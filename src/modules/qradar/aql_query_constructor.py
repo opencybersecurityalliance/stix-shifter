@@ -53,11 +53,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-        # if object is of type datetime, remove quotes
-        if (type(value) is datetime.datetime):
-            return '{}'.format(value)
-
-        return '"{}"'.format(value)
+        return '\'{}\''.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
@@ -80,9 +76,8 @@ class AqlQueryStringPatternTranslator:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
-            mapped_field = "{}".format(
-                self.dmm.map_field(stix_object, stix_field))
-
+            # Multiple QRadar fields may map to the same STIX Object
+            mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
 
@@ -93,7 +88,7 @@ class AqlQueryStringPatternTranslator:
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-                # Should be in double-quotes
+                # Should be in single-quotes
                 value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
@@ -101,9 +96,15 @@ class AqlQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field,
-                                                                           comparator=comparator,
-                                                                           value=value)
+            comparison_string = ""
+            mapped_fields_count = len(mapped_fields_array)
+
+            for mapped_field in mapped_fields_array:
+                comparison_string += "{mapped_field}{comparator}{value}".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
+                if (mapped_fields_count > 1):
+                    comparison_string += " OR "
+                    mapped_fields_count -= 1
 
             if expression.comparator == ComparisonComparators.NotEqual:
                 comparison_string = self._negate_comparison(comparison_string)

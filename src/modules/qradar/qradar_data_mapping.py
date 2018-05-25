@@ -3,7 +3,12 @@ class QRadarDataMapper:
     MAPPINGS = {
         "ipv4-addr": {
             "fields": {
-                "value": "destinationip"
+                "value": ["destinationip", "sourceip"]
+            }
+        },
+        "ipv6-addr": {
+            "fields": {
+                "value": ["destinationip", "sourceip"]
             }
         }
     }
