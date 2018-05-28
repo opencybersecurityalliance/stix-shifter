@@ -23,7 +23,7 @@ Please read our [guidelines for contributing](CONTRIBUTING.md).
 
 ## Licensing
 
-:copyright: Copyright IBM Corp. 2016
+:copyright: Copyright IBM Corp. 2018
 
 All code contained within this project repository or any
 subdirectories is licensed according to the terms of the Apache v2.0 license,
