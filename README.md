@@ -26,7 +26,7 @@ Please read our [guidelines for contributing](CONTRIBUTING.md).
 :copyright: Copyright IBM Corp. 2016
 
 All code contained within this project repository or any
-subdirectories is licensed according to the terms of the MIT license,
+subdirectories is licensed according to the terms of the Apache v2.0 license,
 which can be viewed in the file [LICENSE](LICENSE).
 
 ## Open Source @ IBM
