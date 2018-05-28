@@ -18,7 +18,7 @@ Returns:
 
 ## Contributing
 
-We are thrilled you are considering contributing to <code>kale</code>!
+We are thrilled you are considering contributing!
 Please read our [guidelines for contributing](CONTRIBUTING.md).
 
 ## Licensing
