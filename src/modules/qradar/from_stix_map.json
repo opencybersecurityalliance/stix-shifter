@@ -1,0 +1,12 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["destinationip", "sourceip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["destinationip", "sourceip"]
+    }
+  }
+}
