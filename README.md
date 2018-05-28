@@ -30,3 +30,5 @@ subdirectories is licensed according to the terms of the Apache v2.0 license,
 which can be viewed in the file [LICENSE](LICENSE).
 
 ## Open Source @ IBM
+[Find more open source projects on the IBM Github Page](http://ibm.github.io/)
+
