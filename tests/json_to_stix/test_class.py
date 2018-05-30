@@ -13,7 +13,7 @@ class TestTransform(object):
         transformer = None
         x = json_to_stix.DataSourceObjToStixObj(
             datasource, map_data, transformer)
-        result = x.tranform(data)
+        result = x.transform(data)
         assert(result is not None)
         assert('created' in result)
         assert(result['created'] == data["time"])
@@ -34,7 +34,7 @@ class TestTransform(object):
         transformer = None
         x = json_to_stix.DataSourceObjToStixObj(
             datasource, map_data, transformer)
-        result = x.tranform(data)
+        result = x.transform(data)
         assert(result is not None)
         assert('first_observed' in result)
         assert(result['first_observed'] == data["time"])
@@ -62,7 +62,7 @@ class TestTransform(object):
         transformer = None
         x = json_to_stix.DataSourceObjToStixObj(
             datasource, map_data, transformer)
-        result = x.tranform(data)
+        result = x.transform(data)
         assert(result is not None)
         assert('objects' in result)
         objects = result['objects']
@@ -115,7 +115,7 @@ class TestTransform(object):
         transformer = None
         x = json_to_stix.DataSourceObjToStixObj(
             datasource, map_data, transformer)
-        result = x.tranform(data)
+        result = x.transform(data)
         assert(result is not None)
         assert('x_com_ibm_ariel' in result)
         attributes = result['x_com_ibm_ariel']
@@ -130,17 +130,18 @@ class TestTransform(object):
         assert(attributes['value_one'] == 1)
         assert(attributes['value_two'] == 2)
 
-    def test_stringToInteger_transformer(self):
+    def test_to_integer_transformer(self):
         datasource = {'id': '123', 'name': 'sourcename'}
-        map_data = {"eventCount": {
-            "key": "number_observed",
-            "type": "value",
-            "transformer": "stringToInteger"
-        },
+        map_data = {
+            "eventCount": {
+                "key": "number_observed",
+                "type": "value",
+                "transformer": "ToInteger"
+            },
         }
         data = [{"eventCount": "5"}]
-        result = json_to_stix.convertToStix(datasource, map_data, data, {
-                                            "epochMSToSTIXdt": transformers.epochMSToSTIXdt, "stringToInteger": transformers.stringToInteger})[0]
+        result = json_to_stix.convert_to_stix(
+            datasource, map_data, data, transformers.get_all_transformers())[0]
         assert(result is not None)
         assert('objects' in result)
         objects = result['objects']
@@ -148,16 +149,77 @@ class TestTransform(object):
         assert('number_observed' in result)
         assert(result['number_observed'] == 5)
 
-    def test_stringToInteger_transformer_error(self):
+    def test_to_integer_transformer_error(self):
         datasource = {'id': '123', 'name': 'sourcename'}
-        map_data = {"eventCount": {
-            "key": "number_observed",
-            "type": "value",
-            "transformer": "stringToInteger"
-        },
+        map_data = {
+            "eventCount": {
+                "key": "number_observed",
+                "type": "value",
+                "transformer": "ToInteger"
+            },
         }
         data = [{"eventCount": "notaValidNumber"}]
-        result = json_to_stix.convertToStix(datasource, map_data, data, {
-                                            "epochMSToSTIXdt": transformers.epochMSToSTIXdt, "stringToInteger": transformers.stringToInteger})[0]
+        result = json_to_stix.convert_to_stix(
+            datasource, map_data, data, transformers.get_all_transformers())[0]
         assert(result is not None)
         assert('number_observed' not in result)
+
+    def test_to_string_transformer(self):
+        datasource = {'id': '123', 'name': 'sourcename'}
+        map_data = {
+            "destinationip": [
+                {
+                    "key": "ipv4-addr.value",
+                    "type": "value"
+                },
+                {
+                    "key": "ipv6-addr.value",
+                    "type": "value"
+                },
+                {
+                    "key": "network-traffic.dst_ref",
+                    "type": "reference",
+                    "linked": "nt",
+                    "transformer": "ToString"
+                }
+            ],
+            "sourceip": [
+                {
+                    "key": "ipv4-addr.value",
+                    "type": "value"
+                },
+                {
+                    "key": "ipv6-addr.value",
+                    "type": "value"
+                },
+                {
+                    "key": "network-traffic.src_ref",
+                    "type": "reference",
+                    "linked": "nt",
+                    "transformer": "ToString"
+                }
+            ]
+        }
+        data = [{"sourceip": "1.1.1.1", "destinationip": "2.2.2.2"}]
+        result = json_to_stix.convert_to_stix(
+            datasource, map_data, data, transformers.get_all_transformers())[0]
+        assert(result is not None)
+        assert('objects' in result)
+        objects = result['objects']
+        assert(len(objects) == 3)
+
+        assert('0' in objects)  # destinationip
+        object0 = objects['0']
+        assert(object0['type'] == 'ipv4-addr')
+        assert(object0['value'] == "2.2.2.2")
+
+        assert('1' in objects)  # sourceip
+        object1 = objects['1']
+        assert(object1['type'] == 'ipv4-addr')
+        assert(object1['value'] == "1.1.1.1")
+
+        assert('2' in objects)
+        object2 = objects['2']
+        assert(object2['dst_ref'] == '0')
+        assert(object2['src_ref'] == '1')
+        assert(object2['type'] == 'network-traffic')
