@@ -8,16 +8,16 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 pp = pprint.PrettyPrinter(indent=2, width=50)
 
 
-class epochMSToSTIXdt(json_to_stix.valueTransformer):
+class EpochToStix(json_to_stix.ValueTransformer):
     """A value transformer for the timestamps"""
 
     @staticmethod
-    def transform(obj):
-        return (datetime.fromtimestamp(int(obj) / 1000, timezone.utc)
+    def transform(epoch):
+        return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc)
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class stringToInteger(json_to_stix.valueTransformer):
+class ToInteger(json_to_stix.ValueTransformer):
     """A value transformer for expected integer values"""
 
     @staticmethod
@@ -25,4 +25,19 @@ class stringToInteger(json_to_stix.valueTransformer):
         try:
             return int(obj)
         except ValueError:
-            print("Can't convert input to integer")
+            print("Cannot convert input to integer")
+
+
+class ToString(json_to_stix.ValueTransformer):
+    """A value transformer for expected string values"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return str(obj)
+        except ValueError:
+            print("Cannot convert input to string")
+
+
+def get_all_transformers():
+    return {"EpochToStix": EpochToStix, "ToInteger": ToInteger, "ToString": ToString}
