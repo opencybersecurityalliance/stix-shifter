@@ -138,6 +138,5 @@ class AqlQueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping):
     x = AqlQueryStringPatternTranslator(pattern, data_model_mapping)
-    select_statement = "*"
     select_statement = x.dmm.map_selections()
     return x.translated.replace('*', select_statement, 1)
