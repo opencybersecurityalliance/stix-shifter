@@ -1,0 +1,27 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["sourcemac", "destinationmac"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
+    }
+  }
+}
