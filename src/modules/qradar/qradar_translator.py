@@ -33,7 +33,7 @@ class QRadarTranslator:
         datasource = {
             'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}
 
-        results = json_to_stix.convertToStix(datasource, map_data, qradar_query_results, {
-            "epochMSToSTIXdt": transformers.epochMSToSTIXdt, "stringToInteger": transformers.stringToInteger})
+        results = json_to_stix.convert_to_stix(
+            datasource, map_data, qradar_query_results, transformers.get_all_transformers())
 
         return results

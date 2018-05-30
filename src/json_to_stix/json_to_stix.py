@@ -6,18 +6,18 @@ from . import observable
 # convert JSON data to STIX object using map_data and transformers
 
 
-def convertToStix(datasource, map_data, data, transformers):
+def convert_to_stix(datasource, map_data, data, transformers):
     ds2stix = DataSourceObjToStixObj(
         datasource, map_data, transformers)
 
     # map data list to list of transformed objects
-    results = list(map(ds2stix.tranform, data))
+    results = list(map(ds2stix.transform, data))
     return results
 
 # base class for valueTransformer
 
 
-class valueTransformer():
+class ValueTransformer():
     """ Base class for value transformers """
 
     @staticmethod
@@ -49,8 +49,8 @@ class DataSourceObjToStixObj():
         return z
 
     @staticmethod
-    def _getValue(obj, ds_key, transformer):
-        """ get value from source object, tranforming if specified """
+    def _get_value(obj, ds_key, transformer):
+        """ get value from source object, transforming if specified """
         if ds_key not in obj:
             logging.debug('{} not found in object'.format(ds_key))
             return None
@@ -60,8 +60,8 @@ class DataSourceObjToStixObj():
         return retVal
 
     @staticmethod
-    def _addToObjects(key_to_add, stix_value, observation, index, ds_key,
-                      refObjs, linked, linkedObjs):
+    def _add_to_objects(key_to_add, stix_value, observation, index, ds_key,
+                        refObjs, linked, linkedObjs):
         """ add the object from source to the resulting object
             Takes into consideration, if reference object and/or linked object
         """
@@ -102,8 +102,8 @@ class DataSourceObjToStixObj():
         return index
 
     @staticmethod
-    def _addRefToObjects(key_to_add, stix_value, observation, index, linked,
-                         linkedObjs):
+    def _add_ref_to_objects(key_to_add, stix_value, observation, index, linked,
+                            linkedObjs, transformer):
         """ add the reference to an object from source to the resulting object
             Takes into consideration, if linked object
         """
@@ -120,6 +120,8 @@ class DataSourceObjToStixObj():
             tmpObj.update({childProp: childObj})
             tmpObj = childObj
 
+        if transformer is not None:
+            stix_value = transformer.transform(stix_value)
         tmpObj.update({splitKey[-1]: stix_value})
 
         to_update = str(index)
@@ -138,9 +140,9 @@ class DataSourceObjToStixObj():
         observation['objects'].update({to_update: newObj})
         return index
 
-    def tranform(self, obj):
+    def transform(self, obj):
         """ Transforms the given object in to a STIX observation
-            based on the mapping file and tranform functions
+            based on the mapping file and transform functions
         """
         refObjs = {}
         linkedObjs = {}
@@ -151,7 +153,6 @@ class DataSourceObjToStixObj():
             'id': stixType + '--' + uniqID,
             'type': stixType,
             'objects': {},
-            'x_com_ibm_ariel': {},
         }
 
         index = 0
@@ -162,11 +163,9 @@ class DataSourceObjToStixObj():
                 ds_key_def_obj, list) else [ds_key_def_obj]
             for ds_key_def in ds_key_def_list:
 
-                if (ds_key_def is None or 'key' not in ds_key_def
-                        or 'type' not in ds_key_def):
+                if (ds_key_def is None or 'key' not in ds_key_def or 'type' not in ds_key_def):
                     (logging.debug(
-                        '{} is not valid (None, or missing key and type)'
-                        .format(ds_key_def)))
+                        '{} is not valid (None, or missing key and type)'.format(ds_key_def)))
                     continue
 
                 if ds_key_def['type'] != 'value':
@@ -180,8 +179,8 @@ class DataSourceObjToStixObj():
                 if 'linked' in ds_key_def:
                     linked = ds_key_def['linked']
 
-                stix_value = DataSourceObjToStixObj._getValue(obj, ds_key,
-                                                              transformer)
+                stix_value = DataSourceObjToStixObj._get_value(obj, ds_key,
+                                                               transformer)
                 if stix_value is None:
                     continue
 
@@ -223,9 +222,9 @@ class DataSourceObjToStixObj():
                 elif prop_type == 'OUTER':
                     observation.update({key_to_add: stix_value})
                 else:
-                    index = (self._addToObjects(key_to_add, stix_value,
-                                                observation, index, ds_key,
-                                                refObjs, linked, linkedObjs))
+                    index = (self._add_to_objects(key_to_add, stix_value,
+                                                  observation, index, ds_key,
+                                                  refObjs, linked, linkedObjs))
 
         # complex types
         for ds_key in self.dsToStixMap:
@@ -235,8 +234,9 @@ class DataSourceObjToStixObj():
                 ds_key_def_obj, list) else [ds_key_def_obj]
             for ds_key_def in ds_key_def_list:
 
-                if (ds_key_def is None or 'key' not in ds_key_def
-                        or 'type' not in ds_key_def):
+                if (ds_key_def is None or
+                        'key' not in ds_key_def or
+                        'type' not in ds_key_def):
                     continue
 
                 if ds_key_def['type'] != 'reference':
@@ -252,16 +252,15 @@ class DataSourceObjToStixObj():
 
                 # if complex prop then create new object
                 for complex_prop_key in self.complex_props:
-                    if (isinstance(key_to_add, str)
-                            and key_to_add.startswith(complex_prop_key)):
+                    if (isinstance(key_to_add, str) and key_to_add.startswith(complex_prop_key)):
                         # TODO need to do something with isRequired
                         stix_value = refObjs[ds_key]
                         if stix_value is None:
                             continue
 
-                        index = self._addRefToObjects(
+                        index = self._add_ref_to_objects(
                             key_to_add, stix_value, observation, index,
-                            linked, linkedObjs)
+                            linked, linkedObjs, transformer)
 
         # Validate each STIX object
         validated_result = validate_instance(observation)

@@ -56,28 +56,28 @@
   "eventcount": {
     "key": "number_observed",
     "type": "value",
-    "transformer": "stringToInteger"
+    "transformer": "ToInteger"
   },
   "starttime": [
     {
       "key": "created",
       "type": "value",
-      "transformer": "epochMSToSTIXdt"
+      "transformer": "EpochToStix"
     },
     {
       "key": "modified",
       "type": "value",
-      "transformer": "epochMSToSTIXdt"
+      "transformer": "EpochToStix"
     },
     {
       "key": "first_observed",
       "type": "value",
-      "transformer": "epochMSToSTIXdt"
+      "transformer": "EpochToStix"
     },
     {
       "key": "last_observed",
       "type": "value",
-      "transformer": "epochMSToSTIXdt"
+      "transformer": "EpochToStix"
     }
   ],
   "logsourcename": {
