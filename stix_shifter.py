@@ -1,6 +1,11 @@
 # Main module to be called
 from src import base_module
+#from src.modules.qradar.qradar_module import Translator
 import sys
+import importlib
+
+DATASOURCES = ['qradar']
+INPUT_DATA_MODELS = ['sco']
 
 
 def main():
@@ -8,7 +13,12 @@ def main():
     # In the case of converting a stix pattern to datasource query, arguments will take the form of...
     # <data_source> <input_format> <stix_pattern>
     # The data_source and input_format will determine what module and method gets called
-    interface = base_module.TranslationInterface()
+
+    #interface = base_module.TranslationInterface()
+
+    module = importlib.import_module("src.modules.qradar.qradar_module")
+
+    interface = module.Translator()
 
     input_arguments = sys.argv[1:]
     data_source_module = input_arguments[0]
