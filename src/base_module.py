@@ -1,3 +1,4 @@
+import json
 from .modules.qradar import qradar_translator
 
 
@@ -16,5 +17,6 @@ class TranslationInterface:
     def datasource_to_stix(self, arg):
         # if translating QRadar events to STIX...
         translator = qradar_translator.QRadarTranslator()
-        stix_observables = translator.qradar_to_stix("some qradar events")
+        data = json.loads(arg[2])
+        stix_observables = translator.qradar_to_stix(data)
         return stix_observables

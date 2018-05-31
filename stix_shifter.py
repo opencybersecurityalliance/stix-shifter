@@ -21,9 +21,7 @@ def main():
         exit()
     elif(input_data_model == 'qradar_events'):
         # Converting data from the data source to STIX objects
-        # Not implemented yet. Only returning dummy data right now
-        qradar_events = ["some json array of events"]
-        stix_observables = interface.datasource_to_stix(qradar_events)
+        stix_observables = interface.datasource_to_stix(input_arguments)
         print(stix_observables)
         exit()
     else:
