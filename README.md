@@ -2,6 +2,8 @@
 
 This project consists of an open source library allowing software to connect to data repositories using STIX Patterning, and return results as STIX Observations.
 
+Requires Python 3.6
+
 ## Converting from STIX Patterns to data source queries
 
 Call the stix_shifter in the format of
@@ -10,7 +12,7 @@ python stix_shifter.py `<data source>` `<input format>` `<STIX pattern>`
 
 Example of converting a STIX pattern to an AQL query:
 
-`python stix_shifter.py "qradar" "sco" "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"`
+`python3 stix_shifter.py "qradar" "sco" "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"`
 
 Returns:
 
@@ -18,7 +20,7 @@ Returns:
 
 Example of converting AQL events to STIX:
 
-`python stix_shifter.py "qradar" "qradar_events" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python3 stix_shifter.py "qradar" "qradar_events" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Returns:
 
@@ -29,11 +31,12 @@ Returns:
       "id": "7c0de425-33bf-46be-9e38-e42319e36d95",
       "name": "events"
     },
-    "id": "observed-data--600ddcf4-8d21-4667-955a-2d14e157b1f2",
+    "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
     "type": "observed-data",
     "objects": {
       "0": { "type": "ipv4-addr", "value": "9.21.123.112" },
-      "1": { "type": "ipv4-addr", "value": "9.21.123.112" }
+      "1": { "type": "ipv4-addr", "value": "9.21.123.112" },
+      "2": { "type": "network-traffic", "src_ref": "1", "dst_ref": "0" }
     },
     "x_com_ibm_ariel": {
       "log_source_id": 126,

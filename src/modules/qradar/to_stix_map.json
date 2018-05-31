@@ -48,9 +48,10 @@
       "type": "value"
     },
     {
-      "key": "net-traffic.dst_ref",
+      "key": "network-traffic.dst_ref",
       "type": "reference",
-      "linked": "nt"
+      "linked": "nt",
+      "transformer": "ToString"
     }
   ],
   "eventcount": {
@@ -100,9 +101,10 @@
       "type": "value"
     },
     {
-      "key": "net-traffic.src_ref",
+      "key": "network-traffic.src_ref",
       "type": "reference",
-      "linked": "nt"
+      "linked": "nt",
+      "transformer": "ToString"
     }
   ],
   "qid": {
