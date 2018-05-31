@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 from . import json_to_stix
 from datetime import datetime, timezone
-import pprint
-import logging
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
-
-pp = pprint.PrettyPrinter(indent=2, width=50)
 
 
 class EpochToStix(json_to_stix.ValueTransformer):
