@@ -16,22 +16,28 @@ def main():
 
     #interface = base_module.TranslationInterface()
 
-    module = importlib.import_module("src.modules.qradar.qradar_module")
-
-    interface = module.Translator()
-
     input_arguments = sys.argv[1:]
     data_source_module = input_arguments[0]
     input_data_model = input_arguments[1]
+    input_data = input_arguments[2]
 
-    if(input_data_model in interface.INPUT_DATA_MODELS):
+    module = importlib.import_module(
+        "src.modules." + data_source_module + "." + data_source_module + "_module")
+
+    interface = module.Translator()
+
+    # TODO: Figure out how we want to differentiate if we're translating TO or FROM stix. Seems like that should be the second variable instead of whatever input_data_models is for
+    if(input_data_model in INPUT_DATA_MODELS):
         # Converting STIX pattern to datasource query
-        query = interface.stix_to_datasource_query(input_arguments)
+        query = interface.stix_to_datasource_query(input_data)
+        # TODO: return query instead of print
         print(query)
         exit()
     elif(input_data_model == 'qradar_events'):
         # Converting data from the data source to STIX objects
-        stix_observables = interface.datasource_to_stix(input_arguments)
+        stix_observables = interface.datasource_results_to_stix(input_data)
+
+        # TODO: return stix_observables instead of print
         print(stix_observables)
         exit()
     else:
