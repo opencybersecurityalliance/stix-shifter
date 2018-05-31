@@ -15,14 +15,15 @@ class TestStixToAql(object):
         interface = qradar_translator.Translator()
         input_arguments = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"
         query = interface.transform_query(input_arguments)
-        assert query == selections + " FROM events WHERE sourceip='192.168.122.84' OR destinationip='192.168.122.84' OR sourceip='192.168.122.83' OR destinationip='192.168.122.83'"
+        assert query == selections + \
+            " FROM events WHERE (sourceip='192.168.122.84' OR destinationip='192.168.122.84') OR (sourceip='192.168.122.83' OR destinationip='192.168.122.83')"
 
     def test_ipv6_query(self):
         interface = qradar_translator.Translator()
         input_arguments = "[ipv6-addr:value = '192.168.122.83']"
         query = interface.transform_query(input_arguments)
         assert query == selections + \
-            " FROM events WHERE sourceip='192.168.122.83' OR destinationip='192.168.122.83'"
+            " FROM events WHERE (sourceip='192.168.122.83' OR destinationip='192.168.122.83')"
 
     def test_url_query(self):
         interface = qradar_translator.Translator()
@@ -36,7 +37,7 @@ class TestStixToAql(object):
         input_arguments = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = interface.transform_query(input_arguments)
         assert query == selections + \
-            " FROM events WHERE sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00'"
+            " FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00')"
 
     def test_domain_query(self):
         interface = qradar_translator.Translator()
@@ -45,10 +46,18 @@ class TestStixToAql(object):
         assert query == selections + \
             " FROM events WHERE domainname='example.com'"
 
-    def test_query_from_multiple_observation_expressions(self):
+    def test_query_from_multiple_observation_expressions_joined_by_and(self):
         interface = qradar_translator.Translator()
         input_arguments = "[domain-name:value = 'example.com'] and [mac-addr:value = '00-00-5E-00-53-00']"
         query = interface.transform_query(input_arguments)
-        # Expect the STIX and to be converted to an AQL or.
+        # Expect the STIX and to convert to an AQL OR.
         assert query == selections + \
-            " FROM events WHERE domainname='example.com' OR sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00'"
+            " FROM events WHERE domainname='example.com' OR (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00')"
+
+    def test_query_from_multiple_comparison_expressions_joined_by_and(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"
+        query = interface.transform_query(input_arguments)
+        # Expect the STIX and to convert to an AQL AND.
+        assert query == selections + \
+            " FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'"
