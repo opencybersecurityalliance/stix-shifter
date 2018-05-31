@@ -36,4 +36,4 @@ class QRadarTranslator:
         results = json_to_stix.convert_to_stix(
             datasource, map_data, qradar_query_results, transformers.get_all_transformers())
 
-        return results
+        return json.dumps(results)

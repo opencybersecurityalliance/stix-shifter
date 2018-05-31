@@ -10,7 +10,7 @@ python stix_shifter.py `<data source>` `<input format>` `<STIX pattern>`
 
 Example of converting a STIX pattern to an AQL query:
 
-`python3 stix_shifter.py "qradar" "sco" "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"`
+`python stix_shifter.py "qradar" "sco" "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"`
 
 Returns:
 
@@ -18,11 +18,38 @@ Returns:
 
 Example of converting AQL events to STIX:
 
-`python3 stix_shifter.py "qradar" "qradar_events" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python stix_shifter.py "qradar" "qradar_events" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Returns:
 
-`[{'x_com_ibm_uds_datasource': {'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}, 'id': 'observed-data--600ddcf4-8d21-4667-955a-2d14e157b1f2', 'type': 'observed-data', 'objects': {'0': {'type': 'ipv4-addr', 'value': '9.21.123.112'}, '1': {'type': 'ipv4-addr', 'value': '9.21.123.112'}}, 'x_com_ibm_ariel': {'log_source_id': 126, 'identity_ip': '0.0.0.0', 'protocol_id': 255, 'magnitude': 4, 'qid': 55500004}, 'number_observed': 1, 'created': '2018-04-20T12:36:17.191Z', 'modified': '2018-04-20T12:36:17.191Z', 'first_observed': '2018-04-20T12:36:17.191Z', 'last_observed': '2018-04-20T12:36:17.191Z'}]`
+```json
+[
+  {
+    "x_com_ibm_uds_datasource": {
+      "id": "7c0de425-33bf-46be-9e38-e42319e36d95",
+      "name": "events"
+    },
+    "id": "observed-data--600ddcf4-8d21-4667-955a-2d14e157b1f2",
+    "type": "observed-data",
+    "objects": {
+      "0": { "type": "ipv4-addr", "value": "9.21.123.112" },
+      "1": { "type": "ipv4-addr", "value": "9.21.123.112" }
+    },
+    "x_com_ibm_ariel": {
+      "log_source_id": 126,
+      "identity_ip": "0.0.0.0",
+      "protocol_id": 255,
+      "magnitude": 4,
+      "qid": 55500004
+    },
+    "number_observed": 1,
+    "created": "2018-04-20T12:36:17.191Z",
+    "modified": "2018-04-20T12:36:17.191Z",
+    "first_observed": "2018-04-20T12:36:17.191Z",
+    "last_observed": "2018-04-20T12:36:17.191Z"
+  }
+]
+```
 
 ## Contributing
 
