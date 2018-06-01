@@ -2,10 +2,7 @@
 import sys
 import importlib
 
-from enum import Enum
-
 MODULES = ['qradar']
-# INPUT_DATA_MODELS = ['sco']
 
 RESULTS = 'results'
 QUERY = 'query'
