@@ -26,6 +26,9 @@ def main():
 
 
 def translate(module, translation_type, data):
+    if(module not in MODULES):
+        raise NotImplementedError
+
     translator_module = importlib.import_module(
         "src.modules."+module+"."+module+"_translator")
 
