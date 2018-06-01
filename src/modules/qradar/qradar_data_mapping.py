@@ -41,7 +41,7 @@ class QRadarDataMapper:
 
              # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
             field_list = aql_fields_json['default']
-            aql_select = ",".join(field_list)
+            aql_select = ", ".join(field_list)
 
             return aql_select
         except Exception as ex:
