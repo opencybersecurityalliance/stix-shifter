@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import json
 from ..base.base_translator import TranslationInterface
 from .stix_to_aql import StixToAQL
