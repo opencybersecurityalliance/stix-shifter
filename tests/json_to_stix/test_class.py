@@ -1,4 +1,4 @@
-from src.json_to_stix import json_to_stix
+from src.json_to_stix import json_to_stix_translator
 from src.json_to_stix import transformers
 
 
@@ -11,7 +11,7 @@ class TestTransform(object):
         }}
         data = {"time": "2018-03-20T13:54:59.952Z"}
         transformer = None
-        x = json_to_stix.DataSourceObjToStixObj(
+        x = json_to_stix_translator.DataSourceObjToStixObj(
             datasource, map_data, transformer)
         result = x.transform(data)
         assert(result is not None)
@@ -32,7 +32,7 @@ class TestTransform(object):
         }}
         data = {"time": "2018-03-20T13:54:59.952Z"}
         transformer = None
-        x = json_to_stix.DataSourceObjToStixObj(
+        x = json_to_stix_translator.DataSourceObjToStixObj(
             datasource, map_data, transformer)
         result = x.transform(data)
         assert(result is not None)
@@ -60,7 +60,7 @@ class TestTransform(object):
         data = {"ip": "127.0.0.1", "url": "https://example.com",
                 "domain": "example.com"}
         transformer = None
-        x = json_to_stix.DataSourceObjToStixObj(
+        x = json_to_stix_translator.DataSourceObjToStixObj(
             datasource, map_data, transformer)
         result = x.transform(data)
         assert(result is not None)
@@ -113,7 +113,7 @@ class TestTransform(object):
         data = {"protocolid": 255, "logsourceid": 126, "qid": 55500004,
                 "identityip": "0.0.0.0", "magnitude": 4, "test_linked_value_1": 1, "test_linked_value_2": 2}
         transformer = None
-        x = json_to_stix.DataSourceObjToStixObj(
+        x = json_to_stix_translator.DataSourceObjToStixObj(
             datasource, map_data, transformer)
         result = x.transform(data)
         assert(result is not None)
@@ -140,7 +140,7 @@ class TestTransform(object):
             },
         }
         data = [{"eventCount": "5"}]
-        result = json_to_stix.convert_to_stix(
+        result = json_to_stix_translator.convert_to_stix(
             datasource, map_data, data, transformers.get_all_transformers())[0]
         assert(result is not None)
         assert('objects' in result)
@@ -159,7 +159,7 @@ class TestTransform(object):
             },
         }
         data = [{"eventCount": "notaValidNumber"}]
-        result = json_to_stix.convert_to_stix(
+        result = json_to_stix_translator.convert_to_stix(
             datasource, map_data, data, transformers.get_all_transformers())[0]
         assert(result is not None)
         assert('number_observed' not in result)
@@ -201,7 +201,7 @@ class TestTransform(object):
             ]
         }
         data = [{"sourceip": "1.1.1.1", "destinationip": "2.2.2.2"}]
-        result = json_to_stix.convert_to_stix(
+        result = json_to_stix_translator.convert_to_stix(
             datasource, map_data, data, transformers.get_all_transformers())[0]
         assert(result is not None)
         assert('objects' in result)
