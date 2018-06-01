@@ -16,14 +16,14 @@ class TestStixToAql(object):
         input_arguments = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"
         query = interface.transform_query(input_arguments)
         assert query == selections + \
-            " FROM events WHERE (sourceip='192.168.122.84' OR destinationip='192.168.122.84') OR (sourceip='192.168.122.83' OR destinationip='192.168.122.83')"
+            " FROM events WHERE (sourceip='192.168.122.84' OR destinationip='192.168.122.84' OR identityip='192.168.122.84') OR (sourceip='192.168.122.83' OR destinationip='192.168.122.83' OR identityip='192.168.122.83')"
 
     def test_ipv6_query(self):
         interface = qradar_translator.Translator()
         input_arguments = "[ipv6-addr:value = '192.168.122.83']"
         query = interface.transform_query(input_arguments)
         assert query == selections + \
-            " FROM events WHERE (sourceip='192.168.122.83' OR destinationip='192.168.122.83')"
+            " FROM events WHERE (sourceip='192.168.122.83' OR destinationip='192.168.122.83' OR identityip='192.168.122.83')"
 
     def test_url_query(self):
         interface = qradar_translator.Translator()
@@ -61,3 +61,17 @@ class TestStixToAql(object):
         # Expect the STIX and to convert to an AQL AND.
         assert query == selections + \
             " FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'"
+
+    def test_file_query(self):
+        # TODO: Add support for file hashes. Unsure at this point how QRadar queries them
+        interface = qradar_translator.Translator()
+        input_arguments = "[file:name = 'some_file.exe']"
+        query = interface.transform_query(input_arguments)
+        assert query == selections + " FROM events WHERE filename='some_file.exe'"
+
+    def test_port_queries(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[network-traffic:src_port = 12345 or network-traffic:dst_port = 23456]"
+        query = interface.transform_query(input_arguments)
+        assert query == selections + \
+            " FROM events WHERE destinationport='23456' OR sourceport='12345'"
