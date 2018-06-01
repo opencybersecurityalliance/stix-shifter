@@ -24,7 +24,7 @@ class QRadarTranslator:
     def qradar_to_stix(self, qradar_query_results, map=None):
 
         if(map is None):
-            map_file = open('src/modules/qradar/to_stix_map.json').read()
+            map_file = open('src/modules/qradar/json/to_stix_map.json').read()
             map_data = json.loads(map_file)
         else:
             map_data = json.loads(map)

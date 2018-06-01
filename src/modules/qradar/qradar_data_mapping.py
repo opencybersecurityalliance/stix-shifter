@@ -4,7 +4,7 @@ import json
 def _fetch_mapping():
     try:
         map_file = open(
-            'src/modules/qradar/from_stix_map.json').read()
+            'src/modules/qradar/json/from_stix_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
@@ -35,12 +35,15 @@ class QRadarDataMapper:
                 stix_object_name, stix_property_name))
 
     def map_selections(self):
-        self.map_data = _fetch_mapping()
-        # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
-        return "QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname,\
-    category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name,\
-    highlevelcategory as high_level_category_id, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime,\
-    endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac,\
-    destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac,\
-    username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name,\
-    eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
+        try:
+            aql_fields_file = open('src/modules/qradar/json/aql_event_fields.json').read()
+            aql_fields_json = json.loads(aql_fields_file)
+
+             # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
+            field_list = aql_fields_json['default']
+            aql_select = ", ".join(field_list)
+
+            return aql_select
+        except Exception as ex:
+            print('Exception while reading aql fields file:', ex)
+            return {}
