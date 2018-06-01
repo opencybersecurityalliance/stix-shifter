@@ -1,13 +1,13 @@
 import json
 
 from . import json_to_stix_translator
-from ..modules.base.base_result_translator import ResultTranslationInterface
+from ..modules.base.base_result_translator import BaseResultTranslator
 from . import transformers
 
-# Concrete ResultTranslationInterface
+# Concrete BaseResultTranslator
 
 
-class JSONToStix(ResultTranslationInterface):
+class JSONToStix(BaseResultTranslator):
 
     def translate_results(self, data, mapping=None):
         # if translating QRadar events to STIX...

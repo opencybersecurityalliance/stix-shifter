@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class QueryTranslationInterface(object, metaclass=ABCMeta):
+class BaseQueryTranslator(object, metaclass=ABCMeta):
 
     @abstractmethod
     def transform_query(self, data, mapping=None):

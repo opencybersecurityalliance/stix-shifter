@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class ResultTranslationInterface(object, metaclass=ABCMeta):
+class BaseResultTranslator(object, metaclass=ABCMeta):
 
     @abstractmethod
     def translate_results(self, data, mapping=None):
