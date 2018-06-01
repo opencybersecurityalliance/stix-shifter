@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-from . import json_to_stix
+from .json_to_stix_translator import ValueTransformer
 from datetime import datetime, timezone
 
 
-class EpochToStix(json_to_stix.ValueTransformer):
+class EpochToStix(ValueTransformer):
     """A value transformer for the timestamps"""
 
     @staticmethod
@@ -12,7 +12,7 @@ class EpochToStix(json_to_stix.ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class ToInteger(json_to_stix.ValueTransformer):
+class ToInteger(ValueTransformer):
     """A value transformer for expected integer values"""
 
     @staticmethod
@@ -23,7 +23,7 @@ class ToInteger(json_to_stix.ValueTransformer):
             print("Cannot convert input to integer")
 
 
-class ToString(json_to_stix.ValueTransformer):
+class ToString(ValueTransformer):
     """A value transformer for expected string values"""
 
     @staticmethod

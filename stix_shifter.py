@@ -1,45 +1,45 @@
 # Main module to be called
-from src import base_module
-#from src.modules.qradar.qradar_module import Translator
 import sys
 import importlib
 
-DATASOURCES = ['qradar']
-INPUT_DATA_MODELS = ['sco']
+from enum import Enum
+
+MODULES = ['qradar']
+# INPUT_DATA_MODELS = ['sco']
+
+RESULTS = 'results'
+QUERY = 'query'
 
 
 def main():
 
     # In the case of converting a stix pattern to datasource query, arguments will take the form of...
-    # <data_source> <input_format> <stix_pattern>
-    # The data_source and input_format will determine what module and method gets called
-
-    #interface = base_module.TranslationInterface()
+    # <module> <input_data_translation> <data>
+    # The module and input_translation_type will determine what module and method gets called
 
     input_arguments = sys.argv[1:]
-    data_source_module = input_arguments[0]
-    input_data_model = input_arguments[1]
+
+    module = input_arguments[0]
+    input_translation_type = input_arguments[1]
     input_data = input_arguments[2]
 
-    module = importlib.import_module(
-        "src.modules." + data_source_module + "." + data_source_module + "_module")
+    result = translate(module, input_translation_type, input_data)
+    print(result)
+    exit()
 
-    interface = module.Translator()
 
-    # TODO: Figure out how we want to differentiate if we're translating TO or FROM stix. Seems like that should be the second variable instead of whatever input_data_models is for
-    if(input_data_model in INPUT_DATA_MODELS):
+def translate(module, translation_type, data):
+    translator_module = importlib.import_module(
+        "src.modules."+module+"."+module+"_translator")
+
+    interface = translator_module.Translator()
+
+    if(translation_type == QUERY):
         # Converting STIX pattern to datasource query
-        query = interface.stix_to_datasource_query(input_data)
-        # TODO: return query instead of print
-        print(query)
-        exit()
-    elif(input_data_model == 'qradar_events'):
+        return interface.transform_query(data)
+    elif(translation_type == RESULTS):
         # Converting data from the data source to STIX objects
-        stix_observables = interface.datasource_results_to_stix(input_data)
-
-        # TODO: return stix_observables instead of print
-        print(stix_observables)
-        exit()
+        return interface.translate_results(data)
     else:
         raise NotImplementedError
 
