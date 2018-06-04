@@ -10,7 +10,15 @@ from . import transformers
 class JSONToStix(BaseResultTranslator):
 
     def translate_results(self, data, mapping=None):
-        # if translating QRadar events to STIX...
+        """
+        Translates JSON data into STIX results based on a mapping file
+        :param data: JSON formatted data to translate into STIX format
+        :type data: str
+        :param mapping: The mapping file path to use as instructions on how to translate the given JSON data to STIX. Defaults the path to whatever is passed into the constructor for JSONToSTIX (This should be the to_stix_map.json in the module's json directory)
+        :type mapping: str (filepath)
+        :return: STIX formatted results
+        :rtype: str
+        """
         json_data = json.loads(data)
 
         # arg is passed into the BaseResultTranslator here as the location for the default mapping file

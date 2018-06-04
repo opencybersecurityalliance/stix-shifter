@@ -8,7 +8,7 @@ Requires Python 3.6
 
 Call the stix_shifter in the format of
 
-python stix_shifter.py `<data source>` `<input format>` `<STIX pattern>`
+python stix_shifter.py `<translator_module>` `<query or result>` `<data>`
 
 Example of converting a STIX pattern to an AQL query:
 
@@ -53,6 +53,18 @@ Returns:
   }
 ]
 ```
+
+## Creating new translator modules
+
+To create a new module that can be used when importing stix-shifter, follow these steps:
+
+* Create a directory with the name of your module in the `src/modules/` directory
+* In `stix-shifter.py`, add `<module-name>` to the `MODULES` array at the top of the file
+* In your module directory, create a new python code file named `<module-name>_translator.py`. This is where you'll be defining your concrete translator class
+  * In `<module-name>_translator.py`, define a class named `Translator` and have it extend `BaseTranslator` from `src/modules/base/base_translator.py`. (You can use `src/modules/dummy/dummy_translator.py` as an example)
+  * In `__init__` you need to assign `self.result_translator` and `self.query_translator` to the appropriate query and result translator you want your module to use. For example the QRadar translator uses `JSONToStix` as its result translator and `StixToAQL` as its query translator
+  * You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `src/modules/dummy/`
+* Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` method
 
 ## Contributing
 
