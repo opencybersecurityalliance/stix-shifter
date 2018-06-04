@@ -54,11 +54,6 @@ Returns:
 ]
 ```
 
-## Contributing
-
-We are thrilled you are considering contributing!
-Please read our [guidelines for contributing](CONTRIBUTING.md).
-
 ## Creating new translator modules
 
 To create a new module that can be used when importing stix-shifter, follow these steps:
@@ -70,6 +65,11 @@ To create a new module that can be used when importing stix-shifter, follow thes
   * In `__init__` you need to assign `self.result_translator` and `self.query_translator` to the appropriate query and result translator you want your module to use. For example the QRadar translator uses `JSONToStix` as its result translator and `StixToAQL` as its query translator
   * You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `src/modules/dummy/`
 * Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` method
+
+## Contributing
+
+We are thrilled you are considering contributing!
+Please read our [guidelines for contributing](CONTRIBUTING.md).
 
 ## Licensing
 
