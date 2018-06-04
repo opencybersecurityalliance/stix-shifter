@@ -11,7 +11,15 @@ logger = logging.getLogger(__name__)
 class StixToAQL(BaseQueryTranslator):
 
     def transform_query(self, data, mapping=None):
-        # if translating STIX pattern to AQL...
+        """
+        Transforms STIX query into aql query format. Based on a mapping file
+        :param data: STIX query string to transform into aql query format
+        :type data: str
+        :param mapping: The mapping file path to use as instructions on how to transform the given STIX query into aql format. This defaults to the from_stix_map.json in the src/modules/qradar/json/ directory
+        :type mapping: str (filepath)
+        :return: aql query string
+        :rtype: str
+        """
         stix_pattern = data
 
         logger.info("Converting STIX2 Pattern to ariel")
