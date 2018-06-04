@@ -8,7 +8,20 @@ Requires Python 3.6
 
 Call the stix_shifter in the format of
 
-python stix_shifter.py translate `<data source>` `<input format>` `<STIX pattern>`
+```
+usage: stix_shifter.py translate [-h]
+                                 {qradar,dummy,aql_passthrough}
+                                 {results,query} data
+
+positional arguments:
+  {qradar,dummy,aql_passthrough}
+                        What translation module to use
+  {results,query}       What translation action to perform
+  data                  The data to be translated
+
+optional arguments:
+  -h, --help            show this help message and exit
+```
 
 Example of converting a STIX pattern to an AQL query:
 
