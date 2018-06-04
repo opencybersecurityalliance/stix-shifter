@@ -2,7 +2,7 @@
 import sys
 import importlib
 
-MODULES = ['qradar', 'dummy']
+MODULES = ['qradar', 'dummy', 'aql_passthrough']
 
 RESULTS = 'results'
 QUERY = 'query'

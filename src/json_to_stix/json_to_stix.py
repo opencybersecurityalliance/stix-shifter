@@ -13,11 +13,15 @@ class JSONToStix(BaseResultTranslator):
         # if translating QRadar events to STIX...
         json_data = json.loads(data)
 
+        # arg is passed into the BaseResultTranslator here as the location for the default mapping file
+        default_to_stix_mapping = self.arg
+
         if(mapping is None):
-            map_file = open('src/modules/qradar/json/to_stix_map.json').read()
+            # If no mapping is passed in then we will use the default to_stix_map in the qradar module
+            map_file = open(default_to_stix_mapping).read()
             map_data = json.loads(map_file)
         else:
-            map_data = json.loads(map)
+            map_data = json.loads(mapping)
 
         # todo: make datasource id/name dynamic
         datasource = {
