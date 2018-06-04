@@ -1,4 +1,6 @@
 from src.modules.qradar import qradar_translator
+from src.modules.qradar import qradar_data_mapping
+import unittest
 
 selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
 category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, \
@@ -9,7 +11,7 @@ username as username, eventdirection as direction, identityip as identityip, ide
 eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
 
 
-class TestStixToAql(object):
+class TestStixToAql(unittest.TestCase, object):
 
     def test_ipv4_query(self):
         interface = qradar_translator.Translator()
@@ -75,3 +77,10 @@ class TestStixToAql(object):
         query = interface.transform_query(input_arguments)
         assert query == selections + \
             " FROM events WHERE destinationport='23456' OR sourceport='12345'"
+
+    def test_unmapped_attribute(self):
+        data_mapping_exception = qradar_data_mapping.DataMappingException
+        interface = qradar_translator.Translator()
+        input_arguments = "[network-traffic:some_invalid_attribute = 'whatever']"
+        self.assertRaises(data_mapping_exception,
+                          lambda: interface.transform_query(input_arguments))
