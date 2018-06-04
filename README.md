@@ -8,11 +8,11 @@ Requires Python 3.6
 
 Call the stix_shifter in the format of
 
-python stix_shifter.py `<data source>` `<input format>` `<STIX pattern>`
+python stix_shifter.py translate `<data source>` `<input format>` `<STIX pattern>`
 
 Example of converting a STIX pattern to an AQL query:
 
-`python stix_shifter.py "qradar" "query" "[ipv4-addr:value = '198.51.100.1' or ipv4-addr:value = '198.51.200.1']"`
+`python stix_shifter.py translate "qradar" "query" "[ipv4-addr:value = '198.51.100.1' or ipv4-addr:value = '198.51.200.1']"`
 
 Returns:
 
@@ -20,7 +20,7 @@ Returns:
 
 Example of converting AQL events to STIX:
 
-`python stix_shifter.py "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python stix_shifter.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Returns:
 
