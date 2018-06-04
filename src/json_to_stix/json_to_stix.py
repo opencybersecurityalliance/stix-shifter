@@ -14,10 +14,11 @@ class JSONToStix(BaseResultTranslator):
         json_data = json.loads(data)
 
         if(mapping is None):
+            # If no mapping is passed in then we will use the default to_stix_map in the qradar module
             map_file = open('src/modules/qradar/json/to_stix_map.json').read()
             map_data = json.loads(map_file)
         else:
-            map_data = json.loads(map)
+            map_data = json.loads(mapping)
 
         # todo: make datasource id/name dynamic
         datasource = {
