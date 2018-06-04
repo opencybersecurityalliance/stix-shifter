@@ -49,7 +49,7 @@ class StixShifter:
         """
         Translated queries to a specified format
         :param module: What module to use
-        :type module: one of MODULES 'qradar', 'dummy'
+        :type module: one of MODULES 'qradar', 'dummy', 'aql_passthrough'
         :param translation_type: translation of a query or result set must be either 'results' or 'query'
         :type translation_type: str
         :param data: the data to translate
