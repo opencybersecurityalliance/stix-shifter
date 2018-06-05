@@ -1,12 +1,12 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip"]
+      "value": ["sourceip", "destinationip", "identityip"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip"]
+      "value": ["sourceip", "destinationip", "identityip"]
     }
   },
   "url": {
@@ -22,6 +22,17 @@
   "domain-name": {
     "fields": {
       "value": ["domainname"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"]
     }
   }
 }

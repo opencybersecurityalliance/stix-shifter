@@ -98,13 +98,17 @@ class AqlQueryStringPatternTranslator:
 
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
-
             for mapped_field in mapped_fields_array:
                 comparison_string += "{mapped_field}{comparator}{value}".format(
                     mapped_field=mapped_field, comparator=comparator, value=value)
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
                     mapped_fields_count -= 1
+
+            if(len(mapped_fields_array) > 1):
+                # More than one AQL field maps to the STIX attribute so group the ORs.
+                grouped_comparison_string = "(" + comparison_string + ")"
+                comparison_string = grouped_comparison_string
 
             if expression.comparator == ComparisonComparators.NotEqual:
                 comparison_string = self._negate_comparison(comparison_string)
