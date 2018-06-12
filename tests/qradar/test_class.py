@@ -1,5 +1,6 @@
 from stix_shifter.src.modules.qradar import qradar_translator
 from stix_shifter.src.modules.qradar import qradar_data_mapping
+from stix_shifter.src.modules.base import base_translator
 import unittest
 import random
 
@@ -120,6 +121,13 @@ class TestStixToAql(unittest.TestCase, object):
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
             " FROM events WHERE username='root'"
+
+    def test_invalid_stix_pattern(self):
+        stix_validation_exception = base_translator.StixValidationException
+        interface = qradar_translator.Translator()
+        input_arguments = "[not_a_valid_pattern]"
+        self.assertRaises(stix_validation_exception,
+                          lambda: interface.transform_query(input_arguments))
 
     def test_network_traffic_protocols(self):
         interface = qradar_translator.Translator()
