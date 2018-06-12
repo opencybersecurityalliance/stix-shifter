@@ -94,3 +94,11 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         self.assertRaises(data_mapping_exception,
                           lambda: interface.transform_query(input_arguments, options))
+
+    def test_user_account_query(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[user-account:user_id = 'root']"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        assert query == selections + \
+            " FROM events WHERE username='root'"
