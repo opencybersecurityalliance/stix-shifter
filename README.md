@@ -24,7 +24,7 @@ optional arguments:
 
 Example of converting a STIX pattern to an AQL query:
 
-`python stix_shifter.py translate "qradar" "query" "[ipv4-addr:value = '198.51.100.1' or ipv4-addr:value = '198.51.200.1']"`
+`python main.py translate "qradar" "query" "[ipv4-addr:value = '198.51.100.1' or ipv4-addr:value = '198.51.200.1']"`
 
 Returns:
 
@@ -32,7 +32,7 @@ Returns:
 
 Example of converting AQL events to STIX:
 
-`python stix_shifter.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python main.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Returns:
 
@@ -70,13 +70,14 @@ Returns:
 
 To create a new module that can be used when importing stix-shifter, follow these steps:
 
-* Create a directory with the name of your module in the `src/modules/` directory
-* In `stix-shifter.py`, add `<module-name>` to the `MODULES` array at the top of the file
-* In your module directory, create a new python code file named `<module-name>_translator.py`. This is where you'll be defining your concrete translator class
-  * In `<module-name>_translator.py`, define a class named `Translator` and have it extend `BaseTranslator` from `src/modules/base/base_translator.py`. (You can use `src/modules/dummy/dummy_translator.py` as an example)
-  * In `__init__` you need to assign `self.result_translator` and `self.query_translator` to the appropriate query and result translator you want your module to use. For example the QRadar translator uses `JSONToStix` as its result translator and `StixToAQL` as its query translator
-  * You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `src/modules/dummy/`
-* Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` method
+- Create a directory with the name of your module in the `stix-shifter/src/modules/` directory
+- In `stix-shifter.py`, add `<module-name>` to the `MODULES` array at the top of the file
+- In your module directory, create a new python code file named `<module-name>_translator.py`. This is where you'll be defining your concrete translator class
+  - In `<module-name>_translator.py`, define a class named `Translator` and have it extend `BaseTranslator` from `stix-shifter/src/modules/base/base_translator.py`. (You can use `stix-shifter/src/modules/dummy/dummy_translator.py` as an example)
+  - In `__init__` you need to assign `self.result_translator` and `self.query_translator` to the appropriate query and result translator you want your module to use. For example the QRadar translator uses `JSONToStix` as its result translator and `StixToAQL` as its query translator
+  - You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `stix-shifter/src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `stix-shifter/src/modules/dummy/`
+- Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` method
+- IMPORTANT: If you're including any json data files in your module, be sure to include the path in `MANIFEST.in` so that it's included in the packaging
 
 ## Contributing
 

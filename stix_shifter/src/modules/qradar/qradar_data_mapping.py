@@ -1,10 +1,14 @@
+from os import path
 import json
 
 
 def _fetch_mapping():
     try:
-        map_file = open(
-            'src/modules/qradar/json/from_stix_map.json').read()
+        basepath = path.dirname(__file__)
+        filepath = path.abspath(
+            path.join(basepath, "json", "from_stix_map.json"))
+
+        map_file = open(filepath).read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
@@ -36,10 +40,15 @@ class QRadarDataMapper:
 
     def map_selections(self):
         try:
-            aql_fields_file = open('src/modules/qradar/json/aql_event_fields.json').read()
+
+            basepath = path.dirname(__file__)
+            filepath = path.abspath(
+                path.join(basepath, "json", "aql_event_fields.json"))
+
+            aql_fields_file = open(filepath).read()
             aql_fields_json = json.loads(aql_fields_file)
 
-             # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
+            # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
             field_list = aql_fields_json['default']
             aql_select = ", ".join(field_list)
 
