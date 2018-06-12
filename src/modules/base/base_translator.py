@@ -9,7 +9,7 @@ class BaseTranslator:
         self.result_translator = BaseResultTranslator()
         self.query_translator = BaseQueryTranslator()
 
-    def translate_results(self, data, mapping=None):
+    def translate_results(self, data, options, mapping=None):
         """
         Translates data into STIX results based on a mapping file
         :param data: data to translate into STIX format
@@ -19,9 +19,9 @@ class BaseTranslator:
         :return: translated STIX formatted results
         :rtype: str
         """
-        return self.result_translator.translate_results(data, mapping)
+        return self.result_translator.translate_results(data, options, mapping)
 
-    def transform_query(self, data, mapping=None):
+    def transform_query(self, data, options,mapping=None):
         """
         Transforms STIX query into a different query format. based on a mapping file
         :param data: STIX query string to transform into another format
@@ -31,4 +31,4 @@ class BaseTranslator:
         :return: transformed query string
         :rtype: str
         """
-        return self.query_translator.transform_query(data, mapping)
+        return self.query_translator.transform_query(data, options, mapping)

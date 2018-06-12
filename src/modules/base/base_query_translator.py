@@ -3,11 +3,11 @@ from abc import ABCMeta, abstractmethod
 
 class BaseQueryTranslator(object, metaclass=ABCMeta):
 
-    def __init__(self, arg=None):
-        self.arg = arg
+    def __init__(self, default_mapping_file_path=None):
+        self.default_mapping_file_path = default_mapping_file_path
 
     @abstractmethod
-    def transform_query(self, data, mapping=None):
+    def transform_query(self, data, options, mapping=None):
         """
         Transforms STIX query into a different query format. Based on a mapping file
         :param data: STIX query string to transform into another format

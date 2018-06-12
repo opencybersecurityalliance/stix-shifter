@@ -3,7 +3,7 @@ from ..base.base_result_translator import BaseResultTranslator
 
 class DummyResultTranslator(BaseResultTranslator):
 
-    def translate_results(self, data, mapping=None):
+    def translate_results(self, data, options, mapping=None):
         """
         Takes in passed in results string and returns it
         :param data: results string that gets returned
