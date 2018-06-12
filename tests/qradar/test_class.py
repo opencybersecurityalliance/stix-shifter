@@ -1,5 +1,5 @@
-from src.modules.qradar import qradar_translator
-from src.modules.qradar import qradar_data_mapping
+from stix_shifter.src.modules.qradar import qradar_translator
+from stix_shifter.src.modules.qradar import qradar_data_mapping
 import unittest
 
 selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \

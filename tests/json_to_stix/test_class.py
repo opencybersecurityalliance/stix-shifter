@@ -1,5 +1,5 @@
-from src.json_to_stix import json_to_stix_translator
-from src.json_to_stix import transformers
+from stix_shifter.src.json_to_stix import json_to_stix_translator
+from stix_shifter.src.json_to_stix import transformers
 
 
 class TestTransform(object):
