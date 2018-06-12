@@ -6,9 +6,8 @@ from . import observable
 # convert JSON data to STIX object using map_data and transformers
 
 
-def convert_to_stix(datasource, map_data, data, transformers):
-    ds2stix = DataSourceObjToStixObj(
-        datasource, map_data, transformers)
+def convert_to_stix(datasource, map_data, data, transformers, options):
+    ds2stix = DataSourceObjToStixObj(datasource, map_data, transformers, options)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
@@ -23,15 +22,18 @@ class ValueTransformer():
     @staticmethod
     def transform(obj):
         """ abstract function for converting value to STIX format """
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class DataSourceObjToStixObj():
 
-    def __init__(self, datasource, dsToStixMap, transformers):
+    def __init__(self, datasource, dsToStixMap, transformers, options):
+        self.datasource = datasource
         self.dsToStixMap = dsToStixMap
         self.transformers = transformers
-        self.datasource = datasource
+
+        # parse through options
+        self.stix_validator = options.get('stix_validator', False)
 
         self.common_props = observable.common_props
         self.observation_props = observable.observation_props
@@ -263,6 +265,7 @@ class DataSourceObjToStixObj():
                             linked, linkedObjs, transformer)
 
         # Validate each STIX object
-        validated_result = validate_instance(observation)
-        print_results(validated_result)
+        if self.stix_validator:
+            validated_result = validate_instance(observation)
+            print_results(validated_result)
         return observation

@@ -9,7 +9,7 @@ from . import transformers
 
 class JSONToStix(BaseResultTranslator):
 
-    def translate_results(self, data, mapping=None):
+    def translate_results(self, data, options, mapping=None):
         """
         Translates JSON data into STIX results based on a mapping file
         :param data: JSON formatted data to translate into STIX format
@@ -21,12 +21,9 @@ class JSONToStix(BaseResultTranslator):
         """
         json_data = json.loads(data)
 
-        # arg is passed into the BaseResultTranslator here as the location for the default mapping file
-        default_to_stix_mapping = self.arg
-
         if(mapping is None):
             # If no mapping is passed in then we will use the default to_stix_map in the qradar module
-            map_file = open(default_to_stix_mapping).read()
+            map_file = open(self.default_mapping_file_path).read()
             map_data = json.loads(map_file)
         else:
             map_data = json.loads(mapping)
@@ -35,7 +32,7 @@ class JSONToStix(BaseResultTranslator):
         datasource = {
             'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}
 
-        results = json_to_stix_translator.convert_to_stix(
-            datasource, map_data, json_data, transformers.get_all_transformers())
+        results = json_to_stix_translator.convert_to_stix(datasource, map_data, 
+            json_data, transformers.get_all_transformers(), options)
 
         return json.dumps(results)

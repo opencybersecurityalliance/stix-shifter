@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class StixToAQL(BaseQueryTranslator):
 
-    def transform_query(self, data, mapping=None):
+    def transform_query(self, data, options, mapping=None):
         """
         Transforms STIX query into aql query format. Based on a mapping file
         :param data: STIX query string to transform into aql query format

@@ -3,11 +3,11 @@ from abc import ABCMeta, abstractmethod
 
 class BaseResultTranslator(object, metaclass=ABCMeta):
 
-    def __init__(self, arg=None):
-        self.arg = arg
+    def __init__(self, default_mapping_file_path=None):
+        self.default_mapping_file_path = default_mapping_file_path
 
     @abstractmethod
-    def translate_results(self, data, mapping=None):
+    def translate_results(self, data, options, mapping=None):
         """
         Translates data into STIX results based on a mapping file
         :param data: data to translate into STIX format
