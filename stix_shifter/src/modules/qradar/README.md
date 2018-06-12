@@ -8,7 +8,7 @@ python stix_shifter.py `<translator_module>` `<query or result>` `<data>`
 
 This example input pattern:
 
-`python stix_shifter.py "qradar" "query" "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"`
+`python main.py translate "qradar" "query" "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"`
 
 Returns the following AQL query:
 
@@ -25,13 +25,13 @@ STIX attributes that map to multiple AQL fields will have those fields joined by
 Translated STIX attributes are inserted into the AQL query in the order they are defined in the mapping file. <br/>
 When translating from STIX patterns to AQL queries, the following objects and attributes can be used:
 
-* ipv4-addr:value
-* ipv6-addr:value
-* url:value
-* mac-addr:value
-* domain-name:value
-* file:name
-* network-traffic:src_port, network=traffic:dst_port
+- ipv4-addr:value
+- ipv6-addr:value
+- url:value
+- mac-addr:value
+- domain-name:value
+- file:name
+- network-traffic:src_port, network=traffic:dst_port
 
 ## Converting from QRadar events to STIX
 
@@ -39,7 +39,7 @@ QRadar data to STIX mapping is defined in `to_stix_map.json`
 
 This example QRadar data:
 
-`python stix_shifter.py "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python main.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Will return the following STIX observable:
 
