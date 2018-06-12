@@ -6,7 +6,7 @@ def _fetch_mapping():
     try:
         basepath = path.dirname(__file__)
         filepath = path.abspath(
-            path.join(basepath, "json", "to_stix_map.json"))
+            path.join(basepath, "json", "from_stix_map.json"))
 
         map_file = open(filepath).read()
         map_data = json.loads(map_file)
