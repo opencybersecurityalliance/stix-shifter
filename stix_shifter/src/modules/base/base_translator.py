@@ -37,9 +37,9 @@ class BaseTranslator:
         :rtype: str
         """
 
-    errors = run_validator(data)
-    if (errors != []):
-        raise StixValidationException(
-            "The STIX pattern has the following errors: {}".format(errors))
-    else:
-        return self.query_translator.transform_query(data, options, mapping)
+        errors = run_validator(data)
+        if (errors != []):
+            raise StixValidationException(
+                "The STIX pattern has the following errors: {}".format(errors))
+        else:
+            return self.query_translator.transform_query(data, options, mapping)
