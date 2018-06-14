@@ -7,22 +7,12 @@ from . import observable
 
 
 def convert_to_stix(datasource, map_data, data, transformers, options):
-    ds2stix = DataSourceObjToStixObj(datasource, map_data, transformers, options)
+    ds2stix = DataSourceObjToStixObj(
+        datasource, map_data, transformers, options)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
     return results
-
-# base class for valueTransformer
-
-
-class ValueTransformer():
-    """ Base class for value transformers """
-
-    @staticmethod
-    def transform(obj):
-        """ abstract function for converting value to STIX format """
-        raise NotImplementedError
 
 
 class DataSourceObjToStixObj():

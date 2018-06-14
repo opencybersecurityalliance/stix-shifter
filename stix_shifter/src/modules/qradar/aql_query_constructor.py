@@ -9,16 +9,7 @@ from stix2patterns_translator.pattern_objects import ObservationExpression, Comp
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix2patterns_translator.errors import SearchFeatureNotSupportedError
 
-from stix_shifter.src.json_to_stix.transformers import TimestampToEpoch
-
-
-class ValueTransformer():
-    """ Base class for value transformers """
-
-    @staticmethod
-    def transform(obj):
-        """ abstract function for converting value to STIX format """
-        raise NotImplementedError
+from stix_shifter.src.transformers import TimestampToEpoch, ValueTransformer
 
 
 def _fetch_network_protocol_mapping():

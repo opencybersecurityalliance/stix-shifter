@@ -2,7 +2,7 @@ import json
 
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
-from . import transformers
+from stix_shifter.src import transformers
 
 # Concrete BaseResultTranslator
 
@@ -32,7 +32,7 @@ class JSONToStix(BaseResultTranslator):
         datasource = {
             'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}
 
-        results = json_to_stix_translator.convert_to_stix(datasource, map_data, 
-            json_data, transformers.get_all_transformers(), options)
+        results = json_to_stix_translator.convert_to_stix(datasource, map_data,
+                                                          json_data, transformers.get_all_transformers(), options)
 
         return json.dumps(results)

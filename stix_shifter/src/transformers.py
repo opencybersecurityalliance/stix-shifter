@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
-from .json_to_stix_translator import ValueTransformer
 from datetime import datetime, timezone
 
 
-class EpochToStix(ValueTransformer):
+class ValueTransformer():
+    """ Base class for value transformers """
+
+    @staticmethod
+    def transform(obj):
+        """ abstract function for converting value formats """
+        raise NotImplementedError
+
+
+class EpochToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
 
     @staticmethod
@@ -13,8 +21,8 @@ class EpochToStix(ValueTransformer):
 
 
 class TimestampToEpoch(ValueTransformer):
+    """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch"""
 
-    """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch """
     @staticmethod
     def transform(timestamp):
         time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -47,4 +55,4 @@ class ToString(ValueTransformer):
 
 
 def get_all_transformers():
-    return {"EpochToStix": EpochToStix, "ToInteger": ToInteger, "ToString": ToString}
+    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString}
