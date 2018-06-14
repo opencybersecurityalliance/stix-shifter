@@ -32,7 +32,10 @@
   "network-traffic": {
     "fields": {
       "src_port": ["sourceport"],
-      "dst_port": ["destinationport"]
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"]
     }
   },
   "user-account": {

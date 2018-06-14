@@ -1,6 +1,8 @@
 from stix_shifter.src.modules.qradar import qradar_translator
 from stix_shifter.src.modules.qradar import qradar_data_mapping
+from stix_shifter.src.modules.base import base_translator
 import unittest
+import random
 
 selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
 category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, \
@@ -9,6 +11,23 @@ endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport a
 destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
 eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
+
+protocols = {
+    "tcp": "6",
+    "udp": "17",
+    "icmp": "1",
+    "idpr-cmtp": "38",
+    "ipv6": "40",
+    "rsvp": "46",
+    "gre": "47",
+    "esp": "50",
+    "ah": "51",
+    "narp": "54",
+    "ospfigp": "89",
+    "ipip": "94",
+    "any": "99",
+    "sctp": "132"
+}
 
 
 class TestStixToAql(unittest.TestCase, object):
@@ -102,3 +121,30 @@ class TestStixToAql(unittest.TestCase, object):
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
             " FROM events WHERE username='root'"
+
+    def test_invalid_stix_pattern(self):
+        stix_validation_exception = base_translator.StixValidationException
+        interface = qradar_translator.Translator()
+        input_arguments = "[not_a_valid_pattern]"
+        options = {}
+        self.assertRaises(stix_validation_exception,
+                          lambda: interface.transform_query(input_arguments, options))
+
+    def test_network_traffic_protocols(self):
+        interface = qradar_translator.Translator()
+        for key, value in protocols.items():
+            # Test for both upper and lower case protocols in the STIX pattern
+            if random.randint(0, 1) == 0:
+                key = key.upper()
+            input_arguments = "[network-traffic:protocols[*] = '" + key + "']"
+            options = {}
+            query = interface.transform_query(input_arguments, options)
+            assert query == selections + " FROM events WHERE protocolid='" + value + "'"
+
+    def test_network_traffic_start_stop(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        assert query == selections + \
+            " FROM events WHERE endtime='1528965384' OR starttime='1528965384'"

@@ -1,5 +1,6 @@
 import logging
 import datetime
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -7,6 +8,19 @@ from stix2patterns_translator.pattern_objects import ObservationExpression, Comp
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix2patterns_translator.errors import SearchFeatureNotSupportedError
+
+from stix_shifter.src.transformers import TimestampToEpoch, ValueTransformer
+
+
+def _fetch_network_protocol_mapping():
+    try:
+        map_file = open(
+            'src/modules/qradar/json/network_protocol_map.json').read()
+        map_data = json.loads(map_file)
+        return map_data
+    except Exception as ex:
+        print('exception in reading mapping file:', ex)
+        return {}
 
 
 class AqlQueryStringPatternTranslator:
@@ -80,6 +94,13 @@ class AqlQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
+
+            if stix_field == 'protocols[*]':
+                map_data = _fetch_network_protocol_mapping()
+                expression.value = map_data[expression.value.lower()]
+            elif stix_field == 'start' or stix_field == 'end':
+                transformer = TimestampToEpoch()
+                expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes

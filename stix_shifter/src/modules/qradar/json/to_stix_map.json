@@ -63,22 +63,22 @@
     {
       "key": "created",
       "type": "value",
-      "transformer": "EpochToStix"
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "modified",
       "type": "value",
-      "transformer": "EpochToStix"
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "first_observed",
       "type": "value",
-      "transformer": "EpochToStix"
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
       "type": "value",
-      "transformer": "EpochToStix"
+      "transformer": "EpochToTimestamp"
     }
   ],
   "logsourcename": {

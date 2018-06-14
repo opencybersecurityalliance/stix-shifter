@@ -1,6 +1,11 @@
 from abc import ABCMeta, abstractmethod
 from .base_result_translator import BaseResultTranslator
 from .base_query_translator import BaseQueryTranslator
+from stix2patterns.validator import run_validator
+
+
+class StixValidationException(Exception):
+    pass
 
 
 class BaseTranslator:
@@ -21,7 +26,7 @@ class BaseTranslator:
         """
         return self.result_translator.translate_results(data, options, mapping)
 
-    def transform_query(self, data, options,mapping=None):
+    def transform_query(self, data, options, mapping=None):
         """
         Transforms STIX query into a different query format. based on a mapping file
         :param data: STIX query string to transform into another format
@@ -31,4 +36,10 @@ class BaseTranslator:
         :return: transformed query string
         :rtype: str
         """
-        return self.query_translator.transform_query(data, options, mapping)
+
+        errors = run_validator(data)
+        if (errors != []):
+            raise StixValidationException(
+                "The STIX pattern has the following errors: {}".format(errors))
+        else:
+            return self.query_translator.transform_query(data, options, mapping)
