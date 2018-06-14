@@ -140,3 +140,11 @@ class TestStixToAql(unittest.TestCase, object):
             options = {}
             query = interface.transform_query(input_arguments, options)
             assert query == selections + " FROM events WHERE protocolid='" + value + "'"
+
+    def test_network_traffic_start_stop(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        assert query == selections + \
+            " FROM events WHERE endtime='1528965384' OR starttime='1528965384'"

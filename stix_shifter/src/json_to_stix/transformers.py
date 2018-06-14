@@ -12,6 +12,18 @@ class EpochToStix(ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
+class TimestampToEpoch(ValueTransformer):
+
+    """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch """
+    @staticmethod
+    def transform(timestamp):
+        time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+        epoch = datetime(1970, 1, 1)
+        converted_epoch = int(
+            (datetime.strptime(timestamp, time_pattern) - epoch).total_seconds())
+        return converted_epoch
+
+
 class ToInteger(ValueTransformer):
     """A value transformer for expected integer values"""
 

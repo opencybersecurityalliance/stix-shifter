@@ -9,6 +9,17 @@ from stix2patterns_translator.pattern_objects import ObservationExpression, Comp
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix2patterns_translator.errors import SearchFeatureNotSupportedError
 
+from stix_shifter.src.json_to_stix.transformers import TimestampToEpoch
+
+
+class ValueTransformer():
+    """ Base class for value transformers """
+
+    @staticmethod
+    def transform(obj):
+        """ abstract function for converting value to STIX format """
+        raise NotImplementedError
+
 
 def _fetch_network_protocol_mapping():
     try:
@@ -96,6 +107,9 @@ class AqlQueryStringPatternTranslator:
             if stix_field == 'protocols[*]':
                 map_data = _fetch_network_protocol_mapping()
                 expression.value = map_data[expression.value.lower()]
+            elif stix_field == 'start' or stix_field == 'end':
+                transformer = TimestampToEpoch()
+                expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
