@@ -15,7 +15,7 @@ from stix_shifter.src.transformers import TimestampToEpoch, ValueTransformer
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'src/modules/qradar/json/network_protocol_map.json').read()
+            'stix_shifter/src/modules/qradar/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
@@ -97,7 +97,11 @@ class AqlQueryStringPatternTranslator:
 
             if stix_field == 'protocols[*]':
                 map_data = _fetch_network_protocol_mapping()
-                expression.value = map_data[expression.value.lower()]
+                try:
+                    expression.value = map_data[expression.value.lower()]
+                except Exception as protocol_key:
+                    raise KeyError(
+                        "Network protocol {} is not supported.".format(protocol_key))
             elif stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToEpoch()
                 expression.value = transformer.transform(expression.value)
