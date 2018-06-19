@@ -54,5 +54,19 @@ class ToString(ValueTransformer):
             print("Cannot convert input to string")
 
 
+class ToArray(ValueTransformer):
+    """A value transformer for expected array values"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            obj_array = obj if isinstance(obj, list) else obj.split(', ')
+            # Loop through entries inside obj_array and make all strings lowercase to meet STIX format
+            obj_array = [entry.lower() for entry in obj_array]
+            return obj_array
+        except ValueError:
+            print("Cannot convert input to array")
+
+
 def get_all_transformers():
-    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString}
+    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToArray": ToArray}
