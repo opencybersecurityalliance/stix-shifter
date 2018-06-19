@@ -121,9 +121,8 @@
     "type": "value"
   },
   "payload": {
-    "key": "x-com-ibm-ariel.payload",
-    "type": "value",
-    "linked": "ariel"
+    "key": "artifact.payload_bin",
+    "type": "value"
   },
   "destinationport": {
     "key": "network-traffic.dst_port",

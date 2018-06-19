@@ -38,7 +38,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE (sourceip='192.168.122.84' OR destinationip='192.168.122.84' OR identityip='192.168.122.84') OR (sourceip='192.168.122.83' OR destinationip='192.168.122.83' OR identityip='192.168.122.83')"
+            " FROM events WHERE (sourceip = '192.168.122.84' OR destinationip = '192.168.122.84' OR identityip = '192.168.122.84') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83')"
 
     def test_ipv6_query(self):
         interface = qradar_translator.Translator()
@@ -46,7 +46,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE (sourceip='192.168.122.83' OR destinationip='192.168.122.83' OR identityip='192.168.122.83')"
+            " FROM events WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83')"
 
     def test_url_query(self):
         interface = qradar_translator.Translator()
@@ -54,7 +54,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE url='http://www.testaddress.com'"
+            " FROM events WHERE url = 'http://www.testaddress.com'"
 
     def test_mac_address_query(self):
         interface = qradar_translator.Translator()
@@ -62,7 +62,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00')"
+            " FROM events WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')"
 
     def test_domain_query(self):
         interface = qradar_translator.Translator()
@@ -70,7 +70,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE domainname='example.com'"
+            " FROM events WHERE domainname = 'example.com'"
 
     def test_query_from_multiple_observation_expressions_joined_by_and(self):
         interface = qradar_translator.Translator()
@@ -79,7 +79,7 @@ class TestStixToAql(unittest.TestCase, object):
         query = interface.transform_query(input_arguments, options)
         # Expect the STIX and to convert to an AQL OR.
         assert query == selections + \
-            " FROM events WHERE domainname='example.com' OR (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00')"
+            " FROM events WHERE domainname = 'example.com' OR (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')"
 
     def test_query_from_multiple_comparison_expressions_joined_by_and(self):
         interface = qradar_translator.Translator()
@@ -88,7 +88,7 @@ class TestStixToAql(unittest.TestCase, object):
         query = interface.transform_query(input_arguments, options)
         # Expect the STIX and to convert to an AQL AND.
         assert query == selections + \
-            " FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'"
+            " FROM events WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND domainname = 'example.com'"
 
     def test_file_query(self):
         # TODO: Add support for file hashes. Unsure at this point how QRadar queries them
@@ -96,7 +96,7 @@ class TestStixToAql(unittest.TestCase, object):
         input_arguments = "[file:name = 'some_file.exe']"
         options = {}
         query = interface.transform_query(input_arguments, options)
-        assert query == selections + " FROM events WHERE filename='some_file.exe'"
+        assert query == selections + " FROM events WHERE filename = 'some_file.exe'"
 
     def test_port_queries(self):
         interface = qradar_translator.Translator()
@@ -104,7 +104,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE destinationport='23456' OR sourceport='12345'"
+            " FROM events WHERE destinationport = '23456' OR sourceport = '12345'"
 
     def test_unmapped_attribute(self):
         data_mapping_exception = qradar_data_mapping.DataMappingException
@@ -120,7 +120,7 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE username='root'"
+            " FROM events WHERE username = 'root'"
 
     def test_invalid_stix_pattern(self):
         stix_validation_exception = base_translator.StixValidationException
@@ -139,7 +139,7 @@ class TestStixToAql(unittest.TestCase, object):
             input_arguments = "[network-traffic:protocols[*] = '" + key + "']"
             options = {}
             query = interface.transform_query(input_arguments, options)
-            assert query == selections + " FROM events WHERE protocolid='" + value + "'"
+            assert query == selections + " FROM events WHERE protocolid = '" + value + "'"
 
     def test_network_traffic_start_stop(self):
         interface = qradar_translator.Translator()
@@ -147,4 +147,12 @@ class TestStixToAql(unittest.TestCase, object):
         options = {}
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
-            " FROM events WHERE endtime='1528965384' OR starttime='1528965384'"
+            " FROM events WHERE endtime = '1528965384' OR starttime = '1528965384'"
+
+    def test_artifact_queries(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[artifact:payload_bin matches 'some text']"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        assert query == selections + \
+            " FROM events WHERE payload MATCHES '.*some text.*'"
