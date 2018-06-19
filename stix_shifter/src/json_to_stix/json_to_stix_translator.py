@@ -53,6 +53,14 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _handle_linked(key_to_add, observation, stix_value):
+        """
+        Checks if a key is inside the observation json, then either adds the key:value pair, or updates the key:value pair
+
+        :param key_to_add: key from the mapping file that is currently being checked
+        :param observation: json object to add key:value to
+        :param stix_value: stix valid value of the current key that is being processed
+        :return: altered observation object
+        """
         # replace dashes with underscores to match stix formatting
         observation_key = key_to_add.split('.')[0].replace('-', '_')
         key_to_add_split = key_to_add.split('.')
@@ -67,6 +75,14 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _determine_prop_attr(key_to_add, outer_props, simple_props):
+        """
+        Uses observables to determine what type of property each key is in the json mapping file
+
+        :param key_to_add: key from the mapping file that is currently being checked
+        :param outer_props: set of outer properties as determined by the observable.py file
+        :param simple_props: set of simple properties as determined by the observable.py file
+        :return: an array with 2 values, the property definition, and the property type(either simple or outer)
+        """
         prop_type = None
         prop_def = None
         # if outer property then set on outside
@@ -83,6 +99,17 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _create_complex_objects(ds_map, transformers, index, observation, ref_objs, linked_objs, obj):
+        """
+        performs a series of checks to determine whether or not a key should be added to the observation object
+
+        :param ds_map: json map file
+        :param transformers: the set of transformers used to convert a value to the correct stix format(i.e. string to int)
+        :param index: index of the list item currently being worked on
+        :param observation: json object to add key:value to
+        :param ref_objs: set of list items that can be referenced in any complex object types along with their index #'s
+        :param linked_objs: set of objects that is used to map and aggregate key:value pairs into the correct parent obj
+        :param obj: the datasource object that is being converted to stix
+        """
         for ds_key in ds_map:
             # get the stix keys that are mapped
             ds_key_def_obj = ds_map[ds_key]
@@ -111,9 +138,20 @@ class DataSourceObjToStixObj:
     @staticmethod
     def _add_to_objects(key_to_add, stix_value, observation, index, ds_key,
                         ref_objs, linked, linked_objs, is_obj, transformer):
+        """
+        add the object from source to the resulting object considers if reference object and/or linked object
 
-        """ add the object from source to the resulting object
-            Takes into consideration, if reference object and/or linked object
+        :param key_to_add: key from the mapping file that is currently being checked
+        :param stix_value: stix valid value of the current key that is being processed
+        :param observation: json object to add key:value to
+        :param index: index of the list item currently being worked on
+        :param ds_key: the current datasource key
+        :param ref_objs: set of list items that can be referenced in any complex object types along with their index #'s
+        :param linked:
+        :param linked_objs: set of objects that is used to map and aggregate key:value pairs into the correct parent obj
+        :param is_obj: a boolean value that says whether the object is a complex type or not
+        :param transformer: the method to use when converting a value to the correct stix format(i.e. string to int)
+        :return: the index value to be worked on next(could remain the same as input, or could be incremented by 1)
         """
         to_update = str(index)
         split_key = key_to_add.split('.')
@@ -159,8 +197,11 @@ class DataSourceObjToStixObj:
         return index
 
     def transform(self, obj):
-        """ Transforms the given object in to a STIX observation
-            based on the mapping file and transform functions
+        """
+        Transforms the given object in to a STIX observation based on the mapping file and transform functions
+
+        :param obj: the datasource object that is being converted to stix
+        :return: the input object converted to stix valid json
         """
 
         index = 0
