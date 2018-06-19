@@ -124,5 +124,24 @@
     "key": "x-com-ibm-ariel.payload",
     "type": "value",
     "linked": "ariel"
+  },
+  "destinationport": {
+    "key": "network-traffic.dst_port",
+    "cybox": "true",
+    "linked": "nt",
+    "type": "value"
+  },
+  "sourceport": {
+    "key": "network-traffic.src_port",
+    "cybox": "true",
+    "type": "value",
+    "linked": "nt"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "cybox": "true",
+    "type": "value",
+    "linked": "nt",
+    "transformer": "ToArray"
   }
 }

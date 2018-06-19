@@ -1,4 +1,5 @@
 import json
+import os
 
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
@@ -35,4 +36,4 @@ class JSONToStix(BaseResultTranslator):
         results = json_to_stix_translator.convert_to_stix(datasource, map_data,
                                                           json_data, transformers.get_all_transformers(), options)
 
-        return json.dumps(results)
+        return json.dumps(results, indent=4, sort_keys=True)

@@ -230,3 +230,42 @@ class TestTransform(object):
         assert(object2['dst_ref'] == '0')
         assert(object2['src_ref'] == '1')
         assert(object2['type'] == 'network-traffic')
+
+    def test_to_array_transformer(self):
+        data_source = {'id': '123', 'name': 'sourcename'}
+        map_data = {
+            "destinationport": {
+                "key": "network-traffic.dst_port",
+                "cybox": "true",
+                "linked": "nt",
+                "type": "value"
+            },
+            "sourceport": {
+                "key": "network-traffic.src_port",
+                "cybox": "true",
+                "type": "value",
+                "linked": "nt"
+            },
+            "protocol": {
+                "key": "network-traffic.protocols",
+                "cybox": "true",
+                "type": "value",
+                "linked": "nt",
+                "transformer": "ToArray"
+            }
+        }
+        test_data = [{"protocol": "TCP", "sourceport": 1, "destinationport": 2}]
+        options = {}
+        result = json_to_stix_translator.convert_to_stix(data_source, map_data, test_data,
+                                                         transformers.get_all_transformers(), options)[0]
+
+        assert(result is not None)
+        assert('objects' in result)
+        objects = result['objects']
+
+        assert('0' in objects)
+        network_traffic = objects['0']
+        assert(network_traffic['src_port'] == 1)
+        assert(network_traffic['dst_port'] == 2)
+        assert(isinstance(network_traffic['protocols'], list))
+        assert(network_traffic['protocols'][0] == 'tcp')

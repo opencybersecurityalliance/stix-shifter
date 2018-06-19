@@ -134,8 +134,8 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['stix-pattern-translator',
-                      'stix2-patterns', 'stix2-validator'],  # Optional
+    install_requires=['stix-pattern-translator==0.1.0',
+                      'stix2-patterns==0.6.0', 'stix2-validator==0.5.0'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
