@@ -1,5 +1,4 @@
 import json
-import os
 
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
