@@ -120,6 +120,11 @@
     "key": "domain-name.value",
     "type": "value"
   },
+  "payload": {
+    "key": "x-com-ibm-ariel.payload",
+    "type": "value",
+    "linked": "ariel"
+  },
   "destinationport": {
     "key": "network-traffic.dst_port",
     "cybox": "true",

@@ -10,7 +10,7 @@ highlevelcategory as high_level_category_id, LOGSOURCETYPENAME(logsourceid) as l
 endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
 destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
-eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
+eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload"
 
 protocols = {
     "tcp": "6",
