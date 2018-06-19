@@ -135,7 +135,10 @@ class DataSourceObjToStixObj:
                 tmp_obj.update({child_prop: child_obj})
                 tmp_obj = child_obj
             if transformer is not None:
+                if stix_value is None:
+                    return index
                 stix_value = transformer.transform(stix_value)
+
             tmp_obj.update({split_key[-1]: stix_value})
 
         # if the key is part of a linked object
