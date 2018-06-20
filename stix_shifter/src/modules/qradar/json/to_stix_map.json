@@ -28,16 +28,6 @@
     "type": "value",
     "linked": "ariel"
   },
-  "protocolname": {
-    "key": "x-com-ibm-ariel.protocol_name",
-    "type": "value",
-    "linked": "ariel"
-  },
-  "protocolid": {
-    "key": "x-com-ibm-ariel.protocol_id",
-    "type": "value",
-    "linked": "ariel"
-  },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
