@@ -6,11 +6,11 @@ import random
 
 selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
 category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, \
-highlevelcategory as high_level_category_id, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, \
+highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, \
 endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
 destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
-eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload"
+eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, UTF8(payload) as payload, URL as url, magnitude as magnitude"
 
 protocols = {
     "tcp": "6",
