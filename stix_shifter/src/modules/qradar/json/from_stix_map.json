@@ -42,5 +42,10 @@
     "fields": {
       "user_id": ["username"]
     }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["payload"]
+    }
   }
 }

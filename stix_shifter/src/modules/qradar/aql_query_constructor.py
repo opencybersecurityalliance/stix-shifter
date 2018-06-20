@@ -63,7 +63,7 @@ class AqlQueryStringPatternTranslator:
             raw = raw[0:-1]
         else:
             raw = raw + ".*"
-        return "/{}/".format(raw)
+        return "\'{}\'".format(raw)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -124,7 +124,7 @@ class AqlQueryStringPatternTranslator:
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                comparison_string += "{mapped_field}{comparator}{value}".format(
+                comparison_string += "{mapped_field} {comparator} {value}".format(
                     mapped_field=mapped_field, comparator=comparator, value=value)
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "

@@ -57,12 +57,19 @@ class TestTransform(object):
             "domain": {
             "key": "domain-name.value",
             "type": "value"
+        }, "payload": {
+            "key": "artifact.payload_bin",
+            "type": "value"
         }
         }
         transformer = None
         options = {}
-        data = {"ip": "127.0.0.1", "url": "https://example.com",
-                "domain": "example.com"}
+        payload = "SomeBase64Payload"
+        url = "https://example.com"
+        domain = "example.com"
+        ip_address = "127.0.0.1"
+        data = {"ip": ip_address, "url": url,
+                "domain": domain, "payload": payload}
         x = json_to_stix_translator.DataSourceObjToStixObj(
             datasource, map_data, transformer, options)
         result = x.transform(data)
@@ -72,15 +79,19 @@ class TestTransform(object):
         assert('0' in objects)
         object0 = objects['0']
         assert(object0['type'] == 'ipv4-addr')
-        assert(object0['value'] == "127.0.0.1")
+        assert(object0['value'] == ip_address)
         assert('1' in objects)
         object1 = objects['1']
         assert(object1['type'] == 'url')
-        assert(object1['value'] == "https://example.com")
+        assert(object1['value'] == url)
         assert('2' in objects)
         object2 = objects['2']
         assert(object2['type'] == 'domain-name')
-        assert(object2['value'] == "example.com")
+        assert(object2['value'] == domain)
+        assert('3' in objects)
+        object2 = objects['3']
+        assert(object2['type'] == 'artifact')
+        assert(object2['payload_bin'] == payload)
 
     def test_custom_props(self):
         datasource = {'id': '123', 'name': 'sourcename'}
@@ -254,7 +265,8 @@ class TestTransform(object):
                 "transformer": "ToArray"
             }
         }
-        test_data = [{"protocol": "TCP", "sourceport": 1, "destinationport": 2}]
+        test_data = [
+            {"protocol": "TCP", "sourceport": 1, "destinationport": 2}]
         options = {}
         result = json_to_stix_translator.convert_to_stix(data_source, map_data, test_data,
                                                          transformers.get_all_transformers(), options)[0]
