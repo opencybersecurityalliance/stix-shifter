@@ -1,4 +1,5 @@
 import argparse
+import sys
 from stix_shifter import stix_shifter
 
 
