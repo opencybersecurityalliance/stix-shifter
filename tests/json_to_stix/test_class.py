@@ -48,19 +48,31 @@ class TestTransform(object):
                ['name'] == datasource['name'])
 
     def test_simple_props(self):
-        datasource = {'id': '123', 'name': 'sourcename'}
-        map_data = {"ip": {
-            "key": "ipv4-addr.value",
-            "type": "value"
-        }, "url": {"key": "url.value",
-                   "type": "value"},
-            "domain": {
-            "key": "domain-name.value",
-            "type": "value"
-        }, "payload": {
-            "key": "artifact.payload_bin",
-            "type": "value"
+        datasource = {
+            'id': '123',
+            'name': 'sourcename'
         }
+        map_data = {
+            "ip": {
+                "key": "ipv4-addr.value",
+                "cybox": "true",
+                "type": "value"
+            },
+            "url": {
+                "key": "url.value",
+                "cybox": "true",
+                "type": "value"
+                },
+            "domain": {
+                "key": "domain-name.value",
+                "cybox": "true",
+                "type": "value"
+            },
+            "payload": {
+                "key": "artifact.payload_bin",
+                "cybox": "true",
+                "type": "value"
+            }
         }
         transformer = None
         options = {}
@@ -184,35 +196,43 @@ class TestTransform(object):
     def test_to_string_transformer(self):
         datasource = {'id': '123', 'name': 'sourcename'}
         map_data = {
-            "destinationip": [
-                {
-                    "key": "ipv4-addr.value",
-                    "type": "value"
-                },
-                {
-                    "key": "ipv6-addr.value",
-                    "type": "value"
-                },
-                {
-                    "key": "network-traffic.dst_ref",
-                    "type": "reference",
-                    "linked": "nt",
-                    "transformer": "ToString"
-                }
-            ],
             "sourceip": [
                 {
                     "key": "ipv4-addr.value",
+                    "cybox": "true",
                     "type": "value"
                 },
                 {
                     "key": "ipv6-addr.value",
+                    "cybox": "true",
                     "type": "value"
                 },
                 {
                     "key": "network-traffic.src_ref",
                     "type": "reference",
-                    "linked": "nt",
+                    "references": "ipv4-addr",
+                    "cybox": "true",
+                    "linked": "network-traffic",
+                    "transformer": "ToString"
+                }
+            ],
+            "destinationip": [
+                {
+                    "key": "ipv4-addr.value",
+                    "cybox": "true",
+                    "type": "value"
+                },
+                {
+                    "key": "ipv6-addr.value",
+                    "cybox": "true",
+                    "type": "value"
+                },
+                {
+                    "key": "network-traffic.dst_ref",
+                    "type": "reference",
+                    "references": "ipv6-addr",
+                    "cybox": "true",
+                    "linked": "network-traffic",
                     "transformer": "ToString"
                 }
             ]
@@ -233,13 +253,13 @@ class TestTransform(object):
 
         assert('1' in objects)  # sourceip
         object1 = objects['1']
-        assert(object1['type'] == 'ipv4-addr')
-        assert(object1['value'] == "1.1.1.1")
+        assert(object1['type'] == 'ipv6-addr')
+        assert(object1['value'] == "2.2.2.2")
 
         assert('2' in objects)
         object2 = objects['2']
-        assert(object2['dst_ref'] == '0')
-        assert(object2['src_ref'] == '1')
+        assert(object2['src_ref'] == '0')
+        assert(object2['dst_ref'] == '1')
         assert(object2['type'] == 'network-traffic')
 
     def test_to_array_transformer(self):

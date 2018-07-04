@@ -11,7 +11,7 @@ def convert_to_stix(datasource, map_data, data, transformers, options):
         datasource, map_data, transformers, options)
 
     # map data list to list of transformed objects
-    results = list(map(ds2stix.new_transform, data))
+    results = list(map(ds2stix.transform, data))
     return results
 
 
@@ -153,6 +153,9 @@ class DataSourceObjToStixObj:
             cybox = definition['cybox'] if 'cybox' in definition else None
             val_type = definition['type']
 
+            if stix_value is None:
+                continue
+
             if not cybox:
                 observation = DataSourceObjToStixObj._add_none_cybox_props(observation, stix_value, definition)
             elif cybox:
@@ -161,7 +164,7 @@ class DataSourceObjToStixObj:
 
         return observation
 
-    def new_transform(self, obj):
+    def transform(self, obj):
         """
         Transforms the given object in to a STIX observation based on the mapping file and transform functions
 
@@ -175,7 +178,7 @@ class DataSourceObjToStixObj:
 
         # declare baseline observation object
         observation = {
-            'x_com_obm_uds_datasource': {'id': self.datasource['id'], 'name': self.datasource['name']},
+            'x_com_ibm_uds_datasource': {'id': self.datasource['id'], 'name': self.datasource['name']},
             'id': stix_type + '--' + uniq_id,
             'type': stix_type,
             'objects': {}
