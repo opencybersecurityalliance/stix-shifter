@@ -1,5 +1,5 @@
 import json
-
+import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter.src import transformers
@@ -28,11 +28,11 @@ class JSONToStix(BaseResultTranslator):
         else:
             map_data = json.loads(mapping)
 
-        # todo: make datasource id/name dynamic
+        # todo: Grab datasource id, name, and type from datasource/config
         datasource = {
-            'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}
+            'id': str(uuid.uuid4()), 'name': 'QRadar', 'type': 'events'}
 
         results = json_to_stix_translator.convert_to_stix(datasource, map_data,
                                                           json_data, transformers.get_all_transformers(), options)
 
-        return json.dumps(results, indent=4, sort_keys=True)
+        return json.dumps(results, indent=4, sort_keys=False)

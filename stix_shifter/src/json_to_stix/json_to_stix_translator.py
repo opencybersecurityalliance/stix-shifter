@@ -7,18 +7,39 @@ from stix2validator import validate_instance, print_results
 
 
 def convert_to_stix(datasource, map_data, data, transformers, options):
-    ds2stix = DataSourceObjToStixObj(
-        datasource, map_data, transformers, options)
+
+    bundle = {
+        "type": "bundle",
+        "id": "bundle--" + str(uuid.uuid4()),
+        "objects": []
+    }
+
+    identity_id = "identity--" + datasource['id']
+    identity_object = [{
+        "type": "identity",
+        "id": identity_id,
+        "name": datasource['name'],
+        "identity_class": datasource['type']
+    }]
+
+    bundle["objects"] += identity_object
+
+    for datum in data:
+        datum['identity_id'] = identity_id
+
+    ds2stix = DataSourceObjToStixObj(map_data, transformers, options)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
-    return results
+
+    bundle["objects"] += results
+
+    return bundle
 
 
 class DataSourceObjToStixObj:
 
-    def __init__(self, datasource, ds_to_stix_map, transformers, options):
-        self.datasource = datasource
+    def __init__(self, ds_to_stix_map, transformers, options):
         self.dsToStixMap = ds_to_stix_map
         self.transformers = transformers
 
@@ -81,9 +102,11 @@ class DataSourceObjToStixObj:
         """
         # TODO improve this method
         if index in observation['objects'] and split_key[-2] in observation['objects'][index]:
-            observation['objects'][index][split_key[-2]].update({split_key[-1]: value})
+            observation['objects'][index][split_key[-2]
+                                          ].update({split_key[-1]: value})
         else:
-            new_obj = {'type': split_key[0]} if index not in observation['objects'] else {}
+            new_obj = {
+                'type': split_key[0]} if index not in observation['objects'] else {}
             nested_obj = new_obj
             child_props = split_key[1:-1]
             previous_key = ''
@@ -120,9 +143,11 @@ class DataSourceObjToStixObj:
         :return: altered observation object
         """
         if key_len > 2:
-            observation = DataSourceObjToStixObj._deal_with_nested_props(observation, split_key, value, index, )
+            observation = DataSourceObjToStixObj._deal_with_nested_props(
+                observation, split_key, value, index, )
         elif index not in observation['objects']:
-            observation['objects'].update({index: {'type': split_key[0], split_key[1]: value}})
+            observation['objects'].update(
+                {index: {'type': split_key[0], split_key[1]: value}})
         elif index in observation['objects']:
             obj_to_update = observation['objects'][index]
             obj_to_update.update({split_key[1]: value})
@@ -148,18 +173,22 @@ class DataSourceObjToStixObj:
         # Run through possible permutations of mapping file
         if val_type == 'value' and linked is None and split_key[0] in ref_obj_map:
             index = str(ref_obj_map[split_key[0]])
-            observation['objects'].update({index: {'type': split_key[0], split_key[1]: stix_value}})
+            observation['objects'].update(
+                {index: {'type': split_key[0], split_key[1]: stix_value}})
         elif val_type == 'value' and linked and linked in ref_obj_map:
             index = str(ref_obj_map[linked])
-            observation = DataSourceObjToStixObj._update_cybox_props(index, observation, split_key, stix_value, key_len)
+            observation = DataSourceObjToStixObj._update_cybox_props(
+                index, observation, split_key, stix_value, key_len)
         elif val_type == 'reference' and linked and split_key[0] in ref_obj_map:
             index = str(ref_obj_map[linked])
             ref_value = str(ref_obj_map[definition['references']])
-            observation = DataSourceObjToStixObj._update_cybox_props(index, observation, split_key, ref_value, key_len)
+            observation = DataSourceObjToStixObj._update_cybox_props(
+                index, observation, split_key, ref_value, key_len)
         elif val_type == 'reference' and linked and linked in ref_obj_map:
             index = str(ref_obj_map[linked])
             ref_value = str(ref_obj_map[definition['references']])
-            observation = DataSourceObjToStixObj._update_cybox_props(index, observation, split_key, ref_value, key_len)
+            observation = DataSourceObjToStixObj._update_cybox_props(
+                index, observation, split_key, ref_value, key_len)
 
         return observation
 
@@ -181,7 +210,8 @@ class DataSourceObjToStixObj:
                 item_def = map_def if isinstance(map_def, list) else [map_def]
 
                 for definition in item_def:
-                    split_key = DataSourceObjToStixObj._split_key(definition['key'], True)
+                    split_key = DataSourceObjToStixObj._split_key(
+                        definition['key'], True)
                     linked = definition['linked'] if 'linked' in definition else None
                     cybox = definition['cybox'] if 'cybox' in definition else None
 
@@ -211,8 +241,10 @@ class DataSourceObjToStixObj:
         item_def = map_def if isinstance(map_def, list) else [map_def]
 
         for definition in item_def:
-            transformer = transformers[definition['transformer']] if 'transformer' in definition else None
-            stix_value = transformer.transform(obj[item]) if transformer else obj[item]
+            transformer = transformers[definition['transformer']
+                                       ] if 'transformer' in definition else None
+            stix_value = transformer.transform(
+                obj[item]) if transformer else obj[item]
             linked = definition['linked'] if 'linked' in definition else None
             cybox = definition['cybox'] if 'cybox' in definition else None
             val_type = definition['type']
@@ -221,7 +253,8 @@ class DataSourceObjToStixObj:
                 continue
 
             if not cybox:
-                observation = DataSourceObjToStixObj._add_none_cybox_props(observation, stix_value, definition)
+                observation = DataSourceObjToStixObj._add_none_cybox_props(
+                    observation, stix_value, definition)
             elif cybox:
                 observation = DataSourceObjToStixObj._add_cybox_props(observation, stix_value, definition,
                                                                       linked, ref_obj_map, val_type)
@@ -242,13 +275,14 @@ class DataSourceObjToStixObj:
 
         # declare baseline observation object
         observation = {
-            'x_com_ibm_uds_datasource': {'id': self.datasource['id'], 'name': self.datasource['name']},
             'id': stix_type + '--' + uniq_id,
             'type': stix_type,
+            'created_by_ref': obj['identity_id'],
             'objects': {}
         }
 
-        ref_obj_map = DataSourceObjToStixObj._construct_ref_obj_map(obj, map_file)
+        ref_obj_map = DataSourceObjToStixObj._construct_ref_obj_map(
+            obj, map_file)
 
         for item in obj:
             if item in map_file:
