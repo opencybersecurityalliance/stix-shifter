@@ -20,27 +20,29 @@
   },
   "identityip": {
     "key": "x-com-ibm-ariel.identity_ip",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "qidname": {
     "key": "x-com-ibm-ariel.qid_name",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "ipv6-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "network-traffic.dst_ref",
       "type": "reference",
-      "linked": "nt",
+      "references": "ipv4-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
       "transformer": "ToString"
     }
   ],
@@ -84,16 +86,20 @@
   "sourceip": [
     {
       "key": "ipv4-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "ipv6-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "network-traffic.src_ref",
       "type": "reference",
-      "linked": "nt",
+      "references": "ipv6-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
       "transformer": "ToString"
     }
   ],
@@ -117,20 +123,113 @@
   "destinationport": {
     "key": "network-traffic.dst_port",
     "cybox": "true",
-    "linked": "nt",
+    "linked": "network-traffic",
     "type": "value"
   },
   "sourceport": {
     "key": "network-traffic.src_port",
     "cybox": "true",
     "type": "value",
-    "linked": "nt"
+    "linked": "network-traffic"
   },
   "protocol": {
     "key": "network-traffic.protocols",
     "cybox": "true",
     "type": "value",
-    "linked": "nt",
+    "linked": "network-traffic",
     "transformer": "ToArray"
-  }
+  },
+  "content": {
+    "key": "artifact.payload_bin",
+    "cybox": "true",
+    "type": "value",
+    "transformer": "ToBase64"
+  },
+  "sha_256":{
+    "key": "file.hashes.SHA-256",
+    "type": "value",
+    "cybox": "true",
+    "linked": "child-file"
+  },
+  "md5_hash":{
+    "key": "file.hashes.MD5",
+    "type": "value",
+    "cybox": "true",
+    "linked": "child-file"
+  },
+  "pid": {
+    "key": "process.pid",
+    "type": "value",
+    "cybox": "true",
+    "linked": "child-process"
+  },
+  "image_path": [
+    {
+      "key": "process.binary_ref",
+      "type": "reference",
+      "references": "child-file",
+      "cybox": "true",
+      "linked": "child-process"
+    },
+    {
+      "key": "directory.path",
+      "type": "value",
+      "cybox": "true",
+      "transformer": "ToFilePath",
+      "linked": "child-directory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "type": "reference",
+      "references": "child-directory",
+      "cybox": "true",
+      "linked": "child-file",
+      "transformer": "ToString"
+    },
+    {
+      "key": "file.name",
+      "type": "value",
+      "cybox": "true",
+      "transformer": "ToFileName",
+      "linked": "child-file"
+    }
+  ],
+  "parent_image_path": [
+    {
+      "key": "process.parent_ref",
+      "type": "reference",
+      "references": "parent-process",
+      "cybox": "true",
+      "linked": "child-process"
+    },
+    {
+      "key": "process.binary_ref",
+      "type": "reference",
+      "references": "parent-file",
+      "linked": "parent-process",
+      "cybox": "true"
+    },
+    {
+      "key": "directory.path",
+      "type": "value",
+      "cybox": "true",
+      "transformer": "ToFilePath",
+      "linked": "parent-directory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "type": "reference",
+      "references": "parent-directory",
+      "cybox": "true",
+      "linked": "parent-file",
+      "transformer": "ToString"
+    },
+    {
+      "key": "file.name",
+      "type": "value",
+      "cybox": "true",
+      "transformer": "ToFileName",
+      "linked": "parent-file"
+    }
+  ]
 }
