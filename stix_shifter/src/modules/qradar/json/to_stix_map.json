@@ -110,14 +110,17 @@
   },
   "url": {
     "key": "url.value",
+    "cybox": "true",
     "type": "value"
   },
   "domain": {
     "key": "domain-name.value",
+    "cybox": "true",
     "type": "value"
   },
   "payload": {
     "key": "artifact.payload_bin",
+    "cybox": "true",
     "type": "value"
   },
   "destinationport": {
