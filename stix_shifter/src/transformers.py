@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from datetime import datetime, timezone
+import base64
+import re
 
 
 class ValueTransformer():
@@ -68,5 +70,38 @@ class ToArray(ValueTransformer):
             print("Cannot convert input to array")
 
 
+class ToBase64(ValueTransformer):
+    """A value transformer for expected base 64 values"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return base64.b64encode(obj.encode('ascii')).decode('ascii')
+        except ValueError:
+            print("Cannot convert input to base64")
+
+
+class ToFilePath(ValueTransformer):
+    """A value transformer for expected file paths"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return obj[0:len(obj) - len(re.split(r'[\\/]', obj)[-1])]
+        except ValueError:
+            print("Cannot convert input to path string")
+
+
+class ToFileName(ValueTransformer):
+    """A value transformer for expected file names"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return re.split(r'[\\/]', obj)[-1]
+        except ValueError:
+            print("Cannot convert input to file name")
+
 def get_all_transformers():
-    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToArray": ToArray}
+    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToArray": ToArray,
+            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName}

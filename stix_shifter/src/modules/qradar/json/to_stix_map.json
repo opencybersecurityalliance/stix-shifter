@@ -20,27 +20,29 @@
   },
   "identityip": {
     "key": "x-com-ibm-ariel.identity_ip",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "qidname": {
     "key": "x-com-ibm-ariel.qid_name",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "ipv6-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "network-traffic.dst_ref",
       "type": "reference",
-      "linked": "nt",
+      "references": "ipv4-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
       "transformer": "ToString"
     }
   ],
@@ -84,16 +86,20 @@
   "sourceip": [
     {
       "key": "ipv4-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "ipv6-addr.value",
+      "cybox": "true",
       "type": "value"
     },
     {
       "key": "network-traffic.src_ref",
       "type": "reference",
-      "linked": "nt",
+      "references": "ipv6-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
       "transformer": "ToString"
     }
   ],
@@ -104,33 +110,36 @@
   },
   "url": {
     "key": "url.value",
+    "cybox": "true",
     "type": "value"
   },
   "domain": {
     "key": "domain-name.value",
+    "cybox": "true",
     "type": "value"
   },
   "payload": {
     "key": "artifact.payload_bin",
+    "cybox": "true",
     "type": "value"
   },
   "destinationport": {
     "key": "network-traffic.dst_port",
     "cybox": "true",
-    "linked": "nt",
+    "linked": "network-traffic",
     "type": "value"
   },
   "sourceport": {
     "key": "network-traffic.src_port",
     "cybox": "true",
     "type": "value",
-    "linked": "nt"
+    "linked": "network-traffic"
   },
   "protocol": {
     "key": "network-traffic.protocols",
     "cybox": "true",
     "type": "value",
-    "linked": "nt",
+    "linked": "network-traffic",
     "transformer": "ToArray"
   }
 }
