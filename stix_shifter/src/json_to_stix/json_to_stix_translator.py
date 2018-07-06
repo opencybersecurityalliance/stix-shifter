@@ -1,5 +1,5 @@
 # import re
-# import logging
+import logging
 import uuid
 from stix2validator import validate_instance, print_results
 
@@ -26,17 +26,33 @@ class DataSourceObjToStixObj:
         self.stix_validator = options.get('stix_validator', False)
 
     @staticmethod
-    def _split_key(key, type_name=None):
+    def _split_key(key, contains_type_name=None):
+        """
+        Splits the given key into its constituent parts and returns them
+
+        :param key: The key to be split apart on '.'
+        :param contains_type_name: defaults to None, used to determine whether we should replace '-' with '_'
+        :return: an array of string
+        """
         try:
-            if type_name:
+            if contains_type_name:
                 return key.split('.') if key.index('.') else None
             else:
+                # Replace '-' with '_' to confirm to stix standards
                 return key.replace('-', '_').split('.') if key.index('.') else None
         except ValueError:
-            print('{0} cannot be split'.format(key))
+            logging.info('{0} cannot be split'.format(key))
 
     @staticmethod
     def _add_none_cybox_props(observation, stix_value, definition):
+        """
+        Adds properties that are not part of a cyber observable object to the stix object
+
+        :param observation: current stix JSON object
+        :param stix_value: Stix valid value
+        :param definition: The current mapping key JSON definition
+        :return: altered observation object
+        """
         key = definition['key']
         split_key = DataSourceObjToStixObj._split_key(key)
 
@@ -54,6 +70,15 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _deal_with_nested_props(observation, split_key, value, index):
+        """
+        Creates and/or updates a nested property inside a cyber observable object
+
+        :param observation: current stix JSON object
+        :param split_key: an array of keys(i.e. strings) that are used to construct the nested object
+        :param value: the value, either reference or stix valid value, to be added to the nested property
+        :param index: the index of the cybox object to be altered
+        :return: altered observation object
+        """
         # TODO improve this method
         if index in observation['objects'] and split_key[-2] in observation['objects'][index]:
             observation['objects'][index][split_key[-2]].update({split_key[-1]: value})
@@ -84,6 +109,16 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _update_cybox_props(index, observation, split_key, value, key_len):
+        """
+        Updates the given cyber observable object
+
+        :param index: the index of the cybox object to be altered
+        :param observation: current stix JSON object
+        :param split_key: an array of keys(i.e. strings) that are used to construct the nested object
+        :param value: the value, either reference or stix valid value, to be added to the nested property
+        :param key_len: length of the split_key
+        :return: altered observation object
+        """
         if key_len > 2:
             observation = DataSourceObjToStixObj._deal_with_nested_props(observation, split_key, value, index, )
         elif index not in observation['objects']:
@@ -97,6 +132,17 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _add_cybox_props(observation, stix_value, definition, linked, ref_obj_map, val_type):
+        """
+        Adds a property to a cyber observable object
+
+        :param observation: current stix JSON object
+        :param stix_value: stix valid value
+        :param definition: The current mapping key JSON definition
+        :param linked: a string that is used to find the indices that the property is linked to from the ref_obj_map
+        :param ref_obj_map: object containing a list of keys and their respective indices
+        :param val_type: string that can be either 'value' or 'reference'
+        :return: altered observation object
+        """
         split_key = DataSourceObjToStixObj._split_key(definition['key'], True)
         key_len = len(split_key)
         # Run through possible permutations of mapping file
@@ -119,6 +165,13 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _construct_ref_obj_map(obj, map_file):
+        """
+        Creates and populates an object of cyber observable object types and their respective indices
+
+        :param obj: the datasource object that is being converted to stix
+        :param map_file: the datasource map file
+        :return: object containing a list of keys and their respective indices
+        """
         obj_ref_map = {}
         index = 0
 
@@ -143,6 +196,17 @@ class DataSourceObjToStixObj:
 
     @staticmethod
     def _process_definitions(item, map_file, observation, transformers, obj, ref_obj_map):
+        """
+        Iterate through the datasource object that is being converted to stix and populate the observation object
+
+        :param item: a single key:value from the datasource objectthat is being converted to stix
+        :param map_file: the datasource map file
+        :param observation: current stix JSON object
+        :param transformers: a set of functions
+        :param obj: the datasource object that is being converted to stix
+        :param ref_obj_map: object containing a list of keys and their respective indices
+        :return: altered observation object
+        """
         map_def = map_file[item]
         item_def = map_def if isinstance(map_def, list) else [map_def]
 
@@ -191,7 +255,7 @@ class DataSourceObjToStixObj:
                 observation = DataSourceObjToStixObj._process_definitions(item, map_file, observation,
                                                                           transformers, obj, ref_obj_map)
 
-        if self.stix_validator:
-            validated_result = validate_instance(observation)
-            print_results(validated_result)
+        #if self.stix_validator:
+        validated_result = validate_instance(observation)
+        print_results(validated_result)
         return observation
