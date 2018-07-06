@@ -255,7 +255,7 @@ class DataSourceObjToStixObj:
                 observation = DataSourceObjToStixObj._process_definitions(item, map_file, observation,
                                                                           transformers, obj, ref_obj_map)
 
-        #if self.stix_validator:
-        validated_result = validate_instance(observation)
-        print_results(validated_result)
+        if self.stix_validator:
+            validated_result = validate_instance(observation)
+            print_results(validated_result)
         return observation
