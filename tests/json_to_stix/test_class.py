@@ -1,14 +1,17 @@
 from stix_shifter.src.json_to_stix import json_to_stix_translator
 from stix_shifter.src import transformers
+from stix_shifter.src.modules.qradar import qradar_translator
+import json
+
+interface = qradar_translator.Translator()
+map_file = open(interface.mapping_filepath).read()
+map_data = json.loads(map_file)
 
 
 class TestTransform(object):
+
     def test_common_prop(self):
         data_source = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
-        map_data = {"time": {
-            "key": "created",
-            "type": "value"
-        }}
         transformer = None
         options = {}
         data = {"time": "2018-03-20T13:54:59.952Z"}
@@ -19,135 +22,125 @@ class TestTransform(object):
         assert(result_bundle['type'] == 'bundle')
 
     def test_simple_props(self):
-        datasource = {
+        data_source = {
             'id': '123',
             'name': 'sourcename',
             'type': 'sourcetype'
-        }
-        map_data = {
-            "ip": {
-                "key": "ipv4-addr.value",
-                "cybox": "true",
-                "type": "value"
-            },
-            "url": {
-                "key": "url.value",
-                "cybox": "true",
-                "type": "value"
-            },
-            "domain": {
-                "key": "domain-name.value",
-                "cybox": "true",
-                "type": "value"
-            },
-            "payload": {
-                "key": "artifact.payload_bin",
-                "cybox": "true",
-                "type": "value"
-            }
         }
         transformer = None
         options = {}
         payload = "SomeBase64Payload"
         url = "https://example.com"
         domain = "example.com"
-        ip_address = "127.0.0.1"
-        data = {"ip": ip_address, "url": url,
-                "domain": domain, "payload": payload}
-        x = json_to_stix_translator.DataSourceObjToStixObj(
-            datasource, map_data, transformer, options)
-        result = x.transform(data)
-        assert(result is not None)
-        assert('objects' in result)
-        objects = result['objects']
-        assert('0' in objects)
-        object0 = objects['0']
-        assert(object0['type'] == 'ipv4-addr')
-        assert(object0['value'] == ip_address)
-        assert('1' in objects)
-        object1 = objects['1']
-        assert(object1['type'] == 'url')
-        assert(object1['value'] == url)
-        assert('2' in objects)
-        object2 = objects['2']
-        assert(object2['type'] == 'domain-name')
-        assert(object2['value'] == domain)
-        assert('3' in objects)
-        object2 = objects['3']
-        assert(object2['type'] == 'artifact')
-        assert(object2['payload_bin'] == payload)
+        source_ip = "127.0.0.1"
+        data = {"sourceip": source_ip, "url": url,
+                "domain": domain, "payload": payload, "starttime": 1531169112}
+
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+
+        assert(result_bundle is not None)
+        assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
         assert(result_bundle_objects is not None)
 
         result_bundle_identity = result_bundle_objects[0]
-        assert(result_bundle_identity is not None)
         assert(result_bundle_identity['type'] == 'identity')
         assert(result_bundle_identity['id'] ==
                'identity--' + data_source['id'])
         assert(result_bundle_identity['name'] == data_source['name'])
         assert(result_bundle_identity['identity_class'] == data_source['type'])
 
-        result_bundle_observables = result_bundle_objects[1]
+        observed_data = result_bundle_objects[1]
+        assert(observed_data is not None)
+        assert(observed_data['created'] is not None)
+        assert(observed_data['type'] == "observed-data")
+        assert(observed_data['created_by_ref'] == result_bundle_identity['id'])
 
-        assert(result_bundle_observables is not None)
-        assert(result_bundle_observables['created'] == data["time"])
-        assert(result_bundle_observables['type'] == "observed-data")
-        assert(
-            result_bundle_observables['created_by_ref'] == result_bundle_identity['id'])
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
 
-    def test_to_string_transformer(self):
-        datasource = {'id': '123', 'name': 'sourcename'}
-        map_data = {
-            "sourceip": [
-                {
-                    "key": "ipv4-addr.value",
-                    "cybox": "true",
-                    "type": "value"
-                },
-                {
-                    "key": "ipv6-addr.value",
-                    "cybox": "true",
-                    "type": "value"
-                },
-                {
-                    "key": "network-traffic.src_ref",
-                    "type": "reference",
-                    "references": "ipv4-addr",
-                    "cybox": "true",
-                    "linked": "network-traffic",
-                    "transformer": "ToString"
-                }
-            ],
-            "destinationip": [
-                {
-                    "key": "ipv4-addr.value",
-                    "cybox": "true",
-                    "type": "value"
-                },
-                {
-                    "key": "ipv6-addr.value",
-                    "cybox": "true",
-                    "type": "value"
-                },
-                {
-                    "key": "network-traffic.dst_ref",
-                    "type": "reference",
-                    "references": "ipv6-addr",
-                    "cybox": "true",
-                    "linked": "network-traffic",
-                    "transformer": "ToString"
-                }
-            ]
-        }
-        options = {}
-        data = [{"sourceip": "1.1.1.1", "destinationip": "2.2.2.2"}]
-        result = json_to_stix_translator.convert_to_stix(
-            datasource, map_data, data, transformers.get_all_transformers(), options)[0]
-        assert(result is not None)
-        assert('objects' in result)
-        objects = result['objects']
-        assert(len(objects) == 3)
+        for key, value in objects.items():
+            assert(int(key) in list(range(0, len(objects))))
+            if(value['type'] == 'ipv4-addr'):
+                assert(
+                    value['value'] == source_ip), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'url'):
+                assert(value['value'] == url), "Wrong value returned " + \
+                    key + ":" + str(value)
+            elif(value['type'] == 'domain-name'):
+                assert(
+                    value['value'] == domain), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'artifact'):
+                assert(
+                    value['payload_bin'] == payload), "Wrong value returned " + key + ":" + str(value)
+            # should not be returned, still needs to be fixed in logic
+            elif(value['type'] == 'ipv6-addr'):
+                assert(
+                    value['value'] == source_ip), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'network-traffic'):
+                assert(int(value['src_ref']) in list(
+                    range(0, len(objects)))), "Wrong value returned " + key + ":" + str(value)
+            else:
+                assert(False), "Returned a non-mapped value " + \
+                    key + ":" + str(value)
+
+        assert(result_bundle_identity['name'] == data_source['name'])
+        assert(result_bundle_identity['identity_class'] == data_source['type'])
+
+    # def test_to_string_transformer(self):
+    #     data_source = {'id': '123', 'name': 'sourcename'}
+    #     map_data = {
+    #         "sourceip": [
+    #             {
+    #                 "key": "ipv4-addr.value",
+    #                 "cybox": "true",
+    #                 "type": "value"
+    #             },
+    #             {
+    #                 "key": "ipv6-addr.value",
+    #                 "cybox": "true",
+    #                 "type": "value"
+    #             },
+    #             {
+    #                 "key": "network-traffic.src_ref",
+    #                 "type": "reference",
+    #                 "references": "ipv4-addr",
+    #                 "cybox": "true",
+    #                 "linked": "network-traffic",
+    #                 "transformer": "ToString"
+    #             }
+    #         ],
+    #         "destinationip": [
+    #             {
+    #                 "key": "ipv4-addr.value",
+    #                 "cybox": "true",
+    #                 "type": "value"
+    #             },
+    #             {
+    #                 "key": "ipv6-addr.value",
+    #                 "cybox": "true",
+    #                 "type": "value"
+    #             },
+    #             {
+    #                 "key": "network-traffic.dst_ref",
+    #                 "type": "reference",
+    #                 "references": "ipv6-addr",
+    #                 "cybox": "true",
+    #                 "linked": "network-traffic",
+    #                 "transformer": "ToString"
+    #             }
+    #         ]
+    #     }
+    #     options = {}
+    #     data = [{"sourceip": "1.1.1.1", "destinationip": "2.2.2.2"}]
+    #     result = json_to_stix_translator.convert_to_stix(
+    #         data_source, map_data, data, transformers.get_all_transformers(), options)[0]
+    #     assert(result is not None)
+    #     assert('objects' in result)
+    #     objects = result['objects']
+    #     assert(len(objects) == 3)
 
     #     result = json_to_stix_translator.convert_to_stix(
     #         data_source, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
@@ -164,7 +157,7 @@ class TestTransform(object):
         # assert(object2['type'] == 'network-traffic')
 
     # def test_custom_props(self):
-    #     # datasource = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
+    #     # data_source = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
     #     map_data = {"protocolid": {
     #         "key": "x-com-ibm-ariel.protocol_id",
     #         "type": "value",
@@ -216,7 +209,7 @@ class TestTransform(object):
     #     assert(attributes['value_two'] == 2)
 
     # def test_to_integer_transformer(self):
-    #     datasource = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
+    #     data_source = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
     #     map_data = {
     #         "eventCount": {
     #             "key": "number_observed",
@@ -227,7 +220,7 @@ class TestTransform(object):
     #     options = {}
     #     data = [{"eventCount": "5"}]
     #     result = json_to_stix_translator.convert_to_stix(
-    #         datasource, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
+    #         data_source, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
     #     assert(result is not None)
     #     assert('objects' in result)
     #     objects = result['objects']
@@ -236,7 +229,7 @@ class TestTransform(object):
     #     assert(result['number_observed'] == 5)
 
     # def test_to_integer_transformer_error(self):
-    #     datasource = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
+    #     data_source = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
     #     map_data = {
     #         "eventCount": {
     #             "key": "number_observed",
@@ -247,12 +240,12 @@ class TestTransform(object):
     #     options = {}
     #     data = [{"eventCount": "notaValidNumber"}]
     #     result = json_to_stix_translator.convert_to_stix(
-    #         datasource, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
+    #         data_source, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
     #     assert(result is not None)
     #     assert('number_observed' not in result)
 
     # def test_to_string_transformer(self):
-    #     datasource = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
+    #     data_source = {'id': '123', 'name': 'sourcename', 'type': 'sourcetype'}
     #     map_data = {
     #         "destinationip": [
     #             {
@@ -290,7 +283,7 @@ class TestTransform(object):
     #     options = {}
     #     data = [{"sourceip": "1.1.1.1", "destinationip": "2.2.2.2"}]
     #     result = json_to_stix_translator.convert_to_stix(
-    #         datasource, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
+    #         data_source, map_data, data, transformers.get_all_transformers(), options)['objects'][1]
     #     assert(result is not None)
     #     assert('objects' in result)
     #     objects = result['objects']

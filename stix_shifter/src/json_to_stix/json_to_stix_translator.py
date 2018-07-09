@@ -144,7 +144,7 @@ class DataSourceObjToStixObj:
         """
         if key_len > 2:
             observation = DataSourceObjToStixObj._deal_with_nested_props(
-                observation, split_key, value, index, )
+                observation, split_key, value, index)
         elif index not in observation['objects']:
             observation['objects'].update(
                 {index: {'type': split_key[0], split_key[1]: value}})
