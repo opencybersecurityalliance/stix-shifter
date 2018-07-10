@@ -14,9 +14,11 @@ class BaseTranslator:
         self.result_translator = BaseResultTranslator()
         self.query_translator = BaseQueryTranslator()
 
-    def translate_results(self, data, options, mapping=None):
+    def translate_results(self, data_source, data, options, mapping=None):
         """
         Translates data into STIX results based on a mapping file
+        :param data_source: STIX identity object representing a data source
+        :type data_source: str
         :param data: data to translate into STIX format
         :type data: str
         :param mapping: The mapping file path to use as instructions on how to translate the given data to STIX. This should default to something if it hasn't been passed in
@@ -24,7 +26,7 @@ class BaseTranslator:
         :return: translated STIX formatted results
         :rtype: str
         """
-        return self.result_translator.translate_results(data, options, mapping)
+        return self.result_translator.translate_results(data_source, data, options, mapping)
 
     def transform_query(self, data, options, mapping=None):
         """

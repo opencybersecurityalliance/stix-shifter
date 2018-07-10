@@ -6,7 +6,7 @@ from stix2validator import validate_instance, print_results
 # convert JSON data to STIX object using map_data and transformers
 
 
-def convert_to_stix(datasource, map_data, data, transformers, options):
+def convert_to_stix(data_source, map_data, data, transformers, options):
 
     bundle = {
         "type": "bundle",
@@ -14,15 +14,10 @@ def convert_to_stix(datasource, map_data, data, transformers, options):
         "objects": []
     }
 
-    identity_id = "identity--" + datasource['id']
-    identity_object = [{
-        "type": "identity",
-        "id": identity_id,
-        "name": datasource['name'],
-        "identity_class": datasource['type']
-    }]
+    identity_object = data_source
+    identity_id = identity_object['id']
 
-    bundle["objects"] += identity_object
+    bundle['objects'] += [identity_object]
 
     for datum in data:
         datum['identity_id'] = identity_id
