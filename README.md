@@ -6,7 +6,7 @@ Requires Python 3.6
 
 ## Converting from STIX Patterns to data source queries
 
-Call the stix_shifter in the format of
+### Call the stix_shifter in the format of
 
 ```
 usage: stix_shifter.py translate [-h]
@@ -16,55 +16,21 @@ usage: stix_shifter.py translate [-h]
 positional arguments:
   {qradar,dummy,aql_passthrough}         What translation module to use
   {results,query}                        What translation action to perform
+  data source                            A STIX identity object
   data                                   The data to be translated
 
 optional arguments:
   -h, --help            show this help message and exit
+  -x                    run STIX validation on each observable as it's written to the output JSON
 ```
 
-Example of converting a STIX pattern to an AQL query:
+### Example of converting a STIX pattern to an AQL query:
 
-`python main.py translate "qradar" "query" "[ipv4-addr:value = '198.51.100.1' or ipv4-addr:value = '198.51.200.1']"`
+[See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
 
-Returns:
+### Example of converting QRadar events to STIX:
 
-`SELECT * FROM events WHERE destinationip='192.168.122.84' OR sourceip='192.168.122.84' OR destinationip='192.168.122.83' OR sourceip='192.168.122.83'`
-
-Example of converting AQL events to STIX:
-
-`python main.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
-
-Returns:
-
-```json
-[
-  {
-    "x_com_ibm_uds_datasource": {
-      "id": "7c0de425-33bf-46be-9e38-e42319e36d95",
-      "name": "events"
-    },
-    "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
-    "type": "observed-data",
-    "objects": {
-      "0": { "type": "ipv4-addr", "value": "9.21.123.112" },
-      "1": { "type": "ipv4-addr", "value": "9.21.123.112" },
-      "2": { "type": "network-traffic", "src_ref": "1", "dst_ref": "0" }
-    },
-    "x_com_ibm_ariel": {
-      "log_source_id": 126,
-      "identity_ip": "0.0.0.0",
-      "protocol_id": 255,
-      "magnitude": 4,
-      "qid": 55500004
-    },
-    "number_observed": 1,
-    "created": "2018-04-20T12:36:17.191Z",
-    "modified": "2018-04-20T12:36:17.191Z",
-    "first_observed": "2018-04-20T12:36:17.191Z",
-    "last_observed": "2018-04-20T12:36:17.191Z"
-  }
-]
-```
+[See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
 
 ## Creating new translator modules
 
