@@ -5,6 +5,7 @@
   },
   "username": {
     "key": "user-account.user_id",
+    "cybox": "true",
     "type": "value"
   },
   "categoryname": {
