@@ -39,55 +39,45 @@ QRadar data to STIX mapping is defined in `to_stix_map.json`
 
 This example QRadar data:
 
-`python main.py translate "qradar" "results" '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python main.py translate "qradar" "results" "3532c56d-ea72-48be-a2ad-1a53f4c9c6d3" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Will return the following STIX observable:
 
 ```json
-{
-  "type": "bundle",
-  "id": "bundle--994b685e-6c42-4e0c-b6c4-f3da97fb4cf4",
-  "objects": [
-    {
-      "type": "identity",
-      "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-      "name": "QRadar",
-      "identity_class": "events"
+[
+  {
+    "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
+    "type": "observed-data",
+    "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+    "objects": {
+      "0": {
+        "type": "ipv4-addr",
+        "value": "9.21.123.112"
+      },
+      "1": {
+        "type": "ipv6-addr",
+        "value": "9.21.123.112"
+      },
+      "2": {
+        "type": "network-traffic",
+        "src_ref": "1",
+        "src_port": 0,
+        "dst_ref": "0",
+        "dst_port": 0,
+        "protocols": ["tcp"]
+      }
     },
-    {
-      "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
-      "type": "observed-data",
-      "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-      "objects": {
-        "0": {
-          "type": "ipv4-addr",
-          "value": "9.21.123.112"
-        },
-        "1": {
-          "type": "ipv6-addr",
-          "value": "9.21.123.112"
-        },
-        "2": {
-          "type": "network-traffic",
-          "src_ref": "1",
-          "src_port": 0,
-          "dst_ref": "0",
-          "dst_port": 0,
-          "protocols": ["tcp"]
-        }
-      },
-      "x_com_ibm_ariel": {
-        "log_source_id": 126,
-        "identity_ip": "0.0.0.0",
-        "magnitude": 4,
-        "qid": 55500004
-      },
-      "number_observed": 1,
-      "created": "2018-04-20T12:36:17.191Z",
-      "modified": "2018-04-20T12:36:17.191Z",
-      "first_observed": "2018-04-20T12:36:17.191Z",
-      "last_observed": "2018-04-20T12:36:17.191Z"
-    }
-  ]
-}
+    "x_com_ibm_ariel": {
+      "log_source_id": 126,
+      "identity_ip": "0.0.0.0",
+      "magnitude": 4,
+      "qid": 55500004
+    },
+    "number_observed": 1,
+    "created": "2018-04-20T12:36:17.191Z",
+    "modified": "2018-04-20T12:36:17.191Z",
+    "first_observed": "2018-04-20T12:36:17.191Z",
+    "last_observed": "2018-04-20T12:36:17.191Z"
+  }
+]
 ```

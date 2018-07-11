@@ -17,7 +17,7 @@ class BaseTranslator:
     def translate_results(self, data_source, data, options, mapping=None):
         """
         Translates data into STIX results based on a mapping file
-        :param data_source: STIX identity object representing a data source
+        :param data_source: Data source uuid
         :type data_source: str
         :param data: data to translate into STIX format
         :type data: str

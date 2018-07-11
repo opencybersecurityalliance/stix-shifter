@@ -1,5 +1,4 @@
 import json
-import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter.src import transformers
@@ -20,7 +19,6 @@ class JSONToStix(BaseResultTranslator):
         :rtype: str
         """
         json_data = json.loads(data)
-        data_source = json.loads(data_source)
 
         if(mapping is None):
             # If no mapping is passed in then we will use the default to_stix_map in the qradar module

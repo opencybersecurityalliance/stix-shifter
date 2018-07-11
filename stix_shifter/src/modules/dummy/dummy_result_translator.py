@@ -6,7 +6,7 @@ class DummyResultTranslator(BaseResultTranslator):
     def translate_results(self, data_source, data, options, mapping=None):
         """
         Takes in passed in results string and returns it
-        :param data_source: STIX identity object representing a data source
+        :param data_source: Data source uuid
         :type data_source: str
         :param data: results string that gets returned
         :type data: str
