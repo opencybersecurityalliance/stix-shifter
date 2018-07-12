@@ -6,7 +6,12 @@ import json
 interface = qradar_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
 map_data = json.loads(map_file)
-data_source = "3532c56d-ea72-48be-a2ad-1a53f4c9c6d3"
+data_source = {
+    "type": "identity",
+    "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+    "name": "QRadar",
+    "identity_class": "events"
+}
 options = {}
 
 
@@ -16,12 +21,24 @@ class TestTransform(object):
         transformer = None
         data = {"starttime": 1531169112, "eventcount": 5}
 
-        observed_data = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)[0]
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+
+        assert(result_bundle['type'] == 'bundle')
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert(result_bundle_identity['type'] == data_source['type'])
+        assert(result_bundle_identity['id'] == data_source['id'])
+        assert(result_bundle_identity['name'] == data_source['name'])
+        assert(result_bundle_identity['identity_class']
+               == data_source['identity_class'])
+
+        observed_data = result_bundle_objects[1]
 
         assert(observed_data['id'] is not None)
         assert(observed_data['type'] == "observed-data")
-        assert(observed_data['created_by_ref'] == "identity--" + data_source)
+        assert(observed_data['created_by_ref'] == result_bundle_identity['id'])
 
         assert(observed_data['number_observed'] == 5)
         assert(observed_data['created'] is not None)
@@ -40,8 +57,13 @@ class TestTransform(object):
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url,
                 "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 
-        observed_data = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)[0]
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
 
         assert('objects' in observed_data)
         objects = observed_data['objects']
@@ -92,8 +114,9 @@ class TestTransform(object):
         data = {"logsourceid": 126, "qid": 55500004,
                 "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
-        observed_data = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)[0]
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        observed_data = result_bundle['objects'][1]
 
         assert('x_com_ibm_ariel' in observed_data)
         custom_props = observed_data['x_com_ibm_ariel']

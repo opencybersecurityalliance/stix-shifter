@@ -23,7 +23,7 @@ def __main__():
     translate_parser.add_argument('translate_type', choices=[
         stix_shifter.RESULTS, stix_shifter.QUERY], help='what translation action to perform')
     translate_parser.add_argument(
-        'data_source', help='data source uuid')
+        'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
         'data', type=str, help='the data to be translated')
     # optional arguments

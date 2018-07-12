@@ -16,7 +16,7 @@ usage: stix_shifter.py translate [-h]
 positional arguments:
   {qradar,dummy,aql_passthrough}         What translation module to use
   {results,query}                        What translation action to perform
-  data source                            A data source uuid
+  data source                            A STIX identity object
   data                                   The data to be translated
 
 optional arguments:

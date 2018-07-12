@@ -8,14 +8,28 @@ from stix2validator import validate_instance, print_results
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
 
+    bundle = {
+        "type": "bundle",
+        "id": "bundle--" + str(uuid.uuid4()),
+        "objects": []
+    }
+
+    identity_object = data_source
+    identity_id = identity_object['id']
+
+    bundle['objects'] += [identity_object]
+
     for datum in data:
-        datum['identity_id'] = 'identity--' + data_source
+        datum['identity_id'] = identity_id
 
     ds2stix = DataSourceObjToStixObj(map_data, transformers, options)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
-    return results
+
+    bundle["objects"] += results
+
+    return bundle
 
 
 class DataSourceObjToStixObj:
