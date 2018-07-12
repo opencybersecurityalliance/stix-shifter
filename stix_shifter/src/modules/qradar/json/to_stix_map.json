@@ -1,22 +1,20 @@
 {
   "categoryid": {
     "key": "x-com-ibm-ariel.category_id",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "username": {
     "key": "user-account.user_id",
+    "cybox": "true",
     "type": "value"
   },
   "categoryname": {
     "key": "x-com-ibm-ariel.category_name",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "logsourceid": {
     "key": "x-com-ibm-ariel.log_source_id",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "identityip": {
     "key": "x-com-ibm-ariel.identity_ip",
@@ -75,13 +73,11 @@
   ],
   "logsourcename": {
     "key": "x-com-ibm-ariel.log_source_name",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "magnitude": {
     "key": "x-com-ibm-ariel.magnitude",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "sourceip": [
     {
@@ -105,8 +101,7 @@
   ],
   "qid": {
     "key": "x-com-ibm-ariel.qid",
-    "type": "value",
-    "linked": "ariel"
+    "type": "value"
   },
   "url": {
     "key": "url.value",

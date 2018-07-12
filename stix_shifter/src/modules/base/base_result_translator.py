@@ -7,9 +7,11 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.default_mapping_file_path = default_mapping_file_path
 
     @abstractmethod
-    def translate_results(self, data, options, mapping=None):
+    def translate_results(self, data_source, data, options, mapping=None):
         """
         Translates data into STIX results based on a mapping file
+        :param data_source: STIX identity object representing a data source
+        :type data_source: str
         :param data: data to translate into STIX format
         :type data: str
         :param mapping: The mapping file path to use as instructions on how to translate the given data to STIX. This should default to something if it hasn't been passed in

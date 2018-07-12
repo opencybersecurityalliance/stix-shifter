@@ -1,5 +1,5 @@
 import json
-
+import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter.src import transformers
@@ -9,7 +9,7 @@ from stix_shifter.src import transformers
 
 class JSONToStix(BaseResultTranslator):
 
-    def translate_results(self, data, options, mapping=None):
+    def translate_results(self, data_source, data, options, mapping=None):
         """
         Translates JSON data into STIX results based on a mapping file
         :param data: JSON formatted data to translate into STIX format
@@ -20,6 +20,7 @@ class JSONToStix(BaseResultTranslator):
         :rtype: str
         """
         json_data = json.loads(data)
+        data_source = json.loads(data_source)
 
         if(mapping is None):
             # If no mapping is passed in then we will use the default to_stix_map in the qradar module
@@ -28,11 +29,7 @@ class JSONToStix(BaseResultTranslator):
         else:
             map_data = json.loads(mapping)
 
-        # todo: make datasource id/name dynamic
-        datasource = {
-            'id': '7c0de425-33bf-46be-9e38-e42319e36d95', 'name': 'events'}
-
-        results = json_to_stix_translator.convert_to_stix(datasource, map_data,
+        results = json_to_stix_translator.convert_to_stix(data_source, map_data,
                                                           json_data, transformers.get_all_transformers(), options)
 
-        return json.dumps(results, indent=4, sort_keys=True)
+        return json.dumps(results, indent=4, sort_keys=False)

@@ -15,7 +15,7 @@ class StixShifter:
     def __init__(self):
         self.args = []
 
-    def translate(self, module, translate_type, data, options={}):
+    def translate(self, module, translate_type, data_source, data, options={}):
         """
         Translated queries to a specified format
         :param module: What module to use
@@ -43,6 +43,6 @@ class StixShifter:
             return interface.transform_query(data, options)
         elif translate_type == RESULTS:
             # Converting data from the datasource to STIX objects
-            return interface.translate_results(data, options)
+            return interface.translate_results(data_source, data, options)
         else:
             raise NotImplementedError
