@@ -1,28 +1,20 @@
-# import re
+import re
 import logging
 import uuid
 from stix2validator import validate_instance, print_results
-
-# convert JSON data to STIX object using map_data and transformers
-
+from . import observable
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
-
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
         "objects": []
     }
 
-    identity_object = data_source
-    identity_id = identity_object['id']
+    identity_id = data_source['id']
+    bundle['objects'] += [data_source]
 
-    bundle['objects'] += [identity_object]
-
-    for datum in data:
-        datum['identity_id'] = identity_id
-
-    ds2stix = DataSourceObjToStixObj(map_data, transformers, options)
+    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
@@ -31,230 +23,97 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
 
     return bundle
 
-
 class DataSourceObjToStixObj:
 
-    def __init__(self, ds_to_stix_map, transformers, options):
-        self.dsToStixMap = ds_to_stix_map
+    def __init__(self, identity_id, ds_to_stix_map, transformers, options):
+        self.identity_id = identity_id
+        self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
 
         # parse through options
         self.stix_validator = options.get('stix_validator', False)
+        self.cybox_default = options.get('cybox_default', True)
+
+        self.properties = observable.properties
 
     @staticmethod
-    def _split_key(key, contains_type_name=None):
+    def _get_value(obj, ds_key, transformer):
         """
-        Splits the given key into its constituent parts and returns them
+        Get value from source object, transforming if specified
 
-        :param key: The key to be split apart on '.'
-        :param contains_type_name: defaults to None, used to determine whether we should replace '-' with '_'
-        :return: an array of string
+        :param obj: the input object we are translating to STIX
+        :param ds_key: the property from the input object
+        :param transformer: the transform to apply to the property value (can be None)
+        :return: the resulting STIX value
         """
-        try:
-            if contains_type_name:
-                return key.split('.') if key.index('.') else None
-            else:
-                # Replace '-' with '_' to confirm to stix standards
-                return key.replace('-', '_').split('.') if key.index('.') else None
-        except ValueError:
-            logging.info('{0} cannot be split'.format(key))
+        if ds_key not in obj:
+            logging.debug('{} not found in object'.format(ds_key))
+            return None
+        ret_val = obj[ds_key]
+        if transformer is not None:
+            return transformer.transform(ret_val)
+        return ret_val
 
     @staticmethod
-    def _add_none_cybox_props(observation, stix_value, definition):
+    def _add_property(obj, key, stix_value):
         """
-        Adds properties that are not part of a cyber observable object to the stix object
+        Add stix_value to dictionary based on the input key, the key can be '.'-separated path to inner object
 
-        :param observation: current stix JSON object
-        :param stix_value: Stix valid value
-        :param definition: The current mapping key JSON definition
-        :return: altered observation object
+        :param obj: the dictionary we are adding our key to
+        :param key: the key to add 
+        :param stix_value: the STIX value translated from the input object
         """
-        key = definition['key']
-        split_key = DataSourceObjToStixObj._split_key(key)
 
-        if split_key and split_key[0] not in observation:
-            # Creates a custom object in observation if that object isn't present already
-            observation.update({split_key[0]: {split_key[1]: stix_value}})
-        elif split_key and split_key[0] in observation:
-            # Updates custom object if it's already present
-            observation[split_key[0]].update({split_key[1]: stix_value})
+        split_key = key.split('.')
+        child_obj = obj
+        parent_props = split_key[0:-1]
+        for prop in parent_props:
+            if prop not in child_obj:
+                child_obj[prop] = {}
+            child_obj = child_obj[prop]
+        child_obj[split_key[-1]] = stix_value
+
+    @staticmethod
+    def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name):
+        """
+        Handle the translation of the input property to its STIX CybOX property
+
+        :param key_to_add: STIX property key derived from the mapping file
+        :param observation: the the STIX observation currently being worked on
+        :param stix_value: the STIX value translated from the input object 
+        :param obj_name_map: the mapping of object name to actual object
+        :param obj_name: the object name derived from the mapping file
+        """
+        obj_type, obj_prop = key_to_add.split('.', 1)
+        objs_dir = observation['objects']
+        if obj_name in obj_name_map:
+            obj = objs_dir[obj_name_map[obj_name]]
         else:
-            # Adds simple properties(i.e. just key: value pairs) to the observation
-            observation.update({key: stix_value})
-
-        return observation
-
-    @staticmethod
-    def _deal_with_nested_props(observation, split_key, value, index):
-        """
-        Creates and/or updates a nested property inside a cyber observable object
-
-        :param observation: current stix JSON object
-        :param split_key: an array of keys(i.e. strings) that are used to construct the nested object
-        :param value: the value, either reference or stix valid value, to be added to the nested property
-        :param index: the index of the cybox object to be altered
-        :return: altered observation object
-        """
-        # TODO improve this method
-        if index in observation['objects'] and split_key[-2] in observation['objects'][index]:
-            observation['objects'][index][split_key[-2]
-                                          ].update({split_key[-1]: value})
-        else:
-            new_obj = {
-                'type': split_key[0]} if index not in observation['objects'] else {}
-            nested_obj = new_obj
-            child_props = split_key[1:-1]
-            previous_key = ''
-
-            for prop in child_props:
-                child_obj = {}
-                if previous_key == '':
-                    nested_obj.update({prop: child_obj})
-                else:
-                    previous_key.update({prop: child_obj})
-                previous_key = prop
-
-            nested_obj.update({previous_key: {split_key[-1]: value}})
-
-            if index not in observation['objects']:
-                observation['objects'].update({index: nested_obj})
-            else:
-                obj_to_update = observation['objects'][index]
-                obj_to_update.update(nested_obj)
-                observation['objects'].update({index: obj_to_update})
-
-        return observation
+            obj = {'type': obj_type}
+            obj_dir_key = str(len(objs_dir))
+            objs_dir[obj_dir_key] = obj
+            if obj_name is not None:
+                obj_name_map[obj_name] = obj_dir_key
+        DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
 
     @staticmethod
-    def _update_cybox_props(index, observation, split_key, value, key_len):
+    def _valid_stix_value(props_map, key, stix_value):
         """
-        Updates the given cyber observable object
+        Checks that the given STIX value is valid for this STIX property
 
-        :param index: the index of the cybox object to be altered
-        :param observation: current stix JSON object
-        :param split_key: an array of keys(i.e. strings) that are used to construct the nested object
-        :param value: the value, either reference or stix valid value, to be added to the nested property
-        :param key_len: length of the split_key
-        :return: altered observation object
+        :param props_map: the map of STIX properties which contains validation attributes
+        :param key: the STIX property name
+        :param stix_value: the STIX value translated from the input object 
+        :return: whether STIX value is valid for this STIX property
+        :rtype: bool
         """
-        if key_len > 2:
-            observation = DataSourceObjToStixObj._deal_with_nested_props(
-                observation, split_key, value, index)
-        elif index not in observation['objects']:
-            observation['objects'].update(
-                {index: {'type': split_key[0], split_key[1]: value}})
-        elif index in observation['objects']:
-            obj_to_update = observation['objects'][index]
-            obj_to_update.update({split_key[1]: value})
-            observation['objects'].update({index: obj_to_update})
-
-        return observation
-
-    @staticmethod
-    def _add_cybox_props(observation, stix_value, definition, linked, ref_obj_map, val_type):
-        """
-        Adds a property to a cyber observable object
-
-        :param observation: current stix JSON object
-        :param stix_value: stix valid value
-        :param definition: The current mapping key JSON definition
-        :param linked: a string that is used to find the indices that the property is linked to from the ref_obj_map
-        :param ref_obj_map: object containing a list of keys and their respective indices
-        :param val_type: string that can be either 'value' or 'reference'
-        :return: altered observation object
-        """
-        split_key = DataSourceObjToStixObj._split_key(definition['key'], True)
-        key_len = len(split_key)
-        # Run through possible permutations of mapping file
-        if val_type == 'value' and linked is None and split_key[0] in ref_obj_map:
-            index = str(ref_obj_map[split_key[0]])
-            observation['objects'].update(
-                {index: {'type': split_key[0], split_key[1]: stix_value}})
-        elif val_type == 'value' and linked and linked in ref_obj_map:
-            index = str(ref_obj_map[linked])
-            observation = DataSourceObjToStixObj._update_cybox_props(
-                index, observation, split_key, stix_value, key_len)
-        elif val_type == 'reference' and linked and split_key[0] in ref_obj_map:
-            index = str(ref_obj_map[linked])
-            ref_value = str(ref_obj_map[definition['references']])
-            observation = DataSourceObjToStixObj._update_cybox_props(
-                index, observation, split_key, ref_value, key_len)
-        elif val_type == 'reference' and linked and linked in ref_obj_map:
-            index = str(ref_obj_map[linked])
-            ref_value = str(ref_obj_map[definition['references']])
-            observation = DataSourceObjToStixObj._update_cybox_props(
-                index, observation, split_key, ref_value, key_len)
-
-        return observation
-
-    @staticmethod
-    def _construct_ref_obj_map(obj, map_file):
-        """
-        Creates and populates an object of cyber observable object types and their respective indices
-
-        :param obj: the datasource object that is being converted to stix
-        :param map_file: the datasource map file
-        :return: object containing a list of keys and their respective indices
-        """
-        obj_ref_map = {}
-        index = 0
-
-        for item in obj:
-            if item in map_file:
-                map_def = map_file[item]
-                item_def = map_def if isinstance(map_def, list) else [map_def]
-
-                for definition in item_def:
-                    split_key = DataSourceObjToStixObj._split_key(
-                        definition['key'], True)
-                    linked = definition['linked'] if 'linked' in definition else None
-                    cybox = definition['cybox'] if 'cybox' in definition else None
-
-                    if cybox and not linked and split_key[0] not in obj_ref_map:
-                        obj_ref_map.update({split_key[0]: index})
-                        index = index + 1
-                    elif linked and linked not in obj_ref_map:
-                        obj_ref_map.update({linked: index})
-                        index = index + 1
-
-        return obj_ref_map
-
-    @staticmethod
-    def _process_definitions(item, map_file, observation, transformers, obj, ref_obj_map):
-        """
-        Iterate through the datasource object that is being converted to stix and populate the observation object
-
-        :param item: a single key:value from the datasource objectthat is being converted to stix
-        :param map_file: the datasource map file
-        :param observation: current stix JSON object
-        :param transformers: a set of functions
-        :param obj: the datasource object that is being converted to stix
-        :param ref_obj_map: object containing a list of keys and their respective indices
-        :return: altered observation object
-        """
-        map_def = map_file[item]
-        item_def = map_def if isinstance(map_def, list) else [map_def]
-
-        for definition in item_def:
-            transformer = transformers[definition['transformer']
-                                       ] if 'transformer' in definition else None
-            stix_value = transformer.transform(
-                obj[item]) if transformer else obj[item]
-            linked = definition['linked'] if 'linked' in definition else None
-            cybox = definition['cybox'] if 'cybox' in definition else None
-            val_type = definition['type']
-
-            if stix_value is None:
-                continue
-
-            if not cybox:
-                observation = DataSourceObjToStixObj._add_none_cybox_props(
-                    observation, stix_value, definition)
-            elif cybox:
-                observation = DataSourceObjToStixObj._add_cybox_props(observation, stix_value, definition,
-                                                                      linked, ref_obj_map, val_type)
-
-        return observation
+        if stix_value is None:
+            return False
+        elif key in props_map and 'valid_regex' in props_map[key]:
+            pattern = re.compile(props_map[key]['valid_regex'])
+            if not pattern.match(str(stix_value)):
+                return False
+        return True
 
     def transform(self, obj):
         """
@@ -263,27 +122,49 @@ class DataSourceObjToStixObj:
         :param obj: the datasource object that is being converted to stix
         :return: the input object converted to stix valid json
         """
-        transformers = self.transformers
-        map_file = self.dsToStixMap
-        uniq_id = str(uuid.uuid4())
+        object_map = {}
         stix_type = 'observed-data'
-
-        # declare baseline observation object
+        ds_map = self.ds_to_stix_map
+        transformers = self.transformers
         observation = {
-            'id': stix_type + '--' + uniq_id,
+            'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
-            'created_by_ref': obj['identity_id'],
+            'created_by_ref': self.identity_id,
             'objects': {}
         }
 
-        ref_obj_map = DataSourceObjToStixObj._construct_ref_obj_map(
-            obj, map_file)
+        # create normal type objects
+        for ds_key in obj:
+            if ds_key not in ds_map:
+                logging.debug('{} is not found in map, skipping'.format(ds_key))
+                continue
+            # get the stix keys that are mapped
+            ds_key_def_obj = self.ds_to_stix_map[ds_key]
+            ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
+            for ds_key_def in ds_key_def_list:
+                if ds_key_def is None or 'key' not in ds_key_def:
+                    logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
+                    continue
 
-        for item in obj:
-            if item in map_file:
-                observation = DataSourceObjToStixObj._process_definitions(item, map_file, observation,
-                                                                          transformers, obj, ref_obj_map)
+                key_to_add = ds_key_def['key']
+                transformer = transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
+                if ds_key_def.get('cybox', self.cybox_default):
+                    object_name = ds_key_def.get('object')
+                    if 'references' in ds_key_def:
+                        stix_value = object_map[ds_key_def['references']]
+                    else:
+                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                            continue
+                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
+                else:
+                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        continue
+                    DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
+
+        # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)
             print_results(validated_result)

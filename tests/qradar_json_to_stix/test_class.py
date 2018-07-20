@@ -16,9 +16,18 @@ options = {}
 
 
 class TestTransform(object):
+    @staticmethod
+    def get_first(itr, constraint):
+        return next(
+            (obj for obj in itr if constraint(obj)),
+            None
+        )
+
+    @staticmethod
+    def get_first_of_type(itr, typ):
+        return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        transformer = None
         data = {"starttime": 1531169112, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -47,7 +56,6 @@ class TestTransform(object):
         assert(observed_data['last_observed'] is not None)
 
     def test_cybox_observables(self):
-        transformer = None
         payload = "SomeBase64Payload"
         user_id = "someuserid2018"
         url = "https://example.com"
@@ -68,49 +76,51 @@ class TestTransform(object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
-        # Test that each data element is properly mapped and input into the STIX JSON
-        for key, value in objects.items():
-            assert(int(key) in list(range(0, len(objects))))
-            # Todo: handle case where there is both a source and destination ip, there will be more than one ipv4-addr
-            if(value['type'] == 'ipv4-addr'):
-                # assert(
-                #     value['value'] == source_ip), "Wrong value returned " + key + ":" + str(value)
-                assert(True)
-            elif(value['type'] == 'url'):
-                assert(value['value'] == url), "Wrong value returned " + \
-                    key + ":" + str(value)
-            elif(value['type'] == 'domain-name'):
-                assert(
-                    value['value'] == domain), "Wrong value returned " + key + ":" + str(value)
-            elif(value['type'] == 'artifact'):
-                assert(
-                    value['payload_bin'] == payload), "Wrong value returned " + key + ":" + str(value)
-            elif(value['type'] == 'user-account'):
-                assert(
-                    value['user_id'] == user_id), "Wrong value returned " + key + ":" + str(value)
-            # Todo: should not be returned since the address passed in isn't ipv6, still needs to be fixed in logic
-            elif(value['type'] == 'ipv6-addr'):
-                # assert(
-                #     value['value'] == source_ip), "Wrong value returned " + key + ":" + str(value)
-                assert(True)
-            elif(value['type'] == 'network-traffic'):
-                assert(int(value['src_ref']) in list(
-                    range(0, len(objects)))), "Wrong value returned " + key + ":" + str(value)
-                assert(type(value['src_ref'])
-                       is str), "Reference value should be a string"
-                assert(int(value['dst_ref']) in list(
-                    range(0, len(objects)))), "Wrong value returned " + key + ":" + str(value)
-                assert(type(value['dst_ref'])
-                       is str), "Reference value should be a string"
-                assert(value['protocols'] == ['tcp'])
-                assert(value['src_port'] == 3000)
-                assert(value['dst_port'] == 2000)
-            else:
-                assert(False), "Returned a non-mapped value " + \
-                    key + ":" + str(value)
+        nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
+        assert(nt_object is not None), 'network-traffic object type not found'
+        assert(nt_object.keys() ==
+            {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+        assert(nt_object['src_port'] == 3000)
+        assert(nt_object['dst_port'] == 2000)
+        assert(nt_object['protocols'] == ['tcp'])
+
+        ip_ref = nt_object['dst_ref']
+        assert(ip_ref in objects), f"dst_ref with key {nt_object['dst_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == destination_ip)
+
+        ip_ref = nt_object['src_ref']
+        assert(ip_ref in objects), f"src_ref with key {nt_object['src_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == source_ip)
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
+        assert(curr_obj is not None), 'url object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == url)
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
+        assert(curr_obj is not None), 'domain-name object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == domain)
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
+        assert(curr_obj is not None), 'artifact object type not found'
+        assert(curr_obj.keys() == {'type', 'payload_bin'})
+        assert(curr_obj['payload_bin'] == payload)
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
+        assert(curr_obj is not None), 'user-account object type not found'
+        assert(curr_obj.keys() == {'type', 'user_id'})
+        assert(curr_obj['user_id'] == user_id)
+
+        assert(objects.keys() == set(map(str, range(0, 7))))
 
     def test_custom_props(self):
-        transformer = None
         data = {"logsourceid": 126, "qid": 55500004,
                 "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
