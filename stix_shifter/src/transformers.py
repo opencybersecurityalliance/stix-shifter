@@ -56,7 +56,7 @@ class ToString(ValueTransformer):
             print("Cannot convert input to string")
 
 
-class ToArray(ValueTransformer):
+class ToLowercaseArray(ValueTransformer):
     """A value transformer for expected array values"""
 
     @staticmethod
@@ -103,5 +103,5 @@ class ToFileName(ValueTransformer):
             print("Cannot convert input to file name")
 
 def get_all_transformers():
-    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToArray": ToArray,
+    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
             "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName}

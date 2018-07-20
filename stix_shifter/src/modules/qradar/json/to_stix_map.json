@@ -1,140 +1,116 @@
 {
   "categoryid": {
-    "key": "x-com-ibm-ariel.category_id",
-    "type": "value"
+    "key": "x_com_ibm_ariel.category_id",
+    "cybox": false
   },
   "username": {
-    "key": "user-account.user_id",
-    "cybox": "true",
-    "type": "value"
+    "key": "user-account.user_id"
   },
   "categoryname": {
-    "key": "x-com-ibm-ariel.category_name",
-    "type": "value"
+    "key": "x_com_ibm_ariel.category_name",
+    "cybox": false
   },
   "logsourceid": {
-    "key": "x-com-ibm-ariel.log_source_id",
-    "type": "value"
+    "key": "x_com_ibm_ariel.log_source_id",
+    "cybox": false
   },
   "identityip": {
-    "key": "x-com-ibm-ariel.identity_ip",
-    "type": "value"
+    "key": "x_com_ibm_ariel.identity_ip",
+    "cybox": false
   },
   "qidname": {
-    "key": "x-com-ibm-ariel.qid_name",
-    "type": "value"
+    "key": "x_com_ibm_ariel.qid_name",
+    "cybox": false
   },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
-      "cybox": "true",
-      "type": "value"
+      "object": "dst_ip"
     },
     {
       "key": "ipv6-addr.value",
-      "cybox": "true",
-      "type": "value"
+      "object": "dst_ip"
     },
     {
       "key": "network-traffic.dst_ref",
-      "type": "reference",
-      "references": "ipv4-addr",
-      "cybox": "true",
-      "linked": "network-traffic",
-      "transformer": "ToString"
+      "object": "nt",
+      "references": "dst_ip"
     }
   ],
   "eventcount": {
     "key": "number_observed",
-    "type": "value",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "starttime": [
     {
       "key": "created",
-      "type": "value",
-      "transformer": "EpochToTimestamp"
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     },
     {
       "key": "modified",
-      "type": "value",
-      "transformer": "EpochToTimestamp"
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     },
     {
       "key": "first_observed",
-      "type": "value",
-      "transformer": "EpochToTimestamp"
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     },
     {
       "key": "last_observed",
-      "type": "value",
-      "transformer": "EpochToTimestamp"
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     }
   ],
   "logsourcename": {
-    "key": "x-com-ibm-ariel.log_source_name",
-    "type": "value"
+    "key": "x_com_ibm_ariel.log_source_name",
+    "cybox": false
   },
   "magnitude": {
-    "key": "x-com-ibm-ariel.magnitude",
-    "type": "value"
+    "key": "x_com_ibm_ariel.magnitude",
+    "cybox": false
   },
   "sourceip": [
     {
       "key": "ipv4-addr.value",
-      "cybox": "true",
-      "type": "value"
+      "object": "src_ip"
     },
     {
       "key": "ipv6-addr.value",
-      "cybox": "true",
-      "type": "value"
+      "object": "src_ip"
     },
     {
       "key": "network-traffic.src_ref",
-      "type": "reference",
-      "references": "ipv6-addr",
-      "cybox": "true",
-      "linked": "network-traffic",
-      "transformer": "ToString"
+      "object": "nt",
+      "references": "src_ip"
     }
   ],
   "qid": {
-    "key": "x-com-ibm-ariel.qid",
-    "type": "value"
+    "key": "x_com_ibm_ariel.qid",
+    "cybox": false
   },
   "url": {
-    "key": "url.value",
-    "cybox": "true",
-    "type": "value"
+    "key": "url.value"
   },
   "domain": {
-    "key": "domain-name.value",
-    "cybox": "true",
-    "type": "value"
+    "key": "domain-name.value"
   },
   "payload": {
-    "key": "artifact.payload_bin",
-    "cybox": "true",
-    "type": "value"
+    "key": "artifact.payload_bin"
   },
   "destinationport": {
     "key": "network-traffic.dst_port",
-    "cybox": "true",
-    "linked": "network-traffic",
-    "type": "value"
+    "object": "nt"
   },
   "sourceport": {
     "key": "network-traffic.src_port",
-    "cybox": "true",
-    "type": "value",
-    "linked": "network-traffic"
+    "object": "nt"
   },
   "protocol": {
     "key": "network-traffic.protocols",
-    "cybox": "true",
-    "type": "value",
-    "linked": "network-traffic",
-    "transformer": "ToArray"
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
   }
 }
