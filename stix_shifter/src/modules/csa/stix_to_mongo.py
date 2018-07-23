@@ -27,7 +27,7 @@ class StixToMongo(BaseQueryTranslator):
         query_object = generate_query(stix_pattern)
         logger.info("Query: %s", query_object)
         print(query_object.expression)
-        data_model_mapper = mongo_data_mapper.MongoDataMapper()
+        data_model_mapper = mongo_data_mapper.MongoDataMapper(mapping)
         query_string = mongo_query_constructor.translate_pattern(
             query_object, data_model_mapper)
         return query_string

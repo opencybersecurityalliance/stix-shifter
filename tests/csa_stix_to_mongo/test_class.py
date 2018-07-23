@@ -236,6 +236,8 @@ class TestStixToCsaNfMongo(unittest.TestCase, object):
             options = {}
             query = interface.transform_query(input_arguments, options)
             match = {}
+            print('Query',query)
+            print('Match',match)
             assert query == match
 
     def test_network_traffic_start_stop(self):
