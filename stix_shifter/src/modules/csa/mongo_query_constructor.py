@@ -28,7 +28,7 @@ class MongoQueryStringPatternTranslator:
         ComparisonComparators.Matches: '$regex',  # Will be ugly
         ObservationOperators.Or: '$or',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: '$or'
+        ObservationOperators.And: '$and'
     }
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
@@ -81,7 +81,12 @@ class MongoQueryStringPatternTranslator:
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression)
         elif isinstance(expression, CombinedObservationExpression):
-            pass
+            return {
+                self.comparator_lookup[expression.operator] : [
+                    self._parse_expression(expression.expr1),
+                    self._parse_expression(expression.expr2)
+                ]
+            }
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         else:

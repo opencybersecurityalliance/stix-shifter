@@ -17,12 +17,12 @@
   },
   "mac-addr": {
     "fields": {
-      "value": ["sourcemac", "destinationmac"]
+      "value": ["Link.A", "Link.B"]
     }
   },
   "domain-name": {
     "fields": {
-      "value": ["domainname"]
+      "value": ["Network.A_Name"]
     }
   },
   "file": {
@@ -32,11 +32,11 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["sourceport"],
-      "dst_port": ["destinationport"],
-      "protocols[*]": ["protocolid"],
-      "start": ["starttime"],
-      "end": ["endtime"]
+      "src_port": ["Transport.A"],
+      "dst_port": ["Transport.B"],
+      "protocols[*]": ["Transport.Protocol"],
+      "start": ["Start"],
+      "end": ["Last"]
     }
   },
   "user-account": {
