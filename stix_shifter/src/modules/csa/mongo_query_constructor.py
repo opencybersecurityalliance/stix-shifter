@@ -37,6 +37,30 @@ class MongoQueryStringPatternTranslator:
     @staticmethod
     def _format_equality(value) -> str:
         return value
+    @staticmethod
+    def _format_like(value) -> str:
+        # Convert '.' to r'\.'
+        # Convert r'%' to r'.*'
+        # Convvert r'_' to r'.'
+        value = value.replace('.', r'\.').replace('%', '.*').replace('_', '.')
+        # Wrap in ^$?
+        return '/%s/' % value
+    @staticmethod
+    def _format_match(value) -> str:
+        raw = value
+        if raw[0] == "^":
+            raw = raw[1:]
+        else:
+            raw = ".*" + raw
+        if raw[-1] == "$":
+            raw = raw[0:-1]
+        else:
+            raw = raw + ".*"
+        return '/%s/' % raw
+    @staticmethod
+    def _format_set(values) -> list:
+        gen = values.element_iterator()
+        return [x for x in gen]
     def _parse_expression(self, expression) -> dict:
         print(expression)
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -50,16 +74,17 @@ class MongoQueryStringPatternTranslator:
             if stix_field == 'protocols[*]':
                 return "Not Implemented"
             elif stix_field == 'start' or stix_field == 'end':
-                return "Not Implemented"
+                transformer = TimestampToEpoch()
+                expression.value = transformer.transform(expression.value)
             if expression.comparator == ComparisonComparators.Matches:
-                return "Not Implemented"
+                value = self._format_match(expression.value)
             elif expression.comparator == ComparisonComparators.In:
-                return "Not Implemented"
+                value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 value = self._format_equality(expression.value)
                 logger.debug("Equality of Not Equality")
             elif expression.comparator == ComparisonComparators.Like:
-                return "Not Implemented"
+                value = self._format_like(expression.value)
             else:
                 value = stix_object
             # Next we convert what we have into the Mongo Query

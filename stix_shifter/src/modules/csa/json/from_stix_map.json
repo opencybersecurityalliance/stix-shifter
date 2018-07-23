@@ -12,7 +12,7 @@
   },
   "url": {
     "fields": {
-      "value": ["url"]
+      "value": ["Fetch.url"]
     }
   },
   "mac-addr": {
@@ -27,7 +27,7 @@
   },
   "file": {
     "fields": {
-      "name": ["filename"]
+      "name": ["foo.filename"]
     }
   },
   "network-traffic": {
@@ -41,7 +41,7 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["username"]
+      "user_id": ["initiator.id"]
     }
   },
   "artifact": {
