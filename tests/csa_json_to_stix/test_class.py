@@ -1,10 +1,11 @@
 from stix_shifter.src.json_to_stix import json_to_stix_translator
 from stix_shifter.src import transformers
-from stix_shifter.src.modules.qradar import qradar_translator
+from stix_shifter.src.modules.csa import csa_translator
 import json
 import unittest
+from os import path
 
-interface = qradar_translator.Translator()
+interface = csa_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
 map_data = json.loads(map_file)
 data_source = {
@@ -20,7 +21,7 @@ class TestTransform(unittest.TestCase):
 
     def test_common_prop(self):
         transformer = None
-        data = {"starttime": 1531169112, "eventcount": 5}
+        data = {"Start": 1531169112, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -55,7 +56,7 @@ class TestTransform(unittest.TestCase):
         domain = "example.com"
         source_ip = "127.0.0.1"
         destination_ip = "255.255.255.1"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url,
+        data = {"Network": {"A" : source_ip}, "destinationip": destination_ip, "url": url,
                 "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 
         result_bundle = json_to_stix_translator.convert_to_stix(

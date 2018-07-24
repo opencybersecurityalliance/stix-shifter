@@ -1,0 +1,140 @@
+{
+  "categoryid": {
+    "key": "x-com-ibm-ariel.category_id",
+    "type": "value"
+  },
+  "username": {
+    "key": "user-account.user_id",
+    "cybox": "true",
+    "type": "value"
+  },
+  "categoryname": {
+    "key": "x-com-ibm-ariel.category_name",
+    "type": "value"
+  },
+  "logsourceid": {
+    "key": "x-com-ibm-ariel.log_source_id",
+    "type": "value"
+  },
+  "identityip": {
+    "key": "x-com-ibm-ariel.identity_ip",
+    "type": "value"
+  },
+  "qidname": {
+    "key": "x-com-ibm-ariel.qid_name",
+    "type": "value"
+  },
+  "destinationip": [
+    {
+      "key": "ipv4-addr.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "type": "reference",
+      "references": "ipv4-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
+      "transformer": "ToString"
+    }
+  ],
+  "eventcount": {
+    "key": "number_observed",
+    "type": "value",
+    "transformer": "ToInteger"
+  },
+  "Start": [
+    {
+      "key": "created",
+      "type": "value",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "modified",
+      "type": "value",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "type": "value",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "last_observed",
+      "type": "value",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "logsourcename": {
+    "key": "x-com-ibm-ariel.log_source_name",
+    "type": "value"
+  },
+  "magnitude": {
+    "key": "x-com-ibm-ariel.magnitude",
+    "type": "value"
+  },
+  "Network": {"A":[
+    {
+      "key": "ipv4-addr.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "type": "reference",
+      "references": "ipv6-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
+      "transformer": "ToString"
+    }
+  ]},
+  "qid": {
+    "key": "x-com-ibm-ariel.qid",
+    "type": "value"
+  },
+  "url": {
+    "key": "url.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "domain": {
+    "key": "domain-name.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "payload": {
+    "key": "artifact.payload_bin",
+    "cybox": "true",
+    "type": "value"
+  },
+  "destinationport": {
+    "key": "network-traffic.dst_port",
+    "cybox": "true",
+    "linked": "network-traffic",
+    "type": "value"
+  },
+  "sourceport": {
+    "key": "network-traffic.src_port",
+    "cybox": "true",
+    "type": "value",
+    "linked": "network-traffic"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "cybox": "true",
+    "type": "value",
+    "linked": "network-traffic",
+    "transformer": "ToArray"
+  }
+}
