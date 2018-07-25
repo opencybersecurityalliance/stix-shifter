@@ -1,0 +1,241 @@
+{
+  "process.pid": [
+    {
+      "key": "process.pid",
+      "object": "proc",
+      "transformer": "ToInteger"
+    }
+  ],
+  "process.exe": [
+    {
+      "key": "file.name",
+      "object": "binary",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "proc",
+      "references": "binary"
+    }
+  ],
+  "process.current_directory": [
+    {
+      "key": "process.cwd",
+      "object": "proc",
+      "transformer": "ToString"
+    }
+  ],
+  "process.command_line": [
+    {
+      "key": "process.command_line",
+      "object": "proc",
+      "transformer": "ToString"
+    }
+  ],
+  "process.user": [
+    {
+      "key": "user-account.account_login",
+      "object": "process.user",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "proc",
+      "references": "process.user"
+    }
+  ],
+  "process.image_path": [
+    {
+      "key": "file.name",
+      "object": "binary",
+      "transformer": "SplitFileName"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "proc",
+      "references": "binary"
+    },
+    {
+      "key": "directory.path",
+      "object": "binary_dir",
+      "transformer": "SplitParentDirectory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "binary",
+      "references": "binary_dir"
+    }
+  ],
+  "process.md5_hash": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "binary",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "proc",
+      "references": "binary"
+    }
+  ],
+  "process.sha1_hash": [
+    {
+      "key": "file.hashes.SHA1",
+      "object": "binary",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "proc",
+      "references": "binary"
+    }
+  ],
+  "process.sha256_hash": [
+    {
+      "key": "file.hashes.SHA-256",
+      "object": "binary",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "proc",
+      "references": "binary"
+    }
+  ],
+  "process.parent_exe": [
+    {
+      "key": "file.name",
+      "object": "parent_binary",
+      "transformer": "ToString"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_proc",
+      "references": "parent_binary"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "proc",
+      "references": "parent_proc"
+    }
+  ],
+  "process.ppid": [
+    {
+      "key": "process.pid",
+      "object": "parent_proc",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "proc",
+      "references": "parent_proc"
+    }
+  ],
+  "process.parent_image_path": [
+    {
+      "key": "file.name",
+      "object": "parent_binary",
+      "transformer": "SplitFileName"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_proc",
+      "references": "parent_binary"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "proc",
+      "references": "parent_proc"
+    },
+    {
+      "key": "directory.path",
+      "object": "parent_binary_dir",
+      "transformer": "SplitParentDirectory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "parent_binary",
+      "references": "parent_binary_dir"
+    }
+  ],
+  "process.sid": [
+    {
+      "key": "process.extensions.windows-process-ext.owner_sid",
+      "object": "proc",
+      "transformer": "ToString"
+    }
+  ],
+  "flow.start_time": [
+    {
+      "key": "network-traffic.start",
+      "object": "nt"
+    }
+  ],
+  "flow.end_time": [
+    {
+      "key": "network-traffic.end",
+      "object": "nt"
+    }
+  ],
+  "flow.src_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "flow.dest_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "flow.src_port": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "flow.dest_port": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "flow.protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToArray"
+  },
+  "flow.payload": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "payload"
+    },
+    {
+      "key": "network-traffic.src_payload_ref",
+      "object": "nt",
+      "references": "payload"
+    }
+  ]
+}
