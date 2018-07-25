@@ -156,3 +156,11 @@ class TestStixToAql(unittest.TestCase, object):
         query = interface.transform_query(input_arguments, options)
         assert query == selections + \
             " FROM events WHERE payload MATCHES '.*some text.*'"
+
+    def test_start_stop_qualifiers(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[user-account:user_id = 'root'] START '2016-06-01T01:30:00Z' STOP '2016-07-01T02:30:00Z'"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        assert query == selections + \
+            " FROM events WHERE username = 'root' START '2016-06-01 01:30' STOP '2016-06-01 02:30'"
