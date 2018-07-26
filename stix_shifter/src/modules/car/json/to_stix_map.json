@@ -48,7 +48,7 @@
     {
       "key": "file.name",
       "object": "binary",
-      "transformer": "SplitFileName"
+      "transformer": "ToFileName"
     },
     {
       "key": "process.binary_ref",
@@ -58,7 +58,7 @@
     {
       "key": "directory.path",
       "object": "binary_dir",
-      "transformer": "SplitParentDirectory"
+      "transformer": "ToFilePath"
     },
     {
       "key": "file.parent_directory_ref",
@@ -135,7 +135,7 @@
     {
       "key": "file.name",
       "object": "parent_binary",
-      "transformer": "SplitFileName"
+      "transformer": "ToFileName"
     },
     {
       "key": "process.binary_ref",
@@ -150,7 +150,7 @@
     {
       "key": "directory.path",
       "object": "parent_binary_dir",
-      "transformer": "SplitParentDirectory"
+      "transformer": "ToFilePath"
     },
     {
       "key": "file.parent_directory_ref",
