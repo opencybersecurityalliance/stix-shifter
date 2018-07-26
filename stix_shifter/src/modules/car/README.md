@@ -1,74 +1,175 @@
-# QRadar
+# CAR
 
 ### Format for calling stix-shifter from the command line
 
-python stix_shifter.py `<translator_module>` `<query or result>` `<data>`
+python stix_shifter.py `<translator_module>` `<query or result>` `<stix identity object>` `<data>`
 
-## Converting from STIX patterns to AQL queries
+(Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL. Keyword arguments should be implemented to overcome this).
 
-This example input pattern:
+## Converting from CAR events to STIX
 
-`python main.py translate "qradar" "query" "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"`
+CAR data to STIX mapping is defined in `to_stix_map.json`
 
-Returns the following AQL query:
+### Example of translating a CAR flow object:
 
-`SELECT <defined QRadar fields> FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'`
-
-### AQL query construction: SELECT statement
-
-The QRadar event columns that make up the SELECT portion of the AQL query are defined in `aql_event_fields.json`. A default selection is provided, but custom selections can be added to this file.
-
-### AQL query construction: WHERE clause
-
-STIX to AQL field mapping is defined in `from_stix_map.json` <br/>
-STIX attributes that map to multiple AQL fields will have those fields joined by ORs in the returned query. <br/>
-Translated STIX attributes are inserted into the AQL query in the order they are defined in the mapping file. <br/>
-When translating from STIX patterns to AQL queries, the following objects and attributes can be used:
-
-- ipv4-addr:value
-- ipv6-addr:value
-- url:value
-- mac-addr:value
-- domain-name:value
-- file:name
-- network-traffic:src_port, network=traffic:dst_port
-
-## Converting from QRadar events to STIX
-
-QRadar data to STIX mapping is defined in `to_stix_map.json`
-
-This example QRadar data:
-
-`python main.py translate "qradar" "results" '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"object": "flow", "fields": {"start_time": "2018-04-20T12:36:17.191Z", "end_time": "2018-04-20T12:36:17.191Z", "src_ip": "192.168.0.2", "dest_ip": "192.168.0.3", "src_port": 12345, "dest_port": 80, "protocol": "HTTP", "content": "GET https://www.example.com/ HTTP/1.1"}}]'`
 
 Will return the following STIX observable:
 
 ```json
-[
-  {
-    "x_com_ibm_uds_datasource": {
-      "id": "7c0de425-33bf-46be-9e38-e42319e36d95",
-      "name": "events"
-    },
-    "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
-    "type": "observed-data",
-    "objects": {
-      "0": { "type": "ipv4-addr", "value": "9.21.123.112" },
-      "1": { "type": "ipv4-addr", "value": "9.21.123.112" },
-      "2": { "type": "network-traffic", "src_ref": "1", "dst_ref": "0" }
-    },
-    "x_com_ibm_ariel": {
-      "log_source_id": 126,
-      "identity_ip": "0.0.0.0",
-      "protocol_id": 255,
-      "magnitude": 4,
-      "qid": 55500004
-    },
-    "number_observed": 1,
-    "created": "2018-04-20T12:36:17.191Z",
-    "modified": "2018-04-20T12:36:17.191Z",
-    "first_observed": "2018-04-20T12:36:17.191Z",
-    "last_observed": "2018-04-20T12:36:17.191Z"
-  }
-]
+{
+    "type": "bundle",
+    "id": "bundle--a00d6605-8cfb-47d7-8993-ff124b7f7035",
+    "objects": [
+        {
+            "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"
+        },
+        {
+            "id": "observed-data--61c0cc1e-af14-4c39-8713-26fccec32e60",
+            "type": "observed-data",
+            "created_by_ref": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
+            "objects": {
+                "0": {
+                    "type": "network-traffic",
+                    "start": "2018-04-20T12:36:17.191Z",
+                    "end": "2018-04-20T12:36:17.191Z",
+                    "src_ref": "1",
+                    "dst_ref": "2",
+                    "src_port": 12345,
+                    "dst_port": 80,
+                    "protocols": [
+                        "http"
+                    ],
+                    "src_payload_ref": "3"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "192.168.0.2"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "192.168.0.3"
+                },
+                "3": {
+                    "type": "artifact",
+                    "payload_bin": "R0VUIGh0dHBzOi8vd3d3LmV4YW1wbGUuY29tLyBIVFRQLzEuMQ=="
+                }
+            }
+        }
+    ]
+}
 ```
+
+### Example of translating a CAR process object:
+
+`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"object": "process", "fields": {"pid": 4000, "exe": "blah.exe", "current_directory": "C:\\", "command_line": "blah.exe rofl copter", "user": "myuser", "md5_hash": "00000000000000000000000000000000", "sha1_hash": "1111111111111111111111111111111111111111", "sha256_hash": "2222222222222222222222222222222222222222222222222222222222222222", "parent_exe": "cmd.exe", "ppid": 1024, "sid": "S-1-1-0"}}]'`
+
+Will return the following STIX observable:
+
+```json
+{
+    "type": "bundle",
+    "id": "bundle--1bfd66e6-42d6-4fba-bac8-47e2374c1f5b",
+    "objects": [
+        {
+            "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"
+        },
+        {
+            "id": "observed-data--f44b84e0-6bc5-4e00-8a98-d6fec52ab9ce",
+            "type": "observed-data",
+            "created_by_ref": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "pid": 4000,
+                    "binary_ref": "1",
+                    "cwd": "C:\\",
+                    "command_line": "blah.exe rofl copter",
+                    "creator_user_ref": "2",
+                    "parent_ref": "4",
+                    "extensions": {
+                        "windows-process-ext": {
+                            "owner_sid": "S-1-1-0"
+                        }
+                    }
+                },
+                "1": {
+                    "type": "file",
+                    "name": "blah.exe",
+                    "hashes": {
+                        "MD5": "00000000000000000000000000000000",
+                        "SHA1": "1111111111111111111111111111111111111111",
+                        "SHA-256": "2222222222222222222222222222222222222222222222222222222222222222"
+                    }
+                },
+                "2": {
+                    "type": "user-account",
+                    "account_login": "myuser"
+                },
+                "3": {
+                    "type": "file",
+                    "name": "cmd.exe"
+                },
+                "4": {
+                    "type": "process",
+                    "binary_ref": "3",
+                    "pid": 1024
+                }
+            }
+        }
+    ]
+}
+```
+
+### Example of translating another CAR process object:
+
+`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"object": "process", "fields": {"image_path": "C:\\mydir\\blah.exe", "parent_image_path": "C:\\Windows\\System32\\cmd.exe"}}]'`
+
+Will return the following STIX observable:
+
+```json
+{
+    "type": "bundle",
+    "id": "bundle--ff337df6-6c4f-415d-8a34-2d2595def557",
+    "objects": [
+        {
+            "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"
+        },
+        {
+            "id": "observed-data--03344356-067c-47b8-8090-d24c4da03267",
+            "type": "observed-data",
+            "created_by_ref": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "name": "blah.exe",
+                    "parent_directory_ref": "2"
+                },
+                "1": {
+                    "type": "process",
+                    "binary_ref": "0",
+                    "parent_ref": "4"
+                },
+                "2": {
+                    "type": "directory",
+                    "path": "C:\\mydir\\"
+                },
+                "3": {
+                    "type": "file",
+                    "name": "cmd.exe",
+                    "parent_directory_ref": "5"
+                },
+                "4": {
+                    "type": "process",
+                    "binary_ref": "3"
+                },
+                "5": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\"
+                }
+            }
+        }
+    ]
+}
+```
+
