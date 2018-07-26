@@ -36,6 +36,6 @@ class Translator(BaseTranslator):
         basepath = path.dirname(__file__)
         filepath = path.abspath(
             path.join(basepath, "json", "to_stix_map.json"))
-
+        self.mapping_filepath = filepath
         self.result_translator = CARToStix(filepath)
         self.query_translator = None
