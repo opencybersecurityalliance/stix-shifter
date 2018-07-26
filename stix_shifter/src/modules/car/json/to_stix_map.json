@@ -202,7 +202,7 @@
       "object": "dst_ip"
     },
     {
-      "key": "network-traffic.src_ref",
+      "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
     }
@@ -224,9 +224,9 @@
   "flow.protocol": {
     "key": "network-traffic.protocols",
     "object": "nt",
-    "transformer": "ToArray"
+    "transformer": "ToLowercaseArray"
   },
-  "flow.payload": [
+  "flow.content": [
     {
       "key": "artifact.payload_bin",
       "transformer": "ToBase64",
