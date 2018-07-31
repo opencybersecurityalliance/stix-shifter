@@ -1,4 +1,22 @@
 {
+  "first_observed": [
+    {
+      "key": "first_observed",
+      "cybox": false
+    }
+  ],
+  "last_observed": [
+    {
+      "key": "last_observed",
+      "cybox": false
+    }
+  ],
+  "number_observed": [
+    {
+      "key": "number_observed",
+      "cybox": false
+    }
+  ],
   "process.pid": [
     {
       "key": "process.pid",

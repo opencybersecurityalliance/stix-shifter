@@ -12,20 +12,20 @@ CAR data to STIX mapping is defined in `to_stix_map.json`
 
 ### Example of translating a CAR flow object:
 
-`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"object": "flow", "fields": {"start_time": "2018-04-20T12:36:17.191Z", "end_time": "2018-04-20T12:36:17.191Z", "src_ip": "192.168.0.2", "dest_ip": "192.168.0.3", "src_port": 12345, "dest_port": 80, "protocol": "HTTP", "content": "GET https://www.example.com/ HTTP/1.1"}}]'`
+`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"first_observed": "2018-04-20T12:36:17.191Z", "last_observed": "2018-04-20T12:36:17.191Z", "number_observed": 1, "object": "flow", "fields": {"start_time": "2018-04-20T12:36:17.191Z", "end_time": "2018-04-20T12:36:17.191Z", "src_ip": "192.168.0.2", "dest_ip": "192.168.0.3", "src_port": 12345, "dest_port": 80, "protocol": "HTTP", "content": "GET https://www.example.com/ HTTP/1.1"}}]'`
 
 Will return the following STIX observable:
 
 ```json
 {
     "type": "bundle",
-    "id": "bundle--a00d6605-8cfb-47d7-8993-ff124b7f7035",
+    "id": "bundle--38c16678-9879-4c73-ac53-9ab49dbea236",
     "objects": [
         {
             "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"
         },
         {
-            "id": "observed-data--61c0cc1e-af14-4c39-8713-26fccec32e60",
+            "id": "observed-data--0bd617ba-5c9e-47aa-9917-bb71c47ac818",
             "type": "observed-data",
             "created_by_ref": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
             "objects": {
@@ -54,7 +54,10 @@ Will return the following STIX observable:
                     "type": "artifact",
                     "payload_bin": "R0VUIGh0dHBzOi8vd3d3LmV4YW1wbGUuY29tLyBIVFRQLzEuMQ=="
                 }
-            }
+            },
+            "first_observed": "2018-04-20T12:36:17.191Z",
+            "last_observed": "2018-04-20T12:36:17.191Z",
+            "number_observed": 1
         }
     ]
 }

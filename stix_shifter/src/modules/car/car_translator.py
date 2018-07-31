@@ -20,15 +20,13 @@ class CARToStix(JSONToStix):
       """
 
       json_data = json.loads(data)
-      new_data = []
       for obj in json_data:
-        new_obj = {}
-        typ = obj['object']
-        for field in obj['fields']:
-          new_obj[f"{typ}.{field}"] = obj['fields'][field]
-        new_data.append(new_obj)
+        typ = obj.pop('object', '')
+        fields = obj.pop('fields', [])
+        for field in fields:
+          obj[f"{typ}.{field}"] = fields[field]
 
-      return JSONToStix.translate_results(self, data_source, json.dumps(new_data), options, mapping)
+      return JSONToStix.translate_results(self, data_source, json.dumps(json_data), options, mapping)
 
 class Translator(BaseTranslator):
 

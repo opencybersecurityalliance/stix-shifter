@@ -25,6 +25,36 @@ class TestTransform(object):
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
+    def test_observed_data(self):
+        data = {
+          "first_observed": "2018-04-20T12:36:17.191Z",
+          "last_observed": "2018-04-20T12:36:17.191Z",
+          "number_observed": 3
+        }
+
+        result_bundle = json.loads(interface.result_translator.translate_results(
+            json.dumps(data_source), json.dumps([data]), options))
+
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        assert(observed_data['objects'] == {})
+
+        assert('type' in observed_data)
+        assert(observed_data['type'] == 'observed-data')
+
+        assert('first_observed' in observed_data)
+        assert(observed_data['first_observed'] == data['first_observed'])
+
+        assert('last_observed' in observed_data)
+        assert(observed_data['last_observed'] == data['last_observed'])
+
+        assert('number_observed' in observed_data)
+        assert(observed_data['number_observed'] == data['number_observed'])
+
     def test_process(self):
         data = {
           "object": "process",
