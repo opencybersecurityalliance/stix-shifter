@@ -6,4 +6,3 @@ include LICENSE.txt
 
 # Include JSON files
 include stix_shifter/src/modules/qradar/json/*.json
-include stix_shifter/src/modules/aql_passthrough/json/*.json

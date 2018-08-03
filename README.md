@@ -10,11 +10,11 @@ Requires Python 3.6
 
 ```
 usage: stix_shifter.py translate [-h]
-                                 {qradar,dummy,aql_passthrough}
+                                 {qradar,dummy}
                                  {results,query} data
 
 positional arguments:
-  {qradar,dummy,aql_passthrough}         What translation module to use
+  {qradar,dummy}         What translation module to use
   {results,query}                        What translation action to perform
   data source                            A STIX identity object
   data                                   The data to be translated
