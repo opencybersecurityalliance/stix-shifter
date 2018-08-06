@@ -12,7 +12,7 @@ CAR data to STIX mapping is defined in `to_stix_map.json`
 
 ### Example of translating a CAR flow object:
 
-`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"first_observed": "2018-04-20T12:36:17.191Z", "last_observed": "2018-04-20T12:36:17.191Z", "number_observed": 1, "object": "flow", "fields": {"start_time": "2018-04-20T12:36:17.191Z", "end_time": "2018-04-20T12:36:17.191Z", "src_ip": "192.168.0.2", "dest_ip": "192.168.0.3", "src_port": 12345, "dest_port": 80, "protocol": "HTTP", "content": "GET https://www.example.com/ HTTP/1.1"}}]'`
+`python main.py translate "car" "results" '{"id": "identity--56c5a276-a192-4c46-a61f-b81724c61096"}' '[{"first_observed": "2018-04-20T12:36:17.191Z", "last_observed": "2018-04-20T12:36:17.191Z", "number_observed": 1, "created": "2018-08-05T22:13:02.000Z", "modified": "2018-08-05T22:13:02.000Z", "object": "flow", "fields": {"start_time": "2018-04-20T12:36:17.191Z", "end_time": "2018-04-20T12:36:17.191Z", "src_ip": "192.168.0.2", "dest_ip": "192.168.0.3", "src_port": 12345, "dest_port": 80, "protocol": "HTTP", "content": "GET https://www.example.com/ HTTP/1.1"}}]'`
 
 Will return the following STIX observable:
 
