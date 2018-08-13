@@ -1,8 +1,8 @@
 import sys
 import importlib
 
-MODULES = ['qradar', 'dummy']
 
+MODULES = ['qradar', 'dummy', 'car']
 RESULTS = 'results'
 QUERY = 'query'
 
