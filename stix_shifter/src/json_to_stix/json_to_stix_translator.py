@@ -1,8 +1,13 @@
 import re
 import logging
 import uuid
-from stix2validator import validate_instance, print_results
+
 from . import observable
+from stix2validator.validator import validate_instance
+from stix2validator.output import print_results
+
+# convert JSON data to STIX object using map_data and transformers
+
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
     bundle = {
@@ -22,6 +27,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     bundle["objects"] += results
 
     return bundle
+
 
 class DataSourceObjToStixObj:
 

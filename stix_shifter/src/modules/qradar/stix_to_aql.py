@@ -20,12 +20,10 @@ class StixToAQL(BaseQueryTranslator):
         :return: aql query string
         :rtype: str
         """
-        stix_pattern = data
 
         logger.info("Converting STIX2 Pattern to ariel")
 
-        query_object = generate_query(stix_pattern)
-        # TODO: query_object is throwing away the start stop qualifiers. Need to update stix2patterns_translator to handle this.
+        query_object = generate_query(data)
         data_model_mapper = qradar_data_mapping.QRadarDataMapper()
         query_string = aql_query_constructor.translate_pattern(
             query_object, data_model_mapper)

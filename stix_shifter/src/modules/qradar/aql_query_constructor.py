@@ -1,6 +1,7 @@
 import logging
 import datetime
 import json
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +45,22 @@ class AqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.select_prefix = 'SELECT * FROM events WHERE'
         self.translated = self.parse_expression(pattern)
+
+        query_split = self.translated.split("split")
+        if len(query_split) > 1:
+            # remove empty strings in the array
+            query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
+            # removing leading AND/OR
+            query_array = list(map(lambda x: re.sub("^\s(OR|AND)\s", "", x), query_array))
+            # transform time format from '2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
+            t_pattern = "((?<=START'\d{4}-\d{2}-\d{2})(T))|((?<=STOP'\d{4}-\d{2}-\d{2})(T))"
+            query_array = list(map(lambda x: re.sub(t_pattern, " ", x), query_array))
+            r_pattern = "((?<=\d{2}:\d{2}:\d{2})(Z))"
+            query_array = list(map(lambda x: re.sub(r_pattern, "", x), query_array))
+            self.queries = query_array
+        else:
+            self.queries = query_split
 
     @staticmethod
     def _format_set(values) -> str:
@@ -86,7 +101,7 @@ class AqlQueryStringPatternTranslator:
     def _negate_comparison(comparison_string):
         return "NOT({})".format(comparison_string)
 
-    def _parse_expression(self, expression) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -140,23 +155,50 @@ class AqlQueryStringPatternTranslator:
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
-
-            return "{comparison}".format(comparison=comparison_string)
+            if qualifier is not None:
+                return "{comparison} {qualifier} split".format(comparison=comparison_string, qualifier=qualifier)
+            else:
+                return "{comparison}".format(comparison=comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
-            return query_string
+            if qualifier is not None:
+                return "({query_string}) {qualifier} split".format(query_string=query_string, qualifier=qualifier)
+            else:
+                return "({query_string})".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression)
+            return self._parse_expression(expression.comparison_expression, qualifier)
+        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            if isinstance(expression.observation_expression, CombinedObservationExpression):
+                operator = self.comparator_lookup[expression.observation_expression.operator]
+                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
+                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
+                                                           operator=operator,
+                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+            else:
+                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+        # elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression') and isinstance(expression.observation_expression, CombinedObservationExpression):
+        #     qualifier = expression.qualifier
+        #     # break off into own query
+        #     operator = self.comparator_lookup[expression.observation_expression.combined_observation_expression.operator]
+        #     return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.combined_observation_expression.expr1),
+        #                                                operator=operator,
+        #                                                expr2=self._parse_expression(expression.observation_expression.combined_observation_expression.expr2))
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
             return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
                                                        operator=operator,
                                                        expr2=self._parse_expression(expression.expr2))
+        # elif hasattr(expression, 'qualifier') and hasattr(expression, 'combined_observation_expression'):
+        #     # qualifier = expression.qualifier #Todo: see what this was for....
+        #     operator = self.comparator_lookup[expression.combined_observation_expression.operator]
+        #     return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.combined_observation_expression.expr1),
+        #                                                operator=operator,
+        #                                                expr2=self._parse_expression(expression.combined_observation_expression.expr2))
         elif isinstance(expression, Pattern):
-            return "{opening_select} {expr}".format(opening_select=self.select_prefix, expr=self._parse_expression(expression.expression))
+            return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
@@ -168,4 +210,9 @@ class AqlQueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping):
     x = AqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
-    return x.translated.replace('*', select_statement, 1)
+    queries = []
+    for query in x.queries:
+        queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
+
+    # return "SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=x.translated)
+    return queries
