@@ -165,9 +165,9 @@ class AqlQueryStringPatternTranslator:
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "({query_string}) {qualifier} split".format(query_string=query_string, qualifier=qualifier)
+                return "{query_string} {qualifier} split".format(query_string=query_string, qualifier=qualifier)
             else:
-                return "({query_string})".format(query_string=query_string)
+                return "{query_string}".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
