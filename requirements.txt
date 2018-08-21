@@ -16,7 +16,7 @@ pylint==1.8.3
 pytest==3.5.0
 pytest-cov==2.5.1
 six==1.11.0
-stix-pattern-translator==0.1.0
+stix-pattern-translator==0.2.0
 stix2-patterns==0.6.0
 stix2-validator==1.0.1
 wrapt==1.10.11
