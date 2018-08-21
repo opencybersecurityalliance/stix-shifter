@@ -179,24 +179,11 @@ class AqlQueryStringPatternTranslator:
                                                            expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
-        # elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression') and isinstance(expression.observation_expression, CombinedObservationExpression):
-        #     qualifier = expression.qualifier
-        #     # break off into own query
-        #     operator = self.comparator_lookup[expression.observation_expression.combined_observation_expression.operator]
-        #     return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.combined_observation_expression.expr1),
-        #                                                operator=operator,
-        #                                                expr2=self._parse_expression(expression.observation_expression.combined_observation_expression.expr2))
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
             return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
                                                        operator=operator,
                                                        expr2=self._parse_expression(expression.expr2))
-        # elif hasattr(expression, 'qualifier') and hasattr(expression, 'combined_observation_expression'):
-        #     # qualifier = expression.qualifier #Todo: see what this was for....
-        #     operator = self.comparator_lookup[expression.combined_observation_expression.operator]
-        #     return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.combined_observation_expression.expr1),
-        #                                                operator=operator,
-        #                                                expr2=self._parse_expression(expression.combined_observation_expression.expr2))
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
@@ -213,6 +200,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     queries = []
     for query in x.queries:
         queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
-
-    # return "SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=x.translated)
     return queries
