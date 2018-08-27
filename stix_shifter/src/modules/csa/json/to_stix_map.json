@@ -79,7 +79,7 @@
     "key": "x-com-ibm-ariel.magnitude",
     "type": "value"
   },
-  "Network": {"A":[
+  "Network": [
     {
       "key": "ipv4-addr.value",
       "cybox": "true",
@@ -98,7 +98,7 @@
       "linked": "network-traffic",
       "transformer": "ToString"
     }
-  ]},
+  ],
   "qid": {
     "key": "x-com-ibm-ariel.qid",
     "type": "value"
@@ -136,5 +136,71 @@
     "type": "value",
     "linked": "network-traffic",
     "transformer": "ToArray"
+  },
+  "initiator.name": 
+    {
+    "key": "initiator.name.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "initiator.credential.type": 
+    {
+    "key": "initiator.credential.type.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "initiator.id": 
+    {
+    "key": "initiator.id.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "ALCH_ACCOUNT_ID": 
+    {
+    "key": "ALCH_ACCOUNT_ID.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "ALCH_TENANT_ID": 
+    {
+    "key": "ALCH_TENANT_ID.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "eventTime": 
+    {
+    "key": "eventTime.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "action": 
+    {
+    "key": "action.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "target.id": 
+    {
+    "key": "target.id.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "target.name": 
+    {
+    "key": "target.name.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "message": 
+    {
+    "key": "message.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "event_uuid": 
+    {
+    "key": "event_uuid.value",
+    "cybox": "true",
+    "type": "value"
   }
 }

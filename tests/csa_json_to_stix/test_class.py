@@ -56,12 +56,13 @@ class TestTransform(unittest.TestCase):
         domain = "example.com"
         source_ip = "127.0.0.1"
         destination_ip = "255.255.255.1"
-        data = {"Network": {"A" : source_ip}, "destinationip": destination_ip, "url": url,
+        data = {"Network": source_ip, "destinationip": destination_ip, "url": url,
                 "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
+#        data = {"Network": {"A" : source_ip}, "destinationip": destination_ip, "url": url,
+#                "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
-
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -127,3 +128,90 @@ class TestTransform(unittest.TestCase):
         assert(custom_props['qid'] == data['qid'])
         assert(custom_props['magnitude'] == data['magnitude'])
         assert(custom_props['log_source_name'] == data['logsourcename'])
+
+    
+    def test_at_props(self):
+        transformer = None
+        actio = "actioniam-identity.serviceid-apikey.login"
+        isoti = "isotim2018-07-16T15:00+0000"
+        alcht = "alchtenida:560ea90982962784957b94135af14810"
+        tarid = "taridcrn:v1:bluemix:public:iam-identity::a/560ea90982962784957b94135af14810::apikey:ApiKey-b1ebb918c"
+        tarna = "auto-generated-apikey-4df4db90-06ef-4efa-9d3f-bc7ccf247326"
+        event = "d9b5a3a9-8fb8-4d6d-90cd-0a50f4842c6a"
+        messa = "message is a very long string"
+        activ = "activity"
+        sampl = "sample-response"
+        alcha = "alchaccid560ea90982962784957b"
+        initi = "iam-ServiceId-f48385a1"
+        initn = "ServiceId-f48385a1"
+        initc = "apikey"
+        data = {  
+                  "initiator.credential.type": initc,
+                  "initiator.name": initn,
+                  "initiator.id": initi,
+                  "ALCH_ACCOUNT_ID": alcha,
+                  "responseData": sampl,
+                  "eventType": activ,
+                  "message": messa,
+                  "type": "ActivityTracker",
+                  "event_uuid": event,
+                  "tags": [],
+                  "target.typeURI": "/iam-identity/serviceid/apikey",
+                  "target.name": tarna,
+                  "target.id": tarid,
+                  "ALCH_TENANT_ID": alcht,
+                  "logmet_cluster": "topic3-elasticsearch_3",
+                  "@timestamp": "2018-07-16T15:00:03.062Z",
+                  "typeURI": "http://schemas.dmtf.org/cloud/audit/1.0/event",
+                  "@version": "1",
+                  "eventTime": isoti,
+                  "action": actio,
+                  "requestData": "requestdata",
+                  "outcome": "success"
+                  }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        print (result_bundle)
+        observed_data = result_bundle['objects'][1]
+
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        # Test that each data element is properly mapped and input into the STIX JSON
+        for key, value in objects.items():
+            assert(int(key) in list(range(0, len(objects))))
+            if(value['type'] == 'initiator.credential.type'):
+                assert(value['value'] == initc), "Wrong value returned " + key + ":" + str(value)
+                assert(True)
+            elif(value['type'] == 'initiator.name'):
+                assert(value['value'] == initn), "Wrong value returned " + \
+                    key + ":" + str(value)
+            elif(value['type'] == 'initiator.id'):
+                assert(
+                    value['value'] == initi), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'ALCH_ACCOUNT_ID'):
+                assert(
+                    value['value'] == alcha), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'message'):
+                assert(
+                    value['value'] == messa), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'event_uuid'):
+                assert(
+                    value['value'] == event), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'ALCH_TENANT_ID'):
+                assert(
+                    value['value'] == alcht), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'action'):
+                assert(
+                    value['value'] == actio), "Wrong value returned " + key + ":" + str(value)
+            elif(value['type'] == 'eventTime'):
+                assert(
+                    value['value'] == eventTime), "Wrong value returned " + key + ":" + str(value)
+            else:
+                assert(False), "Returned a non-mapped value " + \
+                    key + ":" + str(value)
