@@ -1,4 +1,6 @@
 import json
+import csv
+import io
 import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
@@ -8,6 +10,10 @@ from stix_shifter.src import transformers
 
 
 class JSONToStix(BaseResultTranslator):
+
+    def __init__(self, default_mapping_file_path=None, is_csv=False):
+        super().__init__(default_mapping_file_path)
+        self.is_csv = is_csv
 
     def translate_results(self, data_source, data, options, mapping=None):
         """
@@ -19,7 +25,11 @@ class JSONToStix(BaseResultTranslator):
         :return: STIX formatted results
         :rtype: str
         """
-        json_data = json.loads(data)
+        print("data:",data)
+        if self.is_csv:
+            json_data = [_ for _ in csv.DictReader(io.StringIO(data))]
+        else:
+            json_data = json.loads(data)
         data_source = json.loads(data_source)
 
         if(mapping is None):
