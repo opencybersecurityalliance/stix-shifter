@@ -25,7 +25,6 @@ class JSONToStix(BaseResultTranslator):
         :return: STIX formatted results
         :rtype: str
         """
-        print("data:",data)
         if self.is_csv:
             json_data = [_ for _ in csv.DictReader(io.StringIO(data))]
         else:
