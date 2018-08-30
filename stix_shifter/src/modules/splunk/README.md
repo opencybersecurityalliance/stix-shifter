@@ -1,4 +1,4 @@
-# QRadar
+# Splunk
 
 ### Format for calling stix-shifter from the command line
 
