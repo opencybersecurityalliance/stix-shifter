@@ -12,6 +12,20 @@ class ValueTransformer():
         """ abstract function for converting value formats """
         raise NotImplementedError
 
+class StringToBool(ValueTransformer):
+    """A value transformer for converting String to boolean value"""
+
+    @staticmethod
+    def transform(value):
+        return value.lower() in ("yes", "true", "t", "1")
+
+
+class SplunkToTimestamp(ValueTransformer):
+    """A value transformer for converting Splunk timestamp to regular timestamp"""
+
+    @staticmethod
+    def transform(splunkTime):
+        return splunkTime[:-6]+'Z'
 
 class EpochToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
@@ -103,5 +117,5 @@ class ToFileName(ValueTransformer):
             print("Cannot convert input to file name")
 
 def get_all_transformers():
-    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
-            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName}
+    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
+            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
