@@ -20,7 +20,6 @@ class CIMToStix(BaseResultTranslator):
         data_source = json.loads(data_source)
 
         if(mapping is None):
-            # If no mapping is passed in then we will use the default to_stix_map in the qradar module
             map_file = open(self.default_mapping_file_path).read()
             map_data = json.loads(map_file)
         else:

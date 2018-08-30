@@ -137,15 +137,11 @@ class DataSourceObjToStixObj:
             'objects': {}
         }
         
-        # create a new cim_list every time an object is passed
         cim_list = []
         if 'tag' in obj:
-            # creates a list of tags regardless if only one tag has been recieved
             tag_list = obj['tag'] if isinstance(obj['tag'], list) else [obj['tag']]
             for tag in tag_list:
-                # Check tag exists in mapping
                 if tag in ds_map[mapping_tags]:
-                    # extend used to join lists of objects to the cim_list
                     cim_list.extend(ds_map[mapping_tags][tag])
 
         for ds_key in obj:
@@ -162,11 +158,8 @@ class DataSourceObjToStixObj:
                     logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
                     continue
 
-                # Check object field exists 
                 if 'object' in ds_key_def:
-                    # check tag so if no tag exists we create all objects as before
                     if 'tag' in obj:
-                        # if object from mapping object not in cim list we skip iteration
                         if ds_key_def['object'] not in cim_list:
                             continue
 
@@ -178,7 +171,6 @@ class DataSourceObjToStixObj:
                     object_name = ds_key_def.get('object')
                   
                     if 'references' in ds_key_def:
-                        # Added check to ensure reference value now in object map
                         if ds_key_def['references'] in object_map:
                             stix_value = object_map[ds_key_def['references']]
               
