@@ -45,7 +45,6 @@ class AqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.select_prefix = 'SELECT * FROM events WHERE'
         self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
 
