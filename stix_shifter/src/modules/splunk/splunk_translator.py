@@ -1,5 +1,4 @@
 from ..base.base_translator import BaseTranslator
-from .stix_to_aql import StixToAQL
 from .cim_to_stix.cim_to_stix import CIMToStix
 from .splunk_result_translator import SplunkResultTranslator
 
@@ -15,6 +14,3 @@ class Translator(BaseTranslator):
        
         self.mapping_filepath = filepath
         self.result_translator = CIMToStix(filepath)
-        
-        #self.result_translator = SplunkResultTranslator()
-        self.query_translator = StixToAQL()
