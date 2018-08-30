@@ -45,6 +45,7 @@ class AqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
+        self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
 
         query_split = self.translated.split("split")
@@ -109,6 +110,7 @@ class AqlQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
+            original_stix_value = expression.value
 
             if stix_field == 'protocols[*]':
                 map_data = _fetch_network_protocol_mapping()
@@ -135,6 +137,8 @@ class AqlQueryStringPatternTranslator:
                 value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
+
+            self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': original_stix_value})
 
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
@@ -200,4 +204,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     queries = []
     for query in x.queries:
         queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
-    return queries
+    return {'aql_queries': queries, 'parsed_stix': x.parsed_pattern}
