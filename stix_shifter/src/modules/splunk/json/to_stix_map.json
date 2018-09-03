@@ -3,7 +3,7 @@
         "web": ["web"],
         "authentication": ["authentication"],
         "certificate": ["certificate"],
-        "process": ["process", "authentication"],
+        "process": ["process", "authentication", "file", "directory"],
         "network": ["network-traffic", "dst_ip", "src_ip"],
         "change": ["windows-registry-key", "file", "directory", "authentication"],
         "endpoint": ["windows-registry-key", "file", "directory", "authentication"],
@@ -158,6 +158,11 @@
             "key": "file.parent_directory_ref",
             "object": "file",
             "references": "directory"
+        },
+        {   
+            "key": "process.binary_ref",
+            "object": "process",
+            "references": "file"
         }
     ],
     "file_create_time": [
