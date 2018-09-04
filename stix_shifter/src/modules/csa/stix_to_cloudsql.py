@@ -10,6 +10,10 @@ logger = logging.getLogger(__name__)
 
 class StixToCloudSQL(BaseQueryTranslator):
 
+    def __init__(self, dialect=None):
+        super().__init__()
+        self.dialect = dialect
+
     def transform_query(self, data, options, mapping=None):
         """
         Transforms STIX query into aql query format. Based on a mapping file
@@ -25,7 +29,7 @@ class StixToCloudSQL(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to ariel")
 
         query_object = generate_query(stix_pattern)
-        data_model_mapper = cloudsql_data_mapping.QRadarDataMapper()
+        data_model_mapper = cloudsql_data_mapping.CloudSQLDataMapper(self.dialect)
         query_string = cloudsql_query_constructor.translate_pattern(
             query_object, data_model_mapper)
         return query_string
