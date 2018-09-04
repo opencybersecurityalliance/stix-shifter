@@ -139,19 +139,19 @@
   },
   "initiator.name": 
     {
-    "key": "initiator.name.value",
+    "key": "initiator_name.value",
     "cybox": "true",
     "type": "value"
   },
   "initiator.credential.type": 
     {
-    "key": "initiator.credential.type.value",
+    "key": "initiator_credential_type.value",
     "cybox": "true",
     "type": "value"
   },
   "initiator.id": 
     {
-    "key": "initiator.id.value",
+    "key": "initiator_id.value",
     "cybox": "true",
     "type": "value"
   },
@@ -181,13 +181,13 @@
   },
   "target.id": 
     {
-    "key": "target.id.value",
+    "key": "target_id.value",
     "cybox": "true",
     "type": "value"
   },
   "target.name": 
     {
-    "key": "target.name.value",
+    "key": "target_name.value",
     "cybox": "true",
     "type": "value"
   },
@@ -202,5 +202,5 @@
     "key": "event_uuid.value",
     "cybox": "true",
     "type": "value"
-  }
-}
+  },
+ }

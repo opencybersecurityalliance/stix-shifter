@@ -146,9 +146,9 @@ class TestTransform(unittest.TestCase):
         initn = "ServiceId-f48385a1"
         initc = "apikey"
         data = {  
-                  "initiator.credential.type": initc,
-                  "initiator.name": initn,
-                  "initiator.id": initi,
+#                  "initiator.credential.type": initc,
+#                  "initiator.name": initn,
+#                  "initiator.id": initi,
                   "ALCH_ACCOUNT_ID": alcha,
                   "responseData": sampl,
                   "eventType": activ,
@@ -156,15 +156,15 @@ class TestTransform(unittest.TestCase):
                   "type": "ActivityTracker",
                   "event_uuid": event,
                   "tags": [],
-                  "target.typeURI": "/iam-identity/serviceid/apikey",
-                  "target.name": tarna,
-                  "target.id": tarid,
+#                  "target.typeURI": "/iam-identity/serviceid/apikey",
+#                  "target.name": tarna,
+#                  "target.id": tarid,
                   "ALCH_TENANT_ID": alcht,
                   "logmet_cluster": "topic3-elasticsearch_3",
                   "@timestamp": "2018-07-16T15:00:03.062Z",
                   "typeURI": "http://schemas.dmtf.org/cloud/audit/1.0/event",
                   "@version": "1",
-                  "eventTime": isoti,
+#                  "eventTime": isoti,
                   "action": actio,
                   "requestData": "requestdata",
                   "outcome": "success"

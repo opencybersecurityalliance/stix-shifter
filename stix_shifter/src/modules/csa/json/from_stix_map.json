@@ -48,5 +48,10 @@
     "fields": {
       "payload_bin": ["payload"]
     }
+  },
+  "user-name": {
+    "fields": {
+      "value": ["initiator.id","target.id","initiator.name"]
+    }
   }
 }
