@@ -51,7 +51,12 @@
   },
   "user-name": {
     "fields": {
-      "value": ["initiator.id","target.id","initiator.name"]
+      "value": ["initiator.id","initiator.name"]
+    }
+  },
+  "target": {
+    "fields": {
+      "value": ["target.id","target.name"]
     }
   }
 }
