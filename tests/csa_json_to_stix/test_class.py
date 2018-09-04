@@ -146,9 +146,8 @@ class TestTransform(unittest.TestCase):
         initn = "ServiceId-f48385a1"
         initc = "apikey"
         data = {  
-#                  "initiator.credential.type": initc,
-#                  "initiator.name": initn,
-#                  "initiator.id": initi,
+#                  "initiator_name": initn,
+#                  "initiator_id": initi,
                   "ALCH_ACCOUNT_ID": alcha,
                   "responseData": sampl,
                   "eventType": activ,
@@ -156,9 +155,8 @@ class TestTransform(unittest.TestCase):
                   "type": "ActivityTracker",
                   "event_uuid": event,
                   "tags": [],
-#                  "target.typeURI": "/iam-identity/serviceid/apikey",
-#                  "target.name": tarna,
-#                  "target.id": tarid,
+#                  "target_name": tarna,
+#                  "target_id": tarid,
                   "ALCH_TENANT_ID": alcht,
                   "logmet_cluster": "topic3-elasticsearch_3",
                   "@timestamp": "2018-07-16T15:00:03.062Z",
@@ -185,13 +183,13 @@ class TestTransform(unittest.TestCase):
         # Test that each data element is properly mapped and input into the STIX JSON
         for key, value in objects.items():
             assert(int(key) in list(range(0, len(objects))))
-            if(value['type'] == 'initiator.credential.type'):
+            if(value['type'] == 'initiator_credential_type'):
                 assert(value['value'] == initc), "Wrong value returned " + key + ":" + str(value)
                 assert(True)
-            elif(value['type'] == 'initiator.name'):
+            elif(value['type'] == 'initiator_name'):
                 assert(value['value'] == initn), "Wrong value returned " + \
                     key + ":" + str(value)
-            elif(value['type'] == 'initiator.id'):
+            elif(value['type'] == 'initiator_id'):
                 assert(
                     value['value'] == initi), "Wrong value returned " + key + ":" + str(value)
             elif(value['type'] == 'ALCH_ACCOUNT_ID'):
