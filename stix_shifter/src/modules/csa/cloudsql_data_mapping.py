@@ -1,6 +1,6 @@
 from os import path
 import json
-
+import re
 
 def _fetch_mapping():
     try:
@@ -20,7 +20,16 @@ class DataMappingException(Exception):
     pass
 
 
-class QRadarDataMapper:
+class CloudSQLDataMapper:
+    def __init__(self, dialect):
+        if dialect is None:
+            self.dialect = 'at'
+        else:
+            m = re.match(r'^[a-z0-9]+$', dialect)
+            if m:
+                self.dialect = dialect
+            else:
+                self.dialect = 'at'
 
     def map_object(self, stix_object_name):
         self.map_data = _fetch_mapping()
@@ -43,7 +52,7 @@ class QRadarDataMapper:
 
             basepath = path.dirname(__file__)
             filepath = path.abspath(
-                path.join(basepath, "json", "at_event_fields.json"))
+                path.join(basepath, "json", self.dialect + "_event_fields.json"))
 
             aql_fields_file = open(filepath).read()
             aql_fields_json = json.loads(aql_fields_file)

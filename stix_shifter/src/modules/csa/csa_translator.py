@@ -7,11 +7,11 @@ from ...json_to_stix.json_to_stix import JSONToStix
 from os import path
 
 class Translator(BaseTranslator):
-    def __init__(self):
+    def __init__(self, dialect=None):
         basepath = path.dirname(__file__)
         filepath = path.abspath(
             path.join(basepath, "json", "to_stix_map.json"))
         self.mapping_filepath = filepath
         self.result_translator = JSONToStix(filepath, is_csv=True)
 #        self.query_translator = StixToMongo()
-        self.query_translator = StixToCloudSQL()
+        self.query_translator = StixToCloudSQL(dialect=dialect)
