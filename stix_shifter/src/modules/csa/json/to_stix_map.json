@@ -137,19 +137,19 @@
     "linked": "network-traffic",
     "transformer": "ToArray"
   },
-  "initiator.name": 
+  "initiator_name": 
     {
     "key": "initiator_name.value",
     "cybox": "true",
     "type": "value"
   },
-  "initiator.credential.type": 
+  "initiator_credential.type": 
     {
     "key": "initiator_credential_type.value",
     "cybox": "true",
     "type": "value"
   },
-  "initiator.id": 
+  "initiator_id": 
     {
     "key": "initiator_id.value",
     "cybox": "true",
@@ -179,13 +179,13 @@
     "cybox": "true",
     "type": "value"
   },
-  "target.id": 
+  "target_id": 
     {
     "key": "target_id.value",
     "cybox": "true",
     "type": "value"
   },
-  "target.name": 
+  "target_name": 
     {
     "key": "target_name.value",
     "cybox": "true",
