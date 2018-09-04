@@ -9,7 +9,6 @@
    	"action as action",
     "target.id as target_id",
     "target.name as target_name",
-    "message as message",
     "event_uuid as event_uuid"
   ],
   "domain-name": [
