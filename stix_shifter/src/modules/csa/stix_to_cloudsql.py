@@ -16,12 +16,12 @@ class StixToCloudSQL(BaseQueryTranslator):
 
     def transform_query(self, data, options, mapping=None):
         """
-        Transforms STIX query into aql query format. Based on a mapping file
-        :param data: STIX query string to transform into aql query format
+        Transforms STIX query into sql query format. Based on a mapping file
+        :param data: STIX query string to transform into sql query format
         :type data: str
-        :param mapping: The mapping file path to use as instructions on how to transform the given STIX query into aql format. This defaults to the from_stix_map.json in the stix_shifter/src/modules/qradar/json/ directory
+        :param mapping: The mapping file path to use as instructions on how to transform the given STIX query into sql format. This defaults to the from_stix_map.json in the stix_shifter/src/modules/qradar/json/ directory
         :type mapping: str (filepath)
-        :return: aql query string
+        :return: sql query string
         :rtype: str
         """
         stix_pattern = data

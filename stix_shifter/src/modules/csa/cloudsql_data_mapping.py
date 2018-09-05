@@ -37,14 +37,14 @@ class CloudSQLDataMapper:
             return self.map_data[stix_object_name]
         else:
             raise DataMappingException(
-                "Unable to map object `{}` into AQL".format(stix_object_name))
+                "Unable to map object `{}` into SQL".format(stix_object_name))
 
     def map_field(self, stix_object_name, stix_property_name):
         self.map_data = _fetch_mapping()
         if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
             return self.map_data[stix_object_name]["fields"][stix_property_name]
         else:
-            raise DataMappingException("Unable to map property `{}:{}` into AQL".format(
+            raise DataMappingException("Unable to map property `{}:{}` into SQL".format(
                 stix_object_name, stix_property_name))
 
     def map_selections(self):
@@ -54,14 +54,14 @@ class CloudSQLDataMapper:
             filepath = path.abspath(
                 path.join(basepath, "json", self.dialect + "_event_fields.json"))
 
-            aql_fields_file = open(filepath).read()
-            aql_fields_json = json.loads(aql_fields_file)
+            sql_fields_file = open(filepath).read()
+            sql_fields_json = json.loads(sql_fields_file)
 
-            # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to AQL.
-            field_list = aql_fields_json['default']
-            aql_select = ", ".join(field_list)
+            # Temporary default selections, this will change based on upcoming config override and the STIX pattern that is getting converted to SQL.
+            field_list = sql_fields_json['default']
+            sql_select = ", ".join(field_list)
 
-            return aql_select
+            return sql_select
         except Exception as ex:
-            print('Exception while reading aql fields file:', ex)
+            print('Exception while reading sql fields file:', ex)
             return {}

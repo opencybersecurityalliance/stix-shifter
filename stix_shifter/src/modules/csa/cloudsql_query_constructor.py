@@ -23,7 +23,7 @@ def _fetch_network_protocol_mapping():
         return {}
 
 
-class AqlQueryStringPatternTranslator:
+class SqlQueryStringPatternTranslator:
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
         ComparisonExpressionOperators.Or: "OR",
@@ -50,11 +50,11 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _format_set(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([AqlQueryStringPatternTranslator._escape_value(value) for value in gen]))
+        return "({})".format(' OR '.join([SqlQueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
     def _format_match(value) -> str:
-        raw = AqlQueryStringPatternTranslator._escape_value(value)
+        raw = SqlQueryStringPatternTranslator._escape_value(value)
         if raw[0] == "^":
             raw = raw[1:]
         else:
@@ -73,7 +73,7 @@ class AqlQueryStringPatternTranslator:
     def _format_like(value) -> str:
         value = value.replace('%', '*')
         value = value.replace('_', '?')
-        return AqlQueryStringPatternTranslator._escape_value(value)
+        return SqlQueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -131,7 +131,7 @@ class AqlQueryStringPatternTranslator:
                     mapped_fields_count -= 1
 
             if(len(mapped_fields_array) > 1):
-                # More than one AQL field maps to the STIX attribute so group the ORs.
+                # More than one SQL field maps to the STIX attribute so group the ORs.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
 
@@ -166,6 +166,6 @@ class AqlQueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping):
-    x = AqlQueryStringPatternTranslator(pattern, data_model_mapping)
+    x = SqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     return x.translated.replace('*', select_statement, 1)
