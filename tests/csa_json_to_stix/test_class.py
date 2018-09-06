@@ -68,7 +68,6 @@ class TestTransform(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
-        assert('objects' in observed_data)
         objects = observed_data['objects']
 
         # Test that each data element is properly mapped and input into the STIX JSON
