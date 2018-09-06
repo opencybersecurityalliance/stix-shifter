@@ -2,7 +2,7 @@ import sys
 import importlib
 
 
-MODULES = ['qradar', 'dummy', 'car']
+MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
 RESULTS = 'results'
 QUERY = 'query'
 

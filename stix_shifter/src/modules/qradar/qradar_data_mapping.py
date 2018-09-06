@@ -1,6 +1,6 @@
 from os import path
 import json
-
+from stix_shifter.src.exceptions import DataMappingException
 
 def _fetch_mapping():
     try:
@@ -14,10 +14,6 @@ def _fetch_mapping():
     except Exception as ex:
         print('exception in main():', ex)
         return {}
-
-
-class DataMappingException(Exception):
-    pass
 
 
 class QRadarDataMapper:
