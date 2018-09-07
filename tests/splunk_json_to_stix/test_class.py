@@ -143,7 +143,7 @@ class TestTransform(object):
             "tag": tag, "event_count": count, "_time": time, "ssl_serial": serial,
             "ssl_version": version, "ssl_signature_algorithm": sig_algorithm, 
             "ssl_issuer": issuer, "ssl_subject": subject, 
-            "ssl_hash": ssl_hash, "subject_public_key_algorithim": key_algorithm
+            "ssl_hash": ssl_hash, "ssl_publickey_algorithm": key_algorithm
         }
 
         result_bundle = cim_to_stix_translator.convert_to_stix(
@@ -161,14 +161,13 @@ class TestTransform(object):
         cert_obj = TestTransform.get_first_of_type(objects.values(), 'x509-certificate')
        
         assert(cert_obj is not None), 'x509-certificate object type not found'
-        assert(cert_obj.keys() == {'type', 'serial_number', 'version', "signature_algorithm", "issuer", "subject", "hashes"})
-        
+        assert(cert_obj.keys() == {'type', 'serial_number', 'version', "signature_algorithm", "subject_public_key_algorithm", "issuer", "subject", "hashes"})
         assert(cert_obj['serial_number'] == "1234")
         assert(cert_obj['version'] == "1")
         assert(cert_obj['signature_algorithm'] == "md5WithRSAEncryption")
         assert(cert_obj['issuer'] == "C=US, ST=California, O=www.example.com, OU=new, CN=new")
         assert(cert_obj['subject'] == "C=US, ST=Maryland, L=Baltimore, O=John Doe, OU=ExampleCorp, CN=www.example.com/emailAddress=doe@example.com")
-        # assert(cert_obj['subject_public_key_algorithim'] == "rsaEncryption")
+        assert(cert_obj['subject_public_key_algorithm'] == "rsaEncryption")
         assert(cert_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
         assert(objects.keys() == set(map(str, range(0, 1))))
 
