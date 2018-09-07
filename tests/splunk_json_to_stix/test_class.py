@@ -1,6 +1,7 @@
 from stix_shifter.src.modules.splunk.cim_to_stix import cim_to_stix_translator
 from stix_shifter.src import transformers
 from stix_shifter.src.modules.splunk import splunk_translator
+from stix2validator import validate_instance
 import json
 
 interface = splunk_translator.Translator()
@@ -80,11 +81,14 @@ class TestTransform(object):
 
         result_bundle = cim_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
-        
+
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         
+        validated_result = validate_instance(observed_data)
+        assert(validated_result.is_valid == True)
+
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
@@ -153,10 +157,12 @@ class TestTransform(object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         
+        validated_result = validate_instance(observed_data)
+        assert(validated_result.is_valid == True)
+
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
-       
         # Test objects in Stix observable data model after transform
         cert_obj = TestTransform.get_first_of_type(objects.values(), 'x509-certificate')
        
@@ -201,6 +207,9 @@ class TestTransform(object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         
+        validated_result = validate_instance(observed_data)
+        assert(validated_result.is_valid == True)
+
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
@@ -273,6 +282,9 @@ class TestTransform(object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
+        validated_result = validate_instance(observed_data)
+        assert(validated_result.is_valid == True)
+
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
@@ -321,6 +333,9 @@ class TestTransform(object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
+        validated_result = validate_instance(observed_data)
+        assert(validated_result.is_valid == True)
+
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
@@ -347,3 +362,4 @@ class TestTransform(object):
         assert(addr_obj.keys() == {'type', 'value'})
         assert(addr_obj['type'] == 'email-addr')
         assert(addr_obj['value'] == src_user)
+        
