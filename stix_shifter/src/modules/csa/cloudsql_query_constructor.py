@@ -44,7 +44,7 @@ class SqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.select_prefix = 'SELECT * FROM cos://us-geo/at-hourly-dumps STORED AS JSON WHERE'
+        self.select_prefix = 'SELECT * FROM cos://us-geo/'+self.dmm.dialect+'-hourly-dumps STORED AS JSON WHERE'
         self.translated = self.parse_expression(pattern)
 
     @staticmethod

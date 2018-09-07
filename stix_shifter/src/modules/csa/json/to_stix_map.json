@@ -202,5 +202,65 @@
     "key": "event_uuid.value",
     "cybox": "true",
     "type": "value"
+  },
+  "NF_UUID": 
+    {
+    "key": "NF_UUID.value",
+    "cybox": "true",
+    "type": "value"
+    },
+  "Link_A": 
+    {
+    "key": "Link_A.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "Link_B": 
+    {
+    "key": "Link_B.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "Link_Protocol": 
+    {
+    "key": "Link_Protocol.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "Netrowk_Protocol": 
+    {
+    "key": "Network_Protocol.value",
+    "cybox": "true",
+    "type": "value"
+    },
+  "Network_A": 
+    {
+    "key": "Network_A.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "Network_B": 
+    {
+    "key": "Network_B.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "CollectionId": 
+    {
+    "key": "CollectionId.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "NF_Start": 
+    {
+    "key": "NF_Start.value",
+    "cybox": "true",
+    "type": "value"
+  },
+  "NF_Last": 
+    {
+    "key": "NF_Last.value",
+    "cybox": "true",
+    "type": "value"
   }
- }
+}
