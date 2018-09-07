@@ -68,7 +68,6 @@ class TestTransform(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
-        assert('objects' in observed_data)
         objects = observed_data['objects']
 
         # Test that each data element is properly mapped and input into the STIX JSON
@@ -133,7 +132,7 @@ class TestTransform(unittest.TestCase):
     def test_at_props(self):
         transformer = None
         actio = "actioniam-identity.serviceid-apikey.login"
-        isoti = "isotim2018-07-16T15:00+0000"
+        isoti = "2018-07-16T15:00+0000"
         alcht = "alchtenida:560ea90982962784957b94135af14810"
         tarid = "taridcrn:v1:bluemix:public:iam-identity::a/560ea90982962784957b94135af14810::apikey:ApiKey-b1ebb918c"
         tarna = "auto-generated-apikey-4df4db90-06ef-4efa-9d3f-bc7ccf247326"
@@ -162,7 +161,7 @@ class TestTransform(unittest.TestCase):
                   "@timestamp": "2018-07-16T15:00:03.062Z",
                   "typeURI": "http://schemas.dmtf.org/cloud/audit/1.0/event",
                   "@version": "1",
-#                  "eventTime": isoti,
+                  "eventTime": isoti,
                   "action": actio,
                   "requestData": "requestdata",
                   "outcome": "success"
@@ -209,7 +208,7 @@ class TestTransform(unittest.TestCase):
                     value['value'] == actio), "Wrong value returned " + key + ":" + str(value)
             elif(value['type'] == 'eventTime'):
                 assert(
-                    value['value'] == eventTime), "Wrong value returned " + key + ":" + str(value)
+                    value['value'] == isoti), "Wrong value returned " + key + ":" + str(value)
             else:
                 assert(False), "Returned a non-mapped value " + \
                     key + ":" + str(value)
