@@ -1,0 +1,4 @@
+{
+  "stix-input":"[file:parent_directory_ref.path MATCHES '^C:\\\\\\\\Windows\\\\w+$']",
+  "car-splunk": "|where (match(tag, \"dm-file-.*\") AND match(file_path, \"^C:\\\\\\\\Windows\\\\w+$\"))"
+}

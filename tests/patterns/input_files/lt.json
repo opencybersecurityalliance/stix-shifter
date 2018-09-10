@@ -1,0 +1,22 @@
+{
+  "stix-input":"[process:pid < 5]",
+  "car-splunk": "|where (match(tag, \"dm-process-.*\") AND pid < 5)",
+  "car-elastic": "data_model.object:process AND data_model.fields.pid:<5",
+  "cim-splunk": "|where (tag=\"process\" AND pid < 5)",
+  "matches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"pid": 4}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "pid": 4}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"pid": 5}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "pid": 5}
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "stix-input":"[process:name = 'reg.exe' AND process:parent_ref.name = 'cmd.exe' AND process:parent_ref.parent_ref.name != 'explorer.exe']"
+}

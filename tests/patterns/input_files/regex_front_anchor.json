@@ -1,0 +1,4 @@
+{
+  "stix-input":"[process:name = 'wsmprovhost.exe' AND process:binary_ref.parent_directory_ref.path MATCHES '^\\\\SystemVolumeInformation']",
+  "car-elastic": "(data_model.object:process AND data_model.fields.image_path:/\\\\SystemVolumeInformation.*/) AND (data_model.object:process AND data_model.fields.exe:\"wsmprovhost.exe\")"
+}

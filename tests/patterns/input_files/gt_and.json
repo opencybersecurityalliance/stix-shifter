@@ -1,0 +1,18 @@
+{
+  "stix-input":"[process:pid > 512 AND process:parent_ref.pid > 7]",
+  "car-splunk": "|where ((match(tag, \"dm-process-.*\") AND ppid > 7) AND (match(tag, \"dm-process-.*\") AND pid > 512))",
+  "car-elastic": "(data_model.object:process AND data_model.fields.ppid:>7) AND (data_model.object:process AND data_model.fields.pid:>512)",
+  "matches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"pid": 700, "ppid": 10}}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"pid": 511, "ppid": 8}},
+      {"object": "process", "action": "create", "fields": {"pid": 513, "ppid": 6}},
+      {"object": "process", "action": "create", "fields": {"pid": 512, "ppid": 7}}
+    ]
+  }
+  
+}
