@@ -24,7 +24,7 @@ class StixToElastic(BaseQueryTranslator):
         query_object = generate_query(data)
         data_mapper = options.get('data_mapper')
         if not data_mapper:
-            data_mapper = 'cim'
+            data_mapper = 'car'
 
         data_mapper_module_name = ''.join(["stix_shifter.src.modules.", data_mapper, ".", data_mapper, "_data_mapping"])
 
