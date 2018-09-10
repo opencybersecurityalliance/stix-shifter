@@ -95,7 +95,7 @@ class CombinedComparisonExpression(BaseComparisonExpression):
                  operator: ComparisonExpressionOperators) -> None:
         if not all((isinstance(expr1, BaseComparisonExpression), isinstance(expr2, BaseComparisonExpression),
                     isinstance(operator, ComparisonExpressionOperators))):
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
         self.expr1 = expr1
         self.expr2 = expr2
         self.operator = operator
@@ -113,7 +113,7 @@ class BaseObservationExpression:
 class ObservationExpression(BaseObservationExpression):
     def __init__(self, comparison_expression: BaseComparisonExpression) -> None:
         if not isinstance(comparison_expression, BaseComparisonExpression):
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
         self.comparison_expression = comparison_expression
 
     def __repr__(self) -> str:
@@ -139,17 +139,17 @@ class CombinedObservationExpression(BaseObservationExpression):
             wrong_type = not isinstance(self.expr1, BaseObservationExpression)
 
         if wrong_type:
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
 
         if hasattr(self.expr2, 'observation_expression'):
             wrong_type = not isinstance(self.expr2.observation_expression, BaseObservationExpression)
         else:
             wrong_type = not isinstance(self.expr2, BaseObservationExpression)
         if wrong_type:
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
 
         if not isinstance(self.operator, ObservationOperators):
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
 
     def __repr__(self) -> str:
         return "CombinedObservationExpression({expr1} {operator} {expr2})".format(expr1=self.expr1,
@@ -164,7 +164,7 @@ class BaseQualifier:
 class Qualifier(BaseQualifier):
     def __init__(self, qualifier, observation_expression: BaseObservationExpression) -> None:
         if not isinstance(observation_expression, BaseObservationExpression):
-            raise RuntimeWarning("{} constructor called with wrong types".format(__class__))
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
         self.qualifier = qualifier
         self.observation_expression = observation_expression
 
