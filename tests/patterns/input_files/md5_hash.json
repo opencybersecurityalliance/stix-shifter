@@ -1,0 +1,22 @@
+{
+  "stix-input":"[file:hashes.MD5 ='79054025255fb1a26e4bc422aef54eb4']",
+  "car-elastic": "data_model.object:file AND data_model.fields.md5_hash:\"79054025255fb1a26e4bc422aef54eb4\"",
+  "car-splunk": "|where (match(tag, \"dm-file-.*\") AND md5_hash = \"79054025255fb1a26e4bc422aef54eb4\")",
+  "cim-splunk": "|where (tag=\"endpoint\" AND file_hash = \"79054025255fb1a26e4bc422aef54eb4\")",
+  "matches": {
+    "car": [
+      {"object": "file", "action": "create", "fields": {"md5_hash": "79054025255fb1a26e4bc422aef54eb4"}}
+    ],
+    "cim": [
+      {"fake_tag": "endpoint", "file_hash": "79054025255fb1a26e4bc422aef54eb4"}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "file", "action": "create", "fields": {"md5_hash": "79054025255fb1a26e4bc422aef54eb3"}}
+    ],
+    "cim": [
+      {"fake_tag": "endpoint", "file_hash": "79054025255fb1a26e4bc422aef54eb3"}
+    ]
+  }
+}

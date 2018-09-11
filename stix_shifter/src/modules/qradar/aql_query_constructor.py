@@ -5,10 +5,10 @@ import re
 
 logger = logging.getLogger(__name__)
 
-from stix2patterns_translator.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix2patterns_translator.errors import SearchFeatureNotSupportedError
+from stix_shifter.src.patterns.errors import SearchFeatureNotSupportedError
 
 from stix_shifter.src.transformers import TimestampToEpoch, ValueTransformer
 

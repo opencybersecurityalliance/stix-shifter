@@ -1,6 +1,7 @@
 from stix_shifter.src.modules.qradar import qradar_translator
 from stix_shifter.src.modules.qradar import qradar_data_mapping
 from stix_shifter.src.modules.base import base_translator
+from stix_shifter.src.exceptions import DataMappingException
 import unittest
 import random
 
@@ -119,7 +120,7 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'aql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_unmapped_attribute(self):
-        data_mapping_exception = qradar_data_mapping.DataMappingException
+        data_mapping_exception = DataMappingException
         interface = qradar_translator.Translator()
         input_arguments = "[network-traffic:some_invalid_attribute = 'whatever']"
         options = {}
