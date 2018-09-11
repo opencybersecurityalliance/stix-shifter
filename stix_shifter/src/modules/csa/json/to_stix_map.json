@@ -47,27 +47,32 @@
   "eventcount": {
     "key": "number_observed",
     "type": "value",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "Start": [
     {
       "key": "created",
       "type": "value",
+      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     {
       "key": "modified",
       "type": "value",
+      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     {
       "key": "first_observed",
       "type": "value",
+      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
       "type": "value",
+      "cybox": false,
       "transformer": "EpochToTimestamp"
     }
   ],
