@@ -1,0 +1,21 @@
+{
+  "stix-input": "[file:name LIKE 'file_.exe']",
+  "car-splunk": "|where (match(tag, \"dm-file-.*\") AND match(file_name, \"^file.\\.exe$\"))",
+  "cim-splunk": "|where (tag=\"endpoint\" AND match(file_name, \"^file.\\.exe$\"))",
+  "matches": {
+    "car": [
+      {"object": "file", "action": "create", "fields": {"file_name": "file1.exe"}}
+    ],
+    "cim": [
+      {"fake_tag": "endpoint", "file_name": "file1.exe"}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "file", "action": "create", "fields": {"file_name": "file.exe"}}
+    ],
+    "cim": [
+      {"fake_tag": "endpoint", "file_name": "file.exe"}
+    ]
+  }
+}

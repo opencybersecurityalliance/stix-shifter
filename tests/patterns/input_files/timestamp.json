@@ -1,0 +1,6 @@
+{
+  "stix-input":"[file:created = t'2014-01-13T07:03:17Z']",
+  "car-elastic": "data_model.object:file AND data_model.fields.creation_time:2014-01-13 07:03:17+00:00",
+  "car-splunk": "|where (match(tag, \"dm-file-.*\") AND creation_time = 2014-01-13 07:03:17+00:00)",
+  "cim-splunk": "|where (tag=\"endpoint\" AND file_create_time = 2014-01-13 07:03:17+00:00)"
+}

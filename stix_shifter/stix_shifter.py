@@ -1,8 +1,7 @@
 import sys
 import importlib
 
-MODULES = ['csa', 'qradar', 'dummy', 'aql_passthrough', 'csa:at', 'csa:nf']
-
+MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'csa', 'csa:at', 'csa:nf']
 RESULTS = 'results'
 QUERY = 'query'
 
@@ -19,7 +18,7 @@ class StixShifter:
         """
         Translated queries to a specified format
         :param module: What module to use
-        :type module: one of MODULES 'qradar', 'dummy', 'aql_passthrough'
+        :type module: one of MODULES 'qradar', 'dummy'
         :param translate_type: translation of a query or result set must be either 'results' or 'query'
         :type translate_type: str
         :param data: the data to translate

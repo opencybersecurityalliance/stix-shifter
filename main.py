@@ -29,6 +29,8 @@ def __main__():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='run stix2 validator against the converted results')
+    translate_parser.add_argument('-m', '--data-mapper',
+                                  help='module to use for the data mapper')
 
     args = parser.parse_args()
 
@@ -39,6 +41,8 @@ def __main__():
     options = {}
     if args.stix_validator:
         options['stix_validator'] = args.stix_validator
+    if args.data_mapper:
+        options['data_mapper'] = args.data_mapper
 
     shifter = stix_shifter.StixShifter()
     result = shifter.translate(

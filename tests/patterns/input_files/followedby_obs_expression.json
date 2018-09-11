@@ -1,0 +1,23 @@
+{
+  "stix-input":"[ipv4-addr:value = '198.51.100.5' ] FOLLOWEDBY [ipv4-addr:value = '198.51.100.10']",
+  "car-splunk": "|eval latest=[search (match(tag, \"dm-flow-.*\") AND dest_ip = \"198.51.100.10\") | append [makeresults 1 | eval _time=0]| head 1 | return $_time] | where (match(tag, \"dm-flow-.*\") AND dest_ip = \"198.51.100.5\")",
+  "cim-splunk": "|eval latest=[search (tag=\"flow\" AND dest_ip = \"198.51.100.10\") | append [makeresults 1 | eval _time=0]| head 1 | return $_time] | where (tag=\"flow\" AND dest_ip = \"198.51.100.5\")",
+  "matches": {
+    "car": [
+      {"object": "flow", "action": "create", "fields": {"dest_ip": "198.51.100.5", "pid": 7, "date": "2017-09-8T17:10:43.723Z"}, "@timestamp": "2017-09-10T14:01:43.719Z"},
+      {"object": "flow", "action": "create", "fields": {"dest_ip": "198.51.100.5", "date": "2017-09-10T14:01:43.719Z"}, "@timestamp": "2017-09-10T14:01:43.719Z"}
+    ],
+    "cim": [
+      {"fake_tag": "flow", "dest_ip": "198.51.100.5"}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wwwwsmprovhost.exe", "pid": 7, "date": "2017-09-16T15:01:47.819Z"}, "@timestamp": "2017-09-10T14:01:43.719Z"},
+      {"object": "flow", "action": "create", "fields": {"dest_ip": "192.51.100.10", "pid": 3, "date": "2017-09-16T14:01:43.719Z"}, "@timestamp": "2017-09-10T14:01:43.719Z"}
+    ],
+    "cim": [
+      {"fake_tag": "flow", "dest_ip": "198.51.100.10"}
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "stix-input":"[file:name NOT LIKE '%.exe']",
+  "car-splunk": "|where (match(tag, \"dm-file-.*\") AND NOT (match(file_name,  \"^.*\\.exe$\")))"
+}
