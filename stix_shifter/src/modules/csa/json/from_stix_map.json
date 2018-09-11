@@ -1,42 +1,41 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["Network.A", "Network.B"],
-      "constraints" : [{"$and" : {"Network.Protocol" : "IPV4"}}]
+      "value": ["sourceip", "destinationip", "identityip"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["Network.A", "Network.B"]
+      "value": ["sourceip", "destinationip", "identityip"]
     }
   },
   "url": {
     "fields": {
-      "value": ["Fetch.url"]
+      "value": ["url"]
     }
   },
   "mac-addr": {
     "fields": {
-      "value": ["Link.A", "Link.B"]
+      "value": ["sourcemac", "destinationmac"]
     }
   },
   "domain-name": {
     "fields": {
-      "value": ["Network.A_Name"]
+      "value": ["domainname"]
     }
   },
   "file": {
     "fields": {
-      "name": ["foo.filename"]
+      "name": ["filename"]
     }
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["Transport.A"],
-      "dst_port": ["Transport.B"],
-      "protocols[*]": ["Transport.Protocol"],
-      "start": ["Start"],
-      "end": ["Last"]
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"]
     }
   },
   "user-account": {

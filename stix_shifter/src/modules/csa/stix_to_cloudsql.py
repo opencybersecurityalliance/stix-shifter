@@ -1,6 +1,6 @@
 import logging
 
-from stix2patterns_translator.parser import generate_query
+from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import cloudsql_data_mapping
 from . import cloudsql_query_constructor
@@ -24,11 +24,10 @@ class StixToCloudSQL(BaseQueryTranslator):
         :return: sql query string
         :rtype: str
         """
-        stix_pattern = data
 
-        logger.info("Converting STIX2 Pattern to ariel")
+        logger.info("Converting STIX2 Pattern to sql")
 
-        query_object = generate_query(stix_pattern)
+        query_object = generate_query(data)
         data_model_mapper = cloudsql_data_mapping.CloudSQLDataMapper(self.dialect)
         query_string = cloudsql_query_constructor.translate_pattern(
             query_object, data_model_mapper)

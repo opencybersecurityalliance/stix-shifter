@@ -2,6 +2,8 @@ from os import path
 import json
 import re
 
+from stix_shifter.src.exceptions import DataMappingException
+
 def _fetch_mapping():
     try:
         basepath = path.dirname(__file__)
@@ -14,10 +16,6 @@ def _fetch_mapping():
     except Exception as ex:
         print('exception in main():', ex)
         return {}
-
-
-class DataMappingException(Exception):
-    pass
 
 
 class CloudSQLDataMapper:

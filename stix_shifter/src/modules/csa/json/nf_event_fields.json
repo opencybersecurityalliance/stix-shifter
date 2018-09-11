@@ -6,7 +6,9 @@
     "Network.B as destinationip",
     "Transport.B as destinationport",
     "Link.B as destinationmac",
-    "Transport.Protocol as protocol"
+    "Transport.Protocol as protocol",
+   	"Start as starttime",
+   	"Last as endtime"
    	
   ],
   "old": [
