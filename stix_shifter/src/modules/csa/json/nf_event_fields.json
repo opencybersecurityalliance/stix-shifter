@@ -1,6 +1,15 @@
 {
   "default": [
-    "UUID as NF_UUID",
+    "Network.A as sourceip",
+    "Transport.A as sourceport",
+    "Link.A as sourcemac",
+    "Network.B as destinationip",
+    "Transport.B as destinationport",
+    "Link.B as destinationmac",
+    "Transport.Protocol as protocol"
+   	
+  ],
+  "old": [
     "Link.A as Link_A",
     "Link.B as Link_B",
    	"Link.Protocol as Link_Protocol",

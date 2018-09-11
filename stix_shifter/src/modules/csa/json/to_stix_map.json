@@ -79,7 +79,7 @@
     "key": "x-com-ibm-ariel.magnitude",
     "type": "value"
   },
-  "Network": [
+  "sourceip": [
     {
       "key": "ipv4-addr.value",
       "cybox": "true",
@@ -262,5 +262,25 @@
     "key": "NF_Last.value",
     "cybox": "true",
     "type": "value"
-  }
+  },
+   "NF_Network": [
+    {
+      "key": "Network_A.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "cybox": "true",
+      "type": "value"
+    },
+    {
+      "key": "Network_B.value",
+      "type": "reference",
+      "references": "ipv6-addr",
+      "cybox": "true",
+      "linked": "network-traffic",
+      "transformer": "ToString"
+    }
+  ]
 }
