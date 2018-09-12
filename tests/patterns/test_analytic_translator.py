@@ -6,6 +6,7 @@ from os import listdir, path
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 class TestAnalyticTranslator(unittest.TestCase):
     """ Integration tests for the full pattern conversion process"""
     longMessage = True
@@ -14,14 +15,16 @@ class TestAnalyticTranslator(unittest.TestCase):
     @staticmethod
     def success_test_generator(pattern, search_platform, data_model, expected_result):
         """ Generates a successful test """
+
         def test(self):
             res = translate(pattern, search_platform, data_model)
-            self.assertEqual(normalize_spacing(res), normalize_spacing(expected_result))
+            self.assertEqual(normalize_spacing(res['queries']), normalize_spacing(expected_result))
         return test
 
     @staticmethod
     def failure_test_generator(pattern, search_platform, data_model):
         """ Generates a test for an error """
+
         def test(self):
             with self.assertRaises(Exception):
                 res = translate(pattern, search_platform, data_model)
@@ -40,7 +43,7 @@ class TestAnalyticTranslator(unittest.TestCase):
 
             # Generate a test for each remaining key in the dictionary
             for platform, expected_result in v.items():
-                if '-' in platform and platform != "stix-input": # Filter out keys that aren't actually platforms
+                if '-' in platform and platform != "stix-input":  # Filter out keys that aren't actually platforms
                     dm, sp = platform.split('-')
 
                     # each test has name in the format: test_md5_hash_car-splunk
@@ -56,5 +59,6 @@ class TestAnalyticTranslator(unittest.TestCase):
                         new_test = TestAnalyticTranslator.failure_test_generator(test_pattern, search_platform,
                                                                                  data_model)
                         setattr(TestAnalyticTranslator, test_name, new_test)
+
 
 TestAnalyticTranslator.generate_tests()
