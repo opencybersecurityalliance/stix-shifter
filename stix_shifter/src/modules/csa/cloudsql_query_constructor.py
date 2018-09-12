@@ -202,6 +202,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     x = SqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     queries = []
+    bucket=x.dmm.dialect+"-hourly-dumps" 
     for query in x.queries:
-        queries.append("SELECT {select_statement} FROM cos://us-geo/"+x.dmm.dialect+"-hourly-dumps STORED AS JSON WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
+        queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause}'
+                       .format(select_statement=select_statement, bucket=bucket, where_clause=query))
     return {'aql_queries': queries, 'parsed_stix': x.parsed_pattern}

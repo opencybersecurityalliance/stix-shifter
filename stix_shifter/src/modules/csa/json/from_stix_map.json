@@ -1,12 +1,13 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "value": ["Network.A", "Network.B"],
+      "constraints" : [{"$and" : {"Network.Protocol" : "IPV4"}}]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "value": ["Network.A", "Network.B"]
     }
   },
   "url": {
@@ -16,7 +17,7 @@
   },
   "mac-addr": {
     "fields": {
-      "value": ["sourcemac", "destinationmac"]
+      "value": ["Link.A", "Link.B"]
     }
   },
   "domain-name": {
@@ -31,11 +32,11 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["sourceport"],
-      "dst_port": ["destinationport"],
-      "protocols[*]": ["protocolid"],
-      "start": ["starttime"],
-      "end": ["endtime"]
+      "src_port": ["Transport.A"],
+      "dst_port": ["Transport.B"],
+      "protocols[*]": ["Transport.Protocol"],
+      "start": ["Start"],
+      "end": ["Last"]
     }
   },
   "user-account": {
