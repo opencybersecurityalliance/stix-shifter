@@ -17,11 +17,21 @@ data_source = {
 options = {}
 
 
-class TestTransform(unittest.TestCase):
+class TestTransform(object):
+    @staticmethod
+    def get_first(itr, constraint):
+        return next(
+            (obj for obj in itr if constraint(obj)),
+            None
+        )
+
+    @staticmethod
+    def get_first_of_type(itr, typ):
+        return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        transformer = None
-        data = {"Start": 1531169112, "eventcount": 5}
+#        transformer = None
+        data = {"starttime": 1531169112, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -49,14 +59,14 @@ class TestTransform(unittest.TestCase):
         assert(observed_data['last_observed'] is not None)
 
     def test_cybox_observables(self):
-        transformer = None
+#        transformer = None
         payload = "SomeBase64Payload"
         user_id = "someuserid2018"
         url = "https://example.com"
         domain = "example.com"
         source_ip = "127.0.0.1"
         destination_ip = "255.255.255.1"
-        data = {"Network": source_ip, "destinationip": destination_ip, "url": url,
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url,
                 "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 #        data = {"Network": {"A" : source_ip}, "destinationip": destination_ip, "url": url,
 #                "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
@@ -68,6 +78,7 @@ class TestTransform(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
+        assert('objects' in observed_data)
         objects = observed_data['objects']
 
         # Test that each data element is properly mapped and input into the STIX JSON
