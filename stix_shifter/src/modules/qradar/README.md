@@ -2,11 +2,15 @@
 
 ### Format for calling stix-shifter from the command line
 
-python stix_shifter.py `<translator_module>` `<query or result>` `<stix identity object>` `<data>`
+python stix_shifter.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 
 (Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL. Keyword arguments should be implemented to overcome this).
 
 ## Converting from STIX patterns to AQL queries
+
+Returns an object representing the aql query and a parsing of the input stix pattern:
+
+`{'aql_query:' resulting_aql_query_string, 'stix_parsing': [{'attribute': <STIX attribute>, 'comparison_operator': <comparison operator>, 'value': <STIX value>}]}`
 
 This example input pattern:
 
@@ -16,6 +20,9 @@ Returns the following AQL query:
 
 `SELECT <defined QRadar fields> FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'`
 
+and returns the parsed STIX pattern:
+
+`[{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]`
 
 ### AQL query construction: SELECT statement
 

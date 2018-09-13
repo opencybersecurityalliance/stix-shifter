@@ -1,0 +1,22 @@
+{
+  "stix-input":"[process:name != 'wsmprovhost.exe']",
+  "car-splunk": "|where (match(tag, \"dm-process-.*\") AND exe != \"wsmprovhost.exe\")",
+  "car-elastic": "data_model.object:process AND NOT(data_model.fields.exe:\"wsmprovhost.exe\")",
+  "cim-splunk": "|where (tag=\"process\" AND process != \"wsmprovhost.exe\")",
+  "matches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost1.exe"}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "process": "wsmprovhost1.exe"}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe"}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "process": "wsmprovhost.exe"}
+    ]
+  }
+}

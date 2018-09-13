@@ -1,0 +1,16 @@
+{
+  "stix-input":"[process:name = 'wsmprovhost.exe' AND process:parent_ref.name = 'svchost.exe']",
+  "car-splunk": "|where ((match(tag, \"dm-process-.*\") AND parent_exe = \"svchost.exe\") AND (match(tag, \"dm-process-.*\") AND exe = \"wsmprovhost.exe\"))",
+  "car-elastic": "(data_model.object:process AND data_model.fields.parent_exe:\"svchost.exe\") AND (data_model.object:process AND data_model.fields.exe:\"wsmprovhost.exe\")",
+  "matches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe", "parent_exe": "svchost.exe"}}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe", "parent_exe": "taskmgr.exe"}},
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost1.exe", "parent_exe": "svchost.exe"}}
+    ]
+  }
+}

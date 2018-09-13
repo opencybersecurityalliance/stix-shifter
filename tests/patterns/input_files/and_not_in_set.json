@@ -1,0 +1,26 @@
+{
+  "stix-input": "[process:pid NOT IN (1, 2, 3) AND process:name = 'wsmprovhost.exe']",
+  "car-elastic": "(data_model.object:process AND data_model.fields.exe:\"wsmprovhost.exe\") AND (data_model.object:process AND NOT(data_model.fields.pid:(1 OR 2 OR 3)))",
+  "car-splunk": "|where ((match(tag, \"dm-process-.*\") AND exe = \"wsmprovhost.exe\") AND (match(tag, \"dm-process-.*\") AND NOT (pid IN (1, 2, 3))))",
+  "cim-splunk": "|where ((tag=\"process\" AND process = \"wsmprovhost.exe\") AND (tag=\"process\" AND NOT (pid IN (1, 2, 3))))",
+  "matches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe", "pid": 7}},
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe"}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "process": "wsmprovhost.exe", "pid": 7},
+      {"fake_tag": "process", "process": "wsmprovhost.exe"}
+    ]
+  },
+  "nonmatches": {
+    "car": [
+      {"object": "process", "action": "create", "fields": {"exe": "wwwwsmprovhost.exe", "pid": 7}},
+      {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost.exe", "pid": 3}}
+    ],
+    "cim": [
+      {"fake_tag": "process", "process": "wwwwsmprovhost.exe", "pid": 7},
+      {"fake_tag": "process", "process": "wsmprovhost.exe", "pid": 3}
+    ]
+  }
+}

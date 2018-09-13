@@ -1,6 +1,6 @@
 import logging
 
-from stix2patterns_translator.parser import generate_query
+from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import qradar_data_mapping
 from . import aql_query_constructor

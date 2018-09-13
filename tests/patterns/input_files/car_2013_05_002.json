@@ -1,0 +1,4 @@
+{
+  "stix-input":"[process:binary_ref.parent_directory_ref.path MATCHES ':\\\\\\\\RECYCLER' OR process:binary_ref.parent_directory_ref.path MATCHES ':\\\\\\\\SystemVolumeInformation']",
+  "car-splunk": "|where ((match(tag, \"dm-process-.*\") AND match(image_path, \":\\\\\\\\SystemVolumeInformation\")) OR (match(tag, \"dm-process-.*\") AND match(image_path, \":\\\\\\\\RECYCLER\")))"
+}
