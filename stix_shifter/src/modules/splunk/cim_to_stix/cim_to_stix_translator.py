@@ -1,7 +1,8 @@
 import re
 import logging
 import uuid
-from stix2validator import validate_instance, print_results
+from stix2validator.validator import validate_instance, FileValidationResults 
+from stix2validator.output import print_results
 from . import observable
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
@@ -186,8 +187,10 @@ class DataSourceObjToStixObj:
                         continue
                     DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
 
+
         # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)
-            print_results(validated_result)
+            wrapped_result = FileValidationResults(validated_result.is_valid, None, validated_result)
+            print_results([wrapped_result])
         return observation

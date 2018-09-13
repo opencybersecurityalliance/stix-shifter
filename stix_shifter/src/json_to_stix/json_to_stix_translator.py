@@ -3,8 +3,9 @@ import logging
 import uuid
 
 from . import observable
-from stix2validator.validator import validate_instance
+from stix2validator.validator import validate_instance, FileValidationResults
 from stix2validator.output import print_results
+
 
 # convert JSON data to STIX object using map_data and transformers
 
@@ -173,5 +174,6 @@ class DataSourceObjToStixObj:
         # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)
-            print_results(validated_result)
+            wrapped_result = FileValidationResults(validated_result.is_valid, None, validated_result)
+            print_results([wrapped_result])
         return observation
