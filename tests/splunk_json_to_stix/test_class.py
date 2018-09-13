@@ -1,7 +1,7 @@
 from stix_shifter.src.modules.splunk.cim_to_stix import cim_to_stix_translator
 from stix_shifter.src import transformers
 from stix_shifter.src.modules.splunk import splunk_translator
-from stix2validator.validator import validate_instance
+from stix2validator import validate_instance
 import json
 
 interface = splunk_translator.Translator()
