@@ -4,7 +4,6 @@ from stix_shifter.src.patterns.pattern_objects import ObservationExpression, Com
 
 
 class PatternTranslator:
-    # Based on AQL comparison operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
         ComparisonExpressionOperators.Or: "OR",
@@ -21,7 +20,8 @@ class PatternTranslator:
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR',
         ObservationOperators.FollowedBy: 'FOLLOWEDBY',
-        ComparisonComparators.IsSubSet: 'INCIDR',
+        ComparisonComparators.IsSubSet: 'ISSUBSET',
+        ComparisonComparators.IsSuperSet: 'ISSUPERSET',
     }
 
     def __init__(self, pattern: Pattern):
