@@ -32,7 +32,7 @@ class SplunkSearchTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
-        self._pattern_prefix = "|where"  # How should the final SPL query string start.  By default, use '|where'
+        self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
 
     def translate(self, expression, qualifier=None):
         """ This is the worker method for the translation. It can be passed any of the STIX2 AST classes and will turn
