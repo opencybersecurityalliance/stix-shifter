@@ -14,7 +14,7 @@ In addition to "finding" the data using these patterns, STIX-Shifter uniquely al
 
 ## This sounds like Sigma, I already have that
 
-[Sigma](https://github.com/Neo23x0/sigma) and STIX Patterning have goals that are related, but at the end of the day have slightly different scopes. While Sigma seeks to be "for log files what Snort is for network traffic and YARA is for files", STIX Patterning's goal is to encompass *all three* fundamental security data source types - network, file, and log - and do so simultaneously, allowing you to create complex queries and analytics that span domains. As such, so does STIX Shifter. We feel it is critical to be able to create search patterns that spam both SIEM, Endpoint, Network, and File level, in order to detect the complex patterns used in modern campaigns.
+[Sigma](https://github.com/Neo23x0/sigma) and STIX Patterning have goals that are related, but at the end of the day have slightly different scopes. While Sigma seeks to be "for log files what Snort is for network traffic and YARA is for files", STIX Patterning's goal is to encompass *all three* fundamental security data source types - network, file, and log - and do so simultaneously, allowing you to create complex queries and analytics that span domains. As such, so does STIX Shifter. We feel it is critical to be able to create search patterns that span SIEM, Endpoint, Network, and File levels, in order to detect the complex patterns used in modern campaigns.
 
 ## Why would I want to use this?
 

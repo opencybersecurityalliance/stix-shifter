@@ -37,6 +37,7 @@ class AqlQueryStringPatternTranslator:
         ComparisonComparators.Like: "LIKE",
         ComparisonComparators.In: "IN",
         ComparisonComparators.Matches: 'MATCHES',
+        ComparisonComparators.IsSubSet: 'INCIDR',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR'
@@ -45,7 +46,6 @@ class AqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
 
         query_split = self.translated.split("split")
@@ -138,13 +138,15 @@ class AqlQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': original_stix_value})
-
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                comparison_string += "{mapped_field} {comparator} {value}".format(
-                    mapped_field=mapped_field, comparator=comparator, value=value)
+                # if its a set operator() query construction will be different. 
+                if expression.comparator == ComparisonComparators.IsSubSet:
+                    comparison_string +=  comparator + "(" + "'" + value + "'," + mapped_field +")"
+                else:
+                    comparison_string += "{mapped_field} {comparator} {value}".format(
+                        mapped_field=mapped_field, comparator=comparator, value=value)
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
                     mapped_fields_count -= 1
@@ -204,4 +206,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     queries = []
     for query in x.queries:
         queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
-    return {'aql_queries': queries, 'parsed_stix': x.parsed_pattern}
+    return queries
