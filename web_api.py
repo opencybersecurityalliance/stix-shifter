@@ -12,7 +12,8 @@ from stix_shifter.src.patterns.translator import translate, SearchPlatforms, Dat
 
 app = Flask(__name__.split('.')[0])
 
-def run_server(): # used only by test module to start dev server
+
+def run_server():  # used only by test module to start dev server
     app.run(debug=True, port=5000, host='127.0.0.1')
 
 
@@ -24,7 +25,7 @@ def car_elastic():
         pattern = request.data.decode("utf-8")  # decode the input string
         output = translate(
             pattern, outputLanguage, outputDataModel)
-        return output
+        return output['queries']
     else:
         print("No Request Data")  # when issues with input data
         return "No Request Data"
@@ -38,28 +39,31 @@ def car_splunk():
         pattern = request.data.decode("utf-8")  # decode the input string
         output = translate(
             pattern, outputLanguage, outputDataModel)
-        return output
+        return output['queries']
     else:
         print("No Request Data")  # when issues with input data
         return "No Request Data"
+
 
 @app.route('/cim-splunk', methods=['POST'])
 def cim_splunk():
     outputLanguage = SearchPlatforms.SPLUNK
     outputDataModel = DataModels.CIM
     if request.data:
-        pattern = request.data.decode("utf-8") # decode the input string
+        pattern = request.data.decode("utf-8")  # decode the input string
         output = translate(
             pattern, outputLanguage, outputDataModel
         )
-        return output
+        return output['queries']
     else:
-        print("No Request Data") # when issues with input data
+        print("No Request Data")  # when issues with input data
         return "No Request Data"
+
 
 def main():
     app.run(debug=True, port=5000, host='127.0.0.1')
 
+
 if __name__ == '__main__':
-    #### DEVELOPMENT Settings, change for production!!!
+    # DEVELOPMENT Settings, change for production!!!
     main()

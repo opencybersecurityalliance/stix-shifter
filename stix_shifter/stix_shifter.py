@@ -1,10 +1,17 @@
 import sys
 import importlib
+from stix_shifter.src.patterns.parser import generate_query
+from stix2patterns.validator import run_validator
+from stix_shifter.src.stix_pattern_parser import stix_pattern_parser
 
 
 MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
 RESULTS = 'results'
 QUERY = 'query'
+
+
+class StixValidationException(Exception):
+    pass
 
 
 class StixShifter:
@@ -39,8 +46,19 @@ class StixShifter:
         interface = translator_module.Translator()
 
         if translate_type == QUERY:
-            # Converting STIX pattern to datasource query
-            return interface.transform_query(data, options)
+            errors = run_validator(data)
+            if (errors != []):
+                raise StixValidationException(
+                    "The STIX pattern has the following errors: {}".format(errors))
+            else:
+                # Translating STIX pattern to antlr query object
+                query_object = generate_query(data)
+                # Converting query object to datasource query
+                parsed_stix = stix_pattern_parser.parse_stix(query_object)
+                # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
+                # Converting STIX pattern to datasource query
+                queries = interface.transform_query(data, options)
+                return {'queries': queries, 'parsed_stix': parsed_stix}
         elif translate_type == RESULTS:
             # Converting data from the datasource to STIX objects
             return interface.translate_results(data_source, data, options)
