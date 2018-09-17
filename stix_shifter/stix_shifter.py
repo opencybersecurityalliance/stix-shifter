@@ -46,8 +46,6 @@ class StixShifter:
         interface = translator_module.Translator()
 
         if translate_type == QUERY:
-            # return interface.transform_query(data, options)
-
             errors = run_validator(data)
             if (errors != []):
                 raise StixValidationException(
