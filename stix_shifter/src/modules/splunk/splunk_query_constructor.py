@@ -134,13 +134,26 @@ class _ObservationExpressionTranslator:
 
             # These are the native objects and fields
             object_mapping = self.dmm.map_object(stix_object)
-            field_mapping = self.dmm.map_field(stix_object, stix_path)
+            field_mapping_array = self.dmm.map_field(stix_object, stix_path)
 
             # This scopes the query to the object
             object_scoping = self.object_scoper(object_mapping)
 
-            # Returns the actual comparison (as a translated string)
-            return self._build_comparison(expression, object_scoping, field_mapping)
+            comparison_string = ""
+            mapped_fields_count = len(field_mapping_array)
+            for mapped_field in field_mapping_array:
+                # Returns the actual comparison (as a translated string)
+                comparison_string += self._build_comparison(expression, object_scoping, mapped_field)
+                if (mapped_fields_count > 1):
+                    comparison_string += " OR "
+                    mapped_fields_count -= 1
+
+            if(len(field_mapping_array) > 1):
+                # More than one SPL field maps to the STIX attribute so group the ORs.
+                grouped_comparison_string = "(" + comparison_string + ")"
+                comparison_string = grouped_comparison_string
+            return comparison_string
+
         elif isinstance(expression, CombinedComparisonExpression):
             return "({} {} {})".format(
                 self.translate(expression.expr1),

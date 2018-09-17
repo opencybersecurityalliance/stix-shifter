@@ -59,10 +59,15 @@ class CimDataMapper:
       "ipv4-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
-          "value": "dest_ip"
+          "value": ["src_ip","dest_ip"]
         }
       },
-      "ipv6-addr": None,
+      "ipv6-addr": { # Network traffic
+        "cim_type": "flow",
+        "fields": {
+          "value": ["src_ip","dest_ip"]
+        }
+      },
       "mac-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
