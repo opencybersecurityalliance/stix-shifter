@@ -12,7 +12,7 @@ Splunk data to Stix mapping is defined in `to_stix_map.json` which is located in
 
 As Splunk uses common field names across multiple Splunk CIM objects, the unique CIM compliant event `tag` field located in the `<data>` object clarifies which objects can potentially be created.
 
-This example Splunk data:
+This example Splunk data (based on the `Change Analysis` CIM):
 
 `python main.py translate "splunk" "results" '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "Splunk", "identity_class": "events"}' '[{"tag": "change", "_time": "2018-08-21T15:11:55.000+00:00", "event_count": 1, "bytes": "300", "user": "ibm_user", "object_path": "hkey_local_machine\\system\\bar\\foo", "file_path": "C:\\Users\\someuser\\sample.dll", "file_create_time": "2018-08-15T15:11:55.676+00:00", "file_modify_time": "2018-08-15T18:10:30.456+00:00", "file_hash": "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f", "file_name": "sample.dll", "file_size": 25536}]'`
 
