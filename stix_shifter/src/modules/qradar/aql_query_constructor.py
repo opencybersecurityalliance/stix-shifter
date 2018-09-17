@@ -37,6 +37,7 @@ class AqlQueryStringPatternTranslator:
         ComparisonComparators.Like: "LIKE",
         ComparisonComparators.In: "IN",
         ComparisonComparators.Matches: 'MATCHES',
+        ComparisonComparators.IsSubSet: 'INCIDR',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR'
@@ -143,8 +144,12 @@ class AqlQueryStringPatternTranslator:
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                comparison_string += "{mapped_field} {comparator} {value}".format(
-                    mapped_field=mapped_field, comparator=comparator, value=value)
+                # if its a set operator() query construction will be different. 
+                if expression.comparator == ComparisonComparators.IsSubSet:
+                    comparison_string +=  comparator + "(" + "'" + value + "'," + mapped_field +")"
+                else:
+                    comparison_string += "{mapped_field} {comparator} {value}".format(
+                        mapped_field=mapped_field, comparator=comparator, value=value)
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
                     mapped_fields_count -= 1

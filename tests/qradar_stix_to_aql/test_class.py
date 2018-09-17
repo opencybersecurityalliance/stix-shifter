@@ -187,3 +187,13 @@ class TestStixToAql(unittest.TestCase, object):
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert len(query['aql_queries']) == 2
         assert query == {'aql_queries': [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02], 'parsed_stix': parsed_stix}
+
+    def test_set_operators(self):
+        interface = qradar_translator.Translator()
+        input_arguments = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
+        options = {}
+        query = interface.transform_query(input_arguments, options)
+        where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip))"
+        parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'INCIDR', 'attribute': 'ipv4-addr:value'}]
+        assert query == {'aql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
