@@ -48,12 +48,15 @@ class AqlQueryStringPatternTranslator:
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
-        query_split = self.translated.split("split")
+        query_split = self.translated.split("SPLIT")
         if len(query_split) > 1:
-            # remove empty strings in the array
-            query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
+            query_array = query_split
             # removing leading AND/OR
-            query_array = list(map(lambda x: re.sub("^\s(OR|AND)\s", "", x), query_array))
+            query_array = list(map(lambda x: re.sub("^\s?(OR|AND)\s?", "", x), query_array))
+            # removing trailing AND/OR
+            query_array = list(map(lambda x: re.sub("\s?(OR|AND)\s?$", "", x), query_array))
+            # remove empty strings in the array
+            query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
             # transform time format from '2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
             t_pattern = "((?<=START'\d{4}-\d{2}-\d{2})(T))|((?<=STOP'\d{4}-\d{2}-\d{2})(T))"
             query_array = list(map(lambda x: re.sub(t_pattern, " ", x), query_array))
@@ -162,7 +165,7 @@ class AqlQueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{comparison} {qualifier} split".format(comparison=comparison_string, qualifier=qualifier)
+                return "SPLIT{comparison} {qualifier}SPLIT".format(comparison=comparison_string, qualifier=qualifier)
             else:
                 return "{comparison}".format(comparison=comparison_string)
 
@@ -171,7 +174,7 @@ class AqlQueryStringPatternTranslator:
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "{query_string} {qualifier} split".format(query_string=query_string, qualifier=qualifier)
+                return "SPLIT{query_string} {qualifier}SPLIT".format(query_string=query_string, qualifier=qualifier)
             else:
                 return "{query_string}".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
