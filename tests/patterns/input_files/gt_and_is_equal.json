@@ -1,6 +1,6 @@
 {
   "stix-input":"[process:pid > 4 AND process:binary_ref.name = 'cmd.exe']",
-  "car-splunk": "|where ((match(tag, \"dm-process-.*\") AND exe = \"cmd.exe\") AND (match(tag, \"dm-process-.*\") AND pid > 4))",
+  "car-splunk": "((match(tag, \"dm-process-.*\") AND exe = \"cmd.exe\") AND (match(tag, \"dm-process-.*\") AND pid > 4))",
   "car-elastic": "(data_model.object:process AND data_model.fields.exe:\"cmd.exe\") AND (data_model.object:process AND data_model.fields.pid:>4)",
   "matches": {
     "car": [

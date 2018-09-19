@@ -88,7 +88,7 @@ class SplunkSearchTranslator:
         elif isinstance(expression, CombinedObservationExpression):
             combined_expr_format_string = self.implemented_operators[expression.operator]
             if expression.operator == ObservationOperators.FollowedBy:
-                self._pattern_prefix = "|eval"
+                self._pattern_prefix = "|eval "
             return combined_expr_format_string.format(expr1=self.translate(expression.expr1),
                                                       expr2=self.translate(expression.expr2))
         
