@@ -22,6 +22,15 @@ class EpochToTimestamp(ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
+class EpochSecondsToTimestamp(ValueTransformer):
+    """A value transformer for the timestamps"""
+
+    @staticmethod
+    def transform(epoch):
+        return (datetime.fromtimestamp(int(epoch), timezone.utc)
+                .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+
+
 class TimestampToEpoch(ValueTransformer):
     """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch"""
 
@@ -103,5 +112,5 @@ class ToFileName(ValueTransformer):
             print("Cannot convert input to file name")
 
 def get_all_transformers():
-    return {"EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
+    return {"EpochToTimestamp": EpochToTimestamp, "EpochSecondsToTimestamp":EpochSecondsToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
             "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName}

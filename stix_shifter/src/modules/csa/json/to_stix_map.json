@@ -45,22 +45,22 @@
   "starttime": [
     {
       "key": "created",
-      "transformer": "EpochToTimestamp",
+      "transformer": "EpochSecondsToTimestamp",
       "cybox": false
     },
     {
       "key": "modified",
-      "transformer": "EpochToTimestamp",
+      "transformer": "EpochSecondsToTimestamp",
       "cybox": false
     },
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "EpochSecondsToTimestamp",
       "cybox": false
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "EpochSecondsToTimestamp",
       "cybox": false
     }
   ],
