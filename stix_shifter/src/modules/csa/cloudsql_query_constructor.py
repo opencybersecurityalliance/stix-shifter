@@ -206,4 +206,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     for query in x.queries:
         queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause}'
                        .format(select_statement=select_statement, bucket=bucket, where_clause=query))
-    return {'aql_queries': queries, 'parsed_stix': x.parsed_pattern}
+    return {'sql_queries': queries, 'parsed_stix': x.parsed_pattern}
