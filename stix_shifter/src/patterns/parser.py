@@ -202,6 +202,12 @@ class STIXQueryBuilder(STIXPatternListener):
         observation_expression = self.pop()
         self.push(Pattern(observation_expression))
 
+    def exitPropTestIsSubset(self, ctx: STIXPatternParser.PropTestIsSubsetContext) -> None:
+        logger.debug("{} {} {}".format("propTestIsSubset", ctx, ctx.getText()))
+        value = self.pop()
+        object_path = self.pop()
+        negated = ctx.NOT()
+        self.push(ComparisonExpression(object_path, value, ComparisonComparators.IsSubSet, negated=negated))
 
 # copied from CASCADE data_model (defined twice)
 class InvalidFieldError(KeyError):

@@ -37,6 +37,7 @@ class AqlQueryStringPatternTranslator:
         ComparisonComparators.Like: "LIKE",
         ComparisonComparators.In: "IN",
         ComparisonComparators.Matches: 'MATCHES',
+        ComparisonComparators.IsSubSet: 'INCIDR',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR'
@@ -45,15 +46,17 @@ class AqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
 
-        query_split = self.translated.split("split")
+        query_split = self.translated.split("SPLIT")
         if len(query_split) > 1:
-            # remove empty strings in the array
-            query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
+            query_array = query_split
             # removing leading AND/OR
-            query_array = list(map(lambda x: re.sub("^\s(OR|AND)\s", "", x), query_array))
+            query_array = list(map(lambda x: re.sub("^\s?(OR|AND)\s?", "", x), query_array))
+            # removing trailing AND/OR
+            query_array = list(map(lambda x: re.sub("\s?(OR|AND)\s?$", "", x), query_array))
+            # remove empty strings in the array
+            query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
             # transform time format from '2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
             t_pattern = "((?<=START'\d{4}-\d{2}-\d{2})(T))|((?<=STOP'\d{4}-\d{2}-\d{2})(T))"
             query_array = list(map(lambda x: re.sub(t_pattern, " ", x), query_array))
@@ -138,13 +141,15 @@ class AqlQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': original_stix_value})
-
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                comparison_string += "{mapped_field} {comparator} {value}".format(
-                    mapped_field=mapped_field, comparator=comparator, value=value)
+                # if its a set operator() query construction will be different. 
+                if expression.comparator == ComparisonComparators.IsSubSet:
+                    comparison_string +=  comparator + "(" + "'" + value + "'," + mapped_field +")"
+                else:
+                    comparison_string += "{mapped_field} {comparator} {value}".format(
+                        mapped_field=mapped_field, comparator=comparator, value=value)
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
                     mapped_fields_count -= 1
@@ -160,7 +165,7 @@ class AqlQueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{comparison} {qualifier} split".format(comparison=comparison_string, qualifier=qualifier)
+                return "SPLIT{comparison} {qualifier}SPLIT".format(comparison=comparison_string, qualifier=qualifier)
             else:
                 return "{comparison}".format(comparison=comparison_string)
 
@@ -169,7 +174,7 @@ class AqlQueryStringPatternTranslator:
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "{query_string} {qualifier} split".format(query_string=query_string, qualifier=qualifier)
+                return "SPLIT{query_string} {qualifier}SPLIT".format(query_string=query_string, qualifier=qualifier)
             else:
                 return "{query_string}".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
@@ -204,4 +209,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     queries = []
     for query in x.queries:
         queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
-    return {'aql_queries': queries, 'parsed_stix': x.parsed_pattern}
+    return queries

@@ -1,11 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from .base_result_translator import BaseResultTranslator
 from .base_query_translator import BaseQueryTranslator
-from stix2patterns.validator import run_validator
-
-
-class StixValidationException(Exception):
-    pass
 
 
 class BaseTranslator:
@@ -39,9 +34,4 @@ class BaseTranslator:
         :rtype: str
         """
 
-        errors = run_validator(data)
-        if (errors != []):
-            raise StixValidationException(
-                "The STIX pattern has the following errors: {}".format(errors))
-        else:
-            return self.query_translator.transform_query(data, options, mapping)
+        return self.query_translator.transform_query(data, options, mapping)
