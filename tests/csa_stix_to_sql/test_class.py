@@ -1,6 +1,7 @@
 '''
 STIX to CSQL query adaptor test cases
 '''
+from stix_shifter import stix_shifter
 from stix_shifter.src.modules.csa import csa_translator
 from stix_shifter.src.modules.csa import cloudsql_data_mapping
 from stix_shifter.src.modules.base import base_translator
@@ -38,6 +39,8 @@ protocols = {
     "any": "99",
     "sctp": "132"
 }
+
+shifter = stix_shifter.StixShifter()
 
 class TestStixToSql(unittest.TestCase, object):
 
@@ -154,12 +157,10 @@ class TestStixToSql(unittest.TestCase, object):
         assert query == {'sql_queries': [at_selections + at_from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_invalid_stix_pattern(self):
-        stix_validation_exception = base_translator.StixValidationException
-        interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[not_a_valid_pattern]"
-        options = {}
+        stix_validation_exception = stix_shifter.StixValidationException
+        stix_pattern = "[not_a_valid_pattern]"
         self.assertRaises(stix_validation_exception,
-                          lambda: interface.transform_query(input_arguments, options))
+                          lambda: shifter.translate('csa', 'query', '{}', stix_pattern))
     
     def test_network_traffic_protocols(self):
         interface = csa_translator.Translator(dialect='nf')
