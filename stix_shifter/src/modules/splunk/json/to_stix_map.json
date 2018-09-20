@@ -1,0 +1,245 @@
+{ 
+    "tag_to_model": {
+        "web": ["web"],
+        "authentication": ["authentication"],
+        "certificate": ["certificate"],
+        "process": ["process", "authentication", "file", "directory"],
+        "network": ["network-traffic", "dst_ip", "src_ip"],
+        "change": ["windows-registry-key", "file", "directory", "authentication"],
+        "endpoint": ["windows-registry-key", "file", "directory", "authentication"],
+        "email": ["email-addr", "email-message"]
+    },
+
+    "event_count": {
+        "key": "number_observed",
+        "cybox": false,
+        "transformer": "ToInteger"
+    },
+    "dest_ip": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "dst_ip"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "dst_ip"
+        },
+        {
+            "key": "network-traffic.dst_ref",
+            "object": "network-traffic",
+            "references": "dst_ip"
+        }
+    ],
+    "src_ip": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "src_ip"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "src_ip"
+        },
+        {
+            "key": "network-traffic.src_ref",
+            "object": "network-traffic",
+            "references": "src_ip"
+        }
+    ],
+    "dest_port": {
+        "key": "network-traffic.dst_port",
+        "object": "network-traffic",
+        "transformer": "ToInteger"
+    },
+    "src_port": {
+        "key": "network-traffic.src_port",
+        "object": "network-traffic",
+        "transformer": "ToInteger"
+    },
+    "transport": {
+        "key": "network-traffic.protocols",
+        "object": "network-traffic",
+        "transformer": "ToLowercaseArray"
+    },
+       
+    "_time": [
+        {
+            "key": "created",
+            "transformer": "SplunkToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "modified",
+            "transformer": "SplunkToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "first_observed",
+            "transformer": "SplunkToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "SplunkToTimestamp",
+            "cybox": false
+        }
+    ],
+    "user": [
+        {
+            "key": "user-account.account_login",
+            "object": "authentication"
+        },
+        {
+            "key": "x_com_splunk_spl.user",
+            "cybox": false
+        },
+        {
+            "key": "user-account.user_id",
+            "object": "authentication"
+        },
+        {
+            "key": "windows-registry-key.creator_user_ref",
+            "object": "windows-registry-key",
+            "references":"authentication"
+        },
+        {
+            "key": "process.creator_user_ref",
+            "object": "process",
+            "references":"authentication"
+        }
+    ],
+    "bytes": {
+        "key": "x_com_splunk_spl.bytes",
+        "cybox": false
+    },
+    "ssl_hash":  [
+        {
+            "key": "x509-certificate.hashes.SHA-256",
+            "object": "certificate"
+        }
+    ],
+    "ssl_version": {
+      "key": "x509-certificate.version",
+      "object": "certificate"
+    },
+    "ssl_serial": {
+      "key": "x509-certificate.serial_number",
+      "object": "certificate" 
+    },
+    "ssl_signature_algorithm": {
+      "key": "x509-certificate.signature_algorithm",
+      "object": "certificate"  
+    },
+    "ssl_issuer": {
+      "key": "x509-certificate.issuer",
+      "object": "certificate"    
+    },
+    "ssl_subject": {
+      "key": "x509-certificate.subject",
+      "object": "certificate"    
+    },
+    "ssl_publickey_algorithm": {
+      "key": "x509-certificate.subject_public_key_algorithm",
+      "object": "certificate"
+    },
+    "process_name":{
+        "key": "process.name",
+        "object": "process"
+    },
+    "process_id":{
+        "key": "process.pid",
+        "object": "process"
+    },
+    "file_path": [
+        {
+            "key": "directory.path",
+            "object": "directory"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+        },
+        {   
+            "key": "process.binary_ref",
+            "object": "process",
+            "references": "file"
+        }
+    ],
+    "file_create_time": [
+        {
+            "key": "directory.created",
+            "object": "directory",
+            "transformer": "SplunkToTimestamp"
+        },
+        {
+            "key": "file.created",
+            "object": "file",
+            "transformer": "SplunkToTimestamp"
+        }
+    ],
+    "file_modify_time": [
+        {
+            "key": "directory.modified",
+            "object": "directory",
+            "transformer": "SplunkToTimestamp"
+        },
+        {
+            "key": "file.modified",
+            "object": "file",
+            "transformer": "SplunkToTimestamp"
+        }
+    ],
+    "file_hash": [
+        {
+            "key": "file.hashes.SHA-256",
+            "object": "file"
+        }
+    ],
+    "file_name": {
+        "key": "file.name",
+        "object": "file"
+    },
+    "file_size": {
+        "key": "file.size",
+        "object": "file"
+    },
+    "dest_fqdn": {
+        "key": "domain-name.value"
+    },
+    "mac": {
+        "key": "mac-addr.value"
+    },
+    "object_path":{
+        "key":"windows-registry-key.key",
+        "object": "windows-registry-key"     
+    },
+    "url":{
+        "key":"url.value",
+        "object": "web"     
+    },
+    "src_user":[
+        {
+            "key":"email-addr.value",
+            "object": "email-addr"     
+        },
+        {
+            "key":"email-message.sender_ref",
+            "object": "email-message",   
+            "references": "email-addr"
+        },
+        {
+            "key":"email-message.from_ref",
+            "object": "email-message",
+            "references": "email-addr"    
+        }
+    ],
+    "subject":{
+        "key":"email-message.subject",
+        "object": "email-message"     
+    },
+    "is_multipart":{
+        "key":"email-message.is_multipart",
+        "object": "email-message",
+        "transformer": "StringToBool"
+    }
+}
