@@ -61,7 +61,7 @@ stringLiteral  // Add parse rule to make getting string literals easier
   ;
 
 startStopQualifier
-  : START StringLiteral STOP StringLiteral
+  : START TimestampLiteral STOP TimestampLiteral
   ;
 
 withinQualifier
