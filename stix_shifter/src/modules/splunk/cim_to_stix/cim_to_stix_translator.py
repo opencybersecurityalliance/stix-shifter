@@ -1,14 +1,11 @@
 import re
 import logging
 import uuid
-
-from . import observable
 from stix2validator import validate_instance, print_results
-
-
-# convert JSON data to STIX object using map_data and transformers
+from . import observable
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
+    
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
@@ -26,7 +23,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     bundle["objects"] += results
 
     return bundle
-
 
 class DataSourceObjToStixObj:
 
@@ -120,6 +116,7 @@ class DataSourceObjToStixObj:
                 return False
         return True
 
+        
     def transform(self, obj):
         """
         Transforms the given object in to a STIX observation based on the mapping file and transform functions
@@ -127,6 +124,8 @@ class DataSourceObjToStixObj:
         :param obj: the datasource object that is being converted to stix
         :return: the input object converted to stix valid json
         """
+        
+        mapping_tags = "tag_to_model"
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
@@ -137,37 +136,56 @@ class DataSourceObjToStixObj:
             'created_by_ref': self.identity_id,
             'objects': {}
         }
+        
+        cim_list = []
+        if 'tag' in obj:
+            tag_list = obj['tag'] if isinstance(obj['tag'], list) else [obj['tag']]
+            for tag in tag_list:
+                if tag in ds_map[mapping_tags]:
+                    cim_list.extend(ds_map[mapping_tags][tag])
 
-        # create normal type objects
         for ds_key in obj:
+
             if ds_key not in ds_map:
                 logging.debug('{} is not found in map, skipping'.format(ds_key))
                 continue
-            # get the stix keys that are mapped
+
             ds_key_def_obj = self.ds_to_stix_map[ds_key]
             ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
+
             for ds_key_def in ds_key_def_list:
                 if ds_key_def is None or 'key' not in ds_key_def:
                     logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
                     continue
 
+                if 'object' in ds_key_def:
+                    if 'tag' in obj:
+                        if ds_key_def['object'] not in cim_list:
+                            continue
+
                 key_to_add = ds_key_def['key']
                 transformer = transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
                 if ds_key_def.get('cybox', self.cybox_default):
+                   
                     object_name = ds_key_def.get('object')
+                  
                     if 'references' in ds_key_def:
-                        stix_value = object_map[ds_key_def['references']]
-                    else:
+                        if ds_key_def['references'] in object_map:
+                            stix_value = object_map[ds_key_def['references']]
+              
+                    else:                
                         stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                         if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                             continue
+
                     DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                         continue
                     DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
+
 
         # Validate each STIX object
         if self.stix_validator:

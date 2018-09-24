@@ -75,3 +75,4 @@ virtualenv/
 *.pyc
 
 .vscode
+*.sqlite
