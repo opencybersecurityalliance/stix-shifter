@@ -147,7 +147,7 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_start_stop_qualifiers_with_two_observations(self):
-        stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START '2016-06-01T01:30:00Z' STOP '2016-06-01T02:20:00Z' OR [ipv4-addr:value = '192.168.122.83'] START '2016-06-01T03:55:00Z' STOP '2016-06-01T04:30:00Z'"
+        stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START t'2016-06-01T01:30:00Z' STOP t'2016-06-01T02:20:00Z' OR [ipv4-addr:value = '192.168.122.83'] START t'2016-06-01T03:55:00Z' STOP t'2016-06-01T04:30:00Z'"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' START'2016-06-01 01:30:00'STOP'2016-06-01 02:20:00'"
         where_statement_02 = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') START'2016-06-01 03:55:00'STOP'2016-06-01 04:30:00'"
@@ -158,7 +158,7 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02], 'parsed_stix': parsed_stix}
 
     def test_start_stop_qualifiers_with_three_observations(self):
-        stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START '2016-06-01T00:00:00Z' STOP '2016-06-01T01:11:11Z' OR [domain-name:value = 'example.com'] OR [ipv4-addr:value = '333.333.333.0'] START '2016-06-07T02:22:22Z' STOP '2016-06-07T03:33:33Z'"
+        stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00Z' STOP t'2016-06-01T01:11:11Z' OR [domain-name:value = 'example.com'] OR [ipv4-addr:value = '333.333.333.0'] START t'2016-06-07T02:22:22Z' STOP t'2016-06-07T03:33:33Z'"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' START'2016-06-01 00:00:00'STOP'2016-06-01 01:11:11'"
         where_statement_02 = "WHERE domainname = 'example.com'"

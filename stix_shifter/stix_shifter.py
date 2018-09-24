@@ -3,6 +3,7 @@ import importlib
 from stix_shifter.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
 from stix_shifter.src.stix_pattern_parser import stix_pattern_parser
+import re
 
 
 MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
@@ -46,7 +47,12 @@ class StixShifter:
         interface = translator_module.Translator()
 
         if translate_type == QUERY:
-            errors = run_validator(data)
+            errors = []
+            # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
+            start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(:\d+)?Z'\sSTOP"
+            pattern_match = bool(re.search(start_stop_pattern, data))
+            if (not pattern_match):
+                errors = run_validator(data)
             if (errors != []):
                 raise StixValidationException(
                     "The STIX pattern has the following errors: {}".format(errors))
