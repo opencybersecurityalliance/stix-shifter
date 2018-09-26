@@ -19,11 +19,6 @@
       "value": ["sourcemac", "destinationmac"]
     }
   },
-  "domain-name": {
-    "fields": {
-      "value": ["domainname"]
-    }
-  },
   "file": {
     "fields": {
       "name": ["filename"]
