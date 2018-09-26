@@ -61,7 +61,8 @@ class TestTransform(object):
         url = "https://example.com"
         source_ip = "127.0.0.1"
         destination_ip = "255.255.255.1"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
+        file_name = "somefile.exe"
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -111,7 +112,12 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'user_id'})
         assert(curr_obj['user_id'] == user_id)
 
-        assert(objects.keys() == set(map(str, range(0, 6))))
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(curr_obj is not None), 'file object type not found'
+        assert(curr_obj.keys() == {'type', 'name'})
+        assert(curr_obj['name'] == file_name)
+
+        assert(objects.keys() == set(map(str, range(0, 7))))
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
