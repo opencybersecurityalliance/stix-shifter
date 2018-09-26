@@ -49,7 +49,7 @@ class StixShifter:
         if translate_type == QUERY:
             errors = []
             # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
-            start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(:\d+)?Z'\sSTOP"
+            start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
             pattern_match = bool(re.search(start_stop_pattern, data))
             if (not pattern_match):
                 errors = run_validator(data)
