@@ -59,11 +59,9 @@ class TestTransform(object):
         payload = "SomeBase64Payload"
         user_id = "someuserid2018"
         url = "https://example.com"
-        domain = "example.com"
         source_ip = "127.0.0.1"
         destination_ip = "255.255.255.1"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url,
-                "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -79,7 +77,7 @@ class TestTransform(object):
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
-            {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
         assert(nt_object['src_port'] == 3000)
         assert(nt_object['dst_port'] == 2000)
         assert(nt_object['protocols'] == ['tcp'])
@@ -103,11 +101,6 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == url)
 
-        curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
-        assert(curr_obj is not None), 'domain-name object type not found'
-        assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == domain)
-
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert(curr_obj is not None), 'artifact object type not found'
         assert(curr_obj.keys() == {'type', 'payload_bin'})
@@ -118,7 +111,7 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'user_id'})
         assert(curr_obj['user_id'] == user_id)
 
-        assert(objects.keys() == set(map(str, range(0, 7))))
+        assert(objects.keys() == set(map(str, range(0, 6))))
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,

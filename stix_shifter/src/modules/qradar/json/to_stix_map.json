@@ -94,8 +94,8 @@
   "url": {
     "key": "url.value"
   },
-  "domain": {
-    "key": "domain-name.value"
+  "filename": {
+    "key": "file.name"
   },
   "payload": {
     "key": "artifact.payload_bin"
