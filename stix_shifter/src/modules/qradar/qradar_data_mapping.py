@@ -2,6 +2,7 @@ from os import path
 import json
 from stix_shifter.src.exceptions import DataMappingException
 
+
 def _fetch_mapping():
     try:
         basepath = path.dirname(__file__)
@@ -26,8 +27,8 @@ class QRadarDataMapper:
             raise DataMappingException(
                 "Unable to map object `{}` into AQL".format(stix_object_name))
 
-    def map_field(self, stix_object_name, stix_property_name):
-        self.map_data = _fetch_mapping()
+    def map_field(self, stix_object_name, stix_property_name, map_json=None):
+        self.map_data = map_json or _fetch_mapping()
         if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
             return self.map_data[stix_object_name]["fields"][stix_property_name]
         else:

@@ -1,6 +1,7 @@
 import argparse
 import sys
 from stix_shifter import stix_shifter
+import json
 
 
 def __main__():
@@ -26,6 +27,7 @@ def __main__():
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
         'data', type=str, help='the data to be translated')
+    translate_parser.add_argument('options', help='options that can be passed in')
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='run stix2 validator against the converted results')
@@ -38,7 +40,8 @@ def __main__():
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    options = {}
+    # args.options = "{\"select_fields\": [\"<FIELDS YOU WANT TO BRING BACK>\"}, \"from_stix_map\": {<HASH OF MAPPING>}}"
+    options = json.loads(args.options) or {}
     if args.stix_validator:
         options['stix_validator'] = args.stix_validator
     if args.data_mapper:
