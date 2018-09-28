@@ -43,10 +43,9 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, map_json):
+    def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.map_json = map_json
         self.translated = self.parse_expression(pattern)
 
         query_split = self.translated.split("SPLIT")
@@ -113,7 +112,7 @@ class AqlQueryStringPatternTranslator:
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple QRadar fields may map to the same STIX Object
-            mapped_fields_array = self.dmm.map_field(stix_object, stix_field, self.map_json)
+            mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
             original_stix_value = expression.value
@@ -206,8 +205,8 @@ class AqlQueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, map_json=None):
-    x = AqlQueryStringPatternTranslator(pattern, data_model_mapping, map_json)
+def translate_pattern(pattern: Pattern, data_model_mapping):
+    x = AqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     queries = []
     for query in x.queries:

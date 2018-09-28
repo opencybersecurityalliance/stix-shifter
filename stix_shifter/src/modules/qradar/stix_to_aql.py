@@ -24,11 +24,7 @@ class StixToAQL(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to ariel")
 
         query_object = generate_query(data)
-        if 'from_stix_map' in options:
-            mapping_json = options['from_stix_map']
-        else:
-            mapping_json = None
-        data_model_mapper = qradar_data_mapping.QRadarDataMapper()
+        data_model_mapper = qradar_data_mapping.QRadarDataMapper(options)
         query_string = aql_query_constructor.translate_pattern(
-            query_object, data_model_mapper, mapping_json)
+            query_object, data_model_mapper)
         return query_string

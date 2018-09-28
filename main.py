@@ -27,12 +27,13 @@ def __main__():
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
         'data', type=str, help='the data to be translated')
-    translate_parser.add_argument('options', help='options that can be passed in')
+    translate_parser.add_argument('options', nargs='?', help='options that can be passed in')
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='run stix2 validator against the converted results')
     translate_parser.add_argument('-m', '--data-mapper',
                                   help='module to use for the data mapper')
+    # translate_parser.add_argument('-options', help='options that can be passed in')
 
     args = parser.parse_args()
 
@@ -41,7 +42,7 @@ def __main__():
         sys.exit(1)
 
     # args.options = "{\"select_fields\": [\"<FIELDS YOU WANT TO BRING BACK>\"}, \"from_stix_map\": {<HASH OF MAPPING>}}"
-    options = json.loads(args.options) or {}
+    options = json.loads(args.options) if bool(args.options) else {}
     if args.stix_validator:
         options['stix_validator'] = args.stix_validator
     if args.data_mapper:
