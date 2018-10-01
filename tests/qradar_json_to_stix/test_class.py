@@ -59,7 +59,7 @@ class TestTransform(object):
         payload = "SomeBase64Payload"
         user_id = "someuserid2018"
         url = "https://example.com"
-        source_ip = "127.0.0.1"
+        source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name}
@@ -94,7 +94,7 @@ class TestTransform(object):
         assert(ip_ref in objects), f"src_ref with key {nt_object['src_ref']} not found"
         ip_obj = objects[ip_ref]
         assert(ip_obj.keys() == {'type', 'value'})
-        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == source_ip)
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
