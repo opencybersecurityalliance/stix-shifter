@@ -23,14 +23,6 @@ class QRadarDataMapper:
         self.mapping_json = options['mapping'] if 'mapping' in options else {}
         self.select_fields_json = options['select_fields'] if 'select_fields' in options else {}
 
-    def map_object(self, stix_object_name):
-        self.map_data = _fetch_mapping()
-        if stix_object_name in self.map_data and self.map_data[stix_object_name] != None:
-            return self.map_data[stix_object_name]
-        else:
-            raise DataMappingException(
-                "Unable to map object `{}` into AQL".format(stix_object_name))
-
     def map_field(self, stix_object_name, stix_property_name):
         self.map_data = self.mapping_json or _fetch_mapping()
         if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
