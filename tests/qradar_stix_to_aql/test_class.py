@@ -169,3 +169,29 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip))"
         parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'ISSUBSET', 'attribute': 'ipv4-addr:value'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_custom_qradar_fields_and_mapping(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        options = {
+            "select_fields": [
+                "sourceip as sourceip", "sourceport as sourceport", "destinationip as destinationip",
+                "destinationport as destinationport", "username as username", "eventcount as eventcount",
+                "PROTOCOLNAME(protocolid) as protocol"
+            ],
+            "mapping": {
+                "ipv4-addr": {"fields": {"value": ["sourceip"]}},
+                "ipv6-addr": {"fields": {"value": ["sourceip"]}},
+                "url": {"fields": {"value": ["url"]}},
+                "mac-addr": {"fields": {"value": ["sourcemac", "destinationmac"]}},
+                "file": {"fields": {"name": ["filename"]}},
+                "network-traffic": {"fields": {"src_port": ["sourceport"], "dst_port": ["destinationport"], "protocols[*]": ["protocolid"], "start": ["starttime"], "end": ["endtime"]}},
+                "user-account": {"fields": {"user_id": ["username"]}},
+                "artifact": {"fields": {"payload_bin": ["payload"]}}
+            }
+        }
+
+        query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
+        where_statement = "WHERE sourceip = '192.168.122.83'"
+        parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
+        custom_selections = "SELECT sourceip as sourceip, sourceport as sourceport, destinationip as destinationip, destinationport as destinationport, username as username, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
+        assert query == {'queries': [custom_selections + from_statement + where_statement], 'parsed_stix': parsed_stix}

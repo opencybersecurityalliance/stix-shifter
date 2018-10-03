@@ -2,6 +2,7 @@ from stix_shifter.src.json_to_stix import json_to_stix_translator
 from stix_shifter.src import transformers
 from stix_shifter.src.modules.qradar import qradar_translator
 import json
+from stix_shifter import stix_shifter
 
 interface = qradar_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
@@ -134,3 +135,33 @@ class TestTransform(object):
         assert(custom_props['qid'] == data['qid'])
         assert(custom_props['magnitude'] == data['magnitude'])
         assert(custom_props['log_source_name'] == data['logsourcename'])
+
+    def test_custom_mapping(self):
+        data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"QRadar\", \"identity_class\": \"events\"}"
+        data = "[{\"custompayload\": \"SomeBase64Payload\", \"url\": \"www.example.com\", \"filename\": \"somefile.exe\", \"username\": \"someuserid2018\"}]"
+
+        options = {"mapping": {
+            "username": {"key": "user-account.user_id"},
+            "identityip": {"key": "x_com_ibm_ariel.identity_ip", "cybox": False},
+            "qidname": {"key": "x_com_ibm_ariel.qid_name", "cybox": False},
+            "url": {"key": "url.value"},
+            "custompayload": {"key": "artifact.payload_bin"}
+        }}
+
+        shifter = stix_shifter.StixShifter()
+        result = shifter.translate('qradar', 'results', data_source, data, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is None), 'default file object type was returned even though it was not included in the custom mapping'
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
+        assert(curr_obj is not None), 'artifact object type not found'
+        assert(curr_obj.keys() == {'type', 'payload_bin'})
+        assert(curr_obj['payload_bin'] == "SomeBase64Payload")
