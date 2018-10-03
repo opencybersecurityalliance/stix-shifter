@@ -57,11 +57,13 @@ class AqlQueryStringPatternTranslator:
             query_array = list(map(lambda x: re.sub("\s?(OR|AND)\s?$", "", x), query_array))
             # remove empty strings in the array
             query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
-            # transform time format from '2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
-            t_pattern = "((?<=START'\d{4}-\d{2}-\d{2})(T))|((?<=STOP'\d{4}-\d{2}-\d{2})(T))"
-            query_array = list(map(lambda x: re.sub(t_pattern, " ", x), query_array))
-            r_pattern = "((?<=\d{2}:\d{2}:\d{2})(Z))"
-            query_array = list(map(lambda x: re.sub(r_pattern, "", x), query_array))
+            # transform time format from t'2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
+            big_t_pattern = "((?<=STARTt'\d{4}-\d{2}-\d{2})(T))|((?<=STOPt'\d{4}-\d{2}-\d{2})(T))"
+            query_array = list(map(lambda x: re.sub(big_t_pattern, " ", x), query_array))
+            big_z_pattern = "(?<=\d{2}:\d{2}:\d{2})Z"
+            query_array = list(map(lambda x: re.sub(big_z_pattern, "", x), query_array))
+            little_t_pattern = "(?<=START)t|(?<=STOP)t"
+            query_array = list(map(lambda x: re.sub(little_t_pattern, "", x), query_array))
             self.queries = query_array
         else:
             self.queries = query_split
@@ -144,9 +146,9 @@ class AqlQueryStringPatternTranslator:
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                # if its a set operator() query construction will be different. 
+                # if its a set operator() query construction will be different.
                 if expression.comparator == ComparisonComparators.IsSubSet:
-                    comparison_string +=  comparator + "(" + "'" + value + "'," + mapped_field +")"
+                    comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
                 else:
                     comparison_string += "{mapped_field} {comparator} {value}".format(
                         mapped_field=mapped_field, comparator=comparator, value=value)

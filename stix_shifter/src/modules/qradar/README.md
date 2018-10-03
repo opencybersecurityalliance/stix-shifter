@@ -14,15 +14,15 @@ Returns an object representing the aql query and a parsing of the input stix pat
 
 This example input pattern:
 
-`python main.py translate "qradar" "query" '{}' "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"`
+`python main.py translate "qradar" "query" '{}' "[url:value = 'www.example.com' and mac-addr:value = '00-00-5E-00-53-00']"`
 
 Returns the following AQL query:
 
-`SELECT <defined QRadar fields> FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND domainname='example.com'`
+`SELECT <defined QRadar fields> FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND url='www.example.com'`
 
 and returns the parsed STIX pattern:
 
-`[{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]`
+`[{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}]`
 
 ### AQL query construction: SELECT statement
 
@@ -39,7 +39,6 @@ When translating from STIX patterns to AQL queries, the following objects and at
 - ipv6-addr:value
 - url:value
 - mac-addr:value
-- domain-name:value
 - file:name
 - network-traffic:src_port, network=traffic:dst_port
 
