@@ -7,8 +7,15 @@ import json
 def __main__():
     """
     In the case of converting a stix pattern to datasource query, arguments will take the form of...
-    <module> <translate_type> <data>
+    <module> <translate_type> <data> <options>
     The module and translate_type will determine what module and method gets called
+    Options argument comes in as:
+      "{
+          "select_fields": <string array of fields in the datasource select statement>},
+          "mapping": <mapping hash for either stix pattern to datasource or data results to stix observation objects>,
+          "result_limit": <integer to limit number or results in the data source query>,
+          "time_range": <time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent>
+       }"
     """
 
     # process arguments
@@ -33,7 +40,6 @@ def __main__():
                                   help='run stix2 validator against the converted results')
     translate_parser.add_argument('-m', '--data-mapper',
                                   help='module to use for the data mapper')
-    # translate_parser.add_argument('-options', help='options that can be passed in')
 
     args = parser.parse_args()
 
@@ -41,7 +47,6 @@ def __main__():
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    # args.options = "{\"select_fields\": [\"<FIELDS YOU WANT TO BRING BACK>\"}, \"from_stix_map\": {<HASH OF MAPPING>}}"
     options = json.loads(args.options) if bool(args.options) else {}
     if args.stix_validator:
         options['stix_validator'] = args.stix_validator
