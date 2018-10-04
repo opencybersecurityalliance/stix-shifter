@@ -1,5 +1,4 @@
 from stix_shifter.src.modules.splunk import splunk_translator
-from stix_shifter.src.modules.base import base_translator
 from stix_shifter.src.exceptions import DataMappingException
 import unittest
 import random
@@ -103,14 +102,13 @@ class TestStixToSpl(unittest.TestCase, object):
         input_arguments = "[network-traffic:some_invalid_attribute = 'whatever']"
         options = {}
         self.assertRaises(data_mapping_exception,
-                          lambda: interface.transform_query(input_arguments, options))
+                           lambda: interface.transform_query(input_arguments, options))
 
     def test_invalid_stix_pattern(self):
-        stix_validation_exception = base_translator.StixValidationException
         interface = splunk_translator.Translator()
         input_arguments = "[not_a_valid_pattern]"
         options = {}
-        self.assertRaises(stix_validation_exception,
+        self.assertRaises(Exception,
                           lambda: interface.transform_query(input_arguments, options))
 
     def test_network_traffic_protocols(self):
