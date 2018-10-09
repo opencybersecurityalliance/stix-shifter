@@ -13,8 +13,8 @@ def __main__():
       "{
           "select_fields": <string array of fields in the datasource select statement>},
           "mapping": <mapping hash for either stix pattern to datasource or data results to stix observation objects>,
-          "result_limit": <integer to limit number or results in the data source query>,
-          "timerange": <time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent>
+          "result_limit": <integer limit number for max results in the data source query>,
+          "timerange": <integer time window in minutes used in the data source query when START STOP qualifiers are absent>
        }"
     """
 
