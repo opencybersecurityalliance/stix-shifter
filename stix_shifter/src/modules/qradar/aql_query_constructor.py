@@ -213,12 +213,12 @@ def _test_for_start_stop(query_string) -> bool:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
-    x = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
-    select_statement = x.dmm.map_selections()
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    select_statement = translated_where_statements.dmm.map_selections()
     queries = []
-    for query in x.queries:
-        if(_test_for_start_stop(query)):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, query))
+    for where_statement in translated_where_statements.queries:
+        if(_test_for_start_stop(where_statement)):
+            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
         else:
-            queries.append("SELECT {} FROM events WHERE {} {}".format(select_statement, query, result_limit))
+            queries.append("SELECT {} FROM events WHERE {} {}".format(select_statement, where_statement, result_limit))
     return queries

@@ -24,7 +24,7 @@ class JSONToStix(BaseResultTranslator):
         json_data = json.loads(data)
         data_source = json.loads(data_source)
 
-        if(not bool(self.mapping_json)):
+        if(not self.mapping_json):
             # If no mapping is passed in then we will use the default to_stix_map in the qradar module
             map_file = open(self.default_mapping_file_path).read()
             map_data = json.loads(map_file)
