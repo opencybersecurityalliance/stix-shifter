@@ -24,7 +24,9 @@ class StixToAQL(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to ariel")
 
         query_object = generate_query(data)
-        data_model_mapper = qradar_data_mapping.QRadarDataMapper()
+        data_model_mapper = qradar_data_mapping.QRadarDataMapper(options)
+        result_limit = options['result_limit'] if 'result_limit' in options else 'limit 10000'
+        timerange = options['timerange'] if 'timerange' in options else None
         query_string = aql_query_constructor.translate_pattern(
-            query_object, data_model_mapper)
+            query_object, data_model_mapper, result_limit, timerange)
         return query_string
