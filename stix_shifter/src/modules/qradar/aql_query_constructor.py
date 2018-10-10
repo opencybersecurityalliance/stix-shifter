@@ -168,7 +168,7 @@ class AqlQueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "SPLIT{} {} {}SPLIT".format(comparison_string, self.result_limit, qualifier)
+                return "SPLIT{} limit {} {}SPLIT".format(comparison_string, self.result_limit, qualifier)
             else:
                 return "{}".format(comparison_string)
 
@@ -177,7 +177,7 @@ class AqlQueryStringPatternTranslator:
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "SPLIT{} {} {}SPLIT".format(query_string, self.result_limit, qualifier)
+                return "SPLIT{} limit {} {}SPLIT".format(query_string, self.result_limit, qualifier)
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -217,8 +217,10 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     for where_statement in translated_where_statements.queries:
-        if(_test_for_start_stop(where_statement)):
+        has_start_stop = _test_for_start_stop(where_statement)
+        if(has_start_stop):
             queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
         else:
-            queries.append("SELECT {} FROM events WHERE {} {}".format(select_statement, where_statement, result_limit))
+            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
+
     return queries
