@@ -1,13 +1,21 @@
 import argparse
 import sys
 from stix_shifter import stix_shifter
+import json
 
 
 def __main__():
     """
     In the case of converting a stix pattern to datasource query, arguments will take the form of...
-    <module> <translate_type> <data>
+    <module> <translate_type> <data> <options>
     The module and translate_type will determine what module and method gets called
+    Options argument comes in as:
+      "{
+          "select_fields": <string array of fields in the datasource select statement>},
+          "mapping": <mapping hash for either stix pattern to datasource or data results to stix observation objects>,
+          "result_limit": <integer to limit number or results in the data source query>,
+          "timerange": <time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent>
+       }"
     """
 
     # process arguments
@@ -26,6 +34,7 @@ def __main__():
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
         'data', type=str, help='the data to be translated')
+    translate_parser.add_argument('options', nargs='?', help='options that can be passed in')
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='run stix2 validator against the converted results')
@@ -38,7 +47,7 @@ def __main__():
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    options = {}
+    options = json.loads(args.options) if bool(args.options) else {}
     if args.stix_validator:
         options['stix_validator'] = args.stix_validator
     if args.data_mapper:

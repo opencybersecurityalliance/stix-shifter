@@ -43,9 +43,10 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
         self.dmm = data_model_mapper
         self.pattern = pattern
+        self.result_limit = result_limit
         self.translated = self.parse_expression(pattern)
 
         query_split = self.translated.split("SPLIT")
@@ -167,18 +168,18 @@ class AqlQueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "SPLIT{comparison} {qualifier}SPLIT".format(comparison=comparison_string, qualifier=qualifier)
+                return "SPLIT{} {} {}SPLIT".format(comparison_string, self.result_limit, qualifier)
             else:
-                return "{comparison}".format(comparison=comparison_string)
+                return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "SPLIT{query_string} {qualifier}SPLIT".format(query_string=query_string, qualifier=qualifier)
+                return "SPLIT{} {} {}SPLIT".format(query_string, self.result_limit, qualifier)
             else:
-                return "{query_string}".format(query_string=query_string)
+                return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
@@ -205,10 +206,19 @@ class AqlQueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping):
-    x = AqlQueryStringPatternTranslator(pattern, data_model_mapping)
-    select_statement = x.dmm.map_selections()
+def _test_for_start_stop(query_string) -> bool:
+    pattern = "START'\d{4}(-\d{2}){2}\s\d{2}(:\d{2}){2}(\.\d+)?Z?'\s?STOP"
+    match = re.search(pattern, query_string)
+    return bool(match)
+
+
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    select_statement = translated_where_statements.dmm.map_selections()
     queries = []
-    for query in x.queries:
-        queries.append("SELECT {select_statement} FROM events WHERE {where_clause}".format(select_statement=select_statement, where_clause=query))
+    for where_statement in translated_where_statements.queries:
+        if(_test_for_start_stop(where_statement)):
+            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
+        else:
+            queries.append("SELECT {} FROM events WHERE {} {}".format(select_statement, where_statement, result_limit))
     return queries

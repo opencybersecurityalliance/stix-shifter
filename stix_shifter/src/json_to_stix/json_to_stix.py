@@ -19,15 +19,17 @@ class JSONToStix(BaseResultTranslator):
         :return: STIX formatted results
         :rtype: str
         """
+
+        self.mapping_json = options['mapping'] if 'mapping' in options else {}
         json_data = json.loads(data)
         data_source = json.loads(data_source)
 
-        if(mapping is None):
+        if(not self.mapping_json):
             # If no mapping is passed in then we will use the default to_stix_map in the qradar module
             map_file = open(self.default_mapping_file_path).read()
             map_data = json.loads(map_file)
         else:
-            map_data = json.loads(mapping)
+            map_data = self.mapping_json
 
         results = json_to_stix_translator.convert_to_stix(data_source, map_data,
                                                           json_data, transformers.get_all_transformers(), options)
