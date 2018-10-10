@@ -32,7 +32,7 @@ class SplunkSearchTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
-        self._pattern_prefix = "|where"  # How should the final SPL query string start.  By default, use '|where'
+        self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
 
     def translate(self, expression, qualifier=None):
         """ This is the worker method for the translation. It can be passed any of the STIX2 AST classes and will turn
@@ -40,7 +40,7 @@ class SplunkSearchTranslator:
         if isinstance(expression, Pattern):
             # Note: The following call to translate might alter the value of self._pattern_prefix.
             expr = self.translate(expression.expression, qualifier=qualifier)
-            return "{prefix} {expr}".format(prefix=self._pattern_prefix, expr=expr)
+            return "{prefix}{expr}".format(prefix=self._pattern_prefix, expr=expr)
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
@@ -88,7 +88,7 @@ class SplunkSearchTranslator:
         elif isinstance(expression, CombinedObservationExpression):
             combined_expr_format_string = self.implemented_operators[expression.operator]
             if expression.operator == ObservationOperators.FollowedBy:
-                self._pattern_prefix = "|eval"
+                self._pattern_prefix = "|eval "
             return combined_expr_format_string.format(expr1=self.translate(expression.expr1),
                                                       expr2=self.translate(expression.expr2))
         
@@ -117,7 +117,9 @@ class _ObservationExpressionTranslator:
         ComparisonComparators.In: encoders.set,
         ComparisonComparators.Matches: encoders.matches,
         ComparisonExpressionOperators.And: 'AND',
-        ComparisonExpressionOperators.Or: 'OR'
+        ComparisonExpressionOperators.Or: 'OR',
+        ComparisonComparators.IsSuperSet: "=", # Splunk cidrmatch('<ip in CIDR notation>', ip) and = operator give the same result
+        ComparisonComparators.IsSubSet: "=" # cidrmatch function can be used for both issuperset and issubset operator
     }
 
     def __init__(self, expression:ObservationExpression, dmm, object_scoper):
@@ -133,12 +135,29 @@ class _ObservationExpressionTranslator:
             # These are the native objects and fields
             object_mapping = self.dmm.map_object(stix_object)
             field_mapping = self.dmm.map_field(stix_object, stix_path)
-
             # This scopes the query to the object
             object_scoping = self.object_scoper(object_mapping)
 
-            # Returns the actual comparison (as a translated string)
-            return self._build_comparison(expression, object_scoping, field_mapping)
+            # Check if mapping has multiple fields
+            if isinstance(field_mapping, list):
+                comparison_string = ""
+                mapped_fields_count = len(field_mapping)
+                for mapped_field in field_mapping:
+                    # Returns the actual comparison (as a translated string)
+                    comparison_string += self._build_comparison(expression, object_scoping, mapped_field)
+                    if (mapped_fields_count > 1):
+                        comparison_string += " OR "
+                        mapped_fields_count -= 1
+
+                if(len(field_mapping) > 1):
+                    # More than one SPL field maps to the STIX attribute so group the ORs.
+                    grouped_comparison_string = "(" + comparison_string + ")"
+                    comparison_string = grouped_comparison_string
+                    
+                return comparison_string
+            else:
+                return self._build_comparison(expression, object_scoping, field_mapping)
+
         elif isinstance(expression, CombinedComparisonExpression):
             return "({} {} {})".format(
                 self.translate(expression.expr1),

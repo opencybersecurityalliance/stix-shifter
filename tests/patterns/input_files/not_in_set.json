@@ -1,8 +1,8 @@
 {
   "stix-input":"[process:pid NOT IN (1, 2, 3)]",
-  "car-splunk": "|where (match(tag, \"dm-process-.*\") AND NOT (pid IN (1, 2, 3)))",
+  "car-splunk": "(match(tag, \"dm-process-.*\") AND NOT (pid IN (1, 2, 3)))",
   "car-elastic": "data_model.object:process AND NOT(data_model.fields.pid:(1 OR 2 OR 3))",
-  "cim-splunk": "|where (tag=\"process\" AND NOT (pid IN (1, 2, 3)))",
+  "cim-splunk": "(tag=\"process\" AND NOT (pid IN (1, 2, 3)))",
   "matches": {
     "car": [
       {"object": "process", "action": "create", "fields": {"pid": 4}}
