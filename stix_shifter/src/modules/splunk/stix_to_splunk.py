@@ -7,6 +7,8 @@ from . import splunk_query_constructor
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_RESULT_LIMIT = 10000
+DEFAULT_TIMERANGE = '-5minutes'
 
 class StixToSplunk(BaseQueryTranslator):
 
@@ -35,7 +37,10 @@ class StixToSplunk(BaseQueryTranslator):
             raise NotImplementedError(f"Module {data_mapper_module_name} not implemented")
         except AttributeError:
             raise NotImplementedError(f"Module {data_mapper_module_name} does not implement mapper_class attribute")
-
+        
+        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_RESULT_LIMIT
+        timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
+        
         query_string = splunk_query_constructor.translate_pattern(
-            query_object, data_model_mapper)
+            query_object, data_model_mapper, result_limit, timerange)
         return query_string

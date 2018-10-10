@@ -28,11 +28,13 @@ class SplunkSearchTranslator:
     }
 
 
-    def __init__(self, pattern:Pattern, data_model_mapper, object_scoper = object_scopers.default_object_scoper):
+    def __init__(self, pattern:Pattern, data_model_mapper, result_limit, timerange, object_scoper = object_scopers.default_object_scoper):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
         self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
+        self.result_limit = result_limit
+        self.timerange = timerange
 
     def translate(self, expression, qualifier=None):
         """ This is the worker method for the translation. It can be passed any of the STIX2 AST classes and will turn
@@ -40,7 +42,7 @@ class SplunkSearchTranslator:
         if isinstance(expression, Pattern):
             # Note: The following call to translate might alter the value of self._pattern_prefix.
             expr = self.translate(expression.expression, qualifier=qualifier)
-            return "{prefix}{expr}".format(prefix=self._pattern_prefix, expr=expr)
+            return "{prefix}{expr} | head {result_limit}".format(prefix=self._pattern_prefix, expr=expr, result_limit=self.result_limit)
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
@@ -84,7 +86,11 @@ class SplunkSearchTranslator:
                 else:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
-                return "{query_string}".format(query_string=translated_query_str)
+                # Setting timerange value if START and STOP qualifiers are absent.
+                return '{query_string} earliest="{earliest}"'.format(query_string=translated_query_str, 
+                                                                                    earliest=self.timerange)
+
+
         elif isinstance(expression, CombinedObservationExpression):
             combined_expr_format_string = self.implemented_operators[expression.operator]
             if expression.operator == ObservationOperators.FollowedBy:
@@ -190,10 +196,10 @@ class _ObservationExpressionTranslator:
         else:
             return splunk_comparison
 
-def translate_pattern(pattern: Pattern, data_model_mapping):
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
     # CAR + Splunk = we want to override the default object scoper, I guess?
     if isinstance(data_model_mapping, CarDataMapper):
-        x = SplunkSearchTranslator(pattern, data_model_mapping, object_scoper = object_scopers.car_object_scoper)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
     else:
-        x = SplunkSearchTranslator(pattern, data_model_mapping)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
     return x.translate(pattern)
