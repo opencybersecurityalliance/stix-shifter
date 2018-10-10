@@ -219,11 +219,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
     for where_statement in translated_where_statements.queries:
         has_start_stop = _test_for_start_stop(where_statement)
         if(has_start_stop):
-            query = "SELECT {} FROM events WHERE {}".format(select_statement, where_statement)
+            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
         else:
-            query = "SELECT {} FROM events WHERE {} limit {}".format(select_statement, where_statement, result_limit)
-        if(not has_start_stop):
-            query += " last {} minutes".format(timerange)
-        queries.append(query)
+            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
 
     return queries
