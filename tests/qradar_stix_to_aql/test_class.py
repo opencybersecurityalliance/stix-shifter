@@ -31,6 +31,7 @@ protocols = {
 }
 
 default_limit = "limit 10000"
+default_time = "last 5 minutes"
 
 shifter = stix_shifter.StixShifter()
 
@@ -41,28 +42,28 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
 
-        where_statement = "WHERE (sourceip = '192.168.122.84' OR destinationip = '192.168.122.84' OR identityip = '192.168.122.84') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {}".format(default_limit)
+        where_statement = "WHERE (sourceip = '192.168.122.84' OR destinationip = '192.168.122.84' OR identityip = '192.168.122.84') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_ipv6_query(self):
         stix_pattern = "[ipv6-addr:value = '192.168.122.83']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {}".format(default_limit)
+        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_url_query(self):
         stix_pattern = "[url:value = 'http://www.testaddress.com']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE url = 'http://www.testaddress.com' {}".format(default_limit)
+        where_statement = "WHERE url = 'http://www.testaddress.com' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'url:value', 'comparison_operator': '=', 'value': 'http://www.testaddress.com'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_mac_address_query(self):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {}".format(default_limit)
+        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -70,7 +71,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[url:value = 'www.example.com'] and [mac-addr:value = '00-00-5E-00-53-00']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         # Expect the STIX and to convert to an AQL OR.
-        where_statement = "WHERE url = 'www.example.com' OR (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {}".format(default_limit)
+        where_statement = "WHERE url = 'www.example.com' OR (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}, {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -78,7 +79,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[url:value = 'www.example.com' and mac-addr:value = '00-00-5E-00-53-00']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         # Expect the STIX and to convert to an AQL AND.
-        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND url = 'www.example.com' {}".format(default_limit)
+        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND url = 'www.example.com' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -86,14 +87,14 @@ class TestStixToAql(unittest.TestCase, object):
         # TODO: Add support for file hashes. Unsure at this point how QRadar queries them
         stix_pattern = "[file:name = 'some_file.exe']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE filename = 'some_file.exe' {}".format(default_limit)
+        where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 or network-traffic:dst_port = 23456]"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE destinationport = '23456' OR sourceport = '12345' {}".format(default_limit)
+        where_statement = "WHERE destinationport = '23456' OR sourceport = '12345' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -106,7 +107,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE username = 'root' {}".format(default_limit)
+        where_statement = "WHERE username = 'root' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -123,21 +124,21 @@ class TestStixToAql(unittest.TestCase, object):
                 key = key.upper()
             stix_pattern = "[network-traffic:protocols[*] = '" + key + "']"
             query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE protocolid = '{}' {}".format(value, default_limit)
+        where_statement = "WHERE protocolid = '{}' {} {}".format(value, default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:protocols[*]', 'comparison_operator': '=', 'value': key}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_network_traffic_start_stop(self):
         stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE endtime = '1528965384' OR starttime = '1528965384' {}".format(default_limit)
+        where_statement = "WHERE endtime = '1528965384' OR starttime = '1528965384' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_artifact_queries(self):
         stix_pattern = "[artifact:payload_bin matches 'some text']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE payload MATCHES '.*some text.*' {}".format(default_limit)
+        where_statement = "WHERE payload MATCHES '.*some text.*' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': 'some text'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -156,7 +157,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00.123Z' STOP t'2016-06-01T01:11:11.456Z' OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0'] START t'2016-06-07T02:22:22.789Z' STOP t'2016-06-07T03:33:33.012Z'"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' {} START'2016-06-01 00:00:00.123Z'STOP'2016-06-01 01:11:11.456Z'".format(default_limit)
-        where_statement_02 = "WHERE url = 'www.example.com' {}".format(default_limit)
+        where_statement_02 = "WHERE url = 'www.example.com' {} {}".format(default_limit, default_time)
         where_statement_03 = "WHERE (sourceip = '333.333.333.0' OR destinationip = '333.333.333.0' OR identityip = '333.333.333.0') {} START'2016-06-07 02:22:22.789Z'STOP'2016-06-07 03:33:33.012Z'".format(default_limit)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 635},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
@@ -168,7 +169,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_set_operators(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {}".format(default_limit)
+        where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {} {}".format(default_limit, default_time)
         parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'ISSUBSET', 'attribute': 'ipv4-addr:value'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -193,7 +194,17 @@ class TestStixToAql(unittest.TestCase, object):
         }
 
         query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
-        where_statement = "WHERE sourceip = '192.168.122.83' {}".format(default_limit)
+        where_statement = "WHERE sourceip = '192.168.122.83' {} {}".format(default_limit, default_time)
         parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
         custom_selections = "SELECT sourceip as sourceip, sourceport as sourceport, destinationip as destinationip, destinationport as destinationport, username as username, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol"
         assert query == {'queries': [custom_selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_custom_time_limit_and_result_count(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        timerange = 25
+        result_limit = 5000
+        options = {"timerange": timerange, "result_limit": result_limit}
+        query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
+        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(result_limit, timerange)
+        parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
