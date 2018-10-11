@@ -42,7 +42,7 @@ class SplunkSearchTranslator:
         if isinstance(expression, Pattern):
             # Note: The following call to translate might alter the value of self._pattern_prefix.
             expr = self.translate(expression.expression, qualifier=qualifier)
-            return "{prefix}{expr} | head {result_limit}".format(prefix=self._pattern_prefix, expr=expr, result_limit=self.result_limit)
+            return "{prefix}{expr}".format(prefix=self._pattern_prefix, expr=expr)
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
@@ -87,8 +87,9 @@ class SplunkSearchTranslator:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
                 # Setting timerange value if START and STOP qualifiers are absent.
-                return '{query_string} earliest="{earliest}"'.format(query_string=translated_query_str, 
-                                                                                    earliest=self.timerange)
+                return '{query_string} earliest="{earliest}" | head {result_limit}'.format(query_string=translated_query_str, 
+                                                                                           earliest=self.timerange, 
+                                                                                           result_limit=self.result_limit)
 
 
         elif isinstance(expression, CombinedObservationExpression):
