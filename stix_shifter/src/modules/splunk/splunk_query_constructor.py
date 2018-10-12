@@ -42,7 +42,8 @@ class SplunkSearchTranslator:
         if isinstance(expression, Pattern):
             # Note: The following call to translate might alter the value of self._pattern_prefix.
             expr = self.translate(expression.expression, qualifier=qualifier)
-            return "{prefix}{expr}".format(prefix=self._pattern_prefix, expr=expr)
+            return '{prefix}{expr}'.format(prefix=self._pattern_prefix, expr=expr)
+
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
@@ -87,9 +88,7 @@ class SplunkSearchTranslator:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
                 # Setting timerange value if START and STOP qualifiers are absent.
-                return '{query_string} earliest="{earliest}" | head {result_limit}'.format(query_string=translated_query_str, 
-                                                                                           earliest=self.timerange, 
-                                                                                           result_limit=self.result_limit)
+                return '{query_string}'.format(query_string=translated_query_str)
 
 
         elif isinstance(expression, CombinedObservationExpression):
@@ -197,10 +196,22 @@ class _ObservationExpressionTranslator:
         else:
             return splunk_comparison
 
+def _test_for_earliest_latest(query_string) -> bool:
+    pattern = r'(earliest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}") (latest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")'
+    match = re.search(pattern, query_string)
+    return bool(match)
+
 def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
     # CAR + Splunk = we want to override the default object scoper, I guess?
     if isinstance(data_model_mapping, CarDataMapper):
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
     else:
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
-    return x.translate(pattern)
+    
+    translated_query = x.translate(pattern)
+    has_earliest_latest = _test_for_earliest_latest(translated_query)
+    
+    if not has_earliest_latest:
+        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+
+    return translated_query

@@ -1,5 +1,6 @@
 from stix_shifter import stix_shifter
 from stix_shifter.src.exceptions import DataMappingException
+from stix_shifter.src.config import SplunkConfig
 import unittest
 import random
 
@@ -20,10 +21,7 @@ protocols = {
     "sctp": "132"
 }
 
-default_limit = 10000
-default_timerange = 5
-
-default_timerange_spl = '-' + str(default_timerange) + 'minutes'
+default_timerange_spl = '-' + str(SplunkConfig.DEFAULT_TIMERANGE) + 'minutes'
 
 shifter = stix_shifter.StixShifter()
 
@@ -33,7 +31,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(((tag="flow" AND src_ip = "192.168.122.84") OR (tag="flow" AND dest_ip = "192.168.122.84")) OR ((tag="flow" AND src_ip = "192.168.122.83") OR (tag="flow" AND dest_ip = "192.168.122.83"))) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(((tag="flow" AND src_ip = "192.168.122.84") OR (tag="flow" AND dest_ip = "192.168.122.84")) OR ((tag="flow" AND src_ip = "192.168.122.83") OR (tag="flow" AND dest_ip = "192.168.122.83"))) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -41,7 +39,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv6-addr:value = 'fe80::8c3b:a720:dc5c:2abf%19']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '((tag="flow" AND src_ip = "fe80::8c3b:a720:dc5c:2abf%19") OR (tag="flow" AND dest_ip = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="flow" AND src_ip = "fe80::8c3b:a720:dc5c:2abf%19") OR (tag="flow" AND dest_ip = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': 'fe80::8c3b:a720:dc5c:2abf%19'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -49,7 +47,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[url:value = 'http://www.testaddress.com']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(tag="web" AND url = "http://www.testaddress.com") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="web" AND url = "http://www.testaddress.com") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'url:value', 'comparison_operator': '=', 'value': 'http://www.testaddress.com'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -57,7 +55,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -65,17 +63,17 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(tag="flow" AND dest_fqdn = "example.com") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="flow" AND dest_fqdn = "example.com") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
 
     def test_query_from_multiple_observation_expressions_joined_by_and(self):
-        stix_pattern = "[domain-name:value = 'example.com'] and [mac-addr:value = '00-00-5E-00-53-00']"
+        stix_pattern = "[domain-name:value = 'example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
         # Expect the STIX and to convert to an SPL OR.
-        queries = '(tag="flow" AND dest_fqdn = "example.com") earliest="-5minutes" | head 10000 OR (tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="flow" AND dest_fqdn = "example.com") OR (tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}, {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -84,7 +82,7 @@ class TestStixToSpl(unittest.TestCase, object):
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
         # Expect the STIX and to convert to an AQL AND.
-        queries = '((tag="flow" AND mac = "00-00-5E-00-53-00") AND (tag="flow" AND dest_fqdn = "example.com")) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="flow" AND mac = "00-00-5E-00-53-00") AND (tag="flow" AND dest_fqdn = "example.com")) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -92,7 +90,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[file:name = 'some_file.exe']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
-        queries = '(tag="endpoint" AND file_name = "some_file.exe") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="endpoint" AND file_name = "some_file.exe") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -100,7 +98,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[network-traffic:src_port = 12345 or network-traffic:dst_port = 23456]"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
-        queries = '((tag="network" AND dest_port = 23456) OR (tag="network" AND src_port = 12345)) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="network" AND dest_port = 23456) OR (tag="network" AND src_port = 12345)) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -120,7 +118,7 @@ class TestStixToSpl(unittest.TestCase, object):
                 key = key.upper()
             stix_pattern = "[network-traffic:protocols[*] = '" + key + "']"
             query = shifter.translate('splunk', 'query', '{}', stix_pattern)
-        queries = '(tag="network" AND protocol = "'+key+'") earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '(tag="network" AND protocol = "'+key+'") earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'network-traffic:protocols[*]', 'comparison_operator': '=', 'value': key}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -128,7 +126,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
-        queries = '((tag="network" AND latest = "2018-06-14T08:36:24.000Z") OR (tag="network" AND earliest = "2018-06-14T08:36:24.000Z")) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="network" AND latest = "2018-06-14T08:36:24.000Z") OR (tag="network" AND earliest = "2018-06-14T08:36:24.000Z")) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -144,7 +142,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value ISSUPERSET '198.51.100.0/24']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
-        queries = '((tag="flow" AND src_ip = "198.51.100.0/24") OR (tag="flow" AND dest_ip = "198.51.100.0/24")) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="flow" AND src_ip = "198.51.100.0/24") OR (tag="flow" AND dest_ip = "198.51.100.0/24")) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': 'ISSUPERSET', 'value': '198.51.100.0/24'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -153,7 +151,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)
         
-        queries = '((tag="flow" AND src_ip = "198.51.100.0/24") OR (tag="flow" AND dest_ip = "198.51.100.0/24")) earliest="{}" | head {}'.format(default_timerange_spl, default_limit)
+        queries = '((tag="flow" AND src_ip = "198.51.100.0/24") OR (tag="flow" AND dest_ip = "198.51.100.0/24")) earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': 'ISSUBSET', 'value': '198.51.100.0/24'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
