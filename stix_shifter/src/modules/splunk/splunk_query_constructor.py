@@ -197,7 +197,7 @@ class _ObservationExpressionTranslator:
             return splunk_comparison
 
 def _test_for_earliest_latest(query_string) -> bool:
-    pattern = r'(earliest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}") (latest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")'
+    pattern = r'(earliest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")|(latest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")'
     match = re.search(pattern, query_string)
     return bool(match)
 

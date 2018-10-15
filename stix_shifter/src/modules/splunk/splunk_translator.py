@@ -1,7 +1,6 @@
 # ..base.base_translator import BaseTranslator
 from ..base.base_translator import BaseTranslator
 from .cim_to_stix.cim_to_stix import CIMToStix
-from .splunk_result_translator import SplunkResultTranslator
 from .stix_to_splunk import StixToSplunk
 
 from os import path
