@@ -23,6 +23,8 @@ class StixToSplunk(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_mapper = options.get('data_mapper')
+        mapping = options.get('mapping')
+        
         if not data_mapper:
             data_mapper = 'cim'
 
@@ -30,7 +32,7 @@ class StixToSplunk(BaseQueryTranslator):
 
         try:
             data_mapper_module = importlib.import_module(data_mapper_module_name)
-            data_model_mapper = data_mapper_module.mapper_class()
+            data_model_mapper = data_mapper_module.mapper_class(mapping)
         except ModuleNotFoundError:
             raise NotImplementedError(f"Module {data_mapper_module_name} not implemented")
         except AttributeError:

@@ -169,3 +169,34 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = '((tag="flow" AND src_ip = "192.168.122.83") OR (tag="flow" AND dest_ip = "192.168.122.83")) earliest="{}" | head {}'.format(timerange_spl, result_limit)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_custom_mapping(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND mac-addr:value = '00-00-5E-00-53-00']"
+        
+        timerange = 15
+        timerange_spl = '-' + str(timerange) + 'minutes'
+        result_limit = 1000
+
+        options = {
+            "timerange": timerange, 
+            "result_limit": result_limit,
+            "mapping": { 
+                "mac-addr": { 
+                    "cim_type": "flow",
+                    "fields": {
+                        "value": "mac"
+                    }
+                },
+                "ipv4-addr": {
+                    "cim_type": "flow",
+                    "fields": {
+                        "value": ["src_ip","dest_ip"]
+                    }
+                }
+            }
+        }
+
+        query = shifter.translate('splunk', 'query', '{}', stix_pattern, options)
+        queries = '((tag="flow" AND mac = "00-00-5E-00-53-00") AND ((tag="flow" AND src_ip = "192.168.122.83") OR (tag="flow" AND dest_ip = "192.168.122.83"))) earliest="{}" | head {}'.format(timerange_spl, result_limit)
+        parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}

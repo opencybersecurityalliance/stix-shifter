@@ -133,6 +133,12 @@ class CimDataMapper:
       }
     }
 
+    def __init__(self, mapping=None):
+      # use user defined mapping object if provided in options
+      if mapping:
+        self.MAPPINGS = mapping
+
+
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:
     # * Registry keys need to pull the path apart from the key name, I believe. Need to investigate with Splunk
