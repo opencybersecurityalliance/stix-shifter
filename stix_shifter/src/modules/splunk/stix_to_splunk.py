@@ -4,9 +4,12 @@ import importlib
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import splunk_query_constructor
-from ...config import SplunkConfig
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
+
 
 class StixToSplunk(BaseQueryTranslator):
 
@@ -38,8 +41,8 @@ class StixToSplunk(BaseQueryTranslator):
         except AttributeError:
             raise NotImplementedError(f"Module {data_mapper_module_name} does not implement mapper_class attribute")
         
-        result_limit = options['result_limit'] if 'result_limit' in options else SplunkConfig.DEFAULT_LIMIT        
-        timerange = options['timerange'] if 'timerange' in options else SplunkConfig.DEFAULT_TIMERANGE
+        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT        
+        timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
         
         # append '-' as prefix and 'minutes' as suffix in timerange to convert minutes in SPL query format
         timerange = '-' + str(timerange) + 'minutes'

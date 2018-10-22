@@ -4,9 +4,9 @@ import os
 
 from web_api import *
 from .helpers.input_file_helpers import *
-from stix_shifter.src.config import SplunkConfig
+from stix_shifter.src.modules.splunk import stix_to_splunk
 
-default_timerange_spl = '-' + str(SplunkConfig.DEFAULT_TIMERANGE) + 'minutes'
+default_timerange_spl = '-' + str(stix_to_splunk.DEFAULT_TIMERANGE) + 'minutes'
 
 class TestRunFlask(unittest.TestCase):
     """ Test the Flask server for Analytic Translator
@@ -102,7 +102,7 @@ class TestRunFlask(unittest.TestCase):
                 if platform in platform_map:  # Some platforms not yet supported
                     if expected_result != None:
                         if platform == 'car-splunk':
-                            expected_result += ' earliest="{}" | head {}'.format(default_timerange_spl, SplunkConfig.DEFAULT_LIMIT)
+                            expected_result += ' earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
                         
                         test_name = "test_stg_{}_{}".format(k, platform)
                         new_test = TestRunFlask.success_test_generator(
