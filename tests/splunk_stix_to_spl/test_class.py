@@ -139,15 +139,6 @@ class TestStixToSpl(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
-    def test_issuperset_operator(self):
-        stix_pattern = "[ipv4-addr:value ISSUPERSET '198.51.100.0/24']"
-        query = shifter.translate('splunk', 'query', '{}', stix_pattern)
-        
-        queries = '((tag="flow" AND src_ip = "198.51.100.0/24") OR (tag="flow" AND dest_ip = "198.51.100.0/24")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
-        parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': 'ISSUPERSET', 'value': '198.51.100.0/24'}]
-        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
-
-
     def test_issubset_operator(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = shifter.translate('splunk', 'query', '{}', stix_pattern)

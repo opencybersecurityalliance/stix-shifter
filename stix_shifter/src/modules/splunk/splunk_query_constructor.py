@@ -124,8 +124,7 @@ class _ObservationExpressionTranslator:
         ComparisonComparators.Matches: encoders.matches,
         ComparisonExpressionOperators.And: 'AND',
         ComparisonExpressionOperators.Or: 'OR',
-        ComparisonComparators.IsSuperSet: "=", # Splunk cidrmatch('<ip in CIDR notation>', ip) and = operator give the same result
-        ComparisonComparators.IsSubSet: "=" # cidrmatch function can be used for both issuperset and issubset operator
+        ComparisonComparators.IsSubSet: "="
     }
 
     def __init__(self, expression:ObservationExpression, dmm, object_scoper):

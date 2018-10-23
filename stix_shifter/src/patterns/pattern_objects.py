@@ -14,9 +14,8 @@ class ComparisonComparators(Enum):
         In,
         Like,
         Matches,
-        IsSubSet,
-        IsSuperSet
-    ) = range(11)
+        IsSubSet
+    ) = range(10)
 
     def __repr__(self):
         return self._name_
