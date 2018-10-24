@@ -9,7 +9,7 @@ highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOUR
 endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
 destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
-eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, payload as payload, URL as url, magnitude as magnitude, Filename as filename"
+eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename"
 
 from_statement = " FROM events "
 

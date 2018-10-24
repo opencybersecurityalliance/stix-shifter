@@ -23,7 +23,7 @@
     "identityhostname as identity_host_name",
     "eventcount as eventcount",
     "PROTOCOLNAME(protocolid) as protocol",
-    "payload as payload",
+    "BASE64(payload) as payload",
     "URL as url",
     "magnitude as magnitude",
     "Filename as filename"
