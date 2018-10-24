@@ -6,7 +6,7 @@ from stix_shifter.src.stix_pattern_parser import stix_pattern_parser
 import re
 
 
-MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
+MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix']
 RESULTS = 'results'
 QUERY = 'query'
 
