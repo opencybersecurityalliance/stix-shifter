@@ -1,11 +1,13 @@
 import logging
 import unittest
 from stix_shifter.src.patterns.translator import translate, DataModels, SearchPlatforms
+from stix_shifter.src.modules.splunk import stix_to_splunk
 from .helpers.input_file_helpers import *
 from os import listdir, path
 
 logging.basicConfig(level=logging.DEBUG)
 
+default_timerange_spl = '-' + str(stix_to_splunk.DEFAULT_TIMERANGE) + 'minutes'
 
 class TestAnalyticTranslator(unittest.TestCase):
     """ Integration tests for the full pattern conversion process"""
@@ -51,7 +53,11 @@ class TestAnalyticTranslator(unittest.TestCase):
 
                     data_model = get_enum_for_input(dm)
                     search_platform = get_enum_for_input(sp)
+
                     if expected_result != None:
+                        if search_platform is SearchPlatforms.SPLUNK:
+                            expected_result += ' earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+
                         new_test = TestAnalyticTranslator.success_test_generator(test_pattern, search_platform,
                                                                                  data_model, expected_result)
                         setattr(TestAnalyticTranslator, test_name, new_test)

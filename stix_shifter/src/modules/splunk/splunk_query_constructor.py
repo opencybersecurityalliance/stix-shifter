@@ -28,11 +28,13 @@ class SplunkSearchTranslator:
     }
 
 
-    def __init__(self, pattern:Pattern, data_model_mapper, object_scoper = object_scopers.default_object_scoper):
+    def __init__(self, pattern:Pattern, data_model_mapper, result_limit, timerange, object_scoper = object_scopers.default_object_scoper):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
-        self._pattern_prefix = "|where"  # How should the final SPL query string start.  By default, use '|where'
+        self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
+        self.result_limit = result_limit
+        self.timerange = timerange
 
     def translate(self, expression, qualifier=None):
         """ This is the worker method for the translation. It can be passed any of the STIX2 AST classes and will turn
@@ -40,7 +42,8 @@ class SplunkSearchTranslator:
         if isinstance(expression, Pattern):
             # Note: The following call to translate might alter the value of self._pattern_prefix.
             expr = self.translate(expression.expression, qualifier=qualifier)
-            return "{prefix} {expr}".format(prefix=self._pattern_prefix, expr=expr)
+            return '{prefix}{expr}'.format(prefix=self._pattern_prefix, expr=expr)
+
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
@@ -84,11 +87,14 @@ class SplunkSearchTranslator:
                 else:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
-                return "{query_string}".format(query_string=translated_query_str)
+                # Setting timerange value if START and STOP qualifiers are absent.
+                return '{query_string}'.format(query_string=translated_query_str)
+
+
         elif isinstance(expression, CombinedObservationExpression):
             combined_expr_format_string = self.implemented_operators[expression.operator]
             if expression.operator == ObservationOperators.FollowedBy:
-                self._pattern_prefix = "|eval"
+                self._pattern_prefix = "|eval "
             return combined_expr_format_string.format(expr1=self.translate(expression.expr1),
                                                       expr2=self.translate(expression.expr2))
         
@@ -117,7 +123,8 @@ class _ObservationExpressionTranslator:
         ComparisonComparators.In: encoders.set,
         ComparisonComparators.Matches: encoders.matches,
         ComparisonExpressionOperators.And: 'AND',
-        ComparisonExpressionOperators.Or: 'OR'
+        ComparisonExpressionOperators.Or: 'OR',
+        ComparisonComparators.IsSubSet: "="
     }
 
     def __init__(self, expression:ObservationExpression, dmm, object_scoper):
@@ -133,12 +140,29 @@ class _ObservationExpressionTranslator:
             # These are the native objects and fields
             object_mapping = self.dmm.map_object(stix_object)
             field_mapping = self.dmm.map_field(stix_object, stix_path)
-
             # This scopes the query to the object
             object_scoping = self.object_scoper(object_mapping)
 
-            # Returns the actual comparison (as a translated string)
-            return self._build_comparison(expression, object_scoping, field_mapping)
+            # Check if mapping has multiple fields
+            if isinstance(field_mapping, list):
+                comparison_string = ""
+                mapped_fields_count = len(field_mapping)
+                for mapped_field in field_mapping:
+                    # Returns the actual comparison (as a translated string)
+                    comparison_string += self._build_comparison(expression, object_scoping, mapped_field)
+                    if (mapped_fields_count > 1):
+                        comparison_string += " OR "
+                        mapped_fields_count -= 1
+
+                if(len(field_mapping) > 1):
+                    # More than one SPL field maps to the STIX attribute so group the ORs.
+                    grouped_comparison_string = "(" + comparison_string + ")"
+                    comparison_string = grouped_comparison_string
+                    
+                return comparison_string
+            else:
+                return self._build_comparison(expression, object_scoping, field_mapping)
+
         elif isinstance(expression, CombinedComparisonExpression):
             return "({} {} {})".format(
                 self.translate(expression.expr1),
@@ -171,10 +195,22 @@ class _ObservationExpressionTranslator:
         else:
             return splunk_comparison
 
-def translate_pattern(pattern: Pattern, data_model_mapping):
+def _test_for_earliest_latest(query_string) -> bool:
+    pattern = r'(earliest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")|(latest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")'
+    match = re.search(pattern, query_string)
+    return bool(match)
+
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
     # CAR + Splunk = we want to override the default object scoper, I guess?
     if isinstance(data_model_mapping, CarDataMapper):
-        x = SplunkSearchTranslator(pattern, data_model_mapping, object_scoper = object_scopers.car_object_scoper)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
     else:
-        x = SplunkSearchTranslator(pattern, data_model_mapping)
-    return x.translate(pattern)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
+    
+    translated_query = x.translate(pattern)
+    has_earliest_latest = _test_for_earliest_latest(translated_query)
+    
+    if not has_earliest_latest:
+        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+
+    return translated_query
