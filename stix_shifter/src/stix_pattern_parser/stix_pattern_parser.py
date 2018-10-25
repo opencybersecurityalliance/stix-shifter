@@ -20,6 +20,7 @@ class PatternTranslator:
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR',
         ObservationOperators.FollowedBy: 'FOLLOWEDBY',
+        ComparisonComparators.IsSuperSet: 'ISSUPERSET',
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 

@@ -375,33 +375,35 @@ class TestTransform(object):
         data = "[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]"
 
         options = {
-            "tag_to_model": {
-                "network": [
-                    "network-traffic",
-                    "dst_ip",
-                    "src_ip"
+            "mapping": { 
+                "tag_to_model": {
+                    "network": [
+                        "network-traffic",
+                        "dst_ip",
+                        "src_ip"
+                    ]
+                },
+                "event_count": {
+                    "key": "number_observed",
+                    "cybox": False,
+                    "transformer": "ToInteger"
+                },
+                "src_ip": [
+                    {
+                        "key": "ipv4-addr.value",
+                        "object": "src_ip"
+                    },
+                    {
+                        "key": "ipv6-addr.value",
+                        "object": "src_ip"
+                    },
+                    {
+                        "key": "network-traffic.src_ref",
+                        "object": "network-traffic",
+                        "references": "src_ip"
+                    }
                 ]
-            },
-            "event_count": {
-                "key": "number_observed",
-                "cybox": False,
-                "transformer": "ToInteger"
-            },
-            "src_ip": [
-                {
-                    "key": "ipv4-addr.value",
-                    "object": "src_ip"
-                },
-                {
-                    "key": "ipv6-addr.value",
-                    "object": "src_ip"
-                },
-                {
-                    "key": "network-traffic.src_ref",
-                    "object": "network-traffic",
-                    "references": "src_ip"
-                }
-            ]
+            }
         }
 
         shifter = stix_shifter.StixShifter()

@@ -16,8 +16,8 @@ class CIMToStix(BaseResultTranslator):
         :return: STIX formatted results
         :rtype: str
         """
-
-        self.mapping_json = options if options else {}
+        self.mapping_json = options.get('mapping', {})
+        
         json_data = json.loads(data)
         data_source = json.loads(data_source)
 
