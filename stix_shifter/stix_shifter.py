@@ -79,8 +79,16 @@ class StixShifter:
 
     def transmit(self, args):
         """
-        Connects to datasource and executes query
-        Args: module, connection, configuration
+        Connects to datasource and executes a query, grabs status update or query results
+        :param args:
+        args: <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
+        '{
+            "type": <ping, query, results, is_async, status>,
+            "search_id": <uuid> (for results and status),
+            "query": <native datasource query string> (for query),
+            "offset": <offset> (for results),
+            "length": <length> (for results)
+        }'
         """
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)

@@ -10,16 +10,29 @@ TRANSMIT = 'transmit'
 
 def __main__():
     """
-    In the case of converting a stix pattern to datasource query, arguments will take the form of...
-    <module> <translate_type> <data> <options>
-    The module and translate_type will determine what module and method gets called
-    Options argument comes in as:
+    Stix-shifter can either be called to either translate or transmit.
+    In the case of translation, stix-shifter either translates a stix pattern to a datasource query, 
+    or converts data source query results into JSON of STIX observations. 
+    Arguments will take the form of...
+    "translate" <module> <translate_type (query or results)> <data (STIX pattern or query results)> <options>
+    The module and translate_type will determine what module and method gets executed.
+    Option arguments comes in as:
       "{
-          "select_fields": <string array of fields in the datasource select statement>},
-          "mapping": <mapping hash for either stix pattern to datasource or data results to stix observation objects>,
+          "select_fields": <string array of fields in the datasource select statement> (In the case of QRadar),
+          "mapping": <mapping hash for either stix pattern to datasource or mapping hash for data results to stix observation objects>,
           "result_limit": <integer limit number for max results in the data source query>,
-          "timerange": <integer time window in minutes used in the data source query when START STOP qualifiers are absent>
+          "timerange": <integer time range for LAST x MINUTES used in the data source query when START STOP qualifiers are absent>
        }"
+    In the case of transmission, stix-shifter connects to a datasource to execute queries, status updates, and result retrieval.
+    Arguments will take the form of...
+    "transmit" <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
+        '{
+            "type": <ping, query, results, is_async, status>,
+            "search_id": <uuid> (for results and status),
+            "query": <native datasource query string> (for query),
+            "offset": <offset> (for results),
+            "length": <length> (for results)
+        }'
     """
 
     # process arguments
