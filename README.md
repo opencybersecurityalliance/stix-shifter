@@ -54,7 +54,6 @@ optional arguments:
 ```
 usage: stix_shifter.py transmit [-h]
                       {async_dummy, synchronous_dummy, qradar, splunk, bigfix}
-                      {results,query} data
 
 positional arguments:
 {<async_dummy, synchronous_dummy, qradar, splunk, bigfix>}         Transmission module to use
