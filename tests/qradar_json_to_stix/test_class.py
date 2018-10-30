@@ -165,3 +165,28 @@ class TestTransform(object):
         assert(curr_obj is not None), 'artifact object type not found'
         assert(curr_obj.keys() == {'type', 'payload_bin'})
         assert(curr_obj['payload_bin'] == "SomeBase64Payload")
+
+    def test_unmapped_attribute_with_mapped_attribute(self):
+        url = "https://example.com"
+        data = {"url": url, "unmapped": "nothing to see here"}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+        assert(objects != {})
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
+        assert(curr_obj is not None), 'url object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == url)
+
+    def test_unmapped_attribute_alone(self):
+        data = {"unmapped": "nothing to see here"}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+        assert(objects == {})
