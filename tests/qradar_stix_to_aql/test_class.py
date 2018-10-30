@@ -129,10 +129,10 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_network_traffic_start_stop(self):
-        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
+        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.567Z']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE endtime = '1528965384' OR starttime = '1528965384' {} {}".format(default_limit, default_time)
-        parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
+        where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.567Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_artifact_queries(self):
@@ -146,11 +146,11 @@ class TestStixToAql(unittest.TestCase, object):
         start_time_01 = "t'2016-06-01T01:30:00.123Z'"
         stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
         start_time_02 = "t'2016-06-01T03:55:00.123Z'"
-        stop_time_02 = "t'2016-06-01T04:30:24.123Z'"
-        epoch_start_time_01 = 1464744600
-        epoch_stop_time_01 = 1464747600
-        epoch_start_time_02 = 1464753300
-        epoch_stop_time_02 = 1464755424
+        stop_time_02 = "t'2016-06-01T04:30:24.743Z'"
+        epoch_start_time_01 = 1464744600123
+        epoch_stop_time_01 = 1464747600123
+        epoch_start_time_02 = 1464753300123
+        epoch_stop_time_02 = 1464755424743
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, epoch_start_time_01, epoch_stop_time_01)
@@ -166,10 +166,10 @@ class TestStixToAql(unittest.TestCase, object):
         stop_time_01 = "t'2016-06-01T01:11:11.456Z'"
         start_time_02 = "t'2016-06-07T02:22:22.789Z'"
         stop_time_02 = "t'2016-06-07T03:33:33.012Z'"
-        epoch_start_time_01 = 1464739200
-        epoch_stop_time_01 = 1464743471
-        epoch_start_time_02 = 1465266142
-        epoch_stop_time_02 = 1465270413
+        epoch_start_time_01 = 1464739200123
+        epoch_stop_time_01 = 1464743471456
+        epoch_start_time_02 = 1465266142789
+        epoch_stop_time_02 = 1465270413012
         stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START {} STOP {} OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0'] START {} STOP {}".format(
             start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
@@ -191,10 +191,10 @@ class TestStixToAql(unittest.TestCase, object):
         start_time_02 = "t'2016-06-01T03:55:00.1Z'"
         # four-digit millisecond
         stop_time_02 = "t'2016-06-01T04:30:24.1243Z'"
-        epoch_start_time_01 = 1464744600
-        epoch_stop_time_01 = 1464747600
-        epoch_start_time_02 = 1464753300
-        epoch_stop_time_02 = 1464755424
+        epoch_start_time_01 = 1464744600000
+        epoch_stop_time_01 = 1464747600000
+        epoch_start_time_02 = 1464753300000
+        epoch_stop_time_02 = 1464755424000
         stix_pattern = "[user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement_01 = "WHERE username = 'root' {} START {} STOP {}".format(default_limit, epoch_start_time_01, epoch_stop_time_01)

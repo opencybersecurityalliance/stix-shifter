@@ -216,8 +216,8 @@ def _test_or_add_milliseconds(timestamp) -> str:
 
 def _test_START_STOP_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
-    # or START 1234567890 STOP 1234567890
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{10}\s))STOP"
+    # or START 1234567890123 STOP 1234567890123
+    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
     match = re.search(pattern, query_string)
     return bool(match)
 

@@ -13,6 +13,7 @@ class ValueTransformer():
         """ abstract function for converting value formats """
         raise NotImplementedError
 
+
 class StringToBool(ValueTransformer):
     """A value transformer for converting String to boolean value"""
 
@@ -27,6 +28,7 @@ class SplunkToTimestamp(ValueTransformer):
     @staticmethod
     def transform(splunkTime):
         return splunkTime[:-6]+'Z'
+
 
 class EpochToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
@@ -44,8 +46,7 @@ class TimestampToEpoch(ValueTransformer):
     def transform(timestamp):
         time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
         epoch = datetime(1970, 1, 1)
-        converted_epoch = int(
-            (datetime.strptime(timestamp, time_pattern) - epoch).total_seconds())
+        converted_epoch = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
         return converted_epoch
 
 
@@ -117,6 +118,7 @@ class ToFileName(ValueTransformer):
         except ValueError:
             print("Cannot convert input to file name")
 
+
 class ToDomainName(ValueTransformer):
     """A value transformer for expected domain name"""
 
@@ -128,6 +130,7 @@ class ToDomainName(ValueTransformer):
             return domain_name
         except ValueError:
             print("Cannot convert input to file name")
+
 
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
