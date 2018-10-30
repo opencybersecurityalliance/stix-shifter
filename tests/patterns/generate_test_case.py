@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     file_header = """
 import unittest
-from src.patterns.translator import translate, DataModels, SearchPlatforms
+from stix_shifter.src.patterns.translator import translate, DataModels, SearchPlatforms
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -30,7 +30,7 @@ class TextStix2PatterningInput(unittest.TestCase):"""
     prototype_test_case = """
     def test_{pattern_name}(self):
         res = {test_function}("{pattern}", {search_platform}, {data_model})
-        print("CONVERTED: {pattern}    TO   " + res)
+        print("CONVERTED: {pattern}    TO   ", res)
     """
     search_platforms = {"elastic": "SearchPlatforms.ELASTIC",
                         "splunk": "SearchPlatforms.SPLUNK"}
