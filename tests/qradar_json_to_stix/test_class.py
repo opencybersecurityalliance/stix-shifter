@@ -63,7 +63,7 @@ class TestTransform(object):
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name}
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name, "domainname": url}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -118,7 +118,12 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'name'})
         assert(curr_obj['name'] == file_name)
 
-        assert(objects.keys() == set(map(str, range(0, 7))))
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
+        assert(curr_obj is not None), 'domain-name object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == 'example.com')
+
+        assert(objects.keys() == set(map(str, range(0, 8))))
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,

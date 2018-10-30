@@ -42,5 +42,10 @@
     "fields": {
       "payload_bin": ["payload"]
     }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
+    }
   }
 }

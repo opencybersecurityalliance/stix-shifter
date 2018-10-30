@@ -93,8 +93,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = value.replace('%', '*')
-        value = value.replace('_', '?')
+        value = "'%{value}%'".format(value=value)
         return AqlQueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
@@ -151,8 +150,14 @@ class AqlQueryStringPatternTranslator:
                 if expression.comparator == ComparisonComparators.IsSubSet:
                     comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
                 else:
+                    # There's no aql field for domain-name. using Like operator to find domian name from the url
+                    if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
+                        comparator = self.comparator_lookup[ComparisonComparators.Like]
+                        value = self._format_like(expression.value)
+                    
                     comparison_string += "{mapped_field} {comparator} {value}".format(
                         mapped_field=mapped_field, comparator=comparator, value=value)
+
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
                     mapped_fields_count -= 1
