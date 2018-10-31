@@ -26,17 +26,7 @@
     "BASE64(payload) as payload",
     "URL as url",
     "magnitude as magnitude",
-    "Filename as filename"
-  ],
-  "domain-name": [
-    "QIDNAME(qid) as qidname",
-    "CATEGORYNAME(highlevelcategory) as high_level_category_name",
-    "devicetime as devicetime",
-    "sourceip as sourceip",
-    "sourceport as sourceport",
-    "sourcemac as sourcemac",
-    "destinationip as destinationip",
-    "destinationport as destinationport",
-    "destinationmac as destinationmac"
+    "Filename as filename",
+    "URL as domainname"
   ]
 }

@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 import base64
 import re
+from urllib.parse import urlparse
 
 
 class ValueTransformer():
@@ -116,6 +117,18 @@ class ToFileName(ValueTransformer):
         except ValueError:
             print("Cannot convert input to file name")
 
+class ToDomainName(ValueTransformer):
+    """A value transformer for expected domain name"""
+
+    @staticmethod
+    def transform(url):
+        try:
+            parsed_url = urlparse(url)
+            domain_name = parsed_url.netloc
+            return domain_name
+        except ValueError:
+            print("Cannot convert input to file name")
+
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
-            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
+            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool, "ToDomainName": ToDomainName}

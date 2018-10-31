@@ -9,7 +9,7 @@ highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOUR
 endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
 destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
-eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename"
+eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname"
 
 from_statement = " FROM events "
 
@@ -207,4 +207,11 @@ class TestStixToAql(unittest.TestCase, object):
         query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
         where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(result_limit, timerange)
         parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+    
+    def test_domainname_query(self):
+        stix_pattern = "[domain-name:value = 'example.com']"
+        query = shifter.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE domainname LIKE '%example.com%' {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
