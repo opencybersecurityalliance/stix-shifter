@@ -1,4 +1,4 @@
-# Generated from C:/Users/hfoster/Documents/Projects/analytic-translator/stix2/grammar\STIXPattern.g4 by ANTLR 4.7
+# Generated from STIXPattern.g4 by ANTLR 4.7.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -81,8 +81,8 @@ def serializedATN():
         buf.write("\2\2\2\u00ae\u0095\3\2\2\2\u00ae\u009c\3\2\2\2\u00ae\u00a3")
         buf.write("\3\2\2\2\u00ae\u00aa\3\2\2\2\u00af\21\3\2\2\2\u00b0\u00b1")
         buf.write("\t\3\2\2\u00b1\23\3\2\2\2\u00b2\u00b3\7\7\2\2\u00b3\25")
-        buf.write("\3\2\2\2\u00b4\u00b5\7\24\2\2\u00b5\u00b6\7\7\2\2\u00b6")
-        buf.write("\u00b7\7\25\2\2\u00b7\u00b8\7\7\2\2\u00b8\27\3\2\2\2\u00b9")
+        buf.write("\3\2\2\2\u00b4\u00b5\7\24\2\2\u00b5\u00b6\7\t\2\2\u00b6")
+        buf.write("\u00b7\7\25\2\2\u00b7\u00b8\7\t\2\2\u00b8\27\3\2\2\2\u00b9")
         buf.write("\u00ba\7\31\2\2\u00ba\u00bb\t\4\2\2\u00bb\u00bc\7\26\2")
         buf.write("\2\u00bc\31\3\2\2\2\u00bd\u00be\7\32\2\2\u00be\u00bf\7")
         buf.write("\3\2\2\u00bf\u00c0\7\33\2\2\u00c0\33\3\2\2\2\u00c1\u00c2")
@@ -124,26 +124,26 @@ class STIXPatternParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
-                     "<INVALID>", "<INVALID>", "'<'", "'<='", "'>'", "'>='",
-                     "'''", "':'", "'.'", "','", "')'", "'('", "']'", "'['",
+    literalNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "'<'", "'<='", "'>'", "'>='", 
+                     "'''", "':'", "'.'", "','", "')'", "'('", "']'", "'['", 
                      "'+'", "<INVALID>", "'-'", "'^'", "'/'", "'*'" ]
 
-    symbolicNames = [ "<INVALID>", "IntLiteral", "FloatLiteral", "HexLiteral",
-                      "BinaryLiteral", "StringLiteral", "BoolLiteral", "TimestampLiteral",
-                      "AND", "OR", "NOT", "FOLLOWEDBY", "LIKE", "MATCHES",
-                      "ISSUPERSET", "ISSUBSET", "LAST", "IN", "START", "STOP",
-                      "SECONDS", "TRUE", "FALSE", "WITHIN", "REPEATS", "TIMES",
-                      "IdentifierWithoutHyphen", "IdentifierWithHyphen",
-                      "EQ", "NEQ", "LT", "LE", "GT", "GE", "QUOTE", "COLON",
-                      "DOT", "COMMA", "RPAREN", "LPAREN", "RBRACK", "LBRACK",
-                      "PLUS", "HYPHEN", "MINUS", "POWER_OP", "DIVIDE", "ASTERISK",
+    symbolicNames = [ "<INVALID>", "IntLiteral", "FloatLiteral", "HexLiteral", 
+                      "BinaryLiteral", "StringLiteral", "BoolLiteral", "TimestampLiteral", 
+                      "AND", "OR", "NOT", "FOLLOWEDBY", "LIKE", "MATCHES", 
+                      "ISSUPERSET", "ISSUBSET", "LAST", "IN", "START", "STOP", 
+                      "SECONDS", "TRUE", "FALSE", "WITHIN", "REPEATS", "TIMES", 
+                      "IdentifierWithoutHyphen", "IdentifierWithHyphen", 
+                      "EQ", "NEQ", "LT", "LE", "GT", "GE", "QUOTE", "COLON", 
+                      "DOT", "COMMA", "RPAREN", "LPAREN", "RBRACK", "LBRACK", 
+                      "PLUS", "HYPHEN", "MINUS", "POWER_OP", "DIVIDE", "ASTERISK", 
                       "WS", "COMMENT", "LINE_COMMENT" ]
 
     RULE_pattern = 0
@@ -167,12 +167,12 @@ class STIXPatternParser ( Parser ):
     RULE_primitiveLiteral = 18
     RULE_orderableLiteral = 19
 
-    ruleNames =  [ "pattern", "observationExpressions", "observationExpressionOr",
-                   "observationExpressionAnd", "observationExpression",
-                   "comparisonExpression", "comparisonExpressionAnd", "propTest",
-                   "orderingComparator", "stringLiteral", "startStopQualifier",
-                   "withinQualifier", "repeatedQualifier", "objectPath",
-                   "objectType", "firstPathComponent", "objectPathComponent",
+    ruleNames =  [ "pattern", "observationExpressions", "observationExpressionOr", 
+                   "observationExpressionAnd", "observationExpression", 
+                   "comparisonExpression", "comparisonExpressionAnd", "propTest", 
+                   "orderingComparator", "stringLiteral", "startStopQualifier", 
+                   "withinQualifier", "repeatedQualifier", "objectPath", 
+                   "objectType", "firstPathComponent", "objectPathComponent", 
                    "setLiteral", "primitiveLiteral", "orderableLiteral" ]
 
     EOF = Token.EOF
@@ -229,7 +229,7 @@ class STIXPatternParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.7")
+        self.checkVersion("4.7.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -255,12 +255,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPattern" ):
                 listener.exitPattern(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPattern" ):
-                return visitor.visitPattern(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -312,12 +306,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressions" ):
                 listener.exitObservationExpressions(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressions" ):
-                return visitor.visitObservationExpressions(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
     def observationExpressions(self, _p:int=0):
@@ -349,7 +337,7 @@ class STIXPatternParser ( Parser ):
                     self.state = 46
                     self.match(STIXPatternParser.FOLLOWEDBY)
                     self.state = 47
-                    self.observationExpressions(3)
+                    self.observationExpressions(3) 
                 self.state = 52
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,0,self._ctx)
@@ -393,12 +381,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressionOr" ):
                 listener.exitObservationExpressionOr(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionOr" ):
-                return visitor.visitObservationExpressionOr(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
     def observationExpressionOr(self, _p:int=0):
@@ -430,7 +412,7 @@ class STIXPatternParser ( Parser ):
                     self.state = 57
                     self.match(STIXPatternParser.OR)
                     self.state = 58
-                    self.observationExpressionOr(3)
+                    self.observationExpressionOr(3) 
                 self.state = 63
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,1,self._ctx)
@@ -474,12 +456,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressionAnd" ):
                 listener.exitObservationExpressionAnd(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionAnd" ):
-                return visitor.visitObservationExpressionAnd(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
     def observationExpressionAnd(self, _p:int=0):
@@ -511,7 +487,7 @@ class STIXPatternParser ( Parser ):
                     self.state = 68
                     self.match(STIXPatternParser.AND)
                     self.state = 69
-                    self.observationExpressionAnd(3)
+                    self.observationExpressionAnd(3) 
                 self.state = 74
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
@@ -534,7 +510,7 @@ class STIXPatternParser ( Parser ):
         def getRuleIndex(self):
             return STIXPatternParser.RULE_observationExpression
 
-
+     
         def copyFrom(self, ctx:ParserRuleContext):
             super().copyFrom(ctx)
 
@@ -560,12 +536,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressionRepeated" ):
                 listener.exitObservationExpressionRepeated(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionRepeated" ):
-                return visitor.visitObservationExpressionRepeated(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class ObservationExpressionSimpleContext(ObservationExpressionContext):
 
@@ -588,12 +558,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitObservationExpressionSimple" ):
                 listener.exitObservationExpressionSimple(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionSimple" ):
-                return visitor.visitObservationExpressionSimple(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class ObservationExpressionCompoundContext(ObservationExpressionContext):
@@ -618,12 +582,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressionCompound" ):
                 listener.exitObservationExpressionCompound(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionCompound" ):
-                return visitor.visitObservationExpressionCompound(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class ObservationExpressionWithinContext(ObservationExpressionContext):
 
@@ -646,12 +604,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObservationExpressionWithin" ):
                 listener.exitObservationExpressionWithin(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionWithin" ):
-                return visitor.visitObservationExpressionWithin(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class ObservationExpressionStartStopContext(ObservationExpressionContext):
 
@@ -673,12 +625,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitObservationExpressionStartStop" ):
                 listener.exitObservationExpressionStartStop(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObservationExpressionStartStop" ):
-                return visitor.visitObservationExpressionStartStop(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -765,7 +711,7 @@ class STIXPatternParser ( Parser ):
                         self.repeatedQualifier()
                         pass
 
-
+             
                 self.state = 96
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
@@ -788,7 +734,7 @@ class STIXPatternParser ( Parser ):
         def getRuleIndex(self):
             return STIXPatternParser.RULE_comparisonExpression
 
-
+     
         def copyFrom(self, ctx:ParserRuleContext):
             super().copyFrom(ctx)
 
@@ -810,12 +756,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitComparisonExpressionAnd_" ):
                 listener.exitComparisonExpressionAnd_(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitComparisonExpressionAnd_" ):
-                return visitor.visitComparisonExpressionAnd_(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class ComparisonExpressionOredContext(ComparisonExpressionContext):
@@ -840,12 +780,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitComparisonExpressionOred" ):
                 listener.exitComparisonExpressionOred(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitComparisonExpressionOred" ):
-                return visitor.visitComparisonExpressionOred(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -882,7 +816,7 @@ class STIXPatternParser ( Parser ):
                     self.state = 101
                     self.match(STIXPatternParser.OR)
                     self.state = 102
-                    self.comparisonExpression(3)
+                    self.comparisonExpression(3) 
                 self.state = 107
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
@@ -905,7 +839,7 @@ class STIXPatternParser ( Parser ):
         def getRuleIndex(self):
             return STIXPatternParser.RULE_comparisonExpressionAnd
 
-
+     
         def copyFrom(self, ctx:ParserRuleContext):
             super().copyFrom(ctx)
 
@@ -927,12 +861,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitComparisonExpressionAndPropTest" ):
                 listener.exitComparisonExpressionAndPropTest(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitComparisonExpressionAndPropTest" ):
-                return visitor.visitComparisonExpressionAndPropTest(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class ComparisonExpressionAndedContext(ComparisonExpressionAndContext):
@@ -957,12 +885,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitComparisonExpressionAnded" ):
                 listener.exitComparisonExpressionAnded(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitComparisonExpressionAnded" ):
-                return visitor.visitComparisonExpressionAnded(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -999,7 +921,7 @@ class STIXPatternParser ( Parser ):
                     self.state = 112
                     self.match(STIXPatternParser.AND)
                     self.state = 113
-                    self.comparisonExpressionAnd(3)
+                    self.comparisonExpressionAnd(3) 
                 self.state = 118
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,7,self._ctx)
@@ -1022,7 +944,7 @@ class STIXPatternParser ( Parser ):
         def getRuleIndex(self):
             return STIXPatternParser.RULE_propTest
 
-
+     
         def copyFrom(self, ctx:ParserRuleContext):
             super().copyFrom(ctx)
 
@@ -1052,12 +974,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPropTestRegex" ):
                 listener.exitPropTestRegex(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestRegex" ):
-                return visitor.visitPropTestRegex(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class PropTestOrderContext(PropTestContext):
@@ -1091,12 +1007,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitPropTestOrder" ):
                 listener.exitPropTestOrder(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestOrder" ):
-                return visitor.visitPropTestOrder(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class PropTestLikeContext(PropTestContext):
 
@@ -1122,12 +1032,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPropTestLike" ):
                 listener.exitPropTestLike(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestLike" ):
-                return visitor.visitPropTestLike(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class PropTestEqualContext(PropTestContext):
@@ -1157,12 +1061,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitPropTestEqual" ):
                 listener.exitPropTestEqual(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestEqual" ):
-                return visitor.visitPropTestEqual(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class PropTestSetContext(PropTestContext):
 
@@ -1188,12 +1086,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPropTestSet" ):
                 listener.exitPropTestSet(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestSet" ):
-                return visitor.visitPropTestSet(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class PropTestIsSubsetContext(PropTestContext):
@@ -1221,12 +1113,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitPropTestIsSubset" ):
                 listener.exitPropTestIsSubset(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestIsSubset" ):
-                return visitor.visitPropTestIsSubset(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class PropTestParenContext(PropTestContext):
 
@@ -1249,12 +1135,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPropTestParen" ):
                 listener.exitPropTestParen(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestParen" ):
-                return visitor.visitPropTestParen(self)
-            else:
-                return visitor.visitChildren(self)
 
 
     class PropTestIsSupersetContext(PropTestContext):
@@ -1281,12 +1161,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPropTestIsSuperset" ):
                 listener.exitPropTestIsSuperset(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPropTestIsSuperset" ):
-                return visitor.visitPropTestIsSuperset(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1491,12 +1365,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitOrderingComparator" ):
                 listener.exitOrderingComparator(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitOrderingComparator" ):
-                return visitor.visitOrderingComparator(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1542,12 +1410,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitStringLiteral" ):
                 listener.exitStringLiteral(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitStringLiteral" ):
-                return visitor.visitStringLiteral(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1576,11 +1438,11 @@ class STIXPatternParser ( Parser ):
         def START(self):
             return self.getToken(STIXPatternParser.START, 0)
 
-        def StringLiteral(self, i:int=None):
+        def TimestampLiteral(self, i:int=None):
             if i is None:
-                return self.getTokens(STIXPatternParser.StringLiteral)
+                return self.getTokens(STIXPatternParser.TimestampLiteral)
             else:
-                return self.getToken(STIXPatternParser.StringLiteral, i)
+                return self.getToken(STIXPatternParser.TimestampLiteral, i)
 
         def STOP(self):
             return self.getToken(STIXPatternParser.STOP, 0)
@@ -1596,12 +1458,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitStartStopQualifier" ):
                 listener.exitStartStopQualifier(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitStartStopQualifier" ):
-                return visitor.visitStartStopQualifier(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1614,11 +1470,11 @@ class STIXPatternParser ( Parser ):
             self.state = 178
             self.match(STIXPatternParser.START)
             self.state = 179
-            self.match(STIXPatternParser.StringLiteral)
+            self.match(STIXPatternParser.TimestampLiteral)
             self.state = 180
             self.match(STIXPatternParser.STOP)
             self.state = 181
-            self.match(STIXPatternParser.StringLiteral)
+            self.match(STIXPatternParser.TimestampLiteral)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1655,12 +1511,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitWithinQualifier" ):
                 listener.exitWithinQualifier(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitWithinQualifier" ):
-                return visitor.visitWithinQualifier(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1717,12 +1567,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitRepeatedQualifier" ):
                 listener.exitRepeatedQualifier(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitRepeatedQualifier" ):
-                return visitor.visitRepeatedQualifier(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1777,12 +1621,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitObjectPath" ):
                 listener.exitObjectPath(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObjectPath" ):
-                return visitor.visitObjectPath(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1839,12 +1677,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitObjectType" ):
                 listener.exitObjectType(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitObjectType" ):
-                return visitor.visitObjectType(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1893,12 +1725,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitFirstPathComponent" ):
                 listener.exitFirstPathComponent(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitFirstPathComponent" ):
-                return visitor.visitFirstPathComponent(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1934,7 +1760,7 @@ class STIXPatternParser ( Parser ):
         def getRuleIndex(self):
             return STIXPatternParser.RULE_objectPathComponent
 
-
+     
         def copyFrom(self, ctx:ParserRuleContext):
             super().copyFrom(ctx)
 
@@ -1962,12 +1788,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitIndexPathStep" ):
                 listener.exitIndexPathStep(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitIndexPathStep" ):
-                return visitor.visitIndexPathStep(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class PathStepContext(ObjectPathComponentContext):
 
@@ -1990,12 +1810,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitPathStep" ):
                 listener.exitPathStep(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPathStep" ):
-                return visitor.visitPathStep(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class KeyPathStepContext(ObjectPathComponentContext):
 
@@ -2015,12 +1829,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitKeyPathStep" ):
                 listener.exitKeyPathStep(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitKeyPathStep" ):
-                return visitor.visitKeyPathStep(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2087,7 +1895,7 @@ class STIXPatternParser ( Parser ):
                         from antlr4.error.Errors import FailedPredicateException
                         raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
                     self.state = 210
-                    self.objectPathComponent(4)
+                    self.objectPathComponent(4) 
                 self.state = 215
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
@@ -2135,12 +1943,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitSetLiteral" ):
                 listener.exitSetLiteral(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitSetLiteral" ):
-                return visitor.visitSetLiteral(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2217,12 +2019,6 @@ class STIXPatternParser ( Parser ):
             if hasattr( listener, "exitPrimitiveLiteral" ):
                 listener.exitPrimitiveLiteral(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitPrimitiveLiteral" ):
-                return visitor.visitPrimitiveLiteral(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -2290,12 +2086,6 @@ class STIXPatternParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitOrderableLiteral" ):
                 listener.exitOrderableLiteral(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitOrderableLiteral" ):
-                return visitor.visitOrderableLiteral(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2370,41 +2160,46 @@ class STIXPatternParser ( Parser ):
     def observationExpressions_sempred(self, localctx:ObservationExpressionsContext, predIndex:int):
             if predIndex == 0:
                 return self.precpred(self._ctx, 2)
-
+         
 
     def observationExpressionOr_sempred(self, localctx:ObservationExpressionOrContext, predIndex:int):
             if predIndex == 1:
                 return self.precpred(self._ctx, 2)
-
+         
 
     def observationExpressionAnd_sempred(self, localctx:ObservationExpressionAndContext, predIndex:int):
             if predIndex == 2:
                 return self.precpred(self._ctx, 2)
-
+         
 
     def observationExpression_sempred(self, localctx:ObservationExpressionContext, predIndex:int):
             if predIndex == 3:
                 return self.precpred(self._ctx, 3)
-
+         
 
             if predIndex == 4:
                 return self.precpred(self._ctx, 2)
-
+         
 
             if predIndex == 5:
                 return self.precpred(self._ctx, 1)
-
+         
 
     def comparisonExpression_sempred(self, localctx:ComparisonExpressionContext, predIndex:int):
             if predIndex == 6:
                 return self.precpred(self._ctx, 2)
-
+         
 
     def comparisonExpressionAnd_sempred(self, localctx:ComparisonExpressionAndContext, predIndex:int):
             if predIndex == 7:
                 return self.precpred(self._ctx, 2)
-
+         
 
     def objectPathComponent_sempred(self, localctx:ObjectPathComponentContext, predIndex:int):
             if predIndex == 8:
                 return self.precpred(self._ctx, 3)
+         
+
+
+
+

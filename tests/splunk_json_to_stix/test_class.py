@@ -1,8 +1,14 @@
 from stix_shifter.src.modules.splunk.cim_to_stix import cim_to_stix_translator
 from stix_shifter.src import transformers
+from stix_shifter import stix_shifter
 from stix_shifter.src.modules.splunk import splunk_translator
 from stix2validator import validate_instance
 import json
+import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 interface = splunk_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
@@ -362,4 +368,56 @@ class TestTransform(object):
         assert(addr_obj.keys() == {'type', 'value'})
         assert(addr_obj['type'] == 'email-addr')
         assert(addr_obj['value'] == src_user)
-        
+    
+    def test_custom_mapping(self):
+
+        data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}"
+        data = "[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]"
+
+        options = {
+            "mapping": { 
+                "tag_to_model": {
+                    "network": [
+                        "network-traffic",
+                        "dst_ip",
+                        "src_ip"
+                    ]
+                },
+                "event_count": {
+                    "key": "number_observed",
+                    "cybox": False,
+                    "transformer": "ToInteger"
+                },
+                "src_ip": [
+                    {
+                        "key": "ipv4-addr.value",
+                        "object": "src_ip"
+                    },
+                    {
+                        "key": "ipv6-addr.value",
+                        "object": "src_ip"
+                    },
+                    {
+                        "key": "network-traffic.src_ref",
+                        "object": "network-traffic",
+                        "references": "src_ip"
+                    }
+                ]
+            }
+        }
+
+        shifter = stix_shifter.StixShifter()
+        result = shifter.translate('splunk', 'results', data_source, data, options)
+
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        curr_obj = TestTransform.get_first_of_type(objects.values(), 'ipv4-addr')
+        assert(curr_obj is not None), 'ipv4-addr object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == "127.0.0.1")
