@@ -26,21 +26,21 @@ def __main__():
     In the case of transmission, stix-shifter connects to a datasource to execute queries, status updates, and result retrieval.
     Arguments will take the form of...
     "transmit" <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
-        '{
-            "type": <ping, query, results, is_async, status>,
-            "search_id": <uuid> (for results and status),
-            "query": <native datasource query string> (for query),
-            "offset": <offset> (for results),
-            "length": <length> (for results)
-        }'
+        <
+            query <query string>,
+            status <search id>,
+            results <search id> <offset> <length>,
+            ping,
+            is_async
+        >
     """
 
     # process arguments
-    parser = argparse.ArgumentParser(description='stix_shifter')
-    subparsers = parser.add_subparsers(dest='command')
+    parent_parser = argparse.ArgumentParser(description='stix_shifter')
+    parent_subparsers = parent_parser.add_subparsers(dest='command')
 
     # translate parser
-    translate_parser = subparsers.add_parser(
+    translate_parser = parent_subparsers.add_parser(
         TRANSLATE, help='Translate a query or result set using a specific translation module')
 
     # positional arguments
@@ -61,7 +61,7 @@ def __main__():
                                   help='module to use for the data mapper')
 
     # transmit parser
-    transmit_parser = subparsers.add_parser(
+    transmit_parser = parent_subparsers.add_parser(
         TRANSMIT, help='Connect to a datasource and exectue a query...')
 
     # positional arguments
@@ -79,16 +79,24 @@ def __main__():
         type=str,
         help='Data source Port'
     )
-    transmit_parser.add_argument(
-        'operation',
-        type=str,
-        help='Operation being performed by stix transmission'
-    )
 
-    args = parser.parse_args()
+    # operation subparser
+    operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
+    operation_subparser.add_parser(stix_shifter.PING, help="Pings the data source")
+    query_operation_parser = operation_subparser.add_parser(stix_shifter.QUERY, help="Executes a query on the data source")
+    query_operation_parser.add_argument('query_string', help='native datasource query string')
+    results_operation_parser = operation_subparser.add_parser(stix_shifter.RESULTS, help="Fetches the results of the data source query")
+    results_operation_parser.add_argument('search_id', help='uuid of executed query')
+    results_operation_parser.add_argument('offset', help='offset of results')
+    results_operation_parser.add_argument('length', help='length of results')
+    status_operation_parser = operation_subparser.add_parser(stix_shifter.STATUS, help="Gets the current status of the query")
+    status_operation_parser.add_argument('search_id', help='uuid of executed query')
+    operation_subparser.add_parser(stix_shifter.IS_ASYNC, help='Checks if the query operation is asynchronous')
+
+    args = parent_parser.parse_args()
 
     if args.command is None:
-        parser.print_help(sys.stderr)
+        parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
     shifter = stix_shifter.StixShifter()
