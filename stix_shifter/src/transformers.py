@@ -124,8 +124,7 @@ class ToDomainName(ValueTransformer):
     def transform(url):
         try:
             parsed_url = urlparse(url)
-            host_name = parsed_url.netloc.split(".")
-            domain_name = ".".join(host_name)
+            domain_name = parsed_url.netloc
             return domain_name
         except ValueError:
             print("Cannot convert input to file name")
