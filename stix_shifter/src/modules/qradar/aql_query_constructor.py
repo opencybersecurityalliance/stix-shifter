@@ -141,7 +141,7 @@ class AqlQueryStringPatternTranslator:
                     if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
                         comparator = self.comparator_lookup[ComparisonComparators.Like]
                         value = self._format_like(expression.value)
-                    
+
                     comparison_string += "{mapped_field} {comparator} {value}".format(
                         mapped_field=mapped_field, comparator=comparator, value=value)
 
@@ -228,14 +228,14 @@ def _test_timestamp(timestamp) -> bool:
     return bool(match)
 
 
-def _convert_timestamps_to_epoch(query_parts):
+def _convert_timestamps_to_milliseconds(query_parts):
     # grab time stamps from array
     start_time = _test_or_add_milliseconds(query_parts[2])
     stop_time = _test_or_add_milliseconds(query_parts[4])
     transformer = TimestampToMilliseconds()
-    epoch_start_time = transformer.transform(start_time)
-    epoch_stop_time = transformer.transform(stop_time)
-    return query_parts[0] + " " + query_parts[1] + " " + str(epoch_start_time) + " " + query_parts[3] + " " + str(epoch_stop_time)
+    millisecond_start_time = transformer.transform(start_time)
+    millisecond_stop_time = transformer.transform(stop_time)
+    return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
 
 
 def _format_split_queries(query_array):
@@ -246,8 +246,8 @@ def _format_split_queries(query_array):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
-    # Transform from human-readable timestamp to epoch time
-    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080
+    # Transform from human-readable timestamp to 13-digit millisecond time
+    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
     formatted_queries = []
     for query in query_array:
         if _test_START_STOP_format(query):
@@ -258,7 +258,7 @@ def _format_split_queries(query_array):
             # Remove None array entries
             query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
             if len(query_parts) == 5:
-                formatted_queries.append(_convert_timestamps_to_epoch(query_parts))
+                formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
             else:
                 logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
                 continue
