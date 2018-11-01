@@ -136,5 +136,6 @@ class ToDomainName(ValueTransformer):
 
 
 def get_all_transformers():
-    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
-            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool, "ToDomainName": ToDomainName}
+    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
+            "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
+            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds}
