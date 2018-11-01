@@ -10,7 +10,7 @@ from stix_shifter.src.patterns.pattern_objects import ObservationExpression, Com
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter.src.patterns.errors import SearchFeatureNotSupportedError
 
-from stix_shifter.src.transformers import TimestampToEpoch, ValueTransformer
+from stix_shifter.src.transformers import TimestampToMilliseconds, ValueTransformer
 
 
 def _fetch_network_protocol_mapping():
@@ -112,7 +112,7 @@ class AqlQueryStringPatternTranslator:
                     raise KeyError(
                         "Network protocol {} is not supported.".format(protocol_key))
             elif stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToEpoch()
+                transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
@@ -232,7 +232,7 @@ def _convert_timestamps_to_epoch(query_parts):
     # grab time stamps from array
     start_time = _test_or_add_milliseconds(query_parts[2])
     stop_time = _test_or_add_milliseconds(query_parts[4])
-    transformer = TimestampToEpoch()
+    transformer = TimestampToMilliseconds()
     epoch_start_time = transformer.transform(start_time)
     epoch_stop_time = transformer.transform(stop_time)
     return query_parts[0] + " " + query_parts[1] + " " + str(epoch_start_time) + " " + query_parts[3] + " " + str(epoch_stop_time)

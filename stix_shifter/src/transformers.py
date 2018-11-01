@@ -39,15 +39,18 @@ class EpochToTimestamp(ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class TimestampToEpoch(ValueTransformer):
-    """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch"""
+class TimestampToMilliseconds(ValueTransformer):
+    """
+    A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) 
+    to 13-digit Unix time (epoch + milliseconds)
+    """
 
     @staticmethod
     def transform(timestamp):
         time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
         epoch = datetime(1970, 1, 1)
-        converted_epoch = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
-        return converted_epoch
+        converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
+        return converted_time
 
 
 class ToInteger(ValueTransformer):
