@@ -72,12 +72,12 @@ def __main__():
     transmit_parser.add_argument(
         'connection',
         type=str,
-        help='Data source Host'
+        help='Data source connection with host, port, and certificate'
     )
     transmit_parser.add_argument(
         'configuration',
         type=str,
-        help='Data source Port'
+        help='Data source authentication'
     )
 
     # operation subparser
@@ -111,8 +111,6 @@ def __main__():
             args.module, args.translate_type, args.data_source, args.data, options=options)
     elif args.command == TRANSMIT:
         result = shifter.transmit(args)
-    else:
-        result = "Must call either 'translate' or 'transmit'."
 
     print(result)
     exit(0)
