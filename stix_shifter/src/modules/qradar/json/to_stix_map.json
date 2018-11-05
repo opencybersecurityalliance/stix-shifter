@@ -112,5 +112,9 @@
     "key": "network-traffic.protocols",
     "object": "nt",
     "transformer": "ToLowercaseArray"
+  },
+  "domainname": {
+    "key": "domain-name.value",
+    "transformer": "ToDomainName"
   }
 }

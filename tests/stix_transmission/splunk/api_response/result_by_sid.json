@@ -1,0 +1,91 @@
+{
+    "preview": false,
+    "init_offset": 0,
+    "messages": [],
+    "fields": [
+        {
+            "name": "tag"
+        },
+        {
+            "name": "_bkt"
+        },
+        {
+            "name": "_cd"
+        },
+        {
+            "name": "_eventtype_color"
+        },
+        {
+            "name": "_indextime"
+        },
+        {
+            "name": "_raw"
+        },
+        {
+            "name": "_serial"
+        },
+        {
+            "name": "_si"
+        },
+        {
+            "name": "_sourcetype"
+        },
+        {
+            "name": "_time"
+        },
+        {
+            "name": "bytes"
+        },
+        {
+            "name": "dest_ip"
+        },
+        {
+            "name": "dest_port"
+        },
+        {
+            "name": "event_count"
+        },
+        {
+            "name": "log_type"
+        },
+        {
+            "name": "src_ip"
+        },
+        {
+            "name": "src_port"
+        },
+        {
+            "name": "transport"
+        },
+        {
+            "name": "user"
+        }
+    ],
+    "results": [
+        {
+            "tag": "network",
+            "_bkt": "shifter~3~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06",
+            "_cd": "3:101",
+            "_eventtype_color": "none",
+            "_indextime": "1535991010",
+            "_raw": "{\n\t\"log_type\": \"network\", \n\t\"bytes\": \"300\", \n\t\"dest_ip\": \"127.0.0.1\", \n\t\"dest_port\": \"80\", \n\t\"src_ip\": \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\", \n\t\"src_port\": \"80\", \n\t\"transport\": \"http\", \n\t\"user\": \"IBM\", \n\t\"event_count\": 1\n}",
+            "_serial": "0",
+            "_si": [
+                "splunk3-01.internal.resilientsystems.com",
+                "shifter"
+            ],
+            "_sourcetype": "_json",
+            "_time": "2018-09-03T16:10:10.000+00:00",
+            "bytes": "300",
+            "dest_ip": "127.0.0.1",
+            "dest_port": "80",
+            "event_count": "1",
+            "log_type": "network",
+            "src_ip": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+            "src_port": "80",
+            "transport": "http",
+            "user": "IBM"
+        }
+    ],
+    "highlighted": {}
+}
