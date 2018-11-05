@@ -134,7 +134,7 @@ class ToDomainName(ValueTransformer):
             domain_name = parsed_url.netloc
             return domain_name
         except ValueError:
-            print("Cannot convert input to file name")
+            print("Cannot convert input to domain name")
 
 
 def get_all_transformers():
