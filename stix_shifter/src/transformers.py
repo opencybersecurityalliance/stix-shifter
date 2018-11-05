@@ -128,6 +128,8 @@ class ToDomainName(ValueTransformer):
     @staticmethod
     def transform(url):
         try:
+            if url is None:
+                return
             parsed_url = urlparse(url)
             domain_name = parsed_url.netloc
             return domain_name
