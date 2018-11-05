@@ -1,6 +1,9 @@
+import logging
 
 from ..base.base_query_translator import BaseQueryTranslator
+from ...patterns.parser import generate_query
 
+logger = logging.getLogger(__name__)
 
 class BigfixQueryTranslator(BaseQueryTranslator):
 
@@ -15,4 +18,11 @@ class BigfixQueryTranslator(BaseQueryTranslator):
         :rtype: str
         """
         # transform query...
+        logger.info("Converting STIX2 Pattern to ariel")
+
+        query_object = generate_query(data)
+        #ADD THE selectors and the mappers selectors for process, files and how hash, filename, map to where clauses
+        #data_model_mapper = qradar_data_mapping.QRadarDataMapper(options)
+        print(query_object)
+
         return data

@@ -23,6 +23,16 @@ Search by name and hash
 ( name of it | "n/a", process id of it as string | "n/a", "sha256", sha256 of image file of it | "n/a", pathname of image file of it | "n/a" ) of processes whose (name of it as lowercase contains "node" as lowercase AND sha256 of image file of it as lowercase = "0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5" as lowercase )
 ```
 
+An Outside OR for STIX I do not think AND makes sense here to have a process with 2 different names.
+
+```
+[process:name = 'node' and file:hashes.sha256 = '0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5'] or [process:name = 'node' and file:hashes.sha256 = '0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5']
+```
+
+```
+( name of it | "n/a", process id of it as string | "n/a", "sha256", sha256 of image file of it | "n/a", pathname of image file of it | "n/a" ) of processes whose ((name of it as lowercase contains "node" as lowercase AND sha256 of image file of it as lowercase = "0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5" as lowercase) or (name of it as lowercase contains "qna" as lowercase AND sha256 of image file of it as lowercase = "33454e4fbe5b8e490512c1f6e8ac9be652341699324ee345cfed0e372a44d2d2" as lowercase))
+```
+
 Name or hash
 ```
 [process:name = 'node' or file:hashes.sha256 = '74c4ff75e3623e64e3d6620864b69ed1d75fa460e520b88edc29cda3db3cdeb5']
