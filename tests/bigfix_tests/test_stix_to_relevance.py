@@ -4,7 +4,7 @@ import unittest
 shifter = stix_shifter.StixShifter()
 
 
-class TestStixToAql(unittest.TestCase, object):
+class TestStixToRelevance(unittest.TestCase, object):
 
     def test_process_query(self):
 
