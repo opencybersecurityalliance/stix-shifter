@@ -3,13 +3,14 @@ from stix_shifter.src.modules.qradar import qradar_data_mapping
 import unittest
 import random
 
-selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
+selections = 'SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
 category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, \
-highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, \
-endtime as endtime, devicetime as devicetime, sourceaddress as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
-destinationaddress as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
-username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
-eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname"
+highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcetypename, \
+LOGSOURCENAME(logsourceid) as logsourcename, starttime as starttime, endtime as endtime, devicetime as devicetime, \
+sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, destinationip as destinationip, \
+destinationport as destinationport, destinationmac as destinationmac, username as username, eventdirection as direction, \
+identityip as identityip, identityhostname as identity_host_name, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, \
+BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname, "File Hash" as filehash'
 
 from_statement = " FROM events "
 
@@ -246,10 +247,26 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(result_limit, timerange)
         parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
-    
+
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
         where_statement = "WHERE domainname LIKE '%example.com%' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_sha256_filehash_query(self):
+        stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
+        options = {"hash_mapping": {"sha-256": [123, 456], "md5": [789]}}
+        query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
+        where_statement = "WHERE (filehash = 'sha256hash' AND (logsourceid = 123 OR logsourceid = 456)) {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'file:hashes.SHA-256', 'comparison_operator': '=', 'value': 'sha256hash'}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_multi_filehash_query(self):
+        stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash'] OR [file:hashes.'MD5' = 'md5hash']"
+        options = {"hash_mapping": {"sha-256": [123, 456], "md5": [789]}}
+        query = shifter.translate('qradar', 'query', '{}', stix_pattern, options)
+        where_statement = "WHERE (filehash = 'sha256hash' AND (logsourceid = 123 OR logsourceid = 456)) OR (filehash = 'md5hash' AND (logsourceid = 789)) {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'file:hashes.SHA-256', 'comparison_operator': '=', 'value': 'sha256hash'}, {'attribute': 'file:hashes.MD5', 'comparison_operator': '=', 'value': 'md5hash'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}

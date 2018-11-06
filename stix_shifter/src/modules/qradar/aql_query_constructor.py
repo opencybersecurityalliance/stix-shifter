@@ -165,6 +165,10 @@ class AqlQueryStringPatternTranslator:
                 # if its a set operator() query construction will be different.
                 if expression.comparator == ComparisonComparators.IsSubSet:
                     comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
+                elif is_file_hash:
+                    # Surrounding parenthesis needed to group hash with logsourceid
+                    comparison_string += "({mapped_field} {comparator} {value})".format(
+                        mapped_field=mapped_field, comparator=comparator, value=value)
                 else:
                     # There's no aql field for domain-name. using Like operator to find domian name from the url
                     if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
