@@ -5,6 +5,9 @@ import re
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
+
 from stix_shifter.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
@@ -43,10 +46,11 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, hash_mapping):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.hash_mapping = hash_mapping
         self.translated = self.parse_expression(pattern)
 
         # Split WHERE statements having a START STOP qualifier: AQL only supports one START STOP qualifier per query.
@@ -103,6 +107,7 @@ class AqlQueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
             original_stix_value = expression.value
+            is_file_hash = bool(re.search("^hashes\.", stix_field))
 
             if stix_field == 'protocols[*]':
                 map_data = _fetch_network_protocol_mapping()
@@ -111,6 +116,26 @@ class AqlQueryStringPatternTranslator:
                 except Exception as protocol_key:
                     raise KeyError(
                         "Network protocol {} is not supported.".format(protocol_key))
+            elif is_file_hash:
+                if self.hash_mapping == {}:
+                    raise AttributeError("Attempted to translate file hash without hash-type mapping")
+                hash_type = stix_field.split(".")[-1].lower()
+                try:
+                    # This will be an array of logsource ids associated to the hash type
+                    log_source_ids = self.hash_mapping[hash_type]
+                    id_count = len(log_source_ids)
+                    hash_string = "'{}' AND (".format(original_stix_value)
+                    for source_id in log_source_ids:
+                        hash_string = hash_string + "logsourceid = {}".format(source_id)
+                        if id_count > 1:
+                            hash_string = hash_string + " OR "
+                            id_count = id_count - 1
+                    hash_string = hash_string + ")"
+                    expression.value = hash_string
+
+                except Exception as hash_key:
+                    raise KeyError(
+                        "File hash {} is not supported.".format(hash_key))
             elif stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
@@ -122,8 +147,12 @@ class AqlQueryStringPatternTranslator:
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-                # Should be in single-quotes
-                value = self._format_equality(expression.value)
+                if is_file_hash:
+                    # No need to format with single quotes since they were added above
+                    value = expression.value
+                else:
+                    # Should be in single-quotes
+                    value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
                 value = self._format_like(expression.value)
@@ -268,8 +297,11 @@ def _format_split_queries(query_array):
     return formatted_queries
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+def translate_pattern(pattern: Pattern, data_model_mapping, options):
+    result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
+    timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
+    hash_mapping = options['hash_mapping'] if 'hash_mapping' in options else {}
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, hash_mapping)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     for where_statement in translated_where_statements.queries:
