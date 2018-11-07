@@ -6,8 +6,8 @@ import random
 selections = "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, \
 category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, \
 highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, \
-endtime as endtime, devicetime as devicetime, sourceip as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
-destinationip as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
+endtime as endtime, devicetime as devicetime, sourceaddress as sourceip, sourceport as sourceport, sourcemac as sourcemac, \
+destinationaddress as destinationip, destinationport as destinationport, destinationmac as destinationmac, \
 username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, \
 eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname"
 
@@ -47,10 +47,10 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_ipv6_query(self):
-        stix_pattern = "[ipv6-addr:value = '192.168.122.83']"
+        stix_pattern = "[ipv6-addr:value = '3001:0:0:0:0:0:0:2']"
         query = shifter.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(default_limit, default_time)
-        parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
+        where_statement = "WHERE (sourceip = '3001:0:0:0:0:0:0:2' OR destinationip = '3001:0:0:0:0:0:0:2') {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': '3001:0:0:0:0:0:0:2'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_url_query(self):
