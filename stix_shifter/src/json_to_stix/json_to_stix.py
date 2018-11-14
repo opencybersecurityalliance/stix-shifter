@@ -3,6 +3,7 @@ import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter.src import transformers
+from stix_shifter.src.modules.qradar import qradar_json_to_stix_translator
 
 # Concrete BaseResultTranslator
 
@@ -31,7 +32,11 @@ class JSONToStix(BaseResultTranslator):
         else:
             map_data = self.mapping_json
 
-        results = json_to_stix_translator.convert_to_stix(data_source, map_data,
-                                                          json_data, transformers.get_all_transformers(), options)
+        if data_source.get('name') == 'QRadar':
+            results = qradar_json_to_stix_translator.convert_to_stix(data_source, map_data,
+                                                                     json_data, transformers.get_all_transformers(), options)
+        else:
+            results = json_to_stix_translator.convert_to_stix(data_source, map_data,
+                                                              json_data, transformers.get_all_transformers(), options)
 
         return json.dumps(results, indent=4, sort_keys=False)
