@@ -1,5 +1,8 @@
+from stix_shifter.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+from stix_shifter.src.transformers import TimestampToMilliseconds
 import logging
-import datetime
 import json
 import re
 
@@ -7,13 +10,6 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
-
-from stix_shifter.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.src.patterns.errors import SearchFeatureNotSupportedError
-
-from stix_shifter.src.transformers import TimestampToMilliseconds, ValueTransformer
 
 
 def _fetch_network_protocol_mapping():
