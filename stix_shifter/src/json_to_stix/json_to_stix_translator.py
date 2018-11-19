@@ -4,6 +4,7 @@ import uuid
 
 from . import observable
 from stix2validator import validate_instance, print_results
+from stix_shifter.src.modules.qradar import qradar_utils
 
 
 # convert JSON data to STIX object using map_data and transformers
@@ -34,6 +35,7 @@ class DataSourceObjToStixObj:
         self.identity_id = identity_id
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
+        self.hash_options = options.get('hash_options', {})
 
         # parse through options
         self.stix_validator = options.get('stix_validator', False)
@@ -138,11 +140,24 @@ class DataSourceObjToStixObj:
             'objects': {}
         }
 
+        if self.hash_options:
+            hash_types, log_source_id_map, generic_hash_name, hash_type_values = qradar_utils.parse_hash_options(self.hash_options, obj)
         # create normal type objects
         for ds_key in obj:
             if ds_key not in ds_map:
                 logging.debug('{} is not found in map, skipping'.format(ds_key))
                 continue
+
+            generic_hash_key = ''
+            # Check and handle file hash of unknown type
+            if self.hash_options:
+                try:
+                    generic_hash_key = qradar_utils.lookup_hash_with_logsource_id(
+                        obj, ds_key, hash_types, log_source_id_map,
+                        generic_hash_name, hash_type_values)
+                except(Exception):
+                    continue
+
             # get the stix keys that are mapped
             ds_key_def_obj = self.ds_to_stix_map[ds_key]
             ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
@@ -150,8 +165,10 @@ class DataSourceObjToStixObj:
                 if ds_key_def is None or 'key' not in ds_key_def:
                     logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
                     continue
-
-                key_to_add = ds_key_def['key']
+                if generic_hash_key:
+                    key_to_add = generic_hash_key
+                else:
+                    key_to_add = ds_key_def['key']
                 transformer = transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
                 if ds_key_def.get('cybox', self.cybox_default):

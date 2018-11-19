@@ -105,7 +105,6 @@ class AqlQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
-            is_file_hash = bool(re.search("^hashes\.", stix_field))
 
             if stix_field == 'protocols[*]':
                 map_data = _fetch_network_protocol_mapping()
