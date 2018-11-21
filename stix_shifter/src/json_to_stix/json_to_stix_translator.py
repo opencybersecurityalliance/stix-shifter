@@ -4,12 +4,11 @@ import uuid
 
 from . import observable
 from stix2validator import validate_instance, print_results
-from stix_shifter.src.modules.qradar import qradar_utils
 
 
 # convert JSON data to STIX object using map_data and transformers
 
-def convert_to_stix(data_source, map_data, data, transformers, options):
+def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
@@ -19,7 +18,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     identity_id = data_source['id']
     bundle['objects'] += [data_source]
 
-    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options)
+    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, callback)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
@@ -31,11 +30,12 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
 
 class DataSourceObjToStixObj:
 
-    def __init__(self, identity_id, ds_to_stix_map, transformers, options):
+    def __init__(self, identity_id, ds_to_stix_map, transformers, options, callback=None):
         self.identity_id = identity_id
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
-        self.hash_options = options.get('hash_options', {})
+        self.options = options
+        self.callback = callback
 
         # parse through options
         self.stix_validator = options.get('stix_validator', False)
@@ -140,8 +140,6 @@ class DataSourceObjToStixObj:
             'objects': {}
         }
 
-        if self.hash_options:
-            hash_types, log_source_id_map, generic_hash_name, hash_type_values = qradar_utils.parse_hash_options(self.hash_options, obj)
         # create normal type objects
         for ds_key in obj:
             if ds_key not in ds_map:
@@ -149,12 +147,10 @@ class DataSourceObjToStixObj:
                 continue
 
             generic_hash_key = ''
-            # Check and handle file hash of unknown type
-            if self.hash_options:
+            # Use callback function to run logic specific to the data source
+            if self.callback:
                 try:
-                    generic_hash_key = qradar_utils.lookup_hash_with_logsource_id(
-                        obj, ds_key, hash_types, log_source_id_map,
-                        generic_hash_name, hash_type_values)
+                    generic_hash_key = self.callback(obj, ds_key, self.options)
                 except(Exception):
                     continue
 

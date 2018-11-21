@@ -2,7 +2,8 @@ class FileHashLookupException(Exception):
     pass
 
 
-def parse_hash_options(hash_options, obj):
+def hash_type_lookup(obj, ds_key, options):
+    hash_options = options.get('hash_options', {})
     hash_types = hash_options.get('types', [])
     log_source_id_map = hash_options.get('log_source_id_map', {})
     generic_hash_name = hash_options.get('generic_name', '')
@@ -11,10 +12,6 @@ def parse_hash_options(hash_options, obj):
     for type in hash_types:
         if type in obj:
             hash_type_values.append(obj[type])
-    return hash_types, log_source_id_map, generic_hash_name, hash_type_values
-
-
-def lookup_hash_with_logsource_id(obj, ds_key, hash_types, log_source_id_map, generic_hash_name, hash_type_values):
     if not generic_hash_name or ds_key != generic_hash_name:
         return ''
     else:
