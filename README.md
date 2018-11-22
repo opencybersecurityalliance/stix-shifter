@@ -1,5 +1,19 @@
 # stix-shifter
 
+#### Table of Contents
+
+[Introduction](#introduction)<br/>
+[How to Use](#usage)<br/>
+[Translation](#translation)<br/>
+[Transmission](#transmission)<br/>
+[Contributing](#contributing)<br/>
+[Creating a new module](#creating_new_module)<br/>
+[Licencing](#licensing)
+
+<a name="introduction" href="#"></a>
+
+# Introduction
+
 This project consists of an open source library allowing software to connect to products that house data repositories using STIX Patterning, and return results as STIX Observations.
 
 Requires Python 3.6
@@ -25,11 +39,22 @@ You may want to use this library and/or contribute to development, if any of the
 - You are a vendor or project owner who has data that could be made available, and you want to contribute an adapter
 - You just want to help make the world a safer place!
 
+<a name="usage" href="#"></a>
+
 # How to use
 
-## Converting from STIX Patterns to data source queries (query) or from data source results to STIX cyber observables (results)
+Stix-shifter handles two primary functions:
 
-### Call the stix_shifter in the format of
+1. **Translation:** Stix-shifter translates STIX patterns into data source queries (in whatever query language the data source may use) and from data source results into bundled STIX observation objects (very similar to JSON).
+2. **Transmission:** Passes in authentication credentials to connect to a data source where stix-shifter can then ping or query the data source or fetch the query status and results.
+
+<a name="translation" href="#"></a>
+
+## Translation
+
+### Converting from STIX Patterns to data source queries (query) or from data source results to STIX cyber observables (results)
+
+#### Call the stix_shifter in the format of
 
 ```
 usage: stix_shifter.py translate [-h]
@@ -47,9 +72,32 @@ optional arguments:
   -x                    run STIX validation on each observable as it's written to the output JSON
 ```
 
-## Connecting to a data source
+### Translation is called with the following ordered parameters:
 
-### Call the stix_shifter in the format of
+```
+<data source (ie. "qradar")> <"query" or "results"> <{} or STIX identity object> <STIX pattern or data source results> <options>
+```
+
+**Data source:** This will be the name of the module used for translation. Currently stix-shifter supports QRadar, Splunk, and Elastic.
+
+**Query or Results:** This argument controls if stix-shifter is translating from a STIX pattern to the data source query, or it it’s translating from the data source results to a STIX bundle of observation objects
+
+**STIX Identity object:** An Identity object is used by stix-shifter to represent a data source and is inserted at the top of a returned observation bundle. Each observation in the bundle gets referenced to this identity. This parameter is only needed when converting from the data source results to the STIX bundle. When converting from a pattern to a query, pass this in as an empty hash.
+
+**STIX Pattern or data source results:** The input getting translated by stix-shifter.
+
+**Options:** Options arguments come in as:
+
+- **"select_fields":** string array of fields in the data source select statement
+- **"mapping":** mapping hash for either stix pattern to data source or data results to STIX observation objects
+- **"result_limit":** integer to limit number or results in the data source query
+- **"time_range":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
+
+<a name="transmission" href="#"></a>
+
+## Transmission
+
+#### Call the stix_shifter in the format of
 
 ```
 usage: stix_shifter.py transmit [-h]
@@ -71,6 +119,58 @@ optional arguments:
   -h, --help            show this help message and exit
 ```
 
+### Transmission is called with the following ordered parameters:
+
+```
+<Data Source (ie. "qradar")> <Connection Params: '{"host":"host ip address", "port":"port number", "cert":"certificate"}'> <'{"auth": {authentication}}'> <Transmission Operation: ping, query, status, results or is_async> <Operation input>
+```
+
+**Data source:** This will be the name of the module used for transmission. Currently stix-shifter supports QRadar, Splunk, and Bigfix.
+
+**Connection Parameters:** Data source IP, port, and certificate
+
+**Data source authentication:** Authentication hash
+
+**Transmission Operation:** The transmission function being called. Transmission functions include:
+
+- **Ping:** ping the data source
+- **Query:** Execute a query on the data source. The input is the native data source query (after it has been translated from the STIX pattern).
+- **Status:** Check the status of the executed query. The input is the query UUID.
+- **Results:** Fetch the results from the query. The input is the query UUID, offset, and length
+- **Is Async**
+
+### Examples of using transmission from the CLI
+
+#### Ping
+
+```
+python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec uid..5678"}}' ping
+```
+
+#### Query (AQL)
+
+```
+python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' query "select * from events limit 100"
+```
+
+#### Status
+
+```
+python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' status "uuid-12345"
+```
+
+#### Results
+
+```
+python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' results "uuid-12345" <offset> <length>
+```
+
+#### Is Async
+
+```
+python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' is_async
+```
+
 ### Example of converting a STIX pattern to an IBM QRadar AQL query:
 
 [See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
@@ -79,13 +179,17 @@ optional arguments:
 
 [See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
 
+<a name="contributing" href="#"></a>
+
 # Contributing
 
 We are thrilled you are considering contributing! We welcome all contributors.
 
 Please read our [guidelines for contributing](CONTRIBUTING.md).
 
-## Creating new translator modules
+<a name="creating_new_module" href="#"></a>
+
+# Creating new translator modules
 
 To create a new module that can be used when importing stix-shifter, follow these steps:
 
@@ -95,8 +199,10 @@ To create a new module that can be used when importing stix-shifter, follow thes
   - In `<module-name>_translator.py`, define a class named `Translator` and have it extend `BaseTranslator` from `stix-shifter/src/modules/base/base_translator.py`. (You can use `stix-shifter/src/modules/dummy/dummy_translator.py` as an example)
   - In `__init__` you need to assign `self.result_translator` and `self.query_translator` to the appropriate query and result translator you want your module to use. For example the QRadar translator uses `JSONToStix` as its result translator and `StixToAQL` as its query translator
   - You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `stix-shifter/src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `stix-shifter/src/modules/dummy/`
-- Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` method
+- Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` function
 - IMPORTANT: If you're including any json data files in your module, be sure to include the path in `MANIFEST.in` so that it's included in the packaging
+
+<a name="licensing" href="#"></a>
 
 # Licensing
 
