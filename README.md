@@ -93,6 +93,89 @@ optional arguments:
 - **"result_limit":** integer to limit number or results in the data source query
 - **"time_range":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
 
+## Example of converting a STIX pattern to (AQL) query
+
+**Running the following:**
+
+```
+python main.py translate qradar query \
+'{}' \
+"[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00.123Z' STOP t'2016-06-01T01:11:11.123Z'"
+```
+
+**Will return:**
+
+```
+{
+  "queries": [
+    "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, endtime as endtime, devicetime as devicetime, sourceaddress as sourceip, sourceport as sourceport, sourcemac as sourcemac, destinationaddress as destinationip, destinationport as destinationport, destinationmac as destinationmac, username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname FROM events WHERE destinationport = '635' AND sourceport = '37020' limit 10000 START 1464739200123 STOP 1464743471123"
+  ],
+  "parsed_stix": [
+    {
+      "attribute": "network-traffic:dst_port",
+      "comparison_operator": "=",
+      "value": 635
+    },
+    {
+      "attribute": "network-traffic:src_port",
+      "comparison_operator": "=",
+      "value": 37020
+    }
+  ]
+}
+```
+
+## Example of converting (QRadar) data to a STIX bundle
+
+**Running the following:**
+
+```
+python main.py translate qradar results \
+'{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
+'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' \
+```
+
+**Will return:**
+
+```
+{
+    "type": "bundle",
+    "id": "bundle--db4e0730-c5e3-4b72-9339-87ed7b1cf415",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "QRadar",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--4eec7558-2016-464a-9ab7-5f7e263f2942",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "192.0.2.0"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": "0123"
+                },
+                "2": {
+                    "type": "file",
+                    "name": "someFile.exe"
+                },
+                "3": {
+                    "type": "user-account",
+                    "user_id": "root"
+                }
+            }
+        }
+    ]
+}
+```
+
 <a name="transmission" href="#"></a>
 
 ## Transmission
