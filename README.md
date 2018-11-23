@@ -3,14 +3,12 @@
 #### Table of Contents
 
 [Introduction](#introduction)<br/>
-[How to Use](#usage)<br/>
+[How to use](#How-to-use)<br/>
 [Translation](#translation)<br/>
 [Transmission](#transmission)<br/>
 [Contributing](#contributing)<br/>
-[Creating a new module](#creating_new_module)<br/>
+[Creating new modules](#creating-new-modules)<br/>
 [Licencing](#licensing)
-
-<a name="introduction" href="#"></a>
 
 # Introduction
 
@@ -39,16 +37,12 @@ You may want to use this library and/or contribute to development, if any of the
 - You are a vendor or project owner who has data that could be made available, and you want to contribute an adapter
 - You just want to help make the world a safer place!
 
-<a name="usage" href="#"></a>
-
 # How to use
 
 Stix-shifter handles two primary functions:
 
 1. **Translation:** Stix-shifter translates STIX patterns into data source queries (in whatever query language the data source may use) and from data source results into bundled STIX observation objects (very similar to JSON).
 2. **Transmission:** Passes in authentication credentials to connect to a data source where stix-shifter can then ping or query the data source or fetch the query status and results.
-
-<a name="translation" href="#"></a>
 
 ## Translation
 
@@ -176,8 +170,6 @@ python main.py translate qradar results \
 }
 ```
 
-<a name="transmission" href="#"></a>
-
 ## Transmission
 
 #### Call the stix_shifter in the format of
@@ -262,17 +254,13 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 
 [See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
 
-<a name="contributing" href="#"></a>
-
 # Contributing
 
 We are thrilled you are considering contributing! We welcome all contributors.
 
 Please read our [guidelines for contributing](CONTRIBUTING.md).
 
-<a name="creating_new_module" href="#"></a>
-
-# Creating new translator modules
+# Creating new modules
 
 To create a new module that can be used when importing stix-shifter, follow these steps:
 
@@ -284,8 +272,6 @@ To create a new module that can be used when importing stix-shifter, follow thes
   - You can write your own query and result translators as well, they must be based off of `BaseQueryTranslator` and `BaseResultTranslator` found in `stix-shifter/src/modules/base/`. Again, you can use the dummy module as a decent example on how to setup the concrete classes found in `stix-shifter/src/modules/dummy/`
 - Once you have this all set up you can invoke your module by running `stix_shifter.py` and passing in your translator module name as the first parameter. The second parameter `query or result` determines if your module runs the query or result translator. The third parameter `data` is passed into your translator as the data that will be translated. If you've imported `stix_shifter.py` into other python code, you can invoke it by running the `translate(module, translation_type, data)` function
 - IMPORTANT: If you're including any json data files in your module, be sure to include the path in `MANIFEST.in` so that it's included in the packaging
-
-<a name="licensing" href="#"></a>
 
 # Licensing
 
