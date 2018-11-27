@@ -19,7 +19,7 @@ def hash_type_lookup(obj, ds_key, options):
             raise FileHashLookupException("Generic hash value already exists in specific hash-type result")
         else:
             # Determine hash type based on log source ID map
-            logsourceid = obj.get('logsourceid', '')
+            logsourceid = str(obj.get('logsourceid', ''))
             if not logsourceid or logsourceid not in log_source_id_map:
                 raise FileHashLookupException('Unable to determine type of file hash based on log source ID.')
             else:

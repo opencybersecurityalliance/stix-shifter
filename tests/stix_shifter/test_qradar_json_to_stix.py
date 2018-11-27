@@ -210,7 +210,7 @@ class TestTransform(object):
             "sha256hash": "someSHA-256hash",
             "sha1hash": "someSHA-1hash",
             "md5hash": "someMD5hash",
-            "logsourceid": "65"
+            "logsourceid": 65
         }]
 
         data_string = json.dumps(data)
@@ -246,7 +246,7 @@ class TestTransform(object):
         data = [{
             "sha256hash": "someSHA-256hash",
             "filehash": "unknownTypeHash",
-            "logsourceid": "65"
+            "logsourceid": 65
         }]
 
         data_string = json.dumps(data)
@@ -287,7 +287,7 @@ class TestTransform(object):
         data = [{
             "sha256hash": "someSHA-256hash",
             "filehash": "unknownTypeHash",
-            "logsourceid": "123"
+            "logsourceid": 123
         }]
 
         data_string = json.dumps(data)
