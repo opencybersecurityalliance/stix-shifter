@@ -63,11 +63,13 @@ class TestTransform(object):
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name, "domainname": url}
+        source_mac = "00-00-5E-00-53-00"
+        destination_mac = "00-00-5A-00-55-01"
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationemac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
-
+        # print(result_bundle)
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -75,8 +77,10 @@ class TestTransform(object):
 
         assert('objects' in observed_data)
         objects = observed_data['objects']
+        print(objects)
 
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
+        print(nt_object)
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
                {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
@@ -123,7 +127,7 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
 
-        assert(objects.keys() == set(map(str, range(0, 8))))
+        assert(objects.keys() == set(map(str, range(0, 11))))
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
