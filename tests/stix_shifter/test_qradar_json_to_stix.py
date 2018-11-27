@@ -69,7 +69,6 @@ class TestTransform(object):
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
-        # print(result_bundle)
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -77,10 +76,8 @@ class TestTransform(object):
 
         assert('objects' in observed_data)
         objects = observed_data['objects']
-        print(objects)
 
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
-        print(nt_object)
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
                {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})

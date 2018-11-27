@@ -95,7 +95,6 @@ class DataSourceObjToStixObj:
             for obj_name_index in obj_name:
                 if obj_name_index in obj_name_map:
                     obj = objs_dir[obj_name_map[obj_name_index]]
-                    # DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
                 else:
                     obj = {'type': obj_type}
                     obj_dir_key = str(len(objs_dir))
