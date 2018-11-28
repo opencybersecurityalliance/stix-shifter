@@ -253,7 +253,6 @@ class TestTransform(object):
 
         options = {
             "hash_options": {
-                "types": ["sha256hash"],
                 "generic_name": "filehash",
                 "log_source_id_map": {"2345": "sha-256", "65": "md5"}
             }
@@ -294,7 +293,6 @@ class TestTransform(object):
 
         options = {
             "hash_options": {
-                "types": ["sha256hash"],
                 "generic_name": "filehash",
                 "log_source_id_map": {"2345": "sha-256", "65": "md5"}
             }
