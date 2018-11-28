@@ -1,5 +1,4 @@
 import re
-import logging
 import uuid
 
 from . import observable
@@ -54,7 +53,7 @@ class DataSourceObjToStixObj:
         :return: the resulting STIX value
         """
         if ds_key not in obj:
-            logging.debug('{} not found in object'.format(ds_key))
+            print('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
         if transformer is not None:
@@ -143,7 +142,7 @@ class DataSourceObjToStixObj:
         # create normal type objects
         for ds_key in obj:
             if ds_key not in ds_map:
-                logging.debug('{} is not found in map, skipping'.format(ds_key))
+                print('{} is not found in map, skipping'.format(ds_key))
                 continue
 
             generic_hash_key = ''
@@ -159,7 +158,7 @@ class DataSourceObjToStixObj:
             ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
             for ds_key_def in ds_key_def_list:
                 if ds_key_def is None or 'key' not in ds_key_def:
-                    logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
+                    print('{} is not valid (None, or missing key)'.format(ds_key_def))
                     continue
                 if generic_hash_key:
                     key_to_add = generic_hash_key
