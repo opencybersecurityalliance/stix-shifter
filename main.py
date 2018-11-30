@@ -1,6 +1,6 @@
 import argparse
 import sys
-from stix_shifter import stix_shifter
+from stix_shifter.stix_translation import stix_translation
 import json
 
 
@@ -45,9 +45,9 @@ def __main__():
 
     # positional arguments
     translate_parser.add_argument(
-        'module', choices=stix_shifter.TRANSLATION_MODULES, help='what translation module to use')
+        'module', choices=stix_translation.TRANSLATION_MODULES, help='what translation module to use')
     translate_parser.add_argument('translate_type', choices=[
-        stix_shifter.RESULTS, stix_shifter.QUERY], help='what translation action to perform')
+        stix_translation.RESULTS, stix_translation.QUERY], help='what translation action to perform')
     translate_parser.add_argument(
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
@@ -66,7 +66,7 @@ def __main__():
 
     # positional arguments
     transmit_parser.add_argument(
-        'module', choices=stix_shifter.TRANSMISSION_MODULES,
+        'module', choices=stix_translation.TRANSMISSION_MODULES,
         help='choose which connection module to use'
     )
     transmit_parser.add_argument(
@@ -82,16 +82,16 @@ def __main__():
 
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
-    operation_subparser.add_parser(stix_shifter.PING, help="Pings the data source")
-    query_operation_parser = operation_subparser.add_parser(stix_shifter.QUERY, help="Executes a query on the data source")
+    operation_subparser.add_parser(stix_translation.PING, help="Pings the data source")
+    query_operation_parser = operation_subparser.add_parser(stix_translation.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
-    results_operation_parser = operation_subparser.add_parser(stix_shifter.RESULTS, help="Fetches the results of the data source query")
+    results_operation_parser = operation_subparser.add_parser(stix_translation.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
-    status_operation_parser = operation_subparser.add_parser(stix_shifter.STATUS, help="Gets the current status of the query")
+    status_operation_parser = operation_subparser.add_parser(stix_translation.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
-    operation_subparser.add_parser(stix_shifter.IS_ASYNC, help='Checks if the query operation is asynchronous')
+    operation_subparser.add_parser(stix_translation.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     args = parent_parser.parse_args()
 
@@ -99,7 +99,7 @@ def __main__():
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
-    shifter = stix_shifter.StixShifter()
+    shifter = stix_translation.StixTranslation()
 
     if args.command == TRANSLATE:
         options = json.loads(args.options) if bool(args.options) else {}

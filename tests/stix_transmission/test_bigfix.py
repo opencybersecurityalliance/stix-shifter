@@ -1,4 +1,4 @@
-from stix_transmission.src.modules.bigfix import bigfix_connector
+from stix_shifter.stix_transmission.src.modules.bigfix import bigfix_connector
 from unittest.mock import patch
 import unittest
 
@@ -44,7 +44,7 @@ connection = {
 }
 
 
-@patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.__init__', autospec=True)
+@patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.__init__', autospec=True)
 class TestBigfixConnection(unittest.TestCase):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
@@ -53,7 +53,7 @@ class TestBigfixConnection(unittest.TestCase):
         check_async = module.Connector(connection, config).is_async
         assert check_async
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
     def test_ping_endpoint_good_return(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = MockHttpResponse('/api/clientquery')
@@ -66,7 +66,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in ping_response
         assert ping_response['success']
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
     def test_ping_endpoint_not_working_return(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = MockHttpResponse('/missing')
@@ -79,7 +79,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in ping_response
         assert ping_response['success'] == False
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = MockHttpResponse('/exception')
@@ -94,7 +94,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert ping_response['success'] == False
         assert ping_response['error'] is not None
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
     def test_ping_endpoint_bad_return_code(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = MockHttpResponse('/exception')
@@ -108,7 +108,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert ping_response['success'] == False
         assert ping_response['error'] is not None
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
     def test_query_response_found(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         big_fix_return_value = '<?xml version="1.0" encoding="UTF-8"?>'\
@@ -133,7 +133,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "105"
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
     def test_query_response_not_found(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         big_fix_return_value = 'big fix did not return proper value'
@@ -153,7 +153,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "UNKNOWN"
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
     def test_query_response_exception(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         big_fix_return_value = 'big fix did not return proper value'
@@ -172,7 +172,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert query_response['success'] == False
         assert 'error' in query_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
     def test_query_response_bad_return_code(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         big_fix_return_value = 'big fix did not return proper value'
@@ -189,8 +189,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert query_response['success'] == False
         assert 'error' in query_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_completed(self, mock_sync_query_results, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -214,8 +214,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_running(self, mock_sync_query_results, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -239,8 +239,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_running_50_complete(self, mock_sync_query_results, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -264,8 +264,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 50
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_running_75_complete(self, mock_sync_query_results, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -289,8 +289,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 75
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_error(self, mock_sync_query_results, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -314,8 +314,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_running_bad_client_query(self, mock_sync_query_results, mock_status_response,
                                                       mock_api_client):
         mock_api_client.return_value = None
@@ -340,8 +340,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_error_exception_status(self, mock_sync_query_results, mock_status_response,
                                              mock_api_client):
         mock_api_client.return_value = None
@@ -365,8 +365,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'error' in status_response
         assert 'progress' not in status_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_error_exception_result(self, mock_sync_query_results, mock_status_response,
                                              mock_api_client):
         mock_api_client.return_value = None
@@ -389,8 +389,8 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'error' in status_response
         assert 'progress' not in status_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
     def test_status_response_error_exception_result_bad_return_code(self, mock_sync_query_results,
                                                                     mock_status_response,
                                                                     mock_api_client):
@@ -425,7 +425,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] == True
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response(self, mock_results_response, mock_api_client):
 
         mock_api_client.return_value = None
@@ -464,7 +464,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'data' in results_response
         assert len(results_response['data']) == 2
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_exeception(self, mock_results_response, mock_api_client):
 
         mock_api_client.return_value = None
@@ -482,7 +482,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert results_response['success'] == False
         assert 'error' in results_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_bad_return_code(self, mock_results_response, mock_api_client):
 
         mock_api_client.return_value = None
@@ -520,7 +520,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert results_response['success'] == False
         assert 'error' in results_response
 
-    @patch('stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_bad_json(self, mock_results_response, mock_api_client):
 
         mock_api_client.return_value = None

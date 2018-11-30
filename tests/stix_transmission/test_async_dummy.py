@@ -1,5 +1,5 @@
-from stix_transmission.src.modules.async_dummy import async_dummy_connector
-from stix_transmission.src.modules.base.base_status_connector import Status
+from stix_shifter.stix_transmission.src.modules.async_dummy import async_dummy_connector
+from stix_shifter.stix_transmission.src.modules.base.base_status_connector import Status
 import unittest
 
 
