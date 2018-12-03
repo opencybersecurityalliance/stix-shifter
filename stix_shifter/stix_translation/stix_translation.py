@@ -3,12 +3,10 @@ from stix_shifter.stix_translation.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
 from stix_shifter.stix_translation.src.stix_pattern_parser import stix_pattern_parser
 import re
-from stix_shifter.stix_transmission import stix_transmission
 import json
 
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
@@ -76,44 +74,3 @@ class StixTranslation:
             return interface.translate_results(data_source, data, options)
         else:
             raise NotImplementedError
-
-    def transmit(self, args):
-        """
-        Connects to datasource and executes a query, grabs status update or query results
-        :param args:
-        args: <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
-        <
-            query <query string>,
-            status <search id>,
-            results <search id> <offset> <length>,
-            ping,
-            is_async
-        >
-        """
-        connection_dict = json.loads(args.connection)
-        configuration_dict = json.loads(args.configuration)
-        operation_command = args.operation_command
-
-        connector = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
-
-        if operation_command == QUERY:
-            query = args.query_string
-            result = connector.query(query)
-        elif operation_command == STATUS:
-            search_id = args.search_id
-            result = connector.status(search_id)
-        elif operation_command == RESULTS:
-            search_id = args.search_id
-            offset = args.offset
-            length = args.length
-            result = connector.results(search_id, offset, length)
-        elif operation_command == DELETE:
-            search_id = args.search_id
-            result = connector.delete(search_id)
-        elif operation_command == PING:
-            result = connector.ping()
-        elif operation_command == IS_ASYNC:
-            result = connector.is_async()
-        else:
-            raise NotImplementedError
-        return result

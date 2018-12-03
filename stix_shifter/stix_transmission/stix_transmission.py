@@ -1,10 +1,13 @@
 import importlib
 
 
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix']
+
+
 class StixTransmission:
     def __init__(self, module, connection, configuration):
 
-        self.connector_module = importlib.import_module("stix_transmission.src.modules." + module +
+        self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
                                                         "." + module + "_connector")
         self.interface = self.connector_module.Connector(connection, configuration)
 

@@ -1,11 +1,18 @@
 import argparse
 import sys
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter.stix_transmission import stix_transmission
 import json
 
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
+RESULTS = 'results'
+QUERY = 'query'
+DELETE = 'delete'
+STATUS = 'status'
+PING = 'ping'
+IS_ASYNC = 'is_async'
 
 
 def __main__():
@@ -66,7 +73,7 @@ def __main__():
 
     # positional arguments
     transmit_parser.add_argument(
-        'module', choices=stix_translation.TRANSMISSION_MODULES,
+        'module', choices=stix_transmission.TRANSMISSION_MODULES,
         help='choose which connection module to use'
     )
     transmit_parser.add_argument(
@@ -99,7 +106,6 @@ def __main__():
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
-    shifter = stix_translation.StixTranslation()
 
     if args.command == TRANSLATE:
         options = json.loads(args.options) if bool(args.options) else {}
@@ -107,13 +113,56 @@ def __main__():
             options['stix_validator'] = args.stix_validator
         if args.data_mapper:
             options['data_mapper'] = args.data_mapper
-        result = shifter.translate(
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate(
             args.module, args.translate_type, args.data_source, args.data, options=options)
     elif args.command == TRANSMIT:
-        result = shifter.transmit(args)
+        result = transmit(args) # stix_transmission
 
     print(result)
     exit(0)
+
+
+def transmit(args):
+    """
+    Connects to datasource and executes a query, grabs status update or query results
+    :param args:
+    args: <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
+    <
+        query <query string>,
+        status <search id>,
+        results <search id> <offset> <length>,
+        ping,
+        is_async
+    >
+    """
+    connection_dict = json.loads(args.connection)
+    configuration_dict = json.loads(args.configuration)
+    transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
+
+    operation_command = args.operation_command
+    if operation_command == QUERY:
+        query = args.query_string
+        result = transmission.query(query)
+    elif operation_command == STATUS:
+        search_id = args.search_id
+        result = transmission.status(search_id)
+    elif operation_command == RESULTS:
+        search_id = args.search_id
+        offset = args.offset
+        length = args.length
+        result = transmission.results(search_id, offset, length)
+    elif operation_command == DELETE:
+        search_id = args.search_id
+        result = transmission.delete(search_id)
+    elif operation_command == PING:
+        result = transmission.ping()
+    elif operation_command == IS_ASYNC:
+        result = transmission.is_async()
+    else:
+        raise NotImplementedError
+    return result
 
 
 if __name__ == "__main__":
