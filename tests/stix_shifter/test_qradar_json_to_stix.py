@@ -142,8 +142,14 @@ class TestTransform(object):
         assert(custom_props['log_source_name'] == data['logsourcename'])
 
     def test_custom_mapping(self):
-        data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"QRadar\", \"identity_class\": \"events\"}"
-        data = "[{\"custompayload\": \"SomeBase64Payload\", \"url\": \"www.example.com\", \"filename\": \"somefile.exe\", \"username\": \"someuserid2018\"}]"
+        data_source_string = json.dumps(data_source)
+        data = [{
+            "custompayload": "SomeBase64Payload",
+            "url": "www.example.com",
+            "filename": "somefile.exe",
+            "username": "someuserid2018"
+        }]
+        data_string = json.dumps(data)
 
         options = {"mapping": {
             "username": {"key": "user-account.user_id"},
@@ -154,7 +160,7 @@ class TestTransform(object):
         }}
 
         shifter = stix_shifter.StixShifter()
-        result = shifter.translate('qradar', 'results', data_source, data, options)
+        result = shifter.translate('qradar', 'results', data_source_string, data_string, options)
         result_bundle = json.loads(result)
 
         result_bundle_objects = result_bundle['objects']
@@ -195,3 +201,121 @@ class TestTransform(object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         assert(objects == {})
+
+    def test_file_hash_mapping_with_type(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filename": "somefile.exe",
+            "sha256hash": "someSHA-256hash",
+            "sha1hash": "someSHA-1hash",
+            "md5hash": "someMD5hash",
+            "logsourceid": 65
+        }]
+
+        data_string = json.dumps(data)
+
+        shifter = stix_shifter.StixShifter()
+        result = shifter.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        assert('hashes' in file_object), 'file object did not contain hashes'
+        assert('name' in file_object), 'file object did not contain name'
+        assert('type' in file_object), 'file object did not contain type'
+        assert(file_object['type'] == 'file'), 'file object had the wrong type'
+        assert(file_object['name'] == 'somefile.exe'), 'file object did not contain the expected name'
+        hashes = file_object['hashes']
+        assert('SHA-256' in hashes), 'SHA-256 hash not included'
+        assert('SHA-1' in hashes), 'SHA-1 hash not included'
+        assert('MD5' in hashes), 'MD5 hash not included'
+        assert(hashes['SHA-256'] == 'someSHA-256hash')
+        assert(hashes['SHA-1'] == 'someSHA-1hash')
+        assert(hashes['MD5'] == 'someMD5hash')
+
+    def test_hashtype_lookup_with_matching_logsource_id(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "sha256hash": "someSHA-256hash",
+            "filehash": "unknownTypeHash",
+            "logsourceid": 65
+        }]
+
+        data_string = json.dumps(data)
+
+        options = {
+            "hash_options": {
+                "generic_name": "filehash",
+                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
+            }
+        }
+
+        shifter = stix_shifter.StixShifter()
+        result = shifter.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        assert('hashes' in file_object), 'file object did not contain hashes'
+        assert('type' in file_object), 'file object did not contain type'
+        assert(file_object['type'] == 'file'), 'file object had the wrong type'
+        hashes = file_object['hashes']
+        assert('SHA-256' in hashes), 'SHA-256 hash not included'
+        assert('MD5' in hashes), 'MD5 hash not included'
+        assert('SHA-1' not in hashes), 'SHA-1 hash included'
+        assert(hashes['SHA-256'] == 'someSHA-256hash')
+        assert(hashes['MD5'] == 'unknownTypeHash')
+
+    def test_hashtype_lookup_without_matching_logsource_id(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "sha256hash": "someSHA-256hash",
+            "filehash": "unknownTypeHash",
+            "logsourceid": 123
+        }]
+
+        data_string = json.dumps(data)
+
+        options = {
+            "hash_options": {
+                "generic_name": "filehash",
+                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
+            }
+        }
+
+        shifter = stix_shifter.StixShifter()
+        result = shifter.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        assert('hashes' in file_object), 'file object did not contain hashes'
+        assert('type' in file_object), 'file object did not contain type'
+        assert(file_object['type'] == 'file'), 'file object had the wrong type'
+        hashes = file_object['hashes']
+        assert('SHA-256' in hashes), 'SHA-256 hash not included'
+        assert('MD5' not in hashes), 'MD5 hash included'
+        assert('SHA-1' not in hashes), 'SHA-1 hash included'
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+        assert(hashes['SHA-256'] == 'someSHA-256hash')

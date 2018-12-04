@@ -3,8 +3,9 @@ from abc import ABCMeta, abstractmethod
 
 class BaseResultTranslator(object, metaclass=ABCMeta):
 
-    def __init__(self, default_mapping_file_path=None):
+    def __init__(self, default_mapping_file_path=None, callback=None):
         self.default_mapping_file_path = default_mapping_file_path
+        self.callback = callback
 
     @abstractmethod
     def translate_results(self, data_source, data, options, mapping=None):

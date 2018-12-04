@@ -1,5 +1,4 @@
 import json
-import uuid
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter.src import transformers
@@ -14,24 +13,24 @@ class JSONToStix(BaseResultTranslator):
         Translates JSON data into STIX results based on a mapping file
         :param data: JSON formatted data to translate into STIX format
         :type data: str
-        :param mapping: The mapping file path to use as instructions on how to translate the given JSON data to STIX. Defaults the path to whatever is passed into the constructor for JSONToSTIX (This should be the to_stix_map.json in the module's json directory)
+        :param mapping: The mapping file path to use as instructions on how to translate the given JSON data to STIX. 
+            Defaults the path to whatever is passed into the constructor for JSONToSTIX (This should be the to_stix_map.json in the module's json directory)
         :type mapping: str (filepath)
         :return: STIX formatted results
         :rtype: str
         """
 
-        self.mapping_json = options['mapping'] if 'mapping' in options else {}
+        self.mapping = options['mapping'] if 'mapping' in options else {}
         json_data = json.loads(data)
         data_source = json.loads(data_source)
 
-        if(not self.mapping_json):
-            # If no mapping is passed in then we will use the default to_stix_map in the qradar module
+        if(not self.mapping):
             map_file = open(self.default_mapping_file_path).read()
             map_data = json.loads(map_file)
         else:
-            map_data = self.mapping_json
+            map_data = self.mapping
 
         results = json_to_stix_translator.convert_to_stix(data_source, map_data,
-                                                          json_data, transformers.get_all_transformers(), options)
+                                                          json_data, transformers.get_all_transformers(), options, self.callback)
 
         return json.dumps(results, indent=4, sort_keys=False)

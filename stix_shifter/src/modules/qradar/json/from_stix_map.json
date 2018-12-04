@@ -6,7 +6,7 @@
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "value": ["sourceip", "destinationip"]
     }
   },
   "url": {

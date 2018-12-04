@@ -1,5 +1,4 @@
 import re
-import logging
 import uuid
 
 from . import observable
@@ -8,7 +7,7 @@ from stix2validator import validate_instance, print_results
 
 # convert JSON data to STIX object using map_data and transformers
 
-def convert_to_stix(data_source, map_data, data, transformers, options):
+def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
@@ -18,7 +17,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     identity_id = data_source['id']
     bundle['objects'] += [data_source]
 
-    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options)
+    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, callback)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
@@ -30,10 +29,12 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
 
 class DataSourceObjToStixObj:
 
-    def __init__(self, identity_id, ds_to_stix_map, transformers, options):
+    def __init__(self, identity_id, ds_to_stix_map, transformers, options, callback=None):
         self.identity_id = identity_id
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
+        self.options = options
+        self.callback = callback
 
         # parse through options
         self.stix_validator = options.get('stix_validator', False)
@@ -52,7 +53,7 @@ class DataSourceObjToStixObj:
         :return: the resulting STIX value
         """
         if ds_key not in obj:
-            logging.debug('{} not found in object'.format(ds_key))
+            print('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
         if transformer is not None:
@@ -141,17 +142,28 @@ class DataSourceObjToStixObj:
         # create normal type objects
         for ds_key in obj:
             if ds_key not in ds_map:
-                logging.debug('{} is not found in map, skipping'.format(ds_key))
+                print('{} is not found in map, skipping'.format(ds_key))
                 continue
+
+            generic_hash_key = ''
+            # Use callback function to run logic specific to the data source
+            if self.callback:
+                try:
+                    generic_hash_key = self.callback(obj, ds_key, self.options)
+                except(Exception):
+                    continue
+
             # get the stix keys that are mapped
             ds_key_def_obj = self.ds_to_stix_map[ds_key]
             ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
             for ds_key_def in ds_key_def_list:
                 if ds_key_def is None or 'key' not in ds_key_def:
-                    logging.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
+                    print('{} is not valid (None, or missing key)'.format(ds_key_def))
                     continue
-
-                key_to_add = ds_key_def['key']
+                if generic_hash_key:
+                    key_to_add = generic_hash_key
+                else:
+                    key_to_add = ds_key_def['key']
                 transformer = transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
                 if ds_key_def.get('cybox', self.cybox_default):

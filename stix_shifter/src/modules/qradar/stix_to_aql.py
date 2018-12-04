@@ -28,8 +28,6 @@ class StixToAQL(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_model_mapper = qradar_data_mapping.QRadarDataMapper(options)
-        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
-        timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
         query_string = aql_query_constructor.translate_pattern(
-            query_object, data_model_mapper, result_limit, timerange)
+            query_object, data_model_mapper, options)
         return query_string
