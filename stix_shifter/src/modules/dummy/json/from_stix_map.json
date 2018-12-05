@@ -29,7 +29,8 @@
       "src_port": ["dummySourcePortField"],
       "dst_port": ["dummyDestinationPortField"],
       "start": ["dummyStartTimeField"],
-      "end": ["dummyEndTimeField"]
+      "end": ["dummyEndTimeField"],
+      "protocols[*]": ["dummyNetworkProtocolField"]
     }
   },
   "user-account": {
