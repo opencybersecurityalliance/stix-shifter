@@ -45,7 +45,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='Tools and interface to translate STIX formatted results and queries to different data source formats',  # Required
+    description='Tools and interface to translate STIX formatted results and queries to different data source formats and to set up appropriate connection strings for invoking and triggering actions in openwhisk',  # Required
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -134,7 +134,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['stix2-patterns==0.6.0', 'stix2-validator==1.0.1',
+    install_requires=['stix2-patterns==0.6.0', 'stix2-validator==0.5.0',
                       'antlr4-python3-runtime==4.7', 'python-dateutil==2.7.3'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
@@ -179,6 +179,11 @@ setup(
     #         'sample=sample:main',
     #     ],
     # },
+    entry_points={
+        'console_scripts': [
+            'stix-transmission=stix_transmission.stix_transmission:main',
+        ],
+    },
 
     # List additional URLs that are relevant to your project as a dict.
     #

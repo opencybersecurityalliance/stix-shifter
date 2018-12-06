@@ -6,7 +6,7 @@
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "value": ["sourceip", "destinationip"]
     }
   },
   "url": {
@@ -17,11 +17,6 @@
   "mac-addr": {
     "fields": {
       "value": ["sourcemac", "destinationmac"]
-    }
-  },
-  "domain-name": {
-    "fields": {
-      "value": ["domainname"]
     }
   },
   "file": {
@@ -46,6 +41,11 @@
   "artifact": {
     "fields": {
       "payload_bin": ["payload"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
     }
   }
 }

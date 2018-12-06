@@ -24,7 +24,7 @@ class CimDataMapper:
       "email-addr": {
         "cim_type": "email",
         "fields": {
-          "value": "src_user" # this probably should be both src_user and recipient
+          "value": ["src_user", "recipient"]
         }
       },
       "email-message": {
@@ -44,7 +44,7 @@ class CimDataMapper:
         }
       },
       "file": { # Really need to add like a bonus filter here for `object_category`
-        "cim_type": "endpoint", # Don't ask...it's all part of the "change" data model
+        "cim_type": "endpoint",
         "fields": {
           "hashes.MD5": "file_hash", # really all hashes should look in hash -- CIM isn't specific as to what hash type it is
           "hashes.SHA-1": "file_hash",
@@ -59,10 +59,15 @@ class CimDataMapper:
       "ipv4-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
-          "value": "dest_ip"
+          "value": ["src_ip","dest_ip"]
         }
       },
-      "ipv6-addr": None,
+      "ipv6-addr": { # Network traffic
+        "cim_type": "flow",
+        "fields": {
+          "value": ["src_ip","dest_ip"]
+        }
+      },
       "mac-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
@@ -77,7 +82,9 @@ class CimDataMapper:
           "src_port": "src_port",
           "dst_ref.value": "src",
           "dst_port": "dest_port",
-          "protocols[*]": "protocol"
+          "protocols[*]": "protocol",
+          "start":"earliest", # TODO: Implement transformer for datetime field inside stix object
+          "end":"latest"
         }
       },
       "process": {
@@ -111,7 +118,7 @@ class CimDataMapper:
           "creator_user_ref.account_login": "user",
         }
       },
-      "x509-certificate": { # This mapping isn't really complete, STIX splits up the actual public key, for example, into its components (for some reason)
+      "x509-certificate": {
         "cim_type": "certificate",
         "fields": {
           "hashes.SHA-256": "ssl_hash",
@@ -125,6 +132,12 @@ class CimDataMapper:
         }
       }
     }
+
+    def __init__(self, mapping=None):
+      # use user defined mapping object if provided in options
+      if mapping:
+        self.MAPPINGS = mapping
+
 
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:

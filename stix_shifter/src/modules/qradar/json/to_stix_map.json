@@ -94,8 +94,25 @@
   "url": {
     "key": "url.value"
   },
-  "domain": {
-    "key": "domain-name.value"
+  "filename": {
+    "key": "file.name",
+    "object": "fl"
+  },
+  "sha256hash": {
+    "key": "file.hashes.SHA-256",
+    "object": "fl"
+  },
+  "sha1hash": {
+    "key": "file.hashes.SHA-1",
+    "object": "fl"
+  },
+  "md5hash": {
+    "key": "file.hashes.MD5",
+    "object": "fl"
+  },
+  "filehash": {
+    "key": "file.hashes.UNKNOWN",
+    "object": "fl"
   },
   "payload": {
     "key": "artifact.payload_bin"
@@ -112,5 +129,9 @@
     "key": "network-traffic.protocols",
     "object": "nt",
     "transformer": "ToLowercaseArray"
+  },
+  "domainname": {
+    "key": "domain-name.value",
+    "transformer": "ToDomainName"
   }
 }

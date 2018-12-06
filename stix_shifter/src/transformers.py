@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 import base64
 import re
+from urllib.parse import urlparse
 
 
 class ValueTransformer():
@@ -11,6 +12,7 @@ class ValueTransformer():
     def transform(obj):
         """ abstract function for converting value formats """
         raise NotImplementedError
+
 
 class StringToBool(ValueTransformer):
     """A value transformer for converting String to boolean value"""
@@ -26,6 +28,7 @@ class SplunkToTimestamp(ValueTransformer):
     @staticmethod
     def transform(splunkTime):
         return splunkTime[:-6]+'Z'
+
 
 class EpochToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
@@ -45,16 +48,18 @@ class EpochSecondsToTimestamp(ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class TimestampToEpoch(ValueTransformer):
-    """A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) to epoch"""
+class TimestampToMilliseconds(ValueTransformer):
+    """
+    A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) 
+    to 13-digit Unix time (epoch + milliseconds)
+    """
 
     @staticmethod
     def transform(timestamp):
         time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
         epoch = datetime(1970, 1, 1)
-        converted_epoch = int(
-            (datetime.strptime(timestamp, time_pattern) - epoch).total_seconds())
-        return converted_epoch
+        converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
+        return converted_time
 
 
 class ToInteger(ValueTransformer):
@@ -125,6 +130,25 @@ class ToFileName(ValueTransformer):
         except ValueError:
             print("Cannot convert input to file name")
 
+
+class ToDomainName(ValueTransformer):
+    """A value transformer for expected domain name"""
+
+    @staticmethod
+    def transform(url):
+        try:
+            if url is None:
+                return
+            parsed_url = urlparse(url)
+            domain_name = parsed_url.netloc
+            return domain_name
+        except ValueError:
+            print("Cannot convert input to domain name")
+
+
 def get_all_transformers():
-    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
-            "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
+    # return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
+    #         "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
+    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
+            "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
+            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds}

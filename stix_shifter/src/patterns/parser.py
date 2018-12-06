@@ -201,6 +201,12 @@ class STIXQueryBuilder(STIXPatternListener):
         logger.debug("{} {} {}".format("Pattern", ctx, ctx.getText()))
         observation_expression = self.pop()
         self.push(Pattern(observation_expression))
+    
+    def exitPropTestIsSuperset(self, ctx: STIXPatternParser.PropTestIsSupersetContext) -> None:
+        logger.debug("{} {} {}".format("exitPropTestIsSuperset", ctx, ctx.getText()))
+        value = self.pop()
+        object_path = self.pop()
+        self.push(ComparisonExpression(object_path, value, ComparisonComparators.IsSuperSet))
 
     def exitPropTestIsSubset(self, ctx: STIXPatternParser.PropTestIsSubsetContext) -> None:
         logger.debug("{} {} {}".format("propTestIsSubset", ctx, ctx.getText()))
