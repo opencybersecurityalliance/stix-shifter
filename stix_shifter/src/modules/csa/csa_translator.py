@@ -11,5 +11,5 @@ class Translator(BaseTranslator):
         filepath = path.abspath(
             path.join(basepath, "json", "to_stix_map.json"))
         self.mapping_filepath = filepath
-        self.result_translator = JSONToStix(filepath, is_csv=False)
+        self.result_translator = JSONToStix(filepath)
         self.query_translator = StixToCloudSQL(dialect=dialect)
