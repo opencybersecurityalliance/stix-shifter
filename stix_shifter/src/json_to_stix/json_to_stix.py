@@ -8,9 +8,6 @@ from stix_shifter.src import transformers
 
 class JSONToStix(BaseResultTranslator):
 
-    def __init__(self, default_mapping_file_path=None):
-        super().__init__(default_mapping_file_path)
-
     def translate_results(self, data_source, data, options, mapping=None):
         """
         Translates JSON data into STIX results based on a mapping file

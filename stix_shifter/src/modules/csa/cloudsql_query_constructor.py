@@ -121,7 +121,7 @@ class SqlQueryStringPatternTranslator:
                         "Network protocol {} is not supported.".format(protocol_key))
             elif stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
+                expression.value = int(transformer.transform(expression.value) / 1000)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
