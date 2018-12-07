@@ -98,7 +98,7 @@
       "references": "src_mac"
     }
   ],
-  "destinationemac": [
+  "destinationmac": [
     {
       "key": "mac-addr.value",
       "object": "dst_mac"
