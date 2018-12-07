@@ -16,4 +16,4 @@ before_script:
 
 script:
   - echo "Running tests..."
-  - pytest --cov=${SRC_FOLDER} --cov-report=xml
+  - pytest --cov=stix_shifter --cov-report=xml

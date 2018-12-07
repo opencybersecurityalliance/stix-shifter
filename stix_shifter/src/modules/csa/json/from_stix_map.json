@@ -1,0 +1,62 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["Network.A", "Network.B"],
+      "constraints" : [{"$and" : {"Network.Protocol" : "IPV4"}}]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["Network.A", "Network.B"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["Link.A", "Link.B"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["Transport.A"],
+      "dst_port": ["Transport.B"],
+      "protocols[*]": ["Transport.Protocol"],
+      "start": ["Start"],
+      "end": ["Last"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["initiator.id"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["payload"]
+    }
+  },
+  "user-name": {
+    "fields": {
+      "value": ["initiator.id","initiator.name"]
+    }
+  },
+  "target": {
+    "fields": {
+      "value": ["target.id","target.name"]
+    }
+  }
+}

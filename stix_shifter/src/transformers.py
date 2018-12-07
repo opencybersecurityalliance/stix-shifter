@@ -39,6 +39,15 @@ class EpochToTimestamp(ValueTransformer):
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
+class EpochSecondsToTimestamp(ValueTransformer):
+    """A value transformer for the timestamps"""
+
+    @staticmethod
+    def transform(epoch):
+        return (datetime.fromtimestamp(int(epoch), timezone.utc)
+                .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+
+
 class TimestampToMilliseconds(ValueTransformer):
     """
     A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z) 
@@ -138,6 +147,8 @@ class ToDomainName(ValueTransformer):
 
 
 def get_all_transformers():
+    # return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
+    #         "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
-            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds}
+            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds, "EpochSecondsToTimestamp": EpochSecondsToTimestamp}

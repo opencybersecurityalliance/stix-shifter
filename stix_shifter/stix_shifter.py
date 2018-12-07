@@ -6,9 +6,8 @@ import re
 from stix_transmission import stix_transmission
 import json
 
-
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic']
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'csa', 'csa:at', 'csa:nf']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
@@ -43,14 +42,22 @@ class StixShifter:
         :return: translated results
         :rtype: str
         """
-
+        dialect = None
+        mod_dia = module.split(':', 1)
+        module = mod_dia[0]
+        if len(mod_dia) > 1:
+            dialect = mod_dia[1]
+        
         if module not in TRANSLATION_MODULES:
             raise NotImplementedError
 
         translator_module = importlib.import_module(
             "stix_shifter.src.modules." + module + "." + module + "_translator")
 
-        interface = translator_module.Translator()
+        if dialect is not None:
+            interface = translator_module.Translator(dialect=dialect)
+        else:
+            interface = translator_module.Translator()
 
         if translate_type == QUERY:
             errors = []
