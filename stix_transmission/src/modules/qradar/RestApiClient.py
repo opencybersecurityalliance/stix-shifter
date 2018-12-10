@@ -11,7 +11,7 @@ from .Utilities import *
 import ssl
 import sys
 import base64
-
+import os
 
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
@@ -50,8 +50,18 @@ class RestApiClient:
 
         check_hostname = True
         if cert is not None:
-            # Load the certificate if the user has specified a certificate
-            # file in config.ini.
+            # put cert/key pair into a file to read it later
+            cert_file_name = "cert.pem"
+            certfile = open("cert.pem", "w+")
+            certfile.write(cert)
+            certfile.close()
+
+            with open(cert_file_name, 'w+') as f:
+                try:
+                    f.write(cert)
+                    f.close()
+                except IOError:
+                    print('Failed to setup certificate')
 
             # The default QRadar certificate does not have a valid hostname,
             # so me must disable hostname checking.
@@ -61,7 +71,13 @@ class RestApiClient:
 
             # Instead of loading the default certificates load only the
             # certificates specified by the user.
-            context.load_verify_locations(cadata=cert)
+            try:
+                context.load_default_certs()
+                context.load_cert_chain(certfile="cert.pem")
+            except:
+                print('Failed to load certificate')
+
+            os.remove("cert.pem")
         else:
             if sys.version_info >= (3, 4):
                 # Python 3.4 and above has the improved load_default_certs()
@@ -95,11 +111,6 @@ class RestApiClient:
             'https://' + self.server_ip + self.base_uri + path,
             headers=actual_headers)
         request.get_method = lambda: method
-
-        # Print the request if print_request is True.
-        if print_request:
-            SampleUtilities.pretty_print_request(self, path, method,
-                                                 headers=actual_headers)
 
         try:
             response = urlopen(request, data)
