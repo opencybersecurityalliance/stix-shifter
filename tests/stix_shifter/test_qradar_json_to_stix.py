@@ -99,6 +99,28 @@ class TestTransform(object):
         assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == source_ip)
 
+        second_nt_objects = objects['6']
+        assert(second_nt_objects is not None), 'network-traffic object type not found'
+        assert(second_nt_objects.keys() ==
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+        assert(second_nt_objects['src_port'] == 3000)
+        assert(second_nt_objects['dst_port'] == 2000)
+        assert(second_nt_objects['protocols'] == ['tcp'])
+
+        ip_ref = second_nt_objects['dst_ref']
+        assert(ip_ref in objects), f"dst_ref with key {second_nt_objects['dst_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'mac-addr')
+        assert(ip_obj['value'] == destination_mac)
+
+        ip_ref = second_nt_objects['src_ref']
+        assert(ip_ref in objects), f"src_ref with key {second_nt_objects['src_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'mac-addr')
+        assert(ip_obj['value'] == source_mac)
+
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
         assert(curr_obj is not None), 'url object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
