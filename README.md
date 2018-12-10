@@ -8,7 +8,7 @@
 [Transmission](#transmission)<br/>
 [Contributing](#contributing)<br/>
 [Creating new modules](#creating-new-modules)<br/>
-[Licencing](#licensing)
+[Licensing](#licensing)
 
 # Introduction
 
