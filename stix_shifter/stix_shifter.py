@@ -1,7 +1,7 @@
 import importlib
 from stix_shifter.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
-from stix_shifter.src.stix_pattern_parser import stix_pattern_parser
+from stix_shifter.src.stix_pattern_parser import parse_stix
 import re
 from stix_transmission import stix_transmission
 import json
@@ -73,7 +73,7 @@ class StixShifter:
                 # Translating STIX pattern to antlr query object
                 query_object = generate_query(data)
                 # Converting query object to datasource query
-                parsed_stix = stix_pattern_parser.parse_stix(query_object)
+                parsed_stix = parse_stix(query_object)
                 # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
                 # Converting STIX pattern to datasource query
                 queries = interface.transform_query(data, options)

@@ -24,10 +24,12 @@ class StixToSplunk(BaseQueryTranslator):
         :rtype: str
         """
 
+        logger.info("Converting STIX2 Pattern to Splunk query")
+
         query_object = generate_query(data)
         data_mapper = options.get('data_mapper')
         mapping = options.get('mapping')
-        
+
         if not data_mapper:
             data_mapper = 'cim'
 
@@ -40,13 +42,13 @@ class StixToSplunk(BaseQueryTranslator):
             raise NotImplementedError(f"Module {data_mapper_module_name} not implemented")
         except AttributeError:
             raise NotImplementedError(f"Module {data_mapper_module_name} does not implement mapper_class attribute")
-        
-        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT        
+
+        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
         timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
-        
+
         # append '-' as prefix and 'minutes' as suffix in timerange to convert minutes in SPL query format
         timerange = '-' + str(timerange) + 'minutes'
-        
+
         query_string = splunk_query_constructor.translate_pattern(
             query_object, data_model_mapper, result_limit, timerange)
         return query_string

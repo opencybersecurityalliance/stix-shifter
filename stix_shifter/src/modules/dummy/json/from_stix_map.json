@@ -1,0 +1,51 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["dummySourceIpField", "dummyDestinationIpField"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["dummyIpField"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["dummyUrlField"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["dummySourceMacField", "dummyDestinationMacField"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["dummyFileNameField"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["dummySourcePortField"],
+      "dst_port": ["dummyDestinationPortField"],
+      "start": ["dummyStartTimeField"],
+      "end": ["dummyEndTimeField"],
+      "protocols[*]": ["dummyNetworkProtocolField"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["dummyUserNameField"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["dummyPayloadField"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["dummyDomainNameField"]
+    }
+  }
+}

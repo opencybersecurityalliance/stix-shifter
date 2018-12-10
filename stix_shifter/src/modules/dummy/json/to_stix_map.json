@@ -1,0 +1,95 @@
+{
+  "dummyUserNameField": {
+    "key": "user-account.user_id"
+  },
+  "dummyLogSourceIdField": {
+    "key": "x_dummy_custom_property.log_source_id",
+    "cybox": false
+  },
+  "dummyMagnitudeField": {
+    "key": "x_dummy_custom_property.magnitude",
+    "cybox": false
+  },
+  "dummyDestinationIpField": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "dummyEventCountField": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "dummyStartTimeField": [
+    {
+      "key": "created",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "modified",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "dummySourceIpField": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "dummyUrlField": {
+    "key": "url.value"
+  },
+  "dummyFileNameField": {
+    "key": "file.name"
+  },
+  "dummyPayloadField": {
+    "key": "artifact.payload_bin"
+  },
+  "dummyDestinationPortField": {
+    "key": "network-traffic.dst_port",
+    "object": "nt"
+  },
+  "dummySourcePortField": {
+    "key": "network-traffic.src_port",
+    "object": "nt"
+  },
+  "dummyNetworkProtocolField": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "dummyDomainNameField": {
+    "key": "domain-name.value"
+  }
+}
