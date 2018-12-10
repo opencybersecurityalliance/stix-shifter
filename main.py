@@ -89,16 +89,16 @@ def __main__():
 
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
-    operation_subparser.add_parser(stix_translation.PING, help="Pings the data source")
-    query_operation_parser = operation_subparser.add_parser(stix_translation.QUERY, help="Executes a query on the data source")
+    operation_subparser.add_parser(stix_transmission.PING, help="Pings the data source")
+    query_operation_parser = operation_subparser.add_parser(stix_transmission.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
-    results_operation_parser = operation_subparser.add_parser(stix_translation.RESULTS, help="Fetches the results of the data source query")
+    results_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
-    status_operation_parser = operation_subparser.add_parser(stix_translation.STATUS, help="Gets the current status of the query")
+    status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
-    operation_subparser.add_parser(stix_translation.IS_ASYNC, help='Checks if the query operation is asynchronous')
+    operation_subparser.add_parser(stix_transmission.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     args = parent_parser.parse_args()
 

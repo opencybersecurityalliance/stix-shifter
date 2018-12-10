@@ -2,6 +2,12 @@ import importlib
 
 
 TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa']
+RESULTS = 'results'
+QUERY = 'query'
+DELETE = 'delete'
+STATUS = 'status'
+PING = 'ping'
+IS_ASYNC = 'is_async'
 
 
 class StixTransmission:

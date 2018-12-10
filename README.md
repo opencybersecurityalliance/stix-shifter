@@ -52,7 +52,7 @@ Stix-shifter handles two primary functions:
 
 ```
 usage: stix_translation.py translate [-h]
-                                 {qradar, dummy, splunk}
+                                 {'qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf'}
                                  {results, query} data
 
 positional arguments:
@@ -176,7 +176,7 @@ python main.py translate qradar results \
 
 ```
 usage: stix_transmission.py transmit [-h]
-                      {async_dummy, synchronous_dummy, qradar, splunk, bigfix}
+                      {'async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa'}
 
 positional arguments:
 {<async_dummy, synchronous_dummy, qradar, splunk, bigfix>}         Transmission module to use
