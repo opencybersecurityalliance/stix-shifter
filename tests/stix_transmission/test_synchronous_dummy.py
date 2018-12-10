@@ -1,6 +1,6 @@
-from stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_connector
-from stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_results_connector
-from stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_ping
+from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_connector
+from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_results_connector
+from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_ping
 import unittest
 
 

@@ -1,4 +1,4 @@
-from stix_transmission.src.modules.splunk import splunk_connector
+from stix_shifter.stix_transmission.src.modules.splunk import splunk_connector
 from unittest.mock import patch
 import unittest
 import json
@@ -14,7 +14,7 @@ class SplunkMockResponse:
         return self.object
 
 
-@patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.__init__')
+@patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.__init__')
 class TestSplunkConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
@@ -35,7 +35,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         assert check_async
 
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.ping_box')
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -58,7 +58,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search')
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search')
     def test_query_response(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '{"sid":"1536672851.4012"}'
@@ -84,7 +84,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "1536672851.4012"
  
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -117,7 +117,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
        
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
         
@@ -149,9 +149,9 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
     
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search', autospec=True)
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results', autospec=True)
     def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         
@@ -209,7 +209,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
 
-    @patch('stix_transmission.src.modules.splunk.spl_api_client.APIClient.delete_search', autospec=True)
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.delete_search', autospec=True)
     def test_delete_search(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
         
