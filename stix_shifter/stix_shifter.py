@@ -6,8 +6,9 @@ import re
 from stix_transmission import stix_transmission
 import json
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'csa', 'csa:at', 'csa:nf']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf']
 TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa']
+
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
