@@ -13,13 +13,13 @@ class APIClient(RestApiClient):
 
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of its inherited class.
-    def __init__(self, server_ip, auth):
+    def __init__(self, server_ip, auth, cert):
 
         # This version of the Splunk APIClient is designed to function with
         # Splunk Enterprise version >= 6.5.0 and <= 7.1.2
         # http://docs.splunk.com/Documentation/Splunk/7.1.2/RESTREF/RESTprolog
         self.endpoint_start = 'services/'
-        super(APIClient, self).__init__(server_ip, auth)
+        super(APIClient, self).__init__(server_ip, auth, cert)
 
     def ping_box(self):
         endpoint = self.endpoint_start + 'server/status'

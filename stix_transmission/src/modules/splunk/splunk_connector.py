@@ -17,8 +17,9 @@ class Connector(BaseConnector):
         host = connection.get("host")
         port = connection.get("port")
         url = host + ':' + str(port)
+        cert = connection.get('cert', None)
 
-        self.api_client = APIClient(url, auth)
+        self.api_client = APIClient(url, auth, cert)
         self.delete_connector = SplunkDeleteConnector(self.api_client)
         self.results_connector = SplunkResultsConnector(self.api_client)
         self.status_connector = SplunkStatusConnector(self.api_client)

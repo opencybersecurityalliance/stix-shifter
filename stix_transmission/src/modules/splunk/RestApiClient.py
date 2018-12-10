@@ -13,16 +13,17 @@ import ssl
 import sys
 import base64
 import json
-
+import os
 
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
 
     # Constructor for the RestApiClient Class
-    def __init__(self, server_ip, auth=None, output_mode='json', version=None):
+    def __init__(self, server_ip, auth=None, cert=None, output_mode='json', version=None):
         self.headers = {'Content-Type': 'application/x-www-form-urlencoded',
                         'Accept': 'application/json'}
         # TODO: check version functionality
+
         if version is not None:
             self.headers['Version'] = version
         if auth is None:
@@ -43,10 +44,33 @@ class RestApiClient:
         context.check_hostname = False
         check_hostname = False
 
+        if cert is not None:
+            cert_file_name = "cert.pem"
+            certfile = open("cert.pem", "w+")
+            certfile.write(cert)
+            certfile.close()
+
+            with open(cert_file_name, 'w+') as f:
+                try:
+                    f.write(cert)
+                    f.close()
+                except IOError:
+                    print('Failed to setup certificate')
+
+            try:
+                context.load_default_certs()
+                context.load_cert_chain(certfile="cert.pem")
+            except:
+                print('Failed to load certificate')
+
+            os.remove("cert.pem")
+
         install_opener(build_opener(
             HTTPSHandler(context=context, check_hostname=check_hostname)))
         
         self.set_auth_token()  # set authorization token in header
+
+
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, params=[], data=None,
