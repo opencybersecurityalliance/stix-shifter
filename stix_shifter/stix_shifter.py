@@ -1,13 +1,13 @@
 import importlib
 from stix_shifter.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
-from stix_shifter.src.stix_pattern_parser import stix_pattern_parser
+from stix_shifter.src.stix_pattern_parser import parse_stix
 import re
 from stix_transmission import stix_transmission
 import json
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix']
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa']
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -43,14 +43,22 @@ class StixShifter:
         :return: translated results
         :rtype: str
         """
-
+        dialect = None
+        mod_dia = module.split(':', 1)
+        module = mod_dia[0]
+        if len(mod_dia) > 1:
+            dialect = mod_dia[1]
+        
         if module not in TRANSLATION_MODULES:
             raise NotImplementedError
 
         translator_module = importlib.import_module(
             "stix_shifter.src.modules." + module + "." + module + "_translator")
 
-        interface = translator_module.Translator()
+        if dialect is not None:
+            interface = translator_module.Translator(dialect=dialect)
+        else:
+            interface = translator_module.Translator()
 
         if translate_type == QUERY:
             errors = []
@@ -66,7 +74,7 @@ class StixShifter:
                 # Translating STIX pattern to antlr query object
                 query_object = generate_query(data)
                 # Converting query object to datasource query
-                parsed_stix = stix_pattern_parser.parse_stix(query_object)
+                parsed_stix = parse_stix(query_object)
                 # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
                 # Converting STIX pattern to datasource query
                 queries = interface.transform_query(data, options)

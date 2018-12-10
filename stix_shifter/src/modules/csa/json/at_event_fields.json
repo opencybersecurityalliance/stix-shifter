@@ -1,0 +1,29 @@
+{
+  "default": [
+    "initiator.id as initiator_id",
+    "initiator.name as initiator_name",
+    "initiator.credential.type as initiator_credential_type",
+   	"ALCH_ACCOUNT_ID as alch_account_id",
+   	"ALCH_TENANT_ID as alch_tenant_id",
+   	"eventTime as eventTime",
+   	"action as action",
+    "target.id as target_id",
+    "target.name as target_name",
+    "event_uuid as event_uuid"
+  ],
+  "domain-name": [
+    "QIDNAME(qid) as qidname",
+    "CATEGORYNAME(highlevelcategory) as high_level_category_name",
+    "devicetime as devicetime",
+    "sourceip as sourceip",
+    "sourceport as sourceport",
+    "sourcemac as sourcemac",
+    "destinationip as destinationip",
+    "destinationport as destinationport",
+    "destinationmac as destinationmac"
+  ],
+  "user-name": [
+    "initiator.id as initiator_id",
+    "initiator.name as initiator_name"
+    ]
+}
