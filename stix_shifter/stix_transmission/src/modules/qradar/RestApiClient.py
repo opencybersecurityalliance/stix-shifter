@@ -18,6 +18,9 @@ class RestApiClient:
 
     # Constructor for the RestApiClient Class
     def __init__(self, server_ip, auth_token, cert=None, proxy=None, version=None):
+        self.x_forward_proxy = None
+        self.x_forward_proxy_auth = None
+
         self.headers = {'Accept': 'application/json'}
         if version is not None:
             self.headers['Version'] = version
@@ -25,6 +28,7 @@ class RestApiClient:
             self.headers['SEC'] = auth_token
         else:
             raise Exception('No valid credentials found in configuration.')
+
         if proxy is not None:
             proxy_url = proxy.get('url')
             proxy_auth = proxy.get('auth')
@@ -33,6 +37,9 @@ class RestApiClient:
                     proxy_auth is not None):
                 self.headers['proxy'] = proxy_url
                 self.headers['Proxy-Authorization'] = 'Basic ' + proxy_auth
+
+        self.x_forward_proxy = proxy.get('x_forward_proxy')
+        self.x_forward_proxy_auth = proxy.get('x_forward_proxy_auth')
 
         self.server_ip = server_ip
         self.base_uri = '/api/'
@@ -98,22 +105,38 @@ class RestApiClient:
                  print_request=False):
 
         path = self.parse_path(endpoint, params)
+        if (data):
+            path = path + '?' + data
 
-        # If the caller specified customer headers merge them with the default
-        # headers.
-        actual_headers = self.headers.copy()
-        if headers is not None:
-            for header_key in headers:
-                actual_headers[header_key] = headers[header_key]
+        if self.x_forward_proxy is None:
+            # If the caller specified customer headers merge them with the default
+            # headers.
+            actual_headers = self.headers.copy()
+            if headers is not None:
+                for header_key in headers:
+                    actual_headers[header_key] = headers[header_key]
 
-        # Send the request and receive the response
-        request = Request(
-            'https://' + self.server_ip + self.base_uri + path,
-            headers=actual_headers)
+            # Send the request and receive the response
+            request = Request(
+                'https://' + self.server_ip + self.base_uri + path,
+                headers=actual_headers)
+        else:
+            self.headers['X-Forward-URL'] = 'https://' + \
+                self.server_ip + self.base_uri + path
+            self.headers['X-Forward-Auth'] = self.x_forward_proxy_auth
+            self.headers['User-Agent'] = 'UDS'
+
+            actual_headers = self.headers.copy()
+            if headers is not None:
+                for header_key in headers:
+                    actual_headers[header_key] = headers[header_key]
+
+            request = Request(self.x_forward_proxy,
+                              headers=actual_headers)
         request.get_method = lambda: method
 
         try:
-            response = urlopen(request, data)
+            response = urlopen(request)
 
             response_info = response.info()
             if 'Deprecated' in response_info:
@@ -132,7 +155,7 @@ class RestApiClient:
             if (isinstance(e.reason, ssl.SSLError) and
                     e.reason.reason == "CERTIFICATE_VERIFY_FAILED"):
                 print("Certificate verification failed.")
-                sys.exit(3)
+                raise e
             else:
                 raise e
 
