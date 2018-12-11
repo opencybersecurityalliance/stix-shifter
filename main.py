@@ -7,12 +7,6 @@ import json
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
-RESULTS = 'results'
-QUERY = 'query'
-DELETE = 'delete'
-STATUS = 'status'
-PING = 'ping'
-IS_ASYNC = 'is_async'
 
 
 def __main__():
@@ -142,23 +136,23 @@ def transmit(args):
     transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
 
     operation_command = args.operation_command
-    if operation_command == QUERY:
+    if operation_command == stix_transmission.QUERY:
         query = args.query_string
         result = transmission.query(query)
-    elif operation_command == STATUS:
+    elif operation_command == stix_transmission.STATUS:
         search_id = args.search_id
         result = transmission.status(search_id)
-    elif operation_command == RESULTS:
+    elif operation_command == stix_transmission.RESULTS:
         search_id = args.search_id
         offset = args.offset
         length = args.length
         result = transmission.results(search_id, offset, length)
-    elif operation_command == DELETE:
+    elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)
-    elif operation_command == PING:
+    elif operation_command == stix_transmission.PING:
         result = transmission.ping()
-    elif operation_command == IS_ASYNC:
+    elif operation_command == stix_transmission.IS_ASYNC:
         result = transmission.is_async()
     else:
         raise NotImplementedError
