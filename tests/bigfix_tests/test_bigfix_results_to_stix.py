@@ -1,7 +1,7 @@
-from stix_shifter import stix_shifter
+from stix_shifter.stix_translation import stix_translation
 import unittest
 
-shifter = stix_shifter.StixShifter()
+translation = stix_translation.StixTranslation()
 
 
 class TestBigFixResultsToStix(unittest.TestCase, object):
@@ -13,6 +13,6 @@ class TestBigFixResultsToStix(unittest.TestCase, object):
         #              "{'computerID': 14821900, 'computerName': 'DESKTOP-C30V1JF', 'subQueryID': 1, 'isFailure': True," \
         #              " 'result': '12520437.cpx, 0a0feb9eb28bde8cd835716343b03b14, C:\\Windows\\system32\\12520437.cpx'," \
         #              " 'ResponseTime': 63000}]"
-        # query = shifter.translate('bigfix', 'results', '{}', bf_results)
+        # query = translation.translate('bigfix', 'results', '{}', bf_results)
         # assert query == bf_results
         assert "query" == "query"

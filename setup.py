@@ -181,7 +181,8 @@ setup(
     # },
     entry_points={
         'console_scripts': [
-            'stix-transmission=stix_transmission.stix_transmission:main',
+            'stix-transmission=stix_shifter.stix_transmission.stix_transmission:main',
+            'stix-translation=stix_shifter.stix_translation.stix_translation:main',
         ],
     },
 

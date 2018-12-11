@@ -48,11 +48,11 @@ Stix-shifter handles two primary functions:
 
 ### Converting from STIX Patterns to data source queries (query) or from data source results to STIX cyber observables (results)
 
-#### Call the stix_shifter in the format of
+#### Call the stix_translation in the format of
 
 ```
-usage: stix_shifter.py translate [-h]
-                                 {qradar, dummy, splunk}
+usage: stix_translation.py translate [-h]
+                                 {'qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf'}
                                  {results, query} data
 
 positional arguments:
@@ -172,11 +172,11 @@ python main.py translate qradar results \
 
 ## Transmission
 
-#### Call the stix_shifter in the format of
+#### Call the stix_transmission in the format of
 
 ```
-usage: stix_shifter.py transmit [-h]
-                      {async_dummy, synchronous_dummy, qradar, splunk, bigfix}
+usage: stix_transmission.py transmit [-h]
+                      {'async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa'}
 
 positional arguments:
 {<async_dummy, synchronous_dummy, qradar, splunk, bigfix>}         Transmission module to use
@@ -248,11 +248,11 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 
 ### Example of converting a STIX pattern to an IBM QRadar AQL query:
 
-[See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
+[See the QRadar module documentation](stix_shifter/stix_translation/src/modules/qradar/README.md)
 
 ### Example of converting IBM QRadar events to STIX:
 
-[See the QRadar module documentation](stix_shifter/src/modules/qradar/README.md)
+[See the QRadar module documentation](stix_shifter/stix_translation/src/modules/qradar/README.md)
 
 # Contributing
 

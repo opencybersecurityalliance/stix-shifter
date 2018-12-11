@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, jsonify
-from stix_shifter.src.patterns.translator import translate, SearchPlatforms, DataModels
+from stix_shifter.stix_translation.src.patterns.translator import translate, SearchPlatforms, DataModels
 
 # EXAMPLE Usage - accepts a STIX2 string as input via POST:
 #    curl -X POST
