@@ -51,9 +51,7 @@ class APIClient(RestApiClient):
         # sends a POST request to https://<server_ip>/rest/api/ariel/searches
 
         data = {'query_expression': query_expression}
-
         data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')
 
         return self.call_api(endpoint, 'POST', self.headers, data=data)
 

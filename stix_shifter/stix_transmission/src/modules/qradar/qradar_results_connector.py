@@ -15,10 +15,10 @@ class QRadarResultsConnector(BaseResultsConnector):
             response_code = response.code
 
             # Construct a response object
+            response_json = json.loads(response.read())
             return_obj = dict()
             if response_code == 200:
                 return_obj['success'] = True
-                response_json = json.loads(response.read())
                 return_obj['data'] = response_json['events']
             else:
                 return_obj['success'] = False
