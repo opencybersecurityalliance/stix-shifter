@@ -1,0 +1,11 @@
+{
+  "process":{
+    "start": ["starttime"],
+    "interface_ip": ["sourceip"],
+    "comms_ip": ["destinationip"],
+    "username": ["username"],
+    "process_name": ["filename"],
+    "domain": ["domainname"],
+    "last_update": ["endtime"]
+  }
+}
