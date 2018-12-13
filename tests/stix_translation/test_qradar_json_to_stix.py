@@ -6,6 +6,7 @@ from stix_shifter.stix_translation import stix_translation
 
 interface = qradar_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
+# Using default mapping in modules/qradar/json/to_stix_map.json
 map_data = json.loads(map_file)
 data_source = {
     "type": "identity",
@@ -319,3 +320,64 @@ class TestTransform(object):
         assert('SHA-1' not in hashes), 'SHA-1 hash included'
         assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
         assert(hashes['SHA-256'] == 'someSHA-256hash')
+
+    def test_hashtype_lookup_without_matching_generic_hash_name(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "someFile.exe"
+        }]
+
+        data_string = json.dumps(data)
+        options = {
+            "hash_options": {
+                "generic_name": "someUnknownHashName",
+                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
+            }
+        }
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        hashes = file_object['hashes']
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+
+    def test_hashtype_lookup_without_hash_options(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "someFile.exe"
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        hashes = file_object['hashes']
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
