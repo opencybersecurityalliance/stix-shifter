@@ -146,16 +146,19 @@ class DataSourceObjToStixObj:
                 continue
 
             generic_hash_key = ''
-            # Use callback function to run logic specific to the data source
-            if self.callback:
-                try:
-                    generic_hash_key = self.callback(obj, ds_key, self.options)
-                except(Exception):
-                    continue
-
             # get the stix keys that are mapped
             ds_key_def_obj = self.ds_to_stix_map[ds_key]
-            ds_key_def_list = ds_key_def_obj if isinstance(ds_key_def_obj, list) else [ds_key_def_obj]
+            if isinstance(ds_key_def_obj, list):
+                ds_key_def_list = ds_key_def_obj
+            else:
+                # Use callback function to run module-specific logic to handle unknown filehash types
+                if self.callback:
+                    try:
+                        generic_hash_key = self.callback(obj, ds_key, ds_key_def_obj['key'], self.options)
+                    except(Exception):
+                        continue
+                ds_key_def_list = [ds_key_def_obj]
+
             for ds_key_def in ds_key_def_list:
                 if ds_key_def is None or 'key' not in ds_key_def:
                     print('{} is not valid (None, or missing key)'.format(ds_key_def))
