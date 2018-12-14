@@ -63,7 +63,7 @@ class TestTransform(object):
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name, "domainname": url}
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
