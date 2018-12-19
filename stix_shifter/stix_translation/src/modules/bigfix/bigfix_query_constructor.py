@@ -23,26 +23,17 @@ class RelevanceQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    query_prefix_lookup = {
-        "file": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files ",
-        "process": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" )"
-    }
-
-    core_inspectors = {
-        "whose": "whose ",
-        "it": "it "
-    }
-
-    casting_lookup = {
-        "lowercase": " as lowercase"
+    query_types = {
+        "file": "file",
+        "process": "process"
     }
 
     query_format = {
-        "file_name_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files of folder (\"{expr1_value}\")",        
+        "file_name_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files of folder (\"{expr2_value}\")",        
         "file_hash_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files whose ({stix_object} of it as lowercase contains \"{expr1_value}\" as lowercase) of folder (\"{expr2_value}\")",
-        "file_name_hash_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files whose ({stix_object1} of it as lowercase contains \"{expr1_value}\" as lowercase AND {stix_object2} of it as lowercase = \"{expr3_value}\" as lowercase) of folder (\"{expr2_value}\")",
+        "file_name_hash_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files whose ({name_object} of it as lowercase contains \"{expr1_value}\" as lowercase AND {sha265_object} of it as lowercase = \"{expr3_value}\" as lowercase) of folder (\"{expr2_value}\")",
         "processes": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" ) of processes whose ({stix_object} of it as lowercase contains \"{expr1_value}\" as lowercase )",
-        "process_name_hash": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" ) of processes whose ({stix_object1} of it as lowercase contains \"{expr1_value}\" as lowercase AND {stix_object2} of image file of it as lowercase = \"{expr2_value}\" as lowercase )"
+        "process_name_hash": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" ) of processes whose ({stix_object1} of it as lowercase contains \"{expr1_value}\" as lowercase {comparator} {stix_object2} of image file of it as lowercase = \"{expr2_value}\" as lowercase )"
     }
 
     query_string = {}
@@ -68,7 +59,7 @@ class RelevanceQueryStringPatternTranslator:
              # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_remainings = expression.object_path.split(':')
             value = self._escape_value(expression.value)
-            comparator = self.comparator_lookup[expression.comparator]
+            # comparator = self.comparator_lookup[expression.comparator]
             stix_property = ""
             stix_key = ""
             self.query_type = stix_object
@@ -86,11 +77,7 @@ class RelevanceQueryStringPatternTranslator:
                 else:
                     reference_property = stix_remainings
             
-            # query_string = "'{stix_object}':'{value}'".format(stix_object=reference_property,value=value)
-            # TO DO: ADD 'query_type': 'file'
             self.query_string.update({reference_property:value})
-            # if 'query_type' not in self.query_string:
-            #     self.query_string.update({'query_type':self.query_type})
             self.query_string.update({'query_type':self.query_type})
 
             return self.query_string
@@ -135,49 +122,42 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
     translated_statements = RelevanceQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     statements = translated_statements.queries
     query_type = statements.get('query_type')
-    stix_object = ""
     format_type = ""
     final_query = ""
+    name_object = 'name'
+    sha265_object = 'sha256'
 
     if query_type == 'file':
-        if 'sha256' not in statements:
-            expr1_value = statements.get('name')
-            expr2_value = statements.get('folder')
-            if expr1_value != "*":
-                stix_object = 'name'
+        if sha265_object not in statements:
+            file_name = statements.get('name')
+            path_value = statements.get('folder')
+            if file_name != "*":
                 format_type = 'file_hash_path'
-                final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=stix_object,expr1_value=expr1_value,expr2_value=expr2_value)
+                final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=name_object,expr1_value=file_name,expr2_value=path_value)
             else:
-                expr1_value = statements.get('folder')
                 format_type = 'file_name_path'
-                final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(expr1_value=expr1_value)
-        elif 'name' not in statements:
-            expr1_value = statements.get('sha256')
-            expr2_value = statements.get('folder')
-            stix_object = 'sha265'
+                final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(expr2_value=path_value)
+        elif name_object not in statements:
+            hash_value = statements.get('sha256')
+            path_name = statements.get('folder')
             format_type = 'file_hash_path'
-            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=stix_object,expr1_value=expr1_value,expr2_value=expr2_value)
-        elif 'name' in statements and 'sha256' in statements and 'folder' in statements:
-            expr1_value = statements.get('name')
-            expr2_value = statements.get('folder')
-            expr3_value = statements.get('sha256')
-            stix_object1 = 'name'
-            stix_object2 = 'sha265'
+            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=sha265_object,expr1_value=hash_value,expr2_value=path_name)
+        elif name_object in statements and 'sha256' in statements and 'folder' in statements:
+            file_name = statements.get('name')
+            path_name = statements.get('folder')
+            hash_value = statements.get('sha256')
             format_type = 'file_name_hash_path'
-            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object1=stix_object1,expr1_value=expr1_value,stix_object2=stix_object2,expr3_value=expr3_value,expr2_value=expr2_value)
+            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(name_object=name_object,expr1_value=file_name,sha265_object=sha265_object,expr3_value=hash_value,expr2_value=path_name)
     elif query_type == 'process':
-        if 'sha256' not in statements:
-            stix_object = 'name'
-            expr1_value = statements.get('name')
+        if sha265_object not in statements:
+            file_name = statements.get('name')
             format_type = 'processes'
-            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=stix_object,expr1_value=expr1_value)
+            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=name_object,expr1_value=file_name)
         else:
-            expr1_value = statements.get('name')
-            expr2_value = statements.get('sha256')
-            stix_object1 = 'name'
-            stix_object2 = 'sha265'
+            file_name = statements.get('name')
+            hash_value = statements.get('sha256')
             format_type = 'process_name_hash'
-            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object1=stix_object1,expr1_value=expr1_value,stix_object2=stix_object2,expr2_value=expr2_value)
+            final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object1=name_object,expr1_value=file_name,comparator=statements.get('comparator'), stix_object2=sha265_object,expr2_value=hash_value)
     else:
         print('Undefined query type')
 

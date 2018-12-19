@@ -1,0 +1,7 @@
+{
+    "file_name_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files of folder (\"{expr2_value}\")",        
+    "file_hash_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files whose ({stix_object} of it as lowercase contains \"{expr1_value}\" as lowercase) of folder (\"{expr2_value}\")",
+    "file_name_hash_path": "(name of it | \"n/a\", \"sha256\", sha256 of it | \"n/a\", pathname of it | \"n/a\") of files whose ({name_object} of it as lowercase contains \"{expr1_value}\" as lowercase AND {sha265_object} of it as lowercase = \"{expr3_value}\" as lowercase) of folder (\"{expr2_value}\")",
+    "processes": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" ) of processes whose ({stix_object} of it as lowercase contains \"{expr1_value}\" as lowercase )",
+    "process_name_hash": "( name of it | \"n/a\", process id of it as string | \"n/a\", \"sha256\", sha256 of image file of it | \"n/a\", pathname of image file of it | \"n/a\" ) of processes whose ({stix_object1} of it as lowercase contains \"{expr1_value}\" as lowercase {comparator} {stix_object2} of image file of it as lowercase = \"{expr2_value}\" as lowercase )"
+}
