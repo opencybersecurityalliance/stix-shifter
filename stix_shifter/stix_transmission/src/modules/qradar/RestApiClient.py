@@ -38,8 +38,8 @@ class RestApiClient:
                 self.headers['proxy'] = proxy_url
                 self.headers['Proxy-Authorization'] = 'Basic ' + proxy_auth
 
-        self.x_forward_proxy = proxy.get('x_forward_proxy')
-        self.x_forward_proxy_auth = proxy.get('x_forward_proxy_auth')
+            self.x_forward_proxy = proxy.get('x_forward_proxy')
+            self.x_forward_proxy_auth = proxy.get('x_forward_proxy_auth')
 
         self.server_ip = server_ip
         self.base_uri = '/api/'

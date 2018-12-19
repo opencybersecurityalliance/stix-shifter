@@ -78,11 +78,13 @@
   },
   "dummyDestinationPortField": {
     "key": "network-traffic.dst_port",
-    "object": "nt"
+    "object": "nt",
+    "transformer": "ToInteger"
   },
   "dummySourcePortField": {
     "key": "network-traffic.src_port",
-    "object": "nt"
+    "object": "nt",
+    "transformer": "ToInteger"
   },
   "dummyNetworkProtocolField": {
     "key": "network-traffic.protocols",
