@@ -2,7 +2,6 @@ import logging
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-from . import bigfix_data_mapping
 from . import bigfix_query_constructor
 
 logger = logging.getLogger(__name__)
@@ -27,12 +26,14 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Relevance language")
 
         query_object = generate_query(data)
-        data_model_mapper = bigfix_data_mapping.BigFixDataMapper(options)
         result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
         timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
         query_string = bigfix_query_constructor.translate_pattern(
-            query_object, data_model_mapper, result_limit, timerange)
-            
+            query_object, result_limit, timerange)
+
         print(query_string)
 
-        return query_string
+        besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BESAPI.xsd\"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>' + \
+            query_string + '</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
+
+        return besapi_query

@@ -30,7 +30,9 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     #     bundle["objects"] += results
     
     results = list(map(ds2stix.transform, data))
-    bundle["objects"] += results
+    for obj in results:
+        if obj is not None:
+            bundle["objects"].append(obj)
 
     return bundle
 
@@ -135,6 +137,7 @@ class DataSourceObjToStixObj:
         """
 
         object_map = {}
+        final_obj = {}
         computer_id = computer_obj['computerID']
         computer_name = computer_obj['computerName']
 
@@ -147,7 +150,11 @@ class DataSourceObjToStixObj:
         # }
 
         results = computer_obj['result']
-        final_obj = DataSourceObjToStixObj.format_computer_obj(results)
+        is_failure = computer_obj['isFailure']
+        if is_failure == False:
+            final_obj = DataSourceObjToStixObj.format_computer_obj(results)
+        else:
+            return 
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
         transformers = self.transformers
@@ -185,7 +192,7 @@ class DataSourceObjToStixObj:
                             continue
                     DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
                 else:
-                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    stix_value = DataSourceObjToStixObj._get_value(final_obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                         continue
                     DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
@@ -198,18 +205,30 @@ class DataSourceObjToStixObj:
         return observation
     
     def format_computer_obj(computer_obj):
-        # 'result' : process, process_name: systemd, pid: 1, sha256: 9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6, sha1: 916933045c5c91ebcaa325e7f8302f3a732a0a3d, md5: 28a9beb86c4d4c31ba572805bea8494f, path: /usr/lib/systemd/systemd
+        # file, .X0-lock, sha256, 7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940, sha1, 8b5e953be1db90172af66631132f6f27dda402d2, md5, e5307d27f0eb9a27af8597a1ddc51e89, /tmp/.X0-lock, 1541424894
+        # process, systemd, 1, sha256, 9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6, sha1, 916933045c5c91ebcaa325e7f8302f3a732a0a3d, md5, 28a9beb86c4d4c31ba572805bea8494f, /usr/lib/systemd/systemd, 1541424881
 
         obj_list = computer_obj.split(',')
-        
-        formatted_obj = {
-            'result': obj_list[0],
-            'process_name': obj_list[1],
-            'process_id': obj_list[2],
-            'sha256hash': obj_list[4],
-            'sha1hash': obj_list[6],
-            'md5hash': obj_list[8],
-            'file_path': obj_list[9]
-        }
+        formatted_obj = {}
+
+        if computer_obj.startswith('process'):
+            formatted_obj['start_time'] = obj_list[10].strip()
+            formatted_obj['type'] = obj_list[0].strip()
+            formatted_obj['process_name'] = obj_list[1].strip()
+            formatted_obj['process_id'] = obj_list[2].strip()
+            formatted_obj['sha256hash'] = obj_list[4].strip()
+            formatted_obj['sha1hash'] = obj_list[6].strip()
+            formatted_obj['md5hash'] = obj_list[8].strip()
+            formatted_obj['file_path'] = obj_list[9].strip()
+        elif computer_obj.startswith('file'):
+            formatted_obj['type'] = obj_list[0].strip()
+            formatted_obj['file_name'] = obj_list[1].strip()
+            formatted_obj['sha256hash'] = obj_list[3].strip()
+            formatted_obj['sha1hash'] = obj_list[5].strip()
+            formatted_obj['md5hash'] = obj_list[7].strip()
+            formatted_obj['file_path'] = obj_list[8].strip()
+            formatted_obj['modified_time'] = obj_list[9].strip()
+        else:
+            print('Unknown result')
 
         return formatted_obj

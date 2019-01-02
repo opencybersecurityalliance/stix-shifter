@@ -38,6 +38,17 @@
     "process_id": {
         "key": "process.pid",
         "object": "process"
+    },
+    "start_time":
+    {
+        "key": "created",
+        "transformer": "EpochSecondsToTimestamp",
+        "cybox": false
+    },
+    "modified_time":
+    {
+        "key": "modified",
+        "transformer": "EpochSecondsToTimestamp",
+        "cybox": false
     }
-
 }
