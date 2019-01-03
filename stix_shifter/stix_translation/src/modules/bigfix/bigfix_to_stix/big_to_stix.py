@@ -19,8 +19,6 @@ class BigFixToStix(BaseResultTranslator):
         """
         self.mapping_json = options.get('mapping', {})
         
-        # result_data = data.replace('\"isFailure\": False', '\"isFailure\": \"False\"')
-        # json_data = json.loads(result_data)
         # json library fails to load the data so we are using yaml library (YAML is a superset of JSON)
         json_data = yaml.load(data)
         data_source = json.loads(data_source)

@@ -16,18 +16,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options):
     bundle['objects'] += [data_source]
 
     ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options)
-
-    # source_obj = list(data)
-    # print(type(source_obj))
-    # print(source_obj[0])
-    
-    # print(type(source_obj))
-    # for index in data:
-    #     obj_dict = dict(index)
-    #     obj_data = obj_dict.get('data')
-        
-    #     results = list(map(ds2stix.transform, obj_data))
-    #     bundle["objects"] += results
     
     results = list(map(ds2stix.transform, data))
     for obj in results:
@@ -140,14 +128,6 @@ class DataSourceObjToStixObj:
         final_obj = {}
         computer_id = computer_obj['computerID']
         computer_name = computer_obj['computerName']
-
-        # computer_identity = {
-        #     "type": "identity",
-        #     "id": "identity" + '--' + str(uuid.uuid4()),
-        #     "identity_class": "system",
-        #     "name": str(computer_id) + '-' + computer_name,
-        #     "created_by_ref": self.identity_id
-        # }
 
         results = computer_obj['result']
         is_failure = computer_obj['isFailure']

@@ -17,15 +17,9 @@ class RelevanceQueryStringPatternTranslator:
         ComparisonComparators.Like: "contains",
         # ComparisonComparators.In: "IN",
         ComparisonComparators.Matches: 'MATCHES',
-        # ComparisonComparators.IsSubSet: 'INCIDR',
         ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.  
         ObservationOperators.And: 'OR'
-    }
-
-    query_types = {
-        "file": "file",
-        "process": "process"
     }
 
     query_format = {
