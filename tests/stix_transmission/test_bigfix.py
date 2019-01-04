@@ -1,6 +1,7 @@
 from stix_shifter.stix_transmission.src.modules.bigfix import bigfix_connector
 from unittest.mock import patch
 import unittest
+import json
 
 
 class BigFixMockJsonResponse:
@@ -456,8 +457,9 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
-
+        bf_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        results_response = json.loads(bf_response)
+        
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -513,7 +515,8 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        bf_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        results_response = json.loads(bf_response)
 
         assert results_response is not None
         assert 'success' in results_response

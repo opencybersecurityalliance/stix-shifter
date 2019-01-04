@@ -39,16 +39,39 @@
         "key": "process.pid",
         "object": "process"
     },
-    "start_time":
-    {
-        "key": "created",
-        "transformer": "EpochSecondsToTimestamp",
-        "cybox": false
-    },
-    "modified_time":
-    {
-        "key": "modified",
-        "transformer": "EpochSecondsToTimestamp",
-        "cybox": false
-    }
+    "start_time": [
+        {
+            "key": "created",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        }
+    ],
+    "modified_time": [
+        {
+            "key": "modified",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        }
+    ]
+    
 }
