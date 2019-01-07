@@ -1,7 +1,7 @@
 import importlib
 
 
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
