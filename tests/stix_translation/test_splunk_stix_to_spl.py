@@ -40,7 +40,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv6-addr:value = 'fe80::8c3b:a720:dc5c:2abf%19']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '((tag="flow" AND src_ip = "fe80::8c3b:a720:dc5c:2abf%19") OR (tag="flow" AND dest_ip = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = '((tag="flow" AND src_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19") OR (tag="flow" AND dest_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': 'fe80::8c3b:a720:dc5c:2abf%19'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -56,7 +56,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = '((tag="flow" AND src_mac = "00-00-5E-00-53-00") OR (tag="flow" AND dest_mac = "00-00-5E-00-53-00")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -64,7 +64,7 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
 
-        queries = '(tag="flow" AND dest_fqdn = "example.com") earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = '(tag="flow" AND url = "example.com") earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -74,7 +74,7 @@ class TestStixToSpl(unittest.TestCase, object):
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         
         # Expect the STIX and to convert to an SPL OR.
-        queries = '(tag="flow" AND dest_fqdn = "example.com") OR (tag="flow" AND mac = "00-00-5E-00-53-00") earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = '(tag="flow" AND url = "example.com") OR ((tag="flow" AND src_mac = "00-00-5E-00-53-00") OR (tag="flow" AND dest_mac = "00-00-5E-00-53-00")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}, {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -83,7 +83,7 @@ class TestStixToSpl(unittest.TestCase, object):
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         
         # Expect the STIX and to convert to an AQL AND.
-        queries = '((tag="flow" AND mac = "00-00-5E-00-53-00") AND (tag="flow" AND dest_fqdn = "example.com")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = '(((tag="flow" AND src_mac = "00-00-5E-00-53-00") OR (tag="flow" AND dest_mac = "00-00-5E-00-53-00")) AND (tag="flow" AND url = "example.com")) earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
