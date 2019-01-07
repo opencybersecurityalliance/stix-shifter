@@ -15,6 +15,10 @@
         "cybox": false,
         "transformer": "ToInteger"
     },
+    "_raw": {
+        "key": "artifact.payload_bin",
+        "transformer": "ToBase64"
+    },
     "dest_ip": [
         {
             "key": "ipv4-addr.value",
@@ -55,7 +59,7 @@
         "object": "network-traffic",
         "transformer": "ToInteger"
     },
-    "transport": {
+    "protocol": {
         "key": "network-traffic.protocols",
         "object": "network-traffic",
         "transformer": "ToLowercaseArray"
