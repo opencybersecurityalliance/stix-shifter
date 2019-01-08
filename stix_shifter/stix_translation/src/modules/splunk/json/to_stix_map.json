@@ -207,10 +207,6 @@
         "key": "file.size",
         "object": "file"
     },
-    "domain": {
-      "key": "domain-name.value",
-      "transformer": "ToDomainName"
-    },
     "mac": {
         "key": "mac-addr.value"
     },
@@ -218,10 +214,16 @@
         "key":"windows-registry-key.key",
         "object": "windows-registry-key"     
     },
-    "url":{
+    "url":[
+      {
         "key":"url.value",
         "object": "web"     
-    },
+      },
+      {
+        "key": "domain-name.value",
+        "transformer": "ToDomainName"
+      }
+    ],
     "src_user":[
         {
             "key":"email-addr.value",
