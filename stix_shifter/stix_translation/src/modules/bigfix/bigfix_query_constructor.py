@@ -93,20 +93,6 @@ class RelevanceQueryStringPatternTranslator:
                 return self.query_string
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression, qualifier)
-        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
-            else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
-        elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
-            return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
-                                                       operator=operator,
-                                                       expr2=self._parse_expression(expression.expr2))
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         else:
@@ -125,24 +111,26 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
     final_query = ""
     name_object = 'name'
     hash_object = 'hashes'
+    value_object = 'value'
+    directory_alias = 'folder'
 
     if query_type == 'file':
-        if name_object in statements and hash_object in statements and 'folder' in statements:
-            file_name = statements.get('name')
-            path_value = statements.get('folder')
-            hash_value = statements.get('value')
-            hash_type = statements.get('hashes')
+        if name_object in statements and hash_object in statements and directory_alias in statements:
+            file_name = statements.get(name_object)
+            path_value = statements.get(directory_alias)
+            hash_value = statements.get(value_object)
+            hash_type = statements.get(hash_object)
             format_type = 'file_name_with_hash'
             final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(name_object=name_object,file_name=file_name,expression_operator=statements.get('expression_operator'),hash_type=hash_type,hash_value=hash_value,file_path=path_value)
         elif hash_object in statements:
-            path_value = statements.get('folder')
-            hash_type = statements.get('hashes')
-            hash_value = statements.get('value')
+            path_value = statements.get(directory_alias)
+            hash_type = statements.get(hash_object)
+            hash_value = statements.get(value_object)
             format_type = 'file_query'
             final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=hash_type,object_value=hash_value,file_path=path_value)
         elif hash_object not in statements:
-            file_name = statements.get('name')
-            path_value = statements.get('folder')
+            file_name = statements.get(name_object)
+            path_value = statements.get(directory_alias)
             if "*" not in file_name:
                 format_type = 'file_query'
                 final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(stix_object=name_object,object_value=file_name,file_path=path_value)
@@ -151,7 +139,7 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
                 final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(file_path=path_value)
     elif query_type == 'process':
         if hash_object not in statements:
-            process_name = statements.get('name')
+            process_name = statements.get(name_object)
             if "*" not in process_name:
                 format_type = 'filter_processes_with_name'
                 final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(process_object=name_object,process_name=process_name)
@@ -159,9 +147,9 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
                 format_type = 'all_processes'
                 final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type)
         else:
-            process_name = statements.get('name')
-            hash_type = statements.get('hashes')
-            hash_value = statements.get('value')
+            process_name = statements.get(name_object)
+            hash_type = statements.get(hash_object)
+            hash_value = statements.get(value_object)
             format_type = 'process_name_with_hash'
             final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(process_object=name_object,process_name=process_name,expression_operator=statements.get('expression_operator'), hash_type=hash_type,hash_value=hash_value)
     else:
