@@ -207,8 +207,9 @@
         "key": "file.size",
         "object": "file"
     },
-    "dest_fqdn": {
-        "key": "domain-name.value"
+    "domain": {
+      "key": "domain-name.value",
+      "transformer": "ToDomainName"
     },
     "mac": {
         "key": "mac-addr.value"
