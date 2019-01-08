@@ -6,7 +6,7 @@
         "process": ["process", "authentication", "file", "directory"],
         "network": ["network-traffic", "dst_ip", "src_ip"],
         "change": ["windows-registry-key", "file", "directory", "authentication"],
-        "endpoint": ["windows-registry-key", "file", "directory", "authentication"],
+        "endpoint": ["file", "directory", "authentication"],
         "email": ["email-addr", "email-message"]
     },
 
