@@ -1,6 +1,6 @@
 from os import path
 import json
-from stix_shifter.src.exceptions import DataMappingException
+from ...exceptions import DataMappingException
 
 
 def _fetch_mapping():
@@ -14,7 +14,7 @@ def _fetch_mapping():
         return map_data
     except Exception as ex:
         print('exception in main():', ex)
-        return {}
+    return {}
 
 
 class CarbonBlackDataMapper:
@@ -49,4 +49,4 @@ class CarbonBlackDataMapper:
             return cb_select
         except Exception as ex:
             print('Exception while reading cb fields file:', ex)
-return {}
+        return {}

@@ -1,11 +1,46 @@
 {
-  "process":{
-    "start": ["starttime"],
-    "interface_ip": ["sourceip"],
-    "comms_ip": ["destinationip"],
-    "username": ["username"],
-    "process_name": ["filename"],
-    "domain": ["domainname"],
-    "last_update": ["endtime"]
+  "ipaddr": {
+    "fields": {
+      "value": ["sourceip", "destinationip", "identityip"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["sourcemac", "destinationmac"]
+    }
+  },
+  "filemod": {
+    "fields": {
+      "name": ["filename"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"]
+    }
+  },
+  "username": {
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["payload"]
+    }
+  },
+  "domain": {
+    "fields": {
+      "value": ["domainname"]
+    }
   }
 }

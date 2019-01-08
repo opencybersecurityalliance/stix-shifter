@@ -5,23 +5,23 @@ import re
 
 logger = logging.getLogger(__name__)
 
-from stix_shifter.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
-from stix_shifter.src.transformers import TimestampToMilliseconds, ValueTransformer
+from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, ValueTransformer
 
 
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'stix_shifter/src/modules/carbonblack/json/network_protocol_map.json').read()
+            'stix_shifter/stix_translation/src/modules/carbonblack/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
         print('exception in reading mapping file:', ex)
-        return {}
+    return {}
 
 
 class CbQueryStringPatternTranslator:
@@ -279,4 +279,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
         else:
             queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
 
-return queries
+    return queries

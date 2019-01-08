@@ -32,4 +32,4 @@ class StixToCB(BaseQueryTranslator):
         timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
         query_string = cb_query_constructor.translate_pattern(
             query_object, data_model_mapper, result_limit, timerange)
-return query_string
+        return query_string

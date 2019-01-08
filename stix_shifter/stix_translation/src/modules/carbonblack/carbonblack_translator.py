@@ -15,4 +15,4 @@ class Translator(BaseTranslator):
             path.join(basepath, "json", "to_stix_map.json"))
         self.mapping_filepath = filepath
         self.result_translator = JSONToStix(filepath)
-self.query_translator = StixToCB()
+        self.query_translator = StixToCB()
