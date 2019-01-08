@@ -258,3 +258,26 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE (sha256hash = 'sha256hash' OR filehash = 'sha256hash') OR (md5hash = 'md5hash' OR filehash = 'md5hash') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'file:hashes.SHA-256', 'comparison_operator': '=', 'value': 'sha256hash'}, {'attribute': 'file:hashes.MD5', 'comparison_operator': '=', 'value': 'md5hash'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_source_and_destination_references(self):
+        where_statements = [
+            [
+                "WHERE sourceip = '192.0.2.0' {} {}".format(default_limit, default_time),
+                "WHERE sourcemac = '00-00-5E-00-53-00' {} {}".format(default_limit, default_time),
+                "WHERE INCIDR('192.0.2.0/25',sourceip) {} {}".format(default_limit, default_time),
+                "WHERE sourceip = '3001:0:0:0:0:0:0:2' {} {}".format(default_limit, default_time)
+            ],
+            [
+                "WHERE destinationip = '192.0.2.0' {} {}".format(default_limit, default_time),
+                "WHERE destinationmac = '00-00-5E-00-53-00' {} {}".format(default_limit, default_time),
+                "WHERE INCIDR('192.0.2.0/25',destinationip) {} {}".format(default_limit, default_time),
+                "WHERE destinationip = '3001:0:0:0:0:0:0:2' {} {}".format(default_limit, default_time)
+            ] 
+        ]
+        for ref_index, reference in enumerate(["network-traffic:src_ref.value", "network-traffic:dst_ref.value"]):
+            for dat_index, datum in enumerate(["'192.0.2.0'", "'00-00-5E-00-53-00'", "'192.0.2.0/25'", "'3001:0:0:0:0:0:0:2'"]):
+                stix_pattern = "[{} = {}]".format(reference, datum)
+                query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
+                where_statement = where_statements[ref_index][dat_index]
+                parsed_stix = [{'attribute': reference, 'comparison_operator': '=', 'value': datum.strip("'")}]
+                assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
