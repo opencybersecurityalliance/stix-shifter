@@ -22,7 +22,7 @@ Requires Python 3.6
 
 This library takes in STIX 2 Patterns as input, and "finds" data that matches the patterns inside various products that house repositories of cybersecurity data. Examples of such products include SIEM systems, endpoint management systems, threat intelligence platforms, orchestration platforms, network control points, data lakes, and more.
 
-In addition to "finding" the data using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same. As anyone with experience in data science will tell you, the cleansing and normalizing of the data accross domains, is one of the largest hurdles to overcome with attempting to build cross-platform security analytics. This is one of the barriers we are attempting to break down with STIX Shifter.
+In addition to "finding" the data using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same. As anyone with experience in data science will tell you, the cleansing and normalizing of the data across domains, is one of the largest hurdles to overcome with attempting to build cross-platform security analytics. This is one of the barriers we are attempting to break down with STIX Shifter.
 
 ## This sounds like Sigma, I already have that
 
@@ -33,7 +33,7 @@ In addition to "finding" the data using these patterns, STIX-Shifter uniquely al
 You may want to use this library and/or contribute to development, if any of the follwing are true:
 
 - You are a vendor or project owner who wants to add some form of query or enrichment functionality to your product capabilities
-- You are an end user and want to have a way to script searches and/or queries as part of your orchestrsation flow
+- You are an end user and want to have a way to script searches and/or queries as part of your orchestration flow
 - You are a vendor or project owner who has data that could be made available, and you want to contribute an adapter
 - You just want to help make the world a safer place!
 
