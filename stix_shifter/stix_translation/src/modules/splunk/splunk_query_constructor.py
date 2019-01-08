@@ -47,6 +47,7 @@ class SplunkSearchTranslator:
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
+
             if qualifier:
                 # start time pattern
                 st_pattern = r"(START'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
@@ -180,7 +181,8 @@ class _ObservationExpressionTranslator:
                     encoders.simple(expression.value)
                 ), expression.negated)
 
-                return "({} AND {})".format(object_scoping, splunk_comparison)
+                # removing tags
+                return "({})".format(splunk_comparison)
             else:
                 return "({} AND {})".format(
                     object_scoping,
@@ -206,7 +208,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
     else:
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
-    
+
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
     
