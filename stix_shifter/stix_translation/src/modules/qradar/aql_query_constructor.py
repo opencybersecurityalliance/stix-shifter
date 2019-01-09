@@ -134,6 +134,9 @@ class AqlQueryStringPatternTranslator:
                 if not parsed_reference:
                     continue
                 comparison_string += parsed_reference
+            # For [ipv4-addr:value = <CIDR value>]
+            elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
+                comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
