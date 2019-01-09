@@ -99,7 +99,9 @@
         {
             "key": "user-account.user_id",
             "object": "authentication"
-        },
+        }
+    ],
+    "process_user":[
         {
             "key": "windows-registry-key.creator_user_ref",
             "object": "windows-registry-key",
