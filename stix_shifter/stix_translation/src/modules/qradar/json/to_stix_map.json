@@ -87,6 +87,28 @@
       "references": "src_ip"
     }
   ],
+  "sourcemac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt_mac",
+      "references": "src_mac"
+    }
+  ],
+  "destinationmac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt_mac",
+      "references": "dst_mac"
+    }
+  ],
   "qid": {
     "key": "x_com_ibm_ariel.qid",
     "cybox": false
@@ -119,17 +141,17 @@
   },
   "destinationport": {
     "key": "network-traffic.dst_port",
-    "object": "nt",
+    "object": ["nt","nt_mac"],
     "transformer": "ToInteger"
   },
   "sourceport": {
     "key": "network-traffic.src_port",
-    "object": "nt",
+    "object": ["nt","nt_mac"],
     "transformer": "ToInteger"
   },
   "protocol": {
     "key": "network-traffic.protocols",
-    "object": "nt",
+    "object": ["nt","nt_mac"],
     "transformer": "ToLowercaseArray"
   },
   "domainname": {
