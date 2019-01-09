@@ -51,14 +51,13 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        # List for any queries that are split due to START STOP qualifier
+        self.qualified_queries = []
+        # Translated query string without any qualifiers
         self.translated = self.parse_expression(pattern)
+        self.qualified_queries.append(self.translated)
 
-        # Split WHERE statements having a START STOP qualifier: AQL only supports one START STOP qualifier per query.
-        query_split = self.translated.split("SPLIT")
-        if len(query_split) > 1:
-            self.queries = _format_split_queries(query_split)
-        else:
-            self.queries = query_split
+        self.qualified_queries = _format_translated_queries(self.qualified_queries)
 
     @staticmethod
     def _format_set(values) -> str:
@@ -201,16 +200,25 @@ class AqlQueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "SPLIT{} limit {} {}SPLIT".format(comparison_string, self.result_limit, qualifier)
+                self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
+                return ''
             else:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
-                                             self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr2))
+            operator = self.comparator_lookup[expression.operator]
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if not expression_01 or not expression_02:
+                return ''
+            if isinstance(expression.expr1, CombinedComparisonExpression):
+                expression_01 = "({})".format(expression_01)
+            if isinstance(expression.expr2, CombinedComparisonExpression):
+                expression_02 = "({})".format(expression_02)
+            query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
-                return "SPLIT{} limit {} {}SPLIT".format(query_string, self.result_limit, qualifier)
+                self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
+                return ''
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -226,9 +234,16 @@ class AqlQueryStringPatternTranslator:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
-            return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
-                                                       operator=operator,
-                                                       expr2=self._parse_expression(expression.expr2))
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if expression_01 and expression_02:
+                return "({}) {} ({})".format(expression_01, operator, expression_02)
+            elif expression_01:
+                return "{}".format(expression_01)
+            elif expression_02:
+                return "{}".format(expression_02)
+            else:
+                return ''
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
@@ -279,11 +294,7 @@ def _convert_timestamps_to_milliseconds(query_parts):
     return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
 
 
-def _format_split_queries(query_array):
-    # removing leading AND/OR
-    query_array = list(map(lambda x: re.sub("^\s?(OR|AND)\s?", "", x), query_array))
-    # removing trailing AND/OR
-    query_array = list(map(lambda x: re.sub("\s?(OR|AND)\s?$", "", x), query_array))
+def _format_translated_queries(query_array):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -315,7 +326,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
-    for where_statement in translated_where_statements.queries:
+    translated_queries = translated_where_statements.qualified_queries
+    for where_statement in translated_queries:
         has_start_stop = _test_START_STOP_format(where_statement)
         if(has_start_stop):
             queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
