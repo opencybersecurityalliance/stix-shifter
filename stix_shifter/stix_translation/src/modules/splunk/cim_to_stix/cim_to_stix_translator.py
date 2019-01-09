@@ -5,7 +5,7 @@ from stix2validator import validate_instance, print_results
 from . import observable
 
 def convert_to_stix(data_source, map_data, data, transformers, options):
-    
+
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
@@ -87,15 +87,27 @@ class DataSourceObjToStixObj:
         """
         obj_type, obj_prop = key_to_add.split('.', 1)
         objs_dir = observation['objects']
-        if obj_name in obj_name_map:
-            obj = objs_dir[obj_name_map[obj_name]]
+        if type(obj_name) is list:
+            for obj_name_index in obj_name:
+                if obj_name_index in obj_name_map:
+                    obj = objs_dir[obj_name_map[obj_name_index]]
+                else:
+                    obj = {'type': obj_type}
+                    obj_dir_key = str(len(objs_dir))
+                    objs_dir[obj_dir_key] = obj
+                    if obj_name_index is not None:
+                        obj_name_map[obj_name_index] = obj_dir_key
+                DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
         else:
-            obj = {'type': obj_type}
-            obj_dir_key = str(len(objs_dir))
-            objs_dir[obj_dir_key] = obj
-            if obj_name is not None:
-                obj_name_map[obj_name] = obj_dir_key
-        DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
+            if obj_name in obj_name_map:
+                obj = objs_dir[obj_name_map[obj_name]]
+            else:
+                obj = {'type': obj_type}
+                obj_dir_key = str(len(objs_dir))
+                objs_dir[obj_dir_key] = obj
+                if obj_name is not None:
+                    obj_name_map[obj_name] = obj_dir_key
+            DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
 
     @staticmethod
     def _valid_stix_value(props_map, key, stix_value):
