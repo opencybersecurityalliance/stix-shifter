@@ -11,6 +11,7 @@ from stix_shifter.stix_translation.src.modules.car.car_data_mapping import CarDa
 
 from . import encoders
 from . import object_scopers
+import json
 
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
@@ -181,8 +182,20 @@ class _ObservationExpressionTranslator:
                     encoders.simple(expression.value)
                 ), expression.negated)
 
-                # removing tags
-                return "({})".format(splunk_comparison)
+                # removing tags, # adding default fields for query
+                map_file = open(
+                    'stix_shifter/stix_translation/src/modules/splunk/json/splunk_event_fields.json').read()
+                map_data = json.loads(map_file)
+                map_data = map_data["default"]
+                fields = ""
+                for field in map_data:
+                    if field != map_data[-1]:
+                        fields += field
+                        fields += ", "
+                    else:
+                        fields += field
+
+                return "search ({} | fields {})".format(splunk_comparison, fields)
             else:
                 return "({} AND {})".format(
                     object_scoping,
