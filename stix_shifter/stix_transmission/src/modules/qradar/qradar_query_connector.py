@@ -19,7 +19,6 @@ class QRadarQueryConnector(BaseQueryConnector):
             if response_code == 201:
                 return_obj['success'] = True
                 return_obj['search_id'] = response_json['search_id']
-                #return_obj['debug_yuri'] = 'true'
             else:
                 return_obj['success'] = False
                 return_obj['error'] = response_json['message']

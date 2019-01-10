@@ -18,43 +18,42 @@ class APIClient():
         # This version of the ariel APIClient is designed to function with
         # version 6.0 of the ariel API.
 
-        print("connection: " + str(connection))
         self.endpoint_start = 'api/ariel/'
         headers = dict()
-        hostPort = connection.get('host') + ':' + str(connection.get('port', ''))
-        headers['Version'] = '8.0'
-        headers['Accept'] = 'application/json'
+        host_port = connection.get('host') + ':' + str(connection.get('port', ''))
+        headers['version'] = '8.0'
+        headers['accept'] = 'application/json'
         auth = configuration.get('auth')
         if auth != None and auth.get('SEC', None) != None:
-            headers['Sec'] = auth.get('SEC')
-        urlModifierFunction = None
+            headers['sec'] = auth.get('SEC')
+        url_modifier_function = None
         proxy = connection.get('proxy')
         if proxy is not None:
             proxy_url = proxy.get('url')
             proxy_auth = proxy.get('auth')
             if (proxy_url is not None and proxy_auth is not None):
                 headers['proxy'] = proxy_url
-                headers['Proxy-authorization'] = 'Basic ' + proxy_auth
+                headers['proxy-authorization'] = 'Basic ' + proxy_auth
             if proxy.get('x_forward_proxy', None) is not None:
-                headers['X-forward-url'] = 'https://' + \
-                    hostPort + '/'# + endpoint, is set by 'add_endpoint_to_url_header'
-                hostPort = proxy.get('x_forward_proxy')
+                headers['x-forward-url'] = 'https://' + \
+                    host_port + '/'# + endpoint, is set by 'add_endpoint_to_url_header'
+                host_port = proxy.get('x_forward_proxy')
                 if proxy.get('x_forward_proxy_auth', None) is not None:
-                    headers['X-forward-auth'] = proxy.get('x_forward_proxy_auth')
-                headers['User-agent'] = 'UDS'
-                urlModifierFunction = self.add_endpoint_to_url_header
+                    headers['x-forward-auth'] = proxy.get('x_forward_proxy_auth')
+                headers['user-agent'] = 'UDS'
+                url_modifier_function = self.add_endpoint_to_url_header
         
-        self.client = RestApiClient(hostPort, 
+        self.client = RestApiClient(host_port, 
                                     None, 
                                     connection.get('cert', None), 
                                     headers, 
-                                    urlModifierFunction
+                                    url_modifier_function
                                     )
         
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
         # it concatenates the endpoint to the header containing the url.
-        headers['X-forward-url'] += endpoint
+        headers['x-forward-url'] += endpoint
         # url is returned since it points to the proxy for initial call
         return url
 
