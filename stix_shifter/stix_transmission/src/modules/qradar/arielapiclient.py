@@ -43,11 +43,12 @@ class APIClient():
                 headers['user-agent'] = 'UDS'
                 url_modifier_function = self.add_endpoint_to_url_header
         
-        self.client = RestApiClient(host_port, 
-                                    None, 
-                                    connection.get('cert', None), 
-                                    headers, 
-                                    url_modifier_function
+        self.client = RestApiClient(host_port,
+                                    None,
+                                    connection.get('cert', None),
+                                    headers,
+                                    url_modifier_function,
+                                    connection.get('cert_verify', 'True')
                                     )
         
     def add_endpoint_to_url_header(self, url, endpoint, headers):

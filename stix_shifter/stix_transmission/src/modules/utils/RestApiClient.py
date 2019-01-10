@@ -8,13 +8,14 @@ import errno
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
 
-    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None):
+    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)            
         self.server_ip = server_ip
+        self.cert_verify = str(cert_verify).lower() not in ['0', 'f', 'false', 'f', 'n', 'no', 'disable', 'disabled']
         self.cert_file = None
-        if cert is not None:
+        if cert is not None and self.cert_verify:
             # put key/cert pair into a file to read it later
             cert_file_name = "cert.pem"
             with open(cert_file_name, 'w+') as f:
@@ -55,9 +56,8 @@ class RestApiClient:
         else:
             url = 'https://' + self.server_ip + '/' + endpoint
         try:
-            
             call = getattr(requests, method.lower())
-            response = call(url, headers=actual_headers, data=data, cert=self.cert_file)            
+            response = call(url, headers=actual_headers, cert=self.cert_file, data=data, verify=self.cert_verify)
             response.raise_for_status()
             if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                             and "Deprecated" in response.headers['Content-Type']:

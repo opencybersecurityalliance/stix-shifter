@@ -21,7 +21,12 @@ class APIClient():
         self.output_mode = 'json'
         self.endpoint_start = 'services/'
         headers = dict()
-        self.client = RestApiClient(connection.get('host'), connection.get('port'), connection.get('cert', None), headers)
+        self.client = RestApiClient(connection.get('host'),
+                                    connection.get('port'),
+                                    connection.get('cert', None),
+                                    headers,
+                                    cert_verify=connection.get('cert_verify', 'True')
+                                    )
         auth = configuration.get('auth')                
         self.set_splunk_auth_token(auth, headers)
 

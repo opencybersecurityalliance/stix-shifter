@@ -15,7 +15,12 @@ class APIClient():
         headers = dict()
         headers['Authorization'] = b"Basic " + base64.b64encode(
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
-        self.client = RestApiClient(connection.get('host'), connection.get('port'), connection.get('cert', None), headers)
+        self.client = RestApiClient(connection.get('host'),
+                                    connection.get('port'),
+                                    connection.get('cert', None),
+                                    headers,
+                                    cert_verify=connection.get('cert_verify', 'True')
+                                    )
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
