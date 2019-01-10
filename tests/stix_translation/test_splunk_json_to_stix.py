@@ -271,7 +271,7 @@ class TestTransform(object):
                 "dest_ip": dest_ip, "dest_port": dest_port, "src_ip": src_ip, 
                 "src_port": src_port, "protocol": transport
         }
-
+        print(data)
         result_bundle = cim_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
@@ -281,6 +281,7 @@ class TestTransform(object):
         observed_data = result_bundle_objects[1]
 
         validated_result = validate_instance(observed_data)
+        #mac address support is breaking this since without a mac it will still print a network traffic for it
         #assert(validated_result.is_valid == True)
         assert('objects' in observed_data)
         objects = observed_data['objects']
@@ -417,7 +418,7 @@ class TestTransform(object):
 
         data = {"src_ip": "169.250.0.1", "src_port": "1220", "src_mac": "aa:bb:cc:dd:11:22",
                 "dest_ip": "127.0.0.1", "dest_port": "1120", "dest_mac": "ee:dd:bb:aa:cc:11",
-                "file_hash": "41a26255d16d121dc525a6445144b895",
+                "file_hash": "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef",
                 "user": "sname", "url": "https://wally.fireeye.com/malware_analysis/analyses?maid=1",
                 "protocol": "tcp", "_bkt": "main~44~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06", "_cd": "44:12606114",
                 "_indextime": "1546960685",
@@ -443,7 +444,7 @@ class TestTransform(object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         validated_result = validate_instance(observed_data)
-        #assert(validated_result.is_valid == True)
+        assert(validated_result.is_valid == True)
         assert('objects' in observed_data)
         objects = observed_data['objects']
         nt_obj = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
@@ -491,7 +492,7 @@ class TestTransform(object):
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
         assert (file_obj is not None), 'file object type not found'
         assert (file_obj.keys() == {'type', 'hashes'})
-        assert (file_obj['hashes']['SHA-256'] == "41a26255d16d121dc525a6445144b895")
+        assert (file_obj['hashes']['SHA-256'] == "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef")
 
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert (user_obj is not None), 'user object type not found'
