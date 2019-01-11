@@ -1,0 +1,46 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["NetworkSourceIpV4", "NetworkDestinationIpV4"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["NetworkSourceIpV6", "NetworkDestinationIpV6"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["NetworkSourceDomain", "NetworkDestinationDomain"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["NetworkSourceMac", "NetworkDestinationMac"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["NetworkSourcePort"],
+      "dst_port": ["NetworkDestinationPort"],
+      "start": ["CreatedAt.Start"],
+      "end": ["CreatedAt.End"],
+      "protocols[*]": ["NetworkProtocol"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["ResourceAwsIamAccessKeyUserName"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["Title","NoteText", "RecommendationText"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["NetworkSourceDomain", "NetworkDestinationDomain"]
+    }
+  }
+}

@@ -66,7 +66,7 @@ class DataSourceObjToStixObj:
         Add stix_value to dictionary based on the input key, the key can be '.'-separated path to inner object
 
         :param obj: the dictionary we are adding our key to
-        :param key: the key to add 
+        :param key: the key to add
         :param stix_value: the STIX value translated from the input object
         """
 
@@ -86,7 +86,7 @@ class DataSourceObjToStixObj:
 
         :param key_to_add: STIX property key derived from the mapping file
         :param observation: the the STIX observation currently being worked on
-        :param stix_value: the STIX value translated from the input object 
+        :param stix_value: the STIX value translated from the input object
         :param obj_name_map: the mapping of object name to actual object
         :param obj_name: the object name derived from the mapping file
         """
@@ -121,7 +121,7 @@ class DataSourceObjToStixObj:
 
         :param props_map: the map of STIX properties which contains validation attributes
         :param key: the STIX property name
-        :param stix_value: the STIX value translated from the input object 
+        :param stix_value: the STIX value translated from the input object
         :return: whether STIX value is valid for this STIX property
         :rtype: bool
         """
@@ -133,6 +133,67 @@ class DataSourceObjToStixObj:
                 return False
         return True
 
+    def _transform(self,object_map,observation,ds_map,ds_key,obj):
+
+        to_map = obj[ ds_key ]
+
+        if ds_key not in ds_map:
+            print('{} is not found in map, skipping'.format(ds_key))
+            return
+
+        if isinstance( to_map, dict ):
+            print('{} is complex; descending'.format(to_map))
+            # If the object is complex we must descend into the map on both sides
+            for key in to_map.keys():
+                self._transform(object_map,observation,ds_map[ds_key],key,to_map)
+            return
+
+        generic_hash_key = ''
+
+        # get the stix keys that are mapped
+        ds_key_def_obj = ds_map[ds_key]
+        if isinstance(ds_key_def_obj, list):
+            ds_key_def_list = ds_key_def_obj
+        else:
+            # Use callback function to run module-specific logic to handle unknown filehash types
+            if self.callback:
+                try:
+                    generic_hash_key = self.callback(obj, ds_key, ds_key_def_obj['key'], self.options)
+                except(Exception):
+                    return
+
+            ds_key_def_list = [ds_key_def_obj]
+
+        for ds_key_def in ds_key_def_list:
+            if ds_key_def is None or 'key' not in ds_key_def:
+                print('{} is not valid (None, or missing key)'.format(ds_key_def))
+                continue
+
+            if generic_hash_key:
+                key_to_add = generic_hash_key
+            else:
+                key_to_add = ds_key_def['key']
+
+            transformer = self.transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
+
+            if ds_key_def.get('cybox', self.cybox_default):
+                object_name = ds_key_def.get('object')
+                print("ds_key_def inside {}".format(ds_key_def))
+                if 'references' in ds_key_def:
+                    stix_value = object_map[ds_key_def['references']]
+                else:
+                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        continue
+
+                DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
+            else:
+                stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                    continue
+
+                DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
+
     def transform(self, obj):
         """
         Transforms the given object in to a STIX observation based on the mapping file and transform functions
@@ -143,7 +204,7 @@ class DataSourceObjToStixObj:
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
-        transformers = self.transformers
+
         observation = {
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
@@ -152,52 +213,15 @@ class DataSourceObjToStixObj:
         }
 
         # create normal type objects
-        for ds_key in obj:
-            if ds_key not in ds_map:
-                print('{} is not found in map, skipping'.format(ds_key))
-                continue
-
-            generic_hash_key = ''
-            # get the stix keys that are mapped
-            ds_key_def_obj = self.ds_to_stix_map[ds_key]
-            if isinstance(ds_key_def_obj, list):
-                ds_key_def_list = ds_key_def_obj
-            else:
-                # Use callback function to run module-specific logic to handle unknown filehash types
-                if self.callback:
-                    try:
-                        generic_hash_key = self.callback(obj, ds_key, ds_key_def_obj['key'], self.options)
-                    except(Exception):
-                        continue
-                ds_key_def_list = [ds_key_def_obj]
-
-            for ds_key_def in ds_key_def_list:
-                if ds_key_def is None or 'key' not in ds_key_def:
-                    print('{} is not valid (None, or missing key)'.format(ds_key_def))
-                    continue
-                if generic_hash_key:
-                    key_to_add = generic_hash_key
-                else:
-                    key_to_add = ds_key_def['key']
-                transformer = transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
-
-                if ds_key_def.get('cybox', self.cybox_default):
-                    object_name = ds_key_def.get('object')
-                    if 'references' in ds_key_def:
-                        stix_value = object_map[ds_key_def['references']]
-                    else:
-                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                            continue
-                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
-                else:
-                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                        continue
-                    DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
+        if isinstance(obj,dict):
+            for ds_key in obj.keys():
+                self._transform(object_map,observation,ds_map,ds_key,obj)
+        else:
+            print("Not a dict: {}".format(obj))
 
         # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)
             print_results(validated_result)
+
         return observation
