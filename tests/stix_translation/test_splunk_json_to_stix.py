@@ -1,4 +1,4 @@
-from stix_shifter.stix_translation.src.modules.splunk.cim_to_stix import cim_to_stix_translator
+from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter.stix_translation.src import transformers
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.splunk import splunk_translator
@@ -36,7 +36,7 @@ class TestTransform(object):
     def test_common_prop(self):
         data = {"_time": "2018-08-21T15:11:55.000+00:00", "event_count": 5}
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
         assert(result_bundle['type'] == 'bundle')
@@ -82,7 +82,7 @@ class TestTransform(object):
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
         }
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
         assert(result_bundle['type'] == 'bundle')
@@ -127,8 +127,9 @@ class TestTransform(object):
         assert(dir_obj['path'] == "C:\\Users\\someuser\\sample.dll")
         assert(dir_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
-
-        assert(objects.keys() == set(map(str, range(0, 4))))
+        print(objects.keys())
+        print(result_bundle_objects)
+        assert(objects.keys() == set(map(str, range(0, 5))))
        
        
     def test_certificate_cim_to_stix(self):
@@ -150,7 +151,7 @@ class TestTransform(object):
             "ssl_hash": ssl_hash, "ssl_publickey_algorithm": key_algorithm
         }
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         
         assert(result_bundle['type'] == 'bundle')
@@ -200,7 +201,7 @@ class TestTransform(object):
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
         }
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         
         assert(result_bundle['type'] == 'bundle')
@@ -272,7 +273,7 @@ class TestTransform(object):
                 "src_port": src_port, "protocol": transport
         }
         print(data)
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
         assert(result_bundle['type'] == 'bundle')
@@ -323,7 +324,7 @@ class TestTransform(object):
                 "src_user": src_user, "subject": subject, "is_multipart": multi 
         }
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
         assert(result_bundle['type'] == 'bundle')
@@ -436,7 +437,7 @@ class TestTransform(object):
                 "_sourcetype": "fe_cef_syslog", "_time": "2019-01-08T15:18:04.000+00:00", "event_count": 1
                 }
 
-        result_bundle = cim_to_stix_translator.convert_to_stix(
+        result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
 
         assert(result_bundle['type'] == 'bundle')
