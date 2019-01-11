@@ -431,22 +431,24 @@ class TestBigfixConnection(unittest.TestCase):
 
         mock_api_client.return_value = None
         mocked_return_value = """{
-                                    "reportingAgents": "100",
-                                    "totalResults": "201",
-                                    "results": 
-                                    [
+                                    "reportingAgents": 2,
+                                    "totalResults": 2,
+                                    "results": [
                                         {
-                                            "computerID":12369754,
-                                            "computerName":"fake.computer.name",
-                                            "subQueryID":1,"isFailure":false,
-                                            "result":".err, d41d8cd98f00b204e9800998ecf8427e, u002f.err","ResponseTime":0
+                                        "computerID": 12369754,
+                                        "computerName": "bigdata4545.canlab.ibm.com",
+                                        "subQueryID": 1,
+                                        "isFailure": false,
+                                        "result": "file, .X0-lock, sha256, 7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940, sha1, 8b5e953be1db90172af66631132f6f27dda402d2, md5, e5307d27f0eb9a27af8597a1ddc51e89, /tmp/.X0-lock, 1541424894",
+                                        "ResponseTime": 0
                                         },
                                         {
-                                            "computerID":14821900,
-                                            "computerName":"DESKTOP-C30V1JF",
-                                            "subQueryID":1,
-                                            "isFailure":true,
-                                            "result":"12520437.cpx, 0a0feb9eb28bde8cd835716343b03b14, C:\\\\Windows\\\\system32\\\\12520437.cpx","ResponseTime":62000
+                                        "computerID": 14821900,
+                                        "computerName": "DESKTOP-C30V1JF",
+                                        "subQueryID": 1,
+                                        "isFailure": true,
+                                        "result": "Singular expression refers to nonexistent object.",
+                                        "ResponseTime": 1000
                                         }
                                     ]
                                 }"""
@@ -464,7 +466,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in results_response
         assert results_response['success'] == True
         assert 'data' in results_response
-        assert len(results_response['data']) == 2
+        assert len(results_response['data']) == 1
 
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_exeception(self, mock_results_response, mock_api_client):

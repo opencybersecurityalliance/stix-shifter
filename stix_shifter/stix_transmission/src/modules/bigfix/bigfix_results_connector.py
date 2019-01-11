@@ -24,7 +24,6 @@ class BigFixResultsConnector(BaseResultsConnector):
             else:
                 return_obj['success'] = False
                 return_obj['error'] = 'error when getting results'
-            # print(json.dumps(return_obj, indent=2))
             return json.dumps(return_obj)
         except Exception as err:
             return_obj = dict()
