@@ -183,7 +183,7 @@ class _ObservationExpressionTranslator:
                 ), expression.negated)
 
                 # removing tags,
-                return "search ({})".format(splunk_comparison)
+                return "({})".format(splunk_comparison)
             else:
                 return "({} AND {})".format(
                     object_scoping,
@@ -213,8 +213,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
 
-    _test_for_earliest_latest(translated_query)
-
     # adding default fields for query
     map_data = data_model_mapping.FIELDS["default"]
     fields = ""
@@ -226,6 +224,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
             fields += field
 
     if not has_earliest_latest:
-        translated_query += ' earliest="{earliest}" | head {result_limit} fields {fields}'.format(earliest=timerange, result_limit=result_limit, fields=fields)
+        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
 
+    translated_query = "search " + translated_query + "| fields {fields}".format(fields=fields)
     return translated_query
