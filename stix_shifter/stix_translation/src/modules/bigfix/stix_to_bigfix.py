@@ -33,7 +33,4 @@ class StixToRelevanceQuery(BaseQueryTranslator):
 
         print(query_string)
 
-        besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BESAPI.xsd\"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>' + \
-            query_string + '</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
-
-        return besapi_query
+        return query_string

@@ -8,15 +8,9 @@ class RelevanceQueryStringPatternTranslator:
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
         ComparisonExpressionOperators.Or: "OR",
-        # ComparisonComparators.GreaterThan: ">",
-        # ComparisonComparators.GreaterThanOrEqual: ">=",
-        # ComparisonComparators.LessThan: "<",
-        # ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.Equal: "=",
         ComparisonComparators.NotEqual: "!=",
         ComparisonComparators.Like: "contains",
-        # ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'MATCHES',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.  
         ObservationOperators.And: 'OR'
@@ -154,5 +148,8 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
             final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(process_object=name_object,process_name=process_name,expression_operator=statements.get('expression_operator'), hash_type=hash_type,hash_value=hash_value)
     else:
         print('Undefined query type')
+    
+    besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BESAPI.xsd\"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>' + \
+            final_query + '</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
 
-    return final_query
+    return besapi_query
