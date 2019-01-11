@@ -93,5 +93,19 @@
   },
   "dummyDomainNameField": {
     "key": "domain-name.value"
+  },
+  "dummyProcess": {
+    "dummyPath": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "dummyPid": [
+      {
+        "object": "proc",
+        "key": "process.id"
+      }
+    ]
   }
 }
