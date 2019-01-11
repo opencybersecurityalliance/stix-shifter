@@ -10,11 +10,12 @@ class QRadarDeleteConnector(BaseDeleteConnector):
         try:
             response = self.api_client.delete_search(search_id)
             response_code = response.code
+            print(response_code)
             response_json = json.loads(response.read())
-
+            print(response_json)
             # Construct a response object
             return_obj = dict()
-            if response_code == 200:
+            if response_code == 202:
                 return_obj['success'] = True
             else:
                 return_obj['success'] = False
