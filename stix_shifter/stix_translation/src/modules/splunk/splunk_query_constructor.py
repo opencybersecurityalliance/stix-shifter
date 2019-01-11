@@ -11,7 +11,6 @@ from stix_shifter.stix_translation.src.modules.car.car_data_mapping import CarDa
 
 from . import encoders
 from . import object_scopers
-import json
 
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
@@ -182,8 +181,10 @@ class _ObservationExpressionTranslator:
                     encoders.simple(expression.value)
                 ), expression.negated)
 
-                # removing tags,
-                return "({})".format(splunk_comparison)
+                if isinstance(self.dmm, CarDataMapper):
+                    return "({} AND {})".format(object_scoping, splunk_comparison)
+                else:
+                    return "({})".format(splunk_comparison)
             else:
                 return "({} AND {})".format(
                     object_scoping,
@@ -203,28 +204,36 @@ def _test_for_earliest_latest(query_string) -> bool:
     match = re.search(pattern, query_string)
     return bool(match)
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search_key, timerange=None):
     # CAR + Splunk = we want to override the default object scoper, I guess?
+    is_cim = False
     if isinstance(data_model_mapping, CarDataMapper):
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
+        is_cim = False
     else:
+        is_cim = True
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
 
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
 
     # adding default fields for query
-    map_data = data_model_mapping.FIELDS["default"]
-    fields = ""
-    for field in map_data:
-        if field != map_data[-1]:
-            fields += field
-            fields += ", "
-        else:
-            fields += field
+
+    if is_cim:
+        map_data = data_model_mapping.FIELDS["default"]
+        fields = ""
+        for field in map_data:
+            if field != map_data[-1]:
+                fields += field
+                fields += ", "
+            else:
+                fields += field
 
     if not has_earliest_latest:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
 
-    translated_query = "search " + translated_query + "| fields {fields}".format(fields=fields)
+    if is_cim:
+        translated_query = search_key + " " + translated_query + " | fields {fields}".format(fields=fields)
+
+    #return "({} AND {})".format(object_scoping, splunk_comparison)
     return translated_query
