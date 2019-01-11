@@ -4,9 +4,9 @@
         "authentication": ["authentication"],
         "certificate": ["certificate"],
         "process": ["process", "authentication", "file", "directory"],
-        "network": ["network-traffic", "dst_ip", "src_ip"],
+        "network": ["network-traffic", "network-traffic-mac", "dst_ip", "src_ip"],
         "change": ["windows-registry-key", "file", "directory", "authentication"],
-        "endpoint": ["windows-registry-key", "file", "directory", "authentication"],
+        "endpoint": ["file", "directory", "authentication"],
         "email": ["email-addr", "email-message"]
     },
 
@@ -14,6 +14,10 @@
         "key": "number_observed",
         "cybox": false,
         "transformer": "ToInteger"
+    },
+    "_raw": {
+        "key": "artifact.payload_bin",
+        "transformer": "ToBase64"
     },
     "dest_ip": [
         {
@@ -47,17 +51,17 @@
     ],
     "dest_port": {
         "key": "network-traffic.dst_port",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToInteger"
     },
     "src_port": {
         "key": "network-traffic.src_port",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToInteger"
     },
-    "transport": {
+    "protocol": {
         "key": "network-traffic.protocols",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToLowercaseArray"
     },
        
@@ -95,7 +99,9 @@
         {
             "key": "user-account.user_id",
             "object": "authentication"
-        },
+        }
+    ],
+    "process_user":[
         {
             "key": "windows-registry-key.creator_user_ref",
             "object": "windows-registry-key",
@@ -203,20 +209,42 @@
         "key": "file.size",
         "object": "file"
     },
-    "dest_fqdn": {
-        "key": "domain-name.value"
+  "src_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
     },
-    "mac": {
-        "key": "mac-addr.value"
+    {
+      "key": "network-traffic.src_ref",
+      "object": "network-traffic-mac",
+      "references": "src_mac"
+    }
+   ],
+   "dest_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
     },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "network-traffic-mac",
+      "references": "dst_mac"
+    }
+   ],
     "object_path":{
         "key":"windows-registry-key.key",
         "object": "windows-registry-key"     
     },
-    "url":{
+    "url":[
+      {
         "key":"url.value",
         "object": "web"     
-    },
+      },
+      {
+        "key": "domain-name.value",
+        "transformer": "ToDomainName"
+      }
+    ],
     "src_user":[
         {
             "key":"email-addr.value",

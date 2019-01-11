@@ -55,7 +55,7 @@ class TestAnalyticTranslator(unittest.TestCase):
                     search_platform = get_enum_for_input(sp)
 
                     if expected_result != None:
-                        if search_platform is SearchPlatforms.SPLUNK:
+                        if data_model is DataModels.CAR and search_platform is SearchPlatforms.SPLUNK:
                             expected_result += ' earliest="{}" | head {}'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
 
                         new_test = TestAnalyticTranslator.success_test_generator(test_pattern, search_platform,
