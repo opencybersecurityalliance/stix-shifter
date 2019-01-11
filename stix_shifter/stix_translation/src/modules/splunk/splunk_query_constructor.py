@@ -182,20 +182,8 @@ class _ObservationExpressionTranslator:
                     encoders.simple(expression.value)
                 ), expression.negated)
 
-                # removing tags, # adding default fields for query
-                map_file = open(
-                    'stix_shifter/stix_translation/src/modules/splunk/json/splunk_event_fields.json').read()
-                map_data = json.loads(map_file)
-                map_data = map_data["default"]
-                fields = ""
-                for field in map_data:
-                    if field != map_data[-1]:
-                        fields += field
-                        fields += ", "
-                    else:
-                        fields += field
-
-                return "search ({} | fields {})".format(splunk_comparison, fields)
+                # removing tags,
+                return "search ({})".format(splunk_comparison)
             else:
                 return "({} AND {})".format(
                     object_scoping,
@@ -224,8 +212,20 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timera
 
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
-    
+
+    _test_for_earliest_latest(translated_query)
+
+    # adding default fields for query
+    map_data = data_model_mapping.FIELDS["default"]
+    fields = ""
+    for field in map_data:
+        if field != map_data[-1]:
+            fields += field
+            fields += ", "
+        else:
+            fields += field
+
     if not has_earliest_latest:
-        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+        translated_query += ' earliest="{earliest}" | head {result_limit} fields {fields}'.format(earliest=timerange, result_limit=result_limit, fields=fields)
 
     return translated_query

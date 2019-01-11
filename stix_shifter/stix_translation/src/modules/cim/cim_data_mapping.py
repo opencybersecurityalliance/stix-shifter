@@ -133,10 +133,29 @@ class CimDataMapper:
       }
     }
 
-    def __init__(self, mapping=None):
-      # use user defined mapping object if provided in options
-      if mapping:
-        self.MAPPINGS = mapping
+    FIELDS = {
+      "default": [
+        "src_ip",
+        "src_port",
+        "src_mac",
+        "src_ipv6",
+        "dest_ip",
+        "dest_port",
+        "dest_mac",
+        "dest_ipv6",
+        "file_hash",
+        "user",
+        "url",
+        "protocol"
+      ]
+    }
+
+    def __init__(self, mapping=None, fields=None):
+        # use user defined mapping object if provided in options
+        if mapping:
+            self.MAPPINGS = mapping
+        if fields:
+            self.FIELDS = fields
 
 
     # TODO:
