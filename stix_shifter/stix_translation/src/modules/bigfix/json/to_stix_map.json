@@ -72,6 +72,10 @@
             "transformer": "EpochSecondsToTimestamp",
             "cybox": false
         }
-    ]
-    
+    ],
+    "computer_identity":
+    {
+        "key": "name",
+        "cybox": false
+    } 
 }

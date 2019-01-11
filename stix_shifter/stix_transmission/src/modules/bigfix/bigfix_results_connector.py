@@ -39,8 +39,9 @@ class BigFixResultsConnector(BaseResultsConnector):
         obj_list = result.split(',')
         formatted_obj = {}
 
-        formatted_obj['computerID'] = computer_obj['computerID']
-        formatted_obj['computerName'] = computer_obj['computerName']
+        computer_identity = str(computer_obj['computerID']) + '-' + computer_obj['computerName']
+        
+        formatted_obj['computer_identity'] = computer_identity
         formatted_obj['subQueryID'] = computer_obj['subQueryID']
         if result.startswith('process'):
             formatted_obj['start_time'] = obj_list[10].strip()

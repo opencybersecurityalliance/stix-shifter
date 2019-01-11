@@ -28,7 +28,7 @@ class TestBigFixResultsToStix(object):
 
 
     def test_common_prop(self):
-        data = {"computerID": 12369754, "computerName": "bigdata4545.canlab.ibm.com", "subQueryID": 1, "start_time": "1541424881", "type": "process", "process_name": "systemd", "process_id": "1", "sha256hash": "9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6", "sha1hash": "916933045c5c91ebcaa325e7f8302f3a732a0a3d", "md5hash": "28a9beb86c4d4c31ba572805bea8494f", "file_path": "/usr/lib/systemd/systemd"}
+        data = {"computer_identity": "12369754-bigdata4545.canlab.ibm.com", "subQueryID": 1, "start_time": "1541424881", "type": "process", "process_name": "systemd", "process_id": "1", "sha256hash": "9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6", "sha1hash": "916933045c5c91ebcaa325e7f8302f3a732a0a3d", "md5hash": "28a9beb86c4d4c31ba572805bea8494f", "file_path": "/usr/lib/systemd/systemd"}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         print(json.dumps(result_bundle, indent=2))
@@ -54,7 +54,7 @@ class TestBigFixResultsToStix(object):
     
     def test_file_results_to_stix(self):
         file_name = '.X0-lock'
-        data = {"computerID": 12369754, "computerName": "bigdata4545.canlab.ibm.com", "subQueryID": 1, "type": "file", "file_name": ".X0-lock", "sha256hash": "7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940", "sha1hash": "8b5e953be1db90172af66631132f6f27dda402d2", "md5hash": "e5307d27f0eb9a27af8597a1ddc51e89", "file_path": "/tmp/.X0-lock", "modified_time": "1541424894"}
+        data = {"computer_identity": "12369754-bigdata4545.canlab.ibm.com", "subQueryID": 1, "type": "file", "file_name": ".X0-lock", "sha256hash": "7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940", "sha1hash": "8b5e953be1db90172af66631132f6f27dda402d2", "md5hash": "e5307d27f0eb9a27af8597a1ddc51e89", "file_path": "/tmp/.X0-lock", "modified_time": "1541424894"}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         
@@ -75,7 +75,7 @@ class TestBigFixResultsToStix(object):
 
     def test_process_results_to_stix(self):
         process_name = 'systemd'
-        data = {"computerID": 12369754, "computerName": "bigdata4545.canlab.ibm.com", "subQueryID": 1, "start_time": "1541424881", "type": "process", "process_name": "systemd", "process_id": "1", "sha256hash": "9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6", "sha1hash": "916933045c5c91ebcaa325e7f8302f3a732a0a3d", "md5hash": "28a9beb86c4d4c31ba572805bea8494f", "file_path": "/usr/lib/systemd/systemd"}
+        data = {"computer_identity": "12369754-bigdata4545.canlab.ibm.com", "subQueryID": 1, "start_time": "1541424881", "type": "process", "process_name": "systemd", "process_id": "1", "sha256hash": "9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404ba52b726792a6", "sha1hash": "916933045c5c91ebcaa325e7f8302f3a732a0a3d", "md5hash": "28a9beb86c4d4c31ba572805bea8494f", "file_path": "/usr/lib/systemd/systemd"}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         print(json.dumps(result_bundle, indent=2))
