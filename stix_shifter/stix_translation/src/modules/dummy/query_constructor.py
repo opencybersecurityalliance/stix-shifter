@@ -8,7 +8,7 @@ import re
 logger = logging.getLogger(__name__)
 
 
-class DummyQueryStringPatternTranslator:
+class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
@@ -36,11 +36,11 @@ class DummyQueryStringPatternTranslator:
     @staticmethod
     def _format_set(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([DummyQueryStringPatternTranslator._escape_value(value) for value in gen]))
+        return "({})".format(' OR '.join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
     def _format_match(value) -> str:
-        raw = DummyQueryStringPatternTranslator._escape_value(value)
+        raw = QueryStringPatternTranslator._escape_value(value)
         if raw[0] == "^":
             raw = raw[1:]
         else:
@@ -58,7 +58,7 @@ class DummyQueryStringPatternTranslator:
     @staticmethod
     def _format_like(value) -> str:
         value = "'%{value}%'".format(value=value)
-        return DummyQueryStringPatternTranslator._escape_value(value)
+        return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -166,11 +166,11 @@ class DummyQueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping):
-    query = DummyQueryStringPatternTranslator(pattern, data_model_mapping).translated
+    query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
 
     # Change return statement as required to fit with data source query language.
     # If supported by the language, a limit on the number of results may be desired.
-    return "SELECT * FROM dummyTableName WHERE {}".format(query)
+    return "SELECT * FROM tableName WHERE {}".format(query)
