@@ -49,10 +49,10 @@ BigFix module currently supports limited stix patterns for the big process query
 ( "process", name of it | "n/a", process id of it as string | "n/a", "sha256", sha256 of image file of it | "n/a", "sha1", sha1 of image file of it | "n/a", "md5", md5 of image file of it | "n/a", pathname of image file of it | "n/a", (start time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of processes whose (name of it as lowercase = "system" as lowercase )
 ```
 
-### Bigfix query result:
+### Bigfix query result (Result is formatted by stix transmission module):
 
 ```
-{'success': True, 'data': [{"computerID": 111222333, "computerName": "DESKTOP-TEST", "subQueryID": 1, "isFailure": True, "result": "The operator 'start time' is not defined.", "ResponseTime": 1000}, {"computerID": 111555222, "computerName": "1111.canlab.ibm.com", "subQueryID": 1, "isFailure": False, "result": "process, systemd, 1, sha256, 9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404baaaaaaaaxxxvvv, sha1, 916933045c5c91ebcaa325e7f8302f3a777aaaa, md5, 28a9beb86c4d4c31bcdf2805bea112244, /file/path/systemd, 1541424881", "ResponseTime": 6000}, {"computerID": 111222444, "computerName": "canlab.ibm.com", "subQueryID": 1, "isFailure": False, "result": "process, systemd-test2, 583, sha256, 6718ca93ac89be647b8faf70d8db98a2257f1adfc10adasfasf234234hh25d79b5f, sha1, b8124a45cb6efb6eb0e79deaab2d755c6aaavvvbbb1, md5, 9f1475e503bfdc1f473d72c888aa1111, /file/path/systemd-test2, 1541424886", "ResponseTime": 6000}]}
+[{"computer_identity": "12369754-bigdata4545.canlab.ibm.com", "subQueryID": 1, "start_time": "1541424881", "type": "process", "process_name": "systemd", "process_id": "1", "sha256hash": "74c4ff75e3623e64e3d6620864b69ed1d75fa460e520b88ed234234fsdfsdsdfs", "sha1hash": "916933045c5c91ebcaa325e7f8302f3123123dfgf0000", "md5hash": "28a9beb86c4d4c31ba572805baaa777f", "file_path": "/file/path/systemd"}]
 ```
 
 ### Stix observable output:
@@ -60,19 +60,18 @@ BigFix module currently supports limited stix patterns for the big process query
 ```
 {
     "type": "bundle",
-    "id": "bundle--f6c3d2ec-dd40-4732-aaa3-b6647ebb6b71",
+    "id": "bundle--e50ba76e-b2e4-4afc-8c29-611d752e0d02",
     "objects": [
         {
             "type": "identity",
-            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
             "name": "BigFix",
             "identity_class": "events"
         },
         {
-            "id": "observed-data--7436f8c5-8e5a-421b-8fd2-be460dd60802",
+            "id": "observed-data--f6f39014-7068-40b0-841f-623e8933b071",
             "type": "observed-data",
-            "name": "111555222-1111.canlab.ibm.com",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
             "objects": {
                 "0": {
                     "type": "process",
@@ -83,9 +82,9 @@ BigFix module currently supports limited stix patterns for the big process query
                 "1": {
                     "type": "file",
                     "hashes": {
-                        "SHA-256": "9c74c625b2aba7a2e8d8a42e2e94715c355367f7cbfa9bd5404baaaaaaaaxxxvvv",
-                        "SHA-1": "916933045c5c91ebcaa325e7f8302f3a777aaaa",
-                        "MD5": "28a9beb86c4d4c31bcdf2805bea112244"
+                        "SHA-256": "9c74c625b2aba7a2e8d8a42e2e94715c355aaafff5556bd5404ba52b726792a6",
+                        "SHA-1": "916933045c5c91ebcaa325e7f8302f3123123dfgf0000",
+                        "MD5": "28a9beb86c4d4c31ba572805baaa777f"
                     },
                     "parent_directory_ref": "2"
                 },
@@ -94,35 +93,10 @@ BigFix module currently supports limited stix patterns for the big process query
                     "path": "/file/path/systemd"
                 }
             },
-            "created": "2018-11-05T13:34:41.000Z"
-        },
-        {
-            "id": "observed-data--4065c9fd-f94b-421c-afa6-71ae991ddc77",
-            "type": "observed-data",
-            "name": "111222444-canlab.ibm.com",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "objects": {
-                "0": {
-                    "type": "process",
-                    "name": "systemd-test2",
-                    "pid": "583",
-                    "binary_ref": "1"
-                },
-                "1": {
-                    "type": "file",
-                    "hashes": {
-                        "SHA-256": "6718ca93ac89be647b8faf70d8db98a2257f1adfc10adasfasf234234hh25d79b5f",
-                        "SHA-1": "b8124a45cb6efb6eb0e79deaab2d755c6aaavvvbbb1",
-                        "MD5": "9f1475e503bfdc1f473d72c888aa1111"
-                    },
-                    "parent_directory_ref": "2"
-                },
-                "2": {
-                    "type": "directory",
-                    "path": "/file/path/systemd-test2"
-                }
-            },
-            "created": "2018-11-05T13:34:46.000Z"
+            "name": "1234567-test.canlab.ibm.com",
+            "created": "2018-11-05T13:34:41.000Z",
+            "first_observed": "2018-11-05T13:34:41.000Z",
+            "last_observed": "2018-11-05T13:34:41.000Z"
         }
     ]
 }
@@ -139,77 +113,51 @@ BigFix module currently supports limited stix patterns for the big process query
 ```
 ("file", name of it | "n/a", "sha256", sha256 of it | "n/a", "sha1", sha1 of it | "n/a", "md5", md5 of it | "n/a", pathname of it | "n/a", (modification time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of files of folder ("/tmp")
 ```
-### Bigfix query result:
 
-```
-{'success': True, 'data': }[{"computerID": 121111, "computerName": "DESKTOP-TEST", "subQueryID": 1, "isFailure": True, "result": "Singular expression refers to nonexistent object.", "ResponseTime": 1000}, {"computerID": 222333555, "computerName": "1122.canlab.ibm.com", "subQueryID": 1, "isFailure": False, "result": "file, test_file1, sha256, 7236f966f07259a1de3ee0d48a222222222444444d76dcabbbb9d6e00940, sha1, 8b5e953be1db90172af66631132f6f27dda402d2, md5, e5307d27f0eb11112222333331ddc51e89, /tmp/test_file1, 1541424894", "ResponseTime": 5000}, {"computerID": 444555666, "computerName": "33445.canlab.ibm.com", "subQueryID": 1, "isFailure": False, "result": "file, test_file2, sha256, 80f0be6226a036ade711111112222213ed1a2ef02ed4c1d2424247025d6351529, sha1, 468ffec645354007f155555666c4a3c5c16ac65, md5, 8d683d83c1bcfa95a66666777774f52c, /tmp/test_file2, 1544528864", "ResponseTime": 5000}]}
-```
+### Bigfix query result (Result is formatted by stix transmission module):
+
+[{"computer_identity": "12369754-bigdata4545.canlab.ibm.com", "subQueryID": 1, "type": "file", "file_name": "test_file.txt", "sha256hash": "7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940", "sha1hash": "8b5e953be1db90172af66631132f6f27dda402d2", "md5hash": "e5307d27f0eb9a27af8597a1ddc51e89", "file_path": "/tmp/test_file.txt", "modified_time": "1541424894"}]
 
 ### Stix observable output:
 ```
 {
     "type": "bundle",
-    "id": "bundle--316f370d-aa27-4c66-b7dc-62cb2e053ba3",
+    "id": "bundle--2b6fc06d-0869-4d0a-bac6-1bdefa5e0870",
     "objects": [
         {
             "type": "identity",
-            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
             "name": "BigFix",
             "identity_class": "events"
         },
         {
-            "id": "observed-data--58a09e1a-8f1b-497a-8222-91c572a64370",
+            "id": "observed-data--fb149477-9efe-4646-a831-2d482f314b9b",
             "type": "observed-data",
-            "name": "222333555-1122.canlab.ibm.com",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
             "objects": {
                 "0": {
                     "type": "file",
-                    "name": "test_file1",
+                    "name": "test_file.txt",
                     "hashes": {
-                        "SHA-256": "7236f966f07259a1de3ee0d48a222222222444444d76dcabbbb9d6e00940",
-                        "SHA-1": "8b5e953be1db90172af66631132f6f27dda402d2",
-                        "MD5": "e5307d27f0eb11112222333331ddc51e89"
+                        "SHA-256": "9c74c625b2aba7a2e8d8a42e2e94715c355aaafff5556bd5404ba52b726792a6",
+                        "SHA-1": "916933045c5c91ebcaa325e7f8302f3123123dfgf0000",
+                        "MD5": "28a9beb86c4d4c31ba572805baaa777f"
                     },
                     "parent_directory_ref": "1"
                 },
                 "1": {
                     "type": "directory",
-                    "path": "/tmp/test_file1"
+                    "path": "/tmp/test_file.txt"
                 },
                 "2": {
                     "type": "process",
                     "binary_ref": "0"
                 }
             },
-            "modified": "2018-11-05T13:34:54.000Z"
-        },
-        {
-            "id": "observed-data--1ac2e1fa-6dce-42e0-a5e2-86dee75c590e",
-            "type": "observed-data",
-            "name": "444555666-33445.canlab.ibm.com",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "name": "test_file2",
-                    "hashes": {
-                        "SHA-256": "80f0be6226a036ade711111112222213ed1a2ef02ed4c1d2424247025d6351529",
-                        "SHA-1": "468ffec645354007f155555666c4a3c5c16ac65",
-                        "MD5": "8d683d83c1bcfa95a66666777774f52c"
-                    },
-                    "parent_directory_ref": "1"
-                },
-                "1": {
-                    "type": "directory",
-                    "path": "/tmp/test_file2"
-                },
-                "2": {
-                    "type": "process",
-                    "binary_ref": "0"
-                }
-            },
-            "modified": "2018-12-11T11:47:44.000Z"
+            "name": "1123456-test.canlab.ibm.com",
+            "modified": "2018-11-05T13:34:54.000Z",
+            "first_observed": "2018-11-05T13:34:54.000Z",
+            "last_observed": "2018-11-05T13:34:54.000Z"
         }
     ]
 }
@@ -230,5 +178,3 @@ The actual relevance query is wrapped around by XML tag `<QueryText> query strin
 	</ClientQuery>
 </BESAPI>
 ```
-
-
