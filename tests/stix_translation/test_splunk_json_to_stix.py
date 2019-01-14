@@ -62,7 +62,6 @@ class TestTransform(object):
         assert(observed_data['last_observed'] is not None)
 
     def test_change_cim_to_stix(self):
-        tag = "change"
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
         file_bytes = "300"
@@ -76,7 +75,7 @@ class TestTransform(object):
         file_size = 25536
         
         data = { 
-            "tag": tag, "event_count": count, "_time": time, "user": user,
+            "event_count": count, "_time": time, "user": user,
             "bytes": file_bytes, "object_path": objPath, "file_path": filePath, 
             "file_create_time": create_time, "file_modify_time": modify_time, 
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
@@ -133,7 +132,6 @@ class TestTransform(object):
        
        
     def test_certificate_cim_to_stix(self):
-        tag = "certificate"
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
         serial = "1234"
@@ -145,7 +143,7 @@ class TestTransform(object):
         ssl_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
 
         data = { 
-            "tag": tag, "event_count": count, "_time": time, "ssl_serial": serial,
+            "event_count": count, "_time": time, "ssl_serial": serial,
             "ssl_version": version, "ssl_signature_algorithm": sig_algorithm, 
             "ssl_issuer": issuer, "ssl_subject": subject, 
             "ssl_hash": ssl_hash, "ssl_publickey_algorithm": key_algorithm
@@ -181,7 +179,6 @@ class TestTransform(object):
 
        
     def test_process_cim_to_stix(self):
-        tag = "process"
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
         user = "test_user"
@@ -195,7 +192,7 @@ class TestTransform(object):
         file_size = 25536
         
         data = { 
-            "tag": tag, "event_count": count, "_time": time, "user": user, 
+            "event_count": count, "_time": time, "user": user,
             "process_name": name, "process_id": pid, "file_path": filePath, 
             "file_create_time": create_time, "file_modify_time": modify_time, 
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
@@ -257,8 +254,6 @@ class TestTransform(object):
 
 
     def test_network_cim_to_stix(self):
-
-        tag = "network"
         count = 2
         time = "2018-08-21T15:11:55.000+00:00"
         user = "ibm_user"
@@ -312,15 +307,13 @@ class TestTransform(object):
 
 
     def test_email_cim_to_stix(self):
-
-        tag = "email"
         count = 3
         time = "2018-08-21T15:11:55.000+00:00"
         src_user = "Jane_Doe@ibm.com"
         subject = "Test Subject"
         multi = "False"
 
-        data = {"tag": tag, "event_count": count, "_time": time, 
+        data = {"event_count": count, "_time": time,
                 "src_user": src_user, "subject": subject, "is_multipart": multi 
         }
 
