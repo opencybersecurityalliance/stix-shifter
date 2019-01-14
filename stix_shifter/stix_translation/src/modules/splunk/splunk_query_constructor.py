@@ -229,7 +229,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search
             else:
                 fields += field
 
-    if not has_earliest_latest:
+    if not has_earliest_latest and is_cim:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
 
     if is_cim:
