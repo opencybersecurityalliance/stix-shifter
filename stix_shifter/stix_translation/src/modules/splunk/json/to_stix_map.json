@@ -1,16 +1,5 @@
 { 
-    "tag_to_model": {
-        "web": ["web"],
-        "authentication": ["authentication"],
-        "certificate": ["certificate"],
-        "process": ["process", "authentication", "file", "directory"],
-        "network": ["network-traffic", "network-traffic-mac", "dst_ip", "src_ip"],
-        "change": ["windows-registry-key", "file", "directory", "authentication"],
-        "endpoint": ["file", "directory", "authentication"],
-        "email": ["email-addr", "email-message"]
-    },
-
-    "event_count": {
+   "event_count": {
         "key": "number_observed",
         "cybox": false,
         "transformer": "ToInteger"
