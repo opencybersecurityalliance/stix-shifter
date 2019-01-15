@@ -21,8 +21,9 @@ class QueryStringPatternTranslator:
         ComparisonComparators.NotEqual: "!=",
         ComparisonComparators.Like: "LIKE",
         ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'MATCHES',
-        ComparisonComparators.IsSubSet: 'INCIDR',
+        ComparisonComparators.Matches: 'LIKE',
+        # ComparisonComparators.IsSubSet: '',
+        # ComparisonComparators.IsSuperSet: '',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR'
@@ -132,9 +133,16 @@ class QueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
-                                             self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr2))
+            operator = self.comparator_lookup[expression.operator]
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if not expression_01 or not expression_02:
+                return ''
+            if isinstance(expression.expr1, CombinedComparisonExpression):
+                expression_01 = "({})".format(expression_01)
+            if isinstance(expression.expr2, CombinedComparisonExpression):
+                expression_02 = "({})".format(expression_02)
+            query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 return "{} {}".format(query_string, qualifier)
             else:
@@ -152,9 +160,16 @@ class QueryStringPatternTranslator:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
-            return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
-                                                       operator=operator,
-                                                       expr2=self._parse_expression(expression.expr2))
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if expression_01 and expression_02:
+                return "({}) {} ({})".format(expression_01, operator, expression_02)
+            elif expression_01:
+                return "{}".format(expression_01)
+            elif expression_02:
+                return "{}".format(expression_02)
+            else:
+                return ''
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
@@ -173,4 +188,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
 
     # Change return statement as required to fit with data source query language.
     # If supported by the language, a limit on the number of results may be desired.
+    # A single query string, or an array of query strings may be returned
     return "SELECT * FROM tableName WHERE {}".format(query)
