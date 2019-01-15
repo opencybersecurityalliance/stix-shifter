@@ -30,23 +30,3 @@ class CarbonBlackDataMapper:
         else:
             raise DataMappingException("Unable to map property `{}:{}` into cb".format(
                 stix_object_name, stix_property_name))
-
-    def map_selections(self):
-        try:
-            if self.select_fields_json:
-                cb_fields_json = self.select_fields_json
-                field_list = cb_fields_json
-            else:
-                basepath = path.dirname(__file__)
-                filepath = path.abspath(
-                    path.join(basepath, "json", "cb_event_fields.json"))
-                cb_fields_file = open(filepath).read()
-                cb_fields_json = json.loads(cb_fields_file)
-                # Temporary default selections, this will change based on config override and the STIX pattern that is getting converted to cb.
-                field_list = cb_fields_json['default']
-            cb_select = ", ".join(field_list)
-
-            return cb_select
-        except Exception as ex:
-            print('Exception while reading cb fields file:', ex)
-        return {}

@@ -1,46 +1,23 @@
 {
-  "ipaddr": {
+  "network-traffic":{
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "start": ["start"],
+      "end": ["last_update"]
     }
   },
-  "url": {
+  "file": {
     "fields": {
-      "value": ["url"]
+      "name": ["process_name"]
     }
   },
-  "mac-addr": {
-    "fields": {
-      "value": ["sourcemac", "destinationmac"]
-    }
-  },
-  "filemod": {
-    "fields": {
-      "name": ["filename"]
-    }
-  },
-  "network-traffic": {
-    "fields": {
-      "src_port": ["sourceport"],
-      "dst_port": ["destinationport"],
-      "protocols[*]": ["protocolid"],
-      "start": ["starttime"],
-      "end": ["endtime"]
-    }
-  },
-  "username": {
+  "user-account":{
     "fields": {
       "user_id": ["username"]
     }
   },
-  "artifact": {
+  "domain-name": {
     "fields": {
-      "payload_bin": ["payload"]
-    }
-  },
-  "domain": {
-    "fields": {
-      "value": ["domainname"]
+      "value": ["hostname"]
     }
   }
 }

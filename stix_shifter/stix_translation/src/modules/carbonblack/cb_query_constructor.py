@@ -26,21 +26,8 @@ def _fetch_network_protocol_mapping():
 
 class CbQueryStringPatternTranslator:
     comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'MATCHES',
-        ComparisonComparators.IsSubSet: 'INCIDR',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
+        ComparisonExpressionOperators.And: "&q=",
+        ComparisonComparators.Equal: ":",
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
@@ -48,18 +35,16 @@ class CbQueryStringPatternTranslator:
         self.pattern = pattern
         self.result_limit = result_limit
         self.translated = self.parse_expression(pattern)
-
-        # Split WHERE statements having a START STOP qualifier: Cb only supports one START STOP qualifier per query.
         query_split = self.translated.split("SPLIT")
+        print (query_split)
         if len(query_split) > 1:
             self.queries = _format_split_queries(query_split)
         else:
             self.queries = query_split
-
     @staticmethod
     def _format_set(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([CbQueryStringPatternTranslator._escape_value(value) for value in gen]))
+        return "({})".format('q='.join([CbQueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
     def _format_match(value) -> str:
@@ -95,7 +80,8 @@ class CbQueryStringPatternTranslator:
         return "NOT({})".format(comparison_string)
 
     def _parse_expression(self, expression, qualifier=None) -> str:
-        if isinstance(expression, ComparisonExpression):  # Base Case
+        if isinstance(expression, ComparisonExpression):
+            # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple QRadar fields may map to the same STIX Object
@@ -133,17 +119,8 @@ class CbQueryStringPatternTranslator:
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             for mapped_field in mapped_fields_array:
-                # if its a set operator() query construction will be different.
-                if expression.comparator == ComparisonComparators.IsSubSet:
-                    comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
-                else:
-                    # There's no Cb field for domain-name. using Like operator to find domian name from the url
-                    if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
-                        comparator = self.comparator_lookup[ComparisonComparators.Like]
-                        value = self._format_like(expression.value)
-
-                    comparison_string += "{mapped_field} {comparator} {value}".format(
-                        mapped_field=mapped_field, comparator=comparator, value=value)
+                comparison_string += "{mapped_field}{comparator}{value}".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
 
                 if (mapped_fields_count > 1):
                     comparison_string += " OR "
@@ -154,9 +131,6 @@ class CbQueryStringPatternTranslator:
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
 
-            if expression.comparator == ComparisonComparators.NotEqual:
-                comparison_string = self._negate_comparison(comparison_string)
-
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
@@ -165,7 +139,7 @@ class CbQueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
+            query_string = "{}{}{}".format(self._parse_expression(expression.expr1),
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
@@ -239,6 +213,7 @@ def _convert_timestamps_to_milliseconds(query_parts):
 
 
 def _format_split_queries(query_array):
+
     # removing leading AND/OR
     query_array = list(map(lambda x: re.sub("^\s?(OR|AND)\s?", "", x), query_array))
     # removing trailing AND/OR
@@ -250,6 +225,7 @@ def _format_split_queries(query_array):
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
     formatted_queries = []
     for query in query_array:
+        print (query)
         if _test_START_STOP_format(query):
             # Remove leading 't' before timestamps
             query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
@@ -269,14 +245,8 @@ def _format_split_queries(query_array):
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
-    translated_where_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
-    select_statement = translated_where_statements.dmm.map_selections()
+    translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     queries = []
-    for where_statement in translated_where_statements.queries:
-        has_start_stop = _test_START_STOP_format(where_statement)
-        if(has_start_stop):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
-        else:
-            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
-
+    for where_statement in translated_statements.queries:
+        queries.append("q={}".format(where_statement))
     return queries
