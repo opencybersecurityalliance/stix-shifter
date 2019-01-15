@@ -20,9 +20,6 @@ class Connector(BaseConnector):
         self.api_client = APIClient(connection, configuration)
         self.is_async = True
 
-        self.connection = connection
-        self.configuration = configuration
-
         self.results_connector = self
         self.query_connector = self
         self.ping_connector = self
