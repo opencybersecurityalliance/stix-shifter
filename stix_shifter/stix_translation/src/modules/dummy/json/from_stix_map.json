@@ -30,7 +30,9 @@
       "dst_port": ["DestinationPort"],
       "start": ["StartTime"],
       "end": ["EndTime"],
-      "protocols[*]": ["NetworkProtocol"]
+      "protocols[*]": ["NetworkProtocol"],
+      "src_ref.value": ["SourceIpV4", "SourceIpV6"],
+      "dst_ref.value": ["DestinationIpV4", "DestinationIpV6"]
     }
   },
   "user-account": {
