@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
-
+DEFAULT_SEARCH_KEYWORD = "search"
+DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
 class StixToSplunk(BaseQueryTranslator):
 
@@ -50,5 +51,5 @@ class StixToSplunk(BaseQueryTranslator):
         timerange = '-' + str(timerange) + 'minutes'
 
         query_string = splunk_query_constructor.translate_pattern(
-            query_object, data_model_mapper, result_limit, timerange)
+            query_object, data_model_mapper, result_limit, DEFAULT_SEARCH_KEYWORD, timerange)
         return query_string

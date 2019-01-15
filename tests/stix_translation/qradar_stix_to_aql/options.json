@@ -69,7 +69,9 @@
         "dst_port": ["destinationport"],
         "protocols[*]": ["protocolid"],
         "start": ["starttime"],
-        "end": ["endtime"]
+        "end": ["endtime"],
+        "src_ref.value": ["sourceip", "sourcemac"],
+        "dst_ref.value": ["destinationip", "destinationmac"]
       }
     },
     "user-account": {

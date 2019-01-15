@@ -21,9 +21,11 @@ class SynchronousDummyResultsConnector(BaseResultsConnector):
         :return: in dummy connectors, just returns passed in parameters
         """
         config = params['config']
-        query = params['query']
-        # set headers
 
+        # The post-processed query, already translated from STIX SCO
+        query = params['query']
+
+        # set headers
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json"

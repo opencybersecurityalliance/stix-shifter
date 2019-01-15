@@ -18,7 +18,7 @@ class CimDataMapper:
       "domain-name": { # Network Traffic
         "cim_type": "flow",
         "fields": {
-          "value": "dest_fqdn"
+          "value": "url"
         }
       },
       "email-addr": {
@@ -65,13 +65,13 @@ class CimDataMapper:
       "ipv6-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
-          "value": ["src_ip","dest_ip"]
+          "value": ["src_ipv6","dest_ipv6"]
         }
       },
       "mac-addr": { # Network traffic
         "cim_type": "flow",
         "fields": {
-          "value": "mac"
+          "value": ["src_mac","dest_mac"]
         }
       },
       "mutex": None,
@@ -107,7 +107,7 @@ class CimDataMapper:
       "user-account": { # This is where the static objects in STIX breakdown. Could either do this as a login (authentication) or create (change)
         "cim_type": "authentication",
         "fields": {
-          "account_login": "user"
+          "user_id": "user"
         }
       },
       "windows-registry-key": {
@@ -133,10 +133,29 @@ class CimDataMapper:
       }
     }
 
-    def __init__(self, mapping=None):
-      # use user defined mapping object if provided in options
-      if mapping:
-        self.MAPPINGS = mapping
+    FIELDS = {
+      "default": [
+        "src_ip",
+        "src_port",
+        "src_mac",
+        "src_ipv6",
+        "dest_ip",
+        "dest_port",
+        "dest_mac",
+        "dest_ipv6",
+        "file_hash",
+        "user",
+        "url",
+        "protocol"
+      ]
+    }
+
+    def __init__(self, mapping=None, fields=None):
+        # use user defined mapping object if provided in options
+        if mapping:
+            self.MAPPINGS = mapping
+        if fields:
+            self.FIELDS = fields
 
 
     # TODO:
