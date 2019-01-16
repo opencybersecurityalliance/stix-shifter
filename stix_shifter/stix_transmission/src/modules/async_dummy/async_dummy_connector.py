@@ -1,17 +1,87 @@
 from ..base.base_connector import BaseConnector
-from .async_dummy_ping import AsyncDummyPing
-from .async_dummy_query_connector import AsyncDummyQueryConnector
-from .async_dummy_status_connector import AsyncDummyStatusConnector
-from .async_dummy_results_connector import AsyncDummyResultsConnector
+from .apiclient import APIClient
+from ..base.base_status_connector import Status
+from json import loads
+from enum import Enum
+
+
+class DatasourceStatus(Enum):
+    # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR
+    WAIT = 'WAIT'
+    EXECUTE = 'EXECUTE'
+    SORTING = 'SORTING'
+    COMPLETED = 'COMPLETED'
+    CANCELED = 'CANCELED'
+    ERROR = 'ERROR'
 
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-        host = connection.get('host')
-        port = connection.get('port')
-        path = connection.get('path')
-        self.query_connector = AsyncDummyQueryConnector(host, port, path)
-        self.status_connector = AsyncDummyStatusConnector(host, port, path)
-        self.results_connector = AsyncDummyResultsConnector(host, port, path)
+        self.api_client = APIClient(connection, configuration)
         self.is_async = True
-        self.ping_connector = AsyncDummyPing(host, port, path)
+
+        self.results_connector = self
+        self.query_connector = self
+        self.ping_connector = self
+        self.delete_connector = self
+        self.status_connector = self
+
+    def ping(self):
+        response = self.api_client.ping_data_source()
+        return response
+
+    def create_query_connection(self, query):
+        response = self.api_client.create_search(query)
+        return response
+
+    # Map data source status to connector status
+    def __getStatus(self, status):
+        switcher = {
+            DatasourceStatus.WAIT.value: Status.RUNNING,
+            DatasourceStatus.EXECUTE.value: Status.RUNNING,
+            DatasourceStatus.SORTING.value: Status.RUNNING,
+            DatasourceStatus.COMPLETED.value: Status.COMPLETED,
+            DatasourceStatus.CANCELED.value: Status.CANCELED,
+            DatasourceStatus.ERROR.value: Status.ERROR
+        }
+        return switcher.get(status).value
+
+    def create_status_connection(self, search_id):
+        response = self.api_client.get_search_status(search_id)
+        # Based on the response
+        # return_obj['success'] = True or False
+        # return_obj['status'] = One of the statuses as defined in the Status class:
+        # Status.RUNNING, Status.COMPLETED, Status.CANCELED, Status.ERROR
+        # return_obj['progress'] = Some progress code if returned from the API
+        # Construct a response object
+        response_code = response["code"]
+        return_obj = dict()
+
+        if response_code == 200:
+            return_obj['success'] = True
+            return_obj['status'] = self.__getStatus(response["status"])
+        else:
+            return_obj['success'] = False
+            return_obj['error'] = response['message']
+        return return_obj
+
+    def create_results_connection(self, search_id, offset, length):
+        min_range = offset
+        max_range = offset + length
+        # Grab the response, extract the response code, and convert it to readable json
+        response = self.api_client.get_search_results(search_id, min_range, max_range)
+        response_code = response["code"]
+
+        # Construct a response object
+        return_obj = dict()
+        if response_code == 200:
+            return_obj['success'] = True
+            return_obj['data'] = response['data']
+        else:
+            return_obj['success'] = False
+            return_obj['error'] = response['message']
+        return return_obj
+
+    def delete_query_connection(self, search_id):
+        response = self.api_client.delete_search(search_id)
+        return response
