@@ -19,12 +19,23 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
     ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, callback)
 
+    # making sure the mac addresses are in small letters
+    data[0] = convert_mac_addrs(data[0])
+
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
 
     bundle["objects"] += results
 
     return bundle
+
+
+def convert_mac_addrs(data):
+    for key in data:
+        if (key == "src_mac") or (key == "dest_mac"):
+            data[key] = data[key].lower()
+
+    return data
 
 
 class DataSourceObjToStixObj:

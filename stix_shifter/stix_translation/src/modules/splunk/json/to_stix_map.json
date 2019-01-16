@@ -184,12 +184,10 @@
             "transformer": "SplunkToTimestamp"
         }
     ],
-    "file_hash": [
-        {
-            "key": "file.hashes.SHA-256",
-            "object": "file"
-        }
-    ],
+     "file_hash": {
+       "key": "file.hashes.UNKNOWN",
+       "object": "fl"
+     },
     "file_name": {
         "key": "file.name",
         "object": "file"
