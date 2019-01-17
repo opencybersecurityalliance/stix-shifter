@@ -371,4 +371,4 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert 'error when deleting search id' in results_response['success'] is False
+        assert 'error when deleting search id' in results_response['error'] is False
