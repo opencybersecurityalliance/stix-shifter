@@ -20,4 +20,5 @@ def hash_type_lookup(obj, ds_key, mapped_stix_attribute, options):
             file_hash_map = file_hash_map.format("SHA-256")
             return file_hash_map
         else:
-            raise FileHashLookupException('Unable to determine type of file hash.')
+            file_hash_map = file_hash_map.format("Unknown")
+            return file_hash_map
