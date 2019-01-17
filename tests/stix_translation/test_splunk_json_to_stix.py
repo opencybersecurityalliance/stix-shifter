@@ -107,14 +107,14 @@ class TestTransform(object):
         assert(user_obj['user_id'] == "ibm_user")
 
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
+
         assert(file_obj is not None), 'file object type not found'
-        assert(file_obj.keys() == {'type','parent_directory_ref','created','modified','hashes','name','size'})
-        
+        assert(file_obj.keys() == {'type', 'parent_directory_ref', 'created', 'modified', 'size', 'name'})
+
         assert(file_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(file_obj['modified'] == "2018-08-15T18:10:30.456Z")
         assert(file_obj['name'] == "sample.dll")
         assert(file_obj['size'] == 25536)
-        assert(file_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
 
         dir_ref = file_obj['parent_directory_ref']
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
@@ -128,7 +128,7 @@ class TestTransform(object):
         assert(dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
         print(objects.keys())
         print(result_bundle_objects)
-        assert(objects.keys() == set(map(str, range(0, 5))))
+        assert(objects.keys() == set(map(str, range(0, 6))))
        
        
     def test_certificate_cim_to_stix(self):
@@ -232,13 +232,11 @@ class TestTransform(object):
 
     
         assert(file_obj is not None), 'file object type not found'
-        assert(file_obj.keys() == {'type','parent_directory_ref','created','modified','hashes','name','size'})
+        assert(file_obj.keys() == {'type', 'parent_directory_ref', 'created', 'modified', 'size', 'name'})
         assert(file_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(file_obj['modified'] == "2018-08-15T18:10:30.456Z")
         assert(file_obj['name'] == "sample.dll")
         assert(file_obj['size'] == 25536)
-        assert(file_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
-
 
         dir_ref = file_obj['parent_directory_ref']
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
@@ -250,7 +248,7 @@ class TestTransform(object):
         assert(dir_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
 
-        assert(objects.keys() == set(map(str, range(0, 4))))
+        assert(objects.keys() == set(map(str, range(0, 5))))
 
 
     def test_network_cim_to_stix(self):
@@ -486,7 +484,6 @@ class TestTransform(object):
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
         assert (file_obj is not None), 'file object type not found'
         assert (file_obj.keys() == {'type', 'hashes'})
-        assert (file_obj['hashes']['SHA-256'] == "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef")
 
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert (user_obj is not None), 'user object type not found'
