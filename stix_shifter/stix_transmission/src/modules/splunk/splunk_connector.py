@@ -11,15 +11,8 @@ import json
 
 
 class Connector(BaseConnector):
-    # TODO: config params passed into constructor instance
     def __init__(self, connection, configuration):
-        auth = configuration.get("auth")
-        host = connection.get("host")
-        port = connection.get("port")
-        url = host + ':' + str(port)
-        cert = connection.get('cert', None)
-
-        self.api_client = APIClient(url, auth, cert)
+        self.api_client = APIClient(connection, configuration)
         self.delete_connector = SplunkDeleteConnector(self.api_client)
         self.results_connector = SplunkResultsConnector(self.api_client)
         self.status_connector = SplunkStatusConnector(self.api_client)

@@ -2,7 +2,7 @@
   "stix-input":"[process:name != 'wsmprovhost.exe']",
   "car-splunk": "(match(tag, \"dm-process-.*\") AND exe != \"wsmprovhost.exe\")",
   "car-elastic": "data_model.object:process AND NOT(data_model.fields.exe:\"wsmprovhost.exe\")",
-  "cim-splunk": "(tag=\"process\" AND process != \"wsmprovhost.exe\")",
+  "cim-splunk": "search (process != \"wsmprovhost.exe\") earliest=\"-5minutes\" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol",
   "matches": {
     "car": [
       {"object": "process", "action": "create", "fields": {"exe": "wsmprovhost1.exe"}}

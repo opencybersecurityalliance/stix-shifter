@@ -1,0 +1,75 @@
+{
+  "ResourceAwsIamAccessKeyUserName": {
+    "key": "user-account.user_id"
+  },
+  "Network" : {
+    "SourceIpV4": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "DestinationIpV4": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "SourceIpV6": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "DestinationIpV6": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "SourcePort": [
+      {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ],
+    "DestinationPort": [
+      {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ]
+  },
+  "Process": {
+    "Path": [ {
+      "object": "proc",
+      "key": "process.command_line"
+    } ],
+    "Pid": [ {
+      "object": "proc",
+      "key": "process.pid"
+    } ]
+  }
+}

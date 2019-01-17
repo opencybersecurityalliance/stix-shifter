@@ -2,6 +2,7 @@ from stix_shifter.stix_transmission.src.modules.qradar import qradar_connector
 from stix_shifter.stix_transmission.src.modules.base.base_status_connector import Status
 from unittest.mock import patch
 import unittest
+from stix_shifter.stix_transmission.src.modules.utils.RestApiClient import ResponseWrapper
 
 
 class QRadarMockResponse:
@@ -10,7 +11,7 @@ class QRadarMockResponse:
         self.object = object
 
     def read(self):
-        return self.object
+        return self.object    
 
 
 @patch('stix_shifter.stix_transmission.src.modules.qradar.arielapiclient.APIClient.__init__', autospec=True)
@@ -203,3 +204,56 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert 'events' in results_response['data']
         assert len(results_response['data']) > 0
+
+class RequestsResponse():
+    def __init__(self, response_code, object):
+        self.code = response_code
+        self.object = object
+
+    def read(self):
+        return self.object    
+
+class MockResponceWrapper(QRadarMockResponse):
+    @property 
+    def status_code(self):
+        return self.code
+
+    @property
+    def content(self):
+        return self.object
+
+    def raise_for_status(self):
+        pass
+
+@patch('requests.get', autospec = True)
+class TestRequests(unittest.TestCase, object):
+    def test_xforward_request(self, mock_get):
+        mocked_return_value = '["mock", "placeholder"]'
+        mock_get.return_value = MockResponceWrapper(200, mocked_return_value)
+
+        connection = {
+            "proxy" : {
+                "url" : "proxy_url0:8088",
+                "auth" : "proxy_auth_data0",
+                "x_forward_proxy" : "x_forward_proxy_host1",
+                "x_forward_proxy_auth" : "x_forward_proxy_auth_data1"
+            },
+
+            "host" : "somehost0",
+            "port" : "15004",
+            "cert" : "somecert0"
+        }
+
+        config = {
+            "auth": {
+                "SEC": "sec0"
+            }
+        }
+        
+        module = qradar_connector
+
+        ping_response = module.Connector(connection, config).ping()
+
+        mock_get.assert_called_with('x_forward_proxy_host1', cert='cert.pem', data=None, headers={'version': '8.0', 'accept': 'application/json', \
+                                    'sec': 'sec0', 'proxy': 'proxy_url0:8088', 'proxy-authorization': 'Basic proxy_auth_data0', \
+                                    'x-forward-url': 'https://somehost0:15004/api/help/resources', 'x-forward-auth': 'x_forward_proxy_auth_data1', 'user-agent': 'UDS'}, verify=True)
