@@ -75,7 +75,7 @@ class APIClient():
             data['offset'] = str(offset)
             data['count'] = str(count)
         # response object body should contain information pertaining to search.
-        return self.client.call_api(endpoint, 'GET', data=data)
+        return self.client.call_api(endpoint, 'GET', urldata=data)
     
     def delete_search(self, search_id):
         # sends a DELETE request to
