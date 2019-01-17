@@ -17,7 +17,7 @@ class SplunkResultsConnector(BaseResultsConnector):
                 results = [{}] if (response_json['results'] == []) else response_json['results']
             else:
                 results = [{}]
-            
+
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
@@ -29,5 +29,7 @@ class SplunkResultsConnector(BaseResultsConnector):
             return return_obj
 
         except Exception as err:
-            print('error when getting search results: {}'.format(err))
-            raise
+            return_obj = dict()
+            return_obj['success'] = False
+            return_obj['error'] = 'error when getting data for id {} message: {}'.format(search_id, err)
+            return return_obj

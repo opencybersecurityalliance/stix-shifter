@@ -29,5 +29,7 @@ class SplunkDeleteConnector(BaseDeleteConnector):
 
             return return_obj
         except Exception as err:
-            print('error deleting search: {}'.format(err))
-            raise
+            return_obj = dict()
+            return_obj['success'] = False
+            return_obj['error'] = 'error when deleting search id {} message: {}'.format(search_id, err)
+            return return_obj
