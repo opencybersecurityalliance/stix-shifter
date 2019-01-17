@@ -364,11 +364,11 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         mocked_return_value = '{"messages":[{"type":"INFO","text":"Search job cancelled."}]}'
         mock_results_delete.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_results_delete.side_effect = Exception('an error when getting query results')
+        mock_results_delete.side_effect = Exception('an error when deleting query')
         module = splunk_connector
         search_id = "1536832140.4293"
         results_response = module.Connector(connection, config).delete_query_connection(search_id)
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert 'error when deleting search id' in results_response['error'] is False
+        assert 'error when deleting search id' in results_response['error']
