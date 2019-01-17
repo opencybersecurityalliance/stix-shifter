@@ -63,7 +63,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('an error occurred when pinging datasource')
+        mock_ping_response.side_effect = Exception('exception')
         module = splunk_connector
         config = {
             "auth": {
@@ -113,7 +113,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         mocked_return_value = '{"sid":"1536672851.4012"}'
         mock_query_response.return_value = SplunkMockResponse(201, mocked_return_value)
-        mock_query_response.side_effect = Exception('an error occurred creating query')
+        mock_query_response.side_effect = Exception('exception')
 
         module = splunk_connector
         config = {
@@ -176,7 +176,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         mocked_return_value = open(file_path, 'r').read()
 
         mock_status_response.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_status_response.side_effect = Exception('an error occurred when getting query status')
+        mock_status_response.side_effect = Exception('exception')
 
         config = {
             "auth": {
@@ -239,7 +239,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         mocked_return_value = open(file_path, 'r').read()
 
         mock_results_response.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_results_response.side_effect = Exception('an error occurred when getting query results')
+        mock_results_response.side_effect = Exception('exception')
 
         module = splunk_connector
         config = {
@@ -364,7 +364,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         mocked_return_value = '{"messages":[{"type":"INFO","text":"Search job cancelled."}]}'
         mock_results_delete.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_results_delete.side_effect = Exception('an error when deleting query')
+        mock_results_delete.side_effect = Exception('exception')
         module = splunk_connector
         search_id = "1536832140.4293"
         results_response = module.Connector(connection, config).delete_query_connection(search_id)
