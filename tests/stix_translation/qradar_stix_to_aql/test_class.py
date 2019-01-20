@@ -140,7 +140,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_artifact_queries(self):
         stix_pattern = "[artifact:payload_bin matches 'some text']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE payload MATCHES '.*some text.*' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE base64_payload MATCHES '.*some text.*' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': 'some text'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
@@ -226,7 +226,7 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'ISSUBSET', 'attribute': 'ipv4-addr:value'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
-    def test_custom_time_limit_and_result_count(self):
+    def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
         custom_options = copy.deepcopy(OPTIONS)
         query = translation.translate('qradar', 'query', '{}', stix_pattern, custom_options)
@@ -299,3 +299,10 @@ class TestStixToAql(unittest.TestCase, object):
         for parsing in parsed_stix:
             assert parsing in query['parsed_stix']
         assert query['queries'] == [selections + from_statement + where_statement]
+
+    def test_payload_string_matching_with_LIKE(self):
+        stix_pattern = "[x-readable-payload:value LIKE 'search term']"
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE utf8_payload LIKE '%{}%' {} {}".format('search term', default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'LIKE', 'value': 'search term'}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}

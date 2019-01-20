@@ -136,22 +136,22 @@
     "key": "file.hashes.UNKNOWN",
     "object": "fl"
   },
-  "payload": {
+  "base64_payload": {
     "key": "artifact.payload_bin"
   },
   "destinationport": {
     "key": "network-traffic.dst_port",
-    "object": ["nt","nt_mac"],
+    "object": ["nt", "nt_mac"],
     "transformer": "ToInteger"
   },
   "sourceport": {
     "key": "network-traffic.src_port",
-    "object": ["nt","nt_mac"],
+    "object": ["nt", "nt_mac"],
     "transformer": "ToInteger"
   },
   "protocol": {
     "key": "network-traffic.protocols",
-    "object": ["nt","nt_mac"],
+    "object": ["nt", "nt_mac"],
     "transformer": "ToLowercaseArray"
   },
   "domainname": {
