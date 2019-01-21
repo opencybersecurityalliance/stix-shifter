@@ -7,8 +7,8 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\65")
-        buf.write("\u00f7\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\67")
+        buf.write("\u00f9\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
         buf.write("\4\24\t\24\4\25\t\25\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3")
@@ -29,88 +29,90 @@ def serializedATN():
         buf.write("\22\3\22\3\22\7\22\u00d7\n\22\f\22\16\22\u00da\13\22\3")
         buf.write("\23\3\23\3\23\3\23\3\23\3\23\7\23\u00e2\n\23\f\23\16\23")
         buf.write("\u00e5\13\23\3\23\3\23\5\23\u00e9\n\23\3\24\3\24\5\24")
-        buf.write("\u00ed\n\24\3\25\3\25\3\25\3\25\3\25\3\25\5\25\u00f5\n")
-        buf.write("\25\3\25\2\t\4\6\b\n\f\16\"\26\2\4\6\b\n\f\16\20\22\24")
-        buf.write("\26\30\32\34\36 \"$&(\2\b\3\2\36\37\3\2 #\3\2\3\4\3\2")
-        buf.write("\34\35\4\2\7\7\34\34\4\2\3\3\61\61\2\u0104\2*\3\2\2\2")
-        buf.write("\4-\3\2\2\2\68\3\2\2\2\bC\3\2\2\2\nW\3\2\2\2\fd\3\2\2")
-        buf.write("\2\16o\3\2\2\2\20\u00af\3\2\2\2\22\u00b1\3\2\2\2\24\u00b3")
-        buf.write("\3\2\2\2\26\u00b5\3\2\2\2\30\u00ba\3\2\2\2\32\u00be\3")
-        buf.write("\2\2\2\34\u00c2\3\2\2\2\36\u00c8\3\2\2\2 \u00ca\3\2\2")
-        buf.write("\2\"\u00d2\3\2\2\2$\u00e8\3\2\2\2&\u00ec\3\2\2\2(\u00f4")
-        buf.write("\3\2\2\2*+\5\4\3\2+,\7\2\2\3,\3\3\2\2\2-.\b\3\1\2./\5")
-        buf.write("\6\4\2/\65\3\2\2\2\60\61\f\4\2\2\61\62\7\r\2\2\62\64\5")
-        buf.write("\4\3\5\63\60\3\2\2\2\64\67\3\2\2\2\65\63\3\2\2\2\65\66")
-        buf.write("\3\2\2\2\66\5\3\2\2\2\67\65\3\2\2\289\b\4\1\29:\5\b\5")
-        buf.write("\2:@\3\2\2\2;<\f\4\2\2<=\7\13\2\2=?\5\6\4\5>;\3\2\2\2")
-        buf.write("?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\7\3\2\2\2B@\3\2\2\2CD")
-        buf.write("\b\5\1\2DE\5\n\6\2EK\3\2\2\2FG\f\4\2\2GH\7\n\2\2HJ\5\b")
-        buf.write("\5\5IF\3\2\2\2JM\3\2\2\2KI\3\2\2\2KL\3\2\2\2L\t\3\2\2")
-        buf.write("\2MK\3\2\2\2NO\b\6\1\2OP\7+\2\2PQ\5\f\7\2QR\7*\2\2RX\3")
-        buf.write("\2\2\2ST\7)\2\2TU\5\4\3\2UV\7(\2\2VX\3\2\2\2WN\3\2\2\2")
-        buf.write("WS\3\2\2\2Xa\3\2\2\2YZ\f\5\2\2Z`\5\26\f\2[\\\f\4\2\2\\")
-        buf.write("`\5\30\r\2]^\f\3\2\2^`\5\32\16\2_Y\3\2\2\2_[\3\2\2\2_")
-        buf.write("]\3\2\2\2`c\3\2\2\2a_\3\2\2\2ab\3\2\2\2b\13\3\2\2\2ca")
-        buf.write("\3\2\2\2de\b\7\1\2ef\5\16\b\2fl\3\2\2\2gh\f\4\2\2hi\7")
-        buf.write("\13\2\2ik\5\f\7\5jg\3\2\2\2kn\3\2\2\2lj\3\2\2\2lm\3\2")
-        buf.write("\2\2m\r\3\2\2\2nl\3\2\2\2op\b\b\1\2pq\5\20\t\2qw\3\2\2")
-        buf.write("\2rs\f\4\2\2st\7\n\2\2tv\5\16\b\5ur\3\2\2\2vy\3\2\2\2")
-        buf.write("wu\3\2\2\2wx\3\2\2\2x\17\3\2\2\2yw\3\2\2\2z|\5\34\17\2")
-        buf.write("{}\7\f\2\2|{\3\2\2\2|}\3\2\2\2}~\3\2\2\2~\177\t\2\2\2")
-        buf.write("\177\u0080\5&\24\2\u0080\u00b0\3\2\2\2\u0081\u0083\5\34")
-        buf.write("\17\2\u0082\u0084\7\f\2\2\u0083\u0082\3\2\2\2\u0083\u0084")
-        buf.write("\3\2\2\2\u0084\u0085\3\2\2\2\u0085\u0086\t\3\2\2\u0086")
-        buf.write("\u0087\5(\25\2\u0087\u00b0\3\2\2\2\u0088\u008a\5\34\17")
-        buf.write("\2\u0089\u008b\7\f\2\2\u008a\u0089\3\2\2\2\u008a\u008b")
-        buf.write("\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d\7\23\2\2\u008d")
-        buf.write("\u008e\5$\23\2\u008e\u00b0\3\2\2\2\u008f\u0091\5\34\17")
-        buf.write("\2\u0090\u0092\7\f\2\2\u0091\u0090\3\2\2\2\u0091\u0092")
-        buf.write("\3\2\2\2\u0092\u0093\3\2\2\2\u0093\u0094\7\16\2\2\u0094")
-        buf.write("\u0095\5\24\13\2\u0095\u00b0\3\2\2\2\u0096\u0098\5\34")
-        buf.write("\17\2\u0097\u0099\7\f\2\2\u0098\u0097\3\2\2\2\u0098\u0099")
-        buf.write("\3\2\2\2\u0099\u009a\3\2\2\2\u009a\u009b\7\17\2\2\u009b")
-        buf.write("\u009c\5\24\13\2\u009c\u00b0\3\2\2\2\u009d\u009f\5\34")
-        buf.write("\17\2\u009e\u00a0\7\f\2\2\u009f\u009e\3\2\2\2\u009f\u00a0")
-        buf.write("\3\2\2\2\u00a0\u00a1\3\2\2\2\u00a1\u00a2\7\21\2\2\u00a2")
-        buf.write("\u00a3\5\24\13\2\u00a3\u00b0\3\2\2\2\u00a4\u00a6\5\34")
-        buf.write("\17\2\u00a5\u00a7\7\f\2\2\u00a6\u00a5\3\2\2\2\u00a6\u00a7")
-        buf.write("\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\u00a9\7\20\2\2\u00a9")
-        buf.write("\u00aa\5\24\13\2\u00aa\u00b0\3\2\2\2\u00ab\u00ac\7)\2")
-        buf.write("\2\u00ac\u00ad\5\f\7\2\u00ad\u00ae\7(\2\2\u00ae\u00b0")
-        buf.write("\3\2\2\2\u00afz\3\2\2\2\u00af\u0081\3\2\2\2\u00af\u0088")
-        buf.write("\3\2\2\2\u00af\u008f\3\2\2\2\u00af\u0096\3\2\2\2\u00af")
-        buf.write("\u009d\3\2\2\2\u00af\u00a4\3\2\2\2\u00af\u00ab\3\2\2\2")
-        buf.write("\u00b0\21\3\2\2\2\u00b1\u00b2\t\3\2\2\u00b2\23\3\2\2\2")
-        buf.write("\u00b3\u00b4\7\7\2\2\u00b4\25\3\2\2\2\u00b5\u00b6\7\24")
-        buf.write("\2\2\u00b6\u00b7\7\t\2\2\u00b7\u00b8\7\25\2\2\u00b8\u00b9")
-        buf.write("\7\t\2\2\u00b9\27\3\2\2\2\u00ba\u00bb\7\31\2\2\u00bb\u00bc")
-        buf.write("\t\4\2\2\u00bc\u00bd\7\26\2\2\u00bd\31\3\2\2\2\u00be\u00bf")
-        buf.write("\7\32\2\2\u00bf\u00c0\7\3\2\2\u00c0\u00c1\7\33\2\2\u00c1")
-        buf.write("\33\3\2\2\2\u00c2\u00c3\5\36\20\2\u00c3\u00c4\7%\2\2\u00c4")
-        buf.write("\u00c6\5 \21\2\u00c5\u00c7\5\"\22\2\u00c6\u00c5\3\2\2")
-        buf.write("\2\u00c6\u00c7\3\2\2\2\u00c7\35\3\2\2\2\u00c8\u00c9\t")
-        buf.write("\5\2\2\u00c9\37\3\2\2\2\u00ca\u00cb\t\6\2\2\u00cb!\3\2")
-        buf.write("\2\2\u00cc\u00cd\b\22\1\2\u00cd\u00ce\7&\2\2\u00ce\u00d3")
-        buf.write("\t\6\2\2\u00cf\u00d0\7+\2\2\u00d0\u00d1\t\7\2\2\u00d1")
-        buf.write("\u00d3\7*\2\2\u00d2\u00cc\3\2\2\2\u00d2\u00cf\3\2\2\2")
-        buf.write("\u00d3\u00d8\3\2\2\2\u00d4\u00d5\f\5\2\2\u00d5\u00d7\5")
-        buf.write("\"\22\6\u00d6\u00d4\3\2\2\2\u00d7\u00da\3\2\2\2\u00d8")
-        buf.write("\u00d6\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9#\3\2\2\2\u00da")
-        buf.write("\u00d8\3\2\2\2\u00db\u00dc\7)\2\2\u00dc\u00e9\7(\2\2\u00dd")
-        buf.write("\u00de\7)\2\2\u00de\u00e3\5&\24\2\u00df\u00e0\7\'\2\2")
-        buf.write("\u00e0\u00e2\5&\24\2\u00e1\u00df\3\2\2\2\u00e2\u00e5\3")
-        buf.write("\2\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e4\3\2\2\2\u00e4\u00e6")
-        buf.write("\3\2\2\2\u00e5\u00e3\3\2\2\2\u00e6\u00e7\7(\2\2\u00e7")
-        buf.write("\u00e9\3\2\2\2\u00e8\u00db\3\2\2\2\u00e8\u00dd\3\2\2\2")
-        buf.write("\u00e9%\3\2\2\2\u00ea\u00ed\5(\25\2\u00eb\u00ed\7\b\2")
-        buf.write("\2\u00ec\u00ea\3\2\2\2\u00ec\u00eb\3\2\2\2\u00ed\'\3\2")
-        buf.write("\2\2\u00ee\u00f5\7\3\2\2\u00ef\u00f5\7\4\2\2\u00f0\u00f5")
-        buf.write("\5\24\13\2\u00f1\u00f5\7\6\2\2\u00f2\u00f5\7\5\2\2\u00f3")
-        buf.write("\u00f5\7\t\2\2\u00f4\u00ee\3\2\2\2\u00f4\u00ef\3\2\2\2")
-        buf.write("\u00f4\u00f0\3\2\2\2\u00f4\u00f1\3\2\2\2\u00f4\u00f2\3")
-        buf.write("\2\2\2\u00f4\u00f3\3\2\2\2\u00f5)\3\2\2\2\31\65@KW_al")
-        buf.write("w|\u0083\u008a\u0091\u0098\u009f\u00a6\u00af\u00c6\u00d2")
-        buf.write("\u00d8\u00e3\u00e8\u00ec\u00f4")
+        buf.write("\u00ed\n\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\5")
+        buf.write("\25\u00f7\n\25\3\25\2\t\4\6\b\n\f\16\"\26\2\4\6\b\n\f")
+        buf.write("\16\20\22\24\26\30\32\34\36 \"$&(\2\b\3\2 !\3\2\"%\4\2")
+        buf.write("\4\4\6\6\3\2\36\37\4\2\t\t\36\36\4\2\3\4\63\63\2\u0108")
+        buf.write("\2*\3\2\2\2\4-\3\2\2\2\68\3\2\2\2\bC\3\2\2\2\nW\3\2\2")
+        buf.write("\2\fd\3\2\2\2\16o\3\2\2\2\20\u00af\3\2\2\2\22\u00b1\3")
+        buf.write("\2\2\2\24\u00b3\3\2\2\2\26\u00b5\3\2\2\2\30\u00ba\3\2")
+        buf.write("\2\2\32\u00be\3\2\2\2\34\u00c2\3\2\2\2\36\u00c8\3\2\2")
+        buf.write("\2 \u00ca\3\2\2\2\"\u00d2\3\2\2\2$\u00e8\3\2\2\2&\u00ec")
+        buf.write("\3\2\2\2(\u00f6\3\2\2\2*+\5\4\3\2+,\7\2\2\3,\3\3\2\2\2")
+        buf.write("-.\b\3\1\2./\5\6\4\2/\65\3\2\2\2\60\61\f\4\2\2\61\62\7")
+        buf.write("\17\2\2\62\64\5\4\3\5\63\60\3\2\2\2\64\67\3\2\2\2\65\63")
+        buf.write("\3\2\2\2\65\66\3\2\2\2\66\5\3\2\2\2\67\65\3\2\2\289\b")
+        buf.write("\4\1\29:\5\b\5\2:@\3\2\2\2;<\f\4\2\2<=\7\r\2\2=?\5\6\4")
+        buf.write("\5>;\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\7\3\2\2\2")
+        buf.write("B@\3\2\2\2CD\b\5\1\2DE\5\n\6\2EK\3\2\2\2FG\f\4\2\2GH\7")
+        buf.write("\f\2\2HJ\5\b\5\5IF\3\2\2\2JM\3\2\2\2KI\3\2\2\2KL\3\2\2")
+        buf.write("\2L\t\3\2\2\2MK\3\2\2\2NO\b\6\1\2OP\7-\2\2PQ\5\f\7\2Q")
+        buf.write("R\7,\2\2RX\3\2\2\2ST\7+\2\2TU\5\4\3\2UV\7*\2\2VX\3\2\2")
+        buf.write("\2WN\3\2\2\2WS\3\2\2\2Xa\3\2\2\2YZ\f\5\2\2Z`\5\26\f\2")
+        buf.write("[\\\f\4\2\2\\`\5\30\r\2]^\f\3\2\2^`\5\32\16\2_Y\3\2\2")
+        buf.write("\2_[\3\2\2\2_]\3\2\2\2`c\3\2\2\2a_\3\2\2\2ab\3\2\2\2b")
+        buf.write("\13\3\2\2\2ca\3\2\2\2de\b\7\1\2ef\5\16\b\2fl\3\2\2\2g")
+        buf.write("h\f\4\2\2hi\7\r\2\2ik\5\f\7\5jg\3\2\2\2kn\3\2\2\2lj\3")
+        buf.write("\2\2\2lm\3\2\2\2m\r\3\2\2\2nl\3\2\2\2op\b\b\1\2pq\5\20")
+        buf.write("\t\2qw\3\2\2\2rs\f\4\2\2st\7\f\2\2tv\5\16\b\5ur\3\2\2")
+        buf.write("\2vy\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\17\3\2\2\2yw\3\2\2\2")
+        buf.write("z|\5\34\17\2{}\7\16\2\2|{\3\2\2\2|}\3\2\2\2}~\3\2\2\2")
+        buf.write("~\177\t\2\2\2\177\u0080\5&\24\2\u0080\u00b0\3\2\2\2\u0081")
+        buf.write("\u0083\5\34\17\2\u0082\u0084\7\16\2\2\u0083\u0082\3\2")
+        buf.write("\2\2\u0083\u0084\3\2\2\2\u0084\u0085\3\2\2\2\u0085\u0086")
+        buf.write("\t\3\2\2\u0086\u0087\5(\25\2\u0087\u00b0\3\2\2\2\u0088")
+        buf.write("\u008a\5\34\17\2\u0089\u008b\7\16\2\2\u008a\u0089\3\2")
+        buf.write("\2\2\u008a\u008b\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d")
+        buf.write("\7\25\2\2\u008d\u008e\5$\23\2\u008e\u00b0\3\2\2\2\u008f")
+        buf.write("\u0091\5\34\17\2\u0090\u0092\7\16\2\2\u0091\u0090\3\2")
+        buf.write("\2\2\u0091\u0092\3\2\2\2\u0092\u0093\3\2\2\2\u0093\u0094")
+        buf.write("\7\20\2\2\u0094\u0095\5\24\13\2\u0095\u00b0\3\2\2\2\u0096")
+        buf.write("\u0098\5\34\17\2\u0097\u0099\7\16\2\2\u0098\u0097\3\2")
+        buf.write("\2\2\u0098\u0099\3\2\2\2\u0099\u009a\3\2\2\2\u009a\u009b")
+        buf.write("\7\21\2\2\u009b\u009c\5\24\13\2\u009c\u00b0\3\2\2\2\u009d")
+        buf.write("\u009f\5\34\17\2\u009e\u00a0\7\16\2\2\u009f\u009e\3\2")
+        buf.write("\2\2\u009f\u00a0\3\2\2\2\u00a0\u00a1\3\2\2\2\u00a1\u00a2")
+        buf.write("\7\23\2\2\u00a2\u00a3\5\24\13\2\u00a3\u00b0\3\2\2\2\u00a4")
+        buf.write("\u00a6\5\34\17\2\u00a5\u00a7\7\16\2\2\u00a6\u00a5\3\2")
+        buf.write("\2\2\u00a6\u00a7\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\u00a9")
+        buf.write("\7\22\2\2\u00a9\u00aa\5\24\13\2\u00aa\u00b0\3\2\2\2\u00ab")
+        buf.write("\u00ac\7+\2\2\u00ac\u00ad\5\f\7\2\u00ad\u00ae\7*\2\2\u00ae")
+        buf.write("\u00b0\3\2\2\2\u00afz\3\2\2\2\u00af\u0081\3\2\2\2\u00af")
+        buf.write("\u0088\3\2\2\2\u00af\u008f\3\2\2\2\u00af\u0096\3\2\2\2")
+        buf.write("\u00af\u009d\3\2\2\2\u00af\u00a4\3\2\2\2\u00af\u00ab\3")
+        buf.write("\2\2\2\u00b0\21\3\2\2\2\u00b1\u00b2\t\3\2\2\u00b2\23\3")
+        buf.write("\2\2\2\u00b3\u00b4\7\t\2\2\u00b4\25\3\2\2\2\u00b5\u00b6")
+        buf.write("\7\26\2\2\u00b6\u00b7\7\13\2\2\u00b7\u00b8\7\27\2\2\u00b8")
+        buf.write("\u00b9\7\13\2\2\u00b9\27\3\2\2\2\u00ba\u00bb\7\33\2\2")
+        buf.write("\u00bb\u00bc\t\4\2\2\u00bc\u00bd\7\30\2\2\u00bd\31\3\2")
+        buf.write("\2\2\u00be\u00bf\7\34\2\2\u00bf\u00c0\7\4\2\2\u00c0\u00c1")
+        buf.write("\7\35\2\2\u00c1\33\3\2\2\2\u00c2\u00c3\5\36\20\2\u00c3")
+        buf.write("\u00c4\7\'\2\2\u00c4\u00c6\5 \21\2\u00c5\u00c7\5\"\22")
+        buf.write("\2\u00c6\u00c5\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7\35\3")
+        buf.write("\2\2\2\u00c8\u00c9\t\5\2\2\u00c9\37\3\2\2\2\u00ca\u00cb")
+        buf.write("\t\6\2\2\u00cb!\3\2\2\2\u00cc\u00cd\b\22\1\2\u00cd\u00ce")
+        buf.write("\7(\2\2\u00ce\u00d3\t\6\2\2\u00cf\u00d0\7-\2\2\u00d0\u00d1")
+        buf.write("\t\7\2\2\u00d1\u00d3\7,\2\2\u00d2\u00cc\3\2\2\2\u00d2")
+        buf.write("\u00cf\3\2\2\2\u00d3\u00d8\3\2\2\2\u00d4\u00d5\f\5\2\2")
+        buf.write("\u00d5\u00d7\5\"\22\6\u00d6\u00d4\3\2\2\2\u00d7\u00da")
+        buf.write("\3\2\2\2\u00d8\u00d6\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9")
+        buf.write("#\3\2\2\2\u00da\u00d8\3\2\2\2\u00db\u00dc\7+\2\2\u00dc")
+        buf.write("\u00e9\7*\2\2\u00dd\u00de\7+\2\2\u00de\u00e3\5&\24\2\u00df")
+        buf.write("\u00e0\7)\2\2\u00e0\u00e2\5&\24\2\u00e1\u00df\3\2\2\2")
+        buf.write("\u00e2\u00e5\3\2\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e4\3")
+        buf.write("\2\2\2\u00e4\u00e6\3\2\2\2\u00e5\u00e3\3\2\2\2\u00e6\u00e7")
+        buf.write("\7*\2\2\u00e7\u00e9\3\2\2\2\u00e8\u00db\3\2\2\2\u00e8")
+        buf.write("\u00dd\3\2\2\2\u00e9%\3\2\2\2\u00ea\u00ed\5(\25\2\u00eb")
+        buf.write("\u00ed\7\n\2\2\u00ec\u00ea\3\2\2\2\u00ec\u00eb\3\2\2\2")
+        buf.write("\u00ed\'\3\2\2\2\u00ee\u00f7\7\4\2\2\u00ef\u00f7\7\3\2")
+        buf.write("\2\u00f0\u00f7\7\6\2\2\u00f1\u00f7\7\5\2\2\u00f2\u00f7")
+        buf.write("\5\24\13\2\u00f3\u00f7\7\b\2\2\u00f4\u00f7\7\7\2\2\u00f5")
+        buf.write("\u00f7\7\13\2\2\u00f6\u00ee\3\2\2\2\u00f6\u00ef\3\2\2")
+        buf.write("\2\u00f6\u00f0\3\2\2\2\u00f6\u00f1\3\2\2\2\u00f6\u00f2")
+        buf.write("\3\2\2\2\u00f6\u00f3\3\2\2\2\u00f6\u00f4\3\2\2\2\u00f6")
+        buf.write("\u00f5\3\2\2\2\u00f7)\3\2\2\2\31\65@KW_alw|\u0083\u008a")
+        buf.write("\u0091\u0098\u009f\u00a6\u00af\u00c6\u00d2\u00d8\u00e3")
+        buf.write("\u00e8\u00ec\u00f6")
         return buf.getvalue()
 
 
@@ -126,17 +128,18 @@ class STIXPatternParser ( Parser ):
 
     literalNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "'AND'", "'OR'", "'NOT'", "'FOLLOWEDBY'", "'LIKE'", 
-                     "'MATCHES'", "'ISSUPERSET'", "'ISSUBSET'", "'LAST'", 
-                     "'IN'", "'START'", "'STOP'", "'SECONDS'", "'true'", 
-                     "'false'", "'WITHIN'", "'REPEATS'", "'TIMES'", "<INVALID>", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "'<'", "'<='", 
-                     "'>'", "'>='", "'''", "':'", "'.'", "','", "')'", "'('", 
-                     "']'", "'['", "'+'", "<INVALID>", "'-'", "'^'", "'/'", 
-                     "'*'" ]
+                     "<INVALID>", "<INVALID>", "'AND'", "'OR'", "'NOT'", 
+                     "'FOLLOWEDBY'", "'LIKE'", "'MATCHES'", "'ISSUPERSET'", 
+                     "'ISSUBSET'", "'LAST'", "'IN'", "'START'", "'STOP'", 
+                     "'SECONDS'", "'true'", "'false'", "'WITHIN'", "'REPEATS'", 
+                     "'TIMES'", "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "'<'", "'<='", "'>'", "'>='", "'''", "':'", "'.'", 
+                     "','", "')'", "'('", "']'", "'['", "'+'", "<INVALID>", 
+                     "'-'", "'^'", "'/'", "'*'" ]
 
-    symbolicNames = [ "<INVALID>", "IntLiteral", "FloatLiteral", "HexLiteral", 
-                      "BinaryLiteral", "StringLiteral", "BoolLiteral", "TimestampLiteral", 
+    symbolicNames = [ "<INVALID>", "IntNegLiteral", "IntPosLiteral", "FloatNegLiteral", 
+                      "FloatPosLiteral", "HexLiteral", "BinaryLiteral", 
+                      "StringLiteral", "BoolLiteral", "TimestampLiteral", 
                       "AND", "OR", "NOT", "FOLLOWEDBY", "LIKE", "MATCHES", 
                       "ISSUPERSET", "ISSUBSET", "LAST", "IN", "START", "STOP", 
                       "SECONDS", "TRUE", "FALSE", "WITHIN", "REPEATS", "TIMES", 
@@ -176,57 +179,59 @@ class STIXPatternParser ( Parser ):
                    "setLiteral", "primitiveLiteral", "orderableLiteral" ]
 
     EOF = Token.EOF
-    IntLiteral=1
-    FloatLiteral=2
-    HexLiteral=3
-    BinaryLiteral=4
-    StringLiteral=5
-    BoolLiteral=6
-    TimestampLiteral=7
-    AND=8
-    OR=9
-    NOT=10
-    FOLLOWEDBY=11
-    LIKE=12
-    MATCHES=13
-    ISSUPERSET=14
-    ISSUBSET=15
-    LAST=16
-    IN=17
-    START=18
-    STOP=19
-    SECONDS=20
-    TRUE=21
-    FALSE=22
-    WITHIN=23
-    REPEATS=24
-    TIMES=25
-    IdentifierWithoutHyphen=26
-    IdentifierWithHyphen=27
-    EQ=28
-    NEQ=29
-    LT=30
-    LE=31
-    GT=32
-    GE=33
-    QUOTE=34
-    COLON=35
-    DOT=36
-    COMMA=37
-    RPAREN=38
-    LPAREN=39
-    RBRACK=40
-    LBRACK=41
-    PLUS=42
-    HYPHEN=43
-    MINUS=44
-    POWER_OP=45
-    DIVIDE=46
-    ASTERISK=47
-    WS=48
-    COMMENT=49
-    LINE_COMMENT=50
-    InvalidCharacter=51
+    IntNegLiteral=1
+    IntPosLiteral=2
+    FloatNegLiteral=3
+    FloatPosLiteral=4
+    HexLiteral=5
+    BinaryLiteral=6
+    StringLiteral=7
+    BoolLiteral=8
+    TimestampLiteral=9
+    AND=10
+    OR=11
+    NOT=12
+    FOLLOWEDBY=13
+    LIKE=14
+    MATCHES=15
+    ISSUPERSET=16
+    ISSUBSET=17
+    LAST=18
+    IN=19
+    START=20
+    STOP=21
+    SECONDS=22
+    TRUE=23
+    FALSE=24
+    WITHIN=25
+    REPEATS=26
+    TIMES=27
+    IdentifierWithoutHyphen=28
+    IdentifierWithHyphen=29
+    EQ=30
+    NEQ=31
+    LT=32
+    LE=33
+    GT=34
+    GE=35
+    QUOTE=36
+    COLON=37
+    DOT=38
+    COMMA=39
+    RPAREN=40
+    LPAREN=41
+    RBRACK=42
+    LBRACK=43
+    PLUS=44
+    HYPHEN=45
+    MINUS=46
+    POWER_OP=47
+    DIVIDE=48
+    ASTERISK=49
+    WS=50
+    COMMENT=51
+    LINE_COMMENT=52
+    InvalidCharacter=53
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -1645,11 +1650,11 @@ class STIXPatternParser ( Parser ):
         def SECONDS(self):
             return self.getToken(STIXPatternParser.SECONDS, 0)
 
-        def IntLiteral(self):
-            return self.getToken(STIXPatternParser.IntLiteral, 0)
+        def IntPosLiteral(self):
+            return self.getToken(STIXPatternParser.IntPosLiteral, 0)
 
-        def FloatLiteral(self):
-            return self.getToken(STIXPatternParser.FloatLiteral, 0)
+        def FloatPosLiteral(self):
+            return self.getToken(STIXPatternParser.FloatPosLiteral, 0)
 
         def getRuleIndex(self):
             return STIXPatternParser.RULE_withinQualifier
@@ -1682,7 +1687,7 @@ class STIXPatternParser ( Parser ):
             self.match(STIXPatternParser.WITHIN)
             self.state = 185
             _la = self._input.LA(1)
-            if not(_la==STIXPatternParser.IntLiteral or _la==STIXPatternParser.FloatLiteral):
+            if not(_la==STIXPatternParser.IntPosLiteral or _la==STIXPatternParser.FloatPosLiteral):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1706,8 +1711,8 @@ class STIXPatternParser ( Parser ):
         def REPEATS(self):
             return self.getToken(STIXPatternParser.REPEATS, 0)
 
-        def IntLiteral(self):
-            return self.getToken(STIXPatternParser.IntLiteral, 0)
+        def IntPosLiteral(self):
+            return self.getToken(STIXPatternParser.IntPosLiteral, 0)
 
         def TIMES(self):
             return self.getToken(STIXPatternParser.TIMES, 0)
@@ -1741,7 +1746,7 @@ class STIXPatternParser ( Parser ):
             self.state = 188
             self.match(STIXPatternParser.REPEATS)
             self.state = 189
-            self.match(STIXPatternParser.IntLiteral)
+            self.match(STIXPatternParser.IntPosLiteral)
             self.state = 190
             self.match(STIXPatternParser.TIMES)
         except RecognitionException as re:
@@ -1955,8 +1960,10 @@ class STIXPatternParser ( Parser ):
             return self.getToken(STIXPatternParser.LBRACK, 0)
         def RBRACK(self):
             return self.getToken(STIXPatternParser.RBRACK, 0)
-        def IntLiteral(self):
-            return self.getToken(STIXPatternParser.IntLiteral, 0)
+        def IntPosLiteral(self):
+            return self.getToken(STIXPatternParser.IntPosLiteral, 0)
+        def IntNegLiteral(self):
+            return self.getToken(STIXPatternParser.IntNegLiteral, 0)
         def ASTERISK(self):
             return self.getToken(STIXPatternParser.ASTERISK, 0)
 
@@ -2066,7 +2073,7 @@ class STIXPatternParser ( Parser ):
                 self.match(STIXPatternParser.LBRACK)
                 self.state = 206
                 _la = self._input.LA(1)
-                if not(_la==STIXPatternParser.IntLiteral or _la==STIXPatternParser.ASTERISK):
+                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << STIXPatternParser.IntNegLiteral) | (1 << STIXPatternParser.IntPosLiteral) | (1 << STIXPatternParser.ASTERISK))) != 0)):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -2240,7 +2247,7 @@ class STIXPatternParser ( Parser ):
             self.state = 234
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [STIXPatternParser.IntLiteral, STIXPatternParser.FloatLiteral, STIXPatternParser.HexLiteral, STIXPatternParser.BinaryLiteral, STIXPatternParser.StringLiteral, STIXPatternParser.TimestampLiteral]:
+            if token in [STIXPatternParser.IntNegLiteral, STIXPatternParser.IntPosLiteral, STIXPatternParser.FloatNegLiteral, STIXPatternParser.FloatPosLiteral, STIXPatternParser.HexLiteral, STIXPatternParser.BinaryLiteral, STIXPatternParser.StringLiteral, STIXPatternParser.TimestampLiteral]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 232
                 self.orderableLiteral()
@@ -2267,11 +2274,17 @@ class STIXPatternParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def IntLiteral(self):
-            return self.getToken(STIXPatternParser.IntLiteral, 0)
+        def IntPosLiteral(self):
+            return self.getToken(STIXPatternParser.IntPosLiteral, 0)
 
-        def FloatLiteral(self):
-            return self.getToken(STIXPatternParser.FloatLiteral, 0)
+        def IntNegLiteral(self):
+            return self.getToken(STIXPatternParser.IntNegLiteral, 0)
+
+        def FloatPosLiteral(self):
+            return self.getToken(STIXPatternParser.FloatPosLiteral, 0)
+
+        def FloatNegLiteral(self):
+            return self.getToken(STIXPatternParser.FloatNegLiteral, 0)
 
         def stringLiteral(self):
             return self.getTypedRuleContext(STIXPatternParser.StringLiteralContext,0)
@@ -2311,37 +2324,47 @@ class STIXPatternParser ( Parser ):
         localctx = STIXPatternParser.OrderableLiteralContext(self, self._ctx, self.state)
         self.enterRule(localctx, 38, self.RULE_orderableLiteral)
         try:
-            self.state = 242
+            self.state = 244
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [STIXPatternParser.IntLiteral]:
+            if token in [STIXPatternParser.IntPosLiteral]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 236
-                self.match(STIXPatternParser.IntLiteral)
+                self.match(STIXPatternParser.IntPosLiteral)
                 pass
-            elif token in [STIXPatternParser.FloatLiteral]:
+            elif token in [STIXPatternParser.IntNegLiteral]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 237
-                self.match(STIXPatternParser.FloatLiteral)
+                self.match(STIXPatternParser.IntNegLiteral)
                 pass
-            elif token in [STIXPatternParser.StringLiteral]:
+            elif token in [STIXPatternParser.FloatPosLiteral]:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 238
+                self.match(STIXPatternParser.FloatPosLiteral)
+                pass
+            elif token in [STIXPatternParser.FloatNegLiteral]:
+                self.enterOuterAlt(localctx, 4)
+                self.state = 239
+                self.match(STIXPatternParser.FloatNegLiteral)
+                pass
+            elif token in [STIXPatternParser.StringLiteral]:
+                self.enterOuterAlt(localctx, 5)
+                self.state = 240
                 self.stringLiteral()
                 pass
             elif token in [STIXPatternParser.BinaryLiteral]:
-                self.enterOuterAlt(localctx, 4)
-                self.state = 239
+                self.enterOuterAlt(localctx, 6)
+                self.state = 241
                 self.match(STIXPatternParser.BinaryLiteral)
                 pass
             elif token in [STIXPatternParser.HexLiteral]:
-                self.enterOuterAlt(localctx, 5)
-                self.state = 240
+                self.enterOuterAlt(localctx, 7)
+                self.state = 242
                 self.match(STIXPatternParser.HexLiteral)
                 pass
             elif token in [STIXPatternParser.TimestampLiteral]:
-                self.enterOuterAlt(localctx, 6)
-                self.state = 241
+                self.enterOuterAlt(localctx, 8)
+                self.state = 243
                 self.match(STIXPatternParser.TimestampLiteral)
                 pass
             else:

@@ -65,11 +65,11 @@ startStopQualifier
   ;
 
 withinQualifier
-  : WITHIN (IntLiteral|FloatLiteral) SECONDS
+  : WITHIN (IntPosLiteral|FloatPosLiteral) SECONDS
   ;
 
 repeatedQualifier
-  : REPEATS IntLiteral TIMES
+  : REPEATS IntPosLiteral TIMES
   ;
 
 objectPath
@@ -93,7 +93,7 @@ firstPathComponent
 objectPathComponent
   : <assoc=left> objectPathComponent objectPathComponent  # pathStep
   | '.' (IdentifierWithoutHyphen | StringLiteral)         # keyPathStep
-  | LBRACK (IntLiteral|ASTERISK) RBRACK                   # indexPathStep
+  | LBRACK (IntPosLiteral|IntNegLiteral|ASTERISK) RBRACK  # indexPathStep
   ;
 
 setLiteral
@@ -107,20 +107,30 @@ primitiveLiteral
   ;
 
 orderableLiteral
-  : IntLiteral
-  | FloatLiteral
+  : IntPosLiteral
+  | IntNegLiteral
+  | FloatPosLiteral
+  | FloatNegLiteral
   | stringLiteral
   | BinaryLiteral
   | HexLiteral
   | TimestampLiteral
   ;
 
-IntLiteral :
-  [+-]? ('0' | [1-9] [0-9]*)
+IntNegLiteral :
+  '-' ('0' | [1-9] [0-9]*)
+  ;
+	
+IntPosLiteral :
+  '+'? ('0' | [1-9] [0-9]*)
   ;
 
-FloatLiteral :
-  [+-]? [0-9]* '.' [0-9]+
+FloatNegLiteral :
+  '-' [0-9]* '.' [0-9]+
+  ;
+	
+FloatPosLiteral :
+  '+'? [0-9]* '.' [0-9]+
   ;
 
 HexLiteral :
