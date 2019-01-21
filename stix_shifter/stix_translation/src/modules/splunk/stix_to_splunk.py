@@ -34,9 +34,9 @@ class StixToSplunk(BaseQueryTranslator):
         fields = options.get('fields')
 
         if not data_mapper:
-            data_mapper = 'cim'
-
-        if data_mapper != 'cim':
+            data_mapper_module = cim_data_mapping
+            data_model_mapper = data_mapper_module.mapper_class(mapping, fields)
+        else:
             data_mapper_module_name = ''.join(["stix_shifter.stix_translation.src.modules.", data_mapper, ".", data_mapper, "_data_mapping"])
 
             try:
@@ -46,9 +46,6 @@ class StixToSplunk(BaseQueryTranslator):
                 raise NotImplementedError(f"Module {data_mapper_module_name} not implemented")
             except AttributeError:
                 raise NotImplementedError(f"Module {data_mapper_module_name} does not implement mapper_class attribute")
-        else:
-            data_mapper_module = cim_data_mapping
-            data_model_mapper = data_mapper_module.mapper_class(mapping,fields)
 
         result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
         timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
