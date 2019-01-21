@@ -23,6 +23,9 @@ class SplunkQueryConnector(BaseQueryConnector):
                 return_obj['success'] = False
                 return_obj['error'] = response_json['messages'][0]['text']
             return return_obj
+
         except Exception as err:
-            print('error when creating search: {}'.format(err))
-            raise
+            return_obj = dict()
+            return_obj['success'] = False
+            return_obj['error'] = 'error when creating query{} message: {}'.format(query, err)
+            return return_obj

@@ -3,6 +3,8 @@ from stix_shifter.stix_translation.src import transformers
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.splunk import splunk_translator
 from stix2validator import validate_instance
+from stix_shifter.stix_translation.src.modules.splunk.splunk_utils import hash_type_lookup
+
 import json
 import logging
 
@@ -70,7 +72,7 @@ class TestTransform(object):
         filePath = "C:\\Users\\someuser\\sample.dll"
         create_time = "2018-08-15T15:11:55.676+00:00"
         modify_time = "2018-08-15T18:10:30.456+00:00"
-        file_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
+        file_hash = "41a26255d16d121dc525a6445144b895"
         file_name = "sample.dll"
         file_size = 25536
         
@@ -82,7 +84,7 @@ class TestTransform(object):
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -107,14 +109,15 @@ class TestTransform(object):
         assert(user_obj['user_id'] == "ibm_user")
 
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
+
         assert(file_obj is not None), 'file object type not found'
-        assert(file_obj.keys() == {'type','parent_directory_ref','created','modified','hashes','name','size'})
-        
+        assert(file_obj.keys() == {'type', 'parent_directory_ref', 'created', 'modified', 'hashes', 'name', 'size'})
+
         assert(file_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(file_obj['modified'] == "2018-08-15T18:10:30.456Z")
         assert(file_obj['name'] == "sample.dll")
         assert(file_obj['size'] == 25536)
-        assert(file_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
+        assert (file_obj['hashes']['MD5'] == "41a26255d16d121dc525a6445144b895")
 
         dir_ref = file_obj['parent_directory_ref']
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
@@ -199,7 +202,7 @@ class TestTransform(object):
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
         
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -232,14 +235,12 @@ class TestTransform(object):
 
     
         assert(file_obj is not None), 'file object type not found'
-        assert(file_obj.keys() == {'type','parent_directory_ref','created','modified','hashes','name','size'})
+        assert(file_obj.keys() == {'type', 'parent_directory_ref', 'created', 'modified', 'size', 'name', 'hashes'})
         assert(file_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(file_obj['modified'] == "2018-08-15T18:10:30.456Z")
         assert(file_obj['name'] == "sample.dll")
         assert(file_obj['size'] == 25536)
-        assert(file_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
-
-
+        assert (file_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
         dir_ref = file_obj['parent_directory_ref']
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
         dir_obj = objects[dir_ref]
@@ -412,7 +413,7 @@ class TestTransform(object):
 
         data = {"src_ip": "169.250.0.1", "src_port": "1220", "src_mac": "aa:bb:cc:dd:11:22",
                 "dest_ip": "127.0.0.1", "dest_port": "1120", "dest_mac": "ee:dd:bb:aa:cc:11",
-                "file_hash": "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef",
+                "file_hash": "cf23df2207d99a74fbe169e3eba035e633b65d94",
                 "user": "sname", "url": "https://wally.fireeye.com/malware_analysis/analyses?maid=1",
                 "protocol": "tcp", "_bkt": "main~44~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06", "_cd": "44:12606114",
                 "_indextime": "1546960685",
@@ -431,7 +432,7 @@ class TestTransform(object):
                 }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -486,8 +487,7 @@ class TestTransform(object):
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
         assert (file_obj is not None), 'file object type not found'
         assert (file_obj.keys() == {'type', 'hashes'})
-        assert (file_obj['hashes']['SHA-256'] == "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef")
-
+        assert (file_obj['hashes']['SHA-1'] == "cf23df2207d99a74fbe169e3eba035e633b65d94")
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert (user_obj is not None), 'user object type not found'
         assert (user_obj.keys() == {'type', 'account_login', 'user_id'})

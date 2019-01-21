@@ -41,8 +41,10 @@ class SplunkStatusConnector(BaseStatusConnector):
             else:
                 return_obj['success'] = False
                 return_obj['error'] = response_json['messages'][0]['text']
-
             return return_obj
+
         except Exception as err:
-            print('error when getting search status: {}'.format(err))
-            raise
+            return_obj = dict()
+            return_obj['success'] = False
+            return_obj['error'] = 'error when getting status for id {} message: {}'.format(search_id, err)
+            return return_obj
