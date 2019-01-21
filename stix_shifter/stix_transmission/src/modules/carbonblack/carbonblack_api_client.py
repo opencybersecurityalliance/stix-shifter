@@ -5,7 +5,6 @@ class APIClient():
 
     PING_ENDPOINT = 'sensor'
     QUERY_ENDPOINT = 'process'
-    SYNC_QUERY_ENDPOINT = 'query'
 
     def __init__(self, connection, configuration):
         self.endpoint_start = 'api/v1/'
@@ -22,3 +21,9 @@ class APIClient():
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
         return self.client.call_api(endpoint, 'GET')
+
+    def run_search(self, query_expression):
+        headers = dict()
+        endpoint = self.endpoint_start + self.QUERY_ENDPOINT
+        data = { "q": query_expression }
+        return self.client.call_api(endpoint, 'GET', headers, urldata=data)
