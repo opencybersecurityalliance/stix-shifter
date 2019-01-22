@@ -31,6 +31,4 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         query_string = bigfix_query_constructor.translate_pattern(
             query_object, result_limit, timerange)
 
-        print(query_string)
-
         return query_string
