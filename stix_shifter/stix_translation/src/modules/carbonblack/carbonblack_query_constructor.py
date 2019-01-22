@@ -26,7 +26,8 @@ def _fetch_network_protocol_mapping():
 
 class CbQueryStringPatternTranslator:
     comparator_lookup = {
-        ComparisonExpressionOperators.And: "&q=",
+        ComparisonExpressionOperators.And: "and",
+        ComparisonExpressionOperators.Or: "or",
         ComparisonComparators.Equal: ":",
     }
 
@@ -61,7 +62,7 @@ class CbQueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
+        return '{}'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
@@ -139,7 +140,7 @@ class CbQueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{}{}{}".format(self._parse_expression(expression.expr1),
+            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
@@ -246,7 +247,4 @@ def _format_split_queries(query_array):
 
 def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
     translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
-    queries = []
-    for where_statement in translated_statements.queries:
-        queries.append("q={}".format(where_statement))
-    return queries
+    return translated_statements.queries
