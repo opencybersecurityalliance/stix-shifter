@@ -1,20 +1,49 @@
 {
-  "dummyUserNameField": {
+  "UserName": {
     "key": "user-account.user_id"
   },
-  "dummyLogSourceIdField": {
-    "key": "x_dummy_custom_property.log_source_id",
+  "LogSourceId": {
+    "key": "x__custom_property.log_source_id",
     "cybox": false
   },
-  "dummyMagnitudeField": {
-    "key": "x_dummy_custom_property.magnitude",
+  "Magnitude": {
+    "key": "x__custom_property.magnitude",
     "cybox": false
   },
-  "dummyDestinationIpField": [
+  "SourceIpV4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "DestinationIpV4": [
     {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
     },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "SourceIpV6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "DestinationIpV6": [
     {
       "key": "ipv6-addr.value",
       "object": "dst_ip"
@@ -25,12 +54,12 @@
       "references": "dst_ip"
     }
   ],
-  "dummyEventCountField": {
+  "EventCount": {
     "key": "number_observed",
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "dummyStartTimeField": [
+  "StartTime": [
     {
       "key": "created",
       "transformer": "EpochToTimestamp",
@@ -52,46 +81,45 @@
       "cybox": false
     }
   ],
-  "dummySourceIpField": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "dummyUrlField": {
+  "Url": {
     "key": "url.value"
   },
-  "dummyFileNameField": {
+  "FileName": {
     "key": "file.name"
   },
-  "dummyPayloadField": {
+  "Payload": {
     "key": "artifact.payload_bin"
   },
-  "dummyDestinationPortField": {
+  "DestinationPort": {
     "key": "network-traffic.dst_port",
     "object": "nt",
     "transformer": "ToInteger"
   },
-  "dummySourcePortField": {
+  "SourcePort": {
     "key": "network-traffic.src_port",
     "object": "nt",
     "transformer": "ToInteger"
   },
-  "dummyNetworkProtocolField": {
+  "NetworkProtocol": {
     "key": "network-traffic.protocols",
     "object": "nt",
     "transformer": "ToLowercaseArray"
   },
-  "dummyDomainNameField": {
+  "DomainName": {
     "key": "domain-name.value"
+  },
+  "Process": {
+    "Path": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "Pid": [
+      {
+        "object": "proc",
+        "key": "process.id"
+      }
+    ]
   }
 }
