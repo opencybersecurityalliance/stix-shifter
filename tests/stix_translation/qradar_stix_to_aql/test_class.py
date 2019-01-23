@@ -138,13 +138,6 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.567Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
-    def test_artifact_queries(self):
-        stix_pattern = "[artifact:payload_bin MATCHES 'some text']"
-        query = translation.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE base64_payload MATCHES '.*some text.*' {} {}".format(default_limit, default_time)
-        parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': 'some text'}]
-        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
-
     def test_start_stop_qualifiers_with_one_observation(self):
         start_time_01 = "t'2016-06-01T01:30:00.123Z'"
         stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
@@ -301,9 +294,38 @@ class TestStixToAql(unittest.TestCase, object):
             assert parsing in query['parsed_stix']
         assert query['queries'] == [selections + from_statement + where_statement]
 
-    def test_payload_string_matching_with_LIKE(self):
-        stix_pattern = "[x-readable-payload:value LIKE 'search term']"
+    def test_LIKE_operator(self):
+        search_string = 'example.com'
+        stix_pattern = "[url:value LIKE '{}']".format(search_string)
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE utf8_payload LIKE '%{}%' {} {}".format('search term', default_limit, default_time)
-        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'LIKE', 'value': 'search term'}]
+        where_statement = "WHERE url LIKE '%{}%' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'url:value', 'comparison_operator': 'LIKE', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_payload_string_matching_with_LIKE(self):
+        search_string = 'search term'
+        stix_pattern = "[x-readable-payload:value LIKE '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '{}' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'LIKE', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_payload_string_matching_with_MATCH(self):
+        search_string = '^.*https://wally.fireeye.com.*$'
+        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'MATCHES', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_backslash_escaping(self):
+        # Stix pattern requires backslash to be double escaped to pass pattern validation.
+        # Not sure yet how we will make this work for an AQL query.
+        # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
+        search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
+        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'MATCHES', 'value': translated_value}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
