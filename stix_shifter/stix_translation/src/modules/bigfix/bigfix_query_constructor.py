@@ -162,5 +162,8 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
     
     besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BESAPI.xsd\"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>' + \
             final_query + '</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
-
+    
+    # Clearing out the query dictionary as we no longer need. 
+    RelevanceQueryStringPatternTranslator.query_string.clear()
+    
     return besapi_query
