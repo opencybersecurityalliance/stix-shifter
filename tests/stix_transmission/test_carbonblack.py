@@ -83,8 +83,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == True
         assert 'data' in results_response
-        assert 'results' in results_response['data']
-        assert len(results_response['data']['results']) == 0
+        assert len(results_response['data']) == 0
 
     @patch('stix_shifter.stix_transmission.src.modules.carbonblack.carbonblack_api_client.APIClient.run_search')
     def test_one_results_response(self, mock_results_response, mock_api_client):
@@ -166,7 +165,6 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == True
         assert 'data' in results_response
-        assert 'results' in results_response['data']
-        assert len(results_response['data']['results']) == 1
-        assert 'process_name' in results_response['data']['results'][0]
-        assert results_response['data']['results'][0]['process_name'] == 'cmd.exe'
+        assert len(results_response['data']) == 1
+        assert 'process_name' in results_response['data'][0]
+        assert results_response['data'][0]['process_name'] == 'cmd.exe'

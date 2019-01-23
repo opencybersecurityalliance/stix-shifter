@@ -42,9 +42,9 @@ class Connector(BaseConnector):
             response_json = json.loads(response.read())
             return_obj = dict()
 
-            if 200 <= response_code < 300:
+            if 200 <= response_code < 300 and 'results' in response_json:
                 return_obj['success'] = True
-                return_obj['data'] = response_json
+                return_obj['data'] = response_json['results']
             else:
                 return_obj['success'] = False
                 return_obj['error'] = 'error when creating search'
