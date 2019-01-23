@@ -139,6 +139,10 @@
   "base64_payload": {
     "key": "artifact.payload_bin"
   },
+  "utf8_payload": {
+    "key": "x_com_ibm_ariel.utf8_payload",
+    "cybox": false
+  },
   "destinationport": {
     "key": "network-traffic.dst_port",
     "object": ["nt", "nt_mac"],

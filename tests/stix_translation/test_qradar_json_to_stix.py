@@ -153,7 +153,8 @@ class TestTransform(object):
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
-                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
+                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName",
+                "utf8_payload": "someReadablePayload"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -166,6 +167,7 @@ class TestTransform(object):
         assert(custom_props['qid'] == data['qid'])
         assert(custom_props['magnitude'] == data['magnitude'])
         assert(custom_props['log_source_name'] == data['logsourcename'])
+        assert(custom_props['utf8_payload'] == data['utf8_payload'])
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(data_source)
