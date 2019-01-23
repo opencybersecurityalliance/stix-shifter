@@ -5,4 +5,10 @@ include *.md
 include LICENSE.txt
 
 # Include JSON files
+include stix_shifter/stix_translation/src/modules/aws_security_hub/json/*.json
+include stix_shifter/stix_translation/src/modules/bigfix/json/*.json
+include stix_shifter/stix_translation/src/modules/car/json/*.json
+include stix_shifter/stix_translation/src/modules/csa/json/*.json
+include stix_shifter/stix_translation/src/modules/dummy/json/*.json
 include stix_shifter/stix_translation/src/modules/qradar/json/*.json
+include stix_shifter/stix_translation/src/modules/splunk/json/*.json

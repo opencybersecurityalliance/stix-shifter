@@ -159,7 +159,7 @@ class TestStixToSpl(unittest.TestCase, object):
         options = {
             "timerange": timerange, 
             "result_limit": result_limit,
-            "mapping": { 
+            "mapping": {
                 "mac-addr": { 
                     "cim_type": "flow",
                     "fields": {
@@ -173,7 +173,7 @@ class TestStixToSpl(unittest.TestCase, object):
                     }
                 }
             },
-            "fields": {
+            "select_fields": {
                 "default":
                     [
                         "src_ip",
