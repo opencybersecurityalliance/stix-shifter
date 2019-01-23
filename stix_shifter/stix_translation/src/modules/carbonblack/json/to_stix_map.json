@@ -1,0 +1,17 @@
+{
+  "username": {
+    "key": "user-account.user_id"
+  },
+  "start": {
+    "key": "network-traffic.start"
+  },
+  "last_update": {
+    "key": "network-traffic.end"
+  },
+  "process_name": {
+    "key": "file.name"
+  },
+  "hostname": {
+    "key": "domain-name.value"
+  }
+}
