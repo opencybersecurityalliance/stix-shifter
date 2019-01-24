@@ -9,7 +9,31 @@
     "key": "network-traffic.end"
   },
   "process_name": {
-    "key": "file.name"
+    "key": "file.name",
+    "object": "process"
+  },
+  "process_md5": {
+    "key": "file.hashes.MD5",
+    "object": "process"
+  },
+  "parent_name": {
+    "key": "file.name",
+    "object": "parent"
+  },
+  "parent_md5": {
+    "key": "file.hashes.MD5",
+    "object": "parent"
+  },
+  "comms_ip": {
+    "key": "ipv4-addr.value",
+    "transformer": "ToIPv4"
+  },
+  "interface_ip": {
+    "key": "ipv4-addr.value",
+    "transformer": "ToIPv4"
+  },
+  "cmdline" : {
+    "key": "process.command_line"
   },
   "hostname": {
     "key": "domain-name.value"

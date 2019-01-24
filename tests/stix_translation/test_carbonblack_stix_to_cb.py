@@ -30,6 +30,20 @@ class TestStixToCB(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.1'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
+    def test_hash_query(self):
+        stix_pattern = "[file:hashes.MD5 = '5746bd7e255dd6a8afa06f7c42c1ba41']"
+        query = translation.translate(module, 'query', '{}', stix_pattern)
+        queries = ["md5:5746bd7e255dd6a8afa06f7c42c1ba41"]
+        parsed_stix = [{'attribute': 'file:hashes.MD5', 'comparison_operator': '=', 'value': '5746bd7e255dd6a8afa06f7c42c1ba41'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_command_line_query(self):
+        stix_pattern = "[process:command_line = 'cmd.exe']"
+        query = translation.translate(module, 'query', '{}', stix_pattern)
+        queries = ["cmdline:cmd.exe"]
+        parsed_stix = [{'attribute': 'process:command_line', 'comparison_operator': '=', 'value': 'cmd.exe'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
     def test_simple_or_query(self):
         stix_pattern = "[ipv4-addr:value = '10.0.0.1' OR ipv4-addr:value = '10.0.0.2']"
         query = translation.translate(module, 'query', '{}', stix_pattern)

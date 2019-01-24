@@ -114,5 +114,11 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
         assert(curr_obj is not None), 'file object type not found'
-        assert(curr_obj.keys() == {'type', 'name'})
+        assert(curr_obj.keys() == {'type', 'name', 'hashes'})
         assert(curr_obj['name'] == "cmd.exe")
+        assert(curr_obj['hashes']['MD5'] == "5746bd7e255dd6a8afa06f7c42c1ba41")
+
+        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
+        assert(curr_obj is not None), 'file object type not found'
+        assert(curr_obj.keys() == {'type', 'value'})
+        assert(curr_obj['value'] == "12.166.224.2")

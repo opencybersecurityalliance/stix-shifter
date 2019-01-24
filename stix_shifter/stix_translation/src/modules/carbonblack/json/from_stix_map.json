@@ -12,12 +12,18 @@
   },
   "file": {
     "fields": {
-      "name": ["process_name"]
+      "name": ["process_name"],
+      "hashes.MD5": ["md5"]
     }
   },
   "user-account":{
     "fields": {
       "user_id": ["username"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "command_line": ["cmdline"]
     }
   },
   "domain-name": {
