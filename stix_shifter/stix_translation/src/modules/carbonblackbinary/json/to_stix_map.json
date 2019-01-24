@@ -1,0 +1,17 @@
+{
+  "username": {
+    "key": "user-account.user_id"
+  },
+  "start": {
+      "key": "start"
+  },
+  "last_update": {
+    "key": "end"
+  },
+  "process_name": {
+    "key": "file.name"
+  },
+  "hostname": {
+    "key": "domain-name.value",
+  }
+}

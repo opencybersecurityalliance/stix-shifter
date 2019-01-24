@@ -1,0 +1,23 @@
+{
+  "network-traffic":{
+    "fields": {
+      "start": ["start"],
+      "end": ["last_update"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["process_name"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["hostname"]
+    }
+  }
+}
