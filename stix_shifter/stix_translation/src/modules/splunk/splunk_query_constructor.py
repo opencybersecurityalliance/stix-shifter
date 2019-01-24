@@ -49,10 +49,11 @@ class SplunkSearchTranslator:
             translated_query_str = translator.translate(expression.comparison_expression)
 
             if qualifier:
+                print(qualifier)
                 # start time pattern
-                st_pattern = r"(START'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
                 # stop time pattern
-                et_pattern = r"(STOP'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
@@ -64,13 +65,13 @@ class SplunkSearchTranslator:
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest     = re.sub(r"(START|')", '', st_arr[0] if st_arr else "")
+                    earliest     = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
                     earliest_obj = datetime.strptime(earliest, stix_date_format)
                     earliest_dt  = earliest_obj.strftime(splunk_date_format)
                 
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest     = re.sub(r"(STOP|')", '', et_arr[0] if et_arr else "")
+                    latest     = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
                     latest_obj = datetime.strptime(latest, stix_date_format)
                     latest_dt  = latest_obj.strftime(splunk_date_format)
 

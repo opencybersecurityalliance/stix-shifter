@@ -5,17 +5,17 @@ from stix_shifter.stix_translation.src.exceptions import DataMappingException
 class CimDataMapper:
 
     MAPPINGS = {
-      "artifact": None,
-      "as": None, # Maybe network traffic
+      "artifact": "None",
+      "as": "None",
       "directory": {
         "cim_type": "endpoint",
         "fields": {
           "path": "file_path",
           "created": "file_create_time",
-          "modified": "file_modify_time",
+          "modified": "file_modify_time"
         }
       },
-      "domain-name": { # Network Traffic
+      "domain-name": {
         "cim_type": "flow",
         "fields": {
           "value": "url"
@@ -43,10 +43,10 @@ class CimDataMapper:
           "from_ref.value": "src_user"
         }
       },
-      "file": { # Really need to add like a bonus filter here for `object_category`
+      "file": {
         "cim_type": "endpoint",
         "fields": {
-          "hashes.MD5": "file_hash", # really all hashes should look in hash -- CIM isn't specific as to what hash type it is
+          "hashes.MD5": "file_hash",
           "hashes.SHA-1": "file_hash",
           "hashes.SHA-256": "file_hash",
           "name": "file_name",
@@ -56,34 +56,34 @@ class CimDataMapper:
           "size": "file_size"
         }
       },
-      "ipv4-addr": { # Network traffic
+      "ipv4-addr": {
         "cim_type": "flow",
         "fields": {
           "value": ["src_ip","dest_ip"]
         }
       },
-      "ipv6-addr": { # Network traffic
+      "ipv6-addr": {
         "cim_type": "flow",
         "fields": {
           "value": ["src_ipv6","dest_ipv6"]
         }
       },
-      "mac-addr": { # Network traffic
+      "mac-addr": {
         "cim_type": "flow",
         "fields": {
           "value": ["src_mac","dest_mac"]
         }
       },
-      "mutex": None,
-      "network-traffic": { # Probably need to figure out when to use web here, but not now
+      "mutex": "None",
+      "network-traffic": {
         "cim_type": "network",
         "fields": {
-          "src_ref.value": "src", # This field is aliased to IP, MAC, domain
+          "src_ref.value": "src",
           "src_port": "src_port",
           "dst_ref.value": "src",
           "dst_port": "dest_port",
           "protocols[*]": "protocol",
-          "start":"earliest", # TODO: Implement transformer for datetime field inside stix object
+          "start":"earliest",
           "end":"latest"
         }
       },
@@ -97,21 +97,21 @@ class CimDataMapper:
           "binary_ref.name":"file_name"
         }
       },
-      "software": None, # This could probably be "inventory"
+      "software": "None",
       "url": {
         "cim_type": "web",
         "fields": {
           "value": "url"
         }
       },
-      "user-account": { # This is where the static objects in STIX breakdown. Could either do this as a login (authentication) or create (change)
+      "user-account": {
         "cim_type": "authentication",
         "fields": {
           "user_id": "user"
         }
       },
       "windows-registry-key": {
-        "cim_type": "endpoint", # as with file, this is part of the change model
+        "cim_type": "endpoint",
         "fields": {
           "key": "object",
           "values[*]": "result",
