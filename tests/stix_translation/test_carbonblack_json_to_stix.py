@@ -113,12 +113,28 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         objects = observed_data['objects']
 
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
+        file_obj = curr_obj # used in later test
         assert(curr_obj is not None), 'file object type not found'
         assert(curr_obj.keys() == {'type', 'name', 'hashes'})
         assert(curr_obj['name'] == "cmd.exe")
         assert(curr_obj['hashes']['MD5'] == "5746bd7e255dd6a8afa06f7c42c1ba41")
 
+        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'user-account')
+        user_obj = curr_obj # used in later test
+        assert(curr_obj is not None), 'user-account object type not found'
+        assert(curr_obj.keys() == {'type', 'user_id'})
+        assert(curr_obj['user_id'] == "SYSTEM")
+
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
-        assert(curr_obj is not None), 'file object type not found'
+        assert(curr_obj is not None), 'ipv4-addr object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == "12.166.224.2")
+
+        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
+        assert(curr_obj is not None), 'process object type not found'
+        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'created', 'pid'})
+        assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")
+        assert(curr_obj['pid'] == 1896)
+
+        assert(file_obj == objects[curr_obj['binary_ref']]), 'process binary_ref does not point to the correct object'
+        assert(user_obj == objects[curr_obj['creator_user_ref']]), 'process creator_user_ref does not point to the correct object'

@@ -1,10 +1,4 @@
 {
-  "network-traffic":{
-    "fields": {
-      "start": ["start"],
-      "end": ["last_update"]
-    }
-  },
   "ipv4-addr": {
     "fields": {
       "value": ["ipaddr"]
@@ -23,7 +17,8 @@
   },
   "process" : {
     "fields": {
-      "command_line": ["cmdline"]
+      "command_line": ["cmdline"],
+      "created": ["start"]
     }
   },
   "domain-name": {

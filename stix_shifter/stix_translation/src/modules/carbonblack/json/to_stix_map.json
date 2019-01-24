@@ -1,28 +1,41 @@
 {
-  "username": {
-    "key": "user-account.user_id"
-  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
   "start": {
-    "key": "network-traffic.start"
-  },
-  "last_update": {
-    "key": "network-traffic.end"
-  },
-  "process_name": {
-    "key": "file.name",
+    "key": "process.created",
     "object": "process"
   },
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
   "process_md5": {
     "key": "file.hashes.MD5",
-    "object": "process"
+    "object": "process_file"
   },
   "parent_name": {
     "key": "file.name",
-    "object": "parent"
+    "object": "parent_file"
   },
   "parent_md5": {
     "key": "file.hashes.MD5",
-    "object": "parent"
+    "object": "parent_file"
   },
   "comms_ip": {
     "key": "ipv4-addr.value",
@@ -32,8 +45,15 @@
     "key": "ipv4-addr.value",
     "transformer": "ToIPv4"
   },
-  "cmdline" : {
-    "key": "process.command_line"
+  "cmdline" : [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
   },
   "hostname": {
     "key": "domain-name.value"

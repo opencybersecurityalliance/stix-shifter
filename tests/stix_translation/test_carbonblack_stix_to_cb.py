@@ -16,7 +16,7 @@ class TestStixToCB(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
-    def test_file_and_time_query(self):
+    def test_file_and_domain_query(self):
         stix_pattern = "[file:name = 'some_file.exe' AND domain-name:value = 'example.com']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
         queries = ["hostname:example.com and process_name:some_file.exe"]
