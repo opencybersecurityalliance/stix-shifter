@@ -31,7 +31,7 @@ class StixToSplunk(BaseQueryTranslator):
         query_object = generate_query(data)
         data_mapper = options.get('data_mapper')
         mapping = options.get('mapping')
-        fields = options.get('fields')
+        fields = options.get('select_fields')
 
         if not data_mapper:
             data_mapper_module = cim_data_mapping

@@ -17,7 +17,7 @@ def _fetch_mapping():
         return {}
 
 
-class DummyDataMapper:
+class DataMapper:
 
     def __init__(self, options):
         mapping_json = options['mapping'] if 'mapping' in options else {}
