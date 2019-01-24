@@ -49,18 +49,17 @@ class SplunkSearchTranslator:
             translated_query_str = translator.translate(expression.comparison_expression)
 
             if qualifier:
-                print(qualifier)
                 # start time pattern
-                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
                 # stop time pattern
-                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
                 
-                stix_date_format = "%Y-%m-%dT%H:%M:%Sz"
-                splunk_date_format = "%m/%d/%Y:%H:%M:%S" 
+                stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
+                splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
@@ -232,6 +231,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search
 
     if not has_earliest_latest and is_cim:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+    elif has_earliest_latest and is_cim:
+        translated_query += ' | head {result_limit}'.format(result_limit=result_limit)
 
     if is_cim:
         translated_query = search_key + " " + translated_query + " | fields {fields}".format(fields=fields)
