@@ -66,7 +66,8 @@ class TestTransform(object):
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP',
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -304,6 +305,7 @@ class TestTransform(object):
         assert('SHA-1' not in hashes), 'SHA-1 hash included'
         assert(hashes['SHA-256'] == 'someSHA-256hash')
         assert(hashes['MD5'] == 'unknownTypeHash')
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
 
     def test_hashtype_lookup_without_matching_logsource_id(self):
         data_source_string = json.dumps(data_source)
@@ -342,8 +344,9 @@ class TestTransform(object):
         assert('SHA-256' in hashes), 'SHA-256 hash not included'
         assert('MD5' not in hashes), 'MD5 hash included'
         assert('SHA-1' not in hashes), 'SHA-1 hash included'
-        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
         assert(hashes['SHA-256'] == 'someSHA-256hash')
+        assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_matching_generic_hash_name(self):
         data_source_string = json.dumps(data_source)
@@ -376,7 +379,8 @@ class TestTransform(object):
         file_object = TestTransform.get_first_of_type(objects.values(), 'file')
         assert(file_object is not None), 'file object not found'
         hashes = file_object['hashes']
-        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
+        assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_hash_options(self):
         data_source_string = json.dumps(data_source)
@@ -404,4 +408,27 @@ class TestTransform(object):
         file_object = TestTransform.get_first_of_type(objects.values(), 'file')
         assert(file_object is not None), 'file object not found'
         hashes = file_object['hashes']
-        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
+
+    def test_hashtype_lookup_by_length(self):
+        data_source_string = json.dumps(data_source)
+        hashes = {'SHA-256': '05503abea7b8ac0a01db3cb35179242c0c1d43c7002c51e5982318244bdcaba9',
+                  'SHA-1': '05503abea7b8ac0a01db3cb35179242c0c1d43c7',
+                  'MD5': '05503abea7b8ac0a01db3cb35179242c',
+                  'UNKNOWN': '05503abea'}
+        for key, value in hashes.items():
+            data = [{'filehash': value}]
+            data_string = json.dumps(data)
+            options = {}
+            translation = stix_translation.StixTranslation()
+            result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+            result_bundle = json.loads(result)
+
+            result_bundle_objects = result_bundle['objects']
+            observed_data = result_bundle_objects[1]
+            objects = observed_data['objects']
+
+            file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+            hashes = file_object['hashes']
+            assert(key in hashes), "{} hash not included".format(key)
+            assert(hashes[key] == value)
