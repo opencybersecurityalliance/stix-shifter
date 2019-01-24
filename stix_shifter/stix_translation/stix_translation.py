@@ -7,7 +7,7 @@ import json
 
 
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'carbonblack']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'carbonblackprocess','carbonblackbinary']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
