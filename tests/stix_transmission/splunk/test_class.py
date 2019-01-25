@@ -3,7 +3,8 @@ from unittest.mock import patch
 import unittest
 import json
 import os
-
+from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.utils.error_response import ErrorCode
 
 class SplunkMockResponse:
     def __init__(self, response_code, object):
@@ -40,8 +41,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = SplunkMockResponse(200, mocked_return_value)
-
-        module = splunk_connector
+        
         config = {
             "auth": {
                 "username": "",
@@ -53,7 +53,8 @@ class TestSplunkConnection(unittest.TestCase, object):
             "port": "8080"
         }
 
-        ping_response = module.Connector(connection, config).ping()
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        ping_response = transmission.ping()
 
         assert ping_response is not None
         assert ping_response['success']
@@ -64,7 +65,6 @@ class TestSplunkConnection(unittest.TestCase, object):
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = SplunkMockResponse(200, mocked_return_value)
         mock_ping_response.side_effect = Exception('exception')
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -76,11 +76,12 @@ class TestSplunkConnection(unittest.TestCase, object):
             "port": "8080"
         }
 
-        ping_response = module.Connector(connection, config).ping()
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        ping_response = transmission.ping()
 
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'error when pinging data source' in ping_response['error']
+        assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search')
     def test_query_response(self, mock_query_response, mock_api_client):
@@ -88,7 +89,6 @@ class TestSplunkConnection(unittest.TestCase, object):
         mocked_return_value = '{"sid":"1536672851.4012"}'
         mock_query_response.return_value = SplunkMockResponse(201, mocked_return_value)
 
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -101,7 +101,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert query_response['success'] is True
@@ -115,7 +116,6 @@ class TestSplunkConnection(unittest.TestCase, object):
         mock_query_response.return_value = SplunkMockResponse(201, mocked_return_value)
         mock_query_response.side_effect = Exception('exception')
 
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -128,11 +128,12 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert query_response['success'] is False
-        assert 'error when creating query' in query_response['error']
+        assert query_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response, mock_api_client):
@@ -190,12 +191,12 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         search_id = "1536832140.4293"
-        module = splunk_connector
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert status_response['success'] is False
-        assert 'error when getting status for id' in status_response['error']
+        assert ErrorCode.TRANSMISSION_UNKNOWN.value==status_response['code']
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
@@ -207,7 +208,6 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         mock_results_response.return_value = SplunkMockResponse(200, mocked_return_value)
 
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -222,7 +222,9 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True
@@ -274,7 +276,6 @@ class TestSplunkConnection(unittest.TestCase, object):
         mock_results_response.return_value = SplunkMockResponse(200, mocked_return_value)
         mock_results_response.side_effect = Exception('exception')
 
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -289,11 +290,11 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
-
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
         assert 'success' in results_response
         assert results_response['success'] is False
-        assert 'error when getting data for id' in results_response['error']
+        assert results_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.create_search', autospec=True)
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
@@ -373,9 +374,9 @@ class TestSplunkConnection(unittest.TestCase, object):
         mocked_return_value = '{"messages":[{"type":"INFO","text":"Search job cancelled."}]}'
         mock_results_delete.return_value = SplunkMockResponse(200, mocked_return_value)
 
-        module = splunk_connector
         search_id = "1536832140.4293"
-        results_response = module.Connector(connection, config).delete_query_connection(search_id)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        results_response = transmission.delete(search_id)
         
         assert results_response is not None
         assert results_response['success'] is True
@@ -395,13 +396,12 @@ class TestSplunkConnection(unittest.TestCase, object):
             "port": "8080"
         }
 
-        mocked_return_value = '{"messages":[{"type":"INFO","text":"Search job cancelled."}]}'
-        mock_results_delete.return_value = SplunkMockResponse(200, mocked_return_value)
-        mock_results_delete.side_effect = Exception('exception')
-        module = splunk_connector
+        
+        mocked_return_value = '{"messages":[{"type":"INFO","text":"Unknown sid."}]}'
+        mock_results_delete.return_value = SplunkMockResponse(201, mocked_return_value)
         search_id = "1536832140.4293"
-        results_response = module.Connector(connection, config).delete_query_connection(search_id)
-
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        results_response = transmission.delete(search_id)
         assert results_response is not None
         assert results_response['success'] is False
-        assert 'error when deleting search id' in results_response['error']
+        assert results_response['code'] == ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS.value

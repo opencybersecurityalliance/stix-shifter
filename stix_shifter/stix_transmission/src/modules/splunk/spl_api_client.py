@@ -20,6 +20,7 @@ class APIClient():
 
         self.output_mode = 'json'
         self.endpoint_start = 'services/'
+        self.authenticated = False
         headers = dict()
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
@@ -27,9 +28,13 @@ class APIClient():
                                     headers,
                                     cert_verify=connection.get('cert_verify', 'True')
                                     )
-        auth = configuration.get('auth')                
-        self.set_splunk_auth_token(auth, headers)
+        self.auth = configuration.get('auth')
+        self.headers = headers
 
+    def authenticate(self):
+        if not self.authenticated:
+            self.set_splunk_auth_token(self.auth, self.headers)
+            self.authenticated = True
         
     def set_splunk_auth_token(self, auth, headers):
         data = {'username': auth['username'], 'password': auth['password'], 'output_mode': 'json'}
@@ -39,11 +44,11 @@ class APIClient():
             data = data.encode('utf-8')
             response_json = json.load(self.client.call_api(endpoint, 'POST', headers, data=data))
             headers['Authorization'] = "Splunk " + response_json['sessionKey']
-        except Exception as e:
-            print('Authentication error occured while getting auth token.')
-            raise e        
+        except KeyError as e:
+            raise Exception('Authentication error occured while getting auth token: ' + str(e))
 
     def ping_box(self):
+        self.authenticate()
         endpoint = self.endpoint_start + 'server/status'
         data = {'output_mode': self.output_mode}
         return self.client.call_api(endpoint, 'GET', data=data)
@@ -51,6 +56,7 @@ class APIClient():
     def create_search(self, query_expression):
         # sends a POST request to 
         # https://<server_ip>:<port>/services/search/jobs
+        self.authenticate()
         endpoint = self.endpoint_start + "search/jobs"
         data = {'search': query_expression, 'output_mode': self.output_mode}
         data = urllib.parse.urlencode(data)
@@ -61,6 +67,7 @@ class APIClient():
         # sends a GET request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>
         # returns information about the search job and its properties.
+        self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id        
         data = {'output_mode': self.output_mode}        
         return self.client.call_api(endpoint, 'GET', data=data)
@@ -69,6 +76,7 @@ class APIClient():
         # sends a GET request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>/results
         # returns results associated with the search job.
+        self.authenticate()
         endpoint = self.endpoint_start + "search/jobs/" + search_id + '/results'
         data = {'output_mode': self.output_mode}
         if ((offset is not None) and (count is not None)):
@@ -81,6 +89,7 @@ class APIClient():
         # sends a DELETE request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>
         # cancels and deletes search created earlier.
+        self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id
         data = {'output_mode': self.output_mode}
         data = urllib.parse.urlencode(data)

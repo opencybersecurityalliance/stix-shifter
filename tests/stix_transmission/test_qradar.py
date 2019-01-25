@@ -3,7 +3,7 @@ from stix_shifter.stix_transmission.src.modules.base.base_status_connector impor
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission.src.modules.utils.RestApiClient import ResponseWrapper
-
+from stix_shifter.stix_transmission import stix_transmission
 
 class QRadarMockResponse:
     def __init__(self, response_code, object):
@@ -40,7 +40,6 @@ class TestQRadarConnection(unittest.TestCase, object):
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = QRadarMockResponse(200, mocked_return_value)
 
-        module = qradar_connector
         config = {
             "auth": {
                 "SEC": "bla"
@@ -51,7 +50,9 @@ class TestQRadarConnection(unittest.TestCase, object):
             "port": "8080",
             "ceft": "cert"
         }
-        ping_response = module.Connector(connection, config).ping()
+        
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        ping_response = transmission.ping()
 
         assert ping_response is not None
         assert ping_response['success']
@@ -73,8 +74,10 @@ class TestQRadarConnection(unittest.TestCase, object):
             "port": "8080",
             "ceft": "cert"
         }
-        query = '{"query":"SELECT sourceIP from events"}'
-        query_response = module.Connector(connection, config).create_query_connection(query)
+
+        query = '{"query":"SELECT sourceIP from events"}'        
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert 'search_id' in query_response
@@ -97,8 +100,10 @@ class TestQRadarConnection(unittest.TestCase, object):
             "port": "8080",
             "ceft": "cert"
         }
+        
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response['success']
         assert status_response is not None
@@ -123,7 +128,6 @@ class TestQRadarConnection(unittest.TestCase, object):
         }"""
         mock_results_response.return_value = QRadarMockResponse(200, mocked_return_value)
 
-        module = qradar_connector
         config = {
             "auth": {
                 "SEC": "bla"
@@ -134,10 +138,12 @@ class TestQRadarConnection(unittest.TestCase, object):
             "port": "8080",
             "ceft": "cert"
         }
+        
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
         assert results_response['success']
@@ -184,6 +190,8 @@ class TestQRadarConnection(unittest.TestCase, object):
         query = '{"query":"SELECT sourceIP from events"}'
 
         query_response = module.Connector(connection, config).create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert 'search_id' in query_response
@@ -250,9 +258,8 @@ class TestRequests(unittest.TestCase, object):
             }
         }
         
-        module = qradar_connector
-
-        ping_response = module.Connector(connection, config).ping()
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        transmission.ping()
 
         mock_get.assert_called_with('x_forward_proxy_host1', cert='cert.pem', data=None, headers={'version': '8.0', 'accept': 'application/json', \
                                     'sec': 'sec0', 'proxy': 'proxy_url0:8088', 'proxy-authorization': 'Basic proxy_auth_data0', \
