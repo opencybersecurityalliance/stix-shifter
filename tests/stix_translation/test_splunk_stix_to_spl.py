@@ -122,10 +122,17 @@ class TestStixToSpl(unittest.TestCase, object):
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_start_stop_qualifiers(self):
-        stix_pattern = "[network-traffic:src_port = 37020] START '2016-06-01T01:30:00Z' STOP '2016-06-01T02:20:00Z' OR [ipv4-addr:value = '192.168.122.83'] START '2016-06-01T03:55:00Z' STOP '2016-06-01T04:30:00Z'"
+        stix_pattern = "[network-traffic:src_port = 37020] START t'2016-06-01T01:30:00.000Z' STOP t'2016-06-01T02:20:00.000Z' OR [ipv4-addr:value = '192.168.122.83'] START t'2016-06-01T03:55:00.000Z' STOP t'2016-06-01T04:30:00.000Z'"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" OR ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="06/01/2016:03:55:00" latest="06/01/2016:04:30:00" | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        queries = 'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" OR ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="06/01/2016:03:55:00" latest="06/01/2016:04:30:00" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         parsed_stix = [{'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_start_stop_qualifiers_one_time(self):
+        stix_pattern = "[network-traffic:src_port = 37020] START t'2016-06-01T01:30:00.000Z' STOP t'2016-06-01T02:20:00.000Z'"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        parsed_stix = [{'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_issubset_operator(self):
