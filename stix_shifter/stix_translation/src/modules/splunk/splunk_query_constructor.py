@@ -50,27 +50,27 @@ class SplunkSearchTranslator:
 
             if qualifier:
                 # start time pattern
-                st_pattern = r"(START'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
                 # stop time pattern
-                et_pattern = r"(STOP'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
                 
-                stix_date_format = "%Y-%m-%dT%H:%M:%Sz"
-                splunk_date_format = "%m/%d/%Y:%H:%M:%S" 
+                stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
+                splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest     = re.sub(r"(START|')", '', st_arr[0] if st_arr else "")
+                    earliest     = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
                     earliest_obj = datetime.strptime(earliest, stix_date_format)
                     earliest_dt  = earliest_obj.strftime(splunk_date_format)
                 
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest     = re.sub(r"(STOP|')", '', et_arr[0] if et_arr else "")
+                    latest     = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
                     latest_obj = datetime.strptime(latest, stix_date_format)
                     latest_dt  = latest_obj.strftime(splunk_date_format)
 
@@ -231,6 +231,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search
 
     if not has_earliest_latest and is_cim:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+    elif has_earliest_latest and is_cim:
+        translated_query += ' | head {result_limit}'.format(result_limit=result_limit)
 
     if is_cim:
         translated_query = search_key + " " + translated_query + " | fields {fields}".format(fields=fields)
