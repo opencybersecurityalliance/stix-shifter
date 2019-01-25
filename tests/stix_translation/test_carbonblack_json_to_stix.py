@@ -132,9 +132,17 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
         assert(curr_obj is not None), 'process object type not found'
-        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'created', 'pid'})
+        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid'})
         assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")
         assert(curr_obj['pid'] == 1896)
 
         assert(file_obj == objects[curr_obj['binary_ref']]), 'process binary_ref does not point to the correct object'
         assert(user_obj == objects[curr_obj['creator_user_ref']]), 'process creator_user_ref does not point to the correct object'
+
+        parent_index = curr_obj['parent_ref']
+        curr_obj = objects[parent_index]
+        assert(curr_obj  is not None)
+        assert(curr_obj.keys()  == {'type', 'pid', 'name', 'binary_ref'})
+        assert(curr_obj['pid'] == 2508)
+        assert(curr_obj['name'] == "cmd.exe")
+        assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")

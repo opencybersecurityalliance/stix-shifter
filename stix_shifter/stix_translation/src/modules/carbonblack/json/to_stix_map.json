@@ -20,22 +20,56 @@
       "object": "process_file"
     },
     {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
       "key": "process.binary_ref",
       "object": "process",
       "references": "process_file"
+    }
+  ],
+  "parent_name": [
+    {
+      "key": "file.name",
+      "object": "parent_file"
+    },
+    {
+      "key": "process.name",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "parent_file"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
+  },
+  "parent_pid" : [
+    {
+      "key": "process.pid",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
     }
   ],
   "process_md5": {
     "key": "file.hashes.MD5",
     "object": "process_file"
   },
-  "parent_name": {
-    "key": "file.name",
-    "object": "parent_file"
-  },
   "parent_md5": {
     "key": "file.hashes.MD5",
     "object": "parent_file"
+  },
+  "cmdline" : {
+      "key": "process.command_line",
+      "object": "process"
   },
   "comms_ip": {
     "key": "ipv4-addr.value",
@@ -44,16 +78,6 @@
   "interface_ip": {
     "key": "ipv4-addr.value",
     "transformer": "ToIPv4"
-  },
-  "cmdline" : [
-    {
-      "key": "process.command_line",
-      "object": "process"
-    }
-  ],
-  "process_pid": {
-    "key": "process.pid",
-    "object": "process"
   },
   "hostname": {
     "key": "domain-name.value"

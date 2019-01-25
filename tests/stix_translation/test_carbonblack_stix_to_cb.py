@@ -49,5 +49,38 @@ class TestStixToCB(unittest.TestCase, object):
         query = translation.translate(module, 'query', '{}', stix_pattern)
         queries = ["ipaddr:10.0.0.2 or ipaddr:10.0.0.1"]
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.2'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.1'}]
-        print(query)
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_query_map_coverage(self):
+        stix_to_cb_mapping = {
+                "[ipv4-addr:value = '198.51.100.5' AND ipv4-addr:value = '198.51.100.10']" : "ipaddr:198.51.100.10 and ipaddr:198.51.100.5",
+                "[process:pid = 4]": "process_pid:4",
+                "[process:parent_ref.pid = 7]": "parent_pid:7",
+                "[network-traffic:src_port = 80]": "ipport:80",
+                "[network-traffic:dst_port = 80]": "ipport:80",
+                "[user-account:user_id = 'SYSTEM']": "username:SYSTEM",
+                "[process:pid < 4]": "process_pid:[* TO 4]",
+                "[process:pid >= 4]": "process_pid:[4 TO *]",
+                "[file:hashes.MD5 ='79054025255fb1a26e4bc422aef54eb4']": "md5:79054025255fb1a26e4bc422aef54eb4",
+                "[process:name NOT = 'cmd.exe']" : "-(process_name:cmd.exe)",
+                "[process:name != 'cmd.exe']" : "-(process_name:cmd.exe)",
+                }
+        for stix_pattern, query in stix_to_cb_mapping.items():
+            result = translation.translate(module, 'query', '{}', stix_pattern)
+            print(result)
+            assert result['queries'] == [query]
+
+    def test_nested_parenthesis_in_pattern(self):
+        stix_pattern = "[(ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '100.100.122.90') and network-traffic:src_port = 37020] or [user-account:user_id = 'root']"
+        query = translation.translate(module, 'query', '{}', stix_pattern)
+        parsed_stix = [
+            {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
+            {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},
+            {'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
+            {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}
+        ]
+        print(query)
+        desired_result = "(ipaddr:192.168.122.83 or ipaddr:100.100.122.90 ) and ipport:37020 or username:root"
+        print("desired_result ", desired_result)
+        #assert(query["queries"] == [desired_result])
+        #assert(False)

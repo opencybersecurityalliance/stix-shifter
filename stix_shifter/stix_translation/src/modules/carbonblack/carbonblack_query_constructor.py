@@ -13,22 +13,20 @@ from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSu
 from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, ValueTransformer
 
 
-def _fetch_network_protocol_mapping():
-    try:
-        map_file = open(
-            'stix_shifter/stix_translation/src/modules/carbonblack/json/network_protocol_map.json').read()
-        map_data = json.loads(map_file)
-        return map_data
-    except Exception as ex:
-        print('exception in reading mapping file:', ex)
-    return {}
-
 
 class CbQueryStringPatternTranslator:
     comparator_lookup = {
         ComparisonExpressionOperators.And: "and",
         ComparisonExpressionOperators.Or: "or",
         ComparisonComparators.Equal: ":",
+        ComparisonComparators.NotEqual: ":",
+
+        ComparisonComparators.GreaterThan: ":",
+        ComparisonComparators.GreaterThanOrEqual: ":",
+        ComparisonComparators.LessThan: ":",
+        ComparisonComparators.LessThanOrEqual: ":",
+
+        ObservationOperators.Or: 'or',
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
@@ -42,43 +40,29 @@ class CbQueryStringPatternTranslator:
             self.queries = _format_split_queries(query_split)
         else:
             self.queries = query_split
-    @staticmethod
-    def _format_set(values) -> str:
-        gen = values.element_iterator()
-        return "({})".format('q='.join([CbQueryStringPatternTranslator._escape_value(value) for value in gen]))
-
-    @staticmethod
-    def _format_match(value) -> str:
-        raw = CbQueryStringPatternTranslator._escape_value(value)
-        if raw[0] == "^":
-            raw = raw[1:]
-        else:
-            raw = ".*" + raw
-        if raw[-1] == "$":
-            raw = raw[0:-1]
-        else:
-            raw = raw + ".*"
-        return "\'{}\'".format(raw)
 
     @staticmethod
     def _format_equality(value) -> str:
         return '{}'.format(value)
 
     @staticmethod
-    def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return CbQueryStringPatternTranslator._escape_value(value)
+    def _format_lt(value) -> str:
+        return '[* TO {}]'.format(value)
+
+    @staticmethod
+    def _format_gte(value) -> str:
+        return '[{} TO *]'.format(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
-        if isinstance(value, str):
+        if isinstance(value, str): # TODO this escape is incorrect for carbonblack
             return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
         else:
             return value
 
     @staticmethod
     def _negate_comparison(comparison_string):
-        return "NOT({})".format(comparison_string)
+        return "-({})".format(comparison_string)
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):
@@ -91,29 +75,21 @@ class CbQueryStringPatternTranslator:
             comparator = self.comparator_lookup[expression.comparator]
             original_stix_value = expression.value
 
-            if stix_field == 'protocols[*]':
-                map_data = _fetch_network_protocol_mapping()
-                try:
-                    expression.value = map_data[expression.value.lower()]
-                except Exception as protocol_key:
-                    raise KeyError(
-                        "Network protocol {} is not supported.".format(protocol_key))
-            elif stix_field == 'start' or stix_field == 'end':
+            if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-                # Should be in single-quotes
+            if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 value = self._format_equality(expression.value)
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
-                value = self._format_like(expression.value)
+            elif expression.comparator == ComparisonComparators.LessThan:
+                value = self._format_lt(expression.value)
+            elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
+                value = self._format_gte(expression.value)
+            elif expression.comparator == ComparisonComparators.LessThanOrEqual: # TODO fix target query language doesn't support this so will require some work
+                value = self._format_lt(expression.value)
+            elif expression.comparator == ComparisonComparators.GreaterThan: # TODO fix target query language doesn't support this so will require some work
+                value = self._format_gte(expression.value)
             else:
                 value = self._escape_value(expression.value)
 
@@ -131,6 +107,10 @@ class CbQueryStringPatternTranslator:
                 # More than one Cb field maps to the STIX attribute so group the ORs.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
+
+            # translate != to NOT equals
+            if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
+                expression.negated = True
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
