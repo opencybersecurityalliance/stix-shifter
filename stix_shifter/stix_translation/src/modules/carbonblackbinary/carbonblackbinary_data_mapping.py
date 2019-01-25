@@ -17,7 +17,7 @@ def _fetch_mapping():
     return {}
 
 
-class CarbonBlackDataMapper:
+class CarbonBlackBinaryDataMapper:
 
     def __init__(self, options):
         self.mapping_json = options['mapping'] if 'mapping' in options else {}

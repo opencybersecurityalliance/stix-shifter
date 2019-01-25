@@ -2,7 +2,7 @@
 from ..base.base_query_translator import BaseQueryTranslator
 
 
-class CarbonBlackQueryTranslator(BaseQueryTranslator):
+class CarbonBlackBinaryQueryTranslator(BaseQueryTranslator):
 
     def transform_query(self, data, mapping=None):
         """

@@ -1,7 +1,7 @@
 
 # ..base.base_translator import BaseTranslator
 from ..base.base_translator import BaseTranslator
-from .stix_to_cb import StixToCBB
+from .stix_to_cbb import StixToCBB
 from ...json_to_stix.json_to_stix import JSONToStix
 
 from os import path

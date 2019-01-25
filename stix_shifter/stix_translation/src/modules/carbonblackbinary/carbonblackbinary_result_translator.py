@@ -1,7 +1,7 @@
 from ..base.base_result_translator import BaseResultTranslator
 
 
-class CarbonBlackResultTranslator(BaseResultTranslator):
+class CarbonBlackBinaryResultTranslator(BaseResultTranslator):
 
     def translate_results(self, data_source, data, options, mapping=None):
         """
