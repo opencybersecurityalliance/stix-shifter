@@ -1,5 +1,6 @@
 from enum import Enum
 import typing
+import re
 
 
 class ComparisonComparators(Enum):
@@ -171,6 +172,26 @@ class Qualifier(BaseQualifier):
     def __repr__(self) -> str:
         return "{observation_expression} Qualifier({qualifier})".format(observation_expression=self.observation_expression, qualifier=self.qualifier)
 
+class StartStopQualifier(Qualifier):
+    def __init__(self, qualifier, observation_expression: BaseObservationExpression, start: str, stop: str) -> None:
+        if not isinstance(observation_expression, BaseObservationExpression):
+            raise RuntimeWarning("{} constructor called with wrong types".format(__class__)) # noqa: F821
+        self.qualifier = qualifier
+        self.observation_expression = observation_expression
+        self.start = start
+        self.stop = stop
+
+        pattern = "^t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+        match = re.search(pattern, start)
+        if not bool(match):
+            raise RuntimeError("Invalid STIX timestamp {}".format(start))
+
+        match = re.search(pattern, stop)
+        if not bool(match):
+            raise RuntimeError("Invalid STIX timestamp {}".format(stop))
+
+    def __repr__(self) -> str:
+        return "{observation_expression} StartStopQualifier({qualifier}, start={start}, stop={stop})".format(observation_expression=self.observation_expression, qualifier=self.qualifier, start=self.start, stop=self.stop)
 
 class Pattern:
     def __init__(self, expression: BaseObservationExpression, qualifier=None) -> None:

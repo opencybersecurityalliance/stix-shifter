@@ -64,6 +64,8 @@ class TestStixToCB(unittest.TestCase, object):
                 "[file:hashes.MD5 ='79054025255fb1a26e4bc422aef54eb4']": "md5:79054025255fb1a26e4bc422aef54eb4",
                 "[process:name NOT = 'cmd.exe']" : "-(process_name:cmd.exe)",
                 "[process:name != 'cmd.exe']" : "-(process_name:cmd.exe)",
+                "[process:pid = 4 START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((process_pid:4) and start:[2019-01-22T00:04:52 TO *] and last_update:[* TO 2019-02-22T00:04:52])",
+
                 }
         for stix_pattern, query in stix_to_cb_mapping.items():
             result = translation.translate(module, 'query', '{}', stix_pattern)

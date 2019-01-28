@@ -4,7 +4,7 @@ import dateutil.parser
 from antlr4 import CommonTokenStream, ParseTreeWalker, InputStream
 from .grammar import STIXPatternListener, STIXPatternParser, STIXPatternLexer
 from .pattern_objects import ObservationExpression, CombinedComparisonExpression, ObservationOperators, \
-    ComparisonExpressionOperators, ComparisonComparators, SetValue, ComparisonExpression, CombinedObservationExpression, Pattern, Qualifier
+    ComparisonExpressionOperators, ComparisonComparators, SetValue, ComparisonExpression, CombinedObservationExpression, Pattern, Qualifier, StartStopQualifier
 
 logger = logging.getLogger(__name__)
 
@@ -186,7 +186,7 @@ class STIXQueryBuilder(STIXPatternListener):
         qualifier_text = qualifier.getText()  # Ex: "START'2016-06-01T00:00:00Z'STOP'2016-06-01T01:11:11Z'"
         observation = ctx.observationExpression()
         expression = self.pop()
-        observation_expression_with_qualifier = Qualifier(qualifier_text, expression)
+        observation_expression_with_qualifier = StartStopQualifier(qualifier_text, expression, qualifier.start_time(), qualifier.stop_time())
         self.push(observation_expression_with_qualifier)
 
     def exitObservationExpressions(self, ctx: STIXPatternParser.ObservationExpressionsContext):

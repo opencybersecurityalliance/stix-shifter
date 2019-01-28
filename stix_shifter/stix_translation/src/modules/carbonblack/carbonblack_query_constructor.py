@@ -6,12 +6,9 @@ import re
 logger = logging.getLogger(__name__)
 
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+    ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
-
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, ValueTransformer
-
 
 
 class CbQueryStringPatternTranslator:
@@ -27,6 +24,8 @@ class CbQueryStringPatternTranslator:
         ComparisonComparators.LessThanOrEqual: ":",
 
         ObservationOperators.Or: 'or',
+        ObservationOperators.And: 'or', # TODO this is technically wrong. It should be converted to two separate queries
+        # observation operator AND - both sides MUST evaluate to true on different observations to be true
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
@@ -34,12 +33,8 @@ class CbQueryStringPatternTranslator:
         self.pattern = pattern
         self.result_limit = result_limit
         self.translated = self.parse_expression(pattern)
-        query_split = self.translated.split("SPLIT")
-        print (query_split)
-        if len(query_split) > 1:
-            self.queries = _format_split_queries(query_split)
-        else:
-            self.queries = query_split
+        self.queries = [self.translated]
+        print (self.queries)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -74,10 +69,6 @@ class CbQueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
             original_stix_value = expression.value
-
-            if stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
@@ -114,8 +105,14 @@ class CbQueryStringPatternTranslator:
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
+
             if qualifier is not None:
-                return "SPLIT{} limit {} {}SPLIT".format(comparison_string, self.result_limit, qualifier)
+                if isinstance(qualifier, StartStopQualifier):
+                    start = to_cb_timestamp(qualifier.start)
+                    stop = to_cb_timestamp(qualifier.stop)
+                    return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(comparison_string, start, stop)
+                else:
+                    raise RuntimeError("Unknown Qualifier")
             else:
                 return "{}".format(comparison_string)
 
@@ -124,7 +121,12 @@ class CbQueryStringPatternTranslator:
                                              self.comparator_lookup[expression.operator],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
-                return "SPLIT{} limit {} {}SPLIT".format(query_string, self.result_limit, qualifier)
+                if isinstance(qualifier, StartStopQualifier):
+                    start = to_cb_timestamp(qualifier.start)
+                    stop = to_cb_timestamp(qualifier.stop)
+                    return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(comparison_string, start, stop)
+                else:
+                    raise RuntimeError("Unknown Qualifier")
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -135,9 +137,9 @@ class CbQueryStringPatternTranslator:
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
                                                            operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression))
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                return self._parse_expression(expression.observation_expression.comparison_expression, expression)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
             return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
@@ -152,78 +154,11 @@ class CbQueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
 
-
-def _test_or_add_milliseconds(timestamp) -> str:
-    if not _test_timestamp(timestamp):
-        raise ValueError("Invalid timestamp")
-    # remove single quotes around timestamp
-    timestamp = re.sub("'", "", timestamp)
-    # check for 3-decimal milliseconds
-    pattern = "\.\d{3}Z$"
-    match = re.search(pattern, timestamp)
-    if bool(match):
-        return timestamp
-    else:
-        pattern = "(\.\d+Z$)|(Z$)"
-        timestamp = re.sub(pattern, ".000Z", timestamp)
-        return timestamp
-
-
-def _test_START_STOP_format(query_string) -> bool:
-    # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
-    # or START 1234567890123 STOP 1234567890123
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-    match = re.search(pattern, query_string)
-    return bool(match)
-
-
-def _test_timestamp(timestamp) -> bool:
-    pattern = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
-    match = re.search(pattern, timestamp)
-    return bool(match)
-
-
-def _convert_timestamps_to_milliseconds(query_parts):
-    # grab time stamps from array
-    start_time = _test_or_add_milliseconds(query_parts[2])
-    stop_time = _test_or_add_milliseconds(query_parts[4])
-    transformer = TimestampToMilliseconds()
-    millisecond_start_time = transformer.transform(start_time)
-    millisecond_stop_time = transformer.transform(stop_time)
-    return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
-
-
-def _format_split_queries(query_array):
-
-    # removing leading AND/OR
-    query_array = list(map(lambda x: re.sub("^\s?(OR|AND)\s?", "", x), query_array))
-    # removing trailing AND/OR
-    query_array = list(map(lambda x: re.sub("\s?(OR|AND)\s?$", "", x), query_array))
-    # remove empty strings in the array
-    query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
-
-    # Transform from human-readable timestamp to 13-digit millisecond time
-    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
-    formatted_queries = []
-    for query in query_array:
-        print (query)
-        if _test_START_STOP_format(query):
-            # Remove leading 't' before timestamps
-            query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
-            # Split individual query to isolate timestamps
-            query_parts = re.split("(START)|(STOP)", query)
-            # Remove None array entries
-            query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
-            if len(query_parts) == 5:
-                formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
-            else:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                continue
-        else:
-            formatted_queries.append(query)
-
-    return formatted_queries
-
+def to_cb_timestamp(ts: str) -> str:
+    stripped = ts[2:-2]
+    if '.' in stripped:
+        stripped = stripped.split('.', 1)[0]
+    return stripped
 
 def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
     translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)

@@ -134,6 +134,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj is not None), 'process object type not found'
         assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid'})
         assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")
+        assert(curr_obj['created'] == "2019-01-22T00:04:52.875Z")
         assert(curr_obj['pid'] == 1896)
 
         assert(file_obj == objects[curr_obj['binary_ref']]), 'process binary_ref does not point to the correct object'
