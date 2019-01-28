@@ -2,7 +2,9 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+import logging
 
+logger = logging.getLogger(__name__)
 
 class RelevanceQueryStringPatternTranslator:
     comparator_lookup = {
@@ -81,9 +83,9 @@ class RelevanceQueryStringPatternTranslator:
             self.query_string.update({'expression_operator':expression_operator})
 
             if qualifier is not None:
-                return "SPLIT{} limit {} {}SPLIT".format(self.query_string, self.result_limit, qualifier)
-            else:
-                return self.query_string
+                logger.info("Qualifier is not supported in BigFix relevance query.")
+            
+            return self.query_string
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif isinstance(expression, Pattern):
@@ -158,7 +160,9 @@ def translate_pattern(pattern: Pattern, result_limit, timerange=None):
         format_type = 'process_hash_query'
         final_query = RelevanceQueryStringPatternTranslator.query_format.get(format_type).format(hash_type=hash_type,hash_value=hash_value)
     else:
-        return 'Undefined query type'
+        logger.info('Unable to translate the Stix pattern into Relevance query')
+        
+        return 'Unable to translate the Stix pattern into Relevance query'
     
     besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BESAPI.xsd\"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>' + \
             final_query + '</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'

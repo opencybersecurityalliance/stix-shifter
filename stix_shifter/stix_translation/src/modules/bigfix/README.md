@@ -8,8 +8,8 @@ BigFix module currently supports limited stix patterns for the big file query. B
 
   1. `[file:parent_directory_ref.path = '/root' AND file:name = '*']`
   2. `[file:name Like 'arbitrary_file_name.txt' AND file:parent_directory_ref.path = '/etc']`
-  3. `[file:hashes.sha256 = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2211111111111122222222333' AND file:parent_directory_ref.path = '/root']`
-  4. `[file:name = 'a' AND file:parent_directory_ref.path = '/root' OR file:hashes.sha256 = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3000000444446666666']`
+  3. `[file:hashes.'SHA-256' = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2211111111111122222222333' AND file:parent_directory_ref.path = '/root']`
+  4. `[file:name = 'a' AND file:parent_directory_ref.path = '/root' OR file:hashes.'SHA-256' = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3000000444446666666']`
 
 #### Translated relevance query(in the same order as stix patterns):
 
@@ -26,8 +26,8 @@ BigFix module currently supports limited stix patterns for the big process query
 
   1. `[process:name = '*']`
   2. `[process:name Like 'node']`
-  3. `[process:name = 'node' or file:hashes.sha256 = '74c4ff75e3623e64e3d6620864b69ed1d75fa460e520b88ed234234fsdfsdsdfs']`
-  4. `[process:name = 'node' AND file:hashes.sha256 = '0c0017201b82e1d8613513dc80d1bf46320a957c393bsdfsdf3423432456546w']`
+  3. `[process:name = 'node' or file:hashes.'SHA-256' = '74c4ff75e3623e64e3d6620864b69ed1d75fa460e520b88ed234234fsdfsdsdfs']`
+  4. `[process:name = 'node' AND file:hashes.'SHA-256' = '0c0017201b82e1d8613513dc80d1bf46320a957c393bsdfsdf3423432456546w']`
 
 #### Translated relevance query(in the same order as stix patterns):
 
