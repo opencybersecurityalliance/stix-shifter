@@ -89,5 +89,7 @@
         "value": ["domainname"]
       }
     }
-  }
+  },
+  "timerange": 25,
+  "result_limit": 5000
 }
