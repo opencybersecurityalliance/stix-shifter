@@ -38,20 +38,20 @@ class CbQueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '{}'.format(value)
+        return '{}'.format(CbQueryStringPatternTranslator._escape_value(value))
 
     @staticmethod
     def _format_lt(value) -> str:
-        return '[* TO {}]'.format(value)
+        return '[* TO {}]'.format(CbQueryStringPatternTranslator._escape_value(value))
 
     @staticmethod
     def _format_gte(value) -> str:
-        return '[{} TO *]'.format(value)
+        return '[{} TO *]'.format(CbQueryStringPatternTranslator._escape_value(value))
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
-        if isinstance(value, str): # TODO this escape is incorrect for carbonblack
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
+        if isinstance(value, str):
+            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(' ', '\\ '))
         else:
             return value
 

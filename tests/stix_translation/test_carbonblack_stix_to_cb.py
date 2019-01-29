@@ -65,7 +65,18 @@ class TestStixToCB(unittest.TestCase, object):
                 "[process:name NOT = 'cmd.exe']" : "-(process_name:cmd.exe)",
                 "[process:name != 'cmd.exe']" : "-(process_name:cmd.exe)",
                 "[process:pid = 4 START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((process_pid:4) and start:[2019-01-22T00:04:52 TO *] and last_update:[* TO 2019-02-22T00:04:52])",
+                }
+        for stix_pattern, query in stix_to_cb_mapping.items():
+            result = translation.translate(module, 'query', '{}', stix_pattern)
+            print(result)
+            assert result['queries'] == [query]
 
+    def test_escape_query(self):
+        stix_to_cb_mapping = {
+                "[process:name = ' ']" : "process_name:\\ ",
+                "[process:name = '(']" : "process_name:\\(",
+                "[process:name = ')']" : "process_name:\\)",
+                "[process:name = '\"']" : "process_name:\\\"",
                 }
         for stix_pattern, query in stix_to_cb_mapping.items():
             result = translation.translate(module, 'query', '{}', stix_pattern)
