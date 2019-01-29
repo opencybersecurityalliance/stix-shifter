@@ -40,7 +40,7 @@ translation = stix_translation.StixTranslation()
 
 class TestStixToAql(unittest.TestCase, object):
     def test_ipv4_query(self):
-        stix_pattern = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84/10']"
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84/10']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         where_statement = "WHERE (INCIDR('192.168.122.84/10',sourceip) OR INCIDR('192.168.122.84/10',destinationip) OR INCIDR('192.168.122.84/10',identityip)) OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(
             default_limit, default_time)
@@ -68,21 +68,22 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
-    def test_query_from_multiple_observation_expressions_joined_by_and(self):
-        stix_pattern = "[url:value = 'www.example.com'] and [mac-addr:value = '00-00-5E-00-53-00']"
+    def test_query_from_multiple_observation_expressions_joined_by_AND(self):
+        stix_pattern = "[url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         # Expect the STIX and to convert to an AQL OR.
         where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}, {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
-    def test_query_from_multiple_comparison_expressions_joined_by_and(self):
-        stix_pattern = "[(url:value = 'www.example.com' or url:value = 'www.test.com') and mac-addr:value = '00-00-5E-00-53-00']"
+    def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
+        stix_pattern = "[(url:value = 'www.example.com' OR url:value = 'www.test.com') AND mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         # Expect the STIX and to convert to an AQL AND.
         where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND (url = 'www.test.com' OR url = 'www.example.com') {} {}".format(default_limit, default_time)
-        parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'url:value',
-                                                                                                                   'comparison_operator': '=', 'value': 'www.test.com'}, {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}]
+        parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'},
+                       {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.test.com'},
+                       {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_file_query(self):
@@ -94,7 +95,7 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_port_queries(self):
-        stix_pattern = "[network-traffic:src_port = 12345 or network-traffic:dst_port = 23456]"
+        stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         where_statement = "WHERE destinationport = '23456' OR sourceport = '12345' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
@@ -131,17 +132,10 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_network_traffic_start_stop(self):
-        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.567Z']"
+        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.567Z']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.567Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
-        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
-
-    def test_artifact_queries(self):
-        stix_pattern = "[artifact:payload_bin matches 'some text']"
-        query = translation.translate('qradar', 'query', '{}', stix_pattern)
-        where_statement = "WHERE payload MATCHES '.*some text.*' {} {}".format(default_limit, default_time)
-        parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': 'some text'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_start_stop_qualifiers_with_one_observation(self):
@@ -226,7 +220,7 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'ISSUBSET', 'attribute': 'ipv4-addr:value'}]
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
-    def test_custom_time_limit_and_result_count(self):
+    def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
         custom_options = copy.deepcopy(OPTIONS)
         query = translation.translate('qradar', 'query', '{}', stix_pattern, custom_options)
@@ -286,7 +280,7 @@ class TestStixToAql(unittest.TestCase, object):
                 assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_nested_parenthesis_in_pattern(self):
-        stix_pattern = "[(ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '100.100.122.90') and network-traffic:src_port = 37020] or [user-account:user_id = 'root'] and [url:value = 'www.example.com']"
+        stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = translation.translate('qradar', 'query', '{}', stix_pattern)
         where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
         parsed_stix = [
@@ -299,3 +293,39 @@ class TestStixToAql(unittest.TestCase, object):
         for parsing in parsed_stix:
             assert parsing in query['parsed_stix']
         assert query['queries'] == [selections + from_statement + where_statement]
+
+    def test_LIKE_operator(self):
+        search_string = 'example.com'
+        stix_pattern = "[url:value LIKE '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE url LIKE '%{}%' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'url:value', 'comparison_operator': 'LIKE', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_payload_string_matching_with_LIKE(self):
+        search_string = 'search term'
+        stix_pattern = "[x-readable-payload:value LIKE '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '{}' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'LIKE', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_payload_string_matching_with_MATCH(self):
+        search_string = '^.*https://wally.fireeye.com.*$'
+        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'MATCHES', 'value': search_string}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
+
+    def test_backslash_escaping(self):
+        # Stix pattern requires backslash to be double escaped to pass pattern validation.
+        # Not sure yet how we will make this work for an AQL query.
+        # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
+        search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
+        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        query = translation.translate('qradar', 'query', '{}', stix_pattern)
+        translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': 'MATCHES', 'value': translated_value}]
+        assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
