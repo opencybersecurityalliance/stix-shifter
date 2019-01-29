@@ -8,17 +8,8 @@ from .bigfix_api_client import APIClient
 
 
 class Connector(BaseConnector):
-    # TODO: config params passed into constructor instance
     def __init__(self, connection, configuration):
-        auth = configuration.get("auth")
-        user_name = auth.get('user_name')
-        password = auth.get('password')
-        host = connection.get('host')
-        port = connection.get('port')
-        cert = connection.get('cert', None)
-        host = str(host)
-        port = str(port)
-        self.api_client = APIClient(host + ':' + port, user_name, password, cert)
+        self.api_client = APIClient(connection, configuration)
         self.results_connector = BigFixResultsConnector(self.api_client)
         self.status_connector = BigFixStatusConnector(self.api_client)
         self.delete_connector = BigFixDeleteConnector(self.api_client)

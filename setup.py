@@ -115,7 +115,7 @@ setup(
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='datasource stix translate transform',  # Optional
+    keywords='datasource stix translate transform transmit',  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -179,12 +179,6 @@ setup(
     #         'sample=sample:main',
     #     ],
     # },
-    entry_points={
-        'console_scripts': [
-            'stix-transmission=stix_shifter.stix_transmission.stix_transmission:main',
-            'stix-translation=stix_shifter.stix_translation.stix_translation:main',
-        ],
-    },
 
     # List additional URLs that are relevant to your project as a dict.
     #

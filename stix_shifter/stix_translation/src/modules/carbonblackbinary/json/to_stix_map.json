@@ -1,17 +1,85 @@
 {
-  "username": {
-    "key": "user-account.user_id"
-  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
   "start": {
-      "key": "start"
+    "key": "process.created",
+    "object": "process"
   },
-  "last_update": {
-    "key": "end"
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "parent_name": [
+    {
+      "key": "file.name",
+      "object": "parent_file"
+    },
+    {
+      "key": "process.name",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "parent_file"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
   },
-  "process_name": {
-    "key": "file.name"
+  "parent_pid" : [
+    {
+      "key": "process.pid",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "process_md5": {
+    "key": "file.hashes.MD5",
+    "object": "process_file"
+  },
+  "parent_md5": {
+    "key": "file.hashes.MD5",
+    "object": "parent_file"
+  },
+  "cmdline" : {
+      "key": "process.command_line",
+      "object": "process"
+  },
+  "comms_ip": {
+    "key": "ipv4-addr.value",
+    "transformer": "ToIPv4"
+  },
+  "interface_ip": {
+    "key": "ipv4-addr.value",
+    "transformer": "ToIPv4"
   },
   "hostname": {
-    "key": "domain-name.value",
+    "key": "domain-name.value"
   }
 }

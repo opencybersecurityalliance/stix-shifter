@@ -22,6 +22,9 @@ class SplunkPing(BasePing):
                 return_obj['error'] = response_json['messages']
 
             return return_obj
+
         except Exception as err:
-            print('error when pinging datasource {}:'.format(err))
-            raise
+            return_obj = dict()
+            return_obj['success'] = False
+            return_obj['error'] = 'error when pinging data source: {}'.format(err)
+            return return_obj

@@ -1,19 +1,12 @@
 { 
-    "tag_to_model": {
-        "web": ["web"],
-        "authentication": ["authentication"],
-        "certificate": ["certificate"],
-        "process": ["process", "authentication", "file", "directory"],
-        "network": ["network-traffic", "dst_ip", "src_ip"],
-        "change": ["windows-registry-key", "file", "directory", "authentication"],
-        "endpoint": ["windows-registry-key", "file", "directory", "authentication"],
-        "email": ["email-addr", "email-message"]
-    },
-
-    "event_count": {
+   "event_count": {
         "key": "number_observed",
         "cybox": false,
         "transformer": "ToInteger"
+    },
+    "_raw": {
+        "key": "artifact.payload_bin",
+        "transformer": "ToBase64"
     },
     "dest_ip": [
         {
@@ -47,17 +40,17 @@
     ],
     "dest_port": {
         "key": "network-traffic.dst_port",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToInteger"
     },
     "src_port": {
         "key": "network-traffic.src_port",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToInteger"
     },
-    "transport": {
+    "protocol": {
         "key": "network-traffic.protocols",
-        "object": "network-traffic",
+        "object": ["network-traffic", "network-traffic-mac"],
         "transformer": "ToLowercaseArray"
     },
        
@@ -95,7 +88,9 @@
         {
             "key": "user-account.user_id",
             "object": "authentication"
-        },
+        }
+    ],
+    "process_user":[
         {
             "key": "windows-registry-key.creator_user_ref",
             "object": "windows-registry-key",
@@ -189,12 +184,10 @@
             "transformer": "SplunkToTimestamp"
         }
     ],
-    "file_hash": [
-        {
-            "key": "file.hashes.SHA-256",
-            "object": "file"
-        }
-    ],
+     "file_hash": {
+       "key": "file.hashes.UNKNOWN",
+       "object": "file"
+     },
     "file_name": {
         "key": "file.name",
         "object": "file"
@@ -203,20 +196,42 @@
         "key": "file.size",
         "object": "file"
     },
-    "dest_fqdn": {
-        "key": "domain-name.value"
+  "src_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
     },
-    "mac": {
-        "key": "mac-addr.value"
+    {
+      "key": "network-traffic.src_ref",
+      "object": "network-traffic-mac",
+      "references": "src_mac"
+    }
+   ],
+   "dest_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
     },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "network-traffic-mac",
+      "references": "dst_mac"
+    }
+   ],
     "object_path":{
         "key":"windows-registry-key.key",
         "object": "windows-registry-key"     
     },
-    "url":{
+    "url":[
+      {
         "key":"url.value",
         "object": "web"     
-    },
+      },
+      {
+        "key": "domain-name.value",
+        "transformer": "ToDomainName"
+      }
+    ],
     "src_user":[
         {
             "key":"email-addr.value",

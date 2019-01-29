@@ -1,18 +1,33 @@
 {
-  "network-traffic":{
+  "network-traffic": {
     "fields": {
-      "start": ["start"],
-      "end": ["last_update"]
+      "src_port": ["ipport"],
+      "dst_port": ["ipport"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ipaddr"]
     }
   },
   "file": {
     "fields": {
-      "name": ["process_name"]
+      "name": ["process_name"],
+      "hashes.MD5": ["md5"]
     }
   },
   "user-account":{
     "fields": {
       "user_id": ["username"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "command_line": ["cmdline"],
+      "created": ["start"],
+      "pid": ["process_pid"],
+      "name": ["process_name"],
+      "parent_ref.pid": ["parent_pid"]
     }
   },
   "domain-name": {

@@ -6,6 +6,7 @@ from stix_shifter.stix_translation import stix_translation
 
 interface = qradar_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
+# Using default mapping in modules/qradar/json/to_stix_map.json
 map_data = json.loads(map_file)
 data_source = {
     "type": "identity",
@@ -63,7 +64,9 @@ class TestTransform(object):
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000, "filename": file_name, "domainname": url}
+        source_mac = "00-00-5E-00-53-00"
+        destination_mac = "00-00-5A-00-55-01"
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -98,6 +101,28 @@ class TestTransform(object):
         assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == source_ip)
 
+        second_nt_objects = objects['6']
+        assert(second_nt_objects is not None), 'network-traffic object type not found'
+        assert(second_nt_objects.keys() ==
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+        assert(second_nt_objects['src_port'] == 3000)
+        assert(second_nt_objects['dst_port'] == 2000)
+        assert(second_nt_objects['protocols'] == ['tcp'])
+
+        ip_ref = second_nt_objects['dst_ref']
+        assert(ip_ref in objects), f"dst_ref with key {second_nt_objects['dst_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'mac-addr')
+        assert(ip_obj['value'] == destination_mac)
+
+        ip_ref = second_nt_objects['src_ref']
+        assert(ip_ref in objects), f"src_ref with key {second_nt_objects['src_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'mac-addr')
+        assert(ip_obj['value'] == source_mac)
+
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
         assert(curr_obj is not None), 'url object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
@@ -123,7 +148,7 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
 
-        assert(objects.keys() == set(map(str, range(0, 8))))
+        assert(objects.keys() == set(map(str, range(0, 11))))
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
@@ -319,3 +344,64 @@ class TestTransform(object):
         assert('SHA-1' not in hashes), 'SHA-1 hash included'
         assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
         assert(hashes['SHA-256'] == 'someSHA-256hash')
+
+    def test_hashtype_lookup_without_matching_generic_hash_name(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "someFile.exe"
+        }]
+
+        data_string = json.dumps(data)
+        options = {
+            "hash_options": {
+                "generic_name": "someUnknownHashName",
+                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
+            }
+        }
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        hashes = file_object['hashes']
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
+
+    def test_hashtype_lookup_without_hash_options(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "someFile.exe"
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert(file_object is not None), 'file object not found'
+        hashes = file_object['hashes']
+        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'

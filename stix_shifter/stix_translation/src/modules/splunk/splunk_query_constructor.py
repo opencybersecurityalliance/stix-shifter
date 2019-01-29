@@ -47,29 +47,30 @@ class SplunkSearchTranslator:
         elif isinstance(expression, ObservationExpression):
             translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
+
             if qualifier:
                 # start time pattern
-                st_pattern = r"(START'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
                 # stop time pattern
-                et_pattern = r"(STOP'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z')"
+                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
                 
-                stix_date_format = "%Y-%m-%dT%H:%M:%Sz"
-                splunk_date_format = "%m/%d/%Y:%H:%M:%S" 
+                stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
+                splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest     = re.sub(r"(START|')", '', st_arr[0] if st_arr else "")
+                    earliest     = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
                     earliest_obj = datetime.strptime(earliest, stix_date_format)
                     earliest_dt  = earliest_obj.strftime(splunk_date_format)
                 
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest     = re.sub(r"(STOP|')", '', et_arr[0] if et_arr else "")
+                    latest     = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
                     latest_obj = datetime.strptime(latest, stix_date_format)
                     latest_dt  = latest_obj.strftime(splunk_date_format)
 
@@ -180,7 +181,10 @@ class _ObservationExpressionTranslator:
                     encoders.simple(expression.value)
                 ), expression.negated)
 
-                return "({} AND {})".format(object_scoping, splunk_comparison)
+                if isinstance(self.dmm, CarDataMapper):
+                    return "({} AND {})".format(object_scoping, splunk_comparison)
+                else:
+                    return "({})".format(splunk_comparison)
             else:
                 return "({} AND {})".format(
                     object_scoping,
@@ -200,17 +204,38 @@ def _test_for_earliest_latest(query_string) -> bool:
     match = re.search(pattern, query_string)
     return bool(match)
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search_key, timerange=None):
     # CAR + Splunk = we want to override the default object scoper, I guess?
+    is_cim = False
     if isinstance(data_model_mapping, CarDataMapper):
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
+        is_cim = False
     else:
+        is_cim = True
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
-    
+
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
-    
-    if not has_earliest_latest:
-        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
 
+    # adding default fields for query
+
+    if is_cim:
+        map_data = data_model_mapping.FIELDS["default"]
+        fields = ""
+        for field in map_data:
+            if field != map_data[-1]:
+                fields += field
+                fields += ", "
+            else:
+                fields += field
+
+    if not has_earliest_latest and is_cim:
+        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+    elif has_earliest_latest and is_cim:
+        translated_query += ' | head {result_limit}'.format(result_limit=result_limit)
+
+    if is_cim:
+        translated_query = search_key + " " + translated_query + " | fields {fields}".format(fields=fields)
+
+    #return "({} AND {})".format(object_scoping, splunk_comparison)
     return translated_query

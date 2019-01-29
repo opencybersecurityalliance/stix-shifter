@@ -2,7 +2,7 @@
   "stix-input":"[process:pid NOT IN (1, 2, 3)]",
   "car-splunk": "(match(tag, \"dm-process-.*\") AND NOT (pid IN (1, 2, 3)))",
   "car-elastic": "data_model.object:process AND NOT(data_model.fields.pid:(1 OR 2 OR 3))",
-  "cim-splunk": "(tag=\"process\" AND NOT (pid IN (1, 2, 3)))",
+  "cim-splunk": "search (tag=\"process\" AND NOT (pid IN (1, 2, 3))) earliest=\"-5minutes\" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol",
   "matches": {
     "car": [
       {"object": "process", "action": "create", "fields": {"pid": 4}}
