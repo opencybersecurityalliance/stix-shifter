@@ -21,7 +21,10 @@
   },
   "file": {
     "fields": {
-      "name": ["filename"]
+      "name": ["filename"],
+      "hashes.SHA-256": ["filehash"],
+      "hashes.MD5": ["filehash"],
+      "hashes.SHA-1": ["filehash"]
     }
   },
   "network-traffic": {

@@ -28,6 +28,7 @@
     "URL as url",
     "magnitude as magnitude",
     "Filename as filename",
-    "URL as domainname"
+    "URL as domainname",
+    "\"File Hash\" as filehash"
   ]
 }
