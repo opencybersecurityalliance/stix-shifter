@@ -24,7 +24,8 @@ class CbQueryStringPatternTranslator:
         ComparisonComparators.LessThanOrEqual: ":",
 
         ObservationOperators.Or: 'or',
-        ObservationOperators.And: 'or', # TODO this is technically wrong. It should be converted to two separate queries
+        ObservationOperators.And: 'or', # This is technically wrong. It should be converted to two separate queries, but
+        # current behavior of existing modules treat operator as an OR.
         # observation operator AND - both sides MUST evaluate to true on different observations to be true
     }
 
@@ -47,6 +48,19 @@ class CbQueryStringPatternTranslator:
     @staticmethod
     def _format_gte(value) -> str:
         return '[{} TO *]'.format(CbQueryStringPatternTranslator._escape_value(value))
+
+# Note: target query language doesn't support '<=' or '>' directly so we implement it indirectly for integers
+    @staticmethod
+    def _format_lte(value) -> str:
+        if isinstance(value, int):
+            value = value + 1
+        return CbQueryStringPatternTranslator._format_lt(value)
+
+    @staticmethod
+    def _format_gt(value) -> str:
+        if isinstance(value, int):
+            value = value + 1
+        return CbQueryStringPatternTranslator._format_gte(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -77,10 +91,10 @@ class CbQueryStringPatternTranslator:
                 value = self._format_lt(expression.value)
             elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
                 value = self._format_gte(expression.value)
-            elif expression.comparator == ComparisonComparators.LessThanOrEqual: # TODO fix target query language doesn't support this so will require some work
-                value = self._format_lt(expression.value)
-            elif expression.comparator == ComparisonComparators.GreaterThan: # TODO fix target query language doesn't support this so will require some work
-                value = self._format_gte(expression.value)
+            elif expression.comparator == ComparisonComparators.LessThanOrEqual:
+                value = self._format_lte(expression.value)
+            elif expression.comparator == ComparisonComparators.GreaterThan:
+                value = self._format_gt(expression.value)
             else:
                 value = self._escape_value(expression.value)
 
