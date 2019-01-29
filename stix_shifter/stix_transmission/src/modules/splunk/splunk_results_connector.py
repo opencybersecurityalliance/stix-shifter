@@ -12,11 +12,12 @@ class SplunkResultsConnector(BaseResultsConnector):
         try:
             response = self.api_client.get_search_results(search_id, offset, length)
             response_code = response.code
-            response_json = json.load(response) 
+            response_json = json.load(response)
+
             if "results" in response_json:
-                results = [{}] if (response_json['results'] == []) else response_json['results']
+                results = [] if (response_json['results'] == []) else response_json['results']
             else:
-                results = [{}]
+                results = []
 
             # Construct a response object
             return_obj = dict()
