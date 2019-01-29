@@ -231,6 +231,39 @@ class TestSplunkConnection(unittest.TestCase, object):
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results',
            autospec=True)
+    def test_results_response_empty_list(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'empty_result_by_sid.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_results_response.return_value = SplunkMockResponse(200, mocked_return_value)
+
+        module = splunk_connector
+        config = {
+            "auth": {
+                "username": "",
+                "password": ""
+            }
+        }
+        connection = {
+            "host": "host",
+            "port": "8080"
+        }
+
+        search_id = "1536832140.4293"
+        offset = 0
+        length = 1
+        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+
+        assert 'success' in results_response
+        assert results_response['success'] is True
+        assert 'data' in results_response
+        assert len(results_response['data']) == 0
+
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search_results',
+           autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
 

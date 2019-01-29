@@ -21,7 +21,10 @@
   },
   "file": {
     "fields": {
-      "name": ["filename"]
+      "name": ["filename"],
+      "hashes.SHA-256": ["filehash"],
+      "hashes.MD5": ["filehash"],
+      "hashes.SHA-1": ["filehash"]
     }
   },
   "network-traffic": {
@@ -42,12 +45,17 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["payload"]
+      "payload_bin": ["base64_payload"]
     }
   },
   "domain-name": {
     "fields": {
       "value": ["domainname"]
+    }
+  },
+  "x-readable-payload": {
+    "fields": {
+      "value": ["utf8_payload"]
     }
   }
 }

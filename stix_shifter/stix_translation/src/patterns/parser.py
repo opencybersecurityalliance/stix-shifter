@@ -116,13 +116,13 @@ class STIXQueryBuilder(STIXPatternListener):
             self.push(set_value)
 
     def exitOrderableLiteral(self, ctx: STIXPatternParser.OrderableLiteralContext):
-        """  Can be IntLiteral, FloatLiteral, stringLiteral, BinaryLiteral, HexLiteral, TimestampLiteral """
+        """  Can be IntPosLiteral, IntNegLiteral, FloatPosLiteral, FloatNegLiteral, stringLiteral, BinaryLiteral, HexLiteral, TimestampLiteral """
         logger.debug("{} {} {}".format("OrderableLiteral", ctx, ctx.getText()))
         if ctx.stringLiteral():
             pass  # Strings should have already been pushed onto the stack
-        elif ctx.IntLiteral():
+        elif ctx.IntPosLiteral() or ctx.IntNegLiteral():
             self.push(int(ctx.getText()))
-        elif ctx.FloatLiteral():
+        elif ctx.FloatPosLiteral() or ctx.FloatNegLiteral():
             self.push(float(ctx.getText()))
         elif ctx.BinaryLiteral():
             # Leave these as strings for now
@@ -201,7 +201,7 @@ class STIXQueryBuilder(STIXPatternListener):
         logger.debug("{} {} {}".format("Pattern", ctx, ctx.getText()))
         observation_expression = self.pop()
         self.push(Pattern(observation_expression))
-    
+
     def exitPropTestIsSuperset(self, ctx: STIXPatternParser.PropTestIsSupersetContext) -> None:
         logger.debug("{} {} {}".format("exitPropTestIsSuperset", ctx, ctx.getText()))
         value = self.pop()
@@ -216,6 +216,8 @@ class STIXQueryBuilder(STIXPatternListener):
         self.push(ComparisonExpression(object_path, value, ComparisonComparators.IsSubSet, negated=negated))
 
 # copied from CASCADE data_model (defined twice)
+
+
 class InvalidFieldError(KeyError):
     pass
 

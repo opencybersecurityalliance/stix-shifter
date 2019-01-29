@@ -66,16 +66,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_match(value) -> str:
-        raw = AqlQueryStringPatternTranslator._escape_value(value)
-        if raw[0] == "^":
-            raw = raw[1:]
-        else:
-            raw = ".*" + raw
-        if raw[-1] == "$":
-            raw = raw[0:-1]
-        else:
-            raw = raw + ".*"
-        return "\'{}\'".format(raw)
+        return "\'{}\'".format(value)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -137,6 +128,8 @@ class AqlQueryStringPatternTranslator:
             # For [ipv4-addr:value = <CIDR value>]
             elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
                 comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
+            elif expression.object_path == 'x-readable-payload:value' and expression.comparator == ComparisonComparators.Like:
+                comparison_string += "TEXT SEARCH '{}'".format(value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
@@ -185,7 +178,7 @@ class AqlQueryStringPatternTranslator:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
+            elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
                 value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)

@@ -81,13 +81,20 @@
     },
     "artifact": {
       "fields": {
-        "payload_bin": ["payload"]
+        "payload_bin": ["base64_payload"]
       }
     },
     "domain-name": {
       "fields": {
         "value": ["domainname"]
       }
+    },
+    "x-readable-payload": {
+      "fields": {
+        "value": ["utf8_payload"]
+      }
     }
-  }
+  },
+  "timerange": 25,
+  "result_limit": 5000
 }
