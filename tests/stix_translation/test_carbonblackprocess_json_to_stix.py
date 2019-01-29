@@ -1,7 +1,7 @@
 from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter.stix_translation.src import transformers
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.carbonblack import carbonblack_translator
+from stix_shifter.stix_translation.src.modules.carbonblackprocess import carbonblackprocess_translator
 from stix2validator import validate_instance
 
 import json
@@ -11,19 +11,19 @@ import unittest
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 
-interface = carbonblack_translator.Translator()
+interface = carbonblackprocess_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
 map_data = json.loads(map_file)
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-    "name": "CarbonBlack",
+    "name": "CarbonBlackProcess",
     "identity_class": "events"
 }
 options = {}
 
 
-class TestCarbonBlackTransformResults(unittest.TestCase, object):
+class TestCarbonBlackProcessTransformResults(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
         return next(
@@ -33,7 +33,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
     @staticmethod
     def get_first_of_type(itr, typ):
-        return TestCarbonBlackTransformResults.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
+        return TestCarbonBlackProcessTransformResults.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_change_cb_to_stix(self):
         data = json.loads("""
@@ -112,25 +112,25 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
+        curr_obj = TestCarbonBlackProcessTransformResults.get_first_of_type(objects.values(), 'file')
         file_obj = curr_obj # used in later test
         assert(curr_obj is not None), 'file object type not found'
         assert(curr_obj.keys() == {'type', 'name', 'hashes'})
         assert(curr_obj['name'] == "cmd.exe")
         assert(curr_obj['hashes']['MD5'] == "5746bd7e255dd6a8afa06f7c42c1ba41")
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'user-account')
+        curr_obj = TestCarbonBlackProcessTransformResults.get_first_of_type(objects.values(), 'user-account')
         user_obj = curr_obj # used in later test
         assert(curr_obj is not None), 'user-account object type not found'
         assert(curr_obj.keys() == {'type', 'user_id'})
         assert(curr_obj['user_id'] == "SYSTEM")
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
+        curr_obj = TestCarbonBlackProcessTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
         assert(curr_obj is not None), 'ipv4-addr object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == "12.166.224.2")
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
+        curr_obj = TestCarbonBlackProcessTransformResults.get_first_of_type(objects.values(), 'process')
         assert(curr_obj is not None), 'process object type not found'
         assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid'})
         assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")

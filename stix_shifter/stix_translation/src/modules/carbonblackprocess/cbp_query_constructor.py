@@ -36,7 +36,6 @@ class CbPQueryStringPatternTranslator:
         self.result_limit = result_limit
         self.translated = self.parse_expression(pattern)
         query_split = self.translated.split("SPLIT")
-        print (query_split)
         if len(query_split) > 1:
             self.queries = _format_split_queries(query_split)
         else:
@@ -57,11 +56,11 @@ class CbPQueryStringPatternTranslator:
             raw = raw[0:-1]
         else:
             raw = raw + ".*"
-        return "\'{}\'".format(raw)
+        return "{}".format(raw)
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
+        return '{}'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
@@ -225,7 +224,6 @@ def _format_split_queries(query_array):
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
     formatted_queries = []
     for query in query_array:
-        print (query)
         if _test_START_STOP_format(query):
             # Remove leading 't' before timestamps
             query = re.sub("(?<=START)t|(?<=STOP)t", "", query)

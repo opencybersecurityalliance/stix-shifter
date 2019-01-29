@@ -57,11 +57,11 @@ class CbBQueryStringPatternTranslator:
             raw = raw[0:-1]
         else:
             raw = raw + ".*"
-        return "\'{}\'".format(raw)
+        return "{}".format(raw)
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
+        return '{}'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
