@@ -2,13 +2,8 @@ import logging
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-<<<<<<< HEAD:stix_shifter/stix_translation/src/modules/carbonblackbinary/stix_to_cbb.py
 from . import carbonblackbinary_data_mapping
 from . import cbb_query_constructor
-=======
-from . import carbonblack_data_mapping
-from . import carbonblack_query_constructor
->>>>>>> 1695ec38a642c77107f0b500cd13fa9e8dd6d36f:stix_shifter/stix_translation/src/modules/carbonblack/stix_to_cb.py
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +30,6 @@ class StixToCBB(BaseQueryTranslator):
         data_model_mapper = carbonblackbinary_data_mapping.CarbonBlackBinaryDataMapper(options)
         result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
         timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
-<<<<<<< HEAD:stix_shifter/stix_translation/src/modules/carbonblackbinary/stix_to_cbb.py
         query_string = cbb_query_constructor.translate_pattern(
-=======
-        query_string = carbonblack_query_constructor.translate_pattern(
->>>>>>> 1695ec38a642c77107f0b500cd13fa9e8dd6d36f:stix_shifter/stix_translation/src/modules/carbonblack/stix_to_cb.py
             query_object, data_model_mapper, result_limit, timerange)
         return query_string

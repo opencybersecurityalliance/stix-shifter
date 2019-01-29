@@ -6,12 +6,7 @@ import re
 import json
 
 
-<<<<<<< HEAD
-
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'carbonblackprocess','carbonblackbinary']
-=======
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
->>>>>>> 1695ec38a642c77107f0b500cd13fa9e8dd6d36f
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
