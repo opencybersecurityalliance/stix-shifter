@@ -86,6 +86,15 @@ class TestStixToCB(unittest.TestCase, object):
             print(result)
             assert result['queries'] == [query]
 
+    def test_binary_api_qualifier(self):
+        stix_to_cb_mapping = {
+                "[file:name = 'cmd.exe'] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((observed_filename:cmd.exe) and server_added_timestamp:[2019-01-22T00:04:52 TO 2019-02-22T00:04:52])"
+                }
+        for stix_pattern, query in stix_to_cb_mapping.items():
+            result = translation.translate("carbonblack:binary", 'query', '{}', stix_pattern)
+            print(result)
+            assert result['queries'] == [query]
+
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '100.100.122.90') and network-traffic:src_port = 37020] or [user-account:user_id = 'root']"
         query = translation.translate(module, 'query', '{}', stix_pattern)

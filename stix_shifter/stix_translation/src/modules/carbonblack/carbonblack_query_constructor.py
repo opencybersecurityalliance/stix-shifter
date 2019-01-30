@@ -29,10 +29,11 @@ class CbQueryStringPatternTranslator:
         # observation operator AND - both sides MUST evaluate to true on different observations to be true
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, dialect):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.dialect = dialect
         self.translated = self.parse_expression(pattern)
         self.queries = [self.translated]
         print (self.queries)
@@ -70,8 +71,27 @@ class CbQueryStringPatternTranslator:
             return value
 
     @staticmethod
-    def _negate_comparison(comparison_string):
+    def _negate_comparison(comparison_string) -> str:
         return "-({})".format(comparison_string)
+
+    @staticmethod
+    def _to_cb_timestamp(ts: str) -> str:
+        stripped = ts[2:-2]
+        if '.' in stripped:
+            stripped = stripped.split('.', 1)[0]
+        return stripped
+
+    def _fomat_start_stop_qualifier(self, expression, qualifier : StartStopQualifier) -> str:
+        start = self._to_cb_timestamp(qualifier.start)
+        stop = self._to_cb_timestamp(qualifier.stop)
+
+        if self.dialect == "process":
+            return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(expression, start, stop)
+        elif self.dialect == "binary":
+            return "(({}) and server_added_timestamp:[{} TO {}])".format(expression, start, stop)
+        else:
+            raise RuntimeError("Invalid CarbonBlack dialect: {}".format(self.dialect))
+
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):
@@ -122,11 +142,9 @@ class CbQueryStringPatternTranslator:
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    start = to_cb_timestamp(qualifier.start)
-                    stop = to_cb_timestamp(qualifier.stop)
-                    return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(comparison_string, start, stop)
+                    return self._fomat_start_stop_qualifier(comparison_string, qualifier)
                 else:
-                    raise RuntimeError("Unknown Qualifier")
+                    raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
                 return "{}".format(comparison_string)
 
@@ -136,11 +154,9 @@ class CbQueryStringPatternTranslator:
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    start = to_cb_timestamp(qualifier.start)
-                    stop = to_cb_timestamp(qualifier.stop)
-                    return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(comparison_string, start, stop)
+                    return self._fomat_start_stop_qualifier(query_string, qualifier) # TODO there are no tests exercising this part
                 else:
-                    raise RuntimeError("Unknown Qualifier")
+                    raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -168,12 +184,7 @@ class CbQueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
 
-def to_cb_timestamp(ts: str) -> str:
-    stripped = ts[2:-2]
-    if '.' in stripped:
-        stripped = stripped.split('.', 1)[0]
-    return stripped
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
-    translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, dialect=None, timerange=None):
+    translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, dialect)
     return translated_statements.queries

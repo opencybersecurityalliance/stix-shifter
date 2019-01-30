@@ -9,10 +9,14 @@ from os import path
 
 class Translator(BaseTranslator):
 
-    def __init__(self):
+    def __init__(self, dialect="process"):
         basepath = path.dirname(__file__)
-        filepath = path.abspath(
-            path.join(basepath, "json", "to_stix_map.json"))
+
+        if dialect not in ["process", "binary"]:
+            raise NotImplementedError # TODO what's the best exception type to raise?
+
+        filepath = path.abspath(path.join(basepath, "json", "to_stix_map.json"))
         self.mapping_filepath = filepath
+
         self.result_translator = JSONToStix(filepath)
-        self.query_translator = StixToCB()
+        self.query_translator = StixToCB(dialect)
