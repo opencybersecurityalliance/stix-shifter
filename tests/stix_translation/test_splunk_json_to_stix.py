@@ -133,7 +133,6 @@ class TestTransform(object):
         print(result_bundle_objects)
         assert(objects.keys() == set(map(str, range(0, 5))))
        
-       
     def test_certificate_cim_to_stix(self):
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
@@ -497,3 +496,24 @@ class TestTransform(object):
                   'bGx5LmZpcmVleWUuY29tL21hbHdhcmVfYW5hbHlzaXMvYW5hbHlzZXM/bWFpZD0xIGNzMkxhYmVsPWFub21hbHkgY3MyPW' \
                   '1pc2MtYW5vbWFseSBjczFMYWJlbD1zbmFtZSBjczE9RkVfVVBYO1Ryb2phbi5QV1MuT25saW5lR2FtZXM='
         assert (payload_obj['payload_bin'] == payload)
+
+    def test_payload_results(self):
+            data = {"src_ip": "169.250.0.1", "src_port": "1220", "src_mac": "aa:bb:cc:dd:11:22", "dest_ip": "127.0.0.1", "dest_port": "1120", "dest_mac": "ee:dd:bb:aa:cc:11", "file_hash": "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef", "user": "sname", "url": "https://wally.fireeye.com/malware_analysis/analyses?maid=1", "protocol": "tcp", "_bkt": "main~44~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06", "_cd": "44:12606114", "_indextime": "1546960685", "_raw": "Jan 08 2019 15:18:04 192.168.33.131 fenotify-2.alert: CEF:0|FireEye|MAS|6.2.0.74298|MO|malware-object|4|rt=Jan 08 2019 15:18:04 Z src=169.250.0.1 dpt=1120 dst=127.0.0.1 spt=1220 smac=AA:BB:CC:DD:11:22 dmac=EE:DD:BB:AA:CC:11 cn2Label=sid cn2=111 fileHash=41a26255d16d121dc525a6445144b895 proto=tcp request=http://qa-server.eng.fireeye.com/QE/NotificationPcaps/58.253.68.29_80-192.168.85.128_1165-2119283109_T.exe cs3Label=osinfo cs3=Microsoft Windows7 Professional 6.1 sp1 dvchost=wally dvc=10.2.101.101 cn1Label=vlan cn1=0 externalId=1 cs4Label=link cs4=https://wally.fireeye.com/malware_analysis/analyses?maid=1 cs2Label=anomaly cs2=misc-anomaly cs1Label=sname cs1=FE_UPX;Trojan.PWS.OnlineGames \n", "_serial": "0", "_si": ["splunk3-01.internal.resilientsystems.com", "main"], "_sourcetype": "fe_cef_syslog", "_time": "2019-01-08T15:18:04.000+00:00", "event_count": 1}
+
+            result_bundle = json_to_stix_translator.convert_to_stix(
+                data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
+
+            assert (result_bundle['type'] == 'bundle')
+
+            result_bundle_objects = result_bundle['objects']
+            observed_data = result_bundle_objects[1]
+            # somehow breaking the stix validation
+            # validated_result = validate_instance(observed_data)
+            # assert(validated_result.is_valid == True)
+            assert ('objects' in observed_data)
+            objects = observed_data['objects']
+
+            utf8 = "Jan 08 2019 15:18:04 192.168.33.131 fenotify-2.alert: CEF:0|FireEye|MAS|6.2.0.74298|MO|malware-object|4|rt=Jan 08 2019 15:18:04 Z src=169.250.0.1 dpt=1120 dst=127.0.0.1 spt=1220 smac=AA:BB:CC:DD:11:22 dmac=EE:DD:BB:AA:CC:11 cn2Label=sid cn2=111 fileHash=41a26255d16d121dc525a6445144b895 proto=tcp request=http://qa-server.eng.fireeye.com/QE/NotificationPcaps/58.253.68.29_80-192.168.85.128_1165-2119283109_T.exe cs3Label=osinfo cs3=Microsoft Windows7 Professional 6.1 sp1 dvchost=wally dvc=10.2.101.101 cn1Label=vlan cn1=0 externalId=1 cs4Label=link cs4=https://wally.fireeye.com/malware_analysis/analyses?maid=1 cs2Label=anomaly cs2=misc-anomaly cs1Label=sname cs1=FE_UPX;Trojan.PWS.OnlineGames \n"
+
+
+            assert(observed_data['x_com_splunk_spl']['utf8_payload'] == utf8)

@@ -87,7 +87,7 @@ class APIClient():
         # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
         data = {'query_expression': query_expression}
-        return self.client.call_api(endpoint, 'POST', data=data)
+        return self.client.call_api(endpoint, 'POST', urldata=data)
 
     def get_search(self, search_id):
         # Sends a GET request to

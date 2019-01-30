@@ -1,13 +1,13 @@
 from stix_shifter.stix_transmission.src.modules.bigfix import bigfix_connector
 from unittest.mock import patch
 import unittest
-
+from stix_shifter.stix_transmission import stix_transmission
 
 class BigFixMockJsonResponse:
     def __init__(self, response_code, object):
         self.code = response_code
-        self.object = object
-
+        self.object = object.encode()
+    
     def read(self):
         return self.object
 
@@ -59,9 +59,9 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_return_value = MockHttpResponse('/api/clientquery')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        module = bigfix_connector
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        ping_response = transmission.ping()
 
-        ping_response = module.Connector(connection, config).ping()
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success']
@@ -72,9 +72,9 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_return_value = MockHttpResponse('/missing')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        module = bigfix_connector
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        ping_response = transmission.ping()
 
-        ping_response = module.Connector(connection, config).ping()
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] == False
@@ -86,9 +86,9 @@ class TestBigfixConnection(unittest.TestCase):
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
         mock_ping_response.side_effect = Exception('an error occured retriving ping information')
 
-        module = bigfix_connector
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        ping_response = transmission.ping()
 
-        ping_response = module.Connector(connection, config).ping()
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] == False
@@ -100,9 +100,9 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_return_value = MockHttpResponse('/exception')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(500, mocked_return_value)
 
-        module = bigfix_connector
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        ping_response = transmission.ping()
 
-        ping_response = module.Connector(connection, config).ping()
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] == False
@@ -121,11 +121,9 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        module = bigfix_connector
-
         query = 'bigfix query text'
-
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -139,13 +137,12 @@ class TestBigfixConnection(unittest.TestCase):
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-
-        module = bigfix_connector
-
+        
         query = 'bigfix query text'
 
-        query_response = module.Connector(connection, config).create_query_connection(query)
-
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        query_response = transmission.query(query)
+        
         assert query_response is not None
         assert 'success' in query_response
         assert query_response['success'] == False
@@ -161,11 +158,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
         mock_query_response.side_effect = Exception('an error occured creating search')
 
-        module = bigfix_connector
-
         query = 'bigfix query text'
 
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -200,11 +196,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "100"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -225,11 +220,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "0", "totalResults": "100"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -250,11 +244,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "1", "totalResults": "100"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -275,11 +268,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "7500", "totalResults": "100"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -300,11 +292,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -326,11 +317,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -353,11 +343,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
         mock_status_response.side_effect = Exception('an error getting status')
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -377,11 +366,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
         mock_status_response.return_value=BigFixMockJsonResponse(200,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -402,11 +390,10 @@ class TestBigfixConnection(unittest.TestCase):
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
         mock_status_response.return_value=BigFixMockJsonResponse(500,mocked_search_results_status)
 
-        module = bigfix_connector
-
         search_id = "104"
 
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -451,12 +438,12 @@ class TestBigfixConnection(unittest.TestCase):
                                 }"""
         mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
 
-        module = bigfix_connector
-
+        
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -470,12 +457,11 @@ class TestBigfixConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_results_response.side_effect = Exception('an error getting data')
 
-        module = bigfix_connector
-
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -508,12 +494,11 @@ class TestBigfixConnection(unittest.TestCase):
                                 }"""
         mock_results_response.return_value = BigFixMockJsonResponse(500, mocked_return_value)
 
-        module = bigfix_connector
-
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -546,12 +531,11 @@ class TestBigfixConnection(unittest.TestCase):
                                 }"""
         mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
 
-        module = bigfix_connector
-
         search_id = "102"
         offset = "0"
         length = "100"
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
         assert 'success' in results_response

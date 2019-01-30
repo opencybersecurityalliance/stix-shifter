@@ -144,6 +144,9 @@ class _ObservationExpressionTranslator:
             # This scopes the query to the object
             object_scoping = self.object_scoper(object_mapping)
 
+            if stix_object == "x-readable-payload" and stix_path == "value":
+                return "_raw=*{}*".format(expression.value)
+
             # Check if mapping has multiple fields
             if isinstance(field_mapping, list):
                 comparison_string = ""

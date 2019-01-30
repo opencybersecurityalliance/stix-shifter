@@ -1,9 +1,10 @@
 from ..base.base_query_connector import BaseQueryConnector
 import json
 from .....utils.error_response import ErrorResponder
+from .qradar_error_mapper import ErrorMapper
 
 
-class SplunkQueryConnector(BaseQueryConnector):
+class QRadarQueryConnector(BaseQueryConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
@@ -15,10 +16,11 @@ class SplunkQueryConnector(BaseQueryConnector):
 
         # Construct a response object
         return_obj = dict()
-        
+
         if response_code == 201:
             return_obj['success'] = True
-            return_obj['search_id'] = response_dict['sid']
+            return_obj['search_id'] = response_dict['search_id']
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+        
         return return_obj
