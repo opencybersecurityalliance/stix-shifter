@@ -58,7 +58,7 @@ class RestApiClient:
         try:
             call = getattr(requests, method.lower())
             response = call(url, headers=actual_headers, cert=self.cert_file, data=data, verify=self.cert_verify)
-            response.raise_for_status()
+            
             if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                             and "Deprecated" in response.headers['Content-Type']:
                 print("WARNING: " + response.headers['Content-Type'], file=sys.stderr)

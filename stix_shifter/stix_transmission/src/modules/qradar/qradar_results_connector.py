@@ -1,28 +1,28 @@
 from ..base.base_results_connector import BaseResultsConnector
-from .spl_api_client import APIClient
 import json
 from .....utils.error_response import ErrorResponder
 
 
-class SplunkResultsConnector(BaseResultsConnector):
+class QRadarResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
     def create_results_connection(self, search_id, offset, length):
+        min_range = offset
+        max_range = offset + length
         # Grab the response, extract the response code, and convert it to readable json
-        response = self.api_client.get_search_results(search_id, offset, length)
+
+        response = self.api_client.get_search_results(search_id, 'application/json', min_range, max_range)
         response_code = response.code
-        response_dict = json.load(response)
 
         # Construct a response object
         return_obj = dict()
+        response_dict = json.loads(response.read())
+        
         if response_code == 200:
-            if "results" in response_dict:
-                results = response_dict['results']
-            else:
-                results = []
             return_obj['success'] = True
-            return_obj['data'] = results
+            return_obj['data'] = response_dict['events']
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+
         return return_obj

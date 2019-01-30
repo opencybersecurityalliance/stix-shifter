@@ -1,4 +1,5 @@
 from ..base.base_delete_connector import BaseDeleteConnector
+from .....utils.error_response import ErrorResponder
 
 
 class BigFixDeleteConnector(BaseDeleteConnector):
