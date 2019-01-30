@@ -153,7 +153,7 @@ class ToIPv4(ValueTransformer):
     @staticmethod
     def transform(value):
         try:
-            return socket.inet_ntoa(value.to_bytes(4, "big"))
+            return socket.inet_ntoa((value & 0xffffffff).to_bytes(4, "big"))
         except ValueError:
             print("Cannot convert input to IPv4 string")
 

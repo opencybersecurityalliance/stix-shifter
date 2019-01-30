@@ -104,7 +104,7 @@ class TestStixToCB(unittest.TestCase, object):
             {'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}
         ]
-        print(query)
+        #print(query)
         desired_result = "(ipaddr:192.168.122.83 or ipaddr:100.100.122.90 ) and ipport:37020 or username:root"
         print("desired_result ", desired_result)
         #assert(query["queries"] == [desired_result])

@@ -63,7 +63,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
       "last_update": "2019-01-22T00:04:52.937Z",
       "start": "2019-01-22T00:04:52.875Z",
       "alliance_link_srstrust": "https://example.com",
-      "comms_ip": 212262914,
+      "comms_ip": -1051309706,
       "regmod_count": 0,
       "interface_ip": 183439304,
       "process_pid": 1896,
@@ -128,7 +128,9 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
         assert(curr_obj is not None), 'ipv4-addr object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == "12.166.224.2")
+        assert(curr_obj['value'] == "193.86.73.118")
+        # TODO add another test for other ip address
+        #assert(curr_obj['value'] == "12.166.224.2")
 
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
         assert(curr_obj is not None), 'process object type not found'
