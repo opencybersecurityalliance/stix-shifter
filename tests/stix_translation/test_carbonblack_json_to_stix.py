@@ -35,7 +35,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
     def get_first_of_type(itr, typ):
         return TestCarbonBlackTransformResults.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
-    def test_change_cb_to_stix(self):
+    def test_change_cb_process_api_results_to_stix(self):
         data = json.loads("""
 {
   "terms": [
@@ -147,3 +147,106 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj['pid'] == 2508)
         assert(curr_obj['name'] == "cmd.exe")
         assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")
+
+
+
+    def test_change_cb_binary_api_results_to_stix(self):
+        data = json.loads("""
+{
+  "terms": [
+    "md5:F5AE03DE0AD60F5B17B82F2CD68402FE"
+  ],
+  "total_results": 1,
+  "highlights": [
+    {
+      "name": "PREPREPREF5AE03DE0AD60F5B17B82F2CD68402FEPOSTPOSTPOST",
+      "ids": [
+        "F5AE03DE0AD60F5B17B82F2CD68402FE"
+      ]
+    }
+  ],
+  "facets": {},
+  "results": [
+    {
+      "host_count": 13,
+      "alliance_updated_srstrust": "2016-09-04T04:59:53Z",
+      "original_filename": "Cmd.Exe.MUI",
+      "legal_copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
+      "digsig_result": "Signed",
+      "observed_filename": [
+        "c:\\\\windows\\\\system32\\\\cmd.exe"
+      ],
+      "product_version": "6.3.9600.16384",
+      "alliance_score_srstrust": -100,
+      "watchlists": [
+        {
+          "wid": "5",
+          "value": "2016-10-19T10:20:05.424Z"
+        }
+      ],
+      "facet_id": 431419,
+      "copied_mod_len": 357376,
+      "server_added_timestamp": "2016-10-19T10:00:25.734Z",
+      "digsig_sign_time": "2014-11-07T08:02:00Z",
+      "orig_mod_len": 357376,
+      "alliance_data_srstrust": [
+        "f5ae03de0ad60f5b17b82f2cd68402fe"
+      ],
+      "is_executable_image": true,
+      "is_64bit": true,
+      "md5": "F5AE03DE0AD60F5B17B82F2CD68402FE",
+      "digsig_publisher": "Microsoft Corporation",
+      "endpoint": [
+        "ADTWO|24",
+        "ADONE|26",
+        "CERT|27",
+        "REPO|29",
+        "adone|26",
+        "cert|27",
+        "adtwo|24",
+        "iestestmachine3|53",
+        "iestestmachine0|52",
+        "iestestmachine1|54"
+      ],
+      "group": [ "CTF Lab", "Default Group", "ctf lab", "default group" ],
+      "event_partition_id": [ 97777295491072, 97794283536384, 97811271778304, 97828260020224, 97845247737856, 97862235979776, 97879224221696, 97896211152896, 97913199394816 ],
+      "digsig_result_code": "0",
+      "file_version": "6.3.9600.16384 (winblue_rtm.130821-1623)",
+      "signed": "Signed",
+      "alliance_link_srstrust": "https://services.bit9.com/Services/extinfo.aspx?ak=b8b4e631d4884ad1c56f50e4a5ee9279&sg=0313e1735f6cec221b1d686bd4de23ee&md5=f5ae03de0ad60f5b17b82f2cd68402fe",
+      "company_name": "Microsoft Corporation",
+      "internal_name": "cmd",
+      "timestamp": "2016-10-19T10:00:25.734Z",
+      "cb_version": 624,
+      "os_type": "Windows",
+      "file_desc": "Windows Command Processor",
+      "product_name": "Microsoft\u00ae Windows\u00ae Operating System",
+      "last_seen": "2019-01-14T03:19:05.687Z"
+    }
+  ],
+  "elapsed": 0.02470088005065918,
+  "start": 0
+}""")
+
+        binary_interface = carbonblack_translator.Translator(dialect='binary')
+        binary_map_file = open(binary_interface.mapping_filepath).read()
+        binary_map_data = json.loads(binary_map_file)
+
+        results = data["results"]
+        result_bundle = json_to_stix_translator.convert_to_stix(data_source, binary_map_data, results, transformers.get_all_transformers(), options)
+        print(result_bundle)
+
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
+        file_obj = curr_obj # used in later test
+        assert(curr_obj is not None), 'file object type not found'
+        assert(curr_obj.keys() == {'type', 'name', 'created', 'hashes'})
+        assert(curr_obj['name'] =="Cmd.Exe.MUI")
+        assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
