@@ -97,7 +97,7 @@ class TestStixToCB(unittest.TestCase, object):
 
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '100.100.122.90') and network-traffic:src_port = 37020] or [user-account:user_id = 'root']"
-        query = translation.translate(module, 'query', '{}', stix_pattern)
+        #query = translation.translate(module, 'query', '{}', stix_pattern)
         parsed_stix = [
             {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},
