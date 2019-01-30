@@ -21,6 +21,12 @@ class CimDataMapper:
           "value": "url"
         }
       },
+      "x-readable-payload": {
+        "cim_type": "",
+        "fields": {
+          "value": "_raw"
+        }
+      },
       "email-addr": {
         "cim_type": "email",
         "fields": {

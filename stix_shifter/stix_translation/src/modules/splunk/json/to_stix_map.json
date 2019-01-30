@@ -4,10 +4,16 @@
         "cybox": false,
         "transformer": "ToInteger"
     },
-    "_raw": {
-        "key": "artifact.payload_bin",
-        "transformer": "ToBase64"
-    },
+    "_raw": [
+     {
+       "key": "artifact.payload_bin",
+       "transformer": "ToBase64"
+     },
+     {
+       "key": "x_com_splunk_spl.utf8_payload",
+       "cybox": false
+     }
+   ],
     "dest_ip": [
         {
             "key": "ipv4-addr.value",

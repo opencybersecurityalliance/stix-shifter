@@ -190,3 +190,15 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = 'search ((mac = "00-00-5E-00-53-00") AND ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83"))) earliest="-15minutes" | head 1000 | fields src_ip, src_port'
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_free_search(self):
+        stix_pattern = "[x-readable-payload:value = 'malware']"
+
+        timerange = 25
+        result_limit = 5000
+        options = {"timerange": timerange, "result_limit": result_limit}
+
+        query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
+        queries = 'search _raw=*malware* earliest="-25minutes" | head 5000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        parsed_stix = [{'attribute': 'x-readable-payload:value', 'comparison_operator': '=', 'value': 'malware'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
