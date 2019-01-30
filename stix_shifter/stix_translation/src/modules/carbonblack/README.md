@@ -1,8 +1,8 @@
 # CarbonBlack
 
-## CarbonBlack Supported STIX Pattern values (Querying):
+## CarbonBlack Process API Supported STIX Pattern values (Querying):
 
-The supported query values are defined in the mapping file [from_stix_map.json](carbonblack/json/from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [to_stix_map.json](carbonblack/json/to_stix_map.json).
+The supported query values are defined in the mapping file [process_api_from_stix_map.json](carbonblack/json/process_api_from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [process_api_to_stix_map.json](carbonblack/json/process_api_to_stix_map.json).
 
 
 - `network-traffic:src_port`
@@ -17,6 +17,17 @@ The supported query values are defined in the mapping file [from_stix_map.json](
 - `process:pid`
 - `process:parent_ref.pid`
 - `domain-name:value`
+
+## CarbonBlack Binary API Supported STIX Pattern values (Querying):
+
+
+Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](carbonblack/json/process_api_from_stix_map.json) [process_api_to_stix_map.json](carbonblack/json/process_api_to_stix_map.json).
+The following query values are supported for the binary api:
+
+- `file:name`
+- `file:hashes.MD5`
+
+In the following examples the module name is `carbonblack`. This will default to the `carbonblack:process` module. Alternatively you can explicitly use the binary or process api by using the module name `carbonblack:binary` or `carbonblack:process`.
 
 ### Execute a STIX pattern on a CarbonBlack instance
 
