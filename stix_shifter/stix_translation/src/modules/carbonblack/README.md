@@ -21,7 +21,7 @@ The supported query values are defined in the mapping file [process_api_from_sti
 ## CarbonBlack Binary API Supported STIX Pattern values (Querying):
 
 
-Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](carbonblack/json/process_api_from_stix_map.json) [process_api_to_stix_map.json](carbonblack/json/process_api_to_stix_map.json).
+Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](carbonblack/json/binary_api_from_stix_map.json) and [process_api_to_stix_map.json](carbonblack/json/binary_api_to_stix_map.json).
 The following query values are supported for the binary api:
 
 - `file:name`
