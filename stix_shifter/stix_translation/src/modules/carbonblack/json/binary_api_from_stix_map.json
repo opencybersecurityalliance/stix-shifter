@@ -1,33 +1,8 @@
 {
-  "network-traffic": {
-    "fields": {
-      "src_port": ["ipport"],
-      "dst_port": ["ipport"]
-    }
-  },
-  "ipv4-addr": {
-    "fields": {
-      "value": ["ipaddr"]
-    }
-  },
   "file": {
     "fields": {
       "name": ["observed_filename"],
       "hashes.MD5": ["md5"]
-    }
-  },
-  "user-account":{
-    "fields": {
-      "user_id": ["username"]
-    }
-  },
-  "process" : {
-    "fields": {
-      "command_line": ["cmdline"],
-      "created": ["start"],
-      "pid": ["process_pid"],
-      "name": ["process_name"],
-      "parent_ref.pid": ["parent_pid"]
     }
   },
   "domain-name": {

@@ -4,8 +4,11 @@ import json
 
 
 class Connector(BaseConnector):
-    def __init__(self, connection, configuration):
-        self.api_client = APIClient(connection, configuration)
+    def __init__(self, connection, configuration, dialect="process"):
+        if dialect not in ["process", "binary"]:
+            raise NotImplementedError # TODO what's the best exception type to raise?
+
+        self.api_client = APIClient(connection, configuration, dialect=dialect)
         self.ping_connector = self
         self.results_connector = self
         self.query_connector = self

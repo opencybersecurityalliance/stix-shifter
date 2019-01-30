@@ -4,9 +4,8 @@ from ..utils.RestApiClient import RestApiClient
 class APIClient():
 
     PING_ENDPOINT = 'sensor'
-    QUERY_ENDPOINT = 'process'
 
-    def __init__(self, connection, configuration):
+    def __init__(self, connection, configuration, dialect=None):
         self.endpoint_start = 'api/v1/'
         auth = configuration.get('auth')
         headers = dict()
@@ -17,6 +16,7 @@ class APIClient():
                                     headers,
                                     cert_verify=connection.get('cert_verify', 'True')
                                     )
+        self.QUERY_ENDPOINT = dialect # dialect names 'binary' and 'process' are the same as the url endpoint
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT

@@ -1,7 +1,7 @@
 import importlib
 
 
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack', 'carbonblack:process', 'carbonblack:binary']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
@@ -12,10 +12,21 @@ IS_ASYNC = 'is_async'
 
 class StixTransmission:
     def __init__(self, module, connection, configuration):
+        if module not in TRANSMISSION_MODULES :
+            raise NotImplementedError
+
+        dialect = None
+        mod_dia = module.split(':', 1)
+        module = mod_dia[0]
+        if len(mod_dia) > 1:
+            dialect = mod_dia[1]
 
         self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
                                                         "." + module + "_connector")
-        self.interface = self.connector_module.Connector(connection, configuration)
+        if dialect is not None:
+            self.interface = self.connector_module.Connector(connection, configuration, dialect=dialect)
+        else:
+            self.interface = self.connector_module.Connector(connection, configuration)
 
     def query(self, query):
         # Creates and sends a query to the correct datasource
