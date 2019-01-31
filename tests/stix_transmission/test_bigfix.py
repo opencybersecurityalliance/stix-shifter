@@ -447,12 +447,13 @@ class TestBigfixConnection(unittest.TestCase):
         length = "100"
         transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
         results_response = transmission.results(search_id, offset, length)
+        json_response = json.loads(results_response)
 
         assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] == True
-        assert 'data' in results_response
-        assert len(results_response['data']) == 1
+        assert 'success' in json_response
+        assert json_response['success'] == True
+        assert 'data' in json_response
+        assert len(json_response['data']) == 1
 
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_exeception(self, mock_results_response, mock_api_client):
@@ -502,11 +503,12 @@ class TestBigfixConnection(unittest.TestCase):
         length = "100"
         transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
         results_response = transmission.results(search_id, offset, length)
+        json_response = json.loads(results_response)
 
         assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] == False
-        assert 'error' in results_response
+        assert 'success' in json_response
+        assert json_response['success'] == False
+        assert 'error' in json_response
 
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     def test_results_response_bad_json(self, mock_results_response, mock_api_client):
@@ -540,7 +542,9 @@ class TestBigfixConnection(unittest.TestCase):
         transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
         results_response = transmission.results(search_id, offset, length)
 
+        json_response = json.loads(results_response)
+
         assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] == False
-        assert 'error' in results_response
+        assert 'success' in json_response
+        assert json_response['success'] == False
+        assert 'error' in json_response
