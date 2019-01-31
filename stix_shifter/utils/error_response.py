@@ -1,0 +1,124 @@
+from requests.exceptions import SSLError, ConnectionError
+from enum import Enum
+import importlib
+import traceback
+from ..utils.error_mapper_base import ErrorMapperBase
+import collections
+import json
+
+class ErrorCode(Enum):
+    TRANSMISSION_UNKNOWN = 500
+    TRANSMISSION_CONNECT = 600
+    TRANSMISSION_AUTH_SSL = 610
+    TRANSMISSION_AUTH_CREDENTIALS = 620
+    TRANSMISSION_MODULE_DEFAULT_ERROR = 700
+    TRANSMISSION_QUERY_PARSING_ERROR = 800
+    TRANSMISSION_QUERY_LOGICAL_ERROR = 801
+    TRANSMISSION_RESPONSE_EMPTY_RESULT = 900
+    TRANSMISSION_SEARCH_DOES_NOT_EXISTS = 901
+    TRANSMISSION_INVALID_PARAMETER = 902
+    TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE = 1000
+
+
+class ErrorResponder():
+
+    @staticmethod
+    def get_struct_item(message_struct, message_path):
+        # "+isFailure=True" means the current item is a list and the new item will be a list containing items with the field 'Failure' equal 'True'
+        # '~result' means the current item is a list and new item will be a list containing specified field ('result') values
+        # document it: '+' and '~'
+        if message_struct is not None and message_path is not None:
+            if (isinstance(message_struct, collections.Mapping) or type(message_struct).__name__=='list'):
+                struct = message_struct.copy()
+                for i in message_path:
+                    if (isinstance(struct, collections.Mapping) and i in struct) or (type(struct).__name__=='list' and isinstance(i, int) and i < len(struct)):
+                        struct = struct[i]
+                        if struct is None:
+                            break
+                    elif i[:1] == '+' and isinstance(struct, list):
+                        key, value = i[1:].split('=')
+                        filtered_struct = list(filter(lambda item: (key in item and str(item[key])==str(value)), struct))
+                        struct = filtered_struct
+                    elif i[:1] == '~' and isinstance(struct, list):
+                        key = i[1:]
+                        filtered_struct = set()
+                        for s in struct:
+                            filtered_struct.add(s[key])
+                        struct = list(filtered_struct)
+                    else:
+                        break
+                return struct
+            else:
+                return message_struct
+
+    @staticmethod
+    def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
+        return_object['success'] = False
+        error_code = ErrorCode.TRANSMISSION_UNKNOWN
+        
+        if message is None:
+            message = ''
+
+        struct_item = ErrorResponder.get_struct_item(message_struct, message_path)
+        if struct_item is not None:
+            if len(message) > 0:
+                message += ';'
+            if (isinstance(struct_item, list)):
+                struct_item = json.dumps(struct_item)
+            message += str(struct_item)
+        error_msg = ''
+        if error is not None:
+            str_error = str(error)
+            #TODO replace with logger + stacktrace it to logger
+            print("error occurred: " + str_error)
+            if isinstance(error, SSLError):
+                error_code = ErrorCode.TRANSMISSION_AUTH_SSL
+                error_msg = 'Wrong certificate'
+            elif isinstance(error, ConnectionError):
+                error_code = ErrorCode.TRANSMISSION_CONNECT
+                error_msg = 'Connection error'
+            else:
+                error_msg = str(error)
+
+            if len(error_msg) > 0:
+                if len(message) > 0:
+                    message += '; '
+                message += error_msg
+
+        if message is not None and len(message)>0:
+            if error_code.value == ErrorCode.TRANSMISSION_UNKNOWN.value:
+                if 'uthenticat' in message or 'uthoriz' in message:
+                    error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
+            return_object['error'] = str(message)
+        ErrorMapperBase.set_error_code(return_object, error_code.value)
+        if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
+            ErrorResponder.call_module_error_mapper(message_struct, return_object)
+
+    @staticmethod
+    def call_module_error_mapper(json_data, return_object):
+        caller_path_list = traceback.extract_stack()[-3].filename.split('/')
+        caller_module_name = caller_path_list[-2]
+        path_start_position = ErrorResponder.rindex(caller_path_list, 'stix_shifter')
+        module_path = '.'.join(caller_path_list[path_start_position: -1]) + '.' + caller_module_name + '_error_mapper'
+        try:
+            module = importlib.import_module(module_path)
+            print('json_data: '+ str(json_data))
+            if json_data is not None:
+                module.ErrorMapper.set_error_code(json_data, return_object)
+            else:
+                ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR)
+        except ModuleNotFoundError:
+            pass
+
+
+    @staticmethod
+    def rindex(mylist, myvalue):
+        return len(mylist) - mylist[::-1].index(myvalue) - 1
+
+    @staticmethod
+    def is_plain_string(s):
+        return isinstance(s, str) and not s.startswith('<?') and not s.startswith('{')
+
+    @staticmethod
+    def is_json_string(s):
+        return isinstance(s, str) and s.startswith('{')

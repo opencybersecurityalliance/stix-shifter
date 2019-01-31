@@ -18,7 +18,7 @@ initiator.credential.type as initiator_credential_type, ALCH_ACCOUNT_ID as alch_
 ALCH_TENANT_ID as alch_tenant_id, eventTime as eventTime, action as action, \
 target.id as target_id, target.name as target_name, event_uuid as event_uuid"
 
-at_from_statement= " FROM cos://us-geo/at-hourly-dumps STORED AS JSON "
+at_from_statement = " FROM cos://us-geo/at-hourly-dumps STORED AS JSON "
 
 from_statement = " FROM cos://us-geo/nf-hourly-dumps STORED AS JSON "
 
@@ -42,27 +42,27 @@ protocols = {
 
 translation = stix_translation.StixTranslation()
 
+
 class TestStixToSql(unittest.TestCase, object):
 
     def test_ipv4_query(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '192.168.122.84']"
+        input_arguments = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
         options = {}
         query = interface.transform_query(input_arguments, options)
         where_statement = "WHERE (Network.A = '192.168.122.84' OR Network.B = '192.168.122.84') OR (Network.A = '192.168.122.83' OR Network.B = '192.168.122.83')"
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert query == {'sql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
-    
+
     def test_ipv4_in_query(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[ipv4-addr:value in ('192.168.122.83', '192.168.122.84')]"
+        input_arguments = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         options = {}
         query = interface.transform_query(input_arguments, options)
         where_statement = "WHERE (Network.A IN (192.168.122.83 OR 192.168.122.84) OR Network.B IN (192.168.122.83 OR 192.168.122.84))"
 #        parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': 'IN', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': 'IN', 'value': '192.168.122.83'}]
         print(query)
         assert query['sql_queries'] == [selections + from_statement + where_statement]
-
 
     def test_ipv6_query(self):
         interface = csa_translator.Translator(dialect='nf')
@@ -102,20 +102,20 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_query_from_multiple_observation_expressions_joined_by_and(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[domain-name:value = 'example.com'] and [mac-addr:value = '00-00-5E-00-53-00']"
+        input_arguments = "[domain-name:value = 'example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         options = {}
         query = interface.transform_query(input_arguments, options)
-        # Expect the STIX and to convert to an AQL OR.
+        # Expect the STIX AND to convert to an AQL OR.
         where_statement = "WHERE domainname = 'example.com' OR (Link.A = '00-00-5E-00-53-00' OR Link.B = '00-00-5E-00-53-00')"
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}, {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
         assert query == {'sql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_query_from_multiple_comparison_expressions_joined_by_and(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[domain-name:value = 'example.com' and mac-addr:value = '00-00-5E-00-53-00']"
+        input_arguments = "[domain-name:value = 'example.com' AND mac-addr:value = '00-00-5E-00-53-00']"
         options = {}
         query = interface.transform_query(input_arguments, options)
-        # Expect the STIX and to convert to an AQL AND.
+        # Expect the STIX AND to convert to an AQL AND.
         where_statement = "WHERE (Link.A = '00-00-5E-00-53-00' OR Link.B = '00-00-5E-00-53-00') AND domainname = 'example.com'"
         parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
         assert query == {'sql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
@@ -132,7 +132,7 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_port_queries(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[network-traffic:src_port = 12345 or network-traffic:dst_port = 23456]"
+        input_arguments = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         options = {}
         query = interface.transform_query(input_arguments, options)
         where_statement = "WHERE Transport.B = '23456' OR Transport.A = '12345'"
@@ -146,7 +146,7 @@ class TestStixToSql(unittest.TestCase, object):
         options = {}
         self.assertRaises(data_mapping_exception,
                           lambda: interface.transform_query(input_arguments, options))
-    
+
     def test_user_account_query(self):
         interface = csa_translator.Translator(dialect='at')
         input_arguments = "[user-account:user_id = 'root']"
@@ -161,11 +161,11 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[not_a_valid_pattern]"
         self.assertRaises(stix_validation_exception,
                           lambda: translation.translate('csa', 'query', '{}', stix_pattern))
-    
+
     def test_network_traffic_protocols(self):
         interface = csa_translator.Translator(dialect='nf')
         for key, value in protocols.items():
-            # Test for both upper and lower case protocols in the STIX pattern
+            # Test for both upper AND lower case protocols in the STIX pattern
             if random.randint(0, 1) == 0:
                 key = key.upper()
             input_arguments = "[network-traffic:protocols[*] = '" + key + "']"
@@ -177,7 +177,7 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_network_traffic_start_stop(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' or network-traffic:end = '2018-06-14T08:36:24.000Z']"
+        input_arguments = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.000Z']"
         options = {}
         query = interface.transform_query(input_arguments, options)
         where_statement = "WHERE Last = '1528965384' OR Start = '1528965384'"
@@ -186,7 +186,7 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_artifact_queries(self):
         interface = csa_translator.Translator(dialect='nf')
-        input_arguments = "[artifact:payload_bin matches 'some text']"
+        input_arguments = "[artifact:payload_bin MATCHES 'some text']"
         options = {}
         query = interface.transform_query(input_arguments, options)
         where_statement = "WHERE payload MATCHES '.*some text.*'"
@@ -195,23 +195,23 @@ class TestStixToSql(unittest.TestCase, object):
 
 # Sample from SkyDive
 #             {
-#   "Start": 1531867319.982, 
+#   "Start": 1531867319.982,
 #   "Metric": {
-#     "BAPackets": 15, 
-#     "BABytes": 6766, 
-#     "ABBytes": 1604, 
+#     "BAPackets": 15,
+#     "BABytes": 6766,
+#     "ABBytes": 1604,
 #     "ABPackets": 10
-#   }, 
-#   "Last": 1531867320.174, 
+#   },
+#   "Last": 1531867320.174,
 #   "Network": {
-#     "A": "172.30.106.116", 
-#     "A_Name": "k8s_node", 
-#     "B": "75.126.81.67", 
+#     "A": "172.30.106.116",
+#     "A_Name": "k8s_node",
+#     "B": "75.126.81.67",
 #     "Protocol": "IPV4"
-#   }, 
+#   },
 #   "Transport": {
-#     "A": "43748", 
-#     "B": "443", 
+#     "A": "43748",
+#     "B": "443",
 #     "Protocol": "TCP"
 #   }
 # }

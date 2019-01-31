@@ -1,6 +1,4 @@
 from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_connector
-from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_results_connector
-from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_ping
 import unittest
 
 
@@ -11,13 +9,11 @@ class TestSynchronousDummyConnection(unittest.TestCase, object):
         assert check_async == False
 
     def test_ping(self):
-        ping_interface = synchronous_dummy_ping.SynchronousDummyPing()
-        ping_result = ping_interface.ping()
-
+        interface = synchronous_dummy_connector.Connector()
+        ping_result = interface.ping()
         assert ping_result == "synchronous ping"
 
     def test_dummy_sync_results(self):
-        results_interface = synchronous_dummy_results_connector.SynchronousDummyResultsConnector()
         options = {}
         params = {
             "config": {
@@ -29,7 +25,8 @@ class TestSynchronousDummyConnection(unittest.TestCase, object):
             "query": "placeholder query text"
         }
 
-        results_response = results_interface.create_results_connection(params, options)
+        interface = synchronous_dummy_connector.Connector()
+        results_response = interface.create_results_connection(params, options)
         response_code = results_response["response_code"]
         query_results = results_response["query_results"]
 

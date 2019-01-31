@@ -2,7 +2,7 @@ from ..base.base_status_connector import BaseStatusConnector
 from ..base.base_status_connector import Status
 from enum import Enum
 import json
-
+from .....utils.error_response import ErrorResponder
 
 class QRadarStatus(Enum):
     # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR
@@ -31,22 +31,17 @@ class QRadarStatusConnector(BaseStatusConnector):
 
     def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
-        try:
-            response = self.api_client.get_search(search_id)
-            response_code = response.code
-            response_json = json.loads(response.read())
+        response = self.api_client.get_search(search_id)
+        response_code = response.code
+        response_dict = json.loads(response.read())
 
-            # Construct a response object
-            return_obj = dict()
+        # Construct a response object
+        return_obj = dict()
 
-            if response_code == 200:
-                return_obj['success'] = True
-                return_obj['status'] = self.__getStatus(response_json['status'])
-                return_obj['progress'] = response_json['progress']
-            else:
-                return_obj['success'] = False
-                return_obj['error'] = response_json['message']
-            return return_obj
-        except Exception as err:
-            print('error when getting search status: {}'.format(err))
-            raise
+        if response_code == 200:
+            return_obj['success'] = True
+            return_obj['status'] = self.__getStatus(response_dict['status'])
+            return_obj['progress'] = response_dict['progress']
+        else:
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+        return return_obj

@@ -1,5 +1,7 @@
 from ..base.base_query_connector import BaseQueryConnector
 import json
+from .....utils.error_response import ErrorResponder
+from .qradar_error_mapper import ErrorMapper
 
 
 class QRadarQueryConnector(BaseQueryConnector):
@@ -8,21 +10,17 @@ class QRadarQueryConnector(BaseQueryConnector):
 
     def create_query_connection(self, query):
         # Grab the response, extract the response code, and convert it to readable json
-        try:
-            response = self.api_client.create_search(query)
-            response_code = response.code
-            response_json = json.loads(response.read())
+        response = self.api_client.create_search(query)
+        response_code = response.code
+        response_dict = json.loads(response.read())
 
-            # Construct a response object
-            return_obj = dict()
+        # Construct a response object
+        return_obj = dict()
 
-            if response_code == 201:
-                return_obj['success'] = True
-                return_obj['search_id'] = response_json['search_id']
-            else:
-                return_obj['success'] = False
-                return_obj['error'] = response_json['message']
-            return return_obj
-        except Exception as err:
-            print('error when creating search: {}'.format(err))
-            raise
+        if response_code == 201:
+            return_obj['success'] = True
+            return_obj['search_id'] = response_dict['search_id']
+        else:
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+        
+        return return_obj

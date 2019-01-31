@@ -134,7 +134,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['stix2-patterns==0.6.0', 'stix2-validator==0.5.0',
+    install_requires=['stix2-patterns==1.1.0', 'stix2-validator==0.5.0',
                       'antlr4-python3-runtime==4.7', 'python-dateutil==2.7.3'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
