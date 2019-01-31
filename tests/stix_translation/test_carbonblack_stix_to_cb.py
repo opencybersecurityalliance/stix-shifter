@@ -51,6 +51,13 @@ class TestStixToCB(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.2'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.1'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
+    def test_simple_and_query(self):
+        stix_pattern = "[process:name = 'cmd.exe' AND process:creator_user_ref.user_id != 'SYSTEM']"
+        query = translation.translate(module, 'query', '{}', stix_pattern)
+        queries = ["-(username:SYSTEM) and process_name:cmd.exe"]
+        parsed_stix = [{'attribute': 'process:creator_user_ref.user_id', 'comparison_operator': '!=', 'value': 'SYSTEM'}, {'attribute': 'process:name', 'comparison_operator': '=', 'value': 'cmd.exe'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
     def test_query_map_coverage(self):
         stix_to_cb_mapping = {
                 "[ipv4-addr:value = '198.51.100.5' AND ipv4-addr:value = '198.51.100.10']" : "ipaddr:198.51.100.10 and ipaddr:198.51.100.5",

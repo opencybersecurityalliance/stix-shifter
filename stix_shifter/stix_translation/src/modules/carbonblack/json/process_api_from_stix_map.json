@@ -27,7 +27,8 @@
       "created": ["start"],
       "pid": ["process_pid"],
       "name": ["process_name"],
-      "parent_ref.pid": ["parent_pid"]
+      "parent_ref.pid": ["parent_pid"],
+      "creator_user_ref.user_id": ["username"]
     }
   },
   "domain-name": {
