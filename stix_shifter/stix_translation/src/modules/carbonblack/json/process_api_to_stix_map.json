@@ -71,14 +71,35 @@
       "key": "process.command_line",
       "object": "process"
   },
-  "comms_ip": {
-    "key": "ipv4-addr.value",
-    "transformer": "ToIPv4"
-  },
-  "interface_ip": {
-    "key": "ipv4-addr.value",
-    "transformer": "ToIPv4"
-  },
+  "comms_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "transformer": "ToIPv4",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "traffic",
+      "references": "dst_ip"
+    },
+    {
+      "key": "process.opened_connection_refs",
+      "object": "process",
+      "references": [ "traffic" ]
+    }
+  ],
+  "interface_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "transformer": "ToIPv4",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "traffic",
+      "references": "src_ip"
+    }
+  ],
   "hostname": {
     "key": "domain-name.value"
   }

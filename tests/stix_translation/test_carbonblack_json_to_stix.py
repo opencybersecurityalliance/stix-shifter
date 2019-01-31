@@ -125,20 +125,21 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj.keys() == {'type', 'user_id'})
         assert(curr_obj['user_id'] == "SYSTEM")
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'ipv4-addr')
-        assert(curr_obj is not None), 'ipv4-addr object type not found'
-        assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == "193.86.73.118")
-        # TODO add another test for other ip address
-        #assert(curr_obj['value'] == "12.166.224.2")
+        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'network-traffic')
+        network_obj = curr_obj # used in later test
+        assert(curr_obj is not None), 'network-traffic object type not found'
+        assert(curr_obj.keys() == {'type', 'src_ref', 'dst_ref'})
+        assert(objects[curr_obj['src_ref']]['value'] == "10.239.15.200")
+        assert(objects[curr_obj['dst_ref']]['value'] == "193.86.73.118")
 
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
         assert(curr_obj is not None), 'process object type not found'
-        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid'})
+        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid', 'opened_connection_refs'})
         assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")
         assert(curr_obj['created'] == "2019-01-22T00:04:52.875Z")
         assert(curr_obj['pid'] == 1896)
 
+        assert(network_obj == objects[curr_obj['opened_connection_refs'][0]]), 'open_connection_refs does not point to the correct object'
         assert(file_obj == objects[curr_obj['binary_ref']]), 'process binary_ref does not point to the correct object'
         assert(user_obj == objects[curr_obj['creator_user_ref']]), 'process creator_user_ref does not point to the correct object'
 
