@@ -1,0 +1,81 @@
+{
+    "file_name": {
+        "key": "file.name",
+        "object": "file"
+    },
+    "file_path": [
+        {
+            "key": "directory.path",
+            "object": "directory"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+        },
+        {   
+            "key": "process.binary_ref",
+            "object": "process",
+            "references": "file"
+        }
+    ],
+    "sha256hash": {
+        "key": "file.hashes.SHA-256",
+        "object": "file"
+    },
+    "sha1hash": {
+        "key": "file.hashes.SHA-1",
+        "object": "file"
+    },
+    "md5hash": {
+        "key": "file.hashes.MD5",
+        "object": "file"
+    },
+    "process_name": {
+        "key": "process.name",
+        "object": "process"
+    },
+    "process_id": {
+        "key": "process.pid",
+        "object": "process"
+    },
+    "start_time": [
+        {
+            "key": "created",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        }
+    ],
+    "modified_time": [
+        {
+            "key": "modified",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        }
+    ],
+    "computer_identity":
+    {
+        "key": "name",
+        "cybox": false
+    } 
+}
