@@ -140,9 +140,11 @@ class CbQueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
+            # Note: it seems the ordering of the expressions is reversed at a lower level
+            # so we reverse it here so that it is as expected.
+            query_string = "{} {} {}".format(self._parse_expression(expression.expr2),
                                              self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr2))
+                                             self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
                     return self._fomat_start_stop_qualifier(query_string, qualifier)
