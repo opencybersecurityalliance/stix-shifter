@@ -2,7 +2,7 @@
 
 ## CarbonBlack Process API Supported STIX Pattern values (Querying):
 
-The supported query values are defined in the mapping file [process_api_from_stix_map.json](carbonblack/json/process_api_from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [process_api_to_stix_map.json](carbonblack/json/process_api_to_stix_map.json).
+The supported query values are defined in the mapping file [process_api_from_stix_map.json](json/process_api_from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [process_api_to_stix_map.json](json/process_api_to_stix_map.json).
 
 
 - `network-traffic:src_port`
@@ -21,7 +21,7 @@ The supported query values are defined in the mapping file [process_api_from_sti
 ## CarbonBlack Binary API Supported STIX Pattern values (Querying):
 
 
-Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](carbonblack/json/binary_api_from_stix_map.json) and [process_api_to_stix_map.json](carbonblack/json/binary_api_to_stix_map.json).
+Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](json/binary_api_from_stix_map.json) and [process_api_to_stix_map.json](json/binary_api_to_stix_map.json).
 The following query values are supported for the binary api:
 
 - `file:name`
@@ -128,62 +128,70 @@ Then the results can be translated with the following command: (Note just the js
 ```
 $ python3 main.py translate carbonblack results '{"id": "blah"}' '<copied results from previous query>'
 {
-    "type": "bundle",
-    "id": "bundle--f61b8f2b-30a1-4e00-9c09-2ee812148021",
-    "objects": [
+    'type': 'bundle',
+        'id': 'bundle--c885b371-fe48-4e64-af10-c69e9ca1593c',
+        'objects': [
         {
-            "id": "blah"
+            'type': 'identity',
+            'id': 'identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3',
+            'name': 'CarbonBlack',
+            'identity_class': 'events'
         },
         {
-            "id": "observed-data--650f0319-817d-4f8a-acc6-26157bc1400e",
-            "type": "observed-data",
-            "created_by_ref": "blah",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "hashes": {
-                        "MD5": "5746bd7e255dd6a8afa06f7c42c1ba41"
+            'id': 'observed-data--41ef31bc-6f77-4628-b9e4-3e761aed631d',
+            'type': 'observed-data',
+            'created_by_ref': 'identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3',
+            'objects': {
+                '0': {'type': 'file',
+                    'hashes': {
+                        'MD5': '5746bd7e255dd6a8afa06f7c42c1ba41'
                     },
-                    "name": "cmd.exe"
+                    'name': 'cmd.exe'
                 },
-                "1": {
-                    "type": "process",
-                    "command_line": "C:\\Windows\\system32\\cmd.exe /c tasklist",
-                    "created": "2019-01-22T00:04:52.875Z",
-                    "pid": 1896,
-                    "creator_user_ref": "7",
-                    "name": "cmd.exe",
-                    "binary_ref": "0",
-                    "parent_ref": "3"
+                '1': {
+                    'type': 'process',
+                    'command_line': 'C:\\Windows\\system32\\cmd.exe /c tasklist',
+                    'created': '2019-01-22T00:04:52.875Z',
+                    'opened_connection_refs': ['6'],
+                    'pid': 1896,
+                    'creator_user_ref': '8',
+                    'name': 'cmd.exe',
+                    'binary_ref': '0',
+                    'parent_ref': '3'
                 },
-                "2": {
-                    "type": "file",
-                    "name": "cmd.exe",
-                    "hashes": {
-                        "MD5": "000000000000000000000000000000"
+                '2': {
+                    'type': 'file',
+                    'name': 'cmd.exe',
+                    'hashes': {
+                        'MD5': '000000000000000000000000000000'
                     }
                 },
-                "3": {
-                    "type": "process",
-                    "name": "cmd.exe",
-                    "binary_ref": "2",
-                    "pid": 2508
+                '3': {
+                    'type': 'process',
+                    'name': 'cmd.exe',
+                    'binary_ref': '2',
+                    'pid': 2508
                 },
-                "4": {
-                    "type": "domain-name",
-                    "value": "lab1-host1"
+                '4': {
+                    'type': 'domain-name',
+                    'value': 'lab1-host1'
                 },
-                "5": {
-                    "type": "ipv4-addr",
-                    "value": "12.166.224.2"
+                '5': {
+                    'type': 'ipv4-addr',
+                    'value': '193.86.73.118'
                 },
-                "6": {
-                    "type": "ipv4-addr",
-                    "value": "10.239.15.200"
+                '6': {
+                    'type': 'network-traffic',
+                    'dst_ref': '5',
+                    'src_ref': '7'
                 },
-                "7": {
-                    "type": "user-account",
-                    "user_id": "SYSTEM"
+                '7': {
+                    'type': 'ipv4-addr',
+                    'value': '10.239.15.200'
+                },
+                '8': {
+                    'type': 'user-account',
+                    'user_id': 'SYSTEM'
                 }
             }
         }
