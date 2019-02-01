@@ -75,6 +75,7 @@ class TestStixToCB(unittest.TestCase, object):
                 "[process:name NOT = 'cmd.exe']" : "-(process_name:cmd.exe)",
                 "[process:name != 'cmd.exe']" : "-(process_name:cmd.exe)",
                 "[process:pid = 4 START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((process_pid:4) and start:[2019-01-22T00:04:52 TO *] and last_update:[* TO 2019-02-22T00:04:52])",
+                "[process:pid = 5 OR process:pid = 6] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": "((process_pid:6 or process_pid:5) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])"
                 }
         for stix_pattern, query in stix_to_cb_mapping.items():
             result = translation.translate(module, 'query', '{}', stix_pattern)
@@ -103,16 +104,16 @@ class TestStixToCB(unittest.TestCase, object):
             assert result['queries'] == [query]
 
     def test_nested_parenthesis_in_pattern(self):
-        stix_pattern = "[(ipv4-addr:value = '192.168.122.83' or ipv4-addr:value = '100.100.122.90') and network-traffic:src_port = 37020] or [user-account:user_id = 'root']"
-        #query = translation.translate(module, 'query', '{}', stix_pattern)
+        stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root']"
+        query = translation.translate(module, 'query', '{}', stix_pattern)
         parsed_stix = [
             {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},
             {'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}
         ]
-        #print(query)
-        desired_result = "(ipaddr:192.168.122.83 or ipaddr:100.100.122.90 ) and ipport:37020 or username:root"
+        print(query)
+        desired_result = "ipport:37020 and ipaddr:100.100.122.90 or ipaddr:192.168.122.83 or username:root"
         print("desired_result ", desired_result)
-        #assert(query["queries"] == [desired_result])
+        assert(query["queries"] == [desired_result])
         #assert(False)

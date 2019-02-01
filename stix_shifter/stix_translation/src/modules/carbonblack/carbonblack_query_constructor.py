@@ -118,20 +118,11 @@ class CbQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = ""
-            mapped_fields_count = len(mapped_fields_array)
-            for mapped_field in mapped_fields_array:
-                comparison_string += "{mapped_field}{comparator}{value}".format(
-                    mapped_field=mapped_field, comparator=comparator, value=value)
+            if len(mapped_fields_array) != 1:
+                raise RuntimeError("CarbonBlack invalid multiple fields mapping.")
 
-                if (mapped_fields_count > 1):
-                    comparison_string += " OR "
-                    mapped_fields_count -= 1
-
-            if(len(mapped_fields_array) > 1):
-                # More than one Cb field maps to the STIX attribute so group the ORs.
-                grouped_comparison_string = "(" + comparison_string + ")"
-                comparison_string = grouped_comparison_string
+            mapped_field = mapped_fields_array[0]
+            comparison_string = "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
             # translate != to NOT equals
             if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
@@ -154,7 +145,7 @@ class CbQueryStringPatternTranslator:
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._fomat_start_stop_qualifier(query_string, qualifier) # TODO there are no tests exercising this part
+                    return self._fomat_start_stop_qualifier(query_string, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:

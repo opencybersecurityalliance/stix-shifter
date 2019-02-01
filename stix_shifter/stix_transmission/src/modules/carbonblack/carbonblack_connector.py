@@ -6,7 +6,7 @@ import json
 class Connector(BaseConnector):
     def __init__(self, connection, configuration, dialect="process"):
         if dialect not in ["process", "binary"]:
-            raise NotImplementedError # TODO what's the best exception type to raise?
+            raise NotImplementedError("Invalid module dialect")
 
         self.api_client = APIClient(connection, configuration, dialect=dialect)
         self.ping_connector = self
