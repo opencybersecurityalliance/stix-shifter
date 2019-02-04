@@ -39,6 +39,21 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
+    def test_status_endpoint(self, mock_api_client):
+        mock_api_client.return_value = None
+
+        module = carbonblack_connector
+        search_id = "process_name:notepad.exe"
+
+        results_response = module.Connector(connection, config).create_status_connection(search_id)
+
+        assert 'success' in results_response
+        assert results_response['success'] == True
+        assert 'status' in results_response
+        assert results_response['status'] == 'COMPLETED'
+        assert 'progress' in results_response
+        assert results_response['progress'] == 100
+
     def test_create_query_connection(self, mock_api_client):
         mock_api_client.return_value = None
 

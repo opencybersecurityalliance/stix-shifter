@@ -14,6 +14,7 @@ class Connector(BaseConnector):
         self.api_client = APIClient(connection, configuration, dialect=dialect)
         self.ping_connector = self
         self.results_connector = self
+        self.status_connector = self
         self.query_connector = self
         self.is_async = False
 
@@ -50,6 +51,9 @@ class Connector(BaseConnector):
 
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
+
+    def create_status_connection(self, search_id):
+        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def create_results_connection(self, search_id, offset, length):
         response_txt = None
