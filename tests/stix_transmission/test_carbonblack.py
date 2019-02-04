@@ -31,7 +31,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = CarbonBlackMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = CarbonBlackMockResponse(200, mocked_return_value.encode())
 
         module = carbonblack_connector
         ping_response = module.Connector(connection, config).ping()
@@ -72,12 +72,12 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_results_response.return_value = CarbonBlackMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = CarbonBlackMockResponse(200, mocked_return_value.encode())
 
         module = carbonblack_connector
 
         query_expression = "process_name:notepad.exe"
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, None, None)
+        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -154,12 +154,12 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_results_response.return_value = CarbonBlackMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = CarbonBlackMockResponse(200, mocked_return_value.encode())
 
         module = carbonblack_connector
 
         query_expression = "process_name:cmd.exe start:[2019-01-22 TO *]"
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, None, None)
+        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -168,3 +168,67 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert len(results_response['data']) == 1
         assert 'process_name' in results_response['data'][0]
         assert results_response['data'][0]['process_name'] == 'cmd.exe'
+
+
+
+    @patch('stix_shifter.stix_transmission.src.modules.carbonblack.carbonblack_api_client.APIClient.run_search')
+    def test_bad_token_response(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>401 Unauthorized</title>
+<h1>Unauthorized</h1>
+<p>The server could not verify that you are authorized to access the URL requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.</p>
+"""
+
+        mock_results_response.return_value = CarbonBlackMockResponse(401, mocked_return_value.encode())
+
+        module = carbonblack_connector
+        query_expression = "process_name:cmd.exe"
+        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+
+        assert results_response is not None
+        assert 'success' in results_response
+        assert results_response['success'] == False
+        assert 'error' in results_response
+        assert results_response['error'] == mocked_return_value
+        assert 'code' in results_response
+        assert  results_response['code'] == 620
+
+
+    @patch('stix_shifter.stix_transmission.src.modules.carbonblack.carbonblack_api_client.APIClient.run_search')
+    def test_binary_bad_parameter_search_response(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = "Unhandled exception. Check logs for details."
+
+        mock_results_response.return_value = CarbonBlackMockResponse(500, mocked_return_value.encode())
+
+        module = carbonblack_connector
+        query_expression = "process_name:cmd.exe"
+        results_response = module.Connector(connection, config, dialect='binary').create_results_connection(query_expression, 0, 10)
+
+        assert results_response is not None
+        assert 'success' in results_response
+        assert results_response['success'] == False
+        assert 'error' in results_response
+        assert  results_response['error'] == mocked_return_value
+        assert 'code' in results_response
+        assert  results_response['code'] == 500  # we may be able to return a better error code
+
+    @patch('stix_shifter.stix_transmission.src.modules.carbonblack.carbonblack_api_client.APIClient.run_search')
+    def test_query_syntax_error_response(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = '{"reason": "query_syntax_error"}'
+
+        mock_results_response.return_value = CarbonBlackMockResponse(400, mocked_return_value.encode())
+
+        module = carbonblack_connector
+        query_expression = "(process_name:cmd.exe"
+        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+
+        assert results_response is not None
+        assert 'success' in results_response
+        assert results_response['success'] == False
+        assert 'error' in results_response
+        assert  results_response['error'] == "query_syntax_error"
+        assert 'code' in results_response
+        assert  results_response['code'] == 800

@@ -1,7 +1,10 @@
 from ..base.base_connector import BaseConnector
 from .carbonblack_api_client import APIClient
 import json
+from .....utils.error_response import ErrorResponder
 
+class UnexpectedResponseException(Exception):
+    pass
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration, dialect="process"):
@@ -14,49 +17,51 @@ class Connector(BaseConnector):
         self.query_connector = self
         self.is_async = False
 
+    def _handle_errors(self, response, return_obj):
+        response_code = response.code
+        response_txt = response.read().decode('utf-8')
+
+        if 200 <= response_code < 300:
+            return_obj['success'] = True
+            response_json = json.loads(response_txt)
+            if 'results' in response_json:
+                return_obj['data'] = response_json['results']
+        elif ErrorResponder.is_plain_string(response_txt):
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+        elif ErrorResponder.is_json_string(response_txt):
+            response_json = json.loads(response_txt)
+            ErrorResponder.fill_error(return_obj, response_json, ['reason'])
+        else:
+            raise UnexpectedResponseException
+        return return_obj
+
     def ping(self):
+        response_txt = None
+        return_obj = {}
         try:
             response = self.api_client.ping_box()
-            response_code = response.code
-            response_json = json.loads(response.read())
-
-            return_obj = dict()
-
-            if len(response_json) > 0 and 200 <= response_code < 300:
-                return_obj['success'] = True
+            return self._handle_errors(response, return_obj)
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                print('can not parse response: ' + str(response_txt))
             else:
-                return_obj['success'] = False
-                return_obj['error'] = 'error when pinging data source'
-            return return_obj
-        except Exception as err:
-            return_obj = dict()
-            return_obj['success'] = False
-            return_obj['error'] = 'error when pinging data source: {}'.format(err)
-            return return_obj
+                raise e
 
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
 
     def create_results_connection(self, search_id, offset, length):
+        response_txt = None
+        return_obj = {}
         try:
             query = search_id
-            response = self.api_client.run_search(query)
-            response_code = response.code
-            response_json = json.loads(response.read())
-            return_obj = dict()
+            response = self.api_client.run_search(query, start=offset, rows=length)
+            return self._handle_errors(response, return_obj)
 
-            print(response_json)
-            if 200 <= response_code < 300 and 'results' in response_json:
-                return_obj['success'] = True
-                return_obj['data'] = response_json['results']
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                print('can not parse response: ' + str(response_txt))
             else:
-                return_obj['success'] = False
-                return_obj['error'] = 'error when creating search'
-
-            return return_obj
-        except Exception as err:
-            return_obj = dict()
-            return_obj['success'] = False
-            return_obj['error'] = 'error when creating search: {}'.format(err)
-            return return_obj
-
+                raise e
