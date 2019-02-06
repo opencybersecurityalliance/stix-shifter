@@ -31,6 +31,8 @@ class SplunkStatusConnector(BaseStatusConnector):
                 status = Status.COMPLETED.value
             elif status == StatusSplunk.ERROR.value:
                 status = Status.ERROR.value
+            elif content['isFinalized'] is True:
+                status = Status.CANCELED.value
             else:
                 status = Status.RUNNING.value
 
