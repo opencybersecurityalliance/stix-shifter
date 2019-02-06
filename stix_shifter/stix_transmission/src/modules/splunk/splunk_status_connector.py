@@ -2,8 +2,13 @@ from ..base.base_status_connector import BaseStatusConnector, Status
 from .spl_api_client import APIClient
 import json
 import math
+from enum import Enum
 from .....utils.error_response import ErrorResponder
 
+class StatusSplunk(Enum):
+    COMPLETED = 'DONE'
+    ERROR = 'FAILED'
+    RUNNING = 'RUNNING'
 
 class SplunkStatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
@@ -20,18 +25,17 @@ class SplunkStatusConnector(BaseStatusConnector):
         if 'entry' in response_dict and isinstance(response_dict['entry'], list):
             content = response_dict['entry'][0]['content']
             progress = math.ceil(content['doneProgress'] * 100)  # convert 0-1.0 scale to <int>0-100
+            status = content['dispatchState']
 
-            if content['isDone'] is True:
+            if status == StatusSplunk.COMPLETED.value:
                 status = Status.COMPLETED.value
-            elif content['isFailed'] is True:
+            elif status == StatusSplunk.ERROR.value:
                 status = Status.ERROR.value
             elif content['isFinalized'] is True:
                 status = Status.CANCELED.value
-            elif progress < 100:
-                status = Status.RUNNING.value
             else:
-                status = 'NA'
-        
+                status = Status.RUNNING.value
+
         # Construct a response object
         return_obj = dict()
         if response_code == 200:
