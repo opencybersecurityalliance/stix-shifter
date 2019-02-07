@@ -161,7 +161,7 @@ def __main__():
                     while status['progress'] < 100:
                         print(status)
                         status = transmission.status(search_id)
-                print(status)
+                    print(status)
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
                     print("Search {} results is:\n{}".format(search_id,result["data"]))
