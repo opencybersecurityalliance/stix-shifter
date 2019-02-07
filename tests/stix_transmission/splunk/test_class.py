@@ -169,6 +169,105 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
+    def test_status_response_error(self, mock_status_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'status_by_sid_failed.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_status_response.return_value = SplunkMockResponse(200, mocked_return_value)
+
+        config = {
+            "auth": {
+                "username": "",
+                "password": ""
+            }
+        }
+        connection = {
+            "host": "host",
+            "port": "8080"
+        }
+
+        search_id = "1536832140.4293"
+        module = splunk_connector
+        status_response = module.Connector(connection, config).create_status_connection(search_id)
+
+        assert status_response is not None
+        assert 'status' in status_response
+        assert status_response['status'] == 'ERROR'
+        assert 'progress' in status_response
+        assert status_response['progress'] == 100
+        assert 'success' in status_response
+        assert status_response['success'] is True
+
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
+    def test_status_response_running(self, mock_status_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'status_by_sid_running.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_status_response.return_value = SplunkMockResponse(200, mocked_return_value)
+
+        config = {
+            "auth": {
+                "username": "",
+                "password": ""
+            }
+        }
+        connection = {
+            "host": "host",
+            "port": "8080"
+        }
+
+        search_id = "1536832140.4293"
+        module = splunk_connector
+        status_response = module.Connector(connection, config).create_status_connection(search_id)
+
+        assert status_response is not None
+        assert 'status' in status_response
+        assert status_response['status'] == 'RUNNING'
+        assert 'progress' in status_response
+        assert status_response['progress'] == 100
+        assert 'success' in status_response
+        assert status_response['success'] is True
+
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
+    def test_status_response_cancelled(self, mock_status_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'status_by_sid_running_cancel.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_status_response.return_value = SplunkMockResponse(200, mocked_return_value)
+
+        config = {
+            "auth": {
+                "username": "",
+                "password": ""
+            }
+        }
+        connection = {
+            "host": "host",
+            "port": "8080"
+        }
+
+        search_id = "1536832140.4293"
+        module = splunk_connector
+        status_response = module.Connector(connection, config).create_status_connection(search_id)
+
+        assert status_response is not None
+        assert 'status' in status_response
+        assert status_response['status'] == 'CANCELED'
+        assert 'progress' in status_response
+        assert status_response['progress'] == 100
+        assert 'success' in status_response
+        assert status_response['success'] is True
+
+    @patch('stix_shifter.stix_transmission.src.modules.splunk.spl_api_client.APIClient.get_search', autospec=True)
     def test_status_response_exception(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
