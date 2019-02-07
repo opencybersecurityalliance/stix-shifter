@@ -96,7 +96,9 @@ class TestStixToCB(unittest.TestCase, object):
 
     def test_binary_api_qualifier(self):
         stix_to_cb_mapping = {
-                "[file:name = 'cmd.exe'] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((observed_filename:cmd.exe) and server_added_timestamp:[2019-01-22T00:04:52 TO 2019-02-22T00:04:52])"
+                "[file:name = 'cmd.exe'] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": "((observed_filename:cmd.exe) and server_added_timestamp:[2019-01-22T00:04:52 TO 2019-02-22T00:04:52])",
+                "[file:hashes.MD5 = '79054025255fb1a26e4bc422aef54eb4']": "md5:79054025255fb1a26e4bc422aef54eb4",
+                "[domain-name:value = 'example.com']": "hostname:example.com",
                 }
         for stix_pattern, query in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack:binary", 'query', '{}', stix_pattern)
