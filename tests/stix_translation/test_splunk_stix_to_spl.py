@@ -1,6 +1,7 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.exceptions import DataMappingException
 from stix_shifter.stix_translation.src.modules.splunk import stix_to_splunk
+from stix_shifter.utils.error_response import ErrorCode
 
 import unittest
 import random
@@ -95,13 +96,18 @@ class TestStixToSpl(unittest.TestCase, object):
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_unmapped_attribute(self):
-        data_mapping_exception = DataMappingException
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
-        self.assertRaises(data_mapping_exception, lambda: translation.translate('splunk', 'query', '{}', stix_pattern))
-
+        result = translation.translate('splunk', 'query', '{}', stix_pattern)
+        assert False == result['success']
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
+        assert result['error'].startswith('Unable to map property')
+        
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
-        self.assertRaises(Exception, lambda: translation.translate('splunk', 'query', '{}', stix_pattern))
+        result = translation.translate('splunk', 'query', '{}', stix_pattern)
+        assert False == result['success']
+        assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
+        assert stix_pattern[1:-1] in result['error']
 
     def test_network_traffic_protocols(self):
         for key, value in protocols.items():
