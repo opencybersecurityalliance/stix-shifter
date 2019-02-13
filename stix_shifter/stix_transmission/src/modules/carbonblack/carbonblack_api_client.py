@@ -2,10 +2,14 @@ from ..utils.RestApiClient import RestApiClient
 
 
 class APIClient():
-
     PING_ENDPOINT = 'sensor'
 
-    def __init__(self, connection, configuration, dialect=None):
+    @staticmethod
+    def _dialect_to_endpoint(dialect):
+        assert dialect in ["binary", "process"]
+        return dialect
+
+    def __init__(self, connection, configuration):
         self.endpoint_start = 'api/v1/'
         auth = configuration.get('auth')
         headers = dict()
@@ -16,20 +20,18 @@ class APIClient():
                                     headers,
                                     cert_verify=connection.get('cert_verify', 'True')
                                     )
-        self.QUERY_ENDPOINT = dialect # dialect names 'binary' and 'process' are the same as the url endpoint
-        self.dialect = dialect
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
         return self.client.call_api(endpoint, 'GET')
 
-    def run_search(self, query_expression, start=0, rows=10):
+    def run_search(self, query_expression, dialect, start=0, rows=10):
         headers = dict()
-        endpoint = self.endpoint_start + self.QUERY_ENDPOINT
+        endpoint = self.endpoint_start + self._dialect_to_endpoint(dialect)
         data = [("q", query_expression), ("start", start), ("rows", rows)]
 
         # The purpose of this is to maintain order stability when doing paging
-        if self.dialect == 'binary':
+        if dialect == 'binary':
             sort_by = 'server_added_timestamp asc'
         else:  # process
             sort_by = 'start asc'

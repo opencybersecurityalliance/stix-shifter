@@ -102,5 +102,21 @@
   ],
   "hostname": {
     "key": "domain-name.value"
+  },
+  "server_added_timestamp": {
+    "key": "file.created",
+    "object": "binary_file"
+  },
+  "original_filename": {
+    "key": "file.name",
+    "object": "binary_file"
+  },
+  "orig_mod_length": {
+    "key": "file.size",
+    "object": "binary_file"
+  },
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "binary_file"
   }
 }

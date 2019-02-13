@@ -231,7 +231,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
   "start": 0
 }""")
 
-        binary_interface = carbonblack_translator.Translator(dialect='binary')
+        binary_interface = carbonblack_translator.Translator()
         binary_map_file = open(binary_interface.mapping_filepath).read()
         binary_map_data = json.loads(binary_map_file)
 

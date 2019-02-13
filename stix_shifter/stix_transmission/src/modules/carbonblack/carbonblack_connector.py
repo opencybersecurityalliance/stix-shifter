@@ -7,11 +7,8 @@ class UnexpectedResponseException(Exception):
     pass
 
 class Connector(BaseConnector):
-    def __init__(self, connection, configuration, dialect="process"):
-        if dialect not in ["process", "binary"]:
-            raise NotImplementedError("Invalid module dialect")
-
-        self.api_client = APIClient(connection, configuration, dialect=dialect)
+    def __init__(self, connection, configuration):
+        self.api_client = APIClient(connection, configuration)
         self.ping_connector = self
         self.results_connector = self
         self.status_connector = self
@@ -59,8 +56,9 @@ class Connector(BaseConnector):
         response_txt = None
         return_obj = {}
         try:
-            query = search_id
-            response = self.api_client.run_search(query, start=offset, rows=length)
+            query = search_id["query"]
+            dialect = search_id["dialect"]
+            response = self.api_client.run_search(query, dialect, start=offset, rows=length)
             return self._handle_errors(response, return_obj)
 
         except Exception as e:

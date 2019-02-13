@@ -25,6 +25,10 @@ class RequestMockResponse:
 @patch('stix_shifter.stix_transmission.src.modules.utils.RestApiClient.requests.get', autospec=True)
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
+    @staticmethod
+    def _create_query_list(query_string, dialect="process"):
+        return [{"query": query_string, "dialect": dialect}]
+
     def test_ping_endpoint(self, mock_requests_response):
         ping_response = """ [
   {
@@ -79,7 +83,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
 
         module = carbonblack_connector
-        search_id = "process_name:notepad.exe"
+        search_id = self._create_query_list("process_name:notepad.exe")
 
         results_response = module.Connector(connection, config).create_status_connection(search_id)
 
@@ -94,7 +98,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
 
         module = carbonblack_connector
-        query_expression = "process_name:notepad.exe"
+        query_expression = self._create_query_list("process_name:notepad.exe")
 
         results_response = module.Connector(connection, config).create_query_connection(query_expression)
 
@@ -124,7 +128,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         module = carbonblack_connector
 
-        query_expression = "process_name:notepad.exe"
+        query_expression = self._create_query_list("process_name:notepad.exe")[0]
         results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
@@ -203,7 +207,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         module = carbonblack_connector
 
-        query_expression = "process_name:cmd.exe start:[2019-01-22 TO *]"
+        query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
         results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
@@ -224,7 +228,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_requests_response.return_value = RequestMockResponse(401, mocked_return_value.encode())
 
         module = carbonblack_connector
-        query_expression = "process_name:cmd.exe"
+        query_expression = self._create_query_list("process_name:cmd.exe")[0]
         results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
@@ -241,8 +245,8 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_requests_response.return_value = RequestMockResponse(500, mocked_return_value.encode())
 
         module = carbonblack_connector
-        query_expression = "process_name:cmd.exe"
-        results_response = module.Connector(connection, config, dialect='binary').create_results_connection(query_expression, 0, 10)
+        query_expression = self._create_query_list("process_name:cmd.exe")[0]
+        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -258,7 +262,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_requests_response.return_value = RequestMockResponse(400, mocked_return_value.encode())
 
         module = carbonblack_connector
-        query_expression = "(process_name:cmd.exe"
+        query_expression = self._create_query_list("(process_name:cmd.exe")[0]
         results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
@@ -276,7 +280,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
         module = carbonblack_connector
-        query_expression = "process_name:cmd.exe"
+        query_expression = self._create_query_list("process_name:cmd.exe")[0]
         results_response = module.Connector(connection, config).create_results_connection(query_expression, 100, 2)
 
         assert results_response is not None
