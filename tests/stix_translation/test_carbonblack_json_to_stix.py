@@ -253,3 +253,276 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj.keys() == {'type', 'name', 'created', 'hashes'})
         assert(curr_obj['name'] =="Cmd.Exe.MUI")
         assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
+
+    def test_merge_results_mixed_to_stix(self):
+        process_data = json.loads("""
+{
+  "terms": [
+    "process_name:cmd.exe"
+  ],
+  "results": [
+    {
+      "process_md5": "5746bd7e255dd6a8afa06f7c42c1ba41",
+      "sensor_id": 50,
+      "filtering_known_dlls": false,
+      "modload_count": 16,
+      "parent_unique_id": "00000032-0000-0a04-01d4-8bc245c6c9e6-000000000001",
+      "emet_count": 0,
+      "cmdline": "cmd /c \\"\\"C:\\\\ProgramData\\\\VMware\\\\VMware CAF\\\\pme\\\\\\\\config\\\\..\\\\scripts\\\\is-listener-running.bat\\" \\"",
+      "filemod_count": 0,
+      "id": "00000032-0000-0888-01d4-95e3b558aacb",
+      "parent_name": "managementagenthost.exe",
+      "parent_md5": "000000000000000000000000000000",
+      "group": "mdr redlab",
+      "parent_id": "00000032-0000-0a04-01d4-8bc245c6c9e6",
+      "hostname": "redlab-vuln2",
+      "last_update": "2018-12-17T08:37:13.396Z",
+      "start": "2018-12-17T08:37:13.318Z",
+      "comms_ip": 212262914,
+      "regmod_count": 0,
+      "interface_ip": 183439305,
+      "process_pid": 2184,
+      "username": "SYSTEM",
+      "terminated": false,
+      "process_name": "cmd.exe",
+      "emet_config": "",
+      "last_server_update": "2019-02-01T18:44:10.53Z",
+      "path": "c:\\\\windows\\\\system32\\\\cmd.exe",
+      "netconn_count": 0,
+      "parent_pid": 2564,
+      "crossproc_count": 2,
+      "segment_id": 1549046650410,
+      "host_type": "workstation",
+      "processblock_count": 0,
+      "os_type": "windows",
+      "childproc_count": 8,
+      "unique_id": "00000032-0000-0888-01d4-95e3b558aacb-0168aa60162a"
+    },
+    {
+      "process_md5": "5746bd7e255dd6a8afa06f7c42c1ba41",
+      "sensor_id": 50,
+      "filtering_known_dlls": false,
+      "modload_count": 16,
+      "parent_unique_id": "00000032-0000-0a04-01d4-8bc245c6c9e6-000000000001",
+      "emet_count": 0,
+      "cmdline": "cmd /c \\"\\"C:\\\\ProgramData\\\\VMware\\\\VMware CAF\\\\pme\\\\\\\\config\\\\..\\\\scripts\\\\is-listener-running.bat\\" \\"",
+      "filemod_count": 0,
+      "id": "00000032-0000-0888-01d4-95e3b558aacb",
+      "parent_name": "managementagenthost.exe",
+      "parent_md5": "000000000000000000000000000000",
+      "group": "mdr redlab",
+      "parent_id": "00000032-0000-0a04-01d4-8bc245c6c9e6",
+      "hostname": "redlab-vuln2",
+      "last_update": "2018-12-17T08:37:13.396Z",
+      "start": "2018-12-17T08:37:13.318Z",
+      "comms_ip": 212262914,
+      "regmod_count": 0,
+      "interface_ip": 183439305,
+      "process_pid": 2184,
+      "username": "SYSTEM",
+      "terminated": false,
+      "process_name": "cmd.exe",
+      "alliance_data_attackframework": [
+        "565594"
+      ],
+      "emet_config": "",
+      "last_server_update": "2019-02-01T18:50:32.875Z",
+      "path": "c:\\\\windows\\\\system32\\\\cmd.exe",
+      "alliance_score_attackframework": 1,
+      "netconn_count": 0,
+      "parent_pid": 2564,
+      "crossproc_count": 2,
+      "alliance_link_attackframework": "https://attack.mitre.org/wiki/Technique/T1082",
+      "segment_id": 1549047032875,
+      "watchlists": [
+        {
+          "segments_hit": [
+            1549046650410
+          ],
+          "wid": "1154",
+          "value": "2019-02-01T18:50:06.003Z"
+        }
+      ],
+      "host_type": "workstation",
+      "processblock_count": 0,
+      "alliance_updated_attackframework": "2018-10-16T20:15:04Z",
+      "os_type": "windows",
+      "childproc_count": 8,
+      "unique_id": "00000032-0000-0888-01d4-95e3b558aacb-0168aa65ec2b"
+    }
+  ],
+  "elapsed": 0.023807048797607422,
+  "comprehensive_search": true,
+  "all_segments": true,
+  "total_results": 77835,
+  "highlights": [
+    {
+      "name": "PREPREPREcmd.exePOSTPOSTPOST",
+      "ids": [
+        "00000032-0000-0888-01d4-95e3b558aacb-0168aa60162a",
+        "00000032-0000-0888-01d4-95e3b558aacb-0168aa65ec2b"
+      ]
+    },
+    {
+      "name": "C:\\\\Windows\\\\system32\\\\PREPREPREcmd.exePOSTPOSTPOST  /S /D /c\\" echo\\"",
+      "ids": [
+        "00000032-0000-0888-01d4-95e3b558aacb-0168aa60162a"
+      ]
+    },
+    {
+      "name": "c:\\\\windows\\\\system32\\\\PREPREPREcmd.exePOSTPOSTPOST",
+      "ids": [
+        "00000032-0000-0888-01d4-95e3b558aacb-0168aa60162a",
+        "00000032-0000-0888-01d4-95e3b558aacb-0168aa65ec2b"
+      ]
+    }
+  ],
+  "facets": {},
+  "tagged_pids": {},
+  "start": 0,
+  "incomplete_results": false,
+  "filtered": {}
+}
+""")
+        binary_data = json.loads("""
+{
+  "terms": [
+    "observed_filename:notepad.exe"
+  ],
+  "total_results": 10,
+  "highlights": [
+    {
+      "name": "c:\\\\windows\\\\system32\\\\PREPREPREnotepad.exePOSTPOSTPOST",
+      "ids": [
+        "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9",
+        "959A31D0CD013CEA0C66DB7C03BCBDDF"
+      ]
+    }
+  ],
+  "facets": {},
+  "results": [
+    {
+      "host_count": 4,
+      "alliance_updated_srstrust": "2017-11-05T07:05:38Z",
+      "original_filename": "NOTEPAD.EXE",
+      "legal_copyright": "\\u00a9 Microsoft Corporation. All rights reserved.",
+      "digsig_result": "Signed",
+      "observed_filename": [
+        "c:\\\\windows\\\\system32\\\\notepad.exe"
+      ],
+      "product_version": "6.3.9600.17930",
+      "alliance_score_srstrust": -100,
+      "watchlists": [
+        {
+          "wid": "5",
+          "value": "2017-03-14T10:10:05.217Z"
+        }
+      ],
+      "facet_id": 2272,
+      "copied_mod_len": 221184,
+      "server_added_timestamp": "2017-03-14T10:04:35.779Z",
+      "digsig_sign_time": "2015-07-11T00:18:00Z",
+      "orig_mod_len": 221184,
+      "alliance_data_srstrust": [
+        "fc2ea5bd5307d2cfa5aaa38e0c0ddce9"
+      ],
+      "is_executable_image": true,
+      "is_64bit": true,
+      "md5": "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9",
+      "digsig_publisher": "Microsoft Corporation",
+      "endpoint": [
+        "REPO|29",
+        "VSPHERE|28",
+        "vsphere|28",
+        "iestestmachine1|54"
+      ],
+      "group": [
+        "CTF Lab",
+        "ctf lab",
+        "default group"
+      ],
+      "event_partition_id": [
+        97777295491072,
+        98439833845760,
+        98847548112896,
+        99679970852864,
+        101310831263744
+      ],
+      "digsig_result_code": "0",
+      "file_version": "6.3.9600.17930 (winblue_ltsb.150709-0600)",
+      "signed": "Signed",
+      "alliance_link_srstrust": "https://services.bit9.com/Services/extinfo.aspx?ak=b8b4e631d4884ad1c56f50e4a5ee9279&sg=0313e1735f6cec221b1d686bd4de23ee&md5=fc2ea5bd5307d2cfa5aaa38e0c0ddce9",
+      "company_name": "Microsoft Corporation",
+      "internal_name": "Notepad",
+      "timestamp": "2017-03-14T10:04:35.779Z",
+      "cb_version": 624,
+      "os_type": "Windows",
+      "file_desc": "Notepad",
+      "product_name": "Microsoft\\u00ae Windows\\u00ae Operating System",
+      "last_seen": "2018-12-29T12:41:54.355Z"
+    },
+    {
+      "host_count": 1,
+      "original_filename": "NOTEPAD.EXE",
+      "legal_copyright": "\\u00a9 Microsoft Corporation. All rights reserved.",
+      "digsig_result": "Signed",
+      "observed_filename": [
+        "c:\\\\windows\\\\system32\\\\notepad.exe"
+      ],
+      "product_version": "6.3.9600.17415",
+      "watchlists": [
+        {
+          "wid": "5",
+          "value": "2017-04-12T21:10:04.604Z"
+        }
+      ],
+      "facet_id": 87425,
+      "copied_mod_len": 221184,
+      "server_added_timestamp": "2017-04-12T21:06:15.216Z",
+      "digsig_sign_time": "2014-11-07T07:55:00Z",
+      "orig_mod_len": 221184,
+      "is_executable_image": true,
+      "is_64bit": true,
+      "md5": "959A31D0CD013CEA0C66DB7C03BCBDDF",
+      "digsig_publisher": "Microsoft Corporation",
+      "endpoint": [
+        "REPO|31"
+      ],
+      "group": [
+        "Default Group"
+      ],
+      "event_partition_id": [
+        97777295491072
+      ],
+      "digsig_result_code": "0",
+      "file_version": "6.3.9600.17415 (winblue_r4.141028-1500)",
+      "signed": "Signed",
+      "company_name": "Microsoft Corporation",
+      "internal_name": "Notepad",
+      "timestamp": "2017-04-12T21:06:15.216Z",
+      "cb_version": 610,
+      "os_type": "Windows",
+      "file_desc": "Notepad",
+      "product_name": "Microsoft\\u00ae Windows\\u00ae Operating System",
+      "last_seen": "2017-04-12T21:10:06.095Z"
+    }
+  ],
+  "elapsed": 0.011963844299316406,
+  "start": 0
+}
+""")
+        results = process_data["results"] + binary_data["results"]  # we assume the data pipeline will combine the results in a list
+        result_bundle = json_to_stix_translator.convert_to_stix(data_source, map_data, results, transformers.get_all_transformers(), options)
+
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        assert(len(result_bundle_objects) == 5)
+
+        objects = result_bundle_objects[1]['objects']
+        types = [o.get('type') for o in objects.values()]
+        assert (types == ['file', 'process', 'file', 'process', 'domain-name', 'ipv4-addr', 'network-traffic', 'ipv4-addr', 'user-account'])
+
+        objects = result_bundle_objects[4]['objects']
+        types = [o.get('type') for o in objects.values()]
+        assert (types == ['file'])

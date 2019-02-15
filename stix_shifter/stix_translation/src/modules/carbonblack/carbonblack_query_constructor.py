@@ -91,6 +91,24 @@ class CbQueryStringPatternTranslator:
             assert(qualifier.annotation == "binary")
             return "(({}) and server_added_timestamp:[{} TO {}])".format(expression, start, stop)
 
+    def _combine_queries(self, queries):
+        process_queries = [q["query"] for q in queries if q["dialect"] == "process"]
+        binary_queries = [q["query"] for q in queries if q["dialect"] == "binary"]
+        if len(process_queries) == 0 or len(binary_queries) == 0:
+            return queries
+
+        # Here we are using the assumption that all observable expressions are OR'ed together
+        if len(process_queries) == 1:
+            process_query = process_queries[0]
+        else:
+            process_query = "({})".format(") or (".join(process_queries))
+
+        if len(binary_queries) == 1:
+            binary_query = binary_queries[0]
+        else:
+            binary_query = "({})".format(") or (".join(binary_queries))
+
+        return [{"query": process_query, "dialect":"process"}, {"query": binary_query, "dialect":"binary"}]
 
     # we annotate all of the observable expressions with either
     # expression.annotation = 'process'
@@ -207,8 +225,8 @@ class CbQueryStringPatternTranslator:
             # Note this code is only correct because we assume AND is OR for observation expressions
             return self._parse_expression(expression.expr1) + self._parse_expression(expression.expr2)
         elif isinstance(expression, Pattern):
-            # Note: an optional optimization could be added here to reduce queries that go to the same api
-            return self._parse_expression(expression.expression)
+            queries = self._parse_expression(expression.expression)
+            return self._combine_queries(queries)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))

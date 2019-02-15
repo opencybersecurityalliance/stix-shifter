@@ -112,6 +112,7 @@ class TestStixToCB(unittest.TestCase, object):
                 "[process:name = 'cmd.exe' OR file:hashes.MD5 = 'blah']": [{"query": "process_name:cmd.exe or md5:blah", "dialect": "process"}],
                 "[file:hashes.MD5 = 'blah']": [{"query": "md5:blah", "dialect": "binary"}],
                 "[process:name = 'cmd.exe'] OR [file:hashes.MD5 = 'blah']": [{"query": "process_name:cmd.exe", "dialect": "process"}, {"query": "md5:blah", "dialect": "binary"}],
+                "[process:name = 'cmd.exe'] OR [file:hashes.MD5 = 'blah'] OR [process:pid = 5]": [{"query": "(process_name:cmd.exe) or (process_pid:5)", "dialect": "process"}, {"query": "md5:blah", "dialect": "binary"}],
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
