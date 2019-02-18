@@ -81,34 +81,41 @@ class CbQueryStringPatternTranslator:
             stripped = stripped.split('.', 1)[0]
         return stripped
 
-    def _fomat_start_stop_qualifier(self, expression, qualifier : StartStopQualifier) -> str:
+    def _fomat_start_stop_qualifier(self, expression, dialect, qualifier : StartStopQualifier) -> str:
         start = self._to_cb_timestamp(qualifier.start)
         stop = self._to_cb_timestamp(qualifier.stop)
 
-        if qualifier.annotation == "process":
+        if dialect == "process":
             return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(expression, start, stop)
         else:
-            assert(qualifier.annotation == "binary")
+            assert(dialect == "binary")
             return "(({}) and server_added_timestamp:[{} TO {}])".format(expression, start, stop)
 
     def _combine_queries(self, queries):
+        results = []
         process_queries = [q["query"] for q in queries if q["dialect"] == "process"]
         binary_queries = [q["query"] for q in queries if q["dialect"] == "binary"]
-        if len(process_queries) == 0 or len(binary_queries) == 0:
-            return queries
 
         # Here we are using the assumption that all observable expressions are OR'ed together
-        if len(process_queries) == 1:
+        if len(process_queries) == 0:
+            pass
+        elif len(process_queries) == 1:
             process_query = process_queries[0]
+            results.append({"query": process_query, "dialect":"process"})
         else:
             process_query = "({})".format(") or (".join(process_queries))
+            results.append({"query": process_query, "dialect":"process"})
 
-        if len(binary_queries) == 1:
+        if len(binary_queries) == 0:
+            pass
+        elif len(binary_queries) == 1:
             binary_query = binary_queries[0]
+            results.append({"query": binary_query, "dialect":"binary"})
         else:
             binary_query = "({})".format(") or (".join(binary_queries))
+            results.append({"query": binary_query, "dialect":"binary"})
 
-        return [{"query": process_query, "dialect":"process"}, {"query": binary_query, "dialect":"binary"}]
+        return results
 
     # we annotate all of the observable expressions with either
     # expression.annotation = 'process'
@@ -138,9 +145,9 @@ class CbQueryStringPatternTranslator:
             expression.annotation = expression.comparison_expression.annotation
             return
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            print(type(expression))
             self._annotate_expression(expression.observation_expression)
-            expression.annotation = expression.observation_expression.annotation
+            if not isinstance(expression.observation_expression, CombinedObservationExpression):
+                expression.annotation = expression.observation_expression.annotation
             return
         elif isinstance(expression, CombinedObservationExpression):
             self._annotate_expression(expression.expr1)
@@ -196,34 +203,38 @@ class CbQueryStringPatternTranslator:
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._fomat_start_stop_qualifier(comparison_string, qualifier)
+                    return self._fomat_start_stop_qualifier(comparison_string, expression.annotation, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
+            # Wrap nested combined comparison expressions in parentheses
+            f1 = "({})" if isinstance(expression.expr2, CombinedComparisonExpression) else "{}"
+            f2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
+
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr2),
-                                             self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr1))
+            query_string = (f1 + " {} " + f2).format(self._parse_expression(expression.expr2),
+                                                     self.comparator_lookup[expression.operator],
+                                                     self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._fomat_start_stop_qualifier(query_string, qualifier)
+                    return self._fomat_start_stop_qualifier(query_string, expression.annotation, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
-            query_string = self._parse_expression(expression.comparison_expression, qualifier)
+            query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
             return [{"query": query_string, "dialect": expression.annotation}]
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             return self._parse_expression(expression.observation_expression, expression)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
             # Note this code is only correct because we assume AND is OR for observation expressions
-            return self._parse_expression(expression.expr1) + self._parse_expression(expression.expr2)
+            return self._parse_expression(expression.expr1, qualifier=qualifier) + self._parse_expression(expression.expr2, qualifier=qualifier)
         elif isinstance(expression, Pattern):
             queries = self._parse_expression(expression.expression)
             return self._combine_queries(queries)

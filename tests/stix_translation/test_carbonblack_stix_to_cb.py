@@ -128,5 +128,17 @@ class TestStixToCB(unittest.TestCase, object):
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'},
         ]
-        queries = [{"query": "ipaddr:192.168.122.83 or ipaddr:100.100.122.90 and ipport:37020 or username:root", "dialect": "process"}]
+        queries = [{"query": "((ipaddr:192.168.122.83 or ipaddr:100.100.122.90) and ipport:37020) or username:root", "dialect": "process"}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
+    def test_start_stop_merged(self):
+        stix_to_cb_mapping = {
+                "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': 'process_name:cmd.exe', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                "[process:name = 'cmd.exe'] START t'2014-01-13T07:03:17Z' STOP t'2019-01-13T07:03:17Z'  OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2019-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                "([process:name = 'cmd.exe'] OR [process:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '(((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])) or (((process_name:notepad.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17]))', 'dialect': 'process'}],
+                "([process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                }
+        for stix_pattern, queries in stix_to_cb_mapping.items():
+            result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
+            print(result)
+            assert result['queries'] == queries
