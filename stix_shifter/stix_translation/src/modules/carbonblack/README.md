@@ -29,7 +29,7 @@ The following query values are supported for the binary api:
 
 ## CarbonBlack Multiple API Endpoints
 
-The STIX Patterns are mapped seamlessly to the desired API depending on the query. If any of the STIX observable expressions (query inside of []'s) reference the process object then that query will be mapped to the CarbonBlack Process API. If multiple observable expressions are used that result in separate calls to the Process and Binary API endpoints then multiple queries will be created, one for each endpoint.
+The STIX Patterns are mapped seamlessly to the desired API depending on the query. If any of the STIX observable expressions (query inside of [ ]'s) reference the process object then that query will be mapped to the CarbonBlack Process API. If multiple observable expressions are used that result in separate calls to the Process and Binary API endpoints then multiple queries will be created, one for each endpoint. There is an [example](#Multiple-API-Endpoint-Example) of the translator mapping to both APIs below.
 
 ### Execute a STIX pattern on a CarbonBlack instance
 
@@ -200,7 +200,7 @@ $ python3 main.py translate carbonblack results '{"id": "blah"}' '<copied result
 }
 ```
 
-
+## Multiple API Endpoint Example
 
 ```
 $ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.my.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}" "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']"
