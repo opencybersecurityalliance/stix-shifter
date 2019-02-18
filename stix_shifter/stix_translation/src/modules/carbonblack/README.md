@@ -27,14 +27,15 @@ The following query values are supported for the binary api:
 - `file:name`
 - `file:hashes.MD5`
 
-In the following examples the module name is `carbonblack`. This will default to the `carbonblack:process` module. Alternatively you can explicitly use the binary or process api by using the module name `carbonblack:binary` or `carbonblack:process`.
+## CarbonBlack Multiple API Endpoints
+
+The STIX Patterns are mapped seamlessly to the desired API depending on the query. If any of the STIX observable expressions (query inside of []'s) reference the process object then that query will be mapped to the CarbonBlack Process API. If multiple observable expressions are used that result in separate calls to the Process and Binary API endpoints then multiple queries will be created, one for each endpoint.
 
 ### Execute a STIX pattern on a CarbonBlack instance
 
 ```
 $ python3 main.py execute carbonblack carbonblack "<data_source>" "<connection>" "<configuration>" "<query>"
 ```
-
 
 This example command executes the full STIX translation and transmission pipeline. The commands that make up this pipeline will be include below.
 ```
@@ -57,7 +58,7 @@ $ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port
 ```
 
 ```
-$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results 'process_name:cmd.exe' '{}' '{}'
+$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results 'process_name:cmd.exe' 0 1
 {
   "terms": [
     "process_name:cmd.exe"
@@ -200,3 +201,177 @@ $ python3 main.py translate carbonblack results '{"id": "blah"}' '<copied result
 ```
 
 
+
+```
+$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.my.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}" "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']"
+```
+
+The translation portion of this command will return:
+```
+[{'query': 'process_name:cmd.exe', 'dialect': 'process'}, {'query': 'observed_filename:notepad.exe', 'dialect': 'binary'}]
+```
+
+The final results will be translated as follows:
+```
+{
+    "type": "bundle",
+    "id": "bundle--0cfca80c-e630-45a3-9d50-1d98b1fe2570",
+    "objects": [
+        {
+            "id": "asdf"
+        },
+        {
+            "id": "observed-data--7168e8cb-2daa-4566-8546-418f459e7d4a",
+            "type": "observed-data",
+            "created_by_ref": "asdf",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "5746bd7e255dd6a8afa06f7c42c1ba41"
+                    },
+                    "name": "cmd.exe"
+                },
+                "1": {
+                    "type": "process",
+                    "command_line": "cmd /c \"\"C:\\ProgramData\\VMware\\VMware CAF\\pme\\\\config\\..\\scripts\\is-listener-running.bat\" \"",
+                    "created": "2018-12-17T08:37:13.318Z",
+                    "opened_connection_refs": [
+                        "6"
+                    ],
+                    "pid": 2184,
+                    "creator_user_ref": "8",
+                    "name": "cmd.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "3"
+                },
+                "2": {
+                    "type": "file",
+                    "name": "managementagenthost.exe",
+                    "hashes": {
+                        "MD5": "000000000000000000000000000000"
+                    }
+                },
+                "3": {
+                    "type": "process",
+                    "name": "managementagenthost.exe",
+                    "binary_ref": "2",
+                    "pid": 2564
+                },
+                "4": {
+                    "type": "domain-name",
+                    "value": "redlab-vuln2"
+                },
+                "5": {
+                    "type": "ipv4-addr",
+                    "value": "12.166.224.2"
+                },
+                "6": {
+                    "type": "network-traffic",
+                    "dst_ref": "5",
+                    "src_ref": "7"
+                },
+                "7": {
+                    "type": "ipv4-addr",
+                    "value": "10.239.15.201"
+                },
+                "8": {
+                    "type": "user-account",
+                    "user_id": "SYSTEM"
+                }
+            }
+        },
+        {
+            "id": "observed-data--2fea7e59-4940-4409-95d2-7fe62dd5af45",
+            "type": "observed-data",
+            "created_by_ref": "asdf",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "5746bd7e255dd6a8afa06f7c42c1ba41"
+                    },
+                    "name": "cmd.exe"
+                },
+                "1": {
+                    "type": "process",
+                    "command_line": "cmd /c \"\"C:\\ProgramData\\VMware\\VMware CAF\\pme\\\\config\\..\\scripts\\is-listener-running.bat\" \"",
+                    "created": "2018-12-17T08:37:13.318Z",
+                    "opened_connection_refs": [
+                        "6"
+                    ],
+                    "pid": 2184,
+                    "creator_user_ref": "8",
+                    "name": "cmd.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "3"
+                },
+                "2": {
+                    "type": "file",
+                    "name": "managementagenthost.exe",
+                    "hashes": {
+                        "MD5": "000000000000000000000000000000"
+                    }
+                },
+                "3": {
+                    "type": "process",
+                    "name": "managementagenthost.exe",
+                    "binary_ref": "2",
+                    "pid": 2564
+                },
+                "4": {
+                    "type": "domain-name",
+                    "value": "redlab-vuln2"
+                },
+                "5": {
+                    "type": "ipv4-addr",
+                    "value": "12.166.224.2"
+                },
+                "6": {
+                    "type": "network-traffic",
+                    "dst_ref": "5",
+                    "src_ref": "7"
+                },
+                "7": {
+                    "type": "ipv4-addr",
+                    "value": "10.239.15.201"
+                },
+                "8": {
+                    "type": "user-account",
+                    "user_id": "SYSTEM"
+                }
+            }
+        },
+        {
+            "id": "observed-data--69aa8cd8-94d3-4bea-b479-066eaded8d2f",
+            "type": "observed-data",
+            "created_by_ref": "asdf",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "name": "NOTEPAD.EXE",
+                    "created": "2017-03-14T10:04:35.779Z",
+                    "hashes": {
+                        "MD5": "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9"
+                    }
+                }
+            }
+        },
+        {
+            "id": "observed-data--a3b32d7b-c641-4f65-87c5-7e00292412a9",
+            "type": "observed-data",
+            "created_by_ref": "asdf",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "name": "NOTEPAD.EXE",
+                    "created": "2017-04-12T21:06:15.216Z",
+                    "hashes": {
+                        "MD5": "959A31D0CD013CEA0C66DB7C03BCBDDF"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
