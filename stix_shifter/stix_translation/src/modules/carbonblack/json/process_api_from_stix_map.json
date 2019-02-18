@@ -33,7 +33,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["hostname"]
+      "value": ["domain"]
     }
   }
 }

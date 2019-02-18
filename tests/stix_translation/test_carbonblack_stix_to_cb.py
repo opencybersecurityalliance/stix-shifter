@@ -19,9 +19,9 @@ class TestStixToCB(unittest.TestCase, object):
     def test_file_and_domain_query(self):
         stix_pattern = "[file:name = 'some_file.exe' AND domain-name:value = 'example.com']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "process_name:some_file.exe and hostname:example.com", "dialect": "process"}]
+        queries = [{"query": "observed_filename:some_file.exe and domain:example.com", "dialect": "process"}]
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}, {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
-        #assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '10.0.0.1']"
@@ -98,7 +98,7 @@ class TestStixToCB(unittest.TestCase, object):
         stix_to_cb_mapping = {
                 "[file:name = 'cmd.exe'] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z']": [{"query": "((observed_filename:cmd.exe) and server_added_timestamp:[2019-01-22T00:04:52 TO 2019-02-22T00:04:52])", "dialect": "binary"}],
                 "[file:hashes.MD5 = '79054025255fb1a26e4bc422aef54eb4']": [{"query": "md5:79054025255fb1a26e4bc422aef54eb4", "dialect": "binary"}],
-                "[domain-name:value = 'example.com']": [{"query": "hostname:example.com", "dialect": "process"}],
+                "[domain-name:value = 'example.com']": [{"query": "domain:example.com", "dialect": "process"}],
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
