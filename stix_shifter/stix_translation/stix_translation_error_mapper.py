@@ -3,13 +3,14 @@ from ..utils.error_response import ErrorCode
 from .src.exceptions import DataMappingException
 from ..stix_translation.stix_translation import StixValidationException
 from .src.patterns.errors import SearchFeatureNotSupportedError
-
+from ..stix_translation.stix_translation import TranslationResultException
 
 error_mapping = {
     NotImplementedError.__name__: ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE,
     DataMappingException.__name__: ErrorCode.TRANSLATION_MAPPING_ERROR,
     StixValidationException.__name__: ErrorCode.TRANSLATION_STIX_VALIDATION,
-    SearchFeatureNotSupportedError.__name__: ErrorCode.TRANSLATION_NOTSUPPORTED
+    SearchFeatureNotSupportedError.__name__: ErrorCode.TRANSLATION_NOTSUPPORTED,
+    TranslationResultException.__name__: ErrorCode.TRANSLATION_RESULT
     }
 
 class ErrorMapper():

@@ -15,6 +15,10 @@ QUERY = 'query'
 class StixValidationException(Exception):
     pass
 
+class TranslationResultException(Exception):
+    def __str__(self):
+        return "Error when converting results to STIX"
+
 
 class StixTranslation:
     """
@@ -77,7 +81,10 @@ class StixTranslation:
                     return {'queries': queries, 'parsed_stix': parsed_stix}
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                return interface.translate_results(data_source, data, options)
+                try:
+                    return interface.translate_results(data_source, data, options)
+                except Exception:
+                    raise TranslationResultException()
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
