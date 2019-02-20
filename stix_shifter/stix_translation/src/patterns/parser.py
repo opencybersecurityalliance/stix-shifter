@@ -186,7 +186,9 @@ class STIXQueryBuilder(STIXPatternListener):
         qualifier_text = qualifier.getText()  # Ex: "START'2016-06-01T00:00:00Z'STOP'2016-06-01T01:11:11Z'"
         observation = ctx.observationExpression()
         expression = self.pop()
-        observation_expression_with_qualifier = StartStopQualifier(qualifier_text, expression, qualifier.start_time(), qualifier.stop_time())
+        start_time = str(qualifier.TimestampLiteral(i=0))
+        stop_time = str(qualifier.TimestampLiteral(i=1))
+        observation_expression_with_qualifier = StartStopQualifier(qualifier_text, expression, start_time, stop_time)
         self.push(observation_expression_with_qualifier)
 
     def exitObservationExpressions(self, ctx: STIXPatternParser.ObservationExpressionsContext):

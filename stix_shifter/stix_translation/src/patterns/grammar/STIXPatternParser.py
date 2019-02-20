@@ -1596,12 +1596,6 @@ class STIXPatternParser ( Parser ):
         def STOP(self):
             return self.getToken(STIXPatternParser.STOP, 0)
 
-        def start_time(self):
-            return str(self.TimestampLiteral(i=0))
-
-        def stop_time(self):
-            return str(self.TimestampLiteral(i=1))
-
         def getRuleIndex(self):
             return STIXPatternParser.RULE_startStopQualifier
 
