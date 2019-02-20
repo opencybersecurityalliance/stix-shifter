@@ -126,8 +126,10 @@ Then the results can be translated with the following command: (Note just the js
 
 ## Example STIX Output Format
 
+Note that the datasource argument passed on the command line `'{"id": "..."}'` will be used as the first object in the observable bundle.
+
 ```
-$ python3 main.py translate carbonblack results '{"id": "blah"}' '<copied results from previous query>'
+$ python3 main.py translate carbonblack results '{"id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3"}' '<copied results from previous query>'
 {
     'type': 'bundle',
         'id': 'bundle--c885b371-fe48-4e64-af10-c69e9ca1593c',

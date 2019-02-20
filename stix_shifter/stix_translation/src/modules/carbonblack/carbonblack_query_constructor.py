@@ -33,10 +33,8 @@ class CbQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        print(pattern)
         self.translated = self.parse_expression(pattern)
         self.queries = self.translated
-        print (self.queries)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -81,7 +79,7 @@ class CbQueryStringPatternTranslator:
             stripped = stripped.split('.', 1)[0]
         return stripped
 
-    def _fomat_start_stop_qualifier(self, expression, dialect, qualifier : StartStopQualifier) -> str:
+    def _format_start_stop_qualifier(self, expression, dialect, qualifier : StartStopQualifier) -> str:
         start = self._to_cb_timestamp(qualifier.start)
         stop = self._to_cb_timestamp(qualifier.stop)
 
@@ -203,7 +201,7 @@ class CbQueryStringPatternTranslator:
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._fomat_start_stop_qualifier(comparison_string, expression.annotation, qualifier)
+                    return self._format_start_stop_qualifier(comparison_string, expression.annotation, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
@@ -221,7 +219,7 @@ class CbQueryStringPatternTranslator:
                                                      self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._fomat_start_stop_qualifier(query_string, expression.annotation, qualifier)
+                    return self._format_start_stop_qualifier(query_string, expression.annotation, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
