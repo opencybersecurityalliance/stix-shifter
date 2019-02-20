@@ -58,6 +58,24 @@ class TestStixToCB(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'process:creator_user_ref.user_id', 'comparison_operator': '!=', 'value': 'SYSTEM'}, {'attribute': 'process:name', 'comparison_operator': '=', 'value': 'cmd.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
+    def test_custom_mapping(self):
+        custom_mappings = {"binary":{}, "process":
+                {
+                    "file" : {
+                        "fields": {
+                            "custom_name": ["observed_filename"],
+                            }
+                        }
+                    }
+                }
+        custom_options = {"mappings" : custom_mappings}
+
+        stix_pattern = "[file:custom_name = 'some_file.exe']"
+        query = translation.translate(module, 'query', '{}', stix_pattern, custom_options)
+        queries = [{"query": "observed_filename:some_file.exe", "dialect": "process"}]
+        parsed_stix = [{'attribute': 'file:custom_name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
+        assert query == {'queries': queries, 'parsed_stix': parsed_stix}
+
     def test_query_map_coverage(self):
         stix_to_cb_mapping = {
                 "[ipv4-addr:value = '198.51.100.5' AND ipv4-addr:value = '198.51.100.10']" : [{"query": "ipaddr:198.51.100.5 and ipaddr:198.51.100.10", "dialect": "process"}],
