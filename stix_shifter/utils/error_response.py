@@ -7,6 +7,13 @@ import collections
 import json
 
 class ErrorCode(Enum):
+    TRANSLATION_NOTIMPLEMENTED_MODE = 100
+    TRANSLATION_MODULE_DEFAULT_ERROR =  200
+    TRANSLATION_MAPPING_ERROR = 310
+    TRANSLATION_STIX_VALIDATION = 320
+    TRANSLATION_NOTSUPPORTED = 330
+    TRANSLATION_RESULT = 340
+
     TRANSMISSION_UNKNOWN = 500
     TRANSMISSION_CONNECT = 600
     TRANSMISSION_AUTH_SSL = 610
@@ -102,7 +109,6 @@ class ErrorResponder():
         module_path = '.'.join(caller_path_list[path_start_position: -1]) + '.' + caller_module_name + '_error_mapper'
         try:
             module = importlib.import_module(module_path)
-            print('json_data: '+ str(json_data))
             if json_data is not None:
                 module.ErrorMapper.set_error_code(json_data, return_object)
             else:

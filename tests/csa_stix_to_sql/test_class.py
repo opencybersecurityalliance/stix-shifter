@@ -5,6 +5,7 @@ from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.csa import csa_translator
 from stix_shifter.stix_translation.src.modules.csa import cloudsql_data_mapping
 from stix_shifter.stix_translation.src.modules.base import base_translator
+from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 
@@ -157,10 +158,11 @@ class TestStixToSql(unittest.TestCase, object):
         assert query == {'sql_queries': [at_selections + at_from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_invalid_stix_pattern(self):
-        stix_validation_exception = stix_translation.StixValidationException
         stix_pattern = "[not_a_valid_pattern]"
-        self.assertRaises(stix_validation_exception,
-                          lambda: translation.translate('csa', 'query', '{}', stix_pattern))
+        result = translation.translate('csa', 'query', '{}', stix_pattern)
+        assert False == result['success']
+        assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
+        assert stix_pattern[1:-1] in result['error']
 
     def test_network_traffic_protocols(self):
         interface = csa_translator.Translator(dialect='nf')

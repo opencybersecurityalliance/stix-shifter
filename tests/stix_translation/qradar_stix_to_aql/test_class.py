@@ -1,5 +1,6 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.qradar import qradar_data_mapping
+from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 import json
@@ -102,10 +103,12 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_unmapped_attribute(self):
-        data_mapping_exception = qradar_data_mapping.DataMappingException
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
-        self.assertRaises(data_mapping_exception,
-                          lambda: translation.translate('qradar', 'query', '{}', stix_pattern))
+        result = translation.translate('qradar', 'query', '{}', stix_pattern)
+        assert result['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
+        assert result['error'].startswith('Unable to map property')
+
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
@@ -115,10 +118,11 @@ class TestStixToAql(unittest.TestCase, object):
         assert query == {'queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_invalid_stix_pattern(self):
-        stix_validation_exception = stix_translation.StixValidationException
         stix_pattern = "[not_a_valid_pattern]"
-        self.assertRaises(stix_validation_exception,
-                          lambda: translation.translate('qradar', 'query', '{}', stix_pattern))
+        result = translation.translate('qradar', 'query', '{}', stix_pattern)
+        assert result['success'] == False
+        assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
+        assert stix_pattern[1:-1] in result['error']
 
     def test_network_traffic_protocols(self):
         for key, value in protocols.items():
