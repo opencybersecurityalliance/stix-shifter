@@ -19,19 +19,10 @@ class StixTransmission:
         if module not in TRANSMISSION_MODULES :
             raise NotImplementedError
 
-        dialect = None
-        mod_dia = module.split(':', 1)
-        module = mod_dia[0]
-        if len(mod_dia) > 1:
-            dialect = mod_dia[1]
-
         try :
             self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
                                                             "." + module + "_connector")
-            if dialect is not None:
-                self.interface = self.connector_module.Connector(connection, configuration, dialect=dialect)
-            else:
-                self.interface = self.connector_module.Connector(connection, configuration)
+            self.interface = self.connector_module.Connector(connection, configuration)
         except KeyError as e:
             self.init_error = e
 
