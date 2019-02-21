@@ -56,6 +56,7 @@ class Connector(BaseConnector):
         response_txt = None
         return_obj = {}
         try:
+            search_id = json.loads(search_id)
             query = search_id["query"]
             dialect = search_id["dialect"]
             response = self.api_client.run_search(query, dialect, start=offset, rows=length)

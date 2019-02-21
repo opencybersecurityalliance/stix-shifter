@@ -53,12 +53,13 @@ $ python3 main.py translate carbonblack query '{}' "[process:name = 'cmd.exe']"
 
 Note that because the carbonblack api is synchronous the search id is the same as the translated query.
 ```
-$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"000000000000000000000000000"}}' query "process_name:cmd.exe"
+$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"000000000000000000000000000"}}' query '{"query":"process_name:cmd.exe", "dialect":"process"}'
 {'success': True, 'search_id': 'process_name:cmd.exe'}
 ```
 
+Note unlike other modules this module accepts a json string with the keys 'query' and 'dialect' set as it's search_id.
 ```
-$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results 'process_name:cmd.exe' 0 1
+$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results '{"query":"process_name:cmd.exe", "dialect":"process"}' 0 1
 {
   "terms": [
     "process_name:cmd.exe"

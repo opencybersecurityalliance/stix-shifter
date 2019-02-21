@@ -3,58 +3,62 @@ from stix_shifter.stix_translation.src.exceptions import DataMappingException
 from stix_shifter.stix_translation.src.modules.carbonblack import stix_to_cb
 
 import unittest
+import json
 
 translation = stix_translation.StixTranslation()
 module = "carbonblack"
+
+def to_json(queries):
+    return list(map(lambda x: json.dumps(x), queries))
 
 class TestStixToCB(unittest.TestCase, object):
 
     def test_file_query(self):
         stix_pattern = "[file:name = 'some_file.exe']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "observed_filename:some_file.exe", "dialect": "binary"}]
+        queries = to_json([{"query": "observed_filename:some_file.exe", "dialect": "binary"}])
         parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_file_and_domain_query(self):
         stix_pattern = "[file:name = 'some_file.exe' AND domain-name:value = 'example.com']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "observed_filename:some_file.exe and domain:example.com", "dialect": "process"}]
+        queries = to_json([{"query": "observed_filename:some_file.exe and domain:example.com", "dialect": "process"}])
         parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}, {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '10.0.0.1']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "ipaddr:10.0.0.1", "dialect": "process"}]
+        queries = to_json([{"query": "ipaddr:10.0.0.1", "dialect": "process"}])
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.1'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_hash_query(self):
         stix_pattern = "[file:hashes.MD5 = '5746bd7e255dd6a8afa06f7c42c1ba41']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "md5:5746bd7e255dd6a8afa06f7c42c1ba41", "dialect": "binary"}]
+        queries = to_json([{"query": "md5:5746bd7e255dd6a8afa06f7c42c1ba41", "dialect": "binary"}])
         parsed_stix = [{'attribute': 'file:hashes.MD5', 'comparison_operator': '=', 'value': '5746bd7e255dd6a8afa06f7c42c1ba41'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_command_line_query(self):
         stix_pattern = "[process:command_line = 'cmd.exe']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "cmdline:cmd.exe", "dialect": "process"}]
+        queries = to_json([{"query": "cmdline:cmd.exe", "dialect": "process"}])
         parsed_stix = [{'attribute': 'process:command_line', 'comparison_operator': '=', 'value': 'cmd.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_simple_or_query(self):
         stix_pattern = "[ipv4-addr:value = '10.0.0.1' OR ipv4-addr:value = '10.0.0.2']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "ipaddr:10.0.0.1 or ipaddr:10.0.0.2", "dialect": "process"}]
+        queries = to_json([{"query": "ipaddr:10.0.0.1 or ipaddr:10.0.0.2", "dialect": "process"}])
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.2'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '10.0.0.1'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_simple_and_query(self):
         stix_pattern = "[process:name = 'cmd.exe' AND process:creator_user_ref.user_id != 'SYSTEM']"
         query = translation.translate(module, 'query', '{}', stix_pattern)
-        queries = [{"query": "process_name:cmd.exe and -(username:SYSTEM)", "dialect": "process"}]
+        queries = to_json([{"query": "process_name:cmd.exe and -(username:SYSTEM)", "dialect": "process"}])
         parsed_stix = [{'attribute': 'process:creator_user_ref.user_id', 'comparison_operator': '!=', 'value': 'SYSTEM'}, {'attribute': 'process:name', 'comparison_operator': '=', 'value': 'cmd.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -72,7 +76,7 @@ class TestStixToCB(unittest.TestCase, object):
 
         stix_pattern = "[file:custom_name = 'some_file.exe']"
         query = translation.translate(module, 'query', '{}', stix_pattern, custom_options)
-        queries = [{"query": "observed_filename:some_file.exe", "dialect": "process"}]
+        queries = to_json([{"query": "observed_filename:some_file.exe", "dialect": "process"}])
         parsed_stix = [{'attribute': 'file:custom_name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
@@ -98,7 +102,7 @@ class TestStixToCB(unittest.TestCase, object):
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate(module, 'query', '{}', stix_pattern)
             print(result)
-            assert result['queries'] == queries
+            assert result['queries'] == to_json(queries)
 
     def test_escape_query(self):
         stix_to_cb_mapping = {
@@ -110,7 +114,7 @@ class TestStixToCB(unittest.TestCase, object):
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate(module, 'query', '{}', stix_pattern)
             print(result)
-            assert result['queries'] == queries
+            assert result['queries'] == to_json(queries)
 
     def test_binary_api_qualifier(self):
         stix_to_cb_mapping = {
@@ -121,7 +125,7 @@ class TestStixToCB(unittest.TestCase, object):
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
             print(result)
-            assert result['queries'] == queries
+            assert result['queries'] == to_json(queries)
 
     def test_merge_apis(self):
         stix_to_cb_mapping = {
@@ -135,7 +139,7 @@ class TestStixToCB(unittest.TestCase, object):
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
             print(result)
-            assert result['queries'] == queries
+            assert result['queries'] == to_json(queries)
 
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020 OR user-account:user_id = 'root']"
@@ -146,7 +150,7 @@ class TestStixToCB(unittest.TestCase, object):
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'},
         ]
-        queries = [{"query": "((ipaddr:192.168.122.83 or ipaddr:100.100.122.90) and ipport:37020) or username:root", "dialect": "process"}]
+        queries = to_json([{"query": "((ipaddr:192.168.122.83 or ipaddr:100.100.122.90) and ipport:37020) or username:root", "dialect": "process"}])
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 
     def test_start_stop_merged(self):
@@ -159,4 +163,4 @@ class TestStixToCB(unittest.TestCase, object):
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern)
             print(result)
-            assert result['queries'] == queries
+            assert result['queries'] == to_json(queries)

@@ -34,7 +34,9 @@ class CbQueryStringPatternTranslator:
         self.pattern = pattern
         self.result_limit = result_limit
         self.translated = self.parse_expression(pattern)
-        self.queries = self.translated
+        self.queries = []
+        for t in self.translated:
+            self.queries.append(json.dumps(t))
 
     @staticmethod
     def _format_equality(value) -> str:
