@@ -169,7 +169,13 @@ class DataSourceObjToStixObj:
                 object_name = ds_key_def.get('object')
                 print("ds_key_def inside {}".format(ds_key_def))
                 if 'references' in ds_key_def:
-                    stix_value = object_map[ds_key_def['references']]
+                    references = ds_key_def['references']
+                    if isinstance(references, list):
+                        stix_value = []
+                        for ref in references:
+                            stix_value.append(object_map[ref])
+                    else:
+                        stix_value = object_map[references]
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):

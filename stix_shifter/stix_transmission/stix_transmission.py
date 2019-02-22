@@ -2,7 +2,7 @@ import importlib
 from ..utils.error_response import ErrorResponder
 
 
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'
@@ -16,10 +16,12 @@ class StixTransmission:
     init_error = None
     
     def __init__(self, module, connection, configuration):
-        # pass
+        if module not in TRANSMISSION_MODULES :
+            raise NotImplementedError
+
         try :
             self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
-                                                        "." + module + "_connector")
+                                                            "." + module + "_connector")
             self.interface = self.connector_module.Connector(connection, configuration)
         except KeyError as e:
             self.init_error = e

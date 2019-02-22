@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from datetime import datetime, timezone
 import base64
+import socket
 import re
 from urllib.parse import urlparse
 
@@ -146,9 +147,19 @@ class ToDomainName(ValueTransformer):
             print("Cannot convert input to domain name")
 
 
+class ToIPv4(ValueTransformer):
+    """A value transformer for converting an unsigned long to IPv4 string"""
+
+    @staticmethod
+    def transform(value):
+        try:
+            return socket.inet_ntoa((value & 0xffffffff).to_bytes(4, "big"))
+        except ValueError:
+            print("Cannot convert input to IPv4 string")
+
+
 def get_all_transformers():
-    # return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToInteger": ToInteger, "ToString": ToString, "ToLowercaseArray": ToLowercaseArray,
-    #         "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName, "StringToBool": StringToBool}
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
-            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds, "EpochSecondsToTimestamp": EpochSecondsToTimestamp}
+            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
+            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4 }

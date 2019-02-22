@@ -96,6 +96,8 @@ class ErrorResponder():
             if error_code.value == ErrorCode.TRANSMISSION_UNKNOWN.value:
                 if 'uthenticat' in message or 'uthoriz' in message:
                     error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
+                elif 'query_syntax_error' in message:
+                    error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
             return_object['error'] = str(message)
         ErrorMapperBase.set_error_code(return_object, error_code.value)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
