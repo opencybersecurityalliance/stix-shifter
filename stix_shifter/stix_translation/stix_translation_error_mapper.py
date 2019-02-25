@@ -1,17 +1,17 @@
 from ..utils.error_mapper_base import ErrorMapperBase
 from ..utils.error_response import ErrorCode
-from .src.exceptions import DataMappingException
-from ..stix_translation.stix_translation import StixValidationException
+from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from .src.patterns.errors import SearchFeatureNotSupportedError
-from ..stix_translation.stix_translation import TranslationResultException
 
 error_mapping = {
     NotImplementedError.__name__: ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE,
     DataMappingException.__name__: ErrorCode.TRANSLATION_MAPPING_ERROR,
     StixValidationException.__name__: ErrorCode.TRANSLATION_STIX_VALIDATION,
     SearchFeatureNotSupportedError.__name__: ErrorCode.TRANSLATION_NOTSUPPORTED,
-    TranslationResultException.__name__: ErrorCode.TRANSLATION_RESULT
-    }
+    TranslationResultException.__name__: ErrorCode.TRANSLATION_RESULT,
+    UnsupportedDataSourceException.__name__: ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE
+}
+
 
 class ErrorMapper():
 
@@ -19,7 +19,7 @@ class ErrorMapper():
 
     @staticmethod
     def set_error_code(data_dict, return_obj):
-        exception = None        
+        exception = None
         if 'exception' in data_dict:
             exception = data_dict['exception']
 
