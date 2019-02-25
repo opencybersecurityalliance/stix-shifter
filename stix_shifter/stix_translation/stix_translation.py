@@ -12,19 +12,6 @@ RESULTS = 'results'
 QUERY = 'query'
 
 
-# class StixValidationException(Exception):
-#     pass
-
-
-# class TranslationResultException(Exception):
-#     def __str__(self):
-#         return "Error when converting results to STIX"
-
-
-# class UnsupportedDataSourceException(Exception):
-#     pass
-
-
 class StixTranslation:
     """
     StixShifter class - implements translations of stix data
