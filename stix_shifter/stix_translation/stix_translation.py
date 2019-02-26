@@ -3,21 +3,13 @@ from stix_shifter.stix_translation.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
 from stix_shifter.stix_translation.src.stix_pattern_parser import parse_stix
 import re
-import json
 from ..utils.error_response import ErrorResponder
+from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
-
-
-class StixValidationException(Exception):
-    pass
-
-class TranslationResultException(Exception):
-    def __str__(self):
-        return "Error when converting results to STIX"
 
 
 class StixTranslation:
@@ -48,18 +40,18 @@ class StixTranslation:
         if len(mod_dia) > 1:
             dialect = mod_dia[1]
 
-        if module not in TRANSLATION_MODULES:
-            raise NotImplementedError
-
-        translator_module = importlib.import_module(
-            "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
-
-        if dialect is not None:
-            interface = translator_module.Translator(dialect=dialect)
-        else:
-            interface = translator_module.Translator()
-
         try:
+            if module not in TRANSLATION_MODULES:
+                raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
+
+            translator_module = importlib.import_module(
+                "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
+
+            if dialect is not None:
+                interface = translator_module.Translator(dialect=dialect)
+            else:
+                interface = translator_module.Translator()
+
             if translate_type == QUERY:
                 errors = []
                 # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
