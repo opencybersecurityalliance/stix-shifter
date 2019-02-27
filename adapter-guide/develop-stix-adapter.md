@@ -2,7 +2,7 @@
 
 * [Introduction](stix-adapter-overview.md)
 * [Scenario](#scenario)
-* [Prerequisites](#prereqs)
+* [Prerequisites](#prerequisites)
 * [Steps](#steps)
 
 ## Scenario
@@ -22,7 +22,7 @@ By implementing a new adapter, *Developer A* allows *Product A* to fit into the 
 
 
 ## Prerequisites for *Developer A*
-{: #prereqs}
+{: #prerequisites}
 
 * Your development environment must use Python 3.6.
 * You must have access to the target data source. In the sample scenario, you must have access to Product A data source.
@@ -62,7 +62,7 @@ By implementing a new adapter, *Developer A* allows *Product A* to fit into the 
 1.	Go to `stix_shifter/stix_translation/src/modules/`.
 2.	Copy the `dummy` translation module folder. It is a template to help you get started quickly. It contains the necessary files that your translation module needs. You need to customize it based on your data source. 
 
-![](../images/translation-module-dummy-folder.png)
+![Translation module dummy folder](./images/translation-module-dummy-folder.png)
 
 3.	Rename your `dummy` translation module folder to match the name of your data source. For example, `abc`. 
 
@@ -92,7 +92,7 @@ By implementing a new adapter, *Developer A* allows *Product A* to fit into the 
 
     When STIX-shifter is used to translate to or from STIX, the data source name is passed in as an argument. This argument is used to determine which module and files to use. If the name of the translator doesn't match the name of the module, an error occurs when the new translation module is used.
 
-    ![](../images/dummy-translator.py.png)
+    ![dummy-translator.py file](./images/dummy-translator.py.png)
 
 #### Step 3. Edit the from_stix_map.json file
 {: #translation-3}
