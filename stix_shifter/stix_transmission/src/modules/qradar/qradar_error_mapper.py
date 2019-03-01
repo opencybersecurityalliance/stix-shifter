@@ -6,13 +6,13 @@ error_mapping = {
         1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,
         # The search cannot be created. The requested search ID that was provided in the query expression is already in use. 
         # Please use a unique search ID (or allow one to be generated).
-        1004: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value+1,
+        1004: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value,
         # A request parameter is not valid
         1005: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
         #The Ariel server might be temporarily unavailable or offline. Please try again later.
         1010: ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
         #An error occurred during the attempt
-        1020: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value+2,
+        1020: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value,
         #error in AQL
         2000: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
     }

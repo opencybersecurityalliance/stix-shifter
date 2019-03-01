@@ -107,7 +107,7 @@ class TestStixToAql(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert result['error'].startswith('Unable to map property')
+        assert 'Unable to map property' in result['error']
 
 
     def test_user_account_query(self):
