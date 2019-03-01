@@ -1,13 +1,12 @@
 # Introduction
 
-* [What is STIX?](#stix)
-* [What is STIX-SHIFTER?](#stix-shifter)
-* [What is a STIX-SHIFTER adapter?](#stix-shifter-adapter)
+* [What is STIX?](#what-is-stix)
+* [What is STIX-SHIFTER?](#what-is-stix-shifter)
+* [What is a STIX-SHIFTER adapter?](#what-is-a-stix-shifter-adapter)
 * [Glossary](#glossary)
-* [Architecture Context](#architecture)
+* [Architecture Context](#architecture-context)
 
 ## What is STIX?
-{: #stix}
 
 Structured Threat Information eXpression (STIX™) is a language and serialization format that organizations can use to exchange cyber threat intelligence (CTI). CTI is represented with objects and descriptive relationships and stored as JSON for machine readability. 
 
@@ -17,7 +16,6 @@ To learn more about STIX, see the following references:
 * [STIX and TAXII](https://docs.google.com/document/d/1yvqWaPPnPW-2NiVCLqzRszcx91ffMowfT5MmE9Nsy_w/edit?usp=sharing)
 
 ## What is STIX-SHIFTER?
-{: #stix-shifter}
 
 STIX-shifter is an open source python library that you can access from https://github.com/IBM/stix-shifter.
 
@@ -120,7 +118,6 @@ The module uses the data source APIs to:
 
 
 ## What is a STIX-SHIFTER adapter?
-{: #stix-shifter-adapter}
 
 A STIX-shifter adapter is the bridge that connects IBM Security Connect to a data source. Developing a new adapter expands on the data sources that STIX-shifter can support.
 
@@ -129,7 +126,6 @@ The combination of translation and transmission functions allows for a single ST
 The objective is to have all the security data, regardless of the data source to look and behave the same. 
 
 ## Glossary
-{: #glossary}
 
 |Terms	                    | Definition 
 |-------------------------- | -----------------------------
@@ -141,6 +137,5 @@ The objective is to have all the security data, regardless of the data source to
 |Data source query results	| Data returned from a data source query.
 
 ## Architecture Context
-{: #architecture}
 
 ![STIX SHIFTER CLASS DIAGRAM](./images/architecture.png)
