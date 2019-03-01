@@ -14,6 +14,8 @@
 
 This project consists of an open source library allowing software to connect to products that house data repositories using STIX Patterning, and return results as STIX Observations.
 
+STIX-Shifter is the heart of the **Universal Data Service** that is provided as part of [IBM Security Connect](https://www.ibm.com/security/connect/).
+
 Requires Python 3.6
 
 ## It is a who that does what now? What is STIX Patterning? What are STIX Observations?
