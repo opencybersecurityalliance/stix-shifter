@@ -238,7 +238,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'error' in results_response
         assert results_response['error'] == mocked_return_value
         assert 'code' in results_response
-        assert  results_response['code'] == 620
+        assert  results_response['code'] == 'authentication_fail'
 
     def test_binary_bad_parameter_search_response(self, mock_requests_response):
         mocked_return_value = "Unhandled exception. Check logs for details."
@@ -255,7 +255,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'error' in results_response
         assert  results_response['error'] == mocked_return_value
         assert 'code' in results_response
-        assert  results_response['code'] == 500  # we may be able to return a better error code
+        assert  results_response['code'] == 'unknown'  # we may be able to return a better error code
 
     def test_query_syntax_error_response(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
@@ -272,7 +272,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'error' in results_response
         assert  results_response['error'] == "query_syntax_error"
         assert 'code' in results_response
-        assert  results_response['code'] == 800
+        assert  results_response['code'] == 'invalid_query'
 
     def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'

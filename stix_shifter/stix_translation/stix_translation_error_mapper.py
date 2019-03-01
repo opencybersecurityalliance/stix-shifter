@@ -4,13 +4,13 @@ from .src.exceptions import DataMappingException, StixValidationException, Unsup
 from .src.patterns.errors import SearchFeatureNotSupportedError
 
 error_mapping = {
-    NotImplementedError.__name__: ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE,
-    DataMappingException.__name__: ErrorCode.TRANSLATION_MAPPING_ERROR,
-    StixValidationException.__name__: ErrorCode.TRANSLATION_STIX_VALIDATION,
-    SearchFeatureNotSupportedError.__name__: ErrorCode.TRANSLATION_NOTSUPPORTED,
-    TranslationResultException.__name__: ErrorCode.TRANSLATION_RESULT,
-    UnsupportedDataSourceException.__name__: ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE
-}
+    NotImplementedError.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'wrong parameter'],
+    DataMappingException.__name__: [ErrorCode.TRANSLATION_MAPPING_ERROR, 'data mapping error'],
+    StixValidationException.__name__: [ErrorCode.TRANSLATION_STIX_VALIDATION, 'stix validation error'],
+    SearchFeatureNotSupportedError.__name__: [ErrorCode.TRANSLATION_NOTSUPPORTED, 'search feature is not supported'],
+    TranslationResultException.__name__: [ErrorCode.TRANSLATION_RESULT, 'result translation error'],
+    UnsupportedDataSourceException.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'unsupported datasource']
+    }
 
 
 class ErrorMapper():
@@ -30,7 +30,12 @@ class ErrorMapper():
             exception_type = type(exception).__name__
             print("received exception => {}: {}".format(exception_type, exception))
             if exception_type in error_mapping:
-                error_code = error_mapping[exception_type]
-                error_message = str(exception)
+                error_code = error_mapping[exception_type][0]
+                error_message = error_mapping[exception_type][1]
+                exception_message = str(exception)
+                if (len(exception_message) > 0):
+                    if len(error_message) > 0:
+                        error_message += ' : '
+                    error_message +=  exception_message
 
         ErrorMapperBase.set_error_code(return_obj, error_code, message=error_message)

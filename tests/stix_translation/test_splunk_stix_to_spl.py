@@ -100,7 +100,7 @@ class TestStixToSpl(unittest.TestCase, object):
         result = translation.translate('splunk', 'query', '{}', stix_pattern)
         assert False == result['success']
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert result['error'].startswith('Unable to map property')
+        assert result['error'].startswith('data mapping error : Unable to map property')
         
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
