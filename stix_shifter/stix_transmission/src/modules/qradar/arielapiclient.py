@@ -36,13 +36,13 @@ class APIClient():
                 headers['proxy-authorization'] = 'Basic ' + proxy_auth
             if proxy.get('x_forward_proxy', None) is not None:
                 headers['x-forward-url'] = 'https://' + \
-                    host_port + '/'# + endpoint, is set by 'add_endpoint_to_url_header'
+                    host_port + '/'  # + endpoint, is set by 'add_endpoint_to_url_header'
                 host_port = proxy.get('x_forward_proxy')
                 if proxy.get('x_forward_proxy_auth', None) is not None:
                     headers['x-forward-auth'] = proxy.get('x_forward_proxy_auth')
                 headers['user-agent'] = 'UDS'
                 url_modifier_function = self.add_endpoint_to_url_header
-        
+
         self.client = RestApiClient(host_port,
                                     None,
                                     connection.get('cert', None),
@@ -50,7 +50,7 @@ class APIClient():
                                     url_modifier_function,
                                     connection.get('cert_verify', 'True')
                                     )
-        
+
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
         # it concatenates the endpoint to the header containing the url.
@@ -59,35 +59,35 @@ class APIClient():
         return url
 
     def ping_box(self):
-        # Sends a GET request 
+        # Sends a GET request
         # to https://<server_ip>/api/help/resources
         endpoint = 'api/help/resources'  # no 'ariel' in the path
         return self.client.call_api(endpoint, 'GET')
 
     def get_databases(self):
-        # Sends a GET request 
+        # Sends a GET request
         # to  https://<server_ip>/api/ariel/databases
         endpoint = self.endpoint_start + 'databases'
         return self.client.call_api(endpoint, 'GET')
 
     def get_database(self, database_name):
-        # Sends a GET request 
+        # Sends a GET request
         # to https://<server_ip>/api/ariel/databases/<database_name>
         endpoint = self.endpoint_start + 'databases' + '/' + database_name
         return self.client.call_api(endpoint, 'GET')
 
     def get_searches(self):
-        # Sends a GET request 
+        # Sends a GET request
         # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
         return self.client.call_api(endpoint, 'GET')
 
     def create_search(self, query_expression):
-        # Sends a POST request 
+        # Sends a POST request
         # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
         data = {'query_expression': query_expression}
-        return self.client.call_api(endpoint, 'POST', urldata=data)
+        return self.client.call_api(endpoint, 'POST', data=data)
 
     def get_search(self, search_id):
         # Sends a GET request to
