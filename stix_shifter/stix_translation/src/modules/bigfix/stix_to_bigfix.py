@@ -26,9 +26,11 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Relevance language")
 
         query_object = generate_query(data)
-        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
-        timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
+        if 'result_limit' not in options:
+            options['result_limit'] = DEFAULT_LIMIT
+        if 'timerange' not in options:
+            options['timerange'] = DEFAULT_TIMERANGE
         query_string = bigfix_query_constructor.translate_pattern(
-            query_object, result_limit, timerange)
+            query_object, options)
 
         return query_string

@@ -12,6 +12,7 @@ from stix_shifter.stix_translation.src.modules.car.car_data_mapping import CarDa
 from . import encoders
 from . import object_scopers
 
+
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
 
@@ -27,8 +28,7 @@ class SplunkSearchTranslator:
                                          "| head 1 | return $_time] | where {expr1}"
     }
 
-
-    def __init__(self, pattern:Pattern, data_model_mapper, result_limit, timerange, object_scoper = object_scopers.default_object_scoper):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, timerange, object_scoper=object_scopers.default_object_scoper):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
@@ -57,40 +57,39 @@ class SplunkSearchTranslator:
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
-                
+
                 stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
                 splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest     = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
+                    earliest = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
                     earliest_obj = datetime.strptime(earliest, stix_date_format)
-                    earliest_dt  = earliest_obj.strftime(splunk_date_format)
-                
+                    earliest_dt = earliest_obj.strftime(splunk_date_format)
+
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest     = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
+                    latest = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
                     latest_obj = datetime.strptime(latest, stix_date_format)
-                    latest_dt  = latest_obj.strftime(splunk_date_format)
+                    latest_dt = latest_obj.strftime(splunk_date_format)
 
-                # prepare splunk SPL query 
+                # prepare splunk SPL query
                 if earliest and latest:
-                    return '{query_string} earliest="{earliest}" latest="{latest}"'.format(query_string=translated_query_str, 
-                                                                                     earliest=earliest_dt,
-                                                                                     latest=latest_dt)
+                    return '{query_string} earliest="{earliest}" latest="{latest}"'.format(query_string=translated_query_str,
+                                                                                           earliest=earliest_dt,
+                                                                                           latest=latest_dt)
                 elif earliest:
-                    return '{query_string} earliest="{earliest}"'.format(query_string=translated_query_str, 
-                                                                                     earliest=earliest_dt)
+                    return '{query_string} earliest="{earliest}"'.format(query_string=translated_query_str,
+                                                                         earliest=earliest_dt)
                 elif latest:
-                     return '{query_string} latest="{latest}"'.format(query_string=translated_query_str, 
-                                                                                     latest=latest_dt)
+                    return '{query_string} latest="{latest}"'.format(query_string=translated_query_str,
+                                                                     latest=latest_dt)
                 else:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
                 # Setting timerange value if START and STOP qualifiers are absent.
                 return '{query_string}'.format(query_string=translated_query_str)
-
 
         elif isinstance(expression, CombinedObservationExpression):
             combined_expr_format_string = self.implemented_operators[expression.operator]
@@ -98,7 +97,7 @@ class SplunkSearchTranslator:
                 self._pattern_prefix = "|eval "
             return combined_expr_format_string.format(expr1=self.translate(expression.expr1),
                                                       expr2=self.translate(expression.expr2))
-        
+
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 expr_format_string = self.implemented_operators[expression.observation_expression.operator]
@@ -106,7 +105,7 @@ class SplunkSearchTranslator:
                 return expr_format_string.format(expr1=self.translate(expression.observation_expression.expr1),
                                                  expr2=self.translate(expression.observation_expression.expr2, expression.qualifier))
             else:
-               return self.translate(expression.observation_expression, expression.qualifier)
+                return self.translate(expression.observation_expression, expression.qualifier)
         else:
             raise NotImplementedError("Comparison type not implemented")
 
@@ -128,7 +127,7 @@ class _ObservationExpressionTranslator:
         ComparisonComparators.IsSubSet: "="
     }
 
-    def __init__(self, expression:ObservationExpression, dmm, object_scoper):
+    def __init__(self, expression: ObservationExpression, dmm, object_scoper):
         # Expression that we're converting
         self.expression = expression
         self.dmm = dmm
@@ -162,7 +161,7 @@ class _ObservationExpressionTranslator:
                     # More than one SPL field maps to the STIX attribute so group the ORs.
                     grouped_comparison_string = "(" + comparison_string + ")"
                     comparison_string = grouped_comparison_string
-                    
+
                 return comparison_string
             else:
                 return self._build_comparison(expression, object_scoping, field_mapping)
@@ -202,16 +201,20 @@ class _ObservationExpressionTranslator:
         else:
             return splunk_comparison
 
+
 def _test_for_earliest_latest(query_string) -> bool:
     pattern = r'(earliest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")|(latest="\d{2}/\d{2}/\d{4}:\d{2}:\d{2}:\d{2}")'
     match = re.search(pattern, query_string)
     return bool(match)
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search_key, timerange=None):
+
+def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options):
+    result_limit = options['result_limit']
+    timerange = options['timerange']
     # CAR + Splunk = we want to override the default object scoper, I guess?
     is_cim = False
     if isinstance(data_model_mapping, CarDataMapper):
-        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper = object_scopers.car_object_scoper)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper=object_scopers.car_object_scoper)
         is_cim = False
     else:
         is_cim = True
@@ -240,5 +243,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, search
     if is_cim:
         translated_query = search_key + " " + translated_query + " | fields {fields}".format(fields=fields)
 
-    #return "({} AND {})".format(object_scoping, splunk_comparison)
+    # return "({} AND {})".format(object_scoping, splunk_comparison)
     return translated_query
