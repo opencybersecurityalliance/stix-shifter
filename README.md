@@ -402,7 +402,7 @@ Please read our [guidelines for contributing](CONTRIBUTING.md).
 
 ## Guide for creating new adapters
 
-If you wish create a new adapter for STIX-shifter, the [developer guide](adapter-guide/develop-stix-adapter.md) will take you through the process.
+If you want to create a new adapter for STIX-shifter, see the [developer guide](adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
 
