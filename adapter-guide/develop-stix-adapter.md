@@ -1,6 +1,6 @@
 # Developing a new STIX-shifter adapter
 
-* [Introduction](stix-adapter-overview.md)
+* [Introduction](../README.md)
 * [Scenario](#scenario)
 * [Prerequisites](#prerequisites)
 * [Steps](#steps)
@@ -31,14 +31,12 @@ By implementing a new adapter, *Developer A* allows *Product A* to fit into the 
 
 ## Steps
 
-1. To develop a STIX-shifter adapter for a data source:
-    1. Fork the `IBM/stix-shifter` repository from https://github.com/IBM/stix-shifter to work on your own copy of the library.
-    1. [Create a Translation module](#create-a-translation-module). 
-    1. [Create a Transmission module](#create-a-transmission-module).
-    1. Create a pull request to merge your changes in the `IBM/stix-shifter` repository.
+To develop a STIX-shifter adapter for a data source:
 
-1. To use the newly developed STIX-shifter adapter:
-    * Follow the steps in the "How to use" section of the `stix-shifter/README.md` file, in https://github.com/IBM/stix-shifter.
+1. Fork the `IBM/stix-shifter` repository from https://github.com/IBM/stix-shifter to work on your own copy of the library.
+1. [Create a Translation module](#create-a-translation-module). 
+1. [Create a Transmission module](#create-a-transmission-module).
+1. Create a pull request to merge your changes in the `IBM/stix-shifter` repository.
 
 ### Create a Translation module
 
