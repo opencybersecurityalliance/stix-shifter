@@ -86,99 +86,101 @@ Python 3.6 is required to use stix-shifter.
 
 ##### INPUT: STIX 2 pattern
 
-    ```
-    # STIX Pattern:
-    "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"
-
-    ```
+```
+# STIX Pattern:
+"[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"
+```
 
 ##### OUTPUT: Native data source query
 
-    ```
-    # Translated Query:
-    "SELECT * FROM tableName WHERE (Url = 'http://www.testaddress.com')
-    OR
-    ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
-    ```
+```
+# Translated Query:
+"SELECT * FROM tableName WHERE (Url = 'http://www.testaddress.com')
+OR
+((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
+```
 
 #### Translate a JSON data source query result to a STIX bundle of observable objects
 
 ##### INPUT: JSON data source query result
 
-    ```
-    # Datasource results:
-    [
-        {
-            "SourcePort": 567,
-            "DestinationPort": 102,
-            "SourceIpV4": "192.168.122.84",
-            "DestinationIpV4": "127.0.0.1",
-            "Url": "www.testaddress.com"
-        }
-    ]
-    ```
+```
+# Datasource results:
+[
+    {
+        "SourcePort": 567,
+        "DestinationPort": 102,
+        "SourceIpV4": "192.168.122.84",
+        "DestinationIpV4": "127.0.0.1",
+        "Url": "www.testaddress.com"
+    }
+]
+```
 
 ##### OUTPUT: STIX bundle of observable objects
 
-    ```
-    # STIX Observables
-    {
-        "type": "bundle",
-        "id": "bundle--2042a6e9-7f34-4a03-a745-502e358594c3",
-        "objects": [
-            {
-                "type": "identity",
-                "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
-                "name": "YourDataSource",
-                "identity_class": "events"
-            },
-            {
-                "id": "observed-data--cf2c58dc-200e-49e0-b6f7-e1997cccf707",
-                "type": "observed-data",
-                "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
-                "objects": {
-                    "0": {
-                        "type": "network-traffic",
-                        "src_port": 567,
-                        "dst_port": 102,
-                        "src_ref": "1",
-                        "dst_ref": "2"
-                    },
-                    "1": {
-                        "type": "ipv4-addr",
-                        "value": "192.168.122.84"
-                    },
-                    "2": {
-                        "type": "ipv4-addr",
-                        "value": "127.0.0.1"
-                    },
-                    "3": {
-                        "type": "url",
-                        "value": "www.testaddress.com"
-                    }
+```
+# STIX Observables
+{
+    "type": "bundle",
+    "id": "bundle--2042a6e9-7f34-4a03-a745-502e358594c3",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
+            "name": "YourDataSource",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--cf2c58dc-200e-49e0-b6f7-e1997cccf707",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
+            "objects": {
+                "0": {
+                    "type": "network-traffic",
+                    "src_port": 567,
+                    "dst_port": 102,
+                    "src_ref": "1",
+                    "dst_ref": "2"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "192.168.122.84"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1"
+                },
+                "3": {
+                    "type": "url",
+                    "value": "www.testaddress.com"
                 }
             }
-        ]
-    }
+        }
+    ]
+}
+```
 
-    ```
-
-#### Call the stix_translation by using this format
+#### CLI help message for translation
 
 ```
-usage: stix_translation.py translate [-h]
-                                 {'qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf'}
-                                 {results, query} data
+usage: main.py translate [-h] [-x] [-m DATA_MAPPER]
+                         {qradar,dummy,car,cim,splunk,elastic,bigfix,csa,csa:at,csa:nf,aws_security_hub,carbonblack}
+                         {results,query} data_source data [options]
 
 positional arguments:
-{qradar, dummy}                        What translation module to use
-{results, query}                       What translation action to perform
-data source                            A STIX identity object
-data                                   STIX pattern or data to be translated
+  {qradar,dummy,car,cim,splunk,elastic,bigfix,csa,csa:at,csa:nf,aws_security_hub,carbonblack}
+                        The translation module to use
+  {results,query}       The translation action to perform
+  data_source           STIX identity object representing a datasource
+  data                  The STIX pattern or JSON results to be translated
+  options               Options dictionary
 
 optional arguments:
   -h, --help            show this help message and exit
-  -x                    run STIX validation on each observable as it's written to the output JSON
+  -x, --stix-validator  Run the STIX 2 validator against the translated results
+  -m DATA_MAPPER, --data-mapper DATA_MAPPER
+                        optional module to use for Splunk or Elastic STIX-to-query mapping
 ```
 
 #### Translation is called with the following ordered parameters
@@ -187,18 +189,18 @@ optional arguments:
 <data source (ie. "qradar")> <"query" or "results"> <{} or STIX identity object> <STIX pattern or data source results> <options>
 ```
 
-**Data source:** This is the name of the module used for translation. Currently, stix-shifter supports QRadar, Splunk, and Elastic.
+**Data source:** This is the name of the module used for translation.
 
 **Query or Results:** This argument controls if stix-shifter is translating from a STIX pattern to the data source query, or it’s translating from the data source results to a STIX bundle of observation objects
 
-**STIX Identity object:** An Identity object is used by stix-shifter to represent a data source and is inserted at the top of a returned observation bundle. Each observation in the bundle gets referenced to this identity. This parameter is only needed when converting from the data source results to the STIX bundle. When converting from a pattern to a query, pass this in as an empty hash.
+**STIX Identity object:** An Identity object is used by stix-shifter to represent a data source and is inserted at the top of a returned observation bundle. Each observation in the bundle gets referenced to this identity. This parameter is only needed when converting from the data source results to the STIX bundle. When converting from a STIX pattern to a query, pass this in as an empty hash.
 
 **STIX Pattern or data source results:** The input getting translated by stix-shifter.
 
 **Options:** Options arguments come in as:
 
 - **"select_fields":** string array of fields in the data source select statement
-- **"mapping":** mapping hash for either stix pattern to data source or data results to STIX observation objects
+- **"mapping":** mapping hash for either STIX pattern to data source or data results to STIX observation objects
 - **"result_limit":** integer to limit number or results in the data source query
 - **"time_range":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
 
@@ -297,26 +299,32 @@ The module uses the data source APIs to:
 - Fetch query results
 - Delete the query (if supported by the APIs)
 
-#### Call the stix_transmission by using this format
+#### CLI help message for transmission
 
 ```
-usage: stix_transmission.py transmit [-h]
-                      {'async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa'}
+usage: main.py transmit [-h]
+                        {async_dummy,synchronous_dummy,qradar,splunk,bigfix,csa,aws_security_hub,carbonblack}
+                        connection configuration
+                        {ping,query,results,status,delete,is_async} ...
 
 positional arguments:
-{<async_dummy, synchronous_dummy, qradar, splunk, bigfix>}         Transmission module to use
-  {"host": <host IP>, "port": <port>, "cert": <certificate>} Data source connection
-  {"auth": <authentication>} Data source authentication
-  {
-    "type": <ping, query, results, is_async, status>,   Translation method to be used
-    "search_id": <uuid> (for results and status),
-    "query": <native datasource query string> (for query),
-    "offset": <offset> (for results),
-    "length": <length> (for results)
-  }
+  {async_dummy,synchronous_dummy,qradar,splunk,bigfix,csa,aws_security_hub,carbonblack}
+                        Choose which connection module to use
+  connection            Data source connection with host, port, and
+                        certificate
+  configuration         Data source authentication
 
 optional arguments:
   -h, --help            show this help message and exit
+
+operation:
+  {ping,query,results,status,delete,is_async}
+    ping                Pings the data source
+    query               Executes a query on the data source
+    results             Fetches the results of the data source query
+    status              Gets the current status of the query
+    delete              Delete a running query on the data source
+    is_async            Checks if the query operation is asynchronous
 ```
 
 #### Transmission is called with the following ordered parameters
@@ -325,7 +333,7 @@ optional arguments:
 <Data Source (ie. "qradar")> <Connection Params: '{"host":"host ip address", "port":"port number", "cert":"certificate"}'> <'{"auth": {authentication}}'> <Transmission Operation: ping, query, status, results or is_async> <Operation input>
 ```
 
-**Data source:** This is the name of the module used for transmission. Currently, stix-shifter supports QRadar, Splunk, and Bigfix.
+**Data source:** This is the name of the module used for transmission.
 
 **Connection Parameters:** Data source IP, port, and certificate
 
@@ -335,11 +343,11 @@ optional arguments:
 
 - **Ping:** ping the data source
 - **Query:** Execute a query on the data source. The input is the native data source query (after it has been translated from the STIX pattern).
-- **Status:** Check the status of the executed query. The input is the query UUID.
+- **Status:** Check the status of the executed query on an asynchronous data source. The input is the query UUID.
 - **Results:** Fetch the results from the query. The input is the query UUID, offset, and length
-- **Is Async**
+- **Is Async** Returns a boolean indicating if the data source is asynchronous
 
-#### Examples of using transmission from the CLI
+#### Examples of using transmission from the CLI to connect to a (QRadar) data source.
 
 ##### Ping
 
@@ -347,7 +355,7 @@ optional arguments:
 python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec uid..5678"}}' ping
 ```
 
-##### Query (AQL)
+##### Query
 
 ```
 python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' query "select * from events limit 100"
