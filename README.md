@@ -384,7 +384,7 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 
 ## Architecture Context
 
-![STIX SHIFTER CLASS DIAGRAM](./images/architecture.png)
+![STIX SHIFTER CLASS DIAGRAM](./adapter-guide/images/architecture.png)
 
 ## Contributing
 
