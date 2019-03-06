@@ -9,6 +9,7 @@ TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 
+
 def __main__():
     """
     Stix-shifter can either be called to either translate or transmit.
@@ -46,20 +47,21 @@ def __main__():
 
     # positional arguments
     translate_parser.add_argument(
-        'module', choices=stix_translation.TRANSLATION_MODULES, help='what translation module to use')
+        'module', choices=stix_translation.TRANSLATION_MODULES, help='The translation module to use')
     translate_parser.add_argument('translate_type', choices=[
-        stix_translation.RESULTS, stix_translation.QUERY], help='what translation action to perform')
+        stix_translation.RESULTS, stix_translation.QUERY], help='The translation action to perform')
     translate_parser.add_argument(
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
-        'data', type=str, help='the data to be translated')
-    translate_parser.add_argument('options', nargs='?', help='options that can be passed in')
+        'data', type=str, help='The STIX pattern or JSON results to be translated')
+    translate_parser.add_argument('options', nargs='?', help='Options dictionary')
 
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
-                                  help='run stix2 validator against the converted results')
+                                  help='Run the STIX 2 validator against the translated results')
+    # Only supported by Elastic and Splunk
     translate_parser.add_argument('-m', '--data-mapper',
-                                  help='module to use for the data mapper')
+                                  help='optional module to use for Splunk or Elastic STIX-to-query mapping')
 
     # transmit parser
     transmit_parser = parent_subparsers.add_parser(
@@ -68,7 +70,7 @@ def __main__():
     # positional arguments
     transmit_parser.add_argument(
         'module', choices=stix_transmission.TRANSMISSION_MODULES,
-        help='choose which connection module to use'
+        help='Choose which connection module to use'
     )
     transmit_parser.add_argument(
         'connection',
@@ -135,7 +137,7 @@ def __main__():
 
     if args.command == EXECUTE:
 
-        #Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
+        # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query)
 
@@ -164,7 +166,7 @@ def __main__():
                     print(status)
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
-                    print("Search {} results is:\n{}".format(search_id,result["data"]))
+                    print("Search {} results is:\n{}".format(search_id, result["data"]))
 
                     # Collect all results
                     results += result["data"]
@@ -174,11 +176,10 @@ def __main__():
                 raise RuntimeError("Search failed to execute; see log for details")
 
         # Translate results to STIX
-        result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results) )
-        print( result )
+        result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results))
+        print(result)
 
         exit(0)
-
 
     elif args.command == TRANSLATE:
         options = json.loads(args.options) if bool(args.options) else {}
@@ -191,7 +192,7 @@ def __main__():
         result = translation.translate(
             args.module, args.translate_type, args.data_source, args.data, options=options)
     elif args.command == TRANSMIT:
-        result = transmit(args) # stix_transmission
+        result = transmit(args)  # stix_transmission
 
     print(result)
     exit(0)
