@@ -5,11 +5,14 @@ from stix_shifter.stix_translation.src.stix_pattern_parser import parse_stix
 import re
 from ..utils.error_response import ErrorResponder
 from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+import sys
 
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
+# Increase Python recursion limit so ANTLR doesn't choke an big patterns
+RECURSION_LIMIT = 2000
 
 
 class StixTranslation:
@@ -53,6 +56,8 @@ class StixTranslation:
                 interface = translator_module.Translator()
 
             if translate_type == QUERY:
+                # Increase the python recursion limit to allow ANTLR to parse large patterns
+                sys.setrecursionlimit(RECURSION_LIMIT)
                 errors = []
                 # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
                 start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
