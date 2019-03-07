@@ -11,6 +11,8 @@ import sys
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
 
 
 class StixTranslation:
@@ -61,6 +63,10 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
+                if 'result_limit' not in options:
+                    options['result_limit'] = DEFAULT_LIMIT
+                if 'timerange' not in options:
+                    options['timerange'] = DEFAULT_TIMERANGE
                 errors = []
                 # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
                 start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"

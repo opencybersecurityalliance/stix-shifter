@@ -6,6 +6,9 @@ from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
+
 protocols = {
     "tcp": "6",
     "udp": "17",
@@ -23,7 +26,7 @@ protocols = {
     "sctp": "132"
 }
 
-default_timerange_spl = '-' + str(stix_to_splunk.DEFAULT_TIMERANGE) + 'minutes'
+default_timerange_spl = '-' + str(DEFAULT_TIMERANGE) + 'minutes'
 
 translation = stix_translation.StixTranslation()
 
@@ -101,7 +104,7 @@ class TestStixToSpl(unittest.TestCase, object):
         assert False == result['success']
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert result['error'].startswith('data mapping error : Unable to map property')
-        
+
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
         result = translation.translate('splunk', 'query', '{}', stix_pattern)
@@ -116,7 +119,7 @@ class TestStixToSpl(unittest.TestCase, object):
                 key = key.upper()
             stix_pattern = "[network-traffic:protocols[*] = '" + key + "']"
             query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search (protocol = "'+key+'") earliest="{}" | head {} | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'.format(default_timerange_spl, stix_to_splunk.DEFAULT_LIMIT)
+        queries = 'search (protocol = "'+key+'") earliest="{}" | head {} | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'.format(default_timerange_spl, DEFAULT_LIMIT)
         parsed_stix = [{'attribute': 'network-traffic:protocols[*]', 'comparison_operator': '=', 'value': key}]
         assert query == {'queries': queries, 'parsed_stix': parsed_stix}
 

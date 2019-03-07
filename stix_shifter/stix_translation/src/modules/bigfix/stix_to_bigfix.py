@@ -6,9 +6,6 @@ from . import bigfix_query_constructor
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
-
 
 class StixToRelevanceQuery(BaseQueryTranslator):
 
@@ -26,10 +23,6 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Relevance language")
 
         query_object = generate_query(data)
-        if 'result_limit' not in options:
-            options['result_limit'] = DEFAULT_LIMIT
-        if 'timerange' not in options:
-            options['timerange'] = DEFAULT_TIMERANGE
         query_string = bigfix_query_constructor.translate_pattern(
             query_object, options)
 

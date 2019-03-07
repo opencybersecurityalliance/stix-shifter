@@ -7,9 +7,6 @@ from . import aql_query_constructor
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
-
 
 class StixToAQL(BaseQueryTranslator):
 
@@ -28,10 +25,6 @@ class StixToAQL(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_model_mapper = qradar_data_mapping.QRadarDataMapper(options)
-        if 'result_limit' not in options:
-            options['result_limit'] = DEFAULT_LIMIT
-        if 'timerange' not in options:
-            options['timerange'] = DEFAULT_TIMERANGE
         query_string = aql_query_constructor.translate_pattern(
             query_object, data_model_mapper, options)
         return query_string
