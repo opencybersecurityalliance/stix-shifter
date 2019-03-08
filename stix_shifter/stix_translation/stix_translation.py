@@ -12,7 +12,7 @@ TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bi
 RESULTS = 'results'
 QUERY = 'query'
 # Increase Python recursion limit so ANTLR doesn't choke an big patterns
-RECURSION_LIMIT = 2000
+RECURSION_LIMIT = 10000
 
 
 class StixTranslation:
