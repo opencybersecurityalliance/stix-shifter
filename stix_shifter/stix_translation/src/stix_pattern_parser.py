@@ -1,6 +1,7 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+import datetime
 
 
 class PatternTranslator:
@@ -24,43 +25,41 @@ class PatternTranslator:
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 
-    def __init__(self, pattern: Pattern):
-        self.pattern = pattern
+    def __init__(self, pattern: Pattern, timerange):
         self.parsed_pattern = []
-        self.translated = self.parse_expression(pattern)
-        self.queries = [self.translated]
+        # Set times based on default timerange or what is in the options
+        # START STOP will override this
+        self.end_time = datetime.datetime.utcnow()
+        go_back_in_minutes = datetime.timedelta(minutes=timerange)
+        self.start_time = self.end_time - go_back_in_minutes
+        self.parse_expression(pattern)
 
-    def _parse_expression(self, expression) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             comparator = self.comparator_lookup[expression.comparator]
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})
-            return ""
-
+            # todo: if qualifier is not None then update start and end times.
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
-                                             self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr2))
+            # todo: if qualifier is not None then update start and end times.
+            self._parse_expression(expression.expr1)
+            self._parse_expression(expression.expr2)
 
-            return "{query_string}".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression)
-        elif hasattr(expression, 'observation_expression'):
+            self._parse_expression(expression.comparison_expression, qualifier)
+
+        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2))
+                self._parse_expression(expression.observation_expression.expr1)
+                self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression)
+                self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
-            return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
-                                                       operator=operator,
-                                                       expr2=self._parse_expression(expression.expr2))
+            self._parse_expression(expression.expr1)
+            self._parse_expression(expression.expr2)
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            self._parse_expression(expression.expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
@@ -69,6 +68,6 @@ class PatternTranslator:
         return self._parse_expression(pattern)
 
 
-def parse_stix(pattern: Pattern):
-    x = PatternTranslator(pattern)
-    return x.parsed_pattern
+def parse_stix(pattern: Pattern, timerange):
+    x = PatternTranslator(pattern, timerange)
+    return {'parsed_stix': x.parsed_pattern, 'start_time': x.start_time, 'end_time': x.end_time}

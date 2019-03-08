@@ -80,7 +80,8 @@ class StixTranslation:
                     # Translating STIX pattern to antlr query object
                     query_object = generate_query(data)
                     # Converting query object to datasource query
-                    parsed_stix = parse_stix(query_object)
+                    parsed_stix_dictionary = parse_stix(query_object, options['timerange'])
+                    parsed_stix = parsed_stix_dictionary['parsed_stix']
                     # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
                     # Converting STIX pattern to datasource query
                     queries = interface.transform_query(data, options)
