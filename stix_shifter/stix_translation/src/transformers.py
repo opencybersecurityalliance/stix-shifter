@@ -158,8 +158,19 @@ class ToIPv4(ValueTransformer):
             print("Cannot convert input to IPv4 string")
 
 
+class DateTimeToUnixTimestamp(ValueTransformer):
+    """A value transformer for converting python datetime object to Unix (millisecond) timestamp"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return int((obj - datetime(1970, 1, 1)).total_seconds() * 1000)
+        except ValueError:
+            print("Cannot convert input to Unix timestamp")
+
+
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
-            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4 }
+            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp}

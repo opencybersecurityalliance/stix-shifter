@@ -2,6 +2,8 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 import datetime
+from stix_shifter.stix_translation.src.transformers import DateTimeToUnixTimestamp
+import re
 
 
 class PatternTranslator:
@@ -28,10 +30,13 @@ class PatternTranslator:
     def __init__(self, pattern: Pattern, timerange):
         self.parsed_pattern = []
         # Set times based on default timerange or what is in the options
-        # START STOP will override this
-        self.end_time = datetime.datetime.utcnow()
+        # START STOP qualifiers will override this
+        end_time = datetime.datetime.utcnow()
+        self.end_time = DateTimeToUnixTimestamp.transform(end_time)
         go_back_in_minutes = datetime.timedelta(minutes=timerange)
-        self.start_time = self.end_time - go_back_in_minutes
+        start_time = end_time - go_back_in_minutes
+        self.start_time = DateTimeToUnixTimestamp.transform(start_time)
+        self.qualifier_timerange_override = False
         self.parse_expression(pattern)
 
     def _parse_expression(self, expression, qualifier=None) -> str:
@@ -39,10 +44,12 @@ class PatternTranslator:
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             comparator = self.comparator_lookup[expression.comparator]
+            if qualifier is not None:
+                self._convert_qualifier_times_to_unix_times(qualifier)
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})
-            # todo: if qualifier is not None then update start and end times.
         elif isinstance(expression, CombinedComparisonExpression):
-            # todo: if qualifier is not None then update start and end times.
+            if qualifier is not None:
+                self._convert_qualifier_times_to_unix_times(qualifier)
             self._parse_expression(expression.expr1)
             self._parse_expression(expression.expr2)
 
@@ -63,6 +70,27 @@ class PatternTranslator:
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def _convert_qualifier_times_to_unix_times(self, qualifier):
+        split_object = qualifier.split("'")
+        start_time = split_object[1]
+        end_time = split_object[3]
+        # Add subseconds to timestamp if it's missing
+        pattern = "\.\d+Z$"
+        if not bool(re.search(pattern, start_time)):
+            start_time = re.sub('Z$', '.000Z', start_time)
+        if not bool(re.search(pattern, end_time)):
+            end_time = re.sub('Z$', '.000Z', end_time)
+        # convert from string format '2019-01-18T08:30:16.227Z'
+        start_time = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        end_time = datetime.datetime.strptime(end_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        start_time = DateTimeToUnixTimestamp.transform(start_time)
+        end_time = DateTimeToUnixTimestamp.transform(end_time)
+        if not self.qualifier_timerange_override or self.start_time > start_time:
+            self.start_time = start_time
+        if not self.qualifier_timerange_override or self.end_time < end_time:
+            self.end_time = end_time
+        self.qualifier_timerange_override = True
 
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)

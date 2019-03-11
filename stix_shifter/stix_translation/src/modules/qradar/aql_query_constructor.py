@@ -254,14 +254,10 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d{3}Z$"
-    match = re.search(pattern, timestamp)
-    if bool(match):
-        return timestamp
-    else:
-        pattern = "(\.\d+Z$)|(Z$)"
-        timestamp = re.sub(pattern, ".000Z", timestamp)
-        return timestamp
+    pattern = "\.\d+Z$"
+    if not bool(re.search(pattern, timestamp)):
+        timestamp = re.sub('Z$', '.000Z', timestamp)
+    return timestamp
 
 
 def _test_START_STOP_format(query_string) -> bool:

@@ -82,10 +82,12 @@ class StixTranslation:
                     # Converting query object to datasource query
                     parsed_stix_dictionary = parse_stix(query_object, options['timerange'])
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
+                    start_time = parsed_stix_dictionary['start_time']
+                    end_time = parsed_stix_dictionary['end_time']
                     # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
                     # Converting STIX pattern to datasource query
                     queries = interface.transform_query(data, options)
-                    return {'queries': queries, 'parsed_stix': parsed_stix}
+                    return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 try:
