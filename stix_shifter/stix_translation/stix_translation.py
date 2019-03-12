@@ -11,7 +11,6 @@ import sys
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
-# Increase Python recursion limit so ANTLR doesn't choke an big patterns
 
 
 class StixTranslation:
