@@ -55,6 +55,7 @@ def __main__():
     translate_parser.add_argument(
         'data', type=str, help='The STIX pattern or JSON results to be translated')
     translate_parser.add_argument('options', nargs='?', help='Options dictionary')
+    translate_parser.add_argument('recursion_limit', type=int, help='Maximum depth of Python interpreter stack')
 
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
@@ -187,10 +188,10 @@ def __main__():
             options['stix_validator'] = args.stix_validator
         if args.data_mapper:
             options['data_mapper'] = args.data_mapper
-
+        recursion_limit = args.recursion_limit if args.recursion_limit else 1000
         translation = stix_translation.StixTranslation()
         result = translation.translate(
-            args.module, args.translate_type, args.data_source, args.data, options=options)
+            args.module, args.translate_type, args.data_source, args.data, options=options, recursion_limit=recursion_limit)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
