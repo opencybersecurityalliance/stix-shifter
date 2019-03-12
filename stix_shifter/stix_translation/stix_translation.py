@@ -5,6 +5,7 @@ from stix_shifter.stix_translation.src.stix_pattern_parser import parse_stix
 import re
 from ..utils.error_response import ErrorResponder
 from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+import sys
 
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
@@ -20,7 +21,7 @@ class StixTranslation:
     def __init__(self):
         self.args = []
 
-    def translate(self, module, translate_type, data_source, data, options={}):
+    def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
         Translated queries to a specified format
         :param module: What module to use
@@ -31,6 +32,8 @@ class StixTranslation:
         :type data: str
         :param options: translation options { stix_validator: bool }
         :type options: dict
+        :param recursion_limit: maximum depth of Python interpreter stack
+        :type recursion_limit: int
         :return: translated results
         :rtype: str
         """
@@ -53,6 +56,11 @@ class StixTranslation:
                 interface = translator_module.Translator()
 
             if translate_type == QUERY:
+                # Increase the python recursion limit to allow ANTLR to parse large patterns
+                current_recursion_limit = sys.getrecursionlimit()
+                if current_recursion_limit < recursion_limit:
+                    print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
+                    sys.setrecursionlimit(recursion_limit)
                 errors = []
                 # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
                 start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
