@@ -1,6 +1,9 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+import datetime
+from stix_shifter.stix_translation.src.transformers import DateTimeToUnixTimestamp
+import re
 
 
 class PatternTranslator:
@@ -24,51 +27,75 @@ class PatternTranslator:
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 
-    def __init__(self, pattern: Pattern):
-        self.pattern = pattern
+    def __init__(self, pattern: Pattern, timerange):
         self.parsed_pattern = []
-        self.translated = self.parse_expression(pattern)
-        self.queries = [self.translated]
+        # Set times based on default timerange or what is in the options
+        # START STOP qualifiers will override this
+        end_time = datetime.datetime.utcnow()
+        self.end_time = DateTimeToUnixTimestamp.transform(end_time)
+        go_back_in_minutes = datetime.timedelta(minutes=timerange)
+        start_time = end_time - go_back_in_minutes
+        self.start_time = DateTimeToUnixTimestamp.transform(start_time)
+        self.qualifier_timerange_override = False
+        self.parse_expression(pattern)
 
-    def _parse_expression(self, expression) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             comparator = self.comparator_lookup[expression.comparator]
+            if qualifier is not None:
+                self._convert_qualifier_times_to_unix_times(qualifier)
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})
-            return ""
-
         elif isinstance(expression, CombinedComparisonExpression):
-            query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
-                                             self.comparator_lookup[expression.operator],
-                                             self._parse_expression(expression.expr2))
+            if qualifier is not None:
+                self._convert_qualifier_times_to_unix_times(qualifier)
+            self._parse_expression(expression.expr1)
+            self._parse_expression(expression.expr2)
 
-            return "{query_string}".format(query_string=query_string)
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression)
-        elif hasattr(expression, 'observation_expression'):
+            self._parse_expression(expression.comparison_expression, qualifier)
+
+        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2))
+                self._parse_expression(expression.observation_expression.expr1)
+                self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression)
+                self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
-            return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
-                                                       operator=operator,
-                                                       expr2=self._parse_expression(expression.expr2))
+            self._parse_expression(expression.expr1)
+            self._parse_expression(expression.expr2)
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            self._parse_expression(expression.expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def _convert_qualifier_times_to_unix_times(self, qualifier):
+        split_object = qualifier.split("'")
+        start_time = split_object[1]
+        end_time = split_object[3]
+        # Add subseconds to timestamp if it's missing
+        pattern = "\.\d+Z$"
+        if not bool(re.search(pattern, start_time)):
+            start_time = re.sub('Z$', '.000Z', start_time)
+        if not bool(re.search(pattern, end_time)):
+            end_time = re.sub('Z$', '.000Z', end_time)
+        # convert from string format '2019-01-18T08:30:16.227Z'
+        start_time = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        end_time = datetime.datetime.strptime(end_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        start_time = DateTimeToUnixTimestamp.transform(start_time)
+        end_time = DateTimeToUnixTimestamp.transform(end_time)
+        if not self.qualifier_timerange_override or self.start_time > start_time:
+            self.start_time = start_time
+        if not self.qualifier_timerange_override or self.end_time < end_time:
+            self.end_time = end_time
+        self.qualifier_timerange_override = True
 
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
 
 
-def parse_stix(pattern: Pattern):
-    x = PatternTranslator(pattern)
-    return x.parsed_pattern
+def parse_stix(pattern: Pattern, timerange):
+    x = PatternTranslator(pattern, timerange)
+    return {'parsed_stix': x.parsed_pattern, 'start_time': x.start_time, 'end_time': x.end_time}

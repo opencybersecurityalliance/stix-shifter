@@ -11,6 +11,8 @@ import sys
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack']
 RESULTS = 'results'
 QUERY = 'query'
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
 
 
 class StixTranslation:
@@ -61,6 +63,10 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
+                if 'result_limit' not in options:
+                    options['result_limit'] = DEFAULT_LIMIT
+                if 'timerange' not in options:
+                    options['timerange'] = DEFAULT_TIMERANGE
                 errors = []
                 # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
                 start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
@@ -74,11 +80,14 @@ class StixTranslation:
                     # Translating STIX pattern to antlr query object
                     query_object = generate_query(data)
                     # Converting query object to datasource query
-                    parsed_stix = parse_stix(query_object)
+                    parsed_stix_dictionary = parse_stix(query_object, options['timerange'])
+                    parsed_stix = parsed_stix_dictionary['parsed_stix']
+                    start_time = parsed_stix_dictionary['start_time']
+                    end_time = parsed_stix_dictionary['end_time']
                     # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
                     # Converting STIX pattern to datasource query
                     queries = interface.transform_query(data, options)
-                    return {'queries': queries, 'parsed_stix': parsed_stix}
+                    return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 try:

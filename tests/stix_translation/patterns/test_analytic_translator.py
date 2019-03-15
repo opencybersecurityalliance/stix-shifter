@@ -7,7 +7,11 @@ from os import listdir, path
 
 logging.basicConfig(level=logging.DEBUG)
 
-default_timerange_spl = '-' + str(stix_to_splunk.DEFAULT_TIMERANGE) + 'minutes'
+DEFAULT_LIMIT = 10000
+DEFAULT_TIMERANGE = 5
+
+default_timerange_spl = '-' + str(DEFAULT_TIMERANGE) + 'minutes'
+
 
 class TestAnalyticTranslator(unittest.TestCase):
     """ Integration tests for the full pattern conversion process"""

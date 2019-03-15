@@ -9,8 +9,6 @@ import re
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
 REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "sourcemac": ["mac"],
                         "destinationip": ["ipv4", "ipv6", "ipv4_cidr"],
@@ -256,14 +254,10 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d{3}Z$"
-    match = re.search(pattern, timestamp)
-    if bool(match):
-        return timestamp
-    else:
-        pattern = "(\.\d+Z$)|(Z$)"
-        timestamp = re.sub(pattern, ".000Z", timestamp)
-        return timestamp
+    pattern = "\.\d+Z$"
+    if not bool(re.search(pattern, timestamp)):
+        timestamp = re.sub('Z$', '.000Z', timestamp)
+    return timestamp
 
 
 def _test_START_STOP_format(query_string) -> bool:
@@ -317,8 +311,8 @@ def _format_translated_queries(query_array):
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
-    timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
+    result_limit = options['result_limit']
+    timerange = options['timerange']
     translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []

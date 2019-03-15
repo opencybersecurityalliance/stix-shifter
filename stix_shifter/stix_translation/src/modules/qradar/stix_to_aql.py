@@ -7,9 +7,6 @@ from . import aql_query_constructor
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
-
 
 class StixToAQL(BaseQueryTranslator):
 

@@ -24,7 +24,7 @@ class CbQueryStringPatternTranslator:
         ComparisonComparators.LessThanOrEqual: ":",
 
         ObservationOperators.Or: 'or',
-        ObservationOperators.And: 'or', # This is technically wrong. It should be converted to two separate queries, but
+        ObservationOperators.And: 'or',  # This is technically wrong. It should be converted to two separate queries, but
         # current behavior of existing modules treat operator as an OR.
         # observation operator AND - both sides MUST evaluate to true on different observations to be true
     }
@@ -81,7 +81,7 @@ class CbQueryStringPatternTranslator:
             stripped = stripped.split('.', 1)[0]
         return stripped
 
-    def _format_start_stop_qualifier(self, expression, dialect, qualifier : StartStopQualifier) -> str:
+    def _format_start_stop_qualifier(self, expression, dialect, qualifier: StartStopQualifier) -> str:
         start = self._to_cb_timestamp(qualifier.start)
         stop = self._to_cb_timestamp(qualifier.stop)
 
@@ -101,19 +101,19 @@ class CbQueryStringPatternTranslator:
             pass
         elif len(process_queries) == 1:
             process_query = process_queries[0]
-            results.append({"query": process_query, "dialect":"process"})
+            results.append({"query": process_query, "dialect": "process"})
         else:
             process_query = "({})".format(") or (".join(process_queries))
-            results.append({"query": process_query, "dialect":"process"})
+            results.append({"query": process_query, "dialect": "process"})
 
         if len(binary_queries) == 0:
             pass
         elif len(binary_queries) == 1:
             binary_query = binary_queries[0]
-            results.append({"query": binary_query, "dialect":"binary"})
+            results.append({"query": binary_query, "dialect": "binary"})
         else:
             binary_query = "({})".format(") or (".join(binary_queries))
-            results.append({"query": binary_query, "dialect":"binary"})
+            results.append({"query": binary_query, "dialect": "binary"})
 
         return results
 
@@ -159,7 +159,6 @@ class CbQueryStringPatternTranslator:
         else:
             print(type(expression), expression)
             assert False
-
 
     # the return type of this function is a string for expressions types up to CombinedComparionExpression
     # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
@@ -247,6 +246,8 @@ class CbQueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, result_limit, timerange=None):
+def translate_pattern(pattern: Pattern, data_model_mapping, options):
+    result_limit = options['result_limit']
+    # timerange = options['timerange']
     translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     return translated_statements.queries

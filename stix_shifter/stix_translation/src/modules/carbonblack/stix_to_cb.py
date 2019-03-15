@@ -7,9 +7,6 @@ from . import carbonblack_query_constructor
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
-
 
 class StixToCB(BaseQueryTranslator):
 
@@ -28,8 +25,6 @@ class StixToCB(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_model_mapper = carbonblack_data_mapping.CarbonBlackDataMapper(options)
-        result_limit = options['result_limit'] if 'result_limit' in options else DEFAULT_LIMIT
-        timerange = options['timerange'] if 'timerange' in options else DEFAULT_TIMERANGE
         query_string = carbonblack_query_constructor.translate_pattern(
-            query_object, data_model_mapper, result_limit, timerange=timerange)
+            query_object, data_model_mapper, options)
         return query_string

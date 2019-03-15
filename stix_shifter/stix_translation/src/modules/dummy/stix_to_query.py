@@ -27,5 +27,5 @@ class StixToQuery(BaseQueryTranslator):
         data_model_mapper = data_mapping.DataMapper(options)
 
         query_string = query_constructor.translate_pattern(
-            query_object, data_model_mapper)
+            query_object, data_model_mapper, options)
         return query_string
