@@ -55,7 +55,7 @@ def __main__():
     translate_parser.add_argument(
         'data', type=str, help='The STIX pattern or JSON results to be translated')
     translate_parser.add_argument('options', nargs='?', help='Options dictionary')
-    translate_parser.add_argument('recursion_limit', type=int, help='Maximum depth of Python interpreter stack')
+    translate_parser.add_argument('recursion_limit', type=int, nargs='?', help='Maximum depth of Python interpreter stack')
 
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
