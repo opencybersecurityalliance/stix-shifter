@@ -9,6 +9,7 @@
   - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
   - [What is a STIX-SHIFTER adapter?](#what-is-a-stix-shifter-adapter)
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
+- [Available Connectors]
 - [How to use](#How-to-use)
   - [Translation](#translation)
   - [Transmission](#transmission)
