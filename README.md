@@ -71,7 +71,7 @@ You might want to use this library and contribute to development, if any of the 
 
 ## Available Connectors Summary (List updated: March 22, 2019)
 
-|          Connector         | Data Model |   Developer  | Translation | Connection | IBM Security Connect Availability |
+|          Connector         | Data Model |   Developer  | Translation | Connection | Availability |
 |:--------------------------:|:----------:|:------------:|:-----------:|:----------:|:---------------------------:|
 | IBM QRadar                 | Default    | IBM Security | Yes         | Yes        | Release                     |
 | IBM BigFix                 | Default    | IBM Security | Yes         | Yes        | Pre-release                 |
