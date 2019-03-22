@@ -9,7 +9,7 @@
   - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
   - [What is a STIX-SHIFTER adapter?](#what-is-a-stix-shifter-adapter)
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
-- [Available Connectors]
+- [Available Connectors](#available-connectors)
 - [How to use](#How-to-use)
   - [Translation](#translation)
   - [Transmission](#transmission)
@@ -70,7 +70,9 @@ You might want to use this library and contribute to development, if any of the 
 - You are a vendor or project owner who has data that can be made available, and you want to contribute an adapter
 - You just want to help make the world a safer place!
 
-## Available Connectors Summary (List updated: March 22, 2019)
+## Available Connectors
+
+List updated: March 22, 2019
 
 |          Connector         | Data Model |   Developer  | Translation | Connection | Availability |
 |:--------------------------:|:----------:|:------------:|:-----------:|:----------:|:---------------------------:|
