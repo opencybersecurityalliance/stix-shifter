@@ -15,7 +15,5 @@ class Translator(BaseTranslator):
         return response.text
 
     def __init__(self):
-        basepath = path.dirname(__file__)
-
         self.result_translator = self
         self.query_translator = self
