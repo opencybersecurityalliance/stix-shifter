@@ -97,10 +97,7 @@ class StixTranslation:
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
-            import traceback, sys
             print('Caught exception: ' + str(ex) + " " + str(type(ex)))
-            exc_info = sys.exc_info()
-            traceback.print_exception(*exc_info)
             
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
