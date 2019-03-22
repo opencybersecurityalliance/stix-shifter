@@ -62,7 +62,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84/10']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (INCIDR('192.168.122.84/10',sourceip) OR INCIDR('192.168.122.84/10',destinationip) OR INCIDR('192.168.122.84/10',identityip)) OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(
+        where_statement = "WHERE ((INCIDR('192.168.122.84/10',sourceip) OR INCIDR('192.168.122.84/10',destinationip) OR INCIDR('192.168.122.84/10',identityip)) OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83')) {} {}".format(
             default_limit, default_time)
         parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.84/10'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
@@ -117,7 +117,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE destinationport = '23456' OR sourceport = '12345' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (destinationport = '23456' OR sourceport = '12345') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
@@ -156,7 +156,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_network_traffic_start_stop(self):
         stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.567Z']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (endtime = '1528965384567' OR starttime = '1528965384000') {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.567Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
@@ -167,7 +167,7 @@ class TestStixToAql(unittest.TestCase, object):
         unix_stop_time_01 = 1464747600123
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {}".format(start_time_01, stop_time_01)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020}]
         assert len(query['queries']) == 1
@@ -187,13 +187,16 @@ class TestStixToAql(unittest.TestCase, object):
         unix_stop_time_02 = 1464755424743
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = _translate_query(stix_pattern)
-        where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement_01 = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         where_statement_02 = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert len(query['queries']) == 2
-        assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
+        query_01 = selections + from_statement + where_statement_01
+        query_02 = selections + from_statement + where_statement_02
+        assert query_01 in query['queries']
+        assert query_02 in query['queries']
         assert query['parsed_stix'] == parsed_stix
         # The biggest time window should be returned
         assert query['start_time'] == unix_start_time_01
@@ -211,7 +214,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START {} STOP {} OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0'] START {} STOP {}".format(
             start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = _translate_query(stix_pattern)
-        where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement_01 = "WHERE (destinationport = '635' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         where_statement_02 = "WHERE (sourceip = '333.333.333.0' OR destinationip = '333.333.333.0' OR identityip = '333.333.333.0') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
         where_statement_03 = "WHERE url = 'www.example.com' {} {}".format(default_limit, default_time)
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 635},
@@ -219,7 +222,12 @@ class TestStixToAql(unittest.TestCase, object):
                        {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'},
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '333.333.333.0'}]
         assert len(query['queries']) == 3
-        assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02, selections + from_statement + where_statement_03]
+        query_01 = selections + from_statement + where_statement_01
+        query_02 = selections + from_statement + where_statement_02
+        query_03 = selections + from_statement + where_statement_03
+        assert query_01 in query['queries']
+        assert query_02 in query['queries']
+        assert query_03 in query['queries']
         assert query['parsed_stix'] == parsed_stix
         # The biggest time window should be returned
         assert query['start_time'] == unix_start_time_01
@@ -244,7 +252,10 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
         assert len(query['queries']) == 2
-        assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
+        query_01 = selections + from_statement + where_statement_01
+        query_02 = selections + from_statement + where_statement_02
+        assert query_01 in query['queries']
+        assert query_02 in query['queries']
         assert query['parsed_stix'] == parsed_stix
         # The biggest time window should be returned
         assert query['start_time'] == unix_start_time_01
@@ -319,7 +330,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR (username = 'root') OR (url = 'www.example.com') {} {}".format(default_limit, default_time)
         parsed_stix = [
             {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
             {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '100.100.122.90'},

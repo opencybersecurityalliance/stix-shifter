@@ -6,6 +6,7 @@ from stix_shifter.stix_translation.src.json_to_stix import observable
 import logging
 import json
 import re
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -45,17 +46,18 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, options):
+        self.result_limit = options['result_limit']
+        self.timerange = options['timerange']
         self.dmm = data_model_mapper
+        self.select_statement = self.dmm.map_selections()
         self.pattern = pattern
-        self.result_limit = result_limit
-        # List for any queries that are split due to START STOP qualifier
-        self.qualified_queries = []
-        # Translated query string without any qualifiers
+        # Object structure of query attributes in the format of:
+        # {observation_group_uuid: {comparision_group_uuid: { query, comparision_operator, qualifier, observation_operator }}}
+        self.grouped_queries = {}
         self.translated = self.parse_expression(pattern)
-        self.qualified_queries.append(self.translated)
-
-        self.qualified_queries = _format_translated_queries(self.qualified_queries)
+        # Final array of translated query strings
+        self.translated_queries = _parse_translated_query_objects(self)
 
     @staticmethod
     def _format_set(values) -> str:
@@ -146,8 +148,26 @@ class AqlQueryStringPatternTranslator:
     def _is_reference_value(stix_field):
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
+    @staticmethod
+    def _format_value(self, expression):
+        if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+            return self._format_match(expression.value)
+        # should be (x, y, z, ...)
+        elif expression.comparator == ComparisonComparators.In:
+            return self._format_set(expression.value)
+        elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
+            # Should be in single-quotes
+            return self._format_equality(expression.value)
+        # '%' -> '*' wildcard, '_' -> '?' single wildcard
+        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
+            return self._format_like(expression.value)
+        else:
+            return self._escape_value(expression.value)
+
+    def _parse_expression(self, expression, qualifier=None, comparision_operator=None, comparision_group=None, observation_group=None, observation_operator=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
+            if not comparision_group:
+                comparision_group = str(uuid.uuid4())
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple QRadar fields may map to the same STIX Object
@@ -167,20 +187,7 @@ class AqlQueryStringPatternTranslator:
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-                # Should be in single-quotes
-                value = self._format_equality(expression.value)
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
-                value = self._format_like(expression.value)
-            else:
-                value = self._escape_value(expression.value)
-
+            value = self._format_value(self, expression)
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
 
             if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
@@ -193,53 +200,62 @@ class AqlQueryStringPatternTranslator:
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
-            if qualifier is not None:
-                self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
-                return ''
+
+            if qualifier:
+                # Transform from human-readable timestamp to 13-digit millisecond time
+                # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
+                qualifier = re.sub("(?<=START)t|(?<=STOP)t", "", qualifier)
+                start_stop_array = qualifier.split('START')[1].split('STOP')
+                qualifier = _convert_timestamps_to_milliseconds(start_stop_array)
+
+            query_attributes = {'query': comparison_string,
+                                'qualifier': qualifier,
+                                'comparision_operator': comparision_operator,
+                                'comparision_group': comparision_group,
+                                'observation_group': observation_group,
+                                'observation_operator': observation_operator}
+            if observation_group not in self.grouped_queries:
+                self.grouped_queries[observation_group] = {}
+            if comparision_group not in self.grouped_queries[observation_group]:
+                self.grouped_queries[observation_group][comparision_group] = [query_attributes]
             else:
-                return "{}".format(comparison_string)
+                self.grouped_queries[observation_group][comparision_group].append(query_attributes)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self.comparator_lookup[expression.operator]
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if not expression_01 or not expression_02:
-                return ''
-            if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
-            if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-            if qualifier is not None:
-                self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
-                return ''
-            else:
-                return "{}".format(query_string)
+            # Record if AND, group
+            comparision_operator = self.comparator_lookup[expression.operator]
+            comparision_group = str(uuid.uuid4())
+
+            self._parse_expression(expression.expr1, qualifier=qualifier, comparision_operator=comparision_operator,
+                                   comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
+            self._parse_expression(expression.expr2, qualifier=qualifier, comparision_operator=comparision_operator,
+                                   comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
         elif isinstance(expression, ObservationExpression):
-            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier))
+            if not observation_group:
+                observation_group = str(uuid.uuid4())
+            self._parse_expression(expression.comparison_expression, qualifier=qualifier, comparision_operator=comparision_operator,
+                                   comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            qualifier = expression.qualifier
+            if not observation_group:
+                observation_group = str(uuid.uuid4())
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+                observation_operator = self.comparator_lookup[expression.observation_expression.operator]
+
+                self._parse_expression(expression.comparison_expression, qualifier=qualifier, comparision_operator=comparision_operator,
+                                       comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                self._parse_expression(expression.observation_expression.comparison_expression, qualifier=qualifier, comparision_operator=comparision_operator,
+                                       comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            elif expression_01:
-                return "{}".format(expression_01)
-            elif expression_02:
-                return "{}".format(expression_02)
-            else:
-                return ''
+            observation_operator = self.comparator_lookup[expression.operator]
+            self._parse_expression(expression.expr1, qualifier=qualifier, comparision_operator=comparision_operator,
+                                   comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
+
+            self._parse_expression(expression.expr2, qualifier=qualifier, comparision_operator=comparision_operator,
+                                   comparision_group=comparision_group, observation_group=observation_group, observation_operator=observation_operator)
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            self._parse_expression(expression.expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
@@ -276,52 +292,58 @@ def _test_timestamp(timestamp) -> bool:
 
 def _convert_timestamps_to_milliseconds(query_parts):
     # grab time stamps from array
-    start_time = _test_or_add_milliseconds(query_parts[2])
-    stop_time = _test_or_add_milliseconds(query_parts[4])
+    start_time = _test_or_add_milliseconds(query_parts[0])
+    stop_time = _test_or_add_milliseconds(query_parts[1])
     transformer = TimestampToMilliseconds()
     millisecond_start_time = transformer.transform(start_time)
     millisecond_stop_time = transformer.transform(stop_time)
-    return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
+    return "START {} STOP {}".format(str(millisecond_start_time), str(millisecond_stop_time))
 
 
-def _format_translated_queries(query_array):
-    # remove empty strings in the array
-    query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
-
-    # Transform from human-readable timestamp to 13-digit millisecond time
-    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
+def _parse_translated_query_objects(self):
+    grouped_queries = self.grouped_queries
+    selections_string = "SELECT {} FROM events WHERE".format(self.select_statement)
+    limit_string = "limit {}".format(self.result_limit)
+    default_time_string = "last {} minutes".format(self.timerange)
     formatted_queries = []
-    for query in query_array:
-        if _test_START_STOP_format(query):
-            # Remove leading 't' before timestamps
-            query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
-            # Split individual query to isolate timestamps
-            query_parts = re.split("(START)|(STOP)", query)
-            # Remove None array entries
-            query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
-            if len(query_parts) == 5:
-                formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
-            else:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                continue
+    unqualified_queries = []
+    unqualified_query = ''
+
+    for observation_key, observation_object in grouped_queries.items():
+        query_string = ''
+        observation_element_count = len(observation_object.items())
+        qualifier = None
+        observation_operator = None
+        for comparison_key, comparison_object_array in observation_object.items():
+            comparison_string = "(" if len(comparison_object_array) > 1 else ""
+            for obj in comparison_object_array:  # Single comparision query (unless src/dest/ident ip)
+                comparison_string += obj['query']
+                if obj['comparision_operator']:
+                    comparison_string += " {} ".format(obj['comparision_operator'])
+            if len(comparison_object_array) > 1:
+                comparison_string = re.sub("\s(OR|AND)\s?$", ")", comparison_string)
+            query_string += comparison_string
+        qualifier = comparison_object_array[0]['qualifier']
+
+        if qualifier:
+            formatted_queries.append("{} {} {} {}".format(selections_string, query_string, limit_string, qualifier))
         else:
-            formatted_queries.append(query)
+            unqualified_queries.append(query_string)
+
+    if unqualified_queries:
+        if len(unqualified_queries) == 1:
+            formatted_queries.append("{} {} {} {}".format(selections_string, unqualified_queries[0], limit_string, default_time_string))
+        else:
+            unqualified_query_string = ''
+            for index, value in enumerate(unqualified_queries):
+                unqualified_query_string += "({})".format(value)
+                if index < len(unqualified_queries) - 1:
+                    unqualified_query_string += ' OR '
+            formatted_queries.append("{} {} {} {}".format(selections_string, unqualified_query_string, limit_string, default_time_string))
 
     return formatted_queries
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit']
-    timerange = options['timerange']
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
-    select_statement = translated_where_statements.dmm.map_selections()
-    queries = []
-    translated_queries = translated_where_statements.qualified_queries
-    for where_statement in translated_queries:
-        has_start_stop = _test_START_STOP_format(where_statement)
-        if(has_start_stop):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
-        else:
-            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
 
-    return queries
+    return AqlQueryStringPatternTranslator(pattern, data_model_mapping, options).translated_queries
