@@ -52,8 +52,8 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.select_statement = self.dmm.map_selections()
         self.pattern = pattern
-        # Object structure of query attributes in the format of:
-        # {observation_group_uuid: {comparison_group_uuid: { query, comparison_operator, qualifier, observation_operator }}}
+        # Object to contain structure of query attributes in the format of:
+        # {observation_group_uuid: {comparison_group_uuid: { query, comparison_operator, qualifier }}}
         self.grouped_queries = {}
         self.translated = self.parse_expression(pattern)
         # Final array of translated query strings
@@ -164,7 +164,7 @@ class AqlQueryStringPatternTranslator:
         else:
             return self._escape_value(expression.value)
 
-    def _parse_expression(self, expression, qualifier=None, comparison_operator=None, comparison_group=None, observation_group=None, observation_operator=None) -> str:
+    def _parse_expression(self, expression, qualifier=None, comparison_operator=None, comparison_group=None, observation_group=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             if not comparison_group:
                 comparison_group = str(uuid.uuid4())
@@ -212,8 +212,7 @@ class AqlQueryStringPatternTranslator:
                                 'qualifier': qualifier,
                                 'comparison_operator': comparison_operator,
                                 'comparison_group': comparison_group,
-                                'observation_group': observation_group,
-                                'observation_operator': observation_operator}
+                                'observation_group': observation_group}
             if observation_group not in self.grouped_queries:
                 self.grouped_queries[observation_group] = {}
             if comparison_group not in self.grouped_queries[observation_group]:
@@ -227,33 +226,31 @@ class AqlQueryStringPatternTranslator:
             comparison_group = str(uuid.uuid4())
 
             self._parse_expression(expression.expr1, qualifier=qualifier, comparison_operator=comparison_operator,
-                                   comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                   comparison_group=comparison_group, observation_group=observation_group)
             self._parse_expression(expression.expr2, qualifier=qualifier, comparison_operator=comparison_operator,
-                                   comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                   comparison_group=comparison_group, observation_group=observation_group)
         elif isinstance(expression, ObservationExpression):
             if not observation_group:
                 observation_group = str(uuid.uuid4())
             self._parse_expression(expression.comparison_expression, qualifier=qualifier, comparison_operator=comparison_operator,
-                                   comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                   comparison_group=comparison_group, observation_group=observation_group)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             qualifier = expression.qualifier
             if not observation_group:
                 observation_group = str(uuid.uuid4())
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                observation_operator = self.comparator_lookup[expression.observation_expression.operator]
 
                 self._parse_expression(expression.comparison_expression, qualifier=qualifier, comparison_operator=comparison_operator,
-                                       comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                       comparison_group=comparison_group, observation_group=observation_group)
             else:
                 self._parse_expression(expression.observation_expression.comparison_expression, qualifier=qualifier, comparison_operator=comparison_operator,
-                                       comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                       comparison_group=comparison_group, observation_group=observation_group)
         elif isinstance(expression, CombinedObservationExpression):
-            observation_operator = self.comparator_lookup[expression.operator]
             self._parse_expression(expression.expr1, qualifier=qualifier, comparison_operator=comparison_operator,
-                                   comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                   comparison_group=comparison_group, observation_group=observation_group)
 
             self._parse_expression(expression.expr2, qualifier=qualifier, comparison_operator=comparison_operator,
-                                   comparison_group=comparison_group, observation_group=observation_group, observation_operator=observation_operator)
+                                   comparison_group=comparison_group, observation_group=observation_group)
         elif isinstance(expression, Pattern):
             self._parse_expression(expression.expression)
         else:
@@ -313,7 +310,6 @@ def _parse_translated_query_objects(self):
         query_string = ''
         observation_element_count = len(observation_object.items())
         qualifier = None
-        observation_operator = None
         for comparison_key, comparison_object_array in observation_object.items():
             break_to_outer_loop = False  # Array of one or more comparison statements joined by AND/OR
             comparison_string = "(" if len(comparison_object_array) > 1 else ""
