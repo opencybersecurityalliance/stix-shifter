@@ -309,25 +309,52 @@ def _parse_translated_query_objects(self):
     unqualified_queries = []
     unqualified_query = ''
 
-    for observation_key, observation_object in grouped_queries.items():
+    for observation_key, observation_object in grouped_queries.items():  # A single [ ]
         query_string = ''
         observation_element_count = len(observation_object.items())
         qualifier = None
         observation_operator = None
         for comparison_key, comparison_object_array in observation_object.items():
+            break_to_outer_loop = False  # Array of one or more comparision statements joined by AND/OR
             comparison_string = "(" if len(comparison_object_array) > 1 else ""
-            for obj in comparison_object_array:  # Single comparision query (unless src/dest/ident ip)
+            for obj in comparison_object_array:  # Single comparision statement
+                pattern = "NOMAP\:([a-zA-Z\d]){8}-(([a-zA-Z\d]){4}-){3}([a-zA-Z\d]){12}"
+                match = re.search(pattern, obj['query'])
+
+                single_observation_single_comparison = (len(grouped_queries.items()) == 1 and len(comparison_object_array) == 1)
+                single_observation_multi_and_comparisons = (obj['comparision_operator'] == 'AND' and len(grouped_queries.items()) == 1)
+
+                if match:
+                    # Skip unmapped comparison but include comparison joined by the OR
+                    if (obj['comparision_operator'] == 'OR'):
+                        continue
+                    # TODO: Property handle case where there may be other ORed comparisons in the observation.
+                    # This is the single_observation_multi_and_comparisons condition
+                    # May need to build up the comparison string differently to handle this
+
+                    elif (single_observation_single_comparison or single_observation_multi_and_comparisons):
+                        error_id = match[0].split(":")[1]
+                        raise self.dmm.mapping_errors[error_id]
+                    elif (obj['comparision_operator'] == 'AND'):
+                        comparison_string = ''
+                        break_to_outer_loop = True
+                        break
+                    else:
+                        continue
+
                 comparison_string += obj['query']
                 if obj['comparision_operator']:
                     comparison_string += " {} ".format(obj['comparision_operator'])
+            if break_to_outer_loop:
+                break
             if len(comparison_object_array) > 1:
                 comparison_string = re.sub("\s(OR|AND)\s?$", ")", comparison_string)
             query_string += comparison_string
         qualifier = comparison_object_array[0]['qualifier']
 
-        if qualifier:
+        if qualifier and query_string:
             formatted_queries.append("{} {} {} {}".format(selections_string, query_string, limit_string, qualifier))
-        else:
+        elif query_string:
             unqualified_queries.append(query_string)
 
     if unqualified_queries:

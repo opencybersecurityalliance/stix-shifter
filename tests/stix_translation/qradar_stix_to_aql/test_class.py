@@ -107,7 +107,6 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
     def test_file_query(self):
-        # TODO: Add support for file hashes. Unsure at this point how QRadar queries them
         stix_pattern = "[file:name = 'some_file.exe']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
@@ -121,12 +120,35 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
-    def test_unmapped_attribute(self):
+    def test_single_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert 'Unable to map property' in result['error']
+
+    def test_unmapped_attribute_with_AND(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
+        result = translation.translate('qradar', 'query', '{}', stix_pattern)
+        assert result['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
+        assert 'Unable to map property' in result['error']
+
+    def test_unmapped_attribute_with_OR(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (filename = 'some_file.exe') {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'},
+                       {'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'}]
+        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+
+    def test_unmapped_attribute_with_two_observations(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever'] OR [file:name = 'some_file.exe']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'},
+                       {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
+        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
