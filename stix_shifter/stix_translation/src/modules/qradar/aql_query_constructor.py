@@ -49,6 +49,7 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.observation_count = 1
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
@@ -146,7 +147,7 @@ class AqlQueryStringPatternTranslator:
     def _is_reference_value(stix_field):
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
+    def _parse_expression(self, expression, qualifier=None, calling_object_type=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -183,6 +184,17 @@ class AqlQueryStringPatternTranslator:
 
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
 
+            pattern = "NOMAP:[a-zA-Z0-9]{8}-([a-zA-Z0-9]{4}-){3}[a-zA-Z0-9]{12}"
+            nomap_search = re.search(pattern, comparison_string)
+            if nomap_search:
+                nomap_with_uuid = nomap_search.group(0)
+                if calling_object_type == 'ObservationExpression' and self.observation_count == 1:
+                    # Pattern has only one ObservationExpression with one unmapped ComparisonExpression
+                    error_id = nomap_with_uuid.split(":")[1]
+                    raise self.dmm.mapping_errors[error_id]
+                else:
+                    return nomap_with_uuid
+
             if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
                 # More than one AQL field maps to the STIX attribute so group the ORs.
                 grouped_comparison_string = "(" + comparison_string + ")"
@@ -203,20 +215,41 @@ class AqlQueryStringPatternTranslator:
             operator = self.comparator_lookup[expression.operator]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
-            if not expression_01 or not expression_02:
-                return ''
+            # WILL ERROR IN ALL CASES WHERE THERE'S AN AND
+            expression_01_nomap = re.search("^NOMAP", expression_01)
+            expression_02_nomap = re.search("^NOMAP", expression_02)
+            if operator == 'AND':
+                if expression_01_nomap or expression_02_nomap:
+                    self.observation_count -= 1
+                    # There are more observation expressions to check so skip this one and continue
+                    if self.observation_count > 0:
+                        return ''
+                # Currently in the only observation expression with an unmapped attribute and the AND operator
+                if expression_01_nomap:
+                    error_id = expression_01.split(":")[1]
+                    raise self.dmm.mapping_errors[error_id]
+                if expression_02_nomap:
+                    error_id = expression_02.split(":")[1]
+                    raise self.dmm.mapping_errors[error_id]
             if isinstance(expression.expr1, CombinedComparisonExpression):
                 expression_01 = "({})".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+            if expression_01_nomap and expression_02_nomap:
+                return ''
+            elif expression_01_nomap:
+                query_string = "{}".format(expression_02)
+            elif expression_02_nomap:
+                query_string = "{}".format(expression_01)
+            else:
+                query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
                 return ''
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
-            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier))
+            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier, 'ObservationExpression'))
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self.comparator_lookup[expression.observation_expression.operator]
@@ -227,15 +260,22 @@ class AqlQueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
+            self.observation_count += 1
             operator = self.comparator_lookup[expression.operator]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            elif expression_01:
+            expression_01_nomap = re.search("^NOMAP", expression_01)
+            expression_02_nomap = re.search("^NOMAP", expression_02)
+            # Both expressions are unmapped so thrown an error
+            if expression_01_nomap and expression_02_nomap:
+                error_id = expression_01.split(":")[1]
+                raise self.dmm.mapping_errors[error_id]
+            elif expression_01 and (not expression_02 or expression_02_nomap):
                 return "{}".format(expression_01)
-            elif expression_02:
+            elif expression_02 and (not expression_01 or expression_01_nomap):
                 return "{}".format(expression_02)
+            elif expression_01 and expression_02:
+                return "({}) {} ({})".format(expression_01, operator, expression_02)
             else:
                 return ''
         elif isinstance(expression, Pattern):
