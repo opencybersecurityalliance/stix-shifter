@@ -191,8 +191,8 @@ class AqlQueryStringPatternTranslator:
         operator = self.comparator_lookup[expression.operator]
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
-        expression_01_nomap = re.search("^NOMAP", expression_01)
-        expression_02_nomap = re.search("^NOMAP", expression_02)
+        expression_01_nomap = expression_01.startswith("NOMAP")
+        expression_02_nomap = expression_02.startswith("NOMAP")
         if operator == 'AND':
             if expression_01_nomap or expression_02_nomap:
                 self.observation_count -= 1
