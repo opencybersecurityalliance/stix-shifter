@@ -151,6 +151,10 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj['name'] == "cmd.exe")
         assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")
 
+        assert(observed_data['created'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['modified'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['first_observed'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.875Z")
 
 
     def test_change_cb_binary_api_results_to_stix(self):
@@ -253,6 +257,11 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj.keys() == {'type', 'name', 'created', 'hashes'})
         assert(curr_obj['name'] =="Cmd.Exe.MUI")
         assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
+
+        assert(observed_data['created'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['modified'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['first_observed'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['last_observed'] == "2016-10-19T10:00:25.734Z")
 
     def test_merge_results_mixed_to_stix(self):
         process_data = json.loads("""
