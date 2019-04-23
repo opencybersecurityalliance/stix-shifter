@@ -50,5 +50,10 @@
     "fields": {
       "value": ["url.original"]
     }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["url.domain"]
+    }
   }
 }

@@ -8,8 +8,6 @@ import logging
 import re
 
 
-DEFAULT_LIMIT = 10000
-
 logger = logging.getLogger(__name__)
 
 
@@ -102,6 +100,9 @@ class QueryStringPatternTranslator:
                         comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field,
                                                                                       comparator=comparator,
                                                                                       value=value)
+            elif expression.comparator == ComparisonComparators.IsSubSet:
+                    comparison_string += "({mapped_field} {comparator} {value} AND {mapped_field}:*)".format(
+                        mapped_field=mapped_field, comparator=comparator, value=value)
             else:
                 comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
                                                                                         comparator=comparator,
@@ -303,23 +304,14 @@ def _format_translated_queries(query_array):
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit']
+    # Added size parameter in tranmission module
+    #result_limit = options['result_limit']
     timerange = options['timerange']
     translated_query_strings = QueryStringPatternTranslator(pattern, data_model_mapping)
     queries = []
     translated_queries = translated_query_strings.qualified_queries
     for query_string in translated_queries:
         has_start_stop = _test_timerange_format(query_string)
-
-        # Not added size to current query
-        """size = ''
-        if result_limit:
-            # elasticsearch _search API call returns with the size limit is
-            # less than or equal to 10000 records
-
-            if result_limit > DEFAULT_LIMIT:
-                result_limit = DEFAULT_LIMIT
-            size = "&size={}".format(result_limit)"""
 
         if(has_start_stop):
             queries.append("{}".format(query_string))

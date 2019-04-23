@@ -180,6 +180,9 @@
   "url": {
     "original": {
       "key": "url.value"
+    },
+    "domain": {
+      "key": "domain-name.value"
     }
   },
   "process": {

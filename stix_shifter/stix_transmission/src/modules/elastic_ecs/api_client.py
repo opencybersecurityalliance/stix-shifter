@@ -3,39 +3,38 @@ from ..utils.RestApiClient import RestApiClient
 import json
 import re
 
+DEFAULT_LIMIT = 10000
+
 class APIClient():
 
     PING_ENDPOINT = '_cluster/health?pretty'
 
     def __init__(self, connection, configuration):
         headers = dict()
+        url_modifier_function = None
         auth = configuration.get('auth')
         self.indices = configuration.get('elastic_ecs', {}).get('indices', None)
+
         if isinstance(self.indices, list):  # Get list of all indices
             self.indices = ",".join(self.indices)
+
         if self.indices:
             self.endpoint = self.indices + '/' +'_search'
         else:
             self.endpoint = '_search'
+
         if auth:
             headers['Authorization'] = b"Basic " + base64.b64encode(
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
-            self.client = RestApiClient(connection.get('host'),
-                                    connection.get('port'),
-                                    connection.get('cert', None),
-                                    headers,
-                                    cert_verify=connection.get('cert_verify', 'True'),
-
-                                    )
-        else: #For local host
+        else:
             url_modifier_function = self.add_endpoint_to_url_http
-            self.client = RestApiClient(connection.get('host'),
+
+        self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
                                     connection.get('cert', None),
                                     headers,
-                                    url_modifier_function,
-                                    cert_verify=connection.get('cert_verify', 'True'),
-
+                                    url_modifier_function=url_modifier_function,
+                                    cert_verify=connection.get('cert_verify', 'True')
                                     )
 
     def add_endpoint_to_url_http(self, server_ip, endpoint, headers):
@@ -48,7 +47,7 @@ class APIClient():
         endpoint = self.PING_ENDPOINT
         return self.client.call_api(endpoint, 'GET')
 
-    def run_search(self, query_expression, offset=None, length=None):
+    def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
 
@@ -56,6 +55,7 @@ class APIClient():
 
         uri_search = False  # For testing and debugging two ways of _search API methods
 
+        # URI Search
         if uri_search:
             if query_expression is not None:
                 # update/add size value
@@ -73,7 +73,7 @@ class APIClient():
             endpoint = endpoint + '?q=' + query_expression
 
             return self.client.call_api(endpoint, 'GET', headers)
-
+        # Request body search
         else:
             # add size value
             if length is not None:
@@ -85,8 +85,8 @@ class APIClient():
 
             data = {
                 "_source": {
-                    "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*", "host.*",
-                                 "network.*", "process.*", "user.*", "file.*", "url.*"]
+                    "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*",
+                                 "host.*","network.*", "process.*", "user.*", "file.*", "url.*"]
                 },
                 "query": {
                     "query_string": {
