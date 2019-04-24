@@ -106,12 +106,50 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
-    def test_unmapped_attribute(self):
+    def test_unmapped_attribute_with_AND(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
+        result = translation.translate('qradar', 'query', '{}', stix_pattern)
+        assert result['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
+        assert 'Unable to map property' in result['error']
+
+    def test_pattern_with_one_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert 'Unable to map property' in result['error']
+
+    def test_unmapped_attribute_with_OR(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'},
+                       {'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'}]
+        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+
+    def test_pattern_with_two_observation_exps_one_with_unmapped_attribute(self):
+        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever'] OR [file:name = 'some_file.exe' AND url:value = 'www.example.com']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE url = 'www.example.com' AND filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'},
+                       {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'},
+                       {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
+        for parsing in parsed_stix:
+            assert parsing in query['parsed_stix']
+        assert query['queries'] == [selections + from_statement + where_statement]
+
+    def test_pattern_with_three_observation_exps_one_with_unmapped_attribute(self):
+        stix_pattern = "[file:name = 'some_file.exe' AND network-traffic:some_invalid_attribute = 'whatever'] OR [url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
+        parsed_stix = [{'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'},
+                       {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'},
+                       {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'},
+                       {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
+        for parsing in parsed_stix:
+            assert parsing in query['parsed_stix']
+        assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
@@ -150,14 +188,16 @@ class TestStixToAql(unittest.TestCase, object):
         stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
         unix_start_time_01 = 1464744600123
         unix_stop_time_01 = 1464747600123
-        stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {}".format(start_time_01, stop_time_01)
+        stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(start_time_01, stop_time_01)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
-                       {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020}]
+                       {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
+                       {'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'}]
         assert len(query['queries']) == 1
         assert query['queries'] == [selections + from_statement + where_statement]
-        assert query['parsed_stix'] == parsed_stix
+        for parsing in parsed_stix:
+            assert parsing in query['parsed_stix']
         assert query['start_time'] == unix_start_time_01
         assert query['end_time'] == unix_stop_time_01
 
@@ -193,7 +233,7 @@ class TestStixToAql(unittest.TestCase, object):
         unix_stop_time_01 = 1464743471456
         unix_start_time_02 = 1465266142789
         unix_stop_time_02 = 1465270413012
-        stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START {} STOP {} OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0'] START {} STOP {}".format(
+        stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START {} STOP {} OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(
             start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = _translate_query(stix_pattern)
         where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
@@ -202,10 +242,12 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 635},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'},
-                       {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '333.333.333.0'}]
+                       {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '333.333.333.0'},
+                       {'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'}]
         assert len(query['queries']) == 3
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02, selections + from_statement + where_statement_03]
-        assert query['parsed_stix'] == parsed_stix
+        for parsing in parsed_stix:
+            assert parsing in query['parsed_stix']
         # The biggest time window should be returned
         assert query['start_time'] == unix_start_time_01
         assert query['end_time'] == unix_stop_time_02

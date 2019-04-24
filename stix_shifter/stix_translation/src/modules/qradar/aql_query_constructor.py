@@ -49,6 +49,7 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.observation_count = 1
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
@@ -146,77 +147,142 @@ class AqlQueryStringPatternTranslator:
     def _is_reference_value(stix_field):
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
-        if isinstance(expression, ComparisonExpression):  # Base Case
-            # Resolve STIX Object Path to a field in the target Data Model
-            stix_object, stix_field = expression.object_path.split(':')
-            # Multiple QRadar fields may map to the same STIX Object
-            mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-            # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+    @staticmethod
+    def _format_value(self, expression):
+        if expression.comparator == ComparisonComparators.Matches:
+            # needs forward slashes
+            return self._format_match(expression.value)
+        # should be (x, y, z, ...)
+        elif expression.comparator == ComparisonComparators.In:
+            return self._format_set(expression.value)
+        elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
+            # Should be in single-quotes
+            return self._format_equality(expression.value)
+        # '%' -> '*' wildcard, '_' -> '?' single wildcard
+        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
+            return self._format_like(expression.value)
+        else:
+            return self._escape_value(expression.value)
 
-            if stix_field == 'protocols[*]':
-                map_data = _fetch_network_protocol_mapping()
-                try:
-                    expression.value = map_data[expression.value.lower()]
-                except Exception as protocol_key:
-                    raise KeyError(
-                        "Network protocol {} is not supported.".format(protocol_key))
-            elif stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
+    @staticmethod
+    def _parse_combined_observation_expression(self, expression):
+        # The pattern has at least one other ObservationExpression
+        self.observation_count += 1
+        operator = self.comparator_lookup[expression.operator]
+        expression_01 = self._parse_expression(expression.expr1)
+        expression_02 = self._parse_expression(expression.expr2)
+        expression_01_nomap = re.search("^NOMAP", expression_01)
+        expression_02_nomap = re.search("^NOMAP", expression_02)
+        # Both expressions are unmapped so throw an error
+        if expression_01_nomap and expression_02_nomap:
+            error_id = expression_01.split(":")[1]
+            raise self.dmm.mapping_errors[error_id]
+        elif expression_01 and (not expression_02 or expression_02_nomap):
+            return "{}".format(expression_01)
+        elif expression_02 and (not expression_01 or expression_01_nomap):
+            return "{}".format(expression_02)
+        elif expression_01 and expression_02:
+            return "({}) {} ({})".format(expression_01, operator, expression_02)
+        else:
+            return ''
 
-            # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-                # Should be in single-quotes
-                value = self._format_equality(expression.value)
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
-                value = self._format_like(expression.value)
-            else:
-                value = self._escape_value(expression.value)
-
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
-
-            if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
-                # More than one AQL field maps to the STIX attribute so group the ORs.
-                grouped_comparison_string = "(" + comparison_string + ")"
-                comparison_string = grouped_comparison_string
-
-            if expression.comparator == ComparisonComparators.NotEqual:
-                comparison_string = self._negate_comparison(comparison_string)
-
-            if expression.negated:
-                comparison_string = self._negate_comparison(comparison_string)
-            if qualifier is not None:
-                self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
-                return ''
-            else:
-                return "{}".format(comparison_string)
-
-        elif isinstance(expression, CombinedComparisonExpression):
-            operator = self.comparator_lookup[expression.operator]
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if not expression_01 or not expression_02:
-                return ''
-            if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
-            if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
+    @staticmethod
+    def _parse_combined_comparison_expression(self, expression, qualifier=None):
+        operator = self.comparator_lookup[expression.operator]
+        expression_01 = self._parse_expression(expression.expr1)
+        expression_02 = self._parse_expression(expression.expr2)
+        expression_01_nomap = expression_01.startswith("NOMAP")
+        expression_02_nomap = expression_02.startswith("NOMAP")
+        if operator == 'AND':
+            if expression_01_nomap or expression_02_nomap:
+                self.observation_count -= 1
+                # There are more observation expressions to check so skip this one and continue
+                if self.observation_count > 0:
+                    return ''
+            # Only one observation expression and it has unmapped attribute with the AND operator
+            if expression_01_nomap:
+                error_id = expression_01.split(":")[1]
+                raise self.dmm.mapping_errors[error_id]
+            if expression_02_nomap:
+                error_id = expression_02.split(":")[1]
+                raise self.dmm.mapping_errors[error_id]
+        if isinstance(expression.expr1, CombinedComparisonExpression):
+            expression_01 = "({})".format(expression_01)
+        if isinstance(expression.expr2, CombinedComparisonExpression):
+            expression_02 = "({})".format(expression_02)
+        if expression_01_nomap and expression_02_nomap:
+            return ''
+        elif expression_01_nomap:
+            query_string = "{}".format(expression_02)
+        elif expression_02_nomap:
+            query_string = "{}".format(expression_01)
+        else:
             query_string = "{} {} {}".format(expression_01, operator, expression_02)
-            if qualifier is not None:
-                self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
-                return ''
+        if qualifier is not None:
+            self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
+            return ''
+        else:
+            return "{}".format(query_string)
+
+    @staticmethod
+    def _parse_comparison_expression(self, expression, qualifier=None, calling_object_type=None):
+        # Resolve STIX Object Path to a field in the target Data Model
+        stix_object, stix_field = expression.object_path.split(':')
+        # Multiple QRadar fields may map to the same STIX Object
+        mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+        # Resolve the comparison symbol to use in the query string (usually just ':')
+        comparator = self.comparator_lookup[expression.comparator]
+
+        if stix_field == 'protocols[*]':
+            map_data = _fetch_network_protocol_mapping()
+            try:
+                expression.value = map_data[expression.value.lower()]
+            except Exception as protocol_key:
+                raise KeyError(
+                    "Network protocol {} is not supported.".format(protocol_key))
+        elif stix_field == 'start' or stix_field == 'end':
+            transformer = TimestampToMilliseconds()
+            expression.value = transformer.transform(expression.value)
+
+        # Some values are formatted differently based on how they're being compared
+        value = self._format_value(self, expression)
+
+        comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
+
+        pattern = "NOMAP:[a-zA-Z0-9]{8}-([a-zA-Z0-9]{4}-){3}[a-zA-Z0-9]{12}"
+        nomap_search = re.search(pattern, comparison_string)
+        if nomap_search:
+            nomap_with_uuid = nomap_search.group(0)
+            if calling_object_type == 'ObservationExpression' and self.observation_count == 1:
+                # Pattern has only one ObservationExpression with one unmapped ComparisonExpression
+                error_id = nomap_with_uuid.split(":")[1]
+                raise self.dmm.mapping_errors[error_id]
             else:
-                return "{}".format(query_string)
+                return nomap_with_uuid
+
+        if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
+            # More than one AQL field maps to the STIX attribute so group the ORs.
+            grouped_comparison_string = "(" + comparison_string + ")"
+            comparison_string = grouped_comparison_string
+
+        if expression.comparator == ComparisonComparators.NotEqual:
+            comparison_string = self._negate_comparison(comparison_string)
+
+        if expression.negated:
+            comparison_string = self._negate_comparison(comparison_string)
+        if qualifier is not None:
+            self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
+            return ''
+        else:
+            return "{}".format(comparison_string)
+
+    def _parse_expression(self, expression, qualifier=None, calling_object_type=None) -> str:
+        if isinstance(expression, ComparisonExpression):  # Base Case
+            return self._parse_comparison_expression(self, expression, qualifier, calling_object_type)
+        elif isinstance(expression, CombinedComparisonExpression):
+            return self._parse_combined_comparison_expression(self, expression, qualifier)
         elif isinstance(expression, ObservationExpression):
-            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier))
+            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier, 'ObservationExpression'))
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self.comparator_lookup[expression.observation_expression.operator]
@@ -227,17 +293,7 @@ class AqlQueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            elif expression_01:
-                return "{}".format(expression_01)
-            elif expression_02:
-                return "{}".format(expression_02)
-            else:
-                return ''
+            return self._parse_combined_observation_expression(self, expression)
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
