@@ -9,35 +9,20 @@ from freezegun import freeze_time
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
 selections_file = open('stix_shifter/stix_translation/src/modules/qradar/json/aql_event_fields.json').read()
+protocols_file = open('stix_shifter/stix_translation/src/modules/qradar/json/network_protocol_map.json').read()
 OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 DEFAULT_START_TIME = 1548926700000
 DEFAULT_END_TIME = 1548927000000
+PROTOCOLS = json.loads(protocols_file)
 
 
 freeze_time("2019-01-31 09:30:00").start()
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
 custom_selections = "SELECT {}".format(", ".join(OPTIONS['select_fields']))
 from_statement = " FROM events "
-
-protocols = {
-    "tcp": "6",
-    "udp": "17",
-    "icmp": "1",
-    "idpr-cmtp": "38",
-    "ipv6": "40",
-    "rsvp": "46",
-    "gre": "47",
-    "esp": "50",
-    "ah": "51",
-    "narp": "54",
-    "ospfigp": "89",
-    "ipip": "94",
-    "any": "99",
-    "sctp": "132"
-}
 
 
 default_limit = "limit {}".format(DEFAULT_LIMIT)
@@ -143,7 +128,7 @@ class TestStixToAql(unittest.TestCase, object):
         assert stix_pattern[1:-1] in result['error']
 
     def test_network_traffic_protocols(self):
-        for key, value in protocols.items():
+        for key, value in PROTOCOLS.items():
             # Test for both upper and lower case protocols in the STIX pattern
             if random.randint(0, 1) == 0:
                 key = key.upper()
