@@ -1,5 +1,4 @@
 from ..base.base_translator import BaseTranslator
-from stix_shifter.stix_translation.src.patterns.parser import generate_query
 
 import json, requests
 

@@ -55,10 +55,10 @@ class Connector(BaseConnector):
 
         bundle = response.json()
 
-        if "validate" in self.configuration and self.configuration["validate"] == True:
+        if "validate" in self.configuration and self.configuration["validate"] is True:
             results = validate_instance(bundle)
  
-            if results.is_valid != True:
+            if results.is_valid is not True:
                 return { "success":False, "message":"Invalid STIX recieved: " + json.dumps(results) }
         
         for obj in bundle["objects"]:
