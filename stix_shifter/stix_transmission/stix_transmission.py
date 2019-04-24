@@ -2,7 +2,7 @@ import importlib
 from ..utils.error_response import ErrorResponder
 
 
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack','proxy']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack','proxy','bundle']
 RESULTS = 'results'
 QUERY = 'query'
 DELETE = 'delete'

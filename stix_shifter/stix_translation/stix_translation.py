@@ -8,7 +8,7 @@ from .src.exceptions import DataMappingException, StixValidationException, Unsup
 import sys
 
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack','proxy']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack','proxy','bundle']
 RESULTS = 'results'
 QUERY = 'query'
 DEFAULT_LIMIT = 10000
