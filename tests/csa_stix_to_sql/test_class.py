@@ -8,6 +8,7 @@ from stix_shifter.stix_translation.src.modules.base import base_translator
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
+import json
 
 selections = "SELECT Network.A as sourceip, Transport.A as sourceport, \
 Link.A as sourcemac, Network.B as destinationip, Transport.B as destinationport, \
@@ -23,23 +24,9 @@ at_from_statement = " FROM cos://us-geo/at-hourly-dumps STORED AS JSON "
 
 from_statement = " FROM cos://us-geo/nf-hourly-dumps STORED AS JSON "
 
+protocols_file = open('stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
+PROTOCOLS = json.loads(protocols_file)
 
-protocols = {
-    "tcp": "6",
-    "udp": "17",
-    "icmp": "1",
-    "idpr-cmtp": "38",
-    "ipv6": "40",
-    "rsvp": "46",
-    "gre": "47",
-    "esp": "50",
-    "ah": "51",
-    "narp": "54",
-    "ospfigp": "89",
-    "ipip": "94",
-    "any": "99",
-    "sctp": "132"
-}
 
 translation = stix_translation.StixTranslation()
 
@@ -166,7 +153,7 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_network_traffic_protocols(self):
         interface = csa_translator.Translator(dialect='nf')
-        for key, value in protocols.items():
+        for key, value in PROTOCOLS.items():
             # Test for both upper AND lower case protocols in the STIX pattern
             if random.randint(0, 1) == 0:
                 key = key.upper()

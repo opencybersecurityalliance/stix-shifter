@@ -7,8 +7,8 @@ from ..utils.error_response import ErrorResponder
 from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 import sys
 
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'bundle']
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack','proxy','bundle']
 RESULTS = 'results'
 QUERY = 'query'
 DEFAULT_LIMIT = 10000
