@@ -132,7 +132,7 @@ def __main__():
         help='Query String'
     )
 
-    host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and developmenr')
+    host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     # positional arguments
     host_parser.add_argument(
         'transmission_module', choices=stix_transmission.TRANSMISSION_MODULES,
