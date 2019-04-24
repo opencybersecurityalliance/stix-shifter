@@ -22,7 +22,7 @@ class Connector(BaseConnector):
                               aws_secret_access_key=self.configuration['aws_secret_access_key']
                               )
 
-        return client.can_paginate('get_findings')
+        return { "success": client.can_paginate('get_findings') }
 
     def create_query_connection(self, query):
         return { "success": True, "search_id": query }
