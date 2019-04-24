@@ -61,7 +61,7 @@ class DataSourceObjToStixObj:
         return ret_val
 
     @staticmethod
-    def _add_property(obj, key, stix_value):
+    def _add_property(obj, key, stix_value, group=False):
         """
         Add stix_value to dictionary based on the input key, the key can be '.'-separated path to inner object
 
@@ -77,10 +77,16 @@ class DataSourceObjToStixObj:
             if prop not in child_obj:
                 child_obj[prop] = {}
             child_obj = child_obj[prop]
-        child_obj[split_key[-1]] = stix_value
+
+
+        if split_key[-1] not in child_obj.keys():
+            child_obj[split_key[-1]] = stix_value
+        elif group is True: # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
+            if (isinstance(child_obj[split_key[-1]], list)):
+                child_obj[split_key[-1]].extend(stix_value)                      # append to existing list
 
     @staticmethod
-    def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name):
+    def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
         """
         Handle the translation of the input property to its STIX CybOX property
 
@@ -101,7 +107,7 @@ class DataSourceObjToStixObj:
             objs_dir[obj_dir_key] = obj
             if obj_name is not None:
                 obj_name_map[obj_name] = obj_dir_key
-        DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value)
+        DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value, group)
 
     @staticmethod
     def _valid_stix_value(props_map, key, stix_value):
@@ -165,6 +171,7 @@ class DataSourceObjToStixObj:
 
             transformer = self.transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
+            group = False
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
                 print("ds_key_def inside {}".format(ds_key_def))
@@ -181,13 +188,17 @@ class DataSourceObjToStixObj:
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                         continue
 
-                DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name)
+                # Group Values
+                if 'group' in ds_key_def:
+                    group = True
+
+                DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
                 stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                 if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                     continue
 
-                DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value)
+                DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value, group)
 
     def transform(self, obj):
         """
