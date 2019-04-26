@@ -32,8 +32,6 @@ class APIClient():
                     (auth['id'] + ':' + auth['api_key']).encode('ascii'))
             elif 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
-        """else: # for default elastic search installation with http protocol
-            url_modifier_function = self.add_endpoint_to_url_http"""
 
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
@@ -43,15 +41,6 @@ class APIClient():
                                     cert_verify=connection.get('cert_verify', 'True')
                                     )
 
-    """
-    # for default elastic search installation with http protocol
-    
-    def add_endpoint_to_url_http(self, server_ip, endpoint, headers):
-        # this function is called from 'call_api' with http mounting to the url,
-        # it concatenates http to the endpoint containing the url.
-        url = 'http://{}/{}'.format(server_ip, endpoint)
-        return url
-    """
     def ping_box(self):
         endpoint = self.PING_ENDPOINT
         return self.client.call_api(endpoint, 'GET')
