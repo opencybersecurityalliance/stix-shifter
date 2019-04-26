@@ -24,10 +24,14 @@ class APIClient():
             self.endpoint = '_search'
 
         if auth:
-            headers['Authorization'] = b"Basic " + base64.b64encode(
-                (auth['username'] + ':' + auth['password']).encode('ascii'))
-        else:
-            url_modifier_function = self.add_endpoint_to_url_http
+            if 'username' in auth and 'password' in auth:
+                headers['Authorization'] = b"Basic " + base64.b64encode(
+                    (auth['username'] + ':' + auth['password']).encode('ascii'))
+            elif 'api_key' in auth and 'id' in auth:
+                headers['Authorization'] = b"ApiKey " + base64.b64encode(
+                    (auth['id'] + ':' + auth['api_key']).encode('ascii'))
+            elif 'access_token' in auth:
+                headers['Authorization'] = "Bearer " + auth['access_token']
 
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
@@ -36,12 +40,6 @@ class APIClient():
                                     url_modifier_function=url_modifier_function,
                                     cert_verify=connection.get('cert_verify', 'True')
                                     )
-
-    def add_endpoint_to_url_http(self, server_ip, endpoint, headers):
-        # this function is called from 'call_api' with http mounting to the url,
-        # it concatenates http to the endpoint containing the url.
-        url = 'http://{}/{}'.format(server_ip, endpoint)
-        return url
 
     def ping_box(self):
         endpoint = self.PING_ENDPOINT
