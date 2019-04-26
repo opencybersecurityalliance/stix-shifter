@@ -24,7 +24,7 @@ class QueryStringPatternTranslator:
         ComparisonComparators.NotEqual: "NOT",
         ComparisonComparators.Like: ":",
         ComparisonComparators.In: ":",
-        #ComparisonComparators.Matches: 'LIKE', # Elastic Search does not support PCRE.
+        ComparisonComparators.Matches: ':', # Elastic Search does not support PCRE.
         ComparisonComparators.IsSubSet: ':',
         ComparisonComparators.IsSuperSet: ':',
         ObservationOperators.Or: 'OR',

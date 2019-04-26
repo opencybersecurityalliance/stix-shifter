@@ -285,3 +285,11 @@ class TestStixtoQuery(unittest.TestCase, object):
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '333.333.333.0'}]
         assert len(translated_query['queries']) == 3
         _test_query_assertions(translated_query, test_query, parsed_stix)
+
+    def test_match_operator(self):
+        stix_pattern = "[artifact:payload_bin MATCHES '1*']"  # Elastic search does not support PCRE
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['event.original : 1*']
+        parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': '1*'}]
+        _test_query_assertions(translated_query, test_query, parsed_stix)
