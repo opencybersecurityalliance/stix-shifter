@@ -165,28 +165,21 @@ class TestStixToAql(unittest.TestCase, object):
         assert len(query['queries']) == 1
         assert query['queries'] == [selections + from_statement + where_statement]
 
-    # def test_start_stop_qualifiers_with_two_observations(self):
-    #     start_time_01 = "t'2016-06-01T01:30:00.123Z'"
-    #     stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
-    #     start_time_02 = "t'2016-06-01T03:55:00.123Z'"
-    #     stop_time_02 = "t'2016-06-01T04:30:24.743Z'"
-    #     unix_start_time_01 = 1464744600123
-    #     unix_stop_time_01 = 1464747600123
-    #     unix_start_time_02 = 1464753300123
-    #     unix_stop_time_02 = 1464755424743
-    #     stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
-    #     query = _translate_query(stix_pattern)
-    #     where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
-    #     where_statement_02 = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
-    #     parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
-    #                    {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
-    #                    {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
-    #     assert len(query['queries']) == 2
-    #     assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
-    #     assert query['parsed_stix'] == parsed_stix
-    #     # The biggest time window should be returned
-    #     assert query['start_time'] == unix_start_time_01
-    #     assert query['end_time'] == unix_stop_time_02
+    def test_start_stop_qualifiers_with_two_observations(self):
+        start_time_01 = "t'2016-06-01T01:30:00.123Z'"
+        stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
+        start_time_02 = "t'2016-06-01T03:55:00.123Z'"
+        stop_time_02 = "t'2016-06-01T04:30:24.743Z'"
+        unix_start_time_01 = 1464744600123
+        unix_stop_time_01 = 1464747600123
+        unix_start_time_02 = 1464753300123
+        unix_stop_time_02 = 1464755424743
+        stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
+        query = _translate_query(stix_pattern)
+        where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement_02 = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
+        assert len(query['queries']) == 2
+        assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
 
     def test_start_stop_qualifiers_with_three_observations(self):
         start_time_01 = "t'2016-06-01T00:00:00.123Z'"
