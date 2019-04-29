@@ -41,8 +41,11 @@ class Translator(BaseTranslator):
         results = json_to_stix_translator.convert_to_stix(data_source, map_data, json_data,
                                                           transformers.get_all_transformers(), options)
 
-        assert(len(results['objects']) - 1 == len(json_data))
-        for i in range(1, len(results['objects'])):
+        if len(results['objects']) - 1 == len(json_data):
+            for i in range(1, len(results['objects'])):
                 results['objects'][i]['number_observed'] = 1
+        else:
+            raise RuntimeError("Incorrect number of result objects after translation. Found: {}, expected: {}.".format(len(result['objects']) - 1, len(json_data)))
+
 
         return json.dumps(results, indent=4, sort_keys=False)
