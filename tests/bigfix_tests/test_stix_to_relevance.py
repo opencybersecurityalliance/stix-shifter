@@ -4,9 +4,8 @@ import unittest
 translation = stix_translation.StixTranslation()
 
 
-def _test_query_assertions(query, queries, parsed_stix):
+def _test_query_assertions(query, queries):
     assert query['queries'] == queries
-    assert query['parsed_stix'] == parsed_stix
 
 
 class TestStixToRelevance(unittest.TestCase, object):
@@ -19,8 +18,7 @@ class TestStixToRelevance(unittest.TestCase, object):
         # queries = '( "process", name of it | "n/a", process id of it as string | "n/a", "sha256", sha256 of image file of it | "n/a", "sha1", sha1 of image file of it | "n/a", "md5", md5 of image file of it | "n/a", pathname of image file of it | "n/a", (start time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of processes whose (name of it as lowercase = "node" as lowercase AND sha256 of image file of it as lowercase = "0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5" as lowercase )'
 
         queries = '<BESAPI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BESAPI.xsd"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>( "process", name of it | "n/a", process id of it as string | "n/a", "sha256", sha256 of image file of it | "n/a", "sha1", sha1 of image file of it | "n/a", "md5", md5 of image file of it | "n/a", pathname of image file of it | "n/a", (start time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of processes whose (name of it as lowercase = "node" as lowercase AND sha256 of image file of it as lowercase = "0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5" as lowercase )</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
-        parsed_stix = [{'attribute': 'file:hashes.SHA-256', 'comparison_operator': '=', 'value': '0c0017201b82e1d8613513dc80d1bf46320a957c393b6ca4fb7fa5c3b682c7e5'}, {'attribute': 'process:name', 'comparison_operator': '=', 'value': 'node'}]
-        _test_query_assertions(query, queries, parsed_stix)
+        _test_query_assertions(query, queries)
 
     def test_file_query(self):
 
@@ -30,6 +28,4 @@ class TestStixToRelevance(unittest.TestCase, object):
         # queries = '("file", name of it | "n/a", "sha256", sha256 of it | "n/a", "sha1", sha1 of it | "n/a", "md5", md5 of it | "n/a", pathname of it | "n/a", (modification time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of files whose (name of it as lowercase = "a" as lowercase OR sha256 of it as lowercase = "2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2291ad5eba06683d58c48570d" as lowercase) of folder ("/root")'
 
         queries = '<BESAPI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BESAPI.xsd"><ClientQuery><ApplicabilityRelevance>true</ApplicabilityRelevance><QueryText>("file", name of it | "n/a", "sha256", sha256 of it | "n/a", "sha1", sha1 of it | "n/a", "md5", md5 of it | "n/a", pathname of it | "n/a", (modification time of it - "01 Jan 1970 00:00:00 +0000" as time)/second ) of files whose (name of it as lowercase = "a" as lowercase OR sha256 of it as lowercase = "2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2291ad5eba06683d58c48570d" as lowercase) of folder ("/root")</QueryText><Target><CustomRelevance>true</CustomRelevance></Target></ClientQuery></BESAPI>'
-        parsed_stix = [{'attribute': 'file:hashes.SHA-256', 'comparison_operator': '=', 'value': '2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2291ad5eba06683d58c48570d'},
-                       {'attribute': 'file:parent_directory_ref.path', 'comparison_operator': '=', 'value': '/root'}, {'attribute': 'file:name', 'comparison_operator': '=', 'value': 'a'}]
-        _test_query_assertions(query, queries, parsed_stix)
+        _test_query_assertions(query, queries)
