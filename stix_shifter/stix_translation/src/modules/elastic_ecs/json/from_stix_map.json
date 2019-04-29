@@ -1,0 +1,59 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["source.mac", "destination.mac", "client.mac", "server.mac"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["source.port", "client.port"],
+      "dst_port": ["destination.port", "server.port"],
+      "protocols[*]": ["network.transport", "network.type", "network.protocol"],
+      "src_ref.value": ["source.ip", "client.ip"],
+      "dst_ref.value": ["destination.ip", "server.ip"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["event.original"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["process.name"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["user.name"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "command_line": ["process.executable"],
+      "created": ["process.start"],
+      "pid": ["process.pid"],
+      "creator_user_ref.user_id": ["user.name"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url.original"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["url.domain"]
+    }
+  }
+}

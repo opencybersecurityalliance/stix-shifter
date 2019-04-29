@@ -16,7 +16,7 @@ from stix_shifter.stix_translation.src.transformers import TimestampToMillisecon
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'stix_shifter/stix_translation/src/modules/qradar/json/network_protocol_map.json').read()
+            'stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
@@ -202,7 +202,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping):
     x = SqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     queries = []
-    bucket=x.dmm.dialect+"-hourly-dumps" 
+    bucket = x.dmm.dialect+"-hourly-dumps"
     for query in x.queries:
         queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause}'
                        .format(select_statement=select_statement, bucket=bucket, where_clause=query))
