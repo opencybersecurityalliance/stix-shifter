@@ -11,6 +11,7 @@ TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bi
 
 RESULTS = 'results'
 QUERY = 'query'
+PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 
@@ -57,7 +58,7 @@ class StixTranslation:
             else:
                 interface = translator_module.Translator()
 
-            if translate_type == QUERY:
+            if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
                 current_recursion_limit = sys.getrecursionlimit()
                 if current_recursion_limit < recursion_limit:
@@ -76,6 +77,12 @@ class StixTranslation:
                 if (errors != []):
                     raise StixValidationException(
                         "The STIX pattern has the following errors: {}".format(errors))
+
+                if translate_type == QUERY:
+
+                    # Converting STIX pattern to datasource query
+                    queries = interface.transform_query(data, options)
+                    return {'queries': queries}
                 else:
                     # Translating STIX pattern to antlr query object
                     query_object = generate_query(data)
@@ -84,10 +91,8 @@ class StixTranslation:
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']
-                    # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
-                    # Converting STIX pattern to datasource query
-                    queries = interface.transform_query(data, options)
-                    return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+                    return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 try:
