@@ -2,13 +2,15 @@ import argparse
 import sys
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
+from flask import Flask, request
+from stix_shifter.utils.error_response import ErrorResponder
 import json
 import time
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
-
+HOST = 'host'
 
 def __main__():
     """
@@ -130,14 +132,95 @@ def __main__():
         help='Query String'
     )
 
+    host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
+    # positional arguments
+    host_parser.add_argument(
+        'transmission_module', choices=stix_transmission.TRANSMISSION_MODULES,
+        help='Which connection module to use'
+    )
+    host_parser.add_argument(
+        'translation_module', choices=stix_translation.TRANSLATION_MODULES,
+        help='Which translation module to use'
+    )
+    host_parser.add_argument(
+        'data_source',
+        type=str,
+        help='STIX Identity object for the data source'
+    )
+
     args = parent_parser.parse_args()
 
     if args.command is None:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
-    if args.command == EXECUTE:
+    elif args.command == HOST:
+        # Host means to start a local web service for STIX shifter, to use in combination with the proxy data source
+        # module. This combination allows one to run and debug their stix-shifter code locally, while interacting with
+        # it inside a service provider such as IBM Security Connect
+        app = Flask("stix-shifter")
+        
+        @app.route('/transform_query', methods=['POST'])
+        def transform_query():
+            request_args = request.get_json( force=True )
+            translation = stix_translation.StixTranslation()
+            dsl = translation.translate(args.translation_module, 'query', args.data_source, request_args["query"])
+            return json.dumps(dsl)
 
+        @app.route('/translate_results', methods=['POST'])
+        def translate_results():
+            request_args = request.get_json( force=True )
+            translation = stix_translation.StixTranslation()
+            print( json.dumps(request_args["results"]))
+            dsl = translation.translate(args.translation_module, 'results', args.data_source, request_args["results"])
+            return json.dumps(dsl)
+
+        @app.route('/create_query_connection', methods=['POST'])
+        def create_query_connection():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return json.dumps(transmission.query(request_args["query"]))
+
+        @app.route('/create_status_connection', methods=['POST'])
+        def create_status_connection():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return json.dumps(transmission.status(request_args["search_id"]))
+
+        @app.route('/create_results_connection', methods=['POST'])
+        def create_results_connection():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return json.dumps(transmission.results(request_args["search_id"],request_args["offset"],request_args["length"]))
+
+        @app.route('/delete_query_connection', methods=['POST'])
+        def delete_query_connection():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return json.dumps(transmission.delete(request_args["search_id"]))
+
+        @app.route('/ping', methods=['POST'])
+        def ping():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return json.dumps(transmission.ping())
+
+        @app.route('/is_async', methods=['GET'])
+        def is_async():
+            request_args = request.get_json( force=True )
+            transmission = stix_transmission.StixTransmission(args.transmission_module, 
+                request_args["connection"], request_args["configuration"])
+            return transmission.is_async()
+        
+        app.run(debug=True, port=5000, host='127.0.0.1')
+   
+
+    elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query)

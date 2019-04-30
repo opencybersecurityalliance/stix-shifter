@@ -19,7 +19,6 @@ class JSONToStix(BaseResultTranslator):
         :return: STIX formatted results
         :rtype: str
         """
-
         self.mapping = options['mapping'] if 'mapping' in options else {}
         json_data = json.loads(data)
         data_source = json.loads(data_source)

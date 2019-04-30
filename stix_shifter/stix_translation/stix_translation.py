@@ -7,8 +7,8 @@ from ..utils.error_response import ErrorResponder
 from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 import sys
 
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'bundle']
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs']
 RESULTS = 'results'
 QUERY = 'query'
 DEFAULT_LIMIT = 10000
@@ -97,7 +97,8 @@ class StixTranslation:
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
-            print('caught exception: ' + str(ex) + " " + str(type(ex)))
+            print('Caught exception: ' + str(ex) + " " + str(type(ex)))
+            
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
