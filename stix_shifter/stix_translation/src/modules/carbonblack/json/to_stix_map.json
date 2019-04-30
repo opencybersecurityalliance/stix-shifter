@@ -10,10 +10,28 @@
       "references": "process_creator"
     }
   ],
-  "start": {
-    "key": "process.created",
-    "object": "process"
-  },
+  "start": [
+    {
+      "key": "process.created",
+      "object": "process"
+    },
+    {
+      "key": "created",
+      "cybox": false
+    },
+    {
+      "key": "modified",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    }
+  ],
   "process_name": [
     {
       "key": "file.name",
@@ -103,10 +121,28 @@
   "hostname": {
     "key": "domain-name.value"
   },
-  "server_added_timestamp": {
-    "key": "file.created",
-    "object": "binary_file"
-  },
+  "server_added_timestamp": [
+    {
+      "key": "file.created",
+      "object": "binary_file"
+    },
+    {
+      "key": "created",
+      "cybox": false
+    },
+    {
+      "key": "modified",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    }
+  ],
   "original_filename": {
     "key": "file.name",
     "object": "binary_file"

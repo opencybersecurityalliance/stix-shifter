@@ -1,6 +1,3 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src import transformers
-from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.carbonblack import carbonblack_translator
 from stix2validator import validate_instance
 
@@ -12,8 +9,6 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 
 interface = carbonblack_translator.Translator()
-map_file = open(interface.mapping_filepath).read()
-map_data = json.loads(map_file)
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -101,7 +96,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 }""")
 
         results = data["results"]
-        result_bundle = json_to_stix_translator.convert_to_stix(data_source, map_data, results, transformers.get_all_transformers(), options)
+        result_bundle = json.loads(interface.translate_results(json.dumps(data_source), json.dumps(results), options))
         print(result_bundle)
 
         assert(result_bundle['type'] == 'bundle')
@@ -151,6 +146,10 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj['name'] == "cmd.exe")
         assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")
 
+        assert(observed_data['created'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['modified'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['first_observed'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.875Z")
 
 
     def test_change_cb_binary_api_results_to_stix(self):
@@ -231,12 +230,8 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
   "start": 0
 }""")
 
-        binary_interface = carbonblack_translator.Translator()
-        binary_map_file = open(binary_interface.mapping_filepath).read()
-        binary_map_data = json.loads(binary_map_file)
-
         results = data["results"]
-        result_bundle = json_to_stix_translator.convert_to_stix(data_source, binary_map_data, results, transformers.get_all_transformers(), options)
+        result_bundle = json.loads(interface.translate_results(json.dumps(data_source), json.dumps(results), options))
         print(result_bundle)
 
         assert(result_bundle['type'] == 'bundle')
@@ -253,6 +248,12 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj.keys() == {'type', 'name', 'created', 'hashes'})
         assert(curr_obj['name'] =="Cmd.Exe.MUI")
         assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
+
+        assert(observed_data['created'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['modified'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['first_observed'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['last_observed'] == "2016-10-19T10:00:25.734Z")
+        assert(observed_data['number_observed'] == 1)
 
     def test_merge_results_mixed_to_stix(self):
         process_data = json.loads("""
@@ -512,8 +513,9 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 }
 """)
         results = process_data["results"] + binary_data["results"]  # we assume the data pipeline will combine the results in a list
-        result_bundle = json_to_stix_translator.convert_to_stix(data_source, map_data, results, transformers.get_all_transformers(), options)
+        result_bundle = json.loads(interface.translate_results(json.dumps(data_source), json.dumps(results), options))
 
+        print(result_bundle)
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -522,7 +524,9 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         objects = result_bundle_objects[1]['objects']
         types = [o.get('type') for o in objects.values()]
         assert (types == ['file', 'process', 'file', 'process', 'domain-name', 'ipv4-addr', 'network-traffic', 'ipv4-addr', 'user-account'])
+        assert (result_bundle_objects[1]['number_observed'] == 1)
 
         objects = result_bundle_objects[4]['objects']
         types = [o.get('type') for o in objects.values()]
         assert (types == ['file'])
+        assert (result_bundle_objects[4]['number_observed'] == 1)
