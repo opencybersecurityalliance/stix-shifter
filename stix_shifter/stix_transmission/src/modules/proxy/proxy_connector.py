@@ -1,5 +1,7 @@
 from ..base.base_connector import BaseConnector
-import json, requests
+import json
+import requests
+
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
@@ -17,30 +19,25 @@ class Connector(BaseConnector):
 
     def ping(self):
         response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/ping",
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration}))
-        return response.text
-
-    def ping(self):
-        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/ping",
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration}))
+                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration}))
         return response.text
 
     def create_query_connection(self, query):
-        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_query_connection", 
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration,"query":query}))
+        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_query_connection",
+                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "query": query}))
         return response.text
 
     def create_results_connection(self, search_id, offset, length):
-        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_results_connection", 
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration,"search_id":search_id,"offset":offset,"length":length}))
+        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_results_connection",
+                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id, "offset": offset, "length": length}))
         return response.text
 
     def create_status_connection(self, search_id):
-        response = requests.get("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_status_connection", 
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration,"search_id":search_id}))
+        response = requests.get("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_status_connection",
+                                data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
         return response.text
 
     def delete_query_connection(self, search_id):
-        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/delete_query_connection", 
-            data=json.dumps({"connection":self.connection,"configuration":self.configuration,"search_id":search_id}))
+        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/delete_query_connection",
+                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
         return response.text
