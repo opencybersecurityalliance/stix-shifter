@@ -74,17 +74,17 @@ You might want to use this library and contribute to development, if any of the 
 
 List updated: March 22, 2019
 
-|          Connector         | Data Model |   Developer  | Translation | Connection | Availability | Observables | Unsupported | 
-|:--------------------------:|:----------:|:------------:|:-----------:|:----------:|:---------------------------:|:---------------------------:|:---------------------------:|
-| IBM QRadar                 | Default    | IBM Security | Yes         | Yes        | Release                     | network-traffic, file, url, host | ISSUPERSET |
-| IBM BigFix                 | Default    | IBM Security | Yes         | Yes        | Pre-release                 | | |
-| Carbon Black CB Response   | Default    | IBM Security | Yes         | Yes        | Release                     | process, file | ISSUPERSET, ISSUBSET |
-| Elastic Search             | MITRE CAR  | MITRE        | Yes         | No         | Pre-release                 | | |
-| Elastic Search             | ECS        | IBM Security | No          | No         | Planned                     | | |
-| AWS SecurityHub            | Default    | IBM Security | Yes         | Yes        | Pre-release                 | | |
-| IBM Cloud Security Advisor | Default    | IBM Cloud    | Yes         | No         | Pre-release                 | | |
-| Splunk                     | Splunk CIM | IBM Security | Yes         | Yes        | Release                     | | ISSUPERSET, ISSUBSET |
-| Splunk                     | MITRE CAR  | MITRE        | Yes         | Yes        | Pre-release                 | | |
+|         Connector          | Data Model |  Developer   | Translation | Connection | Availability |           Observables            |     Unsupported      |
+| :------------------------: | :--------: | :----------: | :---------: | :--------: | :----------: | :------------------------------: | :------------------: |
+|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes     |   Release    | network-traffic, file, url, host |      ISSUPERSET      |
+|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
+|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes     |   Release    |          process, file           | ISSUPERSET, ISSUBSET |
+|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No     | Pre-release  |                                  |                      |
+|       Elastic Search       |    ECS     | IBM Security |     No      |     No     |   Planned    |                                  |                      |
+|      AWS SecurityHub       |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
+| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |     No     | Pre-release  |                                  |                      |
+|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes     |   Release    |                                  | ISSUPERSET, ISSUBSET |
+|           Splunk           | MITRE CAR  |    MITRE     |     Yes     |    Yes     | Pre-release  |                                  |                      |
 
 ## How to use
 
@@ -188,7 +188,7 @@ usage: main.py translate [-h] [-x] [-m DATA_MAPPER]
 positional arguments:
   {qradar,dummy,car,cim,splunk,elastic,bigfix,csa,csa:at,csa:nf,aws_security_hub,carbonblack}
                         The translation module to use
-  {results,query}       The translation action to perform
+  {results,query,parse} The translation action to perform
   data_source           STIX identity object representing a datasource
   data                  The STIX pattern or JSON results to be translated
   options               Options dictionary
@@ -203,12 +203,12 @@ optional arguments:
 #### Translation is called with the following ordered parameters
 
 ```
-<data source (ie. "qradar")> <"query" or "results"> <{} or STIX identity object> <STIX pattern or data source results> <options>
+<data source (ie. "qradar")> <"query", "results", "parse"> <{} or STIX identity object> <STIX pattern or data source results> <options>
 ```
 
 **Data source:** This is the name of the module used for translation.
 
-**Query or Results:** This argument controls if stix-shifter is translating from a STIX pattern to the data source query, or it’s translating from the data source results to a STIX bundle of observation objects
+**Query, Results, or Parse:** This argument controls if stix-shifter is translating from a STIX pattern to the data source query, translating from the data source results to a STIX bundle of observation objects, or parsing the STIX pattern into it's components and time range.
 
 **STIX Identity object:** An Identity object is used by stix-shifter to represent a data source and is inserted at the top of a returned observation bundle. Each observation in the bundle gets referenced to this identity. This parameter is only needed when converting from the data source results to the STIX bundle. When converting from a STIX pattern to a query, pass this in as an empty hash.
 
@@ -237,18 +237,6 @@ python main.py translate qradar query \
 {
   "queries": [
     "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, endtime as endtime, devicetime as devicetime, sourceaddress as sourceip, sourceport as sourceport, sourcemac as sourcemac, destinationaddress as destinationip, destinationport as destinationport, destinationmac as destinationmac, username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname FROM events WHERE destinationport = '635' AND sourceport = '37020' limit 10000 START 1464739200123 STOP 1464743471123"
-  ],
-  "parsed_stix": [
-    {
-      "attribute": "network-traffic:dst_port",
-      "comparison_operator": "=",
-      "value": 635
-    },
-    {
-      "attribute": "network-traffic:src_port",
-      "comparison_operator": "=",
-      "value": 37020
-    }
   ]
 }
 ```
@@ -303,6 +291,39 @@ python main.py translate qradar results \
     ]
 }
 ```
+
+### Example of parsing the components and time range from a STIX pattern
+
+**Running the following:**
+
+```
+python main.py translate qradar parse \
+'{}' \
+"[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00.123Z' STOP t'2016-06-01T01:11:11.123Z'"
+```
+
+**Will return:**
+
+```
+{
+  "parsed_stix": [
+    {
+      "attribute": "network-traffic:dst_port",
+      "comparison_operator": "=",
+      "value": 635
+    },
+    {
+      "attribute": "network-traffic:src_port",
+      "comparison_operator": "=",
+      "value": 37020
+    }
+  ],
+  "start_time": 1464739200123,
+  "end_time": 1464743471123
+}
+```
+
+The `start_time` represents the earliest of either the START qualifier or the default time range. The default time range is last 5 minutes unless overridden in the `time_range` options param. The `end_time` represents the latest of either the STOP qualifier or the current UTC time.
 
 ### Transmission
 
