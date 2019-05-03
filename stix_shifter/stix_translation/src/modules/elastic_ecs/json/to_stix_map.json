@@ -1,4 +1,22 @@
 {
+  "@timestamp": [
+    {
+      "key": "created",
+      "cybox": false
+    },
+    {
+      "key": "modified",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    }
+  ],
   "source": {
     "ip": [
       {
