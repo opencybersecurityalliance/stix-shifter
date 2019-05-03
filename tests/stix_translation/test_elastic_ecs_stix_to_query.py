@@ -181,7 +181,7 @@ class TestStixtoQuery(unittest.TestCase, object):
 
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
-        result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']

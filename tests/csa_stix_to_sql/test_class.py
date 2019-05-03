@@ -146,7 +146,7 @@ class TestStixToSql(unittest.TestCase, object):
 
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
-        result = translation.translate('csa', 'query', '{}', stix_pattern)
+        result = translation.translate('csa', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
         assert False == result['success']
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']
