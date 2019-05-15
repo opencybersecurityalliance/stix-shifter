@@ -51,7 +51,7 @@ def __main__():
     translate_parser.add_argument(
         'module', choices=stix_translation.TRANSLATION_MODULES, help='The translation module to use')
     translate_parser.add_argument('translate_type', choices=[
-        stix_translation.RESULTS, stix_translation.QUERY], help='The translation action to perform')
+        stix_translation.RESULTS, stix_translation.QUERY, stix_translation.PARSE], help='The translation action to perform')
     translate_parser.add_argument(
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(

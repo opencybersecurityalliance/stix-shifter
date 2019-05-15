@@ -11,6 +11,7 @@ TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bi
 
 RESULTS = 'results'
 QUERY = 'query'
+PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 
@@ -22,6 +23,14 @@ class StixTranslation:
 
     def __init__(self):
         self.args = []
+
+    def _validate_pattern(self, pattern):
+        # Validator doesn't support START STOP qualifier so strip out before validating pattern
+        start_stop_pattern = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
+        pattern_without_start_stop = re.sub(start_stop_pattern, " ", pattern)
+        errors = run_validator(pattern_without_start_stop)
+        if (errors != []):
+            raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
@@ -57,7 +66,7 @@ class StixTranslation:
             else:
                 interface = translator_module.Translator()
 
-            if translate_type == QUERY:
+            if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
                 current_recursion_limit = sys.getrecursionlimit()
                 if current_recursion_limit < recursion_limit:
@@ -67,16 +76,15 @@ class StixTranslation:
                     options['result_limit'] = DEFAULT_LIMIT
                 if 'timerange' not in options:
                     options['timerange'] = DEFAULT_TIMERANGE
-                errors = []
-                # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
-                start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
-                pattern_match = re.search(start_stop_pattern, data)
-                if (not pattern_match):
-                    errors = run_validator(data)
-                if (errors != []):
-                    raise StixValidationException(
-                        "The STIX pattern has the following errors: {}".format(errors))
+
+                if translate_type == QUERY:
+                    if 'validate_pattern' in options and options['validate_pattern'] == "true":
+                        self._validate_pattern(data)
+                    # Converting STIX pattern to datasource query
+                    queries = interface.transform_query(data, options)
+                    return {'queries': queries}
                 else:
+                    self._validate_pattern(data)
                     # Translating STIX pattern to antlr query object
                     query_object = generate_query(data)
                     # Converting query object to datasource query
@@ -84,10 +92,8 @@ class StixTranslation:
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']
-                    # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
-                    # Converting STIX pattern to datasource query
-                    queries = interface.transform_query(data, options)
-                    return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+                    return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 try:
@@ -98,7 +104,7 @@ class StixTranslation:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
             print('Caught exception: ' + str(ex) + " " + str(type(ex)))
-            
+
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
