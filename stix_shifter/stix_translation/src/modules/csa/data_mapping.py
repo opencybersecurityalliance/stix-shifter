@@ -4,6 +4,7 @@ import re
 
 from stix_shifter.stix_translation.src.exceptions import DataMappingException
 
+
 def _fetch_mapping():
     try:
         basepath = path.dirname(__file__)
@@ -18,7 +19,7 @@ def _fetch_mapping():
         return {}
 
 
-class CloudSQLDataMapper:
+class DataMapper:
     def __init__(self, dialect):
         if dialect is None:
             self.dialect = 'at'

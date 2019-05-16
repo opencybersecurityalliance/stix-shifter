@@ -2,7 +2,7 @@ import logging
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-from . import cloudsql_data_mapping
+from . import data_mapping
 from . import cloudsql_query_constructor
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class StixToCloudSQL(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to sql")
 
         query_object = generate_query(data)
-        data_model_mapper = cloudsql_data_mapping.CloudSQLDataMapper(self.dialect)
+        data_model_mapper = data_mapping.DataMapper(self.dialect)
         query_string = cloudsql_query_constructor.translate_pattern(
             query_object, data_model_mapper)
         return query_string

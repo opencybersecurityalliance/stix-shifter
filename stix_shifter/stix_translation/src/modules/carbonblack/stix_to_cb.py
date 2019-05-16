@@ -2,7 +2,7 @@ import logging
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-from . import carbonblack_data_mapping
+from . import data_mapping
 from . import carbonblack_query_constructor
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class StixToCB(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to cbquery")
 
         query_object = generate_query(data)
-        data_model_mapper = carbonblack_data_mapping.CarbonBlackDataMapper(options)
+        data_model_mapper = data_mapping.DataMapper(options)
         query_string = carbonblack_query_constructor.translate_pattern(
             query_object, data_model_mapper, options)
         return query_string

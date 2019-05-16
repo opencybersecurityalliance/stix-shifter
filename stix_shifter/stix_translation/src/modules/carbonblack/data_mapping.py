@@ -3,7 +3,7 @@ import json
 from ...exceptions import DataMappingException
 
 
-class CarbonBlackDataMapper:
+class DataMapper:
     def __init__(self, options):
         self.map_data = options.get('mappings', False) or self._fetch_mappings()
         assert len(self.map_data) == 2

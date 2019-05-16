@@ -3,7 +3,7 @@ STIX to CSQL query adaptor test cases
 '''
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_translation.src.modules.csa import csa_translator
-from stix_shifter.stix_translation.src.modules.csa import cloudsql_data_mapping
+from stix_shifter.stix_translation.src.modules.csa import data_mapping
 from stix_shifter.stix_translation.src.modules.base import base_translator
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
@@ -128,7 +128,7 @@ class TestStixToSql(unittest.TestCase, object):
         assert query == {'sql_queries': [selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_unmapped_attribute(self):
-        data_mapping_exception = cloudsql_data_mapping.DataMappingException
+        data_mapping_exception = data_mapping.DataMappingException
         interface = csa_translator.Translator(dialect='nf')
         input_arguments = "[network-traffic:some_invalid_attribute = 'whatever']"
         options = {}
