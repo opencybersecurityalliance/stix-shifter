@@ -3,7 +3,7 @@ import logging
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import data_mapping
-from . import aql_query_constructor
+from . import query_constructor
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,6 @@ class StixToAQL(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_model_mapper = data_mapping.DataMapper(options)
-        query_string = aql_query_constructor.translate_pattern(
+        query_string = query_constructor.translate_pattern(
             query_object, data_model_mapper, options)
         return query_string

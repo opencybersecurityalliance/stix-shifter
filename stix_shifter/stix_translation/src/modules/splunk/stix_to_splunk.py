@@ -3,7 +3,7 @@ import importlib
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-from . import splunk_query_constructor
+from . import query_constructor
 from ..cim import cim_data_mapping
 
 logger = logging.getLogger(__name__)
@@ -53,6 +53,6 @@ class StixToSplunk(BaseQueryTranslator):
         timerange = '-' + str(timerange) + 'minutes'
         translate_options['timerange'] = timerange
 
-        query_string = splunk_query_constructor.translate_pattern(
+        query_string = query_constructor.translate_pattern(
             query_object, data_model_mapper, DEFAULT_SEARCH_KEYWORD, translate_options)
         return query_string

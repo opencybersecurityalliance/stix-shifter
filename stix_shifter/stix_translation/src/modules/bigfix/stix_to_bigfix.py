@@ -2,7 +2,7 @@ import logging
 
 from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-from . import bigfix_query_constructor
+from . import query_constructor
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Relevance language")
 
         query_object = generate_query(data)
-        query_string = bigfix_query_constructor.translate_pattern(
+        query_string = query_constructor.translate_pattern(
             query_object, options)
 
         return query_string
