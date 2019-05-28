@@ -45,18 +45,23 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, timerange):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.timerange = timerange
         # self.observation_count = 1
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
+        self.unqualified_queries = []
         # Translated query string without any qualifiers
-        self.translated = self.parse_expression(pattern)
-        self.qualified_queries.append(self.translated)
+        # self.translated = self.parse_expression(pattern)
+        self.parse_expression(pattern)
+        # self.qualified_queries.append(self.translated)
+        combined_unqualified_queries_string = _format_unqualified_queries(self.unqualified_queries)
 
-        self.qualified_queries = _format_translated_queries(self.qualified_queries)
+        self.qualified_queries = _format_qualified_queries(self.qualified_queries)
+        self.qualified_queries.append(combined_unqualified_queries_string)
 
     @staticmethod
     def _format_set(values) -> str:
@@ -225,6 +230,7 @@ class AqlQueryStringPatternTranslator:
             self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
             return ''
         else:
+            self.unqualified_queries.append(comparison_string)
             return "{}".format(query_string)
 
     @staticmethod
@@ -277,6 +283,7 @@ class AqlQueryStringPatternTranslator:
             self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
             return ''
         else:
+            self.unqualified_queries.append(comparison_string)
             return "{}".format(comparison_string)
 
     def _parse_expression(self, expression, qualifier=None, calling_object_type=None) -> str:
@@ -343,7 +350,7 @@ def _convert_timestamps_to_milliseconds(query_parts):
     return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
 
 
-def _format_translated_queries(query_array):
+def _format_qualified_queries(query_array):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -369,18 +376,33 @@ def _format_translated_queries(query_array):
     return formatted_queries
 
 
+def _format_unqualified_queries(self, query_array):
+    # remove empty strings in the array
+    query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
+    combined_query_string = ''
+    # combine all queries into one query joined by OR
+    for index, query in enumerate(query_array):
+        combined_query_string += "({})".format(query)
+        if index < (len(query_array) - 2):
+            combined_query_string += " OR "
+    # append time and result limit to last query
+    combined_query_string += " limit {} last {} minutes".format(self.result_limit, self.timerange)
+    return combined_query_string
+
+
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     timerange = options['timerange']
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, timerange)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries
     for where_statement in translated_queries:
-        has_start_stop = _test_START_STOP_format(where_statement)
-        if(has_start_stop):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
-        else:
-            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
+        queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
+        # has_start_stop = _test_START_STOP_format(where_statement)
+        # if(has_start_stop):
+        #     queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
+        # else:
+        #     queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
 
     return queries

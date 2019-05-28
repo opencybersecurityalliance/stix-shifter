@@ -1,5 +1,4 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.qradar import qradar_data_mapping
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
@@ -111,14 +110,14 @@ class TestStixToAql(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_pattern_with_one_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
@@ -183,14 +182,14 @@ class TestStixToAql(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.567Z'}, {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
 
-    def test_start_stop_qualifiers_with_one_observation(self):
+    def test_start_stop_qualifiers_with_one_observation_with_an_unmapped_attribute(self):
         start_time_01 = "t'2016-06-01T01:30:00.123Z'"
         stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
         unix_start_time_01 = 1464744600123
         unix_stop_time_01 = 1464747600123
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(start_time_01, stop_time_01)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'network-traffic:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'}]
@@ -224,7 +223,8 @@ class TestStixToAql(unittest.TestCase, object):
         assert query['start_time'] == unix_start_time_01
         assert query['end_time'] == unix_stop_time_02
 
-    def test_start_stop_qualifiers_with_three_observations(self):
+    # BROKEN, not returning query without qualifier
+    def test_start_stop_qualifiers_with_three_observations_and_an_unmapped_attribute(self):
         start_time_01 = "t'2016-06-01T00:00:00.123Z'"
         stop_time_01 = "t'2016-06-01T01:11:11.456Z'"
         start_time_02 = "t'2016-06-07T02:22:22.789Z'"
@@ -283,14 +283,6 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {} {}".format(default_limit, default_time)
         parsed_stix = [{'value': '198.51.100.0/24', 'comparison_operator': 'ISSUBSET', 'attribute': 'ipv4-addr:value'}]
         _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
-
-    # def test_custom_time_limit_and_result_count_and_mappings(self):
-    #     stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-    #     custom_options = copy.deepcopy(OPTIONS)
-    #     query = translation.translate('qradar', 'query', '{}', stix_pattern, custom_options)
-    #     where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(custom_options['result_limit'], custom_options['timerange'])
-    #     parsed_stix = [{'value': '192.168.122.83', 'comparison_operator': '=', 'attribute': 'ipv4-addr:value'}]
-    #     assert query == {'queries': [custom_selections + from_statement + where_statement], 'parsed_stix': parsed_stix}
 
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
