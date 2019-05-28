@@ -28,7 +28,7 @@ class DataMapper:
         if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
             return self.map_data[stix_object_name]["fields"][stix_property_name]
         else:
-            raise DataMappingException("Unable to map property `{}:{}` into AQL".format(stix_object_name, stix_property_name))
+            return []
 
     def map_selections(self):
         try:
