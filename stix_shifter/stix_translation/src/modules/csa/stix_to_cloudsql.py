@@ -4,6 +4,7 @@ from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import data_mapping
 from . import query_constructor
+from stix_shifter.stix_translation.src.unmapped_attribute_stripper import strip_unmapped_attributes
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ class StixToCloudSQL(BaseQueryTranslator):
 
         query_object = generate_query(data)
         data_model_mapper = data_mapping.DataMapper(self.dialect)
+        query_object = strip_unmapped_attributes(query_object, data_model_mapper)
         query_string = query_constructor.translate_pattern(
             query_object, data_model_mapper)
         return query_string

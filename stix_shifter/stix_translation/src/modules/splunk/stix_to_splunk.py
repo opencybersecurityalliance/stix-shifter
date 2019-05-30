@@ -5,6 +5,7 @@ from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import query_constructor
 from ..cim import cim_data_mapping
+from stix_shifter.stix_translation.src.unmapped_attribute_stripper import strip_unmapped_attributes
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class StixToSplunk(BaseQueryTranslator):
             except AttributeError:
                 raise NotImplementedError(f"Module {data_mapper_module_name} does not implement mapper_class attribute")
 
+        query_object = strip_unmapped_attributes(query_object, data_model_mapper)
         translate_options = {}
         translate_options['result_limit'] = options['result_limit']
         timerange = options['timerange']

@@ -23,6 +23,7 @@ class StixToRelevanceQuery(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Relevance language")
 
         query_object = generate_query(data)
+        # TODO: Will need to implement a data mapper before using the unmapped attribute stripper
         query_string = query_constructor.translate_pattern(
             query_object, options)
 
