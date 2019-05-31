@@ -31,5 +31,4 @@ class DataMapper:
         if len(results) != 0:
             return results
         else:
-            raise DataMappingException("Unable to map property `{}:{}` into cb".format(
-                stix_object_name, stix_property_name))
+            return []
