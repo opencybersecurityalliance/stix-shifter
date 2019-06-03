@@ -12,9 +12,11 @@ DEFAULT_TIMERANGE = 5
 
 translation = stix_translation.StixTranslation()
 
+
 def _test_query_assertions(translated_query, test_query, parsed_stix):
     assert translated_query['queries'] == test_query
     assert translated_query['parsed_stix'] == parsed_stix
+
 
 def _start_and_stop_time():
     stop_time = datetime.datetime.utcnow()
@@ -25,6 +27,7 @@ def _start_and_stop_time():
     converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
     converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
     return converted_starttime, converted_stoptime
+
 
 def _remove_timestamp_from_query(queries):
     pattern = r'\s*AND\s*\(\@timestamp:\["\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"\s*TO\s*"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"\]\)'
@@ -98,16 +101,9 @@ class TestStixtoQuery(unittest.TestCase, object):
     def test_complex_query(self):
         stix_pattern = "[network-traffic:protocols[*] LIKE 'ipv_' AND network-traffic:src_port>443] START t'2019-04-11T08:42:39.297Z' STOP t'2019-04-11T08:43:39.297Z' OR [user-account:user_id = '_' AND artifact:payload_bin LIKE '%'] START t'2019-04-11T14:35:44.011Z' STOP t'2019-04-21T16:35:44.011Z' AND [process:pid<700 OR url:value LIKE '%' AND process:creator_user_ref.user_id IN ('root','admin')] START t'2019-04-11T14:35:44.011Z' STOP t'2019-04-17T14:35:44.011Z'"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
-        test_query = ['(source.port:>443 OR client.port:>443) AND (network.transport : ipv? OR network.type : ipv? OR network.protocol : ipv?) AND (@timestamp:["2019-04-11T08:42:39.297Z" TO "2019-04-11T08:43:39.297Z"])', 'event.original : * AND user.name : "_" AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-21T16:35:44.011Z"])', '(user.name : ("root" OR "admin") AND url.original : *) OR process.pid:<700 AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-17T14:35:44.011Z"])']
+        test_query = ['(source.port:>443 OR client.port:>443) AND (network.transport : ipv? OR network.type : ipv? OR network.protocol : ipv?) AND (@timestamp:["2019-04-11T08:42:39.297Z" TO "2019-04-11T08:43:39.297Z"])',
+                      'event.original : * AND user.name : "_" AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-21T16:35:44.011Z"])', '(user.name : ("root" OR "admin") AND url.original : *) OR process.pid:<700 AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-17T14:35:44.011Z"])']
         assert translated_query['queries'] == test_query
-
-    def test_data_mapping_exception(self):
-        stix_pattern = "[file:id = 'some_file.exe']"
-        result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
-        test_error = 'data mapping error : Unable to map property `file:id` into data source query'
-        assert result['success'] is False
-        assert result['code'] == 'mapping_error'
-        assert result['error'] == test_error
 
     def test_file_not_equal_query(self):
         stix_pattern = "[file:name != 'some_file.exe']"
@@ -180,12 +176,20 @@ class TestStixtoQuery(unittest.TestCase, object):
         parsed_stix = [{'attribute': 'network-traffic:protocols[*]', 'comparison_operator': 'LIKE', 'value': '_n%'}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
         _test_query_assertions(translated_query, test_query, parsed_stix)
 
-    def test_unmapped_attribute(self):
-        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
+    def test_unmapped_attribute_handling_with_OR(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' OR unmapped:attribute = 'something']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['url.original : "http://www.testaddress.com"']
+        parsed_stix = [{'attribute': 'unmapped:attribute', 'comparison_operator': '=', 'value': 'something'}, {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'http://www.testaddress.com'}]
+        _test_query_assertions(translated_query, test_query, parsed_stix)
+
+    def test_unmapped_attribute_handling_with_AND(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' AND unmapped:attribute = 'something']"
         result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
@@ -248,7 +252,8 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "([network-traffic:src_port = 37020 AND user-account:user_id = 'root'] OR [ipv4-addr:value = '192.168.122.83']) START {} STOP {}".format(start_time, stop_time)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'][-1] = _remove_timestamp_from_query(translated_query['queries'][-1])
-        test_query = ['(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])', 'user.name : "root" AND (source.port : "37020" OR client.port : "37020")']
+        test_query = ['(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
+                      'user.name : "root" AND (source.port : "37020" OR client.port : "37020")']
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
@@ -262,7 +267,8 @@ class TestStixtoQuery(unittest.TestCase, object):
         stop_time_02 = "t'2019-04-01T04:30:24.743Z'"
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
-        test_query = ['user.name : "root" AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])', '(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T03:55:00.123Z" TO "2019-04-01T04:30:24.743Z"])']
+        test_query = ['user.name : "root" AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
+                      '(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T03:55:00.123Z" TO "2019-04-01T04:30:24.743Z"])']
         parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
@@ -278,7 +284,8 @@ class TestStixtoQuery(unittest.TestCase, object):
             start_time_01, stop_time_01, start_time_02, stop_time_02)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'][-1] = _remove_timestamp_from_query(translated_query['queries'][-1])
-        test_query = ['(destination.port : "635" OR server.port : "635") AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T00:00:00.123Z" TO "2019-04-01T01:11:11.456Z"])', '(source.ip : "333.333.333.0" OR destination.ip : "333.333.333.0" OR client.ip : "333.333.333.0" OR server.ip : "333.333.333.0") AND (@timestamp:["2019-04-07T02:22:22.789Z" TO "2019-04-07T03:33:33.012Z"])', 'url.original : "www.example.com"']
+        test_query = ['(destination.port : "635" OR server.port : "635") AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T00:00:00.123Z" TO "2019-04-01T01:11:11.456Z"])',
+                      '(source.ip : "333.333.333.0" OR destination.ip : "333.333.333.0" OR client.ip : "333.333.333.0" OR server.ip : "333.333.333.0") AND (@timestamp:["2019-04-07T02:22:22.789Z" TO "2019-04-07T03:33:33.012Z"])', 'url.original : "www.example.com"']
         parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 635},
                        {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 37020},
                        {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'},
