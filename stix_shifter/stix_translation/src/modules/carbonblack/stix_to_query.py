@@ -6,7 +6,7 @@ from . import query_constructor
 logger = logging.getLogger(__name__)
 
 
-class StixToAQL(BaseQueryTranslator):
+class StixToQuery(BaseQueryTranslator):
 
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
@@ -21,7 +21,7 @@ class StixToAQL(BaseQueryTranslator):
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to ariel")
+        logger.info("Converting STIX2 Pattern to cbquery")
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, data_model_mapper, options)

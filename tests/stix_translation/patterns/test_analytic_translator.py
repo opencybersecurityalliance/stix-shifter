@@ -1,7 +1,6 @@
 import logging
 import unittest
 from stix_shifter.stix_translation.src.patterns.translator import translate, DataModels, SearchPlatforms
-from stix_shifter.stix_translation.src.modules.splunk import stix_to_splunk
 from .helpers.input_file_helpers import *
 from os import listdir, path
 

@@ -15,7 +15,7 @@ def _test_query_assertions(query, queries, parsed_stix):
     assert query['parsed_stix'] == parsed_stix
 
 
-class TestStixToCB(unittest.TestCase, object):
+class TestStixToQuery(unittest.TestCase, object):
 
     def test_file_query(self):
         stix_pattern = "[file:name = 'some_file.exe']"

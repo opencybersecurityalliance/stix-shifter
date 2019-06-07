@@ -6,7 +6,7 @@ from . import query_constructor
 logger = logging.getLogger(__name__)
 
 
-class StixToRelevanceQuery(BaseQueryTranslator):
+class StixToQuery(BaseQueryTranslator):
 
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
