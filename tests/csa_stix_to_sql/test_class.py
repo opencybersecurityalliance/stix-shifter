@@ -32,9 +32,8 @@ def _translate_query(stix_pattern, dialect):
     return translation.translate("csa:{}".format(dialect), 'query', '{}', stix_pattern)
 
 
-def _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix):
+def _test_query_assertions(query, selections, from_statement, where_statement):
     assert query['queries'] == [selections + from_statement + where_statement]
-    assert query['parsed_stix'] == parsed_stix
 
 
 class TestStixToSql(unittest.TestCase, object):
@@ -44,15 +43,13 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Network.A = '192.168.122.84' OR Network.B = '192.168.122.84') OR (Network.A = '192.168.122.83' OR Network.B = '192.168.122.83')"
-        parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_ipv4_in_query(self):
         dialect = 'nf'
         stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Network.A IN (192.168.122.83 OR 192.168.122.84) OR Network.B IN (192.168.122.83 OR 192.168.122.84))"
-        # parsed_stix = [{'attribute': 'ipv4-addr:value', 'comparison_operator': 'IN', 'value': '192.168.122.84'}, {'attribute': 'ipv4-addr:value', 'comparison_operator': 'IN', 'value': '192.168.122.83'}]
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_ipv6_query(self):
@@ -60,32 +57,28 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[ipv6-addr:value = '192.168.122.83']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Network.A = '192.168.122.83' OR Network.B = '192.168.122.83')"
-        parsed_stix = [{'attribute': 'ipv6-addr:value', 'comparison_operator': '=', 'value': '192.168.122.83'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_url_query(self):
         dialect = 'nf'
         stix_pattern = "[url:value = 'http://www.testaddress.com']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE url = 'http://www.testaddress.com'"
-        parsed_stix = [{'attribute': 'url:value', 'comparison_operator': '=', 'value': 'http://www.testaddress.com'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_mac_address_query(self):
         dialect = 'nf'
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Link.A = '00-00-5E-00-53-00' OR Link.B = '00-00-5E-00-53-00')"
-        parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_domain_query(self):
         dialect = 'nf'
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE domainname = 'example.com'"
-        parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_query_from_multiple_observation_expressions_joined_by_and(self):
         dialect = 'nf'
@@ -93,9 +86,7 @@ class TestStixToSql(unittest.TestCase, object):
         query = _translate_query(stix_pattern, dialect)
         # Expect the STIX AND to convert to an AQL OR.
         where_statement = "WHERE domainname = 'example.com' OR (Link.A = '00-00-5E-00-53-00' OR Link.B = '00-00-5E-00-53-00')"
-        parsed_stix = [{'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'},
-                       {'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_query_from_multiple_comparison_expressions_joined_by_and(self):
         dialect = 'nf'
@@ -103,9 +94,7 @@ class TestStixToSql(unittest.TestCase, object):
         query = _translate_query(stix_pattern, dialect)
         # Expect the STIX AND to convert to an AQL AND.
         where_statement = "WHERE (Link.A = '00-00-5E-00-53-00' OR Link.B = '00-00-5E-00-53-00') AND domainname = 'example.com'"
-        parsed_stix = [{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'},
-                       {'attribute': 'domain-name:value', 'comparison_operator': '=', 'value': 'example.com'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_file_query(self):
         # TODO: Add support for file hashes. Unsure at this point how QRadar queries them
@@ -113,16 +102,14 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[file:name = 'some_file.exe']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE filename = 'some_file.exe'"
-        parsed_stix = [{'attribute': 'file:name', 'comparison_operator': '=', 'value': 'some_file.exe'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_port_queries(self):
         dialect = 'nf'
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE Transport.B = '23456' OR Transport.A = '12345'"
-        parsed_stix = [{'attribute': 'network-traffic:dst_port', 'comparison_operator': '=', 'value': 23456}, {'attribute': 'network-traffic:src_port', 'comparison_operator': '=', 'value': 12345}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_unmapped_attribute_with_AND(self):
         stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
@@ -136,23 +123,20 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[user-account:user_id = 'root' OR unmapped-object:some_invalid_attribute = 'whatever']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE initiator.id = 'root'"
-        parsed_stix = [{'attribute': 'unmapped-object:some_invalid_attribute', 'comparison_operator': '=', 'value': 'whatever'},
-                       {'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'}]
-        _test_query_assertions(query, at_selections, at_from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, at_selections, at_from_statement, where_statement)
 
     def test_user_account_query(self):
         dialect = 'at'
         stix_pattern = "[user-account:user_id = 'root']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE initiator.id = 'root'"
-        parsed_stix = [{'attribute': 'user-account:user_id', 'comparison_operator': '=', 'value': 'root'}]
-        _test_query_assertions(query, at_selections, at_from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, at_selections, at_from_statement, where_statement)
 
     def test_invalid_stix_pattern(self):
         dialect = 'at'
         stix_pattern = "[not_a_valid_pattern]"
-        result = _translate_query(stix_pattern, dialect)
-        assert not result['success']
+        result = translation.translate('csa', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
+        assert False == result['success']
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']
 
@@ -165,25 +149,21 @@ class TestStixToSql(unittest.TestCase, object):
             stix_pattern = "[network-traffic:protocols[*] = '" + key + "']"
             query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE Transport.Protocol = '" + value + "'"
-        parsed_stix = [{'attribute': 'network-traffic:protocols[*]', 'comparison_operator': '=', 'value': key}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_network_traffic_start_stop(self):
         dialect = 'nf'
         stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.000Z']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE Last = '1528965384' OR Start = '1528965384'"
-        parsed_stix = [{'attribute': 'network-traffic:end', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'},
-                       {'attribute': 'network-traffic:start', 'comparison_operator': '=', 'value': '2018-06-14T08:36:24.000Z'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_artifact_queries(self):
         dialect = 'nf'
         stix_pattern = "[artifact:payload_bin MATCHES 'some text']"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE payload MATCHES '.*some text.*'"
-        parsed_stix = [{'attribute': 'artifact:payload_bin', 'comparison_operator': 'MATCHES', 'value': 'some text'}]
-        _test_query_assertions(query, selections, from_statement, where_statement, parsed_stix)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
 # Sample from SkyDive
 #             {

@@ -14,6 +14,7 @@ TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bi
 
 RESULTS = 'results'
 QUERY = 'query'
+PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 DEFAULT_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
@@ -26,6 +27,14 @@ class StixTranslation:
 
     def __init__(self):
         self.args = []
+
+    def _validate_pattern(self, pattern):
+        # Validator doesn't support START STOP qualifier so strip out before validating pattern
+        start_stop_pattern = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
+        pattern_without_start_stop = re.sub(start_stop_pattern, " ", pattern)
+        errors = run_validator(pattern_without_start_stop)
+        if (errors != []):
+            raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
@@ -62,12 +71,7 @@ class StixTranslation:
             else:
                 interface = translator_module.Translator()
 
-            if translate_type == QUERY:
-                try:
-                    data_model_mapper = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping").DataMapper(options)
-                except Exception as ex:
-                    print("Data model mapper not found for {} so attempting to use CAR or CIM".format(module))
-                    data_model_mapper = self._cim_or_car_data_mapper(module, options)
+            if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
                 current_recursion_limit = sys.getrecursionlimit()
                 if current_recursion_limit < recursion_limit:
@@ -77,29 +81,33 @@ class StixTranslation:
                     options['result_limit'] = DEFAULT_LIMIT
                 if 'timerange' not in options:
                     options['timerange'] = DEFAULT_TIMERANGE
-                errors = []
-                # Temporarily skip validation on patterns with START STOP qualifiers: validator doesn't yet support timestamp format
-                start_stop_pattern = "START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP"
-                pattern_match = re.search(start_stop_pattern, data)
-                if (not pattern_match):
-                    errors = run_validator(data)
-                if (errors != []):
-                    raise StixValidationException(
-                        "The STIX pattern has the following errors: {}".format(errors))
+
+                if translate_type == QUERY:
+                    if 'validate_pattern' in options and options['validate_pattern'] == "true":
+                        self._validate_pattern(data)
+                    try:
+                        data_model_mapper = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping").DataMapper(options)
+                    except Exception as ex:
+                        print("Data model mapper not found for {} so attempting to use CAR or CIM".format(module))
+                        data_model_mapper = self._cim_or_car_data_mapper(module, options)
+                    antlr_parsing = generate_query(data)
+                    if data_model_mapper:
+                        # Remove unmapped STIX attributes from antlr parsing
+                        antlr_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
+                    # Converting STIX pattern to datasource query
+                    queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
+                    return {'queries': queries}
                 else:
+                    self._validate_pattern(data)
                     # Translating STIX pattern to antlr query object
                     antlr_parsing = generate_query(data)
                     # Extract pattern elements into parsed stix object
                     parsed_stix_dictionary = parse_stix(antlr_parsing, options['timerange'])
-                    if data_model_mapper:
-                        # Remove unmapped STIX attributes from antlr parsing
-                        antlr_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']
-                    # Convert antlr object to datasource query
-                    queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
-                    return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+                    return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 try:
