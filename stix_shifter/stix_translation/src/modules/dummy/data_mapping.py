@@ -1,6 +1,5 @@
 from os import path
 import json
-from stix_shifter.stix_translation.src.exceptions import DataMappingException
 
 
 def _fetch_mapping():
@@ -28,5 +27,3 @@ class DataMapper:
             return self.map_data[stix_object_name]["fields"][stix_property_name]
         else:
             return []
-            # raise DataMappingException("Unable to map property `{}:{}` into data source query".format(
-            #     stix_object_name, stix_property_name))

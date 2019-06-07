@@ -1,6 +1,5 @@
 import logging
 
-from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
 from . import query_constructor
 
@@ -9,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class StixToRelevanceQuery(BaseQueryTranslator):
 
-    def transform_query(self, data, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
         Transforms STIX query into Relevance query format. Based on a mapping file
         :param data: STIX query string to transform into aql query format
@@ -22,9 +21,8 @@ class StixToRelevanceQuery(BaseQueryTranslator):
 
         logger.info("Converting STIX2 Pattern to Relevance language")
 
-        query_object = generate_query(data)
-        # TODO: Will need to implement a data mapper before using the unmapped attribute stripper
+        # TODO: Will need to implement a data_model_mapper before using the unmapped attribute stripper
         query_string = query_constructor.translate_pattern(
-            query_object, options)
+            antlr_parsing_object, options)
 
         return query_string

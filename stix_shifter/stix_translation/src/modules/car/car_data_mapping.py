@@ -98,10 +98,10 @@ class CarDataMapper:
         "x509-certificate": None
     }
 
-    def __init__(self, mapping=None):
+    def __init__(self, options={}):
         # use user defined mapping object if provided in options
-        if mapping:
-            self.MAPPINGS = mapping
+        if 'mapping' in options:
+            self.MAPPINGS = options['mapping']
 
     def map_object(self, stix_object_name):
         if stix_object_name in self.MAPPINGS and self.MAPPINGS[stix_object_name] != None:

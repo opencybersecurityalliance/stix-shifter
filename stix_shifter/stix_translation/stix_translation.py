@@ -5,6 +5,9 @@ from stix_shifter.stix_translation.src.stix_pattern_parser import parse_stix
 import re
 from ..utils.error_response import ErrorResponder
 from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
+from stix_shifter.stix_translation.src.modules.car import car_data_mapping
+from stix_shifter.stix_translation.src.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'bundle']
@@ -13,6 +16,7 @@ RESULTS = 'results'
 QUERY = 'query'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
+DEFAULT_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 
 
 class StixTranslation:
@@ -54,10 +58,16 @@ class StixTranslation:
 
             if dialect is not None:
                 interface = translator_module.Translator(dialect=dialect)
+                options['dialect'] = dialect
             else:
                 interface = translator_module.Translator()
 
             if translate_type == QUERY:
+                try:
+                    data_model_mapper = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping").DataMapper(options)
+                except Exception as ex:
+                    print("Data model mapper not found for {} so attempting to use CAR or CIM".format(module))
+                    data_model_mapper = self._cim_or_car_data_mapper(module, options)
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
                 current_recursion_limit = sys.getrecursionlimit()
                 if current_recursion_limit < recursion_limit:
@@ -78,15 +88,17 @@ class StixTranslation:
                         "The STIX pattern has the following errors: {}".format(errors))
                 else:
                     # Translating STIX pattern to antlr query object
-                    query_object = generate_query(data)
-                    # Converting query object to datasource query
-                    parsed_stix_dictionary = parse_stix(query_object, options['timerange'])
+                    antlr_parsing = generate_query(data)
+                    # Extract pattern elements into parsed stix object
+                    parsed_stix_dictionary = parse_stix(antlr_parsing, options['timerange'])
+                    if data_model_mapper:
+                        # Remove unmapped STIX attributes from antlr parsing
+                        antlr_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']
-                    # Todo: pass in the query_object instead of the data so we can remove multiple generate_query calls.
-                    # Converting STIX pattern to datasource query
-                    queries = interface.transform_query(data, options)
+                    # Convert antlr object to datasource query
+                    queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
                     return {'queries': queries, 'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
@@ -98,7 +110,14 @@ class StixTranslation:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
             print('Caught exception: ' + str(ex) + " " + str(type(ex)))
-            
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
+
+    def _cim_or_car_data_mapper(self, module, options):
+        if options.get('data_mapper'):
+            return DEFAULT_MAPPERS[options.get('data_mapper')].mapper_class(options)
+        elif module in DEFAULT_MAPPERS:
+            return DEFAULT_MAPPERS[module].mapper_class(options)
+        else:
+            None

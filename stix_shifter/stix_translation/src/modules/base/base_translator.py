@@ -23,7 +23,7 @@ class BaseTranslator:
         """
         return self.result_translator.translate_results(data_source, data, options, mapping)
 
-    def transform_query(self, data, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
         Transforms STIX query into a different query format. based on a mapping file
         :param data: STIX query string to transform into another format
@@ -34,4 +34,4 @@ class BaseTranslator:
         :rtype: str
         """
 
-        return self.query_translator.transform_query(data, options, mapping)
+        return self.query_translator.transform_query(data, antlr_parsing_object, data_model_mapper, options, mapping)

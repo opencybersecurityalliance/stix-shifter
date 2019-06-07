@@ -158,12 +158,12 @@ class CimDataMapper:
         ]
     }
 
-    def __init__(self, mapping=None, fields=None):
+    def __init__(self, options={}):
         # use user defined mapping object if provided in options
-        if mapping:
-            self.MAPPINGS = mapping
-        if fields:
-            self.FIELDS = fields
+        if 'mapping' in options:
+            self.MAPPINGS = options['mapping']
+        if 'select_fields' in options:
+            self.FIELDS = options['select_fields']
 
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:

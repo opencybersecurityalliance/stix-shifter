@@ -20,13 +20,13 @@ def _fetch_mapping():
 
 
 class DataMapper:
-    def __init__(self, dialect):
-        if dialect is None:
+    def __init__(self, options):
+        if options['dialect'] is None:
             self.dialect = 'at'
         else:
-            m = re.match(r'^[a-z0-9]+$', dialect)
+            m = re.match(r'^[a-z0-9]+$', options['dialect'])
             if m:
-                self.dialect = dialect
+                self.dialect = options['dialect']
             else:
                 self.dialect = 'at'
 
