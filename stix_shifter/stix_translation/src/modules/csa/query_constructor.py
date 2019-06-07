@@ -8,7 +8,7 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, ValueTransformer
+from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
 
 
 def _fetch_network_protocol_mapping():

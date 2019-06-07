@@ -3,7 +3,6 @@ import importlib
 
 from ..base.base_query_translator import BaseQueryTranslator
 from . import elastic_query_constructor
-# from stix_shifter.stix_translation.src.unmapped_attribute_stripper import strip_unmapped_attributes
 
 logger = logging.getLogger(__name__)
 

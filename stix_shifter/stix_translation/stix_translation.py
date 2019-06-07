@@ -1,13 +1,13 @@
 import importlib
 from stix_shifter.stix_translation.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
-from stix_shifter.stix_translation.src.stix_pattern_parser import parse_stix
+from stix_shifter.stix_translation.src.utils.stix_pattern_parser import parse_stix
 import re
 from ..utils.error_response import ErrorResponder
-from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+from .src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
 from stix_shifter.stix_translation.src.modules.car import car_data_mapping
-from stix_shifter.stix_translation.src.unmapped_attribute_stripper import strip_unmapped_attributes
+from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'bundle']

@@ -1,4 +1,4 @@
-from stix_shifter.stix_translation.src.exceptions import DataMappingException
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 
 # TODO: should this really be a class? Could be a module, made it a class
 # in case we have configuration arguments at some point

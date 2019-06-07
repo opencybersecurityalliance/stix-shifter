@@ -1,7 +1,7 @@
 from ..base.base_translator import BaseTranslator
 from .stix_to_query import StixToQuery
 from ...json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src import transformers
+from stix_shifter.stix_translation.src.utils import transformers
 
 
 from os import path

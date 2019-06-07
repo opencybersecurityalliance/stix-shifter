@@ -1,7 +1,7 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, DateTimeToUnixTimestamp, EpochSecondsToTimestamp
+from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds, DateTimeToUnixTimestamp, EpochSecondsToTimestamp
 from stix_shifter.stix_translation.src.json_to_stix import observable
 import datetime
 import logging
@@ -24,11 +24,11 @@ class QueryStringPatternTranslator:
         ComparisonComparators.NotEqual: "NOT",
         ComparisonComparators.Like: ":",
         ComparisonComparators.In: ":",
-        ComparisonComparators.Matches: ':', # Elastic Search does not support PCRE.
+        ComparisonComparators.Matches: ':',  # Elastic Search does not support PCRE.
         ComparisonComparators.IsSubSet: ':',
         ComparisonComparators.IsSuperSet: ':',
         ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'OR' # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        ObservationOperators.And: 'OR'  # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
@@ -60,7 +60,6 @@ class QueryStringPatternTranslator:
         else:
             return value
 
-
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -79,34 +78,34 @@ class QueryStringPatternTranslator:
 
         for mapped_field in mapped_fields_array:
             if expression.comparator == ComparisonComparators.NotEqual or \
-                    expression.comparator == ComparisonComparators.IsSuperSet :
+                    expression.comparator == ComparisonComparators.IsSuperSet:
                 comparator = ':'
                 comparison_string += "(NOT {mapped_field} {comparator} {value} AND {mapped_field}:*)".format(mapped_field=mapped_field, comparator=comparator, value=value)
             elif expression.comparator == ComparisonComparators.GreaterThan or \
-                 expression.comparator == ComparisonComparators.LessThan or \
-                 expression.comparator == ComparisonComparators.GreaterThanOrEqual or \
-                 expression.comparator == ComparisonComparators.LessThanOrEqual:
-                    # Check whether value is in datetime format, Ex: process.created
-                    pattern = "^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
-                    try:
-                        match = bool(re.search(pattern, value))
-                    except:
-                        match = False
-                    if match:
-                        # IF value is in datetime format then do conversion of datetime into
-                        # proper Range query of timestamps supported by elastic_ecs for comparators like :<,:>,:<=,:>=
-                        comparison_string += _get_timestamp(mapped_field, comparator, value)
-                    else:
-                        comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field,
-                                                                                      comparator=comparator,
-                                                                                      value=value)
+                    expression.comparator == ComparisonComparators.LessThan or \
+                    expression.comparator == ComparisonComparators.GreaterThanOrEqual or \
+                    expression.comparator == ComparisonComparators.LessThanOrEqual:
+                # Check whether value is in datetime format, Ex: process.created
+                pattern = "^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
+                try:
+                    match = bool(re.search(pattern, value))
+                except:
+                    match = False
+                if match:
+                    # IF value is in datetime format then do conversion of datetime into
+                    # proper Range query of timestamps supported by elastic_ecs for comparators like :<,:>,:<=,:>=
+                    comparison_string += _get_timestamp(mapped_field, comparator, value)
+                else:
+                    comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field,
+                                                                                    comparator=comparator,
+                                                                                    value=value)
             elif expression.comparator == ComparisonComparators.IsSubSet:
-                    comparison_string += "({mapped_field} {comparator} {value} AND {mapped_field}:*)".format(
-                        mapped_field=mapped_field, comparator=comparator, value=value)
+                comparison_string += "({mapped_field} {comparator} {value} AND {mapped_field}:*)".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
             else:
                 comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                        comparator=comparator,
-                                                                                        value=value)
+                                                                                  comparator=comparator,
+                                                                                  value=value)
             if (mapped_fields_count > 1):
                 comparison_string += " OR "
                 mapped_fields_count -= 1
@@ -127,7 +126,7 @@ class QueryStringPatternTranslator:
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
-            #if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+            # if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
             #    value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
@@ -136,7 +135,7 @@ class QueryStringPatternTranslator:
                     expression.comparator == ComparisonComparators.NotEqual or \
                     expression.comparator == ComparisonComparators.IsSubSet or \
                     expression.comparator == ComparisonComparators.IsSuperSet:
-                    value = self._format_equality(expression.value)
+                value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
                 value = self._format_like(expression.value)
@@ -149,15 +148,14 @@ class QueryStringPatternTranslator:
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
 
-
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
 
             if qualifier is not None:
-               self.qualified_queries.append("{} {}".format(comparison_string, qualifier))
-               return ''
+                self.qualified_queries.append("{} {}".format(comparison_string, qualifier))
+                return ''
             else:
-               return "{}".format(comparison_string)
+                return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             operator = self.comparator_lookup[expression.operator]
@@ -241,6 +239,7 @@ def _get_timestamp(mapped_field, comparator, value):
         return "({mapped_field}{value})".format(mapped_field=mapped_field,
                                                 value=converted_value)
 
+
 def _test_or_add_milliseconds(timestamp) -> str:
     if not _test_timestamp(timestamp):
         raise ValueError("Invalid timestamp")
@@ -259,6 +258,7 @@ def _test_START_STOP_format(query_string) -> bool:
     match = re.search(pattern, query_string)
     return bool(match)
 
+
 def _test_timerange_format(query_string) -> bool:
     # Matches @timestamp:["2019-01-28T12:24:01.009Z" TO "2019-01-28T12:54:01.009Z]"
     pattern = r'\@timestamp:\["\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"\s*TO'
@@ -276,7 +276,7 @@ def _convert_timestamps_to_milliseconds(query_parts):
     # grab time stamps from array
     start_time = _test_or_add_milliseconds(query_parts[2])
     stop_time = _test_or_add_milliseconds(query_parts[4])
-    return query_parts[0] + ' AND (@timestamp:["'+ str(start_time) + '" TO "' + str(stop_time) + '"])'
+    return query_parts[0] + ' AND (@timestamp:["' + str(start_time) + '" TO "' + str(stop_time) + '"])'
 
 
 def _format_translated_queries(query_array):
@@ -329,6 +329,3 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
             queries.append("{} {}".format(query_string, timerange_str))
 
     return queries
-
-
-

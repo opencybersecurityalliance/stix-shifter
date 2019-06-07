@@ -1,6 +1,6 @@
 from os import path
 import json
-from stix_shifter.stix_translation.src.exceptions import DataMappingException
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 
 
 def _fetch_mapping():
