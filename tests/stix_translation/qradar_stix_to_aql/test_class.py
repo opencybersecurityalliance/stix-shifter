@@ -98,6 +98,12 @@ class TestStixToAql(unittest.TestCase, object):
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert 'Unable to map the following STIX attributes' in result['error']
 
+    def test_pattern_with_two_observation_exp_with_one_unmapped_attribute(self):
+        stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever'] AND [file:name = 'some_file.exe']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
     def test_pattern_with_one_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
