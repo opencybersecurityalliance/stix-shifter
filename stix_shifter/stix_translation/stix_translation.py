@@ -128,4 +128,4 @@ class StixTranslation:
         elif module in DEFAULT_MAPPERS:
             return DEFAULT_MAPPERS[module].mapper_class(options)
         else:
-            None
+            return None
