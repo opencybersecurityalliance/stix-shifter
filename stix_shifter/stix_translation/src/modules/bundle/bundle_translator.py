@@ -5,7 +5,7 @@ import requests
 
 
 class Translator(BaseTranslator):
-    def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options={}, mapping=None):
         # Data is a STIX pattern and we don't want to touch it
         return json.dumps(data)
 
