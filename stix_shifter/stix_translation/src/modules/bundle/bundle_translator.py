@@ -13,7 +13,7 @@ class Translator(BaseTranslator):
         data_source = json.loads(data_source)
         for obs in bundle_data:
             obs["created_by_ref"] = data_source['id']
-        return json.dumps(data, indent=4, sort_keys=False)
+        return json.dumps(bundle_data, indent=4, sort_keys=False)
 
     def __init__(self):
         self.result_translator = self
