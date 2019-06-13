@@ -10,6 +10,8 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
+        :param data: STIX pattern to transform into native data source query
+        :type data: str
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
         :type antlr_parsing_object: object
         :data_model_mapper: Mapping object for the data source

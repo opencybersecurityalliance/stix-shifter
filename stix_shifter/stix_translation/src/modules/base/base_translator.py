@@ -16,7 +16,7 @@ class BaseTranslator:
         :type data_source: str
         :param data: data to translate into STIX format
         :type data: str
-        :param mapping: The mapping file path to use as instructions on how to translate the given data to STIX. This should default to something if it hasn't been passed in
+        :param mapping: The mapping file path to use as instructions on how to translate the given data to STIX.
         :type mapping: str (filepath)
         :return: translated STIX formatted results
         :rtype: str
@@ -26,9 +26,13 @@ class BaseTranslator:
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
         Transforms STIX query into a different query format. based on a mapping file
-        :param data: STIX query string to transform into another format
+        :param data: STIX pattern to transform into native data source query
         :type data: str
-        :param mapping: The mapping file path to use as instructions on how to transform the given STIX query into another format. This should default to something if one isn't passed in
+        :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
+        :type antlr_parsing_object: object
+        :data_model_mapper: Mapping object for the data source
+        :type data_model_mapper: object
+        :param mapping: The mapping file path to use as instructions on how to transform the given STIX pattern into native data source query.
         :type mapping: str (filepath)
         :return: transformed query string
         :rtype: str
