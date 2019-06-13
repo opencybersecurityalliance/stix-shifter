@@ -17,7 +17,7 @@ QUERY = 'query'
 PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
-DEFAULT_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
+SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 
 
 class StixTranslation:
@@ -86,7 +86,8 @@ class StixTranslation:
                     if 'validate_pattern' in options and options['validate_pattern'] == "true":
                         self._validate_pattern(data)
                     try:
-                        data_model_mapper = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping").DataMapper(options)
+                        data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
+                        data_model_mapper = data_model.DataMapper(options)
                     except Exception as ex:
                         print("Data model mapper not found for {} so attempting to use CAR or CIM".format(module))
                         data_model_mapper = self._cim_or_car_data_mapper(module, options)
@@ -124,8 +125,8 @@ class StixTranslation:
 
     def _cim_or_car_data_mapper(self, module, options):
         if options.get('data_mapper'):
-            return DEFAULT_MAPPERS[options.get('data_mapper')].mapper_class(options)
-        elif module in DEFAULT_MAPPERS:
-            return DEFAULT_MAPPERS[module].mapper_class(options)
+            return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
+        elif module in SHARED_DATA_MAPPERS:
+            return SHARED_DATA_MAPPERS[module].mapper_class(options)
         else:
             return None
