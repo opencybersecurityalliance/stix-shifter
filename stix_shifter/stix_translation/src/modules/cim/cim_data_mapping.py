@@ -1,7 +1,6 @@
 from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 from stix_shifter.stix_translation.src.modules.base.base_data_mapper import BaseDataMapper
 from os import path
-import json
 
 
 class CimDataMapper(BaseDataMapper):
@@ -28,20 +27,8 @@ class CimDataMapper(BaseDataMapper):
         if 'select_fields' in options:
             self.FIELDS = options['select_fields']
         mapping_json = options.get('mapping')
-        self.MAPPINGS = mapping_json or self.fetch_mapping()
-
-    def fetch_mapping(self):
-        try:
-            basepath = path.dirname(__file__)
-            filepath = path.abspath(
-                path.join(basepath, "json", "from_stix_map.json"))
-
-            map_file = open(filepath).read()
-            map_data = json.loads(map_file)
-            return map_data
-        except Exception as ex:
-            print('exception in main():', ex)
-            return {}
+        basepath = path.dirname(__file__)
+        self.MAPPINGS = mapping_json or self.fetch_mapping(basepath)
 
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:

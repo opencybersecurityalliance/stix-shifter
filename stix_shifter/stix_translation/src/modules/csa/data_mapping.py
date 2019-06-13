@@ -16,21 +16,9 @@ class DataMapper(BaseDataMapper):
             else:
                 self.dialect = 'at'
 
-    def fetch_mapping(self):
-        try:
-            basepath = path.dirname(__file__)
-            filepath = path.abspath(
-                path.join(basepath, "json", "from_stix_map.json"))
-
-            map_file = open(filepath).read()
-            map_data = json.loads(map_file)
-            return map_data
-        except Exception as ex:
-            print('exception in main():', ex)
-            return {}
-
     def map_field(self, stix_object_name, stix_property_name):
-        self.map_data = self.fetch_mapping()
+        basepath = path.dirname(__file__)
+        self.map_data = self.fetch_mapping(basepath)
         if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
             return self.map_data[stix_object_name]["fields"][stix_property_name]
         else:

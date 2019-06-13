@@ -1,16 +1,27 @@
 from abc import ABCMeta, abstractmethod
+from os import path
+import json
 
 
 class BaseDataMapper(object, metaclass=ABCMeta):
 
-    @abstractmethod
-    def fetch_mapping(self):
+    def fetch_mapping(self, basepath):
         """
         Fetches STIX-to-datasource mapping JSON from the module's from_stix_map.json file
+        :param basepath: path of data source translation module
+        :type basepath: str
         """
-        pass
+        try:
+            filepath = path.abspath(
+                path.join(basepath, "json", "from_stix_map.json"))
 
-    @abstractmethod
+            map_file = open(filepath).read()
+            map_data = json.loads(map_file)
+            return map_data
+        except Exception as ex:
+            print('exception in main():', ex)
+            return {}
+
     def map_field(self, stix_object_name, stix_property_name):
         """
         Maps the STIX object:property pair to any matching data source fields. 
