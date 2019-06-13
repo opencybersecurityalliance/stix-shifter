@@ -4,4 +4,4 @@ python-dateutil==2.7.3
 antlr4-python3-runtime==4.7
 boto3==1.9.76
 xmltodict==0.11.0
--e git+git://github.com/oasis-open/cti-pattern-matcher.git@fbe7b5010ac42299344f702034e8970e0f5b8e79#egg=stix2-matcher 
+git+git://github.com/oasis-open/cti-pattern-matcher.git@master#egg=stix2-matcher 
