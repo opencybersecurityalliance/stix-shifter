@@ -15,14 +15,8 @@ class DataMapper(BaseDataMapper):
                 self.dialect = options['dialect']
             else:
                 self.dialect = 'at'
-
-    def map_field(self, stix_object_name, stix_property_name):
         basepath = path.dirname(__file__)
         self.map_data = self.fetch_mapping(basepath)
-        if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
-            return self.map_data[stix_object_name]["fields"][stix_property_name]
-        else:
-            return []
 
     def map_selections(self):
         try:

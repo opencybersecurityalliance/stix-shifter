@@ -28,7 +28,7 @@ class CimDataMapper(BaseDataMapper):
             self.FIELDS = options['select_fields']
         mapping_json = options.get('mapping')
         basepath = path.dirname(__file__)
-        self.MAPPINGS = mapping_json or self.fetch_mapping(basepath)
+        self.map_data = mapping_json or self.fetch_mapping(basepath)
 
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:
@@ -38,17 +38,12 @@ class CimDataMapper(BaseDataMapper):
     # * Need to verify "software" == "inventory"
     # * Need to figure out network traffic when it's for web URLs
     # * Hashes are kind of hacky, just hardcoded. Probably needs to be a regex
+
     def map_object(self, stix_object_name):
-        if stix_object_name in self.MAPPINGS and self.MAPPINGS[stix_object_name] != None:
-            return self.MAPPINGS[stix_object_name]["cim_type"]
+        if stix_object_name in self.map_data and self.map_data[stix_object_name] != None:
+            return self.map_data[stix_object_name]["cim_type"]
         else:
             raise DataMappingException("Unable to map object `{}` into CIM".format(stix_object_name))
-
-    def map_field(self, stix_object_name, stix_property_name):
-        if stix_object_name in self.MAPPINGS and stix_property_name in self.MAPPINGS[stix_object_name]["fields"]:
-            return self.MAPPINGS[stix_object_name]["fields"][stix_property_name]
-        else:
-            return []
 
 
 mapper_class = CimDataMapper

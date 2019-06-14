@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from os import path
 import json
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 
 
 class BaseDataMapper(object, metaclass=ABCMeta):
@@ -33,4 +34,7 @@ class BaseDataMapper(object, metaclass=ABCMeta):
         :return: A list of 0 or more data source fields that map to a combination of stix_object_name and stix_property_name
         :rtype: list
         """
-        pass
+        if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
+            return self.map_data[stix_object_name]["fields"][stix_property_name]
+        else:
+            return []
