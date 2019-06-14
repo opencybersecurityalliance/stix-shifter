@@ -1,7 +1,7 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds
+from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter.stix_translation.src.json_to_stix import observable
 import logging
 import json
@@ -13,6 +13,13 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "sourcemac": ["mac"],
                         "destinationip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "destinationmac": ["mac"]}
+
+START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+TIMESTAMP_MILLISECONDS = "\.\d+Z$"
+TRAILING_COMPARISON_OPERATOR = "\s((OR)|(AND))\s?$"
+TRAILING_COMBINED_COMPARISON_OPERATOR = "\sOPERATOR:[a-zA-Z]+$"
+LEADING_COMBINED_COMPARISON_OPERATOR = "^OPERATOR:"
 
 
 def _fetch_network_protocol_mapping():
@@ -45,18 +52,18 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, timerange):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        self.observation_count = 1
-        # List for any queries that are split due to START STOP qualifier
-        self.qualified_queries = []
-        # Translated query string without any qualifiers
-        self.translated = self.parse_expression(pattern)
-        self.qualified_queries.append(self.translated)
-
-        self.qualified_queries = _format_translated_queries(self.qualified_queries)
+        self.timerange = timerange
+        self.qualified_queries = []  # Queries with START STOP qualifiers
+        self.unqualified_queries = []  # Queries without START STOP qualifiers
+        self.parse_expression(pattern)
+        self.qualified_queries = self._format_qualified_queries()
+        if self.unqualified_queries:
+            combined_unqualified_queries_string = self._format_unqualified_queries()
+            self.qualified_queries.append(combined_unqualified_queries_string)
 
     @staticmethod
     def _format_set(values) -> str:
@@ -165,64 +172,80 @@ class AqlQueryStringPatternTranslator:
             return self._escape_value(expression.value)
 
     @staticmethod
-    def _parse_combined_observation_expression(self, expression):
-        # The pattern has at least one other ObservationExpression
-        self.observation_count += 1
-        operator = self.comparator_lookup[expression.operator]
-        expression_01 = self._parse_expression(expression.expr1)
-        expression_02 = self._parse_expression(expression.expr2)
-        expression_01_nomap = re.search("^NOMAP", expression_01)
-        expression_02_nomap = re.search("^NOMAP", expression_02)
-        # Both expressions are unmapped so throw an error
-        if expression_01_nomap and expression_02_nomap:
-            error_id = expression_01.split(":")[1]
-            raise self.dmm.mapping_errors[error_id]
-        elif expression_01 and (not expression_02 or expression_02_nomap):
-            return "{}".format(expression_01)
-        elif expression_02 and (not expression_01 or expression_01_nomap):
-            return "{}".format(expression_02)
-        elif expression_01 and expression_02:
-            return "({}) {} ({})".format(expression_01, operator, expression_02)
-        else:
-            return ''
+    def _parse_pattern_expression(self, expression):
+        return self._parse_expression(expression.expression)
 
     @staticmethod
-    def _parse_combined_comparison_expression(self, expression, qualifier=None):
+    def _parse_combined_observation_expression(self, expression, qualifier=None, calling_object_type=None, operator_override=None):
         operator = self.comparator_lookup[expression.operator]
-        expression_01 = self._parse_expression(expression.expr1)
-        expression_02 = self._parse_expression(expression.expr2)
-        expression_01_nomap = expression_01.startswith("NOMAP")
-        expression_02_nomap = expression_02.startswith("NOMAP")
-        if operator == 'AND':
-            if expression_01_nomap or expression_02_nomap:
-                self.observation_count -= 1
-                # There are more observation expressions to check so skip this one and continue
-                if self.observation_count > 0:
-                    return ''
-            # Only one observation expression and it has unmapped attribute with the AND operator
-            if expression_01_nomap:
-                error_id = expression_01.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
-            if expression_02_nomap:
-                error_id = expression_02.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
-        if isinstance(expression.expr1, CombinedComparisonExpression):
-            expression_01 = "({})".format(expression_01)
-        if isinstance(expression.expr2, CombinedComparisonExpression):
-            expression_02 = "({})".format(expression_02)
-        if expression_01_nomap and expression_02_nomap:
-            return ''
-        elif expression_01_nomap:
-            query_string = "{}".format(expression_02)
-        elif expression_02_nomap:
-            query_string = "{}".format(expression_01)
+        expression_01 = self._parse_expression(expression.expr1, qualifier, 'CombinedObservationExpression')
+        expression_02 = self._parse_expression(expression.expr2, qualifier, 'CombinedObservationExpression')
+        if expression_01 and expression_02:
+            query_string = "({}) {} ({})".format(expression_01, operator, expression_02)
+        elif expression_01:
+            query_string = expression_01
+        elif expression_02:
+            query_string = expression_02
         else:
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-        if qualifier is not None:
+            query_string = ''
+        if qualifier is not None and query_string:
             self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
-            return ''
+            # return ''
+        elif calling_object_type == 'CombinedObservationExpression' or not query_string:
+            return query_string
         else:
-            return "{}".format(query_string)
+            self.unqualified_queries.append(query_string)
+
+    @staticmethod
+    def _parse_observation_expression(self, expression, qualifier=None, calling_object_type=None):
+        query_string = self._parse_expression(expression.comparison_expression, qualifier, calling_object_type)
+        if qualifier is not None and query_string:
+            self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
+        elif calling_object_type == 'CombinedObservationExpression' or not query_string:
+            return query_string
+        else:
+            self.unqualified_queries.append(query_string)
+
+    @staticmethod
+    def _parse_combined_comparison_expression(self, expression, qualifier=None, calling_object_type=None):
+        operator = self.comparator_lookup[expression.operator]
+        expression_01 = self._parse_expression(expression.expr1, qualifier, 'CombinedComparisonExpression')
+        expression_02 = self._parse_expression(expression.expr2, qualifier, 'CombinedComparisonExpression')
+
+        if expression_01 and expression_02:
+            query_string = "({} {} {})".format(expression_01, operator, expression_02)
+        elif expression_01:
+            query_string = "OPERATOR:{} {} OPERATOR:{}".format(operator, expression_01, operator)
+        elif expression_02:
+            query_string = "OPERATOR:{} {} OPERATOR:{}".format(operator, expression_02, operator)
+        else:
+            query_string = ''
+
+        if qualifier is not None and query_string:
+            self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
+        elif calling_object_type in ['CombinedObservationExpression', 'ObservationExpression', 'CombinedComparisonExpression'] or not query_string:
+            return query_string
+        else:
+            self.unqualified_queries.append(query_string)
+
+    @staticmethod
+    def _parse_expression_with_start_stop(self, expression):
+        qualifier = expression.qualifier
+        if isinstance(expression.observation_expression, CombinedObservationExpression):
+            operator = self.comparator_lookup[expression.observation_expression.operator]
+            expression_01 = self._parse_expression(expression.observation_expression.expr1, qualifier)
+            expression_02 = self._parse_expression(expression.observation_expression.expr2, qualifier)
+            if expression_01 and expression_02:
+                query_string = "({} {} {})".format(expression_01, operator, expression_02)
+            elif expression_01:
+                query_string = "OPERATOR:{} {} OPERATOR:{}".format(operator, expression_01, operator)
+            elif expression_02:
+                query_string = "OPERATOR:{} {} OPERATOR:{}".format(operator, expression_02, operator)
+            else:
+                query_string = ''
+            return query_string
+        else:
+            return self._parse_expression(expression.observation_expression.comparison_expression, qualifier)
 
     @staticmethod
     def _parse_comparison_expression(self, expression, qualifier=None, calling_object_type=None):
@@ -246,59 +269,89 @@ class AqlQueryStringPatternTranslator:
 
         # Some values are formatted differently based on how they're being compared
         value = self._format_value(self, expression)
-
         comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
-
-        pattern = "NOMAP:[a-zA-Z0-9]{8}-([a-zA-Z0-9]{4}-){3}[a-zA-Z0-9]{12}"
-        nomap_search = re.search(pattern, comparison_string)
-        if nomap_search:
-            nomap_with_uuid = nomap_search.group(0)
-            if calling_object_type == 'ObservationExpression' and self.observation_count == 1:
-                # Pattern has only one ObservationExpression with one unmapped ComparisonExpression
-                error_id = nomap_with_uuid.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
-            else:
-                return nomap_with_uuid
 
         if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
             # More than one AQL field maps to the STIX attribute so group the ORs.
-            grouped_comparison_string = "(" + comparison_string + ")"
-            comparison_string = grouped_comparison_string
-
+            comparison_string = "({})".format(comparison_string)
         if expression.comparator == ComparisonComparators.NotEqual:
             comparison_string = self._negate_comparison(comparison_string)
-
         if expression.negated:
             comparison_string = self._negate_comparison(comparison_string)
-        if qualifier is not None:
+        if calling_object_type in ['CombinedObservationExpression', 'ObservationExpression', 'CombinedComparisonExpression']:
+            return comparison_string
+        elif qualifier is not None:
             self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
-            return ''
         else:
-            return "{}".format(comparison_string)
+            self.unqualified_queries.append(comparison_string)
+            return comparison_string
 
     def _parse_expression(self, expression, qualifier=None, calling_object_type=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             return self._parse_comparison_expression(self, expression, qualifier, calling_object_type)
         elif isinstance(expression, CombinedComparisonExpression):
-            return self._parse_combined_comparison_expression(self, expression, qualifier)
+            if not calling_object_type:
+                calling_object_type = 'CombinedComparisonExpression'
+            return self._parse_combined_comparison_expression(self, expression, qualifier, calling_object_type)
         elif isinstance(expression, ObservationExpression):
-            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier, 'ObservationExpression'))
+            if not calling_object_type:
+                calling_object_type = 'ObservationExpression'
+            return self._parse_observation_expression(self, expression, qualifier, calling_object_type)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
-            else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+            return self._parse_expression_with_start_stop(self, expression)
         elif isinstance(expression, CombinedObservationExpression):
             return self._parse_combined_observation_expression(self, expression)
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            return self._parse_pattern_expression(self, expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def _format_qualified_queries(self):
+        # remove empty strings in the array
+        query_array = list(map(lambda x: x.strip(), list(filter(None, self.qualified_queries))))
+
+        # Transform from human-readable timestamp to 13-digit millisecond time
+        # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
+        formatted_queries = []
+        for query in query_array:
+            if _test_START_STOP_format(query):
+                # Remove leading 't' before timestamps
+                query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
+                # Split individual query to isolate timestamps
+                query_parts = re.split("(START)|(STOP)", query)
+                # Remove None array entries
+                query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
+                if len(query_parts) == 5:
+                    formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
+                else:
+                    logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
+                    continue
+            else:
+                formatted_queries.append(query)
+        return formatted_queries
+
+    def _format_unqualified_queries(self):
+        # remove empty strings in the array
+        query_array = list(map(lambda x: x.strip(), list(filter(None, self.unqualified_queries))))
+        combined_query_string = ''
+        # combine all queries into one query joined by OR
+        for index, query in enumerate(query_array):
+            if index == 0:
+                combined_query_string += query
+            else:
+                if _test_leading_combined_comparison_operator(query):
+                    combined_query_string = re.sub(TRAILING_COMPARISON_OPERATOR, '', combined_query_string)
+                combined_query_string += " {}".format(query)
+            if (index < (len(query_array) - 1)) and (not _test_trailing_combined_comparison_operator(query)):
+                combined_query_string += " OR"
+        # Remove trailing combined comparison operator
+        combined_query_string = re.sub(TRAILING_COMBINED_COMPARISON_OPERATOR, '', combined_query_string)
+        # Remove any remaining combined comparison tags
+        combined_query_string = re.sub("OPERATOR:", '', combined_query_string)
+        # append time and result limit to last query
+        combined_query_string += " limit {} last {} minutes".format(self.result_limit, self.timerange)
+        return combined_query_string
 
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
@@ -310,8 +363,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d+Z$"
-    if not bool(re.search(pattern, timestamp)):
+    if not bool(re.search(TIMESTAMP_MILLISECONDS, timestamp)):
         timestamp = re.sub('Z$', '.000Z', timestamp)
     return timestamp
 
@@ -319,15 +371,19 @@ def _test_or_add_milliseconds(timestamp) -> str:
 def _test_START_STOP_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
     # or START 1234567890123 STOP 1234567890123
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-    match = re.search(pattern, query_string)
-    return bool(match)
+    return bool(re.search(START_STOP_STIX_QUALIFIER, query_string))
 
 
 def _test_timestamp(timestamp) -> bool:
-    pattern = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
-    match = re.search(pattern, timestamp)
-    return bool(match)
+    return bool(re.search(TIMESTAMP, timestamp))
+
+
+def _test_trailing_combined_comparison_operator(query_string) -> bool:
+    return bool(re.search(TRAILING_COMBINED_COMPARISON_OPERATOR, query_string))
+
+
+def _test_leading_combined_comparison_operator(query_string) -> bool:
+    return bool(re.search(LEADING_COMBINED_COMPARISON_OPERATOR, query_string))
 
 
 def _convert_timestamps_to_milliseconds(query_parts):
@@ -340,44 +396,13 @@ def _convert_timestamps_to_milliseconds(query_parts):
     return query_parts[0] + " " + query_parts[1] + " " + str(millisecond_start_time) + " " + query_parts[3] + " " + str(millisecond_stop_time)
 
 
-def _format_translated_queries(query_array):
-    # remove empty strings in the array
-    query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
-
-    # Transform from human-readable timestamp to 13-digit millisecond time
-    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
-    formatted_queries = []
-    for query in query_array:
-        if _test_START_STOP_format(query):
-            # Remove leading 't' before timestamps
-            query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
-            # Split individual query to isolate timestamps
-            query_parts = re.split("(START)|(STOP)", query)
-            # Remove None array entries
-            query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
-            if len(query_parts) == 5:
-                formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
-            else:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                continue
-        else:
-            formatted_queries.append(query)
-
-    return formatted_queries
-
-
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     timerange = options['timerange']
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, timerange)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries
     for where_statement in translated_queries:
-        has_start_stop = _test_START_STOP_format(where_statement)
-        if(has_start_stop):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
-        else:
-            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
-
+        queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
     return queries

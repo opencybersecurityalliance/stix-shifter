@@ -445,6 +445,11 @@ be translated> <options>
 python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'"
 ```
 
+To run validation on the STIX pattern, add `'{"validate_pattern": "true"}'` as an option to the end of the CLI command:
+```
+python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
+```
+
 2. Visually verify the returned query by running it against the data source.
 
 ##### Test the JSON data source results to STIX translation

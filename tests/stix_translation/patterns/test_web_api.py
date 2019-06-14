@@ -4,7 +4,6 @@ import os
 
 from web_api import *
 from .helpers.input_file_helpers import *
-from stix_shifter.stix_translation.src.modules.splunk import stix_to_splunk
 
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5

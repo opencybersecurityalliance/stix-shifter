@@ -1,15 +1,15 @@
 from os import path
 import json
-from ...exceptions import DataMappingException
+from stix_shifter.stix_translation.src.modules.base.base_data_mapper import BaseDataMapper
 
 
-class CarbonBlackDataMapper:
+class DataMapper(BaseDataMapper):
     def __init__(self, options):
-        self.map_data = options.get('mappings', False) or self._fetch_mappings()
+        self.map_data = options.get('mappings', False) or self.fetch_mapping()
         assert len(self.map_data) == 2
         assert "process" in self.map_data and "binary" in self.map_data
 
-    def _fetch_mappings(self):
+    def fetch_mapping(self):
         process_mapping = self._fetch_mapping_file("process_api_from_stix_map.json")
         binary_mapping = self._fetch_mapping_file("binary_api_from_stix_map.json")
         return {"binary": binary_mapping, "process": process_mapping}
@@ -31,5 +31,4 @@ class CarbonBlackDataMapper:
         if len(results) != 0:
             return results
         else:
-            raise DataMappingException("Unable to map property `{}:{}` into cb".format(
-                stix_object_name, stix_property_name))
+            return []

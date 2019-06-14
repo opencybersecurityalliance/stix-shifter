@@ -1,5 +1,4 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.qradar import qradar_data_mapping
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random

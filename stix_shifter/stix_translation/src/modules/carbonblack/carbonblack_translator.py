@@ -1,7 +1,7 @@
 from ..base.base_translator import BaseTranslator
-from .stix_to_cb import StixToCB
+from .stix_to_query import StixToQuery
 from ...json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src import transformers
+from stix_shifter.stix_translation.src.utils import transformers
 
 
 from os import path
@@ -14,7 +14,7 @@ class Translator(BaseTranslator):
         basepath = path.dirname(__file__)
         filepath = path.abspath(path.join(basepath, "json", "to_stix_map.json"))
         self.mapping_filepath = filepath
-        self.query_translator = StixToCB()
+        self.query_translator = StixToQuery()
 
     def translate_results(self, data_source, data, options, mapping=None):
         """
@@ -46,6 +46,5 @@ class Translator(BaseTranslator):
                 results['objects'][i]['number_observed'] = 1
         else:
             raise RuntimeError("Incorrect number of result objects after translation. Found: {}, expected: {}.".format(len(results['objects']) - 1, len(json_data)))
-
 
         return json.dumps(results, indent=4, sort_keys=False)

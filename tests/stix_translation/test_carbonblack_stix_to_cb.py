@@ -1,6 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.exceptions import DataMappingException
-from stix_shifter.stix_translation.src.modules.carbonblack import stix_to_cb
+from stix_shifter.utils.error_response import ErrorCode
 
 import unittest
 import json
@@ -15,7 +14,7 @@ def _test_query_assertions(query, queries):
     assert query['queries'] == queries
 
 
-class TestStixToCB(unittest.TestCase, object):
+class TestStixToQuery(unittest.TestCase, object):
 
     def test_file_query(self):
         stix_pattern = "[file:name = 'some_file.exe']"
@@ -99,6 +98,19 @@ class TestStixToCB(unittest.TestCase, object):
             result = translation.translate(module, 'query', '{}', stix_pattern)
             print(result)
             assert result['queries'] == to_json(queries)
+
+    def test_unmapped_attribute_handling_with_OR(self):
+        stix_pattern = "[ipv4-addr:value = '198.51.100.5' OR unmapped:attribute = 'something']"
+        translated_query = [{"query": "ipaddr:198.51.100.5", "dialect": "process"}]
+        result = translation.translate(module, 'query', '{}', stix_pattern)
+        assert result['queries'] == to_json(translated_query)
+
+    def test_unmapped_attribute_handling_with_AND(self):
+        stix_pattern = "[ipv4-addr:value = '198.51.100.5' AND unmapped:attribute = 'something']"
+        result = translation.translate(module, 'query', '{}', stix_pattern)
+        assert result['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_escape_query(self):
         stix_to_cb_mapping = {
