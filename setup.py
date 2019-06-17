@@ -138,7 +138,7 @@ setup(
                       'antlr4-python3-runtime==4.7', 'python-dateutil==2.7.3', 'stix2-matcher==v0.1.0'],  # Optional
 
     # dependency_links=['git+git://github.com/oasis-open/cti-pattern-matcher.git@master#egg=stix2-matcher'],
-    process_dependency_links=['git+git://github.com/oasis-open/cti-pattern-matcher.git@master#egg=stix2-matcher-v0.1.0'],
+    dependency_links=['git+git://github.com/oasis-open/cti-pattern-matcher.git@master#egg=stix2-matcher-v0.1.0'],
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
     # syntax, for example:
