@@ -16,6 +16,8 @@ class Connector(BaseConnector):
         self.results_connector = self
         self.query_connector = self
         self.ping_connector = self
+        self.delete_connector = self
+        self.status_connector = self
 
     #We re-implement this method so we can fetch all the "bindings", as their method only 
     #returns the first for some reason
