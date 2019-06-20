@@ -7,9 +7,10 @@ import time
 class Connector(BaseConnector):
     def __init__(self):
         self.is_async = False
-
-        self.results_connector = self
         self.ping_connector = self
+        self.results_connector = self
+        self.status_connector = self
+        self.query_connector = self
 
     def ping(self):
         return "synchronous ping"

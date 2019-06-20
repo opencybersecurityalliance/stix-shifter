@@ -12,6 +12,8 @@ class Connector(BaseConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.ping_connector = self
+        self.results_connector = self
+        self.status_connector = self
         self.query_connector = self
         self.is_async = False
 
@@ -61,7 +63,7 @@ class Connector(BaseConnector):
                     # and (response_json['hits']['total']['value'] >= 0 or response_json['hits']['total'] >= 0):
                     print("Total # of hits:" + str(response_json['hits']['total']))
                     return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
-                    print ("Total # of records: " + str(len(return_obj['data'])))
+                    print("Total # of records: " + str(len(return_obj['data'])))
 
             return return_obj
         except Exception as e:
