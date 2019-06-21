@@ -5,6 +5,7 @@ from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
 import requests
+from .....utils.error_response import ErrorResponder
 
 
 class Connector(BaseConnector):
@@ -48,6 +49,7 @@ class Connector(BaseConnector):
     def create_results_connection(self, search_id, offset, length):
         # search_id is the pattern
         observations = []
+        return_obj = dict()
 
         if "http_user" in self.configuration:
             response = requests.get(self.configuration["bundle_url"], auth=(self.configuration["http_user"], self.configuration["http_password"]))
@@ -72,4 +74,11 @@ class Connector(BaseConnector):
         # Pattern match
         results = self.match(search_id, observations, False)
 
-        return results[int(offset):int(offset + length)]
+        if len(results) != 0:
+            return_obj['success'] = True
+            return_obj['data'] = results[int(offset):int(offset + length)]
+        else:
+            ErrorResponder.fill_error(return_obj, results, ['message'])
+
+
+        return return_obj
