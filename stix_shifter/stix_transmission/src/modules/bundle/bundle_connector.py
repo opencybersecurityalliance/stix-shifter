@@ -7,6 +7,8 @@ import json
 import requests
 from .....utils.error_response import ErrorResponder
 
+class UnexpectedResponseException(Exception):
+    pass
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
@@ -56,29 +58,38 @@ class Connector(BaseConnector):
         else:
             response = requests.get(self.configuration["bundle_url"])
 
-        if response.status_code != 200:
-            response.raise_for_status()
+        response_code = response.status_code
 
-        bundle = response.json()
-
-        if "validate" in self.configuration and self.configuration["validate"] is True:
-            results = validate_instance(bundle)
-
-            if results.is_valid is not True:
-                return {"success": False, "message": "Invalid STIX recieved: " + json.dumps(results)}
-
-        for obj in bundle["objects"]:
-            if obj["type"] == "observed-data":
-                observations.append(obj)
-
-        # Pattern match
-        results = self.match(search_id, observations, False)
-
-        if len(results) != 0:
-            return_obj['success'] = True
-            return_obj['data'] = results[int(offset):int(offset + length)]
+        if response_code != 200:
+            response_txt = response.raise_for_status()
+            if ErrorResponder.is_plain_string(response_txt):
+                ErrorResponder.fill_error(return_obj, message=response_txt)
+            elif ErrorResponder.is_json_string(response_txt):
+                response_json = json.loads(response_txt)
+                ErrorResponder.fill_error(return_obj, response_json, ['reason'])
+            else:
+                raise UnexpectedResponseException
         else:
-            ErrorResponder.fill_error(return_obj, results, ['message'])
+            bundle = response.json()
 
+            if "validate" in self.configuration and self.configuration["validate"] is True:
+                results = validate_instance(bundle)
+
+                if results.is_valid is not True:
+                    return {"success": False, "message": "Invalid STIX recieved: " + json.dumps(results)}
+
+            for obj in bundle["objects"]:
+                if obj["type"] == "observed-data":
+                    observations.append(obj)
+
+            # Pattern match
+            results = self.match(search_id, observations, False)
+
+            if len(results) != 0:
+                return_obj['success'] = True
+                return_obj['data'] = results[int(offset):int(offset + length)]
+            else:
+                return_obj['success'] = True
+                return_obj['data'] = []
 
         return return_obj
