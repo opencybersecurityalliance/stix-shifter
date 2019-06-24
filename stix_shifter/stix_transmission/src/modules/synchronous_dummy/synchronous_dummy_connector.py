@@ -15,6 +15,12 @@ class Connector(BaseConnector):
     def ping(self):
         return "synchronous ping"
 
+    def create_query_connection(self, query):
+        return {"success": True, "search_id": query}
+
+    def create_status_connection(self, search_id):
+        return {"success": True, "status": "COMPLETED", "progress": 100}
+
     def create_results_connection(self, params, options):
         """
         Creates a connection to the specified datasource to send a query
