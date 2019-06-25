@@ -4,6 +4,15 @@ from ..utils.RestApiClient import RestApiClient
 class APIClient():
 
     def __init__(self, connection, configuration):
+        # auth = configuration.get('auth')
+        # headers = dict()
+        # headers['X-Auth-Token'] = auth.get('token')
+        # self.client = RestApiClient(connection.get('host'),
+        #                             connection.get('port'),
+        #                             connection.get('cert', None),
+        #                             headers,
+        #                             cert_verify=connection.get('cert_verify', 'True')
+        #                             )
         self.client = "data source API client"
 
     def ping_data_source(self):
