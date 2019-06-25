@@ -53,10 +53,13 @@ class Connector(BaseConnector):
         observations = []
         return_obj = dict()
 
-        if "http_user" in self.connection:
-            response = requests.get(self.connection["bundle_url"], auth=(self.connection["http_user"], self.connection["http_password"]))
+        bundle_url = self.connection.get('host')
+        auth = self.configuration.get('auth')
+
+        if "username" in auth:
+            response = requests.get(bundle_url, auth=(auth.get('username'), auth.get('password')))
         else:
-            response = requests.get(self.connection["bundle_url"])
+            response = requests.get(bundle_url)
 
         response_code = response.status_code
 
