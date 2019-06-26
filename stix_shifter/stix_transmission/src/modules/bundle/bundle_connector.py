@@ -20,7 +20,6 @@ class Connector(BaseConnector):
         self.query_connector = self
         self.ping_connector = self
         self.status_connector = self
-        self.delete_connector = self
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
@@ -45,9 +44,6 @@ class Connector(BaseConnector):
 
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
-    
-    def delete_query_connection(self, query):
-        return {"success": True}
 
     def create_status_connection(self, search_id):
         return {"success": True, "status": "COMPLETED", "progress": 100}
