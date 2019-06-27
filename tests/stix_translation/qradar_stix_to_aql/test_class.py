@@ -42,7 +42,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84/10']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE ((INCIDR('192.168.122.84/10',sourceip) OR INCIDR('192.168.122.84/10',destinationip) OR INCIDR('192.168.122.84/10',identityip)) OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83')) {} {}".format(
+        where_statement = "WHERE (INCIDR('192.168.122.84/10',sourceip) OR INCIDR('192.168.122.84/10',destinationip) OR INCIDR('192.168.122.84/10',identityip)) OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} {}".format(
             default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
@@ -75,7 +75,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[(url:value = 'www.example.com' OR url:value = 'www.test.com') AND mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
         # Expect the STIX and to convert to an AQL AND.
-        where_statement = "WHERE ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND (url = 'www.test.com' OR url = 'www.example.com')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND (url = 'www.test.com' OR url = 'www.example.com') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_file_query(self):
@@ -88,7 +88,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (destinationport = '23456' OR sourceport = '12345') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE destinationport = '23456' OR sourceport = '12345' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_unmapped_attribute_with_AND(self):
@@ -120,7 +120,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_pattern_with_two_observation_exps_one_with_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever'] OR [file:name = 'some_file.exe' AND url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url = 'www.example.com' AND filename = 'some_file.exe') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE url = 'www.example.com' AND filename = 'some_file.exe' {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_pattern_with_three_observation_exps_one_with_unmapped_attribute(self):
@@ -155,7 +155,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_network_traffic_start_stop(self):
         stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.567Z']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (endtime = '1528965384567' OR starttime = '1528965384000') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_start_stop_qualifiers_with_one_observation_with_an_unmapped_attribute(self):
@@ -165,7 +165,7 @@ class TestStixToAql(unittest.TestCase, object):
         unix_stop_time_01 = 1464747600123
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(start_time_01, stop_time_01)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         assert len(query['queries']) == 1
         assert query['queries'] == [selections + from_statement + where_statement]
 
@@ -180,7 +180,7 @@ class TestStixToAql(unittest.TestCase, object):
         unix_stop_time_02 = 1464755424743
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = _translate_query(stix_pattern)
-        where_statement_01 = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement_01 = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         where_statement_02 = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
         assert len(query['queries']) == 2
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
@@ -198,7 +198,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START {} STOP {} OR [url:value = 'www.example.com'] OR [ipv4-addr:value = '333.333.333.0' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(
             start_time_01, stop_time_01, start_time_02, stop_time_02)
         query = _translate_query(stix_pattern)
-        where_statement_01 = "WHERE (destinationport = '635' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         where_statement_02 = "WHERE (sourceip = '333.333.333.0' OR destinationip = '333.333.333.0' OR identityip = '333.333.333.0') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
         where_statement_03 = "WHERE url = 'www.example.com' {} {}".format(default_limit, default_time)
         assert len(query['queries']) == 3
@@ -285,7 +285,13 @@ class TestStixToAql(unittest.TestCase, object):
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (username = 'root') OR (url = 'www.example.com') OR (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
+        assert query['queries'] == [selections + from_statement + where_statement]
+
+    def test_complex_combined_observation_expression(self):
+        stix_pattern = "[url:value = 'example01.ru' OR url:value = 'example02.ru' OR url:value = 'example01.com' OR url:value = 'example03.ru' OR url:value = 'example02.com' OR url:value = 'example04.ru'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE url = 'example04.ru' OR (url = 'example02.com' OR (url = 'example03.ru' OR (url = 'example01.com' OR (url = 'example02.ru' OR url = 'example01.ru')))) {} START 1561403143000 STOP 1561489543000".format(default_limit)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_LIKE_operator(self):
