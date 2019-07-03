@@ -1,56 +1,63 @@
 from ..base.base_connector import BaseConnector
-# from .synchronous_dummy_results_connector import SynchronousDummyResultsConnector
-# from .synchronous_dummy_ping import SynchronousDummyPing
-import time
+from .....utils.error_response import ErrorResponder
+from .api_client import APIClient
+import json
+
+
+class UnexpectedResponseException(Exception):
+    pass
 
 
 class Connector(BaseConnector):
-    def __init__(self):
+    def __init__(self, connection, configuration):
+        self.api_client = APIClient(connection, configuration)
         self.is_async = False
-
-        self.results_connector = self
         self.ping_connector = self
+        self.results_connector = self
+        self.status_connector = self
+        self.query_connector = self
+
+    def _handle_errors(self, response, return_obj):
+        response_code = response['code']
+
+        if 200 <= response_code < 300:
+            return_obj['success'] = True
+            response_json = response
+            if 'results' in response_json:
+                return_obj['data'] = response_json['results']
+        else:
+            raise UnexpectedResponseException
+        return return_obj
 
     def ping(self):
-        return "synchronous ping"
+        return_obj = {}
+        try:
+            response = self.api_client.ping_box()
+            return self._handle_errors(response, return_obj)
+        except Exception as err:
+            print('error when pinging datasource {}:'.format(err))
+            raise
 
-    def create_results_connection(self, params, options):
-        """
-        Creates a connection to the specified datasource to send a query
+    # Leave dummy implementation as is for synchronous data sources
+    def create_query_connection(self, query):
+        return {"success": True, "search_id": query}
 
-        :param params: the parameters for the query
-        :param options: CLI options passed in
+    # Leave dummy implementation as is for synchronous data sources
+    def create_status_connection(self, search_id):
+        return {"success": True, "status": "COMPLETED", "progress": 100}
 
-        :return: in dummy connectors, just returns passed in parameters
-        """
-        config = params['config']
+    # Query is sent to data source and results are returned in one step
+    def create_results_connection(self, search_id, offset, length):
+        response_txt = None
+        return_obj = {}
+        try:
+            query = search_id
+            response = self.api_client.run_search(query, offset, length)
+            return self._handle_errors(response, return_obj)
 
-        # The post-processed query, already translated from STIX SCO
-        query = params['query']
-
-        # set headers
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
-
-        # construct request object, purely for visual purposes in dummy implementation
-        request = {
-            "host": config['host'],
-            "path": config['path'] + query,
-            "port": config['port'],
-            "headers": headers,
-            "method": "GET"
-        }
-
-        print(request)
-        time.sleep(3)
-
-        dummy_data = {"obj_1": {}, "obj_2": {}, "obj_3": {}, "obj_4": {}, "obj_5": {}}
-
-        return_obj = {
-            "response_code": 200,
-            "query_results": dummy_data
-        }
-
-        return return_obj
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                print('can not parse response: ' + str(response_txt))
+            else:
+                raise e

@@ -93,9 +93,8 @@ To develop a STIX-shifter adapter for a data source:
 
 #### Step 3. Edit the from_stix_map JSON file
 
-The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a data source query result. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and their properties to data source fields, determine how a STIX pattern is translated to a data source query. Only STIX objects and properties that have mappings can be used in a STIX pattern.
+The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query. 
 
-If a STIX pattern contains an unmapped property, STIX-shifter produces an error when translation is called. The error happens because the QueryStringPatternTranslator class (in query_constructor.py) does not know what data source field the STIX object property must be converted to.
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
@@ -148,6 +147,10 @@ The following STIX pattern is supported in the example mapping because the STIX 
 "[network-traffic:src_port = 12345 AND ipv4-addr:value = '00-00-5E-00-53-00']"
 ```
 
+**Avoiding Custom STIX Properties**
+
+As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when converting data source results to STIX. However, ISC uses standard STIX patterns when querying data sources, so it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.  
+
 [Back to top](#create-a-translation-module)
 
 #### Step 4. Edit the query constructor file
@@ -184,6 +187,31 @@ Pattern[
 The parsing is recursively run through QueryStringPatternTranslator.\_parse_expression, which is found in `query_constructor.py`.
 
 The `query_constructor.py` file is where the native query is built from the ANTLR parsing.
+
+---
+#### How STIX-shifter handles unmapped STIX properties
+
+If a STIX pattern contains an unmapped property, and any joining operators allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
+
+`[stix_object:unmapped_property OR stix_object:mapped_property]`
+
+*The unmapped property would be removed since it is joined to a mapped property with an OR operator.*
+
+`[stix_object:unmapped_property] OR [stix_object:mapped_property]`
+
+*The entire observation object (square brackets) containing the unmapped property would be removed since the pattern contains at least one other observation with mapped properties.*
+
+If the unmapped property cannot be removed, STIX-shifter produces an error. This happens because the `QueryStringPatternTranslator` class (in `query_constructor.py`) does not know what data source field the STIX object property must be converted to. The following patterns would produce such an error:
+
+`[stix_object:unmapped_property AND stix_object:mapped_property]`
+
+*The unmapped property cannot be removed without changing the query logic since the two properties are joined by an AND operator.*
+
+`[stix_object:unmapped_property]`
+
+*The pattern only contains one observation with one unmapped property; nothing would be left to the query after removing it.*
+
+---
 
 In your `abc` translation module folder, edit the `query_constructor.py` file. Update the following sections based on the requirements of your data source.
 
@@ -557,7 +585,7 @@ Edit the `apiclient.py` file's APIClient class to include the methods to call yo
 
 **Note on synchronous data sources**
 
-For synchronous data sources, the query is sent to the API from the create_results_connection method. The query is sent, and the results are received in the same step. Although create_query_connection, and create_status_connection are not technically used, they still get called during the transmission execution and must be implemented as follows:
+For synchronous data sources, the query is sent to the API from the create_results_connection method. The query is sent, and the results are received in the same step. Although create_query_connection, and create_status_connection are not technically used, they still get called by UDS during the transmission execution and must be implemented as follows:
 
 _Create Query Connection_
 
@@ -572,6 +600,8 @@ _Create Status Connection_
 def create_status_connection(self, search_id):
       return {"success": True, "status": "COMPLETED", "progress": 100}
 ```
+
+For asynchronous sources, the search id that gets passed into the connection methods is a UUID. This is used to keep track of the original query, allowing the status and results to be fetched. However, in the case a synchronous data source, the query is sent and the results are returned in the same action. Therefore, the search id in this case is not a UUID but the search query itself.
 
 [Back to top](#create-a-transmission-module)
 

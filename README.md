@@ -37,7 +37,7 @@ To learn more about STIX, see the following references:
 
 STIX-shifter is an open source python library allowing software to connect to products that house data repositories by using `STIX Patterning`, and return results as `STIX Observations`.
 
-STIX-Shifter is the heart of the **Universal Data Service** that is provided as part of [IBM Security Connect](https://www.ibm.com/security/connect/).
+STIX-Shifter is the heart of the **Universal Data Service** (UDS) that is provided as part of [IBM Security Connect](https://www.ibm.com/security/connect/) (ISC).
 
 ### What is STIX Patterning? What are STIX Observations?
 
@@ -416,6 +416,16 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 ```
 python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' is_async
 ```
+
+#### How UDS uses STIX-shifter
+
+IBM's Universal Data Service first uses the translation modules to convert a STIX pattern into one or more native queries; this happens for each data source connected to ISC.
+
+Each translated query is sent to its respective data source, query status is polled, and query results are returned, all via the transmission modules.
+
+The translation modules are again used to convert the JSON results into STIX observed-data objects. These objects get wrapped in STIX bundles to be used by the ISC service.
+
+Throughout this process, all data is stateless. The pattern, translated query, JSON results, and STIX objects do not get stored anywhere. UDS simply submits a pattern and fetches the resulting STIX as needed.
 
 ## Glossary
 
