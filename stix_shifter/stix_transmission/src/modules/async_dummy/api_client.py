@@ -4,6 +4,7 @@ from ..utils.RestApiClient import RestApiClient
 class APIClient():
 
     def __init__(self, connection, configuration):
+         # Uncomment when implementing data source API client.
         # auth = configuration.get('auth')
         # headers = dict()
         # headers['X-Auth-Token'] = auth.get('token')
@@ -13,6 +14,9 @@ class APIClient():
         #                             headers,
         #                             cert_verify=connection.get('cert_verify', 'True')
         #                             )
+
+        # Placeholder client to allow dummy transmission calls.
+        # Remove when implementing data source API client.
         self.client = "data source API client"
 
     def ping_data_source(self):
