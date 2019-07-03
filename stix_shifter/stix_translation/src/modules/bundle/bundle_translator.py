@@ -1,14 +1,21 @@
 from ..base.base_translator import BaseTranslator
+import json
+import requests
+import re
 
-import json, requests
+START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
+
 
 class Translator(BaseTranslator):
     def transform_query(self, data, options, mapping=None):
-        #Data is a STIX pattern and we don't want to touch it
+        # Data is a STIX pattern.
+        # stix2-matcher will break on START STOP qualifiers so remove before returning pattern.
+        # Remove this when ever stix2-matcher supports proper qualifier timestamps
+        data = re.sub(START_STOP_PATTERN, " ", data)
         return data
 
     def translate_results(self, data_source, data, options, mapping=None):
-        #Data is already STIX and we don't want to touch it
+        # Data is already STIX and we don't want to touch it
         bundle_data = json.loads(data)
         data_source = json.loads(data_source)
         for obs in bundle_data:

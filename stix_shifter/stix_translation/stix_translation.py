@@ -14,6 +14,7 @@ QUERY = 'query'
 PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
+START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 
 
 class StixTranslation:
@@ -26,8 +27,7 @@ class StixTranslation:
 
     def _validate_pattern(self, pattern):
         # Validator doesn't support START STOP qualifier so strip out before validating pattern
-        start_stop_pattern = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
-        pattern_without_start_stop = re.sub(start_stop_pattern, " ", pattern)
+        pattern_without_start_stop = re.sub(START_STOP_PATTERN, " ", pattern)
         errors = run_validator(pattern_without_start_stop)
         if (errors != []):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
