@@ -1,7 +1,7 @@
 from ..base.base_translator import BaseTranslator
 from .stix_to_query import StixToQuery
 from ...json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src import transformers
+from stix_shifter.stix_translation.src.utils import transformers
 from os import path
 import json
 
@@ -45,6 +45,5 @@ class Translator(BaseTranslator):
                 results['objects'][i]['number_observed'] = 1
         else:
             raise RuntimeError("Incorrect number of result objects after translation. Found: {}, expected: {}.".format(len(results['objects']) - 1, len(json_data)))
-
 
         return json.dumps(results, indent=4, sort_keys=False)

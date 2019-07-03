@@ -1,6 +1,4 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.exceptions import DataMappingException
-from stix_shifter.stix_translation.src.modules.splunk import stix_to_splunk
 from stix_shifter.utils.error_response import ErrorCode
 
 import unittest
@@ -93,12 +91,18 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = 'search ((dest_port = 23456) OR (src_port = 12345)) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)
 
-    def test_unmapped_attribute(self):
-        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
+    def test_unmapped_attribute_handling_with_OR(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' OR unmapped:attribute = 'something']"
+        translated_query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'search (url = "http://www.testaddress.com") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        _test_query_assertions(translated_query, queries)
+
+    def test_unmapped_attribute_handling_with_AND(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' AND unmapped:attribute = 'something']"
         result = translation.translate('splunk', 'query', '{}', stix_pattern)
-        assert False == result['success']
+        assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert result['error'].startswith('data mapping error : Unable to map property')
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"

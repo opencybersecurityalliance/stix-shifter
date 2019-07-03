@@ -1,7 +1,7 @@
 import json
 from . import json_to_stix_translator
 from ..modules.base.base_result_translator import BaseResultTranslator
-from stix_shifter.stix_translation.src import transformers
+from stix_shifter.stix_translation.src.utils import transformers
 
 # Concrete BaseResultTranslator
 
