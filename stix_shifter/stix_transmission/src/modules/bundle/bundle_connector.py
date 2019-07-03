@@ -56,7 +56,7 @@ class Connector(BaseConnector):
         bundle_url = self.connection.get('host')
         auth = self.configuration.get('auth')
 
-        if "username" in auth:
+        if auth is not None:
             response = requests.get(bundle_url, auth=(auth.get('username'), auth.get('password')))
         else:
             response = requests.get(bundle_url)
