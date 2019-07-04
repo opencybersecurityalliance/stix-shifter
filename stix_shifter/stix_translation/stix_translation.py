@@ -10,13 +10,14 @@ from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'bundle']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle']
 
 RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
+START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 
 
@@ -30,8 +31,7 @@ class StixTranslation:
 
     def _validate_pattern(self, pattern):
         # Validator doesn't support START STOP qualifier so strip out before validating pattern
-        start_stop_pattern = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
-        pattern_without_start_stop = re.sub(start_stop_pattern, " ", pattern)
+        pattern_without_start_stop = re.sub(START_STOP_PATTERN, " ", pattern)
         errors = run_validator(pattern_without_start_stop)
         if (errors != []):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
