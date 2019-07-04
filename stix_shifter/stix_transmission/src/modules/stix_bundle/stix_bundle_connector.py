@@ -7,8 +7,10 @@ import json
 import requests
 from .....utils.error_response import ErrorResponder
 
+
 class UnexpectedResponseException(Exception):
     pass
+
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
@@ -79,7 +81,7 @@ class Connector(BaseConnector):
                 results = validate_instance(bundle)
 
                 if results.is_valid is not True:
-                    return {"success": False, "message": "Invalid STIX recieved: " + json.dumps(results)}
+                    return {"success": False, "message": "Invalid STIX received: " + json.dumps(results)}
 
             for obj in bundle["objects"]:
                 if obj["type"] == "observed-data":

@@ -94,14 +94,6 @@ class TestStixtoQuery(unittest.TestCase, object):
                       'event.original : * AND user.name : "_" AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-21T16:35:44.011Z"])', '(user.name : ("root" OR "admin") AND url.original : *) OR process.pid:<700 AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-17T14:35:44.011Z"])']
         assert translated_query['queries'] == test_query
 
-    def test_data_mapping_exception(self):
-        stix_pattern = "[file:id = 'some_file.exe']"
-        result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
-        test_error = 'data mapping error : Unable to map property `file:id` into data source query'
-        assert result['success'] is False
-        assert result['code'] == 'mapping_error'
-        assert result['error'] == test_error
-
     def test_file_not_equal_query(self):
         stix_pattern = "[file:name != 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
@@ -165,12 +157,19 @@ class TestStixtoQuery(unittest.TestCase, object):
         test_query = ['(network.transport : ?n* OR network.type : ?n* OR network.protocol : ?n*) OR (source.port : "12345" OR client.port : "12345")']
         _test_query_assertions(translated_query, test_query)
 
-    def test_unmapped_attribute(self):
-        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
+    def test_unmapped_attribute_handling_with_OR(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' OR unmapped:attribute = 'something']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['url.original : "http://www.testaddress.com"']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_unmapped_attribute_handling_with_AND(self):
+        stix_pattern = "[url:value = 'http://www.testaddress.com' AND unmapped:attribute = 'something']"
         result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"

@@ -1,7 +1,7 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds
+from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter.stix_translation.src.json_to_stix import observable
 import logging
 import json
@@ -13,6 +13,10 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "sourcemac": ["mac"],
                         "destinationip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "destinationmac": ["mac"]}
+
+START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+TIMESTAMP_MILLISECONDS = "\.\d+Z$"
 
 
 def _fetch_network_protocol_mapping():
@@ -49,7 +53,6 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        self.observation_count = 1
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
@@ -148,84 +151,43 @@ class AqlQueryStringPatternTranslator:
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
 
     @staticmethod
-    def _format_value(self, expression):
-        if expression.comparator == ComparisonComparators.Matches:
-            # needs forward slashes
-            return self._format_match(expression.value)
-        # should be (x, y, z, ...)
-        elif expression.comparator == ComparisonComparators.In:
-            return self._format_set(expression.value)
-        elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-            # Should be in single-quotes
-            return self._format_equality(expression.value)
-        # '%' -> '*' wildcard, '_' -> '?' single wildcard
-        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
-            return self._format_like(expression.value)
-        else:
-            return self._escape_value(expression.value)
-
-    @staticmethod
     def _parse_combined_observation_expression(self, expression):
-        # The pattern has at least one other ObservationExpression
-        self.observation_count += 1
         operator = self.comparator_lookup[expression.operator]
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
-        expression_01_nomap = re.search("^NOMAP", expression_01)
-        expression_02_nomap = re.search("^NOMAP", expression_02)
-        # Both expressions are unmapped so throw an error
-        if expression_01_nomap and expression_02_nomap:
-            error_id = expression_01.split(":")[1]
-            raise self.dmm.mapping_errors[error_id]
-        elif expression_01 and (not expression_02 or expression_02_nomap):
-            return "{}".format(expression_01)
-        elif expression_02 and (not expression_01 or expression_01_nomap):
-            return "{}".format(expression_02)
-        elif expression_01 and expression_02:
+        if expression_01 and expression_02:
             return "({}) {} ({})".format(expression_01, operator, expression_02)
+        elif expression_01:
+            return "{}".format(expression_01)
+        elif expression_02:
+            return "{}".format(expression_02)
         else:
             return ''
+
+    @staticmethod
+    def _parse_observation_expression(self, expression, qualifier=None):
+        return "{}".format(self._parse_expression(expression.comparison_expression, qualifier))
 
     @staticmethod
     def _parse_combined_comparison_expression(self, expression, qualifier=None):
         operator = self.comparator_lookup[expression.operator]
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
-        expression_01_nomap = expression_01.startswith("NOMAP")
-        expression_02_nomap = expression_02.startswith("NOMAP")
-        if operator == 'AND':
-            if expression_01_nomap or expression_02_nomap:
-                self.observation_count -= 1
-                # There are more observation expressions to check so skip this one and continue
-                if self.observation_count > 0:
-                    return ''
-            # Only one observation expression and it has unmapped attribute with the AND operator
-            if expression_01_nomap:
-                error_id = expression_01.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
-            if expression_02_nomap:
-                error_id = expression_02.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
+        if not expression_01 or not expression_02:
+            return ''
         if isinstance(expression.expr1, CombinedComparisonExpression):
             expression_01 = "({})".format(expression_01)
         if isinstance(expression.expr2, CombinedComparisonExpression):
             expression_02 = "({})".format(expression_02)
-        if expression_01_nomap and expression_02_nomap:
-            return ''
-        elif expression_01_nomap:
-            query_string = "{}".format(expression_02)
-        elif expression_02_nomap:
-            query_string = "{}".format(expression_01)
-        else:
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-        if qualifier is not None:
+        query_string = "{} {} {}".format(expression_01, operator, expression_02)
+        if qualifier:
             self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
             return ''
         else:
             return "{}".format(query_string)
 
     @staticmethod
-    def _parse_comparison_expression(self, expression, qualifier=None, calling_object_type=None):
+    def _parse_comparison_expression(self, expression, qualifier=None):
         # Resolve STIX Object Path to a field in the target Data Model
         stix_object, stix_field = expression.object_path.split(':')
         # Multiple QRadar fields may map to the same STIX Object
@@ -245,44 +207,42 @@ class AqlQueryStringPatternTranslator:
             expression.value = transformer.transform(expression.value)
 
         # Some values are formatted differently based on how they're being compared
-        value = self._format_value(self, expression)
+        if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+            value = self._format_match(expression.value)
+        # should be (x, y, z, ...)
+        elif expression.comparator == ComparisonComparators.In:
+            value = self._format_set(expression.value)
+        elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
+            # Should be in single-quotes
+            value = self._format_equality(expression.value)
+        # '%' -> '*' wildcard, '_' -> '?' single wildcard
+        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
+            value = self._format_like(expression.value)
+        else:
+            value = self._escape_value(expression.value)
 
         comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
 
-        pattern = "NOMAP:[a-zA-Z0-9]{8}-([a-zA-Z0-9]{4}-){3}[a-zA-Z0-9]{12}"
-        nomap_search = re.search(pattern, comparison_string)
-        if nomap_search:
-            nomap_with_uuid = nomap_search.group(0)
-            if calling_object_type == 'ObservationExpression' and self.observation_count == 1:
-                # Pattern has only one ObservationExpression with one unmapped ComparisonExpression
-                error_id = nomap_with_uuid.split(":")[1]
-                raise self.dmm.mapping_errors[error_id]
-            else:
-                return nomap_with_uuid
-
         if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
             # More than one AQL field maps to the STIX attribute so group the ORs.
-            grouped_comparison_string = "(" + comparison_string + ")"
-            comparison_string = grouped_comparison_string
-
+            comparison_string = "({})".format(comparison_string)
         if expression.comparator == ComparisonComparators.NotEqual:
             comparison_string = self._negate_comparison(comparison_string)
-
         if expression.negated:
             comparison_string = self._negate_comparison(comparison_string)
-        if qualifier is not None:
+        if qualifier:
             self.qualified_queries.append("{} limit {} {}".format(comparison_string, self.result_limit, qualifier))
             return ''
         else:
             return "{}".format(comparison_string)
 
-    def _parse_expression(self, expression, qualifier=None, calling_object_type=None) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
-            return self._parse_comparison_expression(self, expression, qualifier, calling_object_type)
+            return self._parse_comparison_expression(self, expression, qualifier)
         elif isinstance(expression, CombinedComparisonExpression):
             return self._parse_combined_comparison_expression(self, expression, qualifier)
         elif isinstance(expression, ObservationExpression):
-            return "{}".format(self._parse_expression(expression.comparison_expression, qualifier, 'ObservationExpression'))
+            return self._parse_observation_expression(self, expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self.comparator_lookup[expression.observation_expression.operator]
@@ -310,8 +270,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d+Z$"
-    if not bool(re.search(pattern, timestamp)):
+    if not bool(re.search(TIMESTAMP_MILLISECONDS, timestamp)):
         timestamp = re.sub('Z$', '.000Z', timestamp)
     return timestamp
 
@@ -319,15 +278,11 @@ def _test_or_add_milliseconds(timestamp) -> str:
 def _test_START_STOP_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
     # or START 1234567890123 STOP 1234567890123
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-    match = re.search(pattern, query_string)
-    return bool(match)
+    return bool(re.search(START_STOP_STIX_QUALIFIER, query_string))
 
 
 def _test_timestamp(timestamp) -> bool:
-    pattern = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
-    match = re.search(pattern, timestamp)
-    return bool(match)
+    return bool(re.search(TIMESTAMP, timestamp))
 
 
 def _convert_timestamps_to_milliseconds(query_parts):

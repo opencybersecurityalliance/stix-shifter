@@ -1,7 +1,7 @@
-from ..utils.error_mapper_base import ErrorMapperBase
-from ..utils.error_response import ErrorCode
-from .src.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
-from .src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 error_mapping = {
     NotImplementedError.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'wrong parameter'],
@@ -10,7 +10,7 @@ error_mapping = {
     SearchFeatureNotSupportedError.__name__: [ErrorCode.TRANSLATION_NOTSUPPORTED, 'search feature is not supported'],
     TranslationResultException.__name__: [ErrorCode.TRANSLATION_RESULT, 'result translation error'],
     UnsupportedDataSourceException.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'unsupported datasource']
-    }
+}
 
 
 class ErrorMapper():
@@ -36,6 +36,6 @@ class ErrorMapper():
                 if (len(exception_message) > 0):
                     if len(error_message) > 0:
                         error_message += ' : '
-                    error_message +=  exception_message
+                    error_message += exception_message
 
         ErrorMapperBase.set_error_code(return_obj, error_code, message=error_message)

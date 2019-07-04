@@ -1,10 +1,8 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.qradar import qradar_data_mapping
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 import json
-import copy
 from freezegun import freeze_time
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
@@ -94,18 +92,24 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_unmapped_attribute_with_AND(self):
-        stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
+        stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
+
+    def test_pattern_with_two_observation_exp_with_one_unmapped_attribute(self):
+        stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever'] AND [file:name = 'some_file.exe']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_pattern_with_one_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever']"
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map property' in result['error']
+        assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
@@ -154,14 +158,14 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-    def test_start_stop_qualifiers_with_one_observation(self):
+    def test_start_stop_qualifiers_with_one_observation_with_an_unmapped_attribute(self):
         start_time_01 = "t'2016-06-01T01:30:00.123Z'"
         stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
         unix_start_time_01 = 1464744600123
         unix_stop_time_01 = 1464747600123
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root' OR network-traffic:some_invalid_attribute = 'whatever'] START {} STOP {}".format(start_time_01, stop_time_01)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (username = 'root' AND sourceport = '37020') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
+        where_statement = "WHERE username = 'root' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         assert len(query['queries']) == 1
         assert query['queries'] == [selections + from_statement + where_statement]
 
@@ -181,7 +185,8 @@ class TestStixToAql(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
 
-    def test_start_stop_qualifiers_with_three_observations(self):
+    # BROKEN, not returning query without qualifier
+    def test_start_stop_qualifiers_with_three_observations_and_an_unmapped_attribute(self):
         start_time_01 = "t'2016-06-01T00:00:00.123Z'"
         stop_time_01 = "t'2016-06-01T01:11:11.456Z'"
         start_time_02 = "t'2016-06-07T02:22:22.789Z'"
@@ -281,6 +286,12 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
+        assert query['queries'] == [selections + from_statement + where_statement]
+
+    def test_complex_combined_observation_expression(self):
+        stix_pattern = "[url:value = 'example01.ru' OR url:value = 'example02.ru' OR url:value = 'example01.com' OR url:value = 'example03.ru' OR url:value = 'example02.com' OR url:value = 'example04.ru'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE url = 'example04.ru' OR (url = 'example02.com' OR (url = 'example03.ru' OR (url = 'example01.com' OR (url = 'example02.ru' OR url = 'example01.ru')))) {} START 1561403143000 STOP 1561489543000".format(default_limit)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_LIKE_operator(self):

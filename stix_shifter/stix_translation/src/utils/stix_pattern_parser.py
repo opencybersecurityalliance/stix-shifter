@@ -2,7 +2,7 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 import datetime
-from stix_shifter.stix_translation.src.transformers import DateTimeToUnixTimestamp
+from stix_shifter.stix_translation.src.utils.transformers import DateTimeToUnixTimestamp
 import re
 
 
