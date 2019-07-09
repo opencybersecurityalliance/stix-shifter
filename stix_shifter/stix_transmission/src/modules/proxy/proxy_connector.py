@@ -33,8 +33,8 @@ class Connector(BaseConnector):
         return response.text
 
     def create_status_connection(self, search_id):
-        response = requests.get("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_status_connection",
-                                data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
+        response = requests.post("http://" + self.connection["proxy_host"] + ":" + self.connection["proxy_port"] + "/create_status_connection",
+                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
         return response.text
 
     def delete_query_connection(self, search_id):
