@@ -18,7 +18,7 @@ class StixTransmission:
     def __init__(self, module, connection, configuration):
         if module not in TRANSMISSION_MODULES:
             raise NotImplementedError
-        if connection.get('options').get('proxy'):
+        if connection.get('options', {}).get('proxy'):
             module = 'proxy'
 
         try:

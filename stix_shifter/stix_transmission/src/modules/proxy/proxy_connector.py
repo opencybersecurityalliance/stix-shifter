@@ -10,8 +10,12 @@ class Connector(BaseConnector):
 
         self.connection = connection
         self.configuration = configuration
-        self.proxy_host = connection.get('options').get('proxy').get('host')
-        self.proxy_port = connection.get('options').get('proxy').get('port')
+        self.proxy_host = connection.get('options', {}).get('proxy', {}).get('host')
+        self.proxy_port = connection.get('options', {}).get('proxy', {}).get('port')
+        if not self.proxy_host:
+            raise Exception("Missing proxy host")
+        if not self.proxy_port:
+            raise Exception("Missing proxy port")
 
         self.results_connector = self
         self.status_connector = self
