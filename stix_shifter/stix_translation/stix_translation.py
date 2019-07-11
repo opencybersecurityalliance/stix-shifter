@@ -62,6 +62,11 @@ class StixTranslation:
             if module not in TRANSLATION_MODULES:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 
+            # Use the proxy adapter if options contain proxy settings.
+            # Datasource type will be determined by the proxy host.
+            if options.get('proxy'):
+                module = 'proxy'
+
             translator_module = importlib.import_module(
                 "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
 
