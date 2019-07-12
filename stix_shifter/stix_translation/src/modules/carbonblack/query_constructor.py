@@ -29,10 +29,11 @@ class CbQueryStringPatternTranslator:
         # observation operator AND - both sides MUST evaluate to true on different observations to be true
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
+        self.time_range = time_range # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
         self.queries = []
         for t in self.translated:
@@ -241,13 +242,27 @@ class CbQueryStringPatternTranslator:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
 
+    def _add_default_timerange(self, queries):
+        if self.time_range:
+            for q in queries:
+                if "start" not in q['query'] and "last_update" not in q['query'] and "server_added_timestamp" not in q['query']:
+                    # check if there's an existing time constraint on the query
+                    if q['dialect'] == "process":
+                        q['query'] = "(({}) and (start:-{}m or last_update:-{}m))".format(q['query'], self.time_range, self.time_range)
+                    else:
+                        assert(q['dialect'] == "binary")
+                        q['query'] = "(({}) and server_added_timestamp:-{}m)".format(q['query'], self.time_range)
+        return queries
+
     def parse_expression(self, pattern: Pattern):
         self._annotate_expression(pattern)
-        return self._parse_expression(pattern)
+        queries = self._parse_expression(pattern)
+        return self._add_default_timerange(queries)
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
-    # timerange = options['timerange']
-    translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    time_range = options['timerange']
+
+    translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
     return translated_statements.queries
