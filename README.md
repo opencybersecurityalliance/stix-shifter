@@ -1,6 +1,6 @@
 STIX-shifter is an open source python library allowing software to connect to products that house data repositories by using STIX Patterning, and return results as STIX Observations.
 
-STIX-Shifter is the heart of the Universal Data Service (UDS) that is provided as part of IBM Security Connect (ISC).
+STIX-Shifter is the heart of the Universal Data Service (UDS) that is provided as part of [IBM Security Connect](https://www.ibm.com/security/connect/).
 
 For more information about this project, see the [stix-shifter project](https://github.com/IBM/stix-shifter/blob/master/README.md)
 
@@ -9,7 +9,7 @@ For more information about this project, see the [stix-shifter project](https://
 This stix-shifter has the following dependencies:
 
 - [stix2-patterns>=1.1.0](https://pypi.org/project/stix2-patterns/)
-- [stix2-validator>=0.5.0](https://pypi.org/project/stix-validator/)
+- [stix2-validator>=0.5.0](https://pypi.org/project/stix2-validator/)
 - [stix2-matcher](https://github.com/oasis-open/cti-pattern-matcher): There is no python package publish in pypi for stix2-matcher. Below command can be used to install this package-
     ```
     pip install -e git+git://github.com/oasis-open/cti-pattern-matcher.git@v0.1.0#egg=stix2-matcher
