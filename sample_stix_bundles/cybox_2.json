@@ -23,11 +23,11 @@
             "objects": {
                 "0": {
                     "type": "ipv4-addr",
-                    "value": "192.168.97.74"
+                    "value": "127.0.0.1"
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "10.0.0.220"
+                    "value": "10.0.2.0"
                 },
                 "2": {
                     "type": "network-traffic",
@@ -61,11 +61,11 @@
             "objects": {
                 "0": {
                     "type": "ipv4-addr",
-                    "value": "192.168.35.254"
+                    "value": "127.0.0.1"
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "10.0.0.67"
+                    "value": "10.0.2.1"
                 },
                 "2": {
                     "type": "network-traffic",
