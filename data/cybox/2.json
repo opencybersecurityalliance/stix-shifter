@@ -27,7 +27,7 @@
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "10.0.2.0"
+                    "value": "192.168.0.10"
                 },
                 "2": {
                     "type": "network-traffic",
