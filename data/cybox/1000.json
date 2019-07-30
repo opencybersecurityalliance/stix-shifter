@@ -63,7 +63,7 @@
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "10.0.0.112"
+                    "value": "127.0.0.1"
                 },
                 "2": {
                     "type": "network-traffic",
@@ -282,7 +282,7 @@
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "10.0.0.112"
+                    "value": "127.0.0.1"
                 },
                 "2": {
                     "type": "network-traffic",
