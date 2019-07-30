@@ -26,7 +26,8 @@ class Connector(BaseConnector):
         self.delete_connector = self
         self.query_connector = self
         self.ping_connector = self
-        self.is_async = self._is_async()
+        # self.is_async = self._is_async()
+        self.is_async = True
 
     def ping(self):
         response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/ping",
