@@ -26,52 +26,40 @@ class Connector(BaseConnector):
         self.delete_connector = self
         self.query_connector = self
         self.ping_connector = self
-        # self.is_async = self._is_async()
-        self.is_async = True
+        self.is_async = self._is_async()
 
     def ping(self):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/ping",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration})
+        response = requests.post(request_http_path + "/ping", data)
         return response.text
 
     def create_query_connection(self, query):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/create_query_connection",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "query": query}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration, "query": query})
+        response = requests.post(request_http_path + "/create_query_connection", data)
         return response.text
 
     def create_results_connection(self, search_id, offset, length):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/create_results_connection",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id, "offset": offset, "length": length}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id, "offset": offset, "length": length})
+        response = requests.post(request_http_path + "/create_results_connection", data)
         return response.text
 
     def create_status_connection(self, search_id):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/create_status_connection",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id})
+        response = requests.post(request_http_path + "/create_status_connection", data)
         return response.text
 
     def delete_query_connection(self, search_id):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/delete_query_connection",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id})
+        response = requests.post(request_http_path + "/delete_query_connection", data)
         return response.text
 
     def _is_async(self):
-        response = requests.post("http://" + self.proxy_host + ":" + self.proxy_port + "/is_async",
-                                 data=json.dumps({"connection": self.connection, "configuration": self.configuration}))
+        request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
+        data = json.dumps({"connection": self.connection, "configuration": self.configuration})
+        response = requests.post(request_http_path + "/is_async", data)
         return response.text
-
-    def proxy_host(self, options):
-        proxy_host = options.get('proxy', {}).get('host')
-        if not proxy_host:
-            raise Exception("Missing proxy host")
-        return proxy_host
-
-    def _proxy_port(self, options):
-        proxy_port = options.get('proxy', {}).get('port')
-        if not proxy_port:
-            raise Exception("Missing proxy port")
-        return proxy_port
-
-    def _request_http_path(self, options):
-        proxy_host = self._proxy_host(options)
-        proxy_port = self._proxy_port(options)
-        return "http://{}:{}".format(proxy_host, proxy_port)
