@@ -32,34 +32,34 @@ class Connector(BaseConnector):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
         response = requests.post(request_http_path + "/ping", data)
-        return response.text
+        return json.loads(response.text)
 
     def create_query_connection(self, query):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration, "query": query})
         response = requests.post(request_http_path + "/create_query_connection", data)
-        return response.text
+        return json.loads(response.text)
 
     def create_results_connection(self, search_id, offset, length):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id, "offset": offset, "length": length})
         response = requests.post(request_http_path + "/create_results_connection", data)
-        return response.text
+        return json.loads(response.text)
 
     def create_status_connection(self, search_id):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id})
         response = requests.post(request_http_path + "/create_status_connection", data)
-        return response.text
+        return json.loads(response.text)
 
     def delete_query_connection(self, search_id):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id})
         response = requests.post(request_http_path + "/delete_query_connection", data)
-        return response.text
+        return json.loads(response.text)
 
     def _is_async(self):
         request_http_path = "http://{}:{}".format(self.proxy_host, self.proxy_port)
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
         response = requests.post(request_http_path + "/is_async", data)
-        return response.text
+        return json.loads(response.text)
