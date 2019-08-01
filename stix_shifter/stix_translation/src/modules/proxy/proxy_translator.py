@@ -8,13 +8,13 @@ class Translator(BaseTranslator):
         request_http_path = self._request_http_path(options.get('proxy', {}))
         response = requests.post(request_http_path + "/transform_query",
                                  data=json.dumps({"query": data, "options": options}))
-        return response.text
+        return response.json()
 
     def translate_results(self, data_source, data, options, mapping=None):
         request_http_path = self._request_http_path(options.get('proxy', {}))
         response = requests.post(request_http_path + "/translate_results",
                                  data=json.dumps({"results": data, "options": options}))
-        return response.text
+        return response.json()
 
     def _proxy_host(self, options):
         proxy_host = options.get('host')
