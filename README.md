@@ -14,7 +14,7 @@ This stix-shifter has the following dependencies:
     ```
     pip install git+git://github.com/oasis-open/cti-pattern-matcher.git@v0.1.0#egg=stix2-matcher
     ```
-- [antlr4-python3-runtime>=4.7](https://pypi.org/project/antlr4-python3-runtime/)
+- [antlr4-python3-runtime==4.7](https://pypi.org/project/antlr4-python3-runtime/)
 - [python-dateutil>=2.7.3](https://pypi.org/project/python-dateutil/)
 
 Your development environment must use Python 3.6.x
