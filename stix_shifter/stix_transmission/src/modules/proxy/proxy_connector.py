@@ -5,22 +5,10 @@ import requests
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-
-        self.connection = connection
         self.configuration = configuration
-        self.proxy_host = self.connection['host']
-        self.proxy_port = self.connection['port']
-
-        connection_options = connection.get('options')
-
-        self.connection['options'] = self.connection['options'].get('options', {})
-        self.connection["proxy_auth"] = connection_options.get('proxy_auth')
-
-        if not self.proxy_host:
-            raise Exception("Missing proxy host")
-        if not self.proxy_port:
-            raise Exception("Missing proxy port")
-
+        self.proxy_host = connection['host']
+        self.proxy_port = connection['port']
+        self.connection = self._unwrap_connection_options(connection)
         self.results_connector = self
         self.status_connector = self
         self.delete_connector = self
@@ -63,3 +51,17 @@ class Connector(BaseConnector):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
         response = requests.post(request_http_path + "/is_async", data)
         return response.text
+
+    def _unwrap_connection_options(self, connection):
+        connection_options = connection.get('options', {})
+        if connection_options:
+            proxy_auth = connection_options.get('proxy_auth')
+            embedded_connection_options = connection_options.get('options', {})
+            if proxy_auth and embedded_connection_options and embedded_connection_options.get('host'):
+                connection['proxy_auth'] = connection['options'].pop('proxy_auth')
+                connection['host'] = connection['options']['options'].pop('host')
+                connection['port'] = connection['options']['options'].pop('port')
+                connection['type'] = connection['options']['options'].pop('type')
+                # TODO: This may overwrite stuff in the outer-most options we want to keep
+                connection['options'] = connection['options'].pop('options')
+        return connection

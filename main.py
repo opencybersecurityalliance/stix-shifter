@@ -2,12 +2,10 @@ import argparse
 import sys
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
-from flask import Flask, request
-from stix_shifter.utils.error_response import ErrorResponder
+from flask import Flask
 import json
 import time
-import requests
-from stix_shifter.utils.host import Host
+from stix_shifter.utils.proxy_host import ProxyHost
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -156,44 +154,44 @@ def __main__():
 
         @app.route('/transform_query', methods=['POST'])
         def transform_query():
-            host = Host()
-            return Host.transform_query(host)
+            host = ProxyHost()
+            return ProxyHost.transform_query(host)
 
         @app.route('/translate_results', methods=['POST'])
         def translate_results():
             data_source_identity_object = args.data_source
-            host = Host()
-            return Host.translate_results(host, data_source_identity_object)
+            host = ProxyHost()
+            return ProxyHost.translate_results(host, data_source_identity_object)
 
         @app.route('/create_query_connection', methods=['POST'])
         def create_query_connection():
-            host = Host()
-            return Host.create_query_connection(host)
+            host = ProxyHost()
+            return ProxyHost.create_query_connection(host)
 
         @app.route('/create_status_connection', methods=['POST'])
         def create_status_connection():
-            host = Host()
-            return Host.create_status_connection(host)
+            host = ProxyHost()
+            return ProxyHost.create_status_connection(host)
 
         @app.route('/create_results_connection', methods=['POST'])
         def create_results_connection():
-            host = Host()
-            return Host.create_results_connection(host)
+            host = ProxyHost()
+            return ProxyHost.create_results_connection(host)
 
         @app.route('/delete_query_connection', methods=['POST'])
         def delete_query_connection():
-            host = Host()
-            return Host.delete_query_connection(host)
+            host = ProxyHost()
+            return ProxyHost.delete_query_connection(host)
 
         @app.route('/ping', methods=['POST'])
         def ping():
-            host = Host()
-            return Host.ping(host)
+            host = ProxyHost()
+            return ProxyHost.ping(host)
 
         @app.route('/is_async', methods=['POST'])
         def is_async():
-            host = Host()
-            return Host.is_async(host)
+            host = ProxyHost()
+            return ProxyHost.is_async(host)
 
         app.run(debug=True, port=5000, host='127.0.0.1')
 
