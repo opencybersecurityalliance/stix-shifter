@@ -1,6 +1,7 @@
 from ..base.base_connector import BaseConnector
 import json
 import requests
+import copy
 
 
 class Connector(BaseConnector):
@@ -8,7 +9,8 @@ class Connector(BaseConnector):
         self.configuration = configuration
         self.proxy_host = connection['host']
         self.proxy_port = connection['port']
-        self.connection = self._unwrap_connection_options(connection)
+        # deep copy connection since it will be mutates as it is passed along the proxy chain
+        self.connection = self._unwrap_connection_options(copy.deepcopy(connection))
         self.results_connector = self
         self.status_connector = self
         self.delete_connector = self
