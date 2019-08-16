@@ -10,7 +10,7 @@ This stix-shifter has the following dependencies:
 
 - [stix2-patterns>=1.1.0](https://pypi.org/project/stix2-patterns/)
 - [stix2-validator>=0.5.0](https://pypi.org/project/stix2-validator/)
-- [stix2-matcher](https://github.com/oasis-open/cti-pattern-matcher): There is no python package publish in pypi for stix2-matcher. Below command can be used to install this package-
+- [stix2-matcher](https://github.com/oasis-open/cti-pattern-matcher): There is no python package publish in pypi for stix2-matcher. The bellow command can be used to install this package:
     ```
     pip install git+git://github.com/oasis-open/cti-pattern-matcher.git@v0.1.0#egg=stix2-matcher
     ```
