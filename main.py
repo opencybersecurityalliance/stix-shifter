@@ -139,6 +139,11 @@ def __main__():
         type=str,
         help='STIX Identity object for the data source'
     )
+    host_parser.add_argument(
+        'host_address',
+        type=str,
+        help='Proxy Host:Port'
+    )
 
     args = parent_parser.parse_args()
 
@@ -193,7 +198,8 @@ def __main__():
             host = ProxyHost()
             return ProxyHost.is_async(host)
 
-        app.run(debug=True, port=5000, host='127.0.0.1')
+        host_address = args.host_address.split(":")
+        app.run(debug=True, port=int(host_address[1]), host=host_address[0])
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
