@@ -107,7 +107,7 @@ setup(
         #     'Programming Language :: Python :: 2.7',
         #     'Programming Language :: Python :: 3',
         #     'Programming Language :: Python :: 3.4',
-         'Programming Language :: Python :: 3.5',
+        #     'Programming Language :: Python :: 3.5',
          'Programming Language :: Python :: 3.6',
     ],
 
@@ -134,9 +134,10 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['stix2-patterns==1.1.0', 'stix2-validator==0.5.0',
-                      'antlr4-python3-runtime==4.7', 'python-dateutil==2.7.3',
-                      'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher'],  # Optional
+    install_requires=['stix2-patterns>=1.1.0', 'stix2-validator>=0.5.0',
+                      'antlr4-python3-runtime==4.7', 'python-dateutil>=2.7.3'
+                    #   ,'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
+                    ],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
