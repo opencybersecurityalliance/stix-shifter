@@ -21,9 +21,8 @@ class ProxyHost():
         connection_options = self.connection.get('options', {})
         options = connection_options
         if connection_options:
-            proxy_auth = connection_options.get('proxy_auth')
             embedded_connection_options = connection_options.get('options', {})
-            if proxy_auth and embedded_connection_options and embedded_connection_options.get('host'):
+            if embedded_connection_options and embedded_connection_options.get('host'):
                 options = self.connection
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()
@@ -35,9 +34,8 @@ class ProxyHost():
         connection_options = self.connection.get('options', {})
         options = connection_options
         if connection_options:
-            proxy_auth = connection_options.get('proxy_auth')
             embedded_connection_options = connection_options.get('options', {})
-            if proxy_auth and embedded_connection_options and embedded_connection_options.get('host'):
+            if embedded_connection_options and embedded_connection_options.get('host'):
                 options = self.connection
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()

@@ -159,44 +159,45 @@ def __main__():
 
         @app.route('/transform_query', methods=['POST'])
         def transform_query():
+            print("transforming query")
             host = ProxyHost()
-            return ProxyHost.transform_query(host)
+            return host.transform_query(host)
 
         @app.route('/translate_results', methods=['POST'])
         def translate_results():
             data_source_identity_object = args.data_source
             host = ProxyHost()
-            return ProxyHost.translate_results(host, data_source_identity_object)
+            return host.translate_results(data_source_identity_object)
 
         @app.route('/create_query_connection', methods=['POST'])
         def create_query_connection():
             host = ProxyHost()
-            return ProxyHost.create_query_connection(host)
+            return host.create_query_connection()
 
         @app.route('/create_status_connection', methods=['POST'])
         def create_status_connection():
             host = ProxyHost()
-            return ProxyHost.create_status_connection(host)
+            return host.create_status_connection()
 
         @app.route('/create_results_connection', methods=['POST'])
         def create_results_connection():
             host = ProxyHost()
-            return ProxyHost.create_results_connection(host)
+            return host.create_results_connection()
 
         @app.route('/delete_query_connection', methods=['POST'])
         def delete_query_connection():
             host = ProxyHost()
-            return ProxyHost.delete_query_connection(host)
+            return host.delete_query_connection()
 
         @app.route('/ping', methods=['POST'])
         def ping():
             host = ProxyHost()
-            return ProxyHost.ping(host)
+            return host.ping()
 
         @app.route('/is_async', methods=['POST'])
         def is_async():
             host = ProxyHost()
-            return ProxyHost.is_async(host)
+            return host.is_async()
 
         host_address = args.host_address.split(":")
         app.run(debug=True, port=int(host_address[1]), host=host_address[0])

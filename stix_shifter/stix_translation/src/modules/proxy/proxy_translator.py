@@ -30,16 +30,13 @@ class Translator(BaseTranslator):
 
     def _unwrap_connection_options(self, connection):
         connection_options = connection.get('options', {})
-        if connection_options:
-            proxy_auth = connection_options.get('proxy_auth')
-            embedded_connection_options = connection_options.get('options', {})
-            if proxy_auth and embedded_connection_options and embedded_connection_options.get('host'):
-                connection['proxy_auth'] = connection['options'].pop('proxy_auth')
-                connection['host'] = connection['options']['options'].pop('host')
-                connection['port'] = connection['options']['options'].pop('port')
-                connection['type'] = connection['options']['options'].pop('type')
-                # TODO: This may overwrite stuff in the outer-most options we want to keep
-                connection['options'] = connection['options'].pop('options')
+        embedded_connection_options = connection_options.get('options', {})
+        if embedded_connection_options and embedded_connection_options.get('host'):
+            connection['proxy_auth'] = connection_options.get('proxy_auth')  # May be None.
+            connection['host'] = connection['options']['options'].pop('host')
+            connection['port'] = connection['options']['options'].pop('port')
+            connection['type'] = connection['options']['options'].pop('type')
+            connection['options'] = connection['options'].pop('options')
         return connection
 
     def __init__(self):
