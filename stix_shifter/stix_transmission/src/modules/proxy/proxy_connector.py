@@ -52,8 +52,8 @@ class Connector(BaseConnector):
         embedded_connection_options = connection_options.get('options', {})
         if embedded_connection_options and embedded_connection_options.get('host'):
             connection['proxy_auth'] = connection_options.get('proxy_auth')  # May be None.
-            connection['host'] = connection['options']['options'].pop('host')
-            connection['port'] = connection['options']['options'].pop('port')
-            connection['type'] = connection['options']['options'].pop('type')
-            connection['options'] = connection['options'].pop('options')
+            connection['host'] = embedded_connection_options.get('host')
+            connection['port'] = embedded_connection_options.get('port')
+            connection['type'] = embedded_connection_options.get('type')
+            connection['options'] = embedded_connection_options
         return connection
