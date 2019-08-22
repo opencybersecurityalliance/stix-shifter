@@ -89,7 +89,6 @@ class StixTranslation:
                         data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
                         data_model_mapper = data_model.DataMapper(options)
                     except Exception as ex:
-                        print("Data model mapper not found for {} so attempting to use CAR or CIM".format(module))
                         data_model_mapper = self._cim_or_car_data_mapper(module, options)
                     antlr_parsing = generate_query(data)
                     if data_model_mapper:

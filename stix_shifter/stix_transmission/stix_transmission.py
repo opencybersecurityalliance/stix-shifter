@@ -1,7 +1,7 @@
 import importlib
 from ..utils.error_response import ErrorResponder
 
-TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy','stix_bundle']
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle']
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -12,14 +12,16 @@ IS_ASYNC = 'is_async'
 
 
 class StixTransmission:
-    
-    init_error = None
-    
-    def __init__(self, module, connection, configuration):
-        if module not in TRANSMISSION_MODULES :
-            raise NotImplementedError
 
-        try :
+    init_error = None
+
+    def __init__(self, module, connection, configuration):
+        if module not in TRANSMISSION_MODULES:
+            raise NotImplementedError
+        if connection.get('options', {}).get('proxy'):
+            module = 'proxy'
+
+        try:
             self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
                                                             "." + module + "_connector")
             self.interface = self.connector_module.Connector(connection, configuration)
@@ -36,7 +38,6 @@ class StixTransmission:
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
-
 
     def status(self, search_id):
         # Creates and sends a status query to the correct datasource asking for the status of the specific query

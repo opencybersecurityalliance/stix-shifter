@@ -89,7 +89,7 @@ class BaseConnector:
         Sends a basic request to the datasource to confirm we are connected and authenticated
 
         Args:
-            search_id (str): The datasource query ID.
+            None.
 
         Returns:
             dict: The return value.
