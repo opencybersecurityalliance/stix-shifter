@@ -17,29 +17,16 @@ class ProxyHost():
 
     def transform_query(self):
         query = self.request_args["query"]
-        data_source_identity_object = '{}'
-        connection_options = self.connection.get('options', {})
-        options = connection_options
-        if connection_options:
-            embedded_connection_options = connection_options.get('options', {})
-            if embedded_connection_options and embedded_connection_options.get('host'):
-                options = self.connection
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()
-        dsl = translation.translate(translation_module, 'query', data_source_identity_object, query, options)
+        dsl = translation.translate(translation_module, 'query', '{}', query, self.connection)
         return json.dumps(dsl['queries'])
 
     def translate_results(self, data_source_identity_object):
         data_source_results = self.request_args["results"]
-        connection_options = self.connection.get('options', {})
-        options = connection_options
-        if connection_options:
-            embedded_connection_options = connection_options.get('options', {})
-            if embedded_connection_options and embedded_connection_options.get('host'):
-                options = self.connection
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()
-        dsl = translation.translate(translation_module, 'results', data_source_identity_object, data_source_results, options)
+        dsl = translation.translate(translation_module, 'results', data_source_identity_object, data_source_results, self.connection)
         return json.dumps(dsl)
 
     def create_query_connection(self):
