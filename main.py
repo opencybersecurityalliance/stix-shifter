@@ -159,9 +159,8 @@ def __main__():
 
         @app.route('/transform_query', methods=['POST'])
         def transform_query():
-            print("transforming query")
             host = ProxyHost()
-            return host.transform_query(host)
+            return host.transform_query()
 
         @app.route('/translate_results', methods=['POST'])
         def translate_results():
