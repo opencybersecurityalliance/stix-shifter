@@ -33,7 +33,7 @@ Please read our [guidelines for contributing](https://github.com/IBM/stix-shifte
 
 ## Guide for creating new adapters
 
-If you want to create a new adapter for STIX-shifter, see the [developer guide](https://github.com/IBM/stix-shifter/blob/bundle_sample/adapter-guide/develop-stix-adapter.md)
+If you want to create a new adapter for STIX-shifter, see the [developer guide](https://github.com/IBM/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
 
