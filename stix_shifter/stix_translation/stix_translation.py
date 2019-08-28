@@ -77,11 +77,8 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
-                if 'result_limit' not in options:
-                    options['result_limit'] = DEFAULT_LIMIT
-                if 'timerange' not in options:
-                    options['timerange'] = DEFAULT_TIMERANGE
-
+                options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
+                options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
                 if translate_type == QUERY:
                     if 'validate_pattern' in options and options['validate_pattern'] == "true":
                         self._validate_pattern(data)

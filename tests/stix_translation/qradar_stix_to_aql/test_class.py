@@ -229,12 +229,11 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-    # def test_custom_time_limit_and_result_count_and_mappings(self):
-    #     stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-    #     custom_options = copy.deepcopy(OPTIONS)
-    #     query = translation.translate('qradar', 'query', '{}', stix_pattern, custom_options)
-    #     where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(custom_options['result_limit'], custom_options['timerange'])
-    #     assert query == {'queries': [custom_selections + from_statement + where_statement]}
+    def test_custom_time_limit_and_result_count_and_mappings(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
+        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['timerange'])
+        assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
