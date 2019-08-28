@@ -17,18 +17,6 @@
       "cybox": false
     }
   ],
-  "created": [
-    {
-      "key": "created",
-      "cybox": false
-    }
-  ],
-  "modified": [
-    {
-      "key": "modified",
-      "cybox": false
-    }
-  ],
   "process.pid": [
     {
       "key": "process.pid",
