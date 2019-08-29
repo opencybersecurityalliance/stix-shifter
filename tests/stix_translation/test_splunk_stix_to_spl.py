@@ -147,11 +147,7 @@ class TestStixToSpl(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-
-        timerange = 25
-        result_limit = 5000
-        options = {"timerange": timerange, "result_limit": result_limit}
-
+        options = {"timeRange": 25, "resultSizeLimit": 5000}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
         queries = 'search ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-25minutes" | head 5000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)
@@ -159,12 +155,9 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_custom_mapping(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND mac-addr:value = '00-00-5E-00-53-00']"
 
-        timerange = 15
-        result_limit = 1000
-
         options = {
-            "timerange": timerange,
-            "result_limit": result_limit,
+            "timeRange": 15,
+            "resultSizeLimit": 1000,
             "mapping": {
                 "mac-addr": {
                     "cim_type": "flow",
@@ -194,11 +187,7 @@ class TestStixToSpl(unittest.TestCase, object):
 
     def test_free_search(self):
         stix_pattern = "[x-readable-payload:value = 'malware']"
-
-        timerange = 25
-        result_limit = 5000
-        options = {"timerange": timerange, "result_limit": result_limit}
-
+        options = {"timeRange": 25, "resultSizeLimit": 5000}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
         queries = 'search _raw=*malware* earliest="-25minutes" | head 5000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)

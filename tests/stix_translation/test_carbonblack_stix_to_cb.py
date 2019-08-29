@@ -13,7 +13,7 @@ def to_json(queries):
 def _test_query_assertions(query, queries):
     assert query['queries'] == queries
 
-test_options = {"timerange": None} # retain old behavior (no default time range added) for existing tests
+test_options = {"timeRange": None} # retain old behavior (no default time range added) for existing tests
 
 class TestStixToQuery(unittest.TestCase, object):
 
@@ -69,7 +69,7 @@ class TestStixToQuery(unittest.TestCase, object):
                         }
                     }
                 }
-        custom_options = {"mappings" : custom_mappings, "timerange": None}
+        custom_options = {"mappings" : custom_mappings, "timeRange": None}
 
         stix_pattern = "[file:custom_name = 'some_file.exe']"
         query = translation.translate(module, 'query', '{}', stix_pattern, custom_options)
@@ -175,6 +175,6 @@ class TestStixToQuery(unittest.TestCase, object):
                 "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and (start:-5m or last_update:-5m))', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
-            result = translation.translate("carbonblack", 'query', '{}', stix_pattern, options={"timerange": 5})
+            result = translation.translate("carbonblack", 'query', '{}', stix_pattern, options={"timeRange": 5})
             print(result)
             assert result['queries'] == to_json(queries)

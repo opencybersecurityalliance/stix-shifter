@@ -37,64 +37,111 @@
   "mapping": {
     "ipv4-addr": {
       "fields": {
-        "value": ["sourceip", "destinationip", "identityip"]
+        "value": [
+          "sourceip",
+          "destinationip",
+          "identityip"
+        ]
       }
     },
     "ipv6-addr": {
       "fields": {
-        "value": ["sourceip", "destinationip"]
+        "value": [
+          "sourceip",
+          "destinationip"
+        ]
       }
     },
     "url": {
       "fields": {
-        "value": ["url"]
+        "value": [
+          "url"
+        ]
       }
     },
     "mac-addr": {
       "fields": {
-        "value": ["sourcemac", "destinationmac"]
+        "value": [
+          "sourcemac",
+          "destinationmac"
+        ]
       }
     },
     "file": {
       "fields": {
-        "name": ["filename"],
-        "hashes.SHA-256": ["sha256hash", "filehash"],
-        "hashes.MD5": ["md5hash", "filehash"],
-        "hashes.SHA-1": ["sha1hash", "filehash"]
+        "name": [
+          "filename"
+        ],
+        "hashes.SHA-256": [
+          "sha256hash",
+          "filehash"
+        ],
+        "hashes.MD5": [
+          "md5hash",
+          "filehash"
+        ],
+        "hashes.SHA-1": [
+          "sha1hash",
+          "filehash"
+        ]
       }
     },
     "network-traffic": {
       "fields": {
-        "src_port": ["sourceport"],
-        "dst_port": ["destinationport"],
-        "protocols[*]": ["protocolid"],
-        "start": ["starttime"],
-        "end": ["endtime"],
-        "src_ref.value": ["sourceip", "sourcemac"],
-        "dst_ref.value": ["destinationip", "destinationmac"]
+        "src_port": [
+          "sourceport"
+        ],
+        "dst_port": [
+          "destinationport"
+        ],
+        "protocols[*]": [
+          "protocolid"
+        ],
+        "start": [
+          "starttime"
+        ],
+        "end": [
+          "endtime"
+        ],
+        "src_ref.value": [
+          "sourceip",
+          "sourcemac"
+        ],
+        "dst_ref.value": [
+          "destinationip",
+          "destinationmac"
+        ]
       }
     },
     "user-account": {
       "fields": {
-        "user_id": ["username"]
+        "user_id": [
+          "username"
+        ]
       }
     },
     "artifact": {
       "fields": {
-        "payload_bin": ["base64_payload"]
+        "payload_bin": [
+          "base64_payload"
+        ]
       }
     },
     "domain-name": {
       "fields": {
-        "value": ["domainname"]
+        "value": [
+          "domainname"
+        ]
       }
     },
     "x-readable-payload": {
       "fields": {
-        "value": ["utf8_payload"]
+        "value": [
+          "utf8_payload"
+        ]
       }
     }
   },
-  "timerange": 25,
-  "result_limit": 5000
+  "timeRange": 15,
+  "resultSizeLimit": 10000
 }

@@ -25,8 +25,8 @@ def __main__():
       "{
           "select_fields": <string array of fields in the datasource select statement> (In the case of QRadar),
           "mapping": <mapping hash for either stix pattern to datasource or mapping hash for data results to stix observation objects>,
-          "result_limit": <integer limit number for max results in the data source query>,
-          "timerange": <integer time range for LAST x MINUTES used in the data source query when START STOP qualifiers are absent>
+          "resultSizeLimit": <integer limit number for max results in the data source query>,
+          "timeRange": <integer time range for LAST x MINUTES used in the data source query when START STOP qualifiers are absent>
        }"
     In the case of transmission, stix-shifter connects to a datasource to execute queries, status updates, and result retrieval.
     Arguments will take the form of...
