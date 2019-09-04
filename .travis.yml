@@ -23,4 +23,6 @@ script:
   - echo "Running tests..."
   - pytest --cov=stix_shifter --cov-report=xml
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_SLUG" != "" ]; then sonar-scanner; fi # sonar scan on PRs
-  # - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner -X ; fi # sonar scan on non-PRs
+
+after_script:
+  - - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner -X ; fi
