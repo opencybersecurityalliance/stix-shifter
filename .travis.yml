@@ -25,4 +25,4 @@ script:
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_SLUG" != "" ]; then sonar-scanner; fi # sonar scan on PRs
 
 after_script:
-  - - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner -X ; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner -X ; fi
