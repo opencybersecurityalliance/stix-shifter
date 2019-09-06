@@ -1,4 +1,4 @@
-# BigFix
+# BigFix UDS Connector
 
 ## BigFix Relevance Query with XML schema:
 
