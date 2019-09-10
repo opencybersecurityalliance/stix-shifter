@@ -1,6 +1,4 @@
 {
-    "artifact": "None",
-    "as": "None",
     "directory": {
         "cim_type": "endpoint",
         "fields": {
@@ -86,7 +84,6 @@
             ]
         }
     },
-    "mutex": "None",
     "network-traffic": {
         "cim_type": "network",
         "fields": {
@@ -109,7 +106,6 @@
             "binary_ref.name": "file_name"
         }
     },
-    "software": "None",
     "url": {
         "cim_type": "web",
         "fields": {
