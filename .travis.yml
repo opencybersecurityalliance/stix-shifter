@@ -14,6 +14,13 @@ before_script:
   # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
   - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+addons:
+  sonarcloud:
+    token:
+      secure: "${SONAR_CLOUD_TOKEN}"
+
 script:
   - echo "Running tests..."
   - pytest --cov=stix_shifter --cov-report=xml
+  # - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_SLUG" != "" ]; then sonar-scanner; fi # sonar scan on internal PRs
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner; fi # sonar scan on non-PRs

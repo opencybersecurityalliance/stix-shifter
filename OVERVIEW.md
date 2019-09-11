@@ -218,8 +218,8 @@ optional arguments:
 
 - **"select_fields":** string array of fields in the data source select statement
 - **"mapping":** mapping hash for either STIX pattern to data source or data results to STIX observation objects
-- **"result_limit":** integer to limit number or results in the data source query
-- **"time_range":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
+- **"resultSizeLimit":** integer to limit number or results in the data source query
+- **"timeRange":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
 
 #### Example of converting a STIX pattern to (AQL) query
 
