@@ -3,6 +3,7 @@ import uuid
 
 from . import observable
 from stix2validator import validate_instance, print_results
+from datetime import datetime
 
 
 # convert JSON data to STIX object using map_data and transformers
@@ -78,10 +79,9 @@ class DataSourceObjToStixObj:
                 child_obj[prop] = {}
             child_obj = child_obj[prop]
 
-
         if split_key[-1] not in child_obj.keys():
             child_obj[split_key[-1]] = stix_value
-        elif group is True: # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
+        elif group is True:  # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
             if (isinstance(child_obj[split_key[-1]], list)):
                 child_obj[split_key[-1]].extend(stix_value)                      # append to existing list
 
@@ -98,9 +98,9 @@ class DataSourceObjToStixObj:
         """
         obj_type, obj_prop = key_to_add.split('.', 1)
         objs_dir = observation['objects']
-        
+
         if obj_name in obj_name_map:
-                obj = objs_dir[obj_name_map[obj_name]]
+            obj = objs_dir[obj_name_map[obj_name]]
         else:
             obj = {'type': obj_type}
             obj_dir_key = str(len(objs_dir))
@@ -128,19 +128,19 @@ class DataSourceObjToStixObj:
                 return False
         return True
 
-    def _transform(self,object_map,observation,ds_map,ds_key,obj):
+    def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
-        to_map = obj[ ds_key ]
+        to_map = obj[ds_key]
 
         if ds_key not in ds_map:
             print('{} is not found in map, skipping'.format(ds_key))
             return
 
-        if isinstance( to_map, dict ):
+        if isinstance(to_map, dict):
             print('{} is complex; descending'.format(to_map))
             # If the object is complex we must descend into the map on both sides
             for key in to_map.keys():
-                self._transform(object_map,observation,ds_map[ds_key],key,to_map)
+                self._transform(object_map, observation, ds_map[ds_key], key, to_map)
             return
 
         generic_hash_key = ''
@@ -215,13 +215,15 @@ class DataSourceObjToStixObj:
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
             'created_by_ref': self.identity_id,
+            'created': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
+            'modified': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
             'objects': {}
         }
 
         # create normal type objects
-        if isinstance(obj,dict):
+        if isinstance(obj, dict):
             for ds_key in obj.keys():
-                self._transform(object_map,observation,ds_map,ds_key,obj)
+                self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
             print("Not a dict: {}".format(obj))
 
