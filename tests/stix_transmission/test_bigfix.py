@@ -32,15 +32,15 @@ class BigFixMockHttpXMLResponse:
 
 config = {
     "auth": {
-        "user_name": "fake",
-        "password": "fake"
+        "user_name": "abc",
+        "password": "xyz"
     }
 }
 
 connection = {
-    "host": "fake",
-    "port": "fake",
-    "cert": "fake"
+    "host": "123.123.123.123",
+    "port": "443",
+    "cert": False
 }
 
 

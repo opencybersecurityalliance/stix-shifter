@@ -68,29 +68,7 @@
         "references": "user"
       }
     ],
-    "start_time": [
-        {
-            "key": "created",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
-        },
-        {
-            "key": "first_observed",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
-        },
-        {
-            "key": "last_observed",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
-        }
-    ],
-    "modified_time": [
-        {
-            "key": "modified",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
-        },
+    "timestamp": [
         {
             "key": "first_observed",
             "transformer": "EpochSecondsToTimestamp",
@@ -103,8 +81,13 @@
         }
     ],
     "computer_identity": {
-        "key": "name",
-        "cybox": false
+      "key": "x_com_bigfix_relevance.computer_identity",
+      "cybox": false
+    },
+    "event_count": {
+        "key": "number_observed",
+        "cybox": false,
+        "transformer": "ToInteger"
     },
     "local_address":
         [

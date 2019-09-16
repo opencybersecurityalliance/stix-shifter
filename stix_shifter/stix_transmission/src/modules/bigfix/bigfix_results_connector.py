@@ -66,7 +66,7 @@ class BigFixResultsConnector(BaseResultsConnector):
                                          'sha256hash': (12, ('n/a',)), 'sha1hash': (14, ('n/a',)),
                                          'md5hash': (16, ('n/a',)), 'file_path': (17, ('n/a',)),
                                          'process_ppid': (18, ('n/a',)), 'process_user': (19, ('n/a',)),
-                                         'start_time': (21, ('0',)), 'process_name': (9, ('n/a',)),
+                                         'timestamp': (21, ('0',)), 'process_name': (9, ('n/a',)),
                                          'process_id': (10, ('n/a', '0')), 'file_size': (20, ('0',))
                                          }
         for key, value in attr_with_na_value_index_dict.items():
@@ -74,6 +74,7 @@ class BigFixResultsConnector(BaseResultsConnector):
                 formatted_obj[key] = obj_list[value[0]].strip()
         formatted_obj['type'] = "Socket"
         formatted_obj['protocol'] = 'tcp' if obj_list[22].strip() == 'True' else 'udp'
+        formatted_obj['event_count'] = "1"
         return formatted_obj
 
     @staticmethod
@@ -87,13 +88,14 @@ class BigFixResultsConnector(BaseResultsConnector):
         attr_with_na_value_index_dict = {'sha256hash': (4, ('n/a',)), 'sha1hash': (6, ('n/a',)),
                                          'md5hash': (8, ('n/a',)), 'file_path': (9, ('n/a',)),
                                          'process_ppid': (10, ('n/a',)), 'process_user': (11, ('n/a',)),
-                                         'start_time': (13, ('0',)), 'process_name': (1, ('n/a',)),
+                                         'timestamp': (13, ('0',)), 'process_name': (1, ('n/a',)),
                                          'process_id': (2, ('n/a', '0')), 'file_size': (12, ('0',))
                                          }
         for key, value in attr_with_na_value_index_dict.items():
             if obj_list[value[0]].strip() not in value[1]:
                 formatted_obj[key] = obj_list[value[0]].strip()
         formatted_obj['type'] = obj_list[0].strip()
+        formatted_obj['event_count'] = "1"
         return formatted_obj
 
     @staticmethod
@@ -112,7 +114,8 @@ class BigFixResultsConnector(BaseResultsConnector):
             if obj_list[value[0]].strip() not in value[1]:
                 formatted_obj[key] = obj_list[value[0]].strip()
         formatted_obj['type'] = obj_list[0].strip()
-        formatted_obj['modified_time'] = obj_list[10].strip()
+        formatted_obj['timestamp'] = obj_list[10].strip()
+        formatted_obj['event_count'] = "1"
         return formatted_obj
 
     @staticmethod
@@ -129,6 +132,7 @@ class BigFixResultsConnector(BaseResultsConnector):
             if obj_list[value[0]].strip() not in value[1]:
                 formatted_obj[key] = obj_list[value[0]].strip()
         formatted_obj['type'] = obj_list[0].strip()
+        formatted_obj['event_count'] = "1"
         return formatted_obj
 
     def format_computer_obj(self, computer_obj):

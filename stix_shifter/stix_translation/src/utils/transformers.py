@@ -204,7 +204,10 @@ class TimestampToUTC(ValueTransformer):
                             False if timestamp like datetime.datetime(2019, 8, 22, 15, 44, 11, 716805)
         :return: str, e.g. : 25 Jul 2019 10:43:10 +0000
         """
-        input_time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+        if re.search(r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z", str(timestamp)):
+            input_time_pattern = '%Y-%m-%dT%H:%M:%SZ'
+        else:
+            input_time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
         output_time_pattern = '%d %b %Y %H:%M:%S %z'
         if not is_default:
             # convert timestamp to datetime object

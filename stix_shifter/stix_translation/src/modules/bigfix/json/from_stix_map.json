@@ -4,7 +4,7 @@
       "name": ["file.name"],
       "hashes.SHA-256": ["file.sha256"],
       "hashes.SHA-1": ["file.sha1"],
-      "hashes.md5": ["file.md5"],
+      "hashes.MD5": ["file.md5"],
       "parent_directory_ref.path": ["file.folder"],
       "size": ["file.size"]
     }
@@ -17,7 +17,7 @@
       "binary_ref.name" : ["file.name"],
       "binary_ref.hashes.SHA-256" : ["file.sha256"],
       "binary_ref.hashes.SHA-1": ["file.sha1"],
-      "binary_ref.hashes.md5": ["file.md5"],
+      "binary_ref.hashes.MD5": ["file.md5"],
       "binary_ref.parent_directory_ref.path": ["file.pathname"],
       "binary_ref.size": ["file.size"],
       "creator_user_ref.user_id": ["process.user", "process.name of user"]
