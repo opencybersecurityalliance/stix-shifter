@@ -44,16 +44,6 @@
   },
   "starttime": [
     {
-      "key": "created",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "modified",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
       "key": "first_observed",
       "transformer": "EpochToTimestamp",
       "cybox": false

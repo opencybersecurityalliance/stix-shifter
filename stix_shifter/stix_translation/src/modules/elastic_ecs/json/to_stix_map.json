@@ -1,14 +1,6 @@
 {
   "@timestamp": [
     {
-      "key": "created",
-      "cybox": false
-    },
-    {
-      "key": "modified",
-      "cybox": false
-    },
-    {
       "key": "first_observed",
       "cybox": false
     },
@@ -20,8 +12,8 @@
   "source": {
     "ip": [
       {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
       },
       {
         "key": "ipv6-addr.value",
@@ -58,8 +50,8 @@
   "client": {
     "ip": [
       {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
       },
       {
         "key": "ipv6-addr.value",
@@ -96,8 +88,8 @@
   "destination": {
     "ip": [
       {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
       },
       {
         "key": "ipv6-addr.value",
@@ -134,8 +126,8 @@
   "server": {
     "ip": [
       {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
       },
       {
         "key": "ipv6-addr.value",
@@ -173,19 +165,19 @@
     "transport": {
       "key": "network-traffic.protocols",
       "object": "nt",
-      "group" : "True",
+      "group": "True",
       "transformer": "ToLowercaseArray"
     },
     "type": {
       "key": "network-traffic.protocols",
       "object": "nt",
-      "group" : "True",
+      "group": "True",
       "transformer": "ToLowercaseArray"
     },
     "protocol": {
       "key": "network-traffic.protocols",
       "object": "nt",
-      "group" : "True",
+      "group": "True",
       "transformer": "ToLowercaseArray"
     }
   },
@@ -204,12 +196,10 @@
     }
   },
   "process": {
-    "executable":
-    {
+    "executable": {
       "key": "process.command_line",
       "object": "proc"
-    }
-    ,
+    },
     "start": {
       "key": "process.created",
       "object": "proc"
@@ -221,8 +211,8 @@
     },
     "name": [
       {
-      "key": "file.name",
-      "object": "file"
+        "key": "file.name",
+        "object": "file"
       },
       {
         "key": "process.image_ref",
@@ -234,7 +224,7 @@
   "user": {
     "name": [
       {
-        "key":"user-account.user_id",
+        "key": "user-account.user_id",
         "object": "user"
       },
       {
@@ -245,5 +235,3 @@
     ]
   }
 }
-
-
