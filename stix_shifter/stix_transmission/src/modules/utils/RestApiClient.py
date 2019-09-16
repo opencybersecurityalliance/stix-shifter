@@ -51,7 +51,6 @@ class RestApiClient:
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
-                print(url)
                 call = getattr(requests, method.lower())
                 response = call(url, headers=actual_headers, cert=self.cert_file_name, data=data, verify=self.cert_verify)
                 
