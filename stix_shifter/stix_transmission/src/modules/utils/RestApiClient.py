@@ -21,7 +21,6 @@ class RestApiClient:
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None):
-
         self.cert_file_name = None
         try:
             if self.cert is not None and self.cert_verify:
@@ -39,19 +38,20 @@ class RestApiClient:
                 for header_key in headers:
                     actual_headers[header_key] = headers[header_key]
 
-            if urldata is not None:
+            if urldata:
                 urldata = urllib.parse.urlencode(urldata)
                 if '?' in endpoint:
                     endpoint += '&'
                 else:
                     endpoint += '?'
-                endpoint += urldata            
+                endpoint += urldata
 
             if self.url_modifier_function is not None:
                 url = self.url_modifier_function(self.server_ip, endpoint, actual_headers)
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
+                print(url)
                 call = getattr(requests, method.lower())
                 response = call(url, headers=actual_headers, cert=self.cert_file_name, data=data, verify=self.cert_verify)
                 
