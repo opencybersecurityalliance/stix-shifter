@@ -220,7 +220,7 @@ def __main__():
                 if transmission.is_async():
                     time.sleep(1)
                     status = transmission.status(search_id)
-                    while status['progress'] < 100:
+                    while status['progress'] < 100 and status['status'] == 'RUNNING':
                         print(status)
                         status = transmission.status(search_id)
                     print(status)

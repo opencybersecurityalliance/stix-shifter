@@ -30,63 +30,63 @@ class BigFixMockHttpXMLResponse:
         return self.object
 
 
-config = {
+CONFIG = {
     "auth": {
-        "user_name": "abc",
+        "username": "abc",
         "password": "xyz"
     }
 }
 
-connection = {
+CONNECTION = {
     "host": "123.123.123.123",
     "port": "443",
-    "cert": False
+    "cert_verify": False,
+    "timeout": 60
 }
 
 
-@patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.__init__', autospec=True)
 class TestBigfixConnection(unittest.TestCase):
-    def test_is_async(self, mock_api_client):
-        mock_api_client.return_value = None
+    @staticmethod
+    def test_is_async():
         module = bigfix_connector
 
-        check_async = module.Connector(connection, config).is_async
+        check_async = module.Connector(CONNECTION, CONFIG).is_async
         assert check_async
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
-    def test_ping_endpoint_good_return(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_good_return(mock_ping_response):
         mocked_return_value = MockHttpResponse('/api/clientquery')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success']
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
-    def test_ping_endpoint_not_working_return(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_not_working_return(mock_ping_response):
         mocked_return_value = MockHttpResponse('/missing')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] is False
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
-    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_exception(mock_ping_response):
         mocked_return_value = MockHttpResponse('/exception')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
         mock_ping_response.side_effect = Exception('an error occured retriving ping information')
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -94,13 +94,13 @@ class TestBigfixConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.ping_box')
-    def test_ping_endpoint_bad_return_code(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_bad_return_code(mock_ping_response):
         mocked_return_value = MockHttpResponse('/exception')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(500, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -108,9 +108,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
-    def test_query_response_found(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response_found(mock_query_response):
         big_fix_return_value = '<?xml version="1.0" encoding="UTF-8"?>' \
                                '<BESAPI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' \
                                ' xsi:noNamespaceSchemaLocation="BESAPI.xsd">' \
@@ -122,7 +122,7 @@ class TestBigfixConnection(unittest.TestCase):
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
         query = 'bigfix query text'
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -131,16 +131,16 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "105"
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
-    def test_query_response_not_found(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response_not_found(mock_query_response):
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
         query = 'bigfix query text'
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -150,9 +150,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "UNKNOWN"
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
-    def test_query_response_exception(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response_exception(mock_query_response):
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
@@ -160,7 +160,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         query = 'bigfix query text'
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -168,9 +168,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert query_response['success'] is False
         assert 'error' in query_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.create_search')
-    def test_query_response_bad_return_code(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response_bad_return_code(mock_query_response):
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
@@ -178,18 +178,17 @@ class TestBigfixConnection(unittest.TestCase):
 
         query = 'bigfix query text'
 
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        query_response = module.Connector(CONNECTION, CONFIG).create_query_connection(query)
 
         assert query_response is not None
         assert 'success' in query_response
         assert query_response['success'] is False
         assert 'error' in query_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_completed(self, mock_sync_query_results, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_response_completed(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -198,7 +197,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -209,10 +208,12 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_running(self, mock_sync_query_results, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_status_connector.time')
+    def test_status_response_running(mock_time, mock_sync_query_results, mock_status_response):
+        mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
@@ -222,21 +223,23 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "RUNNING"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_running_50_complete(self, mock_sync_query_results, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_status_connector.time')
+    def test_status_response_running_50_complete(mock_time, mock_sync_query_results, mock_status_response):
+        mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
@@ -246,21 +249,23 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "RUNNING"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 50
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_running_75_complete(self, mock_sync_query_results, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_status_connector.time')
+    def test_status_response_running_75_complete(mock_time, mock_sync_query_results, mock_status_response):
+        mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">10000</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
@@ -270,22 +275,21 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "RUNNING"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 75
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_error(self, mock_sync_query_results, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_response_error(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -294,7 +298,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -305,11 +309,12 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_running_bad_client_query(self, mock_sync_query_results, mock_status_response,
-                                                      mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_status_connector.time')
+    def test_status_response_running_bad_client_query(mock_time, mock_sync_query_results, mock_status_response):
+        mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
@@ -319,23 +324,21 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "RUNNING"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_error_exception_status(self, mock_sync_query_results, mock_status_response,
-                                                    mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_response_error_exception_status(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -345,7 +348,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -354,12 +357,10 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'error' in status_response
         assert 'progress' not in status_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_error_exception_result(self, mock_sync_query_results, mock_status_response,
-                                                    mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_response_error_exception_result(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
         mock_sync_query_results.side_effect = Exception('an error occurred executing sync query')
@@ -368,7 +369,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -377,13 +378,11 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'error' in status_response
         assert 'progress' not in status_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_sync_query_results')
-    def test_status_response_error_exception_result_bad_return_code(self, mock_sync_query_results,
-                                                                    mock_status_response,
-                                                                    mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_response_error_exception_result_bad_return_code(mock_sync_query_results,
+                                                                    mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -392,7 +391,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -401,20 +400,19 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'error' in status_response
         assert 'progress' not in status_response
 
-    def test_delete_query(self, mock_api_client):
-        mock_api_client.return_value = None
-
+    @staticmethod
+    def test_delete_query():
         search_id = "104"
 
         module = bigfix_connector
-        status_response = module.Connector(connection, config).delete_query_connection(search_id)
+        status_response = module.Connector(CONNECTION, CONFIG).delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_file(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_file(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -445,7 +443,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -454,9 +452,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'data' in results_response
         assert len(results_response['data']) == 1
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_process(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_process(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -488,7 +486,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "103"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -497,9 +495,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'data' in results_response
         assert len(results_response['data']) == 1
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_network(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_network(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -529,7 +527,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -538,9 +536,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'data' in results_response
         assert len(results_response['data']) == 1
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_mac_addr(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_mac_addr(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -568,7 +566,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -577,15 +575,15 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'data' in results_response
         assert len(results_response['data']) == 2
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_exeception(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_exeception(mock_results_response):
         mock_results_response.side_effect = Exception('an error getting data')
 
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -593,9 +591,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert results_response['success'] is False
         assert 'error' in results_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_bad_return_code(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_bad_return_code(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": "100",
                                     "totalResults": "201",
@@ -623,7 +621,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -631,9 +629,9 @@ class TestBigfixConnection(unittest.TestCase):
         assert results_response['success'] is False
         assert 'error' in results_response
 
+    @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
-    def test_results_response_bad_json(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_bad_json(mock_results_response):
         mocked_return_value = """{
                                     "reportingAgents": "100",
                                     "totalResults": "201",
@@ -661,7 +659,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
