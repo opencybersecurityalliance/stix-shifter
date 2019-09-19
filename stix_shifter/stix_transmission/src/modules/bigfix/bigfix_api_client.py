@@ -22,9 +22,9 @@ class APIClient:
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
                                     connection.get('cert', None),
-                                    connection.get('timeout'),
                                     headers,
-                                    cert_verify=connection.get('cert_verify', 'True')
+                                    cert_verify=connection.get('cert_verify', 'True'),
+                                    timeout=connection.get('timeout')
                                     )
 
     def ping_box(self):

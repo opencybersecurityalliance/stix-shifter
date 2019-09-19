@@ -8,7 +8,8 @@ import errno
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
 
-    def __init__(self, host, port = None, cert=None, timeout=None, headers={}, url_modifier_function=None, cert_verify=True):
+    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
+                 timeout=None):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)            
