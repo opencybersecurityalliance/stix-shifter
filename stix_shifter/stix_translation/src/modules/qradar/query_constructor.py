@@ -151,14 +151,14 @@ class AqlQueryStringPatternTranslator:
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
 
     @staticmethod
-    def _lookup_comparision_operator(self, expression_operator):
+    def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Haven't implemented comparision operator {}".format(expression_operator))
+            raise NotImplementedError("Haven't implemented comparison operator {}".format(expression_operator))
         return self.comparator_lookup[expression_operator]
 
     @staticmethod
     def _parse_combined_observation_expression(self, expression):
-        operator = self._lookup_comparision_operator(self, expression.operator)
+        operator = self._lookup_comparison_operator(self, expression.operator)
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
         if expression_01 and expression_02:
@@ -176,7 +176,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _parse_combined_comparison_expression(self, expression, qualifier=None):
-        operator = self._lookup_comparision_operator(self, expression.operator)
+        operator = self._lookup_comparison_operator(self, expression.operator)
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
         if not expression_01 or not expression_02:
@@ -199,7 +199,7 @@ class AqlQueryStringPatternTranslator:
         # Multiple QRadar fields may map to the same STIX Object
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         # Resolve the comparison symbol to use in the query string (usually just ':')
-        comparator = self._lookup_comparision_operator(self, expression.comparator)
+        comparator = self._lookup_comparison_operator(self, expression.comparator)
 
         if stix_field == 'protocols[*]':
             map_data = _fetch_network_protocol_mapping()
@@ -249,7 +249,7 @@ class AqlQueryStringPatternTranslator:
             return self._parse_observation_expression(self, expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparision_operator(self, expression.observation_expression.operator)
+                operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
                                                            operator=operator,

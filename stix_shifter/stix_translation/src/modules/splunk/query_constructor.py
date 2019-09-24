@@ -134,9 +134,9 @@ class _ObservationExpressionTranslator:
         self.object_scoper = object_scoper
 
     @staticmethod
-    def _lookup_comparision_operator(self, expression_operator):
+    def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self._comparators:
-            raise NotImplementedError("Haven't implemented comparision operator {}".format(expression_operator))
+            raise NotImplementedError("Haven't implemented comparison operator {}".format(expression_operator))
         return self._comparators[expression_operator]
 
     def translate(self, expression):
@@ -180,7 +180,7 @@ class _ObservationExpressionTranslator:
             )
 
     def _build_comparison(self, expression, object_scoping, field_mapping):
-        comparator = self._lookup_comparision_operator(self, expression.comparator)
+        comparator = self._lookup_comparison_operator(self, expression.comparator)
         if isinstance(comparator, str):
             splunk_comparison = self._maybe_negate("{} {} {}".format(
                 field_mapping,
