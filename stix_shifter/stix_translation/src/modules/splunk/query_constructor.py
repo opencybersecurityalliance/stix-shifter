@@ -133,6 +133,12 @@ class _ObservationExpressionTranslator:
         self.dmm = dmm
         self.object_scoper = object_scoper
 
+    @staticmethod
+    def _lookup_comparision_operator(self, expression_operator):
+        if expression_operator not in self._comparators:
+            raise NotImplementedError("Haven't implemented comparision operator {}".format(expression_operator))
+        return self._comparators[expression_operator]
+
     def translate(self, expression):
         if isinstance(expression, ComparisonExpression):
             stix_object, stix_path = expression.object_path.split(':')
@@ -174,26 +180,23 @@ class _ObservationExpressionTranslator:
             )
 
     def _build_comparison(self, expression, object_scoping, field_mapping):
-        if expression.comparator in self._comparators:
-            comparator = self._comparators[expression.comparator]
-            if isinstance(comparator, str):
-                splunk_comparison = self._maybe_negate("{} {} {}".format(
-                    field_mapping,
-                    comparator,
-                    encoders.simple(expression.value)
-                ), expression.negated)
+        comparator = self._lookup_comparision_operator(self, expression.comparator)
+        if isinstance(comparator, str):
+            splunk_comparison = self._maybe_negate("{} {} {}".format(
+                field_mapping,
+                comparator,
+                encoders.simple(expression.value)
+            ), expression.negated)
 
-                if isinstance(self.dmm, CarDataMapper):
-                    return "({} AND {})".format(object_scoping, splunk_comparison)
-                else:
-                    return "({})".format(splunk_comparison)
+            if isinstance(self.dmm, CarDataMapper):
+                return "({} AND {})".format(object_scoping, splunk_comparison)
             else:
-                return "({} AND {})".format(
-                    object_scoping,
-                    self._maybe_negate(comparator(field_mapping, expression.value), expression.negated)
-                )
+                return "({})".format(splunk_comparison)
         else:
-            raise NotImplementedError("Haven't implemented comparator")
+            return "({} AND {})".format(
+                object_scoping,
+                self._maybe_negate(comparator(field_mapping, expression.value), expression.negated)
+            )
 
     def _maybe_negate(self, splunk_comparison, negated):
         if negated:
