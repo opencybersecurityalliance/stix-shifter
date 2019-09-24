@@ -58,6 +58,13 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE url = 'http://www.testaddress.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
+    def test_NOT_and_not_equals_operators(self):
+        stix_pattern = "[url:value != 'www.example.com' OR url:value NOT = 'www.example.ca']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE NOT (url = 'www.example.ca') OR url != 'www.example.com' {} {}".format(
+            default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
     def test_mac_address_query(self):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
