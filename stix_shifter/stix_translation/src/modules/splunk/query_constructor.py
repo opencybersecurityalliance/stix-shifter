@@ -136,7 +136,7 @@ class _ObservationExpressionTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self._comparators:
-            raise NotImplementedError("Haven't implemented comparison operator {}".format(expression_operator))
+            raise NotImplementedError("Comparison operator {} unsupported for Splunk adapter".format(expression_operator.name))
         return self._comparators[expression_operator]
 
     def translate(self, expression):
