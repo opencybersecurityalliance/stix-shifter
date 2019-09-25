@@ -60,3 +60,13 @@ class TestStixParsing(unittest.TestCase, object):
         # The biggest time window should be returned
         assert parsing['start_time'] == 1464744600123
         assert parsing['end_time'] == 1464755424743
+
+    def test_not_equals_operator(self):
+        stix_pattern = "[url:value != 'example.com' OR url:value NOT = 'test.com']"
+        parsing = _parse_query(stix_pattern)
+        parsed_stix = [{'attribute': 'url:value', 'comparison_operator': 'NOT =', 'value': 'test.com'},
+                       {'attribute': 'url:value', 'comparison_operator': '!=', 'value': 'example.com'}]
+        assert parsing['parsed_stix'] == parsed_stix
+        # Time window should be last 5 minutes from frozen time
+        assert parsing['start_time'] == 1548926700000
+        assert parsing['end_time'] == 1548927000000
