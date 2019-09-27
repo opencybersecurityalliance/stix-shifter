@@ -21,6 +21,8 @@ at_from_statement = " FROM cos://us-geo/at-hourly-dumps STORED AS JSON "
 
 from_statement = " FROM cos://us-geo/nf-hourly-dumps STORED AS JSON "
 
+num_rows = 1024
+
 protocols_file = open('stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
 PROTOCOLS = json.loads(protocols_file)
 
@@ -33,7 +35,13 @@ def _translate_query(stix_pattern, dialect):
 
 
 def _test_query_assertions(query, selections, from_statement, where_statement):
-    assert query['queries'] == [selections + from_statement + where_statement]
+    print(query)
+    print(selections)
+    print(from_statement)
+    print(where_statement)
+    print(query['queries']['sql_queries'])
+    print([selections + from_statement + where_statement + ' PARTITIONED EVERY 1024 ROWS'])
+    assert query['queries']['sql_queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
 
 
 class TestStixToSql(unittest.TestCase, object):
@@ -50,7 +58,7 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Network.A IN (192.168.122.83 OR 192.168.122.84) OR Network.B IN (192.168.122.83 OR 192.168.122.84))"
-        assert query['queries'] == [selections + from_statement + where_statement]
+        assert query['queries']['sql_queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
 
     def test_ipv6_query(self):
         dialect = 'nf'
@@ -119,21 +127,21 @@ class TestStixToSql(unittest.TestCase, object):
         assert 'Unable to map the following STIX attributes' in result['error']
 
     def test_unmapped_attribute_with_OR(self):
-        dialect = 'at'
-        stix_pattern = "[user-account:user_id = 'root' OR unmapped-object:some_invalid_attribute = 'whatever']"
+        dialect = 'nf'
+        stix_pattern = "[ipv4-addr:value = '1.2.3.4' OR unmapped-object:some_invalid_attribute = 'whatever']"
         query = _translate_query(stix_pattern, dialect)
-        where_statement = "WHERE initiator.id = 'root'"
-        _test_query_assertions(query, at_selections, at_from_statement, where_statement)
+        where_statement = "WHERE false OR (Network.A = '1.2.3.4' OR Network.B = '1.2.3.4')"
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
-    def test_user_account_query(self):
-        dialect = 'at'
-        stix_pattern = "[user-account:user_id = 'root']"
-        query = _translate_query(stix_pattern, dialect)
-        where_statement = "WHERE initiator.id = 'root'"
-        _test_query_assertions(query, at_selections, at_from_statement, where_statement)
+    # def test_user_account_query(self):
+    #     dialect = 'at'
+    #     stix_pattern = "[user-account:user_id = 'root']"
+    #     query = _translate_query(stix_pattern, dialect)
+    #     where_statement = "WHERE initiator.id = 'root'"
+    #     _test_query_assertions(query, at_selections, at_from_statement, where_statement)
 
     def test_invalid_stix_pattern(self):
-        dialect = 'at'
+        dialect = 'nf'
         stix_pattern = "[not_a_valid_pattern]"
         result = translation.translate('csa', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
         assert False == result['success']

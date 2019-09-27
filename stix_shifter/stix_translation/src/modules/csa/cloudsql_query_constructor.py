@@ -9,7 +9,7 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
-from stix_shifter.stix_translation.src.transformers import TimestampToMilliseconds, ValueTransformer
+from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
 
 logger = logging.getLogger(__name__)
 START_STOP_FIELD = "eventTime"
