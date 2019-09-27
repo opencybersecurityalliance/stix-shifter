@@ -176,7 +176,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
 
         network_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
-        assert network_obj is not None, 'process object type not found'
+        assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
         assert network_obj['src_ref'] == '0'
@@ -202,7 +202,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
 
         network_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
-        assert network_obj is not None, 'process object type not found'
+        assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'src_ref'}
         assert network_obj['type'] == 'network-traffic'
         assert network_obj['src_ref'] == '0'

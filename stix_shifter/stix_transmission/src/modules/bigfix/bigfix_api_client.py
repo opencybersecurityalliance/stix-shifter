@@ -1,8 +1,6 @@
 import base64
 from ..utils.RestApiClient import RestApiClient
 
-TIMEOUT = 60
-
 
 class APIClient:
 
@@ -17,14 +15,11 @@ class APIClient:
         headers = dict()
         headers['Authorization'] = b"Basic " + base64.b64encode(
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
-        if 'timeout' not in connection.keys():
-            connection['timeout'] = TIMEOUT
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
                                     connection.get('cert', None),
                                     headers,
-                                    cert_verify=connection.get('cert_verify', 'True'),
-                                    timeout=connection.get('timeout')
+                                    cert_verify=connection.get('cert_verify', 'True')
                                     )
 
     def ping_box(self):

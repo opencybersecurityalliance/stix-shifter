@@ -41,7 +41,6 @@ CONNECTION = {
     "host": "123.123.123.123",
     "port": "443",
     "cert_verify": False,
-    "timeout": 60
 }
 
 
@@ -230,7 +229,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "COMPLETED"
+        assert status_response['status'] == "RUNNING"
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 
@@ -256,7 +255,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "COMPLETED"
+        assert status_response['status'] == "RUNNING"
         assert 'progress' in status_response
         assert status_response['progress'] == 50
 
@@ -331,7 +330,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "COMPLETED"
+        assert status_response['status'] == "RUNNING"
         assert 'progress' in status_response
         assert status_response['progress'] == 0
 

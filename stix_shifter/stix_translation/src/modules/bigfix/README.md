@@ -24,6 +24,8 @@ The actual relevance query is wrapped around by XML tag `<QueryText> query strin
   2. `[file:name LIKE '.conf' AND file:parent_directory_ref.path = '/etc']`
   3. `[file:hashes.'SHA-256' = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3f2211111111111122222222333' AND file:parent_directory_ref.path = '/root']`
   4. `[file:name = 'a' AND file:parent_directory_ref.path = '/root' OR file:hashes.'SHA-256' = '2584c4ba8b0d2a52d94023f420b7e356a1b1a3000000444446666666']`
+  
+  `Note: file:parent_directory_ref.path attribute will support Equality operation only.`
 
 #### Translated relevance query(in the same order as STIX patterns):
 

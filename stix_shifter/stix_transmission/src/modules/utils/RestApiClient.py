@@ -8,8 +8,7 @@ import errno
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
 
-    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
-                 timeout=None):
+    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)            
@@ -17,7 +16,6 @@ class RestApiClient:
         self.cert_verify = str(cert_verify).lower() not in ['0', 'f', 'false', 'f', 'n', 'no', 'disable', 'disabled']
         self.cert = cert
         self.headers = headers
-        self.timeout = timeout
         self.url_modifier_function = url_modifier_function
 
 

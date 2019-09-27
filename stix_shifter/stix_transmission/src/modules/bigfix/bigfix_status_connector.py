@@ -8,7 +8,7 @@ import time
 from .....utils.error_response import ErrorResponder
 import xmltodict
 
-WAIT_PERIOD = 6
+PROGRESS_THRESHOLD = 50
 
 
 class UnexpectedResponseException(Exception):
@@ -25,6 +25,14 @@ class BigFixStatusConnector(BaseStatusConnector):
         self.api_client = api_client
 
     def _get_progress_status(self, client_count, reporting_agents, return_obj):
+        """
+        Returns the progress based on API query result(reporting_agents) and Bes computers
+        health checked in within last 1 hour(client_count)
+        :param client_count: int
+        :param reporting_agents: int
+        :param return_obj: dict
+        :return: dict
+        """
         if self.DEFAULT_CLIENT_COUNT == client_count:
             return_obj['progress'] = 0
         else:
@@ -33,10 +41,41 @@ class BigFixStatusConnector(BaseStatusConnector):
             return_obj['progress'] = progress_floor
         return return_obj
 
+    def update_query_status(self, return_obj, response_dict, client_count):
+        """
+        Updates the status of query based on progress by comparing against PROGRESS_THRESHOLD
+        if progress < PROGRESS_THRESHOLD ==> STATUS == RUNNING
+        if progress > PROGRESS_THRESHOLD     ==> wait for a relative small period based on proximity of progress to 100%
+        then changes STATUS == COMPLETED
+        :param return_obj: dict
+        :param response_dict: dict
+        :param client_count: int
+        :return: dict
+        """
+        reporting_agents = int(response_dict.get('reportingAgents', '0'))
+        total_results = int(response_dict.get('totalResults', '0'))
+        return_obj = self._get_progress_status(client_count, reporting_agents, return_obj)
+        if client_count <= reporting_agents:
+            return_obj['status'] = Status.COMPLETED.value
+            if total_results <= 0:
+                return_obj['status'] = Status.ERROR.value
+        else:
+            if return_obj['progress'] > PROGRESS_THRESHOLD:
+                sleep_time = math.ceil((100 - return_obj['progress']) * 10 / 100)
+                time.sleep(sleep_time)
+                return_obj['status'] = Status.COMPLETED.value
+        return return_obj
+
     def status_api_response(self, search_id, client_count):
-        time_iter = self.api_client.client.timeout - WAIT_PERIOD
+        """
+        Sub-method of create_status_connection for returning status
+        dictionary object for a given query ID
+        :param search_id: int
+        :param client_count: int
+        :return: dict
+        """
         return_obj = dict()
-        while time_iter > 0:
+        try:
             response = self.api_client.get_search_results(search_id, '0', '1')
             response_code = response.code
             response_txt = response.read().decode('utf-8')
@@ -46,34 +85,31 @@ class BigFixStatusConnector(BaseStatusConnector):
                     response_dict = json.loads(response_txt)
                     return_obj['success'] = True
                     return_obj['status'] = Status.RUNNING.value
-
-                    reporting_agents = int(response_dict.get('reportingAgents', '0'))
-                    total_results = int(response_dict.get('totalResults', '0'))
-                    return_obj = self._get_progress_status(client_count, reporting_agents, return_obj)
-                    if client_count <= reporting_agents:
-                        return_obj['status'] = Status.COMPLETED.value
-                        if total_results <= 0:
-                            return_obj['status'] = Status.ERROR.value
-                        break
-                    time_iter -= WAIT_PERIOD
-                    if time_iter < WAIT_PERIOD:
-                        time.sleep(time_iter)
-                    else:
-                        time.sleep(WAIT_PERIOD)
+                    return_obj = self.update_query_status(return_obj, response_dict, client_count)
                 except json.decoder.JSONDecodeError:
                     response_dict = xmltodict.parse(response_txt)
                     ErrorResponder.fill_error(return_obj, response_dict, ['BESAPI', 'ClientQueryResults',
                                                                           'QueryResult', '+IsFailure=1', '~Result'])
-                    break
             else:
                 if ErrorResponder.is_plain_string(response_txt):
                     ErrorResponder.fill_error(return_obj, message=response_txt)
-                    break
                 else:
                     raise UnexpectedResponseException
+        except Exception as e:
+            if e.__class__.__name__ in ['ConnectionError', 'ProxyError']:
+                ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted')
+                return_obj['status'] = Status.ERROR.value
+            else:
+                raise e
+
         return return_obj
 
     def create_status_connection(self, search_id):
+        """
+        Return status dictionary object for given query ID
+        :param search_id: int
+        :return: dict
+        """
         response_txt = None
         return_obj = dict()
         try:
@@ -85,10 +121,8 @@ class BigFixStatusConnector(BaseStatusConnector):
                 client_count = search.group(1)
             client_count = int(client_count)
             return_obj = self.status_api_response(search_id, client_count)
-            if return_obj['progress'] < 100 and return_obj['status'] == Status.RUNNING.value:
-                return_obj['status'] = Status.COMPLETED.value
         except Exception as e:
-            if e.__class__.__name__ == 'ConnectionError':
+            if e.__class__.__name__ in ['ConnectionError', 'ProxyError']:
                 ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted')
                 return_obj['status'] = Status.ERROR.value
             elif response_txt is not None:

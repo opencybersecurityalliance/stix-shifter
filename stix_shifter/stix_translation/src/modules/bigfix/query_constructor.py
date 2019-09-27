@@ -106,7 +106,7 @@ class RelevanceQueryStringPatternTranslator:
         self._relevance_string_list = []
         self._relevance_query_for_split_attr = []
         self._relevance_property_format_string_dict = self.load_json(RELEVANCE_PROPERTY_MAP_JSON)
-        self._time_range_comparator_list = [self.comparator_lookup.get(each) for each in
+        self._time_range_comparator_list = [self._lookup_comparison_operator(each) for each in
                                             (ComparisonComparators.GreaterThanOrEqual,
                                              ComparisonComparators.LessThanOrEqual)]
         self.parse_expression(pattern)
@@ -167,6 +167,29 @@ class RelevanceQueryStringPatternTranslator:
         :return: str
         """
         return 'regex"({})"'.format(value)
+
+    @staticmethod
+    def _negate_comparison(comparison_string, comparator):
+        """
+        Function for adding Negation operator to relevance query
+        :param comparison_string: str
+        :param comparator: str
+        :return: str
+        """
+        if comparator.lower() != 'matches' and comparison_string:
+            comparison_string = "NOT ({})".format(comparison_string)
+        return comparison_string
+
+    def _lookup_comparison_operator(self, expression_operator):
+        """
+        Comparison operator lookup with error handling for un-supported operators
+        :param expression_operator: str
+        :return: str
+        """
+        if expression_operator not in self.comparator_lookup:
+            raise NotImplementedError(
+                "Comparison operator {} unsupported for BigFix adapter".format(expression_operator.name))
+        return self.comparator_lookup.get(expression_operator)
 
     @staticmethod
     def _html_encoding_escape_character(value) -> str:
@@ -287,12 +310,13 @@ class RelevanceQueryStringPatternTranslator:
                     comparison_string = self._query_const_from_list_subroutine(comparison_string_list)
         return comparison_string
 
-    def _relevance_qry_list_phrasing(self, value, comparator, mapped_field):
+    def _relevance_qry_list_phrasing(self, value, comparator, mapped_field, is_negate):
         """
         A sub method for _parse_mapped_field method in aiding query construction
         :param value: str
         :param comparator: str
         :param mapped_field: str
+        :param is_negate: boolean
         :return: list
         """
         operator_mapping = {"default": "format_string_generic", "matches": "format_string_match"}
@@ -307,11 +331,13 @@ class RelevanceQueryStringPatternTranslator:
             transformer_field, transformer_value = (transformer, '') \
                 if (value.startswith('regex') and comparator == 'contains') \
                 else (transformer, transformer)
-            comparison_string_list.append(self._relevance_property_format_string_dict.get('format_string')
-                                          .get(format_string_key)
-                                          .format(mapped_field=mapped_field_relevance_string,
-                                                  transformer_field=transformer_field, comparator=comparator,
-                                                  value=value, transformer_value=transformer_value))
+            comparison_string_list.append('{} {}'.format('NOT' if comparator.lower() == 'matches' and is_negate
+                                                         else '', self._relevance_property_format_string_dict.
+                                                         get('format_string').get(format_string_key)
+                                                         .format(mapped_field=mapped_field_relevance_string,
+                                                                 transformer_field=transformer_field,
+                                                                 comparator=comparator, value=value,
+                                                                 transformer_value=transformer_value)).strip())
         # Case of handling IN operation
         else:
             for index, each_value in enumerate(value):
@@ -478,22 +504,26 @@ class RelevanceQueryStringPatternTranslator:
                         else:
                             self.get_field_relevance_qry(current_obj, each_key)
 
-    def _parse_mapped_fields(self, value, comparator, mapped_fields_array, conditional_attr):
+    def _parse_mapped_fields(self, value, comparator, mapped_fields_array, *args):
         """
         Mapping the stix object property with their corresponding property in relevance query
         from_stix_map.json will be used for mapping
         :param value: str
         :param comparator: str
         :param mapped_fields_array: list, Mapping available in from_stix_map.json
-        :param conditional_attr: str, A flag for conditional relevance qry formation
-        eg. user attribute of process is OS specific
+        :param args: tuple
+        conditional_attr: str, A flag for conditional relevance qry formation
+        eg. user attribute of process is OS specific,
+        is_negate: boolean, A flag to check if negation of expression needed
         :return: str, whose part of the relevance query for each value
         """
         comparison_string_list = []
+        conditional_attr, is_negate = args
         for mapped_field in mapped_fields_array:
             mapped_field = mapped_field.split('.')[-1]
             if mapped_field.lower() != SEARCH_FOLDER:
-                comparison_string_list.append(self._relevance_qry_list_phrasing(value, comparator, mapped_field))
+                comparison_string_list.append(self._relevance_qry_list_phrasing(value, comparator, mapped_field,
+                                                                                is_negate))
         comparison_string = self._query_construction_from_list(value, comparison_string_list, conditional_attr)
         return comparison_string
 
@@ -559,7 +589,7 @@ class RelevanceQueryStringPatternTranslator:
         if isinstance(expression, ComparisonExpression):  # Base Case
             return self.__eval_comparison_exp(expression)
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self.comparator_lookup[expression.operator]
+            operator = self._lookup_comparison_operator(expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not expression_01:
@@ -597,7 +627,7 @@ class RelevanceQueryStringPatternTranslator:
         stix_object, stix_field = expression.object_path.split(':')
         conditional_attr = conditional_attr_dict.get(stix_field.split('.')[0], None)
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-        comparator = self.comparator_lookup[expression.comparator]
+        comparator = self._lookup_comparison_operator(expression.comparator)
         value = self._html_encoding_escape_character(expression.value)
         if expression.comparator == ComparisonComparators.In:
             value = self._format_set(value)
@@ -615,11 +645,13 @@ class RelevanceQueryStringPatternTranslator:
             raise NotImplementedError("Unknown comparison operator {}.".format(expression.comparator))
         self.get_field_relevance_qry(mapped_fields_array[0].split('.')[0], self._master_obj)
         comparison_string = self._parse_mapped_fields(value, comparator,
-                                                      mapped_fields_array, conditional_attr)
+                                                      mapped_fields_array, conditional_attr, bool(expression.negated))
         if '{}.{}'.format(FILE, SEARCH_FOLDER) in mapped_fields_array:
             self.search_folder = value
         else:
             comparison_string = self.clean_format_string(comparison_string)
+        if expression.negated:
+            comparison_string = self._negate_comparison(comparison_string, comparator)
         # Assigning the relevance condition of mac address to an instance variable and returning ''
         # so as to convert into individual API relevance query
         _is_expr_split_needed, is_expr_modified = self._is_exp_split_needed(expression)
