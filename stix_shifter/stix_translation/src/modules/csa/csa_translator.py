@@ -1,5 +1,5 @@
 from ..base.base_translator import BaseTranslator
-from .stix_to_cloudsql import StixToCloudSQL
+from .stix_to_query import StixToCloudSQL
 from ...json_to_stix.json_to_stix import JSONToStix
 
 

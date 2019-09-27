@@ -1,20 +1,24 @@
 import logging
+import datetime
 import json
 import re
 
-logger = logging.getLogger(__name__)
 
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
+
+logger = logging.getLogger(__name__)
+START_STOP_FIELD = "eventTime"
 
 
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
+            'stix_shifter/stix_translation/src/modules/qradar/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
@@ -43,12 +47,17 @@ class SqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
+        self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
-
         query_split = self.translated.split("split")
+        logger.info("Query {}", query_split)
         if len(query_split) > 1:
             # remove empty strings in the array
             query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
+            start_pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))"
+            query_array = list(map(lambda x: re.sub(start_pattern, self.startreplace, x), query_array))
+            stop_pattern = "STOP((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))"
+            query_array = list(map(lambda x: re.sub(stop_pattern, self.stopreplace, x), query_array))
             # removing leading AND/OR
             query_array = list(map(lambda x: re.sub("^\s(OR|AND)\s", "", x), query_array))
             # transform time format from '2014-04-25T15:51:20Z' into '2014-04-25 15:51:20'
@@ -59,6 +68,19 @@ class SqlQueryStringPatternTranslator:
             self.queries = query_array
         else:
             self.queries = query_split
+
+    @staticmethod
+    def startreplace(m):
+        date1 = m.group(1)
+        date1 = re.sub("t","", date1)
+        #return " {} {} {} {} ".format(self.comparator_lookup[ComparisonExpressionOperators.And], START_STOP_FIELD, self.comparator_lookup[ComparisonExpressionOperators.GreaterThanOrEqual, date1)
+        return " {} {} {} {} ".format("AND", START_STOP_FIELD, ">=", date1)
+
+    @staticmethod
+    def stopreplace(m):
+        date1 = m.group(1)
+        date1 = re.sub("t","", date1)
+        return " {} {} {} {} ".format("AND", START_STOP_FIELD, "<=", date1)
 
     @staticmethod
     def _format_set(values) -> str:
@@ -118,6 +140,7 @@ class SqlQueryStringPatternTranslator:
                         "Network protocol {} is not supported.".format(protocol_key))
             elif stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
+                # TODO Skydive uses seconds for timestamps, but this is something we should configure
                 expression.value = int(transformer.transform(expression.value) / 1000)
 
             # Some values are formatted differently based on how they're being compared
@@ -135,8 +158,12 @@ class SqlQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
+            self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': original_stix_value})
+
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
+            if len(mapped_fields_array) == 0:
+                comparison_string += "false"
             for mapped_field in mapped_fields_array:
                 comparison_string += "{mapped_field} {comparator} {value}".format(
                     mapped_field=mapped_field, comparator=comparator, value=value)
@@ -192,13 +219,21 @@ class SqlQueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
 
+def _test_START_STOP_format(query_string) -> bool:
+    # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
+    # or START 1234567890123 STOP 1234567890123
+    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+    match = re.search(pattern, query_string)
+    return bool(match)
 
-def translate_pattern(pattern: Pattern, data_model_mapping):
+
+def translate_pattern(pattern: Pattern, data_model_mapping, number_rows=1000):
     x = SqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     queries = []
-    bucket = x.dmm.dialect+"-hourly-dumps"
+    bucket=x.dmm.dialect+"-hourly-dumps" 
     for query in x.queries:
-        queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause}'
-                       .format(select_statement=select_statement, bucket=bucket, where_clause=query))
-    return queries
+        has_start_stop = _test_START_STOP_format(query)
+        queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause} PARTITIONED EVERY {number_rows} ROWS'
+                       .format(select_statement=select_statement, bucket=bucket, where_clause=query, number_rows=number_rows))
+    return {'sql_queries': queries, 'parsed_stix': x.parsed_pattern}
