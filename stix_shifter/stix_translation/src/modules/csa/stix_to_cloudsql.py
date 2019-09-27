@@ -29,12 +29,7 @@ class StixToCloudSQL(BaseQueryTranslator):
 
         logger.info("Converting STIX2 Pattern to sql")
 
-        print(antlr_parsing_object)
-        print(data_model_mapper)
-
-
         query_object = generate_query(data)
-        # data_model_mapper = cloudsql_data_mapping.CloudSQLDataMapper(self.dialect)
         query_string = cloudsql_query_constructor.translate_pattern(
             query_object, data_model_mapper, number_rows=self.rows)
         return query_string
