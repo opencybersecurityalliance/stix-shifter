@@ -1,138 +1,111 @@
 {
   "artifact": {
     "fields": {
-      "payload_bin": ["Payload"]
+      "payload_bin": ["file"],
+      "url": ["url", "uri_path"],
+      "hashes.MD5": ["hash"],
+      "hashes.SHA-1": ["hash"],
+      "hashes.SHA-256": ["hash"]
     }
   },
   "autonomous-system" : {
     "fields": {
-      "x": [""]
+      "number": ["autonomous-system"]
     }
   },
   "directory" : {
     "fields": {
-      "x": [""]
+      "path": ["uri_path"]
     }
   },
   "domain-name" : {
     "fields": {
-      "x": [""]
+      "value": ["domain", "fqdn"]
     }
   },
   "email-addr" : {
     "fields": {
-      "x": [""]
+      "value": ["mail_subject", "mail"]
     }
   },
   "email-message" : {
     "fields": {
-      "x": [""]
+      "from_ref.value": ["mail_subject", "mail"],
+      "sender_ref.value": ["mail_subject", "mail"],
+      "subject": ["mail_subject"],
+      "body": ["mail"]
     }
   },
   "file" : {
     "fields": {
-      "x": [""]
+      "name": ["filename"],
+      "content_ref": ["file"],
+      "hashes.MD5": ["hash"],
+      "hashes.SHA-1": ["hash"],
+      "hashes.SHA-256": ["hash"]
     }
   },
   "ipv4-addr" : {
     "fields": {
-      "x": [""]
+      "value": ["ip"]
     }
   },
   "ipv6-addr" : {
     "fields": {
-      "x": [""]
+      "value": ["ip"]
     }
   },
   "mac-addr" : {
     "fields": {
-      "x": [""]
+      "value": ["uri_path", "other"]
     }
   },
   "mutex" : {
     "fields": {
-      "x": [""]
+      "name": ["other"]
     }
   },
   "network-traffic" : {
     "fields": {
-      "x": [""]
+      "src_ref.value": ["ip", "domain", "fqdn", "uri_path", "other"],
+      "src_ref.value": ["ip", "domain", "fqdn", "uri_path", "other"]
     }
   },
   "process" : {
     "fields": {
-      "x": [""]
+      "name": ["other"],
+      "binary_ref.name": ["filename"],
+      "binary_ref.parent_directory_ref.path": ["uri_path"]
     }
   },
   "software" : {
     "fields": {
-      "x": [""]
+      "name": ["filename"],
+      "cpe": ["filename", "other"],
+      "vendor": ["other"]
     }
   },
   "url" : {
     "fields": {
-      "x": [""]
+      "value": ["url", "uri_path"]
     }
   },
   "user-account" : {
     "fields": {
-      "x": [""]
+      "user_id": ["other"]
     }
   },
   "windows-registry-key" : {
     "fields": {
-      "x": [""]
+      "key": ["registry"],
+      "values[*]": ["registry"]
     }
   },
   "x509-certificate" : {
     "fields": {
-      "x": [""]
-    }
-  },
-  "ipv4-addr": {
-    "fields": {
-      "value": ["SourceIpV4", "DestinationIpV4"]
-    }
-  },
-  "ipv6-addr": {
-    "fields": {
-      "value": ["SourceIpV6", "DestinationIpV6"]
-    }
-  },
-  "url": {
-    "fields": {
-      "value": ["Url"]
-    }
-  },
-  "mac-addr": {
-    "fields": {
-      "value": ["SourceMac", "DestinationMac"]
-    }
-  },
-  "file": {
-    "fields": {
-      "name": ["FileName"]
-    }
-  },
-  "network-traffic": {
-    "fields": {
-      "src_port": ["SourcePort"],
-      "dst_port": ["DestinationPort"],
-      "start": ["StartTime"],
-      "end": ["EndTime"],
-      "protocols[*]": ["NetworkProtocol"],
-      "src_ref.value": ["SourceIpV4", "SourceIpV6"],
-      "dst_ref.value": ["DestinationIpV4", "DestinationIpV6"]
-    }
-  },
-  "user-account": {
-    "fields": {
-      "user_id": ["UserName"]
-    }
-  },
-  "domain-name": {
-    "fields": {
-      "value": ["DomainName"]
+      "hashes.SHA-1": ["hash"],
+      "hashes.SHA-256": ["hash"],
+      "issuer": ["other"]
     }
   }
 }
