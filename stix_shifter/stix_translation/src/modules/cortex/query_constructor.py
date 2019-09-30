@@ -239,7 +239,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         data = data.replace('(', '').replace(')', '').strip()
         data = data.replace("'", "")
         data = data.split()[0]
-        observables.append((data_type, data))
+        observables.append({data_type: data})
 
     # returns a list of (datatype, data)-structured observables
     return observables
