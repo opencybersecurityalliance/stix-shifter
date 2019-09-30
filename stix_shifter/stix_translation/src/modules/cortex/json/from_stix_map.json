@@ -1,0 +1,138 @@
+{
+  "artifact": {
+    "fields": {
+      "payload_bin": ["Payload"]
+    }
+  },
+  "autonomous-system" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "directory" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "domain-name" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "email-addr" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "email-message" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "file" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "ipv4-addr" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "ipv6-addr" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "mac-addr" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "mutex" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "network-traffic" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "process" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "software" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "url" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "user-account" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "windows-registry-key" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "x509-certificate" : {
+    "fields": {
+      "x": [""]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["SourceIpV4", "DestinationIpV4"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["SourceIpV6", "DestinationIpV6"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["Url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["SourceMac", "DestinationMac"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["FileName"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["SourcePort"],
+      "dst_port": ["DestinationPort"],
+      "start": ["StartTime"],
+      "end": ["EndTime"],
+      "protocols[*]": ["NetworkProtocol"],
+      "src_ref.value": ["SourceIpV4", "SourceIpV6"],
+      "dst_ref.value": ["DestinationIpV4", "DestinationIpV6"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["UserName"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DomainName"]
+    }
+  }
+}
