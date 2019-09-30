@@ -18,18 +18,21 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
+    #
+    # cortex needs constants which makes only "=" useful
+    # ANDs and ORs can not be translated. OR is a placeholder to cut through
     comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.And: "OR",
         ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
+        # ComparisonComparators.GreaterThan: ">",
+        # ComparisonComparators.GreaterThanOrEqual: ">=",
+        # ComparisonComparators.LessThan: "<",
+        # ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
+        # ComparisonComparators.NotEqual: "!=",
+        # ComparisonComparators.Like: "LIKE",
+        # ComparisonComparators.In: "IN",
+        # ComparisonComparators.Matches: 'LIKE',
         # ComparisonComparators.IsSubSet: '',
         # ComparisonComparators.IsSuperSet: '',
         ObservationOperators.Or: 'OR',
@@ -226,7 +229,17 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
 
-    # Change return statement as required to fit with data source query language.
-    # If supported by the language, a limit on the number of results may be desired.
-    # A single query string, or an array of query strings may be returned
-    return "SELECT * FROM tableName WHERE {}".format(query)
+    # need to focus only on observables, not qualifiers like time etc.
+    observables = []
+    for x in query.split('OR'):
+        data_type = x.split('=')[0]
+        data_type = data_type.replace('(', '').replace(')', '').strip()
+
+        data = x.split('=')[1]
+        data = data.replace('(', '').replace(')', '').strip()
+        data = data.replace("'", "")
+        data = data.split()[0]
+        observables.append((data_type, data))
+
+    # returns a list of (datatype, data)-structured observables
+    return observables
