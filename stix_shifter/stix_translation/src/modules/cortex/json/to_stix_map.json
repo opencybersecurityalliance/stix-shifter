@@ -1,4 +1,8 @@
 {
+  "cortex_analyzer": {
+    "key": "x_cortex_analyzer.name",
+    "cybox": false
+  },
   "filename": {
     "key": "file.name"
   },
