@@ -220,10 +220,13 @@ def __main__():
                 if transmission.is_async():
                     time.sleep(1)
                     status = transmission.status(search_id)
-                    while status['progress'] < 100:
+                    if status['success']:
+                        while status['progress'] < 100 and status['status'] == 'RUNNING':
+                            print(status)
+                            status = transmission.status(search_id)
                         print(status)
-                        status = transmission.status(search_id)
-                    print(status)
+                    else:
+                        raise RuntimeError("Fetching status failed")
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
                     print("Search {} results is:\n{}".format(search_id, result["data"]))

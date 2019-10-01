@@ -2,7 +2,7 @@ import base64
 from ..utils.RestApiClient import RestApiClient
 
 
-class APIClient():
+class APIClient:
 
     PING_ENDPOINT = 'help/clientquery'
     QUERY_ENDPOINT = 'clientquery'
