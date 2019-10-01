@@ -41,7 +41,11 @@
 	  "object": "observer-user"
 	}
   ],
-
+  "eventcount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
   "starttime": [
 	{
 	  "key": "created",

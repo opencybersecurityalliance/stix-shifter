@@ -21,6 +21,6 @@ addons:
 
 script:
   - echo "Running tests..."
-  - pytest --cov=stix_shifter --cov-report=xml
+  - pytest --cov=stix_shifter --cov-report=xml tests/stix_transmission tests
   # - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_SLUG" != "" ]; then sonar-scanner; fi # sonar scan on internal PRs
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_REPO_SLUG" == "ibm/stix-shifter" ]; then sonar-scanner; fi # sonar scan on non-PRs
