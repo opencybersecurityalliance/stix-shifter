@@ -2,10 +2,6 @@ from stix_shifter.stix_translation.src.modules.carbonblack import carbonblack_tr
 import json
 import logging
 import unittest
-from freezegun import freeze_time
-
-freeze_time("2019-01-31 09:30:00").start()
-CREATED_TIME = "2019-01-31T09:30:00.000Z"
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
@@ -444,8 +440,8 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
-        assert(observed_data['created'] == CREATED_TIME)
-        assert(observed_data['modified'] == CREATED_TIME)
+        assert(observed_data['created'] is not None)
+        assert(observed_data['modified'] is not None)
         assert(observed_data['first_observed'] == "2019-01-22T00:04:52.87Z")
         assert(observed_data['last_observed'] == "2019-01-22T00:04:52.87Z")
 
@@ -501,8 +497,8 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj['name'] == "cmd.exe")
         assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")
 
-        assert(observed_data['created'] == CREATED_TIME)
-        assert(observed_data['modified'] == CREATED_TIME)
+        assert(observed_data['created'] is not None)
+        assert(observed_data['modified'] is not None)
         assert(observed_data['first_observed'] == "2019-01-22T00:04:52.875Z")
         assert(observed_data['last_observed'] == "2019-01-22T00:04:52.875Z")
 
@@ -525,8 +521,8 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj['name'] == "Cmd.Exe.MUI")
         assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
 
-        assert(observed_data['created'] == CREATED_TIME)
-        assert(observed_data['modified'] == CREATED_TIME)
+        assert(observed_data['created'] is not None)
+        assert(observed_data['modified'] is not None)
         assert(observed_data['first_observed'] == "2016-10-19T10:00:25.734Z")
         assert(observed_data['last_observed'] == "2016-10-19T10:00:25.734Z")
         assert(observed_data['number_observed'] == 1)
@@ -547,8 +543,8 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
         file_start_time = "2018-12-17T08:37:13.318Z"
 
-        assert(result_bundle_objects[1]['created'] == CREATED_TIME)
-        assert(result_bundle_objects[1]['modified'] == CREATED_TIME)
+        assert(result_bundle_objects[1]['created'] is not None)
+        assert(result_bundle_objects[1]['modified'] is not None)
         assert(result_bundle_objects[1]['first_observed'] == file_start_time)
         assert(result_bundle_objects[1]['last_observed'] == file_start_time)
 
@@ -559,7 +555,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         binary_time = "2017-04-12T21:06:15.216Z"
         assert (result_bundle_objects[4]['number_observed'] == 1)
 
-        assert(result_bundle_objects[4]['created'] == CREATED_TIME)
-        assert(result_bundle_objects[4]['modified'] == CREATED_TIME)
+        assert(result_bundle_objects[4]['created'] is not None)
+        assert(result_bundle_objects[4]['modified'] is not None)
         assert(result_bundle_objects[4]['first_observed'] == binary_time)
         assert(result_bundle_objects[4]['last_observed'] == binary_time)
