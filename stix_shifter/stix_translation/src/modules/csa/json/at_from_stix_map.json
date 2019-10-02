@@ -1,0 +1,50 @@
+{
+  "user-account" : {
+      "fields": {
+       "user_id" : ["initiator.id", "target.id","observer.id"],
+       "account_login" : ["initiator.id", "target.id","observer.id"],
+       "display_name" : ["initiator.name", "target.name", "observer.name"]
+      }
+  },
+  "url" : {
+      "fields" : {
+          "value" : ["url"]
+      }
+  },
+  "mac-addr" : {
+      "fields" : {
+        "value" : []
+      }
+  },
+  "file" : {
+      "fields" : {
+          "name" : ["filename"]
+      }
+  },
+  "domain-name" : {
+      "fields" : {
+          "value" : ["initiator.id",
+            "target.host.address",
+            "initiator.name",
+            "observer.host.address",
+            "action",
+            "api.name"]
+      }
+  },
+  "email-addr": {
+    "fields": {
+        "value": [
+            "target.name",
+            "initiator.name"
+        ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+        "value": [
+            "initiator.host.address",
+            "target.host.address"
+        ]
+    }
+  }
+}
