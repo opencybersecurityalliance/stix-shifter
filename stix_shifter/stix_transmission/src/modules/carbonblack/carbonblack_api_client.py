@@ -28,7 +28,10 @@ class APIClient():
     def run_search(self, query_expression, dialect, start=0, rows=10):
         headers = dict()
         endpoint = self.endpoint_start + self._dialect_to_endpoint(dialect)
+        print('ENDPOINT: {}'.format(endpoint))
         data = [("q", query_expression), ("start", start), ("rows", rows)]
+
+        print('DATA: {}'.format(data))
 
         # The purpose of this is to maintain order stability when doing paging
         if dialect == 'binary':

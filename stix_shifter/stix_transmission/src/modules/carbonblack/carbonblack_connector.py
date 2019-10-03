@@ -18,6 +18,7 @@ class Connector(BaseConnector):
     def _handle_errors(self, response, return_obj):
         response_code = response.code
         response_txt = response.read().decode('utf-8')
+        print('response_txt: {}'.format(response_txt))
 
         if 200 <= response_code < 300:
             return_obj['success'] = True
@@ -61,6 +62,7 @@ class Connector(BaseConnector):
             query = search_id["query"]
             dialect = search_id["dialect"]
             response = self.api_client.run_search(query, dialect, start=offset, rows=length)
+            print('response: {}'.format(response))
             return self._handle_errors(response, return_obj)
 
         except Exception as e:
