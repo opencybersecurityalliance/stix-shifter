@@ -53,6 +53,18 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = 'search (url = "http://www.testaddress.com") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)
 
+    def test_not_equal_operator(self):
+        stix_pattern = "[url:value != 'http://www.testaddress.com']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'search (url != "http://www.testaddress.com") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        _test_query_assertions(query, queries)
+
+    def test_NOT_operator(self):
+        stix_pattern = "[url:value NOT = 'http://www.testaddress.com']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'search (NOT (url = "http://www.testaddress.com")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
+        _test_query_assertions(query, queries)
+
     def test_mac_address_query(self):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)

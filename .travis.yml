@@ -3,7 +3,7 @@ language: python
 
 os:
   - linux
-python: 
+python:
   - "3.6"
 
 before_script:
