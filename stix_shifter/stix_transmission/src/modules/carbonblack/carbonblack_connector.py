@@ -18,7 +18,7 @@ class Connector(BaseConnector):
     def _handle_errors(self, response, return_obj):
         response_code = response.code
         response_txt = response.read().decode('utf-8')
-        # print('response_txt: {}'.format(response_txt))
+        print('response_txt: {}'.format(response_txt))
 
         if 200 <= response_code < 300:
             return_obj['success'] = True
