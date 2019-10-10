@@ -1,12 +1,3 @@
-All non-IBM contributors must agree to the Developer Certificate of Origin Version 1.1. (DCO 1.1) by signing their commits with:
-
-```
-DCO 1.1 Signed-off-by: [NAME] <[EMAIL]>
-```
-
-The full text of the DCO 1.1 is as follows:
-
-```
 Developer Certificate of Origin
 Version 1.1
 

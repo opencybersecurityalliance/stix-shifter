@@ -73,7 +73,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/IBM/stix-shifter',  # Optional
+    url='https://github.com/opencybersecurityalliance/stix-shifter',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -99,7 +99,7 @@ setup(
         #     'Topic :: Software Development :: Build Tools',
 
         #     # Pick your license as you wish
-         'License :: OSI Approved :: MIT License',
+         'License :: OSI Approved :: Apache License :: 2.0',
 
         #     # Specify the Python versions you support here. In particular, ensure
         #     # that you indicate whether you support Python 2, Python 3 or both.
@@ -192,6 +192,6 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Source': 'https://github.com/IBM/stix-shifter',
+        'Source': 'https://github.com/opencybersecurityalliance/stix-shifter',
     },
 )
