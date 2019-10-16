@@ -3,6 +3,7 @@ from datetime import datetime, timezone, tzinfo, timedelta
 import base64
 import socket
 import re
+import os
 from urllib.parse import urlparse
 
 
@@ -38,6 +39,64 @@ class EpochToTimestamp(ValueTransformer):
     def transform(epoch):
         return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc)
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+
+
+class FormatMac(ValueTransformer):
+    """A value transformer to convert MSATP Mac address to STIX Mac address format"""
+
+    @staticmethod
+    def transform(mac):
+        value = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)])
+        return value.lower()
+
+
+class MsatpToTimestamp(ValueTransformer):
+    """A value transformer to truncate milliseconds"""
+
+    @staticmethod
+    def transform(msatptime):
+        time_array = msatptime.split('.')
+        converted_time = time_array[0] + '.' + time_array[1][:3] + 'Z' if len(time_array) > 1 else time_array[0] + 'Z'
+        return converted_time
+
+
+class FormatProtocol(ValueTransformer):
+    """A value transformer to convert MSATP TCP protocol to IANA format"""
+
+    @staticmethod
+    def transform(protocolname):
+        converted_name = re.search(r'^tcp', protocolname, re.I).group(0)
+        try:
+            obj_array = converted_name if isinstance(converted_name, list) else converted_name.split(', ')
+            # Loop through entries inside obj_array and make all strings lowercase to meet STIX format
+            obj_array = [entry.lower() for entry in obj_array]
+            return obj_array
+        except ValueError:
+            print("Cannot convert input to array")
+
+
+class MsatpToRegistryValue(ValueTransformer):
+    """A value transformer to convert MSATP Registry value protocol to windows-registry-value-type STIX"""
+
+    @staticmethod
+    def transform(registryvalues):
+        stix_mapping = {"RegistryValueName": "name", "RegistryValueData": "data", "RegistryValueType": "data_type"}
+        stix_datatype_mapping = {"None": "REG_NONE", "String": "REG_SZ", "Dword": "REG_DWORD",
+                                 "ExpandString": "REG_EXPAND_SZ", "MultiString": "REG_MULTI_SZ",
+                                 "Binary": "REG_BINARY", "Qword": "REG_QWORD"}
+        converted_value = list()
+        registryvalue_dict = dict()
+        for each_value in registryvalues:
+            for key, value in each_value.items():
+                if key == "RegistryValueType":
+                    if value in stix_datatype_mapping.keys():
+                        value = stix_datatype_mapping[value]
+                    else:
+                        # If there is no matching datatype, display the value as such
+                        pass
+                registryvalue_dict.update({stix_mapping[key]: value})
+        converted_value.append(registryvalue_dict)
+        return converted_value
 
 
 class EpochSecondsToTimestamp(ValueTransformer):
@@ -116,7 +175,7 @@ class ToFilePath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return obj[0:len(obj) - len(re.split(r'[\\/]', obj)[-1])]
+            return os.path.dirname(obj)
         except ValueError:
             print("Cannot convert input to path string")
 
@@ -222,5 +281,6 @@ def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
-            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4,
-            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC}
+            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp,
+            "NaiveTimestampToUTC": TimestampToUTC, "MsatpToTimestamp": MsatpToTimestamp, "FormatProtocol":
+                FormatProtocol, "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac}

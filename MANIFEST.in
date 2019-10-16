@@ -15,3 +15,4 @@ include stix_shifter/stix_translation/src/modules/splunk/json/*.json
 include stix_shifter/stix_translation/src/modules/carbonblack/json/*.json
 include stix_shifter/stix_translation/src/modules/elastic_ecs/json/*.json
 include stix_shifter/stix_translation/src/modules/cim/json/*.json
+include stix_shifter/stix_translation/src/modules/msatp/json/*.json

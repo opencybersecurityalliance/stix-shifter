@@ -171,7 +171,7 @@ class TestTransform(object):
         directory_obj = objects[directory_ref]
         assert(directory_obj.keys() == {'type', 'path'})
         assert(directory_obj['type'] == 'directory')
-        assert(directory_obj['path'] == 'C:\\mydir\\')
+        assert(directory_obj['path'] == 'C:\\mydir')
 
         parent_ref = process_obj['parent_ref']
         assert(parent_ref in objects), f"parent_ref with key {parent_ref} not found"
@@ -191,7 +191,7 @@ class TestTransform(object):
         parent_directory_obj = objects[parent_directory_ref]
         assert(parent_directory_obj.keys() == {'type', 'path'})
         assert(parent_directory_obj['type'] == 'directory')
-        assert(parent_directory_obj['path'] == 'C:\\Windows\\System32\\')
+        assert(parent_directory_obj['path'] == 'C:\\Windows\\System32')
 
         assert(objects.keys() == set(map(str, range(0, 6))))
 
