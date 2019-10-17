@@ -98,3 +98,8 @@ class Connector(BaseConnector):
                 return_obj['data'] = []
 
         return return_obj
+
+    def delete_query_connection(self, search_id):
+        return_obj = dict()
+        return_obj['success'] = True
+        return return_obj
