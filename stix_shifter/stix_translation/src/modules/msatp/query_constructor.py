@@ -305,6 +305,12 @@ class QueryStringPatternTranslator:
                 expression, type(expression)))
 
     def __eval_observation_exp(self, expression, qualifier):
+        """
+        Function for parsing observation expression value
+        :param expression: expression object
+        :param qualifier: qualifier
+        :return:
+        """
         self._is_mac = False
         self.lookup_table = []
         self.get_lookup_table_of_obs_exp(expression.comparison_expression, self.lookup_table,
@@ -333,7 +339,7 @@ class QueryStringPatternTranslator:
 
     def __eval_comparison_value(self, expression, comparator):
         """
-        Function for parsing comaprsion expression value
+        Function for parsing comparison expression value
         :param expression: expression object, stix_object, stix_field, comparator
         :return: formatted expression value and comparator
         """

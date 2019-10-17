@@ -59,7 +59,7 @@
     "Protocol": {
       "key": "network-traffic.protocols",
       "object": "nt",
-      "transformer": "FormatProtocol"
+      "transformer": "FormatTCPProtocol"
     },
     "RemoteUrl": {
       "key": "url.value"

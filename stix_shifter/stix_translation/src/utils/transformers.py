@@ -42,7 +42,7 @@ class EpochToTimestamp(ValueTransformer):
 
 
 class FormatMac(ValueTransformer):
-    """A value transformer to convert MSATP Mac address to STIX Mac address format"""
+    """A value transformer to convert Mac address to STIX Mac address format"""
 
     @staticmethod
     def transform(mac):
@@ -60,8 +60,8 @@ class MsatpToTimestamp(ValueTransformer):
         return converted_time
 
 
-class FormatProtocol(ValueTransformer):
-    """A value transformer to convert MSATP TCP protocol to IANA format"""
+class FormatTCPProtocol(ValueTransformer):
+    """A value transformer to convert TCP protocol to IANA format"""
 
     @staticmethod
     def transform(protocolname):
@@ -282,5 +282,5 @@ def get_all_transformers():
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
             "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp,
-            "NaiveTimestampToUTC": TimestampToUTC, "MsatpToTimestamp": MsatpToTimestamp, "FormatProtocol":
-                FormatProtocol, "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac}
+            "NaiveTimestampToUTC": TimestampToUTC, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol":
+                FormatTCPProtocol, "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac}
