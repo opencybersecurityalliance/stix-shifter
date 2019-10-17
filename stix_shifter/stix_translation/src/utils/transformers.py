@@ -88,13 +88,14 @@ class MsatpToRegistryValue(ValueTransformer):
         registryvalue_dict = dict()
         for each_value in registryvalues:
             for key, value in each_value.items():
+                is_data_add = True
                 if key == "RegistryValueType":
                     if value in stix_datatype_mapping.keys():
                         value = stix_datatype_mapping[value]
                     else:
-                        # If there is no matching datatype, display the value as such
-                        pass
-                registryvalue_dict.update({stix_mapping[key]: value})
+                        is_data_add = False
+                if is_data_add:
+                    registryvalue_dict.update({stix_mapping[key]: value})
         converted_value.append(registryvalue_dict)
         return converted_value
 
