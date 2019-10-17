@@ -72,13 +72,13 @@
 #### STIX patterns:
 
 ```
-[file:name LIKE  'upd%'] START t'2019-09-01T08:43:10.003Z' STOP t'2019-10-01T10:43:10.003Z'
+[file:name = 'DismHost.exe'] START t'2019-01-10T08:43:10Z' STOP t'2019-11-23T10:43:10Z'
 ```
 
 #### Translated query:
 
 ```
-(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime desc | where FileName matches regex"(upd.*$)" or InitiatingProcessFileName matches regex"(upd.*$)" or InitiatingProcessParentFileName matches regex"(upd.*$)")
+(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-01-10T08:43:10Z) and EventTime < datetime(2019-11-23T10:43:10Z) | order by EventTime desc | where FileName =~ "DismHost.exe" or InitiatingProcessFileName =~ "DismHost.exe" or InitiatingProcessParentFileName =~ "DismHost.exe")
 ```
 
 #### Above translated query is passed as parameter to STIX transmission module
@@ -87,21 +87,21 @@
 transmit msatp "{\"host\":\"xx.xx.xx.xx\",\"port\": \"xxxx\",\"cert_verify\":\"True\" }" 
 "{\"auth\":{\"tenant\": \"xxxxx\", \"clientId\": \"xxxxx\", \"clientSecret\":\"xxxxxxxx\"}}" 
 results 
-"(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime desc | where FileName matches regex\"(upd.*$)\" or InitiatingProcessFileName matches regex\"(upd.*$)\" or InitiatingProcessParentFileName matches regex\"(upd.*$)\")" 0 2
+"(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-01-10T08:43:10Z) and EventTime < datetime(2019-11-23T10:43:10Z) | order by EventTime desc | where FileName =~ \"DismHost.exe\" or InitiatingProcessFileName =~ \"DismHost.exe\" or InitiatingProcessParentFileName =~ \"DismHost.exe\")" 0 2
 ```
 
 #### MSATP query result (Result is formatted by STIX transmission result module):
 
 ```
-[{'FileCreationEvents': {'EventTime': '2019-09-20T06:50:18.600616Z', 'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c', 'ComputerName': 'desktop-536bt46', 'ActionType': 'FileCreated', 'FileName': 'AccessibleHandler.dll', 'FolderPath': 'C:\\Program Files\\Mozilla Firefox\\updated\\AccessibleHandler.dll', 'SHA1': 'cb7f7b9a2429f52faca3124c33d059d83fa1abc9', 'MD5': 'a262207233b044c665b1fc518c3986ad', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '620f00789f37c453710ebf758bf1772e', 'InitiatingProcessSHA1': '8bd812436b301dd30d55f76ae418a0e85f7dd020', 'InitiatingProcessFolderPath': 'c:\\program files (x86)\\mozilla maintenance service\\update\\updater.exe', 'InitiatingProcessFileName': 'updater.exe', 'InitiatingProcessId': 13980, 'InitiatingProcessCommandLine': '"updater.exe" C:\\ProgramData\\Mozilla\\updates\\308046B0AF4A39CB\\updates\\0 "C:\\Program Files\\Mozilla Firefox" "C:\\Program Files\\Mozilla Firefox\\updated" -1', 'InitiatingProcessCreationTime': '2019-09-20T06:50:08.1793244Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 17088, 'InitiatingProcessParentFileName': 'maintenanceservice.exe', 'InitiatingProcessParentCreationTime': '2019-09-20T06:50:07.6324849Z', 'RequestProtocol': 'Unknown', 'ReportId': 11869, 'rn': 1, 'event_count': '1'}}, {'FileCreationEvents': {'EventTime': '2019-09-20T06:50:18.5949322Z', 'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c', 'ComputerName': 'desktop-536bt46', 'ActionType': 'FileCreated', 'FileName': 'AccessibleMarshal.dll', 'FolderPath': 'C:\\Program Files\\Mozilla Firefox\\updated\\AccessibleMarshal.dll', 'SHA1': 'c8e0e4216020c35801a8ba5b49ec19ffbd2190ca', 'MD5': '14adf1e895271804fec015799969750e', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '620f00789f37c453710ebf758bf1772e', 'InitiatingProcessSHA1': '8bd812436b301dd30d55f76ae418a0e85f7dd020', 'InitiatingProcessFolderPath': 'c:\\program files (x86)\\mozilla maintenance service\\update\\updater.exe', 'InitiatingProcessFileName': 'updater.exe', 'InitiatingProcessId': 13980, 'InitiatingProcessCommandLine': '"updater.exe" C:\\ProgramData\\Mozilla\\updates\\308046B0AF4A39CB\\updates\\0 "C:\\Program Files\\Mozilla Firefox" "C:\\Program Files\\Mozilla Firefox\\updated" -1', 'InitiatingProcessCreationTime': '2019-09-20T06:50:08.1793244Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 17088, 'InitiatingProcessParentFileName': 'maintenanceservice.exe', 'InitiatingProcessParentCreationTime': '2019-09-20T06:50:07.6324849Z', 'RequestProtocol': 'Unknown', 'ReportId': 11868, 'rn': 2, 'event_count': '1'}}]
+[{'FileCreationEvents': {'EventTime': '2019-10-14T05:43:58.4387812Z', 'MachineId': 'fc0842373e54e76f5c55830e47526f6f1c187be6', 'ComputerName': 'car-dev-win', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Windows\\Temp\\549F4E8C-950E-413A-BB73-860DD0B52459\\DismHost.exe', 'SHA1': 'b01d428264a51ae803814644ea5ea43e7d7781d5', 'MD5': 'e8007eb8977e83d29f30a122771c09aa', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '3cb2aa46bb2f56352ee7d39886db1160', 'InitiatingProcessSHA1': '68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7', 'InitiatingProcessFolderPath': 'c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11\\mssenses.exe', 'InitiatingProcessFileName': 'MsSenseS.exe', 'InitiatingProcessId': 3840, 'InitiatingProcessCommandLine': '"MsSenseS.exe"', 'InitiatingProcessCreationTime': '2019-10-09T04:28:56.6541694Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 3308, 'InitiatingProcessParentFileName': 'MonitoringHost.exe', 'InitiatingProcessParentCreationTime': '2019-10-09T04:28:19.7702213Z', 'RequestProtocol': 'Unknown', 'ReportId': 466, 'rn': 1, 'event_count': '1'}}, {'FileCreationEvents': {'EventTime': '2019-10-13T05:28:58.4320739Z', 'MachineId': 'fc0842373e54e76f5c55830e47526f6f1c187be6', 'ComputerName': 'car-dev-win', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Windows\\Temp\\CA881E76-B9FB-444D-BF80-0DC52BB98B58\\DismHost.exe', 'SHA1': 'b01d428264a51ae803814644ea5ea43e7d7781d5', 'MD5': 'e8007eb8977e83d29f30a122771c09aa', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '3cb2aa46bb2f56352ee7d39886db1160', 'InitiatingProcessSHA1': '68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7', 'InitiatingProcessFolderPath': 'c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11\\mssenses.exe', 'InitiatingProcessFileName': 'MsSenseS.exe', 'InitiatingProcessId': 3840, 'InitiatingProcessCommandLine': '"MsSenseS.exe"', 'InitiatingProcessCreationTime': '2019-10-09T04:28:56.6541694Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 3308, 'InitiatingProcessParentFileName': 'MonitoringHost.exe', 'InitiatingProcessParentCreationTime': '2019-10-09T04:28:19.7702213Z', 'RequestProtocol': 'Unknown', 'ReportId': 389, 'rn': 2, 'event_count': '1'}}]
 ```
 
 #### STIX observable output:
 
 ```
-{
+ {
     "type": "bundle",
-    "id": "bundle--17072271-dab1-4ac6-8ebf-f92f6d173ca1",
+    "id": "bundle--95d3b8bf-accb-43e3-8b6d-f73078e2d1af",
     "objects": [
         {
             "type": "identity",
@@ -110,24 +110,24 @@ results
             "identity_class": "events"
         },
         {
-            "id": "observed-data--7bf5ef9c-19cc-43eb-8fc7-e793f6226deb",
+            "id": "observed-data--7736a80e-955f-4abc-9355-7989148670cc",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-09-30T13:07:25.871Z",
-            "modified": "2019-09-30T13:07:25.871Z",
+            "created": "2019-10-14T06:19:02.183Z",
+            "modified": "2019-10-14T06:19:02.183Z",
             "objects": {
                 "0": {
                     "type": "file",
-                    "name": "AccessibleHandler.dll",
+                    "name": "DismHost.exe",
                     "parent_directory_ref": "1",
                     "hashes": {
-                        "SHA-1": "cb7f7b9a2429f52faca3124c33d059d83fa1abc9",
-                        "MD5": "a262207233b044c665b1fc518c3986ad"
+                        "SHA-1": "b01d428264a51ae803814644ea5ea43e7d7781d5",
+                        "MD5": "e8007eb8977e83d29f30a122771c09aa"
                     }
                 },
                 "1": {
                     "type": "directory",
-                    "path": "C:\\Program Files\\Mozilla Firefox\\updated"
+                    "path": "C:\\Windows\\Temp\\549F4E8C-950E-413A-BB73-860DD0B52459"
                 },
                 "2": {
                     "type": "user-account",
@@ -138,63 +138,63 @@ results
                     "type": "process",
                     "creator_user_ref": "2",
                     "binary_ref": "4",
-                    "name": "updater.exe",
-                    "pid": 13980,
-                    "command_line": "\"updater.exe\" C:\\ProgramData\\Mozilla\\updates\\308046B0AF4A39CB\\updates\\0 \"C:\\Program Files\\Mozilla Firefox\" \"C:\\Program Files\\Mozilla Firefox\\updated\" -1",
-                    "created": "2019-09-20T06:50:08.179Z",
+                    "name": "MsSenseS.exe",
+                    "pid": 3840,
+                    "command_line": "\"MsSenseS.exe\"",
+                    "created": "2019-10-09T04:28:56.654Z",
                     "parent_ref": "6"
                 },
                 "4": {
                     "type": "file",
                     "hashes": {
-                        "MD5": "620f00789f37c453710ebf758bf1772e",
-                        "SHA-1": "8bd812436b301dd30d55f76ae418a0e85f7dd020"
+                        "MD5": "3cb2aa46bb2f56352ee7d39886db1160",
+                        "SHA-1": "68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7"
                     },
                     "parent_directory_ref": "5",
-                    "name": "updater.exe"
+                    "name": "MsSenseS.exe"
                 },
                 "5": {
                     "type": "directory",
-                    "path": "c:\\program files (x86)\\mozilla maintenance service\\update"
+                    "path": "c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11"
                 },
                 "6": {
                     "type": "process",
-                    "pid": 17088,
-                    "name": "maintenanceservice.exe",
+                    "pid": 3308,
+                    "name": "MonitoringHost.exe",
                     "binary_ref": "7",
-                    "created": "2019-09-20T06:50:07.632Z"
+                    "created": "2019-10-09T04:28:19.770Z"
                 },
                 "7": {
                     "type": "file",
-                    "name": "maintenanceservice.exe"
+                    "name": "MonitoringHost.exe"
                 }
             },
-            "first_observed": "2019-09-20T06:50:18.600616Z",
-            "last_observed": "2019-09-20T06:50:18.600616Z",
+            "first_observed": "2019-10-14T05:43:58.438Z",
+            "last_observed": "2019-10-14T05:43:58.438Z",
             "x_com_msatp": {
-                "computer_identity": "desktop-536bt46"
+                "computer_identity": "car-dev-win"
             },
             "number_observed": 1
         },
         {
-            "id": "observed-data--e847bd9a-ad5a-401b-98ce-518d00496b48",
+            "id": "observed-data--851577c9-3d1e-4f24-9d24-adf79daf73d1",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-09-30T13:07:25.886Z",
-            "modified": "2019-09-30T13:07:25.886Z",
+            "created": "2019-10-14T06:19:03.023Z",
+            "modified": "2019-10-14T06:19:03.023Z",
             "objects": {
                 "0": {
                     "type": "file",
-                    "name": "AccessibleMarshal.dll",
+                    "name": "DismHost.exe",
                     "parent_directory_ref": "1",
                     "hashes": {
-                        "SHA-1": "c8e0e4216020c35801a8ba5b49ec19ffbd2190ca",
-                        "MD5": "14adf1e895271804fec015799969750e"
+                        "SHA-1": "b01d428264a51ae803814644ea5ea43e7d7781d5",
+                        "MD5": "e8007eb8977e83d29f30a122771c09aa"
                     }
                 },
                 "1": {
                     "type": "directory",
-                    "path": "C:\\Program Files\\Mozilla Firefox\\updated"
+                    "path": "C:\\Windows\\Temp\\CA881E76-B9FB-444D-BF80-0DC52BB98B58"
                 },
                 "2": {
                     "type": "user-account",
@@ -205,41 +205,41 @@ results
                     "type": "process",
                     "creator_user_ref": "2",
                     "binary_ref": "4",
-                    "name": "updater.exe",
-                    "pid": 13980,
-                    "command_line": "\"updater.exe\" C:\\ProgramData\\Mozilla\\updates\\308046B0AF4A39CB\\updates\\0 \"C:\\Program Files\\Mozilla Firefox\" \"C:\\Program Files\\Mozilla Firefox\\updated\" -1",
-                    "created": "2019-09-20T06:50:08.179Z",
+                    "name": "MsSenseS.exe",
+                    "pid": 3840,
+                    "command_line": "\"MsSenseS.exe\"",
+                    "created": "2019-10-09T04:28:56.654Z",
                     "parent_ref": "6"
                 },
                 "4": {
                     "type": "file",
                     "hashes": {
-                        "MD5": "620f00789f37c453710ebf758bf1772e",
-                        "SHA-1": "8bd812436b301dd30d55f76ae418a0e85f7dd020"
+                        "MD5": "3cb2aa46bb2f56352ee7d39886db1160",
+                        "SHA-1": "68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7"
                     },
                     "parent_directory_ref": "5",
-                    "name": "updater.exe"
+                    "name": "MsSenseS.exe"
                 },
                 "5": {
                     "type": "directory",
-                    "path": "c:\\program files (x86)\\mozilla maintenance service\\update"
+                    "path": "c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11"
                 },
                 "6": {
                     "type": "process",
-                    "pid": 17088,
-                    "name": "maintenanceservice.exe",
+                    "pid": 3308,
+                    "name": "MonitoringHost.exe",
                     "binary_ref": "7",
-                    "created": "2019-09-20T06:50:07.632Z"
+                    "created": "2019-10-09T04:28:19.770Z"
                 },
                 "7": {
                     "type": "file",
-                    "name": "maintenanceservice.exe"
+                    "name": "MonitoringHost.exe"
                 }
             },
-            "first_observed": "2019-09-20T06:50:18.5949322Z",
-            "last_observed": "2019-09-20T06:50:18.5949322Z",
+            "first_observed": "2019-10-13T05:28:58.432Z",
+            "last_observed": "2019-10-13T05:28:58.432Z",
             "x_com_msatp": {
-                "computer_identity": "desktop-536bt46"
+                "computer_identity": "car-dev-win"
             },
             "number_observed": 1
         }
