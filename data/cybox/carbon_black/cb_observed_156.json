@@ -20,7 +20,7 @@
             "objects": {
                 "0": {
                     "hashes": {
-                        "MD5": "8a0a29438052faed8a2532da50455756"
+                        "MD5": "846cdb921841ac671c86350d494abf9c"
                     },
                     "name": "svctest.exe",
                     "type": "file"
@@ -86,7 +86,7 @@
             "objects": {
                 "0": {
                     "hashes": {
-                        "MD5": "5b9365bcf5c12d0585574edbae31bb97"
+                        "MD5": "846cdb921841ac671c86350d494abf9c"
                     },
                     "name": "applemobiledeviceservice.exe",
                     "type": "file"
@@ -152,7 +152,7 @@
             "objects": {
                 "0": {
                     "hashes": {
-                        "MD5": "8a0a29438052faed8a2532da50455756"
+                        "MD5": "846cdb921841ac671c86350d494abf9c"
                     },
                     "name": "svctest.exe",
                     "type": "file"
@@ -218,7 +218,7 @@
             "objects": {
                 "0": {
                     "hashes": {
-                        "MD5": "8a0a29438052faed8a2532da50455756"
+                        "MD5": "846cdb921841ac671c86350d494abf9c"
                     },
                     "name": "svctest.exe",
                     "type": "file"
@@ -284,14 +284,14 @@
             "objects": {
                 "0": {
                     "hashes": {
-                        "MD5": "1ba6cce42c29e2dfbcc3f49fe12b0306"
+                        "MD5": "846cdb921841ac671c86350d494abf9c"
                     },
                     "name": "teamviewer.exe",
                     "type": "file"
                 },
                 "1": {
                     "binary_ref": "0",
-                    "command_line": "\"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe\"",
+                    "command_line": "c64.exe",
                     "created": "2019-07-30T13:05:59.127Z",
                     "creator_user_ref": "8",
                     "name": "teamviewer.exe",
