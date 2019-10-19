@@ -2,21 +2,50 @@ from os import path
 import json
 import re
 
-from stix_shifter.stix_translation.src.modules.base.base_data_mapper import BaseDataMapper
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
+
+def _fetch_mapping(dialect=''):
+    try:
+        if dialect != '':
+            dialect = dialect + '_'
+        basepath = path.dirname(__file__)
+        filepath = path.abspath(
+            path.join(basepath, "json", dialect + "from_stix_map.json"))
+
+        map_file = open(filepath).read()
+        map_data = json.loads(map_file)
+        return map_data
+    except Exception as ex:
+        print('exception in main():', ex)
+        return {}
 
 
-class DataMapper(BaseDataMapper):
+class DataMapper:
     def __init__(self, options):
-        if options['dialect'] is None:
+        dialect = options.get('dialect', None)
+        if dialect is None:
             self.dialect = 'at'
         else:
-            m = re.match(r'^[a-z0-9]+$', options['dialect'])
+            m = re.match(r'^[a-z0-9]+$', dialect)
             if m:
-                self.dialect = options['dialect']
+                self.dialect = dialect
             else:
                 self.dialect = 'at'
-        basepath = path.dirname(__file__)
-        self.map_data = self.fetch_mapping(basepath)
+
+    def map_object(self, stix_object_name):
+        self.map_data = _fetch_mapping(self.dialect)
+        if stix_object_name in self.map_data and self.map_data[stix_object_name] != None:
+            return self.map_data[stix_object_name]
+        else:
+            raise DataMappingException(
+                "Unable to map object `{}` into SQL".format(stix_object_name))
+
+    def map_field(self, stix_object_name, stix_property_name):
+        self.map_data = _fetch_mapping(self.dialect)
+        if stix_object_name in self.map_data and stix_property_name in self.map_data[stix_object_name]["fields"]:
+            return self.map_data[stix_object_name]["fields"][stix_property_name]
+        else:
+            return []
 
     def map_selections(self):
         try:

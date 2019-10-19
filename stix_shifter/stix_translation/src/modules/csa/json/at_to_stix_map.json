@@ -1,0 +1,82 @@
+{
+  "initiator_name": {
+	"key": "user-account.display_name",
+	"object": "initiator-user"
+  },
+  "initiator_id": [
+	{
+	  "key": "user-account.account_login",
+	  "object": "initiator-user"
+	},
+	{
+	  "key": "user-account.user_id",
+	  "object": "initiator-user"
+	}
+  ],
+  "target_name": {
+	"key": "user-account.display_name",
+	"object": "target-user"
+  },
+  "target_id": [
+	{
+	  "key": "user-account.account_login",
+	  "object": "target-user"
+	},
+	{
+	  "key": "user-account.user_id",
+	  "object": "target-user"
+	}
+  ],
+  "observer_name": {
+	"key": "user-account.display_name",
+	"object": "observer-user"
+  },
+  "observer_id": [
+	{
+	  "key": "user-account.account_login",
+	  "object": "observer-user"
+	},
+	{
+	  "key": "user-account.user_id",
+	  "object": "observer-user"
+	}
+  ],
+  "eventcount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "starttime": [
+	{
+	  "key": "created",
+	  "transformer": "EpochSecondsToTimestamp",
+	  "cybox": false
+	},
+	{
+	  "key": "modified",
+	  "transformer": "EpochSecondsToTimestamp",
+	  "cybox": false
+	},
+	{
+	  "key": "first_observed",
+	  "transformer": "EpochSecondsToTimestamp",
+	  "cybox": false
+	},
+	{
+	  "key": "last_observed",
+	  "transformer": "EpochSecondsToTimestamp",
+	  "cybox": false
+	}
+  ],
+  "url": {
+	"key": "url.value"
+  },
+  "domain": {
+	"key": "domain-name.value"
+  },
+  "payload": {
+	"key": "artifact.payload_bin"
+  }
+
+
+}

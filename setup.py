@@ -73,7 +73,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/IBM/stix-shifter',  # Optional
+    url='https://github.com/opencybersecurityalliance/stix-shifter',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -99,7 +99,7 @@ setup(
         #     'Topic :: Software Development :: Build Tools',
 
         #     # Pick your license as you wish
-         'License :: OSI Approved :: MIT License',
+         'License :: OSI Approved :: Apache License :: 2.0',
 
         #     # Specify the Python versions you support here. In particular, ensure
         #     # that you indicate whether you support Python 2, Python 3 or both.
@@ -135,7 +135,7 @@ setup(
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['stix2-patterns>=1.1.0', 'stix2-validator>=0.5.0',
-                      'antlr4-python3-runtime==4.7', 'python-dateutil>=2.7.3'
+                      'antlr4-python3-runtime==4.7', 'python-dateutil>=2.7.3', 'xmltodict>=0.11.0'
                     #   ,'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
                     ],  # Optional
 
@@ -192,6 +192,6 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Source': 'https://github.com/IBM/stix-shifter',
+        'Source': 'https://github.com/opencybersecurityalliance/stix-shifter',
     },
 )

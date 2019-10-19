@@ -1,0 +1,26 @@
+{
+    "format_string": {
+      "format_string_generic": "{mapped_field} {transformer_field} {comparator} {value} {transformer_value}",
+      "format_string_range": "{mapped_field} {extra_mapped_string} of it {default_if_attr_undefined} {default_value_transformer} {comparator} {start_value} {transformer}",
+      "format_string_match": "exist {comparator}({value}) of ({mapped_field} {transformer_value})"
+  },
+  "object_hierarchy":{
+    "file": {
+      "text" : "files"
+    },
+    "process": {
+      "text" : "processes",
+      "reference" :
+      {
+        "file" : "image file"
+      }
+    },
+    "socket": {
+      "text" : "sockets",
+      "reference" :
+      {
+        "process" : "processes"
+      }
+    }
+  }
+}

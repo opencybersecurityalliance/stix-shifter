@@ -3,7 +3,6 @@ from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 import json
-from freezegun import freeze_time
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
 selections_file = open('stix_shifter/stix_translation/src/modules/qradar/json/aql_event_fields.json').read()
@@ -12,12 +11,9 @@ OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
-DEFAULT_START_TIME = 1548926700000
-DEFAULT_END_TIME = 1548927000000
 PROTOCOLS = json.loads(protocols_file)
 
 
-freeze_time("2019-01-31 09:30:00").start()
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
 custom_selections = "SELECT {}".format(", ".join(OPTIONS['select_fields']))
 from_statement = " FROM events "

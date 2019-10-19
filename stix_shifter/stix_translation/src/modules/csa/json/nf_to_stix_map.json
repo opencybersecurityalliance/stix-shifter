@@ -1,0 +1,83 @@
+{
+  "destinationip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "eventcount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "starttime": [
+    {
+      "key": "created",
+      "transformer": "EpochSecondsToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "modified",
+      "transformer": "EpochSecondsToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochSecondsToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochSecondsToTimestamp",
+      "cybox": false
+    }
+  ],
+  "sourceip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "url": {
+    "key": "url.value"
+  },
+  "domain": {
+    "key": "domain-name.value"
+  },
+  "payload": {
+    "key": "artifact.payload_bin"
+  },
+  "destinationport": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "sourceport": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  }
+}
