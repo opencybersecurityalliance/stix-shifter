@@ -30,7 +30,7 @@ class TestTransform(object):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        data = {"starttime": 1531169112, "eventcount": 5}
+        data = {"starttime": 1531169112, "endtime": 1531169254, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
