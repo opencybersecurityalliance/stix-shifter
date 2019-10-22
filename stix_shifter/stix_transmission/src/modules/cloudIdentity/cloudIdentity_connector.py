@@ -33,13 +33,27 @@ class Connector(BaseConnector):
         token = CloudIdentity_Token.getToken()
         request = query.split(' ')
         print(request)
-        #response = self.callApi(token, request[3])
-        #print(query.split(' = '))
+
+        
+        
 
         try:
+            # AUTHENTICATION METHODS
+            #json = CloudIdentity_Request.getAuthMethods(token, "smsotp")
+
+            # AUTHENTICATION FACTORS
+            #json = CloudIdentity_Request.getAuthFactors(token)
+
+            # AUTHENTICATION TRAIL
+            #json = CloudIdentity_Request.getAuthenticationTrail(token, "now-240h", "now", 10, "time","asc")
+
+            #Authentication Audit trail
+            json = CloudIdentity_Request.postReports(token, "auth_audit_trail", "now-240h", "now", 10, "time","asc")
+
+            pj = pprint.PrettyPrinter(indent=3)
+            pj.pprint(json)
             #response = CloudIdentity_Request.getAdminActivity(token, "now-240h", "now", 10, "time","asc")
 
-            return 
         except Exception as err:
             print('error when creating search: {}'.format(err))
             raise
@@ -56,9 +70,16 @@ class Connector(BaseConnector):
             print("Invalid Request")
             return
 
- #   def getParams(self, query):
- #       for val in query:
- #           if val == "CIFun":
+    def getParams(self, query):
+        call = None
+        id = None
+        for val in query:
+            if val == "CIFun":
+                print(val)
+        
+        return call, id
+
+                
                  
             
 
