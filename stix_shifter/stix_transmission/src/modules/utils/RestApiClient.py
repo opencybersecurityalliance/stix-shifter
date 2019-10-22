@@ -60,11 +60,13 @@ class RestApiClient:
                 if self.sni is not None:
                     actual_headers["Host"] = self.sni
 
-                if self.cert_verify == False:
+                if not self.cert_verify:
                     response = call(url, headers=actual_headers, data=data, verify=False)
-                elif self.server_cert:
+                elif self.cert_verify and self.cert is None:
+                    response = call(url, headers=actual_headers, data=data, verify=True)
+                elif self.server_cert and self.cert is not None:
                     response = call(url, headers=actual_headers, data=data, verify=self.cert_file_name)
-                elif not self.server_cert:
+                elif not self.server_cert and self.cert is not None:
                     response = call(url, headers=actual_headers, data=data, cert=self.cert_file_name)
                 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
