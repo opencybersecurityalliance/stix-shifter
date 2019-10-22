@@ -1,4 +1,5 @@
 import requests
+from requests_toolbelt.adapters import host_header_ssl
 import sys
 import collections
 import urllib.parse
@@ -8,7 +9,7 @@ import errno
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
 
-    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True):
+    def __init__(self, host, port = None, cert=None, headers={}, url_modifier_function=None, cert_verify=True, sni=None, server_cert=True):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)            
@@ -17,7 +18,8 @@ class RestApiClient:
         self.cert = cert
         self.headers = headers
         self.url_modifier_function = url_modifier_function
-
+        self.sni = sni
+        self.server_cert = server_cert
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None):
@@ -51,8 +53,19 @@ class RestApiClient:
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
-                call = getattr(requests, method.lower())
-                response = call(url, headers=actual_headers, cert=self.cert_file_name, data=data, verify=self.cert_verify)
+                s = requests.Session()
+                call = getattr(s, method.lower())
+
+                s.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
+                if self.sni is not None:
+                    actual_headers["Host"] = self.sni
+
+                if self.cert_verify == False:
+                    response = call(url, headers=actual_headers, data=data, verify=False)
+                elif self.server_cert:
+                    response = call(url, headers=actual_headers, data=data, verify=self.cert_file_name)
+                elif not self.server_cert:
+                    response = call(url, headers=actual_headers, data=data, cert=self.cert_file_name)
                 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                                 and "Deprecated" in response.headers['Content-Type']:
