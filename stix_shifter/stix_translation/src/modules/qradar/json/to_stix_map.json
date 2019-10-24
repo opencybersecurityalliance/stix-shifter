@@ -78,7 +78,8 @@
   },
   "magnitude": {
     "key": "x_com_ibm_ariel.magnitude",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "sourceip": [
     {
