@@ -154,6 +154,21 @@
     "key": "file.hashes.UNKNOWN",
     "object": "fl"
   },
+  "filesize": {
+    "key": "file.size",
+    "object": "fl"
+  },
+  "filepath": [
+    {
+      "key": "directory.path",
+      "object": "dir"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "dir"
+    }
+  ],
   "base64_payload": {
     "key": "artifact.payload_bin"
   },

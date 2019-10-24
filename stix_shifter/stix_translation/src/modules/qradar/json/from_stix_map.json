@@ -24,7 +24,13 @@
       "name": ["filename"],
       "hashes.SHA-256": ["filehash"],
       "hashes.MD5": ["filehash"],
-      "hashes.SHA-1": ["filehash"]
+      "hashes.SHA-1": ["filehash"],
+      "parent_directory_ref": ["filepath"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["filepath"]
     }
   },
   "network-traffic": {
