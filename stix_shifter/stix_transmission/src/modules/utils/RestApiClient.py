@@ -81,7 +81,7 @@ class RestApiClient:
                 print('exception occured during requesting url: ' + str(e))
                 raise e
         finally:
-            if self.server_cert is not None:
+            if self.server_cert is not True:
                 try:
                     os.remove(self.server_cert)
                 except OSError as e:
