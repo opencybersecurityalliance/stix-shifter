@@ -40,7 +40,7 @@ CONFIG = {
 CONNECTION = {
     "host": "123.123.123.123",
     "port": "443",
-    "cert_verify": False,
+    "selfSignedCert": False,
 }
 
 
