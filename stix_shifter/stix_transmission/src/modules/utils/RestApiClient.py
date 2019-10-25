@@ -27,6 +27,8 @@ class RestApiClient:
 
         if cert is not None:
             self.client_cert_exist = True
+            #ignore server cert if we have cert set
+            self.server_cert_content = None
         else:
             self.client_cert_exist = False
 
