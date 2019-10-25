@@ -9,44 +9,58 @@ import errno
 
 
 class RestApiClient:
-
+    #cert_verify can be True, False, or a Cert
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
-        self.cert_verify = cert_verify
-        self.cert = cert
+
+        if isinstance(cert_verify, bool):
+            self.server_cert_content = None
+            self.server_cert_exist = False
+            self.cert_verify = cert_verify
+        elif isinstance(cert_verify, str):
+            self.server_cert_content = cert_verify
+            self.server_cert_exist = True
+            self.cert_verify = None
+
+        if cert is not None:
+            self.client_cert_exist = True
+        else:
+            self.client_cert_exist = False
+
+        self.client_cert_content = cert
+        self.client_cert = "client_cert.pem"
+        self.server_cert = "server_cert.pem"
+
         self.headers = headers
         self.url_modifier_function = url_modifier_function
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None):
-        self.client_cert = None
-        self.server_cert = None
+        #convert client cert to file
         try:
-            if self.cert is not None:
-                # put key/cert pair into a file to read it later
-                self.client_cert = "client_cert.pem"
+            if self.client_cert_content is not None:
                 with open(self.client_cert, 'w') as f:
                     try:
-                        f.write(self.cert)
+                        f.write(self.client_cert_content)
                     except IOError:
                         print('Failed to setup certificate')
+                self.client_cert_content = self.client_cert
             else:
-                self.client_cert = self.cert
+                self.client_cert_content = None
 
-            # check for certificate
-            if self.cert_verify is not True:
-                # put key/cert pair into a file to read it later
-                self.server_cert = "server_cert.pem"
+            # covnert server cert to file
+            if self.server_cert_content is not None:
                 with open(self.server_cert, 'w') as f:
                     try:
-                        f.write(self.cert)
+                        f.write(self.server_cert_content)
                     except IOError:
                         print('Failed to setup certificate')
+                self.server_cert_content = self.server_cert
             else:
-                self.server_cert = self.cert_verify
+                self.server_cert_content = None
 
             url = None
             actual_headers = self.headers.copy()
@@ -69,8 +83,9 @@ class RestApiClient:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
                 call = getattr(requests, method.lower())
+
                 response = call(url, headers=actual_headers,
-                                cert=self.client_cert, data=data, verify=self.server_cert)
+                                cert=self.client_cert_content, data=data, verify=self.server_cert_content)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                         and "Deprecated" in response.headers['Content-Type']:
@@ -81,13 +96,13 @@ class RestApiClient:
                 print('exception occured during requesting url: ' + str(e))
                 raise e
         finally:
-            if self.server_cert is not True:
+            if self.server_cert_exist:
                 try:
                     os.remove(self.server_cert)
                 except OSError as e:
                     if e.errno != errno.ENOENT:
                         raise
-            if self.client_cert is not None:
+            if self.client_cert_exist:
                 try:
                     os.remove(self.client_cert)
                 except OSError as e:

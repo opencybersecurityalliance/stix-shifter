@@ -18,7 +18,7 @@ class APIClient():
                                     connection.get('port'),
                                     connection.get('cert', None),
                                     headers,
-                                    cert_verify=connection.get('cert_verify', 'True')
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
 
     def ping_box(self):
