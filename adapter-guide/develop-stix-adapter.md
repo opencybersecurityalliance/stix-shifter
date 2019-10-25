@@ -700,9 +700,9 @@ For asynchronous sources, the search id that gets passed into the connection met
       {'success': True}
       ```
 
-### Testing a new adapter in IBM Security Connect
+### Testing a new adapter using the proxy host
 
-Work on a new STIX-shifter adapter occurs after the project has been forked and the repository has been cloned into a local development environment. STIX-shifter contains a **proxy** adapter that facilitates a remote instance of the project calling out to a local instance. While in development, a new adapter can be tested in IBM Security Connect without first merging the working branch into the master branch on github. A host is run on the local instance from the CLI. The remote instance of STIX-shifter (the imported python library used by Connect) will use the proxy adapter to pass translation and transmission requests onto the host. The host will then use the new adapter and return results back to the remote STIX-shifter instance.
+Work on a new stix-shifter adapter occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** adapter that facilitates a remote instance of the project calling out to a local instance. While in development, a new adapter's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new adapter and return results back to the remote stix-shifter instance.
 
 Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
 
@@ -715,5 +715,3 @@ As an example:
 ```
 python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
 ```
-
-<!-- TODO: Setup a proxy data source in IBM Security Connect with the proxy address and port. More details and screens to follow. -->
