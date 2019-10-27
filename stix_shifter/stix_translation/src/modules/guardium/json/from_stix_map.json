@@ -1,0 +1,87 @@
+{
+  "x_Guardium": {
+    "fields": {
+      "datacategory": ["datacategory"],
+      "start": ["QUERY_FROM_DATE"],
+      "end": ["QUERY_TO_DATE"],
+      "remotesource": ["REMOTE_SOURCE"],
+      "service_name": ["SERVICENAME"]
+    }
+  },
+  "START": {
+    "fields": {
+      "value": ["QUERY_FROM_DATE"]
+    }
+  },
+  "STOP": {
+    "fields": {
+      "value": ["QUERY_TO_DATE"]
+    }
+  },
+  "x_Guardium_db_info": {
+    "fields": {
+      "database_name": ["DATABASENAME"],
+      "value": ["DATABASENAME"]
+    }
+  },
+  "x_Guardium_exception": {
+    "fields": {
+      "errorcode": ["ERRORCODE"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["CLIENTIP", "SERVERIP"],
+      "src_ip": ["CLIENTIP"],
+      "dst_ip": ["SERVERIP"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["SourceIpV6", "DestinationIpV6"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["Url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["SourceMac", "DestinationMac"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["FileName"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["SourcePort"],
+      "dst_port": ["DestinationPort"],
+      "start": ["StartTime"],
+      "end": ["EndTime"],
+      "protocols[*]": ["NetworkProtocol"],
+      "src_ref.value": ["SourceIpV4", "SourceIpV6"],
+      "dst_ref.value": ["DestinationIpV4", "DestinationIpV6"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "value": ["DBUSERNAME", "OSUSER"],
+      "db_user": ["DBUSERNAME"],
+      "os_user": ["OSUSER"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["Payload"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DomainName"]
+    }
+  }
+}

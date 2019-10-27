@@ -1,0 +1,159 @@
+{
+  "session": {
+    "--IBM SC Session Details": {
+      "reportName": "--IBM SC Session Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "info": "START",
+          "default": "1970-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "info": "STOP",
+          "default": "2019-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "info": "None",
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "info": "None",
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVERIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "info": "map",
+          "default": "%"
+        }
+      }
+    }
+  },
+  "activity": {
+    "--IBM SC Activity Details": {
+      "reportName": "--IBM SC Activity Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "info": "START",
+          "default": "1970-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "info": "STOP",
+          "default": "2019-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "info": "None",
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "info": "None",
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVERIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "OSUSER": {
+          "info": "map",
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "info": "map",
+          "default": "%"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "--IBM SC Exception Details": {
+      "reportName": "--IBM SC Exception Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "info": "START",
+          "default": "1970-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "info": "STOP",
+          "default": "2019-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "info": "None",
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "info": "None",
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVERIP": {
+          "info": "map",
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "OSUSER": {
+          "info": "map",
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "info": "map",
+          "default": "%"
+        },
+        "ERRORCODE": {
+          "info": "map",
+          "default": "%"
+        }
+      }
+    }
+  }
+}

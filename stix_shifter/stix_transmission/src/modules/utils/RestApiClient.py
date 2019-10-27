@@ -4,6 +4,7 @@ import collections
 import urllib.parse
 import os
 import errno
+import logging
 
 # This is a simple HTTP client that can be used to access the REST API
 class RestApiClient:
@@ -53,8 +54,32 @@ class RestApiClient:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
                 call = getattr(requests, method.lower())
-                response = call(url, headers=actual_headers, cert=self.cert_file_name, data=data, verify=self.cert_verify)
-                
+
+#                response = call(url, headers=actual_headers, cert=self.cert_file_name, data=data, verify=self.cert_verify)
+#  Subroto: Replaced the above line with the following because params is not passed to the call though the
+#  'call_api' signature has params as a parameter.
+#
+# This hese code is added because Guardium api requires 'params' to be sent to get the 
+# Authorization token AND 'data' to be sent to retrieve report information
+#
+                logging.debug(url)
+                if (not params or params is None):
+                    logging.info("\n data is present: calling with data")
+                    response = call(url, headers=actual_headers,
+                                cert=self.cert_file_name, data=data, verify=self.cert_verify)
+                #
+                elif data is None and params is not None:
+                    logging.info("\n params is present: calling with params")
+                    response = call(url, headers=actual_headers, cert=self.cert_file_name,
+                                    params=params, verify=self.cert_verify)
+                #
+                else:
+                    logging.info(
+                        "\n data and params are present: calling with both")
+                    response = call(url, headers=actual_headers, cert=self.cert_file_name,
+                                    params=params, data=data, verify=self.cert_verify)
+                #
+# End Change
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                                 and "Deprecated" in response.headers['Content-Type']:
                     print("WARNING: " + response.headers['Content-Type'], file=sys.stderr)

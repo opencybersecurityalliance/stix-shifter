@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "/Users/subroto/Documents/dataInMac/github/isc_work/stix-shifter"
+		}
+	],
+	"settings": {
+		"python.pythonPath": "isc_venv/bin/python3.6"
+	}
+}

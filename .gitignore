@@ -76,3 +76,4 @@ virtualenv/
 
 .vscode
 *.sqlite
+.DS_Store
