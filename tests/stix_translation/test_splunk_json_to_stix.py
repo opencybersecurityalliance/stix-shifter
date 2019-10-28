@@ -75,11 +75,11 @@ class TestTransform(object):
         file_hash = "41a26255d16d121dc525a6445144b895"
         file_name = "sample.dll"
         file_size = 25536
-        
-        data = { 
+
+        data = {
             "event_count": count, "_time": time, "user": user,
-            "bytes": file_bytes, "object_path": objPath, "file_path": filePath, 
-            "file_create_time": create_time, "file_modify_time": modify_time, 
+            "bytes": file_bytes, "object_path": objPath, "file_path": filePath,
+            "file_create_time": create_time, "file_modify_time": modify_time,
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
         }
 
@@ -123,7 +123,6 @@ class TestTransform(object):
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
         dir_obj = objects[dir_ref]
 
-
         assert(dir_obj is not None), 'directory object type not found'
         assert(dir_obj.keys() == {'type', 'path', 'created', 'modified'})
         assert(dir_obj['path'] == "C:\\Users\\someuser\\sample.dll")
@@ -132,7 +131,7 @@ class TestTransform(object):
         print(objects.keys())
         print(result_bundle_objects)
         assert(objects.keys() == set(map(str, range(0, 5))))
-       
+
     def test_certificate_cim_to_stix(self):
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
@@ -144,20 +143,20 @@ class TestTransform(object):
         subject = "C=US, ST=Maryland, L=Baltimore, O=John Doe, OU=ExampleCorp, CN=www.example.com/emailAddress=doe@example.com"
         ssl_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
 
-        data = { 
+        data = {
             "event_count": count, "_time": time, "ssl_serial": serial,
-            "ssl_version": version, "ssl_signature_algorithm": sig_algorithm, 
-            "ssl_issuer": issuer, "ssl_subject": subject, 
+            "ssl_version": version, "ssl_signature_algorithm": sig_algorithm,
+            "ssl_issuer": issuer, "ssl_subject": subject,
             "ssl_hash": ssl_hash, "ssl_publickey_algorithm": key_algorithm
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
-        
+
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
-        
+
         validated_result = validate_instance(observed_data)
         assert(validated_result.is_valid == True)
 
@@ -166,7 +165,7 @@ class TestTransform(object):
 
         # Test objects in Stix observable data model after transform
         cert_obj = TestTransform.get_first_of_type(objects.values(), 'x509-certificate')
-       
+
         assert(cert_obj is not None), 'x509-certificate object type not found'
         assert(cert_obj.keys() == {'type', 'serial_number', 'version', "signature_algorithm", "subject_public_key_algorithm", "issuer", "subject", "hashes"})
         assert(cert_obj['serial_number'] == "1234")
@@ -178,8 +177,6 @@ class TestTransform(object):
         assert(cert_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
         assert(objects.keys() == set(map(str, range(0, 1))))
 
-
-       
     def test_process_cim_to_stix(self):
         count = 1
         time = "2018-08-21T15:11:55.000+00:00"
@@ -192,21 +189,21 @@ class TestTransform(object):
         file_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
         file_name = "sample.dll"
         file_size = 25536
-        
-        data = { 
+
+        data = {
             "event_count": count, "_time": time, "user": user,
-            "process_name": name, "process_id": pid, "file_path": filePath, 
-            "file_create_time": create_time, "file_modify_time": modify_time, 
+            "process_name": name, "process_id": pid, "file_path": filePath,
+            "file_create_time": create_time, "file_modify_time": modify_time,
             "file_hash": file_hash, "file_size": file_size, "file_name": file_name
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
-        
+
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
-        
+
         validated_result = validate_instance(observed_data)
         assert(validated_result.is_valid == True)
 
@@ -217,7 +214,7 @@ class TestTransform(object):
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
         assert(proc_obj is not None), 'process object type not found'
         assert(proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref'})
-        
+
         assert(proc_obj['name'] == "test_process")
         assert(proc_obj['pid'] == 0)
 
@@ -232,7 +229,6 @@ class TestTransform(object):
         assert(bin_ref in objects), f"binary_ref with key {proc_obj['binary_ref']} not found"
         file_obj = objects[bin_ref]
 
-    
         assert(file_obj is not None), 'file object type not found'
         assert(file_obj.keys() == {'type', 'parent_directory_ref', 'created', 'modified', 'size', 'name', 'hashes'})
         assert(file_obj['created'] == "2018-08-15T15:11:55.676Z")
@@ -252,7 +248,6 @@ class TestTransform(object):
 
         assert(objects.keys() == set(map(str, range(0, 4))))
 
-
     def test_network_cim_to_stix(self):
         count = 2
         time = "2018-08-21T15:11:55.000+00:00"
@@ -264,9 +259,9 @@ class TestTransform(object):
         transport = "http"
 
         data = {"event_count": count, "_time": time, "user": user,
-                "dest_ip": dest_ip, "dest_port": dest_port, "src_ip": src_ip, 
+                "dest_ip": dest_ip, "dest_port": dest_port, "src_ip": src_ip,
                 "src_port": src_port, "protocol": transport
-        }
+                }
         print(data)
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -280,7 +275,6 @@ class TestTransform(object):
         assert(validated_result.is_valid == True)
         assert('objects' in observed_data)
         objects = observed_data['objects']
-
 
         nt_obj = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert(nt_obj is not None), 'network-traffic object type not found'
@@ -303,8 +297,6 @@ class TestTransform(object):
         assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == src_ip)
 
-
-
     def test_email_cim_to_stix(self):
         count = 3
         time = "2018-08-21T15:11:55.000+00:00"
@@ -313,8 +305,8 @@ class TestTransform(object):
         multi = "False"
 
         data = {"event_count": count, "_time": time,
-                "src_user": src_user, "subject": subject, "is_multipart": multi 
-        }
+                "src_user": src_user, "subject": subject, "is_multipart": multi
+                }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -330,17 +322,15 @@ class TestTransform(object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
 
-
         msg_obj = TestTransform.get_first_of_type(objects.values(), 'email-message')
         assert(msg_obj is not None), 'email-message object type not found'
         assert(msg_obj.keys() == {'type', 'subject', 'sender_ref', 'from_ref', 'is_multipart'})
         assert(msg_obj['subject'] == "Test Subject")
         assert(msg_obj['is_multipart'] == False)
-       
 
         sender_ref = msg_obj['sender_ref']
         assert(sender_ref in objects), f"sender_ref with key {msg_obj['sender_ref']} not found"
-        
+
         addr_obj = objects[sender_ref]
         assert(addr_obj.keys() == {'type', 'value'})
         assert(addr_obj['type'] == 'email-addr')
@@ -348,19 +338,19 @@ class TestTransform(object):
 
         from_ref = msg_obj['from_ref']
         assert(sender_ref in objects), f"from_ref with key {msg_obj['from_ref']} not found"
-        
+
         addr_obj = objects[from_ref]
         assert(addr_obj.keys() == {'type', 'value'})
         assert(addr_obj['type'] == 'email-addr')
         assert(addr_obj['value'] == src_user)
-    
+
     def test_custom_mapping(self):
 
         data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}"
         data = "[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]"
 
         options = {
-            "mapping": { 
+            "mapping": {
                 "tag_to_model": {
                     "network": [
                         "network-traffic",
@@ -436,7 +426,7 @@ class TestTransform(object):
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
-        #somehow breaking the stix validation
+        # somehow breaking the stix validation
         # validated_result = validate_instance(observed_data)
         # assert(validated_result.is_valid == True)
         assert('objects' in observed_data)
@@ -496,24 +486,3 @@ class TestTransform(object):
                   'bGx5LmZpcmVleWUuY29tL21hbHdhcmVfYW5hbHlzaXMvYW5hbHlzZXM/bWFpZD0xIGNzMkxhYmVsPWFub21hbHkgY3MyPW' \
                   '1pc2MtYW5vbWFseSBjczFMYWJlbD1zbmFtZSBjczE9RkVfVVBYO1Ryb2phbi5QV1MuT25saW5lR2FtZXM='
         assert (payload_obj['payload_bin'] == payload)
-
-    def test_payload_results(self):
-            data = {"src_ip": "169.250.0.1", "src_port": "1220", "src_mac": "aa:bb:cc:dd:11:22", "dest_ip": "127.0.0.1", "dest_port": "1120", "dest_mac": "ee:dd:bb:aa:cc:11", "file_hash": "741ad92448fd12a089a13c6de49fb204e4693e1d3e9f7715471c292adf8c6bef", "user": "sname", "url": "https://wally.fireeye.com/malware_analysis/analyses?maid=1", "protocol": "tcp", "_bkt": "main~44~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06", "_cd": "44:12606114", "_indextime": "1546960685", "_raw": "Jan 08 2019 15:18:04 192.168.33.131 fenotify-2.alert: CEF:0|FireEye|MAS|6.2.0.74298|MO|malware-object|4|rt=Jan 08 2019 15:18:04 Z src=169.250.0.1 dpt=1120 dst=127.0.0.1 spt=1220 smac=AA:BB:CC:DD:11:22 dmac=EE:DD:BB:AA:CC:11 cn2Label=sid cn2=111 fileHash=41a26255d16d121dc525a6445144b895 proto=tcp request=http://qa-server.eng.fireeye.com/QE/NotificationPcaps/58.253.68.29_80-192.168.85.128_1165-2119283109_T.exe cs3Label=osinfo cs3=Microsoft Windows7 Professional 6.1 sp1 dvchost=wally dvc=10.2.101.101 cn1Label=vlan cn1=0 externalId=1 cs4Label=link cs4=https://wally.fireeye.com/malware_analysis/analyses?maid=1 cs2Label=anomaly cs2=misc-anomaly cs1Label=sname cs1=FE_UPX;Trojan.PWS.OnlineGames \n", "_serial": "0", "_si": ["splunk3-01.internal.resilientsystems.com", "main"], "_sourcetype": "fe_cef_syslog", "_time": "2019-01-08T15:18:04.000+00:00", "event_count": 1}
-
-            result_bundle = json_to_stix_translator.convert_to_stix(
-                data_source, map_data, [data], transformers.get_all_transformers(), options, callback=hash_type_lookup)
-
-            assert (result_bundle['type'] == 'bundle')
-
-            result_bundle_objects = result_bundle['objects']
-            observed_data = result_bundle_objects[1]
-            # somehow breaking the stix validation
-            # validated_result = validate_instance(observed_data)
-            # assert(validated_result.is_valid == True)
-            assert ('objects' in observed_data)
-            objects = observed_data['objects']
-
-            utf8 = "Jan 08 2019 15:18:04 192.168.33.131 fenotify-2.alert: CEF:0|FireEye|MAS|6.2.0.74298|MO|malware-object|4|rt=Jan 08 2019 15:18:04 Z src=169.250.0.1 dpt=1120 dst=127.0.0.1 spt=1220 smac=AA:BB:CC:DD:11:22 dmac=EE:DD:BB:AA:CC:11 cn2Label=sid cn2=111 fileHash=41a26255d16d121dc525a6445144b895 proto=tcp request=http://qa-server.eng.fireeye.com/QE/NotificationPcaps/58.253.68.29_80-192.168.85.128_1165-2119283109_T.exe cs3Label=osinfo cs3=Microsoft Windows7 Professional 6.1 sp1 dvchost=wally dvc=10.2.101.101 cn1Label=vlan cn1=0 externalId=1 cs4Label=link cs4=https://wally.fireeye.com/malware_analysis/analyses?maid=1 cs2Label=anomaly cs2=misc-anomaly cs1Label=sname cs1=FE_UPX;Trojan.PWS.OnlineGames \n"
-
-
-            assert(observed_data['x_com_splunk_spl']['utf8_payload'] == utf8)
