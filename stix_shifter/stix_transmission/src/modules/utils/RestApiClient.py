@@ -32,7 +32,7 @@ class RestApiClient:
                 self.client_cert_content = None
                 self.client_cert_file_content_exists = False
             else:
-                self.server_cert_content = True
+                self.server_cert_content = False
                 self.server_cert_file_content_exists = False
                 self.client_cert_content = None
                 self.client_cert_file_content_exists = False
