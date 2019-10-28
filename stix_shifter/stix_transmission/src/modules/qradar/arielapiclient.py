@@ -55,7 +55,8 @@ class APIClient():
                                     connection.get('cert', None),
                                     headers,
                                     url_modifier_function,
-                                    connection.get('selfSignedCert', True)
+                                    cert_verify=connection.get('selfSignedCert', True),
+                                    mutual_auth=connection.get('use_securegateway', False)
                                     )
 
     def add_endpoint_to_url_header(self, url, endpoint, headers):

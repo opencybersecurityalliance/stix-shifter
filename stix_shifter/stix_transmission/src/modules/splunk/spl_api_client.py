@@ -26,7 +26,8 @@ class APIClient():
                                     connection.get('port'),
                                     connection.get('cert', None),
                                     headers,
-                                    cert_verify=connection.get('selfSignedCert', True)
+                                    cert_verify=connection.get('selfSignedCert', True),
+                                    mutual_auth=connection.get('use_securegateway', False)
                                     )
         self.auth = configuration.get('auth')
         self.headers = headers

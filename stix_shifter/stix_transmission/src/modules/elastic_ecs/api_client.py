@@ -38,7 +38,8 @@ class APIClient():
                                     connection.get('cert', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True)
+                                    cert_verify=connection.get('selfSignedCert', True),
+                                    mutual_auth=connection.get('use_securegateway', False)
                                     )
 
     def ping_box(self):

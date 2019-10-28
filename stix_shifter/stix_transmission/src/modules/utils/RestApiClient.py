@@ -6,63 +6,67 @@ import os
 import errno
 
 # This is a simple HTTP client that can be used to access the REST API
-
+CLIENT_CERT_NAME = "client_cert.pem"
+SERVER_CERT_NAME = "server_cert.pem"
 
 class RestApiClient:
-    #cert_verify can be True, False, or a Cert
-    def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True):
+    #cert_verify can be True -- do proper signed cert check, False -- skip all cert checks, or a Cert -- use the proper cleint side cert
+    #mutual_auth is in the case the gateway is being used
+    def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True, mutual_auth=False):
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
 
-        if isinstance(cert_verify, bool):
+        #Gateway Case -- use client cert cert_verify is None
+        if mutual_auth:
             self.server_cert_content = None
-            self.server_cert_exist = False
-            self.cert_verify = cert_verify
+            self.server_cert_file_content_exists = False
+            self.client_cert_content = cert
+            self.client_cert_file_content_exists = True
+        #verify is true or false
+        elif isinstance(cert_verify, bool):
+            if cert_verify:
+                self.server_cert_content = True
+                self.server_cert_file_content_exists = False
+                self.client_cert_content = None
+                self.client_cert_file_content_exists = False
+            else:
+                self.server_cert_content = True
+                self.server_cert_file_content_exists = False
+                self.client_cert_content = None
+                self.client_cert_file_content_exists = False
+        #server cert provided
         elif isinstance(cert_verify, str):
             self.server_cert_content = cert_verify
-            self.server_cert_exist = True
-            self.cert_verify = None
-
-        if cert is not None:
-            self.client_cert_exist = True
-            #ignore server cert if we have cert set
-            self.server_cert_content = None
-        else:
-            self.client_cert_exist = False
-
-        self.client_cert_content = cert
-        self.client_cert = "client_cert.pem"
-        self.server_cert = "server_cert.pem"
+            self.server_cert_file_content_exists = True
+            self.client_cert_content = None
+            self.client_cert_file_content_exists = False
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None):
-        #convert client cert to file
         try:
-            if self.client_cert_content is not None:
-                with open(self.client_cert, 'w') as f:
+
+            # convert client cert to file
+            if self.client_cert_file_content_exists is True:
+                with open(CLIENT_CERT_NAME, 'w') as f:
                     try:
                         f.write(self.client_cert_content)
+                        self.client_cert_content = CLIENT_CERT_NAME
                     except IOError:
                         print('Failed to setup certificate')
-                self.client_cert_content = self.client_cert
-            else:
-                self.client_cert_content = None
 
             # covnert server cert to file
-            if self.server_cert_content is not None:
-                with open(self.server_cert, 'w') as f:
+            if self.server_cert_file_content_exists is True:
+                with open(SERVER_CERT_NAME, 'w') as f:
                     try:
                         f.write(self.server_cert_content)
+                        self.server_cert_content = SERVER_CERT_NAME
                     except IOError:
                         print('Failed to setup certificate')
-                self.server_cert_content = self.server_cert
-            else:
-                self.server_cert_content = None
 
             url = None
             actual_headers = self.headers.copy()
@@ -98,15 +102,15 @@ class RestApiClient:
                 print('exception occured during requesting url: ' + str(e))
                 raise e
         finally:
-            if self.server_cert_exist:
+            if self.server_cert_file_content_exists is True:
                 try:
-                    os.remove(self.server_cert)
+                    os.remove(SERVER_CERT_NAME)
                 except OSError as e:
                     if e.errno != errno.ENOENT:
                         raise
-            if self.client_cert_exist:
+            if self.client_cert_file_content_exists is True:
                 try:
-                    os.remove(self.client_cert)
+                    os.remove(CLIENT_CERT_NAME)
                 except OSError as e:
                     if e.errno != errno.ENOENT:
                         raise
