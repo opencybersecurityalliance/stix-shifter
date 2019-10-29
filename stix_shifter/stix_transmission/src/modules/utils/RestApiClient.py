@@ -24,6 +24,7 @@ class RestApiClient:
             self.server_cert_file_content_exists = False
             self.client_cert_content = cert
             self.client_cert_file_content_exists = True
+            self.client_cert_file_content = cert
         #verify is true or false
         elif isinstance(cert_verify, bool):
             if cert_verify:
@@ -40,6 +41,7 @@ class RestApiClient:
         elif isinstance(cert_verify, str):
             self.server_cert_content = cert_verify
             self.server_cert_file_content_exists = True
+            self.server_cert_file_content = cert_verify
             self.client_cert_content = None
             self.client_cert_file_content_exists = False
 
@@ -54,7 +56,7 @@ class RestApiClient:
             if self.client_cert_file_content_exists is True:
                 with open(CLIENT_CERT_NAME, 'w') as f:
                     try:
-                        f.write(self.client_cert_content)
+                        f.write(self.client_cert_file_content)
                         self.client_cert_content = CLIENT_CERT_NAME
                     except IOError:
                         print('Failed to setup certificate')
@@ -63,7 +65,7 @@ class RestApiClient:
             if self.server_cert_file_content_exists is True:
                 with open(SERVER_CERT_NAME, 'w') as f:
                     try:
-                        f.write(self.server_cert_content)
+                        f.write(self.server_cert_file_content)
                         self.server_cert_content = SERVER_CERT_NAME
                     except IOError:
                         print('Failed to setup certificate')
