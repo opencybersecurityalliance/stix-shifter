@@ -20,13 +20,7 @@ class APIClient():
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of the RestApiClient
     def __init__(self, connection, configuration):
-        # It is re-written for Guardium
-        # Start logging based on logLevel -- for debugging purpuse -- SB
-        logFile = "../runlogs/stix_shifter_run.log"
-        logging.basicConfig(filename=logFile, level=logging.DEBUG,
-                        format='%(asctime)s - %(levelname)s - %(message)s')
-        logging.info('-----------Run Started.------------')
-
+#
         self.endpoint_start = 'restAPI/'
         self.connection = connection
         self.configuration = configuration
@@ -38,7 +32,7 @@ class APIClient():
 
 #
 # Check if connection object contains the following
-        self.credential_filepath = "./stix_shifter/stix_transmission/src/modules/guardium/credentials/"
+ 
         username = connection.get("username", None)
         password = connection.get("password", None)
         grant_type = connection.get("grant_type", None)
@@ -47,6 +41,10 @@ class APIClient():
         access_token = connection.get("guardium_access_token", None)
         expiresTimestamp = connection.get(
             "guardium_token_expiryTimestamp", None)
+#
+#       if the connection object does not contain the credential -- it can be picked from this folder
+#       this may not be implemented.
+        self.credential_filepath = "./stix_shifter/stix_transmission/src/modules/guardium/credentials/"
 #
         if(username is None or password is None or grant_type is None or client_id is None or client_secret is None):
             self.credential = {}

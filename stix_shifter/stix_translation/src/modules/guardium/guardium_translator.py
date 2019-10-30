@@ -14,3 +14,10 @@ class Translator(BaseTranslator):
         self.mapping_filepath = filepath
         self.result_translator = JSONToStix(filepath)
         self.query_translator = StixToQuery()
+        #
+        # It is for Guardium
+        # Start logging based on logLevel -- for debugging purpuse -- SB
+        logFile = "../runlogs/ss_guardium_translation_run.log"
+        logging.basicConfig(filename=logFile, level=logging.DEBUG,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.info('-----------Translation Run Started.------------')

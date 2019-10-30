@@ -1,6 +1,7 @@
 from ..base.base_results_connector import BaseResultsConnector
 import json
 from .....utils.error_response import ErrorResponder
+import logging
 
 
 class GuardiumResultsConnector(BaseResultsConnector):
@@ -23,7 +24,7 @@ class GuardiumResultsConnector(BaseResultsConnector):
         if response_code == 200:
             return_obj['success'] = True
             return_obj['data'] = response_dict
-            print(response.read())
+            logging.debug(response_dict)
             return_obj["search_id"] = search_id
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])

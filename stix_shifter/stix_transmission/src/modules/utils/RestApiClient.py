@@ -59,7 +59,7 @@ class RestApiClient:
 #  Subroto: Replaced the above line with the following because params is not passed to the call though the
 #  'call_api' signature has params as a parameter.
 #
-# This hese code is added because Guardium api requires 'params' to be sent to get the 
+# This code is added because Guardium api requires 'params' to be sent to get the 
 # Authorization token AND 'data' to be sent to retrieve report information
 #
                 logging.debug(url)
