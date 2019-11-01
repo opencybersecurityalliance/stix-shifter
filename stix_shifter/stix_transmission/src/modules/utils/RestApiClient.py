@@ -23,29 +23,29 @@ class RestApiClient:
         self.sni = None
         #Gateway Case -- use client cert cert_verify is None
         if mutual_auth:
-            self.server_cert_call_value = None
+            self.server_cert_content = None
             self.server_cert_file_content_exists = False
-            self.client_cert_call_value = CLIENT_CERT_NAME
+            self.client_cert_content = CLIENT_CERT_NAME
             self.client_cert_file_content_exists = True
             self.client_cert_file_content = cert
         #verify is true or false
         elif isinstance(cert_verify, bool):
             if cert_verify:
-                self.server_cert_call_value = True
+                self.server_cert_content = True
                 self.server_cert_file_content_exists = False
-                self.client_cert_call_value = None
+                self.client_cert_content = None
                 self.client_cert_file_content_exists = False
             else:
-                self.server_cert_call_value = False
+                self.server_cert_content = False
                 self.server_cert_file_content_exists = False
-                self.client_cert_call_value = None
+                self.client_cert_content = None
                 self.client_cert_file_content_exists = False
         #server cert provided
         elif isinstance(cert_verify, str):
-            self.server_cert_call_value = SERVER_CERT_NAME
+            self.server_cert_content = SERVER_CERT_NAME
             self.server_cert_file_content_exists = True
             self.server_cert_file_content = cert_verify
-            self.client_cert_call_value = None
+            self.client_cert_content = None
             self.client_cert_file_content_exists = False
             if sni is not None:
                 self.sni = sni
@@ -103,7 +103,7 @@ class RestApiClient:
                     actual_headers["Host"] = self.sni
 
                 response = call(url, headers=actual_headers,
-                                cert=self.client_cert_call_value, data=data, verify=self.server_cert_call_value)
+                                cert=self.client_cert_content, data=data, verify=self.server_cert_content)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                         and "Deprecated" in response.headers['Content-Type']:
