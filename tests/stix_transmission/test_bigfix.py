@@ -304,7 +304,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "ERROR"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 
