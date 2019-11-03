@@ -4,6 +4,7 @@ python-dateutil>=2.7.3
 antlr4-python3-runtime==4.7
 boto3>=1.9.76
 xmltodict>=0.11.0
+requests_toolbelt==0.9.1
 pandas>=0.25.0
 ibmcloudsql>=0.3.6
 flatten_json==0.1.7
