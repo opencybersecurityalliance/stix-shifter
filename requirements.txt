@@ -6,4 +6,5 @@ boto3>=1.9.76
 xmltodict>=0.11.0
 pandas>=0.25.0
 ibmcloudsql>=0.3.6
+flatten_json==0.1.7
 # git+git://github.com/oasis-open/cti-pattern-matcher.git@v0.1.0#egg=stix2-matcher #uncomment when running locally
