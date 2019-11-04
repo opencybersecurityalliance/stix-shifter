@@ -1,0 +1,80 @@
+{
+
+  "author_id": {
+    "key": "author.user_id"
+  },
+
+  "author_account_id": {
+    "key": "author.author_account_id"
+  },
+
+  "author_email": {
+    "key": "author.email_id"
+  },
+
+  "context_resource_name": {
+    "key": "context.context_resource_name",
+    "cybox": false
+  },
+  "description": {
+    "key": "finding.description",
+    "cybox": false
+  },
+  "finding_severity": {
+    "key": "finding.finding_severity",
+    "cybox": false
+  },
+  "id": {
+    "key": "finding.id",
+    "cybox": false
+  },
+
+  "long_description": {
+    "key": "finding.long_description",
+    "cybox": false
+  },
+  "message": {
+    "key": "finding.message",
+    "cybox": false
+  },
+  "name": {
+    "key": "author.name",
+    "cybox": false
+  },
+  "note_name": {
+    "key": "finding.note_name",
+    "cybox": false
+  },
+  "provider_id": {
+    "key": "provider.provider_id",
+    "cybox": false
+  },
+  "provider_name": {
+    "key": "provider.provider_name",
+    "cybox": false
+  },
+  "remediation": {
+    "key": "finding.remediation",
+    "cybox": false
+  },
+  "reported_by_id": {
+    "key": "provider.reported_by_id",
+    "cybox": false
+  },
+  "reported_by_title": {
+    "key": "provider.reported_by_title",
+    "cybox": false
+  },
+  "short_description": {
+    "key": "finding.short_description",
+    "cybox": false
+  },
+  "finding_next_steps_0_title": {
+    "key": "finding.finding_next_steps_0_title",
+    "cybox": false
+  },
+  "context_resource_type": {
+    "key": "context.context_resource_type",
+    "cybox": false
+  }
+}
