@@ -271,9 +271,6 @@ def transmit(args):
         is_async
     >
     """
-    #print("------------")
-    #print(args)
-    #print('------------')
     connection_dict = json.loads(args.connection)
     configuration_dict = json.loads(args.configuration)
     transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)

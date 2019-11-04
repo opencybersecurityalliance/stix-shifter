@@ -1,5 +1,5 @@
 {
-  "x_Guardium": {
+  "x_guardium": {
     "fields": {
       "datacategory": ["datacategory"],
       "start": ["QUERY_FROM_DATE"],
@@ -18,13 +18,13 @@
       "value": ["QUERY_TO_DATE"]
     }
   },
-  "x_Guardium_db_info": {
+  "x_guardium_db_info": {
     "fields": {
       "database_name": ["DATABASENAME"],
       "value": ["DATABASENAME"]
     }
   },
-  "x_Guardium_exception": {
+  "x_guardium_exception": {
     "fields": {
       "errorcode": ["ERRORCODE"]
     }

@@ -85,13 +85,11 @@ class QueryStringPatternTranslator:
         print(repCall)
         regex = r"([a-zA-Z_]+)(\s=)"
         out_str = re.sub(regex, r"'\1' :", repCall,0)
-        print(out_str)
+        logging.debug("Regex - out_str:" + str(out_str))
         # Create the Json structure
-        #regex1 = r"(\s[\(]+\')"
         regex1 = r"\(|\)"
         out_str = re.sub(regex1, "", out_str,0)
-
-        #regex2 = r"\sAND\s|[\)]+\sAND\s[\(]+"
+#
         regex2 = r"\sAND\s"
         out_str = "{" + re.sub(regex2, "} AND {", out_str,0) + "}"
         #
@@ -106,17 +104,17 @@ class QueryStringPatternTranslator:
         #
         regex6 = r"(T|P)\'[\s\:t]+"
         out_str = re.sub(regex6, r"\1' : ", out_str,0)
-        print(out_str)
+        logging.debug("Regex6 - out_str:" + str(out_str))
         #
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
         regex7 = r"\sOR|\sAND"
         out_str = re.sub(regex7, r",", out_str,0)
-        #print(out_str)
+        logging.debug("Regex7 - out_str:" + str(out_str))
         # Single quotes have to be replaced by double quotes in order to make it as an Json obj
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str,0) + "]"
-        print(out_str)
+        logging.debug("Regex8 - out_str:" + str(out_str))
         #
         jParams_def = json.loads(out_str)
         return jParams_def
@@ -495,12 +493,13 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 #Subroto: added code to support report search parameters are "and" when sent to Guardium
 #
 #   Limit recursive call to build an array of report parameters
-    sys.setrecursionlimit(500)
+#   Minimum is 500.
+#   Increase the limit if required in the future; un-comment the line below and change the limit
+#   sys.setrecursionlimit(500)
 # translate the structure of reportCall that
     jRepCall = guardiumQueryTranslator.trnsfReportCall2Json(reportCall)
     logging.debug("reportCall converted to Json -->")
     logging.debug(json.dumps(jRepCall, indent=4))
-    #print(json.dumps(jRepCall, indent=4))
     resArray = []
     resPos = 0
     outArray = guardiumQueryTranslator.buildArrayOfGuardiumReportParams(resArray, resPos, None, jRepCall, None)
