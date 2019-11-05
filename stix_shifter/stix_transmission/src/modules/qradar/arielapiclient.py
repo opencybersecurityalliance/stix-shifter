@@ -21,7 +21,8 @@ class APIClient():
         self.endpoint_start = 'api/ariel/'
         self.urldata = {}
         headers = dict()
-        host_port = connection.get('host') + ':' + str(connection.get('port', ''))
+        host_port = connection.get('host') + ':' + \
+            str(connection.get('port', ''))
         headers['version'] = '8.0'
         headers['accept'] = 'application/json'
         auth = configuration.get('auth')
@@ -40,7 +41,8 @@ class APIClient():
                     host_port + '/'  # + endpoint, is set by 'add_endpoint_to_url_header'
                 host_port = proxy.get('x_forward_proxy')
                 if proxy.get('x_forward_proxy_auth', None) is not None:
-                    headers['x-forward-auth'] = proxy.get('x_forward_proxy_auth')
+                    headers['x-forward-auth'] = proxy.get(
+                        'x_forward_proxy_auth')
                 headers['user-agent'] = 'UDS'
                 url_modifier_function = self.add_endpoint_to_url_header
 
@@ -53,7 +55,9 @@ class APIClient():
                                     connection.get('cert', None),
                                     headers,
                                     url_modifier_function,
-                                    connection.get('cert_verify', 'True')
+                                    cert_verify=connection.get('selfSignedCert', True),
+                                    mutual_auth=connection.get('use_securegateway', False),
+                                    sni=connection.get('sni', None)
                                     )
 
     def add_endpoint_to_url_header(self, url, endpoint, headers):

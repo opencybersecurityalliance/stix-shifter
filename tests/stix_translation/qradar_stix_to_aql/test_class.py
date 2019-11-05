@@ -327,3 +327,11 @@ class TestStixToAql(unittest.TestCase, object):
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_filepath_queries(self):
+        first_path = 'C:/first/file/path'
+        second_path = 'D:/second/file/path'
+        stix_pattern = "[(file:parent_directory_ref = '{}' OR directory:path = '{}')]".format(first_path, second_path)
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filepath = '{}' OR filepath = '{}' {} {}".format(second_path, first_path, default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
