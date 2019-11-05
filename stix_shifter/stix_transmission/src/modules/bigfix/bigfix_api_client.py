@@ -53,6 +53,5 @@ class APIClient:
                                    self.connection.get('port'),
                                    self.connection.get('cert', None),
                                    self.headers,cert_verify=self.connection.get('selfSignedCert', True),
-                                   mutual_auth=self.connection.get('use_securegateway', False),
-                                   sni=self.connection.get('sni', None))
+                                   mutual_auth=self.connection.get('use_securegateway', False))
         return api_client
