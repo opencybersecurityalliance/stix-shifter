@@ -15,6 +15,9 @@ def find(s_key , superset):
             if( str(s_key) == str(value) ):
                 out.append(item)
 
+            if( str(s_key) == "'" +str(value) + "'" ):
+                out.append(item)
+
     return out  
 
 def and_operation(entites , set):

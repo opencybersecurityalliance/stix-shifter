@@ -16,7 +16,9 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
 
     def create_query_connection(self, query):
 
-        query = eval(query)
+        if( isinstance(query , str) ):
+            query = eval(query)
+        
         list_or =[]
         list_and = []
 
@@ -28,6 +30,8 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
 
             if( len(elem) ==1  ):
                 solved  = StixPatternParser().statement_parser.parser(elem[0])
+
+                print("solved --", solved)
                 output = query_func(solved , set_occ )
                 list_or.append(output)
     
@@ -35,6 +39,9 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
 
                 for finding in elem:
                     solved  = StixPatternParser().statement_parser.parser(finding)
+
+                    print("solved --", solved)
+
                     output = query_func(solved, set_occ)
                     list_and.append(output)
 
@@ -70,4 +77,5 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
                 for finding in sub_elem:
                     l.append(finding)
 
+        
         return json.dumps(l)
