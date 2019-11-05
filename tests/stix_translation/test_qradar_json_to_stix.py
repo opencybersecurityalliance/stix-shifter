@@ -386,7 +386,6 @@ class TestTransform(object):
 
         file_object = TestTransform.get_first_of_type(objects.values(), 'file')
         assert(file_object is not None), 'file object not found'
-        assert(file_object.get('parent_directory_ref'))
         hashes = file_object['hashes']
         assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
