@@ -21,7 +21,7 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
 
         try :
             r = requests.get(url,headers= header)
-            return r.status_code
+            return r.json()
 
         except Exception as e :
             print("some error occured getting Provider !!", str(e))
