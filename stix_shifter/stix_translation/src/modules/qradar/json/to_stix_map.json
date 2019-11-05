@@ -163,11 +163,6 @@
     {
       "key": "directory.path",
       "object": "dir"
-    },
-    {
-      "key": "file.parent_directory_ref",
-      "object": "fl",
-      "references": "dir"
     }
   ],
   "base64_payload": {
