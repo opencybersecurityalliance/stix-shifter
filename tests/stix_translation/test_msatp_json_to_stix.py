@@ -19,7 +19,7 @@ options = {}
 
 class TestMsatpResultsToStix(unittest.TestCase):
     """
-    class to perform unit test case for bigfix translate results
+    class to perform unit test case for msatp translate results
     """
 
     @staticmethod
@@ -345,7 +345,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj is None
 
     def test_mac_json_to_stix(self):
-        """to test network stix object properties"""
+        """to test mac stix object properties"""
         data = {'NetworkCommunicationEvents': {'EventTime': '2019-09-20T06:24:16.830101Z',
                                                'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'ComputerName': 'desktop-536bt46', 'LocalIP': '172.16.2.22',

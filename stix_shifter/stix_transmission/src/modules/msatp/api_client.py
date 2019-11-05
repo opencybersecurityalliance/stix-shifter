@@ -28,7 +28,9 @@ class APIClient:
                                     connection.get('cert', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('cert_verify', 'True')
+                                    cert_verify=connection.get('selfSignedCert', True),
+                                    mutual_auth=connection.get('use_securegateway', False),
+                                    sni=connection.get('sni', None)
                                     )
 
     def ping_box(self):
@@ -37,7 +39,7 @@ class APIClient:
         return self.client.call_api(endpoint, 'GET')
 
     def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
-        """get the response from MS_atp endpoints
+        """get the response from MSatp endpoints
         :param query_expression: str, search_id
         :param offset: int,offset value
         :param length: int,length value

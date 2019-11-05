@@ -13,7 +13,7 @@ FLOOR_TIME = '| extend FormattedTimeKey = bin(EventTime, 1m)'
 
 class QueryStringPatternTranslator:
     """
-    Stix to KQL query translation
+    Stix to kusto query translation
     """
     comparator_lookup = {
         ComparisonExpressionOperators.And: "and",
@@ -30,7 +30,7 @@ class QueryStringPatternTranslator:
         ObservationOperators.Or: 'OR',
         ObservationOperators.And: 'OR'
     }
-
+    # STIX attribute to MSATP table mapping
     msatp_lookup_table = {"file": "FileCreationEvents",
                           "process": "ProcessCreationEvents",
                           "user-account": "ProcessCreationEvents",
@@ -38,12 +38,15 @@ class QueryStringPatternTranslator:
                           "ipv6-addr": "NetworkCommunicationEvents",
                           "network-traffic": "NetworkCommunicationEvents",
                           "url": "NetworkCommunicationEvents",
-                          "windows-registry-key": "RegistryEvents"
+                          "windows-registry-key": "RegistryEvents",
+                          "x-com-msatp": "FileCreationEvents",
+                          "directory": "FileCreationEvents"
                           }
+    # Join query to get MAC address value from MachineNetworkInfo
     join_query = ' | join kind= inner (MachineNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
                  'IPAddresses) | extend IP = IPAddresses.IPAddress | project EventTime ,MachineId , MacAddress, IP, ' \
                  'FormattedTimeKey) on MachineId, $left.FormattedTimeKey ' \
-                 '== $right.FormattedTimeKey | where LocalIP == IP | where {relevance} | order by EventTime desc'
+                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by EventTime desc'
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
@@ -128,7 +131,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _check_value_type(value, expression):
         """
-        Function returning the type of value i.e mac, ipv4, ipv6
+        Function returning value type 'mac'
         :param value: str
         :return: list
         """
@@ -268,10 +271,10 @@ class QueryStringPatternTranslator:
 
     def _parse_expression(self, expression, qualifier=None):
         """
-        Complete formation of relevance query from ANTLR expression object
+        Complete formation of Kusto query from ANTLR expression object
         :param expression: expression object, ANTLR parsed expression object
         :param qualifier: str, default in None
-        :return: None or relevance query as the method call is recursive
+        :return: None or kusto query as the method call is recursive
         """
         if isinstance(expression, ComparisonExpression):  # Base Case
             return self.__eval_comparison_exp(expression)
@@ -280,15 +283,15 @@ class QueryStringPatternTranslator:
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not expression_01:
-                relevance_query = "{}".format(expression_02)
+                kusto_query = "{}".format(expression_02)
             elif not expression_02:
-                relevance_query = "{}".format(expression_01)
+                kusto_query = "{}".format(expression_01)
             else:
                 return "({}) {} ({})".format(expression_01, operator, expression_02)
-            return relevance_query
+            return kusto_query
         elif isinstance(expression, ObservationExpression):
-            relevance_query = self.__eval_observation_exp(expression, qualifier)
-            final_comparison_exp = '({})'.format(relevance_query)
+            kusto_query = self.__eval_observation_exp(expression, qualifier)
+            final_comparison_exp = '({})'.format(kusto_query)
             self.qualified_queries.append(final_comparison_exp)
             return None
         elif isinstance(expression, CombinedObservationExpression):
@@ -315,25 +318,24 @@ class QueryStringPatternTranslator:
         self.lookup_table = []
         self.get_lookup_table_of_obs_exp(expression.comparison_expression, self.lookup_table,
                                          self.msatp_lookup_table)
-        relevance_query = self._parse_expression(expression.comparison_expression)
+        kusto_query = self._parse_expression(expression.comparison_expression)
         self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
         self.qualifier_string = self.clean_format_string(self.qualifier_string)
         self.lookup_table_object = 'find withsource = TableName in ({})'.format(self.lookup_table_object)
         if self._is_mac:
-            relevance_query = self.lookup_table_object + self.qualifier_string + FLOOR_TIME + \
-                              self.join_query.format(relevance=relevance_query, qualifier_string='|' +
-                                                                                                 self.qualifier_string,
-                                                     floor_time=FLOOR_TIME)
+            kusto_query = self.lookup_table_object + self.qualifier_string + FLOOR_TIME + \
+                          self.join_query.format(mac_query=kusto_query, qualifier_string='|' + self.qualifier_string,
+                                                 floor_time=FLOOR_TIME)
         else:
-            relevance_query = self.lookup_table_object + self.qualifier_string + '| order by EventTime desc | ' \
-                                                                                 'where ' + relevance_query
-        return relevance_query
+            kusto_query = self.lookup_table_object + self.qualifier_string + '| order by EventTime desc | ' \
+                                                                             'where ' + kusto_query
+        return kusto_query
 
     def parse_expression(self, pattern: Pattern):
         """
-        parse_expression --> Native query
+        parse_expression --> Kusto query
         :param pattern: expression object, ANTLR parsed expression object
-        :return:str, relevance query(native query)
+        :return:str, Kusto query(native query)
         """
         return self._parse_expression(pattern)
 
@@ -378,6 +380,12 @@ class QueryStringPatternTranslator:
         mapped_from_stix_list = mapped_mac_list if mapped_mac_list else mapped_list
         if stix_field == 'created':
             value = self._format_datetime(expression.value, expression)
+        elif 'path' in stix_field:
+            if comparator == self.comparator_lookup.get(ComparisonComparators.Like):
+                value, comparator = self._format_like(expression.value, comparator)
+            else:
+                raise TypeError("Comparator {comparator} unsupported for Directory Path, use only LIKE operator"
+                                .format(comparator=comparator))
         else:
             value, comparator = self.__eval_comparison_value(expression, comparator)
         comparison_string = self._parse_mapped_fields(expression, value, comparator,
@@ -390,17 +398,19 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapper, options):
     """
-    Conversion of expression object to KQL query
-    :param pattern: expression object, ANTLR parsed exrepssion object
+    Conversion of expression object to kusto query
+    :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapper: DataMapper object, mapping object obtained by parsing from_stix_map.json
     :param options: dict,timerange defaults to 5
-    :return: str, KQL query
+    :return: str, kusto query
     """
     timerange = options['timerange']
-    final_queries = []
     translated_dictionary = QueryStringPatternTranslator(pattern, data_model_mapper, timerange)
-    final_query = translated_dictionary.qualified_queries
-    if len(final_query) > 1:
-        final_queries.append('union {}'.format(','.join(final_query)))
-        return final_queries
+    translated_query = translated_dictionary.qualified_queries
+    if len(translated_query) > 1:
+        # Query formation for multiple observation expression
+        final_query = ['union {}'.format(','.join(translated_query))]
+    else:
+        # Query formation for single observation expression
+        final_query = translated_query
     return final_query

@@ -57,7 +57,14 @@
         "ProcessCreationEvents.InitiatingProcessMD5",
         "NetworkCommunicationEvents.InitiatingProcessMD5",
         "RegistryEvents.InitiatingProcessMD5"
-      ]
+      ],
+      "parent_directory_ref.path": [
+        "FileCreationEvents.FolderPath",
+        "FileCreationEvents.InitiatingProcessFolderPath",
+        "ProcessCreationEvents.FolderPath",
+        "ProcessCreationEvents.InitiatingProcessFolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"]
     }
   },
   "process" : {
@@ -68,7 +75,6 @@
         "NetworkCommunicationEvents.InitiatingProcessParentFileName",
         "RegistryEvents.InitiatingProcessFileName",
         "RegistryEvents.InitiatingProcessParentFileName"
-
       ],
       "parent_ref.name": [
         "ProcessCreationEvents.InitiatingProcessFileName",
@@ -125,7 +131,12 @@
         "NetworkCommunicationEvents.InitiatingProcessParentCreationTime",
         "RegistryEvents.InitiatingProcessParentCreationTime"
       ],
-      "parent_ref.parent_ref.created": ["ProcessCreationEvents.InitiatingProcessParentCreationTime"]
+      "parent_ref.parent_ref.created": ["ProcessCreationEvents.InitiatingProcessParentCreationTime"],
+      "binary_ref.parent_directory_ref.path": [
+        "ProcessCreationEvents.FolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"],
+      "parent_ref.binary_ref.parent_directory_ref.path": ["ProcessCreationEvents.InitiatingProcessFolderPath"]
     }
   },
   "user-account": {
@@ -151,6 +162,34 @@
   "mac-addr": {
     "fields": {
       "value": ["MachineNetworkInfo.MacAddress"]
+    }
+  },
+  "x-com-msatp": {
+    "fields": {
+      "computer_name": [
+        "FileCreationEvents.ComputerName",
+        "ProcessCreationEvents.ComputerName",
+        "NetworkCommunicationEvents.ComputerName",
+        "RegistryEvents.ComputerName"
+      ],
+      "machine_id": [
+        "FileCreationEvents.MachineId",
+        "ProcessCreationEvents.MachineId",
+        "NetworkCommunicationEvents.MachineId",
+        "RegistryEvents.MachineId"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "FileCreationEvents.FolderPath",
+        "FileCreationEvents.InitiatingProcessFolderPath",
+        "ProcessCreationEvents.FolderPath",
+        "ProcessCreationEvents.InitiatingProcessFolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"
+      ]
     }
   }
 }

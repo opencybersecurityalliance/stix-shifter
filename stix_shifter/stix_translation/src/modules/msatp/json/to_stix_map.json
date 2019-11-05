@@ -227,7 +227,11 @@
       }
     ],
     "ComputerName": {
-      "key": "x_com_msatp.computer_identity",
+      "key": "x_com_msatp.computer_name",
+      "cybox": false
+    },
+    "MachineId": {
+      "key": "x_com_msatp.machine_id",
       "cybox": false
     },
     "event_count": {
@@ -532,7 +536,11 @@
       }
     ],
     "ComputerName": {
-      "key": "x_com_msatp.computer_identity",
+      "key": "x_com_msatp.computer_name",
+      "cybox": false
+    },
+    "MachineId": {
+      "key": "x_com_msatp.machine_id",
       "cybox": false
     },
     "event_count": {
@@ -728,7 +736,11 @@
       }
     ],
     "ComputerName": {
-      "key": "x_com_msatp.computer_identity",
+      "key": "x_com_msatp.computer_name",
+      "cybox": false
+    },
+    "MachineId": {
+      "key": "x_com_msatp.machine_id",
       "cybox": false
     },
     "event_count": {
@@ -905,7 +917,11 @@
       }
     ],
     "ComputerName": {
-      "key": "x_com_msatp.computer_identity",
+      "key": "x_com_msatp.computer_name",
+      "cybox": false
+    },
+    "MachineId": {
+      "key": "x_com_msatp.machine_id",
       "cybox": false
     },
     "event_count": {

@@ -52,19 +52,16 @@ class Connector(BaseConnector):
 
     def ping(self):
         """Ping the endpoint."""
-        response_txt = None
         return_obj = dict()
-        try:
-            if self.init_error is not None:
-                raise Exception(self.init_error)
-            response = self.api_client.ping_box()
-            return self._handle_errors(response, return_obj)
-        except Exception as ex:
-            if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
-            else:
-                raise ex
+        if self.init_error is not None:
+            raise Exception(self.init_error)
+        response = self.api_client.ping_box()
+        response_code = response.code
+        if 200 <= response_code < 300:
+            return_obj['success'] = True
+        else:
+            ErrorResponder.fill_error(return_obj, message='unexpected exception')
+        return return_obj
 
     def create_query_connection(self, query):
         """query_connection status

@@ -16,7 +16,7 @@ def _remove_timestamp_from_query(queries):
 
 class TestStixToQuery(unittest.TestCase):
     """
-    class to perform unit test case bigfix translate query
+    class to perform unit test case msatp translate query
     """
 
     def _test_query_assertions(self, query, queries):
@@ -70,7 +70,6 @@ class TestStixToQuery(unittest.TestCase):
         stix_pattern = "[mac-addr:value = '48:4D:7E:9D:BD:97'] START t'2019-09-01T08:43:10.003Z' STOP " \
                        "t'2019-10-10T10:43:10.003Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             '(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime('
@@ -81,20 +80,28 @@ class TestStixToQuery(unittest.TestCase):
             'EventTime ,MachineId , MacAddress, IP, FormattedTimeKey) on MachineId, $left.FormattedTimeKey == '
             '$right.FormattedTimeKey | where LocalIP == IP | where MacAddress =~ "484D7E9DBD97" | order by EventTime '
             'desc)']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_registry_comp_exp(self):
         stix_pattern = "[windows-registry-key:values[*] IN ('SD', 'Index')] START t'2019-09-01T08:43:10.003Z' STOP " \
                        "t'2019-10-10T10:43:10.003Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             '(find withsource = TableName in (RegistryEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) '
             'and EventTime < datetime(2019-10-10T10:43:10.003Z) | order by EventTime desc | where RegistryValueName '
             'in~ ("SD", "Index"))']
-        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
+
+    def test_directory_comp_exp(self):
+        stix_pattern = "[directory:path LIKE 'ProgramData' OR ipv6-addr:value = 'fe80::4161:ca84:4dc5:f5fc'] " \
+                       "START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
+        query = translation.translate('msatp', 'query', '{}', stix_pattern)
+
+        queries = ['(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime('
+                   '2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime '
+                   'desc | where (LocalIP =~ "fe80::4161:ca84:4dc5:f5fc" or RemoteIP =~ "fe80::4161:ca84:4dc5:f5fc") '
+                   'or (InitiatingProcessFolderPath contains "ProgramData"))']
         self._test_query_assertions(query, queries)
 
     def test_gt_eq_datetime_comp_exp(self):
@@ -125,13 +132,11 @@ class TestStixToQuery(unittest.TestCase):
         stix_pattern = "[process:name != 'consent.exe'] START t'2019-09-10T08:43:10.003Z' STOP " \
                        "t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             '(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime('
             '2019-09-10T08:43:10.003Z) and EventTime < datetime(2019-09-23T10:43:10.453Z) | order by EventTime desc | '
             'where FileName !~ "consent.exe")']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_like_comp_exp(self):
@@ -176,43 +181,38 @@ class TestStixToQuery(unittest.TestCase):
         stix_pattern = "[process:name IN ('consent.exe', 'reg.exe') OR file:name = 'updater.exe'] START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             '(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime('
-            '2019-09-24T15:39:47.365329Z) and EventTime < datetime(2019-09-24T15:44:47.365329Z) | order by EventTime '
-            'desc | where (FileName =~ "updater.exe" or InitiatingProcessFileName =~ "updater.exe" or '
+            '2019-09-10T08:43:10.003Z) and EventTime < datetime(2019-09-23T10:43:10.453Z) | order by EventTime desc | '
+            'where (FileName =~ "updater.exe" or InitiatingProcessFileName =~ "updater.exe" or '
             'InitiatingProcessParentFileName =~ "updater.exe") or (FileName in~ ("consent.exe", "reg.exe")))']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_comb_comparison_exp_1(self):
         stix_pattern = "[network-traffic:src_port = '454' OR process:name NOT = 'python.exe'] START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             '(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime('
-            '2019-09-24T18:37:33.390816Z) and EventTime < datetime(2019-09-24T18:42:33.390816Z) | order by EventTime '
-            'desc | where ((not (InitiatingProcessFileName =~ "python.exe" or InitiatingProcessParentFileName =~ '
+            '2019-09-10T08:43:10.003Z) and EventTime < datetime(2019-09-23T10:43:10.453Z) | order by EventTime desc | '
+            'where ((not (InitiatingProcessFileName =~ "python.exe" or InitiatingProcessParentFileName =~ '
             '"python.exe"))) or (tostring(LocalPort) =~ "454"))']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_comb_observation_obs(self):
-        stix_pattern = "[process:created = '2019-09-04T09:29:29.0882Z'] OR [file:name LIKE 'upd_ter.exe'] START " \
-                       "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
+        stix_pattern = "[process:created = '2019-09-04T09:29:29.0882Z'] OR [file:name LIKE 'upd_ter.exe']"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
             'union (find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime('
-            '2019-09-24T15:54:00.736219Z) and EventTime < datetime(2019-09-24T15:59:00.736219Z) | order by EventTime '
-            'desc | where tostring(ProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)),(find withsource = '
-            'TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-24T15:54:00.736219Z) and EventTime '
-            '< datetime(2019-09-24T15:59:00.736219Z) | order by EventTime desc | where FileName matches regex"('
-            'upd.ter.exe$)" or InitiatingProcessFileName matches regex"(upd.ter.exe$)" or '
-            'InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")']
+            '2019-11-04T10:39:31.381Z) and EventTime < datetime(2019-11-04T10:44:31.381Z) | order by EventTime desc | '
+            'where tostring(ProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)),(find withsource = TableName '
+            'in (FileCreationEvents) where EventTime >= datetime(2019-11-04T10:39:31.381Z) and EventTime < datetime('
+            '2019-11-04T10:44:31.381Z) | order by EventTime desc | where FileName matches regex"(upd.ter.exe$)" or '
+            'InitiatingProcessFileName matches regex"(upd.ter.exe$)" or InitiatingProcessParentFileName matches '
+            'regex"(upd.ter.exe$)")']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

@@ -53,7 +53,27 @@
 #### Translated query:
 
   1. `(find withsource = TableName in (RegistryEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | order by EventTime desc | where RegistryKey =~ @"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsAdvancedThreatProtection")`
-  
+ 
+## Example STIX pattern for DirectoryPath query:
+
+#### STIX patterns:
+
+   1. `[directory:path LIKE 'C:\\ProgramData\\Symantec' OR process:name = 'conhost.exe'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'`
+        (Note: Only LIKE operator is supported for STIX object with 'path' value')
+#### Translated query:
+
+   1. `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (FolderPath contains "C:\\ProgramData\\Symantec" or InitiatingProcessFolderPath contains "C:\\ProgramData\\Symantec"))`
+   
+## Example STIX pattern for Custom Attribute(x-com-msatp) query:
+
+#### STIX patterns:
+
+   1. `[x-com-msatp:computer_name = 'ds-win10' OR process:name = 'conhost.exe'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'`
+   
+#### Translated query:
+
+   1. `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (ComputerName =~ "ds-win10"))`
+   
 ## Example STIX pattern for Combined Observation:
 
 #### STIX patterns:
@@ -72,28 +92,28 @@
 #### STIX patterns:
 
 ```
-[file:name = 'DismHost.exe'] START t'2019-01-10T08:43:10Z' STOP t'2019-11-23T10:43:10Z'
+[file:name = 'DismHost.exe'] START t'2019-10-01T08:43:10Z' STOP t'2019-10-30T10:43:10Z'
 ```
 
 #### Translated query:
 
 ```
-(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-01-10T08:43:10Z) and EventTime < datetime(2019-11-23T10:43:10Z) | order by EventTime desc | where FileName =~ "DismHost.exe" or InitiatingProcessFileName =~ "DismHost.exe" or InitiatingProcessParentFileName =~ "DismHost.exe")
+(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10Z) and EventTime < datetime(2019-10-30T10:43:10Z) | order by EventTime desc | where FileName =~ "DismHost.exe" or InitiatingProcessFileName =~ "DismHost.exe" or InitiatingProcessParentFileName =~ "DismHost.exe")
 ```
 
 #### Above translated query is passed as parameter to STIX transmission module
 
 ```
-transmit msatp "{\"host\":\"xx.xx.xx.xx\",\"port\": \"xxxx\",\"cert_verify\":\"True\" }" 
+transmit msatp "{\"host\":\"xx.xx.xx.xx\",\"port\": \"xxxx\"}" 
 "{\"auth\":{\"tenant\": \"xxxxx\", \"clientId\": \"xxxxx\", \"clientSecret\":\"xxxxxxxx\"}}" 
 results 
-"(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-01-10T08:43:10Z) and EventTime < datetime(2019-11-23T10:43:10Z) | order by EventTime desc | where FileName =~ \"DismHost.exe\" or InitiatingProcessFileName =~ \"DismHost.exe\" or InitiatingProcessParentFileName =~ \"DismHost.exe\")" 0 2
+"(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10Z) and EventTime < datetime(2019-10-30T10:43:10Z) | order by EventTime desc | where FileName =~ \"DismHost.exe\" or InitiatingProcessFileName =~ \"DismHost.exe\" or InitiatingProcessParentFileName =~ \"DismHost.exe\")" 0 2
 ```
 
 #### MSATP query result (Result is formatted by STIX transmission result module):
 
 ```
-[{'FileCreationEvents': {'EventTime': '2019-10-14T05:43:58.4387812Z', 'MachineId': 'fc0842373e54e76f5c55830e47526f6f1c187be6', 'ComputerName': 'car-dev-win', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Windows\\Temp\\549F4E8C-950E-413A-BB73-860DD0B52459\\DismHost.exe', 'SHA1': 'b01d428264a51ae803814644ea5ea43e7d7781d5', 'MD5': 'e8007eb8977e83d29f30a122771c09aa', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '3cb2aa46bb2f56352ee7d39886db1160', 'InitiatingProcessSHA1': '68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7', 'InitiatingProcessFolderPath': 'c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11\\mssenses.exe', 'InitiatingProcessFileName': 'MsSenseS.exe', 'InitiatingProcessId': 3840, 'InitiatingProcessCommandLine': '"MsSenseS.exe"', 'InitiatingProcessCreationTime': '2019-10-09T04:28:56.6541694Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 3308, 'InitiatingProcessParentFileName': 'MonitoringHost.exe', 'InitiatingProcessParentCreationTime': '2019-10-09T04:28:19.7702213Z', 'RequestProtocol': 'Unknown', 'ReportId': 466, 'rn': 1, 'event_count': '1'}}, {'FileCreationEvents': {'EventTime': '2019-10-13T05:28:58.4320739Z', 'MachineId': 'fc0842373e54e76f5c55830e47526f6f1c187be6', 'ComputerName': 'car-dev-win', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Windows\\Temp\\CA881E76-B9FB-444D-BF80-0DC52BB98B58\\DismHost.exe', 'SHA1': 'b01d428264a51ae803814644ea5ea43e7d7781d5', 'MD5': 'e8007eb8977e83d29f30a122771c09aa', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '3cb2aa46bb2f56352ee7d39886db1160', 'InitiatingProcessSHA1': '68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7', 'InitiatingProcessFolderPath': 'c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11\\mssenses.exe', 'InitiatingProcessFileName': 'MsSenseS.exe', 'InitiatingProcessId': 3840, 'InitiatingProcessCommandLine': '"MsSenseS.exe"', 'InitiatingProcessCreationTime': '2019-10-09T04:28:56.6541694Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 3308, 'InitiatingProcessParentFileName': 'MonitoringHost.exe', 'InitiatingProcessParentCreationTime': '2019-10-09T04:28:19.7702213Z', 'RequestProtocol': 'Unknown', 'ReportId': 389, 'rn': 2, 'event_count': '1'}}]
+[{'FileCreationEvents': {'EventTime': '2019-10-30T08:44:56.8059397Z', 'MachineId': 'babec47c12ad732b595e803c3320cc32aa26af33', 'ComputerName': 'lp-5cd84714zn.hclt.corp.hcl.in', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Users\\annishprashan.stevi\\AppData\\Local\\Temp\\44556507-AAE8-4AB2-B7C4-4519CC19443C\\DismHost.exe', 'SHA1': 'c34af1caf92b54737956e4940582bcce5cca2725', 'MD5': '2a1ee8df1dd0335605dcc5015c60ebc0', 'InitiatingProcessAccountDomain': 'hcltech', 'InitiatingProcessAccountName': 'annishprashan.stevi', 'InitiatingProcessAccountSid': 'S-1-5-21-333653013-2304839960-3876203932-1269283', 'InitiatingProcessMD5': '062ec57fe7f4463161d9e6ef400b2a3e', 'InitiatingProcessSHA1': '2eb39003998f0e518ad937db120b87e81d5a5893', 'InitiatingProcessFolderPath': 'c:\\windows\\system32\\cleanmgr.exe', 'InitiatingProcessFileName': 'cleanmgr.exe', 'InitiatingProcessId': 19224, 'InitiatingProcessCommandLine': 'cleanmgr.exe /autoclean /d C:', 'InitiatingProcessCreationTime': '2019-10-30T08:44:33.2836067Z', 'InitiatingProcessIntegrityLevel': 'High', 'InitiatingProcessTokenElevation': 'TokenElevationTypeFull', 'InitiatingProcessParentId': 2392, 'InitiatingProcessParentFileName': 'svchost.exe', 'InitiatingProcessParentCreationTime': '2019-10-28T18:44:18.1496667Z', 'RequestProtocol': 'Unknown', 'ReportId': 17363, 'rn': 1, 'event_count': '1'}}, {'FileCreationEvents': {'EventTime': '2019-10-30T08:40:53.6099192Z', 'MachineId': 'fc0842373e54e76f5c55830e47526f6f1c187be6', 'ComputerName': 'car-dev-win', 'ActionType': 'FileCreated', 'FileName': 'DismHost.exe', 'FolderPath': 'C:\\Windows\\Temp\\9C957DFF-D551-4542-9D22-556A347F3B5B\\DismHost.exe', 'SHA1': 'b01d428264a51ae803814644ea5ea43e7d7781d5', 'MD5': 'e8007eb8977e83d29f30a122771c09aa', 'InitiatingProcessAccountDomain': 'nt authority', 'InitiatingProcessAccountName': 'system', 'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessMD5': '3cb2aa46bb2f56352ee7d39886db1160', 'InitiatingProcessSHA1': '68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7', 'InitiatingProcessFolderPath': 'c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 48\\761\\mssenses.exe', 'InitiatingProcessFileName': 'MsSenseS.exe', 'InitiatingProcessId': 4956, 'InitiatingProcessCommandLine': '"MsSenseS.exe"', 'InitiatingProcessCreationTime': '2019-10-23T06:55:53.1651027Z', 'InitiatingProcessIntegrityLevel': 'System', 'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'InitiatingProcessParentId': 3540, 'InitiatingProcessParentFileName': 'MonitoringHost.exe', 'InitiatingProcessParentCreationTime': '2019-10-22T10:55:48.4451712Z', 'RequestProtocol': 'Unknown', 'ReportId': 462, 'rn': 2, 'event_count': '1'}}]
 ```
 
 #### STIX observable output:
@@ -101,87 +121,88 @@ results
 ```
  {
     "type": "bundle",
-    "id": "bundle--95d3b8bf-accb-43e3-8b6d-f73078e2d1af",
+    "id": "bundle--d75ea4fd-7f34-4eca-8a35-70b427329417",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "msatp",
-            "identity_class": "events"
+            "identity_class ": "events"
         },
         {
-            "id": "observed-data--7736a80e-955f-4abc-9355-7989148670cc",
+            "id": "observed-data--c7a04ed8-755f-468e-b9ec-41897182ea18",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-10-14T06:19:02.183Z",
-            "modified": "2019-10-14T06:19:02.183Z",
+            "created": "2019-11-04T07:40:17.431Z",
+            "modified": "2019-11-04T07:40:17.431Z",
             "objects": {
                 "0": {
                     "type": "file",
                     "name": "DismHost.exe",
                     "parent_directory_ref": "1",
                     "hashes": {
-                        "SHA-1": "b01d428264a51ae803814644ea5ea43e7d7781d5",
-                        "MD5": "e8007eb8977e83d29f30a122771c09aa"
+                        "SHA-1": "c34af1caf92b54737956e4940582bcce5cca2725",
+                        "MD5": "2a1ee8df1dd0335605dcc5015c60ebc0"
                     }
                 },
                 "1": {
                     "type": "directory",
-                    "path": "C:\\Windows\\Temp\\549F4E8C-950E-413A-BB73-860DD0B52459"
+                    "path": "C:\\Users\\annishprashan.stevi\\AppData\\Local\\Temp\\44556507-AAE8-4AB2-B7C4-4519CC19443C"
                 },
                 "2": {
                     "type": "user-account",
-                    "account_login": "system",
-                    "user_id": "S-1-5-18"
+                    "account_login": "annishprashan.stevi",
+                    "user_id": "S-1-5-21-333653013-2304839960-3876203932-1269283"
                 },
                 "3": {
                     "type": "process",
                     "creator_user_ref": "2",
                     "binary_ref": "4",
-                    "name": "MsSenseS.exe",
-                    "pid": 3840,
-                    "command_line": "\"MsSenseS.exe\"",
-                    "created": "2019-10-09T04:28:56.654Z",
+                    "name": "cleanmgr.exe",
+                    "pid": 19224,
+                    "command_line": "cleanmgr.exe /autoclean /d C:",
+                    "created": "2019-10-30T08:44:33.283Z",
                     "parent_ref": "6"
                 },
                 "4": {
                     "type": "file",
                     "hashes": {
-                        "MD5": "3cb2aa46bb2f56352ee7d39886db1160",
-                        "SHA-1": "68931a7ec5bdfb7f6b7a85d1273b100456ae9ae7"
+                        "MD5": "062ec57fe7f4463161d9e6ef400b2a3e",
+                        "SHA-1": "2eb39003998f0e518ad937db120b87e81d5a5893"
                     },
                     "parent_directory_ref": "5",
-                    "name": "MsSenseS.exe"
+                    "name": "cleanmgr.exe"
                 },
                 "5": {
                     "type": "directory",
-                    "path": "c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11"
+                    "path": "c:\\windows\\system32"
                 },
                 "6": {
                     "type": "process",
-                    "pid": 3308,
-                    "name": "MonitoringHost.exe",
+                    "pid": 2392,
+                    "name": "svchost.exe",
                     "binary_ref": "7",
-                    "created": "2019-10-09T04:28:19.770Z"
+                    "created": "2019-10-28T18:44:18.149Z"
                 },
                 "7": {
                     "type": "file",
-                    "name": "MonitoringHost.exe"
+                    "name": "svchost.exe"
                 }
             },
-            "first_observed": "2019-10-14T05:43:58.438Z",
-            "last_observed": "2019-10-14T05:43:58.438Z",
+            "first_observed": "2019-10-30T08:44:56.805Z",
+            "last_observed": "2019-10-30T08:44:56.805Z",
             "x_com_msatp": {
-                "computer_identity": "car-dev-win"
+                "machine_id": "babec47c12ad732b595e803c3320cc32aa26af33",
+                "computer_name": "lp-5cd84714zn.hclt.corp.hcl.in"
             },
             "number_observed": 1
         },
         {
-            "id": "observed-data--851577c9-3d1e-4f24-9d24-adf79daf73d1",
+            "id": "observed-data--f337a503-71b1-4592-bf5c-e1b43a91cf66",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-10-14T06:19:03.023Z",
-            "modified": "2019-10-14T06:19:03.023Z",
+            "created": "2019-11-04T07:40:17.436Z",
+            "modified": "2019-11-04T07:40:17.436Z",
             "objects": {
                 "0": {
                     "type": "file",
@@ -194,7 +215,7 @@ results
                 },
                 "1": {
                     "type": "directory",
-                    "path": "C:\\Windows\\Temp\\CA881E76-B9FB-444D-BF80-0DC52BB98B58"
+                    "path": "C:\\Windows\\Temp\\9C957DFF-D551-4542-9D22-556A347F3B5B"
                 },
                 "2": {
                     "type": "user-account",
@@ -206,9 +227,9 @@ results
                     "creator_user_ref": "2",
                     "binary_ref": "4",
                     "name": "MsSenseS.exe",
-                    "pid": 3840,
+                    "pid": 4956,
                     "command_line": "\"MsSenseS.exe\"",
-                    "created": "2019-10-09T04:28:56.654Z",
+                    "created": "2019-10-23T06:55:53.165Z",
                     "parent_ref": "6"
                 },
                 "4": {
@@ -222,24 +243,25 @@ results
                 },
                 "5": {
                     "type": "directory",
-                    "path": "c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 30\\11"
+                    "path": "c:\\program files\\microsoft monitoring agent\\agent\\health service state\\monitoring host temporary files 48\\761"
                 },
                 "6": {
                     "type": "process",
-                    "pid": 3308,
+                    "pid": 3540,
                     "name": "MonitoringHost.exe",
                     "binary_ref": "7",
-                    "created": "2019-10-09T04:28:19.770Z"
+                    "created": "2019-10-22T10:55:48.445Z"
                 },
                 "7": {
                     "type": "file",
                     "name": "MonitoringHost.exe"
                 }
             },
-            "first_observed": "2019-10-13T05:28:58.432Z",
-            "last_observed": "2019-10-13T05:28:58.432Z",
+            "first_observed": "2019-10-30T08:40:53.609Z",
+            "last_observed": "2019-10-30T08:40:53.609Z",
             "x_com_msatp": {
-                "computer_identity": "car-dev-win"
+                "machine_id": "fc0842373e54e76f5c55830e47526f6f1c187be6",
+                "computer_name": "car-dev-win"
             },
             "number_observed": 1
         }
@@ -265,7 +287,7 @@ union (find withsource = TableName in (FileCreationEvents) where EventTime >= da
 #### Above translated query is passed as parameter to STIX transmission module
 
 ```
-transmit msatp "{\"host\":\"xx.xx.xx.xx\",\"port\": \"xxxx\",\"cert_verify\":\"True\" }" 
+transmit msatp "{\"host\":\"xx.xx.xx.xx\",\"port\": \"xxxx\"}" 
 "{\"auth\":{\"tenant\": \"xxxxx\", \"clientId\": \"xxxxx\", \"clientSecret\":\"xxxxxxxx\"}}" 
 results 
 "union (find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (SHA1 =~ \"c98dbe4cb8caad5a521915f6e3f82197d53030ee\" or InitiatingProcessSHA1 =~ \"c98dbe4cb8caad5a521915f6e3f82197d53030ee\") and (FileName =~ \"AM_Delta_Patch_1.301.613.0.exe\" or InitiatingProcessFileName =~ \"AM_Delta_Patch_1.301.613.0.exe\" or InitiatingProcessParentFileName =~ \"AM_Delta_Patch_1.301.613.0.exe\")),(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (MD5 =~ \"b3b863d8c5c2f3605a5b25adec80f0de\" or InitiatingProcessMD5 =~ \"b3b863d8c5c2f3605a5b25adec80f0de\") and (FileName matches regex\"(mpas.*)\" or InitiatingProcessFileName matches regex\"(mpas.*)\" or InitiatingProcessParentFileName matches regex\"(mpas.*)\"))" 0 2
@@ -353,7 +375,8 @@ results
             "first_observed": "2019-09-05T23:01:31.731Z",
             "last_observed": "2019-09-05T23:01:31.731Z",
             "x_com_msatp": {
-                "computer_identity": "testmachine2"
+                "machine_id": "6a55e432bd1d390e9080fa0930f4e45292b95bf8",
+                "computer_name": "testmachine2"
             },
             "number_observed": 1
         },
@@ -420,7 +443,8 @@ results
             "first_observed": "2019-09-05T23:00:19.852Z",
             "last_observed": "2019-09-05T23:00:19.852Z",
             "x_com_msatp": {
-                "computer_identity": "testmachine1"
+                "machine_id": "77725e40c068f4649a772db7512dc6da80bd4214",
+                "computer_name": "testmachine1"
             },
             "number_observed": 1
         }
