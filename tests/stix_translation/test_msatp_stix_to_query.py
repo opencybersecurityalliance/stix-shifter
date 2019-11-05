@@ -58,12 +58,10 @@ class TestStixToQuery(unittest.TestCase):
         stix_pattern = "[ipv4-addr:value = '172.16.2.22'] START t'2019-09-10T08:43:10.003Z' STOP " \
                        "t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
             '(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime('
             '2019-09-10T08:43:10.003Z) and EventTime < datetime(2019-09-23T10:43:10.453Z) | order by EventTime desc | '
             'where LocalIP =~ "172.16.2.22" or RemoteIP =~ "172.16.2.22")']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_mac_comp_exp(self):
