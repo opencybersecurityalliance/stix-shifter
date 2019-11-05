@@ -11,7 +11,7 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
 
     def create_status_connection(self, providerID):
     
-        url = self.host + self.auth["accountID"] + "/providers/" + providerID
+        url = self.host + self.auth["accountID"] + "/providers/" + providerID + "/notes"
 
         header = {
             'Content-Type': 'application/json',
