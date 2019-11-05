@@ -23,7 +23,9 @@ class ProxyHost():
         return json.dumps(dsl['queries'])
 
     def translate_results(self, data_source_identity_object):
-        data_source_results = self.request_args["results"]
+        data_source_results = json.dumps(self.request_args["results"] )
+
+        print(data_source_results)
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(translation_module, 'results', data_source_identity_object, data_source_results, self.connection)

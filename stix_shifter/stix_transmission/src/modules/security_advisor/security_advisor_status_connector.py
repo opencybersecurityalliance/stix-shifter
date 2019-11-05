@@ -19,9 +19,22 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
             'Authorization' : 'Bearer '  + self.auth["authToken"],
         }
 
+        dict = {}
+
         try :
             r = requests.get(url,headers= header)
-            return r.json()
+            dict["status"] = r.json()
+
+            if( r.status_code == 200 ):
+                dict["success"] = True
+            else:
+                dict["success"] = False
+
+            return dict
 
         except Exception as e :
-            print("some error occured getting Provider !!", str(e))
+
+            dict["success"] = False
+            dict["Exception"] = e
+
+        return dict

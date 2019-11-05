@@ -15,13 +15,23 @@ class SecurityAdvisorPing(BasePing):
             'Authorization' : 'Bearer '  + self.auth["authToken"] ,
         }
 
+        dict = {}
+
         try :
             r = requests.get(url,headers= header)
-            if( r.status_code == 200 ):
-                return 'Success'
-            else :
-                return 'Failure'
 
+            response_code = r.status_code
+            dict["response_code"] = response_code
 
-        except Exception :
-            return 'Failure'
+            if ( response_code == 200 ):
+                dict["success"] = True
+            else:
+                dict["success"] = False
+
+            return dict
+
+        except Exception as e:
+            dict["success"] = False
+            dict["Exception"] = e
+
+        return dict

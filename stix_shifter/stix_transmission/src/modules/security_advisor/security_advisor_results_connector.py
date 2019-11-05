@@ -1,49 +1,40 @@
 from ..base.base_results_connector import BaseResultsConnector
-from ..base.base_status_connector import Status
-import time
-
-QUERY_ID_TABLE = {
-    "uuid_1234567890": Status.COMPLETED.value,
-    "uuid_not_done": Status.RUNNING.value,
-    "uuid_should_error": Status.ERROR.value
-}
-
-RETURN_DUMMY_DATA = {
-    "uuid_1234567890": "some data"
-}
-
+import json
+import requests
 
 class SecurityAdvisorResultsConnector(BaseResultsConnector):
-    def __init__(self, host, auth):
+    def __init__(self, host, auth ):
         self.host = host
         self.auth = auth
 
-    def create_results_connection(self, query_id, offset, length):
-        # set headers
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+    def create_results_connection(self, providerID , offset , length):
+
+        # url = self.host + self.auth["accountID"] + "/providers/" + providerID + "/occurrences"
+
+        url = self.host + self.auth["accountID"] + "/providers/" + providerID + "/occurrences" +"?page_size=" + str(length) + "&page_token=" + offset
+
+        header = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization' : 'Bearer '  + self.auth["authToken"],
         }
 
-        # construct request object, purely for visual purposes in dummy implementation
-        request = {
-            "host": self.host,
-            "headers": headers,
-            "method": "GET"
-        }
+        dict = {}
 
-        print(request)
-        time.sleep(3)
-        return_obj = {}
+        try :
+            r = requests.get(url,headers= header)
+            dict["status"] = r.json()
 
-        if QUERY_ID_TABLE[query_id] == Status.COMPLETED.value and RETURN_DUMMY_DATA[query_id]:
-            return_obj["success"] = True
-            return_obj["data"] = RETURN_DUMMY_DATA[query_id]
-        elif QUERY_ID_TABLE[query_id] == Status.RUNNING.value:
-            return_obj["success"] = False
-            return_obj["error"] = "Query is not finished processing"
-        else:
-            return_obj["success"] = False
-            return_obj["error"] = "Error: query results not found"
+            if( r.status_code == 200 ):
+                dict["success"] = True
+            else:
+                dict["success"] = False
 
-        return return_obj
+            return dict
+
+        except Exception as e :
+
+            dict["success"] = False
+            dict["Exception"] = e
+
+        return dict
