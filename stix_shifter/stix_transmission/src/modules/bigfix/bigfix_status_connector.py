@@ -57,13 +57,11 @@ class BigFixStatusConnector(BaseStatusConnector):
         return_obj = self._get_progress_status(client_count, reporting_agents, return_obj)
         if client_count <= reporting_agents:
             return_obj['status'] = Status.COMPLETED.value
-            return_obj['progress'] = 100
         else:
             if return_obj['progress'] > PROGRESS_THRESHOLD:
                 sleep_time = math.ceil((100 - return_obj['progress']) * 10 / 100)
                 time.sleep(sleep_time)
                 return_obj['status'] = Status.COMPLETED.value
-                return_obj['progress'] = 100
         return return_obj
 
     def status_api_response(self, search_id, client_count):
