@@ -3,6 +3,7 @@ from datetime import datetime, timezone, tzinfo, timedelta
 import base64
 import socket
 import re
+import os
 from urllib.parse import urlparse
 
 
@@ -116,7 +117,7 @@ class ToFilePath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return obj[0:len(obj) - len(re.split(r'[\\/]', obj)[-1])]
+            return os.path.dirname(obj)
         except ValueError:
             print("Cannot convert input to path string")
 
