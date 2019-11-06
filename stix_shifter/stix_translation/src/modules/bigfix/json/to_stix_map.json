@@ -7,7 +7,7 @@
         {
             "key": "directory.path",
             "object": "directory",
-            "transformer": "ToFilePath"
+            "transformer": "ToDirectoryPath"
         },
         {
             "key": "file.parent_directory_ref",
