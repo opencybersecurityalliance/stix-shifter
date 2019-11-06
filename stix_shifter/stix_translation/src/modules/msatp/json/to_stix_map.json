@@ -196,7 +196,7 @@
       {
         "key": "directory.path",
         "object": "nc_process_file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -505,7 +505,7 @@
       {
         "key": "directory.path",
         "object": "process_file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -522,7 +522,7 @@
       {
         "key": "directory.path",
         "object": "parent_process_file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -710,7 +710,7 @@
       {
         "key": "directory.path",
         "object": "file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -722,7 +722,7 @@
       {
         "key": "directory.path",
         "object": "fc_process_file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -903,7 +903,7 @@
       {
         "key": "directory.path",
         "object": "re_process_file_dir",
-        "transformer": "ToFilePath"
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",

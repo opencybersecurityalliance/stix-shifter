@@ -176,9 +176,20 @@ class ToFilePath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return os.path.dirname(obj)
+            return obj[0:len(obj) - len(re.split(r'[\\/]', obj)[-1])]
         except ValueError:
             print("Cannot convert input to path string")
+
+
+class ToDirectoryPath(ValueTransformer):
+    """A value transformer for expected directory path"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return os.path.dirname(obj)
+        except ValueError:
+            print("Cannot convert input to directory path string")
 
 
 class ToFileName(ValueTransformer):
@@ -282,6 +293,7 @@ def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
-            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp,
-            "NaiveTimestampToUTC": TimestampToUTC, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol":
+            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4,
+            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC,
+            "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol":
                 FormatTCPProtocol, "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac}
