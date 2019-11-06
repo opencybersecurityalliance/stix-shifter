@@ -3,6 +3,7 @@ from datetime import datetime, timezone, tzinfo, timedelta
 import base64
 import socket
 import re
+import os
 from urllib.parse import urlparse
 
 
@@ -121,6 +122,17 @@ class ToFilePath(ValueTransformer):
             print("Cannot convert input to path string")
 
 
+class ToDirectoryPath(ValueTransformer):
+    """A value transformer for expected directory path"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return os.path.dirname(obj)
+        except ValueError:
+            print("Cannot convert input to directory path string")
+
+
 class ToFileName(ValueTransformer):
     """A value transformer for expected file names"""
 
@@ -223,4 +235,5 @@ def get_all_transformers():
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
             "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4,
-            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC}
+            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC,
+            "ToDirectoryPath": ToDirectoryPath}
