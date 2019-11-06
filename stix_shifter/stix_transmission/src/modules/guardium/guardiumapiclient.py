@@ -365,6 +365,7 @@ class APIClient():
                 if status_code == 401 and error_code == "invalid_token":
                     logging.info(response.read())
                     logging.info("Requesting a new access token and then fetching results!")
+                    self.authorization = None
                     if (self.get_accessToken()):
                         response = self.client.call_api(endpoint, 'POST', params=None, data=data)
                         status_code = response.response.status_code
