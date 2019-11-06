@@ -12,7 +12,9 @@ class GuardiumResultsConnector(BaseResultsConnector):
         #min_range = offset
         #max_range = offset + length
         # Grab the response, extract the response code, and convert it to readable json
-
+        logging.info(
+            "\n ===> TRANSMIT Results \n ------------ Guardium Result Connector - calling get_search_results --------")
+        # Verify the input
         #response = self.api_client.get_search_results(search_id, 'application/json', min_range, max_range)
         response = self.api_client.get_search_results(search_id, 'application/json', offset, length)
         response_code = response.code

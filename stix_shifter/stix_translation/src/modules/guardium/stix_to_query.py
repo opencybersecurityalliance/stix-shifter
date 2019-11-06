@@ -1,10 +1,6 @@
 import logging
-
-#from ...patterns.parser import generate_query
 from ..base.base_query_translator import BaseQueryTranslator
-#from . import data_mapping
 from . import query_constructor
-import logging
 
 logger = logging.getLogger(__name__)
 

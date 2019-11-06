@@ -4,27 +4,11 @@ from stix_shifter.stix_translation.src.utils.exceptions import DataMappingExcept
 from stix_shifter.stix_translation.src.modules.base.base_data_mapper import BaseDataMapper
 import logging
 
-'''
-def _fetch_mapping():
-    try:
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(
-            path.join(basepath, "json", "from_stix_map.json"))
-
-        map_file = open(filepath).read()
-        map_data = json.loads(map_file)
-        return map_data
-    except Exception as ex:
-        print('exception in main():', ex)
-        return {}
-
-'''
 #class DataMapper:
 class DataMapper(BaseDataMapper):
 
     def __init__(self, options):
         mapping_json = options['mapping'] if 'mapping' in options else {}
-        #self.map_data = mapping_json or _fetch_mapping()
         basepath = path.dirname(__file__)
         self.map_data = mapping_json or self.fetch_mapping(basepath)
 

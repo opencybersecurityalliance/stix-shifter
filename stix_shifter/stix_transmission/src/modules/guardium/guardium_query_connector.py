@@ -17,7 +17,7 @@ class GuardiumQueryConnector(BaseQueryConnector):
         #
         queryResultSync = True
         # Grab the response, extract the response code, and convert it to readable json
-        logging.info("------------ Guardium Query Connector - calling create search --------")
+        logging.info("\n ===> TRANSMIT Query \n ------------ Guardium Query Connector - calling create search --------")
         # Verify the input
         try:
             jQry  = json.loads(query)

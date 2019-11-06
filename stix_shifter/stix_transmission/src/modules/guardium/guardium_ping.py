@@ -8,7 +8,7 @@ class GuardiumPing(BasePing):
         self.api_client = api_client
 
     def ping(self):
-        # Not implemented for Guardium
+        # Implemented for Guardium using fetch_token
         response = self.api_client.ping_box()
         response_code = response.code
 
@@ -20,9 +20,9 @@ class GuardiumPing(BasePing):
 
         if len(response_dict) > 0 and response_code == 200:
             return_obj['success'] = True
-            return_obj['status'] = response_dict.get('status',"NA")
-            return_obj['progress'] = response_dict.get('progress',"NA")
-            return_obj['data'] = response_dict.get('data',"NA")
+#            return_obj['status'] = response_dict.get('status',"NA")
+#            return_obj['progress'] = response_dict.get('progress',"NA")
+#            return_obj['data'] = response_dict.get('data',"NA")
             return_obj["search_id"] = response_dict.get('search_id',"NA")
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])

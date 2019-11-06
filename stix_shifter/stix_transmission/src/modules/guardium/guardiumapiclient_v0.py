@@ -29,26 +29,39 @@ class APIClient():
         self.search_id = None
         self.query = None
         self.authorization = None
-        self.credential = None
+        self.credential = {}
+
 #
 # Check if connection object contains the following
-
-        username = configuration.get('auth').get("username", None)
-        password = connection.get('options',{}).get("password", None)
-        grant_type = connection.get('options',{}).get("grant_type", None)
-        client_id = connection.get('options',{}).get("client_id", None)
-        client_secret = connection.get('options',{}).get("client_secret", None)
-# It is decided the authorization will not be sent by UDS
+ 
+        username = connection.get("username", None)
+        password = connection.get("password", None)
+        grant_type = connection.get("grant_type", None)
+        client_id = connection.get("client_id", None)
+        client_secret = connection.get("client_secret", None)
+        access_token = connection.get("guardium_access_token", None)
+        expiresTimestamp = connection.get(
+            "guardium_token_expiryTimestamp", None)
+#
+#       if the connection object does not contain the credential -- it can be picked from this folder
+#       this may not be implemented.
+        self.credential_filepath = "./stix_shifter/stix_transmission/src/modules/guardium/credentials/"
 #
         if(username is None or password is None or grant_type is None or client_id is None or client_secret is None):
-            self.credential = None
+            self.credential = {}
             logging.info(
-                    "Guardium Credential not provided in the connection / configuration object")
+                    "Guardium Credential not provided in the connection object")
             raise IOError(
-                    3001, "Guardium Credential not provided in the connection / configuration object")
+                    3001, "Guardium Credential not provided in the connection object")
         else:
             self.credential = {"username": username, "password": password, "grant_type": grant_type,
                                "client_id": client_id, "client_secret": client_secret}
+# Check if the access_token sent has not expired
+        self.authorization = {}
+        if access_token is not None:
+            if self.isTimestampValid(expiresTimestamp):
+                self.authorization = json.loads(
+                    '{"access_token":"' + str(access_token) + '", "expiresTimestamp":' + str(expiresTimestamp) + "'}")
 #
         host_port = connection.get('host') + ':' + \
             str(connection.get('port', ''))
@@ -78,7 +91,7 @@ class APIClient():
                                     url_modifier_function,
                                     connection.get('cert_verify', 'True')
                                     )
-#
+
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
         # it concatenates the endpoint to the header containing the url.
@@ -108,7 +121,7 @@ class APIClient():
             respObj.status_code = 503
             content = '{"status":"Failed", "data": {"message": "Service is down."}}'
             respObj._content = bytes(content, 'utf-8')
-        # return
+        # return 
         return ResponseWrapper(respObj)
 #
     def get_databases(self):
@@ -129,50 +142,73 @@ class APIClient():
 #
     def get_credential(self):
         # Subroto -- Assumption: credential object will contain the full
-        # guardium credential for the call.  
+        # guardium credential for the call.  There is an option to read it from a file too
+        # proviee the path name if we want to read this credential from a file
         if self.credential is None:
-            logging.info("Guardium Credential object is found to be None. Error Raised.")
-            raise IOError(3001, "Guardium Credential object is found to be None. Error Raised.")
+            self.credential = self.read_credential_from_file()
 #
-        else:
-            jCred = self.credential
+        jCred = self.credential
 #
-            data = 'client_id=' + jCred.get("client_id") + '&grant_type=' + str(jCred.get("grant_type")) + \
+        data = 'client_id=' + jCred.get("client_id") + '&grant_type=' + str(jCred.get("grant_type")) + \
                '&client_secret=' + str(jCred.get("client_secret")) + '&username=' + str(jCred.get("username")) + \
                '&password=' + str(jCred.get("password"))
-#
+        print("credential data: " + data)
         return data
 #
+    def read_credential_from_file(self):
+        # Subroto -- Assumption: credential from a file if the setup is done 
+        # self.credential_file is None.  Do not read from the file
+        username = self.connection.get("username", "admin")
+        host = self.connection.get("host")
+        if self.credential_filepath is not None:
+            path = self.credential_filepath
+            credFile = path + username + "_" + host.replace(".", "_") + ".json"
+            exists = os.path.isfile(credFile)
+            if exists:
+                with open(credFile, 'r') as f_cred:
+                    jCred = json.loads(f_cred.read())
+            else:
+                logging.info(
+                    "Credential not provided or could not get from the - " + credFile)
+                raise IOError(
+                    3001, "Credential not provided or could not get from the - " + credFile)
+        else:
+            jCred = None
+            logging.info("Credential file path is not provided -- Need authorized credential")
+
+        return jCred
+
     def fetch_accessToken(self):
         # process new authorization token
         # Get access token if not present
         # credential is a string contain a json
         #
         successVal = False
+#        username = self.connection.get("username", "admin")
+#        host = self.connection.get("host")
         #
         data = self.get_credential()
         endpoint = "oauth/token"
-        logging.debug("Fetch Access Token: Calling:" + str(data))
         tNow = datetime.datetime.now()
+        logging.debug("Fetch Access Token: Calling:" + str(data))
         response = self.client.call_api(
             endpoint, "POST", params=data, data=None)
+        #jResp = json.loads(response.read()) -- Changed
         jResp = json.loads(str(response.read(), 'utf-8'))
-        logging.info(response.code)
-#
+        print(response.code)
+        print(jResp)
+
         if (response.code != 200):
             logging.info(
                 "Authorization Token NOT Received. Response code: " + str(response.code))
             raise ValueError(3002, "Authorization Token not received ")
         else:
             successVal = True
-            tExp = (tNow + datetime.timedelta(seconds=jResp.get("expires_in"))).timestamp()
+            tExp = tNow.timestamp() + jResp.get("expires_in")
             self.authorization = json.loads(
                 '{"access_token":"' + jResp.get("access_token") + '", "expiresTimestamp":' + str(tExp) + '}')
-            logging.debug("Authorization access_token: " + jResp.get("access_token") + ", expires (delta time): " +
-                          str(jResp.get("expires_in")) + ", expiresTimestamp: "+ str(tExp))
-#
         return successVal
-#
+
     def get_accessToken(self):
         successVal = False
         if (self.authorization is not None):
@@ -180,46 +216,40 @@ class APIClient():
             if self.isTimestampValid((self.authorization).get("expiresTimestamp")):
                 successVal = True
                 self.setAuthorizationHeader()
-                logging.info("A valid Access Token Found; using it.")
                 return successVal
             else:
-                logging.info("get_accessToken: Expired access token.  Get a new access token.")
+                logging.info("Expired access token.  Get a new access token.")
         else:
             logging.info(
-                "get_accessToken: Authorization token is not found. Get a new access token")
+                "Authorization token is not found. Get a new access token")
 #
 # We could find a valid token from the  and now we request one
 #
         if(self.fetch_accessToken()):
             successVal = True
             self.setAuthorizationHeader()
-            logging.info("A new Access Token Received.  Credential OK.")
 #
         return successVal
 #
     def setAuthorizationHeader(self):
         auth = "Bearer " + \
                         str((self.authorization).get("access_token"))
-#
-# Test  -- uncomment to test token failure
-        #auth = "Bearer 575d161c-9a91-4c05-bf0a-1c2d415a8c40"
         self.add_header_elements("authorization", auth)
         return
 #
 # NOTE: connector architecture forces sync connector behave as async connector
 #       therefore, the state of the connector has to preserved in the search_id
 #       which is not generated by Guardium.  We generate and store necessary status_code
-#       such as self.credential, self.query (may be self.authorization)
+#       such as # self.authorization, self.credential, self.query
 #       IF search_id originally generated is changed then the state is lost
 
     def set_searchId(self, search_id):
         self.search_id = search_id
         return
 #
+
     def build_searchId(self):
-        #       It should be called only ONCE when transmit query is called
-        # Structure of the search id is
-        # '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
+        #       It should be called only ONCE
         s_id = None
 #
         if(self.query is None or self.authorization is None or self.credential is None):
@@ -227,17 +257,20 @@ class APIClient():
                 "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
 #
         else:
-            id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
+            id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + \
+                     ', "authorization" : ' + \
+                json.dumps(self.authorization) + '}'
             print(id_str)
             id_byt = id_str.encode('utf-8')
             s_id = base64.b64encode(id_byt)
             self.set_searchId(s_id)
+
 #
         print(s_id)
         return s_id
-#
+
     def decode_searchId(self):
-        # These value (self.credential, self.query) must be present.  self.authorization may not.
+        # self.authorization, self.credential, self.query
         try:
             id_dec64 = base64.b64decode(self.search_id)
             jObj = json.loads(id_dec64.decode('utf-8'))
@@ -252,17 +285,18 @@ class APIClient():
         logging.debug(self.query)
         self.credential = jObj.get("credential", None)
         self.authorization = jObj.get("authorization", None)
+
         return
-#
+
     def get_searches(self):
-        # CAN NOT be implemented for Guardium
-        # 
+        # Sends a GET request
+        # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
         return self.client.call_api(endpoint, 'GET')
-#
+
     def create_search(self, query_expression):
-        # validate credential and create search_id.  No query submission -- Sync call
-        # 
+        # Sends a POST request
+        # to https://<server_ip>/api/ariel/searches
         logging.info("--------- Guardium get access token: \n")
         respObj = Response()
         respObj.code = "401"
@@ -294,9 +328,10 @@ class APIClient():
             logging.info("Access Token -- could not be generated. ")
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
+
 #
         return ResponseWrapper(respObj)
-#
+
     def get_status(self, search_id):
         # Subroto we do not need to send anything to Guardium
         # We create response object and send "COMPLETED"
@@ -317,8 +352,11 @@ class APIClient():
             content = '{"status":"Failed", "data": {"message": "Could obtain status: Authentication issue / service unavailable."}}'
             respObj._content = bytes(content, 'utf-8')
         #
+        # changed by Subroto: https://<server_ip>/api/ariel/searches/<search_id>
+        # endpoint = self.endpoint_start + "searches/" + search_id
+        # return self.client.call_api(endpoint, 'GET')
         return ResponseWrapper(respObj)
-#
+
     def set_IndexAndFsize(self, indexFrom=None, fetchSize=None):
         #
         data = json.loads(self.query)
@@ -334,54 +372,34 @@ class APIClient():
         data["indexFrom"] = str(indx)
         data["fetchSize"] = str(fsize)
         return (json.dumps(data))
-#
+
     def get_search_results(self, search_id, response_type, indexFrom=None, fetchSize=None):
         # Sends a GET request from guardium
         # This function calls Guardium to get data
         self.set_searchId(search_id)
         self.decode_searchId()
-#  replacement indexFrom and fetchSize
-        data = self.set_IndexAndFsize(indexFrom, fetchSize)
-        logging.info(
-                "--------- Guardium get result -- decoded search id for query expression: " + data)
         logging.info("--------- Guardium get result -- access token.")
-#
+
         if (self.get_accessToken()):
             logging.info(" Access Token received.\n")
             endpoint = self.endpoint_start + "online_report"
 #
-            response = self.client.call_api(endpoint, 'POST', params=None, data=data)
-            status_code = response.response.status_code
-            logging.info("Response code: " + str(status_code) + "\n")
-#
-#           Though the connector gets the authorization token just before fetching the actual result
-#           there is a possibility that the token returned is only valid for a second and response_code = 401
-#           is returned.  Catch that situation (though remote) and process again.
-            if status_code != 200:
-                error_msg = json.loads(str(response.read(), 'utf-8'))
-                error_code = error_msg.get('error', None)
-                #print(error_msg)
-                #print("error code: " + str(error_code))
-                if status_code == 401 and error_code == "invalid_token":
-                    logging.info(response.read())
-                    logging.info("Requesting a new access token and then fetching results!")
-                    if (self.get_accessToken()):
-                        response = self.client.call_api(endpoint, 'POST', params=None, data=data)
-                        status_code = response.response.status_code
-                        logging.info("Response code: " + str(status_code) + "\n")
-                        logging.debug("Response headers:\n " + str(response.response.headers) + "\n")
-                        logging.debug("Response content: " + str(response.read()) + "\n")
-                    else:
-                        logging.info("Access Token -- could not be generated. ")
-                        raise ValueError(3002, "Authorization Token not received ")
-#
+#  replacement indexFrom and fetchSize
+            data = self.set_IndexAndFsize(indexFrom, fetchSize)
+            logging.info(
+                "--------- Guardium get result -- decoded search id for query expression: " + data)
+            response = self.client.call_api(
+                endpoint, 'POST', params=None, data=data)
+            logging.debug("Response code: " +
+                          str(response.response.status_code) + "\n")
+            #logging.debug("Response headers:\n " + str(response.response.headers) + "\n")
+            #logging.debug("Response content: " + str(response.read()) + "\n")
             logging.info("------ Return Wrapped Response Object --------")
             return response
         else:
             logging.info("Access Token -- could not be generated. ")
-            raise ValueError(3002, "Authorization Token not received ")
-#           End of this function
-#
+            return None
+
     def update_search(self, search_id, save_results=None, status=None):
         # Subroto -- not used in Guardium context
         # posts search result to site
@@ -394,11 +412,27 @@ class APIClient():
         data = urllib.parse.urlencode(data)
         data = data.encode('utf-8')
         return self.client.call_api(endpoint, 'POST', params=None, data=data)
-#
+
     def delete_search(self, search_id):
         # Subroto -- not used.
+        # Sends a DELETE request to
+        # https://<server_ip>/api/ariel/searches/<search_id>
         # deletes search created earlier.
         # Subroto: we can delete the stored result file if present ... change this code.
         endpoint = self.endpoint_start + "searches" + '/' + search_id
         return self.client.call_api(endpoint, 'DELETE')
-#
+
+    def readResultFile(self, searchId):
+        rFilename = "./stix_shifter/stix_transmission/src/modules/guardium/output/result_" + \
+            str(searchId) + ".json"
+        logging.debug("Reading file: " + rFilename)
+        exists = os.path.isfile(rFilename)
+        if exists:
+            with open(rFilename, 'r') as f_res:
+                jRes = json.loads(f_res.read())
+            if not ("content" in jRes):
+                jRes = None
+        else:
+            logging.debug("File does not exist.")
+            jRes = None
+        return jRes

@@ -22,4 +22,4 @@ class Connector(BaseConnector):
         logFile = "../runlogs/ss_guardium_transmission_run.log"
         logging.basicConfig(filename=logFile, level=logging.DEBUG,
                             format='%(asctime)s - %(levelname)s - %(message)s')
-        logging.info('-----------Transmission Run Started.------------')
+        logging.info('\n >>>>>>>>>>> Transmission Run Started. >>>>>>>>>>')
