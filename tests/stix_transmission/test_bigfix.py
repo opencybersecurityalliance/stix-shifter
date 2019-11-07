@@ -283,7 +283,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'status' in status_response
         assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
-        assert status_response['progress'] == 75
+        assert status_response['progress'] == 100
 
     @staticmethod
     @patch('stix_shifter.stix_transmission.src.modules.bigfix.bigfix_api_client.APIClient.get_search_results')
@@ -304,7 +304,7 @@ class TestBigfixConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
         assert 'status' in status_response
-        assert status_response['status'] == "ERROR"
+        assert status_response['status'] == "COMPLETED"
         assert 'progress' in status_response
         assert status_response['progress'] == 100
 

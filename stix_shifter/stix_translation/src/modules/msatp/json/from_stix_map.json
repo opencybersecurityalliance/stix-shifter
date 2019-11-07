@@ -1,0 +1,195 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["NetworkCommunicationEvents.LocalIP", "NetworkCommunicationEvents.RemoteIP"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["NetworkCommunicationEvents.LocalIP", "NetworkCommunicationEvents.RemoteIP"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["NetworkCommunicationEvents.LocalPort"],
+      "dst_port": ["NetworkCommunicationEvents.RemotePort"],
+      "protocols[*]": ["NetworkCommunicationEvents.Protocol"],
+      "src_ref.value": ["NetworkCommunicationEvents.LocalIP","MachineNetworkInfo.MacAddress"],
+      "dst_ref.value": ["NetworkCommunicationEvents.RemoteIP"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["NetworkCommunicationEvents.RemoteUrl"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "FileCreationEvents.FileName",
+        "FileCreationEvents.InitiatingProcessFileName",
+        "FileCreationEvents.InitiatingProcessParentFileName",
+        "ProcessCreationEvents.FileName",
+        "ProcessCreationEvents.InitiatingProcessFileName",
+        "ProcessCreationEvents.InitiatingProcessParentFileName",
+        "NetworkCommunicationEvents.InitiatingProcessFileName",
+        "NetworkCommunicationEvents.InitiatingProcessParentFileName",
+        "RegistryEvents.InitiatingProcessFileName",
+        "RegistryEvents.InitiatingProcessParentFileName"
+      ],
+      "hashes.SHA-1": [
+        "FileCreationEvents.SHA1",
+        "FileCreationEvents.InitiatingProcessSHA1",
+        "ProcessCreationEvents.SHA1",
+        "ProcessCreationEvents.InitiatingProcessSHA1",
+        "NetworkCommunicationEvents.InitiatingProcessSHA1",
+        "RegistryEvents.InitiatingProcessSHA1"
+      ],
+      "hashes.SHA-256": [
+        "FileCreationEvents.SHA256",
+        "ProcessCreationEvents.SHA256",
+        "ProcessCreationEvents.InitiatingProcessSHA256"
+      ],
+      "hashes.MD5": [
+        "FileCreationEvents.MD5",
+        "FileCreationEvents.InitiatingProcessMD5",
+        "ProcessCreationEvents.MD5",
+        "ProcessCreationEvents.InitiatingProcessMD5",
+        "NetworkCommunicationEvents.InitiatingProcessMD5",
+        "RegistryEvents.InitiatingProcessMD5"
+      ],
+      "parent_directory_ref.path": [
+        "FileCreationEvents.FolderPath",
+        "FileCreationEvents.InitiatingProcessFolderPath",
+        "ProcessCreationEvents.FolderPath",
+        "ProcessCreationEvents.InitiatingProcessFolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "name": [
+        "ProcessCreationEvents.FileName",
+        "NetworkCommunicationEvents.InitiatingProcessFileName",
+        "NetworkCommunicationEvents.InitiatingProcessParentFileName",
+        "RegistryEvents.InitiatingProcessFileName",
+        "RegistryEvents.InitiatingProcessParentFileName"
+      ],
+      "parent_ref.name": [
+        "ProcessCreationEvents.InitiatingProcessFileName",
+        "NetworkCommunicationEvents.InitiatingProcessParentFileName",
+        "RegistryEvents.InitiatingProcessParentFileName"
+      ],
+      "parent_ref.parent_ref.name": ["ProcessCreationEvents.InitiatingProcessParentFileName"],
+      "command_line": [
+        "ProcessCreationEvents.ProcessCommandLine",
+        "NetworkCommunicationEvents.InitiatingProcessCommandLine",
+        "RegistryEvents.InitiatingProcessCommandLine"
+      ],
+      "parent_ref.command_line": ["ProcessCreationEvents.InitiatingProcessCommandLine"],
+      "pid": [
+        "ProcessCreationEvents.ProcessId",
+        "NetworkCommunicationEvents.InitiatingProcessId",
+        "NetworkCommunicationEvents.InitiatingProcessParentId",
+        "RegistryEvents.InitiatingProcessId",
+        "RegistryEvents.InitiatingProcessParentId"
+      ],
+      "parent_ref.pid": [
+        "ProcessCreationEvents.InitiatingProcessId",
+        "NetworkCommunicationEvents.InitiatingProcessParentId",
+        "RegistryEvents.InitiatingProcessParentId"
+      ],
+      "parent_ref.parent_ref.pid": ["ProcessCreationEvents.InitiatingProcessParentId"],
+      "creator_user_ref.user_id": ["ProcessCreationEvents.AccountSid"],
+      "creator_user_ref.account_login": ["ProcessCreationEvents.AccountName"],
+      "parent_ref.creator_user_ref.user_id": ["ProcessCreationEvents.InitiatingProcessAccountSid"],
+      "parent_ref.creator_user_ref.account_login": ["ProcessCreationEvents.InitiatingProcessAccountName"],
+      "binary_ref.hashes.SHA-1": [
+        "ProcessCreationEvents.SHA1",
+        "NetworkCommunicationEvents.InitiatingProcessSHA1",
+        "RegistryEvents.InitiatingProcessSHA1"
+      ],
+      "binary_ref.hashes.SHA-256": ["ProcessCreationEvents.SHA256"],
+      "binary_ref.hashes.MD5": [
+        "ProcessCreationEvents.MD5",
+        "NetworkCommunicationEvents.InitiatingProcessMD5",
+        "RegistryEvents.InitiatingProcessMD5"
+      ],
+      "parent_ref.binary_ref.hashes.SHA-1": ["ProcessCreationEvents.InitiatingProcessSHA1"],
+      "parent_ref.binary_ref.hashes.SHA-256": ["ProcessCreationEvents.InitiatingProcessSHA256"],
+      "parent_ref.binary_ref.hashes.MD5": ["ProcessCreationEvents.InitiatingProcessMD5"],
+      "created": [
+        "ProcessCreationEvents.ProcessCreationTime",
+        "NetworkCommunicationEvents.InitiatingProcessCreationTime",
+        "NetworkCommunicationEvents.InitiatingProcessParentCreationTime",
+        "RegistryEvents.InitiatingProcessCreationTime",
+        "RegistryEvents.InitiatingProcessParentCreationTime"
+      ],
+      "parent_ref.created": [
+        "ProcessCreationEvents.InitiatingProcessCreationTime",
+        "NetworkCommunicationEvents.InitiatingProcessParentCreationTime",
+        "RegistryEvents.InitiatingProcessParentCreationTime"
+      ],
+      "parent_ref.parent_ref.created": ["ProcessCreationEvents.InitiatingProcessParentCreationTime"],
+      "binary_ref.parent_directory_ref.path": [
+        "ProcessCreationEvents.FolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"],
+      "parent_ref.binary_ref.parent_directory_ref.path": ["ProcessCreationEvents.InitiatingProcessFolderPath"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "ProcessCreationEvents.AccountSid",
+        "NetworkCommunicationEvents.InitiatingProcessAccountSid",
+        "RegistryEvents.InitiatingProcessAccountSid"
+      ],
+      "account_login": [
+        "ProcessCreationEvents.AccountName",
+        "NetworkCommunicationEvents.InitiatingProcessAccountName",
+        "RegistryEvents.InitiatingProcessAccountName"
+      ]
+    }
+  },
+  "windows-registry-key": {
+      "fields": {
+          "key": ["RegistryEvents.RegistryKey"],
+          "values[*]": ["RegistryEvents.RegistryValueName"]
+      }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["MachineNetworkInfo.MacAddress"]
+    }
+  },
+  "x-com-msatp": {
+    "fields": {
+      "computer_name": [
+        "FileCreationEvents.ComputerName",
+        "ProcessCreationEvents.ComputerName",
+        "NetworkCommunicationEvents.ComputerName",
+        "RegistryEvents.ComputerName"
+      ],
+      "machine_id": [
+        "FileCreationEvents.MachineId",
+        "ProcessCreationEvents.MachineId",
+        "NetworkCommunicationEvents.MachineId",
+        "RegistryEvents.MachineId"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "FileCreationEvents.FolderPath",
+        "FileCreationEvents.InitiatingProcessFolderPath",
+        "ProcessCreationEvents.FolderPath",
+        "ProcessCreationEvents.InitiatingProcessFolderPath",
+        "NetworkCommunicationEvents.InitiatingProcessFolderPath",
+        "RegistryEvents.InitiatingProcessFolderPath"
+      ]
+    }
+  }
+}

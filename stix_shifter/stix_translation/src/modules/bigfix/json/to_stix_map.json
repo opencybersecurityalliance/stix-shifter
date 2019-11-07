@@ -6,7 +6,8 @@
     "file_path": [
         {
             "key": "directory.path",
-            "object": "directory"
+            "object": "directory",
+            "transformer": "ToDirectoryPath"
         },
         {
             "key": "file.parent_directory_ref",
@@ -139,16 +140,6 @@
       {
         "key": "mac-addr.value",
         "object": "src_mac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
-      },
-      {
-        "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
       }
     ]
 }

@@ -1,5 +1,6 @@
 from ..base.base_results_connector import BaseResultsConnector
 import json
+import time
 from .....utils.error_response import ErrorResponder
 import xmltodict
 
@@ -15,7 +16,7 @@ class BigFixResultsConnector(BaseResultsConnector):
     @staticmethod
     def get_success_status(data_dict):
         items = ErrorResponder.get_struct_item(data_dict, ['results', '+isFailure=False'])
-        return len(items) > 0
+        return len(items) >= 0
 
     def create_results_connection(self, search_id, offset, length):
         response_txt = None
@@ -126,12 +127,16 @@ class BigFixResultsConnector(BaseResultsConnector):
         :param formatted_obj: dict
         :return: dict
         """
-        attr_with_na_value_index_dict = {'local_address': (1, ('n/a',)), 'mac': (2, ('n/a',))
+        attr_with_na_value_index_dict = {'mac': (2, ('n/a',))
                                          }
         for key, value in attr_with_na_value_index_dict.items():
             if obj_list[value[0]].strip() not in value[1]:
-                formatted_obj[key] = obj_list[value[0]].strip()
+                if 'mac' in key:
+                    formatted_obj[key] = obj_list[value[0]].strip().replace('-', ':')
+                else:
+                    formatted_obj[key] = obj_list[value[0]].strip()
         formatted_obj['type'] = obj_list[0].strip()
+        formatted_obj['timestamp'] = int(time.time())
         formatted_obj['event_count'] = "1"
         return formatted_obj
 
