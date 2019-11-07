@@ -27,11 +27,11 @@ class SecurityAdvisorPing(BasePing):
                 dict["success"] = True
             else:
                 dict["success"] = False
-
+                dict["Exception"] =  str(Exception("Ping Failed!"))
             return dict
 
         except Exception as e:
             dict["success"] = False
-            dict["Exception"] = e
+            dict["Exception"] = str(e)
 
         return dict

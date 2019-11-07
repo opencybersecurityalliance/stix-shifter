@@ -9,32 +9,13 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
         self.host = host
         self.auth = auth
 
-    def create_status_connection(self, providerID):
-    
-        url = self.host + self.auth["accountID"] + "/providers/" + providerID + "/notes"
+    def create_status_connection(self, search_id):
+        
+        ret_obj = {}
+        ret_obj['success'] = True
+        ret_obj['status'] = 'COMPLETED'
 
-        header = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization' : 'Bearer '  + self.auth["authToken"],
-        }
+        ret_obj['progress']  = '100'
 
-        dict = {}
-
-        try :
-            r = requests.get(url,headers= header)
-            dict["status"] = r.json()
-
-            if( r.status_code == 200 ):
-                dict["success"] = True
-            else:
-                dict["success"] = False
-
-            return dict
-
-        except Exception as e :
-
-            dict["success"] = False
-            dict["Exception"] = e
-
-        return dict
+        return ret_obj
+        

@@ -29,5 +29,5 @@ class Connector(BaseConnector):
         self.status_connector = SecurityAdvisorStatusConnector(host, auth)
         self.results_connector = SecurityAdvisorResultsConnector(host, auth)
         self.delete_connector = SecurityAdvisorDeleteConnector(host, auth)
-        self.is_async = True
+        self.is_async = False
         self.ping_connector = SecurityAdvisorPing(host, auth)
