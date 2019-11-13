@@ -42,7 +42,16 @@ class Connector(BaseConnector):
         return matching_sdos
 
     def ping(self):
-        return {"success": True}
+        return_obj = dict()
+
+        response = self.call_api('head')
+        response_code = response.status_code
+
+        if response_code == 200 or response_code == 301:
+            return_obj['success'] = True
+        else:
+            ErrorResponder.fill_error(return_obj, ['message'])
+        return return_obj
 
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
@@ -55,13 +64,7 @@ class Connector(BaseConnector):
         observations = []
         return_obj = dict()
 
-        bundle_url = self.connection.get('host')
-        auth = self.configuration.get('auth')
-
-        if auth is not None:
-            response = requests.get(bundle_url, auth=(auth.get('username'), auth.get('password')))
-        else:
-            response = requests.get(bundle_url)
+        response = self.call_api('get')
 
         response_code = response.status_code
 
@@ -103,3 +106,21 @@ class Connector(BaseConnector):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
+
+    def call_api(self, method):
+        call = getattr(requests, method.lower())
+
+        bundle_url = self.connection.get('host')
+        auth = self.configuration.get('auth')
+
+        if auth is not None:
+            username = auth.get('username')
+            password = auth.get('password')
+            if username is not None or password is not None:
+                response = call(bundle_url, auth=(auth.get('username'), auth.get('password')))
+            else:
+                response = call(bundle_url)
+        else:
+            response = call(bundle_url)
+        
+        return response
