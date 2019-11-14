@@ -44,11 +44,23 @@ class Connector(BaseConnector):
     def ping(self):
         return_obj = dict()
 
-        response = self.call_api('head')
+        bundle_url = self.connection.get('host')
+        auth = self.configuration.get('auth')
+
+        response = self.call_api(bundle_url, auth, 'head')
         response_code = response.status_code
 
-        if response_code == 200 or response_code == 301:
+        if response_code == 200:
             return_obj['success'] = True
+        elif response_code == 301:
+            redirected_url = response.headers.get('Location')
+            redirected_response = self.call_api(redirected_url, auth, 'head')
+            redirected_response_code = redirected_response.status_code
+            
+            if redirected_response_code == 200:
+                return_obj['success'] = True
+            else:
+                ErrorResponder.fill_error(return_obj, redirected_response, ['message'])
         else:
             ErrorResponder.fill_error(return_obj, response, ['message'])
         return return_obj
@@ -64,7 +76,10 @@ class Connector(BaseConnector):
         observations = []
         return_obj = dict()
 
-        response = self.call_api('get')
+        bundle_url = self.connection.get('host')
+        auth = self.configuration.get('auth')
+
+        response = self.call_api(bundle_url, auth, 'get')
 
         response_code = response.status_code
 
@@ -107,11 +122,8 @@ class Connector(BaseConnector):
         return_obj['success'] = True
         return return_obj
 
-    def call_api(self, method):
+    def call_api(self, bundle_url, auth, method):
         call = getattr(requests, method.lower())
-
-        bundle_url = self.connection.get('host')
-        auth = self.configuration.get('auth')
 
         if auth is not None:
             username = auth.get('username')
