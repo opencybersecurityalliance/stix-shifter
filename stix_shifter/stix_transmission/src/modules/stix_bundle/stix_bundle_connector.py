@@ -50,7 +50,7 @@ class Connector(BaseConnector):
         if response_code == 200 or response_code == 301:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, ['message'])
+            ErrorResponder.fill_error(return_obj, response, ['message'])
         return return_obj
 
     def create_query_connection(self, query):
