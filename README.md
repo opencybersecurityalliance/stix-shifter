@@ -46,9 +46,6 @@ If you want to create a new adapter for STIX-shifter, see the [developer guide](
 
 ## Licensing
 
-
-Copyright 2019 IBM
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
