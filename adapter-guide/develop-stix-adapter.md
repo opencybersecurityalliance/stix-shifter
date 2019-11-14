@@ -146,9 +146,9 @@ The following STIX pattern is supported in the example mapping because the STIX 
 "[network-traffic:src_port = 12345 AND ipv4-addr:value = '00-00-5E-00-53-00']"
 ```
 
-**Avoiding Custom STIX Properties**
+**Using Custom STIX Objects and Properties**
 
-As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when converting data source results to STIX. However, ISC uses standard STIX patterns when querying data sources, so it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
+As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
 
 [Back to top](#create-a-translation-module)
 
