@@ -35,10 +35,10 @@ By implementing a new adapter, _Developer A_ allows _Product A_ to fit into the 
 
 To develop a STIX-shifter adapter for a data source:
 
-1. Fork the `IBM/stix-shifter` repository from https://github.com/IBM/stix-shifter to work on your own copy of the library.
+1. Fork the `opencybersecurityalliance/stix-shifter` repository from https://github.com/opencybersecurityalliance/stix-shifter to work on your own copy of the library.
 1. [Create a Translation module](#create-a-translation-module).
 1. [Create a Transmission module](#create-a-transmission-module).
-1. Create a pull request to merge your changes in the `IBM/stix-shifter` repository.
+1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
 
 ### Create a Translation module
 
