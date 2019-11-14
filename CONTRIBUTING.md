@@ -1,38 +1,11 @@
-Developer Certificate of Origin
-Version 1.1
+# Contributing
 
-Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
-660 York Street, Suite 102,
-San Francisco, CA 94110 USA
+## <a id="openParticipation">Public Participation Invited</a>
 
-Everyone is permitted to copy and distribute verbatim copies of this
-license document, but changing it is not allowed.
+The Open Cybersecurity Alliance (OCA) is an [OASIS Open Project](https://oasis-open-projects.org/) and welcomes participation by anyone, whether affiliated with OASIS or not.  Substantive contributions and feedback are invited from all parties, following the common conventions for participation in GitHub public repository projects.  
 
+Participation is expected to be consistent with the [Code of Conduct](https://github.com/opencybersecurityalliance/oca-admin/blob/master/CODE_OF_CONDUCT.md), the [licenses](https://github.com/opencybersecurityalliance/oca-admin/blob/master/LICENSE.md), and the acceptance of our Contributor License Agreement, generally at the time of first contribution. Please see the repository [README](https://github.com/opencybersecurityalliance/oca-admin/blob/master/README.md) for more details.</p>
 
-Developer's Certificate of Origin 1.1
+## <a id="feedback">Feedback</a>
 
-By making a contribution to this project, I certify that:
-
-(a) The contribution was created in whole or in part by me and I
-have the right to submit it under the open source license
-indicated in the file; or
-
-(b) The contribution is based upon previous work that, to the best
-of my knowledge, is covered under an appropriate open source
-license and I have the right under that license to submit that
-work with modifications, whether created in whole or in part
-by me, under the same open source license (unless I am
-permitted to submit under a different license), as indicated
-in the file; or
-
-(c) The contribution was provided directly to me by some other
-person who certified (a), (b) or (c) and I have not modified
-it.
-
-(d) I understand and agree that this project and the contribution
-are public and that a record of the contribution (including all
-personal information I submit with it, including my sign-off) is
-maintained indefinitely and may be redistributed consistent with
-this project or the open source license(s) involved.
-```
-
+Questions or comments about the OCA's activities may be composed as GitHub issues or comments or may be directed to the project's general email list at oca@lists.oasis-open-projects.org. General questions about OASIS Open Projects may be directed to OASIS staff at op-admin@lists.oasis-open-projects.org
