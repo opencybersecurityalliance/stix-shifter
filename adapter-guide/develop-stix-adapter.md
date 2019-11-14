@@ -93,8 +93,7 @@ To develop a STIX-shifter adapter for a data source:
 
 #### Step 3. Edit the from_stix_map JSON file
 
-The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query. 
-
+The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query.
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
@@ -147,9 +146,9 @@ The following STIX pattern is supported in the example mapping because the STIX 
 "[network-traffic:src_port = 12345 AND ipv4-addr:value = '00-00-5E-00-53-00']"
 ```
 
-**Avoiding Custom STIX Properties**
+**Using Custom STIX Objects and Properties**
 
-As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when converting data source results to STIX. However, ISC uses standard STIX patterns when querying data sources, so it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.  
+As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
 
 [Back to top](#create-a-translation-module)
 
@@ -189,27 +188,28 @@ The parsing is recursively run through QueryStringPatternTranslator.\_parse_expr
 The `query_constructor.py` file is where the native query is built from the ANTLR parsing.
 
 ---
+
 #### How STIX-shifter handles unmapped STIX properties
 
 If a STIX pattern contains an unmapped property, and any joining operators allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
 
 `[stix_object:unmapped_property OR stix_object:mapped_property]`
 
-*The unmapped property would be removed since it is joined to a mapped property with an OR operator.*
+_The unmapped property would be removed since it is joined to a mapped property with an OR operator._
 
 `[stix_object:unmapped_property] OR [stix_object:mapped_property]`
 
-*The entire observation object (square brackets) containing the unmapped property would be removed since the pattern contains at least one other observation with mapped properties.*
+_The entire observation object (square brackets) containing the unmapped property would be removed since the pattern contains at least one other observation with mapped properties._
 
 If the unmapped property cannot be removed, STIX-shifter produces an error. This happens because the `QueryStringPatternTranslator` class (in `query_constructor.py`) does not know what data source field the STIX object property must be converted to. The following patterns would produce such an error:
 
 `[stix_object:unmapped_property AND stix_object:mapped_property]`
 
-*The unmapped property cannot be removed without changing the query logic since the two properties are joined by an AND operator.*
+_The unmapped property cannot be removed without changing the query logic since the two properties are joined by an AND operator._
 
 `[stix_object:unmapped_property]`
 
-*The pattern only contains one observation with one unmapped property; nothing would be left to the query after removing it.*
+_The pattern only contains one observation with one unmapped property; nothing would be left to the query after removing it._
 
 ---
 
@@ -474,6 +474,7 @@ python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and n
 ```
 
 To run validation on the STIX pattern, add `'{"validate_pattern": "true"}'` as an option to the end of the CLI command:
+
 ```
 python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
 ```
@@ -698,3 +699,19 @@ For asynchronous sources, the search id that gets passed into the connection met
       ```
       {'success': True}
       ```
+
+### Testing a new adapter using the proxy host
+
+Work on a new stix-shifter adapter occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** adapter that facilitates a remote instance of the project calling out to a local instance. While in development, a new adapter's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new adapter and return results back to the remote stix-shifter instance.
+
+Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
+
+```
+python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
+```
+
+As an example:
+
+```
+python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
+```
