@@ -14,10 +14,10 @@ class UnexpectedResponseException(Exception):
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-
         self.is_async = False
         self.connection = connection
         self.configuration = configuration
+        self.bundle_url = None
         self.results_connector = self
         self.query_connector = self
         self.ping_connector = self
@@ -44,25 +44,21 @@ class Connector(BaseConnector):
     def ping(self):
         return_obj = dict()
 
-        bundle_url = self.connection.get('host')
+        if not self.bundle_url:
+            self.bundle_url = self.connection.get('host')
         auth = self.configuration.get('auth')
 
-        response = self.call_api(bundle_url, auth, 'head')
+        response = self.call_api(self.bundle_url, auth, 'head')
+        response_txt = response.raise_for_status()
         response_code = response.status_code
 
         if response_code == 200:
             return_obj['success'] = True
         elif response_code == 301:
-            redirected_url = response.headers.get('Location')
-            redirected_response = self.call_api(redirected_url, auth, 'head')
-            redirected_response_code = redirected_response.status_code
-            
-            if redirected_response_code == 200:
-                return_obj['success'] = True
-            else:
-                ErrorResponder.fill_error(return_obj, redirected_response, ['message'])
+            self.bundle_url = response.headers.get('Location')
+            return self.ping()
         else:
-            ErrorResponder.fill_error(return_obj, response, ['message'])
+            ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj
 
     def create_query_connection(self, query):
