@@ -1,9 +1,4 @@
-
-from .sa_findings_api import get_all_occurences
 from flatten_json import flatten
-
-from .StixPatternParser import StixPatternParser
-
 
 def find(s_key , superset):
     
@@ -30,7 +25,6 @@ def and_operation(entites , set):
 def query_func(sentence , set ):
 
     findings = []
-
     for statement in sentence:
         findings.append(and_operation(statement, set))
         

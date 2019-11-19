@@ -1,7 +1,4 @@
 class StatementParser:
-    
-    def __init__(self):
-        pass
 
     def cleaner(self, entity):
 
@@ -36,16 +33,10 @@ class StatementParser:
 
                     sub = not_split[i].strip()
                     sub = not_split[i].split("=")   
-
-
-                    print("sub -- ", sub)
-
                     key = sub[0].strip()
                     value = sub[1].strip()
-
                     if i == 0:
                         list.append( (key , value) )
-
                     if i == 1:
                         list.append( (key + "~not~", value) )
 
