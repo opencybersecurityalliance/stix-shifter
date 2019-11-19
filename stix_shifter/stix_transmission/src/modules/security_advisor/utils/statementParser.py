@@ -2,7 +2,7 @@ class StatementParser:
 
     def cleaner(self, entity):
 
-        if entity.find("[") == 0  and  entity.find("]") == len(entity) -1:
+        if entity.find("[") == 0  and  entity.find("]") == len(entity)-1:
             return entity[1:len(entity)-1].strip()
 
         if entity.find("[") == 0 :
@@ -13,17 +13,13 @@ class StatementParser:
         else:
             return entity.strip()
 
-
-    def evaluate_or(self, splitted  , list):
+    def evaluate_or(self, splitted, list):
 
         for elem in splitted:
-
             not_split = elem.split("NOT")
-
             if( len(not_split) == 1 ):
                 sub = not_split[0].strip()
                 sub = not_split[0].split("=")
-
                 key = sub[0].strip()
                 value = sub[1].strip()
                 list.append( (key, value) )
@@ -38,7 +34,7 @@ class StatementParser:
                     if i == 0:
                         list.append( (key , value) )
                     if i == 1:
-                        list.append( (key + "~not~", value) )
+                        list.append( (key + "~not~", value))
 
         return list
 
@@ -60,7 +56,7 @@ class StatementParser:
         split_AND = statement.split("OR")
 
         for i in split_AND:
-            list_AND.append( self.slpit_and_eval_or(i) )
+            list_AND.append(self.slpit_and_eval_or(i))
 
         return list_AND
 

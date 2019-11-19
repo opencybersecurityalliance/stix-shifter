@@ -6,5 +6,5 @@ class SecurityAdvisorDeleteConnector(BaseDeleteConnector):
 
     def delete_query_connection(self, search_id):
 
-        return_obj = { "success" : True}
+        return_obj = {"success" : True}
         return return_obj

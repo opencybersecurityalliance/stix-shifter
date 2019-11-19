@@ -11,7 +11,6 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
         return_obj = {}
         return_obj['success'] = True
         return_obj['status'] = 'COMPLETED'
-
         return_obj['progress']  = '100'
 
         return return_obj

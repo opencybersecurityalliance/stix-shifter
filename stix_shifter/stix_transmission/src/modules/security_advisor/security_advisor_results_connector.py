@@ -23,8 +23,7 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
 
             accountID = self.auth["accountID"]
             accessToken = self.auth["authToken"]
-
-            set_occ =  get_all_occurences(  accountID, accessToken , self.host )
+            set_occurences =  get_all_occurences(accountID, accessToken , self.host)
 
         except Exception as e :
             return_obj['success'] = False
@@ -33,15 +32,15 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
 
         try :
             for elem in query :
-                if( len(elem) ==1  ):
+                if( len(elem) ==1):
                     solved  = StixPatternParser().statement_parser.parser(elem[0])
-                    findings = query_func(solved , set_occ )
+                    findings = query_func(solved, set_occurences)
                     list_or.append(findings)
         
                 else :
                     for finding in elem:
                         solved  = StixPatternParser().statement_parser.parser(finding)
-                        findings = query_func(solved, set_occ)
+                        findings = query_func(solved, set_occurences)
                         list_and.append(findings)
 
             combined_list = []
@@ -66,7 +65,7 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
                     if( len(sub_elem) == 1 ):
 
                         for element in common_elements:
-                            if( element == sub_elem[0]["id"] ):
+                            if(element == sub_elem[0]["id"]):
                                 data.append(sub_elem[0])
                             
             for elem_or in list_or:
@@ -75,7 +74,7 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
                     for finding in sub_elem:
                         data.append(finding)
             
-            if( len(data) == 0 ):
+            if(len(data) == 0):
                 return_obj['success'] = False
                 return_obj['error'] = str(Exception("Query Failed!"))
             else:

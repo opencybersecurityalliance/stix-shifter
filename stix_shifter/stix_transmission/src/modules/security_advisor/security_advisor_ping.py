@@ -13,14 +13,12 @@ class SecurityAdvisorPing(BasePing):
             'Accept': 'application/json',
             'Authorization' : 'Bearer '  + self.auth["authToken"] ,
         }
-
         return_obj = {}
-
         try :
             response = requests.get(url,headers= header)
             response_code = response.status_code
 
-            if ( response_code == 200 ):
+            if (response_code == 200):
                 return_obj["success"] = True
             else:
                 return_obj["success"] = False

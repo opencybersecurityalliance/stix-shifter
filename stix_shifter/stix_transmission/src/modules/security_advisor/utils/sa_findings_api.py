@@ -1,17 +1,17 @@
 import requests
 
-def apiCall( header , url  ) :
+def apiCall(header, url) :
     try :
-        response = requests.get(url,headers= header)
-        if( response.status_code == 200 ):
+        response = requests.get(url, headers= header)
+        if(response.status_code == 200):
             response = response.json()
             return(response)
         else :
-            raise Exception("Status Code in getting " + url +  response.status_code)
+            raise Exception("Status Code in getting " + url + response.status_code)
     except Exception as e:
-        raise Exception("Exception in getting response of " + url + str(e) )
+        raise Exception("Exception in getting response of " + url + str(e))
 
-def get_all_occurences(accountID , accessToken, host  ):
+def get_all_occurences(accountID , accessToken, host):
 
     header = {
         'Content-Type': 'application/json',
@@ -20,8 +20,7 @@ def get_all_occurences(accountID , accessToken, host  ):
     }
 
     url = host  + accountID + "/providers"
-
-    all_providers  = apiCall( header , url )
+    all_providers  = apiCall(header , url)
     all_providers = all_providers["providers"]
 
     list_provider_ids = []
