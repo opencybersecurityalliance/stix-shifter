@@ -16,6 +16,5 @@ class SecurityAdvisorQueryTranslator(BaseQueryTranslator):
         :return: the passed in data
         :rtype: str
         """
-
         result = StixPatternParser().parse(data)
         return result

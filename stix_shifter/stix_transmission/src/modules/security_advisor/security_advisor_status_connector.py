@@ -1,9 +1,6 @@
 from ..base.base_status_connector import BaseStatusConnector
 from ..base.base_status_connector import Status
 
-import requests
-
-
 class SecurityAdvisorStatusConnector(BaseStatusConnector):
     def __init__(self, host, auth):
         self.host = host
@@ -11,11 +8,10 @@ class SecurityAdvisorStatusConnector(BaseStatusConnector):
 
     def create_status_connection(self, search_id):
         
-        ret_obj = {}
-        ret_obj['success'] = True
-        ret_obj['status'] = 'COMPLETED'
+        return_obj = {}
+        return_obj['success'] = True
+        return_obj['status'] = 'COMPLETED'
+        return_obj['progress']  = '100'
 
-        ret_obj['progress']  = '100'
-
-        return ret_obj
+        return return_obj
         

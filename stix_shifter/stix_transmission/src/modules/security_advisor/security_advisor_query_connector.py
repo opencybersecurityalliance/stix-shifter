@@ -1,9 +1,6 @@
 from ..base.base_query_connector import BaseQueryConnector
 import requests
-
 import json
-
-from flatten_json import flatten
 
 class SecurityAdvisorQueryConnector(BaseQueryConnector):
     def __init__(self, host,auth):
@@ -12,14 +9,14 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
 
     def create_query_connection(self, query):
 
-        ret_obj = {}
+        return_obj = {}
         try : 
-            ret_obj['success'] = True
-            ret_obj['search_id'] = json.dumps(query)
+            return_obj['success'] = True
+            return_obj['search_id'] = json.dumps(query)
 
         except Exception as e:
-            ret_obj['success'] = False
-            ret_obj['error'] = str(e)
+            return_obj['success'] = False
+            return_obj['error'] = str(e)
 
-        return ret_obj
+        return return_obj
 

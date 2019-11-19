@@ -1,6 +1,5 @@
 from ..base.base_ping import BasePing
 import requests
-
 class SecurityAdvisorPing(BasePing):
     def __init__(self, host, auth):
         self.host = host
@@ -14,24 +13,20 @@ class SecurityAdvisorPing(BasePing):
             'Accept': 'application/json',
             'Authorization' : 'Bearer '  + self.auth["authToken"] ,
         }
-
-        dict = {}
-
+        return_obj = {}
         try :
-            r = requests.get(url,headers= header)
+            response = requests.get(url,headers= header)
+            response_code = response.status_code
 
-            response_code = r.status_code
-            dict["response_code"] = response_code
-
-            if ( response_code == 200 ):
-                dict["success"] = True
+            if (response_code == 200):
+                return_obj["success"] = True
             else:
-                dict["success"] = False
-                dict["Exception"] =  str(Exception("Ping Failed!"))
-            return dict
+                return_obj["success"] = False
+                return_obj["Exception"] =  str(Exception("Ping Failed!"))
+            return return_obj
 
         except Exception as e:
-            dict["success"] = False
-            dict["Exception"] = str(e)
+            return_obj["success"] = False
+            return_obj["Exception"] = str(e)
 
-        return dict
+        return return_obj
