@@ -1,8 +1,15 @@
 # Security Advisor
 
-### Format for calling stix-shifter from the command line
 
-python stix_shifter.py `<translator_module>` `<query or result>` `<stix identity object>` `<data>`
+## Translating Stix Pattern to Security Advisor Query
+
+```
+python3 main.py translate "security_advisor" "query" '{}' "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"
+```
+
+`{'queries': [["[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"]]}`
+
+---------------
 
 ## Converting from Security Advisor Findings to STIX Cyber Observable Object
 
