@@ -75,12 +75,9 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
                     for finding in sub_elem:
                         data.append(finding)
             
-            if(len(data) == 0):
-                return_obj['success'] = False
-                return_obj['error'] = str(Exception("Query Failed!"))
-            else:
-                return_obj['success'] = True
-                return_obj['data'] = data
+            
+            return_obj['success'] = True
+            return_obj['data'] = data
             return return_obj
 
         except Exception as e :
