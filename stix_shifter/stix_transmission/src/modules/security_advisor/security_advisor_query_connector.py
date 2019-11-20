@@ -12,7 +12,7 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
         return_obj = {}
         try : 
             return_obj['success'] = True
-            return_obj['search_id'] = json.dumps(query)
+            return_obj['search_id'] = query
 
         except Exception as e:
             return_obj['success'] = False

@@ -11,8 +11,9 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
         self.StixPatternParser = StixPatternParser()
 
     def create_results_connection(self, searchID , offset , length):
-
-        query = json.loads(searchID)
+        
+        result = StixPatternParser().parse(searchID)
+        query = result
         return_obj = {}
         try :
             if( isinstance(query , str) ):
