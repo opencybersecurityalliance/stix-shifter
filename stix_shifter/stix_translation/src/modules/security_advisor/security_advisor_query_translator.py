@@ -1,7 +1,5 @@
 
 from ..base.base_query_translator import BaseQueryTranslator
-from .utils.StixPatternParser import StixPatternParser
-
 
 class SecurityAdvisorQueryTranslator(BaseQueryTranslator):
 
@@ -16,5 +14,6 @@ class SecurityAdvisorQueryTranslator(BaseQueryTranslator):
         :return: the passed in data
         :rtype: str
         """
-        result = StixPatternParser().parse(data)
-        return result
+        l = []
+        l.append(data)
+        return l
