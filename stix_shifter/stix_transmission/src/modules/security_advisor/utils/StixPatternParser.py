@@ -1,7 +1,12 @@
 from .statementParser import StatementParser
 
 class StixPatternParser:
-
+    """
+        Parse method will do the parsing of the Sentence.
+        (The first parsing to break the sentence into Statements)
+        RESULTS Connector will call this funcion initially and the further processing
+        will be done by the statemet parser
+    """
     def __init__(self):
         self.statement_parser =  StatementParser()
     

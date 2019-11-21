@@ -23,5 +23,4 @@ class SecurityAdvisorAuth():
             return response.json()["access_token"]
 
         else:
-            print(response.json())
             raise Exception("Not able to retrieve Access Token")

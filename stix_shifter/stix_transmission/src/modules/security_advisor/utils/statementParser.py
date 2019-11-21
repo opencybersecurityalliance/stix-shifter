@@ -1,5 +1,11 @@
 class StatementParser:
-
+    """
+        Utility Function for parsing STIX PATTERN (based on the priorites)
+        1. Spliiting on basis of OR
+        2. Spitting the sub elements of OR in AND
+        3. Cleaning the entites
+        4. Creating a list of AND and OR that will be evaluated further in Results Connector
+    """
     def cleaner(self, entity):
 
         if entity.find("[") == 0  and  entity.find("]") == len(entity)-1:
@@ -16,25 +22,11 @@ class StatementParser:
     def evaluate_or(self, splitted, list):
 
         for elem in splitted:
-            not_split = elem.split("NOT")
-            if( len(not_split) == 1 ):
-                sub = not_split[0].strip()
-                sub = not_split[0].split("=")
-                key = sub[0].strip()
-                value = sub[1].strip()
-                list.append( (key, value) )
-
-            else :
-                for i in range(len(not_split)):
-
-                    sub = not_split[i].strip()
-                    sub = not_split[i].split("=")   
-                    key = sub[0].strip()
-                    value = sub[1].strip()
-                    if i == 0:
-                        list.append( (key , value) )
-                    if i == 1:
-                        list.append( (key + "~not~", value))
+            sub = elem.strip()
+            sub = elem.split("=")
+            key = sub[0].strip()
+            value = sub[1].strip()
+            list.append( (key, value) )
 
         return list
 
