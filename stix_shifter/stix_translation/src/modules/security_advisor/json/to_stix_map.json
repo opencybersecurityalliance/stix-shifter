@@ -1,19 +1,16 @@
 {
-
   "author_id": {
     "key": "user-account.user_id"
   },
-
-  "author_account_id": {
-    "key": "author.author_account_id"
-  },
-
   "author_email": {
     "key": "email-addr.value"
   },
-
-  "context_resource_name": {
-    "key": "x_finding.context_resource_name",
+  "author_accountId": {
+    "key": "x_author.author_accountId",
+    "cybox": false
+  },
+  "context_resourceName": {
+    "key": "x_finding.context_resourceName",
     "cybox": false
   },
   "description": {
@@ -24,13 +21,17 @@
     "key": "x_finding.finding_severity",
     "cybox": false
   },
+  "finding_certainty": {
+    "key": "x_finding.finding_certainty",
+    "cybox": false
+  },
   "id": {
     "key": "x_finding.id",
     "cybox": false
   },
 
-  "long_description": {
-    "key": "x_finding.long_description",
+  "longDescription": {
+    "key": "x_finding.longDescription",
     "cybox": false
   },
   "message": {
@@ -41,40 +42,53 @@
     "key": "x_finding.name",
     "cybox": false
   },
-  "note_name": {
-    "key": "x_finding.note_name",
+  "noteName": {
+    "key": "x_finding.noteName",
     "cybox": false
   },
-  "provider_id": {
-    "key": "x_provider.provider_id",
+  "providerId": {
+    "key": "x_provider.providerId",
     "cybox": false
   },
-  "provider_name": {
-    "key": "x_provider.provider_name",
+  "providerName": {
+    "key": "x_provider.providerName",
     "cybox": false
   },
   "remediation": {
     "key": "x_finding.remediation",
     "cybox": false
   },
-  "reported_by_id": {
-    "key": "x_provider.reported_by_id",
+  "reportedBy_id": {
+    "key": "x_provider.reportedBy_id",
     "cybox": false
   },
-  "reported_by_title": {
-    "key": "x_provider.reported_by_title",
+  "reportedBy_title": {
+    "key": "x_provider.reportedBy_title",
     "cybox": false
   },
-  "short_description": {
-    "key": "x_finding.short_description",
+  "shortDescription": {
+    "key": "x_finding.shortDescription",
     "cybox": false
   },
   "finding_next_steps_0_title": {
     "key": "x_finding.finding_next_steps_0_title",
     "cybox": false
   },
-  "context_resource_type": {
-    "key": "x_finding.context_resource_type",
+  "context_accountId": {
+    "key": "x_finding.context_accountId",
     "cybox": false
+  },
+  "createTime": {
+    "key": "first_observed",
+    "cybox": false
+  },
+  "updateTime": {
+    "key": "last_observed",
+    "cybox": false
+  },
+  "occurence_count": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
   }
 }

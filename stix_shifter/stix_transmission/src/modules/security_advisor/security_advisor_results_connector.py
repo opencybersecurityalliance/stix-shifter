@@ -11,10 +11,34 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
         self.StixPatternParser = StixPatternParser()
 
     def create_results_connection(self, searchID , offset , length):
-        
-        result = StixPatternParser().parse(searchID)
-        query = result
+
+        index = 0
+        search_id = searchID
+        time = None
         return_obj = {}
+
+        if( searchID.find("START") != -1 ):
+            index = searchID.find("START")
+            search_id = searchID[ 0 : index ]
+            time = searchID[ index : len(searchID) ].strip()
+            if( time.find("STOP") != -1):
+                time = time.replace("t", "")
+                time = time.replace("START", "fromTime:")
+                time = time.replace("STOP", "toTime:")
+                time = time.replace("'", '"')
+
+            else:
+                time = time.replace("t", "")
+                time = time.replace("START", "fromTime:")
+                time = time.replace("'", '"')
+
+        elif( searchID.find("START") == -1 and  searchID.find("STOP") != -1 ):
+            return_obj['success'] = False
+            return_obj['error'] = str( Exception("START time not Specified") )
+
+        result = StixPatternParser().parse(search_id.strip())
+        query = result
+        
         try :
             if( isinstance(query , str) ):
                 query = eval(query)
@@ -24,8 +48,8 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
 
             accountID = self.auth["accountID"]
             accessToken = self.auth["authToken"]
-            set_occurences =  get_all_occurences(accountID, accessToken , self.host)
-
+            set_occurences =  get_all_occurences(accountID, accessToken , self.host, time)
+            
         except Exception as e :
             return_obj['success'] = False
             return_obj['error'] = str(Exception("Error in Getting all Occurences" + str(e)))
@@ -67,12 +91,14 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
 
                         for element in common_elements:
                             if(element == sub_elem[0]["id"]):
+                                sub_elem[0]["occurence_count"] =1
                                 data.append(sub_elem[0])
                             
             for elem_or in list_or:
 
                 for sub_elem in elem_or:
                     for finding in sub_elem:
+                        finding["occurence_count"] =1
                         data.append(finding)
             
             

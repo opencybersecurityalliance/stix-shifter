@@ -13,17 +13,17 @@ python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCl
 Running Query in Security Advisor:
 
 ```
-python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCloudApiKey" : "", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  query "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"
+python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCloudApiKey" : "", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  query "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'"
 ```
 
-`{'success': True, 'search_id': "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"}`
+`{'success': True, 'search_id': "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'"}`
 
 ---------------
 
 Getting Status for the query: 
 
 ```
-python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCloudApiKey" : "", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  status  "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"
+python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCloudApiKey" : "", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  status "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'"
 ```
 
 `{'success': True, 'status': 'COMPLETED', 'progress': '100'}`
@@ -33,7 +33,7 @@ python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCl
 Getting Results for the query: 
 
 ```
-python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :"", "ibmCloudApiKey" : "", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  results  "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']" 0 3
+python3 main.py transmit security_advisor  {} '{ "ibmCloudAccountID" :" ", "ibmCloudApiKey" : "oSsdirLQuQmLvirvhUiyC_1uKJs02hdrlS5ilrUkL4yg", "saAPIEndpoint" :"https://us-south.secadvisor.cloud.ibm.com/findings/v1/" }'  results "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'" 0 3
 ```
 
-`{'success': True, 'data': [{'author_account_id': '', 'author_email': '', 'author_id': '', 'author_kind': 'user', 'context_account_id': ' ', 'context_resource_name': 'mycluster', 'context_resource_type': 'cluster', 'create_time': '2019-10-31T11:15:55.099615Z', 'create_timestamp': 1572520555100, 'description': 'file hash and url', 'finding_next_steps_0_title': 'file hash and url', 'finding_severity': 'MEDIUM', 'id': '853092', 'insertion_timestamp': 1572520555100, 'kind': 'FINDING', 'long_description': 'http://5.188.86.29:7000', 'message': 'fdc3e15d2bc80b092f69f89329ff34b7b828be976e5cbe41e3c5720f7896c140', 'name': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/occurrences/853092', 'note_name': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/notes/kubehunteribmcloud-remote-code-execution', 'provider_id': 'kubeHunterIBMCloudRemoteCodeExecutor', 'provider_name': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor', 'remediation': ' Test Remeidation', 'reported_by_id': 'kubehunteribmcloud-remote-code-execution', 'reported_by_title': 'Kubehunter IBMCloud control', 'short_description': 'Kube hunter Remote Code Executor', 'update_time': '2019-10-31T11:15:55.099635Z', 'update_timestamp': 1572520555100, 'update_week_date': '2019-W44-4'}]}`
+`{'success': True, 'data': [{'author_accountId': ' ', 'author_id': 'test_id', 'author_email': ' test@gmail.com', 'name': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/occurrences/853092', 'id': '853092', 'noteName': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/notes/kubehunteribmcloud-remote-code-execution', 'updateTime': '2019-10-31T11:15:55.099635Z', 'createTime': '2019-10-31T11:15:55.099615Z', 'shortDescription': 'Kube hunter Remote Code Executor', 'providerId': 'kubeHunterIBMCloudRemoteCodeExecutor', 'providerName': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor', 'longDescription': 'http://5.188.86.29:7000', 'context_accountId': ' ', 'context_resourceName': 'mycluster', 'reportedBy_id': 'kubehunteribmcloud-remote-code-execution', 'reportedBy_title': 'Kubehunter IBMCloud control', 'finding_severity': 'MEDIUM', 'finding_certainty': 'HIGH', 'occurence_count': 1}, {'author_accountId': ' ', 'author_id': 'test_id', 'author_email': ' test@gmail.com', 'name': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/occurrences/853089', 'id': '853089', 'noteName': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor/notes/kubehunteribmcloud-remote-code-execution', 'updateTime': '2019-10-31T11:11:17.679043Z', 'createTime': '2019-10-31T11:11:17.679013Z', 'shortDescription': 'Kube hunter Remote Code Executor', 'providerId': 'kubeHunterIBMCloudRemoteCodeExecutor', 'providerName': ' /providers/kubeHunterIBMCloudRemoteCodeExecutor', 'longDescription': 'http://5.45.69.149:7000', 'context_accountId': ' ', 'context_resourceName': 'mycluster', 'reportedBy_id': 'kubehunteribmcloud-remote-code-execution', 'reportedBy_title': 'Kubehunter IBMCloud control', 'finding_severity': 'LOW', 'finding_certainty': 'HIGH', 'occurence_count': 1}]}`
