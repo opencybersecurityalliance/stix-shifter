@@ -9,18 +9,14 @@ from .security_advisor_auth import SecurityAdvisorAuth
 class Connector(BaseConnector):
     def __init__(self, connection, configuration ):
         
-        auth  = {}
-        accountID = configuration.get("ibmCloudAccountID")
-        apiKey = configuration.get("ibmCloudApiKey") 
-        host = configuration.get("saAPIEndpoint")
+        auth = {}
+        accountID = configuration.get("accountID")
+        apiKey = configuration.get("apiKey") 
+        host = connection.get("host")
 
-        if( not accountID or not apiKey or not host ):
-            raise Exception(" accountID or APIKEY or Host not present !!")
-
+        authToken = SecurityAdvisorAuth(apiKey)
         auth["accountID"] = accountID
-        authToken = SecurityAdvisorAuth(apiKey).obtainAccessToken()
         auth["authToken"] = authToken
-
 
         self.query_connector = SecurityAdvisorQueryConnector(host, auth)
         self.status_connector = SecurityAdvisorStatusConnector(host, auth)

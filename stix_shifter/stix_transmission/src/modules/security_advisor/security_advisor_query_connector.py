@@ -2,6 +2,8 @@ from ..base.base_query_connector import BaseQueryConnector
 import requests
 import json
 
+from .....utils.error_response import ErrorResponder
+
 class SecurityAdvisorQueryConnector(BaseQueryConnector):
     def __init__(self, host,auth):
         self.host = host
@@ -10,13 +12,7 @@ class SecurityAdvisorQueryConnector(BaseQueryConnector):
     def create_query_connection(self, query):
 
         return_obj = {}
-        try : 
-            return_obj['success'] = True
-            return_obj['search_id'] = query
-
-        except Exception as e:
-            return_obj['success'] = False
-            return_obj['error'] = str(e)
+        return_obj['success'] = True
+        return_obj['search_id'] = query
 
         return return_obj
-

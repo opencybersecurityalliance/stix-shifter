@@ -3,6 +3,8 @@ import json
 from .utils.sa_occurence_finder import query_func
 from .utils.sa_findings_api import get_all_occurences
 from .utils.StixPatternParser import StixPatternParser
+from .....utils.error_response import ErrorResponder
+
 
 class SecurityAdvisorResultsConnector(BaseResultsConnector):
     def __init__(self, host, auth ):
@@ -33,9 +35,9 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
                 time = time.replace("'", '"')
 
         elif( searchID.find("START") == -1 and  searchID.find("STOP") != -1 ):
-            return_obj['success'] = False
-            return_obj['error'] = str( Exception("START time not Specified") )
-
+            ErrorResponder.fill_error(return_obj, {'code':"query_failed"}, message= "START time not Specified")
+            return return_obj
+            
         result = StixPatternParser().parse(search_id.strip())
         query = result
         
@@ -47,12 +49,17 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
             list_and = []
 
             accountID = self.auth["accountID"]
-            accessToken = self.auth["authToken"]
+            accessToken = self.auth["authToken"].obtainAccessToken()
+
+        except Exception as e:
+            ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message= str(e))
+            return return_obj
+        
+        try:
             set_occurences =  get_all_occurences(accountID, accessToken , self.host, time)
             
         except Exception as e :
-            return_obj['success'] = False
-            return_obj['error'] = str(Exception("Error in Getting all Occurences" + str(e)))
+            ErrorResponder.fill_error(return_obj, {'code': "service_not_availiable" }, message= str(e))
             return return_obj
 
         try :
@@ -107,7 +114,6 @@ class SecurityAdvisorResultsConnector(BaseResultsConnector):
             return return_obj
 
         except Exception as e :
-            return_obj['success'] = False
-            return_obj['error'] = str(Exception("Error in Evaluation" + str(e)))
+            ErrorResponder.fill_error(return_obj, {'code':"query_failed"}, message= str(e))
 
         return return_obj
