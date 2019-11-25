@@ -8,6 +8,7 @@ python3 main.py translate "security_advisor" "query" '{}' "[url:value = 'http://
 ```
 
 `{'queries': ["[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'"]}`
+
 ---------------
 
 ## Converting from Security Advisor Findings to STIX Cyber Observable Object
