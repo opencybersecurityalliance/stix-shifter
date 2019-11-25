@@ -1,7 +1,6 @@
 from flatten_json import flatten
 
 def find(s_key, superset):
-    
     """
         Takes in searchKey and Set of findings and return the list satisfying that searchKey
         :param s_key: search Key
@@ -11,7 +10,6 @@ def find(s_key, superset):
         :return: list of findings that has s_key
         :rtype: list
     """
-
     dic_flattened = [flatten(d) for d in superset]
     out = []
     for item in dic_flattened:
@@ -20,7 +18,6 @@ def find(s_key, superset):
                 out.append(item)
             if(str(s_key) == "'" +str(value) + "'"):
                 out.append(item)
-
     return out  
 
 def and_operation(entites , set):
@@ -33,7 +30,7 @@ def and_operation(entites , set):
         set = r
     return set
 
-def query_func(sentence , set):
+def query_function(sentence , set):
     """
         Return all the findings with AND opeation on entities of sentence
     """

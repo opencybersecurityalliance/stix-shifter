@@ -1,5 +1,4 @@
 import requests
-
 """
     Takes in accountID accessToken host time and returns all the findings in the account
     :param accountID: accountID of the user
@@ -13,11 +12,12 @@ import requests
     :return: findings
     :rtype: dict
 """
-def get_all_occurences(accountID , accessToken, host , time):
+def get_all_occurences( params, time):
+
     header = {
         'Content-Type': 'application/graphql',
         'Accept': 'application/json',
-        'Authorization' : 'Bearer '  + accessToken,
+        'Authorization' : 'Bearer '  + params["accessToken"],
     }
 
     body = '{ occurrences(kind:"FINDING") { author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context { accountId resourceName } reportedBy { id title } finding { severity certainty }}}'
@@ -25,7 +25,7 @@ def get_all_occurences(accountID , accessToken, host , time):
     if( time ):
         body = '{ occurrences(kind:"FINDING"' + time + ') { author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context { accountId resourceName } reportedBy { id title } finding { severity certainty }}}'
     
-    url = host  + accountID + "/graph"
+    url = params["host"]  + params["accountID"] + "/graph"
     try :
         response = requests.post(url, data= body,headers= header)
 

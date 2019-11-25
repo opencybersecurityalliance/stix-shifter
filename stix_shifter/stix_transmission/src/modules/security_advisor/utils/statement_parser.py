@@ -1,3 +1,6 @@
+from .sa_findings_api import get_all_occurences
+from .sa_occurence_finder import query_function
+
 class StatementParser:
     """
         Utility Function for parsing STIX PATTERN (based on the priorites)
@@ -36,20 +39,42 @@ class StatementParser:
         list_OR  = []
         for i in range(0, len(splitted)):       
             cleaned_entity  =  self.cleaner(splitted[i])
-
             split_OR = cleaned_entity.split("AND")
             self.evaluate_or(split_OR, list_OR )
 
         return list_OR
 
-    def parser(self, statement):
+    def parse_and_call_api(self, statement, params):
+
+        search_id = statement
+        time_filter = None
+        if( statement.find("START") != -1 ):
+            index = statement.find("START")
+            search_id = statement[ 0 : index ]
+            time_filter = statement[ index : len(statement) ].strip()
+            if( time_filter.find("STOP") != -1):
+                time_filter = time_filter.replace("t", "")
+                time_filter = time_filter.replace("START", "fromTime:")
+                time_filter = time_filter.replace("STOP", "toTime:")
+                time_filter = time_filter.replace("'", '"')
+
+            else:
+                time_filter = time_filter.replace("t", "")
+                time_filter = time_filter.replace("START", "fromTime:")
+                time_filter = time_filter.replace("'", '"')
+
+        if( statement.find("STOP") != -1 and  statement.find("START") == -1 ):
+            raise Exception("STOP time not specified")
 
         list_AND = []
-        split_AND = statement.split("OR")
+        split_AND = search_id.strip().split("OR")
 
         for i in split_AND:
             list_AND.append(self.slpit_and_eval_or(i))
 
-        return list_AND
+        set = get_all_occurences( params, time_filter)
+        findings = query_function(list_AND, set)
+
+        return findings
 
         
