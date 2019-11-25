@@ -30,7 +30,7 @@ def and_operation(entites , set):
         set = r
     return set
 
-def query_func(sentence , set):
+def query_function(sentence , set):
     """
         Return all the findings with AND opeation on entities of sentence
     """

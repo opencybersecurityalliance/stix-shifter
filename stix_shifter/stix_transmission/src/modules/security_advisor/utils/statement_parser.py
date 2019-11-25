@@ -1,5 +1,5 @@
 from .sa_findings_api import get_all_occurences
-from .sa_occurence_finder import query_func
+from .sa_occurence_finder import query_function
 
 class StatementParser:
     """
@@ -44,25 +44,24 @@ class StatementParser:
 
         return list_OR
 
-    def parser(self, statement, params):
+    def parse_and_call_api(self, statement, params):
 
         search_id = statement
-        
-        time = None
+        time_filter = None
         if( statement.find("START") != -1 ):
             index = statement.find("START")
             search_id = statement[ 0 : index ]
-            time = statement[ index : len(statement) ].strip()
-            if( time.find("STOP") != -1):
-                time = time.replace("t", "")
-                time = time.replace("START", "fromTime:")
-                time = time.replace("STOP", "toTime:")
-                time = time.replace("'", '"')
+            time_filter = statement[ index : len(statement) ].strip()
+            if( time_filter.find("STOP") != -1):
+                time_filter = time_filter.replace("t", "")
+                time_filter = time_filter.replace("START", "fromTime:")
+                time_filter = time_filter.replace("STOP", "toTime:")
+                time_filter = time_filter.replace("'", '"')
 
             else:
-                time = time.replace("t", "")
-                time = time.replace("START", "fromTime:")
-                time = time.replace("'", '"')
+                time_filter = time_filter.replace("t", "")
+                time_filter = time_filter.replace("START", "fromTime:")
+                time_filter = time_filter.replace("'", '"')
 
         if( statement.find("STOP") != -1 and  statement.find("START") == -1 ):
             raise Exception("STOP time not specified")
@@ -73,8 +72,8 @@ class StatementParser:
         for i in split_AND:
             list_AND.append(self.slpit_and_eval_or(i))
 
-        set = get_all_occurences( params, time)
-        findings = query_func(list_AND, set)
+        set = get_all_occurences( params, time_filter)
+        findings = query_function(list_AND, set)
 
         return findings
 

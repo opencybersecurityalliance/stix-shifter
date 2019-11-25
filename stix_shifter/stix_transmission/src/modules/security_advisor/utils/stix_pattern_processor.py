@@ -1,6 +1,6 @@
-from .statementParser import StatementParser
+from .statement_parser import StatementParser
 
-class StixPatternParser:
+class StixPatternProcessor:
     """
         Parse method will do the parsing of the Sentence.
         (The first parsing to break the sentence into Statements)
@@ -24,34 +24,32 @@ class StixPatternParser:
 
         return list_of_OR
 
-    def parse(self, pattern, params):
+    def process(self, pattern, params):
 
         list_or =[]
         list_and = []
 
         try :
-            arr = self.helper(pattern)
-            for elem in arr :
-                if( len(elem) ==1):
-                    solved  = self.statementParser.parser(elem[0], params)
-                    list_or.append(solved)
+            statements = self.helper(pattern)
+            for statement in statements :
+                if(len(statement) ==1):
+                    sa_findings  = self.statementParser.parse_and_call_api(statement[0], params)
+                    list_or.append(sa_findings)
 
                 else :
-                    for finding in elem:
-                        solved  = self.statementParser.parser(finding , params)
-                        list_and.append(solved)
+                    for sub_statement in statement:
+                        sa_findings  = self.statementParser.parse_and_call_api(sub_statement, params)
+                        list_and.append(sa_findings)
 
             combined_list = []
 
             for elem in list_and:
-                list_occ_ids = []
-
+                list_occurence_ids = []
                 for sub_elem in elem:
-
                     if( len(sub_elem) == 1 ):
-                        list_occ_ids.append(sub_elem[0]["id"])
+                        list_occurence_ids.append(sub_elem[0]["id"])
                     
-                combined_list.append(list_occ_ids)
+                combined_list.append(list_occurence_ids)
 
             common_elements =[]
             if( combined_list != [] ):
