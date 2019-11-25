@@ -46,8 +46,8 @@ class StixPatternProcessor:
             for elem in list_and:
                 list_occurence_ids = []
                 for sub_elem in elem:
-                    if( len(sub_elem) == 1 ):
-                        list_occurence_ids.append(sub_elem[0]["id"])
+                    for e in sub_elem :
+                        list_occurence_ids.append(e["id"])
                     
                 combined_list.append(list_occurence_ids)
 
