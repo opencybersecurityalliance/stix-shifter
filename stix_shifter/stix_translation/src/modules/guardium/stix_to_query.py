@@ -2,7 +2,7 @@ import logging
 from ..base.base_query_translator import BaseQueryTranslator
 from . import query_constructor
 
-logger = logging.getLogger(__name__)
+#logger = #logging.getLogger(__name__)
 
 
 class StixToQuery(BaseQueryTranslator):
@@ -19,14 +19,14 @@ class StixToQuery(BaseQueryTranslator):
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to data source query")
+        #logger.info("Converting STIX2 Pattern to data source query")
 #
 #       Notes: data model mapper is passed now along with option.
 #               Options will contain "remote sources" and we should use the option to do the remote source selection
-        logging.debug("option: " + str(options))
+        #logging.debug("option: " + str(options))
         #query_object = generate_query(data) 
         #data_model_mapper = data_mapping.DataMapper(options)
         query_string = query_constructor.translate_pattern(antlr_parsing_object, 
             data_model_mapper, options)
-        logging.debug("transformed - stix_to_query: " + str(query_string))
+        #logging.debug("transformed - stix_to_query: " + str(query_string))
         return query_string

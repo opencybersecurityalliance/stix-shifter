@@ -19,7 +19,8 @@ class Connector(BaseConnector):
         #
         # It is for Guardium
         # Start logging based on logLevel -- for debugging purpuse -- SB
-        logFile = "../runlogs/ss_guardium_transmission_run.log"
-        logging.basicConfig(filename=logFile, level=logging.DEBUG,
-                            format='%(asctime)s - %(levelname)s - %(message)s')
-        logging.info('\n >>>>>>>>>>> Transmission Run Started. >>>>>>>>>>')
+        # 1. logFile = "../runlogs/ss_guardium_transmission_run.log"
+        # 2. logging.basicConfig(filename=logFile, level=logging.DEBUG,
+        #                    format='%(asctime)s - %(levelname)s - %(message)s')
+        # 3.logging.info('\n >>>>>>>>>>> Transmission Run Started. >>>>>>>>>>')
+        # 

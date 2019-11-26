@@ -65,8 +65,8 @@ class QueryStringPatternTranslator:
         #Read report definition data
         with open("./stix_shifter/stix_translation/src/modules/guardium/json/guardium_reports_def.json", 'r') as f_rep:
             self.REPORT_DEF = json.loads(f_rep.read())
-        logging.info("REPORT DEF as read")
-        logging.info(self.REPORT_DEF)
+        #logging.info("REPORT DEF as read")
+        #logging.info(self.REPORT_DEF)
 
         #Read report definition data
         with open("./stix_shifter/stix_translation/src/modules/guardium/json/guardium_report_params_map.json", 'r') as f_repm:
@@ -85,7 +85,7 @@ class QueryStringPatternTranslator:
         print(repCall)
         regex = r"([a-zA-Z_]+)(\s=)"
         out_str = re.sub(regex, r"'\1' :", repCall,0)
-        logging.debug("Regex - out_str:" + str(out_str))
+        #logging.debug("Regex - out_str:" + str(out_str))
         # Create the Json structure
         regex1 = r"\(|\)"
         out_str = re.sub(regex1, "", out_str,0)
@@ -104,17 +104,17 @@ class QueryStringPatternTranslator:
         #
         regex6 = r"(T|P)\'[\s\:t]+"
         out_str = re.sub(regex6, r"\1' : ", out_str,0)
-        logging.debug("Regex6 - out_str:" + str(out_str))
+        #logging.debug("Regex6 - out_str:" + str(out_str))
         #
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
         regex7 = r"\sOR|\sAND"
         out_str = re.sub(regex7, r",", out_str,0)
-        logging.debug("Regex7 - out_str:" + str(out_str))
+        #logging.debug("Regex7 - out_str:" + str(out_str))
         # Single quotes have to be replaced by double quotes in order to make it as an Json obj
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str,0) + "]"
-        logging.debug("Regex8 - out_str:" + str(out_str))
+        #logging.debug("Regex8 - out_str:" + str(out_str))
         #
         jParams_def = json.loads(out_str)
         return jParams_def
@@ -159,13 +159,13 @@ class QueryStringPatternTranslator:
     def substitute_ParamsPassed(self, reportDefs, reports_in_query):
     # for Each report in reportDefs substitue params for report Params Passed
     #   generate all reports for the query
-        logging.info("-------- Substitute Params Passed ------\n reportDefs")
-        logging.info(reportDefs)
-        logging.info("---- REPORT PROCESSING START ---\n")
+        #logging.info("-------- Substitute Params Passed ------\n reportDefs")
+        #logging.info(reportDefs)
+        #logging.info("---- REPORT PROCESSING START ---\n")
         for reportName in reportDefs:
             report = reportDefs[reportName]
-            logging.info("processing ... " + str(reportName) + "\n")
-            logging.debug(report)
+            #logging.info("processing ... " + str(reportName) + "\n")
+            #logging.debug(report)
             print(report)
             for param in report["reportParameter"]:
                 print(param)
@@ -194,10 +194,10 @@ class QueryStringPatternTranslator:
                 else:
                     report["reportParameter"][param] = value
 
-            logging.info("processing ... Completed: " + str(reportName) + "\n")
-            logging.debug(report)
+            #logging.info("processing ... Completed: " + str(reportName) + "\n")
+            #logging.debug(report)
             reports_in_query.append(report)
-        logging.info("-------- End Substitute Params Passed ------\n")
+        #logging.info("-------- End Substitute Params Passed ------\n")
 #
         return reports_in_query
 #
@@ -206,26 +206,26 @@ class QueryStringPatternTranslator:
         for repParamIndex in range(self.reportParamsArraySize):
             self.reportParamsPassed = self.reportParamsArray[repParamIndex]
             dataCategory = (self.reportParamsPassed).get("datacategory", None)
-            logging.info("-------- Get Report Params for Index: "+ str(repParamIndex) + " of "+ str(self.reportParamsArraySize) +"----\n Data Category")
-            logging.info(dataCategory)
+            #logging.info("-------- Get Report Params for Index: "+ str(repParamIndex) + " of "+ str(self.reportParamsArraySize) +"----\n Data Category")
+            #logging.info(dataCategory)
             if(dataCategory is not None):
                 if dataCategory not in self.REPORT_DEF:
-                    logging.info("Map for Data Category: '" + dataCategory + "' is missing; or a wrong data category value.")
-                    logging.debug(json.dumps(self.REPORT_PARAMS_MAP, indent=4))
+                    #logging.info("Map for Data Category: '" + dataCategory + "' is missing; or a wrong data category value.")
+                    #logging.debug(json.dumps(self.REPORT_PARAMS_MAP, indent=4))
                     reportDefs = None
                 else:
                     reportDefs = copy.deepcopy(self.REPORT_DEF[dataCategory])
     #
             else:
-                logging.info("'dataCategory' is not supplied. It is NONE. Generating the query from report parameter map.")
+                #logging.info("'dataCategory' is not supplied. It is NONE. Generating the query from report parameter map.")
                 reportDefs = self.generate_ReportDefs()
             # substitue Params
-            logging.debug("reportDef output of Report Definition: " + str(reportDefs))
+            #logging.debug("reportDef output of Report Definition: " + str(reportDefs))
             reports_in_query = self.substitute_ParamsPassed(reportDefs,reports_in_query)
-            logging.info("-------- Reports In Query for Index: "+ str(repParamIndex) + "-----\n")
-            logging.debug(reports_in_query)
+            #logging.info("-------- Reports In Query for Index: "+ str(repParamIndex) + "-----\n")
+            #logging.debug(reports_in_query)
             #reportHeader.append(reportDefs)
-        logging.info("-------- End Get Report Params ------\n")
+        #logging.info("-------- End Get Report Params ------\n")
         return reports_in_query
 # Report Defintions list
     def generate_ReportDefs(self):
@@ -233,11 +233,11 @@ class QueryStringPatternTranslator:
     # then take intersection of each set
     # if the intersection is null use the default Category
     #
-        logging.info("---- Start Generate ReportDefs (GenReps) -----")
+        #logging.info("---- Start Generate ReportDefs (GenReps) -----")
         reportSet = None
         param_map = self.REPORT_PARAMS_MAP["maps"]
         param_cmn = self.REPORT_PARAMS_MAP["common"]
-        logging.debug(self.reportParamsPassed)
+        #logging.debug(self.reportParamsPassed)
         for param in self.reportParamsPassed:
             if param in param_map:
                 pSet = set(param_map[param])
@@ -245,7 +245,7 @@ class QueryStringPatternTranslator:
                 pSet = set(self.REPORT_PARAMS_MAP["defaultReports"])
             else:
                 pSet = None
-                logging.info("Generate_ReportDefs/Wrong parameter -- " + str(param) +". Ignored!!")
+                #logging.info("Generate_ReportDefs/Wrong parameter -- " + str(param) +". Ignored!!")
 # find interaction
 # pSet
             if pSet is not None:
@@ -254,39 +254,44 @@ class QueryStringPatternTranslator:
                 else:
                     reportSet = reportSet.intersection(pSet)
             #
-            logging.info("GenReps/processed ... " + str(param) + str(reportSet))
+            #logging.info("GenReps/processed ... " + str(param) + str(reportSet))
         # Check if reportSet is null
         if (not bool(reportSet)):
             reportSet = self.REPORT_PARAMS_MAP["defaultReports"]
 #
-        logging.info(" ------ The FINAL reportSet --------\n")
-        logging.info(reportSet)
-        logging.info("---- START Processing the Final Report Set to select report definitions (reportDefs)--- \n")
+        3
+        #logging.info(" ------ The FINAL reportSet --------\n")
+        #logging.info(reportSet)
+        #logging.info("---- START Processing the Final Report Set to select report definitions (reportDefs)--- \n")
         #
         # Now we have to create reportDefs from this reportSet
         # Report set --> dataCategory:reportName
         # Iterate through self.reportDefs and pick the reports and place them in the report Defs
         #
         reportDefs = {}
-        logging.debug(self.REPORT_DEF)
+        #logging.debug(self.REPORT_DEF)
         for key in reportSet:
             dataCategory, report = key.split(":")
-            logging.debug("data Category: " + str(dataCategory))
+            #logging.debug("data Category: " + str(dataCategory))
             if dataCategory not in self.REPORT_DEF:
-                logging.info("Error in parameter mapping file (data category): " + str(dataCategory) + " not there. Ingored.")
+                #logging.info(
+                raise RuntimeError(
+                        "Error in parameter mapping file (data category): " + str(dataCategory) + " not there. Ingored.")
             else:
                 dcReports = copy.deepcopy(self.REPORT_DEF[dataCategory])
-                logging.info("dcReport ---\n")
-                logging.debug(report)
-                logging.debug(dcReports)
+                #logging.info("dcReport ---\n")
+                #logging.debug(report)
+                #logging.debug(dcReports)
                 if report not in dcReports:
-                    logging.info("Error in parameter mapping file (report name): " + str(report) + " not there. Ingored.")
+                    #logging.info(
+                    raise RuntimeError(
+                            "Error in parameter mapping file (report name): " + str(report) + " not there. Ingored.")
                 else:
                     reportDefs[report] = dcReports[report]
             #
-            logging.info("GenReps/processed ... " + str(key) + str(reportDefs))
-        logging.info("The Final reportDefs in GenReps: \n" + str(reportDefs))
-        logging.info("---- End Generate ReportDefs -----")
+            #logging.info("GenReps/processed ... " + str(key) + str(reportDefs))
+        #logging.info("The Final reportDefs in GenReps: \n" + str(reportDefs))
+        #logging.info("---- End Generate ReportDefs -----")
 
         return reportDefs
 
@@ -365,7 +370,7 @@ class QueryStringPatternTranslator:
             if (mapped_fields_count > 1):
                 comparison_string += " OR "
                 mapped_fields_count -= 1
-        logging.debug("Comparison String: " + comparison_string)
+        #logging.debug("Comparison String: " + comparison_string)
 
         return comparison_string
 
@@ -463,23 +468,23 @@ class QueryStringPatternTranslator:
                 expression, type(expression)))
 
     def parse_expression(self, pattern: Pattern):
-        logging.debug("Parse Expression: patten --->")
-        logging.debug(pattern)
+        #logging.debug("Parse Expression: patten --->")
+        #logging.debug(pattern)
         return self._parse_expression(pattern)
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    logging.debug("\nTranslate Pattern: " + str(pattern))
-    logging.debug("Entered translate_pattern------\nTranslate Pattern: " + str(pattern))
-    logging.debug("Data model mapping: " + str(data_model_mapping))
+    #logging.debug("\nTranslate Pattern: " + str(pattern))
+    #logging.debug("Entered translate_pattern------\nTranslate Pattern: " + str(pattern))
+    #logging.debug("Data model mapping: " + str(data_model_mapping))
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
     timerange = 24 * 60 * 60
     parsed_stix = parse_stix(pattern,timerange)
 
-    logging.debug("Parsed_stix: " + str(parsed_stix))
-    logging.debug("Options supplied to query Constructer - translate pattern --")
-    logging.debug(options)
+    #logging.debug("Parsed_stix: " + str(parsed_stix))
+    #logging.debug("Options supplied to query Constructer - translate pattern --")
+    #logging.debug(options)
 #
     guardiumQueryTranslator = QueryStringPatternTranslator(pattern, data_model_mapping)
     reportCall = guardiumQueryTranslator.translated
@@ -487,8 +492,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Add space around START STOP qualifiers
     reportCall = re.sub("START", "START ", reportCall)
     reportCall = re.sub("STOP", " STOP ", reportCall)
-    logging.debug("reportCall -->")
-    logging.debug(reportCall)
+    #logging.debug("reportCall -->")
+    #logging.debug(reportCall)
 #Subroto: I did not change the code much just adapted to get the report parameters
 #Subroto: added code to support report search parameters are "and" when sent to Guardium
 #
@@ -498,21 +503,21 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 #   sys.setrecursionlimit(500)
 # translate the structure of reportCall that
     jRepCall = guardiumQueryTranslator.trnsfReportCall2Json(reportCall)
-    logging.debug("reportCall converted to Json -->")
-    logging.debug(json.dumps(jRepCall, indent=4))
+    #logging.debug("reportCall converted to Json -->")
+    #logging.debug(json.dumps(jRepCall, indent=4))
     resArray = []
     resPos = 0
     outArray = guardiumQueryTranslator.buildArrayOfGuardiumReportParams(resArray, resPos, None, jRepCall, None)
     guardiumQueryTranslator.set_ReportParamsPasseed(outArray)
-    logging.debug("----- Final Combination of report parameters to support & construct the report search HEADER -->")
-    logging.debug(json.dumps(outArray, indent=4))
-    print(json.dumps(outArray, indent=4))
+    #logging.debug("----- Final Combination of report parameters to support & construct the report search HEADER -->")
+    #logging.debug(json.dumps(outArray, indent=4))
+
     #
     # get report hearder -- multiple for
     reportHeader = guardiumQueryTranslator.get_report_params()
     if (reportHeader != None):
-        logging.debug("Report params Header: ")
-        logging.debug(json.dumps(reportHeader, indent=4))
+        #logging.debug("Report params Header: ")
+        #logging.debug(json.dumps(reportHeader, indent=4))
         #logging.debug(json.dumps(reportHeader, indent=4))
         # Change return statement as required to fit with data source query language.
         # If supported by the language, a limit on the number of results may be desired.

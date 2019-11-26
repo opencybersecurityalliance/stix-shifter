@@ -34,16 +34,15 @@ class APIClient():
 # Check if connection object contains the following
 
         username = configuration.get('auth').get("username", None)
-        password = connection.get('options',{}).get("password", None)
-        grant_type = connection.get('options',{}).get("grant_type", None)
+        password = configuration.get('auth').get("password", None)
+        grant_type = connection.get('options',{}).get("grant_type", 'password')
         client_id = connection.get('options',{}).get("client_id", None)
         client_secret = connection.get('options',{}).get("client_secret", None)
 # It is decided the authorization will not be sent by UDS
 #
         if(username is None or password is None or grant_type is None or client_id is None or client_secret is None):
             self.credential = None
-            logging.info(
-                    "Guardium Credential not provided in the connection / configuration object")
+            #logging.info("Guardium Credential not provided in the connection / configuration object")
             raise IOError(
                     3001, "Guardium Credential not provided in the connection / configuration object")
         else:
@@ -94,7 +93,7 @@ class APIClient():
         # Subroto -- Guardium does not have ping facility
         # We test if we can get the access token if we can then success = true
         #
-        logging.info("--------- Guardium ping_box ------\n")
+        #logging.info("--------- Guardium ping_box ------\n")
         respObj = Response()
         if (self.fetch_accessToken()):
             respObj.code = "200"
@@ -131,7 +130,7 @@ class APIClient():
         # Subroto -- Assumption: credential object will contain the full
         # guardium credential for the call.  
         if self.credential is None:
-            logging.info("Guardium Credential object is found to be None. Error Raised.")
+            #logging.info("Guardium Credential object is found to be None. Error Raised.")
             raise IOError(3001, "Guardium Credential object is found to be None. Error Raised.")
 #
         else:
@@ -152,24 +151,23 @@ class APIClient():
         #
         data = self.get_credential()
         endpoint = "oauth/token"
-        logging.debug("Fetch Access Token: Calling:" + str(data))
+        #logging.debug("Fetch Access Token: Calling:" + str(data))
         tNow = datetime.datetime.now()
         response = self.client.call_api(
             endpoint, "POST", params=data, data=None)
         jResp = json.loads(str(response.read(), 'utf-8'))
-        logging.info(response.code)
+        #logging.info(response.code)
 #
         if (response.code != 200):
-            logging.info(
-                "Authorization Token NOT Received. Response code: " + str(response.code))
+            #logging.info("Authorization Token NOT Received. Response code: " + str(response.code))
             raise ValueError(3002, "Authorization Token not received ")
         else:
             successVal = True
             tExp = (tNow + datetime.timedelta(seconds=jResp.get("expires_in"))).timestamp()
             self.authorization = json.loads(
                 '{"access_token":"' + jResp.get("access_token") + '", "expiresTimestamp":' + str(tExp) + '}')
-            logging.debug("Authorization access_token: " + jResp.get("access_token") + ", expires (delta time): " +
-                          str(jResp.get("expires_in")) + ", expiresTimestamp: "+ str(tExp))
+            #logging.debug("Authorization access_token: " + jResp.get("access_token") + ", expires (delta time): " +
+            #             str(jResp.get("expires_in")) + ", expiresTimestamp: "+ str(tExp))
 #
         return successVal
 #
@@ -180,20 +178,19 @@ class APIClient():
             if self.isTimestampValid((self.authorization).get("expiresTimestamp")):
                 successVal = True
                 self.setAuthorizationHeader()
-                logging.info("A valid Access Token Found; using it.")
+                #logging.info("A valid Access Token Found; using it.")
                 return successVal
-            else:
-                logging.info("get_accessToken: Expired access token.  Get a new access token.")
-        else:
-            logging.info(
-                "get_accessToken: Authorization token is not found. Get a new access token")
+            #else:
+                #logging.info("get_accessToken: Expired access token.  Get a new access token.")
+        #else:
+            #logging.info("get_accessToken: Authorization token is not found. Get a new access token")
 #
-# We could find a valid token from the  and now we request one
+# We could not find a valid token from the  and now we request one
 #
         if(self.fetch_accessToken()):
             successVal = True
             self.setAuthorizationHeader()
-            logging.info("A new Access Token Received.  Credential OK.")
+            #logging.info("A new Access Token Received.  Credential OK.")
 #
         return successVal
 #
@@ -223,8 +220,9 @@ class APIClient():
         s_id = None
 #
         if(self.query is None or self.authorization is None or self.credential is None):
-            logging.info(
-                "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
+            #logging.info(
+            raise IOError(3001, 
+            "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
 #
         else:
             id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
@@ -242,14 +240,13 @@ class APIClient():
             id_dec64 = base64.b64decode(self.search_id)
             jObj = json.loads(id_dec64.decode('utf-8'))
         except:
-            logging.info(
-                "Could not decode search id content - " + self.search_id)
+            #logging.info( "Could not decode search id content - " + self.search_id)
             raise IOError(
                 3001, "Could not decode search id content - " + self.search_id)
 #
         self.query = jObj.get("query", None)
-        logging.debug("Query Decoded: \n")
-        logging.debug(self.query)
+        #logging.debug("Query Decoded: \n")
+        #logging.debug(self.query)
         self.credential = jObj.get("credential", None)
         self.authorization = jObj.get("authorization", None)
         return
@@ -263,13 +260,13 @@ class APIClient():
     def create_search(self, query_expression):
         # validate credential and create search_id.  No query submission -- Sync call
         # 
-        logging.info("--------- Guardium get access token: \n")
+        #logging.info("--------- Guardium get access token: \n")
         respObj = Response()
         respObj.code = "401"
         respObj.error_type = ""
         respObj.status_code = 401
         if (self.get_accessToken()):
-            logging.info("--------- Guardium create search: \n")
+            #logging.info("--------- Guardium create search: \n")
             self.query = query_expression
             response = self.build_searchId()
             if (response != None):
@@ -279,19 +276,16 @@ class APIClient():
                 content = '{"search_id": "' + \
                     str(response) + \
                     '", "data": {"message":  "Search id generated."}}'
-                # print(content)
                 respObj._content = bytes(content, 'utf-8')
-                logging.info(
-                    "------ Return encoded search Id: " + str(response))
+                #logging.info("------ Return encoded search Id: " + str(response))
             else:
                 respObj.code = "404"
                 respObj.error_type = "Not found"
                 respObj.status_code = 404
                 respObj.message = "Could not generate search id."
-                logging.info(
-                    "------ Return encoded search Id: " + str(response))
+                #logging.info("------ Return encoded search Id: " + str(response))
         else:
-            logging.info("Access Token -- could not be generated. ")
+            #logging.info("Access Token -- could not be generated. ")
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
 #
@@ -301,7 +295,7 @@ class APIClient():
         # Subroto we do not need to send anything to Guardium
         # We create response object and send "COMPLETED"
         # Note: we may have an issue with this simplistic approach
-        logging.info("--------- Guardium get_status ------\n")
+        #logging.info("--------- Guardium get_status ------\n")
         respObj = Response()
         if (self.fetch_accessToken()):
             respObj.code = "200"
@@ -325,8 +319,8 @@ class APIClient():
         try:
             indx = int(indexFrom)
             fsize = int(fetchSize)
-            logging.debug("index: " + str(indx))
-            logging.debug("fetch size: " + str(fsize))
+            #logging.debug("index: " + str(indx))
+            #logging.debug("fetch size: " + str(fsize))
         except ValueError:
             print("Offset (indexFrom) or length (fetchSize) is not an integer")
 #
@@ -342,17 +336,16 @@ class APIClient():
         self.decode_searchId()
 #  replacement indexFrom and fetchSize
         data = self.set_IndexAndFsize(indexFrom, fetchSize)
-        logging.info(
-                "--------- Guardium get result -- decoded search id for query expression: " + data)
-        logging.info("--------- Guardium get result -- access token.")
+        #logging.info("--------- Guardium get result -- decoded search id for query expression: " + data)
+        #logging.info("--------- Guardium get result -- access token.")
 #
         if (self.get_accessToken()):
-            logging.info(" Access Token received.\n")
+            #logging.info(" Access Token received.\n")
             endpoint = self.endpoint_start + "online_report"
 #
             response = self.client.call_api(endpoint, 'POST', params=None, data=data)
             status_code = response.response.status_code
-            logging.info("Response code: " + str(status_code) + "\n")
+            #logging.info("Response code: " + str(status_code) + "\n")
 #
 #           Though the connector gets the authorization token just before fetching the actual result
 #           there is a possibility that the token returned is only valid for a second and response_code = 401
@@ -360,26 +353,24 @@ class APIClient():
             if status_code != 200:
                 error_msg = json.loads(str(response.read(), 'utf-8'))
                 error_code = error_msg.get('error', None)
-                #print(error_msg)
-                #print("error code: " + str(error_code))
                 if status_code == 401 and error_code == "invalid_token":
-                    logging.info(response.read())
-                    logging.info("Requesting a new access token and then fetching results!")
+                    #logging.info(response.read())
+                    #logging.info("Requesting a new access token and then fetching results!")
                     self.authorization = None
                     if (self.get_accessToken()):
                         response = self.client.call_api(endpoint, 'POST', params=None, data=data)
                         status_code = response.response.status_code
-                        logging.info("Response code: " + str(status_code) + "\n")
-                        logging.debug("Response headers:\n " + str(response.response.headers) + "\n")
-                        logging.debug("Response content: " + str(response.read()) + "\n")
+                        #logging.info("Response code: " + str(status_code) + "\n")
+                        #logging.debug("Response headers:\n " + str(response.response.headers) + "\n")
+                        #logging.debug("Response content: " + str(response.read()) + "\n")
                     else:
-                        logging.info("Access Token -- could not be generated. ")
+                        #logging.info("Access Token -- could not be generated. ")
                         raise ValueError(3002, "Authorization Token not received ")
 #
-            logging.info("------ Return Wrapped Response Object --------")
+            #logging.info("------ Return Wrapped Response Object --------")
             return response
         else:
-            logging.info("Access Token -- could not be generated. ")
+            #logging.info("Access Token -- could not be generated. ")
             raise ValueError(3002, "Authorization Token not received ")
 #           End of this function
 #

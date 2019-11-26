@@ -32,8 +32,7 @@ class GuardiumStatusConnector(BaseStatusConnector):
 
     def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
-        logging.info(
-                    "\n ===> TRANSMIT Status \n ------------ Guardium Query Connector - calling create search --------")
+        #logging.info("\n ===> TRANSMIT Status \n ------------ Guardium Query Connector - calling create search --------")
         # Verify the input
         response = self.api_client.get_status(search_id)
         response_code = response.code

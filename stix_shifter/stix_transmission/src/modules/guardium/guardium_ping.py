@@ -13,7 +13,6 @@ class GuardiumPing(BasePing):
         response_code = response.code
 
         response_dict = json.loads(response.read())
-        #print(response)
 
         return_obj = dict()
         return_obj['success'] = False
