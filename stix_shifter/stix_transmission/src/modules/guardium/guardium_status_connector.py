@@ -3,7 +3,6 @@ from ..base.base_status_connector import Status
 from enum import Enum
 import json
 from .....utils.error_response import ErrorResponder
-import logging
 
 class GuardiumStatus(Enum):
     # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR
@@ -32,7 +31,6 @@ class GuardiumStatusConnector(BaseStatusConnector):
 
     def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
-        #logging.info("\n ===> TRANSMIT Status \n ------------ Guardium Query Connector - calling create search --------")
         # Verify the input
         response = self.api_client.get_status(search_id)
         response_code = response.code

@@ -5,7 +5,7 @@ from .guardium_status_connector import GuardiumStatusConnector
 from .guardium_delete_connector import GuardiumDeleteConnector
 from .guardium_results_connector import GuardiumResultsConnector
 from .guardiumapiclient import APIClient
-import logging
+
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
@@ -17,10 +17,4 @@ class Connector(BaseConnector):
         self.ping_connector = GuardiumPing(self.api_client)
         self.is_async = False
         #
-        # It is for Guardium
-        # Start logging based on logLevel -- for debugging purpuse -- SB
-        # 1. logFile = "../runlogs/ss_guardium_transmission_run.log"
-        # 2. logging.basicConfig(filename=logFile, level=logging.DEBUG,
-        #                    format='%(asctime)s - %(levelname)s - %(message)s')
-        # 3.logging.info('\n >>>>>>>>>>> Transmission Run Started. >>>>>>>>>>')
-        # 
+

@@ -2,7 +2,6 @@ from os import path
 import json
 from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 from stix_shifter.stix_translation.src.modules.base.base_data_mapper import BaseDataMapper
-import logging
 
 #class DataMapper:
 class DataMapper(BaseDataMapper):

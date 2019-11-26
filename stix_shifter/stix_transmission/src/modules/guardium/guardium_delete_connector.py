@@ -1,7 +1,6 @@
 from ..base.base_delete_connector import BaseDeleteConnector
 import json
 from .....utils.error_response import ErrorResponder
-import logging
 
 
 class GuardiumDeleteConnector(BaseDeleteConnector):
@@ -18,8 +17,6 @@ class GuardiumDeleteConnector(BaseDeleteConnector):
         return_obj['progress'] = responses.get('progress',"NA")
         return_obj['data'] = responses.get('data',"NA")
         return_obj["search_id"] = search_id
-        #logging.info("\n ===> TRANSMIT Delete \n ------------ Guardium Connector - calling delete query --------")
-        #logging.info(responses)
         # Verify the input
         if response_code == 202:
             return_obj['success'] = True
