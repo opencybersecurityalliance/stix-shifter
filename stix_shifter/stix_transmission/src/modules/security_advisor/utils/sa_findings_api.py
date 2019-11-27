@@ -25,7 +25,7 @@ def get_all_occurences( params, time):
     if( time ):
         body = '{ occurrences(kind:"FINDING"' + time + ') { author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context { accountId resourceName } reportedBy { id title } finding { severity certainty }}}'
     
-    url = params["host"]  + params["accountID"] + "/graph"
+    url = params["host"] + "/" + params["accountID"] + "/graph"
     try :
         response = requests.post(url, data= body,headers= header)
 

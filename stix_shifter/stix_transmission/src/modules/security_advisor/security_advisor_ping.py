@@ -13,7 +13,7 @@ class SecurityAdvisorPing(BasePing):
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-        url = self.host + self.auth["accountID"] + "/providers"
+        url = self.host + "/" + self.auth["accountID"] + "/providers"
         try :
             authorization ='Bearer '  + self.auth["authToken"].obtainAccessToken()
             header["Authorization"] = authorization
