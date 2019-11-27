@@ -1,5 +1,6 @@
 import requests_mock
 from stix_shifter.stix_transmission.src.modules.security_advisor import security_advisor_connector
+from stix_shifter.stix_transmission.src.modules.security_advisor import security_advisor_auth
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
@@ -40,6 +41,28 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
 
         check_async = module.Connector(CONNECTION, CONFIG).is_async
         assert check_async == False
+
+    def test_auth_apiKey_not_found_error(self):
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+            }
+        }
+        transmission = stix_transmission.StixTransmission('security_advisor', CONNECTION, CONFIG)
+        ping_response = transmission.ping()
+
+        assert ping_response is not None
+        assert 'success' in ping_response
+        assert ping_response['success'] is False
+
+    def test_auth_access_token_failed(self):
+        
+        transmission = stix_transmission.StixTransmission('security_advisor', CONNECTION, CONFIG)
+        ping_response = transmission.ping()
+
+        assert ping_response is not None
+        assert 'success' in ping_response
+        assert ping_response['success'] is False
 
     
     @requests_mock.mock()
@@ -146,6 +169,25 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
         assert results_response['success'] is True
         assert 'data' in results_response
         assert len(results_response['data']) == 0         
+
+    @requests_mock.mock()
+    def test_graph_ql_exception(self, mock_results_response):
+        
+        mock_results_response.post('https://iam.cloud.ibm.com/identity/token', text= '{ "access_token" : "ertyuiojhgfcvbnbv" }')
+        mock_results_response.post('http://test_sec_adv.com/abc/graph',status_code = 500)
+
+        search_id = "[url:value = 'test@gmail.com'] AND [url:value = 'test@gmail.com'] OR [url:value = 'test@gmail.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-11-20T12:24:01.009Z'"
+        offset = "0"
+        length = "100"
+        transmission = stix_transmission.StixTransmission('security_advisor', CONNECTION, CONFIG)
+        results_response = transmission.results(search_id, offset, length)
+
+        print("results_response", results_response)
+        assert results_response is not None
+        assert 'success' in results_response
+        assert results_response['success'] is False
+        assert 'error' in results_response
+                
 
 
     @requests_mock.mock()
