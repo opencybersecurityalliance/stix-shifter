@@ -10,7 +10,7 @@ class SecurityAdvisorAuth():
             raise Exception("Authorizaion Failed")
 
         iamTokenURL = 'https://iam.cloud.ibm.com/identity/token'
-        requestBody = "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey="+ self.apiKey +"&response_type=cloud_iam"
+        requestBody = "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey={}&response_type=cloud_iam".format(self.apiKey)
 
         header = {
             'Content-Type': 'application/x-www-form-urlencoded',
