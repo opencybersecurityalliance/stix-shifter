@@ -17,9 +17,12 @@ class SecurityAdvisorPing(BasePing):
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-        url = self.host + self.auth["accountID"] + "/providers"
+
+
+        url = self.host + "/" + self.auth["accountID"] + "/providers"
         try:
             authorization = "Bearer {}".format(self.auth_token.obtainAccessToken())
+
             header["Authorization"] = authorization
             
         except Exception as e:
