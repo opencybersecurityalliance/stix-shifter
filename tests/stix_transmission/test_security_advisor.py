@@ -30,10 +30,9 @@ CONFIG = {
 }
 
 CONNECTION = {
-    "host": "http://test_sec_adv.com/",
+    "host": "http://test_sec_adv.com",
 }
 
-import mock
 class TestSecurityAdvisorConnection(unittest.TestCase):
     
     def test_is_async(self):
