@@ -125,16 +125,12 @@ class APIClient():
 #
     def get_credential(self):
         # Subroto -- Assumption: credential object will contain the full
-        # guardium credential for the call.  
+        # guardium credential for the call in json format.  
         if self.credential is None:
             raise IOError(3001, "Guardium Credential object is found to be None. Error Raised.")
 #
         else:
-            jCred = self.credential
-#
-            data = 'client_id=' + jCred.get("client_id") + '&grant_type=' + str(jCred.get("grant_type")) + \
-               '&client_secret=' + str(jCred.get("client_secret")) + '&username=' + str(jCred.get("username")) + \
-               '&password=' + str(jCred.get("password"))
+            data = urllib.parse.urlencode(self.credential)
 #
         return data
 #
@@ -146,20 +142,25 @@ class APIClient():
         successVal = False
         #
         data = self.get_credential()
+        #print(data)
         endpoint = "oauth/token"
         tNow = datetime.datetime.now()
         response = self.client.call_api(
             endpoint, "POST", params=data, data=None)
         jResp = json.loads(str(response.read(), 'utf-8'))
 #
+        print(jResp)
         if (response.code != 200):
-            raise ValueError(3002, "Authorization Token not received ")
+            #print(response.code)
+            errMsg = str(jResp) + " -- " + "Authorization Token not received."
+            raise ValueError(3002, errMsg)
         else:
             successVal = True
             tExp = (tNow + datetime.timedelta(seconds=jResp.get("expires_in"))).timestamp()
             self.authorization = json.loads(
                 '{"access_token":"' + jResp.get("access_token") + '", "expiresTimestamp":' + str(tExp) + '}')
 #
+        #print(self.authorization)
         return successVal
 #
     def get_accessToken(self):
@@ -330,10 +331,38 @@ class APIClient():
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
 #
+# Now START and STOP are optional -- A situation can occur that data set can be empty -- handle this situation here
+            if status_code == 200:
+#
+# Determine if the response is empty if empty Guardium sends {"ID": 0,
+# "Message": "ID=0 The Query did not retrieve any records"} 
+# Raise an error -->  1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT
+                response_content = self.raiseErrorIfEmptyResult(response)
+                print("Records obtained: ")
+                print(response_content)
+                print("\n")
+#
+            else:
+                raise ValueError(1020, "Error -- Status Code is NOT 200!")
+#
             return response
         else:
             raise ValueError(3002, "Authorization Token not received ")
 #           End of this function
+    def raiseErrorIfEmptyResult(self, response):
+        # Determine if the response is empty if empty Guardium sends {"ID": 0,
+        # "Message": "ID=0 The Query did not retrieve any records"} <-- check that an raise and Error
+        #               1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT
+        r_content_str = (response.read()).decode('utf8').replace("'", '"')
+        response_content = json.loads(r_content_str)
+        print(r_content_str)
+        if "ID" in response_content:
+            print(response_content)
+            errMsg = response_content.get("Message", "Default Message - NO Records Fetched using this Query.")
+            raise ValueError(1010, errMsg)
+        else:
+            return response_content
+#
 #
     def update_search(self, search_id, save_results=None, status=None):
         # Subroto -- not used in Guardium context
@@ -351,7 +380,6 @@ class APIClient():
     def delete_search(self, search_id):
         # Subroto -- not used.
         # deletes search created earlier.
-        # Subroto: we can delete the stored result file if present ... change this code.
         endpoint = self.endpoint_start + "searches" + '/' + search_id
         return self.client.call_api(endpoint, 'DELETE')
 #

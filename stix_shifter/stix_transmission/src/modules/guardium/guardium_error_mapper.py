@@ -9,11 +9,11 @@ error_mapping = {
         1004: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value,
         # A request parameter is not valid
         1005: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
-        #The Ariel server might be temporarily unavailable or offline. Please try again later.
-        1010: ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
-        #An error occurred during the attempt
+        #No Guardium records returned 
+        1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT,
+        #Not Used
         1020: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value,
-        #error in AQL
+        #Used 
         2000: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
         #error in AUTHORIZATION CREDENTIAL
         3001: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,

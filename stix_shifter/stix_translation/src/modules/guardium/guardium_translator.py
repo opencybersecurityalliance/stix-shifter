@@ -3,7 +3,6 @@ from .stix_to_query import StixToQuery
 from ...json_to_stix.json_to_stix import JSONToStix
 from os import path
 
-
 class Translator(BaseTranslator):
 
     def __init__(self):

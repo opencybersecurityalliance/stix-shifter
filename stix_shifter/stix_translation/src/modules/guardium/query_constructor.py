@@ -156,6 +156,18 @@ class QueryStringPatternTranslator:
     def substitute_ParamsPassed(self, reportDefs, reports_in_query):
     # for Each report in reportDefs substitue params for report Params Passed
     #   generate all reports for the query
+    #
+    #   In the event START and STOP is missing, Generate the default From and To Dates
+    #   TO_DATE IS SET TO NOW
+    #   FROM_DATE IS SET TO DAYS FROM NOW
+        def_Days_Back = 2
+        dtNow = datetime.datetime.now()
+        def_TO_DATE = dtNow.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        def_FROM_DATE = (dtNow - datetime.timedelta(days=def_Days_Back)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        print("Default Start and Stop time: ")
+        print(def_FROM_DATE)
+        print(def_TO_DATE)
+#
         for reportName in reportDefs:
             report = reportDefs[reportName]
             print(report)
@@ -166,18 +178,15 @@ class QueryStringPatternTranslator:
                     value = report["reportParameter"][param]["default"]
                 else:
                     value = self.reportParamsPassed[param]
-                print(value)
-                print(report["reportParameter"][param]["info"])
      #
      # Use START and STOP  instead of default to time parameter
                 if report["reportParameter"][param]["info"] == "START":
-                    value = self.reportParamsPassed["START"]
-                    print("START")
-                    print(value)
+                    value = self.reportParamsPassed.get("START", def_FROM_DATE)
+#
                 if report["reportParameter"][param]["info"] == "STOP":
-                    value = self.reportParamsPassed["STOP"]
-                    print("STOP")
-                    print(value)
+                    value = self.reportParamsPassed.get("STOP", def_TO_DATE)
+#
+                print(report["reportParameter"][param]["info"] + " -> Value: " + str(value))
       #
       #Transform the value or use it as-is
                 if "transformer" in report["reportParameter"][param]:
@@ -477,5 +486,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         # A single query string, or an array of query strings may be returned
         return "{}".format(reportHeader)
     else:
-        reportHeader = {"ID":1001, "message": "Could not generate query -- issue with dataCategory."}
+        reportHeader = {"ID":2000, "message": "Could not generate query -- issue with dataCategory."}
         return reportHeader

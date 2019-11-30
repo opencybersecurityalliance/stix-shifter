@@ -16,15 +16,17 @@ class GuardiumQueryConnector(BaseQueryConnector):
         #
         queryResultSync = True
         # Grab the response, extract the response code, and convert it to readable json
-        # Verify the input
+        # Verify the input  -- Will ErrorResponder raise an Error.
         try:
             jQry  = json.loads(query)
             reportName = jQry.get("reportName",True)
             if( reportName is True or jQry.get("reportParameter") is True):
-                errMsg = "Report Name or Report Parameter is missing from the query statement." + str(query)
+                errMsg = "query_syntax_error: Report Name or Report Parameter is missing from the query statement." + \
+                    str(query)
                 ErrorResponder.fill_error(return_obj, message_struct=None, message_path=None, message=errMsg, error=2000)
         except:
-            errMsg = "The query string is not in the proper format: " + str(query)
+            errMsg = "query_syntax_error: The query string is not in the proper format: " + \
+                str(query)
             ErrorResponder.fill_error(return_obj, message_struct=None, message_path=None, message=errMsg, error=2000)
 
         response = self.api_client.create_search(query)
