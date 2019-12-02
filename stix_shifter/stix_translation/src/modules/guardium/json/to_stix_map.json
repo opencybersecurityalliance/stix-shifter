@@ -7,27 +7,17 @@
   "Client IP": [{
       "key": "ipv4-addr.value",
       "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
     }
   ],
   "Server IP": [{
       "key": "ipv4-addr.value",
       "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
     }
   ],
   "DB User Name": {
     "key": "user-account.user_id",
     "extensions": {
-      "x_guardium_account": {
+      "x-guardium-account": {
         "type": "db_user"
       }
     }
@@ -35,7 +25,7 @@
   "OS User": {
     "key": "user-account.user_id",
     "extensions": {
-      "x_guardium_account": {
+      "x-guardium-account": {
         "type": "os_user"
       }
     }
@@ -46,71 +36,77 @@
     "transformer": "ToInteger"
   },
   "Audit Process Description": {
-    "key": "x_guardium.audit_process_description"
+    "key": "x-guardium.audit_process_description"
   },
   "Audit Task Description": {
-    "key": "x_guardium.audit_task_description"
+    "key": "x-guardium.audit_task_description"
   },
   "DETAIL": {
-    "key": "x_guardium.run_detail"
+    "key": "x-guardium.run_detail"
   },
   "Event Type": {
-    "key": "x_guardium.event_type"
+    "key": "x-guardium.event_type"
   },
   "Audit Process Id": {
-    "key": "x_guardium.audit_process_id",
+    "key": "x-guardium.audit_process_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Audit Task Id": {
-    "key": "x_guardium.audit_task_id",
+    "key": "x-guardium.audit_task_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Run Id": {
-    "key": "x_guardium.run_id",
+    "key": "x-guardium.run_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Database Name": {
-    "key": "x_guardium_db_info.database_name"
+    "key": "x-guardium.database_name"
   },
   "Full Sql": {
-    "key": "x_guardium_db_info.full_sql"
+    "key": "x-guardium.full_sql"
   },
   "Service Name": {
-    "key": "x_guardium.service_name"
+    "key": "x-guardium.service_name"
   },
 
   "Error Code": {
-    "key": "x_guardium_exception.errorcode",
+    "key": "x-guardium.exception_errorcode",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Exception Description": {
-    "key": "x_guardium_exception.exception_description"
+    "key": "x-guardium.exception_description"
   },
   "Database Error Text": {
-    "key": "x_guardium_exception.database_error_text"
+    "key": "x-guardium.exception_database_error_text"
   },
   "SQL string that caused the Exception": {
-    "key": "x_guardium_exception.sql_caused_exception"
+    "key": "x-guardium.sql_caused_exception"
   },
   "Session Start": [{
       "key": "created",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "modified",
       "transformer": "Ymd_HMSToTimestamp",
       "cybox": false
     },
     {
       "key": "first_observed",
-      "transformer": "Ymd_HMSToTimestamp",
+      "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
   ],
-  "Session End": [{
-      "key": "modified",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+  "Session End": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
     },
     {
       "key": "last_observed",
@@ -120,17 +116,22 @@
   ],
   "Exception Timestamp": [{
       "key": "created",
-      "transformer": "Ymd_HMSToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "modified",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     },
     {
-      "key": "first_observed",
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
+    },
+    {
+      "key": "modified",
       "transformer": "Ymd_HMSToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
       "cybox": false
     },
     {
@@ -140,18 +141,23 @@
     }
   ],
   "Timestamp": [{
-      "key": "created",
+      "key": "modified",
       "transformer": "Ymd_HMSToTimestamp",
       "cybox": false
     },
     {
-      "key": "modified",
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
+    },
+    {
+      "key": "created",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     },
     {
       "key": "first_observed",
-      "transformer": "Ymd_HMSToTimestamp",
+      "transformer": "GuardiumToTimestamp",
       "cybox": false
     },
     {

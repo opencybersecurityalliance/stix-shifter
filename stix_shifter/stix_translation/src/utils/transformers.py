@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import base64
 import socket
 import re
@@ -62,6 +62,16 @@ class TimestampToMilliseconds(ValueTransformer):
         converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
         return converted_time
 
+
+class SetToOne(ValueTransformer):
+    """Send back integer = 1 irrespective of the obj"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return int("1")
+        except ValueError:
+            print("Cannot convert input to integer")
 
 class ToInteger(ValueTransformer):
     """A value transformer for expected integer values"""
@@ -198,18 +208,19 @@ class TimestampToGuardium(ValueTransformer):
 
 
 class Ymd_HMSToTimestamp(ValueTransformer):
-    """A value transformer for the timestamps"""
+    """A value transformer for the timestamps but adds ONE second to the time stamp.  Reason: Use when modified date is missing"""
 
     @staticmethod
     def transform(dt_Str):
         #print(dt_Str)
         dt_obj = datetime.strptime(dt_Str, '%Y-%m-%d %H:%M:%S')
+        dt_objOne = dt_obj + timedelta(seconds=1)
         #print(dt_obj)
-        return (datetime.fromtimestamp(datetime.timestamp(dt_obj), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
 def get_all_transformers():
-    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger,
+    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "SetToOne": SetToOne,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
             "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp,

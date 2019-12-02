@@ -142,7 +142,7 @@ class APIClient():
         successVal = False
         #
         data = self.get_credential()
-        #print(data)
+        print(data)
         endpoint = "oauth/token"
         tNow = datetime.datetime.now()
         response = self.client.call_api(

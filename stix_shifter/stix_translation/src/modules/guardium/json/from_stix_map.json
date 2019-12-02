@@ -5,7 +5,9 @@
       "start": ["QUERY_FROM_DATE"],
       "end": ["QUERY_TO_DATE"],
       "remotesource": ["REMOTE_SOURCE"],
-      "service_name": ["SERVICENAME"]
+      "database_name": ["DATABASENAME"],
+      "service_name": ["SERVICENAME"],
+      "exception_errorcode": ["ERRORCODE"]
     }
   },
   "START": {
@@ -18,17 +20,6 @@
       "value": ["QUERY_TO_DATE"]
     }
   },
-  "x_guardium_db_info": {
-    "fields": {
-      "database_name": ["DATABASENAME"],
-      "value": ["DATABASENAME"]
-    }
-  },
-  "x_guardium_exception": {
-    "fields": {
-      "errorcode": ["ERRORCODE"]
-    }
-  },
   "ipv4-addr": {
     "fields": {
       "value": ["CLIENTIP", "SERVERIP"],
@@ -36,41 +27,11 @@
       "dst_ip": ["SERVERIP"]
     }
   },
-  "ipv6-addr": {
-    "fields": {
-      "value": ["SourceIpV6", "DestinationIpV6"]
-    }
-  },
-  "url": {
-    "fields": {
-      "value": ["Url"]
-    }
-  },
-  "mac-addr": {
-    "fields": {
-      "value": ["SourceMac", "DestinationMac"]
-    }
-  },
-  "file": {
-    "fields": {
-      "name": ["FileName"]
-    }
-  },
   "user-account": {
     "fields": {
       "value": ["DBUSERNAME", "OSUSER"],
       "db_user": ["DBUSERNAME"],
       "os_user": ["OSUSER"]
-    }
-  },
-  "artifact": {
-    "fields": {
-      "payload_bin": ["Payload"]
-    }
-  },
-  "domain-name": {
-    "fields": {
-      "value": ["DomainName"]
     }
   }
 }

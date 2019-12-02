@@ -117,7 +117,7 @@ class QueryStringPatternTranslator:
         return jParams_def
     #
     # Guardium report parameters are "AND"ed in a Gaurdium query.
-    # Our Json object array contains multiple json objects.  Each object may have one or many key/value paris -- these are report params
+    # Our Json object array contains multiple json objects.  Each object may have one or many key/value pairs -- these are report params
     # Problem statement: get an array of json objects containing parameters which support a guardium report call
     #
     def buildArrayOfGuardiumReportParams(self,resArray, resPos, curResObj, paramsArray, curPos):
