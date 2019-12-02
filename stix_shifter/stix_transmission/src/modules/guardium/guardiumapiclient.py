@@ -1,5 +1,5 @@
-from ..utils.RestApiClient import RestApiClient
-from ..utils.RestApiClient import ResponseWrapper
+from .utils.RestApiClient import RestApiClient
+from .utils.RestApiClient import ResponseWrapper
 from requests.models import Response
 import urllib.parse
 import sys
@@ -73,8 +73,15 @@ class APIClient():
                                     connection.get('cert', None),
                                     self.headers,
                                     url_modifier_function,
-                                    connection.get('cert_verify', 'True')
+                                    cert_verify=connection.get(
+                                        'selfSignedCert', True),
+                                    mutual_auth=connection.get(
+                                        'use_securegateway', False),
+                                    sni=connection.get('sni', None)
                                     )
+#        self.client = RestApiClient(host_port,None,connection.get('cert', None),self.headers,
+#                                    url_modifier_function,
+#                                    connection.get('cert_verify', 'True'))
 #
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
@@ -142,14 +149,14 @@ class APIClient():
         successVal = False
         #
         data = self.get_credential()
-        print(data)
+        #print(data)
         endpoint = "oauth/token"
         tNow = datetime.datetime.now()
         response = self.client.call_api(
             endpoint, "POST", params=data, data=None)
         jResp = json.loads(str(response.read(), 'utf-8'))
 #
-        print(jResp)
+        #print(jResp)
         if (response.code != 200):
             #print(response.code)
             errMsg = str(jResp) + " -- " + "Authorization Token not received."
@@ -211,12 +218,12 @@ class APIClient():
 #
         else:
             id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
-            print(id_str)
+            #print(id_str)
             id_byt = id_str.encode('utf-8')
             s_id = base64.b64encode(id_byt)
             self.set_searchId(s_id)
 #
-        print(s_id)
+        #print(s_id)
         return s_id
 #
     def decode_searchId(self):
@@ -338,9 +345,9 @@ class APIClient():
 # "Message": "ID=0 The Query did not retrieve any records"} 
 # Raise an error -->  1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT
                 response_content = self.raiseErrorIfEmptyResult(response)
-                print("Records obtained: ")
-                print(response_content)
-                print("\n")
+                #print("Records obtained: ")
+                #print(response_content)
+                #print("\n")
 #
             else:
                 raise ValueError(1020, "Error -- Status Code is NOT 200!")
@@ -355,9 +362,9 @@ class APIClient():
         #               1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT
         r_content_str = (response.read()).decode('utf8').replace("'", '"')
         response_content = json.loads(r_content_str)
-        print(r_content_str)
+        #print(r_content_str)
         if "ID" in response_content:
-            print(response_content)
+            #print(response_content)
             errMsg = response_content.get("Message", "Default Message - NO Records Fetched using this Query.")
             raise ValueError(1010, errMsg)
         else:
@@ -380,6 +387,7 @@ class APIClient():
     def delete_search(self, search_id):
         # Subroto -- not used.
         # deletes search created earlier.
-        endpoint = self.endpoint_start + "searches" + '/' + search_id
-        return self.client.call_api(endpoint, 'DELETE')
+        #endpoint = self.endpoint_start + "searches" + '/' + search_id
+        #return self.client.call_api(endpoint, 'DELETE')
+        return {"success": True, "search_id": search_id}
 #

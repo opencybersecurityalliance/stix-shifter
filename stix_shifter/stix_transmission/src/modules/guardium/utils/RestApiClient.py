@@ -101,9 +101,30 @@ class RestApiClient:
                     call = getattr(session, method.lower())
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
                     actual_headers["Host"] = self.sni
-
-                response = call(url, headers=actual_headers,
-                                cert=self.client_cert_content, data=data, verify=self.server_cert_content)
+#
+# This is original call 
+                #response = call(url, headers=actual_headers,
+                                #cert=self.client_cert_content, data=data, verify=self.server_cert_content)
+# Replaced with
+#  Subroto: Replaced the above line with the following because params is not passed to the call though the
+#  'call_api' signature has params as a parameter.
+#
+# This code is added because Guardium api requires 'params' to be sent to get the
+# Authorization token AND 'data' to be sent to retrieve report information.
+#
+                if (not params or params is None):
+                    response = call(url, headers=actual_headers,
+                                    cert=self.client_cert_content, data=data, verify=self.server_cert_content)
+                #
+                elif data is None and params is not None:
+                    response = call(url, headers=actual_headers, cert=self.client_cert_content,
+                                    params=params, verify=self.server_cert_content)
+                #
+                else:
+                    response = call(url, headers=actual_headers, cert=self.client_cert_content,
+                                    params=params, data=data, verify=self.server_cert_content)
+                #
+# End Change
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                         and "Deprecated" in response.headers['Content-Type']:

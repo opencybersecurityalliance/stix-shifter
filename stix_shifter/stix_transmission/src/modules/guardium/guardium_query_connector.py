@@ -39,7 +39,7 @@ class GuardiumQueryConnector(BaseQueryConnector):
         if response_code == 200:
             return_obj['success'] = True
             return_obj['search_id'] = response_dict['search_id']
-            return_obj['data'] = response_dict['data']
+            #eturn_obj['data'] = response_dict['data']
 
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['ErrorMessage'])

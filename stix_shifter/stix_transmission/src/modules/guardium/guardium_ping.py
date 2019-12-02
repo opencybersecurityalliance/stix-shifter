@@ -19,7 +19,7 @@ class GuardiumPing(BasePing):
 
         if len(response_dict) > 0 and response_code == 200:
             return_obj['success'] = True
-            return_obj["search_id"] = response_dict.get('search_id',"NA")
+            #return_obj["search_id"] = response_dict.get('search_id',"NA")
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
