@@ -212,10 +212,8 @@ class Ymd_HMSToTimestamp(ValueTransformer):
 
     @staticmethod
     def transform(dt_Str):
-        #print(dt_Str)
         dt_obj = datetime.strptime(dt_Str, '%Y-%m-%d %H:%M:%S')
         dt_objOne = dt_obj + timedelta(seconds=1)
-        #print(dt_obj)
         return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 

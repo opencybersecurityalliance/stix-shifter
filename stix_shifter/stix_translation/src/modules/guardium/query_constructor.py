@@ -79,7 +79,7 @@ class QueryStringPatternTranslator:
     # Where as each key/value parameter from two json objects are "AND"
         #
         # Put quote around key
-        print(repCall)
+        #print(repCall)
         regex = r"([a-zA-Z_]+)(\s=)"
         out_str = re.sub(regex, r"'\1' :", repCall,0)
 
@@ -132,14 +132,13 @@ class QueryStringPatternTranslator:
 
         if curPos < pArrSize:
             thisJObj = paramsArray[curPos]
-            #print(thisJObj)
         #
         # Iterate over this json Object
             for param in thisJObj:
                 # Keep a copy of curResObj before any modification from this invocation
                 cp_curResObj = copy.deepcopy(curResObj)
                 # Insert the param in the curResObj
-                print(param)
+                #print(param)
                 if param not in cp_curResObj:
                     cp_curResObj[param] = thisJObj[param]
                     #print(cp_curResObj)
@@ -149,8 +148,6 @@ class QueryStringPatternTranslator:
                         resArray.append(cp_curResObj)
                         resPos = resPos + 1
         #
-        #print(resPos)
-        #print(resArray)
         return resArray
     #
     def substitute_ParamsPassed(self, reportDefs, reports_in_query):
@@ -164,15 +161,10 @@ class QueryStringPatternTranslator:
         dtNow = datetime.datetime.now()
         def_TO_DATE = dtNow.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         def_FROM_DATE = (dtNow - datetime.timedelta(days=def_Days_Back)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
-        print("Default Start and Stop time: ")
-        print(def_FROM_DATE)
-        print(def_TO_DATE)
 #
         for reportName in reportDefs:
             report = reportDefs[reportName]
-            print(report)
             for param in report["reportParameter"]:
-                print(param)
                 # either the value will be default or passed by ISC (report parameter passed)
                 if param not in self.reportParamsPassed:
                     value = report["reportParameter"][param]["default"]
@@ -186,7 +178,7 @@ class QueryStringPatternTranslator:
                 if report["reportParameter"][param]["info"] == "STOP":
                     value = self.reportParamsPassed.get("STOP", def_TO_DATE)
 #
-                print(report["reportParameter"][param]["info"] + " -> Value: " + str(value))
+                #print(report["reportParameter"][param]["info"] + " -> Value: " + str(value))
       #
       #Transform the value or use it as-is
                 if "transformer" in report["reportParameter"][param]:
