@@ -220,7 +220,7 @@ class APIClient():
             id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
             #print(id_str)
             id_byt = id_str.encode('utf-8')
-            s_id = base64.b64encode(id_byt)
+            s_id = base64.b64encode(id_byt).decode()
             self.set_searchId(s_id)
 #
         #print(s_id)
