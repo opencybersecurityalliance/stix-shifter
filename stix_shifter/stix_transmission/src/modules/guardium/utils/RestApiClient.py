@@ -15,6 +15,7 @@ class RestApiClient:
     #mutual_auth is in the case the gateway is being used
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
                  mutual_auth=False, sni=None):
+        print("Guardium Version of RestApiClient ----")
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)
