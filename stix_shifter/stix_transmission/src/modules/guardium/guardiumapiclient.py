@@ -297,7 +297,6 @@ class APIClient():
         return ResponseWrapper(respObj)
 #
     def set_IndexAndFsize(self, indexFrom=None, fetchSize=None):
-        #
         data = json.loads(self.query)
         try:
             indx = int(indexFrom)
@@ -308,7 +307,7 @@ class APIClient():
 #       replace the data string
         data["indexFrom"] = str(indx)
         data["fetchSize"] = str(fsize)
-        return (json.dumps(data))
+        return json.dumps(data)
 #
     def get_search_results(self, search_id, response_type, indexFrom=None, fetchSize=None):
         # Sends a GET request from guardium
@@ -344,15 +343,10 @@ class APIClient():
 # Determine if the response is empty if empty Guardium sends {"ID": 0,
 # "Message": "ID=0 The Query did not retrieve any records"} 
 # Raise an error -->  1010: ErrorCode.TRANSMISSION_RESPONSE_EMPTY_RESULT
-                response_content = self.raiseErrorIfEmptyResult(response)
-                #print("Records obtained: ")
-                #print(response_content)
-                #print("\n")
-#
+                # response_content = self.raiseErrorIfEmptyResult(response)
+                return response
             else:
                 raise ValueError(1020, "Error -- Status Code is NOT 200!")
-#
-            return response
         else:
             raise ValueError(3002, "Authorization Token not received ")
 #           End of this function
