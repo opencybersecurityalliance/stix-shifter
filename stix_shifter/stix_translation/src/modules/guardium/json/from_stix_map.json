@@ -1,5 +1,5 @@
 {
-  "x_guardium": {
+  "x-com-guardium": {
     "fields": {
       "datacategory": ["datacategory"],
       "start": ["QUERY_FROM_DATE"],
@@ -8,16 +8,6 @@
       "database_name": ["DATABASENAME"],
       "service_name": ["SERVICENAME"],
       "exception_errorcode": ["ERRORCODE"]
-    }
-  },
-  "START": {
-    "fields": {
-      "value": ["QUERY_FROM_DATE"]
-    }
-  },
-  "STOP": {
-    "fields": {
-      "value": ["QUERY_TO_DATE"]
     }
   },
   "ipv4-addr": {
