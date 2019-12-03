@@ -4,96 +4,100 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "Client IP": [{
+  "Client IP": [
+    {
       "key": "ipv4-addr.value",
       "object": "src_ip"
     }
   ],
-  "Server IP": [{
+  "Server IP": [
+    {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
     }
   ],
-  "DB User Name": {
-    "key": "user-account.user_id",
-        "extensions": {
-          "x_guardium": {
-            "type": "x-db_user"
-          }
-        }
-  },
-  "OS User": {
-    "key": "user-account.user_id",
-    "extensions": {
-      "x_guardium": {
-        "type": "x-os_user"
-      }
+  "DB User Name": [
+    {
+      "key": "user-account.user_id"
+    },
+    {
+      "key": "x_com_guardium.db_user",
+      "cybox": false
     }
-  },
+  ],
+  "OS User": [
+    {
+      "key": "user-account.user_id"
+    },
+    {
+      "key": "x_com_guardium.os_user",
+      "cybox": false
+    }
+  ],
   "Count of Exceptions": {
     "key": "number_observed",
     "cybox": false,
     "transformer": "ToInteger"
   },
   "Audit Process Description": {
-    "key": "x_guardium.audit_process_description",
+    "key": "x_com_guardium.audit_process_description",
     "cybox": false
   },
   "Audit Task Description": {
-    "key": "x_guardium.audit_task_description",
+    "key": "x_com_guardium.audit_task_description",
     "cybox": false
   },
   "DETAIL": {
-    "key": "x_guardium.run_detail",
+    "key": "x_com_guardium.run_detail",
     "cybox": false
   },
   "Event Type": {
-    "key": "x_guardium.event_type",
+    "key": "x_com_guardium.event_type",
     "cybox": false
   },
   "Audit Process Id": {
-    "key": "x_guardium.audit_process_id",
+    "key": "x_com_guardium.audit_process_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Audit Task Id": {
-    "key": "x_guardium.audit_task_id",
+    "key": "x_com_guardium.audit_task_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Run Id": {
-    "key": "x_guardium.run_id",
+    "key": "x_com_guardium.run_id",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Database Name": {
-    "key": "x_guardium.database_name",
+    "key": "x_com_guardium.database_name",
     "cybox": false
   },
   "Full Sql": {
-    "key": "x_guardium.full_sql",
+    "key": "x_com_guardium.full_sql",
     "cybox": false
   },
   "Service Name": {
-    "key": "x_guardium.service_name",
+    "key": "x_com_guardium.service_name",
     "cybox": false
   },
 
   "Error Code": {
-    "key": "x_guardium.exception_errorcode",
+    "key": "x_com_guardium.exception_errorcode",
     "transformer": "ToInteger",
     "cybox": false
   },
   "Exception Description": {
-    "key": "x_guardium.exception_description",
+    "key": "x_com_guardium.exception_description",
     "cybox": false
   },
   "Database Error Text": {
-    "key": "x_guardium.exception_database_error_text",
+    "key": "x_com_guardium.exception_database_error_text",
     "cybox": false
   },
   "SQL string that caused the Exception": {
-    "key": "x_guardium.sql_caused_exception",
+    "key": "x_com_guardium.sql_caused_exception",
     "cybox": false
   },
   "Session Start": [
