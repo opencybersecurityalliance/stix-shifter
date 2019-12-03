@@ -14,11 +14,15 @@ def find(s_key, superset):
     out = []
     for item in dic_flattened:
         for key, value in item.items():
-            if(str(s_key) == str(value)):
+            if(str(s_key).lower() == str(value).lower()):
                 out.append(item)
-            if(str(s_key) == "'" +str(value) + "'"):
+            elif(str(s_key) == "'" +str(value) + "'"):
                 out.append(item)
-    return out  
+            elif(str(value).find(str(s_key)) != -1 ):
+                out.append(item) 
+            elif(str(value).find(str(s_key).replace("'", "")) != -1 ):
+                out.append(item)       
+    return out 
 
 def and_operation(entites , set):
     """
