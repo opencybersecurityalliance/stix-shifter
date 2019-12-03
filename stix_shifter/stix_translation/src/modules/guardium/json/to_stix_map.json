@@ -16,17 +16,17 @@
   ],
   "DB User Name": {
     "key": "user-account.user_id",
-    "extensions": {
-      "x_guardium-account": {
-        "type": "db_user"
-      }
-    }
+        "extensions": {
+          "x_guardium": {
+            "type": "x-db_user"
+          }
+        }
   },
   "OS User": {
     "key": "user-account.user_id",
     "extensions": {
-      "x_guardium-account": {
-        "type": "os_user"
+      "x_guardium": {
+        "type": "x-os_user"
       }
     }
   },
