@@ -157,7 +157,7 @@ class QueryStringPatternTranslator:
                 else:
                     report["reportParameter"][param] = value
 
-            reports_in_query.append(report)
+            reports_in_query.append(json.dumps(report))
         return reports_in_query
 
     def get_report_params(self):
