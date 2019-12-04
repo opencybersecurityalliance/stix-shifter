@@ -8,13 +8,13 @@ import re
 import json
 import datetime
 import copy
+from os import path
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
 # REFERENCE_DATA_TYPES = {"QUERY_FROM_DATE": ["start"],
 #                        "QUERY_TO_DATE": ["end"],"OSUser":["%"],"DBUser":"newuser",
 #                        "SHOW_ALIASES":["TRUE","FALSE"],"REMOTE_SOURCE":["%"]}
-REFERENCE_DATA_TYPES = {}
 DEFAULT_DAYS_BACK = 2
 
 
@@ -48,19 +48,19 @@ class QueryStringPatternTranslator:
         self.report_params_array_size = 0
         self.translated = self.parse_expression(pattern)
         self.transformers = transformers.get_all_transformers()
+
         # Read reference data
-        with open("./stix_shifter/stix_translation/src/modules/guardium/json/reference_data_types4Query.json", 'r') as f_ref:
-            self.REFERENCE_DATA_TYPES = json.loads(f_ref.read())
-        # Used in the future when custom STIX params could be used
-        REFERENCE_DATA_TYPES = self.REFERENCE_DATA_TYPES
+        basepath = path.dirname(__file__)
+        filepath = path.abspath(path.join(basepath, "json", "reference_data_types4Query.json"))
+        self.REFERENCE_DATA_TYPES = json.loads(open(filepath).read())
 
         # Read report definition data
-        with open("./stix_shifter/stix_translation/src/modules/guardium/json/guardium_reports_def.json", 'r') as f_rep:
-            self.REPORT_DEF = json.loads(f_rep.read())
+        filepath = path.abspath(path.join(basepath, "json", "guardium_reports_def.json"))
+        self.REPORT_DEF = json.loads(open(filepath).read())
 
         # Read report definition data
-        with open("./stix_shifter/stix_translation/src/modules/guardium/json/guardium_report_params_map.json", 'r') as f_repm:
-            self.REPORT_PARAMS_MAP = json.loads(f_repm.read())
+        filepath = path.abspath(path.join(basepath, "json", "guardium_report_params_map.json"))
+        self.REPORT_PARAMS_MAP = json.loads(open(filepath).read())
 
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
@@ -277,7 +277,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
-        if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
+        if value_type not in self.REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
         else:
             return "{mapped_field} {comparator} {value}".format(
