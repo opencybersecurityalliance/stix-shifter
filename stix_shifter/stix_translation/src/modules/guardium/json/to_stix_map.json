@@ -18,19 +18,23 @@
   ],
   "DB User Name": [
     {
-      "key": "user-account.user_id"
+      "key": "user-account.user_id",
+      "transformer": "EmptyStringToNone"
     },
     {
       "key": "x_com_guardium.db_user",
+      "transformer": "EmptyStringToNone",
       "cybox": false
     }
   ],
   "OS User": [
     {
-      "key": "user-account.user_id"
+      "key": "user-account.user_id",
+      "transformer": "EmptyStringToNone"
     },
     {
       "key": "x_com_guardium.os_user",
+      "transformer": "EmptyStringToNone",
       "cybox": false
     }
   ],
@@ -72,6 +76,7 @@
   },
   "Database Name": {
     "key": "x_com_guardium.database_name",
+    "transformer": "EmptyStringToNone",
     "cybox": false
   },
   "Full Sql": {
@@ -98,6 +103,7 @@
   },
   "SQL string that caused the Exception": {
     "key": "x_com_guardium.sql_caused_exception",
+    "transformer": "EmptyStringToNone",
     "cybox": false
   },
   "Session Start": [
