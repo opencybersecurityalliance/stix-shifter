@@ -1,0 +1,156 @@
+{
+  "Login Succeeded": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "Client IP": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    }
+  ],
+  "Server IP": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    }
+  ],
+  "DB User Name": [
+    {
+      "key": "user-account.user_id"
+    },
+    {
+      "key": "x_com_guardium.db_user",
+      "cybox": false
+    }
+  ],
+  "OS User": [
+    {
+      "key": "user-account.user_id"
+    },
+    {
+      "key": "x_com_guardium.os_user",
+      "cybox": false
+    }
+  ],
+  "Count of Exceptions": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "Audit Process Description": {
+    "key": "x_com_guardium.audit_process_description",
+    "cybox": false
+  },
+  "Audit Task Description": {
+    "key": "x_com_guardium.audit_task_description",
+    "cybox": false
+  },
+  "DETAIL": {
+    "key": "x_com_guardium.run_detail",
+    "cybox": false
+  },
+  "Event Type": {
+    "key": "x_com_guardium.event_type",
+    "cybox": false
+  },
+  "Audit Process Id": {
+    "key": "x_com_guardium.audit_process_id",
+    "transformer": "ToInteger",
+    "cybox": false
+  },
+  "Audit Task Id": {
+    "key": "x_com_guardium.audit_task_id",
+    "transformer": "ToInteger",
+    "cybox": false
+  },
+  "Run Id": {
+    "key": "x_com_guardium.run_id",
+    "transformer": "ToInteger",
+    "cybox": false
+  },
+  "Database Name": {
+    "key": "x_com_guardium.database_name",
+    "cybox": false
+  },
+  "Full Sql": {
+    "key": "x_com_guardium.full_sql",
+    "cybox": false
+  },
+  "Service Name": {
+    "key": "x_com_guardium.service_name",
+    "cybox": false
+  },
+
+  "Error Code": {
+    "key": "x_com_guardium.exception_errorcode",
+    "transformer": "ToInteger",
+    "cybox": false
+  },
+  "Exception Description": {
+    "key": "x_com_guardium.exception_description",
+    "cybox": false
+  },
+  "Database Error Text": {
+    "key": "x_com_guardium.exception_database_error_text",
+    "cybox": false
+  },
+  "SQL string that caused the Exception": {
+    "key": "x_com_guardium.sql_caused_exception",
+    "cybox": false
+  },
+  "Session Start": [
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Session End": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Exception Timestamp": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Timestamp": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "SetToOne"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ]
+}
