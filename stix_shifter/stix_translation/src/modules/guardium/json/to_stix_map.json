@@ -23,6 +23,7 @@
     },
     {
       "key": "x_com_guardium.db_user",
+      "transformer": "EmptyStringToNone",
       "cybox": false
     }
   ],
@@ -33,6 +34,7 @@
     },
     {
       "key": "x_com_guardium.os_user",
+      "transformer": "EmptyStringToNone",
       "cybox": false
     }
   ],
@@ -74,6 +76,7 @@
   },
   "Database Name": {
     "key": "x_com_guardium.database_name",
+    "transformer": "EmptyStringToNone",
     "cybox": false
   },
   "Full Sql": {
