@@ -103,6 +103,7 @@
   },
   "SQL string that caused the Exception": {
     "key": "x_com_guardium.sql_caused_exception",
+    "transformer": "EmptyStringToNone",
     "cybox": false
   },
   "Session Start": [
