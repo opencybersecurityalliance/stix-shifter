@@ -18,7 +18,8 @@
   ],
   "DB User Name": [
     {
-      "key": "user-account.user_id"
+      "key": "user-account.user_id",
+      "transformer": "EmptyStringToNone"
     },
     {
       "key": "x_com_guardium.db_user",
@@ -27,7 +28,8 @@
   ],
   "OS User": [
     {
-      "key": "user-account.user_id"
+      "key": "user-account.user_id",
+      "transformer": "EmptyStringToNone"
     },
     {
       "key": "x_com_guardium.os_user",
