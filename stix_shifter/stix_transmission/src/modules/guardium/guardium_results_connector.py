@@ -15,14 +15,20 @@ class GuardiumResultsConnector(BaseResultsConnector):
 
         # Construct a response object
         return_obj = dict()
-        response_dict = json.loads(response.read())
+        results = json.loads(response.read())
 
         if response_code == 200:
             return_obj['success'] = True
-            return_obj['data'] = response_dict
+            # In the case of no results datasource returns a json/dict type reponse : 
+            #       {'ID': 0, 'Message': 'The Query did not retrieve any records'}
+            #  Therefore setting empty list after checking the datatype
+            if isinstance(results, dict):
+                 return_obj['data'] = []
+            else:
+                return_obj['data'] = results
 
             return_obj["search_id"] = search_id
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, results, ['message'])
 
         return return_obj
