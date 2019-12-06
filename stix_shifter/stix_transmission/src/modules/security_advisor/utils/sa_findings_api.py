@@ -20,11 +20,10 @@ def get_all_occurences( params, time):
         'Authorization' : 'Bearer '  + params["accessToken"],
     }
 
-    body = '{ occurrences(kind:"FINDING") { author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context { accountId resourceName } reportedBy { id title } finding { severity certainty }}}'
-
+    body = '{ occurrences(kind:"FINDING") {author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context {accountId region resourceType resourceName resourceId resourceCrn serviceName serviceCrn} reportedBy {id title url } finding {severity certainty networkConnection {client {address port} server {address port} direction protocol} nextSteps {title url} dataTransferred {clientBytes clientPackets serverBytes serverPackets}}}}'
     if( time ):
-        body = '{ occurrences(kind:"FINDING"' + time + ') { author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context { accountId resourceName } reportedBy { id title } finding { severity certainty }}}'
-    
+        body = '{ occurrences(kind:"FINDING"' + time + ') {author { accountId , id , email } name id noteName updateTime createTime shortDescription providerId providerName longDescription context {accountId region resourceType resourceName resourceId resourceCrn serviceName serviceCrn} reportedBy {id title url } finding {severity certainty networkConnection {client {address port} server {address port} direction protocol} nextSteps {title url} dataTransferred {clientBytes clientPackets serverBytes serverPackets}}}}'
+      
     url = params["host"] + "/" + params["accountID"] + "/graph"
     try :
         response = requests.post(url, data= body,headers= header)
