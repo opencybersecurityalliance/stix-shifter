@@ -3,6 +3,7 @@
 [Click here](https://docs.google.com/forms/d/1vEAqg9SKBF3UMtmbJJ9qqLarrXN5zeVG3_obedA3DKs) and fill out the form to receive an invite to the Open Cybersecurity Alliance slack instance, then join the #stix-shifter channel, to meet and discuss usage with the team.
 
 ### Introduction Webinar!
+
 [Click here](https://ibm.biz/BdzTyA) to view an introduction webinar on STIX Shifter and the use cases it solves for.
 
 ### Introduction
@@ -40,9 +41,9 @@ We are thrilled you are considering contributing! We welcome all contributors.
 
 Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/CONTRIBUTING.md).
 
-## Guide for creating new adapters
+## Guide for creating new connectors
 
-If you want to create a new adapter for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md)
+If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
 
