@@ -1,4 +1,4 @@
-# Developing a new STIX-shifter adapter
+# Developing a new STIX-shifter connector
 
 - [Introduction](../README.md)
 - [Scenario](#scenario)
@@ -9,18 +9,18 @@
 
 ### Participants
 
-This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new adapter for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
+This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new connector for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
 
 ### Problem to solve
 
-_User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter adapters.
+_User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter connectors.
 
 _User A_ would like to:
 
 1. Submit one STIX pattern to query all the user’s security products at once. The use of a STIX pattern simplifies the search process because _User A_ does not need to know the query language or API calls for each security product.
 1. See the query results from all the security products in one unified format (STIX bundle). With the assumption that the submitted pattern represents a potential security incident, the STIX bundle presents the query results in the context of the security event.
 
-By implementing a new adapter, _Developer A_ allows _Product A_ to fit into the workflow.
+By implementing a new connector, _Developer A_ allows _Product A_ to fit into the workflow.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ By implementing a new adapter, _Developer A_ allows _Product A_ to fit into the 
 
 ## Steps
 
-To develop a STIX-shifter adapter for a data source:
+To develop a STIX-shifter connector for a data source:
 
 1. Fork the `opencybersecurityalliance/stix-shifter` repository from https://github.com/opencybersecurityalliance/stix-shifter to work on your own copy of the library.
 1. [Create a Translation module](#create-a-translation-module).
@@ -700,9 +700,9 @@ For asynchronous sources, the search id that gets passed into the connection met
       {'success': True}
       ```
 
-### Testing a new adapter using the proxy host
+### Testing a new connector using the proxy host
 
-Work on a new stix-shifter adapter occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** adapter that facilitates a remote instance of the project calling out to a local instance. While in development, a new adapter's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new adapter and return results back to the remote stix-shifter instance.
+Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
 
 Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
 
