@@ -73,19 +73,25 @@ You might want to use this library and contribute to development, if any of the 
 
 ## Available Connectors
 
-List updated: March 22, 2019
+List updated: December 10, 2019
 
-|         Connector          | Data Model |  Developer   | Translation | Connection | Availability |           Observables            |     Unsupported      |
-| :------------------------: | :--------: | :----------: | :---------: | :--------: | :----------: | :------------------------------: | :------------------: |
-|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes     |   Release    | network-traffic, file, url, host |      ISSUPERSET      |
-|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
-|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes     |   Release    |          process, file           | ISSUPERSET, ISSUBSET |
-|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No     | Pre-release  |                                  |                      |
-|       Elastic Search       |    ECS     | IBM Security |     No      |     No     |   Planned    |                                  |                      |
-|      AWS SecurityHub       |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
-| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |     No     | Pre-release  |                                  |                      |
-|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes     |   Release    |                                  | ISSUPERSET, ISSUBSET |
-|           Splunk           | MITRE CAR  |    MITRE     |     Yes     |    Yes     | Pre-release  |                                  |                      |
+|         Connector          | Data Model |  Developer   | Translation | Connection | Availability | 
+| :------------------------: | :--------: | :----------: | :---------: | :--------: | :----------: | 
+|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes     |   Release    | 
+|   IBM QRadar on Cloud      | IBM QRadar | IBM Security |     Yes     |    Yes     |   Release    |
+|   IBM Cloud Data Lake      | IBM QRadar | IBM Security |     Yes     |    Yes     |   Planned    |
+|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes     |   Release    |
+|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes     |   Release    |
+|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No     |   Release    |
+|       Elastic Search       |    ECS     | IBM Security |     No      |     No     |   Release    |
+| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |     No     |   Release    |
+|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes     |   Release    | 
+|       Microsoft ATP        |  Default   | IBM Security |     Yes     |    Yes     |   Release    |
+|       IBM Guardium         |  Default   | IBM Security |     Yes     |    Yes     |   Release    |
+|  AWS CloudWatch Logs       |  Default   | IBM Security |     Yes     |    Yes     |   Planned    |
+|  Azure Sentinel            |  Default   | IBM Security |     Yes     |    Yes     |   Planned    |
+
+Details of supported STIX Objects and properties from and to STIX for each connector can be found in [IBM Box note](https://ibm.box.com/s/8z80lqjqwfwnt581j639uq95ftbe64m0).
 
 ## How to use
 
