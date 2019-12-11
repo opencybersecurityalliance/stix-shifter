@@ -11,8 +11,10 @@
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
 - [Available Connectors](#available-connectors)
 - [How to use](#How-to-use)
-  - [Translation](#translation)
-  - [Transmission](#transmission)
+  - [Translate](#translate)
+  - [Transmit](#transmit)
+  - [Execute](#execute)
+  - [Parse](#parse)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -42,9 +44,44 @@ STIX-Shifter is the heart of the **Universal Data Service** (UDS) that is provid
 
 STIX 2 Patterning is a part of STIX that deals with the "matching things" part of STIX, which is an integral component of STIX Indicators.
 
+##### An example of a STIX pattern:
+
+`[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']`
+
 This library takes in STIX 2 Patterns as input, and "finds" data that matches the patterns inside various products that house repositories of cybersecurity data. Examples of such products include SIEM systems, endpoint management systems, threat intelligence platforms, orchestration platforms, network control points, data lakes, and more.
 
 In addition to "finding" the data by using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
+
+##### An example of a STIX Observation:
+
+```json
+{
+  "id": "observed-data--cf2c58dc-200e-49e0-b6f7-e1997cccf707",
+  "type": "observed-data",
+  "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
+  "objects": {
+    "0": {
+      "type": "network-traffic",
+      "src_port": 567,
+      "dst_port": 102,
+      "src_ref": "1",
+      "dst_ref": "2"
+    },
+    "1": {
+      "type": "ipv4-addr",
+      "value": "192.168.122.84"
+    },
+    "2": {
+      "type": "ipv4-addr",
+      "value": "127.0.0.1"
+    },
+    "3": {
+      "type": "url",
+      "value": "www.testaddress.com"
+    }
+  }
+}
+```
 
 As anyone with experience in data science will tell you, the cleansing and normalizing of the data across domains, is one of the largest hurdles to overcome with attempting to build cross-platform security analytics. This is one of the barriers we are attempting to break down with STIX Shifter.
 
@@ -87,16 +124,25 @@ List updated: March 22, 2019
 
 ## How to use
 
-Stix-shifter handles two primary functions:
-
-1. **Translation**
-   Stix-shifter translates STIX patterns into data source queries (in whatever query language the data source might use) and from data source results into bundled STIX observation objects (very similar to JSON).
-2. **Transmission**
-   Passes in authentication credentials to connect to a data source where stix-shifter can then ping or query the data source or fetch the query status and results.
+### Prerequisites
 
 Python 3.6 is required to use stix-shifter.
 
-### Translation
+Stix-shifter provides several functions: `translate` and `transmit` are the primary functions, `execute` offers a way to test the complete stix-shifter flow, and `parse` will return the components that make up a STIX pattern. Each of these can be called from the CLI and will be explained in depth.
+
+1. **Translate**
+
+   The `translate` command converts STIX patterns into data source queries (in whatever query language the data source might use) and translates data source results (in JSON format) into bundled STIX observation objects.
+
+2. **Transmit**
+
+   The `transmit` command passes connection information and authentication credentials to the data source API where stix-shifter can make ping, query, delete query, query status and query results calls.
+
+3. **Execute**
+
+   The translation and transmission functions can work in sequence by using the `execute` command from the CLI.
+
+### Translate
 
 #### Translate a STIX 2 pattern to a native data source query
 
@@ -110,7 +156,7 @@ Python 3.6 is required to use stix-shifter.
 ##### OUTPUT: Native data source query
 
 ```
-# Translated Query:
+# Translated Query (using SQL as an example):
 "SELECT * FROM tableName WHERE (Url = 'http://www.testaddress.com')
 OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
@@ -121,7 +167,7 @@ OR
 ##### INPUT: JSON data source query result
 
 ```
-# Datasource results:
+# Datasource results (in JSON format):
 [
     {
         "SourcePort": 567,
@@ -324,7 +370,7 @@ python main.py translate qradar parse \
 
 The `start_time` represents the earliest of either the START qualifier or the default time range. The default time range is last 5 minutes unless overridden in the `time_range` options param. The `end_time` represents the latest of either the STOP qualifier or the current UTC time.
 
-### Transmission
+### Transmit
 
 With the transmission module, you can connect to any products that house repositories of cybersecurity data.
 
@@ -414,6 +460,78 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 
 ```
 python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' is_async
+```
+
+### Execute
+
+The `execute` command takes in the following parameters: Transmission module, Translation module, STIX Identity object, Connection object, Configuration (authentication) object, and STIX pattern. The STIX pattern is translated into the a native data source query, the translated query is sent to the data source (via the API defined in the transmission module)
+
+#### Connection and Configuration objects
+
+STIX-shifter expects a connection object in both the translation and transmission calls and a configuration object in the transmission call. The connection object contains the host address and port of the data source being connected to, as well as an optional server name indicator (SNI) and self signed certificate.
+
+**Connection**
+
+This object contains information needed to connect to a specific data source. The `host` and `port` keys are required.
+
+```json
+{
+    "host": <Host URL or IP address>,
+    "port": <Port>,
+    "sni": <Server name indicator>,
+    "selfSignedCert": <false or Certificate>,
+    "cert": <Certificate (if required)>,
+    "resultSizeLimit": <Results limit to come back from the data source query>,
+    "options": {<Any required options specific to the particular data source>}
+}
+```
+
+**Configuration**
+
+This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source.
+
+```json
+{
+    "auth": {
+        "username": <Username>,
+        "password": <Password>
+    }
+}
+```
+
+```json
+{
+    "auth": {
+        "tenant": <Tenant>,
+        "clientId": <Client ID>,
+        "clientSecret": <Client Secret>
+    }
+}
+```
+
+```json
+{
+    "auth": {
+        "SEC": <SEC Token>
+    }
+}
+```
+
+```json
+{
+    "auth": {
+        "token": <Security Token>
+    }
+}
+```
+
+```json
+{
+    "auth": {
+        "accountId": <Account ID>,
+        "apiKey": <API Key>
+    }
+}
 ```
 
 #### How UDS uses STIX-shifter
