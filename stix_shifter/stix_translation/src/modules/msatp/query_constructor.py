@@ -266,7 +266,7 @@ class QueryStringPatternTranslator:
         """
         if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(
-                "Comparison operator {} unsupported for MSATP adapter".format(expression_operator.name))
+                "Comparison operator {} unsupported for MSATP connector".format(expression_operator.name))
         return self.comparator_lookup.get(expression_operator)
 
     def _parse_expression(self, expression, qualifier=None):
@@ -324,8 +324,8 @@ class QueryStringPatternTranslator:
         self.lookup_table_object = 'find withsource = TableName in ({})'.format(self.lookup_table_object)
         if self._is_mac:
             kusto_query = self.lookup_table_object + self.qualifier_string + FLOOR_TIME + \
-                          self.join_query.format(mac_query=kusto_query, qualifier_string='|' + self.qualifier_string,
-                                                 floor_time=FLOOR_TIME)
+                self.join_query.format(mac_query=kusto_query, qualifier_string='|' + self.qualifier_string,
+                                       floor_time=FLOOR_TIME)
         else:
             kusto_query = self.lookup_table_object + self.qualifier_string + '| order by EventTime desc | ' \
                                                                              'where ' + kusto_query
