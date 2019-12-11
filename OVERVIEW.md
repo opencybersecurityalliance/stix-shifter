@@ -7,7 +7,7 @@
   - [What is STIX-SHIFTER?](#what-is-stix-shifter)
   - [What is STIX Patterning? What are STIX Observations?](#what-is-stix-patterning-what-are-stix-observations)
   - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
-  - [What is a STIX-SHIFTER adapter?](#what-is-a-stix-shifter-adapter)
+  - [What is a STIX-SHIFTER connector?](#what-is-a-stix-shifter-connector)
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
 - [Available Connectors](#available-connectors)
 - [How to use](#How-to-use)
@@ -16,7 +16,7 @@
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
-- [Guide for creating new adapters](adapter-guide/develop-stix-adapter.md)
+- [Guide for creating new connectors](adapter-guide/develop-stix-adapter.md)
 - [Licensing](#licensing)
 
 ## Introduction
@@ -36,8 +36,6 @@ To learn more about STIX, see the following references:
 
 STIX-shifter is an open source python library allowing software to connect to products that house data repositories by using `STIX Patterning`, and return results as `STIX Observations`.
 
-STIX-Shifter is the heart of the **Universal Data Service** (UDS) that is provided as part of [IBM Security Connect](https://www.ibm.com/security/connect/).
-
 ### What is STIX Patterning? What are STIX Observations?
 
 STIX 2 Patterning is a part of STIX that deals with the "matching things" part of STIX, which is an integral component of STIX Indicators.
@@ -52,9 +50,13 @@ As anyone with experience in data science will tell you, the cleansing and norma
 
 [Sigma](https://github.com/Neo23x0/sigma) and STIX Patterning have goals that are related, but at the end of the day has slightly different scopes. While Sigma seeks to be "for log files what Snort is for network traffic and YARA is for files", STIX Patterning's goal is to encompass _all three_ fundamental security data source types - network, file, and log - and do so simultaneously, allowing you to create complex queries and analytics that span domains. As such, so does STIX Shifter. It is critical to be able to create search patterns that span SIEM, Endpoint, Network, and File levels, in order to detect the complex patterns used in modern campaigns.
 
-### What is a STIX-SHIFTER adapter?
+### What is a STIX-SHIFTER connector?
 
-A STIX-shifter adapter is the bridge that connects IBM Security Connect to a data source. Developing a new adapter expands on the data sources that STIX-shifter can support.
+A STIX-shifter connector is a module inside Stix-Shifter library that implements an interface for:
+- data source query and result set translation
+- data source communication 
+
+Developing a new connector expands on the data sources that STIX-shifter can support.
 
 The combination of translation and transmission functions allows for a single STIX pattern to generate a native query for each supported data source. Each query is run, and the results are translated back into STIX objects; allowing for a uniform presentation of data.
 
@@ -66,24 +68,30 @@ You might want to use this library and contribute to development, if any of the 
 
 - You are a vendor or project owner who wants to add some form of query or enrichment functions to your product capabilities
 - You are an end user and want to have a way to script searches and/or queries as part of your orchestration flow
-- You are a vendor or project owner who has data that can be made available, and you want to contribute an adapter
+- You are a vendor or project owner who has data that can be made available, and you want to contribute a connector
 - You just want to help make the world a safer place!
 
 ## Available Connectors
 
-List updated: March 22, 2019
+List updated: December 10, 2019
 
-|         Connector          | Data Model |  Developer   | Translation | Connection | Availability |           Observables            |     Unsupported      |
-| :------------------------: | :--------: | :----------: | :---------: | :--------: | :----------: | :------------------------------: | :------------------: |
-|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes     |   Release    | network-traffic, file, url, host |      ISSUPERSET      |
-|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
-|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes     |   Release    |          process, file           | ISSUPERSET, ISSUBSET |
-|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No     | Pre-release  |                                  |                      |
-|       Elastic Search       |    ECS     | IBM Security |     No      |     No     |   Planned    |                                  |                      |
-|      AWS SecurityHub       |  Default   | IBM Security |     Yes     |    Yes     | Pre-release  |                                  |                      |
-| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |     No     | Pre-release  |                                  |                      |
-|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes     |   Release    |                                  | ISSUPERSET, ISSUBSET |
-|           Splunk           | MITRE CAR  |    MITRE     |     Yes     |    Yes     | Pre-release  |                                  |                      |
+|         Connector          | Data Model |  Developer   | Translation | Transmission | Availability | 
+| :------------------------: | :--------: | :----------: | :---------: | :--------:   | :----------: | 
+|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes       |   Release    | 
+|   IBM QRadar on Cloud      | IBM QRadar | IBM Security |     Yes     |    Yes       |   Release    |
+|   IBM Cloud Data Lake      | IBM QRadar | IBM Security |     Yes     |    Yes       |   Planned    |
+|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
+|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
+|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No       |   Release    |
+|       Elastic Search       |    ECS     | IBM Security |     Yes     |    Yes       |   Release    |
+| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |    Yes       |   Release    |
+|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes       |   Release    | 
+|       Microsoft ATP        |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
+|       IBM Guardium         |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
+|  AWS CloudWatch Logs       |  Default   | IBM Security |     Yes     |    Yes       |   Planned    |
+|  Azure Sentinel            |  Default   | IBM Security |     Yes     |    Yes       |   Planned    |
+
+Details of supported STIX Objects and properties from and to STIX for each connector can be found in [IBM Box note](https://ibm.box.com/s/8z80lqjqwfwnt581j639uq95ftbe64m0).
 
 ## How to use
 
@@ -416,16 +424,6 @@ python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":
 python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' is_async
 ```
 
-#### How UDS uses STIX-shifter
-
-IBM's Universal Data Service first uses the translation modules to convert a STIX pattern into one or more native queries; this happens for each data source connected to IBM Security Connect.
-
-Each translated query is sent to its respective data source, query status is polled, and query results are returned, all via the transmission modules.
-
-The translation modules are again used to convert the JSON results into STIX observed-data objects. These objects get wrapped in STIX bundles to be used by the IBM Security Connect service.
-
-Throughout this process, all data is stateless. The pattern, translated query, JSON results, and STIX objects do not get stored anywhere. UDS simply submits a pattern and fetches the resulting STIX as needed.
-
 ## Glossary
 
 | Terms                     | Definition                                                                                                                                                                                              |
@@ -447,13 +445,11 @@ We are thrilled you are considering contributing! We welcome all contributors.
 
 Please read our [guidelines for contributing](CONTRIBUTING.md).
 
-## Guide for creating new adapters
+## Guide for creating new connectors
 
-If you want to create a new adapter for STIX-shifter, see the [developer guide](adapter-guide/develop-stix-adapter.md)
+If you want to create a new connector for STIX-shifter, see the [developer guide](adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
-
-Copyright 2019 IBM
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
