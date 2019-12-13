@@ -259,7 +259,7 @@ python main.py translate qradar results \
 '[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' --stix-validator
 ```
 
-The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard.
+The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
 
 ## Transmit
 
