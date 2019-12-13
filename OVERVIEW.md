@@ -297,7 +297,7 @@ This object contains an `auth` key who's value stores authentication information
 }
 ```
 
-```json
+```
 {
     "auth": {
         "tenant": <Tenant>,
@@ -307,7 +307,7 @@ This object contains an `auth` key who's value stores authentication information
 }
 ```
 
-```json
+```
 {
     "auth": {
         "SEC": <SEC Token>
@@ -315,7 +315,7 @@ This object contains an `auth` key who's value stores authentication information
 }
 ```
 
-```json
+```
 {
     "auth": {
         "token": <Security Token>
@@ -323,7 +323,7 @@ This object contains an `auth` key who's value stores authentication information
 }
 ```
 
-```json
+```
 {
     "auth": {
         "accountId": <Account ID>,
