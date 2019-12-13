@@ -340,7 +340,7 @@ Each of the transmit functions takes in common arguments: the module name, the c
 
 Any failed transmission function call will return an error in the format of:
 
-`{'success': False, 'error': <Error reported by API>, 'code': <Error code>}`
+`{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
 
 ### Ping
 
