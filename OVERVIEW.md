@@ -271,7 +271,7 @@ STIX-shifter expects connection and configuration objects to be passed in during
 
 This object contains information needed to connect to a specific data source. The `host` and `port` keys are required.
 
-```json
+```
 {
     "host": <Host URL or IP address>,
     "port": <Port>,
@@ -288,7 +288,7 @@ This object contains information needed to connect to a specific data source. Th
 
 This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source.
 
-```json
+```
 {
     "auth": {
         "username": <Username>,
