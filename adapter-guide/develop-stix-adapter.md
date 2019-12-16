@@ -262,7 +262,9 @@ Depending on your data source, edit this section to:
 
 - Add a query field selector.
 - Append result limits and time windows.
-- Return an array of queries or a single query string. A single query string is returned by default, but queries can be split into an array of query strings if required.
+- Return a list of one or more queries. A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
+
+The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `from_stix_map.json`).
 
 [Back to top](#create-a-translation-module)
 
@@ -274,7 +276,7 @@ Results from unmapped data source fields are ignored during translation and are 
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
-3. In your `abc` translation module folder, go to your json/ subfolder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
+3. In your `abc` translation module folder, go to your json/ sub-folder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
 
    ```
    {
