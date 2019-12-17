@@ -100,6 +100,16 @@ class MsatpToRegistryValue(ValueTransformer):
         return converted_value
 
 
+class AwsToTimestamp(ValueTransformer):
+    """A value transformer to format UTC timestamp"""
+
+    @staticmethod
+    def transform(aws_time):
+        time_array = aws_time.split(' ')
+        converted_time = time_array[0] + 'T' + time_array[1] + 'Z'
+        return converted_time
+
+
 class EpochSecondsToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
 
@@ -360,4 +370,5 @@ def get_all_transformers():
             "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
             "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
-            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "EmptyStringToNone": EmptyStringToNone}
+            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "EmptyStringToNone":
+                EmptyStringToNone, "AwsToTimestamp": AwsToTimestamp}

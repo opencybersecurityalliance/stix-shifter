@@ -1,0 +1,30 @@
+{
+  "log-type": "vpcflow",
+  "ipv4-addr": {
+    "fields": {
+      "value": ["srcAddr", "dstAddr"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["srcAddr", "dstAddr"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["srcPort"],
+      "dst_port": ["dstPort"],
+      "src_ref.value": ["srcAddr"],
+      "dst_ref.value": ["dstAddr"],
+      "protocols[*]": ["protocol"],
+      "start": ["start"],
+      "end": ["end"]
+    }
+  },
+  "x_com_aws_cwl": {
+    "fields": {
+      "account_id": ["accountId"],
+      "interface_id": ["interfaceId"]
+    }
+  }
+}

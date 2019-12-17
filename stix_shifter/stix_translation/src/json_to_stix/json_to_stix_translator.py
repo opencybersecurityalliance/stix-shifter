@@ -38,7 +38,7 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        self.stix_validator = options.get('stix_validator', False)
+        self.stix_validator = options.get('stix_validator', True)
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
@@ -194,9 +194,16 @@ class DataSourceObjToStixObj:
 
                 DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
-                stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                    continue
+                if 'references' in ds_key_def:
+                    references = ds_key_def['references']
+                    if object_map.get(references):
+                        stix_value = object_map[references]
+                    else:
+                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                else:
+                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        continue
 
                 DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value, group)
 

@@ -1,0 +1,70 @@
+{
+  "log-type": "guardduty",
+  "ipv4-addr": {
+    "fields": {
+      "value": ["private_ip_address", "public_ip", "remote_ip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ipv6_address"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["local_port"],
+      "dst_port": ["remote_port"],
+      "src_ref.value": ["private_ip_address"],
+      "dst_ref.value": ["remote_ip"],
+      "protocols[*]": ["protocol"]
+    }
+  },
+  "domain-name":{
+    "fields": {
+      "value": ["private_dns_name","public_dns_name", "dns_domain"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["principal_id"],
+      "account_login": ["user_name"]
+    }
+  },
+  "x_com_aws_cwl": {
+    "fields": {
+      "account_id": ["account_id"],
+      "region": ["region"],
+      "finding_id": ["finding_id"],
+      "interface_id": ["interface_id"],
+      "accessKey_id": ["accessKey_id"],
+      "user_type": ["user_type"],
+      "iam_instance_profile_id": ["iam_instance_profile_id"],
+      "image_id": ["image_id"],
+      "instance_id": ["instance_id"],
+      "group_name": ["group_name"],
+      "group_id": ["group_id"],
+      "subnet_id": ["subnet_id"],
+      "vpc_id": ["vpc_id"],
+      "tag_key": ["tag_key"],
+      "tag_value": ["tag_value"],
+      "resource_type": ["resource_type"],
+      "action_type": ["action_type"],
+      "api": ["api"],
+      "api_caller_type": ["api_caller_type"],
+      "api_city_name": ["api_city_name"],
+      "api_country_name": ["api_country_name"],
+      "api_asn": ["api_asn"],
+      "api_asnOrg": ["api_asn_org"],
+      "api_service_name": ["api_service_name"],
+      "network_connection_direction": ["network_direction"],
+      "network_city_name": ["network_city_name"],
+      "network_country_name": ["network_country_name"],
+      "network_asn": ["network_asn"],
+      "network_asn_org": ["network_asn_org"],
+      "finding_type": ["finding_type"],
+      "severity": ["severity"],
+      "updated_at": ["updated_at"],
+      "resource_role": ["resource_role"]
+    }
+  }
+}

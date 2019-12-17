@@ -1,0 +1,152 @@
+{
+    "vpcflow":{
+        "display_fields": ["@timestamp", "srcAddr", "dstAddr", "srcPort", "dstPort", "protocol", "start", "end", "accountId","interfaceId", "bytes", "packets"],
+        "logtype_filter": "strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0"
+    },
+    "guardduty": {
+        "display_fields": ["@timestamp", "source", "@message"],
+        "parse_attributes": {
+            "access_key_id": {
+                "parse_string": "detail.resource.accessKeyDetails.accessKeyId \"\""
+            },
+            "principal_id": {
+                "parse_string": "detail.resource.accessKeyDetails.principalId \"\""
+            },
+            "user_name": {
+                "parse_string": "detail.resource.accessKeyDetails.userName \"\""
+            },
+            "user_type": {
+                "parse_string": "detail.resource.accessKeyDetails.userType \"\""
+            },
+            "iam_instance_profile_id": {
+                "parse_string": "detail.resource.instanceDetails.iamInstanceProfile.id \"\""
+            },
+            "image_id": {
+                "parse_string": "detail.resource.instanceDetails.imageId \"\""
+            },
+            "instance_id": {
+                "parse_string": "detail.resource.instanceDetails.instanceId \"\""
+            },
+            "interface_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"networkInterfaceId\":\"*\"'"
+            },
+            "private_ip_address": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"privateIpAddress\":\"*\"'"
+            },
+            "private_dns_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"privateDnsName\":\"*\"'"
+            },
+            "public_dns_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"publicDnsName\":\"*\"'"
+            },
+            "public_ip": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"publicIp\":\"*\"'"
+            },
+            "ipv6_address": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"ipv6Addresses\":[\"*\"'"
+            },
+            "remote_ip": {
+                "parse_string": "@message /(?:\"ipAddressV4\"\\:\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\")/"
+            },
+            "local_port": {
+                "parse_string": "@message '\"localPortDetails\":{\"port\":*,'"
+            },
+            "remote_port": {
+                "parse_string": "@message '\"remotePortDetails\":{\"port\":*,'"
+            },
+            "protocol": {
+                "parse_string": "detail.service.action.networkConnectionAction.protocol \"\""
+            },
+            "group_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"groupName\":\"*\"'"
+            },
+            "group_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"groupId\":\"*\"'"
+            },
+            "subnet_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"subnetId\":\"*\"'"
+            },
+            "vpc_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"vpcId\":\"*\"'"
+            },
+            "tag_key": {
+                "parse_string": "detail.resource.instanceDetails.tags.0 '\"key\":\"*\"'"
+            },
+            "tag_value": {
+                "parse_string": "detail.resource.instanceDetails.tags.0 '\"value\":\"*\"'"
+            },
+            "resource_type": {
+                "parse_string": "detail.resource.resourceType \"\""
+            },
+            "action_type": {
+                "parse_string": "detail.service.action.actionType \"\""
+            },
+            "api":{
+                "parse_string": "detail.service.action.awsApiCallAction.api \"\""
+            },
+            "api_caller_type": {
+                "parse_string": "detail.service.action.awsApiCallAction.callerType \"\""
+            },
+            "api_city_name": {
+                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.city '\"cityName\":\"*\"'"
+            },
+            "api_country_name": {
+                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.country.countryName \"\""
+            },
+            "api_asn": {
+                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.organization.asn \"\""
+            },
+            "api_asn_org": {
+                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg \"\""
+            },
+            "api_service_name": {
+                "parse_string": "detail.service.action.awsApiCallAction.serviceName \"\""
+            },
+            "dns_domain": {
+                "parse_string": "detail.service.action.dnsRequestAction.domain \"\""
+            },
+            "network_blocked": {
+                "parse_string": "detail.service.action.networkConnectionAction.blocked  \"\""
+            },
+            "network_direction": {
+                "parse_string": "detail.service.action.networkConnectionAction.connectionDirection  \"\""
+            },
+            "network_city_name": {
+                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"cityName\":\"*\"'"
+            },
+            "network_country_name": {
+                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"countryName\":\"*\"'"
+            },
+            "network_asn": {
+                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"asn\":\"*\"'"
+            },
+            "network_asn_org": {
+                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"asnOrg\":\"*\"'"
+            },
+            "threat_list_name": {
+                "parse_string": "detail.service.additionalInfo.threatListName  \"\""
+            },
+            "region": {
+                "parse_string": "region \"\""
+            },
+            "account_id": {
+                "parse_string": "account \"\""
+            },
+            "finding_id": {
+                "parse_string": "detail.id \"\""
+            },
+            "updated_at": {
+                "parse_string": "detail.updatedAt \"\""
+            },
+            "finding_type": {
+                "parse_string": "detail.type \"\""
+            },
+            "severity": {
+                "parse_string": "detail.severity \"\""
+            },
+            "resource_role": {
+                "parse_string": "detail.service.resourceRole \"\""
+            }
+        }
+    }
+}
