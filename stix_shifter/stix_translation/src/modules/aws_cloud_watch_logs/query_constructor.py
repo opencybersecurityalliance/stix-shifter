@@ -267,33 +267,7 @@ class QueryStringPatternTranslator:
         :return: str, comparison string
         """
         if isinstance(expression, ComparisonExpression):  # Base Case
-            # Resolve STIX Object Path to a field in the target Data Model
-            stix_object, stix_field = expression.object_path.split(':')
-            # Custom condition for protocol lookup if log type == 'vpcflow'
-            if stix_field.lower() == 'protocols[*]':
-                existing_protocol_value = expression.value
-                value = self.protocol_lookup(expression.value)
-                if (not value) or (isinstance(value, list) and None in value):
-                    raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
-                        expression.value, expression.comparator, path.basename(self.log_type)))
-                expression.value = self._format_set(value) if isinstance(value, list) and not\
-                    self._protocol_lookup_needed and expression.comparator not in [ComparisonComparators.Matches,
-                                                                                   ComparisonComparators.In]\
-                    else value
-            mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
-            comparator = self._lookup_comparison_operator(self, expression.comparator)
-            comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
-            # Reverting back the protocol value in expression to existing
-            if stix_field.lower() == 'protocols[*]':
-                expression.value = existing_protocol_value
-            if len(mapped_fields_array) > 1:
-                # More than one data source field maps to the STIX attribute, so group comparisons together.
-                grouped_comparison_string = "(" + comparison_string + ")"
-                comparison_string = grouped_comparison_string
-
-            if expression.negated:
-                if comparison_string:
-                    comparison_string = self._negate_comparison(comparison_string)
+            comparison_string = self.__eval_comparison_exp(expression)
             return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
@@ -306,23 +280,7 @@ class QueryStringPatternTranslator:
                 query_string = "({}) {} ({})".format(expression_01, operator, expression_02)
             return query_string
         elif isinstance(expression, ObservationExpression):
-            filter_query = self._parse_expression(expression.comparison_expression, qualifier)
-            if filter_query:
-                self._parse_time_range(qualifier, self._time_range)
-                self.build_parse_statement(self._parse_statement)
-                self.qualified_queries.append(self.aws_query.format(fields=', '.join(self._log_config_data
-                                                                                     .get(self.log_type)
-                                                                                     .get('display_fields')),
-                                                                    filter_query=filter_query,
-                                                                    stix_filter=''.join(self._parse_statement) if
-                                                                    self._parse_statement else '',
-                                                                    parse_filter='| filter ' + self._parse_filter if
-                                                                    self._parse_filter else '',
-                                                                    logtype_filter='| filter ' + self.logtype_filter
-                                                                    if self.logtype_filter else ''))
-                # Re-initialize parse statement for multiple observation
-                self._parse_statement = {}
-            return None
+            return self.__eval_observation_exp(expression, qualifier)
         elif isinstance(expression, CombinedObservationExpression):
             self._parse_expression(expression.expr1, qualifier)
             self._parse_expression(expression.expr2, qualifier)
@@ -335,6 +293,54 @@ class QueryStringPatternTranslator:
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def __eval_comparison_exp(self, expression):
+        # Resolve STIX Object Path to a field in the target Data Model
+        stix_object, stix_field = expression.object_path.split(':')
+        # Custom condition for protocol lookup if log type == 'vpcflow'
+        if stix_field.lower() == 'protocols[*]':
+            existing_protocol_value = expression.value
+            value = self.protocol_lookup(expression.value)
+            if (not value) or (isinstance(value, list) and None in value):
+                raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
+                    expression.value, expression.comparator, path.basename(self.log_type)))
+            expression.value = self._format_set(value) if isinstance(value, list) and not \
+                self._protocol_lookup_needed and expression.comparator not in [ComparisonComparators.Matches,
+                                                                               ComparisonComparators.In] \
+                else value
+        mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
+        comparator = self._lookup_comparison_operator(self, expression.comparator)
+        comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
+        # Reverting back the protocol value in expression to existing
+        if stix_field.lower() == 'protocols[*]':
+            expression.value = existing_protocol_value
+        if len(mapped_fields_array) > 1:
+            # More than one data source field maps to the STIX attribute, so group comparisons together.
+            grouped_comparison_string = "(" + comparison_string + ")"
+            comparison_string = grouped_comparison_string
+        if expression.negated:
+            if comparison_string:
+                comparison_string = self._negate_comparison(comparison_string)
+        return comparison_string
+
+    def __eval_observation_exp(self, expression, qualifier):
+        filter_query = self._parse_expression(expression.comparison_expression, qualifier)
+        if filter_query:
+            self._parse_time_range(qualifier, self._time_range)
+            self.build_parse_statement(self._parse_statement)
+            self.qualified_queries.append(self.aws_query.format(fields=', '.join(self._log_config_data
+                                                                                 .get(self.log_type)
+                                                                                 .get('display_fields')),
+                                                                filter_query=filter_query,
+                                                                stix_filter=''.join(self._parse_statement) if
+                                                                self._parse_statement else '',
+                                                                parse_filter='| filter ' + self._parse_filter if
+                                                                self._parse_filter else '',
+                                                                logtype_filter='| filter ' + self.logtype_filter
+                                                                if self.logtype_filter else ''))
+            # Re-initialize parse statement for multiple observation
+            self._parse_statement = {}
+        return None
 
     def __eval_comparison_value(self, comparator, expression, mapped_fields_array, stix_field):
         """

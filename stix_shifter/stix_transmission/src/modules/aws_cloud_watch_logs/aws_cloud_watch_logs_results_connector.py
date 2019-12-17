@@ -143,5 +143,3 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                     return value
         else:
             raise FileNotFoundError
-
-

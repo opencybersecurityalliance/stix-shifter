@@ -44,7 +44,7 @@ class TestStixToQuery(unittest.TestCase):
             '?i)172.31.88.63$/))", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))", '
             '"startTime": 1569919390, "endTime": 1572432190}']
         queries = _remove_timestamp_from_query(queries)
@@ -61,7 +61,7 @@ class TestStixToQuery(unittest.TestCase):
             '\'igp\'])", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (protocol IN [\'6\', \'9\'])", "startTime": 1569919390, "endTime": '
             '1572432190}']
         self._test_query_assertions(query, queries)
@@ -77,7 +77,7 @@ class TestStixToQuery(unittest.TestCase):
             'private_ip_address LIKE /(?i)58/)", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (srcAddr LIKE /(?i)58/)", "startTime": 1569919390, "endTime": 1572432190}']
         self._test_query_assertions(query, queries)
 
@@ -98,7 +98,7 @@ class TestStixToQuery(unittest.TestCase):
             '"endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter ((srcAddr IN [\'54.239.30.177\', \'113.204.228.66\'] OR dstAddr IN ['
             '\'54.239.30.177\', \'113.204.228.66\']))", "startTime": 1569919390, "endTime": 1572432190}']
         self._test_query_assertions(query, queries)
@@ -114,7 +114,7 @@ class TestStixToQuery(unittest.TestCase):
             'local_port) > 0 | filter (local_port LIKE /\\\\d+/)", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (srcPort LIKE /\\\\d+/)", "startTime": 1569919390, "endTime": 1572432190}']
         self._test_query_assertions(query, queries)
 
@@ -135,7 +135,7 @@ class TestStixToQuery(unittest.TestCase):
             'OR remote_ip =~ /^(?i)54.239.30.177$/)))", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (((srcAddr =~ /^(?i)167.71.118.48$/ OR dstAddr =~ /^(?i)167.71.118.48$/)) '
             'OR ((srcAddr =~ /^(?i)54.239.30.177$/ OR dstAddr =~ /^(?i)54.239.30.177$/)))", "startTime": 1569919390, '
             '"endTime": 1572432190}']
@@ -163,13 +163,13 @@ class TestStixToQuery(unittest.TestCase):
             'local_port) > 0 | filter (local_port =~ /^(?i)22$/)", "startTime": 1569919390, "endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (((srcAddr =~ /^(?i)167.71.118.48$/ OR dstAddr =~ /^(?i)167.71.118.48$/)) '
             'OR ((srcAddr =~ /^(?i)54.239.30.177$/ OR dstAddr =~ /^(?i)54.239.30.177$/)))", "startTime": 1569919390, '
             '"endTime": 1572432190}',
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter (srcPort =~ /^(?i)22$/)", "startTime": 1569919390, "endTime": 1572432190}']
         self._test_query_assertions(query, queries)
 
@@ -180,7 +180,7 @@ class TestStixToQuery(unittest.TestCase):
         queries = [
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, '
-            'end, accountId, interfaceId, bytes, packets | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
+            'end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or '
             'strlen(protocol) > 0 | filter ((start = \'1571130610\'))", "startTime": 1569919390, "endTime": '
             '1572432190}']
         self._test_query_assertions(query, queries)
