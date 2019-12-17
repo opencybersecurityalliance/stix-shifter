@@ -419,9 +419,42 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert custom_object.keys() == {'resource', 'service', 'region', 'source', 'account_id',
                                         'id', 'updated_at',
                                         'type', 'severity', 'title'}
-        assert custom_object['resource'] == {'instance_details': {'instance_id': 'i-99999999', 'iam_instance_profile': {'id': 'GeneratedFindingInstanceProfileId'}, 'network_interfaces_0': {'network_interface_id': 'eni-bfcffe88', 'private_dns_name_ref': 'GeneratedFindingPrivateDnsName', 'private_ip_address_ref': '0', 'subnet_id': 'GeneratedFindingSubnetId', 'vpc_id': 'GeneratedFindingVPCId', 'security_groups': {'group_name': 'GeneratedFindingSecurityGroupName', 'group_id': 'GeneratedFindingSecurityId'}, 'public_dns_name_ref': 'GeneratedFindingPublicDNSName', 'public_ip_ref': '3'}, 'tags_0': {'key': 'GeneratedFindingInstaceTag1', 'value': 'GeneratedFindingInstaceValue1'}, 'image_id': 'ami-99999999'}, 'resource_type': 'Instance'}
+        assert custom_object['resource'] == {'instance_details': {'instance_id': 'i-99999999', 'iam_instance_profile': {
+            'id': 'GeneratedFindingInstanceProfileId'}, 'network_interfaces_0': {'network_interface_id': 'eni-bfcffe88',
+                                                                                 'private_dns_name_ref':
+                                                                                     'GeneratedFindingPrivateDnsName',
+                                                                                 'private_ip_address_ref': '0',
+                                                                                 'subnet_id': 'GeneratedFindingSubnetId',
+                                                                                 'vpc_id': 'GeneratedFindingVPCId',
+                                                                                 'security_groups': {
+                                                                                     'group_name':
+                                                                                         'GeneratedFindingSecurityGroupName',
+                                                                                     'group_id':
+                                                                                         'GeneratedFindingSecurityId'},
+                                                                                 'public_dns_name_ref': 'GeneratedFindingPublicDNSName',
+                                                                                 'public_ip_ref': '3'},
+                                                                  'tags_0': {'key': 'GeneratedFindingInstaceTag1',
+                                                                             'value': 'GeneratedFindingInstaceValue1'},
+                                                                  'image_id': 'ami-99999999'},
+                                             'resource_type': 'Instance'}
 
-        assert custom_object['service'] == {'action': {'network_connection_action': {'connection_direction': 'OUTBOUND', 'remote_ip_details': {'ip_addressv4': {'remote_ip_ref': '5'}, 'organization': {'asn': '-1', 'asn_org': 'GeneratedFindingASNOrg'}, 'country': {'country_name': 'United States'}}, 'remote_port_details': {'port_ref': '1', 'port_name': 'SSH'}, 'local_port_details': {'port_ref': '1', 'port_name': 'Unknown'}, 'protocol_ref': '1', 'blocked': 'false'}, 'action_type': 'NETWORK_CONNECTION'}, 'resource_role': 'TARGET'}
+        assert custom_object['service'] == {'action': {'network_connection_action': {'connection_direction': 'OUTBOUND',
+                                                                                     'remote_ip_details': {
+                                                                                         'ip_addressv4': {
+                                                                                             'remote_ip_ref': '5'},
+                                                                                         'organization': {'asn': '-1',
+                                                                                                          'asn_org': 'GeneratedFindingASNOrg'},
+                                                                                         'country': {
+                                                                                             'country_name': 'United States'}},
+                                                                                     'remote_port_details': {
+                                                                                         'port_ref': '1',
+                                                                                         'port_name': 'SSH'},
+                                                                                     'local_port_details': {
+                                                                                         'port_ref': '1',
+                                                                                         'port_name': 'Unknown'},
+                                                                                     'protocol_ref': '1',
+                                                                                     'blocked': 'false'},
+                                                       'action_type': 'NETWORK_CONNECTION'}, 'resource_role': 'TARGET'}
         assert custom_object['region'] == 'us-east-1'
         assert custom_object['source'] == 'aws.guardduty'
         assert custom_object['account_id'] == '979326520502'
