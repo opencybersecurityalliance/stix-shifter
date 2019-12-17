@@ -66,8 +66,8 @@
 transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
-"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"xxxx\": 
-[\"xxxxxx\"]}}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},
+\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"]}}"
 query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message  | parse detail
 .resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 
@@ -212,7 +212,8 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message  | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as private_ip_address | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen (private_ip_address) > 0 or strlen (public_ip) > 0 or strlen (remote_ip) > 0  | filter ((private_ip_address =~ /^(?i)172.31.88.63$/ OR public_ip =~ /^(?i)172.31.88.63$/ OR remote_ip =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId, bytes, packets   | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}
+{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message  | parse detail.resource
+.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as private_ip_address | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen (private_ip_address) > 0 or strlen (public_ip) > 0 or strlen (remote_ip) > 0  | filter ((private_ip_address =~ /^(?i)172.31.88.63$/ OR public_ip =~ /^(?i)172.31.88.63$/ OR remote_ip =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}
 ```
 
 #### Transmit query for vpcflow:
@@ -225,7 +226,8 @@ transmit
 \"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
 [\"USEast1_FlowLogs\"]}}"
 query
-"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId, bytes, packets   | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
+"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, 
+dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
 ```
 
 #### Transmit query for guardduty:
@@ -235,8 +237,8 @@ transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
-\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
-[\"USEast1_FlowLogs\"]}}"
+\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",
+\"/aws/events/guardduty\"]}}"
 query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message  | parse detail
 .resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as private_ip_address | parse detail

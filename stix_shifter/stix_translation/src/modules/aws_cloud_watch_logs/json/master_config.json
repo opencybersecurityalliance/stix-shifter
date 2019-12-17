@@ -1,6 +1,6 @@
 {
     "vpcflow":{
-        "display_fields": ["@timestamp", "srcAddr", "dstAddr", "srcPort", "dstPort", "protocol", "start", "end", "accountId","interfaceId", "bytes", "packets"],
+        "display_fields": ["@timestamp", "srcAddr", "dstAddr", "srcPort", "dstPort", "protocol", "start", "end", "accountId", "interfaceId"],
         "logtype_filter": "strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0"
     },
     "guardduty": {
@@ -93,12 +93,6 @@
             "api_country_name": {
                 "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.country.countryName \"\""
             },
-            "api_asn": {
-                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.organization.asn \"\""
-            },
-            "api_asn_org": {
-                "parse_string": "detail.service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg \"\""
-            },
             "api_service_name": {
                 "parse_string": "detail.service.action.awsApiCallAction.serviceName \"\""
             },
@@ -116,12 +110,6 @@
             },
             "network_country_name": {
                 "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"countryName\":\"*\"'"
-            },
-            "network_asn": {
-                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"asn\":\"*\"'"
-            },
-            "network_asn_org": {
-                "parse_string": "detail.service.action.networkConnectionAction.remoteIpDetails '\"asnOrg\":\"*\"'"
             },
             "threat_list_name": {
                 "parse_string": "detail.service.additionalInfo.threatListName  \"\""
