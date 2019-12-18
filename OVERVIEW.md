@@ -11,8 +11,9 @@
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
 - [Available Connectors](#available-connectors)
 - [How to use](#How-to-use)
-  - [Translation](#translation)
-  - [Transmission](#transmission)
+  - [Translate](#translate)
+  - [Transmit](#transmit)
+  - [Execute](#execute)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -40,9 +41,44 @@ STIX-shifter is an open source python library allowing software to connect to pr
 
 STIX 2 Patterning is a part of STIX that deals with the "matching things" part of STIX, which is an integral component of STIX Indicators.
 
+##### An example of a STIX pattern:
+
+`[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']`
+
 This library takes in STIX 2 Patterns as input, and "finds" data that matches the patterns inside various products that house repositories of cybersecurity data. Examples of such products include SIEM systems, endpoint management systems, threat intelligence platforms, orchestration platforms, network control points, data lakes, and more.
 
 In addition to "finding" the data by using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
+
+##### An example of a STIX Observation:
+
+```json
+{
+  "id": "observed-data--cf2c58dc-200e-49e0-b6f7-e1997cccf707",
+  "type": "observed-data",
+  "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d8",
+  "objects": {
+    "0": {
+      "type": "network-traffic",
+      "src_port": 567,
+      "dst_port": 102,
+      "src_ref": "1",
+      "dst_ref": "2"
+    },
+    "1": {
+      "type": "ipv4-addr",
+      "value": "192.168.122.84"
+    },
+    "2": {
+      "type": "ipv4-addr",
+      "value": "127.0.0.1"
+    },
+    "3": {
+      "type": "url",
+      "value": "www.testaddress.com"
+    }
+  }
+}
+```
 
 As anyone with experience in data science will tell you, the cleansing and normalizing of the data across domains, is one of the largest hurdles to overcome with attempting to build cross-platform security analytics. This is one of the barriers we are attempting to break down with STIX Shifter.
 
@@ -53,8 +89,9 @@ As anyone with experience in data science will tell you, the cleansing and norma
 ### What is a STIX-SHIFTER connector?
 
 A STIX-shifter connector is a module inside Stix-Shifter library that implements an interface for:
+
 - data source query and result set translation
-- data source communication 
+- data source communication
 
 Developing a new connector expands on the data sources that STIX-shifter can support.
 
@@ -75,61 +112,82 @@ You might want to use this library and contribute to development, if any of the 
 
 List updated: December 10, 2019
 
-|         Connector          | Data Model |  Developer   | Translation | Transmission | Availability | 
-| :------------------------: | :--------: | :----------: | :---------: | :--------:   | :----------: | 
-|         IBM QRadar         |  Default   | IBM Security |     Yes     |    Yes       |   Release    | 
-|   IBM QRadar on Cloud      | IBM QRadar | IBM Security |     Yes     |    Yes       |   Release    |
-|   IBM Cloud Data Lake      | IBM QRadar | IBM Security |     Yes     |    Yes       |   Planned    |
-|         IBM BigFix         |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
-|  Carbon Black CB Response  |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
-|       Elastic Search       | MITRE CAR  |    MITRE     |     Yes     |     No       |   Release    |
-|       Elastic Search       |    ECS     | IBM Security |     Yes     |    Yes       |   Release    |
-| IBM Cloud Security Advisor |  Default   |  IBM Cloud   |     Yes     |    Yes       |   Release    |
-|           Splunk           | Splunk CIM | IBM Security |     Yes     |    Yes       |   Release    | 
-|       Microsoft ATP        |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
-|       IBM Guardium         |  Default   | IBM Security |     Yes     |    Yes       |   Release    |
-|  AWS CloudWatch Logs       |  Default   | IBM Security |     Yes     |    Yes       |   Planned    |
-|  Azure Sentinel            |  Default   | IBM Security |     Yes     |    Yes       |   Planned    |
+|         Connector          |   Module Name    | Data Model |  Developer   | Translation | Transmission | Availability |
+| :------------------------: | :--------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
+|         IBM QRadar         |      qradar      |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|    IBM QRadar on Cloud     |      qradar      | IBM QRadar | IBM Security |     Yes     |     Yes      |   Release    |
+|    IBM Cloud Data Lake     |      qradar      | IBM QRadar | IBM Security |     Yes     |     Yes      |   Planned    |
+|         IBM BigFix         |      bigfix      |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|  Carbon Black CB Response  |   carbonblack    |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|       Elastic Search       |     elastic      | MITRE CAR  |    MITRE     |     Yes     |      No      |   Release    |
+|       Elastic Search       |   elastic_ecs    |    ECS     | IBM Security |     Yes     |     Yes      |   Release    |
+| IBM Cloud Security Advisor | security_advisor |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Release    |
+|           Splunk           |      splunk      | Splunk CIM | IBM Security |     Yes     |     Yes      |   Release    |
+|       Microsoft ATP        |      msatp       |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|        IBM Guardium        |     guardium     |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|    AWS CloudWatch Logs     |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
+|       Azure Sentinel       |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
 
-Details of supported STIX Objects and properties from and to STIX for each connector can be found in [IBM Box note](https://ibm.box.com/s/8z80lqjqwfwnt581j639uq95ftbe64m0).
+The full list of connectors and their supported STIX objects and properties can be found [in this table](https://ibm.box.com/v/supported-stix-attributes).
 
 ## How to use
 
-Stix-shifter handles two primary functions:
-
-1. **Translation**
-   Stix-shifter translates STIX patterns into data source queries (in whatever query language the data source might use) and from data source results into bundled STIX observation objects (very similar to JSON).
-2. **Transmission**
-   Passes in authentication credentials to connect to a data source where stix-shifter can then ping or query the data source or fetch the query status and results.
+### Prerequisites
 
 Python 3.6 is required to use stix-shifter.
 
-### Translation
+Stix-shifter provides several functions: `translate` and `transmit` are the primary functions, `execute` offers a way to test the complete stix-shifter flow.
 
-#### Translate a STIX 2 pattern to a native data source query
+1. [**Translate**](#translate)
 
-##### INPUT: STIX 2 pattern
+   The `translate` command converts STIX patterns into data source queries (in whatever query language the data source might use) and translates data source results (in JSON format) into bundled STIX observation objects.
+
+2. [**Transmit**](#transmit)
+
+   The `transmit` command allows stix-shifter to connect with products that house repositories of cybersecurity data. Connection and authentication credentials are passed to the data source APIs where stix-shifter can make calls to ping the data source, make queries, delete queries, check query status, and fetch query results.
+
+3. [**Execute**](#execute)
+
+   The translation and transmission functions can work in sequence by using the `execute` command from the CLI.
+
+## Translate
+
+### 1. Translate a STIX pattern to a native data source query
+
+#### INPUT: STIX 2 pattern
 
 ```
 # STIX Pattern:
 "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"
 ```
 
-##### OUTPUT: Native data source query
+#### OUTPUT: Native data source query
 
 ```
-# Translated Query:
+# Translated Query (using SQL as an example):
 "SELECT * FROM tableName WHERE (Url = 'http://www.testaddress.com')
 OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
 ```
 
-#### Translate a JSON data source query result to a STIX bundle of observable objects
+#### CLI Command
 
-##### INPUT: JSON data source query result
+Open a terminal and navigate to the stix-shifter root directory. Translation of a **query** is called in the format of:
+
+`python main.py translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
+
+The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. The STIX identity object is only used when translating data source results into STIX, so it can be passed in as an empty object for query translation calls.
+
+Using the Qradar connector as an example:
+
+`python main.py translate qradar query "{}" "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"`
+
+### 2. Translate a JSON data source query result to a STIX bundle of observable objects
+
+#### INPUT: JSON data source query result
 
 ```
-# Datasource results:
+# Datasource results (in JSON format):
 [
     {
         "SourcePort": 567,
@@ -141,7 +199,7 @@ OR
 ]
 ```
 
-##### OUTPUT: STIX bundle of observable objects
+#### OUTPUT: STIX bundle of observable objects
 
 ```
 # STIX Observables
@@ -185,244 +243,188 @@ OR
 }
 ```
 
-#### CLI help message for translation
+#### CLI Command
 
-```
-usage: main.py translate [-h] [-x] [-m DATA_MAPPER]
-                         {qradar,dummy,car,cim,splunk,elastic,bigfix,csa,csa:at,csa:nf,aws_security_hub,carbonblack}
-                         {results,query} data_source data [options]
+Open a terminal and navigate to the stix-shifter root directory. Translation of **results** is called in the format of:
 
-positional arguments:
-  {qradar,dummy,car,cim,splunk,elastic,bigfix,csa,csa:at,csa:nf,aws_security_hub,carbonblack}
-                        The translation module to use
-  {results,query,parse} The translation action to perform
-  data_source           STIX identity object representing a datasource
-  data                  The STIX pattern or JSON results to be translated
-  options               Options dictionary
+`python main.py translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -x, --stix-validator  Run the STIX 2 validator against the translated results
-  -m DATA_MAPPER, --data-mapper DATA_MAPPER
-                        optional module to use for Splunk or Elastic STIX-to-query mapping
-```
+The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. The STIX Identity object represents the data source and is passed in to allow stix-shifter to create a reference between the data source and the generated STIX observed objects.
 
-#### Translation is called with the following ordered parameters
-
-```
-<data source (ie. "qradar")> <"query", "results", "parse"> <{} or STIX identity object> <STIX pattern or data source results> <options>
-```
-
-**Data source:** This is the name of the module used for translation.
-
-**Query, Results, or Parse:** This argument controls if stix-shifter is translating from a STIX pattern to the data source query, translating from the data source results to a STIX bundle of observation objects, or parsing the STIX pattern into it's components and time range.
-
-**STIX Identity object:** An Identity object is used by stix-shifter to represent a data source and is inserted at the top of a returned observation bundle. Each observation in the bundle gets referenced to this identity. This parameter is only needed when converting from the data source results to the STIX bundle. When converting from a STIX pattern to a query, pass this in as an empty hash.
-
-**STIX Pattern or data source results:** The input getting translated by stix-shifter.
-
-**Options:** Options arguments come in as:
-
-- **"select_fields":** string array of fields in the data source select statement
-- **"mapping":** mapping hash for either STIX pattern to data source or data results to STIX observation objects
-- **"resultSizeLimit":** integer to limit number or results in the data source query
-- **"timeRange":** time window (ie. last 5 minutes) used in the data source query when START STOP qualifiers are absent
-
-#### Example of converting a STIX pattern to (AQL) query
-
-**Running the following:**
-
-```
-python main.py translate qradar query \
-'{}' \
-"[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00.123Z' STOP t'2016-06-01T01:11:11.123Z'"
-```
-
-**Will return:**
-
-```
-{
-  "queries": [
-    "SELECT QIDNAME(qid) as qidname, qid as qid, CATEGORYNAME(category) as categoryname, category as categoryid, CATEGORYNAME(highlevelcategory) as high_level_category_name, highlevelcategory as high_level_category_id, logsourceid as logsourceid, LOGSOURCETYPENAME(logsourceid) as logsourcename, starttime as starttime, endtime as endtime, devicetime as devicetime, sourceaddress as sourceip, sourceport as sourceport, sourcemac as sourcemac, destinationaddress as destinationip, destinationport as destinationport, destinationmac as destinationmac, username as username, eventdirection as direction, identityip as identityip, identityhostname as identity_host_name, eventcount as eventcount, PROTOCOLNAME(protocolid) as protocol, BASE64(payload) as payload, URL as url, magnitude as magnitude, Filename as filename, URL as domainname FROM events WHERE destinationport = '635' AND sourceport = '37020' limit 10000 START 1464739200123 STOP 1464743471123"
-  ]
-}
-```
-
-#### Example of converting (QRadar) data to a STIX bundle
-
-**Running the following:**
+Using the Qradar connector as an example:
 
 ```
 python main.py translate qradar results \
 '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
-'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' \
+'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' --stix-validator
 ```
 
-**Will return:**
+The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+
+## Transmit
+
+### Connection and Configuration objects
+
+STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional server name indicator (SNI) and self signed certificate.
+
+#### Connection
+
+This object contains information needed to connect to a specific data source. The `host` and `port` keys are required.
 
 ```
 {
-    "type": "bundle",
-    "id": "bundle--db4e0730-c5e3-4b72-9339-87ed7b1cf415",
-    "objects": [
-        {
-            "type": "identity",
-            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-            "name": "QRadar",
-            "identity_class": "events"
-        },
-        {
-            "id": "observed-data--4eec7558-2016-464a-9ab7-5f7e263f2942",
-            "type": "observed-data",
-            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-            "objects": {
-                "0": {
-                    "type": "ipv4-addr",
-                    "value": "192.0.2.0"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_ref": "0",
-                    "src_port": "0123"
-                },
-                "2": {
-                    "type": "file",
-                    "name": "someFile.exe"
-                },
-                "3": {
-                    "type": "user-account",
-                    "user_id": "root"
-                }
-            }
-        }
-    ]
+    "host": <Host URL or IP address>,
+    "port": <Port>,
+    "sni": <Server name indicator>,
+    "selfSignedCert": <false or Certificate>,
+    "cert": <Certificate (if required)>,
+    "resultSizeLimit": <Results limit to come back from the data source query>,
+    "timeRange": <Default query time range in minutes>,
+    "options": {<Any required options specific to the particular data source>}
 }
 ```
 
-### Example of parsing the components and time range from a STIX pattern
+#### Configuration
 
-**Running the following:**
-
-```
-python main.py translate qradar parse \
-'{}' \
-"[network-traffic:src_port = 37020 AND network-traffic:dst_port = 635] START t'2016-06-01T00:00:00.123Z' STOP t'2016-06-01T01:11:11.123Z'"
-```
-
-**Will return:**
+This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source.
 
 ```
 {
-  "parsed_stix": [
-    {
-      "attribute": "network-traffic:dst_port",
-      "comparison_operator": "=",
-      "value": 635
-    },
-    {
-      "attribute": "network-traffic:src_port",
-      "comparison_operator": "=",
-      "value": 37020
+    "auth": {
+        "username": <Username>,
+        "password": <Password>
     }
-  ],
-  "start_time": 1464739200123,
-  "end_time": 1464743471123
 }
 ```
 
-The `start_time` represents the earliest of either the START qualifier or the default time range. The default time range is last 5 minutes unless overridden in the `time_range` options param. The `end_time` represents the latest of either the STOP qualifier or the current UTC time.
-
-### Transmission
-
-With the transmission module, you can connect to any products that house repositories of cybersecurity data.
-
-The module uses the data source APIs to:
-
-- Ping the data source
-- Send queries in the native language of the data source
-- Fetch query status (if supported by the APIs)
-- Fetch query results
-- Delete the query (if supported by the APIs)
-
-#### CLI help message for transmission
-
 ```
-usage: main.py transmit [-h]
-                        {async_dummy,synchronous_dummy,qradar,splunk,bigfix,csa,aws_security_hub,carbonblack}
-                        connection configuration
-                        {ping,query,results,status,delete,is_async} ...
-
-positional arguments:
-  {async_dummy,synchronous_dummy,qradar,splunk,bigfix,csa,aws_security_hub,carbonblack}
-                        Choose which connection module to use
-  connection            Data source connection with host, port, and
-                        certificate
-  configuration         Data source authentication
-
-optional arguments:
-  -h, --help            show this help message and exit
-
-operation:
-  {ping,query,results,status,delete,is_async}
-    ping                Pings the data source
-    query               Executes a query on the data source
-    results             Fetches the results of the data source query
-    status              Gets the current status of the query
-    delete              Delete a running query on the data source
-    is_async            Checks if the query operation is asynchronous
+{
+    "auth": {
+        "tenant": <Tenant>,
+        "clientId": <Client ID>,
+        "clientSecret": <Client Secret>
+    }
+}
 ```
 
-#### Transmission is called with the following ordered parameters
-
 ```
-<Data Source (ie. "qradar")> <Connection Params: '{"host":"host ip address", "port":"port number", "cert":"certificate"}'> <'{"auth": {authentication}}'> <Transmission Operation: ping, query, status, results or is_async> <Operation input>
-```
-
-**Data source:** This is the name of the module used for transmission.
-
-**Connection Parameters:** Data source IP, port, and certificate
-
-**Data source authentication:** Authentication hash
-
-**Transmission Operation:** The transmission function being called. Transmission functions include:
-
-- **Ping:** ping the data source
-- **Query:** Execute a query on the data source. The input is the native data source query (after it has been translated from the STIX pattern).
-- **Status:** Check the status of the executed query on an asynchronous data source. The input is the query UUID.
-- **Results:** Fetch the results from the query. The input is the query UUID, offset, and length
-- **Is Async** Returns a boolean indicating if the data source is asynchronous
-
-#### Examples of using transmission from the CLI to connect to a (QRadar) data source.
-
-##### Ping
-
-```
-python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec uid..5678"}}' ping
+{
+    "auth": {
+        "SEC": <SEC Token>
+    }
+}
 ```
 
-##### Query
-
 ```
-python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' query "select * from events limit 100"
-```
-
-##### Status
-
-```
-python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' status "uuid-12345"
+{
+    "auth": {
+        "token": <Security Token>
+    }
+}
 ```
 
-##### Results
+```
+{
+    "auth": {
+        "accountId": <Account ID>,
+        "apiKey": <API Key>
+    }
+}
+```
 
-```
-python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' results "uuid-12345" <offset> <length>
-```
+### Transmit functions
 
-##### Is Async
+Transmit offers several functions: `ping`, `query`, `status` (for asynchronous data sources), `results`, `delete` (if supported by the data source), and `is_async`.
 
-```
-python main.py transmit qradar '{"host":"<ip address>", "port":"<port>", "cert":"-----BEGIN CERTIFICATE-----\ncErTificateGoesHere=\n-----END CERTIFICATE-----"}' '{"auth": {"SEC":"1234..sec..uid..5678"}}' is_async
-```
+Each of the transmit functions takes in common arguments: the module name, the connection object, and the configuration object. The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. Information on the [connection and configuration objects](#transmit) can also be found above. Each of the CLI commands can be run from a terminal in the stix-shifter root director.
+
+Any failed transmission function call will return an error in the format of:
+
+`{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
+
+### Ping
+
+Uses the data source API to ping the connection.
+
+#### CLI Command
+
+`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' ping`
+
+#### OUTPUT:
+
+`{'success': True}`
+
+### Query
+
+Uses the data source API to submit a query to the connection.
+
+#### CLI Command
+
+`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' query <NATIVE DATA SOURCE QUERY>`
+
+#### OUTPUT:
+
+`{'success': True, 'search_id': <SEARCH ID>}`
+
+An asynchronous data source will typically return a search ID supplied by the API response. In the event where the API doesn't return a search id, such as with a synchronous data source, the search id will be defined in the transmission module.
+
+### Status
+
+Uses the data source API to look up the query status based on the `search_id` that is returned from the query call. This is only used for asynchronous data sources where the results are not returned right after making a query call.
+
+#### CLI Command
+
+`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID>`
+
+#### OUTPUT:
+
+`{'success': True, 'status': <STATUS>, 'progress': <QUERY PERCENTAGE COMPLETE>}`
+
+The status can be one of: `COMPLETED`, `ERROR`, `CANCELLED`, `TIMEOUT`, or `RUNNING`. Depending on the data source, the progress may return with less than 100 while still showing the status as completed.
+
+### Results
+
+Uses the data source API to fetch the query results based on the search ID, offset, and length.
+
+#### CLI Command
+
+`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH>`
+
+#### OUTPUT:
+
+`{'success': True, 'data': [<QUERY RESULTS>]}`
+
+The offset and length control what pages/rows of data are returned in the query results.
+
+### Is Async
+
+Checks if the data source connection is asynchronous.
+
+#### CLI Command
+
+`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' is_async`
+
+#### OUTPUT:
+
+`True` or `False`
+
+## Execute
+
+The `execute` command tests all steps of the translation-transmission flow:
+
+1. A STIX pattern is translated into a list of one or more native data source queries (using a **translate query** call).
+2. Each translated query in the list is sent to the data source via a **transmit query** call.
+3. If the data source is asynchronous, a **transmit status** call is made for each query. Otherwise the flow moves to the next step.
+4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
+5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
+
+#### CLI Command
+
+`python main.py execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+
+#### OUTPUT:
+
+A bundle of STIX objects
 
 ## Glossary
 
