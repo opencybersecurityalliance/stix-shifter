@@ -128,7 +128,7 @@ List updated: December 10, 2019
 |    AWS CloudWatch Logs     |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
 |       Azure Sentinel       |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
 
-The full list of connectors and their supported STIX objects and properties can be found [in this table](https://ibm.box.com/v/STIX-object-support).
+The full list of connectors and their supported STIX objects and properties can be found [in this table](https://ibm.box.com/v/supported-stix-attributes).
 
 ## How to use
 
