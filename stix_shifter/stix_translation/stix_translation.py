@@ -30,9 +30,7 @@ class StixTranslation:
         self.args = []
 
     def _validate_pattern(self, pattern):
-        # Validator doesn't support START STOP qualifier so strip out before validating pattern
-        pattern_without_start_stop = re.sub(START_STOP_PATTERN, " ", pattern)
-        errors = run_validator(pattern_without_start_stop)
+        errors = run_validator(pattern, stix_version='2.1')
         if (errors != []):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
@@ -80,7 +78,7 @@ class StixTranslation:
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
                 if translate_type == QUERY:
-                    if 'validate_pattern' in options and options['validate_pattern'] == "true":
+                    if options.get('validate_pattern'):
                         self._validate_pattern(data)
                     try:
                         data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
