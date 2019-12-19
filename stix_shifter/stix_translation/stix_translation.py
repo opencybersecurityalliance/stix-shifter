@@ -9,12 +9,14 @@ from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
 from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
+
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
                        'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium']
 
 RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
+SUPPORTED_ATTRIBUTES = "supported_attributes"
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
@@ -111,6 +113,17 @@ class StixTranslation:
                     return interface.translate_results(data_source, data, options)
                 except Exception:
                     raise TranslationResultException()
+            elif translate_type == SUPPORTED_ATTRIBUTES:
+                # Return mapped STIX attributes supported by the data source
+                try:
+                    data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
+                    data_model_mapper = data_model.DataMapper(options)
+                except Exception as ex:
+                    data_model_mapper = self._cim_or_car_data_mapper(module, options)
+                
+                mapped_attributes = data_model_mapper.map_data
+
+                return {'supported_attributes': mapped_attributes}
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
