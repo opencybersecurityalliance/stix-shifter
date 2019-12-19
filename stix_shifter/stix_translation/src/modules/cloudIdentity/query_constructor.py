@@ -220,8 +220,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # timerange = options['timerange']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
+    query = re.sub("START", "FROM ", query)
+    query = re.sub("STOP", " TO ", query)
 
     # Change return statement as required to fit with data source query language.
     # If supported by the language, a limit on the number of results may be desired.

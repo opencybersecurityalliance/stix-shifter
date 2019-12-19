@@ -78,8 +78,11 @@ def postReports(token, reportName, FROM, TO, SIZE, SORT_BY, SORT_ORDER, SEARCH_A
         print(e)
 
 def getAdminActivity(token, FROM, TO, SIZE, SORT_BY, SORT_ORDER):
+    
     url = util.getUri() + "/v1.0/reports/admin_activity"
-    headers = { "Accept": "application/json, text/plain, */*","Content-Type": "application/json", "authorization": "Bearer "+token}
+    headers = { "Accept": "application/json, text/plain, */*","Content-Type": "application/json", 
+    "authorization": "Bearer "+token}
+
     body = json.dumps({
         "FROM": FROM,
         "TO": TO,

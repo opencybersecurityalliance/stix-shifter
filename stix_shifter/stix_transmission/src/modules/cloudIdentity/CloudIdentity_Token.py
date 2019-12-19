@@ -12,7 +12,6 @@ def getToken():
     }
     resp = requests.post(util.getUri()+"/v2.0/endpoint/default/token", data=options)
     json_data = json.loads(resp.text)
-    print(json_data)
     token = json_data['access_token']
     return token
 
