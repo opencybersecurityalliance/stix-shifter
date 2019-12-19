@@ -13,7 +13,7 @@ EXECUTE = 'execute'
 HOST = 'host'
 
 
-def __main__():
+def main():
     """
     Stix-shifter can either be called to either translate or transmit.
     In the case of translation, stix-shifter either translates a stix pattern to a datasource query,
