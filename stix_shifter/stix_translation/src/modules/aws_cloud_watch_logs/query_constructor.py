@@ -25,9 +25,8 @@ class QueryStringPatternTranslator:
         ComparisonComparators.NotEqual: "!=",
         ComparisonComparators.Like: "LIKE",
         ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
+        ComparisonComparators.Matches: "LIKE",
         ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
         ObservationOperators.Or: 'OR',
         ObservationOperators.And: 'OR'
     }
@@ -59,7 +58,7 @@ class QueryStringPatternTranslator:
             validate = []
             self._parse_statement = []
             for key, value in parse_statement.items():
-                filter_string = " or strlen ({validate}) > 0".format(validate=key)
+                filter_string = " or strlen({validate}) > 0".format(validate=key)
                 validate.append(filter_string)
                 parse_str = value.split(' ')[1]
                 if not parse_str.startswith('/'):
@@ -73,26 +72,16 @@ class QueryStringPatternTranslator:
     def protocol_lookup(self, value):
         """
         Function for protocol number lookup
-        :param value:str
-        :return:str if log type is vpcflow, list if log type is guardduty
+        :param value:str or list, protocol
+        :return:str or list, protocol
         """
-        protocol_value = []
         value = value.values if hasattr(value, 'values') else value
         protocol_json = self.load_json(PROTOCOL_LOOKUP_JSON_FILE)
-        if self._protocol_lookup_needed:
-            if isinstance(value, list):
-                protocol_value = [protocol_json.get(each_value.lower()) for each_value in value if each_value.lower() in
-                                  protocol_json]
-            else:
-                protocol_value = protocol_json.get(value.lower())
+        if isinstance(value, list):
+            protocol_value = [protocol_json.get(each_value.lower()) for each_value in value if each_value.lower() in
+                              protocol_json]
         else:
-            if isinstance(value, list):
-                protocol_value = list(map(str.upper, value))
-                existing_protocol_lower = list(map(str.lower, value))
-                for index, v in enumerate(existing_protocol_lower):
-                    protocol_value.insert(2*index+1, v)
-            else:
-                protocol_value.extend([value.lower(), value.upper()])
+            protocol_value = protocol_json.get(value.lower())
         return protocol_value
 
     @staticmethod
@@ -110,7 +99,7 @@ class QueryStringPatternTranslator:
             raise FileNotFoundError
 
     @staticmethod
-    def _format_set(values) -> str:
+    def _format_set(values) -> list:
         """
         Formatting list of values in the event of IN operation
         :param values: str
@@ -130,16 +119,13 @@ class QueryStringPatternTranslator:
         return '/{}/'.format(value) if not isinstance(value, list) else ['/{}/'.format(each) for each in value]
 
     @staticmethod
-    def _format_equality(comparator, value) -> str:
+    def _format_equality(value) -> str:
         """
         Formatting value in the event of equality operation
         :param value: str
         :return: str
         """
-        if comparator == '=' and not isinstance(value, list):
-            comparator = '=~'
-            return "/^(?i){}$/".format(value), comparator
-        return "'{}'".format(value) if not isinstance(value, list) else value, comparator
+        return "{}".format(value) if not isinstance(value, list) else value
 
     @staticmethod
     def _format_like(value) -> str:
@@ -152,33 +138,22 @@ class QueryStringPatternTranslator:
         if not isinstance(value, list):
             compile_regex = re.compile(r'.*(\%|\_).*')
             if compile_regex.match(value):
-                value = '/(?i){}$/'.format(value.replace('%', '.*').replace('_', '.'))
+                value = '/(?i){}/'.format(value.replace('%', '.*').replace('_', '.'))
             else:
                 value = '/(?i){}/'.format(value)
         return value
 
     @staticmethod
-    def _format_datetime(value, field) -> str:
+    def _format_datetime(value) -> list:
         """
         Formating value in the event of value is datetime
         :param value: datetime value
         :return: list, timestamp in milliseconds or timestamp itself
         """
-        values = []
-        if field == 'updated_at':
-            compile_timestamp_regex = re.compile(TIMESTAMP_PATTERN)
-            val = value.values if hasattr(value, 'values') else [value]
-            for value in val:
-                temp = compile_timestamp_regex.search(value)
-                if temp:
-                    values.append(temp.group(0))
-                else:
-                    raise ValueError("invalid timestamp in Stix field 'updatedAt'")
-        else:
-            transformer = TimestampToMilliseconds()
-            values = value.values if hasattr(value, 'values') else [value]
-            milli_secs_lst = list(map(transformer.transform, values))
-            values = list(map(lambda x: '{}'.format(str(x)[:-3]), milli_secs_lst))
+        transformer = TimestampToMilliseconds()
+        values = value.values if hasattr(value, 'values') else [value]
+        milli_secs_lst = list(map(transformer.transform, values))
+        values = list(map(lambda x: '{}'.format(str(x)[:-3]), milli_secs_lst))
         return values
 
     @staticmethod
@@ -198,24 +173,31 @@ class QueryStringPatternTranslator:
         comparison_string = ""
         mapped_fields_count = len(mapped_fields_array)
         for mapped_field in mapped_fields_array:
-            if expression.comparator == ComparisonComparators.In:
-                comparison_string += '{mapped_field} {comparator} {value}'.format(mapped_field=mapped_field,
-                                                                                  comparator=comparator, value=value)
-            elif expression.comparator == ComparisonComparators.IsSubSet:
-                comparison_string += 'isIpv4InSubnet({mapped_field},{value})'.format(mapped_field=mapped_field,
-                                                                                     value=value)
-
-            else:
-                if isinstance(value, list):
-                    comparison_string += "({})".format(' OR '.join(map(lambda x: "{mapped_field} {comparator}"
-                                                                                 " '{value}'".
+            if expression.comparator == ComparisonComparators.In or isinstance(value, list):
+                value_chk = all([True if val.isdigit() else False for val in value])
+                if not value_chk:
+                    comparison_string += '({})'.format(' OR '.join(map(lambda x: "tolower({mapped_field}) "
+                                                                                 "{comparator} tolower('{value}')".
                                                                        format(mapped_field=mapped_field,
-                                                                              comparator=comparator,
+                                                                              comparator='=',
                                                                               value=x), value)))
                 else:
                     comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
                                                                                       comparator=comparator,
-                                                                                      value=value)
+                                                                                      value="'{}'".format(value[0])
+                                                                                      if len(value) == 1 else value)
+            elif expression.comparator == ComparisonComparators.IsSubSet:
+                comparison_string += 'isIpv4InSubnet({mapped_field},{value})'.format(mapped_field=mapped_field,
+                                                                                     value=value)
+            elif expression.comparator in [ComparisonComparators.Like,
+                                           ComparisonComparators.Matches] or value.isdigit():
+                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                  comparator=comparator,
+                                                                                  value="'{}'".format(value) if
+                                                                                  value.isdigit() else value)
+            else:
+                comparison_string += "tolower({mapped_field}) {comparator} tolower('{value}')".\
+                    format(mapped_field=mapped_field, comparator=comparator, value=value)
             if 'parse_attributes' in self._log_config_data.get(self.log_type):
                 if mapped_field in self._log_config_data.get(self.log_type).get('parse_attributes').keys():
                     parse_attributes_from_config = self._log_config_data.get(self.log_type).get('parse_attributes').get(
@@ -256,10 +238,10 @@ class QueryStringPatternTranslator:
     def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for "
-                                      "AWS cloudwatch logs adapter".format(expression_operator.name))
+                                      "AWS CloudWatch logs adapter".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str or None:
         """
         Complete formation of AWS query from ANTLR expression object
         :param expression: expression object, ANTLR parsed expression object
@@ -269,7 +251,6 @@ class QueryStringPatternTranslator:
         if isinstance(expression, ComparisonExpression):  # Base Case
             comparison_string = self.__eval_comparison_exp(expression)
             return "{}".format(comparison_string)
-
         elif isinstance(expression, CombinedComparisonExpression):
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
@@ -280,7 +261,8 @@ class QueryStringPatternTranslator:
                 query_string = "({}) {} ({})".format(expression_01, operator, expression_02)
             return query_string
         elif isinstance(expression, ObservationExpression):
-            return self.__eval_observation_exp(expression, qualifier)
+            self.__eval_observation_exp(expression, qualifier)
+            return None
         elif isinstance(expression, CombinedObservationExpression):
             self._parse_expression(expression.expr1, qualifier)
             self._parse_expression(expression.expr2, qualifier)
@@ -294,36 +276,13 @@ class QueryStringPatternTranslator:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
 
-    def __eval_comparison_exp(self, expression):
-        # Resolve STIX Object Path to a field in the target Data Model
-        stix_object, stix_field = expression.object_path.split(':')
-        # Custom condition for protocol lookup if log type == 'vpcflow'
-        if stix_field.lower() == 'protocols[*]':
-            existing_protocol_value = expression.value
-            value = self.protocol_lookup(expression.value)
-            if (not value) or (isinstance(value, list) and None in value):
-                raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
-                    expression.value, expression.comparator, path.basename(self.log_type)))
-            expression.value = self._format_set(value) if isinstance(value, list) and not \
-                self._protocol_lookup_needed and expression.comparator not in [ComparisonComparators.Matches,
-                                                                               ComparisonComparators.In] \
-                else value
-        mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
-        comparator = self._lookup_comparison_operator(self, expression.comparator)
-        comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
-        # Reverting back the protocol value in expression to existing
-        if stix_field.lower() == 'protocols[*]':
-            expression.value = existing_protocol_value
-        if len(mapped_fields_array) > 1:
-            # More than one data source field maps to the STIX attribute, so group comparisons together.
-            grouped_comparison_string = "(" + comparison_string + ")"
-            comparison_string = grouped_comparison_string
-        if expression.negated:
-            if comparison_string:
-                comparison_string = self._negate_comparison(comparison_string)
-        return comparison_string
-
     def __eval_observation_exp(self, expression, qualifier):
+        """
+        Function for parsing observation expression value
+        :param expression: expression object
+        :param qualifier: qualifier
+        :return: str
+        """
         filter_query = self._parse_expression(expression.comparison_expression, qualifier)
         if filter_query:
             self._parse_time_range(qualifier, self._time_range)
@@ -340,7 +299,34 @@ class QueryStringPatternTranslator:
                                                                 if self.logtype_filter else ''))
             # Re-initialize parse statement for multiple observation
             self._parse_statement = {}
-        return None
+
+    def __eval_comparison_exp(self, expression):
+        """
+        Parsing comparison expression
+        :param expression: expression object, ANTLR parsed expression object
+        :return: str
+        """
+        # Resolve STIX Object Path to a field in the target Data Model
+        stix_object, stix_field = expression.object_path.split(':')
+        # Custom condition for protocol lookup if log type == 'vpcflow'
+        if self._protocol_lookup_needed:
+            if stix_field.lower() == 'protocols[*]':
+                value = self.protocol_lookup(expression.value)
+                if (not value) or (isinstance(value, list) and None in value):
+                    raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
+                        expression.value, expression.comparator, path.basename(self.log_type)))
+                expression.value = value
+        mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
+        comparator = self._lookup_comparison_operator(self, expression.comparator)
+        comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
+        if len(mapped_fields_array) > 1:
+            # More than one data source field maps to the STIX attribute, so group comparisons together.
+            grouped_comparison_string = "(" + comparison_string + ")"
+            comparison_string = grouped_comparison_string
+        if expression.negated:
+            if comparison_string:
+                comparison_string = self._negate_comparison(comparison_string)
+        return comparison_string
 
     def __eval_comparison_value(self, comparator, expression, mapped_fields_array, stix_field):
         """
@@ -351,9 +337,9 @@ class QueryStringPatternTranslator:
         :param stix_field: str, stix field
         :return: str, comparison string
         """
-        if stix_field in ["start", "end", "updated_at"]:
+        if stix_field in ["start", "end"]:
             if expression.comparator not in [ComparisonComparators.Matches, ComparisonComparators.Like]:
-                value = self._format_datetime(expression.value, stix_field)
+                value = self._format_datetime(expression.value)
             else:
                 raise NotImplementedError("STIX field '{}' un-supported for LIKE and MATCHES operation".format(
                     stix_field))
@@ -363,11 +349,11 @@ class QueryStringPatternTranslator:
             value = self._format_set(expression.value)
         elif expression.comparator == ComparisonComparators.Equal or \
                 expression.comparator == ComparisonComparators.NotEqual:
-            value, comparator = self._format_equality(comparator, expression.value)
+            value = self._format_equality(expression.value)
         elif expression.comparator == ComparisonComparators.Like:
             value = self._format_like(expression.value)
         else:
-            value = '"{}"'.format(expression.value)
+            value = '{}'.format(expression.value)
         comparison_string = self._parse_mapped_fields(expression, value, comparator, mapped_fields_array)
         return comparison_string
 

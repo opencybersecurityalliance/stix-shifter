@@ -77,6 +77,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 json_message = record_dict['@message']
                 data = json.loads(json_message)
                 flatten_results = flatten(data)
+                flatten_results = {k: v for k, v in flatten_results.items() if v != "" and v != {}}
                 guard_dict = dict()
                 guard_dict['guardduty'] = dict()
                 if flatten_results.get('detail_service_action_actionType') is None:

@@ -51,13 +51,13 @@
 #### STIX patterns:
 
 ```
-([domain-name:value = 'guarddutyc2activityb.com' OR x_com_aws_cwl:imageId = 'ami-00068cd7555f543d']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+(domain-name:value = 'guarddutyc2activityb.com' OR x_com_aws_instance:image_id = 'ami-00068cd7555f543d']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
 ```
 
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message  | parse detail.resource.instanceDetails.imageId \\"\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateDnsName\\":\\"*\\"\' as private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicDnsName\\":\\"*\\"\' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = \'aws.guardduty\' or strlen (image_id) > 0 or strlen (private_dns_name) > 0 or strlen (public_dns_name) > 0 or strlen (dns_domain) > 0  | filter ((image_id =~ /^(?i)ami-00068cd7555f543d$/) OR ((private_dns_name =~ /^(?i)guarddutyc2activityb.com$/ OR public_dns_name =~ /^(?i)guarddutyc2activityb.com$/ OR dns_domain =~ /^(?i)guarddutyc2activityb.com$/)))", "startTime": 1575189790, "endTime": 1575628990}
+{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource.instanceDetails.imageId \\"\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateDnsName\\":\\"*\\"\' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateDnsName\\":\\"*\\"\' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicDnsName\\":\\"*\\"\' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = \'aws.guardduty\' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower(\'ami-00068cd7555f543d\')) OR ((tolower(eth0_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(eth1_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(public_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(dns_domain) = tolower(\'guarddutyc2activityb.com\'))))", "startTime": 1575189790, "endTime": 1575628990}
 ```
 
 #### Transmit query:
@@ -66,23 +66,16 @@
 transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
-"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},
-\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"]}}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"xxxx\": 
+[\"xxxxxx\"]}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message  | parse detail
-.resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 
-'\\\"privateDnsName\\\":\\\"*\\\"' as private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 
-'\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\\"\\\" as 
-dns_domain | filter source = 'aws.guardduty' or strlen (image_id) > 0 or strlen (private_dns_name) > 0 or strlen 
-(public_dns_name) > 0 or strlen (dns_domain) > 0  | filter ((image_id =~ /^(?i)ami-00068cd7555f543d$/) OR (
-(private_dns_name =~ /^(?i)guarddutyc2activityb.com$/ OR public_dns_name =~ /^(?i)guarddutyc2activityb.com$/ OR 
-dns_domain =~ /^(?i)guarddutyc2activityb.com$/)))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
+"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateDnsName\\\":\\\"*\\\"' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateDnsName\\\":\\\"*\\"' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = 'aws.guardduty' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower('ami-00068cd7555f543d')) OR ((tolower(eth0_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(eth1_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(public_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(dns_domain) = tolower('guarddutyc2activityb.com'))))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
 ```
 
 #### Search id:
 
 ```
-{'success': True, 'search_id': 'ca48ecec-09d1-4745-bbf3-ee2743586f7f'}
+{'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502'}
 ```
 
 #### For Transmit result:
@@ -93,7 +86,7 @@ transmit
 "{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-ca48ecec-09d1-4745-bbf3-ee2743586f7f
+3c4d5934-aa47-4a4f-be16-ef963d73b502
 0
 2
 ```
@@ -103,7 +96,7 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
 ```
 {
     "type": "bundle",
-    "id": "bundle--8b5f8064-4e2a-436f-8657-c68d8d9c32ea",
+    "id": "bundle--d74ec163-7d77-4cbd-8503-f7d353ed96f8",
     "objects": [
         {
             "type": "identity",
@@ -112,15 +105,16 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
             "identity_class": "events"
         },
         {
-            "id": "observed-data--af00bbea-5f76-481a-a44e-f98835a9fc44",
+            "id": "observed-data--0bcbbf16-b5c2-4479-98e0-da080bf08f87",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-12-12T06:40:39.465Z",
-            "modified": "2019-12-12T06:40:39.465Z",
+            "created": "2019-12-23T10:25:07.536Z",
+            "modified": "2019-12-23T10:25:07.536Z",
             "objects": {
                 "0": {
                     "type": "ipv6-addr",
-                    "value": "2600:1f18:4036:e6fe:1ad2:4170:395a:da9a"
+                    "value": "2600:1f18:4036:e6fe:1ad2:4170:395a:da9a",
+                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe"
                 },
                 "1": {
                     "type": "domain-name",
@@ -131,7 +125,9 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
                 },
                 "2": {
                     "type": "ipv4-addr",
-                    "value": "172.31.13.238"
+                    "value": "172.31.13.238",
+                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
+                    "x_com_aws_ip_type": "private"
                 },
                 "3": {
                     "type": "domain-name",
@@ -142,62 +138,41 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
                 },
                 "4": {
                     "type": "ipv4-addr",
-                    "value": "3.231.163.216"
+                    "value": "3.231.163.216",
+                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
+                    "x_com_aws_ip_type": "public"
                 },
                 "5": {
                     "type": "domain-name",
                     "value": "guarddutyc2activityb.com"
                 }
             },
-            "x_com_guardduty_findings": {
-                "resource": {
-                    "instance_details": {
-                        "instance_id": "i-091501e21e01d0602",
-                        "network_interfaces_0": {
-                            "ipv6_addresses_0_ref": "0",
-                            "network_interface_id": "eni-0a70b0fa1a9cd3dbe",
-                            "private_dns_name_ref": "1",
-                            "private_ip_address_ref": "2",
-                            "subnet_id": "subnet-b9a994de",
-                            "vpc_id": "vpc-10db926a",
-                            "security_groups": {
-                                "group_name": "launch-wizard-1",
-                                "group_id": "sg-0aa89ff4646f71594"
-                            },
-                            "public_dns_name_ref": "3",
-                            "public_ip_ref": "4"
-                        },
-                        "tags_0": {
-                            "key": "stack",
-                            "value": "test"
-                        },
-                        "image_id": "ami-00068cd7555f543d5"
-                    },
-                    "resource_type": "Instance"
-                },
-                "service": {
-                    "action": {
-                        "dns_request_action": {
-                            "domain_ref": "5"
-                        },
-                        "action_type": "DNS_REQUEST"
-                    },
-                    "resource_role": "TARGET"
-                },
-                "source": "aws.guardduty",
+            "x_com_aws_instance": {
+                "instance_id": "i-091501e21e01d0602",
+                "availability_zone": "us-east-1a",
+                "image_id": "ami-00068cd7555f543d5"
+            },
+            "x_com_aws_vpc": {
+                "subnet_id": "subnet-b9a994de",
+                "vpc_id": "vpc-10db926a",
+                "security_group_name": "launch-wizard-1",
+                "security_group_id": "sg-0aa89ff4646f71594"
+            },
+            "x_com_aws": {
                 "account_id": "979326520502",
-                "region": "us-east-1",
+                "region": "us-east-1"
+            },
+            "x_com_aws_guardduty_finding": {
                 "id": "0ab76a9742c56179c3cfbc9d0616ff49",
                 "type": "Backdoor:EC2/C&CActivity.B!DNS",
                 "severity": 8,
-                "updated_at": "2019-12-05T10:03:15.926Z",
-                "title": "Command and Control server domain name queried by EC2 instance i-091501e21e01d0602."
+                "title": "Command and Control server domain name queried by EC2 instance i-091501e21e01d0602.",
+                "timestamp": "2019-12-05T10:15:01.000Z"
             },
             "first_observed": "2019-12-05T08:16:04Z",
             "last_observed": "2019-12-05T08:16:18Z",
-            "x_com_cwl_timestamp": "2019-12-05T10:15:01.000Z",
             "number_observed": 1
-        }
+    }   
 }
 ```
 
@@ -206,14 +181,13 @@ ca48ecec-09d1-4745-bbf3-ee2743586f7f
 #### STIX patterns:
 
 ```
-[ipv4-addr:value = '172.31.88.63'] START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+[ipv4-addr:value = '172.31.88.63'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-20T10:43:10.003Z'
 ```
 
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message  | parse detail.resource
-.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as private_ip_address | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen (private_ip_address) > 0 or strlen (public_ip) > 0 or strlen (remote_ip) > 0  | filter ((private_ip_address =~ /^(?i)172.31.88.63$/ OR public_ip =~ /^(?i)172.31.88.63$/ OR remote_ip =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))", "startTime": 1575189790, "endTime": 1575628990}
+{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower(\'172.31.88.63\') OR tolower(eth1_private_ip) = tolower(\'172.31.88.63\') OR tolower(public_ip) = tolower(\'172.31.88.63\') OR tolower(remote_ip) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}
 ```
 
 #### Transmit query for vpcflow:
@@ -226,8 +200,7 @@ transmit
 \"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
 [\"USEast1_FlowLogs\"]}}"
 query
-"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, 
-dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((srcAddr =~ /^(?i)172.31.88.63$/ OR dstAddr =~ /^(?i)172.31.88.63$/))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
+"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
 
 #### Transmit query for guardduty:
@@ -237,24 +210,19 @@ transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
-\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",
-\"/aws/events/guardduty\"]}}"
+\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
+[\"USEast1_FlowLogs\"]}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message  | parse detail
-.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as private_ip_address | parse detail
-.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /
-(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}
-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen (private_ip_address) > 0
- or strlen (public_ip) > 0 or strlen (remote_ip) > 0  | filter ((private_ip_address =~ /^(?i)172.31.88.63$/ OR public_ip =~ /^(?i)172.31.88.63$/ OR remote_ip =~ /^(?i)172.31.88.63$/))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
+"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower('172.31.88.63') OR tolower(eth1_private_ip) = tolower('172.31.88.63') OR tolower(public_ip) = tolower('172.31.88.63') OR tolower(remote_ip) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
 
 #### Search id for guardduty and vpcflow:
 
 ```
-{'success': True, 'search_id': '8c816cdd-51ac-4e55-a335-59179fa817b1'}
+{'success': True, 'search_id': '713bd4e2-1e9c-4919-bdb4-72baceed3ba7'}
 ```
 ```
-{'success': True, 'search_id': '947b9ac3-4653-4846-8472-d25d17e72349'}
+{'success': True, 'search_id': 'c3be3246-8b2b-4be7-b2de-d5d475c0ed8a'}
 ```
 
 #### For guardduty Transmit result:
@@ -266,7 +234,7 @@ transmit
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
 \"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"}}"
 results
-8c816cdd-51ac-4e55-a335-59179fa817b1
+713bd4e2-1e9c-4919-bdb4-72baceed3ba7
 0
 2
 ```
@@ -280,7 +248,7 @@ transmit
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
 \"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"}}"
 results
-947b9ac3-4653-4846-8472-d25d17e72349
+c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
 0
 2
 ```
@@ -289,7 +257,7 @@ results
 ```
 {
     "type": "bundle",
-    "id": "bundle--dc36b68c-4ffc-40d6-a848-ca5ffe179fd1",
+    "id": "bundle--2e3adffd-2694-4e89-848a-a70bd58dece0",
     "objects": [
         {
             "type": "identity",
@@ -298,11 +266,11 @@ results
             "identity_class": "events"
         },
         {
-            "id": "observed-data--eb288544-b02c-4680-9bb3-dd087f33d5ee",
+            "id": "observed-data--2542d92e-0662-4cac-878e-a183198b33ee",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-12-12T06:58:18.993Z",
-            "modified": "2019-12-12T06:58:18.993Z",
+            "created": "2019-12-23T10:40:15.840Z",
+            "modified": "2019-12-23T10:40:15.840Z",
             "objects": {
                 "0": {
                     "type": "domain-name",
@@ -313,7 +281,9 @@ results
                 },
                 "1": {
                     "type": "ipv4-addr",
-                    "value": "172.31.88.63"
+                    "value": "172.31.88.63",
+                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f",
+                    "x_com_aws_ip_type": "private"
                 },
                 "2": {
                     "type": "domain-name",
@@ -324,90 +294,97 @@ results
                 },
                 "3": {
                     "type": "ipv4-addr",
-                    "value": "54.211.223.78"
+                    "value": "54.211.223.78",
+                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f",
+                    "x_com_aws_ip_type": "public"
                 },
                 "4": {
                     "type": "ipv4-addr",
-                    "value": "115.213.134.162"
+                    "value": "115.213.134.162",
+                    "x_com_aws_remote_city_name": "Lishui",
+                    "x_com_aws_remote_country_name": "China"
                 }
             },
-            "x_com_guardduty_findings": {
-                "resource": {
-                    "instance_details": {
-                        "instance_id": "i-0b8fd03ade35c681d",
-                        "iam_instance_profile": {
-                            "id": "AIPA6IBDIZS3ES3TI5TNQ"
-                        },
-                        "network_interfaces_0": {
-                            "network_interface_id": "eni-02e70b8e842c70a2f",
-                            "private_dns_name_ref": "0",
-                            "private_ip_address_ref": "1",
-                            "public_dns_name_ref": "2",
-                            "public_ip_ref": "3"
-                        },
-                        "image_id": "ami-04763b3055de4860b"
-                    },
-                    "resource_type": "Instance"
-                },
-                "service": {
-                    "action": {
-                        "port_probe_action": {
-                            "port_probe_details_0": {
-                                "port": 22,
-                                "port_name": "SSH",
-                                "remote_ip_ref": "4",
-                                "remote_ip_details": {
-                                    "organization": {
-                                        "asn": "4134",
-                                        "asn_org": "No.31,Jin-rong Street",
-                                        "isp": "China Telecom"
-                                    },
-                                    "country": {
-                                        "country_name": "China"
-                                    },
-                                    "city": {
-                                        "city_name": "Lishui"
-                                    }
-                                }
-                            }
-                        },
-                        "action_type": "PORT_PROBE"
-                    },
-                    "additional_info": {
-                        "threat_list_name": "ProofPoint"
-                    },
-                    "resource_role": "TARGET"
-                },
-                "source": "aws.guardduty",
-                "account_id": "979326520502",
-                "region": "us-east-1",
+            "x_com_aws_instance": {
+                "instance_id": "i-0b8fd03ade35c681d",
+                "availability_zone": "us-east-1b",
+                "image_id": "ami-04763b3055de4860b"
+            },
+            "x_com_aws_vpc": {
+                "subnet_id": "subnet-c62a11e8",
+                "vpc_id": "vpc-10db926a",
+                "security_group_name": "launch-wizard-1",
+                "security_group_id": "sg-0aa89ff4646f71594"
+            },
+            "x_com_aws_guardduty_finding": {
+                "probe_port": 22,
                 "id": "9ab6e702ba673b8f1f3323956f0759d9",
                 "type": "Recon:EC2/PortProbeUnprotectedPort",
                 "severity": 2,
-                "updated_at": "2019-10-18T09:37:44.346Z",
-                "title": "Unprotected port on EC2 instance i-0b8fd03ade35c681d is being probed."
+                "title": "Unprotected port on EC2 instance i-0b8fd03ade35c681d is being probed.",
+                "timestamp": "2019-10-18T09:45:05.000Z"
+            },
+            "x_com_aws": {
+                "account_id": "979326520502",
+                "region": "us-east-1"
             },
             "first_observed": "2019-10-15T05:50:08Z",
             "last_observed": "2019-10-18T09:20:16Z",
-            "x_com_cwl_timestamp": "2019-10-18T09:45:05.000Z",
             "number_observed": 1
         }
-}
+    }
 ```
 
 #### STIX observable output for vpcflow:
 
 ```
 {
-            "id": "observed-data--a4348702-f095-4393-bf56-0b17e1c09500",
+            "id": "observed-data--b5cb09d3-5b2a-4ff3-b78d-d86b847d61a6",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-12-12T06:58:20.431Z",
-            "modified": "2019-12-12T06:58:20.431Z",
+            "created": "2019-12-23T10:40:15.852Z",
+            "modified": "2019-12-23T10:40:15.852Z",
             "objects": {
                 "0": {
                     "type": "ipv4-addr",
-                    "value": "120.192.217.102"
+                    "value": "172.31.88.63",
+                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "dst_ref": "2",
+                    "src_port": 36834,
+                    "dst_port": 443,
+                    "protocols": [
+                        "tcp"
+                    ],
+                    "start": "2019-10-20T10:43:09.000Z",
+                    "end": "2019-10-20T10:44:08.000Z"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "52.46.159.38"
+                }
+            },
+            "first_observed": "2019-10-20T10:43:09.000Z",
+            "last_observed": "2019-10-20T10:43:09.000Z",
+            "x_com_aws": {
+                "account_id": "979326520502"
+            },
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--e5391086-f4ae-4c47-a238-7ae1b20cf1d7",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2019-12-23T10:40:15.855Z",
+            "modified": "2019-12-23T10:40:15.855Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "120.192.217.102",
+                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f"
                 },
                 "1": {
                     "type": "network-traffic",
@@ -428,47 +405,30 @@ results
             },
             "first_observed": "2019-10-20T10:43:09.000Z",
             "last_observed": "2019-10-20T10:43:09.000Z",
-            "x_com_vpc_flow": {
-                "account_id": "979326520502",
-                "interface_id": "eni-02e70b8e842c70a2f"
-            },
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--d516f912-36f1-44d2-8c06-bbe4e21b6c16",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2019-12-12T06:58:20.517Z",
-            "modified": "2019-12-12T06:58:20.517Z",
-            "objects": {
-                "0": {
-                    "type": "ipv4-addr",
-                    "value": "172.31.88.63"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_ref": "0",
-                    "dst_ref": "2",
-                    "src_port": 53866,
-                    "dst_port": 443,
-                    "protocols": [
-                        "tcp"
-                    ],
-                    "start": "2019-10-20T10:43:09.000Z",
-                    "end": "2019-10-20T10:44:08.000Z"
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "54.239.29.61"
-                }
-            },
-            "first_observed": "2019-10-20T10:43:09.000Z",
-            "last_observed": "2019-10-20T10:43:09.000Z",
-            "x_com_vpc_flow": {
-                "account_id": "979326520502",
-                "interface_id": "eni-02e70b8e842c70a2f"
+            "x_com_aws": {
+                "account_id": "979326520502"
             },
             "number_observed": 1
         }
-}
 ```
+### STIX pattern for custom attributes and sample values
+| STIX Pattern | Sample Values | Reference |
+| --- | --- | --- | 
+| ipv4-addr:x_com_aws_interface_id | [ipv4-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |  | 
+| ipv4-addr:x_com_aws_remote_city_name | [ipv4-addr:x_com_aws_remote_city_name = 'Ashburn'] |  |
+| ipv4-addr:x_com_aws_remote_country_name | [ipv4-addr:x_com_aws_remote_country_name = 'United States'] |  |
+| ipv6-addr:x_com_aws_interface_id | [ipv6-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |  |
+| x_com_aws:account_id | [x_com_aws:account_id = '979326520502'] |  |
+| x_com_aws:aws_region | [x_com_aws:aws_region = 'us-east-1'] |  |
+| x_com_aws_instance:instance_id | [x_com_aws_instance:instance_id = 'i-091501e21e01d0602'] |  |
+| x_com_aws_instance:image_id| [x_com_aws_instance:image_id = 'ami-00068cd7555f543d5'] |  |
+| x_com_aws_instance:availability_zone | [x_com_aws_instance:availability_zone = 'us-east-1a'] |  |
+| x_com_aws_vpc:vpc_id | [x_com_aws_vpc:vpc_id = 'i-091501e21e01d0602'] |  |
+| x_com_aws_vpc:subnet_id| [x_com_aws_vpc:subnet_id = 'ami-00068cd7555f543d5'] |  |
+| x_com_aws_vpc:security_group_name | [x_com_aws_vpc:security_group_name = 'launch-wizard-1'] |  |
+| x_com_aws_vpc:security_group_id | [x_com_aws_vpc:security_group_id = 'sg-0aa89ff4646f71594'] |  |
+| x_com_aws_api:access_key_id | [x_com_aws_api:access_key_id = 'AAAABBBBCCCC'] |  |
+| x_com_aws_api:api | [x_com_aws_api:api = 'DescribeSecurityGroups'] |  |
+| x_com_aws_api:api_service_name | [x_com_aws_api:api_service_name = 'ec2.amazonaws.com'] |  |
+| x_com_aws_guardduty_finding:finding_id | [x_com_aws_guardduty_finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |  |
+| x_com_aws_guardduty_finding:finding_type | [x_com_aws_guardduty_finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] | Refer below link for different types of guardduty finding<br/>https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-active.html |

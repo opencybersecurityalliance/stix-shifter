@@ -13,6 +13,7 @@ class DataMapper(BaseDataMapper):
             path.join(basepath, "json", "from_*.json")))
         self.map_data = mapping_json or self.fetch_mapping()
 
+
     @staticmethod
     def json_files_to_fetch(file_path):
         return glob.glob(file_path)
@@ -59,3 +60,4 @@ class DataMapper(BaseDataMapper):
             return self.map_data.get(json_file)[stix_object_name]["fields"][stix_property_name]
         else:
             return []
+

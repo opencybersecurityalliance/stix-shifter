@@ -1,17 +1,5 @@
 {
   "vpcflow": {
-    "@timestamp": [
-      {
-        "key": "first_observed",
-        "cybox": false,
-        "transformer": "AwsToTimestamp"
-      },
-      {
-        "key": "last_observed",
-        "cybox": false,
-        "transformer": "AwsToTimestamp"
-      }
-    ],
     "srcAddr": [
       {
         "key": "ipv4-addr.value",
@@ -25,6 +13,18 @@
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "ipv4-addr.x_com_aws_interface_id",
+        "object": "src_ip",
+        "ds_key": "interfaceId",
+        "cybox": false
+      },
+      {
+        "key": "ipv6-addr.x_com_aws_interface_id",
+        "object": "src_ip",
+        "ds_key": "interfaceId",
+        "cybox": false
       }
     ],
     "dstAddr": [
@@ -79,20 +79,20 @@
     ],
     "accountId": [
       {
-        "key": "x_com_vpc_flow.account_id",
+        "key": "x_com_aws.account_id",
         "cybox": false
       }
     ],
-    "interfaceId": [
+    "@timestamp": [
       {
-        "key": "x_com_vpc_flow.interface_id",
-        "cybox": false
-      }
-    ],
-    "@logStream": [
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "AwsToTimestamp"
+      },
       {
-        "key": "x_com_vpc_flow.log_stream",
-        "cybox": false
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "AwsToTimestamp"
       }
     ],
     "event_count": [
@@ -108,21 +108,28 @@
       "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
         {
           "key": "ipv4-addr.value",
-          "object": "nc_private_ip"
+          "object": "nc_private_ip1"
         },
         {
           "key": "network-traffic.src_ref",
           "object": "nc_nt",
-          "references": "nc_private_ip"
+          "references": "nc_private_ip1"
         },
         {
           "key": "domain-name.resolves_to_refs",
-          "object": "nc_private_name",
-          "references": ["nc_private_ip"]
+          "object": "nc_private_name1",
+          "references": ["nc_private_ip1"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_ip_address_ref",
-          "references": "nc_private_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_private_ip1",
+          "value": "private",
           "cybox": false
         }
       ],
@@ -132,8 +139,9 @@
           "object": "nc_ipv6_ip"
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.ipv6_addresses_0_ref",
-          "references": "nc_ipv6_ip",
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "nc_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         }
       ],
@@ -148,31 +156,57 @@
           "references": ["nc_public_ip"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_ip_ref",
-          "references": "nc_public_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_public_ip",
+          "value": "public",
           "cybox": false
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
         {
           "key": "domain-name.value",
-          "object": "nc_private_name"
-        },
-        {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_dns_name_ref",
-          "references": "nc_private_name",
-          "cybox": false
+          "object": "nc_private_name1"
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
         {
           "key": "domain-name.value",
           "object": "nc_public_name"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nc_private_ip2"
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_dns_name_ref",
-          "references": "nc_public_name",
+          "key": "domain-name.resolves_to_refs",
+          "object": "nc_private_name2",
+          "references": ["nc_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
           "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_private_ip2",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "nc_private_name2"
         }
       ],
       "detail_service_action_networkConnectionAction_remoteIpDetails_ipAddressV4": [
@@ -186,8 +220,15 @@
           "references": "nc_remote_ip"
         },
         {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_ip_details.ip_addressv4.remote_ip_ref",
-          "references": "nc_remote_ip",
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "nc_remote_ip",
+          "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_city_cityName",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "nc_remote_ip",
+          "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_country_countryName",
           "cybox": false
         }
       ],
@@ -196,11 +237,6 @@
           "key": "network-traffic.src_port",
           "object": "nc_nt",
           "transformer": "ToInteger"
-        },
-        {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.local_port_details.port_ref",
-          "references": "nc_nt",
-          "cybox": false
         }
       ],
       "detail_service_action_networkConnectionAction_remotePortDetails_port": [
@@ -208,11 +244,6 @@
           "key": "network-traffic.dst_port",
           "object": "nc_nt",
           "transformer": "ToInteger"
-        },
-        {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_port_details.port_ref",
-          "references": "nc_nt",
-          "cybox": false
         }
       ],
       "detail_service_action_networkConnectionAction_protocol": [
@@ -220,87 +251,34 @@
           "key": "network-traffic.protocols",
           "object": "nc_nt",
           "transformer": "ToLowercaseArray"
-        },
-        {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.protocol_ref",
-          "references": "nc_nt",
-          "cybox": false
         }
       ],
-      "detail_resource_instanceDetails_tags_0_key": {
-        "key": "x_com_guardduty_findings.resource.instance_details.tags_0.key",
-        "cybox": false
-      },
-      "detail_resource_instanceDetails_tags_0_value": {
-        "key": "x_com_guardduty_findings.resource.instance_details.tags_0.value",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_localPortDetails_portName": [
-        {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.local_port_details.port_name",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_networkConnectionAction_remotePortDetails_portName": [
-        {
-          "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_port_details.port_name",
-          "cybox": false
-        }
-      ],
-      "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.network_interface_id",
-        "cybox": false
-      },
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.subnet_id",
+        "key": "x_com_aws_vpc.subnet_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.vpc_id",
+        "key": "x_com_aws_vpc.vpc_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.security_groups.group_id",
+        "key": "x_com_aws_vpc.security_group_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.security_groups.group_name",
+        "key": "x_com_aws_vpc.security_group_name",
         "cybox": false
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_guardduty_findings.resource.instance_details.image_id",
-        "cybox": false
-      },
-      "detail_resource_instanceDetails_iamInstanceProfile_id": {
-        "key": "x_com_guardduty_findings.resource.instance_details.iam_instance_profile.id",
+        "key": "x_com_aws_instance.image_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.instance_id",
+        "key": "x_com_aws_instance.instance_id",
         "cybox": false
       },
-      "detail_region": {
-        "key": "x_com_guardduty_findings.region",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_blocked": {
-        "key": "x_com_guardduty_findings.service.action.network_connection_action.blocked",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_connectionDirection": {
-        "key": "x_com_guardduty_findings.service.action.network_connection_action.connection_direction",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_remoteIpDetails_country_countryName": {
-        "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_ip_details.country.country_name",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_remoteIpDetails_organization_asn": {
-        "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_ip_details.organization.asn",
-        "cybox": false
-      },
-      "detail_service_action_networkConnectionAction_remoteIpDetails_organization_asnOrg": {
-        "key": "x_com_guardduty_findings.service.action.network_connection_action.remote_ip_details.organization.asn_org",
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
         "cybox": false
       }
     },
@@ -308,16 +286,23 @@
       "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
         {
           "key": "ipv4-addr.value",
-          "object": "pp_private_ip"
+          "object": "pp_private_ip1"
         },
         {
           "key": "domain-name.resolves_to_refs",
-          "object": "pp_private_name",
-          "references": ["pp_private_ip"]
+          "object": "pp_private_name1",
+          "references": ["pp_private_ip1"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_ip_address_ref",
-          "references": "pp_private_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_private_ip1",
+          "value": "private",
           "cybox": false
         }
       ],
@@ -327,31 +312,22 @@
           "object": "pp_ipv6_ip"
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.ipv6_addresses_0_ref",
-          "references": "pp_ipv6_ip",
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "pp_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
         {
           "key": "domain-name.value",
-          "object": "pp_private_name"
-        },
-        {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_dns_name_ref",
-          "references": "pp_private_name",
-          "cybox": false
+          "object": "pp_private_name1"
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
         {
           "key": "domain-name.value",
           "object": "pp_public_name"
-        },
-        {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_dns_name_ref",
-          "references": "pp_public_name",
-          "cybox": false
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_publicIp": [
@@ -365,9 +341,45 @@
           "references": ["pp_public_ip"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_ip_ref",
-          "references": "pp_public_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_public_ip",
+          "value": "public",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "pp_private_ip2"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "pp_private_name2",
+          "references": ["pp_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_private_ip2",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "pp_private_name2"
         }
       ],
       "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_ipAddressV4": [
@@ -376,73 +388,50 @@
           "object": "pp_remote_ip"
         },
         {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_ref",
-          "references": "pp_remote_ip",
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "pp_remote_ip",
+          "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_city_cityName",
           "cybox": false
-        }
-      ],
-      "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId": [
+        },
         {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.network_interface_id",
-        "cybox": false
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "pp_remote_ip",
+          "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_country_countryName",
+          "cybox": false
         }
       ],
       "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port": [
         {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.port",
+          "key": "x_com_aws_guardduty_finding.probe_port",
           "cybox": false
         }
       ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_portName": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.port_name",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_organization_asn": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_details.organization.asn",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_organization_asnOrg": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_details.organization.asn_org",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_organization_isp": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_details.organization.isp",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_country_countryName": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_details.country.country_name",
-          "cybox": false
-        }
-      ],
-      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_city_cityName": [
-        {
-          "key": "x_com_guardduty_findings.service.action.port_probe_action.port_probe_details_0.remote_ip_details.city.city_name",
-          "cybox": false
-        }
-      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
+        "key": "x_com_aws_vpc.subnet_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
+        "key": "x_com_aws_vpc.vpc_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
+        "key": "x_com_aws_vpc.security_group_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
+        "key": "x_com_aws_vpc.security_group_name",
+        "cybox": false
+      },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_guardduty_findings.resource.instance_details.image_id",
+        "key": "x_com_aws_instance.image_id",
         "cybox": false
       },
-      "detail_resource_instanceDetails_iamInstanceProfile_id": {
-        "key": "x_com_guardduty_findings.resource.instance_details.iam_instance_profile.id",
+      "detail_resource_instanceDetails_instanceId": {
+        "key": "x_com_aws_instance.instance_id",
         "cybox": false
       },
-       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.instance_id",
-        "cybox": false
-      },
-      "detail_service_additionalInfo_threatListName": {
-        "key": "x_com_guardduty_findings.service.additional_info.threat_list_name",
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
         "cybox": false
       }
     },
@@ -453,88 +442,60 @@
           "object": "api_remote_ip"
         },
         {
-          "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.ip_addressv4_ref",
-          "references": "api_remote_ip",
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "api_remote_ip",
+          "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_city_cityName",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "api_remote_ip",
+          "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_country_countryName",
           "cybox": false
         }
       ],
-      "detail_resource_accessKeyDetails_principalId": [
-        {
+      "detail_resource_accessKeyDetails_principalId": {
           "key": "user-account.user_id",
           "object": "api_user"
-        },
-        {
-            "key": "x_com_guardduty_findings.resource.access_key_details.principal_id_ref",
-            "references": "api_user",
-            "cybox": false
-        }
-      ],
-      "detail_resource_accessKeyDetails_userName": [
-        {
+      },
+      "detail_resource_accessKeyDetails_userName": {
         "key": "user-account.account_login",
         "object": "api_user"
-        },
-        {
-            "key": "x_com_guardduty_findings.resource.access_key_details.user_name_ref",
-            "references": "api_user",
-            "cybox": false
-        }
-      ],
-      "detail_resource_accessKeyDetails_accessKeyId": {
-        "key": "x_com_guardduty_findings.resource.access_key_details.access_key_id",
-        "cybox": false
       },
-      "detail_resource_accessKeyDetails_userType": {
-        "key": "x_com_guardduty_findings.resource.access_key_details.user_type",
+      "detail_resource_accessKeyDetails_accessKeyId": {
+        "key": "x_com_aws_api.access_key_id",
         "cybox": false
       },
       "detail_service_action_awsApiCallAction_api": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.api",
-        "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_callerType": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.caller_type",
-        "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_remoteIpDetails_city_cityName": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.city.city_name",
-        "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_remoteIpDetails_country_countryName": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.country.country_name",
-        "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_remoteIpDetails_organization_asn": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.organization.asn",
-        "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_remoteIpDetails_organization_asnOrg": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.organization.asn_org",
+        "key": "x_com_aws_api.api",
         "cybox": false
       },
       "detail_service_action_awsApiCallAction_serviceName": {
-        "key": "x_com_guardduty_findings.service.action.aws_api_call_action.service_name",
+        "key": "x_com_aws_api.service_name",
         "cybox": false
-      },
-      "detail_service_action_awsApiCallAction_remoteIpDetails_organization_isp": {
-          "key": "x_com_guardduty_findings.service.action.aws_api_call_action.remote_ip_details.organization.isp",
-          "cybox": false
       }
     },
     "DNS_REQUEST": {
       "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
         {
           "key": "ipv4-addr.value",
-          "object": "dns_private_ip"
+          "object": "dns_private_ip1"
         },
         {
           "key": "domain-name.resolves_to_refs",
-          "object": "dns_private_name",
-          "references": ["dns_private_ip"]
+          "object": "dns_private_name1",
+          "references": ["dns_private_ip1"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_ip_address_ref",
-          "references": "dns_private_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_private_ip1",
+          "value": "private",
           "cybox": false
         }
       ],
@@ -544,8 +505,9 @@
           "object": "dns_ipv6_ip"
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.ipv6_addresses_0_ref",
-          "references": "dns_ipv6_ip",
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "dns_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         }
       ],
@@ -560,89 +522,122 @@
           "references": ["dns_public_ip"]
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_ip_ref",
-          "references": "dns_public_ip",
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_public_ip",
+          "value": "public",
           "cybox": false
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
         {
           "key": "domain-name.value",
-          "object": "dns_private_name"
-        },
-        {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.private_dns_name_ref",
-          "references": "dns_private_name",
-          "cybox": false
+          "object": "dns_private_name1"
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
         {
           "key": "domain-name.value",
           "object": "dns_public_name"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dns_private_ip2"
         },
         {
-          "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.public_dns_name_ref",
-          "references": "dns_public_name",
+          "key": "domain-name.resolves_to_refs",
+          "object": "dns_private_name2",
+          "references": ["dns_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_private_ip2",
+          "value": "private",
           "cybox": false
         }
       ],
-      "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.network_interface_id",
-        "cybox": false
-      },
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "dns_private_name2"
+        }
+      ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.subnet_id",
+        "key": "x_com_aws_vpc.subnet_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.vpc_id",
+        "key": "x_com_aws_vpc.vpc_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.security_groups.group_id",
+        "key": "x_com_aws_vpc.security_group_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_com_guardduty_findings.resource.instance_details.network_interfaces_0.security_groups.group_name",
+        "key": "x_com_aws_vpc.security_group_name",
         "cybox": false
       },
       "detail_service_action_dnsRequestAction_domain":[
         {
           "key": "domain-name.value",
           "object": "dns_domain_name"
-        },
-        {
-          "key": "x_com_guardduty_findings.service.action.dns_request_action.domain_ref",
-          "references": "dns_domain_name",
-          "cybox": false
         }
       ],
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_guardduty_findings.resource.instance_details.image_id",
-        "cybox": false
-      },
-      "detail_resource_instanceDetails_iamInstanceProfile_id": {
-        "key": "x_com_guardduty_findings.resource.instance_details.iam_instance_profile.id",
+        "key": "x_com_aws_instance.image_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_guardduty_findings.resource.instance_details.instance_id",
+        "key": "x_com_aws_instance.instance_id",
         "cybox": false
       },
-      "detail_resource_instanceDetails_tags_0_key": {
-        "key": "x_com_guardduty_findings.resource.instance_details.tags_0.key",
-        "cybox": false
-      },
-      "detail_resource_instanceDetails_tags_0_value": {
-        "key": "x_com_guardduty_findings.resource.instance_details.tags_0.value",
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
         "cybox": false
       }
     },
     "@timestamp": {
-        "key": "x_com_cwl_timestamp",
+        "key": "x_com_aws_guardduty_finding.timestamp",
         "cybox": false,
         "transformer": "AwsToTimestamp"
+    },
+    "account": {
+      "key": "x_com_aws.account_id",
+      "cybox": false
+    },
+    "detail_region": {
+      "key": "x_com_aws.region",
+      "cybox": false
+    },
+    "detail_id": {
+      "key": "x_com_aws_guardduty_finding.id",
+      "cybox": false
+    },
+    "detail_severity": {
+      "key": "x_com_aws_guardduty_finding.severity",
+      "cybox": false
+    },
+    "detail_type": {
+      "key": "x_com_aws_guardduty_finding.type",
+      "cybox": false
+    },
+    "detail_title": {
+      "key": "x_com_aws_guardduty_finding.title",
+      "cybox": false
     },
     "detail_service_eventFirstSeen": {
         "key": "first_observed",
@@ -651,50 +646,6 @@
     "detail_service_eventLastSeen": {
         "key": "last_observed",
         "cybox": false
-    },
-    "source": {
-      "key": "x_com_guardduty_findings.source",
-      "cybox": false
-    },
-    "account": {
-      "key": "x_com_guardduty_findings.account_id",
-      "cybox": false
-    },
-    "detail_region": {
-      "key": "x_com_guardduty_findings.region",
-      "cybox": false
-    },
-    "detail_id": {
-      "key": "x_com_guardduty_findings.id",
-      "cybox": false
-    },
-    "detail_service_resourceRole": {
-      "key": "x_com_guardduty_findings.service.resource_role",
-      "cybox": false
-    },
-    "detail_severity": {
-      "key": "x_com_guardduty_findings.severity",
-      "cybox": false
-    },
-    "detail_type": {
-      "key": "x_com_guardduty_findings.type",
-      "cybox": false
-    },
-    "detail_updatedAt": {
-      "key": "x_com_guardduty_findings.updated_at",
-      "cybox": false
-    },
-    "detail_resource_resourceType": {
-      "key": "x_com_guardduty_findings.resource.resource_type",
-      "cybox": false
-    },
-    "detail_service_action_actionType": {
-      "key": "x_com_guardduty_findings.service.action.action_type",
-      "cybox": false
-    },
-    "detail_title": {
-      "key": "x_com_guardduty_findings.title",
-      "cybox": false
     },
     "event_count": [
       {

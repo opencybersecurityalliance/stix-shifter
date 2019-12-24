@@ -2,12 +2,14 @@
   "log-type": "vpcflow",
   "ipv4-addr": {
     "fields": {
-      "value": ["srcAddr", "dstAddr"]
+      "value": ["srcAddr", "dstAddr"],
+      "x_com_aws_interface_id": ["interfaceId"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["srcAddr", "dstAddr"]
+      "value": ["srcAddr", "dstAddr"],
+      "x_com_aws_interface_id": ["interfaceId"]
     }
   },
   "network-traffic": {
@@ -21,10 +23,9 @@
       "end": ["end"]
     }
   },
-  "x_com_aws_cwl": {
+  "x_com_aws": {
     "fields": {
-      "account_id": ["accountId"],
-      "interface_id": ["interfaceId"]
+      "account_id": ["accountId"]
     }
   }
 }
