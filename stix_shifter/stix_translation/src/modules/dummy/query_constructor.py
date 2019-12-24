@@ -226,7 +226,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
 
-    # Change return statement as required to fit with data source query language.
-    # If supported by the language, a limit on the number of results may be desired.
-    # A single query string, or an array of query strings may be returned
-    return "SELECT * FROM tableName WHERE {}".format(query)
+    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
+    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
+    # Translated patterns must be returned as a list of one or more native query strings.
+    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
+    return ["SELECT * FROM tableName WHERE {}".format(query)]

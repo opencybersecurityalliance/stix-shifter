@@ -262,7 +262,9 @@ Depending on your data source, edit this section to:
 
 - Add a query field selector.
 - Append result limits and time windows.
-- Return an array of queries or a single query string. A single query string is returned by default, but queries can be split into an array of query strings if required.
+- Return a list of one or more queries. A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
+
+The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `from_stix_map.json`).
 
 [Back to top](#create-a-translation-module)
 
@@ -274,7 +276,7 @@ Results from unmapped data source fields are ignored during translation and are 
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
-3. In your `abc` translation module folder, go to your json/ subfolder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
+3. In your `abc` translation module folder, go to your json/ sub-folder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
 
    ```
    {
@@ -487,8 +489,10 @@ python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and n
 
 ```
 python main.py translate abc results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
-6a4751cae5ff","name": "abc","identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]'
+6a4751cae5ff","name": "abc","identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
 ```
+
+Adding the `stix_validator` option at the end will ensure the observed-data objects conform to the STIX 2 standard.
 
 2. Visually verify that all expected data is in the returned STIX bundle. If a data source field in your sample results is mapped in `to_stix_map.json`, the value must be in the STIX bundle under the mapped STIX property.
 
@@ -527,18 +531,20 @@ python main.py translate abc results '{"type": "identity","id": "identity--f431f
 
    For an asynchronous transmission module, you must have the following files:
 
-   | Folder/file              | Why is it important? Where is it used?                                  |
-   | ------------------------ | ----------------------------------------------------------------------- |
-   | **init**.py              | This file is required by Python to properly handle library directories. |
-   | apiclient.py             |
-   | async_dummy_connector.py |
+   | Folder/file                 | Why is it important? Where is it used?                                  |
+   | --------------------------- | ----------------------------------------------------------------------- |
+   | **init**.py                 | This file is required by Python to properly handle library directories. |
+   | apiclient.py                |
+   | async_dummy_connector.py    |
+   | async_dummy_error_mapper.py |
 
    For a synchronous transmission module, you must have the following files:
 
-   | Folder/file                    | Why is it important? Where is it used?                                  |
-   | ------------------------------ | ----------------------------------------------------------------------- |
-   | **init**.py                    | This file is required by Python to properly handle library directories. |
-   | synchronous_dummy_connector.py |
+   | Folder/file                       | Why is it important? Where is it used?                                  |
+   | --------------------------------- | ----------------------------------------------------------------------- |
+   | **init**.py                       | This file is required by Python to properly handle library directories. |
+   | synchronous_dummy_connector.py    |
+   | synchronous_dummy_error_mapper.py |
 
 [Back to top](#create-a-transmission-module)
 
@@ -606,7 +612,15 @@ For asynchronous sources, the search id that gets passed into the connection met
 
 [Back to top](#create-a-transmission-module)
 
-#### Step 4. Verify that the transmission module was created successfully
+#### Step 4. Edit the dummy error mapper file
+
+The error mapper associates data source error codes, returned by the API, with error messages defined in the `ErrorCode` class. Update the keys in the `error_mapping` dictionary to match any error codes that may be returned by the API and set the appropriate value to one of the existing error codes defined in `error_reponse.py`.
+
+As an example, `1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS` would return an error code of 'no_results' if the API returned a 1002 code. Stix-shifter returns errors in the following format:
+
+`{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
+
+#### Step 5. Verify that the transmission module was created successfully
 
 1. You must have:
 
