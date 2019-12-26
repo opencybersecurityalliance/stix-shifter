@@ -30,6 +30,9 @@ class TestStixToQuery(unittest.TestCase):
             self.assertEqual(each_query, queries[index])
 
     def test_network_exp(self):
+        """
+        Test with Equal operator
+        """
         stix_pattern = "[ipv4-addr:value = '172.31.88.63']"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
@@ -53,6 +56,9 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_network_protocol_exp(self):
+        """
+        Test with IN operator
+        """
         stix_pattern = "[network-traffic:protocols[*] IN ('tcp','igp')] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
@@ -68,6 +74,9 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_like_comp_exp(self):
+        """
+        Test with LIKE operator
+        """
         stix_pattern = "[network-traffic:src_ref.value LIKE '58'] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
@@ -83,6 +92,9 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_in_comp_exp(self):
+        """
+        Test with IN operator
+        """
         stix_pattern = "[ipv4-addr:value IN ('54.239.30.177','113.204.228.66')] START t'2019-10-01T08:43:10.003Z' " \
                        "STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
@@ -109,6 +121,10 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_matches_comp_exp(self):
+        """
+        Test with MATCHES operator
+        :return:
+        """
         stix_pattern = "[network-traffic:src_port MATCHES '\\\\d+'] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
@@ -124,6 +140,10 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_network_comp_exp(self):
+        """
+        Test with OR operator
+        :return:
+        """
         stix_pattern = "[ipv4-addr:value = '54.239.30.177' OR ipv4-addr:value = '167.71.118.48'] START " \
                        "t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
@@ -149,6 +169,9 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_network_comb_obs_exp(self):
+        """
+        Test with two observation expression
+        """
         stix_pattern = "([ipv4-addr:value = '54.239.30.177' OR ipv4-addr:value = '167.71.118.48'] OR [" \
                        "network-traffic:src_port = '22']) START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
@@ -181,6 +204,9 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_start_end_exp(self):
+        """
+        test observation expression with Stix field start
+        """
         stix_pattern = "[network-traffic:start = '2019-10-15T09:10:10.003Z'] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
@@ -190,3 +216,15 @@ class TestStixToQuery(unittest.TestCase):
             '0 or strlen(protocol) > 0 | filter (start = \'1571130610\')", "startTime": 1569919390, '
             '"endTime": 1572432190}']
         self._test_query_assertions(query, queries)
+
+    def test_oper_issuperset(self):
+        """
+        Test Unsupportted operator
+        """
+        stix_pattern = "([ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2019-10-01T08:43:10.003Z' STOP " \
+                       "t'2019-10-30T10:43:10.003Z'"
+        query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
+        assert query['success'] is False
+        assert query['code'] == 'not_implemented'
+        assert query['error'] == 'wrong parameter : Comparison operator IsSuperSet unsupported for AWS CloudWatch ' \
+                                 'logs adapter'

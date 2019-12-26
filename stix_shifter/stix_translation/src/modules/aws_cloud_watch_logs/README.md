@@ -51,7 +51,8 @@
 #### STIX patterns:
 
 ```
-(domain-name:value = 'guarddutyc2activityb.com' OR x_com_aws_instance:image_id = 'ami-00068cd7555f543d']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+([domain-name:value = 'guarddutyc2activityb.com' OR x_com_aws_instance:image_id = 'ami-00068cd7555f543d']) START 
+t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
 ```
 
 #### Translated query:
@@ -66,8 +67,7 @@
 transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
-"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"xxxx\": 
-[\"xxxxxx\"]}}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}"
 query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateDnsName\\\":\\\"*\\\"' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateDnsName\\\":\\\"*\\"' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = 'aws.guardduty' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower('ami-00068cd7555f543d')) OR ((tolower(eth0_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(eth1_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(public_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(dns_domain) = tolower('guarddutyc2activityb.com'))))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
 ```
@@ -197,8 +197,7 @@ transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
-\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
-[\"USEast1_FlowLogs\"]}}"
+\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}"
 query
 "{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
@@ -210,8 +209,7 @@ transmit
 "aws_cloud_watch_logs"
 "{\"host\":\"xxxxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxxxxxx\", \"aws_secret_access_key\": 
-\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"vpcflow\": 
-[\"USEast1_FlowLogs\"]}}"
+\"xxxxxxxxx\",\"aws_iam_role\":\"xxxxxxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}"
 query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower('172.31.88.63') OR tolower(eth1_private_ip) = tolower('172.31.88.63') OR tolower(public_ip) = tolower('172.31.88.63') OR tolower(remote_ip) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
@@ -411,24 +409,134 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
             "number_observed": 1
         }
 ```
+
+## Sample 3:
+
+#### STIX patterns:
+
+```
+([x_com_aws_api:access_key_id = 'xxxxxxx']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+```
+
+#### Translated query:
+
+```
+{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource
+.accessKeyDetails.accessKeyId \\"\\" as access_key_id | filter source = \'aws.guardduty\' or strlen (access_key_id) >
+ 0 | filter (tolower(access_key_id) = tolower(\'xxxxxxxx\'))", "startTime": 1577333751, "endTime": 1577334051}
+```
+
+#### Transmit query:
+
+```
+transmit
+"aws_cloud_watch_logs"
+"{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}"
+query
+"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail
+.resource.accessKeyDetails.accessKeyId \\"\\" as access_key_id | filter source = 'aws.guardduty' or strlen 
+(access_key_id) > 0 | filter (tolower(access_key_id) = tolower('xxxxx'))\", \"startTime\": 1577333751, 
+\"endTime\": 1577334051}"
+```
+
+#### Search id:
+
+```
+{'success': True, 'search_id': '50359121-6624-43bf-9ef2-a9f3bf07f5ef'}
+```
+
+#### For Transmit result:
+
+```
+transmit
+"aws_cloud_watch_logs"
+"{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
+results
+50359121-6624-43bf-9ef2-a9f3bf07f5ef
+0
+2
+```
+
+#### STIX observable output:
+```
+{
+    "type": "bundle",
+    "id": "bundle--4fafbd23-0b25-44c2-982a-bf2ed4999429",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "aws_cloud_watch_logs",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--794b5867-6600-419f-b912-0868954c72d3",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2019-12-26T13:21:04.882Z",
+            "modified": "2019-12-26T13:21:04.882Z",
+            "objects": {
+                "0": {
+                    "type": "user-account",
+                    "user_id": "AIDA6IBDIZS3PHKDTXCSI",
+                    "account_login": "karthick.rajagopal@hcl.com"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "157.46.15.243",
+                    "x_com_aws_remote_city_name": "Chennai",
+                    "x_com_aws_remote_country_name": "India"
+                }
+            },
+            "x_com_aws_api": {
+                "access_key_id": "xxxxxxx",
+                "api": "DescribeSecurityGroups",
+                "service_name": "ec2.amazonaws.com"
+            },
+            "x_com_aws": {
+                "account_id": "979326520502",
+                "region": "us-east-1"
+            },
+            "x_com_aws_guardduty_finding": {
+                "id": "14b76d5936d5f302695e67ac500ab78a",
+                "type": "Recon:IAMUser/NetworkPermissions",
+                "severity": 5,
+                "title": "Unusual network permission reconnaissance activity by karthick.rajagopal@hcl.com.",
+                "timestamp": "2019-12-06T10:15:05.000Z"
+            },
+            "first_observed": "2019-12-06T09:51:34Z",
+            "last_observed": "2019-12-06T09:51:34Z",
+            "number_observed": 1
+        }
+    ]
+}
+
+```
+
 ### STIX pattern for custom attributes and sample values
-| STIX Pattern | Sample Values | Reference |
-| --- | --- | --- | 
-| ipv4-addr:x_com_aws_interface_id | [ipv4-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |  | 
-| ipv4-addr:x_com_aws_remote_city_name | [ipv4-addr:x_com_aws_remote_city_name = 'Ashburn'] |  |
-| ipv4-addr:x_com_aws_remote_country_name | [ipv4-addr:x_com_aws_remote_country_name = 'United States'] |  |
-| ipv6-addr:x_com_aws_interface_id | [ipv6-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |  |
-| x_com_aws:account_id | [x_com_aws:account_id = '979326520502'] |  |
-| x_com_aws:aws_region | [x_com_aws:aws_region = 'us-east-1'] |  |
-| x_com_aws_instance:instance_id | [x_com_aws_instance:instance_id = 'i-091501e21e01d0602'] |  |
-| x_com_aws_instance:image_id| [x_com_aws_instance:image_id = 'ami-00068cd7555f543d5'] |  |
-| x_com_aws_instance:availability_zone | [x_com_aws_instance:availability_zone = 'us-east-1a'] |  |
-| x_com_aws_vpc:vpc_id | [x_com_aws_vpc:vpc_id = 'i-091501e21e01d0602'] |  |
-| x_com_aws_vpc:subnet_id| [x_com_aws_vpc:subnet_id = 'ami-00068cd7555f543d5'] |  |
-| x_com_aws_vpc:security_group_name | [x_com_aws_vpc:security_group_name = 'launch-wizard-1'] |  |
-| x_com_aws_vpc:security_group_id | [x_com_aws_vpc:security_group_id = 'sg-0aa89ff4646f71594'] |  |
-| x_com_aws_api:access_key_id | [x_com_aws_api:access_key_id = 'AAAABBBBCCCC'] |  |
-| x_com_aws_api:api | [x_com_aws_api:api = 'DescribeSecurityGroups'] |  |
-| x_com_aws_api:api_service_name | [x_com_aws_api:api_service_name = 'ec2.amazonaws.com'] |  |
-| x_com_aws_guardduty_finding:finding_id | [x_com_aws_guardduty_finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |  |
-| x_com_aws_guardduty_finding:finding_type | [x_com_aws_guardduty_finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] | Refer below link for different types of guardduty finding<br/>https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-active.html |
+|  Description  |  STIX Pattern  |  Sample Values  |
+| --- | --- | --- |
+| Network Interface id of the EC2 instance  | ipv4-addr:x_com_aws_interface_id | [ipv4-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
+| City name of Remote Ip address  | ipv4-addr:x_com_aws_remote_city_name | [ipv4-addr:x_com_aws_remote_city_name = 'Ashburn'] |
+| Country name of Remote Ip address  | ipv4-addr:x_com_aws_remote_country_name | [ipv4-addr:x_com_aws_remote_country_name = 'United States'] |
+| Network Interface id of the EC2 instance  | ipv6-addr:x_com_aws_interface_id | [ipv6-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
+| AWS Account Id | x_com_aws:account_id | [x_com_aws:account_id = '979326520502'] |
+| AWS Region | x_com_aws:aws_region | [x_com_aws:aws_region = 'us-east-1'] |
+| EC2 instance Id  | x_com_aws_instance:instance_id | [x_com_aws_instance:instance_id = 'i-091501e21e01d0602'] |
+| EC2 instance Image Id  | x_com_aws_instance:image_id| [x_com_aws_instance:image_id = 'ami-00068cd7555f543d5'] |
+| EC2 instance Availability Zone  | x_com_aws_instance:availability_zone | [x_com_aws_instance:availability_zone = 'us-east-1a'] |
+| VPC Id associated with EC2 Instance | x_com_aws_vpc:vpc_id | [x_com_aws_vpc:vpc_id = 'i-091501e21e01d0602'] |
+| Subnet Id associated with EC2 Instance | x_com_aws_vpc:subnet_id| [x_com_aws_vpc:subnet_id = 'ami-00068cd7555f543d5'] |
+| Security Group Name associated with EC2 Instance  | x_com_aws_vpc:security_group_name | [x_com_aws_vpc:security_group_name = 'launch-wizard-1'] |
+| Security Group Id associated with EC2 Instance | x_com_aws_vpc:security_group_id | [x_com_aws_vpc:security_group_id = 'sg-0aa89ff4646f71594'] |
+| AccessKey Id of User | x_com_aws_api:access_key_id | [x_com_aws_api:access_key_id = 'AAAABBBBCCCC'] |
+| AWS api name | x_com_aws_api:api | [x_com_aws_api:api = 'DescribeSecurityGroups'] |
+| AWS service name whose api is invoked | x_com_aws_api:api_service_name | [x_com_aws_api:api_service_name = 'ec2.amazonaws.com'] |
+| Id of guardduty finding | x_com_aws_guardduty_finding:finding_id | [x_com_aws_guardduty_finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |
+| Type of guardduty finding | x_com_aws_guardduty_finding:finding_type | [x_com_aws_guardduty_finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] |
+
+###References
+Click below link for different types of guardduty finding<br/>
+ [Guardduty Finding](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-active.html).
