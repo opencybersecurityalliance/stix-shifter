@@ -111,7 +111,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
         for key, val in flatten_results.items():
             if val is None or val == []:
                 continue
-            elif val is False:
+            elif val is False or val is True:
                 val = str(val).lower()
             if key in guardduty_common_attr:
                 guard_dict['guardduty'].update({key: val})

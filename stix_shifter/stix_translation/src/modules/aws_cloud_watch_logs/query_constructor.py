@@ -187,8 +187,8 @@ class QueryStringPatternTranslator:
                                                                                       value="'{}'".format(value[0])
                                                                                       if len(value) == 1 else value)
             elif expression.comparator == ComparisonComparators.IsSubSet:
-                comparison_string += 'isIpv4InSubnet({mapped_field},{value})'.format(mapped_field=mapped_field,
-                                                                                     value=value)
+                comparison_string += "isIpv4InSubnet({mapped_field},'{value}')".format(mapped_field=mapped_field,
+                                                                                       value=value)
             elif expression.comparator in [ComparisonComparators.Like,
                                            ComparisonComparators.Matches] or value.isdigit():
                 comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
@@ -204,7 +204,6 @@ class QueryStringPatternTranslator:
                         mapped_field).get('parse_string')
                     parse_value = parse_attributes_from_config
                     self._parse_statement.update({mapped_field: parse_value})
-
             if mapped_fields_count > 1:
                 comparison_string += " OR "
                 mapped_fields_count -= 1
