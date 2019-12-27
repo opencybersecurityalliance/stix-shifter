@@ -1,6 +1,6 @@
 import base64
 from ..utils.RestApiClient import RestApiClient
-from . import CloudIdentity_Request, CloudIdentity_Token
+from . import CloudIdentity_Request
 import pprint
 import json, requests
 import re
@@ -16,16 +16,17 @@ class APIClient():
         auth = configuration.get('auth')
         headers["Accept"] = "application/json, text/plain, */*"
         headers["Content-type"] = "application/json"
-
+        self.uri = auth.get('tenant')
+        print(self.uri)
         self.indices = configuration.get('cloudIdentity', {}).get('indices', None)
 
-        #Check for authentication type
+        #Check for authentication type and create a cloud identity token used from requests
         if auth:
            if 'tenant' in auth and 'clientId' in auth and 'clientSecret' in auth:
                #get token from specified cloud identity tenant
-               headers["Authorization"] =  "Bearer " + self.getToken(auth['tenant'], auth['clientId'], auth['clientSecret'])
+               self.token = self.getToken(auth['tenant'], auth['clientId'], auth['clientSecret'])
            elif 'token' in auth: 
-               headers['Authorization'] = "Bearer " + auth['token']
+               self.token = auth['token']
 
         if isinstance(self.indices, list):  # Get list of all indices
             self.indices = ",".join(self.indices)
@@ -37,17 +38,14 @@ class APIClient():
 
     def run_search(self, query_expression):
         print("RUNNING SEARCH")
-        
+   
         ip, FROM, TO = self._parse_query(query_expression)
-        try:
-            #response = CloudIdentity_Request.postReports(token,"admin_activity", FROM, TO, 10, 'time', 'asc')
-            #pp = pprint.PrettyPrinter(indent=1)
-            #pp.pprint(response)
-            
-
-            return 
-        except Exception as e:
-            return
+        print(ip, FROM, TO)
+        print("Attempting to contact CI")
+        response = self.postReports("admin_activity", FROM, TO, 10, 'time', 'asc')
+        pp = pprint.PrettyPrinter(indent=1)
+        pp.pprint(response)
+        return response
 
     #Retrieve valid token from Cloud Identity
     def getToken(self, uri, clientId, clientSecret):
@@ -57,11 +55,39 @@ class APIClient():
             'client_secret': clientSecret,
             'grant_type': "client_credentials"
         }
-        resp = requests.post(uri+"/v2.0/endpoint/default/token", data=options)
+        try:
+            resp = requests.post(uri+"/v2.0/endpoint/default/token", data=options)
+
+        except Exception as e:
+            print("failed to create token")
+            print(e)
+
         json_data = json.loads(resp.text)
         token = json_data['access_token']
         return token
 
+    #Returns given report from cloud identity tenant
+    def postReports(self, reportName, FROM, TO, SIZE, SORT_BY, SORT_ORDER, SEARCH_AFTER = None):
+        url = self.uri + f"/v1.0/reports/{reportName}"
+        headers = { "Accept": "application/json, text/plain, */*","Content-Type": "application/json", "authorization": "Bearer "+ self.token}
+        body = {
+            "FROM": FROM,
+            "TO": TO,
+            "SIZE": SIZE,
+            "SORT_BY": SORT_BY,
+            "SORT_ORDER": SORT_ORDER
+        }
+        if ("after" in reportName):
+            body.update(SEARCH_AFTER)
+
+        try:
+            res = requests.post(url, json=body, headers=headers)
+
+            jsonData = res.json()
+            return jsonData
+        except Exception as e:
+            print("failed")
+            print(e)
 
     #Parse out meaningful data from input query   
     def _parse_query(self, query):

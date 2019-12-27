@@ -1,7 +1,6 @@
 from ..utils.RestApiClient import RestApiClient
 import requests, json
 from . import util
-from . import CloudIdentity_Token
 
 def authUser(id, pwd, token):
     body = {

@@ -4,7 +4,7 @@ from ..base.base_status_connector import Status
 import json
 
 from enum import Enum
-from . import CloudIdentity_Request, CloudIdentity_Token
+from . import CloudIdentity_Request
 #from CloudIdentity_Token import init
 
 
