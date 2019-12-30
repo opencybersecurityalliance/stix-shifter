@@ -37,14 +37,26 @@ class APIClient():
             self.endpoint = 'v2.0/Users'
 
     def run_search(self, query_expression):
-        print("RUNNING SEARCH")
-   
+
         ip, FROM, TO = self._parse_query(query_expression)
         print(ip, FROM, TO)
         print("Attempting to contact CI")
-        response = self.postReports("admin_activity", FROM, TO, 10, 'time', 'asc')
+        response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
+
+        #refine json response 
+        if(response['response']['report']['hits'] is not None):
+            response = response['response']['report']['hits']
+        
+        #For debuging 
         pp = pprint.PrettyPrinter(indent=1)
         pp.pprint(response)
+
+        #Getting user from reports
+        #print(response[0]['_source']['data']['subject'])
+        #user = self.getUser(id=response[0]['_source']['data']['subject'])
+
+        print(user)
+
         return response
 
     #Retrieve valid token from Cloud Identity
@@ -86,7 +98,20 @@ class APIClient():
             jsonData = res.json()
             return jsonData
         except Exception as e:
-            print("failed")
+            print("Could not retrieve report "+ reportName)
+            print(e)
+
+    def getUser(self, id):
+        url = self.uri + f"/v2.0/Users/{id}"
+
+        headers = { "Accept": "application/json, text/plain, */*","authorization": "Bearer "+self.token}
+        try:
+            res = requests.post(url, headers=headers)
+
+            jsonData = res.json()
+            return jsonData
+        except Exception as e:
+            print("User id invalid")
             print(e)
 
     #Parse out meaningful data from input query   
