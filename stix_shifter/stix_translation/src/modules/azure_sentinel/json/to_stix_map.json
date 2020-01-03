@@ -1,0 +1,509 @@
+{
+    "eventDateTime": [
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    }
+  ],
+  "event_count": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "azureTenantId": {
+    "key": "x_com_msazure_sentinel.tenant_id",
+    "cybox": false
+  },
+  "azureSubscriptionId": {
+    "key": "x_com_msazure_sentinel.subscription_id",
+    "cybox": false
+  },
+  "id": {
+    "key": "x_com_msazure_sentinel_alert.id",
+    "cybox": false
+  },
+  "title": {
+    "key": "x_com_msazure_sentinel_alert.title",
+    "cybox": false
+  },
+  "vendorInformation_provider": {
+    "key": "x_com_msazure_sentinel_alert.provider",
+    "cybox": false
+  },
+  "vendorInformation_vendor": {
+    "key": "x_com_msazure_sentinel_alert.vendor",
+    "cybox": false
+  },
+  "hostStates_0_fqdn": {
+      "key": "domain-name.value",
+      "object": "fqdn_0"
+  },
+  "hostStates_1_fqdn": {
+      "key": "domain-name.value",
+      "object": "fqdn_1"
+  },
+  "hostStates_2_fqdn": {
+      "key": "domain-name.value",
+      "object": "fqdn_2"
+  },
+  "hostStates_3_fqdn": {
+      "key": "domain-name.value",
+      "object": "fqdn_3"
+  },
+  "hostStates_0_netBiosName": {
+      "key": "domain-name.value",
+      "object": "net_bios_name_0"
+  },
+  "hostStates_1_netBiosName": {
+      "key": "domain-name.value",
+      "object": "net_bios_name_1"
+  },
+  "hostStates_2_netBiosName": {
+      "key": "domain-name.value",
+      "object": "net_bios_name_2"
+  },
+  "hostStates_3_netBiosName": {
+      "key": "domain-name.value",
+      "object": "net_bios_name_3"
+  },
+  "networkConnections_0_sourceAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip0"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt0",
+      "references": "src_ip0"
+    }
+  ],
+  "networkConnections_1_sourceAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip1"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt1",
+      "references": "src_ip1"
+    }
+  ],
+  "networkConnections_2_sourceAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip2"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt2",
+      "references": "src_ip2"
+    }
+  ],
+  "networkConnections_3_sourceAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip3"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt3",
+      "references": "src_ip3"
+    }
+  ],
+  "networkConnections_0_destinationAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip0"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt0",
+      "references": "dst_ip0"
+    }
+  ],
+  "networkConnections_1_destinationAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip1"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt1",
+      "references": "dst_ip1"
+    }
+  ],
+  "networkConnections_2_destinationAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip2"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt2",
+      "references": "dst_ip2"
+    }
+  ],
+  "networkConnections_3_destinationAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip3"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt3",
+      "references": "dst_ip3"
+    }
+  ],
+  "networkConnections_0_protocol":
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt0",
+      "transformer": "ToLowercaseArray"
+  },
+  "networkConnections_1_protocol":
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt1",
+      "transformer": "ToLowercaseArray"
+  },
+  "networkConnections_2_protocol":
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt2",
+      "transformer": "ToLowercaseArray"
+  },
+  "networkConnections_3_protocol":
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt3",
+      "transformer": "ToLowercaseArray"
+  },
+  "networkConnections_0_destinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt0",
+    "transformer": "ToInteger"
+  },
+  "networkConnections_1_destinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt1",
+    "transformer": "ToInteger"
+  },
+  "networkConnections_2_destinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt2",
+    "transformer": "ToInteger"
+  },
+  "networkConnections_3_destinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt3",
+    "transformer": "ToInteger"
+  },
+  "networkConnections_0_sourcePort": {
+    "key": "network-traffic.src_port",
+    "object": "nt0",
+    "transformer": "ToInteger"
+  },
+  "fileStates_0_name": {
+    "key": "file.name",
+    "object": "file0"
+  },
+    "fileStates_1_name": {
+    "key": "file.name",
+    "object": "file1"
+  },
+  "fileStates_2_name": {
+    "key": "file.name",
+    "object": "file2"
+  },
+  "fileStates_3_name": {
+    "key": "file.name",
+    "object": "file3"
+  },
+  "fileStates_0_sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file0"
+  },
+  "fileStates_1_sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file1"
+  },
+  "fileStates_2_sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file2"
+  },
+  "fileStates_3_sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file3"
+  },
+  "fileStates_0_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file0"
+  },
+  "fileStates_1_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file1"
+  },
+  "fileStates_2_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file2"
+  },
+  "fileStates_3_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file3"
+  },
+  "processes_0_name": [
+    {
+    "key": "file.name",
+    "object": "file0"
+    },
+    {
+    "key": "process.name",
+    "object": "process0"
+    }
+  ],
+  "processes_1_name": [
+    {
+    "key": "file.name",
+    "object": "file1"
+    },
+    {
+    "key": "process.name",
+    "object": "process1"
+   }
+  ],
+  "processes_2_name": {
+    "key": "process.name",
+    "object": "process2"
+  },
+  "processes_3_name": {
+    "key": "process.name",
+    "object": "process3"
+  },
+  "processes_0_sha1": {
+    "key": "process.binary_ref",
+    "object": "process0",
+    "references": "file0"
+  },
+  "processes_1_sha1": {
+    "key": "process.binary_ref",
+    "object": "process1",
+    "references": "file1"
+  },
+  "processes_2_sha1": {
+    "key": "process.binary_ref",
+    "object": "process2",
+    "references": "file2"
+  },
+  "processes_3_sha1": {
+    "key": "process.binary_ref",
+    "object": "process3",
+    "references": "file3"
+  },
+  "processes_0_sha256": {
+    "key": "process.binary_ref",
+    "object": "process0",
+    "references": "file0"
+  },
+  "processes_1_sha256": {
+    "key": "process.binary_ref",
+    "object": "process1",
+    "references": "file1"
+  },
+  "processes_2_sha256": {
+    "key": "process.binary_ref",
+    "object": "process2",
+    "references": "file2"
+  },
+  "processes_3_sha256": {
+    "key": "process.binary_ref",
+    "object": "process3",
+    "references": "file3"
+  },
+  "processes_0_path": [
+      {
+          "key": "directory.path",
+          "object": "directory0",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file0",
+          "references": "directory0"
+      },
+      {
+          "key": "process.binary_ref",
+          "object": "process0",
+          "references": "file0"
+      }
+  ],
+  "processes_1_path": [
+      {
+          "key": "directory.path",
+          "object": "directory1",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file1",
+          "references": "directory1"
+      },
+      {
+          "key": "process.binary_ref",
+          "object": "process1",
+          "references": "file1"
+      }
+  ],
+  "processes_2_path": [
+      {
+          "key": "directory.path",
+          "object": "directory2",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file2",
+          "references": "directory2"
+      },
+      {
+          "key": "process.binary_ref",
+          "object": "process2",
+          "references": "file2"
+      }
+  ],
+  "processes_3_path": [
+      {
+          "key": "directory.path",
+          "object": "directory3",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file3",
+          "references": "directory3"
+      },
+      {
+          "key": "process.binary_ref",
+          "object": "process3",
+          "references": "file3"
+      }
+  ],
+   "processes_0_parentProcessName": [
+       {
+          "key": "process.name",
+          "object": "process0"
+       }
+   ],
+  "processes_1_parentProcessName": [
+       {
+          "key": "process.parent_ref",
+          "object": "process1",
+          "references": "process0"
+       }
+   ],
+  "processes_2_parentProcessName": [
+       {
+          "key": "process.name",
+          "object": "ppn2"
+       },
+       {
+          "key": "process.parent_ref",
+          "object": "process2",
+          "references": "ppn2"
+       }
+   ],
+  "processes_3_parentProcessName": [
+       {
+          "key": "process.name",
+          "object": "ppn3"
+       },
+       {
+          "key": "process.parent_ref",
+          "object": "process3",
+          "references": "ppn3"
+       }
+   ],
+  "fileStates_0_path": [
+      {
+          "key": "directory.path",
+          "object": "directory0",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file0",
+          "references": "directory0"
+      }
+  ],
+  "fileStates_1_path": [
+      {
+          "key": "directory.path",
+          "object": "directory1",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file1",
+          "references": "directory1"
+      }
+  ],
+  "fileStates_2_path": [
+      {
+          "key": "directory.path",
+          "object": "directory2",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file2",
+          "references": "directory2"
+      }
+  ],
+  "fileStates_3_path": [
+      {
+          "key": "directory.path",
+          "object": "directory3",
+          "transformer": "ToDirectoryPath"
+      },
+      {
+          "key": "file.parent_directory_ref",
+          "object": "file3",
+          "references": "directory3"
+      }
+  ],
+  "userStates_0_accountName": {
+          "key": "user-account.user_id",
+          "object": "ua_an0"
+  },
+  "userStates_1_accountName": {
+          "key": "user-account.user_id",
+          "object": "ua_an1"
+  },
+  "userStates_2_accountName": {
+          "key": "user-account.user_id",
+          "object": "ua_an2"
+  },
+  "userStates_3_accountName": {
+          "key": "user-account.user_id",
+          "object": "ua_an3"
+  },
+  "userStates_0_logonDateTime": {
+          "key": "user-account.account_last_login",
+          "object": "ua_ldt0"
+  },
+  "userStates_1_logonDateTime": {
+          "key": "user-account.account_last_login",
+          "object": "ua_ldt1"
+  },
+  "userStates_2_logonDateTime": {
+          "key": "user-account.account_last_login",
+          "object": "ua_ldt2"
+  },
+  "userStates_3_logonDateTime": {
+          "key": "user-account.account_last_login",
+          "object": "ua_ldt3"
+  }
+}
