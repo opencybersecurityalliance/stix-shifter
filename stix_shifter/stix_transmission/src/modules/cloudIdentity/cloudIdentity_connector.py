@@ -20,7 +20,7 @@ class DatasourceStatus(Enum):
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-        self.api_client = APIClient(connection, configuration)
+        self.apiclient = APIClient(connection, configuration)
         self.ping_connector = self
         self.results_connector = self
         self.status_connector = self
@@ -69,7 +69,7 @@ class Connector(BaseConnector):
 
     def create_status_connection(self, search_id):
         try:
-            response = self.api_client.get_search_status(search_id)
+            response = self.apiclient.get_search_status(search_id)
             # Based on the response
             # return_obj['success'] = True or False
             # return_obj['status'] = One of the statuses as defined in the Status class:
@@ -95,13 +95,15 @@ class Connector(BaseConnector):
         return_obj = dict()
         try:
             # Grab the response, extract the response code, and convert it to readable json
-            response = self.api_client.run_search(search_id)
-            response_code = response["success"]
+            return_obj = self.apiclient.run_search(search_id)
+            response_code = return_obj["success"]
             
-            print(return_obj)
             # Construct a response object
-            #if (response_code):
-                #response_json = json.loads(response["response"])
+            if (response_code):
+                #refine json response 
+                if(return_obj['response']['report']['hits'] is not None):
+                    response_json = return_obj['response']['report']['hits']
+
                 #print(response_json)
              #   if response_json['hits']:
                     # and (response_json['hits']['total']['value'] >= 0 or response_json['hits']['total'] >= 0):

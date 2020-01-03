@@ -15,7 +15,7 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
         headers["Accept"] = "application/json, text/plain, */*"
-        headers["Content-type"] = "application/json"
+        headers["Content-type"] = "application/json" 
         self.uri = auth.get('tenant')
         print(self.uri)
         self.indices = configuration.get('cloudIdentity', {}).get('indices', None)
@@ -39,25 +39,37 @@ class APIClient():
     def run_search(self, query_expression):
 
         ip, FROM, TO = self._parse_query(query_expression)
-        print(ip, FROM, TO)
-        print("Attempting to contact CI")
-        response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
 
-        #refine json response 
-        if(response['response']['report']['hits'] is not None):
-            response = response['response']['report']['hits']
+        #For testing
+        #print(ip, FROM, TO)
+        #print("Attempting to contact CI")
+
+        #REST call to CI 
+        report_response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
+
+        
         
         #For debuging 
         pp = pprint.PrettyPrinter(indent=1)
-        pp.pprint(response)
+        #pp.pprint(response)
 
-        #Getting user from reports
+        #refine json response to individual hits
+        hits = report_response['response']['report']['hits']
+
+        #Iterate over hits object
+        for index in hits:
+            #Compare CI report origin/ip to input IP 
+            if(str(index['_source']['data']['origin'] == ip)):
+                #REST call to CI on specified user_id
+                user_response = self.getUser(id=hits[0]['_source']['data']['subject'])
+                pp.pprint(user_response)
+
+
         #print(response[0]['_source']['data']['subject'])
-        #user = self.getUser(id=response[0]['_source']['data']['subject'])
+        #user = self.getUser(id=hits[0]['_source']['data']['subject'])
+        #pp.pprint(user)
 
-        print(user)
-
-        return response
+        return report_response
 
     #Retrieve valid token from Cloud Identity
     def getToken(self, uri, clientId, clientSecret):
@@ -106,7 +118,7 @@ class APIClient():
 
         headers = { "Accept": "application/json, text/plain, */*","authorization": "Bearer "+self.token}
         try:
-            res = requests.post(url, headers=headers)
+            res = requests.get(url, headers=headers)
 
             jsonData = res.json()
             return jsonData
