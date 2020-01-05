@@ -21,7 +21,7 @@
     "username as username",
     "eventdirection as direction",
     "identityip as identityip",
-    "identityhostname as identity_host_name",
+    "identityhostname as identityhostname",
     "eventcount as eventcount",
     "PROTOCOLNAME(protocolid) as protocol",
     "BASE64(payload) as base64_payload",
@@ -30,6 +30,7 @@
     "magnitude as magnitude",
     "Filename as filename",
     "URL as domainname",
-    "\"File Hash\" as filehash"
+    "\"File Hash\" as filehash",
+    "\"File Path\" as filepath"
   ]
 }

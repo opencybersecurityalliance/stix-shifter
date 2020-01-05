@@ -14,10 +14,10 @@ class UnexpectedResponseException(Exception):
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-
         self.is_async = False
         self.connection = connection
         self.configuration = configuration
+        self.bundle_url = None
         self.results_connector = self
         self.query_connector = self
         self.ping_connector = self
@@ -42,7 +42,24 @@ class Connector(BaseConnector):
         return matching_sdos
 
     def ping(self):
-        return {"success": True}
+        return_obj = dict()
+
+        if not self.bundle_url:
+            self.bundle_url = self.connection.get('host')
+        auth = self.configuration.get('auth')
+
+        response = self.call_api(self.bundle_url, auth, 'head')
+        response_txt = response.raise_for_status()
+        response_code = response.status_code
+
+        if response_code == 200:
+            return_obj['success'] = True
+        elif response_code == 301:
+            self.bundle_url = response.headers.get('Location')
+            return self.ping()
+        else:
+            ErrorResponder.fill_error(return_obj, response_txt, ['message'])
+        return return_obj
 
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
@@ -58,10 +75,7 @@ class Connector(BaseConnector):
         bundle_url = self.connection.get('host')
         auth = self.configuration.get('auth')
 
-        if auth is not None:
-            response = requests.get(bundle_url, auth=(auth.get('username'), auth.get('password')))
-        else:
-            response = requests.get(bundle_url)
+        response = self.call_api(bundle_url, auth, 'get')
 
         response_code = response.status_code
 
@@ -98,3 +112,23 @@ class Connector(BaseConnector):
                 return_obj['data'] = []
 
         return return_obj
+
+    def delete_query_connection(self, search_id):
+        return_obj = dict()
+        return_obj['success'] = True
+        return return_obj
+
+    def call_api(self, bundle_url, auth, method):
+        call = getattr(requests, method.lower())
+
+        if auth is not None:
+            username = auth.get('username')
+            password = auth.get('password')
+            if username is not None or password is not None:
+                response = call(bundle_url, auth=(auth.get('username'), auth.get('password')))
+            else:
+                response = call(bundle_url)
+        else:
+            response = call(bundle_url)
+        
+        return response

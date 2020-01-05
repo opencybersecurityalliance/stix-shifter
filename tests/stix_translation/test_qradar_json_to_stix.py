@@ -30,7 +30,7 @@ class TestTransform(object):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        data = {"starttime": 1531169112, "eventcount": 5}
+        data = {"starttime": 1531169112, "endtime": 1531169254, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -131,8 +131,7 @@ class TestTransform(object):
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
-                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName",
-                "utf8_payload": "someReadablePayload"}
+                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -145,7 +144,6 @@ class TestTransform(object):
         assert(custom_props['qid'] == data['qid'])
         assert(custom_props['magnitude'] == data['magnitude'])
         assert(custom_props['log_source_name'] == data['logsourcename'])
-        assert(custom_props['utf8_payload'] == data['utf8_payload'])
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(data_source)
@@ -369,7 +367,8 @@ class TestTransform(object):
             "filehash": "unknownTypeHash",
             "sha256hash": "someSHA-256hash",
             "logsourceid": 123,
-            "filename": "someFile.exe"
+            "filename": "someFile.exe",
+            "filepath": "C:/my/file/path"
         }]
 
         data_string = json.dumps(data)
@@ -389,6 +388,9 @@ class TestTransform(object):
         assert(file_object is not None), 'file object not found'
         hashes = file_object['hashes']
         assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
+        directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
+        directory_object_path = directory_object.get('path', '')
+        assert(directory_object_path == "C:/my/file/path")
 
     def test_hashtype_lookup_by_length(self):
         data_source_string = json.dumps(data_source)

@@ -261,7 +261,7 @@ class TestRequests(unittest.TestCase, object):
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.ping()
 
-        mock_get.assert_called_with('x_forward_proxy_host1', cert='cert.pem', data=None, headers={'version': '8.0', 'accept': 'application/json', \
+        mock_get.assert_called_with('x_forward_proxy_host1', cert=None, data=None, headers={'version': '8.0', 'accept': 'application/json', \
                                     'sec': 'sec0', 'proxy': 'proxy_url0:8088', 'proxy-authorization': 'Basic proxy_auth_data0', \
                                     'x-forward-url': 'https://somehost0:15004/api/help/resources', 'x-forward-auth': 'x_forward_proxy_auth_data1', 'user-agent': 'UDS'}, verify=True)
 

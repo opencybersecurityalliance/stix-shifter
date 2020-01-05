@@ -1,0 +1,43 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["Network.A", "Network.B"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["Network.A", "Network.B"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["Link.A", "Link.B"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["Transport.A"],
+      "dst_port": ["Transport.B"],
+      "protocols[*]": ["Transport.Protocol"],
+      "start": ["Start"],
+      "end": ["Last"],
+      "src_packets" : ["ABPackets"],
+      "src_byte_count" : ["ABBytes"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": []
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["payload"]
+    }
+  }
+}

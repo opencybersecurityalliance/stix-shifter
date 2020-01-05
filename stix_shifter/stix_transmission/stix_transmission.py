@@ -1,7 +1,13 @@
 import importlib
 from ..utils.error_response import ErrorResponder
 
+<<<<<<< HEAD
 TRANSMISSION_MODULES = ['cloudIdentity', 'async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle']
+=======
+TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub',
+                        'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium']
+
+>>>>>>> upstream/master
 
 RESULTS = 'results'
 QUERY = 'query'

@@ -24,7 +24,13 @@
       "name": ["filename"],
       "hashes.SHA-256": ["filehash"],
       "hashes.MD5": ["filehash"],
-      "hashes.SHA-1": ["filehash"]
+      "hashes.SHA-1": ["filehash"],
+      "parent_directory_ref": ["filepath"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["filepath"]
     }
   },
   "network-traffic": {
@@ -56,6 +62,22 @@
   "x-readable-payload": {
     "fields": {
       "value": ["utf8_payload"]
+    }
+  },
+  "x-com-ibm-ariel": {
+    "fields": {
+      "qid": ["qid"],
+      "qid_name": ["qidname"],
+      "magnitude": ["magnitude"],
+      "log_source_id": ["logsourceid"],
+      "log_source_name": ["logsourcename"],
+      "log_source_type_name": ["logsourcetypename"],
+      "category_id": ["categoryid"],
+      "category_name": ["categoryname"],
+      "high_level_category_name": ["high_level_category_name"],
+      "high_level_category_id": ["high_level_category_id"],
+      "direction": ["direction"],
+      "identity_host_name": ["identityhostname"]
     }
   }
 }

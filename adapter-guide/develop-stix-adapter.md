@@ -1,4 +1,4 @@
-# Developing a new STIX-shifter adapter
+# Developing a new STIX-shifter connector
 
 - [Introduction](../README.md)
 - [Scenario](#scenario)
@@ -9,18 +9,18 @@
 
 ### Participants
 
-This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new adapter for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
+This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new connector for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
 
 ### Problem to solve
 
-_User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter adapters.
+_User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter connectors.
 
 _User A_ would like to:
 
 1. Submit one STIX pattern to query all the user’s security products at once. The use of a STIX pattern simplifies the search process because _User A_ does not need to know the query language or API calls for each security product.
 1. See the query results from all the security products in one unified format (STIX bundle). With the assumption that the submitted pattern represents a potential security incident, the STIX bundle presents the query results in the context of the security event.
 
-By implementing a new adapter, _Developer A_ allows _Product A_ to fit into the workflow.
+By implementing a new connector, _Developer A_ allows _Product A_ to fit into the workflow.
 
 ## Prerequisites
 
@@ -33,12 +33,12 @@ By implementing a new adapter, _Developer A_ allows _Product A_ to fit into the 
 
 ## Steps
 
-To develop a STIX-shifter adapter for a data source:
+To develop a STIX-shifter connector for a data source:
 
-1. Fork the `IBM/stix-shifter` repository from https://github.com/IBM/stix-shifter to work on your own copy of the library.
+1. Fork the `opencybersecurityalliance/stix-shifter` repository from https://github.com/opencybersecurityalliance/stix-shifter to work on your own copy of the library.
 1. [Create a Translation module](#create-a-translation-module).
 1. [Create a Transmission module](#create-a-transmission-module).
-1. Create a pull request to merge your changes in the `IBM/stix-shifter` repository.
+1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
 
 ### Create a Translation module
 
@@ -93,8 +93,7 @@ To develop a STIX-shifter adapter for a data source:
 
 #### Step 3. Edit the from_stix_map JSON file
 
-The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query. 
-
+The `from_stix_map.json` file is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query.
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
@@ -147,9 +146,9 @@ The following STIX pattern is supported in the example mapping because the STIX 
 "[network-traffic:src_port = 12345 AND ipv4-addr:value = '00-00-5E-00-53-00']"
 ```
 
-**Avoiding Custom STIX Properties**
+**Using Custom STIX Objects and Properties**
 
-As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when converting data source results to STIX. However, ISC uses standard STIX patterns when querying data sources, so it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.  
+As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
 
 [Back to top](#create-a-translation-module)
 
@@ -189,27 +188,28 @@ The parsing is recursively run through QueryStringPatternTranslator.\_parse_expr
 The `query_constructor.py` file is where the native query is built from the ANTLR parsing.
 
 ---
+
 #### How STIX-shifter handles unmapped STIX properties
 
 If a STIX pattern contains an unmapped property, and any joining operators allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
 
 `[stix_object:unmapped_property OR stix_object:mapped_property]`
 
-*The unmapped property would be removed since it is joined to a mapped property with an OR operator.*
+_The unmapped property would be removed since it is joined to a mapped property with an OR operator._
 
 `[stix_object:unmapped_property] OR [stix_object:mapped_property]`
 
-*The entire observation object (square brackets) containing the unmapped property would be removed since the pattern contains at least one other observation with mapped properties.*
+_The entire observation object (square brackets) containing the unmapped property would be removed since the pattern contains at least one other observation with mapped properties._
 
 If the unmapped property cannot be removed, STIX-shifter produces an error. This happens because the `QueryStringPatternTranslator` class (in `query_constructor.py`) does not know what data source field the STIX object property must be converted to. The following patterns would produce such an error:
 
 `[stix_object:unmapped_property AND stix_object:mapped_property]`
 
-*The unmapped property cannot be removed without changing the query logic since the two properties are joined by an AND operator.*
+_The unmapped property cannot be removed without changing the query logic since the two properties are joined by an AND operator._
 
 `[stix_object:unmapped_property]`
 
-*The pattern only contains one observation with one unmapped property; nothing would be left to the query after removing it.*
+_The pattern only contains one observation with one unmapped property; nothing would be left to the query after removing it._
 
 ---
 
@@ -262,7 +262,9 @@ Depending on your data source, edit this section to:
 
 - Add a query field selector.
 - Append result limits and time windows.
-- Return an array of queries or a single query string. A single query string is returned by default, but queries can be split into an array of query strings if required.
+- Return a list of one or more queries. A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
+
+The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `from_stix_map.json`).
 
 [Back to top](#create-a-translation-module)
 
@@ -274,7 +276,7 @@ Results from unmapped data source fields are ignored during translation and are 
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
-3. In your `abc` translation module folder, go to your json/ subfolder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
+3. In your `abc` translation module folder, go to your json/ sub-folder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
 
    ```
    {
@@ -474,6 +476,7 @@ python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and n
 ```
 
 To run validation on the STIX pattern, add `'{"validate_pattern": "true"}'` as an option to the end of the CLI command:
+
 ```
 python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
 ```
@@ -486,8 +489,10 @@ python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and n
 
 ```
 python main.py translate abc results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
-6a4751cae5ff","name": "abc","identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]'
+6a4751cae5ff","name": "abc","identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
 ```
+
+Adding the `stix_validator` option at the end will ensure the observed-data objects conform to the STIX 2 standard.
 
 2. Visually verify that all expected data is in the returned STIX bundle. If a data source field in your sample results is mapped in `to_stix_map.json`, the value must be in the STIX bundle under the mapped STIX property.
 
@@ -526,18 +531,20 @@ python main.py translate abc results '{"type": "identity","id": "identity--f431f
 
    For an asynchronous transmission module, you must have the following files:
 
-   | Folder/file              | Why is it important? Where is it used?                                  |
-   | ------------------------ | ----------------------------------------------------------------------- |
-   | **init**.py              | This file is required by Python to properly handle library directories. |
-   | apiclient.py             |
-   | async_dummy_connector.py |
+   | Folder/file                 | Why is it important? Where is it used?                                  |
+   | --------------------------- | ----------------------------------------------------------------------- |
+   | **init**.py                 | This file is required by Python to properly handle library directories. |
+   | apiclient.py                |
+   | async_dummy_connector.py    |
+   | async_dummy_error_mapper.py |
 
    For a synchronous transmission module, you must have the following files:
 
-   | Folder/file                    | Why is it important? Where is it used?                                  |
-   | ------------------------------ | ----------------------------------------------------------------------- |
-   | **init**.py                    | This file is required by Python to properly handle library directories. |
-   | synchronous_dummy_connector.py |
+   | Folder/file                       | Why is it important? Where is it used?                                  |
+   | --------------------------------- | ----------------------------------------------------------------------- |
+   | **init**.py                       | This file is required by Python to properly handle library directories. |
+   | synchronous_dummy_connector.py    |
+   | synchronous_dummy_error_mapper.py |
 
 [Back to top](#create-a-transmission-module)
 
@@ -605,7 +612,15 @@ For asynchronous sources, the search id that gets passed into the connection met
 
 [Back to top](#create-a-transmission-module)
 
-#### Step 4. Verify that the transmission module was created successfully
+#### Step 4. Edit the dummy error mapper file
+
+The error mapper associates data source error codes, returned by the API, with error messages defined in the `ErrorCode` class. Update the keys in the `error_mapping` dictionary to match any error codes that may be returned by the API and set the appropriate value to one of the existing error codes defined in `error_reponse.py`.
+
+As an example, `1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS` would return an error code of 'no_results' if the API returned a 1002 code. Stix-shifter returns errors in the following format:
+
+`{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
+
+#### Step 5. Verify that the transmission module was created successfully
 
 1. You must have:
 
@@ -698,3 +713,19 @@ For asynchronous sources, the search id that gets passed into the connection met
       ```
       {'success': True}
       ```
+
+### Testing a new connector using the proxy host
+
+Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
+
+Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
+
+```
+python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
+```
+
+As an example:
+
+```
+python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
+```

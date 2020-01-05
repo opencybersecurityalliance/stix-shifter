@@ -122,22 +122,22 @@ class TestTransform(object):
                 assert(False), "Returned a non-mapped value " + \
                     key + ":" + str(value)
 
-    def test_custom_props(self):
-        transformer = None
-        data = {"logsourceid": 126, "qid": 55500004,
-                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
+    # def test_custom_props(self):
+    #     transformer = None
+    #     data = {"logsourceid": 126, "qid": 55500004,
+    #             "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
-        observed_data = result_bundle['objects'][1]
+    #     result_bundle = json_to_stix_translator.convert_to_stix(
+    #         data_source, map_data, [data], transformers.get_all_transformers(), options)
+    #     observed_data = result_bundle['objects'][1]
 
-        assert('x_com_ibm_ariel' in observed_data)
-        custom_props = observed_data['x_com_ibm_ariel']
-        assert(custom_props['identity_ip'] == data['identityip'])
-        assert(custom_props['log_source_id'] == data['logsourceid'])
-        assert(custom_props['qid'] == data['qid'])
-        assert(custom_props['magnitude'] == data['magnitude'])
-        assert(custom_props['log_source_name'] == data['logsourcename'])
+    #     assert('x_com_ibm_ariel' in observed_data)
+    #     custom_props = observed_data['x_com_ibm_ariel']
+    #     assert(custom_props['identity_ip'] == data['identityip'])
+    #     assert(custom_props['log_source_id'] == data['logsourceid'])
+    #     assert(custom_props['qid'] == data['qid'])
+    #     assert(custom_props['magnitude'] == data['magnitude'])
+    #     assert(custom_props['log_source_name'] == data['logsourcename'])
 
     
     def test_at_props(self):

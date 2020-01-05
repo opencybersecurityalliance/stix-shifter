@@ -1,0 +1,13 @@
+{
+  "QUERY_FROM_DATE": ["start"],
+  "QUERY_TO_DATE": ["end"],
+  "SHOW_ALIASES": ["TRUE", "FALSE"],
+  "REMOTE_SOURCE": ["remotesource"],
+  "CLIENTIP": ["src_ip"],
+  "SERVERIP": ["dst_ip"],
+  "DBUSERNAME": ["db_user"],
+  "DATABASENAME": ["database_name"],
+  "SERVICENAME": ["service_name"],
+  "OSUSER": ["os_user"],
+  "ERRORCODE": ["errorcode"]
+}

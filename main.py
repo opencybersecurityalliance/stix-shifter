@@ -52,7 +52,7 @@ def __main__():
     translate_parser.add_argument(
         'module', choices=stix_translation.TRANSLATION_MODULES, help='The translation module to use')
     translate_parser.add_argument('translate_type', choices=[
-        stix_translation.RESULTS, stix_translation.QUERY, stix_translation.PARSE], help='The translation action to perform')
+        stix_translation.RESULTS, stix_translation.QUERY, stix_translation.PARSE, stix_translation.SUPPORTED_ATTRIBUTES], help='The translation action to perform')
     translate_parser.add_argument(
         'data_source', help='STIX identity object representing a datasource')
     translate_parser.add_argument(
@@ -220,10 +220,13 @@ def __main__():
                 if transmission.is_async():
                     time.sleep(1)
                     status = transmission.status(search_id)
-                    while status['progress'] < 100:
+                    if status['success']:
+                        while status['progress'] < 100 and status['status'] == 'RUNNING':
+                            print(status)
+                            status = transmission.status(search_id)
                         print(status)
-                        status = transmission.status(search_id)
-                    print(status)
+                    else:
+                        raise RuntimeError("Fetching status failed")
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
                     print("Search {} results is:\n{}".format(search_id, result["data"]))
