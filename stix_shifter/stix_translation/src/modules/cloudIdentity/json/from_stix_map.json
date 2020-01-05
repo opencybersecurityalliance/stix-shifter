@@ -1,23 +1,22 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value":["origin"]
+      "value":["DestinationIpV4.origin"]
     }
   },
   "url": {
     "fields": {
-      "type": ["Url"],
-      "value": ["cloudIdentityTenant"]
+      "value": ["Url.tenatname"]
     }
   },
   "user-account": {
     "fields": {
-      "user_id": ["id"],
-      "account_login": ["userName"],
-      "account_type": ["type"],
+      "user_id": ["user-account.id"],
+      "account_login": ["user-account.userName"],
+      "account_type": ["user-account.userCategory"],
       "password_last_changed": ["pwdChangedTime"],
-      "display_name": ["displayName"],
-      "account_first_login": ["created"]
+      "display_name": ["user-account.displayName"],
+      "account_first_login": ["user-account.created"]
       
     }
   },
@@ -29,7 +28,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["realm"]
+      "value": ["DomainName.realm"]
     }
   },
   "API-Call": {
@@ -39,7 +38,19 @@
       "TO": ["To"],
       "USERNAME": ["username"]
     }
+  },
+  "file": {
+    "fields": {
+      "type": ["file"],
+      "name": ["FileName"]
+    }
+  },
+  "process": {
+    "fields": {
+      "type": ["process"],
+      "pid": ["process.pid"],
+      "command_line": ["process.path"]
+    }
   }
-
 
 }
