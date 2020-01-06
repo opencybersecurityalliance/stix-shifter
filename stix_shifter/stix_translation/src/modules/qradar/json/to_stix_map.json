@@ -10,12 +10,20 @@
     "key": "x_com_ibm_ariel.category_name",
     "cybox": false
   },
-  "logsourceid": {
-    "key": "x_com_ibm_ariel.log_source_id",
+  "high_level_category_name": {
+    "key": "x_com_ibm_ariel.high_level_category_name",
+    "cybox": false
+  },
+  "high_level_category_id": {
+    "key": "x_com_ibm_ariel.high_level_category_id",
     "cybox": false
   },
   "identityip": {
     "key": "x_com_ibm_ariel.identity_ip",
+    "cybox": false
+  },
+  "identityhostname": {
+    "key": "x_com_ibm_ariel.identity_host_name",
     "cybox": false
   },
   "qidname": {
@@ -42,25 +50,36 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "starttime": [
-    {
-      "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    }
-  ],
+  "starttime": {
+    "key": "first_observed",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  "endtime": {
+    "key": "last_observed",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  "logsourceid": {
+    "key": "x_com_ibm_ariel.log_source_id",
+    "cybox": false
+  },
   "logsourcename": {
     "key": "x_com_ibm_ariel.log_source_name",
     "cybox": false
   },
+  "logsourcetypename": {
+    "key": "x_com_ibm_ariel.log_source_type_name",
+    "cybox": false
+  },
+  "direction": {
+    "key": "x_com_ibm_ariel.direction",
+    "cybox": false
+  },
   "magnitude": {
     "key": "x_com_ibm_ariel.magnitude",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "sourceip": [
     {
@@ -136,12 +155,18 @@
     "key": "file.hashes.UNKNOWN",
     "object": "fl"
   },
+  "filesize": {
+    "key": "file.size",
+    "object": "fl"
+  },
+  "filepath": [
+    {
+      "key": "directory.path",
+      "object": "dir"
+    }
+  ],
   "base64_payload": {
     "key": "artifact.payload_bin"
-  },
-  "utf8_payload": {
-    "key": "x_com_ibm_ariel.utf8_payload",
-    "cybox": false
   },
   "destinationport": {
     "key": "network-traffic.dst_port",

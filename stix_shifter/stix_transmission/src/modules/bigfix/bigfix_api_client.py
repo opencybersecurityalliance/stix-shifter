@@ -2,7 +2,7 @@ import base64
 from ..utils.RestApiClient import RestApiClient
 
 
-class APIClient():
+class APIClient:
 
     PING_ENDPOINT = 'help/clientquery'
     QUERY_ENDPOINT = 'clientquery'
@@ -12,19 +12,15 @@ class APIClient():
     def __init__(self, connection, configuration):
         self.endpoint_start = 'api/'
         auth = configuration.get('auth')
-        headers = dict()
-        headers['Authorization'] = b"Basic " + base64.b64encode(
+        self.headers = dict()
+        self.headers['Authorization'] = b"Basic " + base64.b64encode(
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
-        self.client = RestApiClient(connection.get('host'),
-                                    connection.get('port'),
-                                    connection.get('cert', None),
-                                    headers,
-                                    cert_verify=connection.get('cert_verify', 'True')
-                                    )
+        self.connection = connection
+        self.configuration = configuration
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
-        return self.client.call_api(endpoint, 'GET')
+        return self.get_api_client().call_api(endpoint, 'GET')
 
     def create_search(self, query_expression):
         headers = dict()
@@ -32,7 +28,7 @@ class APIClient():
         endpoint = self.endpoint_start + self.QUERY_ENDPOINT
         data = query_expression
         data = data.encode('utf-8')
-        return self.client.call_api(endpoint, 'POST', headers, data=data)
+        return self.get_api_client().call_api(endpoint, 'POST', headers, data=data)
 
     def get_search_results(self, search_id, offset, length):
         headers = dict()
@@ -43,11 +39,21 @@ class APIClient():
         params['stats'] = '1'
         params['start'] = offset
         params['count'] = length
-        return self.client.call_api(endpoint, 'GET', headers, urldata=params)
+        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params)
 
     def get_sync_query_results(self, relevance):
         headers = dict()
         endpoint = self.endpoint_start + self.SYNC_QUERY_ENDPOINT
         params = dict()
         params['relevance'] = relevance
-        return self.client.call_api(endpoint, 'GET', headers, urldata=params)
+        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params)
+
+    def get_api_client(self):
+        api_client = RestApiClient(self.connection.get('host'),
+                                   self.connection.get('port'),
+                                   self.connection.get('cert', None),
+                                   self.headers, cert_verify=self.connection.get('selfSignedCert', True),
+                                   mutual_auth=self.connection.get('use_securegateway', False),
+                                   sni=self.connection.get('sni', None)
+                                   )
+        return api_client

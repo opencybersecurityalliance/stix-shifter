@@ -1,0 +1,27 @@
+{
+  "x-com-guardium": {
+    "fields": {
+      "datacategory": ["datacategory"],
+      "start": ["QUERY_FROM_DATE"],
+      "end": ["QUERY_TO_DATE"],
+      "remotesource": ["REMOTE_SOURCE"],
+      "database_name": ["DATABASENAME"],
+      "service_name": ["SERVICENAME"],
+      "exception_errorcode": ["ERRORCODE"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["CLIENTIP", "SERVERIP"],
+      "src_ip": ["CLIENTIP"],
+      "dst_ip": ["SERVERIP"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "value": ["DBUSERNAME", "OSUSER"],
+      "db_user": ["DBUSERNAME"],
+      "os_user": ["OSUSER"]
+    }
+  }
+}

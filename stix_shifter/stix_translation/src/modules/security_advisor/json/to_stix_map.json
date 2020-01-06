@@ -1,0 +1,94 @@
+{
+  "author_id": {
+    "key": "user-account.user_id"
+  },
+  "author_email": {
+    "key": "email-addr.value"
+  },
+  "author_accountId": {
+    "key": "x_author.author_accountId",
+    "cybox": false
+  },
+  "context_resourceName": {
+    "key": "x_finding.context_resourceName",
+    "cybox": false
+  },
+  "description": {
+    "key": "x_finding.description",
+    "cybox": false
+  },
+  "finding_severity": {
+    "key": "x_finding.finding_severity",
+    "cybox": false
+  },
+  "finding_certainty": {
+    "key": "x_finding.finding_certainty",
+    "cybox": false
+  },
+  "id": {
+    "key": "x_finding.id",
+    "cybox": false
+  },
+
+  "longDescription": {
+    "key": "x_finding.longDescription",
+    "cybox": false
+  },
+  "message": {
+    "key": "x_finding.message",
+    "cybox": false
+  },
+  "name": {
+    "key": "x_finding.name",
+    "cybox": false
+  },
+  "noteName": {
+    "key": "x_finding.noteName",
+    "cybox": false
+  },
+  "providerId": {
+    "key": "x_provider.providerId",
+    "cybox": false
+  },
+  "providerName": {
+    "key": "x_provider.providerName",
+    "cybox": false
+  },
+  "remediation": {
+    "key": "x_finding.remediation",
+    "cybox": false
+  },
+  "reportedBy_id": {
+    "key": "x_provider.reportedBy_id",
+    "cybox": false
+  },
+  "reportedBy_title": {
+    "key": "x_provider.reportedBy_title",
+    "cybox": false
+  },
+  "shortDescription": {
+    "key": "x_finding.shortDescription",
+    "cybox": false
+  },
+  "finding_next_steps_0_title": {
+    "key": "x_finding.finding_next_steps_0_title",
+    "cybox": false
+  },
+  "context_accountId": {
+    "key": "x_finding.context_accountId",
+    "cybox": false
+  },
+  "createTime": {
+    "key": "first_observed",
+    "cybox": false
+  },
+  "updateTime": {
+    "key": "last_observed",
+    "cybox": false
+  },
+  "occurence_count": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  }
+}

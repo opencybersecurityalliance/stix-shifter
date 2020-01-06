@@ -1,0 +1,196 @@
+{
+  "session": {
+    "--IBM SC Session Details": {
+      "reportName": "--IBM SC Session Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "default": "12:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "default": "00:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "default": "%"
+        },
+        "SERVERIP": {
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "default": "%"
+        }
+      }
+    }
+  },
+  "activity": {
+    "--IBM SC Activity Details": {
+      "reportName": "--IBM SC Activity Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "default": "12:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "default": "00:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "default": "%"
+        },
+        "SERVERIP": {
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "default": "%"
+        },
+        "OSUSER": {
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "default": "%"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "--IBM SC Exception Details": {
+      "reportName": "--IBM SC Exception Details",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "default": "12:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "default": "00:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "default": "TRUE"
+        },
+        "REMOTE_SOURCE": {
+          "default": "%"
+        },
+        "CLIENTIP": {
+          "default": "%"
+        },
+        "SERVERIP": {
+          "default": "%"
+        },
+        "DBUSERNAME": {
+          "default": "%"
+        },
+        "SERVICENAME": {
+          "default": "%"
+        },
+        "OSUSER": {
+          "default": "%"
+        },
+        "DATABASENAME": {
+          "default": "%"
+        },
+        "ERRORCODE": {
+          "default": "%"
+        }
+      }
+    }
+  },
+  "audit": {
+    "reportName": "--IBM Audit Process Log",
+    "indexFrom": "0",
+    "fetchSize": "1000",
+    "sortType": "asc",
+    "reportParameter": {
+      "QUERY_FROM_DATE": {
+        "default": "12:00:00",
+        "transformer": "EpochToGuardium"
+      },
+      "QUERY_TO_DATE": {
+        "default": "00:00:00",
+        "transformer": "EpochToGuardium"
+      },
+      "SHOW_ALIASES": {
+        "default": "TRUE"
+      },
+      "REMOTE_SOURCE": {
+        "default": "%"
+      }
+    }
+  },
+  "userActivity": {
+    "reportName": "--My User Activity",
+    "indexFrom": "0",
+    "fetchSize": "1000",
+    "sortType": "asc",
+    "reportParameter": {
+      "QUERY_FROM_DATE": {
+        "default": "12:00:00",
+        "transformer": "EpochToGuardium"
+      },
+      "QUERY_TO_DATE": {
+        "default": "00:00:00",
+        "transformer": "EpochToGuardium"
+      },
+      "SHOW_ALIASES": {
+        "default": true
+      },
+      "REMOTE_SOURCE": {
+        "default": "%"
+      }
+    }
+  },
+  "realtime": {
+    "ISC_Report_Realtime": {
+      "reportName": "ISC_Report_Realtime",
+      "indexFrom": "0",
+      "fetchSize": "1000",
+      "sortType": "asc",
+      "reportParameter": {
+        "QUERY_FROM_DATE": {
+          "default": "12:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "QUERY_TO_DATE": {
+          "default": "00:00:00",
+          "transformer": "EpochToGuardium"
+        },
+        "SHOW_ALIASES": {
+          "default": true
+        },
+        "REMOTE_SOURCE": {
+          "default": "%"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "common": {
+    "QUERY_FROM_DATE": "*",
+    "QUERY_TO_DATE": "*",
+    "SHOW_ALIASES": "*",
+    "REMOTE_SOURCE": "*"
+
+  },
+  "maps": {
+    "CLIENTIP": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "SERVERIP": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "DBUSERNAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "DATABASENAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "SERVICENAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "OSUSER": ["activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
+    "ERRORCODE": ["exceptions:--IBM SC Exception Details"]
+  },
+  "defaultReports":["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"]
+}

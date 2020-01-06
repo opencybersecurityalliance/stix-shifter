@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
+from datetime import datetime, timezone, tzinfo, timedelta
 import base64
 import socket
 import re
+import os
 from urllib.parse import urlparse
 
 
@@ -38,6 +39,65 @@ class EpochToTimestamp(ValueTransformer):
     def transform(epoch):
         return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc)
                 .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+
+
+class FormatMac(ValueTransformer):
+    """A value transformer to convert Mac address to STIX Mac address format"""
+
+    @staticmethod
+    def transform(mac):
+        value = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)])
+        return value.lower()
+
+
+class MsatpToTimestamp(ValueTransformer):
+    """A value transformer to truncate milliseconds"""
+
+    @staticmethod
+    def transform(msatptime):
+        time_array = msatptime.split('.')
+        converted_time = time_array[0] + '.' + time_array[1][:3] + 'Z' if len(time_array) > 1 else time_array[0] + 'Z'
+        return converted_time
+
+
+class FormatTCPProtocol(ValueTransformer):
+    """A value transformer to convert TCP protocol to IANA format"""
+
+    @staticmethod
+    def transform(protocolname):
+        converted_name = re.search(r'^tcp', protocolname, re.I).group(0)
+        try:
+            obj_array = converted_name if isinstance(converted_name, list) else converted_name.split(', ')
+            # Loop through entries inside obj_array and make all strings lowercase to meet STIX format
+            obj_array = [entry.lower() for entry in obj_array]
+            return obj_array
+        except ValueError:
+            print("Cannot convert input to array")
+
+
+class MsatpToRegistryValue(ValueTransformer):
+    """A value transformer to convert MSATP Registry value protocol to windows-registry-value-type STIX"""
+
+    @staticmethod
+    def transform(registryvalues):
+        stix_mapping = {"RegistryValueName": "name", "RegistryValueData": "data", "RegistryValueType": "data_type"}
+        stix_datatype_mapping = {"None": "REG_NONE", "String": "REG_SZ", "Dword": "REG_DWORD",
+                                 "ExpandString": "REG_EXPAND_SZ", "MultiString": "REG_MULTI_SZ",
+                                 "Binary": "REG_BINARY", "Qword": "REG_QWORD"}
+        converted_value = list()
+        registryvalue_dict = dict()
+        for each_value in registryvalues:
+            for key, value in each_value.items():
+                is_data_add = True
+                if key == "RegistryValueType":
+                    if value in stix_datatype_mapping.keys():
+                        value = stix_datatype_mapping[value]
+                    else:
+                        is_data_add = False
+                if is_data_add:
+                    registryvalue_dict.update({stix_mapping[key]: value})
+        converted_value.append(registryvalue_dict)
+        return converted_value
 
 
 class EpochSecondsToTimestamp(ValueTransformer):
@@ -121,6 +181,17 @@ class ToFilePath(ValueTransformer):
             print("Cannot convert input to path string")
 
 
+class ToDirectoryPath(ValueTransformer):
+    """A value transformer for expected directory path"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return os.path.dirname(obj)
+        except ValueError:
+            print("Cannot convert input to directory path string")
+
+
 class ToFileName(ValueTransformer):
     """A value transformer for expected file names"""
 
@@ -169,8 +240,124 @@ class DateTimeToUnixTimestamp(ValueTransformer):
             print("Cannot convert input to Unix timestamp")
 
 
+class NaiveToUTC(tzinfo):
+    """
+        A class for converting naive datetime object to UTC timezone datetime object
+        naive datetime: "2017-09-29T15:00:00
+        datetime with timezone offset: "2017-09-29T15:00:00+0300
+        This class is declared to help convert Naive datetime format to datetime format with timezone(UTC here)
+        """
+    _dst = timedelta(0)
+
+    def tzname(self, **kwargs):
+        return "UTC"
+
+    def utcoffset(self, dt):
+        return self.__class__._dst
+
+    def dst(self, dt):
+        return self.__class__._dst
+
+
+class TimestampToUTC(ValueTransformer):
+    """
+    A value transformer for converting a UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z)
+    to %d %b %Y %H:%M:%S %z"(23 Oct 2018 12:20:14 +0000)
+    """
+
+    @staticmethod
+    def transform(timestamp, is_default=False):
+        """
+        Transformer for converting naive or non-naive to UTC time
+        :param timestamp: datetime.datetime object(datetime.datetime(2019, 8, 22, 15, 44, 11, 716805)) or
+                            '2019-07-25T10:43:10.003Z'
+        :param is_default: True if timestamp like '2019-07-25T10:43:10.003Z'
+                            False if timestamp like datetime.datetime(2019, 8, 22, 15, 44, 11, 716805)
+        :return: str, e.g. : 25 Jul 2019 10:43:10 +0000
+        """
+        if re.search(r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z", str(timestamp)):
+            input_time_pattern = '%Y-%m-%dT%H:%M:%SZ'
+        else:
+            input_time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+        output_time_pattern = '%d %b %Y %H:%M:%S %z'
+        if not is_default:
+            # convert timestamp to datetime object
+            datetime_obj = datetime.strptime(timestamp, input_time_pattern)
+        else:
+            datetime_obj = timestamp
+        converted_time = datetime.strftime(datetime_obj.replace(tzinfo=NaiveToUTC()), output_time_pattern)
+        return converted_time
+
+
+class SetToOne(ValueTransformer):
+    """Send back integer = 1 irrespective of the obj"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            return int("1")
+        except ValueError:
+            print("Cannot convert input to integer")
+
+# TODO: rename classes to be more generic since they can be reused by other data sources
+
+
+class EpochToGuardium(ValueTransformer):
+    """A value transformer for Epoch to Guardium timestamp"""
+
+    @staticmethod
+    def transform(epoch):
+        return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
+
+
+class GuardiumToTimestamp(ValueTransformer):
+    """A value transformer for converting Guardium timestamp to regular timestamp"""
+
+    @staticmethod
+    def transform(gdmTime):
+        rgx = r"(\d\d\d\d-\d\d-\d\d)\s(\d\d:\d\d:\d\d)"
+        mtch = (re.findall(rgx, gdmTime))[0]
+        return (mtch[0] + 'T' + mtch[1]) + '.000Z'
+
+
+class TimestampToGuardium(ValueTransformer):
+    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+
+    @staticmethod
+    def transform(timestamp):
+        rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
+        mtch = (re.findall(rgx, timestamp))[0]
+        return (mtch[0] + ' ' + mtch[1])
+
+
+class Ymd_HMSToTimestamp(ValueTransformer):
+    """A value transformer for the timestamps but adds ONE second to the time stamp.  Reason: Use when modified date is missing"""
+
+    @staticmethod
+    def transform(dt_Str):
+        dt_obj = datetime.strptime(dt_Str, '%Y-%m-%d %H:%M:%S')
+        dt_objOne = dt_obj + timedelta(seconds=1)
+        return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+
+
+class EmptyStringToNone(ValueTransformer):
+    """A transformer that converts empty strings to None. This will exclude empty string values from the STIX results."""
+
+    @staticmethod
+    def transform(obj):
+        if (type(obj) is str and not(obj)):
+            return None
+        else:
+            return obj
+
+
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
             "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
-            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4, "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp}
+            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4,
+            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC,
+            "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
+            "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
+            "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
+            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "EmptyStringToNone": EmptyStringToNone}

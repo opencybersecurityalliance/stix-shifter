@@ -44,6 +44,8 @@ class PatternTranslator:
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             comparator = self.comparator_lookup[expression.comparator]
+            if expression.negated:
+                comparator = 'NOT ' + comparator
             if qualifier is not None:
                 self._convert_qualifier_times_to_unix_times(qualifier)
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})

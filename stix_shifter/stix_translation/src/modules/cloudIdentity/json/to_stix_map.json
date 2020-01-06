@@ -1,6 +1,198 @@
-{
-  "UserName": {
-    "key": "user-account.user_id"
+{  
+"user-account": {
+  "id": [
+    {
+      "object": "ua",
+      "key": "user-account.user_id"
+    }
+  ],
+  "userName": [
+    {
+      "object": "ua",
+      "key": "user-account.account_login"
+    }
+  ],
+  "displayName": [
+    {
+      "object": "ua",
+      "key": "user-account.display_name"
+    }
+  ],
+  "created": [
+    {
+      "object": "ua",
+      "key": "user-account.account_first_login"
+    }
+  ],
+  "userCategory": [
+    {
+      "object": "ua",
+      "key": "user-account.account_type"
+    }
+  ],
+  "pwdChangedTime": [
+    {
+      "object": "ua",
+      "key": "user-account.password_last_changed"
+    }
+  ] 
+},
+"Url": {
+  "realm": {
+    "key": "url.value"
+  },
+  "domain": {
+    "key": "domain-name.value"
+  }
+  
+},
+"FileName": {
+  "key": "file.name"
+},
+"DestinationPort": {
+  "key": "network-traffic.dst_port",
+  "object": "nt",
+  "transformer": "ToInteger"
+},
+"SourcePort": {
+  "key": "network-traffic.src_port",
+  "object": "nt",
+  "transformer": "ToInteger"
+},
+"NetworkProtocol": {
+  "key": "network-traffic.protocols",
+  "object": "nt",
+  "transformer": "ToLowercaseArray"
+},
+"DomainName": {
+  "key": "domain-name.value"
+},
+"process": {
+  "path": [
+    {
+      "object": "proc",
+      "key": "process.command_line"
+    }
+  ],
+  "Pid": [
+    {
+      "object": "proc",
+      "key": "process.pid"
+    }
+  ]
+},
+"SourceIpV4": [
+  {
+    "key": "ipv4-addr.value",
+    "object": "src_ip"
+  },
+  {
+    "key": "network-traffic.src_ref",
+    "object": "nt",
+    "references": "src_ip"
+  }
+],
+"DestinationIpV4": [
+  {
+    "key": "ipv4-addr.value",
+    "object": "dst_ip"
+  },
+  {
+    "key": "network-traffic.dst_ref",
+    "object": "nt",
+    "references": "dst_ip"
+  }
+],
+"SourceIpV6": [
+  {
+    "key": "ipv6-addr.value",
+    "object": "src_ip"
+  },
+  {
+    "key": "network-traffic.src_ref",
+    "object": "nt",
+    "references": "src_ip"
+  }
+],
+"DestinationIpV6": [
+  {
+    "key": "ipv6-addr.value",
+    "object": "dst_ip"
+  },
+  {
+    "key": "network-traffic.dst_ref",
+    "object": "nt",
+    "references": "dst_ip"
+  }
+],
+"StartTime": [
+  {
+    "key": "created",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  {
+    "key": "modified",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  {
+    "key": "first_observed",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  {
+    "key": "last_observed",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  }
+],
+"User-Report": {
+  "event_type": [
+    {
+      "object": "ur",
+      "key": "user-report.event-type"
+    }
+  ],
+  "data": {
+    "result": [
+      {
+        "object": "ur",
+        "key": "user-report.result"
+      }
+    ],
+    "targetid_username": [
+      {
+        "object": "ur",
+        "key": "user-report.targetid_username"
+      }
+    ],
+    "origin": [
+      {
+        "object": "ur",
+        "key": "user-report.origin"
+      }
+    ],
+    "performedby_username": [
+      {
+        "object": "ur",
+        "key": "user-report.performedby_username"
+      }
+    ],
+    "action": [
+      {
+        "object": "ur",
+        "key": "user-report.action"
+      }
+    ]
+  },
+    "cybox":false
+
+},
+  "EventCount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "LogSourceId": {
     "key": "x__custom_property.log_source_id",
@@ -10,196 +202,6 @@
     "key": "x__custom_property.magnitude",
     "cybox": false
   },
-  
-  "SourceIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "SourceIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "EventCount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "StartTime": [
-    {
-      "key": "created",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "modified",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    }
-  ],
-
-  
-  "Url": {
-    "key": "url.value"
-  },
-  "FileName": {
-    "key": "file.name"
-  },
-  "Payload": {
-    "key": "artifact.payload_bin"
-  },
-  "DestinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "SourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "NetworkProtocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "transformer": "ToLowercaseArray"
-  },
-  "DomainName": {
-    "key": "domain-name.value"
-  },
-  "Process": {
-    "Path": [
-      {
-        "object": "proc",
-        "key": "process.command_line"
-      }
-    ],
-    "Pid": [
-      {
-        "object": "proc",
-        "key": "process.id"
-      }
-    ]
-  },
-
-  "User-Report": {
-    "event_type": [
-      {
-        "object": "ur",
-        "key": "user-report.event-type"
-      }
-    ],
-    "data": {
-      "result": [
-        {
-          "object": "ur",
-          "key": "user-report.result"
-        }
-      ],
-      "targetid_username": [
-        {
-          "object": "ur",
-          "key": "user-report.targetid_username"
-        }
-      ],
-      "origin": [
-        {
-          "object": "ur",
-          "key": "user-report.origin"
-        }
-      ],
-      "performedby_username": [
-        {
-          "object": "ur",
-          "key": "user-report.performedby_username"
-        }
-      ],
-      "action": [
-        {
-          "object": "ur",
-          "key": "user-report.action"
-        }
-      ]
-    },
-      "cybox":false
-
-  },
-  "user-account": {
-      "id": [
-        {
-          "object": "ua",
-          "key": "user-account.user_id"
-        }
-      ],
-      "userName": [
-        {
-          "object": "ua",
-          "key": "user-account.account_login"
-        }
-      ],
-      "displayName": [
-        {
-          "object": "ua",
-          "key": "user-account.display_name"
-        }
-      ],
-      "created": [
-        {
-          "object": "ua",
-          "key": "user-account.account_first_login"
-        }
-      ],
-      "respourceType": [
-        {
-          "object": "ua",
-          "key": "user-account.account_type"
-        }
-      ] 
-  }
   
 
 }

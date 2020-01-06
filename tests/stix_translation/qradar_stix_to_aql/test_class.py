@@ -3,7 +3,6 @@ from stix_shifter.utils.error_response import ErrorCode
 import unittest
 import random
 import json
-from freezegun import freeze_time
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
 selections_file = open('stix_shifter/stix_translation/src/modules/qradar/json/aql_event_fields.json').read()
@@ -12,12 +11,9 @@ OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
-DEFAULT_START_TIME = 1548926700000
-DEFAULT_END_TIME = 1548927000000
 PROTOCOLS = json.loads(protocols_file)
 
 
-freeze_time("2019-01-31 09:30:00").start()
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
 custom_selections = "SELECT {}".format(", ".join(OPTIONS['select_fields']))
 from_statement = " FROM events "
@@ -56,6 +52,13 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[url:value = 'http://www.testaddress.com']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE url = 'http://www.testaddress.com' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_NOT_and_not_equals_operators(self):
+        stix_pattern = "[url:value != 'www.example.com' OR url:value NOT = 'www.example.ca']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE NOT (url = 'www.example.ca') OR url != 'www.example.com' {} {}".format(
+            default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_mac_address_query(self):
@@ -323,4 +326,12 @@ class TestStixToAql(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_filepath_queries(self):
+        first_path = 'C:/first/file/path'
+        second_path = 'D:/second/file/path'
+        stix_pattern = "[(file:parent_directory_ref = '{}' OR directory:path = '{}')]".format(first_path, second_path)
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE filepath = '{}' OR filepath = '{}' {} {}".format(second_path, first_path, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

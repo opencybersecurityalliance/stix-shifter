@@ -10,20 +10,5 @@
    	"Start as starttime",
    	"Last as endtime"
    	
-  ],
-  "old": [
-    "Link.A as Link_A",
-    "Link.B as Link_B",
-   	"Link.Protocol as Link_Protocol",
-   	"Network.Protocol as Network_Protocol",
-   	"Network.A as Network_A",
-   	"Network.B as Network_B",
-   	"CollectionId as CollectionId",
-   	"Start as NF_Start",
-   	"Last as NF_Last"
-  ],
-  "user-name": [
-    "initiator.id as initiator_id",
-    "initiator.name as initiator_name"
-    ]
+  ]
 }
