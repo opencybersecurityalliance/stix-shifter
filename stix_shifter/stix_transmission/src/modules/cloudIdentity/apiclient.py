@@ -1,5 +1,4 @@
 import base64
-from ..utils.RestApiClient import RestApiClient
 from . import CloudIdentity_Request
 import pprint
 import json, requests
