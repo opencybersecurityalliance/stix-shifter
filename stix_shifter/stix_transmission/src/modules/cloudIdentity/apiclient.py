@@ -37,38 +37,29 @@ class APIClient():
             self.endpoint = 'v2.0/Users'
 
     def run_search(self, query_expression):
-
+        #Creates variables for CI
         ip, FROM, TO = self._parse_query(query_expression)
-
-        #For testing
-        #print(ip, FROM, TO)
-        #print("Attempting to contact CI")
 
         #REST call to CI 
         report_response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
 
-        
-        
-        #For debuging 
+        #Makes return json easier to read 
         pp = pprint.PrettyPrinter(indent=1)
         #pp.pprint(response)
 
         #refine json response to individual hits
         hits = report_response['response']['report']['hits']
-
+        user_response = dict()
+        
         #Iterate over hits object
         for index in hits:
             #Compare CI report origin/ip to input IP 
             if(str(index['_source']['data']['origin'] == ip)):
                 #REST call to CI on specified user_id
                 user_response = self.getUser(id=hits[0]['_source']['data']['subject'])
-                pp.pprint(user_response)
 
-
-        #print(response[0]['_source']['data']['subject'])
-        #user = self.getUser(id=hits[0]['_source']['data']['subject'])
-        #pp.pprint(user)
-
+        
+        pp.pprint(user_response)
         return report_response
 
     #Retrieve valid token from Cloud Identity
