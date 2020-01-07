@@ -204,7 +204,7 @@ def __main__():
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         translation = stix_translation.StixTranslation()
-        dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query)
+        dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query, {'validate_pattern': True})
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
 
@@ -239,7 +239,7 @@ def __main__():
                 raise RuntimeError("Search failed to execute; see log for details")
 
         # Translate results to STIX
-        result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results))
+        result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
         print(result)
 
         exit(0)
