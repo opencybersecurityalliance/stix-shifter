@@ -1,7 +1,7 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value":["DestinationIpV4.origin"]
+      "value":["origin"]
     }
   },
   "url": {
@@ -12,7 +12,7 @@
   "user-account": {
     "fields": {
       "user_id": ["user-account.id"],
-      "account_login": ["user-account.userName"],
+      "account_login": ["user-account.username"],
       "account_type": ["user-account.userCategory"],
       "password_last_changed": ["pwdChangedTime"],
       "display_name": ["user-account.displayName"],
@@ -54,3 +54,5 @@
   }
 
 }
+
+
