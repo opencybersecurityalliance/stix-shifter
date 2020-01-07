@@ -134,11 +134,18 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['stix2-patterns>=1.1.0', 'stix2-validator>=0.5.0',
-                      'antlr4-python3-runtime==4.7', 'python-dateutil>=2.7.3', 'xmltodict>=0.11.0',
-                      'requests_toolbelt==0.9.1', 'adal>=1.2.2', 'flatten_json==0.1.7'
-                    #   ,'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
-                    ],  # Optional
+    install_requires=[
+        'stix2-patterns>=1.1.0',
+        'stix2-validator>=0.5.0',
+        'antlr4-python3-runtime==4.7',
+        'python-dateutil>=2.7.3',
+        'xmltodict>=0.11.0',
+        'requests_toolbelt==0.9.1',
+        'adal>=1.2.2',
+        'flatten_json==0.1.7',
+        'flask>=1.0.2'
+        # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
+    ],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
@@ -175,13 +182,13 @@ setup(
     # `pip` to create the appropriate form of executable for the target
     # platform.
     #
-    # For example, the following would provide a command called `sample` which
+    # The following would provide a command called `stix-shifter` which
     # executes the function `main` from this package when invoked:
-    # entry_points={  # Optional
-    #     'console_scripts': [
-    #         'sample=sample:main',
-    #     ],
-    # },
+    entry_points={  # Optional
+        'console_scripts': [
+            'stix-shifter=stix_shifter.scripts.stix_shifter:main',
+        ],
+    },
 
     # List additional URLs that are relevant to your project as a dict.
     #
