@@ -1,3 +1,5 @@
+
+from requests.models import Response
 import base64
 from . import CloudIdentity_Request
 import pprint
@@ -7,58 +9,61 @@ import re
 
 
 class APIClient():
-    PING_ENDPOINT = "v2.0/Users"
+    
     def __init__(self, connection, configuration):
         
-        headers = dict()
-        url_modifier_function = None
-        auth = configuration.get('auth')
-        headers["Accept"] = "application/json, text/plain, */*"
-        headers["Content-type"] = "application/json" 
-        self.uri = auth.get('tenant')
-        print(self.uri)
-        self.indices = configuration.get('cloudIdentity', {}).get('indices', None)
+        self.connection = connection
+        self.configuration = configuration
+        self.headers = dict()
+        self.search_id = None
+        self.query = None 
+        self.authroization = None
+        self.credential = None
 
-        #Check for authentication type and create a cloud identity token used from requests
-        if auth:
-           if 'tenant' in auth and 'clientId' in auth and 'clientSecret' in auth:
-               #get token from specified cloud identity tenant
-               self.token = self.getToken(auth['tenant'], auth['clientId'], auth['clientSecret'])
-           elif 'token' in auth: 
-               self.token = auth['token']
-
-        if isinstance(self.indices, list):  # Get list of all indices
-            self.indices = ",".join(self.indices)
-
-        if self.indices:
-            self.endpoint = self.indices + '/' +'_search'
+        #Check for token 
+        if(configuration.get('auth').get('token') is not None):
+            self.token = configuration.get('auth').get('token')
+        #Check for client_id and client_secret if true initialize token
+        elif(configuration.get('auth').get("clientId") is not None 
+        and configuration.get('auth').get("clientSecret") is not None
+        and configuration.get('auth').get("tenant") is not None):
+            self.uri = configuration.get('auth').get("tenant")
+            self.token = self.getToken(self.uri, configuration.get('auth').get("clientId"),configuration.get('auth').get("clientSecret"))
         else:
-            self.endpoint = 'v2.0/Users'
+            print("No Token initialized. Tenant client Id and client secret is required")
+            
+        
+
 
     def run_search(self, query_expression):
         #Creates variables for CI
         ip, FROM, TO = self._parse_query(query_expression)
 
-        #REST call to CI 
+        #Different types for reports to be called 
         report_response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
+        events_response = self.getEvents(FROM, TO)
+
 
         #Makes return json easier to read 
         pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(response)
 
-        #refine json response to individual hits
-        hits = report_response['response']['report']['hits']
+        #refine json response to individual hits and events
+        report_hits = report_response['response']['report']['hits']
+        event_hits = events_response['response']['events']['events']
+
         user_response = dict()
+
+        #pp.pprint(event_hits[0])
         
         #Iterate over hits object
-        for index in hits:
+        for index in report_hits:
             #Compare CI report origin/ip to input IP 
             if(str(index['_source']['data']['origin'] == ip)):
                 #REST call to CI on specified user_id
-                user_response = self.getUser(id=hits[0]['_source']['data']['subject'])
+                user_response = self.getUser(id=report_hits[0]['_source']['data']['subject'])
 
         
-        pp.pprint(user_response)
+        #pp.pprint(user_response)
         return report_response
 
     #Retrieve valid token from Cloud Identity
@@ -103,6 +108,21 @@ class APIClient():
             print("Could not retrieve report "+ reportName)
             print(e)
 
+    def getEvents(self, FROM, TO):
+
+        url = self.uri + f"/v1.0/events?from={FROM}&to={TO}&range_type=time"
+
+        headers = { "Accept": "application/json, text/plain, */*","authorization": "Bearer "+self.token}
+
+        try:
+            res = requests.get(url, headers=headers)
+            jsonData = res.json()
+            return jsonData
+
+        except Exception as e:
+            print(e)
+            return
+
     def getUser(self, id):
         url = self.uri + f"/v2.0/Users/{id}"
 
@@ -118,7 +138,6 @@ class APIClient():
 
     #Parse out meaningful data from input query   
     def _parse_query(self, query):
-
         request = query.split(' ')
         
         for index in range(len(request)):
