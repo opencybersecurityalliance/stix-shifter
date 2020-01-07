@@ -1,5 +1,7 @@
+from ..utils.RestApiClient import RestApiClient
+from requests.models import Response
 import base64
-from . import CloudIdentity_Request
+import urllib.parse
 import pprint
 import json, requests
 import re
@@ -7,118 +9,132 @@ import re
 
 
 class APIClient():
-    PING_ENDPOINT = "v2.0/Users"
+    
     def __init__(self, connection, configuration):
         
-        headers = dict()
-        url_modifier_function = None
-        auth = configuration.get('auth')
-        headers["Accept"] = "application/json, text/plain, */*"
-        headers["Content-type"] = "application/json" 
-        self.uri = auth.get('tenant')
-        print(self.uri)
-        self.indices = configuration.get('cloudIdentity', {}).get('indices', None)
+        self.connection = connection
+        self.configuration = configuration
+        self.headers = dict()
+        self.search_id = None
+        self.query = None 
+        self.authroization = None
+        self.credential = None
+        self.host = connection.get('host')
+        self.host_port = connection.get('port')
+        self.client = RestApiClient(self.host)
 
-        #Check for authentication type and create a cloud identity token used from requests
-        if auth:
-           if 'tenant' in auth and 'clientId' in auth and 'clientSecret' in auth:
-               #get token from specified cloud identity tenant
-               self.token = self.getToken(auth['tenant'], auth['clientId'], auth['clientSecret'])
-           elif 'token' in auth: 
-               self.token = auth['token']
 
-        if isinstance(self.indices, list):  # Get list of all indices
-            self.indices = ",".join(self.indices)
-
-        if self.indices:
-            self.endpoint = self.indices + '/' +'_search'
+        #Check for token 
+        if(configuration.get('auth').get('token') is not None):
+            self.token = configuration.get('auth').get('token')
+        #Check for client_id and client_secret if true initialize token
+        elif(configuration.get('auth').get("clientId") is not None 
+        and configuration.get('auth').get("clientSecret") is not None
+        and configuration.get('auth').get("tenant") is not None):
+            self.uri = configuration.get('auth').get("tenant")
+            self.token = self.getToken(self.uri, configuration.get('auth').get("clientId"),configuration.get('auth').get("clientSecret"))
         else:
-            self.endpoint = 'v2.0/Users'
+            print("No Token initialized. Tenant client Id and client secret is required")
+
+        
+        
+
 
     def run_search(self, query_expression):
         #Creates variables for CI
         ip, FROM, TO = self._parse_query(query_expression)
 
-        #REST call to CI 
+        #Different types for reports to be called 
         report_response = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
+        #events_response = self.getEvents(FROM, TO)
+
 
         #Makes return json easier to read 
         pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(response)
 
-        #refine json response to individual hits
-        hits = report_response['response']['report']['hits']
+        #refine json response to individual hits and events
+        report_hits = report_response['response']['report']['hits']
+        #event_hits = events_response['response']['events']['events']
+
         user_response = dict()
+
+        #pp.pprint(events_response)
         
         #Iterate over hits object
-        for index in hits:
+        for index in report_hits:
             #Compare CI report origin/ip to input IP 
             if(str(index['_source']['data']['origin'] == ip)):
                 #REST call to CI on specified user_id
-                user_response = self.getUser(id=hits[0]['_source']['data']['subject'])
+                user_response = self.getUser(id=report_hits[0]['_source']['data']['subject'])
 
+        #pp.pprint(user_response)
         
-        pp.pprint(user_response)
         return report_response
 
     #Retrieve valid token from Cloud Identity
-    def getToken(self, uri, clientId, clientSecret):
+    def getToken(self, uri, client_id, client_secret):
+
         options = {
-            'uri': uri+"/v2.0/endpoint/default/token",
-            'client_id': clientId,
-            'client_secret': clientSecret,
-            'grant_type': "client_credentials"
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials"
         }
-        try:
-            resp = requests.post(uri+"/v2.0/endpoint/default/token", data=options)
 
-        except Exception as e:
-            print("failed to create token")
-            print(e)
+        endpoint = "v2.0/endpoint/default/token"
+        resp = self.client.call_api(endpoint, "POST", data=options)
 
-        json_data = json.loads(resp.text)
-        token = json_data['access_token']
-        return token
+        jresp = json.loads(str(resp.read(), 'utf-8'))
+        return jresp.get('access_token')
+        
 
     #Returns given report from cloud identity tenant
     def postReports(self, reportName, FROM, TO, SIZE, SORT_BY, SORT_ORDER, SEARCH_AFTER = None):
-        url = self.uri + f"/v1.0/reports/{reportName}"
-        headers = { "Accept": "application/json, text/plain, */*","Content-Type": "application/json", "authorization": "Bearer "+ self.token}
-        body = {
-            "FROM": FROM,
-            "TO": TO,
-            "SIZE": SIZE,
-            "SORT_BY": SORT_BY,
-            "SORT_ORDER": SORT_ORDER
-        }
-        if ("after" in reportName):
-            body.update(SEARCH_AFTER)
+        endpoint = "v1.0/reports/" + reportName
 
-        try:
-            res = requests.post(url, json=body, headers=headers)
+        headers = dict()
+        headers["Accept"] = "application/json, text/plain, */*"
+        headers["Content-Type"] = "application/json"
+        headers["authorization"] = "Bearer "+ self.token
 
-            jsonData = res.json()
-            return jsonData
-        except Exception as e:
-            print("Could not retrieve report "+ reportName)
-            print(e)
+        data = dict()
+        data["FROM"] = FROM
+        data["TO"] = TO
+        data["SIZE"] = SIZE
+        data["SORT_BY"] = SORT_BY
+        data["SORT_ORDER"] = SORT_ORDER
 
+        d = json.dumps(data)
+        resp = self.client.call_api(endpoint, "POST", headers = headers, data=d)
+        jresp = json.loads(str(resp.read(), 'utf-8'))
+
+        return jresp
+
+    def getEvents(self, FROM, TO):
+        
+        endpoint = f"/v1.0/events?from={FROM}&to={TO}&range_type=time"
+
+        headers = dict()
+        headers['Accept'] = "application/json, text/plain, */*"
+        headers['authorization'] = "Bearer "+self.token
+
+        response = self.client.call_api(endpoint, 'GET', headers=headers)
+        jresp = json.loads(str(response.read(), 'utf-8'))
+
+        return jresp
+       
     def getUser(self, id):
-        url = self.uri + f"/v2.0/Users/{id}"
+        endpoint = f"/v2.0/Users/{id}"
 
-        headers = { "Accept": "application/json, text/plain, */*","authorization": "Bearer "+self.token}
-        try:
-            res = requests.get(url, headers=headers)
+        headers = dict()
+        headers['Accept'] = "application/json, text/plain, */*"
+        headers['authorization'] = "Bearer "+self.token
 
-            jsonData = res.json()
-            return jsonData
-        except Exception as e:
-            print("User id invalid")
-            print(e)
+        response = self.client.call_api(endpoint, 'GET', headers=headers)
+        jresp = json.loads(str(response.read(), 'utf-8'))
+        return jresp
 
     #Parse out meaningful data from input query   
     def _parse_query(self, query):
-
         request = query.split(' ')
         
         for index in range(len(request)):
