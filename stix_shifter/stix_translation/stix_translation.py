@@ -32,8 +32,13 @@ class StixTranslation:
         self.args = []
 
     def _validate_pattern(self, pattern):
+        errors = []
+        # Temporary work around since pattern validator currently treats multiple qualifiers of the same type as invalid.
+        start_stop_count = len(re.findall(START_STOP_PATTERN, pattern))
+        if(start_stop_count > 1):
+            pattern = re.sub(START_STOP_PATTERN, " ", pattern)
         errors = run_validator(pattern, stix_version='2.1')
-        if (errors != []):
+        if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
