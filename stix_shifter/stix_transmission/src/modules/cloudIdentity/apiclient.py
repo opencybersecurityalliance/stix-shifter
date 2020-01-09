@@ -49,10 +49,12 @@ class APIClient():
         self._add_headers('Accept', "application/json, text/plain, */*")
         self._add_headers("Content-Type", "application/json")
 
+        print(self.authorization)
+
     # Searches both reports and events from Cloud Identity 
     def run_search(self, query_expression):
         
-
+        #TODO add switcher to see which report to call
         #Run search on Cloud identity reports  
         report_response = self.search_reports(query_expression)
 
@@ -81,7 +83,7 @@ class APIClient():
 
     def get_search_results(self, search_id, FROM=None, TO=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        return {"code": 200, "search_id": search_id, "data": "Results for search"}
+        return self.run_search(search_id)
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
@@ -98,18 +100,19 @@ class APIClient():
 
         resp = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
         #refine json response to individual hits and events
-        report_hits = resp['response']['report']['hits']
+        #report_hits = resp['response']['report']['hits']
 
         #Iterate over hits object
-        for index in report_hits:
+        #for index in report_hits:
             #Compare CI report origin/ip to input IP 
-            if(str(index['_source']['data']['origin'] == ip)):
+            #if(str(index['_source']['data']['origin'] == ip)):
                 #REST call to CI on specified user_id
-                user_response = self.getUser(id=report_hits[0]['_source']['data']['subject'])
+                #user_response = self.getUser(id=report_hits[0]['_source']['data']['subject'])
 
         #Makes return json easier to read 
         #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(user_response)
+        #pp.pprint(report_hits)
+        return resp
 
     def search_events(self, query_expression):
         #Creates variables for CI
@@ -128,7 +131,7 @@ class APIClient():
 
         #Makes return json easier to read 
         #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(user_response)
+        #pp.pprint(event_hits)
         return event_hits
 
     def get_credentials(self):
@@ -174,7 +177,7 @@ class APIClient():
         resp = self.client.call_api(endpoint, "POST", data=options)
         jresp = json.loads(str(resp.read(), 'utf-8')) 
 
-        print(jresp)
+        #print(jresp)
 
         if(resp.code != 200):
             raise ValueError(3002, str(jresp) + " -- Access Token not received")
@@ -183,7 +186,7 @@ class APIClient():
             exTime = (time + datetime.timedelta(seconds=jresp.get("expires_in"))).timestamp()
             self.authorization = json.loads('{"access_token":"' + jresp.get("access_token") + '", "expiresTimestamp":' + str(exTime) + '}')
 
-        print(self.authorization)
+        #print(self.authorization)
         return success
         
     def isTokenExpired(self, exTime):
@@ -207,7 +210,7 @@ class APIClient():
         resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=data)
         jresp = json.loads(str(resp.read(), 'utf-8'))
 
-        return jresp
+        return resp
 
     def getEvents(self, FROM, TO):
         

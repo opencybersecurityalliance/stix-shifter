@@ -1,13 +1,14 @@
 from ..base.base_query_connector import BaseQueryConnector
 import json
+import uuid
+import datetime
 from .....utils.error_response import ErrorResponder
-
 
 class CloudIdentityQueryConnector(BaseQueryConnector): 
     def __init__(self, api_client):
         self.api_client = api_client
 
-    def create_query_connector(self, query):
+    def create_query_connection(self, query):
         response = self.api_client.create_search(query)
         response_code = response.code
         response_dict = json.loads(response.read())
