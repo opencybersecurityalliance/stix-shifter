@@ -11,12 +11,12 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["user-account.User_id"],
-      "account_login": ["user-account.username"],
-      "account_type": ["user-account.userCategory"],
+      "user_id": ["user_id"],
+      "account_login": ["username"],
+      "account_type": ["userCategory"],
       "password_last_changed": ["pwdChangedTime"],
-      "display_name": ["user-account.displayName"],
-      "account_first_login": ["user-account.created"]
+      "display_name": ["displayName"],
+      "account_first_login": ["created"]
       
     }
   },
@@ -31,12 +31,14 @@
       "value": ["DomainName.realm"]
     }
   },
-  "API-Call": {
-    "fields": {
-      "value": ["CIFun"],
-      "FROM": ["From"],
-      "TO": ["To"],
-      "USERNAME": ["username"]
+  "START": {
+    "fields":{
+      "value": ["FROM"]
+    }
+  },
+  "STOP": {
+    "fields":{
+      "value": ["TO"]
     }
   },
   "file": {

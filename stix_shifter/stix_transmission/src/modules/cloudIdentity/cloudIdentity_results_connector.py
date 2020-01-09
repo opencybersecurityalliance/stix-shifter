@@ -11,6 +11,10 @@ class CloudIdentityResultsConnector(BaseConnector):
 
     def create_results_connection(self, search_id, offset, length):
 
+        #TESTING 
+        #self.parse_query(search_id)
+        #return
+
         response = self.api_client.get_search_results(search_id)
         #response_code = response.code
         pp = pprint.PrettyPrinter(indent=1)
@@ -24,7 +28,11 @@ class CloudIdentityResultsConnector(BaseConnector):
         print(retValue)
         #pp.pprint(return_obj)
 
+
+    #parse query for key values
     def parse_query(self, query):
+
+        params = dict()
         print(query)
         
 

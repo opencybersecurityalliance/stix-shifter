@@ -226,4 +226,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Change return statement as required to fit with data source query language.
     # If supported by the language, a limit on the number of results may be desired.
     # A single query string, or an array of query strings may be returned
-    return "GET {}".format(query)
+    return "{}".format(query)
