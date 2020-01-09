@@ -34,7 +34,7 @@ class APIClient():
         host = connection.get('host')
         port = connection.get('port', None)
 
-
+        #TODO enable a proxy to connect to Cloud Identity
         if(client_id is not None and client_secret is not None and tenant is not None):
             self.credentials = {"tenant": tenant, "client_id": client_id, "client_secret": client_secret}
             self.token = self.getToken()
@@ -59,7 +59,7 @@ class APIClient():
         report_response = self.search_reports(query_expression)
 
         #Run search on cloud identity events
-        events_response = self.search_events(query_expression)
+        #events_response = self.search_events(query_expression)
         
         #TODO integrate event/report responses
         
@@ -100,19 +100,20 @@ class APIClient():
 
         resp = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
         #refine json response to individual hits and events
-        #report_hits = resp['response']['report']['hits']
-
+        report_hits = resp['response']['report']['hits']
+        
         #Iterate over hits object
-        #for index in report_hits:
+        for index in report_hits:
             #Compare CI report origin/ip to input IP 
-            #if(str(index['_source']['data']['origin'] == ip)):
+            if(str(index['_source']['data']['origin'] == ip)):
                 #REST call to CI on specified user_id
-                #user_response = self.getUser(id=report_hits[0]['_source']['data']['subject'])
-
+                #print("getting user")
+                user_response = self.getUser(id=index['_source']['data']['subject'])
+                break
         #Makes return json easier to read 
         #pp = pprint.PrettyPrinter(indent=1)
         #pp.pprint(report_hits)
-        return resp
+        return user_response
 
     def search_events(self, query_expression):
         #Creates variables for CI
@@ -177,8 +178,6 @@ class APIClient():
         resp = self.client.call_api(endpoint, "POST", data=options)
         jresp = json.loads(str(resp.read(), 'utf-8')) 
 
-        #print(jresp)
-
         if(resp.code != 200):
             raise ValueError(3002, str(jresp) + " -- Access Token not received")
         else:
@@ -209,8 +208,8 @@ class APIClient():
         data = json.dumps(data)
         resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=data)
         jresp = json.loads(str(resp.read(), 'utf-8'))
-
-        return resp
+    
+        return jresp
 
     def getEvents(self, FROM, TO):
         
@@ -227,7 +226,9 @@ class APIClient():
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
 
-        return jresp
+        #pp = pprint.PrettyPrinter(indent=1)
+        #pp.pprint(jresp)
+        return response
 
     #Parse out meaningful data from input query   
     def _parse_query(self, query):

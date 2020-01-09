@@ -11,7 +11,7 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["user-account.id"],
+      "user_id": ["user-account.User_id"],
       "account_login": ["user-account.username"],
       "account_type": ["user-account.userCategory"],
       "password_last_changed": ["pwdChangedTime"],

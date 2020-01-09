@@ -1,25 +1,38 @@
 {  
-
-    "data":{
-      "subject": {
+    "user-account": {
+      "user-id": {
         "key": "user-account.user_id",
-        "object": "user"
+        "object": "ua"
       },
-      "origin": {
-        "key": "ipv4-addr.value",
-        "object": "ip"
+      "account-created": {
+        "key": "user-account.account_created",
+        "object": "ua"
       },
-      "username":{
+      "account_last_login": {
+        "key": "user-account.account_last_login",
+        "object": "ua"
+      },
+      "account_login": {
         "key": "user-account.account_login",
-        "object": "user"
+        "object": "ua"
       },
-      "realm":{
-        "key": "url.value",
-        "object": "url"
-      }    
-    }
+      "display_name": {
+        "key": "user-account.display_name",
+        "object": "ua"
+      }
+    },
+    "email-addr":
+      {
+        "display_name": {
+          "key": "email-addr.display_name",
+          "object": "em"
+        },
+        "value": {
+          "key": "email-addr.value",
+          "object": "em"
+        }
 
-    "name":{}
+      }
 
 }
 
