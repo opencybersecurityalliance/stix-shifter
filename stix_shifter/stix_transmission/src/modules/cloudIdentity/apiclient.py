@@ -49,8 +49,6 @@ class APIClient():
         self._add_headers('Accept', "application/json, text/plain, */*")
         self._add_headers("Content-Type", "application/json")
 
-        print(self.authorization)
-
     # Searches both reports and events from Cloud Identity 
     def run_search(self, query_expression):
         #Run search on Cloud identity reports  
@@ -92,51 +90,35 @@ class APIClient():
     #NOTE All functions below are either Cloud Identity REST calls or modifier functions 
 
 
-    def search_reports(self, query_expression):
+    def search_reports(self, params):
         #Creates variables for CI
-        ip, FROM, TO = self._parse_query(query_expression)
+        
 
-        resp = self.postReports("auth_audit_trail", FROM, TO, 10, 'time', 'asc')
+        resp = self.postReports("auth_audit_trail", params["FROM"], params["TO"], 10, 'time', 'asc')
         #refine json response to individual hits and events
         report_hits = resp['response']['report']['hits']
         
-        #Iterate over hits object
-        for index in report_hits:
-            #Compare CI report origin/ip to input IP 
-            if(str(index['_source']['data']['origin'] == ip)):
-                user_response = self.getUser(id=index['_source']['data']['subject'])
-            break
-
-        juser = json.loads(user_response.read())
         #Makes return json easier to read 
         pp = pprint.PrettyPrinter(indent=1)
-        pp.pprint(juser)
+        pp.pprint(report_hits)
 
-        return user_response
+        return resp
+    #Using search params to envoke event search -- target is used to pull out data from
+    #event if present
+    def search_events(self, params, target):
+        return_obj = dict()
+        resp = self.getEvents(params["FROM"], params["TO"])
 
-    def search_events(self, query_expression):
-        #Creates variables for CI
-        ip, FROM, TO = self._parse_query(query_expression)
-
-        resp = self.getEvents(FROM, TO)
         #refine json response to individual hits and events
         event_hits = resp['response']['events']['events']
+        #Search events for target origin
+        return_obj = self._parse_events(event_hits, target, params['origin'])
 
-        #Iterate over hits object
-        #for index in event_hits:
-            #Compare CI report origin/ip to input IP 
-            #if(str(index['_source']['data']['origin'] == ip)):
-                #REST call to CI on specified user_id
-                #user_response = self.getUser(id=event_hits[0]['_source']['data']['subject'])
-
-        #Makes return json easier to read 
-        #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(event_hits)
-        return event_hits
+        return return_obj
 
     def get_credentials(self):
         if self.credentials is None:
-            raise IOError(3001, "Cloud Identity Credential object is None")
+            raise IOError("Cloud Identity Credential object is None")
         else: 
             data = self.credentials
 
@@ -163,7 +145,6 @@ class APIClient():
         success = False
 
         auth = self.get_credentials()
-        #print(auth)
 
         options = {
             "client_id": auth.get("client_id"),
@@ -178,13 +159,12 @@ class APIClient():
         jresp = json.loads(str(resp.read(), 'utf-8')) 
 
         if(resp.code != 200):
-            raise ValueError(3002, str(jresp) + " -- Access Token not received")
+            raise ValueError(str(jresp) + " -- Access Token not received")
         else:
             success = True
             exTime = (time + datetime.timedelta(seconds=jresp.get("expires_in"))).timestamp()
             self.authorization = json.loads('{"access_token":"' + jresp.get("access_token") + '", "expiresTimestamp":' + str(exTime) + '}')
 
-        #print(self.authorization)
         return success
         
     def isTokenExpired(self, exTime):
@@ -220,8 +200,8 @@ class APIClient():
         return jresp
        
     def getUser(self, id):
-        endpoint = f"/v2.0/Users/{id}"
-
+        
+        endpoint = "/v2.0/Users/" + id
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
 
@@ -230,21 +210,24 @@ class APIClient():
         
         return response
 
-    #Parse out meaningful data from input query   
-    def _parse_query(self, query):
-        request = query.split(' ')
-        
-        for index in range(len(request)):
-            if(request[index] == "origin"):
-                ip = request[index+2]
-            if(request[index] == "FROM"):
-                FROM = request[index+1]
-            if(request[index] ==  "TO"):
-                TO = request[index+1]
-        
-        FROM = FROM.strip("t''")
-        TO = TO.strip("t''")
-        return ip, FROM, TO
+    #Iterate over eventsObj searching for target to create a return_obj
+    #NOTE for now target = ipv4/origin
+
+    def _parse_events(self, eventsObj, target, value):
+        return_obj = dict()
+
+        pp = pprint.PrettyPrinter(indent=1)
+        numResponse = 0 
+
+        #hit is each individual event that occurs
+        for hit in eventsObj:
+            #test if event has target variable and target value = input value
+            if target in hit['data'] and hit['data'][target] == value:
+                return_obj[numResponse] = hit['data']
+                numResponse += 1
+
+
+        return return_obj
 
     def _add_headers(self, key, value):
         self.headers[key] = value

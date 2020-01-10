@@ -1,54 +1,68 @@
 {  
-    "user-account": {
-      "user-id": {
+    "user-account":
+      {
+      "user_id": {
         "key": "user-account.user_id",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "account_login": {
         "key": "user-account.account_login",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "account_type": {
         "key": "user-account.account_type",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "password_last_changed": {
         "key": "user-account.password_last_changed",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
-      "account-created": {
+      "account_created": {
         "key": "user-account.account_created",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "account_last_login": {
         "key": "user-account.account_last_login",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "display_name": {
         "key": "user-account.display_name",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       },
       "is_privileged": {
         "key": "user-account.is_privleged",
-        "object": "ua"
+        "group": "True",
+        "object": "user"
       }
-    },
+      },
     "email-addr":
       {
         "display_name": {
           "key": "email-addr.display_name",
+          "group": "True",
           "object": "em"
         },
         "value": {
           "key": "email-addr.value",
+          "group": "True",
           "object": "em"
         }
       },
     "ipv4-addr":
       {
-        "key": "ipv4-addr.value",
-        "object": "ip"
+        "value":{
+          "key": "ipv4-addr.value",
+          "object": "ip"
+        }
       }
-
+  
 }
+
 
