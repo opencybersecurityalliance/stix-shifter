@@ -7,12 +7,13 @@ translation = stix_translation.StixTranslation()
 
 def _remove_timestamp_from_query(queries):
     if isinstance(queries, list):
-        query_dict = {}
+        query_list = []
         for query in queries:
             query_dict = json.loads(query)
             query_dict.pop("startTime")
             query_dict.pop("endTime")
-        return [query_dict]
+            query_list.append(query_dict)
+        return query_list
 
 
 class TestStixToQuery(unittest.TestCase):
@@ -26,16 +27,16 @@ class TestStixToQuery(unittest.TestCase):
         """
         self.assertIsInstance(query, dict)
         self.assertIsInstance(query['queries'], list)
-        for index, each_query in enumerate(query.get('queries'), start=0):
-            self.assertEqual(each_query, queries[index])
+        for each_query in query.get('queries'):
+            self.assertIn(each_query, queries)
 
     def test_network_exp(self):
         """
         Test with Equal operator
         """
-        stix_pattern = "[ipv4-addr:value = '172.31.88.63']"
+        stix_pattern = "[ipv4-addr:value = '172.31.88.63'] START t'2019-10-01T08:43:10.003Z' " \
+                       "STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
             '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
@@ -52,7 +53,6 @@ class TestStixToQuery(unittest.TestCase):
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = '
             'tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1572432190}']
-        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_network_protocol_exp(self):
@@ -210,11 +210,13 @@ class TestStixToQuery(unittest.TestCase):
         stix_pattern = "[network-traffic:start = '2019-10-15T09:10:10.003Z'] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
             '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (start = \'1571130610\')", "startTime": 1569919390, '
             '"endTime": 1572432190}']
+        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_oper_issuperset(self):
@@ -222,7 +224,7 @@ class TestStixToQuery(unittest.TestCase):
         Test Unsupportted operator
         """
         stix_pattern = "([ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2019-10-01T08:43:10.003Z' STOP " \
-                       "t'2019-10-30T10:43:10.003Z'"
+                       "t'2019-10-30T10:43:10.003Z')"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         assert query['success'] is False
         assert query['code'] == 'not_implemented'

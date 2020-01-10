@@ -21,7 +21,7 @@ IAM_CONFIG = {
 }
 
 CONNECTION = {
-    "host": "abc.xyz.com",
+    "options": {"region": "xyz"}
 }
 
 

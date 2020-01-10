@@ -34,20 +34,20 @@
       "account_login": ["user_name"]
     }
   },
-  "x_com_aws": {
+  "x-com-aws": {
     "fields": {
       "account_id": ["account_id"],
       "region": ["aws_region"]
     }
   },
-  "x_com_aws_instance": {
+  "x-com-aws-instance": {
     "fields": {
       "instance_id": ["instance_id"],
       "image_id": ["image_id"],
       "availability_zone": ["availability_zone"]
     }
   },
-  "x_com_aws_vpc": {
+  "x-com-aws-vpc": {
     "fields": {
       "vpc_id": ["vpc_id"],
       "subnet_id": ["subnet_id"],
@@ -55,14 +55,14 @@
       "security_group_id": ["security_group_id"]
     }
   },
-  "x_com_aws_api": {
+  "x-com-aws-api": {
     "fields": {
       "access_key_id": ["access_key_id"],
       "api": ["api"],
       "api_service_name": ["api_service_name"]
     }
   },
- "x_com_aws_guardduty_finding": {
+ "x-com-aws-guardduty-finding": {
   "fields": {
     "finding_id": ["finding_id"],
     "finding_type": ["finding_type"]

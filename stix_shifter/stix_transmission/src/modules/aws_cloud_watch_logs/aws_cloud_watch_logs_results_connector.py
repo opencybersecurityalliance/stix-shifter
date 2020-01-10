@@ -37,14 +37,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 return_obj['success'] = True
                 results = response_dict['results'][offset:total_records]
                 result_list = []
-                guardduty_common_attr = ["account", "source", "detail_region", "detail_id",
-                                         "detail_service_resourceRole", "detail_severity", "detail_type",
-                                         "detail_createdAt", "detail_updatedAt", "detail_resource_resourceType",
-                                         "detail_title", "detail_service_action_actionType",
-                                         "detail_service_eventFirstSeen", "detail_service_eventLastSeen",
-                                         "detail_service_archived", "detail_service_count", "detail_description",
-                                         "detail_resource", "detail_service_eventFirstSeen",
-                                         "detail_service_eventLastSeen"]
+                guardduty_common_attr = self.get_guardduty_common_attr()
                 self.format_results(guardduty_common_attr, result_list, results, return_obj)
             else:
                 raise InvalidParameterException
@@ -84,7 +77,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                     continue
                 if flatten_results.get('detail_service_action_networkConnectionAction_protocol') == 'Unknown':
                     continue
-                self.process_flatten_results(flatten_results, guard_dict, guardduty_common_attr, record_dict)
+                self.process_flatten_guardduty_results(flatten_results, guard_dict, guardduty_common_attr, record_dict)
                 result_list.append(guard_dict)
             elif 'source' not in record_dict.keys():
                 vpc_dict = dict()
@@ -99,7 +92,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 result_list.append(flatten_results)
         return_obj['data'] = result_list
 
-    def process_flatten_results(self, flatten_results, guard_dict, guardduty_common_attr, record_dict):
+    def process_flatten_guardduty_results(self, flatten_results, guard_dict, guardduty_common_attr, record_dict):
         """
         Processing the flatten results
         :param flatten_results: dict
@@ -144,3 +137,21 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                     return value
         else:
             raise FileNotFoundError
+
+    @staticmethod
+    def get_guardduty_common_attr():
+        """
+        Fetching guardduty common attributes from common attributes json
+        :return: list, guardduty common attributes
+        """
+        _json_path = path.abspath(path.join(path.dirname(__file__), '../../../..',
+                                            'stix_translation/src/modules/aws_cloud_watch_logs/json'
+                                            '/common_attributes.json'))
+        if path.exists(_json_path):
+            with open(_json_path) as f_obj:
+                common_attr_dict = json.load(f_obj)
+                common_attr_list = common_attr_dict.get('guardduty')
+                return common_attr_list
+        else:
+            raise FileNotFoundError
+

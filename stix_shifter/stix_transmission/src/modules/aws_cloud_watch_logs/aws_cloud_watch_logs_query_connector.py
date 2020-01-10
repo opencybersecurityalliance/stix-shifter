@@ -19,17 +19,18 @@ class AWSCloudWatchLogsQueryConnector(BaseQueryConnector):
         response_dict = dict()
         try:
             query = json.loads(query)
-            is_logtypepresent = False
-            if self.log_group_names:
-                if isinstance(self.log_group_names, dict):
-                    for key, value in self.log_group_names.items():
-                        if key == query['logType']:
-                            is_logtypepresent = True
-                            if isinstance(value, list):
-                                query['logGroupNames'] = value
-                            else:
-                                query['logGroupNames'] = [value]
-            if not is_logtypepresent:
+            log_type = query['logType']
+            # add service specific loggroups to query if service logtype present
+            # else loggroups in default type adds to query
+            log_groups = self.log_group_names.get(log_type) if self.log_group_names.get(log_type) else \
+                self.log_group_names.get('default')
+            if log_groups:
+                if isinstance(log_groups, list):
+                    query['logGroupNames'] = log_groups
+                else:
+                    query['logGroupNames'] = [log_groups]
+            # if loggroupnames is none, describe_log_groups api will be called
+            else:
                 log_group_response_dict = self.client.describe_log_groups(**{})
                 log_group_names = []
                 for log_group in log_group_response_dict['logGroups']:

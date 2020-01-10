@@ -308,8 +308,9 @@ class QueryStringPatternTranslator:
         # Resolve STIX Object Path to a field in the target Data Model
         stix_object, stix_field = expression.object_path.split(':')
         # Custom condition for protocol lookup if log type == 'vpcflow'
-        if self._protocol_lookup_needed:
-            if stix_field.lower() == 'protocols[*]':
+        if stix_field.lower() == 'protocols[*]':
+            existing_protocol_value = expression.value
+            if self._protocol_lookup_needed:
                 value = self.protocol_lookup(expression.value)
                 if (not value) or (isinstance(value, list) and None in value):
                     raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
@@ -318,6 +319,8 @@ class QueryStringPatternTranslator:
         mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
         comparator = self._lookup_comparison_operator(self, expression.comparator)
         comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
+        if stix_field.lower() == 'protocols[*]':
+            expression.value = existing_protocol_value
         if len(mapped_fields_array) > 1:
             # More than one data source field maps to the STIX attribute, so group comparisons together.
             grouped_comparison_string = "(" + comparison_string + ")"

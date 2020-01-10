@@ -9,12 +9,14 @@ from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
 from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
+
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
                        'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs']
 
 RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
+SUPPORTED_ATTRIBUTES = "supported_attributes"
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
@@ -30,10 +32,13 @@ class StixTranslation:
         self.args = []
 
     def _validate_pattern(self, pattern):
-        # Validator doesn't support START STOP qualifier so strip out before validating pattern
-        pattern_without_start_stop = re.sub(START_STOP_PATTERN, " ", pattern)
-        errors = run_validator(pattern_without_start_stop)
-        if (errors != []):
+        errors = []
+        # Temporary work around since pattern validator currently treats multiple qualifiers of the same type as invalid.
+        start_stop_count = len(re.findall(START_STOP_PATTERN, pattern))
+        if(start_stop_count > 1):
+            pattern = re.sub(START_STOP_PATTERN, " ", pattern)
+        errors = run_validator(pattern, stix_version='2.1')
+        if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
@@ -80,13 +85,9 @@ class StixTranslation:
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
                 if translate_type == QUERY:
-                    if 'validate_pattern' in options and options['validate_pattern'] == "true":
+                    if options.get('validate_pattern'):
                         self._validate_pattern(data)
-                    try:
-                        data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
-                        data_model_mapper = data_model.DataMapper(options)
-                    except Exception as ex:
-                        data_model_mapper = self._cim_or_car_data_mapper(module, options)
+                    data_model_mapper = self._build_data_mapper(module, options)
                     antlr_parsing = generate_query(data)
                     if data_model_mapper:
                         # Remove unmapped STIX attributes from antlr parsing
@@ -111,6 +112,11 @@ class StixTranslation:
                     return interface.translate_results(data_source, data, options)
                 except Exception:
                     raise TranslationResultException()
+            elif translate_type == SUPPORTED_ATTRIBUTES:
+                # Return mapped STIX attributes supported by the data source
+                data_model_mapper = self._build_data_mapper(module, options)
+                mapped_attributes = data_model_mapper.map_data
+                return {'supported_attributes': mapped_attributes}
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
@@ -119,10 +125,15 @@ class StixTranslation:
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
 
-    def _cim_or_car_data_mapper(self, module, options):
-        if options.get('data_mapper'):
-            return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
-        elif module in SHARED_DATA_MAPPERS:
-            return SHARED_DATA_MAPPERS[module].mapper_class(options)
-        else:
-            return None
+    def _build_data_mapper(self, module, options):
+        try:
+            data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
+            return data_model.DataMapper(options)
+        except Exception as ex:
+            # Attempt to use the CIM or CAR mapper
+            if options.get('data_mapper'):
+                return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
+            elif module in SHARED_DATA_MAPPERS:
+                return SHARED_DATA_MAPPERS[module].mapper_class(options)
+            else:
+                return None

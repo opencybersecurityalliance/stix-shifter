@@ -5,13 +5,14 @@ import random
 
 class BOTO3Client:
     def __init__(self, connection, configuration):
-        host = connection.get('host')
-        region_name = host.split('.')[1]
+        region_name = connection.get('options', {}).get('region')
         auth = configuration.get('auth')
         aws_access_key_id = auth.get('aws_access_key_id')
         aws_secret_access_key = auth.get('aws_secret_access_key')
-        self.log_group_names = configuration.get('log_group_names', {})
+        self.log_group_names = connection.get('options', {}).get('log_group_names', {})
         try:
+            if not region_name:
+                raise KeyError('Region must be specified')
             if 'aws_iam_role' in auth:
                 '''specific for role based authentication.Links user to role and
                      generates client object with role based Credentials.'''
@@ -42,6 +43,6 @@ class BOTO3Client:
                                            region_name=region_name
                                            )
         except KeyError as e:
-            print('"%s" is not found' % str(e))
-        except Exception as e:
             raise e
+        except Exception as e:
+            raise KeyError(e.args)

@@ -171,8 +171,11 @@ OR
 ```
 
 #### CLI Command
+Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
-Open a terminal and navigate to the stix-shifter root directory. Translation of a **query** is called in the format of:
+`stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
+
+Alternatively, you can run the CLI commands from the source. Open a terminal and navigate to the stix-shifter root directory. Translation of a **query** is called in the format of:
 
 `python main.py translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
 
@@ -244,8 +247,11 @@ Using the Qradar connector as an example:
 ```
 
 #### CLI Command
+Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
-Open a terminal and navigate to the stix-shifter root directory. Translation of **results** is called in the format of:
+`stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
+
+Alternatively, you can run the CLI commands from the source. Open a terminal and navigate to the stix-shifter root directory. Translation of **results** is called in the format of:
 
 `python main.py translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
 
@@ -348,7 +354,7 @@ Uses the data source API to ping the connection.
 
 #### CLI Command
 
-`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' ping`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' ping`
 
 #### OUTPUT:
 
@@ -360,7 +366,7 @@ Uses the data source API to submit a query to the connection.
 
 #### CLI Command
 
-`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' query <NATIVE DATA SOURCE QUERY>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' query <NATIVE DATA SOURCE QUERY>`
 
 #### OUTPUT:
 
@@ -374,7 +380,7 @@ Uses the data source API to look up the query status based on the `search_id` th
 
 #### CLI Command
 
-`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID>`
 
 #### OUTPUT:
 
@@ -388,7 +394,7 @@ Uses the data source API to fetch the query results based on the search ID, offs
 
 #### CLI Command
 
-`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH>`
 
 #### OUTPUT:
 
@@ -402,7 +408,7 @@ Checks if the data source connection is asynchronous.
 
 #### CLI Command
 
-`python main.py transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' is_async`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' is_async`
 
 #### OUTPUT:
 
@@ -420,7 +426,7 @@ The `execute` command tests all steps of the translation-transmission flow:
 
 #### CLI Command
 
-`python main.py execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
 
 #### OUTPUT:
 

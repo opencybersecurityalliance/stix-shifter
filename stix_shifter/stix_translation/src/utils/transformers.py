@@ -101,7 +101,10 @@ class MsatpToRegistryValue(ValueTransformer):
 
 
 class AwsToTimestamp(ValueTransformer):
-    """A value transformer to format UTC timestamp"""
+    """
+    A value transformer for converting AWS timestamp (YYYY-MM-DD hh:mm:ss.000)
+    to UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z)
+    """
 
     @staticmethod
     def transform(aws_time):
