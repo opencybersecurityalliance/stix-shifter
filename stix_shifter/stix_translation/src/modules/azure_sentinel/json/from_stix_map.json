@@ -54,13 +54,13 @@
       "account_last_login": ["userStates.logonDateTime"]
     }
   },
-  "x_com_msazure_sentinel": {
+  "x-com-msazure-sentinel": {
     "fields": {
       "tenant_id": ["azureTenantId"],
       "subscription_id": ["azureSubscriptionId"]
     }
   },
-  "x_com_msazure_sentinel_alert": {
+  "x-com-msazure-sentinel-alert": {
     "fields": {
       "id": ["id"],
       "title": ["title"],
