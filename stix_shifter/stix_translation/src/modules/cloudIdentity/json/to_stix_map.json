@@ -4,6 +4,18 @@
         "key": "user-account.user_id",
         "object": "ua"
       },
+      "account_login": {
+        "key": "user-account.account_login",
+        "object": "ua"
+      },
+      "account_type": {
+        "key": "user-account.account_type",
+        "object": "ua"
+      },
+      "password_last_changed": {
+        "key": "user-account.password_last_changed",
+        "object": "ua"
+      },
       "account-created": {
         "key": "user-account.account_created",
         "object": "ua"
@@ -12,12 +24,12 @@
         "key": "user-account.account_last_login",
         "object": "ua"
       },
-      "account_login": {
-        "key": "user-account.account_login",
-        "object": "ua"
-      },
       "display_name": {
         "key": "user-account.display_name",
+        "object": "ua"
+      },
+      "is_privileged": {
+        "key": "user-account.is_privleged",
         "object": "ua"
       }
     },
@@ -31,7 +43,11 @@
           "key": "email-addr.value",
           "object": "em"
         }
-
+      },
+    "ipv4-addr":
+      {
+        "key": "ipv4-addr.value",
+        "object": "ip"
       }
 
 }

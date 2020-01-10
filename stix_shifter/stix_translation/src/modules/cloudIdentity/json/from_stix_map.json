@@ -1,4 +1,24 @@
 {
+  "user-account": {
+    "fields": {
+      "user_id": ["user_id"],
+      "account_login": ["username"],
+      "account_type": ["userCategory"],
+      "password_last_changed": ["pwdChangedTime"],
+      "account_created": ["created"],
+      "account_last_login": ["lastLogin"],
+      "display_name": ["displayName"],
+      "is_privileged": ["adminGroup"]
+      
+      
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "display_name": ["formatted"],
+      "value": ["emails"]
+    }
+  },
   "ipv4-addr": {
     "fields": {
       "value":["origin"]
@@ -7,23 +27,6 @@
   "url": {
     "fields": {
       "value": ["Url.tenatname"]
-    }
-  },
-  "user-account": {
-    "fields": {
-      "user_id": ["user_id"],
-      "account_login": ["username"],
-      "account_type": ["userCategory"],
-      "password_last_changed": ["pwdChangedTime"],
-      "display_name": ["displayName"],
-      "account_first_login": ["created"]
-      
-    }
-  },
-  "email-addr": {
-    "fields": {
-      "value": ["emails"],
-      "display_name": ["formatted"]
     }
   },
   "domain-name": {
