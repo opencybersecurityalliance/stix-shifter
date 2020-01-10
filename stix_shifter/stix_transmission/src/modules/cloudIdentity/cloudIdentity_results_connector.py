@@ -16,8 +16,10 @@ class CloudIdentityResultsConnector(BaseConnector):
         #return
 
         response = self.api_client.get_search_results(search_id)
-        #response_code = response.code
+        response_code = response.code
+
         pp = pprint.PrettyPrinter(indent=1)
+
         resp = json.loads(response.read())
     
         return_obj = dict()
@@ -31,7 +33,7 @@ class CloudIdentityResultsConnector(BaseConnector):
 
     #parse query for key values
     def parse_query(self, query):
-
+        requests = query.split(' ')
         params = dict()
         print(query)
         

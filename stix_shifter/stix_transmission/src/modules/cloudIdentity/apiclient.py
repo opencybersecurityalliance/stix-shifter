@@ -53,8 +53,6 @@ class APIClient():
 
     # Searches both reports and events from Cloud Identity 
     def run_search(self, query_expression):
-        
-        #TODO add switcher to see which report to call
         #Run search on Cloud identity reports  
         report_response = self.search_reports(query_expression)
 
@@ -106,13 +104,14 @@ class APIClient():
         for index in report_hits:
             #Compare CI report origin/ip to input IP 
             if(str(index['_source']['data']['origin'] == ip)):
-                #REST call to CI on specified user_id
-                #print("getting user")
                 user_response = self.getUser(id=index['_source']['data']['subject'])
-                break
+            break
+
+        juser = json.loads(user_response.read())
         #Makes return json easier to read 
-        #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(report_hits)
+        pp = pprint.PrettyPrinter(indent=1)
+        pp.pprint(juser)
+
         return user_response
 
     def search_events(self, query_expression):
@@ -228,6 +227,7 @@ class APIClient():
 
         #pp = pprint.PrettyPrinter(indent=1)
         #pp.pprint(jresp)
+        
         return response
 
     #Parse out meaningful data from input query   
