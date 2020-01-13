@@ -198,7 +198,7 @@ class QueryStringPatternTranslator:
                 else:
                     if comparator == 'contains':
                         comparison_string += "{collection_name}/any({fn}:{comparator}({attribute_expression}, " \
-                                             "{value}))"\
+                                             "{value}))" \
                             .format(collection_name=collection_name, fn=lambda_func,
                                     attribute_expression=attribute_expression,
                                     comparator=comparator, value=value)
@@ -334,7 +334,11 @@ class QueryStringPatternTranslator:
             if stix_field not in ['provider', 'vendor']:
                 value = self._format_value_to_lower_case(value)
 
+            # COUNTER is used to form sequential lambda function names for OData4 queries per comparison observation
+            ''' eg. processes/any(query1:contains(tolower(query1/path), 'c:\\windows\\system32')) and 
+            processes/any(query2:contains(tolower(query2/name), 'exe')) '''
             self.COUNTER += 1
+
             comparison_string = self._parse_mapped_fields(expression, value, comparator, stix_field,
                                                           mapped_fields_array, self.COUNTER)
 
