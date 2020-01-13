@@ -1,4 +1,5 @@
 from ..utils.RestApiClient import RestApiClient
+from ..utils.RestApiClient import ResponseWrapper
 from requests.models import Response
 import base64
 import urllib.parse
@@ -67,11 +68,30 @@ class APIClient():
 
     def create_search(self, query_expression):
         # Queries the data source
-        print("In APICLIENT, query: " + query_expression)
-        return {
-            "code": 200,
-            "query_id": "uuid_1234567890"
-        }
+
+        respObj = Response()
+        
+        if(self.getToken()):
+            self.query = query_expression
+            response = self.build_searchId()
+            if (response != None):
+                respObj.code = "200"
+                respObj.error_type = ""
+                respObj.status_code = 200
+                content = '{"search_id": "' + \
+                    str(response) + \
+                    '", "data": {"message":  "Search id generated."}}'
+                respObj._content = bytes(content, 'utf-8')
+            else:
+                respObj.code = "404"
+                respObj.error_type = "Not found"
+                respObj.status_code = 404
+                respObj.message = "Could not generate search id."
+        else:
+            respObj.error_type = "Unauthorized: Access token could not be generated."
+            respObj.message = "Unauthorized: Access token could not be generated."
+#
+        return ResponseWrapper(respObj)
 
     def get_search_status(self, search_id):
         # Check the current status of the search
@@ -79,13 +99,80 @@ class APIClient():
 
     def get_search_results(self, search_id, FROM=None, TO=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        return self.run_search(search_id)
+        
+        pp = pprint.PrettyPrinter(indent=1)
+        self.build_searchId()
+        self.decode_searchId()
 
+        request_params = self.parse_query()
+        return_obj = dict()
+
+        #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
+        if "user_id" in request_params:
+            user_obj = self.getUser(request_params['user_id'])
+            #if(self.checkResponse(user_obj)):
+            return_obj = json.loads(user_obj.read())
+
+                #pp.pprint(return_obj)
+
+        if "username" in request_params:
+            user_obj = self.getUserWithFilters(request_params)
+            
+            #pp.pprint(user_obj)
+            return user_obj
+            #return_obj = json.loads(user_obj.read())['Resources']
+                #pp.pprint(return_obj)
+
+        #If input query contains ipv4:value(MAPS TO)->origin -- if present call events and find all ip's that match
+        if "origin" in request_params and "FROM" in request_params and "TO" in request_params:
+            return_obj = self.search_events(request_params, "origin")
+            #pp.pprint(return_obj)
+
+
+        #retValue = json.dumps(return_obj)
+        return retValue
+       
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
         return "Deleted query: {}".format(search_id)
 
+    def set_searchId(self, search_id):
+        self.search_id = search_id
+        return
+
+    def build_searchId(self):
+        #       It should be called only ONCE when transmit query is called
+        # Structure of the search id is
+        # '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
+        s_id = None
+
+        if(self.query is None or self.authorization is None or self.credentials is None):
+            raise IOError(3001, 
+            "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
+#
+        else:
+            id_str = '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credentials) + '}'
+            #print(id_str)
+            id_byt = id_str.encode('utf-8')
+            s_id = base64.b64encode(id_byt).decode()
+            self.set_searchId(s_id)
+
+        return s_id
+
+    def decode_searchId(self):
+        # These value (self.credential, self.query) must be present.  self.authorization may not.
+        try:
+            id_dec64 = base64.b64decode(self.search_id)
+            jObj = json.loads(id_dec64.decode('utf-8'))
+        except:
+            raise IOError(
+                3001, "Could not decode search id content - " + self.search_id)
+#
+        self.query = jObj.get("query", None)
+        self.credentials = jObj.get("credentials", None)
+        self.authorization = jObj.get("authorization", None)
+        return
 
     #NOTE All functions below are either Cloud Identity REST calls or modifier functions 
 
@@ -250,3 +337,23 @@ class APIClient():
         auth = "Bearer " + str(self.authorization.get("access_token"))
         self._add_headers("authorization", auth)
         return
+
+    def parse_query(self):
+        
+        requests = self.query.split(' ')
+        params = dict()
+
+        #Iterate over query string and assign variables i.e. user-account, ipv4 etc
+        for index in range(len(requests)):
+            if(requests[index] == "user_id"):
+                params["user_id"] = requests[index+2].strip("''")
+            elif(requests[index] == "username"):
+                params['username'] = requests[index+2].strip("''")
+            elif(requests[index] == "origin"):
+                params['origin'] = requests[index+2].strip("''")
+            elif(requests[index] == "FROM"):
+                params['FROM'] = requests[index+1].strip("t''")
+            elif(requests[index] == "TO"):
+                params['TO'] = requests[index+1].strip("t''")
+    
+        return params

@@ -9,8 +9,6 @@
       "account_last_login": ["lastLogin"],
       "display_name": ["displayName"],
       "is_privileged": ["adminGroup"]
-      
-      
     }
   },
   "email-addr": {
@@ -29,35 +27,7 @@
       "value": ["Url.tenatname"]
     }
   },
-  "domain-name": {
-    "fields": {
-      "value": ["DomainName.realm"]
-    }
-  },
-  "START": {
-    "fields":{
-      "value": ["FROM"]
-    }
-  },
-  "STOP": {
-    "fields":{
-      "value": ["TO"]
-    }
-  },
-  "file": {
-    "fields": {
-      "type": ["file"],
-      "name": ["FileName"]
-    }
-  },
-  "process": {
-    "fields": {
-      "type": ["process"],
-      "pid": ["process.pid"],
-      "command_line": ["process.path"]
-    }
-  },
-  "Location": {
+  "Geo Location": {
     "fields": {
       "city": ["city"],
       "continent": ["continent"],

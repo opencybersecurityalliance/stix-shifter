@@ -77,22 +77,22 @@
 
     "geoip": {
       "city_name": {
-        "key": "Location.city",
+        "key": "Geo Location.city",
         "cybox": false,
         "object": "geo"
       },
       "continent_name": {
-        "key": "Location.continent",
+        "key": "Geo Location.continent",
         "cybox": false,
         "object": "geo"
       },
       "country_name": {
-        "key": "Location.country_name",
+        "key": "Geo Location.country_name",
         "cybox": false,
         "object": "geo"
       },
       "region_name": {
-        "key": "Location.region_name",
+        "key": "Geo Location.region_name",
         "cybox": false,
         "object": "geo"
       }
