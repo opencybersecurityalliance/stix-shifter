@@ -35,6 +35,38 @@ The recommended method for installing the STIX-shifter is via pip.
 pip install stix-shifter
 ```
 
+## Usage
+
+
+### As A Script
+
+The STIX-Shifter comes with a bundled script which you can use to translate STIX Pattern to a native datasource query. It can also be used to translate a JSON data source query result to a STIX bundle of observable objects. You can also send query to a datasource by using a transmission option. 
+
+More details of the command line option can be found [here](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/OVERVIEW.md#how-to-use)
+
+```
+$ stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"
+```
+Example:
+```
+$ stix-shifter translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
+```
+
+**Note:** In order to create python executable `stix-shifter` from source run the following command from stix-shifter parent directory in your python 3 environment: `python setup.py install`
+
+### As A Library
+
+You can also use this library to integrate STIX Shifter into your own tools. You can translate a STIX Pattern:
+
+```
+from stix_shifter.stix_translation import stix_translation
+
+translation = stix_translation.StixTranslation()
+response = translation.translate('<MODULE NAME>', 'query', '{}', '<STIX PATTERN>', '<OPTIONS>')
+
+print(response)
+```
+
 ## Contributing
 
 We are thrilled you are considering contributing! We welcome all contributors.
