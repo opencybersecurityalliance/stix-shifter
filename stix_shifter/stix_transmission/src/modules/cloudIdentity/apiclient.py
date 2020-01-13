@@ -111,9 +111,11 @@ class APIClient():
 
         #refine json response to individual hits and events
         event_hits = resp['response']['events']['events']
+        pp = pprint.PrettyPrinter(indent=1)
+        #pp.pprint(event_hits[0])
         #Search events for target origin
-        return_obj = self._parse_events(event_hits, target, params['origin'])
-
+        return_obj = self._parse_events(event_hits, target, params[target])
+        #pp.pprint(return_obj)
         return return_obj
 
     def get_credentials(self):
@@ -196,6 +198,10 @@ class APIClient():
 
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
+        obj = jresp['response']['events']['events']
+
+        #pp = pprint.PrettyPrinter(indent=1)
+        #pp.pprint(obj)
 
         return jresp
        
@@ -205,28 +211,35 @@ class APIClient():
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
 
-        #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(jresp)
-        
+        return response
+    
+    def getUserWithFilters(self, params):
+        endpoint = "/v2.0/Users?filter="
+        if "username" in params:
+            endpoint = endpoint + "userName%20eq%20%20%22" + params['username'] + "%22"
+
+        response = self.client.call_api(endpoint, 'GET', headers=self.headers)
+        jresp = json.loads(str(response.read(), 'utf-8'))
+
         return response
 
     #Iterate over eventsObj searching for target to create a return_obj
     #NOTE for now target = ipv4/origin
 
     def _parse_events(self, eventsObj, target, value):
-        return_obj = dict()
 
         pp = pprint.PrettyPrinter(indent=1)
         numResponse = 0 
-
+        return_obj = dict()
         #hit is each individual event that occurs
         for hit in eventsObj:
             #test if event has target variable and target value = input value
             if target in hit['data'] and hit['data'][target] == value:
-                return_obj[numResponse] = hit['data']
-                numResponse += 1
+                return_obj['data'] = hit['data']
+                if "geoip" in hit:
+                    return_obj["geoip"] = hit['geoip']
 
-
+        pp.pprint(return_obj)
         return return_obj
 
     def _add_headers(self, key, value):

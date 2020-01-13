@@ -1,67 +1,106 @@
 {  
-    "user-account":
-      {
-      "user_id": {
-        "key": "user-account.user_id",
-        "group": "True",
-        "object": "user"
-      },
-      "account_login": {
-        "key": "user-account.account_login",
-        "group": "True",
-        "object": "user"
-      },
-      "account_type": {
-        "key": "user-account.account_type",
-        "group": "True",
-        "object": "user"
-      },
-      "password_last_changed": {
-        "key": "user-account.password_last_changed",
-        "group": "True",
-        "object": "user"
-      },
-      "account_created": {
-        "key": "user-account.account_created",
-        "group": "True",
-        "object": "user"
-      },
-      "account_last_login": {
-        "key": "user-account.account_last_login",
-        "group": "True",
-        "object": "user"
-      },
-      "display_name": {
+    "id": {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    "name": 
+    {
+      "formatted": {
         "key": "user-account.display_name",
-        "group": "True",
         "object": "user"
       },
-      "is_privileged": {
-        "key": "user-account.is_privleged",
-        "group": "True",
+      "key": "email-addr.display_name",
+      "object": "email",
+      "reference": "user"
+    },
+  "meta": 
+    {
+      "created": {
+        "key": "user-account.account_created",
         "object": "user"
       }
-      },
-    "email-addr":
-      {
-        "display_name": {
-          "key": "email-addr.display_name",
-          "group": "True",
-          "object": "em"
+    },
+    "userName": {
+      "key": "user-account.account_login",
+      "object": "user"
+    },
+    "urn:ietf:params:scim:schemas:extension:ibm:2.0:User": {
+      "lastLogin": {
+        "key": "user-account.account_last_login",
+        "object": "user"
+    }
+    },
+    "emails": 
+          {
+            "value": {
+            "key": "email-addr.value",
+            "object": "email"
+          },
+            "display_name": {
+              "key": "email-addr.display_name",
+              "object": "email"
+          } 
         },
-        "value": {
-          "key": "email-addr.value",
-          "group": "True",
-          "object": "em"
-        }
+
+    "displayName": {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+
+    "origin": {
+      "key": "ipv4-addr.value",
+      "object": "ip"
+    },
+    "targetid": {
+      "key": "user-account.user_id",
+       "object": "event_user"
+    },
+    "targetid_username": {
+      "key": "user-account.account_login",
+      "object": "event_user"
+    },
+
+    "data": {
+      "origin": {
+        "key": "ipv4-addr.value",
+        "object": "ip"
       },
-    "ipv4-addr":
-      {
-        "value":{
-          "key": "ipv4-addr.value",
-          "object": "ip"
-        }
+      "subject": {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+       "username": {
+      "key": "user-account.account_login",
+      "object": "user"
       }
+    },
+
+    "geoip": {
+      "city_name": {
+        "key": "Location.city",
+        "cybox": false,
+        "object": "geo"
+      },
+      "continent_name": {
+        "key": "Location.continent",
+        "cybox": false,
+        "object": "geo"
+      },
+      "country_name": {
+        "key": "Location.country_name",
+        "cybox": false,
+        "object": "geo"
+      },
+      "region_name": {
+        "key": "Location.region_name",
+        "cybox": false,
+        "object": "geo"
+      }
+
+    }
+    
+
+
   
 }
 

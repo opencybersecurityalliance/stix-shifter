@@ -56,6 +56,15 @@
       "pid": ["process.pid"],
       "command_line": ["process.path"]
     }
+  },
+  "Location": {
+    "fields": {
+      "city": ["city"],
+      "continent": ["continent"],
+      "country_name": ["country_name"],
+      "region_name": ["region"]
+
+    }
   }
 
 }
