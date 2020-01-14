@@ -68,12 +68,12 @@ class APIClient():
 
     def create_search(self, query_expression):
         # Queries the data source
-
         respObj = Response()
         
         if(self.getToken()):
             self.query = query_expression
             response = self.build_searchId()
+            
             if (response != None):
                 respObj.code = "200"
                 respObj.error_type = ""
@@ -90,7 +90,7 @@ class APIClient():
         else:
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
-#
+
         return ResponseWrapper(respObj)
 
     def get_search_status(self, search_id):
@@ -101,35 +101,26 @@ class APIClient():
         # Return the search results. Results must be in JSON format before being translated into STIX
         
         pp = pprint.PrettyPrinter(indent=1)
-        self.build_searchId()
-        self.decode_searchId()
+
         #print(self.query)
         request_params = self.parse_query()
+        print(request_params)
         return_obj = {}
 
         #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
         if "user_id" in request_params:
-            user_obj = self.getUser(request_params['user_id'])
-            #if(self.checkResponse(user_obj)):
-            return_obj = json.loads(user_obj.read())
-
-                #pp.pprint(return_obj)
+            return_obj = self.getUser(request_params['user_id'])
+            pp.pprint(json.loads(return_obj.read()))
 
         if "username" in request_params:
-            user_obj = self.getUserWithFilters(request_params)
-            
-            pp.pprint(user_obj)
-            return user_obj
-            #return_obj = json.loads(user_obj.read())['Resources']
-                #pp.pprint(return_obj)
-
+            return_obj = self.getUserWithFilters(request_params)
+            pp.pprint(json.loads(return_obj.read()))
         #If input query contains ipv4:value(MAPS TO)->origin -- if present call events and find all ip's that match
         if "origin" in request_params and "FROM" in request_params and "TO" in request_params:
             return_obj = self.search_events(request_params, "origin")
-            #pp.pprint(return_obj)
+        
+        #pp.pprint(return_obj.content)
 
-
-        #retValue = json.dumps(return_obj)
         return return_obj
        
     def delete_search(self, search_id):
@@ -193,17 +184,27 @@ class APIClient():
     #Using search params to envoke event search -- target is used to pull out data from
     #event if present
     def search_events(self, params, target):
+        pp = pprint.PrettyPrinter(indent=1)
         return_obj = dict()
         resp = self.getEvents(params["FROM"], params["TO"])
-
+        jresp = json.loads(resp.read())
         #refine json response to individual hits and events
-        event_hits = resp['response']['events']['events']
-        pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(event_hits[0])
+        event_hits = jresp['response']['events']['events']
+
         #Search events for target origin
-        return_obj = self._parse_events(event_hits, target, params[target])
-        #pp.pprint(return_obj)
-        return return_obj
+        content = self._parse_events(event_hits, target, params[target])
+        print(resp.content)
+        print(resp.read())
+        #init new response object 
+        resp.content = str(content)
+        resp._content = bytes(str(content), 'utf-8')
+
+        print(resp)
+
+        #print(json.loads(resp.read()))
+        #pp.pprint(content)
+
+        return resp
 
     def get_credentials(self):
         if self.credentials is None:
@@ -290,14 +291,14 @@ class APIClient():
         #pp = pprint.PrettyPrinter(indent=1)
         #pp.pprint(obj)
 
-        return jresp
+        return response
        
     def getUser(self, id):
         
         endpoint = "/v2.0/Users/" + id
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
-
+        #print(jresp)
         return response
     
     def getUserWithFilters(self, params):
@@ -326,8 +327,8 @@ class APIClient():
                 if "geoip" in hit:
                     return_obj["geoip"] = hit['geoip']
 
-        pp.pprint(return_obj)
-        return return_obj
+        #pp.pprint(return_obj)
+        return return_obj['data']
 
     def _add_headers(self, key, value):
         self.headers[key] = value
