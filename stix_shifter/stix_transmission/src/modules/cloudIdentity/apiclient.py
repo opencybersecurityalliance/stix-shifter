@@ -109,15 +109,16 @@ class APIClient():
 
         #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
         if "user_id" in request_params:
-            return_obj = self.getUser(request_params['user_id'])
-            pp.pprint(json.loads(return_obj.read()))
-
+            # 1) search user_activity 
+            return_obj = self.get_user_activity(request_params)
+            
         if "username" in request_params:
-            return_obj = self.getUserWithFilters(request_params)
-            pp.pprint(json.loads(return_obj.read()))
-        #If input query contains ipv4:value(MAPS TO)->origin -- if present call events and find all ip's that match
-        if "origin" in request_params and "FROM" in request_params and "TO" in request_params:
-            return_obj = self.search_events(request_params, "origin")
+            # 1) search user_activity
+            return_obj = self.get_user_activity(request_params)
+            
+        #If input query contains ipv4:value(MAPS TO)->origin -- searches user_activity on ip
+        if "origin" in request_params:
+            return_obj = self.get_user_activity(request_params)
         
         #pp.pprint(return_obj.content)
 
@@ -167,20 +168,6 @@ class APIClient():
 
     #NOTE All functions below are either Cloud Identity REST calls or modifier functions 
 
-
-    def search_reports(self, params):
-        #Creates variables for CI
-        
-
-        resp = self.postReports("auth_audit_trail", params["FROM"], params["TO"], 10, 'time', 'asc')
-        #refine json response to individual hits and events
-        report_hits = resp['response']['report']['hits']
-        
-        #Makes return json easier to read 
-        pp = pprint.PrettyPrinter(indent=1)
-        pp.pprint(report_hits)
-
-        return resp
     #Using search params to envoke event search -- target is used to pull out data from
     #event if present
     def search_events(self, params, target):
@@ -257,21 +244,6 @@ class APIClient():
         return False
 
     #Returns given report from cloud identity tenant
-    def postReports(self, reportName, FROM, TO, SIZE, SORT_BY, SORT_ORDER, SEARCH_AFTER = None):
-        endpoint = "v1.0/reports/" + reportName
-
-        data = dict()
-        data["FROM"] = FROM
-        data["TO"] = TO
-        data["SIZE"] = SIZE
-        data["SORT_BY"] = SORT_BY
-        data["SORT_ORDER"] = SORT_ORDER
-
-        data = json.dumps(data)
-        resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=data)
-        jresp = json.loads(str(resp.read(), 'utf-8'))
-    
-        return jresp
 
     def getEvents(self, FROM, TO):
         
@@ -285,6 +257,23 @@ class APIClient():
         #pp.pprint(obj)
 
         return response
+       
+
+
+    def get_user_activity(self, params):
+        pp = pprint.PrettyPrinter(indent=1)
+        endpoint = "v1.0/reports/user_activity" 
+
+        payload = dict()
+        payload = self.set_payload(params)
+        payload = json.dumps(payload)
+        print(payload)
+        resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=payload)
+        jresp = json.loads(str(resp.read(), 'utf-8'))
+        pp.pprint(jresp)
+
+        return resp
+
        
     def getUser(self, id):
         
@@ -306,7 +295,6 @@ class APIClient():
 
     #Iterate over eventsObj searching for target to create a return_obj
     #NOTE for now target = ipv4/origin
-
     def _parse_events(self, eventsObj, target, value):
 
         pp = pprint.PrettyPrinter(indent=1)
@@ -331,6 +319,24 @@ class APIClient():
         auth = "Bearer " + str(self.authorization.get("access_token"))
         self._add_headers("authorization", auth)
         return
+    def set_payload(self, params):
+        payload = dict()
+        #Default payload params
+        payload["FROM"] = params.get("FROM", "now-24h")
+        payload["TO"] = params.get("TO", "now")
+        payload["SIZE"] = 10
+        payload["SORT_BY"] = "time"
+        payload["SORT_ORDER"] = "asc"
+
+        #Optional Filters
+        if "username" in params:
+            payload["USERNAME"] = params.get("username")
+        if "user_id" in params:
+            payload["USERID"] = params.get("user_id")
+        if "origin" in params:
+            payload["CLIENT_IP"] = params.get("origin")
+
+        return payload
 
     def parse_query(self):
         
@@ -359,8 +365,18 @@ class APIClient():
         if(resp.code == 200):
             respObj.code = "200"
             respObj.status_code = 200
-            content = json.dumps(newContent)
+            content = json.dumps(newContent) #put new content in response
             respObj._content = bytes(content, 'utf-8')
+        elif(resp.code == 400):
+            respObj.code = "400"
+            respObj.error_type = "Bad Request"
+            respObj.status_code = 400
+            respObj.message = "Could not generate response."
+        elif(resp.code == 500):
+            respObj.code = "500"
+            respObj.error_type = "Internal Server Error"
+            respObj.status_code = 400
+            respObj.message = "An internal server error occured. "
 
         return ResponseWrapper(respObj)
 
