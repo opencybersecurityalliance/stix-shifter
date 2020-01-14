@@ -37,8 +37,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 return_obj['success'] = True
                 results = response_dict['results'][offset:total_records]
                 result_list = []
-                guardduty_common_attr = self.get_guardduty_common_attr()
-                self.format_results(guardduty_common_attr, result_list, results, return_obj)
+                self.format_results(result_list, results, return_obj)
             else:
                 raise InvalidParameterException
         except Exception as ex:
@@ -53,10 +52,9 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
-    def format_results(self, guardduty_common_attr, result_list, results, return_obj):
+    def format_results(self, result_list, results, return_obj):
         """
         Formatting the results
-        :param guardduty_common_attr: list, list of guardduty common attributes
         :param result_list: list
         :param results: list, results
         :param return_obj: dict
@@ -71,14 +69,14 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 data = json.loads(json_message)
                 flatten_results = flatten(data)
                 flatten_results = {k: v for k, v in flatten_results.items() if v != "" and v != {}}
-                guard_dict = dict()
-                guard_dict['guardduty'] = dict()
                 if flatten_results.get('detail_service_action_actionType') is None:
                     continue
                 if flatten_results.get('detail_service_action_networkConnectionAction_protocol') == 'Unknown':
                     continue
-                self.process_flatten_guardduty_results(flatten_results, guard_dict, guardduty_common_attr, record_dict)
-                result_list.append(guard_dict)
+                guardduty_results = self.process_flatten_guardduty_results(flatten_results)
+                guardduty_results['guardduty'].update({'@timestamp': record_dict['@timestamp']})
+                guardduty_results['guardduty'].update({'event_count': 1})
+                result_list.append(guardduty_results)
             elif 'source' not in record_dict.keys():
                 vpc_dict = dict()
                 vpc_dict['vpcflow'] = copy.deepcopy(record_dict)
@@ -92,15 +90,15 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 result_list.append(flatten_results)
         return_obj['data'] = result_list
 
-    def process_flatten_guardduty_results(self, flatten_results, guard_dict, guardduty_common_attr, record_dict):
+    def process_flatten_guardduty_results(self, flatten_results):
         """
         Processing the flatten results
         :param flatten_results: dict
-        :param guard_dict: dict,
-        :param guardduty_common_attr: list, list of guardduty common attributes
-        :param record_dict: dict
+        :return: dict
         """
-        guard_dict['guardduty'][flatten_results.get('detail_service_action_actionType')] = dict()
+        guard_dict, guard_dict['guardduty'], \
+        guard_dict['guardduty'][flatten_results.get('detail_service_action_actionType')] = dict(), dict(), dict()
+        guardduty_common_attr = self.get_guardduty_common_attr()
         for key, val in flatten_results.items():
             if val is None or val == []:
                 continue
@@ -113,8 +111,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 guard_dict['guardduty'][flatten_results['detail_service_action_actionType']].update({key: val})
             else:
                 guard_dict['guardduty'][flatten_results['detail_service_action_actionType']].update({key: val})
-        guard_dict['guardduty'].update({'@timestamp': record_dict['@timestamp']})
-        guard_dict['guardduty'].update({'event_count': 1})
+        return guard_dict
 
     @staticmethod
     def get_protocol(value):

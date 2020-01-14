@@ -23,21 +23,19 @@
         query <translated_query>
         ```
     
-## This connector supports two types of data search 
+## This connector supports following ways of data search 
 
-   1. Collect data from specific loggroups if "log_group_names" is given.
-   
-        a. Provide logtype (guarduty or vpcflow) and loggroups as input
-        #### Sample Input:
+   1. No log groups given
+       #### Sample Input:
         ```
         transmit
         "aws_cloud_watch_logs"
-        "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\", 
-        \"log_group_names\": {\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":[\"USEast1_FlowLogs\"]}}}"
+        "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
         query <translated_query>
         ```
-        b. Provide logtype(default) and loggroups as input
+
+   2. Log groups given without logtype specification
         #### Sample Input:
         ```
         transmit
@@ -47,25 +45,29 @@
         \"aws_secret_access_key\": \"xxxx\"}}"
         query <translated_query>
         ```
-        c. Provide logtype(guardduty or vpcflow, default) and loggroups as input
+
+   3. Log groups given with logtype specification
         #### Sample Input:
         ```
         transmit
         "aws_cloud_watch_logs"
         "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"us-east-1\", 
-        \"log_group_names\": {\"guardduty\": [\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\", \"default\":[\"/aws/events/guardduty\", \"USEast1_FlowLogs\"]}}}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", 
+        \"log_group_names\": {\"guardduty\": [\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", 
         \"aws_secret_access_key\": \"xxxx\"}}"
         query <translated_query>
         ```
-   2. Collect data from all available loggroups if no "log_group_names" is given.
+
+   4. Log groups given with logtype and default specification
         #### Sample Input:
         ```
         transmit
         "aws_cloud_watch_logs"
-        "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
+        "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\", 
+        \"log_group_names\": {\"guardduty\": [\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\", \"default\":[\"/aws/events/guardduty\", \"USEast1_FlowLogs\"]}}}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
         query <translated_query>
         ```  
+
 ## Sample 1:
 
 #### STIX patterns:
@@ -98,7 +100,7 @@ query
 {'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502'}
 ```
 
-#### For Transmit result:
+#### Transmit result:
 
 ```
 transmit
@@ -210,18 +212,7 @@ results
 {"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower(\'172.31.88.63\') OR tolower(eth1_private_ip) = tolower(\'172.31.88.63\') OR tolower(public_ip) = tolower(\'172.31.88.63\') OR tolower(remote_ip) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}
 ```
 
-#### Transmit query for vpcflow:
-
-```
-transmit
-"aws_cloud_watch_logs"
-"{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
-"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
-query
-"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
-```
-
-#### Transmit query for guardduty:
+#### GuardDuty Transmit query :
 
 ```
 transmit
@@ -232,16 +223,30 @@ query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower('172.31.88.63') OR tolower(eth1_private_ip) = tolower('172.31.88.63') OR tolower(public_ip) = tolower('172.31.88.63') OR tolower(remote_ip) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
 
-#### Search id for guardduty and vpcflow:
+#### VPCFlow Transmit query:
+
+```
+transmit
+"aws_cloud_watch_logs"
+"{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
+query
+"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
+```
+
+#### GuardDuty Search id:
 
 ```
 {'success': True, 'search_id': '713bd4e2-1e9c-4919-bdb4-72baceed3ba7'}
 ```
+
+#### VPCFlow Search id:
+
 ```
 {'success': True, 'search_id': 'c3be3246-8b2b-4be7-b2de-d5d475c0ed8a'}
 ```
 
-#### For guardduty Transmit result:
+#### GuardDuty Transmit result :
 
 ```
 transmit
@@ -254,7 +259,7 @@ results
 2
 ```
 
-#### For vpcflow Transmit result:
+#### VPCFlow Transmit result :
 
 ```
 transmit
@@ -266,7 +271,8 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
 0
 2
 ```
-#### STIX observable output for guardduty:
+
+#### GuardDuty STIX observable output:
 
 ```
 {
@@ -349,7 +355,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
     }
 ```
 
-#### STIX observable output for vpcflow:
+#### VPCFlow STIX observable output:
 
 ```
 {
@@ -447,8 +453,8 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
 ```
 transmit
 "aws_cloud_watch_logs"
-"{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
-"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"},\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}"
+"{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
+"{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
 "{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail
 .resource.accessKeyDetails.accessKeyId \\"\\" as access_key_id | filter source = 'aws.guardduty' or strlen 
@@ -462,7 +468,7 @@ query
 {'success': True, 'search_id': '50359121-6624-43bf-9ef2-a9f3bf07f5ef'}
 ```
 
-#### For Transmit result:
+#### Transmit result:
 
 ```
 transmit
