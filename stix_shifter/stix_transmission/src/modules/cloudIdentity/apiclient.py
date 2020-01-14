@@ -352,14 +352,14 @@ class APIClient():
     
         return params
 
-    def createResponse(self, resp, respContent):
+    def createResponse(self, resp, newContent):
         pp = pprint.PrettyPrinter(indent=1)
         respObj = Response()
 
         if(resp.code == 200):
             respObj.code = "200"
             respObj.status_code = 200
-            content = json.dumps(respContent)
+            content = json.dumps(newContent)
             respObj._content = bytes(content, 'utf-8')
 
         return ResponseWrapper(respObj)
