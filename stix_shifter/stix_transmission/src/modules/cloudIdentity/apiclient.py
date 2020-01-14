@@ -103,9 +103,9 @@ class APIClient():
         pp = pprint.PrettyPrinter(indent=1)
         self.build_searchId()
         self.decode_searchId()
-
+        #print(self.query)
         request_params = self.parse_query()
-        return_obj = dict()
+        return_obj = {}
 
         #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
         if "user_id" in request_params:
@@ -118,7 +118,7 @@ class APIClient():
         if "username" in request_params:
             user_obj = self.getUserWithFilters(request_params)
             
-            #pp.pprint(user_obj)
+            pp.pprint(user_obj)
             return user_obj
             #return_obj = json.loads(user_obj.read())['Resources']
                 #pp.pprint(return_obj)
@@ -130,7 +130,7 @@ class APIClient():
 
 
         #retValue = json.dumps(return_obj)
-        return retValue
+        return return_obj
        
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
@@ -307,7 +307,7 @@ class APIClient():
 
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
-
+        print(jresp)
         return response
 
     #Iterate over eventsObj searching for target to create a return_obj
