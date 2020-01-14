@@ -143,7 +143,8 @@ setup(
         'requests_toolbelt==0.9.1',
         'adal>=1.2.2',
         'flatten_json==0.1.7',
-        'flask>=1.0.2'
+        'flask>=1.0.2',
+        'boto3>=1.9.76'
         # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
     ],
 

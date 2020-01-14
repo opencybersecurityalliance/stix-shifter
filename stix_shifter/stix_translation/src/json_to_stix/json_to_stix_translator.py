@@ -194,11 +194,25 @@ class DataSourceObjToStixObj:
 
                 DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
-                stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                    continue
+                # get the object name defined for custom attributes
+                if 'object' in ds_key_def:
+                    object_name = ds_key_def.get('object')
+                    # get the value mapped
+                    if 'value' in ds_key_def:
+                        stix_value = ds_key_def['value']
+                    # get the value from mapped key
+                    elif 'ds_key' in ds_key_def:
+                        ds_key = ds_key_def['ds_key']
+                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        continue
+                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
+                else:
+                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        continue
 
-                DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value, group)
+                    DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value, group)
 
     def transform(self, obj):
         """

@@ -1,0 +1,10 @@
+{
+  "guardduty": ["account", "source", "detail_region", "detail_id",
+                                         "detail_service_resourceRole", "detail_severity", "detail_type",
+                                         "detail_createdAt", "detail_updatedAt", "detail_resource_resourceType",
+                                         "detail_title", "detail_service_action_actionType",
+                                         "detail_service_eventFirstSeen", "detail_service_eventLastSeen",
+                                         "detail_service_archived", "detail_service_count", "detail_description",
+                                         "detail_resource", "detail_service_eventFirstSeen",
+                                         "detail_service_eventLastSeen"]
+}

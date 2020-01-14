@@ -1,0 +1,107 @@
+{
+    "vpcflow":{
+        "display_fields": ["@timestamp", "srcAddr", "dstAddr", "srcPort", "dstPort", "protocol", "start", "end", "accountId", "interfaceId"],
+        "logtype_filter": "strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0"
+    },
+    "guardduty": {
+        "display_fields": ["@timestamp", "source", "@message"],
+        "parse_attributes": {
+            "account_id": {
+                "parse_string": "account \"\""
+            },
+            "aws_region": {
+                "parse_string": "region \"\""
+            },
+            "image_id": {
+                "parse_string": "detail.resource.instanceDetails.imageId \"\""
+            },
+            "instance_id": {
+                "parse_string": "detail.resource.instanceDetails.instanceId \"\""
+            },
+            "availability_zone": {
+                "parse_string": "detail.resource.instanceDetails.availabilityZone \"\""
+            },
+            "security_group_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"groupName\":\"*\"'"
+            },
+            "security_group_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"groupId\":\"*\"'"
+            },
+            "subnet_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"subnetId\":\"*\"'"
+            },
+            "vpc_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"vpcId\":\"*\"'"
+            },
+            "access_key_id": {
+                "parse_string": "detail.resource.accessKeyDetails.accessKeyId \"\""
+            },
+            "principal_id": {
+                "parse_string": "detail.resource.accessKeyDetails.principalId \"\""
+            },
+            "user_name": {
+                "parse_string": "detail.resource.accessKeyDetails.userName \"\""
+            },
+            "api":{
+                "parse_string": "detail.service.action.awsApiCallAction.api \"\""
+            },
+            "api_service_name": {
+                "parse_string": "detail.service.action.awsApiCallAction.serviceName \"\""
+            },
+            "eth0_private_ip": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"privateIpAddress\":\"*\"'"
+            },
+            "eth0_private_dns_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"privateDnsName\":\"*\"'"
+            },
+            "public_dns_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"publicDnsName\":\"*\"'"
+            },
+            "public_ip": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"publicIp\":\"*\"'"
+            },
+            "ipv6_address": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"ipv6Addresses\":[\"*\"'"
+            },
+            "eth1_private_ip": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.1 '\"privateIpAddress\":\"*\"'"
+            },
+            "eth1_private_dns_name": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.1 '\"privateDnsName\":\"*\"'"
+            },
+            "remote_ip": {
+                "parse_string": "@message /(?:\"ipAddressV4\"\\:\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\")/"
+            },
+            "local_port": {
+                "parse_string": "@message '\"localPortDetails\":{\"port\":*,'"
+            },
+            "remote_port": {
+                "parse_string": "@message '\"remotePortDetails\":{\"port\":*,'"
+            },
+            "protocol": {
+                "parse_string": "detail.service.action.networkConnectionAction.protocol \"\""
+            },
+            "interface_id": {
+                "parse_string": "detail.resource.instanceDetails.networkInterfaces.0 '\"networkInterfaceId\":\"*\"'"
+            },
+            "city_name": {
+                "parse_string": "@message '\"cityName\":\"*\"'"
+            },
+            "country_name": {
+                "parse_string": "@message '\"countryName\":\"*\"'"
+            },
+            "dns_domain": {
+                "parse_string": "detail.service.action.dnsRequestAction.domain \"\""
+            },
+            "finding_id": {
+                "parse_string": "detail.id \"\""
+            },
+            "finding_type": {
+                "parse_string": "detail.type \"\""
+            },
+            "action_type": {
+                "parse_string": "detail.service.action.actionType \"\""
+            }
+        }
+    }
+}
