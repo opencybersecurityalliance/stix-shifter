@@ -10,53 +10,29 @@ class CloudIdentityResultsConnector(BaseConnector):
         self.api_client = api_client
 
     def create_results_connection(self, search_id, offset, length):
-        
+        #FOR TESTING RESULTS TODO delete when done
+        self.api_client.create_search(search_id)
+
+
         pp = pprint.PrettyPrinter(indent=1)
+
+        response = self.api_client.get_search_results(search_id)
+        results = json.loads(response.read())
         return_obj = dict()
-        request_params = self.parse_query(search_id)
-
-        #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
-        if "user_id" in request_params:
-            user_obj = self.api_client.getUser(request_params['user_id'])
-            if(self.checkResponse(user_obj)):
-                return_obj = json.loads(user_obj.read())
-                #pp.pprint(return_obj)
-
-        if "username" in request_params:
-            user_obj = self.api_client.getUserWithFilters(request_params)
-            if(self.checkResponse(user_obj)):
-                return_obj = json.loads(user_obj.read())['Resources']
-                #pp.pprint(return_obj)
-
-        #If input query contains ipv4:value(MAPS TO)->origin -- if present call events and find all ip's that match
-        if "origin" in request_params and "FROM" in request_params and "TO" in request_params:
-            return_obj = self.api_client.search_events(request_params, "origin")
-            pp.pprint(return_obj)
-
-        retValue = json.dumps(return_obj)
-        return retValue
-
-    def parse_query(self, query):
-        requests = query.split(' ')
-        params = dict()
-
-        #Iterate over query string and assign variables i.e. user-account, ipv4 etc
-        for index in range(len(requests)):
-            if(requests[index] == "user_id"):
-                params["user_id"] = requests[index+2].strip("''")
-            elif(requests[index] == "username"):
-                params['username'] = requests[index+2].strip("''")
-            elif(requests[index] == "origin"):
-                params['origin'] = requests[index+2].strip("''")
-            elif(requests[index] == "FROM"):
-                params['FROM'] = requests[index+1].strip("t''")
-            elif(requests[index] == "TO"):
-                params['TO'] = requests[index+1].strip("t''")
-    
-        return params
-
-    def checkResponse(self, response):
+        #pp.pprint(results)
         if(response.code == 200):
-            return True
+
+            return_obj['success'] = True
+            return_obj['search_id'] = search_id
+            
+            #FOR DEMO PURPOSES JSON.DUMP whole object #TODO delete when done testing UDS expects return_obj['data']
+            return_obj = results
+            return_obj = json.dumps(return_obj)
+            #pp.pprint(return_obj)
+            #TODO what is actually responded uncomment when done testing
+            #return_obj['data'] = json.dumps(results)
+
+        else:
+            ErrorResponder.fill_error(return_obj, results, ['message'])
         
-        return False
+        return return_obj
