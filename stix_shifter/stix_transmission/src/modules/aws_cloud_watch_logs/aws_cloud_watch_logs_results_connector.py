@@ -5,8 +5,6 @@ import copy
 from .....utils.error_response import ErrorResponder
 from os import path
 
-MAX_LIMIT = 1000
-
 
 class InvalidParameterException(Exception):
     pass
@@ -31,25 +29,16 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
             offset = int(offset)
             length = int(length)
             total_records = offset+length
-            if total_records <= MAX_LIMIT:
-                query['queryId'] = search_id
-                response_dict = self.client.get_query_results(**query)
-                return_obj['success'] = True
-                results = response_dict['results'][offset:total_records]
-                result_list = []
-                self.format_results(result_list, results, return_obj)
-            else:
-                raise InvalidParameterException
+            query['queryId'] = search_id
+            response_dict = self.client.get_query_results(**query)
+            return_obj['success'] = True
+            results = response_dict['results'][offset:total_records]
+            result_list = []
+            self.format_results(result_list, results, return_obj)
         except Exception as ex:
-            if isinstance(ex, InvalidParameterException):
-                return_obj = dict()
-                response_dict['__type'] = 'InvalidParameterException'
-                response_dict['message'] = 'Total number of records (offset+length) must be less than or equal to 10000'
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-            else:
-                response_dict['__type'] = ex.__class__.__name__
-                response_dict['message'] = ex
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            response_dict['__type'] = ex.__class__.__name__
+            response_dict['message'] = ex
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
     def format_results(self, result_list, results, return_obj):

@@ -13,7 +13,7 @@ class BOTO3Client:
         try:
             if not region_name:
                 raise KeyError('Region must be specified')
-            if 'aws_iam_role' in auth:
+            if 'aws_iam_role' in auth and auth.get('aws_iam_role'):
                 '''specific for role based authentication.Links user to role and
                      generates client object with role based Credentials.'''
                 client = boto3.client('sts',
