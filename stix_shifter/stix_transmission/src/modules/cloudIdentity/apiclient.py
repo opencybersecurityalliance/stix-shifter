@@ -193,18 +193,11 @@ class APIClient():
 
         #Search events for target origin
         content = self._parse_events(event_hits, target, params[target])
-        print(resp.content)
-        print(resp.read())
-        #init new response object 
-        resp.content = str(content)
-        resp._content = bytes(str(content), 'utf-8')
 
-        print(resp)
+        #Create new response object with new data
+        newResp = self.createResponse(resp, content)
 
-        #print(json.loads(resp.read()))
-        #pp.pprint(content)
-
-        return resp
+        return newResp
 
     def get_credentials(self):
         if self.credentials is None:
@@ -358,3 +351,18 @@ class APIClient():
                 params['TO'] = requests[index+1].strip("t''")
     
         return params
+
+    def createResponse(self, resp, respContent):
+        pp = pprint.PrettyPrinter(indent=1)
+        respObj = Response()
+
+        if(resp.code == 200):
+            respObj.code = "200"
+            respObj.status_code = 200
+            content = json.dumps(respContent)
+            respObj._content = bytes(content, 'utf-8')
+
+        return ResponseWrapper(respObj)
+
+
+
