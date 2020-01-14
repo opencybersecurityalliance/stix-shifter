@@ -10,9 +10,8 @@ from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
 
-TRANSLATION_MODULES = ['cloudIdentity', 'qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 'cloudIdentity']
-#TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
-#                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium']
+TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
+                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs']
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -33,10 +32,13 @@ class StixTranslation:
         self.args = []
 
     def _validate_pattern(self, pattern):
-        # Validator doesn't support START STOP qualifier so strip out before validating pattern
-        pattern_without_start_stop = re.sub(START_STOP_PATTERN, " ", pattern)
-        errors = run_validator(pattern_without_start_stop)
-        if (errors != []):
+        errors = []
+        # Temporary work around since pattern validator currently treats multiple qualifiers of the same type as invalid.
+        start_stop_count = len(re.findall(START_STOP_PATTERN, pattern))
+        if(start_stop_count > 1):
+            pattern = re.sub(START_STOP_PATTERN, " ", pattern)
+        errors = run_validator(pattern, stix_version='2.1')
+        if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
@@ -83,7 +85,7 @@ class StixTranslation:
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
                 if translate_type == QUERY:
-                    if 'validate_pattern' in options and options['validate_pattern'] == "true":
+                    if options.get('validate_pattern'):
                         self._validate_pattern(data)
                     data_model_mapper = self._build_data_mapper(module, options)
                     antlr_parsing = generate_query(data)

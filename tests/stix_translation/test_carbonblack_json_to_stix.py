@@ -432,7 +432,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
     def test_change_cb_process_api_timestamp_regex(self):
         results = process_data_1["results"].copy()
         results[0]['start'] = "2019-01-22T00:04:52.87Z"
-        timestamp_bug_options = {'cybox_default': False}
+        timestamp_bug_options = {'cybox_default': True}
         result_bundle = json.loads(interface.translate_results(json.dumps(data_source), json.dumps(results), timestamp_bug_options))
 
         assert(result_bundle['type'] == 'bundle')
