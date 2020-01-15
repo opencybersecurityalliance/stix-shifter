@@ -347,9 +347,7 @@ class APIClient():
         return response
     
     def getUserWithFilters(self, params):
-        endpoint = "/v2.0/Users?filter="
-        if "username" in params:
-            endpoint = endpoint + "userName%20eq%20%20%22" + params['username'] + "%22"
+        endpoint = "/v2.0/Users" + self.set_filters(params)
 
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
