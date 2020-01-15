@@ -1,0 +1,7 @@
+{
+    "USERNAME": ["account_login"],
+    "CLIENT_IP": ["ipv4-addr"],
+    "COUNTRY_NAME": ["country_name"]
+  
+
+}

@@ -1,0 +1,19 @@
+{
+    "common": {
+        "FROM": ["*"],
+        "TO": ["*"],
+        "SIZE": ["*"],
+        "SORT_BY": ["*"],
+        "SORT_ORDER": ["*"]
+    },
+
+    "map": {
+        "USERNAME": ["auth_audit_trail"],
+        "REALM": ["auth_audit_trail"],
+        "CLIENT_IP": ["auth_audit_trail"],
+        "COUNTRY_NAME": ["auth_audit_trail"]
+    },
+
+    "defaultReports": ["auth_audit_trail"]
+
+}

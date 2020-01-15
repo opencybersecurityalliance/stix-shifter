@@ -1,0 +1,33 @@
+{
+
+    "auth_audit_trail": {
+        "reportName": "auth_audit_trail",
+        "FROM": "now-24h",
+        "TO": "now",
+        "SIZE": "10",
+        "SORT_BY": "time",
+        "SORT_ORDER": "asc",
+        "reportParameter": {
+            "USERNAME": {
+                "info": "map",
+                "default": "%"
+            },
+            "REALM": {
+                "info": "none",
+                "default": "www.ibm.com"
+            },
+            "CLIENT_IP": {
+                "info": "map",
+                "default": "%"
+            },
+            "COUNTRY_NAME": {
+                "info": "map",
+                "default": "%"
+            }
+
+        }
+    }
+}
+
+
+  
