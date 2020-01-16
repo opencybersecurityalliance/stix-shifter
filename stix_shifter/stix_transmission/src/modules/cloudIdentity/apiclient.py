@@ -41,7 +41,7 @@ class APIClient():
             self.token = self.getToken()
         else: 
             self.credentials = None           
-            raise IOError (3001, "Cloud Identity Credentials not provided in connection/configuration")
+            raise IOError ("Cloud Identity Credentials not provided in connection/configuration")
 
         #Init communication to Cloud Identity Tenant
         
@@ -97,81 +97,49 @@ class APIClient():
         # Check the current status of the search
         return {"code": 200, "search_id": search_id, "status": "COMPLETED"}
 
-    def get_search_results(self, search_id, FROM=None, TO=None):
+    def get_search_results(self, search_id, offset=None, length=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         
         pp = pprint.PrettyPrinter(indent=1)
-
-
+        
         #Parse out request parameters in query 
         request_params = self.parse_query()
 
         #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
-        if "user_id" in request_params:
-
+        if "USERID" in request_params:
+            
+            user = self.getUser(request_params["USERID"])
             # 1) search user_activity 
             user_activity = self.get_user_activity(request_params)
-            print("REPORT FOR USER ACTIVITY\n")
-            pp.pprint(json.loads(user_activity.read()))
-            print("----------------------------------------\n")
-
             # 2) search application audit reports
             app_audit = self.get_app_audit(request_params)
-            print("REPORT FOR APPLICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(app_audit.read()))
-            print("----------------------------------------\n")
-
             # 3) search authentication audit reports
             user_auth = self.get_auth_audit(request_params)
-            print("REPORT FOR AUTHENTICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(user_auth.read()))
-            print("----------------------------------------\n")
-
-        if "username" in request_params:
-
+            
+        if "USERNAME" in request_params:
+            
+            user = self.getUserWithFilters(request_params)
+            #pp.pprint(json.loads(user.read()))
             # 1) search user_activity 
             user_activity = self.get_user_activity(request_params)
-            print("REPORT FOR USER ACTIVITY\n")
-            pp.pprint(json.loads(user_activity.read()))
-            print("----------------------------------------\n")
-
             # 2) search application audit reports
             app_audit = self.get_app_audit(request_params)
-            print("REPORT FOR APPLICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(app_audit.read()))
-            print("----------------------------------------\n")
-
             # 3) search authentication audit reports
             user_auth = self.get_auth_audit(request_params)
-            print("REPORT FOR AUTHENTICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(user_auth.read()))
-            print("----------------------------------------\n")
 
         #If input query contains ipv4:value(MAPS TO)->origin -- searches user_activity on ip
-        if "origin" in request_params:
-
+        if "CLIENT_IP" in request_params:
             # 1) search user_activity 
             user_activity = self.get_user_activity(request_params)
-            print("REPORT FOR USER ACTIVITY\n")
-            pp.pprint(json.loads(user_activity.read()))
-            print("----------------------------------------\n")
-
             # 2) search application audit reports
             app_audit = self.get_app_audit(request_params)
-            print("REPORT FOR APPLICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(app_audit.read()))
-            print("----------------------------------------\n")
-
             # 3) search authentication audit reports
             user_auth = self.get_auth_audit(request_params)
-            print("REPORT FOR AUTHENTICATION AUDIT TRAIL\n")
-            pp.pprint(json.loads(user_auth.read()))
-            print("----------------------------------------\n")
 
-        #pp.pprint(return_obj.content)
-    
-        return 
-       
+        #return user_activity
+        #return app_audit
+        #return user_auth
+        return user
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
@@ -273,63 +241,59 @@ class APIClient():
                 return True
         return False
 
-    #Returns given report from cloud identity tenant
-
-    def getEvents(self, FROM, TO):
-        
-        endpoint = f"/v1.0/events?&from={FROM}&to={TO}&range_type=time"
-
-        response = self.client.call_api(endpoint, 'GET', headers=self.headers)
-        jresp = json.loads(str(response.read(), 'utf-8'))
-        obj = jresp['response']['events']['events']
-
-        #pp = pprint.PrettyPrinter(indent=1)
-        #pp.pprint(obj)
-
-        return response
     #returns a application audit - uses filter in params to refine search 
     def get_app_audit(self, params):
         pp = pprint.PrettyPrinter(indent=1)
 
-        endpoint = "/v1.0/reports/app_audit_trail" + self.set_filters(params)
+        endpoint = "/v1.0/reports/app_audit_trail"
 
         payload = self.set_payload(params)
         payload = json.dumps(payload)
 
         resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=payload)
         jresp = json.loads(str(resp.read(), 'utf-8'))
-
         #NOTE TODO this only works for one response
-        retResp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
+        if(bool(jresp['response']['report']['hits'])):
+            resp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
    
-        return retResp
+        return resp
 
     #returns and authentication audit - uses filter in params to refine search 
     def get_auth_audit(self, params):
         pp = pprint.PrettyPrinter(indent=1)
-        endpoint = "/v1.0/reports/auth_audit_trail" + self.set_filters(params)
+
+        endpoint = "/v1.0/reports/auth_audit_trail" 
 
         payload = self.set_payload(params)
         payload = json.dumps(payload)
 
         resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=payload)
-        jresp = json.loads(str(resp.read(), 'utf-8'))
+        jresp = json.loads(resp.read())
+        pp.pprint(jresp)
+        #pp.pprint(jresp)
+        if(bool(jresp['response']['report']['hits'])):
+            resp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
+        #pp.pprint(json.loads(resp.read()))
+        #TODO needs work - attempts to concatenate all report data 
+        #if(resp.code == 200):
+            #content = self.concatData(jresp['response']['report']['hits'])
+            #pp.pprint(json.loads(content))
+            #return
+            #resp = self.createResponse(resp, content)
 
-        retResp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
- 
-        return retResp
+        return resp 
 
     #Get user_activity report - uses filter in params to refine search 
     def get_user_activity(self, params):
         pp = pprint.PrettyPrinter(indent=1)
-        endpoint = "/v1.0/reports/user_activity" + self.set_filters(params)
+        endpoint = "/v1.0/reports/user_activity"
 
 
         payload = self.set_payload(params)
         payload = json.dumps(payload)
 
         resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=payload)
-        jresp = json.loads(str(resp.read(), 'utf-8'))
+        jresp = json.loads(resp.read())
 
         #NOTE TODO have not gotten a reponse from this yet
         #retResp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
@@ -347,32 +311,13 @@ class APIClient():
         return response
     
     def getUserWithFilters(self, params):
-        endpoint = "/v2.0/Users?filter="
-        if "username" in params:
-            endpoint = endpoint + "userName%20eq%20%20%22" + params['username'] + "%22"
+        endpoint = "/v2.0/Users?filter=userName%20eq%20%22{}%22".format(params['USERNAME'])
 
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
-        print(jresp)
-        return response
 
-    #Iterate over eventsObj searching for target to create a return_obj
-    #NOTE for now target = ipv4/origin
-    def _parse_events(self, eventsObj, target, value):
-
-        pp = pprint.PrettyPrinter(indent=1)
-        numResponse = 0 
-        return_obj = dict()
-        #hit is each individual event that occurs
-        for hit in eventsObj:
-            #test if event has target variable and target value = input value
-            if target in hit['data'] and hit['data'][target] == value:
-                return_obj['data'] = hit['data']
-                if "geoip" in hit:
-                    return_obj["geoip"] = hit['geoip']
-
-        #pp.pprint(return_obj)
-        return return_obj['data']
+        retResp = self.createResponse(response, jresp['Resources'])
+        return retResp
 
     def _add_headers(self, key, value):
         self.headers[key] = value
@@ -382,38 +327,25 @@ class APIClient():
         auth = "Bearer " + str(self.authorization.get("access_token"))
         self._add_headers("authorization", auth)
         return
+
     def set_payload(self, params):
         payload = dict()
         #Default payload params
         payload["FROM"] = params.get("FROM", "now-24h")
         payload["TO"] = params.get("TO", "now")
-        payload["SIZE"] = 10
+        payload["SIZE"] = params.get("SIZE", 10) #IF no length is given default is 10
         payload["SORT_BY"] = "time"
         payload["SORT_ORDER"] = "asc"
 
-        if "user_id" in params:
-            payload['USERID'] = params['user_id']
+        #format for cloud identity payload attribute ex: username : "\"nathan.test\""
+        if "USERNAME" in params:
+            payload["USERNAME"] = "\"{}\"".format(params['USERNAME'])
+        if "USERID" in params:
+            payload["USERID"] = "\"{}\"".format(params['USERID'])
+        if "CLIENT_IP" in params:
+            payload["CLIENT_IP"] = "\"{}\"".format(params['CLIENT_IP'])
 
         return payload
-
-    def set_filters(self, filters):
-        isFilter = False
-        filterEndPoint = ""
-        #Optional Filters
-        if "username" in filters:
-            filterEndPoint += "USERNAMEeq" + filters['username']
-            isFilter = True
-        if "user_id" in filters:
-            filterEndPoint += "USERIDeq" + filters['user_id']
-            isFilter = True
-        if "origin" in filters:
-            filterEndPoint += "CLIENT_IPeq" + filters['origin']
-            isFilter = True
-
-        if(isFilter):
-            return "?filter=" + filterEndPoint
-
-        return filterEndPoint
 
     def parse_query(self):
         
@@ -422,23 +354,22 @@ class APIClient():
 
         #Iterate over query string and assign variables i.e. user-account, ipv4 etc
         for index in range(len(requests)):
-            if(requests[index] == "user_id"):
-                params["user_id"] = requests[index+2].strip("''")
-            elif(requests[index] == "username"):
-                params['username'] = requests[index+2].strip("''")
-            elif(requests[index] == "origin"):
-                params['origin'] = requests[index+2].strip("''")
+            if(requests[index] == "USERID"):
+                params["USERID"] = requests[index+2].strip("''")
+            elif(requests[index] == "USERNAME"):
+                params['USERNAME'] = requests[index+2].strip("''")
+            elif(requests[index] == "CLIENT_IP"):
+                params['CLIENT_IP'] = requests[index+2].strip("''")
             elif(requests[index] == "FROM"):
                 params['FROM'] = requests[index+1].strip("t''")
             elif(requests[index] == "TO"):
                 params['TO'] = requests[index+1].strip("t''")
     
         return params
-
+    #Creates a new reponse - purpose is to refine json response so stix mapping is simple
     def createResponse(self, resp, newContent):
         pp = pprint.PrettyPrinter(indent=1)
         respObj = Response()
-
         if(resp.code == 200):
             respObj.code = "200"
             respObj.status_code = 200
@@ -457,5 +388,12 @@ class APIClient():
 
         return ResponseWrapper(respObj)
 
+    #TODO needs work
+    def concatData(self, content):
+        data = ""
+        for jdata in content:
+            data += json.dumps(jdata['_source'])
+  
+        return data
 
 

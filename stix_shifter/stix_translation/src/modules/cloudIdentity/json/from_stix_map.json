@@ -1,8 +1,8 @@
 {
   "user-account": {
     "fields": {
-      "user_id": ["user_id"],
-      "account_login": ["username"],
+      "user_id": ["USERID"],
+      "account_login": ["USERNAME"],
       "account_type": ["userCategory"],
       "password_last_changed": ["pwdChangedTime"],
       "account_created": ["created"],
@@ -19,12 +19,12 @@
   },
   "ipv4-addr": {
     "fields": {
-      "value":["origin"]
+      "value":["CLIENT_IP"]
     }
   },
   "url": {
     "fields": {
-      "value": ["Url.tenatname"]
+      "value": ["Url"]
     }
   },
   "Geo Location": {
