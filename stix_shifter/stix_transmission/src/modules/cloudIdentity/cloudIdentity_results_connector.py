@@ -16,7 +16,7 @@ class CloudIdentityResultsConnector(BaseConnector):
 
         pp = pprint.PrettyPrinter(indent=1)
 
-        response = self.api_client.get_search_results(search_id)
+        response = self.api_client.get_search_results(search_id, offset, length)
         results = json.loads(response.read())
         return_obj = dict()
         #pp.pprint(results)
