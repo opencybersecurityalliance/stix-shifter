@@ -101,22 +101,33 @@ class APIClient():
         # Return the search results. Results must be in JSON format before being translated into STIX
         
         pp = pprint.PrettyPrinter(indent=1)
-        
+        return_obj = dict()
         #Parse out request parameters in query 
         request_params = self.parse_query()
-
+        self.payload = json.dumps(self.set_payload(request_params,length))
+        print(self.payload)
         #If input query contains user-account:user_id(MAPS TO)->user_id connector will getUser{user_id} in api_client
-        if "USERID" in request_params:
+        if "userid" in request_params:
             
-            user = self.getUser(request_params["USERID"])
+            user = self.getUser(request_params["userid"])
+            return_obj = self.mergeJson(return_obj, json.loads(user.read()))
+
             # 1) search user_activity 
             user_activity = self.get_user_activity(request_params)
+            return_obj = self.mergeJson(return_obj, json.loads(user_activity.read()))
+
             # 2) search application audit reports
             app_audit = self.get_app_audit(request_params)
+            return_obj = self.mergeJson(return_obj, json.loads(app_audit.read()))
+
             # 3) search authentication audit reports
             user_auth = self.get_auth_audit(request_params)
+            return_obj = self.mergeJson(return_obj, json.loads(user_auth.read()))
             
-        if "USERNAME" in request_params:
+            resp = self.createResponse(user_auth, return_obj)
+            return resp
+            
+        if "username" in request_params:
             
             user = self.getUserWithFilters(request_params)
             #pp.pprint(json.loads(user.read()))
@@ -128,7 +139,7 @@ class APIClient():
             user_auth = self.get_auth_audit(request_params)
 
         #If input query contains ipv4:value(MAPS TO)->origin -- searches user_activity on ip
-        if "CLIENT_IP" in request_params:
+        if "client_ip" in request_params:
             # 1) search user_activity 
             user_activity = self.get_user_activity(request_params)
             # 2) search application audit reports
@@ -139,7 +150,7 @@ class APIClient():
         #return user_activity
         #return app_audit
         #return user_auth
-        return user
+        #return user
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
@@ -247,10 +258,7 @@ class APIClient():
 
         endpoint = "/v1.0/reports/app_audit_trail"
 
-        payload = self.set_payload(params)
-        payload = json.dumps(payload)
-
-        resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=payload)
+        resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=self.payload)
         jresp = json.loads(str(resp.read(), 'utf-8'))
         #NOTE TODO this only works for one response
         if(bool(jresp['response']['report']['hits'])):
@@ -264,22 +272,14 @@ class APIClient():
 
         endpoint = "/v1.0/reports/auth_audit_trail" 
 
-        payload = self.set_payload(params)
-        payload = json.dumps(payload)
-
-        resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=payload)
+        resp = self.client.call_api(endpoint, "POST", headers=self.headers, data=self.payload)
         jresp = json.loads(resp.read())
-        pp.pprint(jresp)
-        #pp.pprint(jresp)
+
+        #check if response data is present - if so refine response to stix-readable object 
         if(bool(jresp['response']['report']['hits'])):
             resp = self.createResponse(resp, jresp['response']['report']['hits'][0]['_source'])
         #pp.pprint(json.loads(resp.read()))
         #TODO needs work - attempts to concatenate all report data 
-        #if(resp.code == 200):
-            #content = self.concatData(jresp['response']['report']['hits'])
-            #pp.pprint(json.loads(content))
-            #return
-            #resp = self.createResponse(resp, content)
 
         return resp 
 
@@ -288,11 +288,7 @@ class APIClient():
         pp = pprint.PrettyPrinter(indent=1)
         endpoint = "/v1.0/reports/user_activity"
 
-
-        payload = self.set_payload(params)
-        payload = json.dumps(payload)
-
-        resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=payload)
+        resp = self.client.call_api(endpoint, "POST", headers = self.headers, data=self.payload)
         jresp = json.loads(resp.read())
 
         #NOTE TODO have not gotten a reponse from this yet
@@ -307,11 +303,11 @@ class APIClient():
         endpoint = "/v2.0/Users/" + id
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
-        #print(jresp)
+
         return response
     
     def getUserWithFilters(self, params):
-        endpoint = "/v2.0/Users?filter=userName%20eq%20%22{}%22".format(params['USERNAME'])
+        endpoint = "/v2.0/Users?filter=username%20eq%20%22{}%22".format(params['username'])
 
         response = self.client.call_api(endpoint, 'GET', headers=self.headers)
         jresp = json.loads(str(response.read(), 'utf-8'))
@@ -328,22 +324,19 @@ class APIClient():
         self._add_headers("authorization", auth)
         return
 
-    def set_payload(self, params):
+    def set_payload(self, params, length):
         payload = dict()
         #Default payload params
         payload["FROM"] = params.get("FROM", "now-24h")
         payload["TO"] = params.get("TO", "now")
-        payload["SIZE"] = params.get("SIZE", 10) #IF no length is given default is 10
+        payload["SIZE"] = 10 if length is None else length
         payload["SORT_BY"] = "time"
         payload["SORT_ORDER"] = "asc"
 
         #format for cloud identity payload attribute ex: username : "\"nathan.test\""
-        if "USERNAME" in params:
-            payload["USERNAME"] = "\"{}\"".format(params['USERNAME'])
-        if "USERID" in params:
-            payload["USERID"] = "\"{}\"".format(params['USERID'])
-        if "CLIENT_IP" in params:
-            payload["CLIENT_IP"] = "\"{}\"".format(params['CLIENT_IP'])
+        if "username" in params: payload["username"] = "\"{}\"".format(params['username'])
+        if "userid" in params: payload["userid"] = "\"{}\"".format(params['userid'])
+        if "client_ip" in params: payload["client_ip"] = "\"{}\"".format(params['client_ip'])
 
         return payload
 
@@ -354,17 +347,11 @@ class APIClient():
 
         #Iterate over query string and assign variables i.e. user-account, ipv4 etc
         for index in range(len(requests)):
-            if(requests[index] == "USERID"):
-                params["USERID"] = requests[index+2].strip("''")
-            elif(requests[index] == "USERNAME"):
-                params['USERNAME'] = requests[index+2].strip("''")
-            elif(requests[index] == "CLIENT_IP"):
-                params['CLIENT_IP'] = requests[index+2].strip("''")
-            elif(requests[index] == "FROM"):
-                params['FROM'] = requests[index+1].strip("t''")
-            elif(requests[index] == "TO"):
-                params['TO'] = requests[index+1].strip("t''")
-    
+            if(requests[index] == "userid"): params["userid"] = requests[index+2].strip("''")
+            elif(requests[index] == "username"): params['username'] = requests[index+2].strip("''")
+            elif(requests[index] == "client_ip"): params['client_ip'] = requests[index+2].strip("''")
+            elif(requests[index] == "FROM"): params['FROM'] = requests[index+1].strip("t''")
+            elif(requests[index] == "TO"): params['TO'] = requests[index+1].strip("t''")
         return params
     #Creates a new reponse - purpose is to refine json response so stix mapping is simple
     def createResponse(self, resp, newContent):
@@ -388,12 +375,10 @@ class APIClient():
 
         return ResponseWrapper(respObj)
 
-    #TODO needs work
-    def concatData(self, content):
-        data = ""
-        for jdata in content:
-            data += json.dumps(jdata['_source'])
-  
-        return data
+    #merges two json/dict objects - purpose to to create more robust stix report by adding new data
+    def mergeJson(self, dict1, dict2):
+        
+        dict1.update(dict2)
+        return dict1
 
 

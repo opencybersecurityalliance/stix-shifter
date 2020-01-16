@@ -1,8 +1,8 @@
 {
   "user-account": {
     "fields": {
-      "user_id": ["USERID"],
-      "account_login": ["USERNAME"],
+      "user_id": ["userid"],
+      "account_login": ["username"], 
       "account_type": ["userCategory"],
       "password_last_changed": ["pwdChangedTime"],
       "account_created": ["created"],
@@ -19,7 +19,7 @@
   },
   "ipv4-addr": {
     "fields": {
-      "value":["CLIENT_IP"]
+      "value":["client_ip"]
     }
   },
   "url": {

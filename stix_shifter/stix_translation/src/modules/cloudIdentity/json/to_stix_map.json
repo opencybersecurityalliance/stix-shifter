@@ -1,7 +1,7 @@
 {  
     "id": {
       "key": "user-account.user_id",
-      "object": "user"
+      "object": "user-id"
     },
     "name": 
     {
