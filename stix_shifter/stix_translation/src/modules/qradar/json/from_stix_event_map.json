@@ -1,4 +1,5 @@
 {
+  "log-type": "events",
   "ipv4-addr": {
     "fields": {
       "value": ["sourceip", "destinationip", "identityip"]
