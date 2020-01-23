@@ -1,0 +1,658 @@
+{
+  "vpcflow": {
+    "srcAddr": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      },
+      {
+        "key": "ipv4-addr.x_com_aws_interface_id",
+        "object": "src_ip",
+        "ds_key": "interfaceId",
+        "cybox": false
+      },
+      {
+        "key": "ipv6-addr.x_com_aws_interface_id",
+        "object": "src_ip",
+        "ds_key": "interfaceId",
+        "cybox": false
+      }
+    ],
+    "dstAddr": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "srcPort": [
+      {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ],
+    "dstPort": [
+      {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ],
+    "protocol": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "transformer": "ToLowercaseArray"
+      }
+    ],
+    "start": [
+      {
+        "key": "network-traffic.start",
+        "object": "nt",
+        "transformer": "EpochSecondsToTimestamp"
+      }
+    ],
+    "end": [
+      {
+        "key": "network-traffic.end",
+        "object": "nt",
+        "transformer": "EpochSecondsToTimestamp"
+      }
+    ],
+    "accountId": [
+      {
+        "key": "x_com_aws.account_id",
+        "cybox": false
+      }
+    ],
+    "@timestamp": [
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "AwsToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "AwsToTimestamp"
+      }
+    ],
+    "event_count": [
+      {
+        "key": "number_observed",
+        "cybox": false,
+        "transformer": "ToInteger"
+      }
+    ]
+  },
+  "guardduty": {
+    "NETWORK_CONNECTION": {
+      "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nc_private_ip1"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nc_nt",
+          "references": "nc_private_ip1"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "nc_private_name1",
+          "references": ["nc_private_ip1"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_private_ip1",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_ipv6Addresses_0": [
+        {
+          "key": "ipv6-addr.value",
+          "object": "nc_ipv6_ip"
+        },
+        {
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "nc_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicIp": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nc_public_ip"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "nc_public_name",
+          "references": ["nc_public_ip"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_public_ip",
+          "value": "public",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "nc_private_name1"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "nc_public_name"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nc_private_ip2"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "nc_private_name2",
+          "references": ["nc_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "nc_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "nc_private_ip2",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "nc_private_name2"
+        }
+      ],
+      "detail_service_action_networkConnectionAction_remoteIpDetails_ipAddressV4": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nc_remote_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nc_nt",
+          "references": "nc_remote_ip"
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "nc_remote_ip",
+          "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_city_cityName",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "nc_remote_ip",
+          "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_country_countryName",
+          "cybox": false
+        }
+      ],
+      "detail_service_action_networkConnectionAction_localPortDetails_port": [
+        {
+          "key": "network-traffic.src_port",
+          "object": "nc_nt",
+          "transformer": "ToInteger"
+        }
+      ],
+      "detail_service_action_networkConnectionAction_remotePortDetails_port": [
+        {
+          "key": "network-traffic.dst_port",
+          "object": "nc_nt",
+          "transformer": "ToInteger"
+        }
+      ],
+      "detail_service_action_networkConnectionAction_protocol": [
+        {
+          "key": "network-traffic.protocols",
+          "object": "nc_nt",
+          "transformer": "ToLowercaseArray"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
+        "key": "x_com_aws_vpc.subnet_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
+        "key": "x_com_aws_vpc.vpc_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
+        "key": "x_com_aws_vpc.security_group_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
+        "key": "x_com_aws_vpc.security_group_name",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_imageId":{
+        "key": "x_com_aws_instance.image_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_instanceId": {
+        "key": "x_com_aws_instance.instance_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
+        "cybox": false
+      }
+    },
+    "PORT_PROBE": {
+      "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "pp_private_ip1"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "pp_private_name1",
+          "references": ["pp_private_ip1"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_private_ip1",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_ipv6Addresses_0": [
+        {
+          "key": "ipv6-addr.value",
+          "object": "pp_ipv6_ip"
+        },
+        {
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "pp_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "pp_private_name1"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "pp_public_name"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicIp": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "pp_public_ip"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "pp_public_name",
+          "references": ["pp_public_ip"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_public_ip",
+          "value": "public",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "pp_private_ip2"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "pp_private_name2",
+          "references": ["pp_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "pp_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "pp_private_ip2",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "pp_private_name2"
+        }
+      ],
+      "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_ipAddressV4": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "pp_remote_ip"
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "pp_remote_ip",
+          "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_city_cityName",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "pp_remote_ip",
+          "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_country_countryName",
+          "cybox": false
+        }
+      ],
+      "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port": [
+        {
+          "key": "x_com_aws_guardduty_finding.probe_port",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
+        "key": "x_com_aws_vpc.subnet_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
+        "key": "x_com_aws_vpc.vpc_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
+        "key": "x_com_aws_vpc.security_group_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
+        "key": "x_com_aws_vpc.security_group_name",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_imageId":{
+        "key": "x_com_aws_instance.image_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_instanceId": {
+        "key": "x_com_aws_instance.instance_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
+        "cybox": false
+      }
+    },
+    "AWS_API_CALL": {
+      "detail_service_action_awsApiCallAction_remoteIpDetails_ipAddressV4": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "api_remote_ip"
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "object": "api_remote_ip",
+          "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_city_cityName",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "object": "api_remote_ip",
+          "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_country_countryName",
+          "cybox": false
+        }
+      ],
+      "detail_resource_accessKeyDetails_principalId": {
+          "key": "user-account.user_id",
+          "object": "api_user"
+      },
+      "detail_resource_accessKeyDetails_userName": {
+        "key": "user-account.account_login",
+        "object": "api_user"
+      },
+      "detail_resource_accessKeyDetails_accessKeyId": {
+        "key": "x_com_aws_api.access_key_id",
+        "cybox": false
+      },
+      "detail_service_action_awsApiCallAction_api": {
+        "key": "x_com_aws_api.api",
+        "cybox": false
+      },
+      "detail_service_action_awsApiCallAction_serviceName": {
+        "key": "x_com_aws_api.service_name",
+        "cybox": false
+      }
+    },
+    "DNS_REQUEST": {
+      "detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dns_private_ip1"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dns_private_name1",
+          "references": ["dns_private_ip1"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_private_ip1",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_private_ip1",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_ipv6Addresses_0": [
+        {
+          "key": "ipv6-addr.value",
+          "object": "dns_ipv6_ip"
+        },
+        {
+          "key": "ipv6-addr.x_com_aws_interface_id",
+          "object": "dns_ipv6_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicIp": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dns_public_ip"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dns_public_name",
+          "references": ["dns_public_ip"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_public_ip",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_public_ip",
+          "value": "public",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "dns_private_name1"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_publicDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "dns_public_name"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateIpAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dns_private_ip2"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dns_private_name2",
+          "references": ["dns_private_ip2"]
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_interface_id",
+          "object": "dns_private_ip2",
+          "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
+          "cybox": false
+        },
+        {
+          "key": "ipv4-addr.x_com_aws_ip_type",
+          "object": "dns_private_ip2",
+          "value": "private",
+          "cybox": false
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_1_privateDnsName": [
+        {
+          "key": "domain-name.value",
+          "object": "dns_private_name2"
+        }
+      ],
+      "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
+        "key": "x_com_aws_vpc.subnet_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
+        "key": "x_com_aws_vpc.vpc_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
+        "key": "x_com_aws_vpc.security_group_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
+        "key": "x_com_aws_vpc.security_group_name",
+        "cybox": false
+      },
+      "detail_service_action_dnsRequestAction_domain":[
+        {
+          "key": "domain-name.value",
+          "object": "dns_domain_name"
+        }
+      ],
+      "detail_resource_instanceDetails_imageId":{
+        "key": "x_com_aws_instance.image_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_instanceId": {
+        "key": "x_com_aws_instance.instance_id",
+        "cybox": false
+      },
+      "detail_resource_instanceDetails_availabilityZone": {
+        "key": "x_com_aws_instance.availability_zone",
+        "cybox": false
+      }
+    },
+    "@timestamp": {
+        "key": "x_com_aws_guardduty_finding.timestamp",
+        "cybox": false,
+        "transformer": "AwsToTimestamp"
+    },
+    "account": {
+      "key": "x_com_aws.account_id",
+      "cybox": false
+    },
+    "detail_region": {
+      "key": "x_com_aws.region",
+      "cybox": false
+    },
+    "detail_id": {
+      "key": "x_com_aws_guardduty_finding.id",
+      "cybox": false
+    },
+    "detail_severity": {
+      "key": "x_com_aws_guardduty_finding.severity",
+      "cybox": false
+    },
+    "detail_type": {
+      "key": "x_com_aws_guardduty_finding.type",
+      "cybox": false
+    },
+    "detail_title": {
+      "key": "x_com_aws_guardduty_finding.title",
+      "cybox": false
+    },
+    "detail_service_eventFirstSeen": {
+        "key": "first_observed",
+        "cybox": false
+    },
+    "detail_service_eventLastSeen": {
+        "key": "last_observed",
+        "cybox": false
+    },
+    "event_count": [
+      {
+        "key": "number_observed",
+        "cybox": false,
+        "transformer": "ToInteger"
+      }
+    ]
+  }
+}
