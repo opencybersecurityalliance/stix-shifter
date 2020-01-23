@@ -26,7 +26,8 @@ ERROR_MAPPING = {
     "resyncRequired": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "serviceNotAvailable": ErrorCode.TRANSMISSION_CONNECT,
     "quotaLimitReached": ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,
-    "unauthenticated": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
+    "unauthenticated": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "ResourceNotFound": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     }
 
 

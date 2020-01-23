@@ -10,8 +10,11 @@ class APIClient:
 
         headers = dict()
         url_modifier_function = None
+        default_api_version = 'v1.0'
         auth = configuration.get('auth')
-        self.endpoint = 'beta/security/alerts'
+        api_version = auth.get('api_version')
+        endpoint_version = api_version if api_version else default_api_version
+        self.endpoint = str(endpoint_version) + '/security/alerts'
         self.host = connection.get('host')
 
         if auth:
