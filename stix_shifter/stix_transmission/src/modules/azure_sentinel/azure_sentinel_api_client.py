@@ -12,9 +12,7 @@ class APIClient:
         url_modifier_function = None
         default_api_version = 'v1.0'
         auth = configuration.get('auth')
-        api_version = auth.get('api_version')
-        endpoint_version = api_version if api_version else default_api_version
-        self.endpoint = str(endpoint_version) + '/security/alerts'
+        self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
         self.host = connection.get('host')
 
         if auth:
