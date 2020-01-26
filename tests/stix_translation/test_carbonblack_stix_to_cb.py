@@ -111,7 +111,7 @@ class TestStixToQuery(unittest.TestCase, object):
         result = translation.translate(module, 'query', '{}', stix_pattern, options=test_options)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX attributes' in result['error']
+        assert 'Unable to map the following STIX objects and properties' in result['error']
 
     def test_escape_query(self):
         stix_to_cb_mapping = {

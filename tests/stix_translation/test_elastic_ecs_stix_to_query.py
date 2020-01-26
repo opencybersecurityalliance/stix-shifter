@@ -1,8 +1,6 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.elastic_ecs import data_mapping
 from stix_shifter.utils.error_response import ErrorCode
 import unittest
-import json
 import datetime
 import re
 
@@ -169,7 +167,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         result = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX attributes' in result['error']
+        assert 'Unable to map the following STIX objects and properties' in result['error']
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id = 'root']"
