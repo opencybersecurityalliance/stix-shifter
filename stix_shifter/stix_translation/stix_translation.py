@@ -8,7 +8,10 @@ from .src.utils.exceptions import DataMappingException, StixValidationException,
 from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
 from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
+from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 import sys
+import glob
+from os import path
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
                        'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs']
@@ -84,20 +87,61 @@ class StixTranslation:
                     sys.setrecursionlimit(recursion_limit)
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
+
                 if translate_type == QUERY:
+                    MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
+                    # Carbon Black combined the mapping files into one JSON using process and binary keys.
+                    # The query constructor has some logic around which of the two are used.
+                    SKIP_MODULES_FROM_MAP_LOOKUP = ['csa', 'csa:at', 'csa:nf', 'carbonblack', 'car', 'cim', 'elastic']
                     if options.get('validate_pattern'):
                         self._validate_pattern(data)
-                    data_model_mapper = self._build_data_mapper(module, options)
-                    antlr_parsing = generate_query(data)
-                    if data_model_mapper:
-                        # Remove unmapped STIX attributes from antlr parsing
-                        antlr_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
-                    # Converting STIX pattern to datasource query
-                    queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
+                    queries = []
+                    unmapped_stix_objects = {}
+                    from_stix_mapping_files = self._fetch_from_stix_mapping_files(module)
+                    if from_stix_mapping_files and not (module in SKIP_MODULES_FROM_MAP_LOOKUP):
+                        for mapping_file in from_stix_mapping_files:
+                            antlr_parsing = generate_query(data)
+                            options['mapping_file'] = mapping_file
+                            data_model_mapper = self._build_data_mapper(module, options)
+                            if data_model_mapper:
+                                stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
+                                antlr_parsing = stripped_parsing.get('parsing')
+                                unmapped_stix = stripped_parsing.get('unmapped_stix')
+                                if unmapped_stix:
+                                    unmapped_stix_objects[mapping_file] = unmapped_stix
+                                if not antlr_parsing:
+                                    continue
+                                translated_queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
+                                # Will not work if the query constructor doesn't return an array of values. Need to enforce that each data source, even bundle, does this
+                                if type(translated_queries == list):
+                                    for query in translated_queries:
+                                        queries.append(query)
+                                else:
+                                    queries = translated_queries
+                        if not queries:
+                            raise DataMappingException(
+                                "{} {}".format(MAPPING_ERROR, unmapped_stix_objects)
+                            )
+                    else:
+                        antlr_parsing = generate_query(data)
+                        data_model_mapper = self._build_data_mapper(module, options)
+                        if data_model_mapper:
+                            stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
+                            antlr_parsing = stripped_parsing.get('parsing')
+                            unmapped_stix = stripped_parsing.get('unmapped_stix')
+                            if not antlr_parsing:
+                                raise DataMappingException(
+                                    "{} {}".format(MAPPING_ERROR, unmapped_stix)
+                                )
+                        translated_queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
+                        queries = translated_queries
+                    if not queries:
+                        raise DataMappingException(
+                            "{} {}".format(MAPPING_ERROR, unmapped_stix)
+                        )
                     return {'queries': queries}
                 else:
                     self._validate_pattern(data)
-                    # Translating STIX pattern to antlr query object
                     antlr_parsing = generate_query(data)
                     # Extract pattern elements into parsed stix object
                     parsed_stix_dictionary = parse_stix(antlr_parsing, options['timerange'])
@@ -125,8 +169,17 @@ class StixTranslation:
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
 
+    def _fetch_from_stix_mapping_files(self, module):
+        basepath = "/Users/danny.elliott.ibm.com/Documents/dev/stix-shifter/stix_shifter/stix_translation/src/modules/{}/json".format(module)
+        mapping_paths = glob.glob(path.abspath(path.join(basepath, "*from_stix*.json")))
+        mapping_files = []
+        for map_path in mapping_paths:
+            mapping_files.append(re.sub('^/', '', re.sub(basepath, '', map_path)))
+        return mapping_files
+
     def _build_data_mapper(self, module, options):
         try:
+            print("getting data model for {}".format(module))
             data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
             return data_model.DataMapper(options)
         except Exception as ex:

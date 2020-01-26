@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from os import path
 import json
-from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 
 
 class BaseDataMapper(object, metaclass=ABCMeta):
@@ -13,9 +12,9 @@ class BaseDataMapper(object, metaclass=ABCMeta):
         :type basepath: str
         """
         try:
-            filepath = path.abspath(
-                path.join(basepath, "json", "from_stix_map.json"))
-
+            if not hasattr(self, 'mapping_file'):
+                self.mapping_file = 'from_stix_map.json'
+            filepath = path.abspath(path.join(basepath, "json", self.mapping_file))
             map_file = open(filepath).read()
             map_data = json.loads(map_file)
             return map_data
