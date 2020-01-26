@@ -170,11 +170,12 @@ class StixTranslation:
             return response
 
     def _fetch_from_stix_mapping_files(self, module):
-        basepath = "/Users/danny.elliott.ibm.com/Documents/dev/stix-shifter/stix_shifter/stix_translation/src/modules/{}/json".format(module)
-        mapping_paths = glob.glob(path.abspath(path.join(basepath, "*from_stix*.json")))
+        basepath = path.dirname(__file__)
+        mapping_files_path = path.join(basepath, "src/modules/{}/json".format(module))
+        mapping_paths = glob.glob(path.abspath(path.join(mapping_files_path, "*from_stix*.json")))
         mapping_files = []
         for map_path in mapping_paths:
-            mapping_files.append(re.sub('^/', '', re.sub(basepath, '', map_path)))
+            mapping_files.append(re.sub('^/', '', re.sub(mapping_files_path, '', map_path)))
         return mapping_files
 
     def _build_data_mapper(self, module, options):

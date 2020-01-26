@@ -1,0 +1,8 @@
+{
+  "log-type": "flows",
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip", "identityip"]
+    }
+  }
+}

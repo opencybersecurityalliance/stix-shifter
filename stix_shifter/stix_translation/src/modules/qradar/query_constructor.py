@@ -4,7 +4,6 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
 from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter.stix_translation.src.json_to_stix import observable
 import logging
-import os.path as path
 import json
 import re
 
@@ -50,34 +49,18 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, from_stix_json_filename):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        self.json_file = from_stix_json_filename
-        self.log_type = self.load_json('json/' + path.basename(from_stix_json_filename)).get('log-type')
+        self.log_type = self.dmm.map_data.get('log-type', 'events')
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
         self.translated = self.parse_expression(pattern)
-        print("TRANSLATED: {}".format(self.translated))
         self.qualified_queries.append(self.translated)
 
         self.qualified_queries = _format_translated_queries(self.qualified_queries)
-
-    @staticmethod
-    def load_json(rel_path_of_file):
-        """
-        Consumes a json file and returns a dictionary
-        :param rel_path_of_file: str, path of json file
-        :return: dictionary
-        """
-        _json_path = path.abspath(path.join(path.join(__file__, ".."), rel_path_of_file))
-        if path.exists(_json_path):
-            with open(_json_path) as f_obj:
-                return json.load(f_obj)
-        else:
-            raise FileNotFoundError
 
     @staticmethod
     def _format_set(values) -> str:
@@ -135,9 +118,8 @@ class AqlQueryStringPatternTranslator:
         # Need to use expression.value to match against regex since the passed-in value has already been formated.
         value_type = self._check_value_type(expression.value) if is_reference_value else None
         mapped_fields_count = 1 if is_reference_value else len(mapped_fields_array)
-        print("MAPPED FIELD ARRAY: {}".format(mapped_fields_array))
+
         for mapped_field in mapped_fields_array:
-            print("MAPPED FIELD: {}".format(mapped_field))
             # if its a set operator() query construction will be different.
             if expression.comparator == ComparisonComparators.IsSubSet:
                 comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
@@ -216,10 +198,7 @@ class AqlQueryStringPatternTranslator:
         # Resolve STIX Object Path to a field in the target Data Model
         stix_object, stix_field = expression.object_path.split(':')
         # Multiple QRadar fields may map to the same STIX Object
-
-        # mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-        mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
-        print("THIS IS THE MAPPED FIELDS ARRAY: {}".format(mapped_fields_array))
+        mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         # Resolve the comparison symbol to use in the query string (usually just ':')
         comparator = self._lookup_comparison_operator(self, expression.comparator)
 
@@ -350,19 +329,16 @@ def _format_translated_queries(query_array):
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     timerange = options['timerange']
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    # TODO: Still need to figure out selections, maybe they should go into the mapping file
+    select_statement = translated_where_statements.dmm.map_selections()
     queries = []
-    for each_json_file in data_model_mapping.from_stix_files_cnt:
-        translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, each_json_file)
-        select_statement = translated_where_statements.dmm.map_selections()
-        log_type = translated_where_statements.log_type
-
-        translated_queries = translated_where_statements.qualified_queries
-        print("TRANSLATED QUERIES: {}".format(translated_queries))
-        for where_statement in translated_queries:
-            has_start_stop = _test_START_STOP_format(where_statement)
-            if(has_start_stop):
-                queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, log_type, where_statement))
-            else:
-                queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, log_type, where_statement, result_limit, timerange))
-    print("RETURNED QUERIES: {}".format(queries))
+    translated_queries = translated_where_statements.qualified_queries
+    log_type = translated_where_statements.log_type
+    for where_statement in translated_queries:
+        has_start_stop = _test_START_STOP_format(where_statement)
+        if(has_start_stop):
+            queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, log_type, where_statement))
+        else:
+            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, log_type, where_statement, result_limit, timerange))
     return queries
