@@ -47,7 +47,6 @@ class SqlQueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.parsed_pattern = []
         self.translated = self.parse_expression(pattern)
         query_split = self.translated.split("split")
         logger.info("Query {}", query_split)
@@ -72,14 +71,14 @@ class SqlQueryStringPatternTranslator:
     @staticmethod
     def startreplace(m):
         date1 = m.group(1)
-        date1 = re.sub("t","", date1)
-        #return " {} {} {} {} ".format(self.comparator_lookup[ComparisonExpressionOperators.And], START_STOP_FIELD, self.comparator_lookup[ComparisonExpressionOperators.GreaterThanOrEqual, date1)
+        date1 = re.sub("t", "", date1)
+        # return " {} {} {} {} ".format(self.comparator_lookup[ComparisonExpressionOperators.And], START_STOP_FIELD, self.comparator_lookup[ComparisonExpressionOperators.GreaterThanOrEqual, date1)
         return " {} {} {} {} ".format("AND", START_STOP_FIELD, ">=", date1)
 
     @staticmethod
     def stopreplace(m):
         date1 = m.group(1)
-        date1 = re.sub("t","", date1)
+        date1 = re.sub("t", "", date1)
         return " {} {} {} {} ".format("AND", START_STOP_FIELD, "<=", date1)
 
     @staticmethod
@@ -158,8 +157,6 @@ class SqlQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': original_stix_value})
-
             comparison_string = ""
             mapped_fields_count = len(mapped_fields_array)
             if len(mapped_fields_array) == 0:
@@ -219,21 +216,13 @@ class SqlQueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
 
-def _test_START_STOP_format(query_string) -> bool:
-    # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
-    # or START 1234567890123 STOP 1234567890123
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-    match = re.search(pattern, query_string)
-    return bool(match)
-
 
 def translate_pattern(pattern: Pattern, data_model_mapping, number_rows=1000):
     x = SqlQueryStringPatternTranslator(pattern, data_model_mapping)
     select_statement = x.dmm.map_selections()
     queries = []
-    bucket=x.dmm.dialect+"-hourly-dumps" 
+    bucket = x.dmm.dialect+"-hourly-dumps"
     for query in x.queries:
-        has_start_stop = _test_START_STOP_format(query)
         queries.append('SELECT {select_statement} FROM cos://us-geo/{bucket} STORED AS JSON WHERE {where_clause} PARTITIONED EVERY {number_rows} ROWS'
                        .format(select_statement=select_statement, bucket=bucket, where_clause=query, number_rows=number_rows))
-    return {'sql_queries': queries, 'parsed_stix': x.parsed_pattern}
+    return queries
