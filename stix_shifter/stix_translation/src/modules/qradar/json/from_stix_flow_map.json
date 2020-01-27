@@ -2,7 +2,37 @@
   "log-type": "flows",
   "ipv4-addr": {
     "fields": {
-      "value": ["sourceip", "destinationip", "identityip"]
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourcev6", "destinationv6"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "src_ref.value": ["sourceip", "sourcev6"],
+      "dst_ref.value": ["destinationip", "destinationv6"],
+      "src_byte_count": ["sourcebytes"],
+      "dst_byte_count": ["destinationbytes"],
+      "src_packets": ["sourcepackets"],
+      "dst_packets": ["destinationpackets"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["base64_source_payload", "base64_destination_payload"]
+    }
+  },
+  "x-readable-payload": {
+    "fields": {
+      "value": ["utf8_source_payload", "utf8_destination_payload"]
     }
   }
 }

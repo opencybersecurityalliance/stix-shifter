@@ -18,8 +18,11 @@ class DataMapper(BaseDataMapper):
                 field_list = aql_fields_json
             else:
                 basepath = path.dirname(__file__)
-                filepath = path.abspath(
-                    path.join(basepath, "json", "aql_event_fields.json"))
+                if "flow" in self.mapping_file:
+                    aql_fields_json = "aql_flow_fields.json"
+                else:
+                    aql_fields_json = "aql_event_fields.json"
+                filepath = path.abspath(path.join(basepath, "json", aql_fields_json))
                 aql_fields_file = open(filepath).read()
                 aql_fields_json = json.loads(aql_fields_file)
                 # Temporary default selections, this will change based on config override and the STIX pattern that is getting converted to AQL.
