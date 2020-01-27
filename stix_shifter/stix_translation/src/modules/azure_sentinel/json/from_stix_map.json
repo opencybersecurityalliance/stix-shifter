@@ -1,0 +1,71 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["networkConnections.sourcePort"],
+      "dst_port": ["networkConnections.destinationPort"],
+      "protocols[*]": ["networkConnections.protocol"],
+      "src_ref.value": ["networkConnections.sourceAddress"],
+      "dst_ref.value": ["networkConnections.destinationAddress"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["fileStates.path"]
+    }
+  },
+  "file": {
+    "fields": {
+      "parent_directory_ref.path": ["fileStates.path"],
+      "name": ["fileStates.name"],
+      "hashes.SHA-256": ["fileStates.fileHash.hashValue"],
+      "hashes.SHA-1": ["fileStates.fileHash.hashValue"]
+    }
+  },
+   "process" : {
+    "fields": {
+      "name": ["processes.name"],
+      "parent_ref.name": ["processes.parentProcessName"],
+      "command_line": ["processes.commandLine"],
+      "pid": ["processes.processId"],
+      "parent_ref.pid": ["processes.parentProcessId"],
+      "binary_ref.path": ["processes.path"],
+      "binary_ref.hashes.SHA-256": ["processes.fileHash.hashValue"],
+      "binary_ref.hashes.SHA-1": ["processes.fileHash.hashValue"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["hostStates.fqdn", "hostStates.netBiosName"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["userStates.accountName"],
+      "account_last_login": ["userStates.logonDateTime"]
+    }
+  },
+  "x-com-msazure-sentinel": {
+    "fields": {
+      "tenant_id": ["azureTenantId"],
+      "subscription_id": ["azureSubscriptionId"]
+    }
+  },
+  "x-com-msazure-sentinel-alert": {
+    "fields": {
+      "id": ["id"],
+      "title": ["title"],
+      "provider": ["vendorInformation.provider"],
+      "vendor": ["vendorInformation.vendor"]
+    }
+  }
+}

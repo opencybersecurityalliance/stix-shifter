@@ -11,7 +11,7 @@ from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import 
 import sys
 
 TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
-                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs']
+                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs', 'azure_sentinel']
 
 RESULTS = 'results'
 QUERY = 'query'

@@ -3,7 +3,7 @@ from ..utils.error_response import ErrorResponder
 
 TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub',
                         'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium',
-                        'aws_cloud_watch_logs']
+                        'aws_cloud_watch_logs', 'azure_sentinel']
 
 
 RESULTS = 'results'
