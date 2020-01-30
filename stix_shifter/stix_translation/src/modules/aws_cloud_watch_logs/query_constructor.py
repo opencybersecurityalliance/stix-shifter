@@ -36,7 +36,7 @@ class QueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self._time_range = time_range
-        self.log_type = self.dmm.map_data.get('log-type')
+        self.log_type = self.dmm.dialect
         self._log_config_data = self.load_json(MASTER_CONFIG_FILE)
         self._protocol_lookup_needed = True if self.log_type in ['vpcflow'] else False
         self._parse_statement = []

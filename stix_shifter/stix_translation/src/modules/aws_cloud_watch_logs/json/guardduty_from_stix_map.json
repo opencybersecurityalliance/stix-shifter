@@ -1,5 +1,4 @@
 {
-  "log-type": "guardduty",
   "ipv4-addr": {
     "fields": {
       "value": ["eth0_private_ip", "eth1_private_ip", "public_ip", "remote_ip"],
