@@ -53,7 +53,6 @@ class AqlQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        self.log_type = self.dmm.map_data.get('log-type', 'events')
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
@@ -334,11 +333,10 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries
-    log_type = translated_where_statements.log_type
     for where_statement in translated_queries:
         has_start_stop = _test_START_STOP_format(where_statement)
         if(has_start_stop):
-            queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, log_type, where_statement))
+            queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, data_model_mapping.dialect, where_statement))
         else:
-            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, log_type, where_statement, result_limit, timerange))
+            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, data_model_mapping.dialect, where_statement, result_limit, timerange))
     return queries

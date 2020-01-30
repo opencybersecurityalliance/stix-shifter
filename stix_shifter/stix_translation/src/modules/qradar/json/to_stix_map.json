@@ -45,6 +45,17 @@
       "references": "dst_ip"
     }
   ],
+  "destinationv6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
   "eventcount": {
     "key": "number_observed",
     "cybox": false,
@@ -86,6 +97,17 @@
       "key": "ipv4-addr.value",
       "object": "src_ip"
     },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "sourcev6": [
     {
       "key": "ipv6-addr.value",
       "object": "src_ip"
@@ -168,6 +190,28 @@
   "base64_payload": {
     "key": "artifact.payload_bin"
   },
+  "base64_source_payload": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "src_payload"
+    },
+    {
+      "key": "network-traffic.src_payload_ref",
+      "object": "nt",
+      "references": "src_payload"
+    }
+  ],
+  "base64_destination_payload": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "dst_payload"
+    },
+    {
+      "key": "network-traffic.dst_payload_ref",
+      "object": "nt",
+      "references": "dst_payload"
+    }
+  ],
   "destinationport": {
     "key": "network-traffic.dst_port",
     "object": "nt",
@@ -175,6 +219,26 @@
   },
   "sourceport": {
     "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "sourcebytes": {
+    "key": "network-traffic.src_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destinationbytes": {
+    "key": "network-traffic.dst_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "sourcepackets": {
+    "key": "network-traffic.src_packets",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destinationpackets": {
+    "key": "network-traffic.dst_packets",
     "object": "nt",
     "transformer": "ToInteger"
   },

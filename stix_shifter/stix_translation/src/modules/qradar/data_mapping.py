@@ -6,10 +6,11 @@ from stix_shifter.stix_translation.src.modules.base.base_data_mapper import Base
 class DataMapper(BaseDataMapper):
 
     def __init__(self, options):
+        self.mapping_json = options['mapping'] if 'mapping' in options else {}
         self.select_fields_json = options['select_fields'] if 'select_fields' in options else {}
         basepath = path.dirname(__file__)
-        self.mapping_file = options.get('mapping_file')
-        self.map_data = self.fetch_mapping(basepath)
+        self.dialect = options.get('dialect') or 'events'
+        self.map_data = self.mapping_json or self.fetch_mapping(basepath)
 
     def map_selections(self):
         try:
@@ -18,7 +19,7 @@ class DataMapper(BaseDataMapper):
                 field_list = aql_fields_json
             else:
                 basepath = path.dirname(__file__)
-                if "flow" in self.mapping_file:
+                if self.dialect == 'flows':
                     aql_fields_json = "aql_flow_fields.json"
                 else:
                     aql_fields_json = "aql_event_fields.json"
