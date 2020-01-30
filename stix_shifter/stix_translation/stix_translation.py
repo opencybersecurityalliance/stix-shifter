@@ -8,13 +8,14 @@ from .src.utils.exceptions import DataMappingException, StixValidationException,
 from stix_shifter.stix_translation.src.modules.cim import cim_data_mapping
 from stix_shifter.stix_translation.src.modules.car import car_data_mapping
 from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
-from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 import sys
 import glob
 from os import path
 
-TRANSLATION_MODULES = ['qradar', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix', 'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
-                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs']
+TRANSLATION_MODULES = ['qradar', 'qradar:events', 'qradar:flows', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix',
+                       'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
+                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs',
+                       'aws_cloud_watch_logs:guardduty', 'aws_cloud_watch_logs:vpcflow']
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -24,6 +25,7 @@ DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
+MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
 
 class StixTranslation:
@@ -75,9 +77,18 @@ class StixTranslation:
 
             if dialect is not None:
                 interface = translator_module.Translator(dialect=dialect)
-                options['dialect'] = dialect
             else:
                 interface = translator_module.Translator()
+
+            dialects = []
+            if dialect:
+                dialects = [dialect]
+            else:
+                for trans_module in TRANSLATION_MODULES:
+                    if "{}:".format(module) in trans_module:
+                        dialects.append(trans_module.split(':', 1)[1])
+            if not dialects:
+                dialects = ['default']
 
             if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
@@ -89,56 +100,36 @@ class StixTranslation:
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
 
                 if translate_type == QUERY:
-                    MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
-                    # Carbon Black combined the mapping files into one JSON using process and binary keys.
+                    # Carbon Black combines the mapping files into one JSON using process and binary keys.
                     # The query constructor has some logic around which of the two are used.
-                    SKIP_MODULES_FROM_MAP_LOOKUP = ['csa', 'csa:at', 'csa:nf', 'carbonblack', 'car', 'cim', 'elastic']
                     if options.get('validate_pattern'):
                         self._validate_pattern(data)
                     queries = []
-                    unmapped_stix_objects = {}
-                    from_stix_mapping_files = self._fetch_from_stix_mapping_files(module)
-                    if from_stix_mapping_files and not (module in SKIP_MODULES_FROM_MAP_LOOKUP):
-                        for mapping_file in from_stix_mapping_files:
-                            antlr_parsing = generate_query(data)
-                            options['mapping_file'] = mapping_file
-                            data_model_mapper = self._build_data_mapper(module, options)
-                            if data_model_mapper:
-                                stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
-                                antlr_parsing = stripped_parsing.get('parsing')
-                                unmapped_stix = stripped_parsing.get('unmapped_stix')
-                                if unmapped_stix:
-                                    unmapped_stix_objects[mapping_file] = unmapped_stix
-                                if not antlr_parsing:
-                                    continue
-                                translated_queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
-                                # Will not work if the query constructor doesn't return an array of values. Need to enforce that each data source, even bundle, does this
-                                if type(translated_queries == list):
-                                    for query in translated_queries:
-                                        queries.append(query)
-                                else:
-                                    queries = translated_queries
-                        if not queries:
-                            raise DataMappingException(
-                                "{} {}".format(MAPPING_ERROR, unmapped_stix_objects)
-                            )
-                    else:
+                    unmapped_stix_collection = []
+                    for dia in dialects:
+                        options['dialect'] = dia
                         antlr_parsing = generate_query(data)
                         data_model_mapper = self._build_data_mapper(module, options)
                         if data_model_mapper:
                             stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
                             antlr_parsing = stripped_parsing.get('parsing')
                             unmapped_stix = stripped_parsing.get('unmapped_stix')
+                            if unmapped_stix:
+                                unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
-                                raise DataMappingException(
-                                    "{} {}".format(MAPPING_ERROR, unmapped_stix)
-                                )
+                                continue
                         translated_queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
-                        queries = translated_queries
+                        
+                        if isinstance(translated_queries, str):
+                            translated_queries = [translated_queries]
+                        for query in translated_queries:
+                            queries.append(query)
+
                     if not queries:
                         raise DataMappingException(
-                            "{} {}".format(MAPPING_ERROR, unmapped_stix)
+                            "{} {}".format(MAPPING_ERROR, unmapped_stix_collection)
                         )
+
                     return {'queries': queries}
                 else:
                     self._validate_pattern(data)
@@ -180,7 +171,6 @@ class StixTranslation:
 
     def _build_data_mapper(self, module, options):
         try:
-            print("getting data model for {}".format(module))
             data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
             return data_model.DataMapper(options)
         except Exception as ex:
