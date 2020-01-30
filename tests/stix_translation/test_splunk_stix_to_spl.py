@@ -30,7 +30,7 @@ translation = stix_translation.StixTranslation()
 
 
 def _test_query_assertions(query, queries):
-    assert query['queries'] == queries
+    assert query['queries'] == [queries]
 
 
 class TestStixToSpl(unittest.TestCase, object):
