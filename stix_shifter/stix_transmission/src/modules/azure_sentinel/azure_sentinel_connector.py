@@ -98,7 +98,6 @@ class Connector(BaseConnector):
                         break
                 # slice the cumulative records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:offset+length]
-                print(len(return_obj['data']))
 
                 single_level_json = []
                 # flatten result json to single level
