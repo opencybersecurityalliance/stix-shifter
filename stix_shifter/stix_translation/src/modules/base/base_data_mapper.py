@@ -42,5 +42,4 @@ class BaseDataMapper(object, metaclass=ABCMeta):
 
     def _fetch_from_stix_mapping_file(self, basepath):
         mapping_paths = glob.glob(path.abspath(path.join(basepath, "json", "{}_from_stix*.json".format(self.dialect))))
-        print("The mapping paths {}".format(mapping_paths))
         return mapping_paths[0]

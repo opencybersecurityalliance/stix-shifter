@@ -12,10 +12,9 @@ import sys
 import glob
 from os import path
 
-TRANSLATION_MODULES = ['qradar', 'qradar:events', 'qradar:flows', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix',
-                       'csa', 'csa:at', 'csa:nf', 'aws_security_hub', 'carbonblack',
-                       'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs',
-                       'aws_cloud_watch_logs:guardduty', 'aws_cloud_watch_logs:vpcflow']
+TRANSLATION_MODULES = ['qradar', 'qradar:events:flows', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix',
+                       'csa', 'csa:at:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 
+                       'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs', 'aws_cloud_watch_logs:guardduty:vpcflow']
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -26,6 +25,7 @@ DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
+DEFAULT_DIALECT = 'default'
 
 
 class StixTranslation:
@@ -62,12 +62,9 @@ class StixTranslation:
         :return: translated results
         :rtype: str
         """
-        dialect = None
-        mod_dia = module.split(':', 1)
-        module = mod_dia[0]
-        if len(mod_dia) > 1:
-            dialect = mod_dia[1]
 
+        module, dialects = self._collect_dialects(module)
+        
         try:
             if module not in TRANSLATION_MODULES:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
@@ -75,20 +72,11 @@ class StixTranslation:
             translator_module = importlib.import_module(
                 "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
 
-            if dialect is not None:
-                interface = translator_module.Translator(dialect=dialect)
+            if not dialects[0] == DEFAULT_DIALECT:
+                # Todo: this will only work if there is one dialect, this part should also be in the loop
+                interface = translator_module.Translator(dialect=dialects[0])
             else:
                 interface = translator_module.Translator()
-
-            dialects = []
-            if dialect:
-                dialects = [dialect]
-            else:
-                for trans_module in TRANSLATION_MODULES:
-                    if "{}:".format(module) in trans_module:
-                        dialects.append(trans_module.split(':', 1)[1])
-            if not dialects:
-                dialects = ['default']
 
             if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
@@ -181,3 +169,19 @@ class StixTranslation:
                 return SHARED_DATA_MAPPERS[module].mapper_class(options)
             else:
                 return None
+
+    def _collect_dialects(self, module):
+        dialects = module.split(':')
+        module = dialects.pop(0)
+        if not dialects:
+            # See if the module has any dialects
+            for trans_module in TRANSLATION_MODULES:
+                if "{}:".format(module) in trans_module:
+                    dialects_found = trans_module.split(':')
+                    dialects_found.pop(0)  # remove module from list
+                    for d in dialects_found:
+                        if d not in dialects:
+                            dialects.append(d)
+        if not dialects:
+            dialects = [DEFAULT_DIALECT]
+        return [module, dialects]
