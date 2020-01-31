@@ -9,6 +9,7 @@ from .....utils.error_response import ErrorResponder
 
 class Connector(BaseConnector):
     init_error = None
+    max_limit = 1000
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -63,22 +64,26 @@ class Connector(BaseConnector):
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
-
+        response = None
         response_dict = dict()
         return_obj = dict()
         length = int(length)
+        offset = int(offset)
 
         try:
             if self.init_error:
                 print("Token Generation Failed:")
                 return self.adal_response
-            response = self.api_client.run_search(query, offset, length)
+            if length <= self.max_limit:
+                response = self.api_client.run_search(query, offset + length)
+            elif length > self.max_limit:
+                response = self.api_client.run_search(query, self.max_limit)
             response_code = response.code
             response_dict = json.loads(response.read())
             if 199 < response_code < 300:
                 return_obj['success'] = True
                 return_obj['data'] = response_dict['value']
-                while len(return_obj['data']) < length:
+                while len(return_obj['data']) < offset + length:
                     try:
                         next_page_link = response_dict['@odata.nextLink']
                         response = self.api_client.next_page_run_search(next_page_link)
@@ -90,7 +95,8 @@ class Connector(BaseConnector):
                             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
                     except KeyError:
                         break
-                return_obj['data'] = return_obj['data'][:length]
+                return_obj['data'] = return_obj['data'][offset:offset+length]
+                print(len(return_obj['data']))
 
                 single_level_json = []
                 # flatten result json to single level

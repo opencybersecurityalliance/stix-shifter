@@ -109,11 +109,11 @@ class TestStixToQuery(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_matches_comp_exp(self):
-        stix_pattern = "[file:name MATCHES 'ser\\w+.exe']"
+        stix_pattern = "[file:name MATCHES 'serv']"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'ser\\w+.exe'))) and (eventDateTime ge "
+        queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'serv'))) and (eventDateTime ge "
                    "2019-12-24T09:49:14.586Z and eventDateTime le 2019-12-24T09:54:14.586Z)"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
