@@ -74,6 +74,7 @@ class Connector(BaseConnector):
             if self.init_error:
                 print("Token Generation Failed:")
                 return self.adal_response
+            # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 response = self.api_client.run_search(query, offset + length)
             elif length > self.max_limit:
@@ -83,7 +84,7 @@ class Connector(BaseConnector):
             if 199 < response_code < 300:
                 return_obj['success'] = True
                 return_obj['data'] = response_dict['value']
-                while len(return_obj['data']) < offset + length:
+                while len(return_obj['data']) < (offset + length):
                     try:
                         next_page_link = response_dict['@odata.nextLink']
                         response = self.api_client.next_page_run_search(next_page_link)
@@ -95,6 +96,7 @@ class Connector(BaseConnector):
                             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
                     except KeyError:
                         break
+                # slice the cumulative records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:offset+length]
                 print(len(return_obj['data']))
 
