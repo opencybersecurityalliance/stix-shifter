@@ -4,7 +4,7 @@ from ..base.base_status_connector import Status
 from enum import Enum
 import math
 
-DEFAULT_LIMIT = 1000
+DEFAULT_LIMIT = 10000
 
 
 class AWSCWLOGS(Enum):
@@ -51,8 +51,6 @@ class AWSCloudWatchLogsStatusConnector(BaseStatusConnector):
         response_dict = dict()
         limit = DEFAULT_LIMIT
         try:
-            if ':' in search_id:
-                search_id, limit = search_id.split(':')
             query = dict()
             query['queryId'] = search_id
             response_dict = self.client.get_query_results(**query)

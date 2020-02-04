@@ -80,7 +80,8 @@ t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource.instanceDetails.imageId \\"\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateDnsName\\":\\"*\\"\' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateDnsName\\":\\"*\\"\' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicDnsName\\":\\"*\\"\' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = \'aws.guardduty\' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower(\'ami-00068cd7555f543d\')) OR ((tolower(eth0_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(eth1_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(public_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(dns_domain) = tolower(\'guarddutyc2activityb.com\'))))", "startTime": 1575189790, "endTime": 1575628990}
+{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse detail.resource
+.instanceDetails.imageId \\"\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateDnsName\\":\\"*\\"\' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateDnsName\\":\\"*\\"\' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicDnsName\\":\\"*\\"\' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = \'aws.guardduty\' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower(\'ami-00068cd7555f543d\')) OR ((tolower(eth0_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(eth1_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(public_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(dns_domain) = tolower(\'guarddutyc2activityb.com\'))))", "startTime": 1575189790, "endTime": 1575628990}
 ```
 
 #### Transmit query:
@@ -91,7 +92,8 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateDnsName\\\":\\\"*\\\"' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateDnsName\\\":\\\"*\\"' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = 'aws.guardduty' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower('ami-00068cd7555f543d')) OR ((tolower(eth0_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(eth1_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(public_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(dns_domain) = tolower('guarddutyc2activityb.com'))))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
+"{\"logType\": \"guardduty\", \"limit\": 10000, \"queryString\": \"fields @timestamp, source, @message | parse detail
+.resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateDnsName\\\":\\\"*\\\"' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateDnsName\\\":\\\"*\\"' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = 'aws.guardduty' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower('ami-00068cd7555f543d')) OR ((tolower(eth0_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(eth1_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(public_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(dns_domain) = tolower('guarddutyc2activityb.com'))))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
 ```
 
 #### Search id:
@@ -209,7 +211,8 @@ results
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower(\'172.31.88.63\') OR tolower(eth1_private_ip) = tolower(\'172.31.88.63\') OR tolower(public_ip) = tolower(\'172.31.88.63\') OR tolower(remote_ip) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}
+{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse detail.resource
+.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicIp\\":\\"*\\"\' as public_ip | parse @message /(?:\\"ipAddressV4\\"\\\\:\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\")/ | filter source = \'aws.guardduty\' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower(\'172.31.88.63\') OR tolower(eth1_private_ip) = tolower(\'172.31.88.63\') OR tolower(public_ip) = tolower(\'172.31.88.63\') OR tolower(remote_ip) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}', '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1571568190}
 ```
 
 #### GuardDuty Transmit query :
@@ -220,7 +223,8 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower('172.31.88.63') OR tolower(eth1_private_ip) = tolower('172.31.88.63') OR tolower(public_ip) = tolower('172.31.88.63') OR tolower(remote_ip) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
+"{\"logType\": \"guardduty\", \"limit\": 10000, \"queryString\": \"fields @timestamp, source, @message | parse detail
+.resource.instanceDetails.networkInterfaces.0 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateIpAddress\\\":\\\"*\\\"' as eth1_private_ip | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicIp\\\":\\\"*\\\"' as public_ip | parse @message /(?:\\\"ipAddressV4\\\"\\\\:\\\")(?<remote_ip>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\\\")/ | filter source = 'aws.guardduty' or strlen(eth0_private_ip) > 0 or strlen(eth1_private_ip) > 0 or strlen(public_ip) > 0 or strlen(remote_ip) > 0 | filter ((tolower(eth0_private_ip) = tolower('172.31.88.63') OR tolower(eth1_private_ip) = tolower('172.31.88.63') OR tolower(public_ip) = tolower('172.31.88.63') OR tolower(remote_ip) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
 
 #### VPCFlow Transmit query:
@@ -231,7 +235,8 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
-"{\"logType\": \"vpcflow\", \"limit\": 1000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
+"{\"logType\": \"vpcflow\", \"limit\": 10000, \"queryString\": \"fields @timestamp, srcAddr, dstAddr, srcPort, 
+dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower('172.31.88.63') OR tolower(dstAddr) = tolower('172.31.88.63')))\", \"startTime\": 1569919390, \"endTime\": 1571568190}"
 ```
 
 #### GuardDuty Search id:
@@ -443,7 +448,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse detail.resource
+{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse detail.resource
 .accessKeyDetails.accessKeyId \\"\\" as access_key_id | filter source = \'aws.guardduty\' or strlen (access_key_id) >
  0 | filter (tolower(access_key_id) = tolower(\'xxxxxxxx\'))", "startTime": 1577333751, "endTime": 1577334051}
 ```
@@ -456,7 +461,7 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 1000, \"queryString\": \"fields @timestamp, source, @message | parse detail
+"{\"logType\": \"guardduty\", \"limit\": 10000, \"queryString\": \"fields @timestamp, source, @message | parse detail
 .resource.accessKeyDetails.accessKeyId \\"\\" as access_key_id | filter source = 'aws.guardduty' or strlen 
 (access_key_id) > 0 | filter (tolower(access_key_id) = tolower('xxxxx'))\", \"startTime\": 1577333751, 
 \"endTime\": 1577334051}"
