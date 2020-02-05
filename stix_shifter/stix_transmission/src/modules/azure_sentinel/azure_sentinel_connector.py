@@ -79,7 +79,8 @@ class Connector(BaseConnector):
                 return self.adal_response
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
-                response = self.api_client.run_search(query, offset + length)
+                # $skip(offset) param not included as data source provides incorrect results for some of the queries
+                response = self.api_client.run_search(query, total_records)
             elif length > self.max_limit:
                 response = self.api_client.run_search(query, self.max_limit)
             response_code = response.code
