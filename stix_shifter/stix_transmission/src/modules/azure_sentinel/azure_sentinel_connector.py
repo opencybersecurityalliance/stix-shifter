@@ -70,6 +70,9 @@ class Connector(BaseConnector):
         length = int(length)
         offset = int(offset)
 
+        # total records is the sum of the offset and length(limit) value
+        total_records = offset + length
+
         try:
             if self.init_error:
                 print("Token Generation Failed:")
@@ -84,7 +87,7 @@ class Connector(BaseConnector):
             if 199 < response_code < 300:
                 return_obj['success'] = True
                 return_obj['data'] = response_dict['value']
-                while len(return_obj['data']) < (offset + length):
+                while len(return_obj['data']) < total_records:
                     try:
                         next_page_link = response_dict['@odata.nextLink']
                         response = self.api_client.next_page_run_search(next_page_link)
@@ -97,7 +100,7 @@ class Connector(BaseConnector):
                     except KeyError:
                         break
                 # slice the cumulative records as per the provided offset and length(limit)
-                return_obj['data'] = return_obj['data'][offset:offset+length]
+                return_obj['data'] = return_obj['data'][offset:total_records]
 
                 single_level_json = []
                 # flatten result json to single level
