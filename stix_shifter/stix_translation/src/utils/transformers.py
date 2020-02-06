@@ -142,9 +142,11 @@ class ToInteger(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
+            if type(obj) is str and re.search('\.', obj):
+                obj = float(obj)
             return int(obj)
         except ValueError:
-            print("Cannot convert input to integer")
+            print("Cannot convert input {} to integer".format(obj))
 
 
 class ToString(ValueTransformer):
