@@ -31,7 +31,7 @@
   },
   "x-readable-payload": {
     "fields": {
-      "value": ["utf8_source_payload", "utf8_destination_payload"]
+      "value": ["source_payload", "destination_payload"]
     }
   }
 }
