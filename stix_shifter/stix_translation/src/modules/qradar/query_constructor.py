@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr"],
                         "sourcemac": ["mac"],
                         "destinationip": ["ipv4", "ipv6", "ipv4_cidr"],
-                        "destinationmac": ["mac"]}
+                        "destinationmac": ["mac"],
+                        "sourcev6": ["ipv6"],
+                        "destinationv6": ["ipv6"]}
 
 START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
@@ -101,6 +103,12 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
+            return None
+        # These next two checks wouldn't be needed if events and flows used their own to-STIX mapping
+        # This is here because both events and flows map sourceip and destinationip, but in different ways
+        if value_type == 'ipv6' and (mapped_field == 'sourceip' or mapped_field == 'destinationip') and self.dmm.dialect == 'flows':
+            return None
+        if value_type == 'ipv4' and (mapped_field == 'sourcev6' or mapped_field == 'destinationv6') and self.dmm.dialect == 'flows':
             return None
         if value_type == 'ipv4_cidr':
             # Comparator originally came in as '=' so it must be changed to INCIDR
