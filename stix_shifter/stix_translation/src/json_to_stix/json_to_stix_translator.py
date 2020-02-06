@@ -186,6 +186,7 @@ class DataSourceObjToStixObj:
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        print("Removing {} since it is an invalid STIX value for {}".format(stix_value, key_to_add))
                         continue
 
                 # Group Values
@@ -221,6 +222,7 @@ class DataSourceObjToStixObj:
         :param obj: the datasource object that is being converted to stix
         :return: the input object converted to stix valid json
         """
+        NUMBER_OBSERVED_KEY = 'number_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
@@ -240,6 +242,10 @@ class DataSourceObjToStixObj:
                 self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
             print("Not a dict: {}".format(obj))
+        
+        # Add required property to the observation if it wasn't added via the mapping
+        if NUMBER_OBSERVED_KEY not in observation:
+            observation[NUMBER_OBSERVED_KEY] = 1
 
         # Validate each STIX object
         if self.stix_validator:
