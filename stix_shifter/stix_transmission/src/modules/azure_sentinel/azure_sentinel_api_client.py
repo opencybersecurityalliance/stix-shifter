@@ -35,17 +35,15 @@ class APIClient:
         params['$top'] = 1
         return self.client.call_api(self.endpoint, 'GET', urldata=params)
 
-    def run_search(self, query_expression, offset, length):
+    def run_search(self, query_expression, length):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
-        :param offset: int,offset value
         :param length: int,length value
         :return: response, json object"""
         headers = dict()
         headers['Accept'] = 'application/json'
         params = dict()
         params['$filter'] = query_expression
-        params['$skip'] = offset
         params['$top'] = length
         return self.client.call_api(self.endpoint, 'GET', headers, urldata=params)
 
