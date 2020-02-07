@@ -49,9 +49,9 @@
     "starttime",
     "endtime",
     "viewobjectpair",
-    "UTF8(sourcepayload) as source_payload",
-    "UTF8(destinationpayload) as destination_payload",
     "BASE64(sourcepayload) as base64_source_payload",
-    "BASE64(destinationpayload) as base64_destination_payload"
+    "BASE64(destinationpayload) as base64_destination_payload",
+    "UTF8(sourcepayload) as utf8_source_payload",
+    "UTF8(destinationpayload) as utf8_destination_payload"
   ]
 }

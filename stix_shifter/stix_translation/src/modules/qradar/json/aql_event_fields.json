@@ -25,7 +25,7 @@
     "eventcount",
     "PROTOCOLNAME(protocolid) as protocol",
     "BASE64(payload) as base64_payload",
-    "UTF8(payload) as payload",
+    "UTF8(payload) as utf8_payload",
     "URL as url",
     "magnitude",
     "Filename as filename",

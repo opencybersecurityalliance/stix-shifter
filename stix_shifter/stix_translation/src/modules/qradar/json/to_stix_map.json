@@ -187,15 +187,13 @@
       "object": "dir"
     }
   ],
-  "payload": {
-    "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
+  "base64_payload": {
+    "key": "artifact.payload_bin"
   },
-  "source_payload": [
+  "base64_source_payload": [
     {
       "key": "artifact.payload_bin",
-      "object": "src_payload",
-      "transformer": "ToBase64"
+      "object": "src_payload"
     },
     {
       "key": "network-traffic.src_payload_ref",
@@ -203,11 +201,10 @@
       "references": "src_payload"
     }
   ],
-  "destination_payload": [
+  "base64_destination_payload": [
     {
       "key": "artifact.payload_bin",
-      "object": "dst_payload",
-      "transformer": "ToBase64"
+      "object": "dst_payload"
     },
     {
       "key": "network-traffic.dst_payload_ref",
