@@ -17,6 +17,8 @@ class AWSCloudWatchLogsDeleteConnector(BaseDeleteConnector):
         response_dict = dict()
         try:
             query = dict()
+            if ':' in search_id:
+                search_id = search_id.split(':')[0]
             query['queryId'] = search_id
             self.client.stop_query(**query)
             return_obj['success'] = True
