@@ -51,6 +51,8 @@ class AWSCloudWatchLogsStatusConnector(BaseStatusConnector):
         response_dict = dict()
         limit = DEFAULT_LIMIT
         try:
+            if ':' in search_id:
+                search_id, limit = search_id.split(':')
             query = dict()
             query['queryId'] = search_id
             response_dict = self.client.get_query_results(**query)
@@ -63,7 +65,7 @@ class AWSCloudWatchLogsStatusConnector(BaseStatusConnector):
                 progress = (results / int(limit)) * 100
                 progress_floor = math.floor(progress)
                 return_obj['progress'] = progress_floor
-                if return_obj['progress'] == 100:
+                if return_obj['progress'] >= 100:
                     return_obj['status'] = 'COMPLETED'
             else:
                 return_obj['progress'] = 0

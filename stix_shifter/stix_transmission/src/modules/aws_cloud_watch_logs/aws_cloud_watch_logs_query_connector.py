@@ -20,6 +20,7 @@ class AWSCloudWatchLogsQueryConnector(BaseQueryConnector):
         try:
             query = json.loads(query)
             log_type = query['logType']
+            limit = query['limit']
             # add service specific loggroups to query if service logtype present
             # else loggroups in default type adds to query
             log_groups = self.log_group_names.get(log_type) if self.log_group_names.get(log_type) else \
@@ -39,7 +40,7 @@ class AWSCloudWatchLogsQueryConnector(BaseQueryConnector):
             query.pop('logType')
             response_dict = self.client.start_query(**query)
             return_obj['success'] = True
-            return_obj['search_id'] = response_dict['queryId']
+            return_obj['search_id'] = response_dict['queryId'] + ':' + str(limit)
         except Exception as ex:
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex

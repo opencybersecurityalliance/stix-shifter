@@ -298,7 +298,7 @@ class TestAWSConnection(unittest.TestCase):
         assert 'success' in query_response
         assert query_response['success'] is True
         assert 'search_id' in query_response
-        assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870"\
+        assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870:2"
 
     @staticmethod
     @patch(
@@ -306,7 +306,7 @@ class TestAWSConnection(unittest.TestCase):
         '.client')
     def test_iam_create_query_connection(mock_create_query):
         mock_create_query.return_value = AWSMockJsonResponse()
-        query = "{\"logType\": \"vpcflow\", \"limit\": 2, \"logGroupName\": \"USEast1_FlowLogs\", " \
+        query = "{\"logType\": \"vpcflow\", \"limit\": 10000, \"logGroupName\": \"USEast1_FlowLogs\", " \
                 "\"queryString\": \"fields @timestamp, " \
                 "srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId, bytes, packets | " \
                 "filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | " \
@@ -319,7 +319,7 @@ class TestAWSConnection(unittest.TestCase):
         assert 'success' in query_response
         assert query_response['success'] is True
         assert 'search_id' in query_response
-        assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870"
+        assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870:10000"
 
     @staticmethod
     @patch(

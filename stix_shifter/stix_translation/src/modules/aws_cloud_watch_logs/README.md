@@ -99,7 +99,7 @@ query
 #### Search id:
 
 ```
-{'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502'}
+{'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502:10000'}
 ```
 
 #### Transmit result:
@@ -110,7 +110,7 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-3c4d5934-aa47-4a4f-be16-ef963d73b502
+3c4d5934-aa47-4a4f-be16-ef963d73b502:10000
 0
 2
 ```
@@ -242,13 +242,13 @@ dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) >
 #### GuardDuty Search id:
 
 ```
-{'success': True, 'search_id': '713bd4e2-1e9c-4919-bdb4-72baceed3ba7'}
+{'success': True, 'search_id': '713bd4e2-1e9c-4919-bdb4-72baceed3ba7:10000'}
 ```
 
 #### VPCFlow Search id:
 
 ```
-{'success': True, 'search_id': 'c3be3246-8b2b-4be7-b2de-d5d475c0ed8a'}
+{'success': True, 'search_id': 'c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000'}
 ```
 
 #### GuardDuty Transmit result :
@@ -259,7 +259,7 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-713bd4e2-1e9c-4919-bdb4-72baceed3ba7
+713bd4e2-1e9c-4919-bdb4-72baceed3ba7:10000
 0
 2
 ```
@@ -272,7 +272,7 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-c3be3246-8b2b-4be7-b2de-d5d475c0ed8a
+c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
 0
 2
 ```
@@ -470,7 +470,7 @@ query
 #### Search id:
 
 ```
-{'success': True, 'search_id': '50359121-6624-43bf-9ef2-a9f3bf07f5ef'}
+{'success': True, 'search_id': '50359121-6624-43bf-9ef2-a9f3bf07f5ef:10000'}
 ```
 
 #### Transmit result:
@@ -481,7 +481,7 @@ transmit
 "{\"host\":\"xxxxxxx.xxxx.xxxxx\",\"port\": \"xxx\",\"cert_verify\":\"xxxx\"}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-50359121-6624-43bf-9ef2-a9f3bf07f5ef
+50359121-6624-43bf-9ef2-a9f3bf07f5ef:10000
 0
 2
 ```

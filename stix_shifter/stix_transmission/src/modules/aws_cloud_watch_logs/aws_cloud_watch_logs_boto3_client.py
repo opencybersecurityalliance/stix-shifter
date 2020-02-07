@@ -14,8 +14,8 @@ class BOTO3Client:
             if not region_name:
                 raise KeyError('Region must be specified')
             if 'aws_iam_role' in auth and auth.get('aws_iam_role'):
-                '''specific for role based authentication.Links user to role and
-                     generates client object with role based Credentials.'''
+                # specific for role based authentication.Links user to role and
+                # generates client object with role based Credentials.
                 client = boto3.client('sts',
                                       aws_access_key_id=aws_access_key_id,
                                       aws_secret_access_key=aws_secret_access_key,
@@ -36,7 +36,7 @@ class BOTO3Client:
                                            region_name=region_name
                                            )
             else:
-                '''basic client object authentication with access_key and aws_secret_access_key.'''
+                # basic client object authentication with access_key and aws_secret_access_key.
                 self.client = boto3.client('logs',
                                            aws_access_key_id=aws_access_key_id,
                                            aws_secret_access_key=aws_secret_access_key,
