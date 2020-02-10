@@ -68,19 +68,19 @@
         query <translated_query>
         ```  
 
-## Sample 1:
+## Sample 1:(STIX pattern with resultSizeLimit)
 
 #### STIX patterns:
 
 ```
-([domain-name:value = 'guarddutyc2activityb.com' OR x-com-aws-instance:image_id = 'ami-00068cd7555f543d']) START 
-t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+"([domain-name:value = 'guarddutyc2activityb.com' OR x-com-aws-instance:image_id = 'ami-00068cd7555f543d']) START 
+t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'" "{\"resultSizeLimit\":500}"
 ```
 
 #### Translated query:
 
 ```
-{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse detail.resource
+{"logType": "guardduty", "limit": 500, "queryString": "fields @timestamp, source, @message | parse detail.resource
 .instanceDetails.imageId \\"\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateDnsName\\":\\"*\\"\' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 \'\\"privateDnsName\\":\\"*\\"\' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 \'\\"publicDnsName\\":\\"*\\"\' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = \'aws.guardduty\' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower(\'ami-00068cd7555f543d\')) OR ((tolower(eth0_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(eth1_private_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(public_dns_name) = tolower(\'guarddutyc2activityb.com\') OR tolower(dns_domain) = tolower(\'guarddutyc2activityb.com\'))))", "startTime": 1575189790, "endTime": 1575628990}
 ```
 
@@ -92,14 +92,14 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\",\"log_group_names\":{\"guardduty\":[\"CloudTrail/DefaultLogGroup\",\"/aws/events/guardduty\"], \"vpcflow\":\"USEast1_FlowLogs\"}}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 query
-"{\"logType\": \"guardduty\", \"limit\": 10000, \"queryString\": \"fields @timestamp, source, @message | parse detail
+"{\"logType\": \"guardduty\", \"limit\": 500, \"queryString\": \"fields @timestamp, source, @message | parse detail
 .resource.instanceDetails.imageId \\\"\\\" as image_id | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"privateDnsName\\\":\\\"*\\\"' as eth0_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.1 '\\\"privateDnsName\\\":\\\"*\\"' as eth1_private_dns_name | parse detail.resource.instanceDetails.networkInterfaces.0 '\\\"publicDnsName\\\":\\\"*\\\"' as public_dns_name | parse detail.service.action.dnsRequestAction.domain \\"\\" as dns_domain | filter source = 'aws.guardduty' or strlen(image_id) > 0 or strlen(eth0_private_dns_name) > 0 or strlen(eth1_private_dns_name) > 0 or strlen(public_dns_name) > 0 or strlen(dns_domain) > 0 | filter ((tolower(image_id) = tolower('ami-00068cd7555f543d')) OR ((tolower(eth0_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(eth1_private_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(public_dns_name) = tolower('guarddutyc2activityb.com') OR tolower(dns_domain) = tolower('guarddutyc2activityb.com'))))\", \"startTime\": 1575189790, \"endTime\": 1575628990}"
 ```
 
 #### Search id:
 
 ```
-{'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502:10000'}
+{'success': True, 'search_id': '3c4d5934-aa47-4a4f-be16-ef963d73b502:500'}
 ```
 
 #### Transmit result:
@@ -110,9 +110,9 @@ transmit
 "{\"host\":\"xxxx\",\"port\": \"xxxx\",\"cert_verify\":\"xxxx\",\"options\": {\"region\": \"xxxx\"}}"
 "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"xxxxx\"}}"
 results
-3c4d5934-aa47-4a4f-be16-ef963d73b502:10000
+3c4d5934-aa47-4a4f-be16-ef963d73b502:500
 0
-2
+50
 ```
 
 #### STIX observable output:
@@ -202,7 +202,7 @@ results
 
 ## Sample 2:
 
-#### STIX patterns:
+#### STIX patterns:(STIX pattern without resultSizeLimit)
 
 ```
 [ipv4-addr:value = '172.31.88.63'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-20T10:43:10.003Z'
@@ -440,7 +440,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
 
 ## Sample 3:
 
-#### STIX patterns:
+#### STIX patterns:(STIX pattern without resultSizeLimit)
 
 ```
 ([x-com-aws-api:access_key_id = 'xxxxxxx']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'

@@ -361,7 +361,7 @@ class TestAWSConnection(unittest.TestCase):
         '.client')
     def test_create_results_connection(mock_results):
         mock_results.return_value = AWSMockJsonResponse
-        search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
+        search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         offset = 0
         length = 2
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
@@ -379,7 +379,7 @@ class TestAWSConnection(unittest.TestCase):
         '.client')
     def test_delete_query_connection(mock_delete_query):
         mock_delete_query.return_value = AWSMockJsonResponse()
-        search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
+        search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
         delete_response = transmission.delete(search_id)
 
@@ -407,7 +407,7 @@ class TestAWSConnection(unittest.TestCase):
         '.client')
     def test_create_status_connection(mock_create_status):
         mock_create_status.return_value = AWSMockJsonResponse()
-        search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
+        search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 

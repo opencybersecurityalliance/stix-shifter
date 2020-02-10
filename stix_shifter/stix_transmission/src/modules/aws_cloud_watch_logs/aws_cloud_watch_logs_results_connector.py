@@ -83,8 +83,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
         :param flatten_results: dict
         :return: dict
         """
-        guard_dict, guard_dict['guardduty'], \
-        guard_dict['guardduty'][flatten_results.get('detail_service_action_actionType')] = dict(), dict(), dict()
+        guard_dict, guard_dict['guardduty'], guard_dict['guardduty'][flatten_results.get(
+            'detail_service_action_actionType')] = dict(), dict(), dict()
         guardduty_common_attr = self.get_guardduty_common_attr()
         for key, val in flatten_results.items():
             if val is None or val == []:
