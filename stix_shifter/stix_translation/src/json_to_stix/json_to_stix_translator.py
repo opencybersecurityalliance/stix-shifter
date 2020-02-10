@@ -120,7 +120,10 @@ class DataSourceObjToStixObj:
         :return: whether STIX value is valid for this STIX property
         :rtype: bool
         """
-        if stix_value is None:
+
+        #  Causing a couple of failing tests in MSATP
+        if stix_value is None or stix_value == '':
+        # if stix_value is None:
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
@@ -133,7 +136,7 @@ class DataSourceObjToStixObj:
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            print('{} is not found in map, skipping'.format(ds_key))
+            # print('{} is not found in map, skipping'.format(ds_key))
             return
 
         if isinstance(to_map, dict):
@@ -174,25 +177,29 @@ class DataSourceObjToStixObj:
             group = False
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
-                print("ds_key_def inside {}".format(ds_key_def))
                 if 'references' in ds_key_def:
                     references = ds_key_def['references']
                     if isinstance(references, list):
                         stix_value = []
                         for ref in references:
-                            stix_value.append(object_map[ref])
+                            val = object_map.get(ref)
+                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, val):
+                                continue
+                            stix_value.append(val)
+                        if not stix_value:
+                            continue
                     else:
-                        stix_value = object_map[references]
+                        stix_value = object_map.get(references)
+                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                            continue
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                        print("Removing {} since it is an invalid STIX value for {}".format(stix_value, key_to_add))
                         continue
 
                 # Group Values
                 if 'group' in ds_key_def:
                     group = True
-
                 DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
                 # get the object name defined for custom attributes
