@@ -60,7 +60,6 @@ class TestTransform(object):
 
     def test_cybox_observables(self):
         payload = "Payload"
-        encoded_string = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
@@ -68,7 +67,7 @@ class TestTransform(object):
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "payload": payload, "username": user_id, "protocol": 'TCP',
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -112,7 +111,7 @@ class TestTransform(object):
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert(curr_obj is not None), 'artifact object type not found'
         assert(curr_obj.keys() == {'type', 'payload_bin'})
-        assert(curr_obj['payload_bin'] == encoded_string)
+        assert(curr_obj['payload_bin'] == payload)
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert(curr_obj is not None), 'user-account object type not found'
