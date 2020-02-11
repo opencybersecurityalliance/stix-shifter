@@ -316,7 +316,7 @@ class TestStixToAql(unittest.TestCase, object):
         search_string = '^.*https://wally.fireeye.com.*$'
         stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_backslash_escaping(self):
@@ -327,7 +327,7 @@ class TestStixToAql(unittest.TestCase, object):
         stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
-        where_statement = "WHERE payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
+        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_filepath_queries(self):

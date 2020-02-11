@@ -61,7 +61,7 @@
   },
   "x-readable-payload": {
     "fields": {
-      "value": ["payload"]
+      "value": ["utf8_payload"]
     }
   },
   "x-com-ibm-ariel": {
