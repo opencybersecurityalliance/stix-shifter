@@ -202,7 +202,7 @@ class ToDirectoryPath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return os.path.dirname(obj)
+            return os.path.dirname(obj) + os.path.basename(obj)
         except ValueError:
             print("Cannot convert input to directory path string")
 
