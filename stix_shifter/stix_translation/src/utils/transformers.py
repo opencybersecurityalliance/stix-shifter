@@ -355,17 +355,6 @@ class Ymd_HMSToTimestamp(ValueTransformer):
         return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class EmptyStringToNone(ValueTransformer):
-    """A transformer that converts empty strings to None. This will exclude empty string values from the STIX results."""
-
-    @staticmethod
-    def transform(obj):
-        if (type(obj) is str and not(obj)):
-            return None
-        else:
-            return obj
-
-
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
@@ -375,5 +364,4 @@ def get_all_transformers():
             "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
             "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
-            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "EmptyStringToNone":
-                EmptyStringToNone, "AwsToTimestamp": AwsToTimestamp}
+            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp}
