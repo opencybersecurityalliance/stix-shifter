@@ -250,5 +250,9 @@
   "domainname": {
     "key": "domain-name.value",
     "transformer": "ToDomainName"
+  },
+  "flowsource": {
+    "key": "x_com_ibm_ariel.flow_source",
+    "cybox": false
   }
 }
