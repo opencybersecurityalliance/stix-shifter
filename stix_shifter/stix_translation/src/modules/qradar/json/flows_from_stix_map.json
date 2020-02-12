@@ -23,10 +23,5 @@
       "src_packets": ["sourcepackets"],
       "dst_packets": ["destinationpackets"]
     }
-  },
-  "artifact": {
-    "fields": {
-      "payload_bin": ["utf8_source_payload"]
-    }
   }
 }

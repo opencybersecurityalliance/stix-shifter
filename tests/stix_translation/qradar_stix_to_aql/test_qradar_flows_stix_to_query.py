@@ -92,12 +92,3 @@ class TestStixToAql(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (destinationpackets = '1' AND sourcepackets = '2898') OR (destinationbytes = '604' AND sourcebytes = '306') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         _test_query_assertions(query, selections, from_statement, where_statement)
-
-    def test_src_dst_payloads(self):
-        # TODO: A query may need to be created for both source and destination payloads.
-        # TEXT SEARCH looks like it only brings back results for the first payload in the AQL query.
-        # An AQL query can only have one TEXT SEARCH so need to add utf8_destination_payload to the from-STIX mapping
-        stix_pattern = "[artifact:payload_bin LIKE 'some.payload']"
-        query = _translate_query(stix_pattern)
-        where_statement = "WHERE TEXT SEARCH 'some.payload' {} {}".format(default_limit, default_time)
-        _test_query_assertions(query, selections, from_statement, where_statement)
