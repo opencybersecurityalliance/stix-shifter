@@ -70,8 +70,12 @@ class StixTranslation:
             if module not in TRANSLATION_MODULES:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 
-            translator_module = importlib.import_module(
-                "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
+            try:
+                translator_module = importlib.import_module(
+                    "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
+            except:
+                translator_module = importlib.import_module(
+                    "stix_shifter_modules." + module + ".stix_translation." + module + "_translator")
 
             if not dialects[0] == DEFAULT_DIALECT:
                 # Todo: This will only work if there is one dialect.
@@ -149,7 +153,10 @@ class StixTranslation:
 
     def _build_data_mapper(self, module, options):
         try:
-            data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
+            try:
+                data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
+            except:
+                data_model = importlib.import_module("stix_shifter_modules." + module + ".stix_translation.data_mapping")
             return data_model.DataMapper(options)
         except Exception as ex:
             # Attempt to use the CIM or CAR mapper

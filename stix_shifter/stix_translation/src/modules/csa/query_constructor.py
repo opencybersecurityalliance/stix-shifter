@@ -18,7 +18,7 @@ START_STOP_FIELD = "eventTime"
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'stix_shifter/stix_translation/src/modules/qradar/json/network_protocol_map.json').read()
+            'stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:

@@ -1,5 +1,6 @@
 import importlib
-from ..utils.error_response import ErrorResponder
+#DELETEME from ..utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub',
                         'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium',
@@ -19,7 +20,6 @@ class StixTransmission:
     init_error = None
 
     def __init__(self, module, connection, configuration):
-        module = module.split(':')[0]
         if module not in TRANSMISSION_MODULES:
             raise NotImplementedError
         if connection.get('options', {}).get('proxy'):
@@ -30,8 +30,7 @@ class StixTransmission:
                 self.connector_module = importlib.import_module("stix_shifter.stix_transmission.src.modules." + module +
                                                                     "." + module + "_connector")
             except:
-                # print("stix_shifter_modules." + module + ".stix_transmission." + module + "_connector")
-                self.connector_module = importlib.import_module(
+                translator_module = importlib.import_module(
                     "stix_shifter_modules." + module + ".stix_transmission." + module + "_connector")
             self.interface = self.connector_module.Connector(connection, configuration)
         except KeyError as e:
