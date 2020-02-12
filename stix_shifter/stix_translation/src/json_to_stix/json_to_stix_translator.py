@@ -57,7 +57,8 @@ class DataSourceObjToStixObj:
             print('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
-        if transformer is not None:
+        # Is this getting his with a none-type value?
+        if ret_val and transformer is not None:
             return transformer.transform(ret_val)
         return ret_val
 
@@ -123,7 +124,7 @@ class DataSourceObjToStixObj:
 
         #  Causing a couple of failing tests in MSATP
         if stix_value is None or stix_value == '':
-        # if stix_value is None:
+            print("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
