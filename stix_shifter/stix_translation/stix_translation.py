@@ -131,10 +131,7 @@ class StixTranslation:
 
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                try:
-                    return interface.translate_results(data_source, data, options)
-                except Exception:
-                    raise TranslationResultException()
+                return interface.translate_results(data_source, data, options)
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 data_model_mapper = self._build_data_mapper(module, options)
