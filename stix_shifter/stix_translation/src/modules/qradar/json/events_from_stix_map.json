@@ -51,17 +51,12 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["base64_payload"]
+      "payload_bin": ["utf8_payload"]
     }
   },
   "domain-name": {
     "fields": {
       "value": ["domainname"]
-    }
-  },
-  "x-readable-payload": {
-    "fields": {
-      "value": ["utf8_payload"]
     }
   },
   "x-com-ibm-ariel": {

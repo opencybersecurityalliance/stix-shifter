@@ -26,12 +26,7 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["base64_source_payload", "base64_destination_payload"]
-    }
-  },
-  "x-readable-payload": {
-    "fields": {
-      "value": ["source_payload", "destination_payload"]
+      "payload_bin": ["utf8_source_payload"]
     }
   }
 }

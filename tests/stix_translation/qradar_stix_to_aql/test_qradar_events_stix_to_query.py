@@ -307,14 +307,14 @@ class TestStixToAql(unittest.TestCase, object):
 
     def test_payload_string_matching_with_LIKE(self):
         search_string = 'search term'
-        stix_pattern = "[x-readable-payload:value LIKE '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin LIKE '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE TEXT SEARCH '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_payload_string_matching_with_MATCH(self):
         search_string = '^.*https://wally.fireeye.com.*$'
-        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
@@ -324,7 +324,7 @@ class TestStixToAql(unittest.TestCase, object):
         # Not sure yet how we will make this work for an AQL query.
         # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
         search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
-        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
