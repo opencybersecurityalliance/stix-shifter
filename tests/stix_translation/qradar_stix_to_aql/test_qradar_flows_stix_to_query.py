@@ -12,7 +12,6 @@ DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 PROTOCOLS = json.loads(protocols_file)
-MODULES = ['qradar', 'qradar:events', 'qradar:flows']
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
 
@@ -32,7 +31,7 @@ def _test_query_assertions(query, selections, from_statement, where_statement):
 
 
 def _translate_query(stix_pattern):
-    return translation.translate(MODULES[2], 'query', '{}', stix_pattern)
+    return translation.translate('qradar:flows', 'query', '{}', stix_pattern)
 
 
 class TestStixToAql(unittest.TestCase, object):

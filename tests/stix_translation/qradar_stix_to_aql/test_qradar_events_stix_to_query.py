@@ -12,7 +12,6 @@ DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 PROTOCOLS = json.loads(protocols_file)
-MODULES = ['qradar', 'qradar:events', 'qradar:flows']
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
 
@@ -32,7 +31,7 @@ def _test_query_assertions(query, selections, from_statement, where_statement):
 
 
 def _translate_query(stix_pattern):
-    return translation.translate(MODULES[1], 'query', '{}', stix_pattern)
+    return translation.translate('qradar:events', 'query', '{}', stix_pattern)
 
 
 class TestStixToAql(unittest.TestCase, object):
@@ -236,7 +235,7 @@ class TestStixToAql(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-        query = translation.translate(MODULES[1], 'query', '{}', stix_pattern, OPTIONS)
+        query = translation.translate('qradar:events', 'query', '{}', stix_pattern, OPTIONS)
         where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['timerange'])
         assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
