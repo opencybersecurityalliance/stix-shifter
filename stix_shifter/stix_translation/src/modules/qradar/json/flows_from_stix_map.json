@@ -23,5 +23,24 @@
       "src_packets": ["sourcepackets"],
       "dst_packets": ["destinationpackets"]
     }
+  },
+  "x-com-ibm-ariel": {
+    "fields": {
+      "qid": ["qid"],
+      "qid_name": ["qidname"],
+      "flow_source": ["flowsource"],
+      "flow_interface_id": ["flowinterfaceid"],
+      "flow_interface": ["flowinterface"],
+      "geographic": ["geographic"],
+      "category_name": ["categoryname"],
+      "credibility": ["credibility"],
+      "severity": ["severity"],
+      "direction": ["direction"],
+      "relevance": ["relevance"],
+      "first_packet_time": ["firstpackettime"],
+      "last_packet_time": ["lastpackettime"],
+      "application_id": ["applicationid"],
+      "application_name": ["applicationname"]
+    }
   }
 }

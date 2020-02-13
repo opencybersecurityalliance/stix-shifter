@@ -72,7 +72,10 @@
       "high_level_category_name": ["high_level_category_name"],
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
-      "identity_host_name": ["identityhostname"]
+      "identity_host_name": ["identityhostname"],
+      "severity": ["severity"],
+      "relevance": ["relevance"],
+      "geographic": ["geographic"]
     }
   }
 }

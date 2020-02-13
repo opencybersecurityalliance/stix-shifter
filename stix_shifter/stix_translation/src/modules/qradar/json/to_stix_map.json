@@ -30,6 +30,10 @@
     "key": "x_com_ibm_ariel.qid_name",
     "cybox": false
   },
+  "relevance": {
+    "key": "x_com_ibm_ariel.relevance",
+    "cybox": false
+  },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
@@ -253,6 +257,42 @@
   },
   "flowsource": {
     "key": "x_com_ibm_ariel.flow_source",
+    "cybox": false
+  },
+  "flowinterface": {
+    "key": "x_com_ibm_ariel.flow_interface",
+    "cybox": false
+  },
+  "flowinterfaceid": {
+    "key": "x_com_ibm_ariel.flow_interface_id",
+    "cybox": false
+  },
+  "geographic": {
+    "key": "x_com_ibm_ariel.geographic",
+    "cybox": false
+  },
+  "credibility": {
+    "key": "x_com_ibm_ariel.credibility",
+    "cybox": false
+  },
+  "severity": {
+    "key": "x_com_ibm_ariel.severity",
+    "cybox": false
+  },
+  "firstpackettime": {
+    "key": "x_com_ibm_ariel.first_packet_time",
+    "cybox": false
+  },
+  "lastpackettime": {
+    "key": "x_com_ibm_ariel.last_packet_time",
+    "cybox": false
+  },
+  "applicationname": {
+    "key": "x_com_ibm_ariel.application_name",
+    "cybox": false
+  },
+  "applicationid": {
+    "key": "x_com_ibm_ariel.application_id",
     "cybox": false
   }
 }

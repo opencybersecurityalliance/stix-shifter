@@ -1,6 +1,7 @@
 {
   "default": [
     "applicationid",
+    "APPLICATIONNAME(applicationid) as applicationname",
     "CATEGORYNAME(category) as categoryname",
     "credibility",
     "destinationasn",
@@ -17,7 +18,7 @@
     "fullmatchlist",
     "firstpackettime",
     "flowbias",
-    "flowdirection",
+    "flowdirection as direction",
     "flowinterfaceid",
     "flowsource",
     "flowtype",
@@ -31,6 +32,7 @@
     "lastpackettime",
     "partialmatchlist",
     "PROTOCOLNAME(protocolid) as protocol",
+    "QIDNAME(qid) as qidname",
     "qid",
     "processorid",
     "relevance",
@@ -48,7 +50,6 @@
     "sourcev6",
     "starttime",
     "endtime",
-    "viewobjectpair",
     "BASE64(sourcepayload) as base64_source_payload",
     "BASE64(destinationpayload) as base64_destination_payload"
   ]
