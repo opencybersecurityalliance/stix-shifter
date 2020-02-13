@@ -6,7 +6,7 @@ from ...json_to_stix import observable
 from flatten_json import flatten
 from os import path
 import json
-import re
+import re 
 
 
 
@@ -57,7 +57,14 @@ class JSONToStixObservablesDecorator:
         for key, value in flattened_finding.items():
             try:
                 objectList = re.findall(regex, value)
+                exceptionList = []
                 if len(objectList) > 0:
+                    if type == 'domain-name' :
+                       for value in objectList:
+                           if "securityadvisor." in value:
+                               exceptionList.append(value)
+                    # Removing specific exceptions here.
+                    objectList =  list(set(objectList) - set(exceptionList))
                     objects.extend(objectList)
             except:
                 pass
