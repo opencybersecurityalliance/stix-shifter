@@ -38,7 +38,7 @@ class TestStixToQuery(unittest.TestCase):
                        "STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
             'eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '
             '\'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse '
@@ -49,7 +49,7 @@ class TestStixToQuery(unittest.TestCase):
             '| filter ((tolower(eth0_private_ip) = tolower(\'172.31.88.63\') OR tolower(eth1_private_ip) = tolower('
             '\'172.31.88.63\') OR tolower(public_ip) = tolower(\'172.31.88.63\') OR tolower(remote_ip) = tolower('
             '\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter ((tolower(srcAddr) = tolower(\'172.31.88.63\') OR tolower(dstAddr) = '
             'tolower(\'172.31.88.63\')))", "startTime": 1569919390, "endTime": 1572432190}']
@@ -63,11 +63,11 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.service.action.networkConnectionAction.protocol \\"\\" as protocol | filter source = '
             '\'aws.guardduty\' or strlen(protocol) > 0 | filter ((tolower(protocol) = tolower(\'tcp\') OR tolower('
             'protocol) = tolower(\'igp\')))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (protocol IN [\'6\', \'9\'])", "startTime": 1569919390, "endTime": '
             '1572432190}']
@@ -81,11 +81,11 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
             'eth0_private_ip | filter source = \'aws.guardduty\' or strlen(eth0_private_ip) > 0 | filter ('
             'eth0_private_ip LIKE /(?i)58/)", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (srcAddr LIKE /(?i)58/)", "startTime": 1569919390, "endTime": '
             '1572432190}']
@@ -100,7 +100,7 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
             'eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '
             '\'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse '
@@ -113,7 +113,7 @@ class TestStixToQuery(unittest.TestCase):
             'eth1_private_ip) = tolower(\'113.204.228.66\')) OR (tolower(public_ip) = tolower(\'54.239.30.177\') OR '
             'tolower(public_ip) = tolower(\'113.204.228.66\')) OR (tolower(remote_ip) = tolower(\'54.239.30.177\') OR '
             'tolower(remote_ip) = tolower(\'113.204.228.66\'))))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (((tolower(srcAddr) = tolower(\'54.239.30.177\') OR tolower(srcAddr) '
             '= tolower(\'113.204.228.66\')) OR (tolower(dstAddr) = tolower(\'54.239.30.177\') OR tolower(dstAddr) = '
@@ -129,11 +129,11 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             '@message \'\\"localPortDetails\\":{\\"port\\":*,\' as local_port | filter source = \'aws.guardduty\' or '
             'strlen(local_port) > 0 | filter (local_port LIKE /\\\\d+/)", "startTime": 1569919390, "endTime": '
             '1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (srcPort LIKE /\\\\d+/)", "startTime": 1569919390, "endTime": '
             '1572432190}']
@@ -148,7 +148,7 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
             'eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '
             '\'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse '
@@ -161,7 +161,7 @@ class TestStixToQuery(unittest.TestCase):
             '\'167.71.118.48\'))) OR ((tolower(eth0_private_ip) = tolower(\'54.239.30.177\') OR tolower('
             'eth1_private_ip) = tolower(\'54.239.30.177\') OR tolower(public_ip) = tolower(\'54.239.30.177\') OR '
             'tolower(remote_ip) = tolower(\'54.239.30.177\'))))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (((tolower(srcAddr) = tolower(\'167.71.118.48\') OR tolower(dstAddr) '
             '= tolower(\'167.71.118.48\'))) OR ((tolower(srcAddr) = tolower(\'54.239.30.177\') OR tolower(dstAddr) = '
@@ -177,7 +177,7 @@ class TestStixToQuery(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         queries = [
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             'detail.resource.instanceDetails.networkInterfaces.0 \'\\"privateIpAddress\\":\\"*\\"\' as '
             'eth0_private_ip | parse detail.resource.instanceDetails.networkInterfaces.1 '
             '\'\\"privateIpAddress\\":\\"*\\"\' as eth1_private_ip | parse '
@@ -190,15 +190,15 @@ class TestStixToQuery(unittest.TestCase):
             '\'167.71.118.48\'))) OR ((tolower(eth0_private_ip) = tolower(\'54.239.30.177\') OR tolower('
             'eth1_private_ip) = tolower(\'54.239.30.177\') OR tolower(public_ip) = tolower(\'54.239.30.177\') OR '
             'tolower(remote_ip) = tolower(\'54.239.30.177\'))))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "guardduty", "limit": 1000, "queryString": "fields @timestamp, source, @message | parse '
+            '{"logType": "guardduty", "limit": 10000, "queryString": "fields @timestamp, source, @message | parse '
             '@message \'\\"localPortDetails\\":{\\"port\\":*,\' as local_port | filter source = \'aws.guardduty\' or '
             'strlen(local_port) > 0 | filter (local_port = \'22\')", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (((tolower(srcAddr) = tolower(\'167.71.118.48\') OR tolower(dstAddr) '
             '= tolower(\'167.71.118.48\'))) OR ((tolower(srcAddr) = tolower(\'54.239.30.177\') OR tolower(dstAddr) = '
             'tolower(\'54.239.30.177\'))))", "startTime": 1569919390, "endTime": 1572432190}',
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (srcPort = \'22\')", "startTime": 1569919390, "endTime": 1572432190}']
         self._test_query_assertions(query, queries)
@@ -212,7 +212,7 @@ class TestStixToQuery(unittest.TestCase):
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
-            '{"logType": "vpcflow", "limit": 1000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
+            '{"logType": "vpcflow", "limit": 10000, "queryString": "fields @timestamp, srcAddr, dstAddr, srcPort, '
             'dstPort, protocol, start, end, accountId, interfaceId | filter strlen(srcAddr) > 0 or strlen(dstAddr) > '
             '0 or strlen(protocol) > 0 | filter (start = \'1571130610\')", "startTime": 1569919390, '
             '"endTime": 1572432190}']

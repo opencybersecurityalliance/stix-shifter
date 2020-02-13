@@ -4,7 +4,7 @@ from .....utils.error_response import ErrorCode
 ERROR_MAPPING = {
     "InvalidParameterException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "ParamValidationError": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
-    "UnknownOperationException": ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE,
+    "UnknownOperationException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "UnrecognizedClientException": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "ClientError": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "InvalidSignatureException": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,

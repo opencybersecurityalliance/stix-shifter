@@ -6,10 +6,6 @@ from .....utils.error_response import ErrorResponder
 from os import path
 
 
-class InvalidParameterException(Exception):
-    pass
-
-
 class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
     def __init__(self, client):
         self.client = client
@@ -28,6 +24,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
             query = dict()
             offset = int(offset)
             length = int(length)
+            if ':' in search_id:
+                search_id = search_id.split(':')[0]
             total_records = offset+length
             query['queryId'] = search_id
             response_dict = self.client.get_query_results(**query)
@@ -85,8 +83,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
         :param flatten_results: dict
         :return: dict
         """
-        guard_dict, guard_dict['guardduty'], \
-        guard_dict['guardduty'][flatten_results.get('detail_service_action_actionType')] = dict(), dict(), dict()
+        guard_dict, guard_dict['guardduty'], guard_dict['guardduty'][flatten_results.get(
+            'detail_service_action_actionType')] = dict(), dict(), dict()
         guardduty_common_attr = self.get_guardduty_common_attr()
         for key, val in flatten_results.items():
             if val is None or val == []:
@@ -140,4 +138,3 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 return common_attr_list
         else:
             raise FileNotFoundError
-
