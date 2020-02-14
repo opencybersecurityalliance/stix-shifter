@@ -51,17 +51,12 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["base64_payload"]
+      "payload_bin": ["utf8_payload"]
     }
   },
   "domain-name": {
     "fields": {
       "value": ["domainname"]
-    }
-  },
-  "x-readable-payload": {
-    "fields": {
-      "value": ["utf8_payload"]
     }
   },
   "x-com-ibm-ariel": {
@@ -77,7 +72,10 @@
       "high_level_category_name": ["high_level_category_name"],
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
-      "identity_host_name": ["identityhostname"]
+      "identity_host_name": ["identityhostname"],
+      "severity": ["severity"],
+      "relevance": ["relevance"],
+      "geographic": ["geographic"]
     }
   }
 }

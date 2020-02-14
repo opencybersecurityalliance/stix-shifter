@@ -40,9 +40,7 @@ def _translate_query(stix_pattern, dialect):
 
 
 def _test_query_assertions(query, selections, from_statement, where_statement):
-    # print(query['queries']['sql_queries'])
-    # print([selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)])
-    assert query['queries']['sql_queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
+    assert query['queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
 
 
 class TestStixToSql(unittest.TestCase, object):
@@ -59,7 +57,7 @@ class TestStixToSql(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         query = _translate_query(stix_pattern, dialect)
         where_statement = "WHERE (Network.A IN (192.168.122.83 OR 192.168.122.84) OR Network.B IN (192.168.122.83 OR 192.168.122.84))"
-        assert query['queries']['sql_queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
+        assert query['queries'] == [selections + from_statement + where_statement + ' PARTITIONED EVERY {num_rows} ROWS'.format(num_rows=num_rows)]
 
     def test_ipv6_query(self):
         dialect = 'nf'
@@ -126,7 +124,7 @@ class TestStixToSql(unittest.TestCase, object):
         result = translation.translate('csa:nf', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX attributes' in result['error']
+        assert 'Unable to map the following STIX objects and properties to data source fields' in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         dialect = 'nf'

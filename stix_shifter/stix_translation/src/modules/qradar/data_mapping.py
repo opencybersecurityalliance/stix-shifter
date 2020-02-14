@@ -9,6 +9,7 @@ class DataMapper(BaseDataMapper):
         self.mapping_json = options['mapping'] if 'mapping' in options else {}
         self.select_fields_json = options['select_fields'] if 'select_fields' in options else {}
         basepath = path.dirname(__file__)
+        self.dialect = options.get('dialect') or 'events'
         self.map_data = self.mapping_json or self.fetch_mapping(basepath)
 
     def map_selections(self):
@@ -18,8 +19,11 @@ class DataMapper(BaseDataMapper):
                 field_list = aql_fields_json
             else:
                 basepath = path.dirname(__file__)
-                filepath = path.abspath(
-                    path.join(basepath, "json", "aql_event_fields.json"))
+                if self.dialect == 'flows':
+                    aql_fields_json = "aql_flow_fields.json"
+                else:
+                    aql_fields_json = "aql_event_fields.json"
+                filepath = path.abspath(path.join(basepath, "json", aql_fields_json))
                 aql_fields_file = open(filepath).read()
                 aql_fields_json = json.loads(aql_fields_file)
                 # Temporary default selections, this will change based on config override and the STIX pattern that is getting converted to AQL.

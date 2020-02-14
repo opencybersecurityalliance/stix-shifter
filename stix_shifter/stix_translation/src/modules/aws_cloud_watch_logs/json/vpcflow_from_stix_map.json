@@ -1,5 +1,4 @@
 {
-  "log-type": "vpcflow",
   "ipv4-addr": {
     "fields": {
       "value": ["srcAddr", "dstAddr"],

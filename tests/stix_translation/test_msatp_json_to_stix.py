@@ -186,6 +186,8 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
         assert file_obj['parent_directory_ref'] == '1'
+        directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
+        assert directory_object.get('path') == data['FileCreationEvents']['FolderPath']
 
     def test_process_json_to_stix(self):
         """

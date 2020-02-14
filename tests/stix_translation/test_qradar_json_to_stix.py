@@ -3,6 +3,7 @@ from stix_shifter.stix_translation.src.utils import transformers
 from stix_shifter.stix_translation.src.modules.qradar import qradar_translator
 import json
 from stix_shifter.stix_translation import stix_translation
+import base64
 
 interface = qradar_translator.Translator()
 map_file = open(interface.mapping_filepath).read()
@@ -58,7 +59,7 @@ class TestTransform(object):
         assert(observed_data['last_observed'] is not None)
 
     def test_cybox_observables(self):
-        payload = "SomeBase64Payload"
+        payload = "Payload"
         user_id = "someuserid2018"
         url = "https://example.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"

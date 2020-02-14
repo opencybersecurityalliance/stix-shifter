@@ -23,7 +23,7 @@ class TestAnalyticTranslator(unittest.TestCase):
 
         def test(self):
             res = translate(pattern, search_platform, data_model)
-            self.assertEqual(normalize_spacing(res['queries']), normalize_spacing(expected_result))
+            self.assertEqual(normalize_spacing(res['queries'][0]), normalize_spacing(expected_result))
         return test
 
     @staticmethod

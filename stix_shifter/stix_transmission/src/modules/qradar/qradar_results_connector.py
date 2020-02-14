@@ -21,7 +21,7 @@ class QRadarResultsConnector(BaseResultsConnector):
         
         if response_code == 200:
             return_obj['success'] = True
-            return_obj['data'] = response_dict['events']
+            return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 

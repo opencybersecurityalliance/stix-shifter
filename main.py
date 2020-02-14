@@ -50,7 +50,8 @@ def __main__():
 
     # positional arguments
     translate_parser.add_argument(
-        'module', choices=stix_translation.TRANSLATION_MODULES, help='The translation module to use')
+        'module', 
+        help='The translation module to use')
     translate_parser.add_argument('translate_type', choices=[
         stix_translation.RESULTS, stix_translation.QUERY, stix_translation.PARSE, stix_translation.SUPPORTED_ATTRIBUTES], help='The translation action to perform')
     translate_parser.add_argument(
@@ -73,7 +74,7 @@ def __main__():
 
     # positional arguments
     transmit_parser.add_argument(
-        'module', choices=stix_transmission.TRANSMISSION_MODULES,
+        'module', 
         help='Choose which connection module to use'
     )
     transmit_parser.add_argument(
@@ -105,11 +106,11 @@ def __main__():
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
     # positional arguments
     execute_parser.add_argument(
-        'transmission_module', choices=stix_transmission.TRANSMISSION_MODULES,
+        'transmission_module', 
         help='Which connection module to use'
     )
     execute_parser.add_argument(
-        'translation_module', choices=stix_translation.TRANSLATION_MODULES,
+        'translation_module', 
         help='Which translation module to use'
     )
     execute_parser.add_argument(
@@ -205,12 +206,14 @@ def __main__():
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query, {'validate_pattern': True})
+        print("\n\n***** TRANSLATED QUERIES *****\n\n{}".format(dsl))
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
 
         results = []
+        print("\n\n***** SEARCH RESULTS *****\n\n")
         for query in dsl['queries']:
             search_result = transmission.query(query)
 
@@ -240,8 +243,8 @@ def __main__():
 
         # Translate results to STIX
         result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
-        print(result)
-
+        
+        print("\n\n***** STIX BUNDLE *****\n\n{}".format(result))
         exit(0)
 
     elif args.command == TRANSLATE:

@@ -9,10 +9,12 @@ import re
 
 logger = logging.getLogger(__name__)
 
-REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr"],
+REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
                         "sourcemac": ["mac"],
-                        "destinationip": ["ipv4", "ipv6", "ipv4_cidr"],
-                        "destinationmac": ["mac"]}
+                        "destinationip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
+                        "destinationmac": ["mac"],
+                        "sourcev6": ["ipv6", "ipv6_cidr"],
+                        "destinationv6": ["ipv6", "ipv6_cidr"]}
 
 START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
@@ -102,7 +104,13 @@ class AqlQueryStringPatternTranslator:
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
-        if value_type == 'ipv4_cidr':
+        # These next two checks wouldn't be needed if events and flows used their own to-STIX mapping
+        # This is here because both events and flows map sourceip and destinationip, but in different ways
+        if value_type in REFERENCE_DATA_TYPES['sourcev6'] and (mapped_field == 'sourceip' or mapped_field == 'destinationip') and self.dmm.dialect == 'flows':
+            return None
+        if value_type not in REFERENCE_DATA_TYPES['sourcev6'] and (mapped_field == 'sourcev6' or mapped_field == 'destinationv6') and self.dmm.dialect == 'flows':
+            return None
+        if value_type == 'ipv4_cidr' or value_type == 'ipv6_cidr':
             # Comparator originally came in as '=' so it must be changed to INCIDR
             comparator = self.comparator_lookup[ComparisonComparators.IsSubSet]
             return comparator + "(" + value + "," + mapped_field + ")"
@@ -130,7 +138,7 @@ class AqlQueryStringPatternTranslator:
             # For [ipv4-addr:value = <CIDR value>]
             elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
                 comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
-            elif expression.object_path == 'x-readable-payload:value' and expression.comparator == ComparisonComparators.Like:
+            elif expression.object_path == 'artifact:payload_bin' and expression.comparator == ComparisonComparators.Like:
                 comparison_string += "TEXT SEARCH '{}'".format(value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
@@ -222,7 +230,7 @@ class AqlQueryStringPatternTranslator:
             # Should be in single-quotes
             value = self._format_equality(expression.value)
         # '%' -> '*' wildcard, '_' -> '?' single wildcard
-        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'x-readable-payload:value'):
+        elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'artifact:payload_bin'):
             value = self._format_like(expression.value)
         else:
             value = self._escape_value(expression.value)
@@ -335,8 +343,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     for where_statement in translated_queries:
         has_start_stop = _test_START_STOP_format(where_statement)
         if(has_start_stop):
-            queries.append("SELECT {} FROM events WHERE {}".format(select_statement, where_statement))
+            queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, data_model_mapping.dialect, where_statement))
         else:
-            queries.append("SELECT {} FROM events WHERE {} limit {} last {} minutes".format(select_statement, where_statement, result_limit, timerange))
-
+            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, data_model_mapping.dialect, where_statement, result_limit, timerange))
     return queries

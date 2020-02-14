@@ -32,12 +32,11 @@ class QueryStringPatternTranslator:
     }
     aws_query = "fields {fields}{stix_filter} {parse_filter}{logtype_filter} | filter ({filter_query})"
 
-    def __init__(self, pattern: Pattern, data_model_mapper, time_range, from_stix_json_filename):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self._time_range = time_range
-        self.json_file = from_stix_json_filename
-        self.log_type = self.load_json('json/' + path.basename(from_stix_json_filename)).get('log-type')
+        self.log_type = self.dmm.dialect
         self._log_config_data = self.load_json(MASTER_CONFIG_FILE)
         self._protocol_lookup_needed = True if self.log_type in ['vpcflow'] else False
         self._parse_statement = []
@@ -316,7 +315,7 @@ class QueryStringPatternTranslator:
                     raise NotImplementedError("Un-supported protocol '{}' for operation '{}' for aws '{}' logs".format(
                         expression.value, expression.comparator, path.basename(self.log_type)))
                 expression.value = value
-        mapped_fields_array = self.dmm.map_field_json(stix_object, stix_field, path.basename(self.json_file))
+        mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         comparator = self._lookup_comparison_operator(self, expression.comparator)
         comparison_string = self.__eval_comparison_value(comparator, expression, mapped_fields_array, stix_field)
         if stix_field.lower() == 'protocols[*]':
@@ -374,17 +373,16 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     timerange = options['timerange']
     limit = options['result_limit']
     final_queries = []
-    for each_json_file in data_model_mapping.from_stix_files_cnt:
-        queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, timerange, each_json_file)
-        qualifier_list = list(zip(*queries_obj.time_range_lst))
-        queries_string = queries_obj.qualified_queries
-        for index, each_query in enumerate(queries_string, start=0):
-            translate_query_dict = dict()
-            translate_query_dict['logType'] = queries_obj.log_type
-            translate_query_dict['limit'] = limit
-            translate_query_dict['queryString'] = each_query
-            translate_query_dict['startTime'] = qualifier_list[0][index]
-            translate_query_dict['endTime'] = qualifier_list[1][index]
-            translate_query_dict = json.dumps(translate_query_dict)
-            final_queries.append(translate_query_dict)
+    queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, timerange)
+    qualifier_list = list(zip(*queries_obj.time_range_lst))
+    queries_string = queries_obj.qualified_queries
+    for index, each_query in enumerate(queries_string, start=0):
+        translate_query_dict = dict()
+        translate_query_dict['logType'] = queries_obj.log_type
+        translate_query_dict['limit'] = limit
+        translate_query_dict['queryString'] = each_query
+        translate_query_dict['startTime'] = qualifier_list[0][index]
+        translate_query_dict['endTime'] = qualifier_list[1][index]
+        translate_query_dict = json.dumps(translate_query_dict)
+        final_queries.append(translate_query_dict)
     return final_queries

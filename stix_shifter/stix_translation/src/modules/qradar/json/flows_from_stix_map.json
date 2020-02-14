@@ -1,0 +1,46 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourcev6", "destinationv6"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "src_ref.value": ["sourceip", "sourcev6"],
+      "dst_ref.value": ["destinationip", "destinationv6"],
+      "src_byte_count": ["sourcebytes"],
+      "dst_byte_count": ["destinationbytes"],
+      "src_packets": ["sourcepackets"],
+      "dst_packets": ["destinationpackets"]
+    }
+  },
+  "x-com-ibm-ariel": {
+    "fields": {
+      "qid": ["qid"],
+      "qid_name": ["qidname"],
+      "flow_source": ["flowsource"],
+      "flow_interface_id": ["flowinterfaceid"],
+      "flow_interface": ["flowinterface"],
+      "geographic": ["geographic"],
+      "category_name": ["categoryname"],
+      "credibility": ["credibility"],
+      "severity": ["severity"],
+      "direction": ["direction"],
+      "relevance": ["relevance"],
+      "first_packet_time": ["firstpackettime"],
+      "last_packet_time": ["lastpackettime"],
+      "application_id": ["applicationid"],
+      "application_name": ["applicationname"]
+    }
+  }
+}

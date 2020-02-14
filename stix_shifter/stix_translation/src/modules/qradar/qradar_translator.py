@@ -10,7 +10,7 @@ from os import path
 
 class Translator(BaseTranslator):
 
-    def __init__(self):
+    def __init__(self, dialect=None):
         basepath = path.dirname(__file__)
         filepath = path.abspath(
             path.join(basepath, "json", "to_stix_map.json"))

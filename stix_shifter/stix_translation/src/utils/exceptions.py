@@ -7,8 +7,12 @@ class StixValidationException(Exception):
 
 
 class TranslationResultException(Exception):
+    pass
+
+
+class LoadJsonResultsException(Exception):
     def __str__(self):
-        return "Error when converting results to STIX"
+        return "Error when loading the JSON results from the data source"
 
 
 class UnsupportedDataSourceException(Exception):

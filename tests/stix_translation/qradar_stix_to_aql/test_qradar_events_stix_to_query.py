@@ -12,6 +12,7 @@ DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 PROTOCOLS = json.loads(protocols_file)
+MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
 
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
@@ -30,7 +31,7 @@ def _test_query_assertions(query, selections, from_statement, where_statement):
 
 
 def _translate_query(stix_pattern):
-    return translation.translate('qradar', 'query', '{}', stix_pattern)
+    return translation.translate('qradar:events', 'query', '{}', stix_pattern)
 
 
 class TestStixToAql(unittest.TestCase, object):
@@ -99,7 +100,7 @@ class TestStixToAql(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX attributes' in result['error']
+        assert MAPPING_ERROR in result['error']
 
     def test_pattern_with_two_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever'] AND [file:name = 'some_file.exe']"
@@ -112,7 +113,7 @@ class TestStixToAql(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX attributes' in result['error']
+        assert MAPPING_ERROR in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
@@ -234,7 +235,7 @@ class TestStixToAql(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-        query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
+        query = translation.translate('qradar:events', 'query', '{}', stix_pattern, OPTIONS)
         where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['timerange'])
         assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
@@ -305,14 +306,14 @@ class TestStixToAql(unittest.TestCase, object):
 
     def test_payload_string_matching_with_LIKE(self):
         search_string = 'search term'
-        stix_pattern = "[x-readable-payload:value LIKE '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin LIKE '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE TEXT SEARCH '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_payload_string_matching_with_MATCH(self):
         search_string = '^.*https://wally.fireeye.com.*$'
-        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
@@ -322,7 +323,7 @@ class TestStixToAql(unittest.TestCase, object):
         # Not sure yet how we will make this work for an AQL query.
         # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
         search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
-        stix_pattern = "[x-readable-payload:value MATCHES '{}']".format(search_string)
+        stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
         where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)

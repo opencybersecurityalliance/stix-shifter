@@ -30,11 +30,26 @@
     "key": "x_com_ibm_ariel.qid_name",
     "cybox": false
   },
+  "relevance": {
+    "key": "x_com_ibm_ariel.relevance",
+    "cybox": false
+  },
   "destinationip": [
     {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
     },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "destinationv6": [
     {
       "key": "ipv6-addr.value",
       "object": "dst_ip"
@@ -96,6 +111,17 @@
       "references": "src_ip"
     }
   ],
+  "sourcev6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
   "sourcemac": [
     {
       "key": "mac-addr.value",
@@ -104,12 +130,12 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": "src_mac"
+      "references": ["src_mac"]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": "src_mac"
+      "references": ["src_mac"]
     }
   ],
   "destinationmac": [
@@ -120,12 +146,12 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": "dst_mac"
+      "references": ["dst_mac"]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": "dst_mac"
+      "references": ["dst_mac"]
     }
   ],
   "qid": {
@@ -168,6 +194,28 @@
   "base64_payload": {
     "key": "artifact.payload_bin"
   },
+  "base64_source_payload": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "src_payload"
+    },
+    {
+      "key": "network-traffic.src_payload_ref",
+      "object": "nt",
+      "references": "src_payload"
+    }
+  ],
+  "base64_destination_payload": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "dst_payload"
+    },
+    {
+      "key": "network-traffic.dst_payload_ref",
+      "object": "nt",
+      "references": "dst_payload"
+    }
+  ],
   "destinationport": {
     "key": "network-traffic.dst_port",
     "object": "nt",
@@ -175,6 +223,26 @@
   },
   "sourceport": {
     "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "sourcebytes": {
+    "key": "network-traffic.src_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destinationbytes": {
+    "key": "network-traffic.dst_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "sourcepackets": {
+    "key": "network-traffic.src_packets",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destinationpackets": {
+    "key": "network-traffic.dst_packets",
     "object": "nt",
     "transformer": "ToInteger"
   },
@@ -186,5 +254,45 @@
   "domainname": {
     "key": "domain-name.value",
     "transformer": "ToDomainName"
+  },
+  "flowsource": {
+    "key": "x_com_ibm_ariel.flow_source",
+    "cybox": false
+  },
+  "flowinterface": {
+    "key": "x_com_ibm_ariel.flow_interface",
+    "cybox": false
+  },
+  "flowinterfaceid": {
+    "key": "x_com_ibm_ariel.flow_interface_id",
+    "cybox": false
+  },
+  "geographic": {
+    "key": "x_com_ibm_ariel.geographic",
+    "cybox": false
+  },
+  "credibility": {
+    "key": "x_com_ibm_ariel.credibility",
+    "cybox": false
+  },
+  "severity": {
+    "key": "x_com_ibm_ariel.severity",
+    "cybox": false
+  },
+  "firstpackettime": {
+    "key": "x_com_ibm_ariel.first_packet_time",
+    "cybox": false
+  },
+  "lastpackettime": {
+    "key": "x_com_ibm_ariel.last_packet_time",
+    "cybox": false
+  },
+  "applicationname": {
+    "key": "x_com_ibm_ariel.application_name",
+    "cybox": false
+  },
+  "applicationid": {
+    "key": "x_com_ibm_ariel.application_id",
+    "cybox": false
   }
 }

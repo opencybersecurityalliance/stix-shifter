@@ -37,8 +37,10 @@ class EpochToTimestamp(ValueTransformer):
 
     @staticmethod
     def transform(epoch):
-        return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc)
-                .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        try:
+            return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        except ValueError:
+            print("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class FormatMac(ValueTransformer):
@@ -118,8 +120,11 @@ class EpochSecondsToTimestamp(ValueTransformer):
 
     @staticmethod
     def transform(epoch):
-        return (datetime.fromtimestamp(int(epoch), timezone.utc)
-                .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        try:
+            return (datetime.fromtimestamp(int(epoch), timezone.utc)
+                    .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        except ValueError:
+            print("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class TimestampToMilliseconds(ValueTransformer):
@@ -132,8 +137,11 @@ class TimestampToMilliseconds(ValueTransformer):
     def transform(timestamp):
         time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
         epoch = datetime(1970, 1, 1)
-        converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
-        return converted_time
+        try:
+            converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
+            return converted_time
+        except ValueError:
+            print("Cannot convert the timestamp {} to milliseconds".format(timestamp))
 
 
 class ToInteger(ValueTransformer):
@@ -142,9 +150,11 @@ class ToInteger(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
+            if type(obj) is str and re.search('\.', obj):
+                obj = float(obj)
             return int(obj)
         except ValueError:
-            print("Cannot convert input to integer")
+            print("Cannot convert input {} to integer".format(obj))
 
 
 class ToString(ValueTransformer):
@@ -200,7 +210,7 @@ class ToDirectoryPath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return os.path.dirname(obj)
+            return os.path.dirname(obj) + os.path.basename(obj)
         except ValueError:
             print("Cannot convert input to directory path string")
 
@@ -250,7 +260,7 @@ class DateTimeToUnixTimestamp(ValueTransformer):
         try:
             return int((obj - datetime(1970, 1, 1)).total_seconds() * 1000)
         except ValueError:
-            print("Cannot convert input to Unix timestamp")
+            print("Cannot convert input {} to Unix timestamp".format(obj))
 
 
 class NaiveToUTC(tzinfo):
@@ -310,7 +320,7 @@ class SetToOne(ValueTransformer):
         try:
             return int("1")
         except ValueError:
-            print("Cannot convert input to integer")
+            print("Cannot convert input {} to integer".format(obj))
 
 # TODO: rename classes to be more generic since they can be reused by other data sources
 
@@ -320,7 +330,10 @@ class EpochToGuardium(ValueTransformer):
 
     @staticmethod
     def transform(epoch):
-        return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
+        try:
+            return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
+        except ValueError:
+            print("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class GuardiumToTimestamp(ValueTransformer):
@@ -353,17 +366,6 @@ class Ymd_HMSToTimestamp(ValueTransformer):
         return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
-class EmptyStringToNone(ValueTransformer):
-    """A transformer that converts empty strings to None. This will exclude empty string values from the STIX results."""
-
-    @staticmethod
-    def transform(obj):
-        if (type(obj) is str and not(obj)):
-            return None
-        else:
-            return obj
-
-
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
@@ -373,5 +375,4 @@ def get_all_transformers():
             "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
             "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
-            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "EmptyStringToNone":
-                EmptyStringToNone, "AwsToTimestamp": AwsToTimestamp}
+            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp}
