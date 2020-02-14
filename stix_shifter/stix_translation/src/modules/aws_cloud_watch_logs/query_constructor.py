@@ -371,6 +371,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     :return: str, AWS query
     """
     timerange = options['timerange']
+    limit = options['result_limit']
     final_queries = []
     queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, timerange)
     qualifier_list = list(zip(*queries_obj.time_range_lst))
@@ -378,7 +379,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     for index, each_query in enumerate(queries_string, start=0):
         translate_query_dict = dict()
         translate_query_dict['logType'] = queries_obj.log_type
-        translate_query_dict['limit'] = 1000
+        translate_query_dict['limit'] = limit
         translate_query_dict['queryString'] = each_query
         translate_query_dict['startTime'] = qualifier_list[0][index]
         translate_query_dict['endTime'] = qualifier_list[1][index]

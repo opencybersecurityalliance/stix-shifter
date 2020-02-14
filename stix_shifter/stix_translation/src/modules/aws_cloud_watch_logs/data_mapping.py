@@ -8,3 +8,5 @@ class DataMapper(BaseDataMapper):
         basepath = path.dirname(__file__)
         self.dialect = options.get('dialect') or 'guardduty'
         self.map_data = self.fetch_mapping(basepath)
+
+

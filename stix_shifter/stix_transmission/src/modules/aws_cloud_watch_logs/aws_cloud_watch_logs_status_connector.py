@@ -4,7 +4,7 @@ from ..base.base_status_connector import Status
 from enum import Enum
 import math
 
-DEFAULT_LIMIT = 1000
+DEFAULT_LIMIT = 10000
 
 
 class AWSCWLOGS(Enum):
@@ -65,7 +65,7 @@ class AWSCloudWatchLogsStatusConnector(BaseStatusConnector):
                 progress = (results / int(limit)) * 100
                 progress_floor = math.floor(progress)
                 return_obj['progress'] = progress_floor
-                if return_obj['progress'] == 100:
+                if return_obj['progress'] >= 100:
                     return_obj['status'] = 'COMPLETED'
             else:
                 return_obj['progress'] = 0

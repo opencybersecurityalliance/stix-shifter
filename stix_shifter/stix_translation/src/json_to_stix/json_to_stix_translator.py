@@ -12,6 +12,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
+        "spec_version": "2.0",
         "objects": []
     }
 

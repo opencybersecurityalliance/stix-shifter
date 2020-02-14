@@ -1,6 +1,7 @@
 {
     "type": "bundle",
     "id": "bundle--abe952aa-b943-4a9d-98d4-c6c073b4e8dc",
+    "spec_version": "2.0",
     "objects": [
         {
             "type": "identity",
