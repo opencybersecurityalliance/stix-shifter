@@ -337,7 +337,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     timerange = options['timerange']
     translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
-    # TODO: Still need to figure out selections, maybe they should go into the mapping file
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries

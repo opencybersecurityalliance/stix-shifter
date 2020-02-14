@@ -74,7 +74,8 @@ class StixTranslation:
                 "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
 
             if not dialects[0] == DEFAULT_DIALECT:
-                # Todo: this will only work if there is one dialect, this part should also be in the loop
+                # Todo: This will only work if there is one dialect.
+                # To handle a case such as <MODULE>:<DIALECT_01>:<DIALECT_02> this may need to go in a loop.
                 interface = translator_module.Translator(dialect=dialects[0])
             else:
                 interface = translator_module.Translator()
@@ -145,15 +146,6 @@ class StixTranslation:
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
-
-    def _fetch_from_stix_mapping_files(self, module):
-        basepath = path.dirname(__file__)
-        mapping_files_path = path.join(basepath, "src/modules/{}/json".format(module))
-        mapping_paths = glob.glob(path.abspath(path.join(mapping_files_path, "*from_stix*.json")))
-        mapping_files = []
-        for map_path in mapping_paths:
-            mapping_files.append(re.sub('^/', '', re.sub(mapping_files_path, '', map_path)))
-        return mapping_files
 
     def _build_data_mapper(self, module, options):
         try:
