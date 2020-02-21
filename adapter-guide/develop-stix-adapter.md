@@ -48,8 +48,9 @@ To develop a STIX-shifter connector for a data source:
 1. [Edit the query_constructor.py file](#step-4-edit-the-query-constructor-file)
 1. [Edit the to_stix_map.json file](#step-5-edit-the-to_stix_map-json-file)
 1. [If required by your data source, update the transformers.py file](#step-6-if-required-by-your-data-source-update-the-transformers-file)
-1. [Update the MANIFEST.in file to include the path to the json mapping folder](#step-7-update-the-manifest-file-to-include-the-path-to-the-json-mapping-folder)
-1. [Verify that the translation module was created successfully](#step-8-verify-that-the-translation-module-was-created-successfully)
+1. [Add the module name to the stix translation file](#step-7-add-the-module-name-to-stix_translation.py)
+1. [Update the MANIFEST.in file to include the path to the json mapping folder](#step-8-update-the-manifest-file-to-include-the-path-to-the-json-mapping-folder)
+1. [Verify that the translation module was created successfully](#step-9-verify-that-the-translation-module-was-created-successfully)
 
 #### Step 1. Create a translation module folder
 
@@ -149,6 +150,11 @@ The following STIX pattern is supported in the example mapping because the STIX 
 **Using Custom STIX Objects and Properties**
 
 As shown below in [Step 5](#step-5-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
+
+**Using multiple from-STIX map files with dialects**
+
+Pattern translation can use dialects to differentiate between multiple from-STIX mapping files. Multiple from-STIX mappings may be needed in cases where one STIX pattern queries multiple data source tables that use different schemas. Any dialects are appended to the module name with the following format: `<module_name>:<dialect_1>:<dialect_2>` Using QRadar as an example, one pattern queries both event and flow tables. This requires a from-STIX mapping file for each, which results in one pattern translating into two AQL queries. QRadar's module name would be passed to the `StixTranslation.translate` method as `qradar:events:flows`. Each dialect gets extracted from the module name and becomes a property of the data_mapper object, which is used throughout the pattern translation flow. In cases where multiple from-STIX map files are used, the naming convention is `<dialect>_from_stix_map.json`. It is important that the file names follow this structure since the dialect is used to dynamically look up the file path. So in the case of QRadar, there would be a `events_from_stix_map.json` and `flows_from_stix_map.json` file in the json folder. The dialect can also be used in the `query_constructor` (detailed below) if it's needed in the translated query string. In the case of an SQL language, this may look like `SELECT * FROM <dialect> WHERE <some condition>`
+
 
 [Back to top](#create-a-translation-module)
 
@@ -451,13 +457,20 @@ The `transformers.py` file contains classes that transform data formats. Each cl
 
 [Back to top](#create-a-translation-module)
 
-#### Step 7. Update the MANIFEST file to include the path to the json mapping folder
+#### Step 7. Add the module name to stix_translation.py
+
+The `stix_translation.py` file contains a `TRANSLATION_MODULES` constant who's value is a list of the currently supported data sources and their dialects. You must add the name of your module to this list. In addition to this, if your translation module uses dialects, you must add another entry to this list with the module name followed by the dialects in the following format `<module_name>:<first_module>:<second_module>`. So if module abc has dialects `dialect_1` and `dialect_2`, there would be two entries added to the `TRANSLATION_MODULES` list, `abc` and `abc:dialect_1:dialect_2`.
+
+[Back to top](#create-a-translation-module)
+
+
+#### Step 8. Update the MANIFEST file to include the path to the json mapping folder
 
 The `MANIFEST.in` file is required by Python so that the new mapping files can be found when STIX-shifter is packaged.
 
 [Back to top](#create-a-translation-module)
 
-#### Step 8. Verify that the translation module was created successfully
+#### Step 9. Verify that the translation module was created successfully
 
 You must have access to the data source either through a UI or CLI so that you can run the translated query and confirm that it works.
 The translation module can be tested by calling the `main.py file` from the command line and passing in the required arguments. The order of arguments is as follows:
@@ -480,6 +493,8 @@ To run validation on the STIX pattern, add `'{"validate_pattern": "true"}'` as a
 ```
 python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
 ```
+
+If the translation module uses multiple from-STIX mapping files, you can append the dialects to the module name before passing it into the CLI. Given that module abc has two dialects, it could be passed in as: `abc:dialect_1:dialect_2` Only the appended dialects will be used during pattern translation. `abc:dialect_2` would only use the mapping for the second dialect and thus only return one translated query, not two. If the module uses dialects, but only the module name is passed in, all dialects will automatically be used; so `abc` would still use both dialects.
 
 2. Visually verify the returned query by running it against the data source.
 
@@ -512,7 +527,9 @@ Adding the `stix_validator` option at the end will ensure the observed-data obje
 1. [Create a transmission module folder](#step-1-create-a-transmission-module-folder)
 1. [Edit the apiclient.py file](#step-2-edit-the-apiclient-file)
 1. [Edit the dummy_connector.py file](#step-3-edit-the-dummy-connector-file)
-1. [Verify that the transmission module was created successfully](#step-4-verify-that-the-transmission-module-was-created-successfully)
+1. [Edit the dummy_error_mapper.py file](#step-4-edit-the-dummy-error-mapper-file)
+1. [Add the module name to the stix transmission file](#step-5-add-the-module-name-to-stix_transmission.py)
+1. [Verify that the transmission module was created successfully](#step-6-verify-that-the-transmission-module-was-created-successfully)
 
 #### Step 1. Create a transmission module folder
 
@@ -620,7 +637,15 @@ As an example, `1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS` would retur
 
 `{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
 
-#### Step 5. Verify that the transmission module was created successfully
+[Back to top](#create-a-transmission-module)
+
+#### Step 5. Add the module name to stix_transmission.py
+
+The `stix_transmission.py` file contains a `TRANSMISSION_MODULES` constant who's value is a list of the currently supported data sources. You must add the name of your module to this list. So if the module folder name is abc, a new entry, `abc`, will be added to the `TRANSMISSION_MODULES` list.
+
+[Back to top](#create-a-transmission-module)
+
+#### Step 6. Verify that the transmission module was created successfully
 
 1. You must have:
 
