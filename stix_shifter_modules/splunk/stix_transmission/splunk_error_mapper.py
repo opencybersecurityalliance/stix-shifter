@@ -1,5 +1,5 @@
-from .....utils.error_mapper_base import ErrorMapperBase
-from .....utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 error_mapping = {
         'Unknown sid.': ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,

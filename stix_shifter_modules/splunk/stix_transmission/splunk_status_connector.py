@@ -1,9 +1,9 @@
-from ..base.base_status_connector import BaseStatusConnector, Status
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector, Status
 from .spl_api_client import APIClient
 import json
 import math
 from enum import Enum
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 class StatusSplunk(Enum):
     COMPLETED = 'DONE'

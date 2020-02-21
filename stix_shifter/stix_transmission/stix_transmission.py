@@ -1,5 +1,5 @@
 import importlib
-from ..utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 TRANSMISSION_MODULES = ['async_dummy', 'synchronous_dummy', 'qradar', 'splunk', 'bigfix', 'csa', 'aws_security_hub',
                         'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 'msatp', 'security_advisor', 'guardium',

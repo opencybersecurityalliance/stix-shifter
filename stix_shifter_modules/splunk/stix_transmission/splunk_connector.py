@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .splunk_query_connector import SplunkQueryConnector
 from .splunk_status_connector import SplunkStatusConnector
 from .splunk_results_connector import SplunkResultsConnector

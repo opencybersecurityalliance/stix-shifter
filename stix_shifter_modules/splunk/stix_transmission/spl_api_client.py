@@ -1,4 +1,4 @@
-from ..utils.RestApiClient import RestApiClient, ResponseWrapper
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 import urllib.parse
 import json
 import base64

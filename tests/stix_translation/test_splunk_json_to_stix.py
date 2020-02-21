@@ -1,9 +1,9 @@
 from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter.stix_translation.src.utils import transformers
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_translation.src.modules.splunk import splunk_translator
+from stix_shifter_modules.splunk.stix_translation import splunk_translator
 from stix2validator import validate_instance
-from stix_shifter.stix_translation.src.modules.splunk.splunk_utils import hash_type_lookup
+from stix_shifter_modules.splunk.stix_translation.splunk_utils import hash_type_lookup
 
 import json
 import logging

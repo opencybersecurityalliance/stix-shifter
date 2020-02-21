@@ -1,6 +1,6 @@
-from ..base.base_delete_connector import BaseDeleteConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
 import json
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class SplunkDeleteConnector(BaseDeleteConnector):
@@ -18,6 +18,7 @@ class SplunkDeleteConnector(BaseDeleteConnector):
         if response_code == 200:
             return_obj['success'] = True
         else:
+            print('FILL ERROR: {}'.format(response_dict))
             ErrorResponder.fill_error(return_obj, response_dict, ['messages',0,'text'])
 
         return return_obj
