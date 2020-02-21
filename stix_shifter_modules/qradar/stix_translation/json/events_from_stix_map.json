@@ -1,0 +1,81 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip", "identityip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["sourcemac", "destinationmac"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"],
+      "hashes.SHA-256": ["filehash"],
+      "hashes.MD5": ["filehash"],
+      "hashes.SHA-1": ["filehash"],
+      "parent_directory_ref": ["filepath"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["filepath"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "src_ref.value": ["sourceip", "sourcemac"],
+      "dst_ref.value": ["destinationip", "destinationmac"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["utf8_payload"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname"]
+    }
+  },
+  "x-com-ibm-ariel": {
+    "fields": {
+      "qid": ["qid"],
+      "qid_name": ["qidname"],
+      "magnitude": ["magnitude"],
+      "log_source_id": ["logsourceid"],
+      "log_source_name": ["logsourcename"],
+      "log_source_type_name": ["logsourcetypename"],
+      "category_id": ["categoryid"],
+      "category_name": ["categoryname"],
+      "high_level_category_name": ["high_level_category_name"],
+      "high_level_category_id": ["high_level_category_id"],
+      "direction": ["direction"],
+      "identity_host_name": ["identityhostname"],
+      "severity": ["severity"],
+      "relevance": ["relevance"],
+      "geographic": ["geographic"]
+    }
+  }
+}
