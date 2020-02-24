@@ -1,0 +1,142 @@
+{
+    "directory": {
+        "cim_type": "endpoint",
+        "fields": {
+            "path": "file_path",
+            "created": "file_create_time",
+            "modified": "file_modify_time"
+        }
+    },
+    "domain-name": {
+        "cim_type": "flow",
+        "fields": {
+            "value": "url"
+        }
+    },
+    "x-readable-payload": {
+        "cim_type": "",
+        "fields": {
+            "value": "_raw"
+        }
+    },
+    "email-addr": {
+        "cim_type": "email",
+        "fields": {
+            "value": [
+                "src_user",
+                "recipient"
+            ]
+        }
+    },
+    "email-message": {
+        "cim_type": "email",
+        "fields": {
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5": "file_hash",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.SHA-1": "file_hash",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.SHA-256": "file_hash",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.name": "file_name",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.size": "file_size",
+            "to_refs.[*].value": "recipient",
+            "cc_refs.[*].value": "recipient",
+            "bcc_refs.[*].value": "recipient",
+            "subject": "subject",
+            "sender_ref.value": "src_user",
+            "from_ref.value": "src_user"
+        }
+    },
+    "file": {
+        "cim_type": "endpoint",
+        "fields": {
+            "hashes.MD5": "file_hash",
+            "hashes.SHA-1": "file_hash",
+            "hashes.SHA-256": "file_hash",
+            "name": "file_name",
+            "created": "file_create_time",
+            "modified": "file_modify_time",
+            "parent_directory_ref.path": "file_path",
+            "size": "file_size"
+        }
+    },
+    "ipv4-addr": {
+        "cim_type": "flow",
+        "fields": {
+            "value": [
+                "src_ip",
+                "dest_ip"
+            ]
+        }
+    },
+    "ipv6-addr": {
+        "cim_type": "flow",
+        "fields": {
+            "value": [
+                "src_ipv6",
+                "dest_ipv6"
+            ]
+        }
+    },
+    "mac-addr": {
+        "cim_type": "flow",
+        "fields": {
+            "value": [
+                "src_mac",
+                "dest_mac"
+            ]
+        }
+    },
+    "network-traffic": {
+        "cim_type": "network",
+        "fields": {
+            "src_ref.value": "src",
+            "src_port": "src_port",
+            "dst_ref.value": "src",
+            "dst_port": "dest_port",
+            "protocols[*]": "protocol",
+            "start": "earliest",
+            "end": "latest"
+        }
+    },
+    "process": {
+        "cim_type": "process",
+        "fields": {
+            "name": "process",
+            "pid": "pid",
+            "creator_user_ref.account_login": "user",
+            "binary_ref.parent_directory_ref.path": "file_path",
+            "binary_ref.name": "file_name"
+        }
+    },
+    "url": {
+        "cim_type": "web",
+        "fields": {
+            "value": "url"
+        }
+    },
+    "user-account": {
+        "cim_type": "authentication",
+        "fields": {
+            "user_id": "user"
+        }
+    },
+    "windows-registry-key": {
+        "cim_type": "endpoint",
+        "fields": {
+            "key": "object",
+            "values[*]": "result",
+            "creator_user_ref.account_login": "user"
+        }
+    },
+    "x509-certificate": {
+        "cim_type": "certificate",
+        "fields": {
+            "hashes.SHA-256": "ssl_hash",
+            "hashes.SHA-1": "ssl_hash",
+            "version": "ssl_version",
+            "serial_number": "ssl_serial",
+            "signature_algorithm": "ssl_signature_algorithm",
+            "issuer": "ssl_issuer",
+            "subject": "ssl_subject",
+            "subject_public_key_algorithm": "ssl_publickey_algorithm"
+        }
+    }
+}

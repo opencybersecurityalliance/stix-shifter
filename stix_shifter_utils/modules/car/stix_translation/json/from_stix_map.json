@@ -1,0 +1,80 @@
+{
+    "domain-name": {
+        "car_type": "flow",
+        "fields": {
+            "value": "dest_fqdn"
+        }
+    },
+    "file": {
+        "car_type": "file",
+        "fields": {
+            "hashes.MD5": "md5_hash",
+            "hashes.SHA-1": "sha1_hash",
+            "hashes.SHA-256": "sha256_hash",
+            "name": "file_name",
+            "created": "creation_time",
+            "parent_directory_ref.path": "file_path"
+        }
+    },
+    "ipv4-addr": {
+        "car_type": "flow",
+        "fields": {
+            "value": "dest_ip"
+        }
+    },
+    "mac-addr": {
+        "car_type": "flow",
+        "fields": {
+            "value": "mac"
+        }
+    },
+    "network-traffic": {
+        "car_type": "flow",
+        "fields": {
+            "start": "start_time",
+            "end": "end_time",
+            "src_ref.value": "src_ip",
+            "dst_ref.value": "dest_ip",
+            "src_port": "src_port",
+            "dst_port": "dest_port",
+            "protocols[*]": "protocol",
+            "src_payload_ref.payload_bin": "content"
+        }
+    },
+    "process": {
+        "car_type": "process",
+        "fields": {
+            "pid": "pid",
+            "name": "exe",
+            "cwd": "current_directory",
+            "command_line": "command_line",
+            "creator_user_ref.account_login": "user",
+            "binary_ref.name": "exe",
+            "binary_ref.parent_directory_ref.path": "image_path",
+            "binary_ref.hashes.MD5": "md5_hash",
+            "binary_ref.hashes.SHA1": "sha1_hash",
+            "binary_ref.hashes.SHA256": "sha256_hash",
+            "parent_ref.name": "parent_exe",
+            "parent_ref.pid": "ppid",
+            "parent_ref.binary_ref.file_name": "parent_exe",
+            "parent_ref.binary_ref.parent_directory_ref.path": "parent_image_path",
+            "extensions.windows-process-ext.owner_sid": "sid"
+        }
+    },
+    "user-account": {
+        "car_type": "user_session",
+        "fields": {
+            "user_id": "logon_id",
+            "account_login": "user",
+            "account_type": "logon_type"
+        }
+    },
+    "windows-registry-key": {
+        "car_type": "registry",
+        "fields": {
+            "key": "key",
+            "values[*]": "value",
+            "creator_user_ref.account_login": "user"
+        }
+    }
+}
