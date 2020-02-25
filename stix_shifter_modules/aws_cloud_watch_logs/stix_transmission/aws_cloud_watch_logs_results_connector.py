@@ -1,8 +1,8 @@
-from ..base.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 import json
 from flatten_json import flatten
 import copy
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from os import path
 
 
@@ -37,6 +37,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+        
+        print('RETURN OBJ: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj
 
     def format_results(self, result_list, results, return_obj):
@@ -67,6 +69,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
             elif 'source' not in record_dict.keys():
                 vpc_dict = dict()
                 vpc_dict['vpcflow'] = copy.deepcopy(record_dict)
+                
                 vpc_dict['vpcflow']['protocol'] = self.get_protocol(vpc_dict['vpcflow']['protocol'])
                 vpc_dict['vpcflow']['event_count'] = 1
                 result_list.append(vpc_dict)
@@ -75,6 +78,7 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
                 data = json.loads(json_message)
                 flatten_results = flatten(data)
                 result_list.append(flatten_results)
+
         return_obj['data'] = result_list
 
     def process_flatten_guardduty_results(self, flatten_results):
@@ -107,8 +111,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
         :param value: str, protocol
         :return: str, protocol
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../../..',
-                                            'stix_translation/src/modules/aws_cloud_watch_logs/json'
+        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
+                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
                                             '/network_protocol_map.json'))
         if path.exists(_json_path):
             with open(_json_path) as f_obj:
@@ -128,8 +132,8 @@ class AWSCloudWatchLogsResultsConnector(BaseResultsConnector):
         Fetching guardduty common attributes from common attributes json
         :return: list, guardduty common attributes
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../../..',
-                                            'stix_translation/src/modules/aws_cloud_watch_logs/json'
+        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
+                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
                                             '/common_attributes.json'))
         if path.exists(_json_path):
             with open(_json_path) as f_obj:

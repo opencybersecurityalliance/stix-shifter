@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .aws_cloud_watch_logs_ping import AWSCloudWatchLogsPing
 from .aws_cloud_watch_logs_query_connector import AWSCloudWatchLogsQueryConnector
 from .aws_cloud_watch_logs_status_connector import AWSCloudWatchLogsStatusConnector
