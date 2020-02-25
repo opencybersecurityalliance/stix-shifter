@@ -1,6 +1,6 @@
 """Apiclient for MSATP"""
 import json
-from ..utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0

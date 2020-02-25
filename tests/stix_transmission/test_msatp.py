@@ -1,8 +1,8 @@
-from stix_shifter.stix_transmission.src.modules.msatp import msatp_connector
+from stix_shifter_modules.msatp.stix_transmission import msatp_connector
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 
 class MSATPMockResponse:
@@ -14,8 +14,8 @@ class MSATPMockResponse:
         return bytearray(self.object, 'utf-8')
 
 
-@patch('stix_shifter.stix_transmission.src.modules.msatp.msatp_connector.Connector.generate_token')
-@patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.__init__')
+@patch('stix_shifter_modules.msatp.stix_transmission.msatp_connector.Connector.generate_token')
+@patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     config = {
         "auth": {
@@ -36,7 +36,7 @@ class TestMSATPConnection(unittest.TestCase):
 
         assert check_async is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
@@ -50,7 +50,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
@@ -80,7 +80,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_file_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -112,7 +112,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_registry_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -139,7 +139,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -158,7 +158,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert results_response['code'] == 'unknown'
         assert results_response['success'] is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
