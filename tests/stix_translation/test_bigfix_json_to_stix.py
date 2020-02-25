@@ -1,7 +1,7 @@
 import json
-from stix_shifter.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.modules.bigfix import bigfix_translator
+from stix_shifter_utils.stix_translation.src.utils import transformers
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_modules.bigfix.stix_translation import bigfix_translator
 import unittest
 
 interface = bigfix_translator.Translator()

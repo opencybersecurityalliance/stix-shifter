@@ -1,10 +1,10 @@
-from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
 import json
 import os.path as path
-from stix_shifter.stix_translation.src.utils.transformers import TimestampToUTC
-from stix_shifter.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToUTC
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from datetime import datetime, timedelta
 from functools import reduce
 import operator as op

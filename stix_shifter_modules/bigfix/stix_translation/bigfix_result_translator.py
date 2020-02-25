@@ -1,4 +1,4 @@
-from ..base.base_result_translator import BaseResultTranslator
+import stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
 
 
 class BigfixResultTranslator(BaseResultTranslator):

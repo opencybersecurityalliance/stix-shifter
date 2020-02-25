@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .bigfix_ping import BigFixPing
 from .bigfix_query_connector import BigFixQueryConnector
 from .bigfix_status_connector import BigFixStatusConnector
