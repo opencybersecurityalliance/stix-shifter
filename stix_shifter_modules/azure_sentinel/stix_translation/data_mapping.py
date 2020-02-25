@@ -1,5 +1,5 @@
 from os import path
-from ..base.base_data_mapper import BaseDataMapper
+from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
 
 
 class DataMapper(BaseDataMapper):

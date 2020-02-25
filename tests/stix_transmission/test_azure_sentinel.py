@@ -1,4 +1,4 @@
-from stix_shifter.stix_transmission.src.modules.azure_sentinel import azure_sentinel_connector
+from stix_shifter_modules.azure_sentinel.stix_transmission import azure_sentinel_connector
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
@@ -22,8 +22,8 @@ class AdalMockResponse:
         return context_response
 
 
-@patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_connector.adal.AuthenticationContext')
-@patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.__init__')
+@patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_connector.adal.AuthenticationContext')
+@patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.__init__')
 class TestAzureSentinalConnection(unittest.TestCase):
     config = {
         "auth": {
@@ -46,7 +46,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
         assert check_async is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = AdalMockResponse
@@ -60,7 +60,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = AdalMockResponse
@@ -97,7 +97,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.run_search',
            autospec=True)
     def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -154,9 +154,9 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient'
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient'
            '.next_page_run_search', autospec=True)
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.run_search',
            autospec=True)
     def test_results_paging_response(self, mock_results_response, mock_next_page_response, mock_api_client,
                                      mock_generate_token):
@@ -253,7 +253,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.azure_sentinel.azure_sentinel_api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.azure_sentinel_api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None

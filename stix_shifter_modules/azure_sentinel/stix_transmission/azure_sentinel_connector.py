@@ -2,9 +2,9 @@ import json
 import adal
 import re
 from flatten_json import flatten
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .azure_sentinel_api_client import APIClient
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class Connector(BaseConnector):
