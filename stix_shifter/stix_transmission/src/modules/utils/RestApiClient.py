@@ -54,7 +54,7 @@ class RestApiClient:
         self.url_modifier_function = url_modifier_function
 
     # This method is used to set up an HTTP request and send it to the server
-    def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None):
+    def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None, timeout=None):
         try:
 
             # convert client cert to file
@@ -103,7 +103,7 @@ class RestApiClient:
                     actual_headers["Host"] = self.sni
 
                 response = call(url, headers=actual_headers,
-                                cert=self.client_cert_content, data=data, verify=self.server_cert_content)
+                                cert=self.client_cert_content, data=data, verify=self.server_cert_content, timeout=timeout)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                         and "Deprecated" in response.headers['Content-Type']:

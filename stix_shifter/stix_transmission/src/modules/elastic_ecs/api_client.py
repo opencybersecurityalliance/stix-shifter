@@ -1,5 +1,6 @@
 import base64
 from ..utils.RestApiClient import RestApiClient
+from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 import json
 import re
 
@@ -45,7 +46,7 @@ class APIClient():
 
     def ping_box(self):
         endpoint = self.PING_ENDPOINT
-        return self.client.call_api(endpoint, 'GET')
+        return self.client.call_api(endpoint, 'GET',timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
         headers = dict()

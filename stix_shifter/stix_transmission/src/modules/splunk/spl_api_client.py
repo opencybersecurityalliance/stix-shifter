@@ -1,4 +1,5 @@
 from ..utils.RestApiClient import RestApiClient, ResponseWrapper
+from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 import urllib.parse
 import json
 import base64
@@ -53,7 +54,7 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + 'server/status'
         data = {'output_mode': self.output_mode}
-        return self.client.call_api(endpoint, 'GET', data=data)
+        return self.client.call_api(endpoint, 'GET', data=data, timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
         
     def create_search(self, query_expression):
         # sends a POST request to 

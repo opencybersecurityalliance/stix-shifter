@@ -1,4 +1,5 @@
 from ..utils.RestApiClient import RestApiClient
+from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 import urllib.parse
 import logging
 import sys
@@ -71,7 +72,7 @@ class APIClient():
         # Sends a GET request
         # to https://<server_ip>/api/help/resources
         endpoint = 'api/help/resources'  # no 'ariel' in the path
-        return self.client.call_api(endpoint, 'GET')
+        return self.client.call_api(endpoint, 'GET', timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
 
     def get_databases(self):
         # Sends a GET request
