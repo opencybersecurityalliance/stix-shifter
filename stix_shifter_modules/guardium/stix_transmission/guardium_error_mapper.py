@@ -1,5 +1,5 @@
-from .....utils.error_mapper_base import ErrorMapperBase
-from .....utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 error_mapping = {
         #search does not exist
