@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .guardium_ping import GuardiumPing
 from .guardium_query_connector import GuardiumQueryConnector
 from .guardium_status_connector import GuardiumStatusConnector

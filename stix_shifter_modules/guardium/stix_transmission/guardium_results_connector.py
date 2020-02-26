@@ -1,6 +1,6 @@
-from ..base.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 import json
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 class GuardiumResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):

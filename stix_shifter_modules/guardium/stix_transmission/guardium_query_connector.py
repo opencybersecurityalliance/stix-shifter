@@ -1,8 +1,8 @@
-from ..base.base_query_connector import BaseQueryConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseQueryConnector
 import json
 import uuid
 import datetime
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from .guardium_error_mapper import ErrorMapper
 
 
