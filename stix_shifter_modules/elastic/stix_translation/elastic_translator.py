@@ -1,5 +1,4 @@
-# ..base.base_translator import BaseTranslator
-from ..base.base_translator import BaseTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 from .stix_to_elastic import StixToElastic
 
 from os import path
