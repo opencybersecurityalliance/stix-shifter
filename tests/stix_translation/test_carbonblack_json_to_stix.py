@@ -1,4 +1,4 @@
-from stix_shifter.stix_translation.src.modules.carbonblack import carbonblack_translator
+from stix_shifter_modules.carbonblack.stix_translation import carbonblack_translator
 import json
 import logging
 import unittest

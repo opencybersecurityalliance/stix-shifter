@@ -1,9 +1,9 @@
-from stix_shifter.stix_transmission.src.modules.carbonblack import carbonblack_connector
-from stix_shifter.stix_transmission.src.modules.base.base_status_connector import Status
+from stix_shifter_modules.carbonblack.stix_transmission import carbonblack_connector
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from unittest.mock import patch
 import unittest
 import json
-from stix_shifter.stix_transmission.src.modules.utils.RestApiClient import ResponseWrapper
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
 
 
 config = {
@@ -23,7 +23,7 @@ class RequestMockResponse:
         self.content = content
 
 
-@patch('stix_shifter.stix_transmission.src.modules.utils.RestApiClient.requests.get', autospec=True)
+@patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.requests.get', autospec=True)
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
     @staticmethod
