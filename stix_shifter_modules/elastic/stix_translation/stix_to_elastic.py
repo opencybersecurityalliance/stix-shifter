@@ -1,7 +1,7 @@
 import logging
 import importlib
 
-from ..base.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from . import elastic_query_constructor
 
 logger = logging.getLogger(__name__)

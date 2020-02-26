@@ -1,6 +1,6 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.modules.elastic_ecs import elastic_ecs_translator
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.stix_translation.src.utils import transformers
+from stix_shifter_modules.elastic_ecs.stix_translation import elastic_ecs_translator
 from stix_shifter.stix_translation import stix_translation
 
 import json
