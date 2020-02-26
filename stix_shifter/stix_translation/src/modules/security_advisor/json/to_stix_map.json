@@ -24,6 +24,12 @@
   "url":{
     "key": "url.value"
   },
+  "file": {
+    "key": "file.value"
+  },
+  "directory": {
+    "key": "directory.value"
+  },
   "context_resourceName": {
     "key": "x_com_security_advisor_finding.context_resourceName",
     "cybox": false
