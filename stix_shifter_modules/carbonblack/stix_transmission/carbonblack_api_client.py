@@ -1,5 +1,4 @@
-from ..utils.RestApiClient import RestApiClient
-
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
 class APIClient():
     PING_ENDPOINT = 'sensor'
