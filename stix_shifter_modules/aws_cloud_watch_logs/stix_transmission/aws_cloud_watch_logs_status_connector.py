@@ -1,6 +1,6 @@
-from ..base.base_status_connector import BaseStatusConnector
-from .....utils.error_response import ErrorResponder
-from ..base.base_status_connector import Status
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
+from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from enum import Enum
 import math
 
