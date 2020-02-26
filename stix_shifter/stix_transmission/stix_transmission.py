@@ -13,7 +13,6 @@ STATUS = 'status'
 PING = 'ping'
 IS_ASYNC = 'is_async'
 
-DEFAULT_PING_TIMEOUT_IN_SECONDS = 10
 
 class StixTransmission:
 

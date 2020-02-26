@@ -1,8 +1,9 @@
 from ..utils.RestApiClient import RestApiClient
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
+
 
 class APIClient():
     PING_ENDPOINT = 'sensor'
+    PING_TIMEOUT_IN_SECONDS = 10
 
     @staticmethod
     def _dialect_to_endpoint(dialect):
@@ -25,7 +26,7 @@ class APIClient():
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
-        return self.client.call_api(endpoint, 'GET', timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, dialect, start=0, rows=10):
         headers = dict()

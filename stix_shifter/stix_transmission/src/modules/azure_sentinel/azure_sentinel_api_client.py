@@ -1,9 +1,10 @@
 from ..utils.RestApiClient import RestApiClient
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 
 
 class APIClient:
     """API Client to handle all calls."""
+    PING_TIMEOUT_IN_SECONDS = 10
+    
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
@@ -34,7 +35,7 @@ class APIClient:
         """Ping the endpoint."""
         params = dict()
         params['$top'] = 1
-        return self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, length):
         """get the response from azure_sentinel endpoints

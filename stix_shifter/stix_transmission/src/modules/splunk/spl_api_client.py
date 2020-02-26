@@ -1,9 +1,8 @@
 from ..utils.RestApiClient import RestApiClient, ResponseWrapper
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 import urllib.parse
 import json
-import base64
 from urllib.parse import urlencode
+
 
 class APIClient():
     # API METHODS
@@ -13,6 +12,8 @@ class APIClient():
 
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of its inherited class.
+    PING_TIMEOUT_IN_SECONDS = 10
+
     def __init__(self, connection, configuration):
 
         # This version of the Splunk APIClient is designed to function with
@@ -54,7 +55,7 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + 'server/status'
         data = {'output_mode': self.output_mode}
-        return self.client.call_api(endpoint, 'GET', data=data, timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', data=data, timeout=self.PING_TIMEOUT_IN_SECONDS)
         
     def create_search(self, query_expression):
         # sends a POST request to 

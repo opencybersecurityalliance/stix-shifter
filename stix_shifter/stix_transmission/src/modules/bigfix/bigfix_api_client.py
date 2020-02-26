@@ -1,6 +1,5 @@
 import base64
 from ..utils.RestApiClient import RestApiClient
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 
 
 class APIClient:
@@ -9,6 +8,7 @@ class APIClient:
     QUERY_ENDPOINT = 'clientquery'
     RESULT_ENDPOINT = 'clientqueryresults/'
     SYNC_QUERY_ENDPOINT = 'query'
+    PING_TIMEOUT_IN_SECONDS = 10
 
     def __init__(self, connection, configuration):
         self.endpoint_start = 'api/'
@@ -21,7 +21,7 @@ class APIClient:
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
-        return self.get_api_client().call_api(endpoint, 'GET', timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.get_api_client().call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def create_search(self, query_expression):
         headers = dict()

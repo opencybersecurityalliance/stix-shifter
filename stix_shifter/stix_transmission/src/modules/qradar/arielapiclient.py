@@ -1,13 +1,8 @@
 from ..utils.RestApiClient import RestApiClient
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 import urllib.parse
-import logging
-import sys
-import json
 
 
 class APIClient():
-
     # API METHODS
 
     # These methods are used to call Ariel's API methods through http requests.
@@ -15,6 +10,8 @@ class APIClient():
 
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of the RestApiClient
+    PING_TIMEOUT_IN_SECONDS = 10
+
     def __init__(self, connection, configuration):
         # This version of the ariel APIClient is designed to function with
         # version 6.0 of the ariel API.
@@ -72,7 +69,7 @@ class APIClient():
         # Sends a GET request
         # to https://<server_ip>/api/help/resources
         endpoint = 'api/help/resources'  # no 'ariel' in the path
-        return self.client.call_api(endpoint, 'GET', timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def get_databases(self):
         # Sends a GET request

@@ -1,7 +1,6 @@
 """Apiclient for MSATP"""
 import json
 from ..utils.RestApiClient import RestApiClient
-from ....stix_transmission import DEFAULT_PING_TIMEOUT_IN_SECONDS
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0
@@ -9,6 +8,8 @@ DEFAULT_OFFSET = 0
 
 class APIClient:
     """API Client to handle all calls."""
+    PING_TIMEOUT_IN_SECONDS = 10
+
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
@@ -37,7 +38,7 @@ class APIClient:
     def ping_box(self):
         """Ping the endpoint."""
         endpoint = '/api'
-        return self.client.call_api(endpoint, 'GET', timeout=DEFAULT_PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
         """get the response from MSatp endpoints
