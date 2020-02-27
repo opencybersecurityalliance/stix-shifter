@@ -5,4 +5,18 @@ include *.md
 include LICENSE.txt
 
 # Include JSON files
-include **/*.json
+include stix_shifter/stix_translation/src/modules/aws_cloud_watch_logs/json/*.json
+include stix_shifter/stix_translation/src/modules/aws_security_hub/json/*.json
+include stix_shifter/stix_translation/src/modules/bigfix/json/*.json
+include stix_shifter/stix_translation/src/modules/car/json/*.json
+include stix_shifter/stix_translation/src/modules/csa/json/*.json
+include stix_shifter/stix_translation/src/modules/dummy/json/*.json
+include stix_shifter_modules/qradar/stix_translation/json/*.json
+include stix_shifter_modules/splunk/stix_translation/json/*.json
+include stix_shifter/stix_translation/src/modules/carbonblack/json/*.json
+include stix_shifter/stix_translation/src/modules/elastic_ecs/json/*.json
+include stix_shifter/stix_translation/src/modules/cim/json/*.json
+include stix_shifter/stix_translation/src/modules/msatp/json/*.json
+include stix_shifter/stix_translation/src/modules/security_advisor/json/*.json
+include stix_shifter/stix_translation/src/modules/guardium/json/*.json
+include stix_shifter/stix_translation/src/modules/azure_sentinel/json/*.json 
