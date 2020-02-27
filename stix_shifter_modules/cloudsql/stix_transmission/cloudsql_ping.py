@@ -1,4 +1,4 @@
-from ..base.base_ping import BasePing
+from stix_shifter_utils.modules.base.stix_transmission.base_ping import BasePing
 
 
 class CloudSQLPing(BasePing):

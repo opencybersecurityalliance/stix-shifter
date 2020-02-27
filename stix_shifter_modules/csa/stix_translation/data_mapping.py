@@ -2,7 +2,7 @@ from os import path
 import json
 import re
 
-from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 
 def _fetch_mapping(dialect=''):
     try:

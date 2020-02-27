@@ -28,7 +28,7 @@ from_statement = " FROM cos://us-geo/nf-hourly-dumps STORED AS JSON "
 
 num_rows = 1024
 
-protocols_file = open('stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
+protocols_file = open('stix_shifter_modules/csa/stix_translation/json/network_protocol_map.json').read()
 PROTOCOLS = json.loads(protocols_file)
 
 

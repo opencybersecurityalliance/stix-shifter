@@ -9,7 +9,7 @@ from stix_shifter.stix_translation.src.patterns.pattern_objects import Observati
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
-from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
 
 logger = logging.getLogger(__name__)
 START_STOP_FIELD = "eventTime"
@@ -18,7 +18,7 @@ START_STOP_FIELD = "eventTime"
 def _fetch_network_protocol_mapping():
     try:
         map_file = open(
-            'stix_shifter/stix_translation/src/modules/csa/json/network_protocol_map.json').read()
+            'stix_shifter_modules/csa/stix_translation/json/network_protocol_map.json').read()
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
