@@ -10,10 +10,7 @@ import sys
 import json
 
 if __name__ == "__main__":
-    print('Argument List:'+ str(sys.argv))
     if len(sys.argv) > 2:
         params = json.loads(sys.argv[-1])
         sys.argv = sys.argv[:-1]
-        print(sys.argv)
-        # print(params)
         setup(**params)
