@@ -1,4 +1,4 @@
-from ..base.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 import json
 import re
 import math

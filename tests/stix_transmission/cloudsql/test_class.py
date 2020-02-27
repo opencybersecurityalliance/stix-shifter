@@ -1,5 +1,5 @@
-from stix_shifter.stix_transmission.src.modules.cloudsql import cloudsql_connector
-from stix_shifter.stix_transmission.src.modules.base.base_status_connector import Status
+from stix_shifter_modules.cloudsql.stix_transmission import cloudsql_connector
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 import pandas as pd
 from unittest.mock import patch
 import json
@@ -107,7 +107,7 @@ class TestCloudSQLConnection(unittest.TestCase, object):
         assert 'status' in status_response
         assert status_response['status'] == Status.COMPLETED.value
 
-    @patch('stix_shifter.stix_transmission.src.modules.cloudsql.cloudsql_results_connector.CloudSQLResultsConnector.records', autospec=True)
+    @patch('stix_shifter_modules.cloudsql.stix_transmission.cloudsql_results_connector.CloudSQLResultsConnector.records', autospec=True)
     def test_results_response(self, mock_results_response,
                               mock_api_client_logon, mock_api_client):
         mock_api_client_logon.return_value = None

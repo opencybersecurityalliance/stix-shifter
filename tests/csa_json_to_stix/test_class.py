@@ -1,6 +1,6 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.modules.csa import csa_translator
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.stix_translation.src.utils  import transformers
+from stix_shifter_modules.csa.stix_translation import csa_translator
 import json
 import unittest
 from os import path

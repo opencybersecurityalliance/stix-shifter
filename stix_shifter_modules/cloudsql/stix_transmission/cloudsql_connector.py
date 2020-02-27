@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .cloudsql_ping import CloudSQLPing
 from .cloudsql_query_connector import CloudSQLQueryConnector
 from .cloudsql_status_connector import CloudSQLStatusConnector
