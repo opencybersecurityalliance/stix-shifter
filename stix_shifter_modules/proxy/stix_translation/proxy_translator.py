@@ -1,4 +1,4 @@
-from ..base.base_translator import BaseTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 import json
 import requests
 
