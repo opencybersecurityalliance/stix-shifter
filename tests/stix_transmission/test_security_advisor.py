@@ -1,6 +1,5 @@
 import requests_mock
-from stix_shifter.stix_transmission.src.modules.security_advisor import security_advisor_connector
-from stix_shifter.stix_transmission.src.modules.security_advisor import security_advisor_auth
+from stix_shifter_modules.security_advisor.stix_transmission import security_advisor_connector, security_advisor_auth
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission

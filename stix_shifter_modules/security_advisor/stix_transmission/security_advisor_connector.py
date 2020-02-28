@@ -1,4 +1,4 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .security_advisor_ping import SecurityAdvisorPing
 from .security_advisor_query_connector import SecurityAdvisorQueryConnector
 from .security_advisor_status_connector import SecurityAdvisorStatusConnector

@@ -1,6 +1,6 @@
-from ..base.base_ping import BasePing
+from stix_shifter_utils.modules.base.stix_transmission.base_ping import BasePing
 import requests
-from .....utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from .security_advisor_auth import SecurityAdvisorAuth
 
 

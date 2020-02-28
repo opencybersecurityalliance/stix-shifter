@@ -1,4 +1,6 @@
-from ..base.base_delete_connector import BaseDeleteConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
+
+
 class SecurityAdvisorDeleteConnector(BaseDeleteConnector):
     def __init__(self, host, auth ):
         self.host = host

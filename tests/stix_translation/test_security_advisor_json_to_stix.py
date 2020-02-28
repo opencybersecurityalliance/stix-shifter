@@ -1,7 +1,7 @@
 import json
-from stix_shifter.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.modules.security_advisor import security_advisor_translator
+from stix_shifter_utils.stix_translation.src.utils import transformers
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
+from stix_shifter_modules.security_advisor.stix_translation import security_advisor_translator
 from stix_shifter.stix_translation import stix_translation
 
 
@@ -17,6 +17,7 @@ data_source = {
     "identity_class": "events"
 }
 options = {}
+
 
 class TestSecurityAdvisorResultsToStix(unittest.TestCase):
     """

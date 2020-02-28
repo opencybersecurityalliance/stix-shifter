@@ -1,11 +1,8 @@
-from ..base.base_query_connector import BaseQueryConnector
-import requests
-import json
+from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
 
-from .....utils.error_response import ErrorResponder
 
 class SecurityAdvisorQueryConnector(BaseQueryConnector):
-    def __init__(self, host,auth):
+    def __init__(self, host, auth):
         self.host = host
         self.auth = auth
 

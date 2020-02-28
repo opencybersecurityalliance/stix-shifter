@@ -1,5 +1,5 @@
-from ..base.base_status_connector import BaseStatusConnector
-from ..base.base_status_connector import Status
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector, Status
+
 
 class SecurityAdvisorStatusConnector(BaseStatusConnector):
     def __init__(self, host, auth):
