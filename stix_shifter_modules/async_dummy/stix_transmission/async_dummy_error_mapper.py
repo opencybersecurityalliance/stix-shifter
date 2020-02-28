@@ -1,5 +1,5 @@
-from .....utils.error_mapper_base import ErrorMapperBase
-from .....utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 error_mapping = {
     # These are only examples. Change the keys to reflect the error codes that come back from the data source API.
