@@ -51,7 +51,7 @@ class JSONToStixObservablesDecorator:
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r"(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]","domain-name",mapping_overriden)
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r'(https?://\S+)',"url",mapping_overriden)
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r'([~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+\.[a-z,A-Z][\w]+|[\w]+\.[a-z,A-Z][\W]+|\.[a-z,A-Z][\w]+)',"file",mapping_overriden)
-            self.customFunctionAndDecorateWithStdObjects(flattened_finding,finding,"parseDirectory","directory",mapping_overriden)
+            self.customFunctionAndDecorateWithStdObjects(flattened_finding,finding,"directory",mapping_overriden)
 
     # This method decorates finding with cyber observables and overrides mapping to support these observables
     def regexAndDecorateWithStdObjects(self,flattened_finding, finding, regex,type, mapping_overriden):
@@ -89,13 +89,18 @@ class JSONToStixObservablesDecorator:
                 pass
     
     # This method provides a way to call custom functions when function name is provided as string
-    def customFunctionAndDecorateWithStdObjects(self, flattened_finding, finding, function_name, type, mapping_overriden):
-        m = globals()['ObjectFinderMethods']()
+    def customFunctionAndDecorateWithStdObjects(self, flattened_finding, finding, type, mapping_overriden):
+        m = globals()['ObjectParserMethods']()
+        function_name = "parse"+type.capitalize() 
         getattr(m, function_name)(flattened_finding, finding, type, mapping_overriden)
 
 
-""" This class contains all custom regex parsing functions """
-class ObjectFinderMethods:
+""" This class contains all custom  parsing functions to parse standard stix objects from findigs.
+    Each of these methods should start with ‘parse’  and end with type.
+    For example  parseDirectory parses directory type objects """
+
+
+class ObjectParserMethods:
 
     def parseDirectory(self,flattened_finding, finding, type, mapping_overriden):
         regex = "[/~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+"
