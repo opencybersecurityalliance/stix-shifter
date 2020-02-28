@@ -22,7 +22,7 @@ mode = 1
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
 
-#DO NOT insert spaces around the equal sign at the line below
+#DO NOT remove spaces around the equal sign at the line below
 version = '1.0.0'
 if 'VERSION' in os.environ:
     version = os.environ['VERSION']
