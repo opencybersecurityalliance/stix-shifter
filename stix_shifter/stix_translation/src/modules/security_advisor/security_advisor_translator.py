@@ -22,6 +22,7 @@ class Translator(BaseTranslator):
         self.result_translator = JSONToStixObservablesDecorator(filepath)
         self.query_translator = SecurityAdvisorQueryTranslator()
 
+    
 
 class JSONToStixObservablesDecorator:
     def __init__(self, filepath):
@@ -49,6 +50,8 @@ class JSONToStixObservablesDecorator:
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)","email",mapping_overriden)
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r"(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]","domain-name",mapping_overriden)
             self.regexAndDecorateWithStdObjects(flattened_finding,finding,r'(https?://\S+)',"url",mapping_overriden)
+            self.regexAndDecorateWithStdObjects(flattened_finding,finding,r'([~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+\.[a-z,A-Z][\w]+|[\w]+\.[a-z,A-Z][\W]+|\.[a-z,A-Z][\w]+)',"file",mapping_overriden)
+            self.customFunctionAndDecorateWithStdObjects(flattened_finding,finding,"parseDirectory","directory",mapping_overriden)
 
     # This method decorates finding with cyber observables and overrides mapping to support these observables
     def regexAndDecorateWithStdObjects(self,flattened_finding, finding, regex,type, mapping_overriden):
@@ -63,9 +66,54 @@ class JSONToStixObservablesDecorator:
                        for value in objectList:
                            if "securityadvisor." in value:
                                exceptionList.append(value)
+                           elif ".pdf" in value or ".sh" in value or ".txt" in value or ".html" in value:
+                               exceptionList.append(value)
+                    if type == 'file':
+                       for value in objectList:
+                           if ".com" in value or ".in" in value or ".org" in value or ".co.in" in value or ".net" in value:
+                               exceptionList.append(value)
                     # Removing specific exceptions here.
                     objectList =  list(set(objectList) - set(exceptionList))
                     objects.extend(objectList)
+            except:
+                pass
+        
+        count = 1
+        for entry in set(objects):
+            try:
+                finding[type+ str(count)] = entry
+                # Dynamically add mapping, for eg: 5 email definitions if there are 5 emails identified from a finding
+                mapping_overriden[type+ str(count)] = definition
+                count += 1
+            except:
+                pass
+    
+    # This method provides a way to call custom functions when function name is provided as string
+    def customFunctionAndDecorateWithStdObjects(self, flattened_finding, finding, function_name, type, mapping_overriden):
+        m = globals()['ObjectFinderMethods']()
+        getattr(m, function_name)(flattened_finding, finding, type, mapping_overriden)
+
+
+""" This class contains all custom regex parsing functions """
+class ObjectFinderMethods:
+
+    def parseDirectory(self,flattened_finding, finding, type, mapping_overriden):
+        regex = "[/~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+"
+        definition = mapping_overriden[type]
+        objects = []
+        for key, value in flattened_finding.items():
+            try:
+                objectList = re.findall(regex, value)
+                exceptionList = []
+                dirList = []
+                for value in objectList:
+                    path = value
+                    if '.' in value and '/' in value and 'providers' not in value:
+                        path = re.search("[/[\w]*/+", value).group()
+                        dirList.append(path)
+                    if '.' not in value and '/' in value and 'providers' not in value:
+                        dirList.append(path)
+                objects.extend(dirList)
             except:
                 pass
         
