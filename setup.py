@@ -18,7 +18,7 @@ def fill_connectors(projects, modules_path):
     for module in modules:
         projects['stix_shifter_modules_'+module] = ['stix_shifter_modules/'+module]
 
-mode = 1
+mode = '1'
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
 
