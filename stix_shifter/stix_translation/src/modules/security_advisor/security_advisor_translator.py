@@ -95,7 +95,7 @@ class JSONToStixObservablesDecorator:
         getattr(m, function_name)(flattened_finding, finding, type, mapping_overriden)
 
 
-""" This class contains all custom  parsing functions to parse standard stix objects from findigs.
+""" This class contains all custom  parsing functions to parse standard stix objects from findings.
     Each of these methods should start with ‘parse’  and end with type.
     For example  parseDirectory parses directory type objects """
 
