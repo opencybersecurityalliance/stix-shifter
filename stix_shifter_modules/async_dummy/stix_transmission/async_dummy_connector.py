@@ -1,6 +1,6 @@
-from ..base.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .api_client import APIClient
-from ..base.base_status_connector import Status
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from json import loads
 from enum import Enum
 

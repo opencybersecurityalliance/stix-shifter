@@ -1,4 +1,4 @@
-from stix_shifter.stix_transmission.src.modules.synchronous_dummy import synchronous_dummy_connector
+from stix_shifter_modules.synchronous_dummy.stix_transmission import synchronous_dummy_connector
 import unittest
 
 CONNECTION = {"host": "hostbla",  "port": "8080",  "path": "/"}
