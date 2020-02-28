@@ -1,10 +1,3 @@
-"""A setuptools based setup module.
-
-See:
-https://packaging.python.org/en/latest/distributing.html
-https://github.com/pypa/sampleproject
-"""
-
 from setuptools import find_packages
 # To use a consistent encoding
 from codecs import open
@@ -28,6 +21,11 @@ def fill_connectors(projects, modules_path):
 mode = 1
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
+
+#DO NOT insert spaces around the equal sign at the line below
+version = '1.0.0'
+if 'VERSION' in os.environ:
+    version = os.environ['VERSION']
 
 if mode=='1':
     projects = {
@@ -98,7 +96,7 @@ for project_name in projects.keys():
     #Prepare setup params
     params = {
         'name': project_name,  # Required
-        'version': '1.0.0',  # Required
+        'version': version,  # Required
         'description': 'Tools and interface to translate STIX formatted results and queries to different data source formats and to set up appropriate connection strings for invoking and triggering actions in openwhisk',  # Required
         'long_description': long_description,  # Optional
         'long_description_content_type': 'text/markdown',  # Optional (see note above)
