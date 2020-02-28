@@ -1,5 +1,5 @@
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 
-from ..base.base_query_translator import BaseQueryTranslator
 
 class SecurityAdvisorQueryTranslator(BaseQueryTranslator):
 

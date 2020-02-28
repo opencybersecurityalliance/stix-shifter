@@ -1,6 +1,6 @@
 from .security_advisor_query_translator import SecurityAdvisorQueryTranslator
-from ..base.base_translator import BaseTranslator
-from ...json_to_stix.json_to_stix import JSONToStix
+from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 from os import path
 
