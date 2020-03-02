@@ -1,6 +1,4 @@
-#DELETEME from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation import stix_translation
-#DELETEME from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.stix_transmission import stix_transmission
 from flask import request
 import json

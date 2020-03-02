@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from os import path
 import json
-#DELETEME from stix_shifter.stix_translation.src.utils.exceptions import DataMappingException
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import glob
 

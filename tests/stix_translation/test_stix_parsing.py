@@ -3,9 +3,7 @@ import unittest
 import json
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
-#DELETEME selections_file = open('stix_shifter/stix_translation/src/modules/qradar/json/aql_event_fields.json').read()
 selections_file = open('stix_shifter_modules/qradar/stix_translation/json/aql_event_fields.json').read()
-#DELETEME protocols_file = open('stix_shifter/stix_translation/src/modules/qradar/json/network_protocol_map.json').read()
 protocols_file = open('stix_shifter_modules/qradar/stix_translation/json/network_protocol_map.json').read()
 OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)

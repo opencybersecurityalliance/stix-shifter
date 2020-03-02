@@ -1,9 +1,7 @@
-#DELETEME from ..base.base_query_connector import BaseQueryConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseQueryConnector
-import json
-#DELETEME from .....utils.error_response import ErrorResponder
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .qradar_error_mapper import ErrorMapper
+import json
 
 
 class QRadarQueryConnector(BaseQueryConnector):
