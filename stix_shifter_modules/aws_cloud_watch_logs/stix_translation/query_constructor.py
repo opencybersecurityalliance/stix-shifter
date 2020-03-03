@@ -1,7 +1,7 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
-from stix_shifter.stix_translation.src.utils.transformers import TimestampToMilliseconds
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from datetime import datetime, timedelta
 import os.path as path
 import json

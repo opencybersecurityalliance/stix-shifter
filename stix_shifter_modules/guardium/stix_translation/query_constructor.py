@@ -1,9 +1,9 @@
 from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.utils.transformers import TimestampToGuardium
-from stix_shifter.stix_translation.src.json_to_stix import observable
-from stix_shifter.stix_translation.src.utils import transformers
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToGuardium
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.utils import transformers
 import re
 import json
 import datetime
