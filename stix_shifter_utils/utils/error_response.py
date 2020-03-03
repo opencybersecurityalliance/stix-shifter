@@ -107,6 +107,7 @@ class ErrorResponder():
     @staticmethod
     def call_module_error_mapper(json_data, return_object):
         caller_path_list = traceback.extract_stack()[-3].filename.split('/')
+        print(traceback.print_stack())
         caller_module_name = caller_path_list[-3:-1]
         # path_start_position = ErrorResponder.rindex(caller_path_list, 'stix-shifter')
         module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'

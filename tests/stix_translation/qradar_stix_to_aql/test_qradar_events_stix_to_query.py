@@ -142,6 +142,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
         result = translation.translate('qradar', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
+        print('RESULT: {}'.format(result))
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']
