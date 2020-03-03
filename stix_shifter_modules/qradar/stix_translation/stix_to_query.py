@@ -1,6 +1,5 @@
 import logging
 
-#DELETEME from ..base.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseQueryTranslator
 from . import query_constructor
 

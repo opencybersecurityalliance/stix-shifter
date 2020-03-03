@@ -1,9 +1,8 @@
 from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter.stix_translation.src.utils import transformers
-#DELETEME from stix_shifter.stix_translation.src.modules.qradar import qradar_translator
 from stix_shifter_modules.qradar.stix_translation import qradar_translator
-import json
 from stix_shifter.stix_translation import stix_translation
+import json
 import base64
 
 interface = qradar_translator.Translator()

@@ -1,8 +1,6 @@
 import json
 from . import json_to_stix_translator
-#DELETEME from ..modules.base.base_result_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
-#DELETEME from stix_shifter.stix_translation.src.utils import transformers
 from stix_shifter_utils.stix_translation.src.utils import transformers
 
 # Concrete BaseResultTranslator

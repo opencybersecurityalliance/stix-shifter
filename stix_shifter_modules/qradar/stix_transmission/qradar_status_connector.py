@@ -1,11 +1,9 @@
-#DELETEME from ..base.base_status_connector import BaseStatusConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
-#DELETEME from ..base.base_status_connector import Status
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from enum import Enum
 import json
-#DELETEME from .....utils.error_response import ErrorResponder
-from stix_shifter_utils.utils.error_response import ErrorResponder
+
 
 class QRadarStatus(Enum):
     # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR

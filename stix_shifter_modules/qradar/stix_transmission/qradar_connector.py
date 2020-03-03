@@ -1,4 +1,3 @@
-#DELETEME from ..base.base_connector import BaseConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from .qradar_ping import QRadarPing
 from .qradar_query_connector import QRadarQueryConnector

@@ -1,4 +1,3 @@
-#DELETEME from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation import stix_translation
 from enum import Enum
 
