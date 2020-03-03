@@ -1,5 +1,5 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.utils import transformers
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.aws_cloud_watch_logs.stix_translation import aws_cloud_watch_logs_translator
 import json
 import unittest

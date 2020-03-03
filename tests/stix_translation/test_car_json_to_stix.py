@@ -1,5 +1,5 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_modules.car.stix_translation import car_translator
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.modules.car.stix_translation import car_translator
 import json
 import base64
 
