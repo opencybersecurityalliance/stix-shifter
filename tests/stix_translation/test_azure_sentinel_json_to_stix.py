@@ -1,6 +1,6 @@
 import json
 from stix_shifter_utils.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.azure_sentinel.stix_translation import azure_sentinel_translator
 import unittest
 
