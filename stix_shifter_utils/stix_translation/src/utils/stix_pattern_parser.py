@@ -1,8 +1,8 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import DateTimeToUnixTimestamp
 import datetime
+from stix_shifter_utils.stix_translation.src.utils.transformers import DateTimeToUnixTimestamp
 import re
 
 

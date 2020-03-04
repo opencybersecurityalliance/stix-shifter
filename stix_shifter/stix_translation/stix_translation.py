@@ -7,7 +7,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from .src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
 from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
-from stix_shifter.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
+from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 import sys
 import glob
 from os import path
