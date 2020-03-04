@@ -97,7 +97,7 @@ class TestStixToAql(unittest.TestCase, object):
 
     def test_unmapped_attribute_with_AND(self):
         stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever' AND file:name = 'some_file.exe']"
-        result = translation.translate('qradar', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
+        result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert MAPPING_ERROR in result['error']
@@ -142,7 +142,6 @@ class TestStixToAql(unittest.TestCase, object):
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"
         result = translation.translate('qradar', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
-        print('RESULT: {}'.format(result))
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']
