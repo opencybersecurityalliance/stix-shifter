@@ -3,7 +3,7 @@ from stix_shifter.stix_translation.src.patterns.parser import generate_query
 from stix2patterns.validator import run_validator
 from stix_shifter.stix_translation.src.utils.stix_pattern_parser import parse_stix
 import re
-from ..utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from .src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
 from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
