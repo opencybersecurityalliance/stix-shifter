@@ -5,10 +5,10 @@ import re
 
 logger = logging.getLogger(__name__)
 
-from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 
 class CbQueryStringPatternTranslator:

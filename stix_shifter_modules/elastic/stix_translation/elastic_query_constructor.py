@@ -3,10 +3,10 @@ import datetime
 
 logger = logging.getLogger(__name__)
 
-from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 class ElasticQueryStringPatternTranslator:
     comparator_lookup = {

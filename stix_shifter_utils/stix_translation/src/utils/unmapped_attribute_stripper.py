@@ -1,4 +1,4 @@
-from stix_shifter.stix_translation.src.patterns.pattern_objects import StartStopQualifier, ObservationExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import StartStopQualifier, ObservationExpression, \
     ComparisonExpression, Pattern, CombinedComparisonExpression, CombinedObservationExpression
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 

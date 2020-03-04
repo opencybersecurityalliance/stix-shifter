@@ -4,7 +4,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.modules.car.stix_translation.car_data_mapping import CarDataMapper
