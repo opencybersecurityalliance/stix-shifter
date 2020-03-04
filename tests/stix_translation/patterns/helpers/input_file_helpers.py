@@ -1,5 +1,5 @@
 from os import listdir, path
-from stix_shifter_utils.stix_translation.src.patterns.translator import SearchPlatforms, DataModels
+from ..translator import SearchPlatforms, DataModels
 import json
 import re
 
