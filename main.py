@@ -5,7 +5,7 @@ from stix_shifter.stix_transmission import stix_transmission
 from flask import Flask
 import json
 import time
-from stix_shifter.utils.proxy_host import ProxyHost
+from stix_shifter_utils.utils.proxy_host import ProxyHost
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
