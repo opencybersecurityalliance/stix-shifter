@@ -1,6 +1,6 @@
 import logging
 import unittest
-from stix_shifter.stix_translation.src.patterns.translator import translate, DataModels, SearchPlatforms
+from .translator import translate, DataModels, SearchPlatforms
 from .helpers.input_file_helpers import *
 from os import listdir, path
 

@@ -1,7 +1,7 @@
-from stix_shifter.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression
-from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 from datetime import datetime, timedelta
 import re
 

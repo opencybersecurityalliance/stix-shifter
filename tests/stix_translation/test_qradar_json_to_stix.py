@@ -29,6 +29,15 @@ class TestTransform(object):
     @staticmethod
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
+    
+    @staticmethod
+    def get_object_keys(objects):
+        for k, v in objects.items():
+            if k == 'type':
+                yield v
+            elif isinstance(v, dict):
+                for id_val in TestTransform.get_object_keys(v):
+                    yield id_val
 
     def test_common_prop(self):
         data = {"starttime": 1531169112, "endtime": 1531169254, "eventcount": 5}
@@ -415,3 +424,35 @@ class TestTransform(object):
             hashes = file_object['hashes']
             assert(key in hashes), "{} hash not included".format(key)
             assert(hashes[key] == value)
+    
+    def test_none_empty_values_in_results(self):
+        payload = "Payload"
+        user_id = "someuserid2018"
+        url = None 
+        source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
+        destination_ip = "255.255.255.1"
+        file_name = ""
+        source_mac = "00-00-5E-00-53-00"
+        destination_mac = "00-00-5A-00-55-01"
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
+        
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        
+        assert(result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+        
+        obj_keys = []
+        for key in TestTransform.get_object_keys(objects):
+            obj_keys.append(key)
+
+        # url object has None in results so url object will be skipped while creating the observables
+        assert('url' not in obj_keys)
+        # file object has empty string in results so url object will be skipped while creating the observables
+        assert('file' not in obj_keys)

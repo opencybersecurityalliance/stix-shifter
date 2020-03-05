@@ -2,6 +2,7 @@ import json
 from . import json_to_stix_translator
 from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.utils import transformers
+from stix_shifter_utils.stix_translation.src.utils.exceptions import LoadJsonResultsException, TranslationResultException
 
 # Concrete BaseResultTranslator
 
@@ -20,8 +21,11 @@ class JSONToStix(BaseResultTranslator):
         :rtype: str
         """
         self.mapping = options['mapping'] if 'mapping' in options else {}
-        json_data = json.loads(data)
-        data_source = json.loads(data_source)
+        try:
+            json_data = json.loads(data)
+            data_source = json.loads(data_source)
+        except Exception:
+            raise LoadJsonResultsException()
 
         if(not self.mapping):
             map_file = open(self.default_mapping_file_path).read()
@@ -29,7 +33,9 @@ class JSONToStix(BaseResultTranslator):
         else:
             map_data = self.mapping
 
-        results = json_to_stix_translator.convert_to_stix(data_source, map_data,
-                                                          json_data, transformers.get_all_transformers(), options, self.callback)
+        try:
+            results = json_to_stix_translator.convert_to_stix(data_source, map_data, json_data, transformers.get_all_transformers(), options, self.callback)
+        except Exception as ex:
+            raise TranslationResultException("Error when converting results to STIX: {}".format(ex))
 
         return json.dumps(results, indent=4, sort_keys=False)
