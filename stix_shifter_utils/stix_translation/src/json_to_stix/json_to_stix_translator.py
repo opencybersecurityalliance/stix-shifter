@@ -138,7 +138,7 @@ class DataSourceObjToStixObj:
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            # print('{} is not found in map, skipping'.format(ds_key))
+            print('{} is not found in map, skipping'.format(ds_key))
             return
 
         if isinstance(to_map, dict):
