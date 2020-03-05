@@ -12,6 +12,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
+        "spec_version": "2.0",
         "objects": []
     }
 
@@ -57,7 +58,8 @@ class DataSourceObjToStixObj:
             print('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
-        if transformer is not None:
+        # Is this getting his with a none-type value?
+        if ret_val and transformer is not None:
             return transformer.transform(ret_val)
         return ret_val
 
@@ -120,7 +122,10 @@ class DataSourceObjToStixObj:
         :return: whether STIX value is valid for this STIX property
         :rtype: bool
         """
-        if stix_value is None:
+
+        #  Causing a couple of failing tests in MSATP
+        if stix_value is None or stix_value == '':
+            print("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
@@ -133,7 +138,7 @@ class DataSourceObjToStixObj:
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            print('{} is not found in map, skipping'.format(ds_key))
+            # print('{} is not found in map, skipping'.format(ds_key))
             return
 
         if isinstance(to_map, dict):
@@ -174,15 +179,21 @@ class DataSourceObjToStixObj:
             group = False
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
-                print("ds_key_def inside {}".format(ds_key_def))
                 if 'references' in ds_key_def:
                     references = ds_key_def['references']
                     if isinstance(references, list):
                         stix_value = []
                         for ref in references:
-                            stix_value.append(object_map[ref])
+                            val = object_map.get(ref)
+                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, val):
+                                continue
+                            stix_value.append(val)
+                        if not stix_value:
+                            continue
                     else:
-                        stix_value = object_map[references]
+                        stix_value = object_map.get(references)
+                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                            continue
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
@@ -191,7 +202,6 @@ class DataSourceObjToStixObj:
                 # Group Values
                 if 'group' in ds_key_def:
                     group = True
-
                 DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
                 # get the object name defined for custom attributes
@@ -221,6 +231,7 @@ class DataSourceObjToStixObj:
         :param obj: the datasource object that is being converted to stix
         :return: the input object converted to stix valid json
         """
+        NUMBER_OBSERVED_KEY = 'number_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
@@ -240,6 +251,10 @@ class DataSourceObjToStixObj:
                 self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
             print("Not a dict: {}".format(obj))
+        
+        # Add required property to the observation if it wasn't added via the mapping
+        if NUMBER_OBSERVED_KEY not in observation:
+            observation[NUMBER_OBSERVED_KEY] = 1
 
         # Validate each STIX object
         if self.stix_validator:
