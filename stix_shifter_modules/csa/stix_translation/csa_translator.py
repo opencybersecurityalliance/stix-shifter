@@ -7,6 +7,8 @@ from os import path
 
 class Translator(BaseTranslator):
     def __init__(self, dialect="at", rows=1024):
+        if dialect == 'default':
+            dialect = 'at'
         basepath = path.dirname(__file__)
         filepath = path.abspath(
             path.join(basepath, "json", dialect+"_to_stix_map.json"))

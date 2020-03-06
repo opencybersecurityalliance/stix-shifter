@@ -6,12 +6,13 @@ from flask import Flask
 import json
 import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
+from stix_shifter_utils.utils.module_discovery import module_list, reorganize_modules_renameme
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 HOST = 'host'
-
+CONNECTOR_MODULES = module_list()
 
 def main():
     """
@@ -50,7 +51,8 @@ def main():
 
     # positional arguments
     translate_parser.add_argument(
-        'module', choices=stix_translation.TRANSLATION_MODULES, help='The translation module to use')
+        'module',
+         help='The translation module to use')
     translate_parser.add_argument('translate_type', choices=[
         stix_translation.RESULTS, stix_translation.QUERY, stix_translation.PARSE], help='The translation action to perform')
     translate_parser.add_argument(
@@ -73,7 +75,7 @@ def main():
 
     # positional arguments
     transmit_parser.add_argument(
-        'module', choices=stix_transmission.TRANSMISSION_MODULES,
+        'module', 
         help='Choose which connection module to use'
     )
     transmit_parser.add_argument(
@@ -105,12 +107,12 @@ def main():
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
     # positional arguments
     execute_parser.add_argument(
-        'transmission_module', choices=stix_transmission.TRANSMISSION_MODULES,
+        'transmission_module', 
         help='Which connection module to use'
     )
     execute_parser.add_argument(
-        'translation_module', choices=stix_translation.TRANSLATION_MODULES,
-        help='Which translation module to use'
+        'module', 
+        help='Which translation module to use for translation'
     )
     execute_parser.add_argument(
         'data_source',
@@ -147,7 +149,24 @@ def main():
 
     args = parent_parser.parse_args()
 
-    if args.command is None:
+    help_and_die = args.command is None
+
+    if 'module' in args:
+        args_module_dialects = args.module
+        
+        options = args.options
+        if options == None:
+            options = {}
+        else:
+            options = json.loads(options)
+
+        module, dialects = reorganize_modules_renameme(args_module_dialects, options)
+        args.options = json.dumps(options)
+
+    if not module in CONNECTOR_MODULES:
+        help_and_die = True
+
+    if help_and_die:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
@@ -204,7 +223,7 @@ def main():
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         translation = stix_translation.StixTranslation()
-        dsl = translation.translate(args.translation_module, 'query', args.data_source, args.query, {'validate_pattern': True})
+        dsl = translation.translate(args.module, 'query', args.data_source, args.query, {'validate_pattern': True})
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
 
@@ -239,7 +258,7 @@ def main():
                 raise RuntimeError("Search failed to execute; see log for details")
 
         # Translate results to STIX
-        result = translation.translate(args.translation_module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
+        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
         print(result)
 
         exit(0)

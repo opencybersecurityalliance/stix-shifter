@@ -8,14 +8,10 @@ from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMapping
 from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
 from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
+from stix_shifter_utils.utils.module_discovery import module_list, reorganize_modules_renameme
 import sys
 import glob
 from os import path
-
-TRANSLATION_MODULES = ['qradar', 'qradar:events:flows', 'dummy', 'car', 'cim', 'splunk', 'elastic', 'bigfix',
-                       'csa', 'csa:at:nf', 'aws_security_hub', 'carbonblack', 'elastic_ecs', 'proxy', 'stix_bundle', 
-                       'msatp', 'security_advisor', 'guardium', 'aws_cloud_watch_logs', 'aws_cloud_watch_logs:guardduty:vpcflow', 'azure_sentinel']
-
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -27,6 +23,7 @@ START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\s
 SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 DEFAULT_DIALECT = 'default'
+CONNECTOR_MODULES = module_list()
 
 
 class StixTranslation:
@@ -47,11 +44,19 @@ class StixTranslation:
         if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
+
+    def _set_dialect(self, options, dialect):
+        if 'dialect' in options:
+            del options['dialect']
+        if dialect != DEFAULT_DIALECT:
+            options['dialect'] = dialect
+
+
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
         Translated queries to a specified format
         :param module: What module to use
-        :type module: one of TRANSLATION_MODULES 'qradar', 'dummy'
+        :type module: one of connector modules: 'qradar', 'dummy'
         :param translate_type: translation of a query or result set must be either 'results' or 'query'
         :type translate_type: str
         :param data: the data to translate
@@ -64,25 +69,14 @@ class StixTranslation:
         :rtype: str
         """
 
-        module, dialects = self._collect_dialects(module)
+        module, dialects = reorganize_modules_renameme(module, options)
         
         try:
-            if module not in TRANSLATION_MODULES:
-                raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
-
             try:
                 translator_module = importlib.import_module(
-                    "stix_shifter.stix_translation.src.modules." + module + "." + module + "_translator")
-            except:
-                translator_module = importlib.import_module(
                     "stix_shifter_modules." + module + ".stix_translation." + module + "_translator")
-
-            if not dialects[0] == DEFAULT_DIALECT:
-                # Todo: This will only work if there is one dialect.
-                # To handle a case such as <MODULE>:<DIALECT_01>:<DIALECT_02> this may need to go in a loop.
-                interface = translator_module.Translator(dialect=dialects[0])
-            else:
-                interface = translator_module.Translator()
+            except:
+                raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 
             if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
@@ -101,7 +95,8 @@ class StixTranslation:
                     queries = []
                     unmapped_stix_collection = []
                     for dia in dialects:
-                        options['dialect'] = dia
+                        self._set_dialect(options, dia)
+                        interface = translator_module.Translator(dialect=dia)                        
                         antlr_parsing = generate_query(data)
                         data_model_mapper = self._build_data_mapper(module, options)
                         if data_model_mapper:
@@ -137,12 +132,17 @@ class StixTranslation:
 
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
+                interface = translator_module.Translator()
                 return interface.translate_results(data_source, data, options)
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
-                data_model_mapper = self._build_data_mapper(module, options)
-                mapped_attributes = data_model_mapper.map_data
-                return {'supported_attributes': mapped_attributes}
+                result = {}
+                for dia in dialects:
+                    self._set_dialect(options, dia)
+                    data_model_mapper = self._build_data_mapper(module, options)
+                    result[dia] = data_model_mapper.map_data
+                    
+                return {'supported_attributes': result}
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
@@ -152,33 +152,12 @@ class StixTranslation:
             return response
 
     def _build_data_mapper(self, module, options):
+        if options.get('data_mapper'):
+            return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
+        elif module in SHARED_DATA_MAPPERS:
+            return SHARED_DATA_MAPPERS[module].mapper_class(options)
         try:
-            try:
-                data_model = importlib.import_module("stix_shifter.stix_translation.src.modules." + module + ".data_mapping")
-            except:
-                data_model = importlib.import_module("stix_shifter_modules." + module + ".stix_translation.data_mapping")
+            data_model = importlib.import_module("stix_shifter_modules." + module + ".stix_translation.data_mapping")
             return data_model.DataMapper(options)
-        except Exception as ex:
-            # Attempt to use the CIM or CAR mapper
-            if options.get('data_mapper'):
-                return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
-            elif module in SHARED_DATA_MAPPERS:
-                return SHARED_DATA_MAPPERS[module].mapper_class(options)
-            else:
-                return None
-
-    def _collect_dialects(self, module):
-        dialects = module.split(':')
-        module = dialects.pop(0)
-        if not dialects:
-            # See if the module has any dialects
-            for trans_module in TRANSLATION_MODULES:
-                if "{}:".format(module) in trans_module:
-                    dialects_found = trans_module.split(':')
-                    dialects_found.pop(0)  # remove module from list
-                    for d in dialects_found:
-                        if d not in dialects:
-                            dialects.append(d)
-        if not dialects:
-            dialects = [DEFAULT_DIALECT]
-        return [module, dialects]
+        except:
+            pass
