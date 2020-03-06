@@ -1,6 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
-import sys
 
 translation = stix_translation.StixTranslation()
 
@@ -29,5 +28,4 @@ class TestStixToQueryCounts(unittest.TestCase, object):
     def test_query_count_for_flows(self):
         stix_pattern = "[network-traffic:src_byte_count = 1280]"
         query = _translate_query(stix_pattern)
-        print(str(query))
         assert len(query['queries']) == 1

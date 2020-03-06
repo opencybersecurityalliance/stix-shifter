@@ -8,7 +8,7 @@ from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMapping
 from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
 from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
-from stix_shifter_utils.utils.module_discovery import module_list, reorganize_modules_renameme
+from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
 import sys
 import glob
 from os import path
@@ -69,7 +69,7 @@ class StixTranslation:
         :rtype: str
         """
 
-        module, dialects = reorganize_modules_renameme(module, options)
+        module, dialects = process_dialects(module, options)
         
         try:
             try:

@@ -26,14 +26,11 @@ def split_module_dialects(module_dialects):
 def module_list():
     modules_path = 'stix_shifter_modules'
     dirs = [ name for name in os.listdir(modules_path) if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')) )]
-    # print(f"DIRS: {dirs}")
     return dirs
 
 def dialect_list(module):
     dialects_path = f'stix_shifter_modules/{module}/stix_translation/json'
-    # ff = os.listdir(dialects_path)
     ENDING = '_from_stix_map.json'
-    # print(f'S: {ff}')
     dialects = []
     if os.path.isdir(dialects_path):
         files = [ name for name in os.listdir(dialects_path) if (os.path.isfile(os.path.join(dialects_path, name)) and (name.endswith(ENDING)) )]
@@ -41,4 +38,3 @@ def dialect_list(module):
     if not dialects:
         dialects = ['default']
     return dialects
-    # print(f"FILES: {files}")

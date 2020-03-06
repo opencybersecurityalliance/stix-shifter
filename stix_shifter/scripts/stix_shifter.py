@@ -6,7 +6,7 @@ from flask import Flask
 import json
 import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
-from stix_shifter_utils.utils.module_discovery import module_list, reorganize_modules_renameme
+from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -160,7 +160,7 @@ def main():
         else:
             options = json.loads(options)
 
-        module, dialects = reorganize_modules_renameme(args_module_dialects, options)
+        module, dialects = process_dialects(args_module_dialects, options)
         args.options = json.dumps(options)
 
     if not module in CONNECTOR_MODULES:
