@@ -110,25 +110,35 @@ You might want to use this library and contribute to development, if any of the 
 
 ## Available Connectors
 
-List updated: December 10, 2019
+Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
 
-|         Connector          |   Module Name    | Data Model |  Developer   | Translation | Transmission | Availability |
-| :------------------------: | :--------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
-|         IBM QRadar         |      qradar      |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|    IBM QRadar on Cloud     |      qradar      | IBM QRadar | IBM Security |     Yes     |     Yes      |   Release    |
-|    IBM Cloud Data Lake     |      qradar      | IBM QRadar | IBM Security |     Yes     |     Yes      |   Planned    |
-|         IBM BigFix         |      bigfix      |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|  Carbon Black CB Response  |   carbonblack    |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|       Elastic Search       |     elastic      | MITRE CAR  |    MITRE     |     Yes     |      No      |   Release    |
-|       Elastic Search       |   elastic_ecs    |    ECS     | IBM Security |     Yes     |     Yes      |   Release    |
-| IBM Cloud Security Advisor | security_advisor |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Release    |
-|           Splunk           |      splunk      | Splunk CIM | IBM Security |     Yes     |     Yes      |   Release    |
-|       Microsoft ATP        |      msatp       |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|        IBM Guardium        |     guardium     |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|    AWS CloudWatch Logs     |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
-|       Azure Sentinel       |                  |  Default   | IBM Security |     Yes     |     Yes      |   Planned    |
+### Common cyber observable properties
+- created
+- modified
+- first_observed
+- last_observed
+- number_observed
 
-The full list of connectors and their supported STIX objects and properties can be found [in this table](https://ibm.box.com/v/supported-stix-attributes).
+Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
+
+List updated: March 6, 2020
+
+|         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
+| :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
+|         [IBM QRadar](adapter-guide/connectors/qradar_supported_stix.md)         |        qradar        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|    [IBM QRadar on Cloud](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Release    |
+|    [IBM Cloud Data Lake](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Planned    |
+|         [IBM BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|  [Carbon Black CB Response](adapter-guide/connectors/carbonblack_supported_stix.md)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Release    |
+|       [Elasticsearch](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Release    |
+| [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Release    |
+|           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Release    |
+|       [Microsoft ATP](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|        [IBM Security Guardium](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+
 
 ## How to use
 
