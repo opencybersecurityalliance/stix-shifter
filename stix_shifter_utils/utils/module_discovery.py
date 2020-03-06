@@ -1,6 +1,6 @@
 import os
 
-def reorganize_modules_renameme(cli_module, options):
+def process_dialects(cli_module, options):
     module, cli_dialects = split_module_dialects(cli_module)
     if 'dialects' not in options:
         options['dialect'] = []
