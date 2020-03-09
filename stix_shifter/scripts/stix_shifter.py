@@ -149,7 +149,7 @@ def main():
 
     args = parent_parser.parse_args()
 
-    help_and_die = args.command is None
+    help_and_exit = args.command is None
 
     if 'module' in args:
         args_module_dialects = args.module
@@ -164,9 +164,9 @@ def main():
         args.options = json.dumps(options)
 
     if not module in CONNECTOR_MODULES:
-        help_and_die = True
+        help_and_exit = True
 
-    if help_and_die:
+    if help_and_exit:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
 
