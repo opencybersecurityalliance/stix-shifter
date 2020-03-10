@@ -5,6 +5,11 @@ import requests
 
 class Translator(BaseTranslator):
 
+    def __init__(self, dialect=None):
+        self.result_translator = self
+        self.query_translator = self
+
+
     def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options={}, mapping=None):
         # A proxy translation call passes the entire data source connection object in as the options
         # Top-most connection host and port are for the proxy
@@ -42,7 +47,3 @@ class Translator(BaseTranslator):
             del connection['options']
             connection.update(connection_options)
         return connection
-
-    def __init__(self):
-        self.result_translator = self
-        self.query_translator = self

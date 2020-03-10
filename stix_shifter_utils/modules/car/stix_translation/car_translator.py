@@ -28,12 +28,13 @@ class CARToStix(JSONToStix):
 
       return JSONToStix.translate_results(self, data_source, json.dumps(json_data), options, mapping)
 
+
 class Translator(BaseTranslator):
 
-    def __init__(self):
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(
-            path.join(basepath, "json", "to_stix_map.json"))
-        self.mapping_filepath = filepath
-        self.result_translator = CARToStix(filepath)
-        self.query_translator = None
+  def __init__(self, dialect=None):
+    basepath = path.dirname(__file__)
+    filepath = path.abspath(
+        path.join(basepath, "json", "to_stix_map.json"))
+    self.mapping_filepath = filepath
+    self.result_translator = CARToStix(filepath)
+    self.query_translator = None
