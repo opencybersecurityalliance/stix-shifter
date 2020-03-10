@@ -3,22 +3,15 @@
     "configure": {
         "fields": {
             "name": {
-                "hint": "Add a connector name",
-                "default": "",
                 "type": "text"
             },
             "description": {
-                "hint": "Add a description",
-                "default": "",
                 "type": "text"
             },
             "host": {
-                "hint": "Specify the IP address or  hostname of the data source",
-                "default": "",
-                "type": "number"
+                "type": "text"
             },
             "port": {
-                "hint": "Set the port number that is associated with the Host name or IP",
                 "default": 443,
                 "type": "number"
             }
@@ -28,13 +21,9 @@
     "certificate": {
         "fields": {
             "sni": {
-                "hint": "Server Name Indicator",
-                "default": "",
                 "type": "text"
             },
             "cert": {
-                "hint": "self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2",
-                "default": "",
                 "type": "text"
             }
         }
@@ -43,26 +32,27 @@
         "fields": {
             "limit": {
                 "hint": "The maximum number of entries or objects that are returned by search query",
-                "max": 1000,
+                "default": 1000,
+                "max": 10000,
                 "type": "number"
             },
             "timeout": {
                 "hint": "The time limit in minutes for how long the query is run on the data source",
-                "max": 1,
+                "default": 1,
+                "max": 60,
                 "type": "number"
             },
             "concurrent": {
                 "hint": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source",
-                "max": 4,
+                "default": 4,
+                "max": 60,
                 "type": "number"
             }
         }
     },
     "iam": {
         "fields": {
-            "sec": {
-                "hint": "QRadar authentication token",
-                "default": "",
+            "SEC": {
                 "type": "text"
             }
         }
