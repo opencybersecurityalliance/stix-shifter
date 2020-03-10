@@ -1,0 +1,58 @@
+{
+    "configure": {
+        "fields": {
+            "name": {
+                "label": "Connector name",
+                "description": "Assign a name to uniquely identify the data source connection"
+            },
+            "description": {
+                "label": "Connector Description",
+                "description": "Write a description to indicate the purpose of the data source connection"
+            },
+            "host": {
+                "label": "Hostname",
+                "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            },
+            "port": {
+                "label": "Port",
+                "description": "Set the port number that is associated with the Host name or IP"
+            }
+        }
+    },
+    "certificate": {
+        "fields": {
+            "sni": {
+                "label": "SNI",
+                "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+            },
+            "cert": {
+                "label": "certificate",
+                "description": "Use self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2"
+            }
+        }
+    },
+    "parameters": {
+        "fields": {
+            "limit": {
+                "label": "resultSizeLimit",
+                "description": "The maximum number of entries or objects that are returned by search query.The default result size limit is 1000. The value must not be less than 1 and must not be greater than 10,000."
+            },
+            "timeout": {
+                "label": "queryTimeoutLimitMinutes",
+                "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
+            },
+            "concurrent": {
+                "label": "maxConcurrentSearches",
+                "description": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source. The default limit for the number of connections is 4."
+            }
+        }
+    },
+    "iam": {
+        "fields": {
+            "sec": {
+                "label": "SEC",
+                "description": "The Authentication Token is the unique identifier of the data source that you want to establish the connection with. It is required to authenticate the connection request."
+            }
+        }
+    }
+}
