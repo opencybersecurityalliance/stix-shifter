@@ -12,7 +12,6 @@ TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 HOST = 'host'
-CONNECTOR_MODULES = module_list()
 
 def main():
     """
@@ -163,7 +162,8 @@ def main():
         module, dialects = process_dialects(args_module_dialects, options)
         args.options = json.dumps(options)
 
-    if not module in CONNECTOR_MODULES:
+    all_modules = module_list()
+    if not module in all_modules:
         help_and_exit = True
 
     if help_and_exit:
