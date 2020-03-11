@@ -1,10 +1,7 @@
 {
-    "type": "QRadar",
-    "configure": {
-        "name": {
-            "type": "text"
-        },
-        "description": {
+    "connection": {
+        "type": {
+            "default": "QRadar",
             "type": "text"
         },
         "host": {
@@ -17,17 +14,7 @@
         "help": {
             "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
             "type": "link"
-        }
-    },
-    "certificate": {
-        "sni": {
-            "type": "text"
         },
-        "cert": {
-            "type": "text"
-        }
-    },
-    "parameters": {
         "limit": {
             "hint": "The maximum number of entries or objects that are returned by search query",
             "default": 1000,
@@ -39,15 +26,13 @@
             "default": 1,
             "max": 60,
             "type": "number"
-        },
-        "concurrent": {
-            "hint": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source",
-            "default": 4,
-            "max": 60,
-            "type": "number"
         }
     },
-    "iam": {
+    "configuration": {
+        "type": {
+            "default": "QRadar",
+            "type": "text"
+        },
         "sec": {
             "type": "text"
         }

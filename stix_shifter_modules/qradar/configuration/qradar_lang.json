@@ -1,0 +1,31 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "type": "link"
+        },
+        "limit": {
+            "label": "Result Size Limit",
+            "description": "The maximum number of entries or objects that are returned by search query.The default result size limit is 1000. The value must not be less than 1 and must not be greater than 10,000."
+        },
+        "timeout": {
+            "label": "Query Timeout Limit",
+            "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
+        }
+    },
+    "configuration": {
+        "sec": {
+            "label": "Authentication Token",
+            "description": "The Authentication Token is the unique identifier of the data source that you want to establish the connection with. It is required to authenticate the connection request."
+        }
+    }
+}

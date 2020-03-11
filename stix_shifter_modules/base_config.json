@@ -1,0 +1,32 @@
+{
+    "connection": {
+        "type": {
+            "type": "text"
+        },
+        "name": {
+            "type": "text"
+        },
+        "description": {
+            "type": "text"
+        },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
+        }
+    },
+    "configuration":{
+        "type": {
+            "type": "text"
+        },
+        "name": {
+            "type": "text"
+        },
+        "description": {
+            "type": "text"
+        },
+        "connectionId": {
+            "type": "text"
+        }
+    }
+}
