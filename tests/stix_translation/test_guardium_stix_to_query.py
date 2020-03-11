@@ -6,7 +6,7 @@ translation = stix_translation.StixTranslation()
 
 class TestStixToQuery(unittest.TestCase):
     """
-    class to perform unit test case msatp translate query
+    class to perform unit test case guardium translate query
     """
 
     def _test_query_assertions(self, query, queries):
@@ -30,5 +30,4 @@ class TestStixToQuery(unittest.TestCase):
                    '{"reportName": "--IBM SC Activity Details", "indexFrom": "0", "fetchSize": "1000", "sortType": "asc", "reportParameter": {"QUERY_FROM_DATE": "2018-06-01 00:00:00", "QUERY_TO_DATE": "2019-11-01 01:11:11", "SHOW_ALIASES": "TRUE", "REMOTE_SOURCE": "guardiumv10col01.guardiumlabservices.ibm.com", "CLIENTIP": "%", "SERVERIP": "%", "DBUSERNAME": "%", "SERVICENAME": "%", "OSUSER": "%", "DATABASENAME": "%"}}']
 
 
-        # self.assertEqual(query.get('queries')[0], queries[0])
         self._test_query_assertions(query, queries)
