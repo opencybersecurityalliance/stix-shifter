@@ -55,7 +55,7 @@
     },
     "iam": {
         "fields": {
-            "SEC": {
+            "sec": {
                 "label": "Authentication Token",
                 "description": "The Authentication Token is the unique identifier of the data source that you want to establish the connection with. It is required to authenticate the connection request."
             }

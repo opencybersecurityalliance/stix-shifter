@@ -52,7 +52,7 @@
     },
     "iam": {
         "fields": {
-            "SEC": {
+            "sec": {
                 "type": "text"
             }
         }
