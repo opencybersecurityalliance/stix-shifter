@@ -9,8 +9,6 @@ class DataMapper(BaseDataMapper):
         self.select_fields_json = options['select_fields'] if 'select_fields' in options else {}
         basepath = path.dirname(__file__)
         self.dialect = options.get('dialect') or 'events'
-        print(f'qradar.dialect: {self.dialect}')
-        print(f'qradar.mapping_json: {self.mapping_json}')
         self.map_data = self.mapping_json or self.fetch_mapping(basepath)
 
     def map_selections(self):

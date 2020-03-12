@@ -3,13 +3,15 @@ import os
 def process_dialects(cli_module, options):
     module, cli_dialects = split_module_dialects(cli_module)
     if 'dialects' not in options:
-        options['dialect'] = []
-    options_dialects = options['dialect']
+        options['dialects'] = []
+    options_dialects = options['dialects']
     
     dialects = list(set(cli_dialects+options_dialects))
-    if len(dialects)>1 and 'default' in dialects:
+    if 'default' in dialects:
         dialects.remove('default')
-    options['dialect'] = dialects
+        if len(dialects)==0:
+            dialects = dialect_list(module)
+    options['dialects'] = dialects
     return module, dialects
 
 def split_module_dialects(module_dialects):
@@ -20,7 +22,7 @@ def split_module_dialects(module_dialects):
         module = dialects.pop(0)
     else:
         module = module_dialects
-        dialects = dialect_list(module)
+        dialects = ['default']
     return module, dialects
 
 def module_list():
