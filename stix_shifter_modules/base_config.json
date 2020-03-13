@@ -18,7 +18,8 @@
     },
     "configuration":{
         "type": {
-            "type": "text"
+            "type": "type",
+            "optional": true
         },
         "name": {
             "min": 5,

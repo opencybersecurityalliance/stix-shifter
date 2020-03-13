@@ -1,8 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "QRadar",
-            "type": "type"
+            "default": "QRadar"
         },
         "host": {
             "type": "text"
@@ -36,8 +35,7 @@
     },
     "configuration": {
         "type": {
-            "default": "QRadar",
-            "type": "text"
+            "default": "QRadar"
         },
         "sec": {
             "type": "password"
