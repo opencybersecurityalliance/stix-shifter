@@ -1,0 +1,44 @@
+{
+    "connection": {
+        "type": {
+            "default": "QRadar"
+        },
+        "host": {
+            "type": "text"
+        },
+        "port": {
+            "default": 443,
+            "type": "number"
+        },
+        "help": {
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "type": "link"
+        },
+        "limit": {
+            "default": 1000,
+            "max": 10000,
+            "type": "number"
+        },
+        "timeout": {
+            "default": 1,
+            "max": 60,
+            "type": "number"
+        },
+        "cert": {
+            "type": "text",
+            "optional": true
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        }
+    },
+    "configuration": {
+        "type": {
+            "default": "QRadar"
+        },
+        "sec": {
+            "type": "password"
+        }
+    }
+}
