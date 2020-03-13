@@ -1,9 +1,10 @@
 {
     "connection": {
         "type": {
-            "type": "text"
+            "type": "type"
         },
         "name": {
+            "min": 5,
             "type": "text"
         },
         "description": {
@@ -20,6 +21,7 @@
             "type": "text"
         },
         "name": {
+            "min": 5,
             "type": "text"
         },
         "description": {

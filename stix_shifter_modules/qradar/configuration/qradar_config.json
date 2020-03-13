@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "default": "QRadar",
-            "type": "text"
+            "type": "type"
         },
         "host": {
             "type": "text"
@@ -16,16 +16,22 @@
             "type": "link"
         },
         "limit": {
-            "hint": "The maximum number of entries or objects that are returned by search query",
             "default": 1000,
             "max": 10000,
             "type": "number"
         },
         "timeout": {
-            "hint": "The time limit in minutes for how long the query is run on the data source",
             "default": 1,
             "max": 60,
             "type": "number"
+        },
+        "cert": {
+            "type": "text",
+            "optional": true
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
         }
     },
     "configuration": {
@@ -34,7 +40,7 @@
             "type": "text"
         },
         "sec": {
-            "type": "text"
+            "type": "password"
         }
     }
 }

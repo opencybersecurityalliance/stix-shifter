@@ -20,6 +20,14 @@
         "timeout": {
             "label": "Query Timeout Limit",
             "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
+        },
+        "cert": {
+            "label": "IBM QRadar Certificate",
+            "description": "Use self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         }
     },
     "configuration": {
