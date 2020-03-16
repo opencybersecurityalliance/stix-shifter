@@ -14,12 +14,12 @@
         },
         "options": {
             "region": {
-                "label": "text",
+                "label": "Region",
                 "placeholder": "us-east-2",
                 "description": "Specify the region of the CloudWatch Logs for the data source"
             },
             "log_group_names": {
-                "label": "text",
+                "label": "Log Group Names",
                 "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from"
             }
         }
