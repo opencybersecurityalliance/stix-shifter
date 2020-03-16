@@ -30,15 +30,17 @@
         "type": {
             "default": "aws_cloud_watch_logs"
         },
-        "aws_access_key_id": {
-            "type": "password"
-        },
-        "aws_iam_role": {
-            "type": "password",
-            "optional": true
-        },
-        "aws_secret_access_key": {
-            "type": "password"
+        "auth": {
+            "aws_access_key_id": {
+                "type": "password"
+            },
+            "aws_iam_role": {
+                "type": "password",
+                "optional": true
+            },
+            "aws_secret_access_key": {
+                "type": "password"
+            }
         }
     }
 }
