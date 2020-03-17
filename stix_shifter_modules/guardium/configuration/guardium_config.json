@@ -32,13 +32,13 @@
             "type": "text",
             "optional": true
         },
-        "options": {
-            "client_id": {
-                "type": "text"
-            },
-            "client_secret": {
-                "type": "password"
-            }
+        "client_id": {
+            "type": "text",
+            "previous": "connection.options.client_id"
+        },
+        "client_secret": {
+            "type": "password",
+            "previous": "connection.options.client_secret"
         }
     },
     "configuration": {

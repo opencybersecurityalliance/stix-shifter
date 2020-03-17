@@ -29,15 +29,13 @@
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         },
-        "options": {
-            "client_id": {
-                "label": "Client ID",
-                "description": "Client ID associated with the data source"
-            },
-            "client_secret": {
-                "label": "Client Secret",
-                "description": "Client Secret associated with the data source"
-            }
+        "client_id": {
+            "label": "Client ID",
+            "description": "Client ID associated with the data source"
+        },
+        "client_secret": {
+            "label": "Client Secret",
+            "description": "Client Secret associated with the data source"
         }
     },
     "configuration": {
