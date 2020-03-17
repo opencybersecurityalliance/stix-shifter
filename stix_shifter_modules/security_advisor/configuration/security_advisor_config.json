@@ -28,7 +28,7 @@
         },
         "auth": {
             "accountID": {
-                "type": "text"
+                "type": "password"
             },
             "apiKey": {
                 "type": "password"
