@@ -31,6 +31,10 @@
         "sni": {
             "type": "text",
             "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
         }
     },
     "configuration": {

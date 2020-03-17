@@ -32,6 +32,10 @@
             "type": "text",
             "optional": true
         },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
         "client_id": {
             "type": "text",
             "previous": "connection.options.client_id"
