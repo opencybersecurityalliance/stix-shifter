@@ -12,16 +12,14 @@
             "label": "Query Timeout Limit",
             "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
         },
-        "options": {
-            "region": {
-                "label": "Region",
-                "placeholder": "us-east-2",
-                "description": "Specify the region of the CloudWatch Logs for the data source"
-            },
-            "log_group_names": {
-                "label": "Log Group Names",
-                "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from"
-            }
+        "region": {
+            "label": "Region",
+            "placeholder": "us-east-2",
+            "description": "Specify the region of the CloudWatch Logs for the data source"
+        },
+        "log_group_names": {
+            "label": "Log Group Names",
+            "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from"
         }
     },
     "configuration": {
