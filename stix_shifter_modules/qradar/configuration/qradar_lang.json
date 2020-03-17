@@ -10,8 +10,8 @@
             "description": "Set the port number that is associated with the Host name or IP"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
-            "type": "link"
+            "label": "Help",
+            "description": "More details on the datasource setting can be found in the specified link"
         },
         "limit": {
             "label": "Result Size Limit",
@@ -31,9 +31,11 @@
         }
     },
     "configuration": {
-        "sec": {
-            "label": "Authentication Token",
-            "description": "The Authentication Token is the unique identifier of the data source that you want to establish the connection with. It is required to authenticate the connection request."
+        "auth": {
+            "sec": {
+                "label": "Authentication Token",
+                "description": "The Authentication Token is the unique identifier of the data source that you want to establish the connection with. It is required to authenticate the connection request."
+            }
         }
     }
 }
