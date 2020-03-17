@@ -17,13 +17,13 @@
             "max": 60,
             "type": "number"
         },
-        "options": {
-            "region": {
-                "type": "text"
-            },
-            "log_group_names": {
-                "type": "text"
-            }
+        "region": {
+            "type": "text",
+            "previous": "connection.options.region"
+        },
+        "log_group_names": {
+            "type": "text",
+            "previous": "connection.options.log_group_names"
         }
     },
     "configuration": {
