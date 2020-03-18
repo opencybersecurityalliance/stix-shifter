@@ -20,9 +20,9 @@ This stix-shifter has the following dependencies:
 - [stix2-validator>=0.5.0](https://pypi.org/project/stix2-validator/)
 - [stix2-matcher](https://github.com/oasis-open/cti-pattern-matcher): There is no python package publish in pypi for stix2-matcher. The bellow command can be used to install this package:
   ```
-  pip install git+git://github.com/oasis-open/cti-pattern-matcher.git@v0.1.0#egg=stix2-matcher
+  pip install git+git://github.com/oasis-open/cti-pattern-matcher.git@master#egg=stix2-matcher
   ```
-- [antlr4-python3-runtime==4.7](https://pypi.org/project/antlr4-python3-runtime/)
+- [antlr4-python3-runtime>=4.7](https://pypi.org/project/antlr4-python3-runtime/)
 - [python-dateutil>=2.7.3](https://pypi.org/project/python-dateutil/)
 
 Your development environment must use Python 3.6.x

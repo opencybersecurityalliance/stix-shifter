@@ -137,7 +137,7 @@ setup(
     install_requires=[
         'stix2-patterns>=1.1.0',
         'stix2-validator>=0.5.0',
-        'antlr4-python3-runtime==4.7',
+        'antlr4-python3-runtime>=4.7',
         'python-dateutil>=2.7.3',
         'xmltodict>=0.11.0',
         'requests_toolbelt==0.9.1',
@@ -145,7 +145,7 @@ setup(
         'flatten_json==0.1.7',
         'flask>=1.0.2',
         'boto3>=1.9.76'
-        # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/v0.1.0.zip#egg=stix2-matcher' # uncomment when running setup.py locally
+        # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/master.zip#egg=stix2-matcher' # uncomment when running setup.py locally
     ],
 
     # List additional groups of dependencies here (e.g. development
