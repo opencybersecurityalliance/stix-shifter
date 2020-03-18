@@ -11,7 +11,7 @@ def process_dialects(cli_module, options):
         dialects.remove('default')
         if len(dialects)==0:
             dialects = dialect_list(module)
-    options['dialects'] = dialects
+    options['dialects_active'] = dialects # all active dialects
     return module, dialects
 
 def split_module_dialects(module_dialects):
