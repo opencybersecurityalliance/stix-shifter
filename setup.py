@@ -145,7 +145,7 @@ setup(
         'flatten_json==0.1.7',
         'flask>=1.0.2',
         'boto3>=1.9.76'
-        # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/master.zip#egg=stix2-matcher' # uncomment when running setup.py locally
+        # 'stix2-matcher@https://github.com/oasis-open/cti-pattern-matcher/archive/b265862971eb63c04a8a054a2adb13860edf7846.zip#egg=stix2-matcher' # uncomment when running setup.py locally
     ],
 
     # List additional groups of dependencies here (e.g. development
