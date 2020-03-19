@@ -26,8 +26,10 @@ def split_module_dialects(module_dialects):
     return module, dialects
 
 def module_list():
-    modules_path = 'stix_shifter_modules'
-    dirs = [ name for name in os.listdir(modules_path) if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')) )]
+    modules_path = os.path.join(os.path.dirname(__file__), '../../stix_shifter_modules')
+    dirs = []
+    if os.path.isdir(modules_path):
+        dirs = [ name for name in os.listdir(modules_path) if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')) )]
     return dirs
 
 def dialect_list(module):

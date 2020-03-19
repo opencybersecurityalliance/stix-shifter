@@ -153,7 +153,9 @@ def main():
     if 'module' in args:
         args_module_dialects = args.module
         
-        options = args.options
+        options = None
+        if 'options' in args:
+            options = args.options
         if options == None:
             options = {}
         else:
@@ -164,6 +166,7 @@ def main():
 
     all_modules = module_list()
     if not module in all_modules:
+        print(f"module '{module}' is not found")
         help_and_exit = True
 
     if help_and_exit:
