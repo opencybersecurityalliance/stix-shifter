@@ -4,9 +4,9 @@ from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import Ba
 
 class DataMapper(BaseDataMapper):
 
-    def __init__(self, options):
+    def __init__(self, options, dialect='guardduty'):
         basepath = path.dirname(__file__)
-        self.dialect = options.get('dialect') or 'guardduty'
+        self.dialect = dialect
         self.map_data = self.fetch_mapping(basepath)
 
 

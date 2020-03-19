@@ -7,6 +7,7 @@ import json
 import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
 from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
+import importlib
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -172,7 +173,6 @@ def main():
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
-
     elif args.command == HOST:
         # Host means to start a local web service for STIX shifter, to use in combination with the proxy data source
         # module. This combination allows one to run and debug their stix-shifter code locally, while interacting with

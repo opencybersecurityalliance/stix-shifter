@@ -21,16 +21,16 @@ def _fetch_mapping(dialect=''):
 
 
 class DataMapper:
-    def __init__(self, options):
-        dialect = options.get('dialect', None)
-        if dialect is None:
-            self.dialect = 'at'
-        else:
-            m = re.match(r'^[a-z0-9]+$', dialect)
-            if m:
-                self.dialect = dialect
-            else:
-                self.dialect = 'at'
+    def __init__(self, options, dialect='at'):
+        # dialect = options.get('dialect', None)
+        # if dialect is None:
+            # self.dialect = 'at'
+        # else:
+            # m = re.match(r'^[a-z0-9]+$', dialect)
+            # if m:
+        self.dialect = dialect
+            # else:
+                # self.dialect = 'at'
 
     def map_object(self, stix_object_name):
         self.map_data = _fetch_mapping(self.dialect)

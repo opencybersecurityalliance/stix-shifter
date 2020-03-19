@@ -20,7 +20,6 @@ SUPPORTED_ATTRIBUTES = "supported_attributes"
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
-SHARED_DATA_MAPPERS = {'elastic': car_data_mapping, 'splunk': cim_data_mapping, 'cim': cim_data_mapping, 'car': car_data_mapping}
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 DEFAULT_DIALECT = 'default'
 CONNECTOR_MODULES = module_list()
@@ -45,13 +44,6 @@ class StixTranslation:
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
 
 
-    def _set_dialect(self, options, dialect):
-        if 'dialect' in options:
-            del options['dialect']
-        if dialect != DEFAULT_DIALECT:
-            options['dialect'] = dialect
-
-
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
         Translated queries to a specified format
@@ -73,8 +65,8 @@ class StixTranslation:
         
         try:
             try:
-                translator_module = importlib.import_module(
-                    "stix_shifter_modules." + module + ".stix_translation." + module + "_translator")
+                connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+                entry_point = connector_module.EntryPoint(options)
             except:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 
@@ -84,7 +76,9 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
+                #TODO do we need it? can that convertion be implemented on the caller side?
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
+                #TODO can we rename it to 'time_range'?
                 options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
 
                 if translate_type == QUERY:
@@ -95,10 +89,8 @@ class StixTranslation:
                     queries = []
                     unmapped_stix_collection = []
                     for dia in dialects:
-                        self._set_dialect(options, dia)
-                        interface = translator_module.Translator(dialect=dia)                        
                         antlr_parsing = generate_query(data)
-                        data_model_mapper = self._build_data_mapper(module, options)
+                        data_model_mapper = entry_point.get_data_mapper(dia)
                         if data_model_mapper:
                             stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
                             antlr_parsing = stripped_parsing.get('parsing')
@@ -107,7 +99,7 @@ class StixTranslation:
                                 unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
                                 continue
-                        translated_queries = interface.transform_query(data, antlr_parsing, data_model_mapper, options)
+                        translated_queries = entry_point.transform_query(dia, data, antlr_parsing, data_model_mapper, options)
                         
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]
@@ -132,14 +124,12 @@ class StixTranslation:
 
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                interface = translator_module.Translator()
-                return interface.translate_results(data_source, data, options)
+                return entry_point.translate_results(data_source, data, options)
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
                 for dia in dialects:
-                    self._set_dialect(options, dia)
-                    data_model_mapper = self._build_data_mapper(module, options)
+                    data_model_mapper = entry_point.get_data_mapper(dia)
                     result[dia] = data_model_mapper.map_data
                     
                 return {'supported_attributes': result}
@@ -151,13 +141,3 @@ class StixTranslation:
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response
 
-    def _build_data_mapper(self, module, options):
-        if options.get('data_mapper'):
-            return SHARED_DATA_MAPPERS[options.get('data_mapper')].mapper_class(options)
-        elif module in SHARED_DATA_MAPPERS:
-            return SHARED_DATA_MAPPERS[module].mapper_class(options)
-        try:
-            data_model = importlib.import_module("stix_shifter_modules." + module + ".stix_translation.data_mapping")
-            return data_model.DataMapper(options)
-        except:
-            pass

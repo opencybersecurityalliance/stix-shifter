@@ -22,7 +22,7 @@ class CimDataMapper(BaseDataMapper):
         ]
     }
 
-    def __init__(self, options={}):
+    def __init__(self, options={}, dialect=None):
         self.options = options
         if 'select_fields' in options:
             self.FIELDS = options['select_fields']
@@ -45,5 +45,3 @@ class CimDataMapper(BaseDataMapper):
         else:
             raise DataMappingException("Unable to map object `{}` into CIM".format(stix_object_name))
 
-
-mapper_class = CimDataMapper

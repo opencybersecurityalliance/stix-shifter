@@ -4,7 +4,7 @@ from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import Ba
 
 
 class DataMapper(BaseDataMapper):
-    def __init__(self, options):
+    def __init__(self, options, dialect=None):
         self.map_data = options.get('mappings', False) or self.fetch_mapping()
         assert len(self.map_data) == 2
         assert "process" in self.map_data and "binary" in self.map_data
