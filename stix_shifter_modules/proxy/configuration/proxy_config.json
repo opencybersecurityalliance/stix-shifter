@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "azure_sentinel"
+            "default": "proxy"
         },
         "host": {
             "type": "text"
@@ -11,7 +11,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-azure-sentinel.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-proxy.html",
             "type": "link"
         },
         "limit": {
@@ -24,33 +24,23 @@
             "max": 60,
             "type": "number"
         },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
-        "selfSignedCert": {
-            "type": "password",
+        "options": {
+            "type": "proxy",
             "optional": true
         }
     },
     "configuration": {
         "type": {
-            "default": "azure_sentinel"
+            "default": "proxy"
         },
         "auth": {
-            "tenant": {
+            "username": {
                 "type": "password"
             },
-            "clientId": {
+            "password": {
                 "type": "password"
             },
-            "clientSecret": {
-                "type": "password"
-            }
+            "optional": true
         }
     }
 }
