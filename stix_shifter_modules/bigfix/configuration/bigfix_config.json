@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "QRadar"
+            "default": "BigFix"
         },
         "host": {
             "type": "text"
@@ -11,7 +11,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-bigfix.html",
             "type": "link"
         },
         "limit": {
@@ -39,10 +39,13 @@
     },
     "configuration": {
         "type": {
-            "default": "QRadar"
+            "default": "BigFix"
         },
         "auth": {
-            "sec": {
+            "username": {
+                "type": "password"
+            },
+            "password": {
                 "type": "password"
             }
         }

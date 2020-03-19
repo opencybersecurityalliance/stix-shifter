@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "QRadar"
+            "default": "stix_bundle"
         },
         "host": {
             "type": "text"
@@ -11,7 +11,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-stix.html",
             "type": "link"
         },
         "limit": {
@@ -23,27 +23,20 @@
             "default": 1,
             "max": 60,
             "type": "number"
-        },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
-        "selfSignedCert": {
-            "type": "password",
-            "optional": true
         }
     },
     "configuration": {
         "type": {
-            "default": "QRadar"
+            "default": "stix_bundle"
         },
         "auth": {
-            "sec": {
-                "type": "password"
+            "username": {
+                "type": "password",
+                "optional": true
+            },
+            "password": {
+                "type": "password",
+                "optional": true
             }
         }
     }
