@@ -76,7 +76,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
 
         data = { 
                     'author_id': 'IBMid-123',
-                    'author_email': 'test@gmail.com',
+                    'email': 'test@gmail.com',
                 }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -98,7 +98,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         curr_obj = TestSecurityAdvisorResultsToStix.get_first_of_type(objects.values(), 'email-addr')
         assert(curr_obj is not None), 'eamil-addr object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == data['author_email'])
+        assert(curr_obj['value'] == data['email'])
 
     def test_custom_property(self):
         """
@@ -124,10 +124,9 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        custom_props = observed_data['x_author']
+        custom_props = observed_data['x_com_security_advisor_finding']
         assert(custom_props['author_accountId'] == data['author_accountId'])
 
-        custom_props = observed_data['x_finding']
         assert(custom_props['name'] == data['name'])
         assert(custom_props['noteName'] == data['noteName'])
         assert(custom_props['shortDescription'] == data['shortDescription'])
@@ -137,7 +136,6 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         assert(custom_props['finding_severity'] == data['finding_severity'])
         assert(custom_props['finding_certainty'] == data['finding_certainty'])
 
-        custom_props = observed_data['x_provider']
         assert(custom_props['providerId'] == data['providerId'])
         assert(custom_props['providerName'] == data['providerName'])
         assert(custom_props['reportedBy_id'] == data['reportedBy_id'])

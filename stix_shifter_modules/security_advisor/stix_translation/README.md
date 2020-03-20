@@ -17,7 +17,7 @@ Security Advisor data to Stix mapping is defined in `to_stix_map.json` which is 
 
 This example Security Advisor data :
 
-`python3 main.py translate "security_advisor" "results" '{"type": "identity", "id":"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "SecurityAdvisor","identity_class": "events"}' '[{"author_accountId": "test_id", "author_id": "test_user","author_email": "test@gmail.com", "name":"test_id/providers/kubeHunterIBMCloudRemoteCodeExecutor/occurrences/853092", "id": "853092","noteName":"test_id/providers/kubeHunterIBMCloudRemoteCodeExecutor/notes/kubehunteribmcloud-remote-code-execution","updateTime": "2019-10-31T11:15:55.099635Z", "createTime": "2019-10-31T11:15:55.099615Z", "shortDescription": "Kubehunter Remote Code Executor", "providerId": "kubeHunterIBMCloudRemoteCodeExecutor", "providerName":"test_id/providers/kubeHunterIBMCloudRemoteCodeExecutor", "longDescription":"http://5.188.86.29:7000", "context_accountId": "test_id", "context_resourceName": "mycluster","reportedBy_id": "kubehunteribmcloud-remote-code-execution", "reportedBy_title": "Kubehunter IBMCloud control","finding_severity": "MEDIUM", "finding_certainty": "HIGH" , "occurence_count": 1}]'`
+`python3 main.py translate security_advisor results '{"type": "identity", "id":"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "SecurityAdvisor","identity_class": "events"}' '[{"author_accountId": "4263e551d4a9460e8cdaccc06414198b", "author_id": "iam-ServiceId-7b4398db-219e-4174-b4f5-c6e31970c7dc", "author_email": null, "name": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor/occurrences/datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A", "id": "datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A", "noteName": "4263e551d4a9460e8cdaccc06414198b/providers/config-advisor/notes/datacos-not_in_private_network", "updateTime": "2020-01-08T18:03:59.825854Z", "createTime": "2020-01-08T18:03:59.825827Z", "shortDescription": "COS bucket is not in a private network", "providerId": "config-advisor", "providerName": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor", "longDescription": "Bucket is not in a private network", "context_accountId": "67035ffbd96ead38e7e5bd6bf40f364a", "context_region": "us-south", "context_resourceType": "COS bucket", "context_resourceName": "Any", "context_resourceId": null, "context_resourceCrn": "Any", "context_serviceName": "COS service", "context_serviceCrn": "crn:v1:bluemix:public:cloud-object-storage:global:a/67035ffbd96ead38e7e5bd6bf40f364a:895aa3a5-905f-4e78-90c9-d7e86d3032e1::", "reportedBy_id": "appprotection", "reportedBy_title": "Config Advisor", "reportedBy_url": null, "finding_severity": "HIGH", "finding_certainty": "HIGH", "finding_networkConnection": null, "finding_nextSteps_0_title": "Cloud Object Storage Docs", "finding_nextSteps_0_url": "https://cloud.ibm.com/docs/services/cloud-object-storage?topic=cloud-object-storage-setting-a-firewall", "finding_nextSteps_1_title": "Bucket 'sa.67035ffbd96ead38e7e5bd6bf40f364a.telemetric.us-south' of COS-instance 'securityadvisor.67035ffbd96ead38e7e5bd6bf40f364a.instance' is not using private network. Use REST API to set the private network mask for the bucket", "finding_nextSteps_1_url": null, "finding_dataTransferred": null, "occurence_count": 1}]' '{"stix_validator": true}'`
 
 Will return the following valid STIX Cyber Observable Object:
 ```json
@@ -27,48 +27,49 @@ Will return the following valid STIX Cyber Observable Object:
     "objects": [
         {
             "type": "identity",
-            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "id": "bundle--ff8f94e5-7f08-4cc7-94f7-9fc86408a615",
+            "spec_version": "2.0",
             "name": "SecurityAdvisor",
             "identity_class": "events"
         },
         {
-            "id": "observed-data--a2577bd6-6a4b-48cd-8103-68f78abe8f32",
+            "id": "observed-data--5c3152c8-b1f4-4425-b56c-4ce3f21613fe",
             "type": "observed-data",
             "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-            "created": "2019-11-21T11:22:53.717Z",
-            "modified": "2019-11-21T11:22:53.717Z",
+            "created": "2020-02-13T16:33:56.650Z",
+            "modified": "2020-02-13T16:33:56.650Z",
             "objects": {
                 "0": {
                     "type": "user-account",
-                    "user_id": "IBMid-5500035EWY"
+                    "user_id": "iam-ServiceId-7b4398db-219e-4174-b4f5-c6e31970c7dc"
                 },
                 "1": {
-                    "type": "email-addr",
-                    "value": "saksaini@in.ibm.com"
+                    "type": "domain-name",
+                    "value": "cloud.ibm.com"
+                },
+                "2": {
+                    "type": "url",
+                    "value": "https://cloud.ibm.com/docs/services/cloud-object-storage?topic=cloud-object-storage-setting-a-firewall"
                 }
             },
-            "x_author": {
-                "author_accountId": "c4800b388c224809bb25fd12500862e6"
-            },
-            "x_finding": {
-                "name": "c4800b388c224809bb25fd12500862e6/providers/kubeHunterIBMCloudRemoteCodeExecutor/occurrences/853092",
-                "id": "853092",
-                "noteName": "c4800b388c224809bb25fd12500862e6/providers/kubeHunterIBMCloudRemoteCodeExecutor/notes/kubehunteribmcloud-remote-code-execution",
-                "shortDescription": "Kubehunter Remote Code Executor",
-                "longDescription": "http://5.188.86.29:7000",
-                "context_accountId": "c4800b388c224809bb25fd12500862e6",
-                "context_resourceName": "mycluster",
-                "finding_severity": "MEDIUM",
+             "x_com_security_advisor_finding": {
+                "author_accountId": "4263e551d4a9460e8cdaccc06414198b",
+                "name": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor/occurrences/datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",
+                "id": "datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",
+                "noteName": "4263e551d4a9460e8cdaccc06414198b/providers/config-advisor/notes/datacos-not_in_private_network",
+                "shortDescription": "COS bucket is not in a private network",
+                "providerId": "config-advisor",
+                "providerName": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor",
+                "longDescription": "Bucket is not in a private network",
+                "context_accountId": "67035ffbd96ead38e7e5bd6bf40f364a",
+                "context_resourceName": "Any",
+                "reportedBy_id": "appprotection",
+                "reportedBy_title": "Config Advisor",
+                "finding_severity": "HIGH",
                 "finding_certainty": "HIGH"
             },
-            "last_observed": "2019-10-31T11:15:55.099635Z",
-            "first_observed": "2019-10-31T11:15:55.099615Z",
-            "x_provider": {
-                "providerId": "kubeHunterIBMCloudRemoteCodeExecutor",
-                "providerName": "c4800b388c224809bb25fd12500862e6/providers/kubeHunterIBMCloudRemoteCodeExecutor",
-                "reportedBy_id": "kubehunteribmcloud-remote-code-execution",
-                "reportedBy_title": "Kubehunter IBMCloud control"
-            },
+            "last_observed": "2020-01-08T18:03:59.825854Z",
+            "first_observed": "2020-01-08T18:03:59.825827Z",
             "number_observed": 1
         }
     ]
