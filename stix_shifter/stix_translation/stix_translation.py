@@ -8,7 +8,7 @@ from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMapping
 from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
 from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
-from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
+from stix_shifter_utils.utils.module_discovery import process_dialects
 import sys
 import glob
 from os import path
@@ -22,7 +22,6 @@ DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 DEFAULT_DIALECT = 'default'
-CONNECTOR_MODULES = module_list()
 
 
 class StixTranslation:
@@ -66,7 +65,9 @@ class StixTranslation:
         try:
             try:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-                entry_point = connector_module.EntryPoint(options)
+                entry_point = connector_module.EntryPoint(options=options)
+                if len(dialects) == 0:
+                    dialects = entry_point.get_dialects()
             except:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 

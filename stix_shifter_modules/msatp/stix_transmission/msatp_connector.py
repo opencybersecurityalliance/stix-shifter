@@ -21,12 +21,6 @@ class Connector(BaseConnector):
         except Exception as ex:
             self.init_error = ex
 
-        self.ping_connector = self
-        self.results_connector = self
-        self.status_connector = self
-        self.query_connector = self
-        self.is_async = False
-
     @staticmethod
     def _handle_errors(response, return_obj):
         """Handling API error response

@@ -11,11 +11,6 @@ class UnexpectedResponseException(Exception):
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
-        self.ping_connector = self
-        self.results_connector = self
-        self.status_connector = self
-        self.query_connector = self
-        self.is_async = False
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code

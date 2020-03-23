@@ -1,15 +1,16 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_translation.dummy_translator import Translator
-from .stix_translation.data_mapping import DataMapper
-from .stix_transmission.synchronous_dummy_connector import Connector
+from .stix_transmission.proxy_connector import Connector
+from .stix_translation.proxy_translator import Translator
 
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super(EntryPoint, self).__init__(options)
-        self.set_async(False)
+
         if connection:
             connector = Connector(connection, configuration)
+            is_async = connector.is_async()
+            self.set_async(is_async)
             self.setup_transmission_basic(connector)
         else:
-            self.add_dialect('default', Translator(), DataMapper(options), default=True)
+            self.add_dialect('default', Translator(), None, True)

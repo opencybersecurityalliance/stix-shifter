@@ -10,12 +10,6 @@ class Connector(BaseConnector):
         self.request_http_path = "http://{}:{}".format(connection['host'], connection['port'])
         # deep copy connection since it will be mutates as it is passed along the proxy chain
         self.connection = self._unwrap_connection_options(copy.deepcopy(connection))
-        self.results_connector = self
-        self.status_connector = self
-        self.delete_connector = self
-        self.query_connector = self
-        self.ping_connector = self
-        self.is_async = self._is_async()
 
     def ping(self):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
@@ -42,7 +36,7 @@ class Connector(BaseConnector):
         response = requests.post(self.request_http_path + "/delete_query_connection", data)
         return response.json()
 
-    def _is_async(self):
+    def is_async(self):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
         response = requests.post(self.request_http_path + "/is_async", data)
         return response.text

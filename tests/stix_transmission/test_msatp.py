@@ -1,4 +1,4 @@
-from stix_shifter_modules.msatp.stix_transmission import msatp_connector
+from stix_shifter_modules.msatp.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
@@ -31,8 +31,8 @@ class TestMSATPConnection(unittest.TestCase):
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = 'test'
-        module = msatp_connector
-        check_async = module.Connector(self.connection, self.config).is_async
+        entry_point = EntryPoint(self.connection, self.config)
+        check_async = entry_point.is_async()
 
         assert check_async is False
 
@@ -176,7 +176,7 @@ class TestMSATPConnection(unittest.TestCase):
                             }"""
 
         mock_results_response.return_value = MSATPMockResponse(200, results_mock)
-        module = msatp_connector
+        entry_point = EntryPoint(self.connection, self.config)
 
         query = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime ' \
@@ -198,7 +198,7 @@ class TestMSATPConnection(unittest.TestCase):
                                               '"updater.exe")'
         offset = 0
         length = 1
-        results_response = module.Connector(self.connection, self.config).create_results_connection(query, offset,
+        results_response = entry_point.create_results_connection(query, offset,
                                                                                                     length)
 
         assert results_response is not None
@@ -214,8 +214,8 @@ class TestMSATPConnection(unittest.TestCase):
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
-        module = msatp_connector
-        status_response = module.Connector(self.connection, self.config).delete_query_connection(search_id)
+        entry_point = EntryPoint(self.connection, self.config)
+        status_response = entry_point.delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -229,8 +229,8 @@ class TestMSATPConnection(unittest.TestCase):
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
-        module = msatp_connector
-        status_response = module.Connector(self.connection, self.config).create_status_connection(search_id)
+        entry_point = EntryPoint(self.connection, self.config)
+        status_response = entry_point.create_status_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

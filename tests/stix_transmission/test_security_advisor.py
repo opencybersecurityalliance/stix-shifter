@@ -1,5 +1,6 @@
 import requests_mock
-from stix_shifter_modules.security_advisor.stix_transmission import security_advisor_connector, security_advisor_auth
+from stix_shifter_modules.security_advisor.stix_transmission import security_advisor_auth
+from stix_shifter_modules.security_advisor.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
@@ -35,9 +36,9 @@ CONNECTION = {
 class TestSecurityAdvisorConnection(unittest.TestCase):
     
     def test_is_async(self):
-        module = security_advisor_connector
+        entry_point = EntryPoint()
 
-        check_async = module.Connector(CONNECTION, CONFIG).is_async
+        check_async = entry_point.is_async()
         assert check_async == False
 
     def test_auth_apiKey_not_found_error(self):
@@ -144,8 +145,8 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
     def test_delete_query():
         search_id = "[url:value = 'test@gmail.com']"
 
-        module = security_advisor_connector
-        status_response = module.Connector(CONNECTION, CONFIG).delete_query_connection(search_id)
+        entry_point = EntryPoint(CONNECTION, CONFIG)
+        status_response = entry_point.delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

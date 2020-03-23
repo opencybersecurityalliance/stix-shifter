@@ -23,11 +23,6 @@ class Connector(BaseConnector):
         else:
             self.init_error = True
 
-        self.ping_connector = self
-        self.results_connector = self
-        self.status_connector = self
-        self.query_connector = self
-        self.is_async = False
 
     def ping(self):
         """Ping the endpoint."""

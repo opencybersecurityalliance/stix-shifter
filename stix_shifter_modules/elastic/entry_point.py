@@ -5,8 +5,8 @@ from .stix_translation.elastic_translator import Translator
 
 class EntryPoint(EntryPointBase):
 
-    def __init__(self, options):
-        self.parent_init(options)
+    def __init__(self, connection={}, configuration={}, options={}):
+        super(EntryPoint, self).__init__(options)
         self.add_dialect('default', Translator(), CarDataMapper(options), True)
         self.add_dialect('cim', Translator(), CimDataMapper(options), False, default_include=False)
         self.add_dialect('car', Translator(), CarDataMapper(options), False, default_include=False)

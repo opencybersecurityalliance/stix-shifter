@@ -6,7 +6,7 @@ from flask import Flask
 import json
 import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
-from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
+from stix_shifter_utils.utils.module_discovery import process_dialects
 import importlib
 
 TRANSLATE = 'translate'
@@ -151,22 +151,23 @@ def main():
 
     help_and_exit = args.command is None
 
-    if 'module' in args:
-        args_module_dialects = args.module
-        
-        options = None
-        if 'options' in args:
-            options = args.options
-        if options == None:
-            options = {}
-        else:
-            options = json.loads(options)
+    args_module_dialects = args.module
 
-        module, dialects = process_dialects(args_module_dialects, options)
-        args.options = json.dumps(options)
+    options = None
+    if 'options' in args:
+        options = args.options
+    if options == None:
+        options = {}
+    else:
+        options = json.loads(options)
 
-    all_modules = module_list()
-    if not module in all_modules:
+    module = process_dialects(args_module_dialects, options)[0]
+    args.options = json.dumps(options)
+
+    try:
+        connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+        entry_point = connector_module.EntryPoint()
+    except:
         print(f"module '{module}' is not found")
         help_and_exit = True
 

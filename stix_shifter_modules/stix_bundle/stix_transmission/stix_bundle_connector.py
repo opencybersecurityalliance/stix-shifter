@@ -14,14 +14,9 @@ class UnexpectedResponseException(Exception):
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-        self.is_async = False
         self.connection = connection
         self.configuration = configuration
         self.bundle_url = None
-        self.results_connector = self
-        self.query_connector = self
-        self.ping_connector = self
-        self.status_connector = self
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason

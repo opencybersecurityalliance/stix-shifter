@@ -1,4 +1,4 @@
-from stix_shifter_modules.splunk.stix_transmission import splunk_connector
+from stix_shifter_modules.splunk.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 import json
@@ -19,7 +19,6 @@ class SplunkMockResponse:
 class TestSplunkConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
-        module = splunk_connector
         
         config = {
             "auth": {
@@ -32,7 +31,8 @@ class TestSplunkConnection(unittest.TestCase, object):
             "port": "8080"
         }
 
-        check_async = module.Connector(connection, config).is_async
+        entry_point = EntryPoint(connection, config)
+        check_async = entry_point.is_async()
 
         assert check_async
 
@@ -157,8 +157,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         search_id = "1536832140.4293"
-        module = splunk_connector
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        entry_point = EntryPoint(connection, config)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -190,8 +190,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         search_id = "1536832140.4293"
-        module = splunk_connector
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        entry_point = EntryPoint(connection, config)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -223,8 +223,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         search_id = "1536832140.4293"
-        module = splunk_connector
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        entry_point = EntryPoint(connection, config)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -256,8 +256,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
 
         search_id = "1536832140.4293"
-        module = splunk_connector
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        entry_point = EntryPoint(connection, config)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -341,7 +341,6 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         mock_results_response.return_value = SplunkMockResponse(200, mocked_return_value)
 
-        module = splunk_connector
         config = {
             "auth": {
                 "username": "",
@@ -356,7 +355,8 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        entry_point = EntryPoint(connection, config)
+        results_response = entry_point.create_results_connection(search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True
@@ -424,10 +424,9 @@ class TestSplunkConnection(unittest.TestCase, object):
         status_mock = open(status_file_path, 'r').read()
         mock_status_response.return_value = SplunkMockResponse(200, status_mock)
 
-        module = splunk_connector
-
         query = 'search eventtype=network_traffic | fields + tag| spath'
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        entry_point = EntryPoint(connection, config)
+        query_response = entry_point.create_query_connection(query)
 
         assert query_response is not None
         assert query_response['success'] is True
@@ -435,7 +434,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "1536832140.4293"
 
         search_id = "1536832140.4293"
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -448,7 +447,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        results_response = entry_point.create_results_connection(search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True

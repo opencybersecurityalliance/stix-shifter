@@ -6,15 +6,10 @@ from json import loads
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-
-        self.is_async = False
-
         self.connection = connection
         self.configuration = configuration
-
-        self.results_connector = self
-        self.query_connector = self
-        self.ping_connector = self
+        #TODO a bad example for an async connector, there is no status connector, base connector does have it. I would expect a special status object for that case. 
+        # carbon_black is a good example for that
 
     def ping(self):
         client = boto3.client('securityhub',
