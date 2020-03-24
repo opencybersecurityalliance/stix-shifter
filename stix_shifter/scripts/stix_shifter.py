@@ -164,10 +164,10 @@ def main():
         module, dialects = process_dialects(args_module_dialects, options)
         args.options = json.dumps(options)
 
-    all_modules = module_list()
-    if not module in all_modules:
-        print(f"module '{module}' is not found")
-        help_and_exit = True
+        all_modules = module_list()
+        if not module in all_modules:
+            print(f"module '{module}' is not found")
+            help_and_exit = True
 
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
