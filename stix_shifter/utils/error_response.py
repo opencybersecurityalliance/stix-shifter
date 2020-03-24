@@ -80,10 +80,10 @@ class ErrorResponder():
             print("error occurred: " + str_error)
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
-                error_msg = 'Wrong certificate'
+                error_msg = 'Wrong certificate: ' + str_error
             elif isinstance(error, ConnectionError):
                 error_code = ErrorCode.TRANSMISSION_CONNECT
-                error_msg = 'Connection error'
+                error_msg = 'Connection error: ' + str_error
             else:
                 error_msg = str(error)
 
