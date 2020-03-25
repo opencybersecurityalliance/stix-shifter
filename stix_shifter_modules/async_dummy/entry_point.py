@@ -4,7 +4,7 @@ from .stix_transmission.async_dummy_connector import Connector
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         if connection:
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)

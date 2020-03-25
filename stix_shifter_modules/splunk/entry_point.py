@@ -13,7 +13,7 @@ from .stix_translation.stix_to_query import StixToQuery
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         if connection:
             api_client = APIClient(connection, configuration)
             delete_connector = SplunkDeleteConnector(api_client)

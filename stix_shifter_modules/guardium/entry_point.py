@@ -9,7 +9,7 @@ from .stix_transmission.guardiumapiclient import APIClient
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         self.set_async(False)
         #TODO add test cases
 

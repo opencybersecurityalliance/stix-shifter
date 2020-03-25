@@ -11,7 +11,7 @@ import json
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         if connection:
             auth = configuration.get('auth')
             client_info = configuration.get('client_info')

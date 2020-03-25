@@ -9,7 +9,7 @@ from .stix_transmission.aws_cloud_watch_logs_boto3_client import BOTO3Client
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
 
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)

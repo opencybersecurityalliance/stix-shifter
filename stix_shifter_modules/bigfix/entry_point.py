@@ -10,7 +10,7 @@ from .stix_transmission.bigfix_api_client import APIClient
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         
         if connection:
             api_client = APIClient(connection, configuration)

@@ -9,7 +9,7 @@ from .stix_transmission.security_advisor_delete_connector import SecurityAdvisor
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         self.set_async(False)
         if connection:
             auth = configuration.get("auth")

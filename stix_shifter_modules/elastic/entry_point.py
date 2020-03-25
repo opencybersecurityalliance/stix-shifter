@@ -5,7 +5,7 @@ from .stix_translation.stix_to_elastic  import StixToElastic
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         self.add_dialect('default', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default=True)
         self.add_dialect('cim', query_translator=StixToElastic(), data_mapper=CimDataMapper(options), default_include=False)
         self.add_dialect('car', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default_include=False)

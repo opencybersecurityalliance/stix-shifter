@@ -9,7 +9,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JS
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super(EntryPoint, self).__init__(options)
+        super().__init__(options)
         self.set_async(False)
         if connection:
             connector = Connector(connection, configuration)
