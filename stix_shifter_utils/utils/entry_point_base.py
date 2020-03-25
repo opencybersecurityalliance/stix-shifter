@@ -5,7 +5,7 @@ import os
 from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
-from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
 
 import sys, inspect

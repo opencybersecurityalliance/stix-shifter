@@ -1,12 +1,12 @@
 from abc import ABCMeta, abstractmethod
-from .base_result_translator import BaseResultTranslator
+from .base_results_translator import BaseResultTranslator
 from .base_query_translator import BaseQueryTranslator
 
 
 class BaseTranslator:
 
     def __init__(self):
-        self.result_translator = BaseResultTranslator()
+        self.results_translator = BaseResultTranslator()
         self.query_translator = BaseQueryTranslator()
 
     def translate_results(self, data_source, data, options, mapping=None):
@@ -21,7 +21,7 @@ class BaseTranslator:
         :return: translated STIX formatted results
         :rtype: str
         """
-        return self.result_translator.translate_results(data_source, data, options, mapping)
+        return self.results_translator.translate_results(data_source, data, options, mapping)
 
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """

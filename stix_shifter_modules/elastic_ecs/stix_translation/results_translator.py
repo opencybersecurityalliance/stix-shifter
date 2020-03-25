@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from .stix_to_query import StixToQuery
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers

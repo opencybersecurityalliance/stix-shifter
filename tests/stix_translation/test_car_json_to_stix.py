@@ -1,9 +1,9 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.modules.car.stix_translation import car_translator
+from stix_shifter_utils.modules.car.stix_translation.car_translator import CARToStix
 import json
 import base64
 
-interface = car_translator.Translator()
+results_translator = CARToStix()
 data_source = {
     "type": "identity",
     "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
@@ -32,7 +32,7 @@ class TestTransform(object):
           "number_observed": 3
         }
 
-        result_bundle = json.loads(interface.result_translator.translate_results(
+        result_bundle = json.loads(results_translator.translate_results(
             json.dumps(data_source), json.dumps([data]), options))
 
         assert(result_bundle['type'] == 'bundle')
@@ -74,7 +74,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(interface.result_translator.translate_results(
+        result_bundle = json.loads(results_translator.translate_results(
             json.dumps(data_source), json.dumps([data]), options))
 
         fields = data['fields']
@@ -137,7 +137,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(interface.result_translator.translate_results(
+        result_bundle = json.loads(results_translator.translate_results(
             json.dumps(data_source), json.dumps([data]), options))
 
         fields = data['fields']
@@ -212,7 +212,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(interface.result_translator.translate_results(
+        result_bundle = json.loads(results_translator.translate_results(
             json.dumps(data_source), json.dumps([data]), options))
 
         fields = data['fields']
