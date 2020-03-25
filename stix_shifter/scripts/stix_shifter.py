@@ -151,24 +151,25 @@ def main():
 
     help_and_exit = args.command is None
 
-    args_module_dialects = args.module
+  if 'module' in args:
+      args_module_dialects = args.module
 
-    options = None
-    if 'options' in args:
-        options = args.options
-    if options == None:
-        options = {}
-    else:
-        options = json.loads(options)
+      options = None
+      if 'options' in args:
+          options = args.options
+      if options == None:
+          options = {}
+      else:
+          options = json.loads(options)
 
-    module = process_dialects(args_module_dialects, options)[0]
-    args.options = json.dumps(options)
+      module = process_dialects(args_module_dialects, options)[0]
+      args.options = json.dumps(options)
 
-    try:
-        connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-    except:
-        print(f"module '{module}' is not found")
-        help_and_exit = True
+      try:
+          connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+      except:
+          print(f"module '{module}' is not found")
+          help_and_exit = True
 
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
