@@ -166,7 +166,6 @@ def main():
 
     try:
         connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-        entry_point = connector_module.EntryPoint()
     except:
         print(f"module '{module}' is not found")
         help_and_exit = True

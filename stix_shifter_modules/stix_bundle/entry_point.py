@@ -11,4 +11,5 @@ class EntryPoint(EntryPointBase):
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)
         else:
-            self.add_dialect('default', Translator(), None, True)
+            translator = Translator()
+            self.add_dialect('default', query_translator=translator, results_translator=translator, data_mapper=None, default=True)

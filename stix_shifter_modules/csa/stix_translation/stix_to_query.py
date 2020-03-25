@@ -7,7 +7,7 @@ from . import query_constructor
 logger = logging.getLogger(__name__)
 
 
-class StixToCloudSQL(BaseQueryTranslator):
+class StixToQuery(BaseQueryTranslator):
 
     def __init__(self, dialect=None, rows=1024):
         super().__init__()

@@ -3,6 +3,9 @@ from .stix_translation.dummy_translator import Translator
 from .stix_translation.data_mapping import DataMapper
 from .stix_transmission.synchronous_dummy_connector import Connector
 
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
+
+
 class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
@@ -12,4 +15,4 @@ class EntryPoint(EntryPointBase):
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)
         else:
-            self.add_dialect('default', Translator(), DataMapper(options), default=True)
+            self.add_dialect('default', data_mapper=DataMapper(options), default=True)

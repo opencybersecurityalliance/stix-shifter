@@ -1,5 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from .stix_transmission.aws_security_hub_connector import Connector
+from .stix_translation.query_translator import QueryTranslator
 
 class EntryPoint(EntryPointBase):
 
@@ -11,4 +12,4 @@ class EntryPoint(EntryPointBase):
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)
         else:
-            self.setup_translation_simple('default')
+            self.setup_translation_simple('default', query_translator=QueryTranslator())

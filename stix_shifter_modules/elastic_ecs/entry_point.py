@@ -1,5 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from .stix_transmission.elastic_ecs_connector import Connector
+from .stix_translation.results_translator import ResultTranslator
 
 class EntryPoint(EntryPointBase):
 
@@ -11,4 +12,4 @@ class EntryPoint(EntryPointBase):
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)
         else:
-            self.setup_translation_simple('default')
+            self.setup_translation_simple('default', results_translator=ResultTranslator())

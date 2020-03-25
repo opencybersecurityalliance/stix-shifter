@@ -5,8 +5,6 @@ from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import pa
 import re
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
-from stix_shifter_utils.modules.cim.stix_translation import cim_data_mapping
-from stix_shifter_utils.modules.car.stix_translation import car_data_mapping
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 from stix_shifter_utils.utils.module_discovery import process_dialects
 import sys
@@ -65,11 +63,11 @@ class StixTranslation:
         try:
             try:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-                entry_point = connector_module.EntryPoint(options=options)
-                if len(dialects) == 0:
-                    dialects = entry_point.get_dialects()
-            except:
+            except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
+            entry_point = connector_module.EntryPoint(options=options)
+            if len(dialects) == 0:
+                dialects = entry_point.get_dialects()
 
             if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
@@ -100,7 +98,7 @@ class StixTranslation:
                                 unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
                                 continue
-                        translated_queries = entry_point.transform_query(dia, data, antlr_parsing, data_model_mapper, options)
+                        translated_queries = entry_point.transform_query(dia, data, antlr_parsing, options)
                         
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]

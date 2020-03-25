@@ -1,7 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from stix_shifter_utils.modules.cim.stix_translation.cim_data_mapping import CimDataMapper
 from stix_shifter_utils.modules.car.stix_translation.car_data_mapping import CarDataMapper
-from .stix_translation.splunk_translator import Translator
 from .stix_transmission.splunk_query_connector import SplunkQueryConnector
 from .stix_transmission.splunk_status_connector import SplunkStatusConnector
 from .stix_transmission.splunk_results_connector import SplunkResultsConnector
@@ -9,6 +8,7 @@ from .stix_transmission.splunk_delete_connector import SplunkDeleteConnector
 from .stix_transmission.spl_api_client import APIClient
 from .stix_transmission.splunk_ping import SplunkPing
 from .stix_transmission.splunk_auth import SplunkAuth
+from .stix_translation.stix_to_query import StixToQuery
 
 class EntryPoint(EntryPointBase):
 
@@ -28,6 +28,7 @@ class EntryPoint(EntryPointBase):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
         else:
-            self.add_dialect('default', Translator(), CimDataMapper(options), True)
-            self.add_dialect('cim', Translator(), CimDataMapper(options), False, default_include=False)
-            self.add_dialect('car', Translator(), CarDataMapper(options), False, default_include=False)
+            query_translator = StixToQuery()
+            self.add_dialect('default', query_translator=query_translator, data_mapper=CimDataMapper(options), default=True)
+            self.add_dialect('cim', query_translator=query_translator, data_mapper=CimDataMapper(options), default=False, default_include=False)
+            self.add_dialect('car', query_translator=query_translator, data_mapper=CarDataMapper(options), default=False, default_include=False)

@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_translation.security_advisor_translator import Translator
+from .stix_translation.security_advisor_query_translator import SecurityAdvisorQueryTranslator
 from .stix_transmission.security_advisor_ping import SecurityAdvisorPing
 from .stix_transmission.security_advisor_query_connector import SecurityAdvisorQueryConnector
 from .stix_transmission.security_advisor_status_connector import SecurityAdvisorStatusConnector
@@ -27,4 +27,4 @@ class EntryPoint(EntryPointBase):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
         else:
-            self.add_dialect('default', Translator(), None, True)
+            self.add_dialect('default', query_translator=SecurityAdvisorQueryTranslator(), data_mapper=None, default=True)

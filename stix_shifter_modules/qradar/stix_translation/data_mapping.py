@@ -5,7 +5,6 @@ from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import Ba
 class DataMapper(BaseDataMapper):
 
     def __init__(self, options, dialect='events'):
-        #TODO options['mapping'] has to specify custom mapping per dialect
         self.mapping_json = options['mapping'] if 'mapping' in options else {}
         self.select_fields_json = options['select_fields'] if 'select_fields' in options else {}
         basepath = path.dirname(__file__)

@@ -13,4 +13,5 @@ class EntryPoint(EntryPointBase):
             self.set_async(is_async)
             self.setup_transmission_basic(connector)
         else:
-            self.add_dialect('default', Translator(), None, True)
+            translator = Translator()
+            self.add_dialect('default', query_translator=translator, results_translator=translator, data_mapper=None, default=True)

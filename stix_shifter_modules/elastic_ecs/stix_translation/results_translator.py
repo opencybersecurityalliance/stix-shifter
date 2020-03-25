@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
 from .stix_to_query import StixToQuery
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
@@ -6,14 +6,13 @@ from os import path
 import json
 
 
-class Translator(BaseTranslator):
+class ResultTranslator(BaseResultTranslator):
 
     def __init__(self, dialect=None):
         basepath = path.dirname(__file__)
         filepath = path.abspath(
             path.join(basepath, "json", "to_stix_map.json"))
-        self.mapping_filepath = filepath
-        self.query_translator = StixToQuery()
+        self.default_mapping_file_path = filepath
 
     def translate_results(self, data_source, data, options, mapping=None):
         """
