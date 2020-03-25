@@ -34,12 +34,10 @@ class EntryPointBase:
         @functools.wraps(func)
         def wrapper_func(self, *args, **kwargs):
             self.__check_translation_configured()
-            print('call DECORATOR translation')
             return func(self, *args, **kwargs)
         return wrapper_func
 
     def __check_translation_configured(self):
-        print('__is_translation_configured')
         if not self.__dialect_default:
             raise Exception('EntryPoint: default dialect is not configured')
 
@@ -47,7 +45,6 @@ class EntryPointBase:
         @functools.wraps(func)
         def wrapper_func(self, *args, **kwargs):
             self.__check_transmission_configured()
-            print('call DECORATOR transmission')
             return func(self, *args, **kwargs)
         return wrapper_func
 
