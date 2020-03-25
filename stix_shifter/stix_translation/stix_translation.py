@@ -85,9 +85,9 @@ class StixTranslation:
                         self._validate_pattern(data)
                     queries = []
                     unmapped_stix_collection = []
-                    for dia in dialects:
+                    for dialect in dialects:
                         antlr_parsing = generate_query(data)
-                        data_model_mapper = entry_point.get_data_mapper(dia)
+                        data_model_mapper = entry_point.get_data_mapper(dialect)
                         if data_model_mapper:
                             stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
                             antlr_parsing = stripped_parsing.get('parsing')
@@ -96,7 +96,7 @@ class StixTranslation:
                                 unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
                                 continue
-                        translated_queries = entry_point.transform_query(dia, data, antlr_parsing, options)
+                        translated_queries = entry_point.transform_query(dialect, data, antlr_parsing, options)
                         
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]
@@ -125,9 +125,9 @@ class StixTranslation:
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
-                for dia in dialects:
-                    data_model_mapper = entry_point.get_data_mapper(dia)
-                    result[dia] = data_model_mapper.map_data
+                for dialect in dialects:
+                    data_model_mapper = entry_point.get_data_mapper(dialect)
+                    result[dialect] = data_model_mapper.map_data
                     
                 return {'supported_attributes': result}
             else:
