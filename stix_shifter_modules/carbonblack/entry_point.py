@@ -1,7 +1,7 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from .stix_translation.data_mapping import DataMapper
 from .stix_transmission.carbonblack_connector import Connector
-from .stix_translation.stix_to_query import StixToQuery
+from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
 
 class EntryPoint(EntryPointBase):
@@ -14,4 +14,4 @@ class EntryPoint(EntryPointBase):
             connector = Connector(connection, configuration)
             self.setup_transmission_basic(connector)
         else:
-            self.add_dialect('default', query_translator=StixToQuery(), results_translator=ResultsTranslator(), data_mapper=DataMapper(options), default=True)
+            self.add_dialect('default', query_translator=QueryTranslator(), results_translator=ResultsTranslator(), data_mapper=DataMapper(options), default=True)

@@ -1,5 +1,4 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_translation.dummy_translator import Translator
 from .stix_translation.data_mapping import DataMapper
 from .stix_transmission.synchronous_dummy_connector import Connector
 

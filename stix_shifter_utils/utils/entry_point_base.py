@@ -86,8 +86,8 @@ class EntryPointBase:
     def create_default_query_translator(self):
         module = self.__connector_module
         stixtoquety_module = importlib.import_module(
-                    "stix_shifter_modules." + module + ".stix_translation.stix_to_query")
-        query_translator = stixtoquety_module.StixToQuery()
+                    "stix_shifter_modules." + module + ".stix_translation.query_translator")
+        query_translator = stixtoquety_module.QueryTranslator()
         return query_translator
 
     def create_default_results_translator(self):

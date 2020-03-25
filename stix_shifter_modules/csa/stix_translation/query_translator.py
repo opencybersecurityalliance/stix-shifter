@@ -7,7 +7,7 @@ from . import query_constructor
 logger = logging.getLogger(__name__)
 
 
-class StixToQuery(BaseQueryTranslator):
+class QueryTranslator(BaseQueryTranslator):
 
     def __init__(self, dialect=None, rows=1024):
         super().__init__()

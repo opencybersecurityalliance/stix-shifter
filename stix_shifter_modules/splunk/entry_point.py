@@ -8,7 +8,7 @@ from .stix_transmission.splunk_delete_connector import SplunkDeleteConnector
 from .stix_transmission.spl_api_client import APIClient
 from .stix_transmission.splunk_ping import SplunkPing
 from .stix_transmission.splunk_auth import SplunkAuth
-from .stix_translation.stix_to_query import StixToQuery
+from .stix_translation.query_translator import QueryTranslator
 
 class EntryPoint(EntryPointBase):
 
@@ -28,7 +28,7 @@ class EntryPoint(EntryPointBase):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
         else:
-            query_translator = StixToQuery()
+            query_translator = QueryTranslator()
             self.add_dialect('default', query_translator=query_translator, data_mapper=CimDataMapper(options), default=True)
             self.add_dialect('cim', query_translator=query_translator, data_mapper=CimDataMapper(options), default=False, default_include=False)
             self.add_dialect('car', query_translator=query_translator, data_mapper=CarDataMapper(options), default=False, default_include=False)

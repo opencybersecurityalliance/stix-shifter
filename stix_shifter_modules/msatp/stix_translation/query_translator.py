@@ -6,23 +6,22 @@ from . import query_constructor
 logger = logging.getLogger(__name__)
 
 
-class StixToQuery(BaseQueryTranslator):
+class QueryTranslator(BaseQueryTranslator):
 
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
-        Transforms STIX pattern into a different query format. Based on a mapping file
-        :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
-        :type antlr_parsing_object: object
-        :data_model_mapper: Mapping object for the data source
-        :type data_model_mapper: object
+        Transforms STIX query into KQL query format. Based on a mapping file
+        :param data: STIX query string to transform into kql query format
+        :type data: str
         :param mapping: The mapping file path to use as instructions on how to transform the given STIX query into
-        another format. This should default to something if one isn't passed in
+        KQL. This defaults to the from_stix_map.json in the stix_shifter/stix_translation/src/modules/msatp/json/
+        directory
         :type mapping: str (filepath)
-        :return: transformed query string
+        :return: kql query string
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to data source query")
+        logger.info("Converting STIX2 Pattern to KQL query")
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, data_model_mapper, options)

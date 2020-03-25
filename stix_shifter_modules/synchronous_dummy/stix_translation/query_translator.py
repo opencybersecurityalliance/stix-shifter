@@ -1,16 +1,12 @@
 import logging
-import importlib
 
-from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from . import query_constructor
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_SEARCH_KEYWORD = "search"
-DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
-
-class StixToQuery(BaseQueryTranslator):
+class QueryTranslator(BaseQueryTranslator):
 
     def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
         """
@@ -25,15 +21,8 @@ class StixToQuery(BaseQueryTranslator):
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to Splunk query")
-
-        translate_options = {}
-        translate_options['result_limit'] = options['result_limit']
-        time_range = options['time_range']
-        # append '-' as prefix and 'minutes' as suffix in time_range to convert minutes in SPL query format
-        time_range = '-' + str(time_range) + 'minutes'
-        translate_options['time_range'] = time_range
+        logger.info("Converting STIX2 Pattern to data source query")
 
         query_string = query_constructor.translate_pattern(
-            antlr_parsing_object, data_model_mapper, DEFAULT_SEARCH_KEYWORD, translate_options)
+            antlr_parsing_object, data_model_mapper, options)
         return query_string

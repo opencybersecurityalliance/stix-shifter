@@ -16,7 +16,7 @@ def _remove_timestamp_from_query(queries):
         return query_list
 
 
-class TestStixToQuery(unittest.TestCase):
+class TestQueryTranlator(unittest.TestCase):
     """
     class to perform unit test case aws cloudwatch logs translate query
     """
