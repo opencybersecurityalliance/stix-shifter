@@ -262,7 +262,7 @@ class CbQueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
-    time_range = options['timerange']
+    time_range = options['time_range']
 
     translated_statements = CbQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
     return translated_statements.queries

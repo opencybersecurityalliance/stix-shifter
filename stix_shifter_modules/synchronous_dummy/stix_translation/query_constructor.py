@@ -220,7 +220,7 @@ class QueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
     # result_limit = options['result_limit']
-    # timerange = options['timerange']
+    # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)

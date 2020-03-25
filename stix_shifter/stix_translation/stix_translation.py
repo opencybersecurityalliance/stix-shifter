@@ -75,10 +75,8 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
-                #TODO do we need it? can that convertion be implemented on the caller side?
                 options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
-                #TODO can we rename it to 'time_range'?
-                options['timerange'] = options.get('timeRange', DEFAULT_TIMERANGE)
+                options['time_range'] = options.get('timeRange', DEFAULT_TIMERANGE)
 
                 if translate_type == QUERY:
                     # Carbon Black combines the mapping files into one JSON using process and binary keys.
@@ -115,7 +113,7 @@ class StixTranslation:
                     self._validate_pattern(data)
                     antlr_parsing = generate_query(data)
                     # Extract pattern elements into parsed stix object
-                    parsed_stix_dictionary = parse_stix(antlr_parsing, options['timerange'])
+                    parsed_stix_dictionary = parse_stix(antlr_parsing, options['time_range'])
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']

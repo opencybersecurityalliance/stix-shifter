@@ -399,12 +399,12 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     Conversion of expression object to translated query
     :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapping: DataMapper object, mapping object obtained by parsing from_stix_map.json
-    :param options: dict, contains 2 keys result_limit defaults to 10000, timerange defaults to 5
+    :param options: dict, contains 2 keys result_limit defaults to 10000, time_range defaults to 5
     :return: str, translated query
     """
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
-    timerange = options['timerange']
-    query = QueryStringPatternTranslator(pattern, data_model_mapping, timerange)
+    time_range = options['time_range']
+    query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
 
     translated_query = query.final_query_list
     return translated_query

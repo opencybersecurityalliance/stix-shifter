@@ -29,10 +29,10 @@ class StixToQuery(BaseQueryTranslator):
 
         translate_options = {}
         translate_options['result_limit'] = options['result_limit']
-        timerange = options['timerange']
-        # append '-' as prefix and 'minutes' as suffix in timerange to convert minutes in SPL query format
-        timerange = '-' + str(timerange) + 'minutes'
-        translate_options['timerange'] = timerange
+        time_range = options['time_range']
+        # append '-' as prefix and 'minutes' as suffix in time_range to convert minutes in SPL query format
+        time_range = '-' + str(time_range) + 'minutes'
+        translate_options['time_range'] = time_range
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, data_model_mapper, DEFAULT_SEARCH_KEYWORD, translate_options)

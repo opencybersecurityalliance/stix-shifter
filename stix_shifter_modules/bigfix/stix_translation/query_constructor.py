@@ -764,12 +764,12 @@ def translate_pattern(pattern: Pattern, data_model_mapper, options):
     Conversion of expression object to XML query
     :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapper: DataMapper object, mapping object obtained by parsing from_stix_map.json
-    :param options: dict, contains 2 keys result_limit defaults to 10000, timerange defaults to 5
+    :param options: dict, contains 2 keys result_limit defaults to 10000, time_range defaults to 5
     :return: str, XML query with relevance query embedded inside <QueryText> tag
     """
-    timerange = options['timerange']
+    time_range = options['time_range']
     list_final_query = []
-    translated_dictionary = RelevanceQueryStringPatternTranslator(pattern, data_model_mapper, timerange)
+    translated_dictionary = RelevanceQueryStringPatternTranslator(pattern, data_model_mapper, time_range)
     final_query = translated_dictionary.qualified_queries
     for each_query in final_query:
         besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:' \

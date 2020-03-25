@@ -401,11 +401,11 @@ def translate_pattern(pattern: Pattern, data_model_mapper, options):
     Conversion of expression object to kusto query
     :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapper: DataMapper object, mapping object obtained by parsing from_stix_map.json
-    :param options: dict,timerange defaults to 5
+    :param options: dict,time_range defaults to 5
     :return: str, kusto query
     """
-    timerange = options['timerange']
-    translated_dictionary = QueryStringPatternTranslator(pattern, data_model_mapper, timerange)
+    time_range = options['time_range']
+    translated_dictionary = QueryStringPatternTranslator(pattern, data_model_mapper, time_range)
     translated_query = translated_dictionary.qualified_queries
     if len(translated_query) > 1:
         # Query formation for multiple observation expression

@@ -367,13 +367,13 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     Conversion of expression object to AWS query
     :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapping: DataMapper object, mapping object obtained by parsing json
-    :param options: dict, timerange defaults to 5
+    :param options: dict, time_range defaults to 5
     :return: str, AWS query
     """
-    timerange = options['timerange']
+    time_range = options['time_range']
     limit = options['result_limit']
     final_queries = []
-    queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, timerange)
+    queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
     qualifier_list = list(zip(*queries_obj.time_range_lst))
     queries_string = queries_obj.qualified_queries
     for index, each_query in enumerate(queries_string, start=0):

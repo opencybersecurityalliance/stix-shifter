@@ -306,7 +306,7 @@ def _format_translated_queries(query_array):
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Added size parameter in tranmission module
     #result_limit = options['result_limit']
-    timerange = options['timerange']
+    time_range = options['time_range']
     translated_query_strings = QueryStringPatternTranslator(pattern, data_model_mapping)
     queries = []
     translated_queries = translated_query_strings.qualified_queries
@@ -316,16 +316,16 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         if(has_start_stop):
             queries.append("{}".format(query_string))
         else:
-            # Set times based on default timerange or what is in the options
+            # Set times based on default time_range or what is in the options
             stop_time = datetime.datetime.utcnow()
-            go_back_in_minutes = datetime.timedelta(minutes=timerange)
+            go_back_in_minutes = datetime.timedelta(minutes=time_range)
             start_time = stop_time - go_back_in_minutes
             # converting from UTC timestamp 2019-04-13 23:13:06.130401 to
             # string format 2019-04-13 23:13:06.130Z
             converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
             converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-            timerange_str = 'AND (@timestamp:["' + str(converted_starttime) + '" TO "' + str(
+            time_range_str = 'AND (@timestamp:["' + str(converted_starttime) + '" TO "' + str(
                 converted_stoptime) + '"])'
-            queries.append("{} {}".format(query_string, timerange_str))
+            queries.append("{} {}".format(query_string, time_range_str))
 
     return queries
