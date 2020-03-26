@@ -17,6 +17,11 @@
             "max": 60,
             "type": "number"
         },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
+        },
         "region": {
             "type": "text",
             "previous": "connection.options.region"
@@ -27,9 +32,6 @@
         }
     },
     "configuration": {
-        "type": {
-            "default": "aws_cloud_watch_logs"
-        },
         "auth": {
             "aws_access_key_id": {
                 "type": "password"
