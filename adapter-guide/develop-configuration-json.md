@@ -72,21 +72,21 @@ Following example json contains the appropriate parameters that each module requ
 
 Each parameter in both connection and configuration object can also have few different child attribute to define the paramatere functionality. Below are the attributes that can be specified at least one or more based on the parameter funciton-
 
-    1. type
-        Following types can be specified for the parameters(more can be added based on module requirements):
-        - text
-        - number
-        - password
-    2. default
-        Any value that needs to be default for the parameter
-    3. min
-        Minmum value for the parameter. If the type is text than it is the minimum number of character in the value.
-    4. max
-        Maximum value for the parameter. If the type is text than it is the maximum number of character in the value.
-    5. optional
-        Set this value to "true" if the parameter is optional. By default the value is "false" if not mentioned
-    6. hidden
-        Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not mentioned
+1. type
+    Following types can be specified for the parameters(more can be added based on module requirements):
+    - text
+    - number
+    - password
+2. default
+    Any value that needs to be default for the parameter
+3. min
+    Minmum value for the parameter. If the type is text than it is the minimum number of character in the value.
+4. max
+    Maximum value for the parameter. If the type is text than it is the maximum number of character in the value.
+5. optional
+    Set this value to "true" if the parameter is optional. By default the value is "false" if not mentioned
+6. hidden
+    Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not mentioned
 
 Configuration object needs to have `auth` child object. `auth` object should contain the parameters that are needed for api authentication. We have put an example of qradar api authentication paramter in the above example. Here's another example of `auth` object-
 
@@ -107,12 +107,12 @@ Both connection and configuration object may contain more or different parameter
 
 The `<module name>_lang.json` file has the similar format like `<module name>_config.json`. It has different child attributes to translate the files for UI framework.
 
-    1. label
-        Label of the parameter that is visiable in the UI
-    2. placeholder
-        Any placeholder value that can be present in the user input field
-    3. description
-        Description of the parameter
+1. label
+    Label of the parameter that is visiable in the UI
+2. placeholder
+    Any placeholder value that can be present in the user input field
+3. description
+    Description of the parameter
 
 Below example json is the language translation file of the above QRadar config json file:
 
