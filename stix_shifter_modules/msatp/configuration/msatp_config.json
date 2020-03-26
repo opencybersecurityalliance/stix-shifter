@@ -24,6 +24,11 @@
             "max": 60,
             "type": "number"
         },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
+        },
         "cert": {
             "type": "password",
             "optional": true
@@ -38,9 +43,6 @@
         }
     },
     "configuration": {
-        "type": {
-            "default": "msatp"
-        },
         "auth": {
             "tenant": {
                 "type": "password"

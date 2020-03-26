@@ -21,6 +21,10 @@
             "label": "Query Timeout Limit",
             "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
         },
+        "concurrent": {
+            "label": "Concurrent Search Limit",
+            "description": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source. The default limit for the number of connections is 4."
+        },
         "cert": {
             "label": "Guardium connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
