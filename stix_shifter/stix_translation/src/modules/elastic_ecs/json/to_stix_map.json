@@ -9,229 +9,211 @@
       "cybox": false
     }
   ],
-  "source": {
-    "ip": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      }
-    ],
-    "port": {
-      "key": "network-traffic.src_port",
-      "object": "nt",
-      "transformer": "ToInteger"
+  "source.ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
     },
-    "mac": [
-      {
-        "key": "mac-addr.value",
-        "object": "src_mac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
-      },
-      {
-        "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
-      }
-    ]
-  },
-  "client": {
-    "ip": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      }
-    ],
-    "port": {
-      "key": "network-traffic.src_port",
-      "object": "nt",
-      "transformer": "ToInteger"
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
     },
-    "mac": [
-      {
-        "key": "mac-addr.value",
-        "object": "src_mac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
-      },
-      {
-        "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": "src_mac"
-      }
-    ]
-  },
-  "destination": {
-    "ip": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "network-traffic.dst_ref",
-        "object": "nt",
-        "references": "dst_ip"
-      }
-    ],
-    "port": {
-      "key": "network-traffic.dst_port",
+    {
+      "key": "network-traffic.src_ref",
       "object": "nt",
-      "transformer": "ToInteger"
-    },
-    "mac": [
-      {
-        "key": "mac-addr.value",
-        "object": "dst_mac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": "dst_mac"
-      },
-      {
-        "key": "ipv6-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": "dst_mac"
-      }
-    ]
-  },
-  "server": {
-    "ip": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "network-traffic.dst_ref",
-        "object": "nt",
-        "references": "dst_ip"
-      }
-    ],
-    "port": {
-      "key": "network-traffic.dst_port",
-      "object": "nt",
-      "transformer": "ToInteger"
-    },
-    "mac": [
-      {
-        "key": "mac-addr.value",
-        "object": "dst_mac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": "dst_mac"
-      },
-      {
-        "key": "ipv6-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": "dst_mac"
-      }
-    ]
-  },
-  "network": {
-    "transport": {
-      "key": "network-traffic.protocols",
-      "object": "nt",
-      "group": "True",
-      "transformer": "ToLowercaseArray"
-    },
-    "type": {
-      "key": "network-traffic.protocols",
-      "object": "nt",
-      "group": "True",
-      "transformer": "ToLowercaseArray"
-    },
-    "protocol": {
-      "key": "network-traffic.protocols",
-      "object": "nt",
-      "group": "True",
-      "transformer": "ToLowercaseArray"
+      "references": "src_ip"
     }
+  ],
+  "source.port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
   },
-  "event": {
-    "original": {
-      "key": "artifact.payload_bin",
-      "transformer": "ToBase64"
+  "source.mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "src_ip",
+      "references": "src_mac"
+    },
+    {
+      "key": "ipv6-addr.resolves_to_refs",
+      "object": "src_ip",
+      "references": "src_mac"
     }
-  },
-  "url": {
-    "original": {
-      "key": "url.value"
+  ],
+  "client.ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
     },
-    "domain": {
-      "key": "domain-name.value"
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
     }
+  ],
+  "client.port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
   },
-  "process": {
-    "executable": {
-      "key": "process.command_line",
-      "object": "proc"
+  "client.mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
     },
-    "start": {
-      "key": "process.created",
-      "object": "proc"
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "src_ip",
+      "references": "src_mac"
     },
-    "pid": {
-      "key": "process.pid",
+    {
+      "key": "ipv6-addr.resolves_to_refs",
+      "object": "src_ip",
+      "references": "src_mac"
+    }
+  ],
+  "destination.ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "destination.port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destination.mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "dst_ip",
+      "references": "dst_mac"
+    },
+    {
+      "key": "ipv6-addr.resolves_to_refs",
+      "object": "dst_ip",
+      "references": "dst_mac"
+    }
+  ],
+  "server.ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "server.port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "server.mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "dst_ip",
+      "references": "dst_mac"
+    },
+    {
+      "key": "ipv6-addr.resolves_to_refs",
+      "object": "dst_ip",
+      "references": "dst_mac"
+    }
+  ],
+  "network.transport": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "group": "True",
+    "transformer": "ToLowercaseArray"
+  },
+  "network.type": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "group": "True",
+    "transformer": "ToLowercaseArray"
+  },
+  "network.protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "group": "True",
+    "transformer": "ToLowercaseArray"
+  },
+  "event.original": {
+    "key": "artifact.payload_bin",
+    "transformer": "ToBase64"
+  },
+  "url.original": {
+    "key": "url.value"
+  },
+  "url.domain": {
+    "key": "domain-name.value"
+  },
+  "process.executable": {
+    "key": "process.command_line",
+    "object": "proc"
+  },
+  "process.start": {
+    "key": "process.created",
+    "object": "proc"
+  },
+  "process.pid": {
+    "key": "process.pid",
+    "object": "proc",
+    "transformer": "ToInteger"
+  },
+  "process.name": [
+    {
+      "key": "file.name",
+      "object": "file"
+    },
+    {
+      "key": "process.image_ref",
       "object": "proc",
-      "transformer": "ToInteger"
+      "references": "file"
+    }
+  ],
+  "user.name": [
+    {
+      "key": "user-account.user_id",
+      "object": "user"
     },
-    "name": [
-      {
-        "key": "file.name",
-        "object": "file"
-      },
-      {
-        "key": "process.image_ref",
-        "object": "proc",
-        "references": "file"
-      }
-    ]
-  },
-  "user": {
-    "name": [
-      {
-        "key": "user-account.user_id",
-        "object": "user"
-      },
-      {
-        "key": "process.creator_user_ref",
-        "object": "proc",
-        "references": "user"
-      }
-    ]
-  }
+    {
+      "key": "process.creator_user_ref",
+      "object": "proc",
+      "references": "user"
+    }
+  ]
 }
