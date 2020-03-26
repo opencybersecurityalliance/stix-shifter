@@ -1,8 +1,8 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_ping import BasePing
+from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
-class SplunkPing(BasePing):
+class SplunkPing(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
     

@@ -1,10 +1,10 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_ping import BasePing
+from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 import requests
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .security_advisor_auth import SecurityAdvisorAuth
 
 
-class SecurityAdvisorPing(BasePing):
+class SecurityAdvisorPing(BasePingConnector):
     def __init__(self, host, auth):
         self.host = host
         self.auth = auth

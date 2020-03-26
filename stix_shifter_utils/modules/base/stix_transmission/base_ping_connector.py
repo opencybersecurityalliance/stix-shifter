@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class BasePing(object, metaclass=ABCMeta):
+class BasePingConnector(object, metaclass=ABCMeta):
     @abstractmethod
     def ping(self):
         """

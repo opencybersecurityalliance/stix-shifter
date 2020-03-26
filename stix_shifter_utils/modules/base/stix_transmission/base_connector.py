@@ -1,4 +1,4 @@
-from .base_ping import BasePing
+from .base_ping_connector import BasePingConnector
 from .base_query_connector import BaseQueryConnector
 from .base_status_connector import BaseStatusConnector
 from .base_delete_connector import BaseDeleteConnector
@@ -16,7 +16,7 @@ class BaseConnector:
         self.status_connector = BaseStatusConnector()
         self.delete_connector = BaseDeleteConnector()
         self.results_connector = BaseResultsConnector()
-        self.ping_connector = BasePing()
+        self.ping_connector = BasePingConnector()
 
     def create_query_connection(self, query):
         """

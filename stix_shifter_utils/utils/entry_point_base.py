@@ -12,6 +12,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 
 import sys, inspect
 import functools
@@ -182,6 +183,8 @@ class EntryPointBase:
         return self.__delete_connector.delete_query_connection(search_id)
 
     def set_ping_connector(self, connector):
+        if not isinstance(connector, (BaseConnector, BasePingConnector)):
+            raise Exception('connector is not instance of BaseConnector or BasePingConnector')
         self.__ping_connector = connector
 
     @transmission

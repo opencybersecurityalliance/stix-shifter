@@ -1,7 +1,7 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_ping import BasePing
+from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 
 
-class CloudSQLPing(BasePing):
+class CloudSQLPing(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
