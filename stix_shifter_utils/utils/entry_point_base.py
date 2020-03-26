@@ -7,6 +7,11 @@ from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JS
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
 
 import sys, inspect
 import functools
@@ -132,6 +137,8 @@ class EntryPointBase:
         return self.__dialects_visible
 
     def setup_transmission_basic(self, connector):
+        if not isinstance(connector, BaseConnector):
+            raise Exception('connector is not instance of BaseConnector')
         self.set_query_connector(connector)
         self.set_status_connector(connector)
         self.set_results_connector(connector)
@@ -139,6 +146,8 @@ class EntryPointBase:
         self.set_ping_connector(connector)
 
     def set_query_connector(self, connector):
+        if not isinstance(connector, (BaseConnector, BaseQueryConnector)):
+            raise Exception('connector is not instance of BaseConnector or BaseQueryConnector')
         self.__query_connector = connector
 
     @transmission
@@ -146,6 +155,8 @@ class EntryPointBase:
         return self.__query_connector.create_query_connection(query)
 
     def set_status_connector(self, connector):
+        if not isinstance(connector, (BaseConnector, BaseStatusConnector)):
+            raise Exception('connector is not instance of BaseConnector or BaseStatusConnector')
         self.__status_connector = connector
 
     @transmission
@@ -153,6 +164,8 @@ class EntryPointBase:
         return self.__status_connector.create_status_connection(search_id)
     
     def set_results_connector(self, connector):
+        if not isinstance(connector, (BaseConnector, BaseResultsConnector)):
+            raise Exception('connector is not instance of BaseConnector or BaseResultsConnector')
         self.__results_connector = connector
 
     @transmission
@@ -160,6 +173,8 @@ class EntryPointBase:
         return self.__results_connector.create_results_connection(search_id, offset, length)
 
     def set_delete_connector(self, connector):
+        if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):
+            raise Exception('connector is not instance of BaseConnector or BaseDeleteConnector')
         self.__delete_connector = connector
 
     @transmission
