@@ -1,12 +1,12 @@
 import json
 import adal
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import copy
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     init_error = None
 
     def __init__(self, connection, configuration):
@@ -56,16 +56,6 @@ class Connector(BaseConnector):
         else:
             ErrorResponder.fill_error(return_obj, message='unexpected exception')
         return return_obj
-
-    def create_query_connection(self, query):
-        """query_connection status
-        :param query: str, search_id"""
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        """"create_status_connection response
-        :param search_id: str, search_id"""
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def delete_query_connection(self, search_id):
         """"delete_query_connection response

@@ -1,15 +1,13 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 
 import boto3
 from json import loads
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.connection = connection
         self.configuration = configuration
-        #TODO a bad example for an async connector, there is no status connector, base connector does have it. I would expect a special status object for that case. 
-        # carbon_black is a good example for that
 
     def ping(self):
         client = boto3.client('securityhub',
@@ -18,9 +16,6 @@ class Connector(BaseConnector):
                               )
 
         return { "success": client.can_paginate('get_findings') }
-
-    def create_query_connection(self, query):
-        return { "success": True, "search_id": query }
 
     def create_results_connection(self, query_id, offset, length):
 

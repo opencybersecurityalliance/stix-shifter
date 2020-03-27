@@ -147,8 +147,8 @@ class EntryPointBase:
         self.set_ping_connector(connector)
 
     def set_query_connector(self, connector):
-        if not isinstance(connector, (BaseConnector, BaseQueryConnector)):
-            raise Exception('connector is not instance of BaseConnector or BaseQueryConnector')
+        if not (isinstance(connector, (BaseConnector, BaseQueryConnector)) or issubclass(connector, BaseConnector)):
+            raise Exception('connector is not instance of BaseConnector (or it\'s subclass) or BaseQueryConnector')
         self.__query_connector = connector
 
     @transmission
@@ -156,8 +156,8 @@ class EntryPointBase:
         return self.__query_connector.create_query_connection(query)
 
     def set_status_connector(self, connector):
-        if not isinstance(connector, (BaseConnector, BaseStatusConnector)):
-            raise Exception('connector is not instance of BaseConnector or BaseStatusConnector')
+        if not (isinstance(connector, (BaseConnector, BaseStatusConnector)) or issubclass(connector, BaseConnector)):
+            raise Exception('connector is not instance of BaseConnector (or it\'s subclass) or BaseStatusConnector')
         self.__status_connector = connector
 
     @transmission

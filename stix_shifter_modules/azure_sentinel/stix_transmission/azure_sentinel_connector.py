@@ -2,12 +2,12 @@ import json
 import adal
 import re
 from flatten_json import flatten
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .azure_sentinel_api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     init_error = None
     max_limit = 1000
 
@@ -38,16 +38,6 @@ class Connector(BaseConnector):
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
         return return_obj
-
-    def create_query_connection(self, query):
-        """query_connection status
-        :param query: str, search_id"""
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        """"create_status_connection response
-        :param search_id: str, search_id"""
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def delete_query_connection(self, search_id):
         """"delete_query_connection response

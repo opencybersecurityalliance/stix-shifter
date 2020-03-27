@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .carbonblack_api_client import APIClient
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -6,7 +6,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 class UnexpectedResponseException(Exception):
     pass
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
 
@@ -41,12 +41,6 @@ class Connector(BaseConnector):
                 print('can not parse response: ' + str(response_txt))
             else:
                 raise e
-
-    def create_query_connection(self, query):
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def create_results_connection(self, search_id, offset, length):
         response_txt = None
