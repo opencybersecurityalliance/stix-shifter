@@ -73,10 +73,10 @@ Following example json contains the appropriate parameters that each module requ
 Each parameter in both connection and configuration object can also have few different child attribute to define the paramatere functionality. Below are the attributes that can be specified at least one or more based on the parameter funciton-
 
 1. type
-    Following types can be specified for the parameters(more can be added based on module requirements):
-    - text
-    - number
-    - password
+    - Following types can be specified for the parameters(more can be added based on module requirements):
+        - text
+        - number
+        - password
 2. default
     - Any value that needs to be default for the parameter
 3. min
