@@ -36,7 +36,7 @@ class Connector(BaseSyncConnector):
 
         return matching_sdos
 
-    def ping(self):
+    def ping_connection(self):
         return_obj = dict()
 
         if not self.bundle_url:
@@ -51,7 +51,7 @@ class Connector(BaseSyncConnector):
             return_obj['success'] = True
         elif response_code == 301:
             self.bundle_url = response.headers.get('Location')
-            return self.ping()
+            return self.ping_connection()
         else:
             ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj

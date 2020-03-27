@@ -212,9 +212,9 @@ def main():
             return host.delete_query_connection()
 
         @app.route('/ping', methods=['POST'])
-        def ping():
+        def ping_connection():
             host = ProxyHost()
-            return host.ping()
+            return host.ping_connection()
 
         @app.route('/is_async', methods=['POST'])
         def is_async():

@@ -29,7 +29,7 @@ class Connector(BaseSyncConnector):
             raise UnexpectedResponseException
         return return_obj
 
-    def ping(self):
+    def ping_connection(self):
         response_txt = None
         return_obj = {}
         try:

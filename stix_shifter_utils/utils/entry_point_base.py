@@ -189,8 +189,7 @@ class EntryPointBase:
 
     @transmission
     def ping_connection(self):
-        #TODO rename ping to ping_connection?
-        return self.__ping_connector.ping()
+        return self.__ping_connector.ping_connection()
 
     def set_async(self, async):
         self.__async = async

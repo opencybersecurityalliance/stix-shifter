@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.cloudsql_ping import CloudSQLPing
+from .stix_transmission.cloudsql_ping_connector import CloudSQLPingConnector
 from .stix_transmission.cloudsql_query_connector import CloudSQLQueryConnector
 from .stix_transmission.cloudsql_status_connector import CloudSQLStatusConnector
 from .stix_transmission.cloudsql_results_connector import CloudSQLResultsConnector
@@ -24,7 +24,7 @@ class EntryPoint(EntryPointBase):
             results_connector = CloudSQLResultsConnector(api_client)
             status_connector = CloudSQLStatusConnector(api_client)
             query_connector = CloudSQLQueryConnector(api_client)
-            ping_connector = CloudSQLPing(api_client)
+            ping_connector = CloudSQLPingConnector(api_client)
             delete_connector = CloudSQLDeleteConnector(api_client)
 
             self.set_results_connector(results_connector)

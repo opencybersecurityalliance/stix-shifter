@@ -1,6 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from .stix_translation.security_advisor_query_translator import SecurityAdvisorQueryTranslator
-from .stix_transmission.security_advisor_ping import SecurityAdvisorPing
+from .stix_transmission.security_advisor_ping_connector import SecurityAdvisorPingConnector
 from .stix_transmission.security_advisor_query_connector import SecurityAdvisorQueryConnector
 from .stix_transmission.security_advisor_status_connector import SecurityAdvisorStatusConnector
 from .stix_transmission.security_advisor_results_connector import SecurityAdvisorResultsConnector
@@ -19,7 +19,7 @@ class EntryPoint(EntryPointBase):
             status_connector = SecurityAdvisorStatusConnector(host, auth)
             results_connector = SecurityAdvisorResultsConnector(host, auth)
             delete_connector = SecurityAdvisorDeleteConnector(host, auth)
-            ping_connector = SecurityAdvisorPing(host, auth)
+            ping_connector = SecurityAdvisorPingConnector(host, auth)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

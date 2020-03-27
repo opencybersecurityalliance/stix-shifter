@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.guardium_ping import GuardiumPing
+from .stix_transmission.guardium_ping_connector import GuardiumPingConnector
 from .stix_transmission.guardium_query_connector import GuardiumQueryConnector
 from .stix_transmission.guardium_status_connector import GuardiumStatusConnector
 from .stix_transmission.guardium_delete_connector import GuardiumDeleteConnector
@@ -19,7 +19,7 @@ class EntryPoint(EntryPointBase):
             status_connector = GuardiumStatusConnector(api_client)
             delete_connector = GuardiumDeleteConnector(api_client)
             query_connector = GuardiumQueryConnector(api_client)
-            ping_connector = GuardiumPing(api_client)
+            ping_connector = GuardiumPingConnector(api_client)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

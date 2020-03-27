@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.aws_cloud_watch_logs_ping import AWSCloudWatchLogsPing
+from .stix_transmission.aws_cloud_watch_logs_ping_connector import AWSCloudWatchLogsPingConnector
 from .stix_transmission.aws_cloud_watch_logs_query_connector import AWSCloudWatchLogsQueryConnector
 from .stix_transmission.aws_cloud_watch_logs_status_connector import AWSCloudWatchLogsStatusConnector
 from .stix_transmission.aws_cloud_watch_logs_delete_connector import AWSCloudWatchLogsDeleteConnector
@@ -17,7 +17,7 @@ class EntryPoint(EntryPointBase):
             status_connector = AWSCloudWatchLogsStatusConnector(boto3_client.client)
             delete_connector = AWSCloudWatchLogsDeleteConnector(boto3_client.client)
             query_connector = AWSCloudWatchLogsQueryConnector(boto3_client.client,boto3_client.log_group_names)
-            ping_connector = AWSCloudWatchLogsPing(boto3_client.client)
+            ping_connector = AWSCloudWatchLogsPingConnector(boto3_client.client)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

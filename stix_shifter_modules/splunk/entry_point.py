@@ -5,8 +5,8 @@ from .stix_transmission.splunk_query_connector import SplunkQueryConnector
 from .stix_transmission.splunk_status_connector import SplunkStatusConnector
 from .stix_transmission.splunk_results_connector import SplunkResultsConnector
 from .stix_transmission.splunk_delete_connector import SplunkDeleteConnector
+from .stix_transmission.splunk_ping_connector import SplunkPingConnector
 from .stix_transmission.spl_api_client import APIClient
-from .stix_transmission.splunk_ping import SplunkPing
 from .stix_transmission.splunk_auth import SplunkAuth
 from .stix_translation.query_translator import QueryTranslator
 
@@ -20,7 +20,7 @@ class EntryPoint(EntryPointBase):
             results_connector = SplunkResultsConnector(api_client)
             status_connector = SplunkStatusConnector(api_client)
             query_connector = SplunkQueryConnector(api_client)
-            ping_connector = SplunkPing(api_client)
+            ping_connector = SplunkPingConnector(api_client)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

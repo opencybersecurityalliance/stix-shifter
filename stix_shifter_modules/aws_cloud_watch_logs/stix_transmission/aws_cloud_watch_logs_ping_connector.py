@@ -2,12 +2,12 @@ from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector impor
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
-class AWSCloudWatchLogsPing(BasePingConnector):
+class AWSCloudWatchLogsPingConnector(BasePingConnector):
 
     def __init__(self, client):
         self.client = client
 
-    def ping(self):
+    def ping_connection(self):
         """
         Ping the endpoint
         :return: dict

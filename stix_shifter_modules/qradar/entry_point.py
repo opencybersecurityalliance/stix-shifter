@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.qradar_ping import QRadarPing
+from .stix_transmission.qradar_ping_connector import QRadarPingConnector
 from .stix_transmission.qradar_query_connector import QRadarQueryConnector
 from .stix_transmission.qradar_status_connector import QRadarStatusConnector
 from .stix_transmission.qradar_delete_connector import QRadarDeleteConnector
@@ -20,7 +20,7 @@ class EntryPoint(EntryPointBase):
             status_connector = QRadarStatusConnector(api_client)
             delete_connector = QRadarDeleteConnector(api_client)
             query_connector = QRadarQueryConnector(api_client)
-            ping_connector = QRadarPing(api_client)
+            ping_connector = QRadarPingConnector(api_client)
             
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

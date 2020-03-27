@@ -24,7 +24,7 @@ class Connector(BaseSyncConnector):
             raise UnexpectedResponseException
         return return_obj
 
-    def ping(self):
+    def ping_connection(self):
         return_obj = {}
         try:
             response = self.api_client.ping_box()

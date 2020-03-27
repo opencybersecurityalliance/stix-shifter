@@ -9,7 +9,7 @@ class Connector(BaseSyncConnector):
         self.connection = connection
         self.configuration = configuration
 
-    def ping(self):
+    def ping_connection(self):
         client = boto3.client('securityhub',
                               aws_access_key_id=self.configuration['aws_access_key_id'],
                               aws_secret_access_key=self.configuration['aws_secret_access_key']

@@ -84,7 +84,7 @@ class BaseConnector:
         """
         return self.delete_connector.delete_query_connection(search_id)
 
-    def ping(self):
+    def ping_connection(self):
         """
         Sends a basic request to the datasource to confirm we are connected and authenticated
 
@@ -97,4 +97,4 @@ class BaseConnector:
                     success (bool): True or False
                     error (str): error message (when success=False)
         """
-        return self.ping_connector.ping()
+        return self.ping_connector.ping_connection()

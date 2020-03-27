@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.bigfix_ping import BigFixPing
+from .stix_transmission.bigfix_ping_connector import BigFixPingConnector
 from .stix_transmission.bigfix_query_connector import BigFixQueryConnector
 from .stix_transmission.bigfix_status_connector import BigFixStatusConnector
 from .stix_transmission.bigfix_delete_connector import BigFixDeleteConnector
@@ -18,7 +18,7 @@ class EntryPoint(EntryPointBase):
             status_connector = BigFixStatusConnector(api_client)
             delete_connector = BigFixDeleteConnector(api_client)
             query_connector = BigFixQueryConnector(api_client)
-            ping_connector = BigFixPing(api_client)
+            ping_connector = BigFixPingConnector(api_client)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

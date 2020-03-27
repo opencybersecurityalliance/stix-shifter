@@ -6,14 +6,14 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class BigFixPing(BasePingConnector):
+class BigFixPingConnector(BasePingConnector):
 
     ENDPOINT = '/api/clientquery'
 
     def __init__(self, api_client):
         self.api_client = api_client
 
-    def ping(self):
+    def ping_connection(self):
         response_txt = None
         return_obj = dict()
         try:

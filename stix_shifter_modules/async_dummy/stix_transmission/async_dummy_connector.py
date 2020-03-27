@@ -19,7 +19,7 @@ class Connector(BaseConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
 
-    def ping(self):
+    def ping_connection(self):
         try:
             response = self.api_client.ping_data_source()
             return response

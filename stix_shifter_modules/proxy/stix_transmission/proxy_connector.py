@@ -11,7 +11,7 @@ class Connector(BaseConnector):
         # deep copy connection since it will be mutates as it is passed along the proxy chain
         self.connection = self._unwrap_connection_options(copy.deepcopy(connection))
 
-    def ping(self):
+    def ping_connection(self):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
         response = requests.post(self.request_http_path + "/ping", data)
         return response.json()

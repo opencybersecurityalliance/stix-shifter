@@ -24,7 +24,7 @@ class Connector(BaseSyncConnector):
             self.init_error = True
 
 
-    def ping(self):
+    def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error:

@@ -4,14 +4,14 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from .security_advisor_auth import SecurityAdvisorAuth
 
 
-class SecurityAdvisorPing(BasePingConnector):
+class SecurityAdvisorPingConnector(BasePingConnector):
     def __init__(self, host, auth):
         self.host = host
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = SecurityAdvisorAuth(api_key)
 
-    def ping(self):
+    def ping_connection(self):
         return_obj = {}        
         header = {
                 'Content-Type': 'application/json',
