@@ -20,12 +20,14 @@
             "default": 1,
             "max": 60,
             "type": "number"
+        },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
         }
     },
     "configuration": {
-        "type": {
-            "default": "security_advisor"
-        },
         "auth": {
             "accountID": {
                 "type": "password"
