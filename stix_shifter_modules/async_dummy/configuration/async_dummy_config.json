@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "<module name>"
+            "default": "async_dummy"
         },
         "host": {
             "type": "text"
@@ -24,6 +24,11 @@
             "max": 60,
             "type": "number"
         },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
+        },
         "cert": {
             "type": "password",
             "optional": true
@@ -38,9 +43,6 @@
         }
     },
     "configuration": {
-        "type": {
-            "default": "<module name>"
-        },
         "auth": {
             "username": {
                 "type": "password"
