@@ -4,7 +4,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 class APIClient:
     """API Client to handle all calls."""
     PING_TIMEOUT_IN_SECONDS = 10
-
+    
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict

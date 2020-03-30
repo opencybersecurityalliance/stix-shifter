@@ -5,8 +5,8 @@ import re
 
 DEFAULT_LIMIT = 10000
 
-class APIClient():
 
+class APIClient():
     PING_ENDPOINT = '_cluster/health?pretty'
     PING_TIMEOUT_IN_SECONDS = 10
 
@@ -45,7 +45,6 @@ class APIClient():
                                     )
 
     def ping_box(self):
-        endpoint = self.PING_ENDPOINT
         return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):

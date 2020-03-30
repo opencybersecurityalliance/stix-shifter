@@ -1,0 +1,114 @@
+{
+  "author_id": {
+    "key": "user-account.user_id"
+  },
+  "author_accountId": {
+    "key": "x_com_security_advisor_finding.author_accountId",
+    "cybox": false
+  },
+  "ipv4address":{
+    "key": "ipv4-addr.value"
+  },
+  "ipv6address":{
+    "key": "ipv6-addr.value"
+  },
+  "email":{
+    "key": "email-addr.value"
+  },
+  "domain-name":{
+    "key": "domain-name.value"
+  },
+  "mac-addr":{
+    "key": "mac-addr.value"
+  },
+  "url":{
+    "key": "url.value"
+  },
+  "file": {
+    "key": "file.value"
+  },
+  "directory": {
+    "key": "directory.value"
+  },
+  "context_resourceName": {
+    "key": "x_com_security_advisor_finding.context_resourceName",
+    "cybox": false
+  },
+  "description": {
+    "key": "x_com_security_advisor_finding.description",
+    "cybox": false
+  },
+  "finding_severity": {
+    "key": "x_com_security_advisor_finding.finding_severity",
+    "cybox": false
+  },
+  "finding_certainty": {
+    "key": "x_com_security_advisor_finding.finding_certainty",
+    "cybox": false
+  },
+  "id": {
+    "key": "x_com_security_advisor_finding.id",
+    "cybox": false
+  },
+  "longDescription": {
+    "key": "x_com_security_advisor_finding.longDescription",
+    "cybox": false
+  },
+  "message": {
+    "key": "x_com_security_advisor_finding.message",
+    "cybox": false
+  },
+  "name": {
+    "key": "x_com_security_advisor_finding.name",
+    "cybox": false
+  },
+  "noteName": {
+    "key": "x_com_security_advisor_finding.noteName",
+    "cybox": false
+  },
+  "providerId": {
+    "key": "x_com_security_advisor_finding.providerId",
+    "cybox": false
+  },
+  "providerName": {
+    "key": "x_com_security_advisor_finding.providerName",
+    "cybox": false
+  },
+  "remediation": {
+    "key": "x_com_security_advisor_finding.remediation",
+    "cybox": false
+  },
+  "reportedBy_id": {
+    "key": "x_com_security_advisor_finding.reportedBy_id",
+    "cybox": false
+  },
+  "reportedBy_title": {
+    "key": "x_com_security_advisor_finding.reportedBy_title",
+    "cybox": false
+  },
+  "shortDescription": {
+    "key": "x_com_security_advisor_finding.shortDescription",
+    "cybox": false
+  },
+  "finding_next_steps_0_title": {
+    "key": "x_com_security_advisor_finding.finding_next_steps_0_title",
+    "cybox": false
+  },
+  "context_accountId": {
+    "key": "x_com_security_advisor_finding.context_accountId",
+    "cybox": false
+  },
+  "createTime": {
+    "key": "first_observed",
+    "cybox": false
+  },
+  "updateTime": {
+    "key": "last_observed",
+    "cybox": false
+  },
+  "occurence_count": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  }
+}
