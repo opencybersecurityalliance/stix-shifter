@@ -3,6 +3,8 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 
 class APIClient:
     """API Client to handle all calls."""
+    PING_TIMEOUT_IN_SECONDS = 10
+
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
@@ -33,7 +35,7 @@ class APIClient:
         """Ping the endpoint."""
         params = dict()
         params['$top'] = 1
-        return self.client.call_api(self.endpoint, 'GET', urldata=params)
+        return self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.PING_TIMEOUT_IN_SECONDS)
 
     def run_search(self, query_expression, length):
         """get the response from azure_sentinel endpoints
