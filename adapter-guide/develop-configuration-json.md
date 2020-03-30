@@ -1,8 +1,8 @@
 # Configuration paramaters
 
-A json file needs to be created that contains configuration paramters for each module. Configuration json file is required in order to validate the module specific parameters for a successful translation and tranmission call. Please follow this naming convention when you create the file: `<module name>_config.json`
+A json file needs to be created that contains configuration paramters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and tranmission call. Please follow this naming convention when you create the file: `<module name>_config.json`
 
-A second json file is required to translate the parameters mention in `<module name>_lang.json` for the UI. This file is necessary in order to help the UI framework to show the parameters in human readable format.
+A second json file is required to translate the parameters defined in `<module name>_lang.json` for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format.
 
 ## File Location
 
@@ -84,9 +84,9 @@ Each parameter in both connection and configuration object can also have few dif
 4. max
     - Maximum value for the parameter. If the type is text than it is the maximum number of character in the value.
 5. optional
-    - Set this value to "true" if the parameter is optional. By default the value is "false" if not mentioned
+    - Set this value to "true" if the parameter is optional. By default the value is "false" if not defined
 6. hidden
-    - Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not mentioned
+    - Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not defined
 
 Configuration object needs to have `auth` child object. `auth` object should contain the parameters that are needed for api authentication. We have put an example of qradar api authentication paramter in the above example. Here's another example of `auth` object-
 
@@ -101,7 +101,7 @@ Configuration object needs to have `auth` child object. `auth` object should con
         }
 ```
 
-Both connection and configuration object may contain more or different parameters than that are mentioned in the example above based on the individual module. 
+Both connection and configuration object may contain more or different parameters than that are defined in the example above based on the individual module. 
 
 ### lang json file
 
@@ -160,4 +160,4 @@ Below example json is the language translation file of the above QRadar config j
 }
 ```
 
-For easier implementation, you can copy the json files from dummy modules (async_dummy or synchornous_dummy) and modify according the module requirements. You can also review the existing module configuration json files to reference. 
+For easier implementation, you can copy the json files from dummy modules (async_dummy or synchornous_dummy) and modify according the module requirements. You can also review the configuration json files of existing modules for reference. 
