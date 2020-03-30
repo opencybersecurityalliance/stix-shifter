@@ -1,5 +1,3 @@
-from .security_advisor_query_translator import SecurityAdvisorQueryTranslator
-# from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
@@ -7,18 +5,6 @@ from flatten_json import flatten
 from os import path
 import json
 import re
-
-
-# class Translator(BaseTranslator):
-
-#     def __init__(self, dialect=None):
-#         basepath = path.dirname(__file__)
-#         filepath = path.abspath(
-#             path.join(basepath, "json", "to_stix_map.json"))
-#         self.mapping_filepath = filepath
-#         # Use a decorator which has standard JSONToStix translation capability and ability to decorate with observables.
-#         self.result_translator = JSONToStixObservablesDecorator(filepath)
-#         self.query_translator = SecurityAdvisorQueryTranslator()
 
 
 class JSONToStixObservablesDecorator(BaseResultTranslator):
