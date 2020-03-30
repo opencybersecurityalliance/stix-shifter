@@ -84,7 +84,7 @@ class EntryPointBase:
         dialects = dialect_list(module)
 
         datamapper_module = importlib.import_module(
-                    "stix_shifter_modules." + module + ".stix_translation.data_mapping")
+                    "stix_shifter_modules." + module + ".stix_translation.data_mapper")
         for dialect in dialects:
             data_mapper = datamapper_module.DataMapper(self.__options, dialect)
             self.add_dialect(dialect, data_mapper, query_translator=query_translator, results_translator=results_translator, default=(dialect==dialect_default))

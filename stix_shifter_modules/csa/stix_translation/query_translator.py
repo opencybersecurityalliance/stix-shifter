@@ -1,7 +1,7 @@
 import logging
 
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
-from . import data_mapping
+from . import data_mapper
 from . import query_constructor
 
 logger = logging.getLogger(__name__)

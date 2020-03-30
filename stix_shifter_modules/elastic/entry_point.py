@@ -1,6 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from stix_shifter_utils.modules.cim.stix_translation.cim_data_mapping import CimDataMapper
-from stix_shifter_utils.modules.car.stix_translation.car_data_mapping import CarDataMapper
+from stix_shifter_utils.modules.cim.stix_translation.cim_data_mapper import CimDataMapper
+from stix_shifter_utils.modules.car.stix_translation.car_data_mapper import CarDataMapper
 from .stix_translation.stix_to_elastic  import StixToElastic
 class EntryPoint(EntryPointBase):
 

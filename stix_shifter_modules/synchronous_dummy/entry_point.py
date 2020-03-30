@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_translation.data_mapping import DataMapper
+from .stix_translation.data_mapper import DataMapper
 from .stix_transmission.synchronous_dummy_connector import Connector
 
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
