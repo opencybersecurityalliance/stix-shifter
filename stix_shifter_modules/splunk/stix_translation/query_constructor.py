@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.modules.car.stix_translation.car_data_mapping import CarDataMapper
+from stix_shifter_utils.modules.car.stix_translation.car_data_mapper import CarDataMapper
 
 from . import encoders
 from . import object_scopers
@@ -28,13 +28,13 @@ class SplunkSearchTranslator:
                                          "| head 1 | return $_time] | where {expr1}"
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, timerange, object_scoper=object_scopers.default_object_scoper):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range, object_scoper=object_scopers.default_object_scoper):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.object_scoper = object_scoper
         self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
         self.result_limit = result_limit
-        self.timerange = timerange
+        self.time_range = time_range
 
     def translate(self, expression, qualifier=None):
         """ This is the worker method for the translation. It can be passed any of the STIX2 AST classes and will turn
@@ -88,7 +88,7 @@ class SplunkSearchTranslator:
                 else:
                     raise NotImplementedError("Qualifier type not implemented")
             else:
-                # Setting timerange value if START and STOP qualifiers are absent.
+                # Setting time_range value if START and STOP qualifiers are absent.
                 return '{query_string}'.format(query_string=translated_query_str)
 
         elif isinstance(expression, CombinedObservationExpression):
@@ -213,15 +213,15 @@ def _test_for_earliest_latest(query_string) -> bool:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options):
     result_limit = options['result_limit']
-    timerange = options['timerange']
+    time_range = options['time_range']
     # CAR + Splunk = we want to override the default object scoper, I guess?
     is_cim = False
     if isinstance(data_model_mapping, CarDataMapper):
-        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange, object_scoper=object_scopers.car_object_scoper)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range, object_scoper=object_scopers.car_object_scoper)
         is_cim = False
     else:
         is_cim = True
-        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, timerange)
+        x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
 
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
@@ -239,7 +239,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
                 fields += field
 
     if not has_earliest_latest and is_cim:
-        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=timerange, result_limit=result_limit)
+        translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=time_range, result_limit=result_limit)
     elif has_earliest_latest and is_cim:
         translated_query += ' | head {result_limit}'.format(result_limit=result_limit)
 

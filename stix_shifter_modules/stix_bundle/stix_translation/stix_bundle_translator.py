@@ -10,8 +10,7 @@ START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\s
 class Translator(BaseTranslator):
 
     def __init__(self, dialect=None):
-        self.result_translator = self
-        self.query_translator = self
+        pass
 
     def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options={}, mapping=None):
         # Data is a STIX pattern.

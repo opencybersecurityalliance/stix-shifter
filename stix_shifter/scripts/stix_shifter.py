@@ -6,7 +6,8 @@ from flask import Flask
 import json
 import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
-from stix_shifter_utils.utils.module_discovery import module_list, process_dialects
+from stix_shifter_utils.utils.module_discovery import process_dialects
+import importlib
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -152,7 +153,7 @@ def main():
 
     if 'module' in args:
         args_module_dialects = args.module
-        
+
         options = None
         if 'options' in args:
             options = args.options
@@ -161,18 +162,18 @@ def main():
         else:
             options = json.loads(options)
 
-        module, dialects = process_dialects(args_module_dialects, options)
+        module = process_dialects(args_module_dialects, options)[0]
         args.options = json.dumps(options)
 
-        all_modules = module_list()
-        if not module in all_modules:
+        try:
+            connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+        except:
             print(f"module '{module}' is not found")
             help_and_exit = True
 
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
-
     elif args.command == HOST:
         # Host means to start a local web service for STIX shifter, to use in combination with the proxy data source
         # module. This combination allows one to run and debug their stix-shifter code locally, while interacting with
@@ -211,9 +212,9 @@ def main():
             return host.delete_query_connection()
 
         @app.route('/ping', methods=['POST'])
-        def ping():
+        def ping_connection():
             host = ProxyHost()
-            return host.ping()
+            return host.ping_connection()
 
         @app.route('/is_async', methods=['POST'])
         def is_async():

@@ -1,11 +1,11 @@
 import json
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_modules.bigfix.stix_translation import bigfix_translator
+from stix_shifter_modules.bigfix.entry_point import EntryPoint
 import unittest
 
-interface = bigfix_translator.Translator()
-map_file = open(interface.mapping_filepath).read()
+entry_point = EntryPoint()
+map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
 map_data = json.loads(map_file)
 data_source = {
     "type": "identity",

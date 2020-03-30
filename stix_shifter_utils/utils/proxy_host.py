@@ -57,7 +57,7 @@ class ProxyHost():
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.delete(search_id))
 
-    def ping(self):
+    def ping_connection(self):
         transmission_module = self.connection['type'].lower()
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.ping())

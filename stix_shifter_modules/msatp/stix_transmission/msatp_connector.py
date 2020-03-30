@@ -1,12 +1,12 @@
 import json
 import adal
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import copy
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     init_error = None
 
     def __init__(self, connection, configuration):
@@ -20,12 +20,6 @@ class Connector(BaseConnector):
 
         except Exception as ex:
             self.init_error = ex
-
-        self.ping_connector = self
-        self.results_connector = self
-        self.status_connector = self
-        self.query_connector = self
-        self.is_async = False
 
     @staticmethod
     def _handle_errors(response, return_obj):
@@ -50,7 +44,7 @@ class Connector(BaseConnector):
         else:
             raise Exception(return_obj)
 
-    def ping(self):
+    def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error is not None:
@@ -62,16 +56,6 @@ class Connector(BaseConnector):
         else:
             ErrorResponder.fill_error(return_obj, message='unexpected exception')
         return return_obj
-
-    def create_query_connection(self, query):
-        """query_connection status
-        :param query: str, search_id"""
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        """"create_status_connection response
-        :param search_id: str, search_id"""
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def delete_query_connection(self, search_id):
         """"delete_query_connection response

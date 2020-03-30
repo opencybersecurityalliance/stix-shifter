@@ -1,4 +1,4 @@
-from stix_shifter_modules.elastic_ecs.stix_transmission import elastic_ecs_connector
+from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 import json
@@ -20,7 +20,7 @@ class ElasticEcsMockResponse:
 class TestElasticEcsConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
-        module = elastic_ecs_connector
+        entry_point = EntryPoint()
 
         config = {
             "auth": {
@@ -33,7 +33,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
             "ceft": "cert"
         }
 
-        check_async = module.Connector(connection, config).is_async
+        check_async = entry_point.is_async()
 
         assert check_async is False
 
@@ -238,7 +238,6 @@ class TestElasticEcsConnection(unittest.TestCase, object):
             } """
 
         mock_results_response.return_value = ElasticEcsMockResponse(200, results_mock)
-        module = elastic_ecs_connector
 
         config = {
             "auth": {
@@ -262,7 +261,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(query, offset, length)
+        entry_point = EntryPoint(connection, config)
+        results_response = entry_point.create_results_connection(query, offset, length)
 
         assert results_response is not None
         assert 'data' in results_response

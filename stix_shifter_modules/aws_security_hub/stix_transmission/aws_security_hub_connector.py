@@ -1,31 +1,21 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 
 import boto3
 from json import loads
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
-
-        self.is_async = False
-
         self.connection = connection
         self.configuration = configuration
 
-        self.results_connector = self
-        self.query_connector = self
-        self.ping_connector = self
-
-    def ping(self):
+    def ping_connection(self):
         client = boto3.client('securityhub',
                               aws_access_key_id=self.configuration['aws_access_key_id'],
                               aws_secret_access_key=self.configuration['aws_secret_access_key']
                               )
 
         return { "success": client.can_paginate('get_findings') }
-
-    def create_query_connection(self, query):
-        return { "success": True, "search_id": query }
 
     def create_results_connection(self, query_id, offset, length):
 

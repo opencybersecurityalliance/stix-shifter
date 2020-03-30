@@ -27,13 +27,13 @@ class PatternTranslator:
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 
-    def __init__(self, pattern: Pattern, timerange):
+    def __init__(self, pattern: Pattern, time_range):
         self.parsed_pattern = []
-        # Set times based on default timerange or what is in the options
+        # Set times based on default time_range or what is in the options
         # START STOP qualifiers will override this
         end_time = datetime.datetime.utcnow()
         self.end_time = DateTimeToUnixTimestamp.transform(end_time)
-        go_back_in_minutes = datetime.timedelta(minutes=timerange)
+        go_back_in_minutes = datetime.timedelta(minutes=time_range)
         start_time = end_time - go_back_in_minutes
         self.start_time = DateTimeToUnixTimestamp.transform(start_time)
         self.qualifier_timerange_override = False
@@ -98,6 +98,6 @@ class PatternTranslator:
         return self._parse_expression(pattern)
 
 
-def parse_stix(pattern: Pattern, timerange):
-    x = PatternTranslator(pattern, timerange)
+def parse_stix(pattern: Pattern, time_range):
+    x = PatternTranslator(pattern, time_range)
     return {'parsed_stix': x.parsed_pattern, 'start_time': x.start_time, 'end_time': x.end_time}

@@ -1,12 +1,13 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
-from stix_shifter_modules.qradar.stix_translation import qradar_translator
+from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
 import json
 import base64
 
-interface = qradar_translator.Translator()
-map_file = open(interface.mapping_filepath).read()
+entry_point = EntryPoint()
+map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
+map_data = json.loads(map_file)
 # Using default mapping in modules/qradar/json/to_stix_map.json
 map_data = json.loads(map_file)
 data_source = {

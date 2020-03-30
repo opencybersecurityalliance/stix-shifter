@@ -1,4 +1,4 @@
-from stix_shifter_modules.qradar.stix_transmission import qradar_connector
+from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter.stix_transmission import stix_transmission
@@ -18,7 +18,7 @@ class QRadarMockResponse:
 class TestQRadarConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
-        module = qradar_connector
+        entry_point = EntryPoint()
 
         config = {
             "auth": {
@@ -30,7 +30,7 @@ class TestQRadarConnection(unittest.TestCase, object):
             "port": "8080",
             "ceft": "cert"
         }
-        check_async = module.Connector(connection, config).is_async
+        check_async = entry_point.is_async()
 
         assert check_async
 
@@ -63,7 +63,6 @@ class TestQRadarConnection(unittest.TestCase, object):
         mocked_return_value = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211"}'
         mock_query_response.return_value = QRadarMockResponse(201, mocked_return_value)
 
-        module = qradar_connector
         config = {
             "auth": {
                 "SEC": "bla"
@@ -89,7 +88,6 @@ class TestQRadarConnection(unittest.TestCase, object):
         mocked_return_value = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211", "status": "COMPLETED", "progress": "100"}'
         mock_status_response.return_value = QRadarMockResponse(200, mocked_return_value)
 
-        module = qradar_connector
         config = {
             "auth": {
                 "SEC": "bla"
@@ -174,7 +172,6 @@ class TestQRadarConnection(unittest.TestCase, object):
         mock_results_response.return_value = QRadarMockResponse(200, results_mock)
         mock_status_response.return_value = QRadarMockResponse(200, status_mock)
         mock_query_response.return_value = QRadarMockResponse(201, query_mock)
-        module = qradar_connector
 
         config = {
             "auth": {
@@ -188,8 +185,9 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
 
         query = '{"query":"SELECT sourceIP from events"}'
+        entry_point = EntryPoint(connection, config)
 
-        query_response = module.Connector(connection, config).create_query_connection(query)
+        query_response = entry_point.create_query_connection(query)
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         query_response = transmission.query(query)
 
@@ -198,7 +196,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
 
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
-        status_response = module.Connector(connection, config).create_status_connection(search_id)
+        status_response = entry_point.create_status_connection(search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -206,7 +204,7 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(search_id, offset, length)
+        results_response = entry_point.create_results_connection(search_id, offset, length)
 
         assert results_response is not None
         assert 'data' in results_response

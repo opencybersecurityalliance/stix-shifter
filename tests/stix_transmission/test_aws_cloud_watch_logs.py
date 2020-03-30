@@ -1,4 +1,4 @@
-from stix_shifter_modules.aws_cloud_watch_logs.stix_transmission import aws_cloud_watch_logs_connector
+from stix_shifter_modules.aws_cloud_watch_logs.entry_point import EntryPoint
 from unittest.mock import patch
 import json
 import unittest
@@ -233,9 +233,10 @@ class MockExceptionResponse:
 class TestAWSConnection(unittest.TestCase):
     @staticmethod
     def test_is_async():
-        module = aws_cloud_watch_logs_connector
-
-        check_async = module.Connector(CONNECTION, CONFIG).is_async
+        # module = aws_cloud_watch_logs_connector
+        entry_point = EntryPoint()
+        check_async = entry_point.is_async()
+        # check_async = module.Connector(CONNECTION, CONFIG).is_async
         assert check_async
 
     @staticmethod

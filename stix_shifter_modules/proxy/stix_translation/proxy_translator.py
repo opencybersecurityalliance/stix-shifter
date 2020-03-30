@@ -6,8 +6,7 @@ import requests
 class Translator(BaseTranslator):
 
     def __init__(self, dialect=None):
-        self.result_translator = self
-        self.query_translator = self
+        pass
 
 
     def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options={}, mapping=None):

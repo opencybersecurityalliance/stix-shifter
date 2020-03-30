@@ -1,6 +1,6 @@
 import json
 from . import json_to_stix_translator
-from stix_shifter_utils.modules.base.stix_translation.base_result_translator import BaseResultTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.stix_translation.src.utils.exceptions import LoadJsonResultsException, TranslationResultException
 

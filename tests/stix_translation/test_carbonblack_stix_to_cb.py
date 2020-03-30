@@ -15,7 +15,7 @@ def _test_query_assertions(query, queries):
 
 test_options = {"timeRange": None} # retain old behavior (no default time range added) for existing tests
 
-class TestStixToQuery(unittest.TestCase, object):
+class TestQueryTranslator(unittest.TestCase, object):
 
     def test_file_query(self):
         stix_pattern = "[file:name = 'some_file.exe']"

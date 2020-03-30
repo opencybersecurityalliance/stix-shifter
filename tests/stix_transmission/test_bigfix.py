@@ -1,4 +1,4 @@
-from stix_shifter_modules.bigfix.stix_transmission import bigfix_connector
+from stix_shifter_modules.bigfix.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
@@ -49,9 +49,9 @@ CONNECTION = {
 class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     def test_is_async():
-        module = bigfix_connector
+        entry_point = EntryPoint(CONNECTION, CONFIG)
 
-        check_async = module.Connector(CONNECTION, CONFIG).is_async
+        check_async = entry_point.is_async()
         assert check_async
 
     @staticmethod
@@ -175,11 +175,11 @@ class TestBigfixConnection(unittest.TestCase):
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-        module = bigfix_connector
-
+        
         query = 'bigfix query text'
 
-        query_response = module.Connector(CONNECTION, CONFIG).create_query_connection(query)
+        entry_point = EntryPoint(CONNECTION, CONFIG)
+        query_response = entry_point.create_query_connection(query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -405,8 +405,8 @@ class TestBigfixConnection(unittest.TestCase):
     def test_delete_query():
         search_id = "104"
 
-        module = bigfix_connector
-        status_response = module.Connector(CONNECTION, CONFIG).delete_query_connection(search_id)
+        entry_point = EntryPoint(CONNECTION, CONFIG)
+        status_response = entry_point.delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

@@ -1,4 +1,4 @@
-from stix_shifter_modules.carbonblack.stix_transmission import carbonblack_connector
+from stix_shifter_modules.carbonblack.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from unittest.mock import patch
 import unittest
@@ -74,8 +74,8 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(200, ping_response.encode())
 
-        module = carbonblack_connector
-        ping_response = module.Connector(connection, config).ping()
+        entry_point = EntryPoint(connection, config)
+        ping_response = entry_point.ping_connection()
 
         assert ping_response is not None
         assert ping_response['success']
@@ -83,10 +83,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_status_endpoint(self, mock_api_client):
         mock_api_client.return_value = None
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         search_id = self._create_query_list("process_name:notepad.exe")
-
-        results_response = module.Connector(connection, config).create_status_connection(search_id)
+        results_response = entry_point.create_status_connection(search_id)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -98,10 +97,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_create_query_connection(self, mock_api_client):
         mock_api_client.return_value = None
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")
-
-        results_response = module.Connector(connection, config).create_query_connection(query_expression)
+        results_response = entry_point.create_query_connection(query_expression)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -127,10 +125,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
-        module = carbonblack_connector
-
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+        results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -206,10 +203,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
-        module = carbonblack_connector
-
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+        results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -228,9 +224,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(401, mocked_return_value.encode())
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+        results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -245,9 +241,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(500, mocked_return_value.encode())
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+        results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -262,9 +258,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(400, mocked_return_value.encode())
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("(process_name:cmd.exe")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 0, 10)
+        results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -280,9 +276,9 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
-        module = carbonblack_connector
+        entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = module.Connector(connection, config).create_results_connection(query_expression, 100, 2)
+        results_response = entry_point.create_results_connection(query_expression, 100, 2)
 
         assert results_response is not None
         assert 'success' in results_response

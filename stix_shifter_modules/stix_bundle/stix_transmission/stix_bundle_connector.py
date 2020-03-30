@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
@@ -12,16 +12,11 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
-        self.is_async = False
         self.connection = connection
         self.configuration = configuration
         self.bundle_url = None
-        self.results_connector = self
-        self.query_connector = self
-        self.ping_connector = self
-        self.status_connector = self
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
@@ -41,7 +36,7 @@ class Connector(BaseConnector):
 
         return matching_sdos
 
-    def ping(self):
+    def ping_connection(self):
         return_obj = dict()
 
         if not self.bundle_url:
@@ -56,16 +51,10 @@ class Connector(BaseConnector):
             return_obj['success'] = True
         elif response_code == 301:
             self.bundle_url = response.headers.get('Location')
-            return self.ping()
+            return self.ping_connection()
         else:
             ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj
-
-    def create_query_connection(self, query):
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def create_results_connection(self, search_id, offset, length):
         # search_id is the pattern

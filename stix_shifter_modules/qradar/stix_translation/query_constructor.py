@@ -335,7 +335,7 @@ def _format_translated_queries(query_array):
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
-    timerange = options['timerange']
+    time_range = options['time_range']
     translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
@@ -345,5 +345,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         if(has_start_stop):
             queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, data_model_mapping.dialect, where_statement))
         else:
-            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, data_model_mapping.dialect, where_statement, result_limit, timerange))
+            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, data_model_mapping.dialect, where_statement, result_limit, time_range))
     return queries

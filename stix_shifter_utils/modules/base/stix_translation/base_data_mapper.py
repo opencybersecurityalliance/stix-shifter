@@ -7,6 +7,9 @@ import glob
 
 class BaseDataMapper(object, metaclass=ABCMeta):
 
+    def __init__(self, dialect):
+        self.dialect = dialect
+
     def fetch_mapping(self, basepath):
         """
         Fetches STIX-to-datasource mapping JSON from the module's from_stix_map.json file
@@ -14,7 +17,7 @@ class BaseDataMapper(object, metaclass=ABCMeta):
         :type basepath: str
         """
         try:
-            if hasattr(self, 'dialect') and not(self.dialect == 'default'):
+            if hasattr(self, 'dialect') and not(self.dialect == None) and not(self.dialect == 'default'):
                 filepath = self._fetch_from_stix_mapping_file(basepath)
             else:
                 filepath = path.abspath(path.join(basepath, "json", 'from_stix_map.json'))

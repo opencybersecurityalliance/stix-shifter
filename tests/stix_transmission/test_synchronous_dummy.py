@@ -1,4 +1,4 @@
-from stix_shifter_modules.synchronous_dummy.stix_transmission import synchronous_dummy_connector
+from stix_shifter_modules.synchronous_dummy.entry_point import EntryPoint
 import unittest
 
 CONNECTION = {"host": "hostbla",  "port": "8080",  "path": "/"}
@@ -6,18 +6,18 @@ CONNECTION = {"host": "hostbla",  "port": "8080",  "path": "/"}
 
 class TestSynchronousDummyConnection(unittest.TestCase, object):
     def test_is_async(self):
-        module = synchronous_dummy_connector
-        check_async = module.Connector(CONNECTION, None).is_async
+        entry_point = EntryPoint()
+        check_async = entry_point.is_async()
         assert check_async == False
 
     def test_ping(self):
-        interface = synchronous_dummy_connector.Connector(CONNECTION, None)
-        ping_result = interface.ping()
+        entry_point = EntryPoint(CONNECTION, None)
+        ping_result = entry_point.ping_connection()
         assert ping_result["success"] is True
 
     def test_dummy_sync_results(self):
-        interface = synchronous_dummy_connector.Connector(CONNECTION, None)
-        results_response = interface.create_results_connection("some query", 1, 1)
+        entry_point = EntryPoint(CONNECTION, None)
+        results_response = entry_point.create_results_connection("some query", 1, 1)
         response_code = results_response["success"]
         query_results = results_response["data"]
 

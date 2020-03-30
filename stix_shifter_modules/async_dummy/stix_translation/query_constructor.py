@@ -88,6 +88,7 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
+    #TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
@@ -220,7 +221,7 @@ class QueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
     # result_limit = options['result_limit']
-    # timerange = options['timerange']
+    # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)

@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .api_client import APIClient
 import json
@@ -8,14 +8,9 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseConnector):
+class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
-        self.is_async = False
-        self.ping_connector = self
-        self.results_connector = self
-        self.status_connector = self
-        self.query_connector = self
 
     def _handle_errors(self, response, return_obj):
         response_code = response['code']
@@ -29,7 +24,7 @@ class Connector(BaseConnector):
             raise UnexpectedResponseException
         return return_obj
 
-    def ping(self):
+    def ping_connection(self):
         return_obj = {}
         try:
             response = self.api_client.ping_box()
@@ -39,12 +34,14 @@ class Connector(BaseConnector):
             raise
 
     # Leave dummy implementation as is for synchronous data sources
-    def create_query_connection(self, query):
-        return {"success": True, "search_id": query}
+    # implemented in BaseSyncConnnector
+    # def create_query_connection(self, query):
+    #     return {"success": True, "search_id": query}
 
     # Leave dummy implementation as is for synchronous data sources
-    def create_status_connection(self, search_id):
-        return {"success": True, "status": "COMPLETED", "progress": 100}
+    # implemented in BaseSyncConnnector
+    # def create_status_connection(self, search_id):
+    #     return {"success": True, "status": "COMPLETED", "progress": 100}
 
     # Query is sent to data source and results are returned in one step
     def create_results_connection(self, search_id, offset, length):
