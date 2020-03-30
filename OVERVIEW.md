@@ -139,7 +139,6 @@ List updated: March 6, 2020
 |    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
 |       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
 
-
 ## How to use
 
 ### Prerequisites

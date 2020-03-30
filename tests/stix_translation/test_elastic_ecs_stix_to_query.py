@@ -1,5 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 import unittest
 import datetime
 import re

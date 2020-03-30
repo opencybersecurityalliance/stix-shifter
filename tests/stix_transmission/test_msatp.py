@@ -1,8 +1,8 @@
-from stix_shifter.stix_transmission.src.modules.msatp import msatp_connector
+from stix_shifter_modules.msatp.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 
 class MSATPMockResponse:
@@ -14,8 +14,8 @@ class MSATPMockResponse:
         return bytearray(self.object, 'utf-8')
 
 
-@patch('stix_shifter.stix_transmission.src.modules.msatp.msatp_connector.Connector.generate_token')
-@patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.__init__')
+@patch('stix_shifter_modules.msatp.stix_transmission.msatp_connector.Connector.generate_token')
+@patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     config = {
         "auth": {
@@ -31,12 +31,12 @@ class TestMSATPConnection(unittest.TestCase):
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = 'test'
-        module = msatp_connector
-        check_async = module.Connector(self.connection, self.config).is_async
+        entry_point = EntryPoint(self.connection, self.config)
+        check_async = entry_point.is_async()
 
         assert check_async is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
@@ -50,7 +50,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
@@ -80,7 +80,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_file_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -112,7 +112,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_registry_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -139,7 +139,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -158,7 +158,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert results_response['code'] == 'unknown'
         assert results_response['success'] is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.msatp.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -176,7 +176,7 @@ class TestMSATPConnection(unittest.TestCase):
                             }"""
 
         mock_results_response.return_value = MSATPMockResponse(200, results_mock)
-        module = msatp_connector
+        entry_point = EntryPoint(self.connection, self.config)
 
         query = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime ' \
@@ -198,7 +198,7 @@ class TestMSATPConnection(unittest.TestCase):
                                               '"updater.exe")'
         offset = 0
         length = 1
-        results_response = module.Connector(self.connection, self.config).create_results_connection(query, offset,
+        results_response = entry_point.create_results_connection(query, offset,
                                                                                                     length)
 
         assert results_response is not None
@@ -214,8 +214,8 @@ class TestMSATPConnection(unittest.TestCase):
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
-        module = msatp_connector
-        status_response = module.Connector(self.connection, self.config).delete_query_connection(search_id)
+        entry_point = EntryPoint(self.connection, self.config)
+        status_response = entry_point.delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -229,8 +229,8 @@ class TestMSATPConnection(unittest.TestCase):
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
-        module = msatp_connector
-        status_response = module.Connector(self.connection, self.config).create_status_connection(search_id)
+        entry_point = EntryPoint(self.connection, self.config)
+        status_response = entry_point.create_status_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

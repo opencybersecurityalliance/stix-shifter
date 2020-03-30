@@ -1,10 +1,10 @@
-from stix_shifter.stix_transmission.src.modules.elastic_ecs import elastic_ecs_connector
+from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
 import json
 import os
 from stix_shifter.stix_transmission import stix_transmission
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 
 class ElasticEcsMockResponse:
@@ -16,11 +16,11 @@ class ElasticEcsMockResponse:
         return bytearray(self.object, 'utf-8')
 
 
-@patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.__init__',  autospec=True)
+@patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.__init__',  autospec=True)
 class TestElasticEcsConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
-        module = elastic_ecs_connector
+        entry_point = EntryPoint()
 
         config = {
             "auth": {
@@ -33,11 +33,11 @@ class TestElasticEcsConnection(unittest.TestCase, object):
             "ceft": "cert"
         }
 
-        check_async = module.Connector(connection, config).is_async
+        check_async = entry_point.is_async()
 
         assert check_async is False
 
-    @patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -61,7 +61,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -108,7 +108,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -170,7 +170,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
 
-    @patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -198,7 +198,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success'] is False
 
 
-    @patch('stix_shifter.stix_transmission.src.modules.elastic_ecs.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_query_flow(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -238,7 +238,6 @@ class TestElasticEcsConnection(unittest.TestCase, object):
             } """
 
         mock_results_response.return_value = ElasticEcsMockResponse(200, results_mock)
-        module = elastic_ecs_connector
 
         config = {
             "auth": {
@@ -262,7 +261,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         offset = 0
         length = 1
-        results_response = module.Connector(connection, config).create_results_connection(query, offset, length)
+        entry_point = EntryPoint(connection, config)
+        results_response = entry_point.create_results_connection(query, offset, length)
 
         assert results_response is not None
         assert 'data' in results_response

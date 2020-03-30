@@ -2,10 +2,10 @@
 edge cases."""
 
 import unittest
-from stix_shifter.stix_translation.src.patterns.translator import translate, DataModels, SearchPlatforms
-from stix_shifter.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+from .translator import translate, DataModels, SearchPlatforms
+from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 import logging
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 
 class TestNotSupported(unittest.TestCase):

@@ -1,5 +1,5 @@
-from stix_shifter.stix_transmission.src.modules.async_dummy import async_dummy_connector
-from stix_shifter.stix_transmission.src.modules.base.base_status_connector import Status
+from stix_shifter_modules.async_dummy.entry_point import EntryPoint
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 import unittest
 
 
@@ -10,9 +10,9 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             "port": "8080",
             "path": "/"
         }
-        interface = async_dummy_connector.Connector(connection, None)
+        entry_point = EntryPoint(connection, None)
         query = "placeholder query text"
-        query_response = interface.create_query_connection(query)
+        query_response = entry_point.create_query_connection(query)
 
         assert query_response['query_id'] == "uuid_1234567890"
         assert query_response['code'] == 200
@@ -23,9 +23,9 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             "port": "8080",
             "path": "/"
         }
-        interface = async_dummy_connector.Connector(connection, None)
+        entry_point = EntryPoint(connection, None)
         query_id = "uuid_1234567890"
-        status_response = interface.create_status_connection(query_id)
+        status_response = entry_point.create_status_connection(query_id)
 
         success = status_response["success"]
         assert success == True
@@ -38,9 +38,9 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             "port": "8080",
             "path": "/"
         }
-        interface = async_dummy_connector.Connector(connection, None)
+        entry_point = EntryPoint(connection, None)
         query_id = "uuid_1234567890"
-        results_response = interface.create_results_connection(query_id, 1, 1)
+        results_response = entry_point.create_results_connection(query_id, 1, 1)
 
         success = results_response["success"]
         assert success == True
@@ -53,7 +53,8 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             "port": "8080",
             "path": "/"
         }
-        check_async = async_dummy_connector.Connector(connection, None).is_async
+        entry_point = EntryPoint(connection, None)
+        check_async = entry_point.is_async()
         assert check_async
 
     def test_ping(self):
@@ -63,6 +64,6 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             "path": "/"
         }
 
-        interface = async_dummy_connector.Connector(connection, None)
-        ping_result = interface.ping()
+        entry_point = EntryPoint(connection, None)
+        ping_result = entry_point.ping_connection()
         assert ping_result == "async ping"

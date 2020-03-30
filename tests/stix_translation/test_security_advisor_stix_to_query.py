@@ -1,5 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter.utils.error_response import ErrorCode
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 import unittest
 import json
@@ -14,7 +14,7 @@ def _test_query_assertions(query, queries):
     assert query['queries'] == queries
 
 
-class TestStixToQuery(unittest.TestCase):
+class TestQueryTranslator(unittest.TestCase):
 
     def test_simple_or_query(self):
         stix_pattern = "[url:value = 'http://5.188.86.29:7000' OR url:value = 'http://5.45.69.149:7000']"

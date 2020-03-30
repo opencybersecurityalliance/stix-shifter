@@ -1,0 +1,29 @@
+{
+    "connection": {
+        "type": {
+            "description": "Datasource type"
+        },
+        "name": {
+            "label": "Connector name",
+            "placeholder": "QRadar Datasource",
+            "description": "Assign a name to uniquely identify the data source connection"
+        },
+        "description": {
+            "label": "Connector Description",
+            "placeholder": "QRadar Datasource Description",
+            "description": "Write a description to indicate the purpose of the data source connection"
+        }
+    },
+    "configuration":{
+        "name": {
+            "label": "Configuration name",
+            "placeholder": "QRadar Configuration",
+            "description": "Assign a name to uniquely identify the data source configuration"
+        },
+        "description": {
+            "label": "Configuration Description",
+            "placeholder": "QRadar Configuration Description",
+            "description": "Write a description to indicate the purpose of the data source configuration"
+        }
+    }
+}

@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import time
 import urllib3
-from stix_shifter.stix_translation.src.patterns.translator import DataModels
+from stix_shifter_utils.stix_translation.src.patterns.translator import DataModels
 
 urllib3.disable_warnings()
 

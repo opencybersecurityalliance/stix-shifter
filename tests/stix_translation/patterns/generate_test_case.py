@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     file_header = """
 import unittest
-from stix_shifter.stix_translation.src.patterns.translator import translate, DataModels, SearchPlatforms
+from stix_shifter_utils.stix_translation.src.patterns.translator import translate, DataModels, SearchPlatforms
 import logging
 
 logging.basicConfig(level=logging.DEBUG)

@@ -1,11 +1,12 @@
-from stix_shifter.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter.stix_translation.src.utils import transformers
-from stix_shifter.stix_translation.src.modules.msatp import msatp_translator
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.stix_translation.src.utils import transformers
+from stix_shifter_modules.msatp.entry_point import EntryPoint
 import json
 import unittest
 
-interface = msatp_translator.Translator()
-map_file = open(interface.mapping_filepath).read()
+entry_point = EntryPoint()
+map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
+map_data = json.loads(map_file)
 
 map_data = json.loads(map_file)
 data_source = {
@@ -177,9 +178,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
+        print(json.dumps(objects, sort_keys=True, indent=4))
 
         file_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'file')
+        print('FILE OBJ: {}'.format(json.dumps(file_obj)))
         assert file_obj is not None, 'file object type not found'
+        print('FILE KEYS: {}'.format(file_obj.keys()))
         assert file_obj.keys() == {'type', 'hashes', 'parent_directory_ref', 'name'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'updater.exe'
@@ -232,6 +236,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
+        print(json.dumps(objects, sort_keys=True, indent=4))
 
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'

@@ -14,7 +14,7 @@ def _remove_timestamp_from_query(queries):
         return re.sub(pattern, "", queries)
 
 
-class TestStixToQuery(unittest.TestCase):
+class TestQueryTranslator(unittest.TestCase):
     """
     class to perform unit test case msatp translate query
     """

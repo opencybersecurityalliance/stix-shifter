@@ -1,0 +1,49 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Help",
+            "description": "More details on the datasource setting can be found in the specified link"
+        },
+        "limit": {
+            "label": "Result Size Limit",
+            "description": "The maximum number of entries or objects that are returned by search query.The default result size limit is 1000. The value must not be less than 1 and must not be greater than 10,000."
+        },
+        "timeout": {
+            "label": "Query Timeout Limit",
+            "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
+        },
+        "concurrent": {
+            "label": "Concurrent Search Limit",
+            "description": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source. The default limit for the number of connections is 4."
+        },
+        "cert": {
+            "label": "BigFix Certificate",
+            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
+            }
+        }
+    }
+}

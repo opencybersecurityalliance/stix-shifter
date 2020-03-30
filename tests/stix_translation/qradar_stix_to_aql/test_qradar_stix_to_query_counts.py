@@ -8,7 +8,7 @@ def _translate_query(stix_pattern):
     return translation.translate('qradar', 'query', '{}', stix_pattern)
 
 
-class TestStixToQueryCounts(unittest.TestCase, object):
+class TestQueryTranslatorCounts(unittest.TestCase, object):
 
     def test_query_count_for_events_and_flows(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
