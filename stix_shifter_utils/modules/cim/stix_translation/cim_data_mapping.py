@@ -23,6 +23,7 @@ class CimDataMapper(BaseDataMapper):
     }
 
     def __init__(self, options={}, dialect=None):
+        super().__init__(dialect)
         self.options = options
         if 'select_fields' in options:
             self.FIELDS = options['select_fields']

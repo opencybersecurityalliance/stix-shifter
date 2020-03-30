@@ -5,10 +5,12 @@ from os import path
 
 class CarDataMapper(BaseDataMapper):
 
-    def __init__(self, options={}):
+    def __init__(self, options={}, dialect=None):
+        super().__init__(dialect)
         self.options = options
         mapping_json = options.get('mapping')
         basepath = path.dirname(__file__)
+        print('mapping_json: ' + str(mapping_json))
         self.map_data = mapping_json or self.fetch_mapping(basepath)
 
     def map_object(self, stix_object_name):

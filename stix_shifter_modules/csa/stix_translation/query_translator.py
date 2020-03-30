@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class QueryTranslator(BaseQueryTranslator):
 
     def __init__(self, dialect=None, rows=1024):
-        super().__init__()
+        super().__init__(dialect)
         self.dialect = dialect
         self.rows = rows
 

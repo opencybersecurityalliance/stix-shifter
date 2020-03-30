@@ -10,6 +10,7 @@ from stix_shifter_utils.utils.module_discovery import process_dialects
 import sys
 import glob
 from os import path
+import traceback
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -65,7 +66,14 @@ class StixTranslation:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
-            entry_point = connector_module.EntryPoint(options=options)
+            try: 
+                entry_point = connector_module.EntryPoint(options=options)
+            except Exception as ex:
+                track = traceback.format_exc()
+                print(ex)
+                print(track) 
+                raise ex
+
             if len(dialects) == 0:
                 dialects = entry_point.get_dialects()
 
