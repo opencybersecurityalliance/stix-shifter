@@ -1,5 +1,6 @@
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.param_validator import param_validator
 
 
 RESULTS = 'results'
@@ -16,13 +17,19 @@ class StixTransmission:
 
     def __init__(self, module, connection, configuration):
         module = module.split(':')[0]
+
         if connection.get('options', {}).get('proxy'):
             module = 'proxy'
+             
         try:
+            param_validated, updated_object = param_validator(module, connection, configuration)
+            if param_validated and updated_object:
+                connection.update(updated_object)
+            
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
             self.entry_point = connector_module.EntryPoint(connection, configuration)
-        except Exception as e:
-            self.init_error = e
+        except Exception as ex:
+            self.init_error = ex
 
     def query(self, query):
         # Creates and sends a query to the correct datasource

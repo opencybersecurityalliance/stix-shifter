@@ -170,7 +170,19 @@ def main():
         except:
             print(f"module '{module}' is not found")
             help_and_exit = True
-
+    
+    # if args.command == TRANSMIT or args.command == EXECUTE:
+    #     connection_dict = json.loads(args.connection)
+    #     configuration_dict = json.loads(args.configuration)
+        
+    #     try:
+    #         param_validated, new_obj = param_validator(module, connection_dict, configuration_dict)
+    #         if param_validated and new_obj:
+    #             args.connection = new_obj
+    #     except Exception as ex:
+    #         print(ex)
+    #         sys.exit(1)
+    
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
