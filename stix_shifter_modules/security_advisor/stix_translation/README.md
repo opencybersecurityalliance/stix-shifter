@@ -23,12 +23,12 @@ Will return the following valid STIX Cyber Observable Object:
 ```json
 {
     "type": "bundle",
-    "id": "bundle--bf8762c9-5e77-4285-b3a8-cd4efe3b9945",
+    "id": "bundle--ff8f94e5-7f08-4cc7-94f7-9fc86408a615",
+    "spec_version": "2.0",
     "objects": [
         {
             "type": "identity",
-            "id": "bundle--ff8f94e5-7f08-4cc7-94f7-9fc86408a615",
-            "spec_version": "2.0",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
             "name": "SecurityAdvisor",
             "identity_class": "events"
         },
@@ -52,7 +52,7 @@ Will return the following valid STIX Cyber Observable Object:
                     "value": "https://cloud.ibm.com/docs/services/cloud-object-storage?topic=cloud-object-storage-setting-a-firewall"
                 }
             },
-             "x_com_security_advisor_finding": {
+            "x_com_security_advisor_finding": {
                 "author_accountId": "4263e551d4a9460e8cdaccc06414198b",
                 "name": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor/occurrences/datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",
                 "id": "datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",
@@ -73,5 +73,5 @@ Will return the following valid STIX Cyber Observable Object:
             "number_observed": 1
         }
     ]
-}                                                                                        
+}                                                                                   
 ```
