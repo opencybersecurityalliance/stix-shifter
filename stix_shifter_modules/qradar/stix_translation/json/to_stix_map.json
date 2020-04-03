@@ -294,5 +294,17 @@
   "applicationid": {
     "key": "x_com_ibm_ariel.application_id",
     "cybox": false
+  },
+  "creEventList": {
+    "key": "x_com_ibm_ariel.matched_custom_rule",
+    "cybox": false
+  },
+  "domainid": {
+    "key": "x_com_ibm_ariel.domain_id",
+    "cybox": false
+  },
+  "devicetype": {
+    "key": "x_com_ibm_ariel.devicetype",
+    "cybox": false
   }
 }
