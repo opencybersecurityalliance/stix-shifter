@@ -288,8 +288,7 @@
     "cybox": false
   },
   "applicationname": {
-    "key": "x_com_ibm_ariel.application_name",
-    "cybox": false
+    "key": "software.name"
   },
   "applicationid": {
     "key": "x_com_ibm_ariel.application_id",

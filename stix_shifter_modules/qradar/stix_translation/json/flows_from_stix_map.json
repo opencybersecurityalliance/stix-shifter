@@ -24,6 +24,11 @@
       "dst_packets": ["destinationpackets"]
     }
   },
+  "software": {
+    "fields": {
+      "name": ["applicationname"]
+    }
+  },
   "x-com-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
