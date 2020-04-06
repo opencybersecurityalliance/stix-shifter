@@ -16,7 +16,8 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 def fill_connectors(projects, modules_path):
     modules = [ name for name in os.listdir(modules_path) if (os.path.isdir(os.path.join(modules_path, name) ) and (not name.startswith('__')) )]
     for module in modules:
-        projects['stix_shifter_modules_'+module] = ['stix_shifter_modules/'+module]
+        if not os.path.isfile(os.path.join(modules_path, module, 'SKIP.ME')):
+            projects['stix_shifter_modules_'+module] = ['stix_shifter_modules/'+module]
 
 mode = '1'
 if 'MODE' in os.environ:
@@ -59,8 +60,11 @@ for project_name in projects.keys():
     #Prepare packages 
     packages_include = []
     for src_folder in src_folders:
+        packages_include.append(src_folder.replace('/','.'))
         packages_include.append(src_folder.replace('/','.') + '.*')
     print('packages_include: %s' % packages_include)
+    packages = find_packages(include=packages_include)
+    print('packages: %s' % packages)
 
     #Prepare requires list
     install_requires = set()
@@ -68,7 +72,7 @@ for project_name in projects.keys():
     for src_folder in src_folders:
         for r, d, f in os.walk(src_folder):
             for file in f:
-                if 'requirements.txt'==file:
+                if 'requirements.txt'==file and not os.path.isfile(os.path.join(r, 'SKIP.ME')):
                     requirements_files.append(os.path.join(r, file))
     print('requirements_files: %s' % requirements_files)
     for requirements_file in requirements_files:
@@ -86,7 +90,7 @@ for project_name in projects.keys():
     for src_folder in src_folders:
         entry_point_path = os.path.join(src_folder, 'scripts', src_folder+'.py')
         if os.path.exists(entry_point_path):
-            entry_points_items.append('%s=%s.scripts.%s:main' % (project_name,project_name,project_name))
+            entry_points_items.append('%s=%s.scripts.%s:main' % (project_name.replace('_','-'),project_name,project_name))
     if len(entry_points_items) > 0:
         entry_points = {  # Optional
             'console_scripts': entry_points_items
@@ -108,19 +112,11 @@ for project_name in projects.keys():
             'License :: OSI Approved :: Apache Software License',
             'Programming Language :: Python :: 3.6',
         ],
-
         'keywords': 'datasource stix translate transform transmit',  # Optional
-
-        # packages=find_packages(exclude=['tests']),  # Required
-        'packages': find_packages(include=packages_include),
+        'packages': packages, # Required
         'install_requires': install_requires,
-
         'include_package_data': True,
-        'entry_points': {  # Optional
-            'console_scripts': [
-                'stix-shifter=stix_shifter.scripts.stix_shifter:main',
-            ],
-        },
+        'entry_points': entry_points,  # Optional
         'project_urls': {  # Optional
             'Source': 'https://github.com/opencybersecurityalliance/stix-shifter',
         },
