@@ -33,7 +33,11 @@
     "\"File Hash\" as filehash",
     "\"File Path\" as filepath",
     "severity",
+    "credibility",
     "relevance",
-    "geographiclocation as geographic"
+    "geographiclocation as geographic",
+    "creEventList",
+    "domainid",
+    "LOGSOURCETYPENAME(devicetype) as devicetype"
   ]
 }
