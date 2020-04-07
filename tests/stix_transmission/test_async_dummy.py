@@ -45,7 +45,7 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
         success = results_response["success"]
         assert success == True
         data = results_response["data"]
-        assert data == "Results for search"
+        assert data == "Results from search"
 
     def test_is_async(self):
         connection = {
@@ -66,4 +66,4 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, None)
         ping_result = entry_point.ping_connection()
-        assert ping_result == "async ping"
+        assert ping_result["success"] is True
