@@ -3,7 +3,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 class APIClient():
 
     def __init__(self, connection, configuration):
-         # Uncomment when implementing data source API client.
+        # Uncomment when implementing data source API client.
         # auth = configuration.get('auth')
         # headers = dict()
         # headers['X-Auth-Token'] = auth.get('token')
