@@ -11,8 +11,8 @@ class DataMapper(BaseDataMapper):
         assert "process" in self.map_data and "binary" in self.map_data
 
     def fetch_mapping(self):
-        process_mapping = self._fetch_mapping_file("process_from_stix_map_part.json")
-        binary_mapping = self._fetch_mapping_file("binary_from_stix_map_part.json")
+        process_mapping = self._fetch_mapping_file("process_from_stix_map.json")
+        binary_mapping = self._fetch_mapping_file("binary_from_stix_map.json")
         return {"binary": binary_mapping, "process": process_mapping}
 
     def _fetch_mapping_file(self, filename):
