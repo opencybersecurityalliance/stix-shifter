@@ -1,0 +1,1 @@
+collect_ignore = ["tests/stix_transmission/cloudsql/test_class.py"]

@@ -6,7 +6,7 @@ requirements_files = []
 for src_folder in src_folders:
     for r, d, f in os.walk(src_folder):
         for file in f:
-            if 'requirements.txt'==file:
+            if 'requirements.txt'==file and not os.path.isfile(os.path.join(r, 'SKIP.ME')):
                 requirements_files.append(os.path.join(r, file))
 print('requirements_files: %s' % requirements_files)
 for requirements_file in requirements_files:
