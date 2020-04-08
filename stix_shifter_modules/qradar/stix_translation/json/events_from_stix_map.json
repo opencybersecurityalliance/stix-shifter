@@ -74,8 +74,12 @@
       "direction": ["direction"],
       "identity_host_name": ["identityhostname"],
       "severity": ["severity"],
+      "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "geographic": ["geographic"]
+      "geographic": ["geographic"],
+      "matched_custom_rule": ["creEventList"],
+      "domain_id": ["domainid"],
+      "devicetype": ["devicetype"]
     }
   }
 }

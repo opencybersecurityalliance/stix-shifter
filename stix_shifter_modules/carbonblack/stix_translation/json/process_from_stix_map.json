@@ -1,0 +1,72 @@
+{
+  "network-traffic": {
+    "fields": {
+      "src_port": ["ipport"],
+      "dst_port": ["ipport"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ipaddr"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["process_name"],
+      "hashes.MD5": ["md5"],
+      "hashes.SHA-256": ["sha256"],
+      "hashes.parent_MD5": ["parent_md5"],
+      "hashes.child_MD5": ["childproc_md5"],
+      "hashes.filewrite_MD5": ["filewrite_md5"],
+      "hashes.parent_SHA-256": ["parent_sha256"],
+      "hashes.child_SHA-256": ["childproc_sha256"],
+      "hashes.filewrite_SHA-256": ["filewrite_sha256"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": ["cmdline"],
+      "created": ["start"],
+      "pid": ["process_pid"],
+      "name": ["process_name"],
+      "parent_ref.pid": ["parent_pid"],
+      "creator_user_ref.user_id": ["username"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domain"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["path"]
+    }
+  },
+  "x-com-cb-response" : {
+    "fields": {
+      "host_name": ["hostname"],
+      "group": ["group"],
+      "os_type": ["os_type"],
+      "crossproc_type": ["crossproc_type"],
+      "tampered": ["tampered"],
+      "block_status": ["block_status"],
+      "digsig_result": ["digsig_result"],
+      "digsig_publisher": ["digsig_publisher"],
+      "has_emet_event": ["has_emet_event"],
+      "has_emet_config": ["has_emet_config"],
+      "filemod": ["filemod"],
+      "regmod": ["regmod"]
+    }
+  }
+}
