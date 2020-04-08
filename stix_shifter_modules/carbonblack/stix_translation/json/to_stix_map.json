@@ -39,24 +39,21 @@
       "references": "process_file"
     }
   ],
-  "parent_name": [
-    {
-      "key": "file.name",
-      "object": "parent_file"
-    },
-    {
-      "key": "process.name",
-      "object": "parent_process"
-    },
-    {
-      "key": "process.binary_ref",
-      "object": "parent_process",
-      "references": "parent_file"
-    }
-  ],
   "process_pid": {
     "key": "process.pid",
     "object": "process"
+  },
+  "id": {
+    "key": "process.x_id",
+    "object": "process"
+  },
+  "unique_id": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  },
+  "parent_name": {
+    "key": "process.name",
+    "object": "parent_process"
   },
   "parent_pid": [
     {
@@ -69,51 +66,106 @@
       "references": "parent_process"
     }
   ],
+  "parent_id": {
+    "key": "process.x_id",
+    "object": "parent_process"
+  },
+  "parent_unique_id": {
+    "key": "process.x_unique_id",
+    "object": "parent_process"
+  },
   "process_md5": {
     "key": "file.hashes.MD5",
     "object": "process_file"
   },
-  "parent_md5": {
-    "key": "file.hashes.MD5",
-    "object": "parent_file"
+  "process_sha256": {
+    "key": "file.hahses.SHA-256",
+    "object": "process_file"
   },
   "cmdline": {
     "key": "process.command_line",
     "object": "process"
   },
-  "comms_ip": [
-    {
-      "key": "ipv4-addr.value",
-      "transformer": "ToIPv4",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "traffic",
-      "references": "dst_ip"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "traffic"
-      ]
-    }
-  ],
   "interface_ip": [
     {
       "key": "ipv4-addr.value",
-      "transformer": "ToIPv4",
-      "object": "src_ip"
-    },
+      "transformer": "ToIPv4"
+    }
+  ],
+  "path": [
     {
-      "key": "network-traffic.src_ref",
-      "object": "traffic",
-      "references": "src_ip"
+      "key": "directory.path",
+      "object": "dir"
     }
   ],
   "hostname": {
-    "key": "domain-name.value"
+    "key": "x_com_cb_response.host_name",
+    "cybox": false
+  },
+  "host_type": {
+    "key": "x_com_cb_response.host_type",
+    "cybox": false
+  },
+  "comms_ip": {
+    "key": "x_com_cb_response.comms_ip",
+    "cybox": false,
+    "transformer": "ToIPv4"
+  },
+  "os_type": {
+    "key": "x_com_cb_response.os_type",
+    "cybox": false
+  },
+  "sensor_id": {
+    "key": "x_com_cb_response.sensor_id",
+    "cybox": false
+  },
+  "group": {
+    "key": "x_com_cb_response.group",
+    "cybox": false
+  },
+  "segment_id": {
+    "key": "x_com_cb_response.segment_id",
+    "cybox": false
+  },
+  "terminated": {
+    "key": "x_com_cb_response.terminated",
+    "cybox": false
+  },
+  "regmod_count": {
+    "key": "x_com_cb_response.regmod_count",
+    "cybox": false
+  },
+  "netconn_count": {
+    "key": "x_com_cb_response.netconn_count",
+    "cybox": false
+  },
+  "filemod_count": {
+    "key": "x_com_cb_response.filemod_count",
+    "cybox": false
+  },
+  "modload_count": {
+    "key": "x_com_cb_response.modload_count",
+    "cybox": false
+  },
+  "childproc_count": {
+    "key": "x_com_cb_response.childproc_count",
+    "cybox": false
+  },
+  "crossproc_count": {
+    "key": "x_com_cb_response.crossproc_count",
+    "cybox": false
+  },
+  "emet_count": {
+    "key": "x_com_cb_response.emet_count",
+    "cybox": false
+  },
+  "processblock_count": {
+    "key": "x_com_cb_response.processblock_count",
+    "cybox": false
+  },
+  "filtering_known_dlls": {
+    "key": "x_com_cb_response.filtering_known_dlls",
+    "cybox": false
   },
   "server_added_timestamp": [
     {

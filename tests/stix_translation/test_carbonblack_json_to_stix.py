@@ -429,6 +429,10 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
     def get_first_of_type(itr, typ):
         return TestCarbonBlackTransformResults.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
+    @staticmethod
+    def get_first_process(itr, typ):
+        return TestCarbonBlackTransformResults.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ and "parent_ref" in o)
+
     def test_change_cb_process_api_timestamp_regex(self):
         results = process_data_1["results"].copy()
         results[0]['start'] = "2019-01-22T00:04:52.87Z"
@@ -471,31 +475,22 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(curr_obj.keys() == {'type', 'user_id'})
         assert(curr_obj['user_id'] == "SYSTEM")
 
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'network-traffic')
-        network_obj = curr_obj  # used in later test
-        assert(curr_obj is not None), 'network-traffic object type not found'
-        assert(curr_obj.keys() == {'type', 'src_ref', 'dst_ref'})
-        assert(objects[curr_obj['src_ref']]['value'] == "10.239.15.200")
-        assert(objects[curr_obj['dst_ref']]['value'] == "193.86.73.118")
-
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'process')
+        curr_obj = TestCarbonBlackTransformResults.get_first_process(objects.values(), 'process')
         assert(curr_obj is not None), 'process object type not found'
-        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid', 'opened_connection_refs'})
+        assert(curr_obj.keys() == {'type', 'command_line', 'creator_user_ref', 'binary_ref', 'parent_ref', 'created', 'name', 'pid', 'x_id', 'x_unique_id'})
         assert(curr_obj['command_line'] == "C:\\Windows\\system32\\cmd.exe /c tasklist")
         assert(curr_obj['created'] == "2019-01-22T00:04:52.875Z")
         assert(curr_obj['pid'] == 1896)
 
-        assert(network_obj == objects[curr_obj['opened_connection_refs'][0]]), 'open_connection_refs does not point to the correct object'
         assert(file_obj == objects[curr_obj['binary_ref']]), 'process binary_ref does not point to the correct object'
         assert(user_obj == objects[curr_obj['creator_user_ref']]), 'process creator_user_ref does not point to the correct object'
 
         parent_index = curr_obj['parent_ref']
         curr_obj = objects[parent_index]
         assert(curr_obj is not None)
-        assert(curr_obj.keys() == {'type', 'pid', 'name', 'binary_ref'})
+        assert(curr_obj.keys() == {'type', 'pid', 'name', 'x_id', 'x_unique_id'})
         assert(curr_obj['pid'] == 2508)
         assert(curr_obj['name'] == "cmd.exe")
-        assert(objects[curr_obj['binary_ref']]['name'] == "cmd.exe")
 
         assert(observed_data['created'] is not None)
         assert(observed_data['modified'] is not None)
@@ -538,7 +533,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
         objects = result_bundle_objects[1]['objects']
         types = [o.get('type') for o in objects.values()]
-        assert (types == ['file', 'process', 'file', 'process', 'domain-name', 'ipv4-addr', 'network-traffic', 'ipv4-addr', 'user-account'])
+        assert (types == ['file', 'process', 'process', 'ipv4-addr', 'user-account', 'directory'])
         assert (result_bundle_objects[1]['number_observed'] == 1)
 
         file_start_time = "2018-12-17T08:37:13.318Z"
