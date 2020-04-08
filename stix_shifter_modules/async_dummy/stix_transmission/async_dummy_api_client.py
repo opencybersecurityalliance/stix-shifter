@@ -21,14 +21,11 @@ class APIClient():
 
     def ping_data_source(self):
         # Pings the data source
-        return {"code": 200, "success": True, "results": "Was able to hit the data source"}
+        return {"code": 200, "success": True}
 
     def create_search(self, query_expression):
         # Queries the data source
-        return {
-            "code": 200,
-            "query_id": "uuid_1234567890"
-        }
+        return {"code": 200, "query_id": "uuid_1234567890"}
 
     def get_search_status(self, search_id):
         # Check the current status of the search
@@ -41,4 +38,4 @@ class APIClient():
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
-        return "Deleted query: {}".format(search_id)
+        return {"code": 200, "success": True}

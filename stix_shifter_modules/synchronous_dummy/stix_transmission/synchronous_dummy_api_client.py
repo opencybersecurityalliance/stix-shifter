@@ -20,13 +20,13 @@ class APIClient():
 
     def ping_data_source(self):
         # Pings the data source
-        return {"code": 200, "success": True, "results": "Was able to hit the data source"}
+        return {"code": 200, "success": True}
 
-    def create_search(self, search_id, range_start=None, range_end=None):
+    def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         return {"code": 200, "search_id": search_id, "data": "Results from search"}
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
-        return "Deleted query: {}".format(search_id)
+        return {"code": 200, "success": True}
