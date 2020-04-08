@@ -24,7 +24,7 @@ class APIClient():
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        return {"code": 200, "search_id": search_id, "data": "Results from search"}
+        return {"code": 200, "data": "Results from search"}
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API

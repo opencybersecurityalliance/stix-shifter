@@ -13,7 +13,7 @@ class AsyncDummyQueryConnector(BaseQueryConnector):
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
-                return_obj['query_id'] = response_dict['query_id']
+                return_obj['search_id'] = response_dict['query_id']
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
