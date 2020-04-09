@@ -64,7 +64,7 @@ class StixTranslation:
         try:
             try:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-            except Exception as ex:
+            # except Exception as ex:
             #     raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             # try: 
                 entry_point = connector_module.EntryPoint(options=options)
@@ -72,7 +72,8 @@ class StixTranslation:
                 track = traceback.format_exc()
                 print(ex)
                 print(track) 
-                raise ex
+                # raise ex
+                raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
 
             if len(dialects) == 0:
                 dialects = entry_point.get_dialects()
