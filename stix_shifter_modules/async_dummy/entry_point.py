@@ -1,10 +1,10 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
+from .stix_transmission.async_dummy_api_client import APIClient
 from .stix_transmission.async_dummy_ping_connector import AsyncDummyPingConnector
 from .stix_transmission.async_dummy_query_connector import AsyncDummyQueryConnector
 from .stix_transmission.async_dummy_status_connector import AsyncDummyStatusConnector
-from .stix_transmission.async_dummy_delete_connector import AsyncDummyDeleteConnector
 from .stix_transmission.async_dummy_results_connector import AsyncDummyResultsConnector
-from .stix_transmission.async_dummy_api_client import APIClient
+from .stix_transmission.async_dummy_delete_connector import AsyncDummyDeleteConnector
 from .stix_translation.data_mapper import DataMapper
 from .stix_translation.query_translator import QueryTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
@@ -20,17 +20,17 @@ class EntryPoint(EntryPointBase):
         super().__init__(options)
         if connection:
             api_client = APIClient(connection, configuration)
-            results_connector = AsyncDummyResultsConnector(api_client)
-            status_connector = AsyncDummyStatusConnector(api_client)
-            delete_connector = AsyncDummyDeleteConnector(api_client)
-            query_connector = AsyncDummyQueryConnector(api_client)
             ping_connector = AsyncDummyPingConnector(api_client)
+            query_connector = AsyncDummyQueryConnector(api_client)
+            status_connector = AsyncDummyStatusConnector(api_client)
+            results_connector = AsyncDummyResultsConnector(api_client)
+            delete_connector = AsyncDummyDeleteConnector(api_client)
 
-            self.set_results_connector(results_connector)
-            self.set_status_connector(status_connector)
-            self.set_delete_connector(delete_connector)
-            self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
+            self.set_query_connector(query_connector)
+            self.set_status_connector(status_connector)
+            self.set_results_connector(results_connector)
+            self.set_delete_connector(delete_connector)
         else:
             
             # self.setup_translation_simple('default')      #   <-------------

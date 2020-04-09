@@ -6,18 +6,6 @@ from .base_results_connector import BaseResultsConnector
 
 
 class BaseConnector:
-    def __init__(self, connection, configuration):
-        """
-        Args:
-            connection (dict): The datasource connection info.
-            configuration (dict): The datasource configuration info.
-        """
-        self.query_connector = BaseQueryConnector()
-        self.status_connector = BaseStatusConnector()
-        self.delete_connector = BaseDeleteConnector()
-        self.results_connector = BaseResultsConnector()
-        self.ping_connector = BasePingConnector()
-
     def create_query_connection(self, query):
         """
         Creates a connection to the specified datasource to send a query
@@ -32,7 +20,7 @@ class BaseConnector:
                     search_id (str): query ID
                     error (str): error message (when success=False)
         """
-        return self.query_connector.create_query_connection(query)
+        raise NotImplementedError()
 
     def create_status_connection(self, search_id):
         """
@@ -49,7 +37,7 @@ class BaseConnector:
                     progress (int): percentage of progress (0-100)
                     error (str): error message (when success=False)
         """
-        return self.status_connector.create_status_connection(search_id)
+        raise NotImplementedError()
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -67,7 +55,7 @@ class BaseConnector:
                     data (str): The query result data
                     error (str): error message (when success=False)
         """
-        return self.results_connector.create_results_connection(search_id, offset, length)
+        raise NotImplementedError()
 
     def delete_query_connection(self, search_id):
         """
@@ -82,7 +70,7 @@ class BaseConnector:
                     success (bool): True or False
                     error (str): error message (when success=False)
         """
-        return self.delete_connector.delete_query_connection(search_id)
+        raise NotImplementedError()
 
     def ping_connection(self):
         """
@@ -97,4 +85,4 @@ class BaseConnector:
                     success (bool): True or False
                     error (str): error message (when success=False)
         """
-        return self.ping_connector.ping_connection()
+        raise NotImplementedError()
