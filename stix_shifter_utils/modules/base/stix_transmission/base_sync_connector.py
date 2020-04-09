@@ -7,9 +7,6 @@ from .base_connector import BaseConnector
 
 
 class BaseSyncConnector(BaseConnector):
-    def __init__(self, connection, configuration):
-        super.__init__()
-
     def create_query_connection(self, query):
         return {"success": True, "search_id": query}
 

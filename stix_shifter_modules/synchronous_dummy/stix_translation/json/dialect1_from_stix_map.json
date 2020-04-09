@@ -1,0 +1,53 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["SourceIpV4-dialect1", "DestinationIpV4-dialect1"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["SourceIpV6-dialect1", "DestinationIpV6-dialect1"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["Url-dialect1"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["SourceMac-dialect1", "DestinationMac-dialect1"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["FileName-dialect1"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["SourcePort-dialect1"],
+      "dst_port": ["DestinationPort-dialect1"],
+      "start": ["StartTime-dialect1"],
+      "end": ["EndTime-dialect1"],
+      "protocols[*]": ["NetworkProtocol-dialect1"],
+      "src_ref.value": ["SourceIpV4-dialect1", "SourceIpV6-dialect1"],
+      "dst_ref.value": ["DestinationIpV4-dialect1", "DestinationIpV6-dialect1"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["UserName-dialect1"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["Payload-dialect1"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DomainName-dialect1"]
+    }
+  }
+}

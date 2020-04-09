@@ -1,7 +1,7 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
-class AsyncDummyDeleteConnector(BaseDeleteConnector):
+class SynchronousDummyDeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
