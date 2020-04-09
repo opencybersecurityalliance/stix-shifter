@@ -17,17 +17,17 @@ class EntryPoint(EntryPointBase):
             auth = configuration.get("auth")
             host = connection.get("host")
 
+            ping_connector = SecurityAdvisorPingConnector(host, auth)
             query_connector = SecurityAdvisorQueryConnector(host, auth)
             status_connector = SecurityAdvisorStatusConnector(host, auth)
             results_connector = SecurityAdvisorResultsConnector(host, auth)
             delete_connector = SecurityAdvisorDeleteConnector(host, auth)
-            ping_connector = SecurityAdvisorPingConnector(host, auth)
 
-            self.set_results_connector(results_connector)
-            self.set_status_connector(status_connector)
-            self.set_delete_connector(delete_connector)
-            self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
+            self.set_query_connector(query_connector)
+            self.set_status_connector(status_connector)
+            self.set_results_connector(results_connector)
+            self.set_delete_connector(delete_connector)
         else:
             basepath = path.dirname(__file__)
             filepath = path.abspath(path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
