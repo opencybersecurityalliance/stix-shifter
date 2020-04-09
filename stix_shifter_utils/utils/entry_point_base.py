@@ -191,8 +191,8 @@ class EntryPointBase:
     def ping_connection(self):
         return self.__ping_connector.ping_connection()
 
-    def set_async(self, async):
-        self.__async = async
+    def set_async(self, is_async):
+        self.__async = is_async
 
     def is_async(self):
         return self.__async
