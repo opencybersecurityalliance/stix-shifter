@@ -14,7 +14,7 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
         query = "placeholder query text"
         query_response = entry_point.create_query_connection(query)
 
-        assert query_response['query_id'] == "uuid_1234567890"
+        assert query_response['search_id'] == "uuid_1234567890"
 
     def test_dummy_async_status(self):
         connection = {
