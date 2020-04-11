@@ -1,65 +1,5 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
-  },
-  "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
-  },
-  "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
-  },
-  "SourceIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "SourceIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "EventCount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "StartTime": [
+  "create_time": [
     {
       "key": "first_observed",
       "transformer": "EpochToTimestamp",
@@ -71,45 +11,66 @@
       "cybox": false
     }
   ],
-  "Url": {
-    "key": "url.value"
+  "dstip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    }
+  ],
+  "srcip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    }
+  ],
+  "user": {
+    "key": "user-account.user_id"
   },
-  "FileName": {
+  "file": {
     "key": "file.name"
   },
-  "Payload": {
-    "key": "artifact.payload_bin"
+  "process": {
+    "key": "process.name",
+    "object": "process"
   },
-  "DestinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt",
-    "transformer": "ToInteger"
+  "event": {
+    "key": "x_org_alertflex.event",
+    "cybox": false
   },
-  "SourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt",
-    "transformer": "ToInteger"
+  "severity": {
+    "key": "x_org_alertflex.severity",
+    "cybox": false
   },
-  "NetworkProtocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "transformer": "ToLowercaseArray"
+  "category": {
+    "key": "x_org_alertflex.category",
+    "cybox": false
   },
-  "DomainName": {
-    "key": "domain-name.value"
+  "description": {
+    "key": "x_org_alertflex.description",
+    "cybox": false
   },
-  "Process": {
-    "Path": [
-      {
-        "object": "proc",
-        "key": "process.command_line"
-      }
-    ],
-    "Pid": [
-      {
-        "object": "proc",
-        "key": "process.id"
-      }
-    ]
+  "info": {
+    "key": "x_org_alertflex.info",
+    "cybox": false
+  },
+  "agent": {
+    "key": "x_org_alertflex.agent",
+    "cybox": false
+  },
+  "source": {
+    "key": "x_org_alertflex.source",
+    "cybox": false
+  },
+  "node": {
+    "key": "x_org_alertflex.node",
+    "cybox": false
   }
 }

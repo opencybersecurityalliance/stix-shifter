@@ -1,53 +1,36 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["SourceIpV4", "DestinationIpV4"]
-    }
-  },
-  "ipv6-addr": {
-    "fields": {
-      "value": ["SourceIpV6", "DestinationIpV6"]
-    }
-  },
-  "url": {
-    "fields": {
-      "value": ["Url"]
-    }
-  },
-  "mac-addr": {
-    "fields": {
-      "value": ["SourceMac", "DestinationMac"]
+      "src_ip": ["a.srcip"],
+      "dst_ip": ["a.dstip"],
+      "ip": ["a.dstip", "a.srcip"]
     }
   },
   "file": {
     "fields": {
-      "name": ["FileName"]
+      "name": ["a.file"]
     }
   },
-  "network-traffic": {
+  "user": {
     "fields": {
-      "src_port": ["SourcePort"],
-      "dst_port": ["DestinationPort"],
-      "start": ["StartTime"],
-      "end": ["EndTime"],
-      "protocols[*]": ["NetworkProtocol"],
-      "src_ref.value": ["SourceIpV4", "SourceIpV6"],
-      "dst_ref.value": ["DestinationIpV4", "DestinationIpV6"]
+      "name": ["a.user"]
     }
   },
-  "user-account": {
+  "host": {
     "fields": {
-      "user_id": ["UserName"]
+      "agent": ["a.agent", "a.srcagent", "a.dstagent"]
     }
   },
-  "artifact": {
+  "process" : {
     "fields": {
-      "payload_bin": ["Payload"]
+      "name": ["a.process"]
     }
   },
-  "domain-name": {
+  "alert" : {
     "fields": {
-      "value": ["DomainName"]
+      "id": ["a.event"],
+      "category": ["a.category"],
+      "severity": ["a.severity"]
     }
   }
 }

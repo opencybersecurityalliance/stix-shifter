@@ -44,28 +44,29 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    # Leave dummy implementation as is for synchronous data sources
-    # implemented in BaseSyncConnnector
-    # def create_query_connection(self, query):
-    #     return {"success": True, "search_id": query}
-
-    # Leave dummy implementation as is for synchronous data sources
-    # implemented in BaseSyncConnnector
-    # def create_status_connection(self, search_id):
-    #     return {"success": True, "status": "COMPLETED", "progress": 100}
-
     # Query is sent to data source and results are returned in one step
+    def create_query_connection(self, query):
+        # Grab the response, extract the response code, and convert it to readable json
+        response = self.api_client.run_search(query)
+        response_code = response.code
+        response_dict = json.loads(response.read())
+
+        # Construct a response object
+        return_obj = dict()
+
+        if 200 <= response_code < 202:
+            return_obj['success'] = True
+            return_obj['search_id'] = response_dict
+        else:
+            ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'])
+        return return_obj
+
     def create_results_connection(self, search_id, offset, length):
-        response_txt = None
         return_obj = {}
         try:
-            query = search_id
-            response = self.api_client.run_search(query, offset, length)
-            return self._handle_errors(response, return_obj)
+            return_obj['success'] = True
+            return_obj['data'] = search_id
+            return return_obj
 
         except Exception as e:
-            if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
-            else:
-                raise e
+            raise e
