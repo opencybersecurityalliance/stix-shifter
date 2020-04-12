@@ -36,8 +36,12 @@
     "credibility",
     "relevance",
     "geographiclocation as geographic",
+    "\"CRE Name\" as creName",
+    "\"CRE Description\" as creDescription",
     "creEventList",
+    "rulename(creEventList) as rulenames",
     "domainid",
-    "LOGSOURCETYPENAME(devicetype) as devicetype"
+    "LOGSOURCETYPENAME(devicetype) as devicetypename",
+    "devicetype"
   ]
 }

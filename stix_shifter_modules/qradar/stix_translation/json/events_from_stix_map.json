@@ -77,9 +77,19 @@
       "credibility": ["credibility"],
       "relevance": ["relevance"],
       "geographic": ["geographic"],
-      "matched_custom_rule": ["creEventList"],
-      "domain_id": ["domainid"],
-      "devicetype": ["devicetype"]
+      "domain_id": ["domainid"]
+    }
+  },
+  "x-risk-finding": {
+    "fields": {
+      "name": ["devicetypename"],
+      "rule_names[*]": ["rulenames"],
+      "cre_name": ["creName"],
+      "cre_description": ["creDescription"],
+      "device_type_name": ["devicetypename"],
+      "device_type": ["devicetype"],
+      "event_name": ["qidname"],
+      "severity": ["severity"]
     }
   }
 }

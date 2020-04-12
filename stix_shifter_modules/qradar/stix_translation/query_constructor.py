@@ -209,6 +209,10 @@ class AqlQueryStringPatternTranslator:
         # Resolve the comparison symbol to use in the query string (usually just ':')
         comparator = self._lookup_comparison_operator(self, expression.comparator)
 
+        # Special case where we want the risk finding
+        if stix_object == 'x-risk-finding' and stix_field == 'name' and expression.value == "*":
+            return "devicetype = 18"
+        
         if stix_field == 'protocols[*]':
             map_data = _fetch_network_protocol_mapping()
             try:
