@@ -1,7 +1,8 @@
 {
   "categoryid": {
     "key": "x_com_ibm_ariel.category_id",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "username": {
     "key": "user-account.user_id"
@@ -16,7 +17,8 @@
   },
   "high_level_category_id": {
     "key": "x_com_ibm_ariel.high_level_category_id",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "identityip": {
     "key": "x_com_ibm_ariel.identity_ip",
@@ -27,12 +29,13 @@
     "cybox": false
   },
   "qidname": {
-    "key": "x_com_ibm_ariel.qid_name",
+    "key": "x_com_ibm_ariel.event_name",
     "cybox": false
   },
   "relevance": {
     "key": "x_com_ibm_ariel.relevance",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "destinationip": [
     {
@@ -77,7 +80,8 @@
   },
   "logsourceid": {
     "key": "x_com_ibm_ariel.log_source_id",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "logsourcename": {
     "key": "x_com_ibm_ariel.log_source_name",
@@ -156,7 +160,8 @@
   ],
   "qid": {
     "key": "x_com_ibm_ariel.qid",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "url": {
     "key": "url.value"
@@ -273,11 +278,13 @@
   },
   "credibility": {
     "key": "x_com_ibm_ariel.credibility",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "severity": {
     "key": "x_com_ibm_ariel.severity",
-    "cybox": false
+    "cybox": false,
+    "transformer": "ToInteger"
   },
   "firstpackettime": {
     "key": "x_com_ibm_ariel.first_packet_time",
@@ -294,16 +301,34 @@
     "key": "x_com_ibm_ariel.application_id",
     "cybox": false
   },
-  "creEventList": {
-    "key": "x_com_ibm_ariel.matched_custom_rule",
+  "creeventlist": {
+    "key": "x_com_ibm_ariel.cre_event_list",
+    "cybox": false
+  },
+  "rulenames": {
+    "key": "x_com_ibm_ariel.rule_names",
+    "cybox": false
+  },
+  "crename": {
+    "key": "x_com_ibm_finding.name",
+    "cybox": false
+  },
+  "credescription": {
+    "key": "x_com_ibm_finding.description",
     "cybox": false
   },
   "domainid": {
     "key": "x_com_ibm_ariel.domain_id",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "devicetypename": {
+    "key": "x_com_ibm_ariel.device_type_name",
     "cybox": false
   },
   "devicetype": {
-    "key": "x_com_ibm_ariel.devicetype",
-    "cybox": false
+    "key": "x_com_ibm_ariel.device_type",
+    "cybox": false,
+    "transformer": "ToInteger"
   }
 }
