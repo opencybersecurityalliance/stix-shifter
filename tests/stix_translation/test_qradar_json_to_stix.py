@@ -148,12 +148,12 @@ class TestTransform(object):
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         observed_data = result_bundle['objects'][1]
 
-        assert('x_risk_finding' in observed_data)
-        finding = observed_data['x_risk_finding']
+        assert('x_com_ibm_finding' in observed_data)
+        finding = observed_data['x_com_ibm_finding']
         assert(finding['name'] == data['crename'])
         assert(finding['description'] == data['credescription'])
-        assert('x_com_ibm_ariel' in observed_data)
 
+        assert('x_com_ibm_ariel' in observed_data)
         custom_prop = observed_data['x_com_ibm_ariel']
         assert(custom_prop['severity'] == data['severity'])
         assert(custom_prop['event_name'] == data['qidname'])

@@ -338,7 +338,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_risk_finding(self):
-        stix_pattern="[x-risk-finding:name = '*']"
+        stix_pattern="[x-com-ibm-finding:name = '*']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE devicetype = 18 {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

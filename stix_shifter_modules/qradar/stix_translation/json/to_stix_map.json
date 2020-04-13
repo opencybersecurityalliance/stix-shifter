@@ -310,11 +310,11 @@
     "cybox": false
   },
   "crename": {
-    "key": "x_risk_finding.name",
+    "key": "x_com_ibm_finding.name",
     "cybox": false
   },
   "credescription": {
-    "key": "x_risk_finding.description",
+    "key": "x_com_ibm_finding.description",
     "cybox": false
   },
   "domainid": {

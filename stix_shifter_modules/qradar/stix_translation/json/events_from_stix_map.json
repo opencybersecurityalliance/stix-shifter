@@ -83,7 +83,7 @@
       "rule_names[*]": ["rulenames"]
     }
   },
-  "x-risk-finding": {
+  "x-com-ibm-finding": {
     "fields": {
       "name": ["crename"],
       "description": ["credescription"]
