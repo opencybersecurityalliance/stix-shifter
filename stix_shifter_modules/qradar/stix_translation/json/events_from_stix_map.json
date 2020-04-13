@@ -62,7 +62,7 @@
   "x-com-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
-      "qid_name": ["qidname"],
+      "event_name": ["qidname"],
       "magnitude": ["magnitude"],
       "log_source_id": ["logsourceid"],
       "log_source_name": ["logsourcename"],
@@ -77,19 +77,16 @@
       "credibility": ["credibility"],
       "relevance": ["relevance"],
       "geographic": ["geographic"],
-      "domain_id": ["domainid"]
+      "domain_id": ["domainid"],
+      "device_type_name": ["devicetypename"],
+      "device_type": ["devicetype"],
+      "rule_names[*]": ["rulenames"]
     }
   },
   "x-risk-finding": {
     "fields": {
-      "name": ["devicetypename"],
-      "rule_names[*]": ["rulenames"],
-      "cre_name": ["creName"],
-      "cre_description": ["creDescription"],
-      "device_type_name": ["devicetypename"],
-      "device_type": ["devicetype"],
-      "event_name": ["qidname"],
-      "severity": ["severity"]
+      "name": ["crename"],
+      "description": ["credescription"]
     }
   }
 }

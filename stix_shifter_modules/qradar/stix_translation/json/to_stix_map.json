@@ -28,16 +28,10 @@
     "key": "x_com_ibm_ariel.identity_host_name",
     "cybox": false
   },
-  "qidname": [
-    {
-      "key": "x_com_ibm_ariel.qid_name",
-      "cybox": false
-    },
-    {
-      "key": "x_risk_finding.event_name",
-      "cybox": false
-    }
-  ],
+  "qidname": {
+    "key": "x_com_ibm_ariel.event_name",
+    "cybox": false
+  },
   "relevance": {
     "key": "x_com_ibm_ariel.relevance",
     "cybox": false,
@@ -287,18 +281,11 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "severity": [
-    {
-      "key": "x_com_ibm_ariel.severity",
-      "cybox": false,
-      "transformer": "ToInteger"
-    },
-    {
-      "key": "x_risk_finding.severity",
-      "cybox": false,
-      "transformer": "ToInteger"
-    }
-  ],
+  "severity": {
+    "key": "x_com_ibm_ariel.severity",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
   "firstpackettime": {
     "key": "x_com_ibm_ariel.first_packet_time",
     "cybox": false
@@ -314,20 +301,20 @@
     "key": "x_com_ibm_ariel.application_id",
     "cybox": false
   },
-  "creEventList": {
-    "key": "x_risk_finding.cre_event_list",
+  "creeventlist": {
+    "key": "x_com_ibm_ariel.cre_event_list",
     "cybox": false
   },
   "rulenames": {
-    "key": "x_risk_finding.rule_names",
+    "key": "x_com_ibm_ariel.rule_names",
     "cybox": false
   },
-  "creName": {
-    "key": "x_risk_finding.cre_name",
+  "crename": {
+    "key": "x_risk_finding.name",
     "cybox": false
   },
-  "creDescription": {
-    "key": "x_risk_finding.cre_description",
+  "credescription": {
+    "key": "x_risk_finding.description",
     "cybox": false
   },
   "domainid": {
@@ -336,11 +323,11 @@
     "transformer": "ToInteger"
   },
   "devicetypename": {
-    "key": "x_risk_finding.device_type_name",
+    "key": "x_com_ibm_ariel.device_type_name",
     "cybox": false
   },
   "devicetype": {
-    "key": "x_risk_finding.device_type",
+    "key": "x_com_ibm_ariel.device_type",
     "cybox": false,
     "transformer": "ToInteger"
   }
