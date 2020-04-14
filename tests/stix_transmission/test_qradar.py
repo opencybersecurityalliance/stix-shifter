@@ -22,13 +22,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
         check_async = entry_point.is_async()
 
@@ -42,13 +42,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
         
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
@@ -65,13 +65,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
 
         query = '{"query":"SELECT sourceIP from events"}'        
@@ -90,13 +90,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
         
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
@@ -128,13 +128,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
         
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
@@ -175,13 +175,13 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "sec": "bla"
             }
         }
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "ceft": "cert"
+            "cert": "cert"
         }
 
         query = '{"query":"SELECT sourceIP from events"}'
@@ -252,7 +252,7 @@ class TestRequests(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "sec0"
+                "sec": "sec0"
             }
         }
         
@@ -276,7 +276,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         config = {
             "auth": {
-                "SEC": "sec0"
+                "sec": "sec0"
             }
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
@@ -292,7 +292,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         config = {
             "auth": {
-                "SEC": "sec0"
+                "sec": "sec0"
             }
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
@@ -308,7 +308,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         config = {
             "auth": {
-                "SEC": "sec0"
+                "sec": "sec0"
             }
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)

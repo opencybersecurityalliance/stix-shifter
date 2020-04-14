@@ -19,13 +19,15 @@ class MSATPMockResponse:
 class TestMSATPConnection(unittest.TestCase):
     config = {
         "auth": {
-            "SEC": "bla"
+            "tenant": "bla",
+            "clientId": "bla",
+            "clientSecret": "bla"
         }
     }
     connection = {
         "host": "hostbla",
         "port": "8080",
-        "ceft": "cert"
+        "cert": "cert"
     }
 
     def test_is_async(self, mock_api_client, mock_generate_token):

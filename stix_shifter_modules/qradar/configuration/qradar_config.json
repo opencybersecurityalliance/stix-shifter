@@ -40,6 +40,10 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "data_lake": {
+            "default": false,
+            "optional": true
         }
     },
     "configuration": {
