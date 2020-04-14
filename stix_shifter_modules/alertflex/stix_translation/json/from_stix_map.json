@@ -6,6 +6,12 @@
       "ip": ["a.dstip", "a.srcip"]
     }
   },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["a.srcport"],
+      "dst_port": ["a.dstport"]
+    }
+  },
   "file": {
     "fields": {
       "name": ["a.file"]
@@ -28,8 +34,10 @@
   },
   "alert" : {
     "fields": {
+      "node": ["a.node"],
+      "source": ["a.source"],
+      "type": ["a.type"],
       "id": ["a.event"],
-      "category": ["a.category"],
       "severity": ["a.severity"]
     }
   }

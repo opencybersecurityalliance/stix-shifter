@@ -11,26 +11,57 @@
       "cybox": false
     }
   ],
-  "dstip": [
-    {
+  "srcip":
+        [
+            {
+                "key": "ipv4-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "src_ip"
+            }
+        ],
+    "dstip": [
+      {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "srcport": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
     },
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    }
-  ],
-  "srcip": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
+    "dstport": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
     },
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["url.domain"]
     }
-  ],
+  },
   "user": {
     "key": "user-account.user_id"
   },
@@ -40,6 +71,14 @@
   "process": {
     "key": "process.name",
     "object": "process"
+  },
+  "sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file"
+  },
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "file"
   },
   "event": {
     "key": "x_org_alertflex.event",
@@ -67,6 +106,10 @@
   },
   "source": {
     "key": "x_org_alertflex.source",
+    "cybox": false
+  },
+  "type": {
+    "key": "x_org_alertflex.type",
     "cybox": false
   },
   "node": {

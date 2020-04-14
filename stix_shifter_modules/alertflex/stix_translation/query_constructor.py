@@ -222,12 +222,18 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    # Add space around START STOP qualifiers
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
+    query_split = query.split(" START")
+    if len(query_split) > 1:
+        query_time = query_split[1].replace("t'","")
+        time = query_time.split("STOP")
+        start_time = time[0].replace("T"," ").replace("Z'","")
+        stop_time = time[1].replace("T"," ").replace("Z'","")
+        time_interval = " AND a.timeCollr BETWEEN '" + start_time + "' AND '" + stop_time + "'"
+        query = query_split[0] + time_interval
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.
     # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["SELECT a FROM Alert a WHERE {}".format(query)]
+    query = ["SELECT a FROM Alert a WHERE {}".format(query)]
+    return query
