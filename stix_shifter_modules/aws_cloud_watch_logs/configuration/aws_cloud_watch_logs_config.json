@@ -22,6 +22,7 @@
         },
         "log_group_names": {
             "type": "text",
+            "optional": true,
             "previous": "connection.options.log_group_names"
         }
     },

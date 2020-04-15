@@ -1,8 +1,31 @@
 import json
 
+def modernize_objects(module, params):
+
+    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
+    
+    try:
+        with open(config_json_path) as mapping_file:
+            configs = json.load(mapping_file)
+    except Exception as ex:
+        raise(ex)
+    expected_connection = configs.get("connection")
+    # for key, value in expected_connection.items():
+    #     if key 
+
+    if isinstance(params, dict):
+        if "options" in params.keys():
+            options = params.get('options')
+            if isinstance(options, dict):
+                for options_key, options_value in options.items():
+                    params[options_key] = options_value
+                params.pop("options")
+
+    return params
+
 def param_validator(module, connection, configuration):
-    validate = False
-    updated_object = {}
+    valid = False
+
     config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
     
     try:
@@ -11,52 +34,51 @@ def param_validator(module, connection, configuration):
     except Exception as ex:
         raise(ex)
     
-    expected_connection = configs.get("connection")
-    expected_configuration = configs.get("configuration")
+    if isinstance(configs, dict):
+        for key, value in configs.items():
+            if key == 'connection':
+                expected_connection = configs.get("connection")
+                valid = validate(connection, expected_connection)
+            elif key == 'configuration':
+                expected_configuration = configs.get("configuration")["auth"]
+                valid = validate(configuration["auth"], expected_configuration)
 
-    validate, updated_object = connection_validator(connection, expected_connection)
-    validate = configuration_validator(configuration, expected_configuration)
-    
-    return validate, updated_object
+    return valid
 
-def connection_validator(connection, expected_connection):
-    validate = False
-    updated_connection = {}
-    if isinstance(connection, dict):
-        for key, value in connection.items():
-            # TODO: data type match
-            if key in expected_connection.keys():
-                validate = True
-            elif key == "options":
-                if isinstance(value, dict):
-                    for options_key, options_value in value.items():
-                        if options_key in expected_connection.keys():
-                            updated_connection[options_key] = options_value
-                            validate = True
-                        else:
-                            raise Exception("Parameter validation failed: Invalid parameter \"{}\" passed in the options property".format(options_key))
-                else:
-                    raise Exception("Parameter validation failed: Invalid parameter passed in 'options'")
+def validate(params, expected_params):
+    valid = False
+
+    if isinstance(params, dict):
+        for key, value in expected_params.items():
+            if key in params.keys():
+                valid = True
+            elif value.get('optional'):
+                continue
             else:
-                raise Exception("Parameter validation failed: Invalid parameter \"{}\" passed in the query".format(key))
-
-    return validate, updated_connection
-
-def configuration_validator(configuration, expected_configuration):
-    validate = False
-    
-    auth_object = configuration.get('auth')
-    expected_auth_object = expected_configuration.get('auth')
-    if auth_object:
-        if isinstance(auth_object, dict):
-            for key, value in auth_object.items():
-                # TODO: data type match
-                if key in expected_auth_object.keys():
-                    validate = True
-                else:
-                    validate = False
-                    raise Exception("Parameter validation failed: Invalid parameter \"{}\" passed in the query".format(key))
+                raise Exception("Parameter validation failed: parameter \"{}\" not found".format(key))
     else:
-        raise Exception("Invalid configuration object: auth object not found")
+        raise Exception("Parameter validation failed: Invalid parameter object \"{}\" passed in the query".format(params))
     
-    return validate
+    return valid
+
+# def validate(params, expected_params):
+#     valid = False
+
+#     if isinstance(params, dict):
+#         for key, value in params.items():
+#             print('KEY' + str(key))
+#             print('VALUE' + str(value))
+#             # TODO: data type match
+#             if isinstance(value, dict):
+#                 print('VALUE2' + str(value))
+#                 valid = validate(value, expected_params)
+#             elif key in expected_params.keys():
+#                 valid = True
+#             elif expected_params.get(key)['optional']:
+#                 continue
+#             else:
+#                 raise Exception("Parameter validation failed: Invalid parameter \"{}\" passed in the query".format(key))
+#     else:
+#         raise Exception("Parameter validation failed: Invalid parameter object \"{}\" passed in the query".format(params))
+    
+#     return valid
