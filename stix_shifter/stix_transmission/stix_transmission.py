@@ -23,7 +23,8 @@ class StixTransmission:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
 
             connection = modernize_objects(module, connection)
-            configuration = modernize_objects(module, configuration)
+            validation_obj = {'connection': connection, 'configuration': configuration}
+            configuration = modernize_objects(module, validation_obj)
 
             param_validated = param_validator(module, connection, configuration)
 
