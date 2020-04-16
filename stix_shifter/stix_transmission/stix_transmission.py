@@ -22,15 +22,18 @@ class StixTransmission:
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
 
-            connection = modernize_objects(module, connection)
             validation_obj = {'connection': connection, 'configuration': configuration}
-            configuration = modernize_objects(module, validation_obj)
+            modernize_objects(module, validation_obj)
 
-            param_validated = param_validator(module, connection, configuration)
-
-            if param_validated:
-                self.entry_point = connector_module.EntryPoint(connection, configuration)            
-            # self.entry_point = connector_module.EntryPoint(connection, configuration)
+            print(str(connection))
+            print(str(configuration))
+            
+            param_validator(module, validation_obj)
+            
+            print(str(connection))
+            print(str(configuration))
+          
+            self.entry_point = connector_module.EntryPoint(connection, configuration)
         except Exception as e:
             self.init_error = e
 
