@@ -1,5 +1,5 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter_modules.guardium.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_modules.guardium.stix_transmission.utils.RestApiClient import ResponseWrapper
 from requests.models import Response
 import urllib.parse
 import sys
