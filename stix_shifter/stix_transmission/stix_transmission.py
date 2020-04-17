@@ -28,12 +28,12 @@ class StixTransmission:
             print(str(connection))
             print(str(configuration))
             
-            param_validator(module, validation_obj)
+            validation_obj = param_validator(module, validation_obj)
             
-            print(str(connection))
-            print(str(configuration))
+            print(str(validation_obj))
+            # print(str(configuration))
           
-            self.entry_point = connector_module.EntryPoint(connection, configuration)
+            self.entry_point = connector_module.EntryPoint(validation_obj['connection'], validation_obj['configuration'])
         except Exception as e:
             self.init_error = e
 
