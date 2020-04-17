@@ -29,14 +29,16 @@
     "configuration": {
         "auth": {
             "aws_access_key_id": {
-                "type": "password"
+                "type": "password",
+                "optional": false
             },
             "aws_iam_role": {
                 "type": "password",
                 "optional": true
             },
             "aws_secret_access_key": {
-                "type": "password"
+                "type": "password",
+                "optional": false
             }
         }
     }
