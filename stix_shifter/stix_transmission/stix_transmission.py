@@ -24,14 +24,8 @@ class StixTransmission:
 
             validation_obj = {'connection': connection, 'configuration': configuration}
             modernize_objects(module, validation_obj)
-
-            print(str(connection))
-            print(str(configuration))
             
             validation_obj = param_validator(module, validation_obj)
-            
-            print(str(validation_obj))
-            # print(str(configuration))
           
             self.entry_point = connector_module.EntryPoint(validation_obj['connection'], validation_obj['configuration'])
         except Exception as e:
