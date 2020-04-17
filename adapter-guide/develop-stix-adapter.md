@@ -36,14 +36,25 @@ By implementing a new connector, _Developer A_ allows _Product A_ to fit into th
 To develop a STIX-shifter connector for a data source:
 
 1. Fork the `opencybersecurityalliance/stix-shifter` repository from https://github.com/opencybersecurityalliance/stix-shifter to work on your own copy of the library.
+1. [Create a module folder](#create-a-module-folder).
 1. [Create a Translation module](#create-a-translation-module).
 1. [Create a Transmission module](#create-a-transmission-module).
 1. [Create Configuration JSONs](develop-configuration-json.md)
 1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
 
-### Create a Translation module
+### Create a module folder
 
-1. [Create a translation module folder](#step-1-create-a-translation-module-folder)
+Connector modules are stored under the `stix_shifter_modules` directory. To help you get started with creating a new connector, two module templates are available. If your data source executes queries synchronously (there is no API call to check the status of the query), make a copy of the `synchronous_dummy` folder in the `stix_shifter_modules` directory. If your data source executes queries asynchronously, make a copy of the `async_dummy` folder. The instructions that follow use the async template as the example.
+
+Rename the copied folder to match the data source your new connector is being developed for. For example, `abc_security_monitor`.
+
+The module name is used as an argument when either translation or transmission is called. This argument is used throughout the project so that STIX-shifter knows which modules to use.
+
+Each module contains three directories which will be explained throughout this guide: `stix_translation`, `stix_transmission`, and `configuration`.
+
+### STIX Translation
+
+1. [Exploring the stix_translation director](#step-1-explore-the-stix_translation-directory)
 1. [Rename the dummy_translator.py file](#step-2-rename-the-dummy-translator-file)
 1. [Edit the from_stix_map.json file](#step-3-edit-the-from_stix_map-json-file)
 1. [Edit the query_constructor.py file](#step-4-edit-the-query-constructor-file)
@@ -53,20 +64,13 @@ To develop a STIX-shifter connector for a data source:
 1. [Update the MANIFEST.in file to include the path to the json mapping folder](#step-8-update-the-manifest-file-to-include-the-path-to-the-json-mapping-folder)
 1. [Verify that the translation module was created successfully](#step-9-verify-that-the-translation-module-was-created-successfully)
 
-#### Step 1. Create a translation module folder
+#### Step 1. Exploring the stix_translation directory
 
-1. Go to `stix_shifter/stix_translation/src/modules/`.
-2. Copy the `dummy` translation module folder. It is a template to help you get started quickly. It contains the necessary files that your translation module needs. You need to customize it based on your data source.
 
-![Translation module dummy folder](./images/translation-module-dummy-folder.png)
 
-3. Rename your `dummy` translation module folder to match the name of your data source. For example, `abc`.
 
-   The data source name is used as an argument when either translation or transmission is called. This argument is used throughout the project so that STIX-shifter knows which modules to use.
 
-   **Note:** The translation and transmission modules must have the same name.
-
-4. Verify that your translation module folder contains the following folders and files.
+Verify that your `stix_translation` directory contains the following folders and files.
 
 | Folder/file             | Why is it important? Where is it used?                                                                                                                                                                                                                                                                     |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -91,7 +95,7 @@ To develop a STIX-shifter connector for a data source:
 
   ![dummy-translator.py file](./images/dummy-translator.py.png)
 
-[Back to top](#create-a-translation-module)
+[Back to top](#STIX-translation)
 
 #### Step 3. Edit the from_stix_map JSON file
 
