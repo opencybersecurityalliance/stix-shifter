@@ -15,7 +15,7 @@ class RestApiClient:
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
                  mutual_auth=False, sni=None):
 
-        uniqueFileHandle = uuid.uuid1()
+        uniqueFileHandle = uuid.uuid4()
         self.client_cert_name = "{0}-client_cert.pem".format(uniqueFileHandle)
         self.server_cert_name = "{0}-server_cert.pem".format(uniqueFileHandle)
         server_ip = host
