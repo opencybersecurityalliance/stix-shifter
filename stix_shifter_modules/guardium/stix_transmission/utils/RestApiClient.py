@@ -5,10 +5,9 @@ import collections
 import urllib.parse
 import os
 import errno
+import uuid
 
 # This is a simple HTTP client that can be used to access the REST API
-CLIENT_CERT_NAME = "client_cert.pem"
-SERVER_CERT_NAME = "server_cert.pem"
 
 class RestApiClient:
     #cert_verify can be True -- do proper signed cert check, False -- skip all cert checks, or a Cert -- use the proper cleint side cert
@@ -16,6 +15,9 @@ class RestApiClient:
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
                  mutual_auth=False, sni=None):
         print("Guardium Version of RestApiClient ----")
+        uniqueFileHandle = uuid.uuid1()
+        self.client_cert_name = "{0}-client_cert.pem".format(uniqueFileHandle)
+        self.server_cert_name = "{0}-server_cert.pem".format(uniqueFileHandle)
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)
@@ -26,7 +28,7 @@ class RestApiClient:
         if mutual_auth:
             self.server_cert_content = None
             self.server_cert_file_content_exists = False
-            self.client_cert_content = CLIENT_CERT_NAME
+            self.client_cert_content = self.client_cert_name
             self.client_cert_file_content_exists = True
             self.client_cert_file_content = cert
         #verify is true or false
@@ -43,7 +45,7 @@ class RestApiClient:
                 self.client_cert_file_content_exists = False
         #server cert provided
         elif isinstance(cert_verify, str):
-            self.server_cert_content = SERVER_CERT_NAME
+            self.server_cert_content = self.server_cert_name
             self.server_cert_file_content_exists = True
             self.server_cert_file_content = cert_verify
             self.client_cert_content = None
@@ -60,7 +62,7 @@ class RestApiClient:
 
             # convert client cert to file
             if self.client_cert_file_content_exists is True:
-                with open(CLIENT_CERT_NAME, 'w') as f:
+                with open(self.client_cert_name, 'w') as f:
                     try:
                         f.write(self.client_cert_file_content)
                     except IOError:
@@ -68,7 +70,7 @@ class RestApiClient:
 
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
-                with open(SERVER_CERT_NAME, 'w') as f:
+                with open(self.server_cert_name, 'w') as f:
                     try:
                         f.write(self.server_cert_file_content)
                     except IOError:
@@ -138,13 +140,13 @@ class RestApiClient:
         finally:
             if self.server_cert_file_content_exists is True:
                 try:
-                    os.remove(SERVER_CERT_NAME)
+                    os.remove(self.server_cert_name)
                 except OSError as e:
                     if e.errno != errno.ENOENT:
                         raise
             if self.client_cert_file_content_exists is True:
                 try:
-                    os.remove(CLIENT_CERT_NAME)
+                    os.remove(self.client_cert_name)
                 except OSError as e:
                     if e.errno != errno.ENOENT:
                         raise
