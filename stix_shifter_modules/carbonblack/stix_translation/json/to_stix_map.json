@@ -79,7 +79,7 @@
     "object": "process_file"
   },
   "process_sha256": {
-    "key": "file.hahses.SHA-256",
+    "key": "file.hashes.SHA-256",
     "object": "process_file"
   },
   "cmdline": {
