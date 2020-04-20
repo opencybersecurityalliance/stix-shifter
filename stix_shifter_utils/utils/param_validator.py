@@ -20,29 +20,26 @@ def modernize_step(configs, params, params_root):
         for key, value in configs.items():
             if isinstance(value, dict):
                 if 'previous' in value:
-                    # insert old value
-                    old_path = value['previous'] #connection.options.log_group_names
-                    old_value = get_dot_path(params_root, old_path)#  <= replace to handle dots = connection.options.log_group_names, it can fail on any of 3 steps
+                    old_path = value['previous']
+                    old_value = get_dot_path(params_root, old_path)
                     if old_value:
                         params[key] = old_value
                         del_dot_path(params_root, old_path)
-                    # del params_root[old_path]#  <= replace to handle dots = connection.options.log_group_names, it can fail on any of 3 steps
-                    # delete old value
-                # check that params[key] exists
                 if key in params:
                     modernize_step(value, params[key], params_root)
 
 def get_dot_path(params, path):
-    # print(str(params), path)
     if '.' in path:
         pp = path.split('.')
         if pp[0] in params:
             return get_dot_path(params[pp[0]], '.'.join(pp[1:]))
     else:
-        return params[path]
+        if path in params:
+            return params[path]
+        else:
+            raise ValueError('Parameter not found: ' + path)
 
 def del_dot_path(params, path):
-    # print(str(params), path)
     if '.' in path:
         pp = path.split('.')
         if pp[0] in params:
@@ -66,15 +63,12 @@ def param_validator(module, input_configs):
     errors = []
     copy_valid_configs(input_configs, expected_configs, validated_params, errors)
 
-    if input_configs:
-        if isinstance(input_configs, dict):
-            unex_param = get_inner_keys(input_configs)
-    
     error_obj = {}
     if errors:
         error_obj['missing_params'] = errors
-    if unex_param:
-        error_obj['unexpected_params'] = unex_param
+    if input_configs:
+        if isinstance(input_configs, dict):
+            error_obj['unexpected_params'] = get_inner_keys(input_configs)
 
     if error_obj:
         raise ValueError(error_obj)
@@ -110,8 +104,11 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     if not input_configs[key]:
                         del input_configs[key]
             else:
-                if 'optional' in expected_configs[key] and not expected_configs[key]['optional']:
+                if not 'optional' in expected_configs[key] and not 'default' in expected_configs[key]:
                     errors.append(key_path)
+                
+                if 'default' in expected_configs[key]:
+                    validated_params[key] = value['default']
 
 
 def is_leaf(config):
