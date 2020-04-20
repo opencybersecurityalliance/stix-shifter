@@ -16,8 +16,8 @@ class RestApiClient:
                  mutual_auth=False, sni=None):
         print("Guardium Version of RestApiClient ----")
         uniqueFileHandle = uuid.uuid4()
-        self.client_cert_name = "{0}-client_cert.pem".format(uniqueFileHandle)
-        self.server_cert_name = "{0}-server_cert.pem".format(uniqueFileHandle)
+        self.client_cert_name = "/tmp/{0}-client_cert.pem".format(uniqueFileHandle)
+        self.server_cert_name = "/tmp/{0}-server_cert.pem".format(uniqueFileHandle)
         server_ip = host
         if port is not None:
             server_ip += ":" + str(port)
