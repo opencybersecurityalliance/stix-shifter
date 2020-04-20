@@ -66,30 +66,24 @@ def param_validator(module, input_configs):
     errors = []
     copy_valid_configs(input_configs, expected_configs, validated_params, errors)
 
-    if errors:
-        raise ValueError('unexpected params: %s' % errors)
-    
     if input_configs:
-        raise ValueError('unexpected params: %s' % input_configs)
+        if isinstance(input_configs, dict):
+            unex_param = get_inner_keys(input_configs)
+    
+    error_obj = {}
+    if errors:
+        error_obj['missing_params'] = errors
+    if unex_param:
+        error_obj['unexpected_params'] = unex_param
+
+    if error_obj:
+        raise ValueError(error_obj)
 
     return validated_params
 
-#rename to copy config expected values
+
 def copy_valid_configs(input_configs, expected_configs, validated_params, errors=[], current_path=''):
-
-    # 0. rework param_validator to a 1 call validation for configuration and connection (recurtion, options may contain only objects from the root level but everything is optional)
-    # 1. all the keys(required) from json are present in udi config_json_path (implemented)
-    # 2. no extra params are provided, except options
-    #     |
-    #      --->   on step 1
-    #             during validation MOVE from udi_conf_dict to udi_conf_validated_dict
-    #             make sure udi_conf_dict has no extra params 
-
-    # udi_conf_dict = {} 
-    # udi_conf_validated_dict = {}
-
     if isinstance(expected_configs, dict):
-        print('current_path -->' + (current_path), is_leaf(expected_configs))
         for key, value in expected_configs.items():
             key_path = current_path
             if key_path:
@@ -97,7 +91,6 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
             key_path = key_path + key
             if key in input_configs:
                 if is_leaf(expected_configs[key]):
-                    #TODO apply validation rules: min, max, regex, etc
                     if 'min' in expected_configs[key]:
                         if not check_min(input_configs[key], expected_configs[key]['min']):
                             raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]), str(expected_configs[key]['min'])))
@@ -109,22 +102,19 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                             raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
 
                     validated_params[key] = input_configs[key]
-                    print('moved here', key_path)
                     del input_configs[key]
                 else:
                     if key not in validated_params:
                         validated_params[key] = dict()
-                        print('created: ', key_path)
                     copy_valid_configs(input_configs[key], expected_configs[key], validated_params[key], errors, key_path)
                     if not input_configs[key]:
                         del input_configs[key]
             else:
                 if 'optional' in expected_configs[key] and not expected_configs[key]['optional']:
-                    errors.append('input configuration is missing: ' + key_path)
+                    errors.append(key_path)
 
 
 def is_leaf(config):
-    # print(str(type(config)))
     if isinstance(config, dict):
         for key,value in config.items():
             if isinstance(value, dict):
@@ -152,39 +142,11 @@ def check_regex(input_value, regex_value):
     else:
         False
 
-if __name__ == "__main__":
-
-    # udi_conf = {'connection': {'options': {'region': 'Labrador', 'region2': 'Nova Scotia'}}}
-    # rules = {'connection': {'region': {'type': 'text', 'previous': 'connection.options.region'}, 'region2': {'type': 'text', 'previous': 'connection.options.region2'}}}
-    # value = get_dot_path(udi_conf, 'connection.options.region')
-    # print(value)
-    # modernize_step(rules, udi_conf, udi_conf)
-    # print('=================')
-    # print(str(udi_conf))
-
-    # input_params = {'connection': {'region': 'us-east'} }
-    module = 'aws_cloud_watch_logs'
-    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
-    
-    try:
-        with open(config_json_path) as mapping_file:
-            expected_configs = json.load(mapping_file)
-    except Exception as ex:
-        raise(ex)
-    # invalid original config
-    # input_configs = {'configuration': {'aws_access_key_id': 'AKIA6IBDIZS3EIAR5RM5', 'aws_iam_role': 'arn:aws:iam::979326..._api_role', 'aws_secret_access_key': 'p0qAfOlxJ/zd0yqhj/D...ssoF+A0Cd'}, 'connection': {'k1': 'v1', 'region': 'us-east-1'}}
-    # valid config with configuration.auth object
-    # input_configs = {'configuration': {'auth': {'aws_access_key_id': 'AKIA6IBDIZS3EIAR5RM5', 'aws_iam_role': 'arn:aws:iam::979326..._api_role', 'aws_secret_access_key': 'p0qAfOlxJ/zd0yqhj/D...ssoF+A0Cd'}}, 'connection': {'k1': 'v1', 'region': 'us-east-1'}}
-    # validated_params = {}
-    # print('input_configs    :    '+ str(input_configs))
-    # errors = []
-    # validate(input_configs, expected_configs, validated_params, errors)
-    # print('errors: ', str(errors))
-    
-    # print('validated_params : ' + str(validated_params))
-    # print('input_configs out:'+ str(input_configs))
-
-    # ptr = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
-    # # inp = "stable-tor01-vm-sa-uds.qradar.ibmcloud-dev.com"
-    # inp = "127001&&"
-    # check_regex(inp, ptr)
+def get_inner_keys(obj):
+    keys = []
+    for key, value in obj.items():
+        if isinstance(value, dict):
+            keys.extend(get_inner_keys(value))
+        else:
+            keys.append(key)
+    return keys
