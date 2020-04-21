@@ -1,0 +1,44 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "src_ip": ["a.srcip"],
+      "dst_ip": ["a.dstip"],
+      "ip": ["a.dstip", "a.srcip"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["a.srcport"],
+      "dst_port": ["a.dstport"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["a.file"]
+    }
+  },
+  "user": {
+    "fields": {
+      "name": ["a.user"]
+    }
+  },
+  "host": {
+    "fields": {
+      "agent": ["a.agent", "a.srcagent", "a.dstagent"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "name": ["a.process"]
+    }
+  },
+  "alert" : {
+    "fields": {
+      "node": ["a.node"],
+      "source": ["a.source"],
+      "type": ["a.type"],
+      "id": ["a.event"],
+      "severity": ["a.severity"]
+    }
+  }
+}
