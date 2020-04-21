@@ -40,13 +40,26 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
-
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        print(str(self.connection))
+        print(str(self.config))
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -68,13 +81,25 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
         query = "(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime(" \
                 "2019-09-24T16:32:32.993821Z) and EventTime < datetime(2019-09-24T16:37:32.993821Z) | order by " \
                 "EventTime desc | where LocalPort < 443)"
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -85,6 +110,19 @@ class TestMSATPConnection(unittest.TestCase):
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_file_response(self, mock_results_response, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
+
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = """{
@@ -106,7 +144,7 @@ class TestMSATPConnection(unittest.TestCase):
                 'or InitiatingProcessParentFileName !~ "updater.exe")'
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         results_response = transmission.results(query, offset, length)
 
         assert results_response is not None
@@ -117,6 +155,19 @@ class TestMSATPConnection(unittest.TestCase):
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_registry_response(self, mock_results_response, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
+
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = """{"Results": [{"TableName": "RegistryEvents","EventTime": "2019-10-10T10:43:07.2363291Z","MachineId":
@@ -133,7 +184,7 @@ class TestMSATPConnection(unittest.TestCase):
                 'Install")'
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         results_response = transmission.results(query, offset, length)
 
         assert results_response is not None
@@ -144,6 +195,19 @@ class TestMSATPConnection(unittest.TestCase):
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
+
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = """ {    } """
@@ -154,7 +218,7 @@ class TestMSATPConnection(unittest.TestCase):
                 "EventTime desc | where LocalPort < 443)"
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         results_response = transmission.results(query, offset, length)
 
         assert results_response['code'] == 'unknown'
@@ -163,6 +227,18 @@ class TestMSATPConnection(unittest.TestCase):
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
         results_mock = """{
@@ -178,14 +254,13 @@ class TestMSATPConnection(unittest.TestCase):
                             }"""
 
         mock_results_response.return_value = MSATPMockResponse(200, results_mock)
-        entry_point = EntryPoint(self.connection, self.config)
 
         query = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime ' \
                 'desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" or ' \
                 'InitiatingProcessParentFileName !~ "updater.exe")'
 
-        transmission = stix_transmission.StixTransmission('msatp', self.connection, self.config)
+        transmission = stix_transmission.StixTransmission('msatp', connection, config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -200,8 +275,8 @@ class TestMSATPConnection(unittest.TestCase):
                                               '"updater.exe")'
         offset = 0
         length = 1
-        results_response = entry_point.create_results_connection(query, offset,
-                                                                                                    length)
+
+        results_response = transmission.results(query_response['search_id'], offset, length)
 
         assert results_response is not None
         assert 'data' in results_response
@@ -223,6 +298,19 @@ class TestMSATPConnection(unittest.TestCase):
         assert status_response['success'] is True
 
     def test_status_query(self, mock_api_client, mock_generate_token):
+        config = {
+            "auth": {
+                "tenant": "bla",
+                "clientId": "bla",
+                "clientSecret": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": "8080",
+            "cert": "cert"
+        }
+
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
@@ -231,7 +319,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
-        entry_point = EntryPoint(self.connection, self.config)
+        entry_point = EntryPoint(connection, config)
         status_response = entry_point.create_status_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response

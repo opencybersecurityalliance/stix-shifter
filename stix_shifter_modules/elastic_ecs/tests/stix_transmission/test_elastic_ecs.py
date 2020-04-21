@@ -22,17 +22,6 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         entry_point = EntryPoint()
 
-        config = {
-            "auth": {
-                "SEC": "bla"
-            }
-        }
-        connection = {
-            "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
-        }
-
         check_async = entry_point.is_async()
 
         assert check_async is False
@@ -46,7 +35,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -69,7 +59,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         mock_ping_response.side_effect = Exception('exception')
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -90,7 +81,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -150,7 +142,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -179,7 +172,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -241,7 +235,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         config = {
             "auth": {
-                "SEC": "bla"
+                "username": "bla",
+                "password": "bla"
             }
         }
         connection = {
@@ -261,8 +256,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         offset = 0
         length = 1
-        entry_point = EntryPoint(connection, config)
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = transmission.results(query_response['search_id'], offset, length)
 
         assert results_response is not None
         assert 'data' in results_response

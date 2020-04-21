@@ -66,6 +66,16 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
     
     @requests_mock.mock()
     def test_ping_endpoint_good_return(self, mock_ping_response):
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
 
         mock_ping_response.post('https://iam.cloud.ibm.com/identity/token', text= '{ "access_token" : "ertyuiojhgfcvbnbv" }')
         mock_ping_response.get('http://test_sec_adv.com/abc/providers', text= '{ "status_code" : 200 }')
@@ -117,6 +127,17 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
         assert ping_response['error'] is not None
 
     def test_query_response_found(self):
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
+
         query = "[url:value = 'test@gmail.com']"
         transmission = stix_transmission.StixTransmission('security_advisor', CONNECTION, CONFIG)
         query_response = transmission.query(query)
@@ -128,6 +149,17 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
         assert query_response['search_id'] == "[url:value = 'test@gmail.com']"
 
     def test_status_response_completed( self):
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
+
         search_id = "[url:value = 'test@gmail.com']"
 
         transmission = stix_transmission.StixTransmission('security_advisor', CONNECTION, CONFIG)
@@ -143,6 +175,16 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
 
     @staticmethod
     def test_delete_query():
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
         search_id = "[url:value = 'test@gmail.com']"
 
         entry_point = EntryPoint(CONNECTION, CONFIG)
@@ -153,6 +195,16 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
 
     @requests_mock.mock()
     def test_results_response(self, mock_results_response):
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
         
         mock_results_response.post('https://iam.cloud.ibm.com/identity/token', text= '{ "access_token" : "ertyuiojhgfcvbnbv" }')
         mock_results_response.post('http://test_sec_adv.com/abc/graph', text= '{ "data" : {"occurrences" : [ {} ] } }')
@@ -191,7 +243,17 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
 
     @requests_mock.mock()
     def test_results_response_start_time(self, mock_results_response):
-        
+        CONFIG = {
+            "auth": {
+                "accountID": "abc",
+                "apiKey": "xyz"
+            }
+        }
+
+        CONNECTION = {
+            "host": "http://test_sec_adv.com",
+        }
+
         mock_results_response.post('https://iam.cloud.ibm.com/identity/token', text= '{ "access_token" : "ertyuiojhgfcvbnbv" }')
         mock_results_response.post('http://test_sec_adv.com/abc/graph', text= '{ "data" : {"occurrences" : [ {} ] } }')
 
