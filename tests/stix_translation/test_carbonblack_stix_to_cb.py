@@ -60,16 +60,21 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_custom_mapping(self):
-        custom_mappings = {"binary":{}, "process":
-                {
-                    "file" : {
-                        "fields": {
-                            "custom_name": ["observed_filename"],
+        custom_mappings = {
+            "default": {
+                "from_stix" : {
+                    "binary":{}, 
+                    "process": {
+                        "file" : {
+                            "fields": {
+                                "custom_name": ["observed_filename"],
                             }
                         }
                     }
                 }
-        custom_options = {"mappings" : custom_mappings, "timeRange": None}
+            }
+        }
+        custom_options = {"mapping" : custom_mappings, "timeRange": None}
 
         stix_pattern = "[file:custom_name = 'some_file.exe']"
         query = translation.translate(module, 'query', '{}', stix_pattern, custom_options)

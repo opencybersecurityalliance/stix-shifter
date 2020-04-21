@@ -3,14 +3,15 @@ from stix_shifter_utils.modules.car.stix_translation.car_translator import CARTo
 import json
 import base64
 
-results_translator = CARToStix()
+options = {}
+results_translator = CARToStix(options)
 data_source = {
     "type": "identity",
     "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096",
     "name": "CAR",
     "identity_class": "events"
 }
-options = {}
+
 
 
 class TestTransform(object):

@@ -7,13 +7,10 @@ import json
 
 class ResultTranslator(BaseResultTranslator):
 
-    def __init__(self, dialect=None):
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(
-            path.join(basepath, "json", "to_stix_map.json"))
-        self.default_mapping_file_path = filepath
+    def __init__(self, options, dialect):
+        super().__init__(options, dialect, path.dirname(__file__))
 
-    def translate_results(self, data_source, data, options, mapping=None):
+    def translate_results(self, data_source, data):
         """
         Translates JSON data into STIX results based on a mapping file
         :param data: JSON formatted data to translate into STIX format
@@ -25,18 +22,11 @@ class ResultTranslator(BaseResultTranslator):
         :rtype: str
         """
 
-        self.mapping = options['mapping'] if 'mapping' in options else {}
         json_data = json.loads(data)
         data_source = json.loads(data_source)
 
-        if(not self.mapping):
-            map_file = open(self.mapping_filepath).read()
-            map_data = json.loads(map_file)
-        else:
-            map_data = self.mapping
-
-        results = json_to_stix_translator.convert_to_stix(data_source, map_data, json_data,
-                                                          transformers.get_all_transformers(), options)
+        results = json_to_stix_translator.convert_to_stix(data_source, self.map_data, json_data,
+                                                          transformers.get_all_transformers(), self.options)
 
         if len(results['objects']) - 1 == len(json_data):
             for i in range(1, len(results['objects'])):

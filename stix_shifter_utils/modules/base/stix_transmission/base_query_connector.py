@@ -17,4 +17,4 @@ class BaseQueryConnector(object, metaclass=ABCMeta):
                     search_id (str): query ID
                     error (str): error message (when success=False)
         """
-        pass
+        raise NotImplementedError()

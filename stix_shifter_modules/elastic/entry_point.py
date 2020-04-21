@@ -6,6 +6,7 @@ class EntryPoint(EntryPointBase):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
-        self.add_dialect('default', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default=True)
-        self.add_dialect('cim', query_translator=StixToElastic(), data_mapper=CimDataMapper(options), default_include=False)
-        self.add_dialect('car', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default_include=False)
+        dialect = 'car'
+        self.add_dialect(dialect, query_translator=StixToElastic(dialect), data_mapper=CarDataMapper(options, dialect), default=True)
+        dialect = 'cim'
+        self.add_dialect(dialect, query_translator=StixToElastic(dialect), data_mapper=CimDataMapper(options, dialect), default_include=False)

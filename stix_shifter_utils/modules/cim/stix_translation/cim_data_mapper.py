@@ -5,7 +5,7 @@ from os import path
 
 class CimDataMapper(BaseDataMapper):
 
-    FIELDS = {
+    FIELDS_DEFAULT = {
         "default": [
             "src_ip",
             "src_port",
@@ -23,14 +23,10 @@ class CimDataMapper(BaseDataMapper):
     }
 
     def __init__(self, options={}, dialect=None):
-        super().__init__(dialect)
-        self.options = options
-        if 'select_fields' in options:
-            self.FIELDS = options['select_fields']
-        mapping_json = options.get('mapping')
-        basepath = path.dirname(__file__)
-        self.map_data = mapping_json or self.fetch_mapping(basepath)
-
+        super().__init__(options, dialect, path.dirname(__file__))
+        if not self.select_fields:
+            self.select_fields = self.FIELDS_DEFAULT
+        
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:
     # * Registry keys need to pull the path apart from the key name, I believe. Need to investigate with Splunk

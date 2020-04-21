@@ -23,4 +23,4 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         :rtype: str
         """
         # if translating STIX pattern to a datasource query...
-        pass
+        raise NotImplementedError()

@@ -19,4 +19,4 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
                     data (str): The query result data
                     error (str): error message (when success=False)
         """
-        pass
+        raise NotImplementedError()

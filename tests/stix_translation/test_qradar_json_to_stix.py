@@ -166,13 +166,19 @@ class TestTransform(object):
         }]
         data_string = json.dumps(data)
 
-        options = {"mapping": {
-            "username": {"key": "user-account.user_id"},
-            "identityip": {"key": "x_com_ibm_ariel.identity_ip", "cybox": False},
-            "qidname": {"key": "x_com_ibm_ariel.qid_name", "cybox": False},
-            "url": {"key": "url.value"},
-            "custompayload": {"key": "artifact.payload_bin"}
-        }}
+        options = {
+            "mapping": {
+                "flows": {
+                    "to_stix": {
+                        "username": {"key": "user-account.user_id"},
+                        "identityip": {"key": "x_com_ibm_ariel.identity_ip", "cybox": False},
+                        "qidname": {"key": "x_com_ibm_ariel.qid_name", "cybox": False},
+                        "url": {"key": "url.value"},
+                        "custompayload": {"key": "artifact.payload_bin"}
+                    }
+                }
+            }
+        }
 
         translation = stix_translation.StixTranslation()
         result = translation.translate('qradar', 'results', data_source_string, data_string, options)

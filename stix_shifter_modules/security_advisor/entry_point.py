@@ -6,6 +6,7 @@ from .stix_transmission.security_advisor_query_connector import SecurityAdvisorQ
 from .stix_transmission.security_advisor_status_connector import SecurityAdvisorStatusConnector
 from .stix_transmission.security_advisor_results_connector import SecurityAdvisorResultsConnector
 from .stix_transmission.security_advisor_delete_connector import SecurityAdvisorDeleteConnector
+from stix_shifter_utils.modules.base.stix_translation.empty_data_mapper import EmptyDataMapper
 from os import path
 
 class EntryPoint(EntryPointBase):
@@ -29,7 +30,7 @@ class EntryPoint(EntryPointBase):
             self.set_results_connector(results_connector)
             self.set_delete_connector(delete_connector)
         else:
-            basepath = path.dirname(__file__)
-            filepath = path.abspath(path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
-            results_translator = JSONToStixObservablesDecorator(filepath)
-            self.add_dialect('default', query_translator=SecurityAdvisorQueryTranslator(), results_translator=results_translator, data_mapper=None, default=True)
+            dialect = 'default'
+            query_translator = SecurityAdvisorQueryTranslator(dialect)
+            results_translator = JSONToStixObservablesDecorator(options, dialect)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, data_mapper=EmptyDataMapper(options, dialect, None), default=True)

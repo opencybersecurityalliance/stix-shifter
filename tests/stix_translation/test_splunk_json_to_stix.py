@@ -351,39 +351,42 @@ class TestTransform(object):
 
         options = {
             "mapping": {
-                "tag_to_model": {
-                    "network": [
-                        "network-traffic",
-                        "dst_ip",
-                        "src_ip"
-                    ]
-                },
-                "event_count": {
-                    "key": "number_observed",
-                    "cybox": False,
-                    "transformer": "ToInteger"
-                },
-                "src_ip": [
-                    {
-                        "key": "ipv4-addr.value",
-                        "object": "src_ip"
-                    },
-                    {
-                        "key": "ipv6-addr.value",
-                        "object": "src_ip"
-                    },
-                    {
-                        "key": "network-traffic.src_ref",
-                        "object": "network-traffic",
-                        "references": "src_ip"
+                "cim": {
+                    "to_stix": {
+                        "tag_to_model": {
+                            "network": [
+                                "network-traffic",
+                                "dst_ip",
+                                "src_ip"
+                            ]
+                        },
+                        "event_count": {
+                            "key": "number_observed",
+                            "cybox": False,
+                            "transformer": "ToInteger"
+                        },
+                        "src_ip": [
+                            {
+                                "key": "ipv4-addr.value",
+                                "object": "src_ip"
+                            },
+                            {
+                                "key": "ipv6-addr.value",
+                                "object": "src_ip"
+                            },
+                            {
+                                "key": "network-traffic.src_ref",
+                                "object": "network-traffic",
+                                "references": "src_ip"
+                            }
+                        ]
                     }
-                ]
+                }
             }
         }
 
         translation = stix_translation.StixTranslation()
         result = translation.translate('splunk', 'results', data_source, data, options)
-
         result_bundle = json.loads(result)
 
         result_bundle_objects = result_bundle['objects']

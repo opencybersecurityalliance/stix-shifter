@@ -37,16 +37,17 @@ class EntryPoint(EntryPointBase):
             # self.setup_translation_simple('default')      #   <-------------
             # all the lines below can be replaced with one line configuration |
             
-            query_translator = QueryTranslator()
             basepath = os.path.dirname(__file__)
-            filepath = os.path.abspath(
-                os.path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
-            results_translator = JSONToStix(filepath)
+            filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
             dialect = 'dialect1'
-            data_mapper = DataMapper(options, dialect=dialect)
+            data_mapper = DataMapper(options, dialect, basepath)
+            query_translator = QueryTranslator(dialect, filepath)
+            results_translator = JSONToStix(options, dialect, filepath)
             self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
-            data_mapper = DataMapper(options, dialect=dialect)
+            data_mapper = DataMapper(options, dialect, basepath)
+            query_translator = QueryTranslator(dialect, filepath)
+            results_translator = JSONToStix(options, dialect, filepath)
             self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)

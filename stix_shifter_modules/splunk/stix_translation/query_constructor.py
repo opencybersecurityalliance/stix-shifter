@@ -229,7 +229,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
     # adding default fields for query
 
     if is_cim:
-        map_data = data_model_mapping.FIELDS["default"]
+        map_data = data_model_mapping.select_fields["default"]
         fields = ""
         for field in map_data:
             if field != map_data[-1]:
