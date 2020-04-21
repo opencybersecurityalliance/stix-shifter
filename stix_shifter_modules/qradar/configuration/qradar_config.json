@@ -42,6 +42,10 @@
             "type": "password",
             "optional": true
         },
+        "proxy": {
+            "type": "text",
+            "optional": true
+        },
         "data_lake": {
             "default": false
         }
