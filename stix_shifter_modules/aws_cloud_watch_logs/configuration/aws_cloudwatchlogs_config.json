@@ -17,11 +17,6 @@
             "max": 60,
             "type": "number"
         },
-        "concurrent": {
-            "default": 4,
-            "max": 60,
-            "type": "number"
-        },
         "region": {
             "type": "text",
             "previous": "connection.options.region"
