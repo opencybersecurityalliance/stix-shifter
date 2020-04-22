@@ -1,5 +1,5 @@
 import requests_mock
-from stix_shifter_modules.security_advisor.stix_transmission import security_advisor_auth
+from stix_shifter_modules.security_advisor.stix_transmission import auth
 from stix_shifter_modules.security_advisor.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest

@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.elastic_ecs_connector import Connector
+from .stix_transmission.connector import Connector
 from .stix_translation.results_translator import ResultTranslator
 
 class EntryPoint(EntryPointBase):

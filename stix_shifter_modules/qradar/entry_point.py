@@ -1,10 +1,10 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.arielapiclient import APIClient
-from .stix_transmission.qradar_ping_connector import QRadarPingConnector
-from .stix_transmission.qradar_query_connector import QRadarQueryConnector
-from .stix_transmission.qradar_status_connector import QRadarStatusConnector
-from .stix_transmission.qradar_results_connector import QRadarResultsConnector
-from .stix_transmission.qradar_delete_connector import QRadarDeleteConnector
+from .stix_transmission.api_client import APIClient
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 import os
@@ -16,11 +16,11 @@ class EntryPoint(EntryPointBase):
         
         if connection:
             api_client = APIClient(connection, configuration)
-            ping_connector = QRadarPingConnector(api_client)
-            query_connector = QRadarQueryConnector(api_client)
-            status_connector = QRadarStatusConnector(api_client)
-            results_connector = QRadarResultsConnector(api_client)
-            delete_connector = QRadarDeleteConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
+            status_connector = StatusConnector(api_client)
+            results_connector = ResultsConnector(api_client)
+            delete_connector = DeleteConnector(api_client)
             
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

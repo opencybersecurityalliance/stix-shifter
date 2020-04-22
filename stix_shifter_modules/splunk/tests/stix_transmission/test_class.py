@@ -15,7 +15,7 @@ class SplunkMockResponse:
         return self.object
 
 
-@patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.__init__')
+@patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.__init__')
 class TestSplunkConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
@@ -36,7 +36,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         assert check_async
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -59,7 +59,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -83,7 +83,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.create_search')
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.create_search')
     def test_query_response(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '{"sid":"1536672851.4012"}'
@@ -109,7 +109,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "1536672851.4012"
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.create_search')
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.create_search')
     def test_query_response_exception(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '{"sid":"1536672851.4012"}'
@@ -135,7 +135,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert query_response['success'] is False
         assert query_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -168,7 +168,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response_error(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -201,7 +201,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response_running(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -234,7 +234,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response_cancelled(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -267,7 +267,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response_exception(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
 
@@ -297,7 +297,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert status_response['success'] is False
         assert ErrorCode.TRANSMISSION_UNKNOWN.value==status_response['code']
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
         
@@ -330,7 +330,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search_results',
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search_results',
            autospec=True)
     def test_results_response_empty_list(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -363,7 +363,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search_results',
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search_results',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -395,9 +395,9 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert results_response['success'] is False
         assert results_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.create_search', autospec=True)
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search', autospec=True)
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.create_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         
@@ -454,7 +454,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.delete_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.delete_search', autospec=True)
     def test_delete_search(self, mock_results_delete, mock_api_client):
         mock_api_client.return_value = None
         
@@ -479,7 +479,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert results_response is not None
         assert results_response['success'] is True
 
-    @patch('stix_shifter_modules.splunk.stix_transmission.spl_api_client.APIClient.delete_search', autospec=True)
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.delete_search', autospec=True)
     def test_delete_search_exception(self, mock_results_delete, mock_api_client):
         mock_api_client.return_value = None
 

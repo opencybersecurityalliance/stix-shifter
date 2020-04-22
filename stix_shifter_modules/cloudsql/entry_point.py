@@ -1,10 +1,10 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from ibmcloudsql import SQLQuery
-from .stix_transmission.cloudsql_ping_connector import CloudSQLPingConnector
-from .stix_transmission.cloudsql_query_connector import CloudSQLQueryConnector
-from .stix_transmission.cloudsql_status_connector import CloudSQLStatusConnector
-from .stix_transmission.cloudsql_results_connector import CloudSQLResultsConnector
-from .stix_transmission.cloudsql_delete_connector import CloudSQLDeleteConnector
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 
 import json
 

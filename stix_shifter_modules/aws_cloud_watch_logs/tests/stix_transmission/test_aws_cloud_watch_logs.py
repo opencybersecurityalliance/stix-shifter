@@ -241,7 +241,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_ping(mock_ping):
         mock_ping.return_value = AWSMockJsonResponse()
@@ -254,7 +254,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_ping_exception(mock_ping_value):
         mock_ping_value.return_value = MockExceptionResponse()
@@ -267,7 +267,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_query_exception(mock_create_query):
         mock_create_query.return_value = Exception("Invalid Query")
@@ -282,7 +282,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_query_connection(mock_create_query):
         mock_create_query.return_value = AWSMockJsonResponse()
@@ -303,7 +303,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_iam_create_query_connection(mock_create_query):
         mock_create_query.return_value = AWSMockJsonResponse()
@@ -324,7 +324,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_results_exception(mock_create_results):
         mock_create_results.return_value = MockExceptionResponse()
@@ -341,7 +341,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_results_indexerror(mock_create_results):
         mock_create_results.return_value = MockExceptionResponse()
@@ -358,7 +358,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_results_connection(mock_results):
         mock_results.return_value = AWSMockJsonResponse
@@ -376,7 +376,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_delete_query_connection(mock_delete_query):
         mock_delete_query.return_value = AWSMockJsonResponse()
@@ -390,7 +390,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_delete_query_exception(mock_create_status):
         mock_create_status.return_value = MockExceptionResponse()
@@ -404,7 +404,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_connection(mock_create_status):
         mock_create_status.return_value = AWSMockJsonResponse()
@@ -420,7 +420,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_running(mock_create_status):
         mock_create_status.return_value = MockStatusResponse()
@@ -436,7 +436,7 @@ class TestAWSConnection(unittest.TestCase):
 
     @staticmethod
     @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.aws_cloud_watch_logs_boto3_client.boto3'
+        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_exception(mock_create_status):
         mock_create_status.return_value = MockExceptionResponse()

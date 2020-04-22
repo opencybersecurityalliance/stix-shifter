@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.azure_sentinel_connector import Connector
+from .stix_transmission.connector import Connector
 
 class EntryPoint(EntryPointBase):
 

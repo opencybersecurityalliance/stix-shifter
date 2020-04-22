@@ -1,13 +1,12 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
 from stix_shifter_utils.modules.cim.stix_translation.cim_data_mapper import CimDataMapper
 from stix_shifter_utils.modules.car.stix_translation.car_data_mapper import CarDataMapper
-from .stix_transmission.spl_api_client import APIClient
-from .stix_transmission.splunk_ping_connector import SplunkPingConnector
-from .stix_transmission.splunk_query_connector import SplunkQueryConnector
-from .stix_transmission.splunk_status_connector import SplunkStatusConnector
-from .stix_transmission.splunk_results_connector import SplunkResultsConnector
-from .stix_transmission.splunk_delete_connector import SplunkDeleteConnector
-from .stix_transmission.splunk_auth import SplunkAuth
+from .stix_transmission.api_client import APIClient
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 
 class EntryPoint(EntryPointBase):
 
@@ -15,11 +14,11 @@ class EntryPoint(EntryPointBase):
         super().__init__(options)
         if connection:
             api_client = APIClient(connection, configuration)
-            ping_connector = SplunkPingConnector(api_client)
-            query_connector = SplunkQueryConnector(api_client)
-            status_connector = SplunkStatusConnector(api_client)
-            results_connector = SplunkResultsConnector(api_client)
-            delete_connector = SplunkDeleteConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
+            status_connector = StatusConnector(api_client)
+            results_connector = ResultsConnector(api_client)
+            delete_connector = DeleteConnector(api_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

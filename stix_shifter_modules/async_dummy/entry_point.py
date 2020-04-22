@@ -1,10 +1,10 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.async_dummy_api_client import APIClient
-from .stix_transmission.async_dummy_ping_connector import AsyncDummyPingConnector
-from .stix_transmission.async_dummy_query_connector import AsyncDummyQueryConnector
-from .stix_transmission.async_dummy_status_connector import AsyncDummyStatusConnector
-from .stix_transmission.async_dummy_results_connector import AsyncDummyResultsConnector
-from .stix_transmission.async_dummy_delete_connector import AsyncDummyDeleteConnector
+from .stix_transmission.api_client import APIClient
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 from .stix_translation.data_mapper import DataMapper
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
@@ -20,11 +20,11 @@ class EntryPoint(EntryPointBase):
         super().__init__(options)
         if connection:
             api_client = APIClient(connection, configuration)
-            ping_connector = AsyncDummyPingConnector(api_client)
-            query_connector = AsyncDummyQueryConnector(api_client)
-            status_connector = AsyncDummyStatusConnector(api_client)
-            results_connector = AsyncDummyResultsConnector(api_client)
-            delete_connector = AsyncDummyDeleteConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
+            status_connector = StatusConnector(api_client)
+            results_connector = ResultsConnector(api_client)
+            delete_connector = DeleteConnector(api_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

@@ -107,7 +107,7 @@ class TestCloudSQLConnection(unittest.TestCase, object):
         assert 'status' in status_response
         assert status_response['status'] == Status.COMPLETED.value
 
-    @patch('stix_shifter_modules.cloudsql.stix_transmission.cloudsql_results_connector.CloudSQLResultsConnector.records', autospec=True)
+    @patch('stix_shifter_modules.cloudsql.stix_transmission.results_connector.ResultsConnector.records', autospec=True)
     def test_results_response(self, mock_results_response,
                               mock_api_client_logon, mock_api_client):
         mock_api_client_logon.return_value = None

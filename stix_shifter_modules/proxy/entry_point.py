@@ -1,6 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.proxy_connector import Connector
-from .stix_translation.proxy_translator import Translator
+from .stix_transmission.connector import Connector
+from .stix_translation.translator import Translator
 
 class EntryPoint(EntryPointBase):
 

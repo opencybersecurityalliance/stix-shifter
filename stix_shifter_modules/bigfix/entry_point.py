@@ -1,10 +1,10 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.bigfix_api_client import APIClient
-from .stix_transmission.bigfix_ping_connector import BigFixPingConnector
-from .stix_transmission.bigfix_query_connector import BigFixQueryConnector
-from .stix_transmission.bigfix_status_connector import BigFixStatusConnector
-from .stix_transmission.bigfix_results_connector import BigFixResultsConnector
-from .stix_transmission.bigfix_delete_connector import BigFixDeleteConnector
+from .stix_transmission.api_client import APIClient
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 
 
 class EntryPoint(EntryPointBase):
@@ -14,11 +14,11 @@ class EntryPoint(EntryPointBase):
         
         if connection:
             api_client = APIClient(connection, configuration)
-            ping_connector = BigFixPingConnector(api_client)
-            query_connector = BigFixQueryConnector(api_client)
-            status_connector = BigFixStatusConnector(api_client)
-            results_connector = BigFixResultsConnector(api_client)
-            delete_connector = BigFixDeleteConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
+            status_connector = StatusConnector(api_client)
+            results_connector = ResultsConnector(api_client)
+            delete_connector = DeleteConnector(api_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.aws_security_hub_connector import Connector
+from .stix_transmission.connector import Connector
 from .stix_translation.query_translator import QueryTranslator
 
 class EntryPoint(EntryPointBase):
