@@ -20,7 +20,7 @@
             "type": "number"
         },
         "timeout": {
-            "default": 1,
+            "default": 5,
             "max": 60,
             "type": "number"
         },
