@@ -3,7 +3,7 @@ import unittest
 import random
 import json
 
-options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
+options_file = open('stix_shifter_modules/qradar/tests/stix_translation/qradar_stix_to_aql/options.json').read()
 selections_file = open('stix_shifter_modules/qradar/stix_translation/json/aql_flows_fields.json').read()
 protocols_file = open('stix_shifter_modules/qradar/stix_translation/json/network_protocol_map.json').read()
 OPTIONS = json.loads(options_file)
