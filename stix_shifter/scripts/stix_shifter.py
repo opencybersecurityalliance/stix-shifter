@@ -13,6 +13,7 @@ TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 HOST = 'host'
+MAPPING = 'mapping'
 
 def main():
     """
@@ -24,8 +25,7 @@ def main():
     The module and translate_type will determine what module and method gets executed.
     Option arguments comes in as:
       "{
-          "select_fields": <string array of fields in the datasource select statement> (In the case of QRadar),
-          "mapping": <mapping hash for either stix pattern to datasource or mapping hash for data results to stix observation objects>,
+          "mapping": <mapping hash for stix pattern to datasource and data results to stix observation objects>,
           "resultSizeLimit": <integer limit number for max results in the data source query>,
           "timeRange": <integer time range for LAST x MINUTES used in the data source query when START STOP qualifiers are absent>
        }"
@@ -65,9 +65,17 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
-    # Only supported by Elastic and Splunk
-    translate_parser.add_argument('-m', '--data-mapper',
-                                  help='optional module to use for Splunk or Elastic STIX-to-query mapping')
+
+    # mapping parser parser
+    mapping_parser = parent_subparsers.add_parser(
+        MAPPING, help='Get module mapping')
+    # positional arguments
+    mapping_parser.add_argument(
+        'module',
+         help='The translation module to use')
+    # optional arguments
+    mapping_parser.add_argument('-x', '--stix-validator', action='store_true',
+                                  help='Run the STIX 2 validator against the translated results')
 
     # transmit parser
     transmit_parser = parent_subparsers.add_parser(
@@ -271,15 +279,17 @@ def main():
         options = json.loads(args.options) if bool(args.options) else {}
         if args.stix_validator:
             options['stix_validator'] = args.stix_validator
-        if args.data_mapper:
-            options['data_mapper'] = args.data_mapper
         recursion_limit = args.recursion_limit if args.recursion_limit else 1000
         translation = stix_translation.StixTranslation()
         result = translation.translate(
             args.module, args.translate_type, args.data_source, args.data, options=options, recursion_limit=recursion_limit)
+    elif args.command == MAPPING:
+        translation = stix_translation.StixTranslation()        
+        result = translation.translate(args.module, stix_translation.MAPPING, None, None, options=options)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
+    #TODO make all cli output json stings
     print(result)
     exit(0)
 

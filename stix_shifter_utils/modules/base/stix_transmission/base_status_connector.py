@@ -27,4 +27,4 @@ class BaseStatusConnector(object, metaclass=ABCMeta):
                     progress (int): percentage of progress (0-100)
                     error (str): error message (when success=False)
         """
-        pass
+        raise NotImplementedError()

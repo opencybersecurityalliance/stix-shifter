@@ -1,4 +1,3 @@
-from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from flatten_json import flatten
@@ -7,23 +6,16 @@ import json
 import re
 
 
-class JSONToStixObservablesDecorator(BaseResultTranslator):
-    def __init__(self, filepath):
-        super().__init__(filepath)
-        self.result_translator = JSONToStix(filepath)
-        self.filepath = filepath
-        self.default_mapping_file_path = filepath
+class JSONToStixObservablesDecorator(JSONToStix):
+    def __init__(self, options, dialect):
+        super().__init__(options, dialect, path.dirname(__file__))
         
-    def translate_results(self, data_source, data, options, mapping=None):
+    def translate_results(self, data_source, data):
         json_data = json.loads(data)
-        map_file = open(self.filepath).read()
-        mapping_overriden = json.loads(map_file)
         # Decorate the findings with std observables at this step
-        self.decorateFindingsWithObjects(json_data,mapping_overriden)
+        self.decorateFindingsWithObjects(json_data, self.map_data)
         data = json.dumps(json_data)
-        # Override the mapping with dynamically identified definitions
-        options["mapping"] = mapping_overriden
-        return self.result_translator.translate_results( data_source, data, options, mapping_overriden)
+        return super().translate_results(data_source, data)
     
     # Decorate the finding with dynamically identified cyber observables
     def decorateFindingsWithObjects(self,data, mapping_overriden): 

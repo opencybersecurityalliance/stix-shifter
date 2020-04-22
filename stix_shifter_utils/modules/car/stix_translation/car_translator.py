@@ -1,19 +1,12 @@
-
-from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
-from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from os import path
 import json
 
 
 class CARToStix(JSONToStix):
 
-  def __init__(self, dialect=None, callback=None):
-    basepath = path.dirname(__file__)
-    filepath = path.abspath(
-        path.join(basepath, "json", "to_stix_map.json"))
-    self.default_mapping_file_path = filepath
-    self.callback=None
+  def __init__(self, options, dialect=None, callback=None):
+    super().__init__(options, dialect, path.dirname(__file__), callback)
 
   def translate_results(self, data_source, data, options, mapping=None):
       """
@@ -33,5 +26,5 @@ class CARToStix(JSONToStix):
         for field in fields:
           obj[f"{typ}.{field}"] = fields[field]
 
-      return JSONToStix.translate_results(self, data_source, json.dumps(json_data), options, mapping)
+      return super().translate_results(data_source, json.dumps(json_data))
 

@@ -4,20 +4,19 @@ from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import Ba
 
 
 class DataMapper(BaseDataMapper):
-    def __init__(self, options, dialect=None):
-        super().__init__(dialect)
-        self.map_data = options.get('mappings', False) or self.fetch_mapping()
+    
+    def __init__(self, options, dialect, basepath):
+        super().__init__(options, dialect, basepath)
         assert len(self.map_data) == 2
         assert "process" in self.map_data and "binary" in self.map_data
 
-    def fetch_mapping(self):
+    def fetch_mapping(self, not_used_path):
         process_mapping = self._fetch_mapping_file("process_from_stix_map.json")
         binary_mapping = self._fetch_mapping_file("binary_from_stix_map.json")
         return {"binary": binary_mapping, "process": process_mapping}
 
     def _fetch_mapping_file(self, filename):
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(path.join(basepath, "json", filename))
+        filepath = path.abspath(path.join(self.basepath, "json", filename))
         map_file = open(filepath).read()
         map_data = json.loads(map_file)
         return map_data

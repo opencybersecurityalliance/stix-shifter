@@ -7,7 +7,7 @@ from .stix_transmission.async_dummy_results_connector import AsyncDummyResultsCo
 from .stix_transmission.async_dummy_delete_connector import AsyncDummyDeleteConnector
 from .stix_translation.data_mapper import DataMapper
 from .stix_translation.query_translator import QueryTranslator
-from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
+from .stix_translation.results_translator import ResultsTranslator
 import os
 
 class EntryPoint(EntryPointBase):
@@ -36,16 +36,19 @@ class EntryPoint(EntryPointBase):
             # self.setup_translation_simple('default')      #   <-------------
             # all the lines below can be replaced with one line configuration |
             
-            query_translator = QueryTranslator()
+            
             basepath = os.path.dirname(__file__)
             filepath = os.path.abspath(
-                os.path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
-            results_translator = JSONToStix(filepath)
+                os.path.join(basepath, "stix_translation"))
 
             dialect = 'dialect1'
-            data_mapper = DataMapper(options, dialect=dialect)
+            data_mapper = DataMapper(option, dialect, filepath)
+            query_translator = QueryTranslator(dialect, filepath)
+            results_translator = ResultsTranslator(options, dialect)
             self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
-            data_mapper = DataMapper(options, dialect=dialect)
-            self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)
+            data_mapper = DataMapper(option, dialect, filepath)
+            query_translator = QueryTranslator(dialect, filepath)
+            results_translator = ResultsTranslator(options, dialect)
+            self.add_dialect(dialect,  data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)

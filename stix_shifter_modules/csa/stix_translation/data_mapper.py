@@ -22,17 +22,6 @@ def _fetch_mapping(dialect=''):
 
 
 class DataMapper(BaseDataMapper):
-    def __init__(self, options, dialect='at'):
-        super().__init__(dialect)
-        # dialect = options.get('dialect', None)
-        # if dialect is None:
-            # self.dialect = 'at'
-        # else:
-            # m = re.match(r'^[a-z0-9]+$', dialect)
-            # if m:
-                # self.dialect = dialect
-            # else:
-                # self.dialect = 'at'
 
     def map_object(self, stix_object_name):
         self.map_data = _fetch_mapping(self.dialect)
@@ -51,9 +40,8 @@ class DataMapper(BaseDataMapper):
 
     def map_selections(self):
         try:
-            basepath = path.dirname(__file__)
             filepath = path.abspath(
-                path.join(basepath, "json", self.dialect + "_event_fields.json"))
+                path.join(self.basepath, "json", self.dialect + "_event_fields.json"))
             sql_fields_file = open(filepath).read()
             sql_fields_json = json.loads(sql_fields_file)
 

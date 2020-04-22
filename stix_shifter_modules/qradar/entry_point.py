@@ -6,7 +6,7 @@ from .stix_transmission.qradar_status_connector import QRadarStatusConnector
 from .stix_transmission.qradar_results_connector import QRadarResultsConnector
 from .stix_transmission.qradar_delete_connector import QRadarDeleteConnector
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
-from .stix_translation.qradar_utils import hash_type_lookup
+
 import os
 
 class EntryPoint(EntryPointBase):
@@ -28,10 +28,4 @@ class EntryPoint(EntryPointBase):
             self.set_results_connector(results_connector)
             self.set_delete_connector(delete_connector)
         else:
-            basepath = os.path.dirname(__file__)
-            filepath = os.path.abspath(
-                os.path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
-            # self.mapping_filepath = filepath
-            # Pass in callback function to handle hashes with unknown type
-            results_translator = JSONToStix(filepath, hash_type_lookup)
-            self.setup_translation_simple('events', results_translator=results_translator)
+            self.setup_translation_simple('flows')

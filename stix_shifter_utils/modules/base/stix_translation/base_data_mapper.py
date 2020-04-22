@@ -7,8 +7,29 @@ import glob
 
 class BaseDataMapper(object, metaclass=ABCMeta):
 
-    def __init__(self, dialect):
+    def __init__(self, options, dialect, basepath):
+        self.options = options
         self.dialect = dialect
+        self.basepath = basepath #used in tests
+        self.map_data = {}
+        self.select_fields = {}
+
+        mapping = options['mapping'] if 'mapping' in options else None
+        if mapping and dialect in mapping:
+            mapping = mapping[dialect]
+            if 'from_stix' in mapping:
+                self.map_data = mapping['from_stix']
+            if 'select_fields' in mapping:
+                self.select_fields = mapping['select_fields']
+
+        if not self.map_data:
+            self.map_data = self.fetch_mapping(basepath)
+
+    def get_mapping(self):
+        return self.map_data
+
+    def get_select_fields(self):
+        return self.select_fields
 
     def fetch_mapping(self, basepath):
         """
@@ -18,8 +39,8 @@ class BaseDataMapper(object, metaclass=ABCMeta):
         """
         try:
             if hasattr(self, 'dialect') and not(self.dialect == None) and not(self.dialect == 'default'):
-                filepath = self._fetch_from_stix_mapping_file(basepath)
-            else:
+                filepath = self.__fetch_from_stix_mapping_file(basepath)
+            else:                
                 filepath = path.abspath(path.join(basepath, "json", 'from_stix_map.json'))
             map_file = open(filepath).read()
             map_data = json.loads(map_file)
@@ -44,6 +65,6 @@ class BaseDataMapper(object, metaclass=ABCMeta):
         else:
             return []
 
-    def _fetch_from_stix_mapping_file(self, basepath):
+    def __fetch_from_stix_mapping_file(self, basepath):
         mapping_paths = glob.glob(path.abspath(path.join(basepath, "json", "{}_from_stix*.json".format(self.dialect))))
         return mapping_paths[0]

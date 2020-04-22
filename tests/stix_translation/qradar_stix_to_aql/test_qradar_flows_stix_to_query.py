@@ -4,7 +4,7 @@ import random
 import json
 
 options_file = open('tests/stix_translation/qradar_stix_to_aql/options.json').read()
-selections_file = open('stix_shifter_modules/qradar/stix_translation/json/aql_flow_fields.json').read()
+selections_file = open('stix_shifter_modules/qradar/stix_translation/json/aql_flows_fields.json').read()
 protocols_file = open('stix_shifter_modules/qradar/stix_translation/json/network_protocol_map.json').read()
 OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
@@ -15,7 +15,6 @@ MAPPING_ERROR = "Unable to map the following STIX objects and properties to data
 
 
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
-custom_selections = "SELECT {}".format(", ".join(OPTIONS['select_fields']))
 from_statement = " FROM flows "
 
 
