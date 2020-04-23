@@ -21,7 +21,6 @@
         },
         "timeout": {
             "default": 5,
-            "max": 60,
             "type": "number"
         },
         "options": {
