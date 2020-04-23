@@ -1,4 +1,4 @@
-# Generated from STIXPattern.g4 by ANTLR 4.7.1
+# Generated from stix_shifter_utils/stix_translation/src/patterns/grammar/STIXPattern.g4 by ANTLR 4.8
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .STIXPatternParser import STIXPatternParser
@@ -323,3 +323,5 @@ class STIXPatternListener(ParseTreeListener):
         pass
 
 
+
+del STIXPatternParser
