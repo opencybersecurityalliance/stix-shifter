@@ -20,13 +20,7 @@
             "type": "number"
         },
         "timeout": {
-            "default": 1,
-            "max": 60,
-            "type": "number"
-        },
-        "concurrent": {
-            "default": 4,
-            "max": 60,
+            "default": 5,
             "type": "number"
         },
         "options": {

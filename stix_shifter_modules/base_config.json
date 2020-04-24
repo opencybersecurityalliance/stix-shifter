@@ -9,6 +9,10 @@
         },
         "description": {
             "type": "text"
+        },
+        "concurrent": {
+            "default": 4,
+            "type": "number"
         }
     },
     "configuration":{
