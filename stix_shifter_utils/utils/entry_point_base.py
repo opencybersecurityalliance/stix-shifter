@@ -103,7 +103,7 @@ class EntryPointBase:
         module_name = self.__connector_module
         module = importlib.import_module(
                     "stix_shifter_modules." + module_name + ".stix_translation.query_translator")
-        query_translator = module.QueryTranslator(dialect)
+        query_translator = module.QueryTranslator(self.__options, dialect)
         return query_translator
 
     def create_default_results_translator(self, dialect):
@@ -144,13 +144,13 @@ class EntryPointBase:
         return self.__dialect_to_results_translator[self.__dialect_default]
 
     @translation
-    def transform_query(self, dialect, data, antlr_parsing, options, mapping=None):
+    def transform_query(self, dialect, data, antlr_parsing):
         data_model_mapper = self.get_data_mapper(dialect)
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data, antlr_parsing, data_model_mapper, options, mapping)
+        return translator.transform_query(data, antlr_parsing, data_model_mapper)
 
     @translation
-    def translate_results(self, data_source, data, options):
+    def translate_results(self, data_source, data):
         translator = self.get_results_translator()
         return translator.translate_results(data_source, data)
 

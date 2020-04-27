@@ -9,12 +9,11 @@ logger = logging.getLogger(__name__)
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def __init__(self, dialect=None, rows=1024):
-        super().__init__(dialect)
-        self.dialect = dialect
+    def __init__(self, options, dialect=None, rows=1024):
+        super().__init__(options, dialect)
         self.rows = rows
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX query into sql query format. Based on a mapping file
         :param data: STIX query string to transform into sql query format

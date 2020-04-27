@@ -1,6 +1,6 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.connector import Connector
-from .stix_translation.translator import Translator
+from .stix_translation.query_translator import QueryTranslator
+from .stix_translation.results_translator import ResultsTranslator
 
 class EntryPoint(EntryPointBase):
 
@@ -8,10 +8,7 @@ class EntryPoint(EntryPointBase):
         super().__init__(options)
 
         if connection:
-            connector = Connector(connection, configuration)
-            is_async = connector.is_async()
-            self.set_async(is_async)
-            self.setup_transmission_basic(connector)
+            self.setup_transmission_basic(connection, configuration)
         else:
-            translator = Translator()
-            self.add_dialect('default', query_translator=translator, results_translator=translator, data_mapper=None, default=True)
+            dialect = 'default'
+            self.add_dialect(dialect, query_translator=QueryTranslator(options, dialect), results_translator=ResultsTranslator(options, dialect), default=True)

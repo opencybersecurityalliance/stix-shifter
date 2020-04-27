@@ -5,11 +5,13 @@ from .base_query_translator import BaseQueryTranslator
 
 class BaseTranslator:
 
-    def __init__(self):
+    def __init__(self, options, dialect):
+        self.options = options
+        self.dialect = dialect
         self.results_translator = BaseResultTranslator()
         self.query_translator = BaseQueryTranslator()
 
-    def translate_results(self, data_source, data, options, mapping=None):
+    def translate_results(self, data_source, data):
         """
         Translates data into STIX results based on a mapping file
         :param data_source: STIX identity object representing a data source
@@ -21,9 +23,9 @@ class BaseTranslator:
         :return: translated STIX formatted results
         :rtype: str
         """
-        return self.results_translator.translate_results(data_source, data, options, mapping)
+        return self.results_translator.translate_results(data_source, data, self.options)
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX query into a different query format. based on a mapping file
         :param data: STIX pattern to transform into native data source query
@@ -38,4 +40,4 @@ class BaseTranslator:
         :rtype: str
         """
 
-        return self.query_translator.transform_query(data, antlr_parsing_object, data_model_mapper, options, mapping)
+        return self.query_translator.transform_query(data, antlr_parsing_object, data_model_mapper)

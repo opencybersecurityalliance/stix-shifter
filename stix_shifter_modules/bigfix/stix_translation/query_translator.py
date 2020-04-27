@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX query into Relevance query format. Based on a mapping file
         :param data: STIX query string to transform into aql query format
@@ -23,6 +23,6 @@ class QueryTranslator(BaseQueryTranslator):
 
         # TODO: Will need to implement a data_model_mapper before using the unmapped attribute stripper
         query_string = query_constructor.translate_pattern(
-            antlr_parsing_object, data_model_mapper, options)
+            antlr_parsing_object, data_model_mapper, self.options)
 
         return query_string

@@ -12,14 +12,14 @@ class Translator(BaseTranslator):
     def __init__(self, dialect=None):
         pass
 
-    def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}, options={}, mapping=None):
+    def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}):
         # Data is a STIX pattern.
         # stix2-matcher will break on START STOP qualifiers so remove before returning pattern.
         # Remove this when ever stix2-matcher supports proper qualifier timestamps
         data = re.sub(START_STOP_PATTERN, " ", data)
         return data
 
-    def translate_results(self, data_source, data, options, mapping=None):
+    def translate_results(self, data_source, data:
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
         bundle = {
             "type": "bundle",

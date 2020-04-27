@@ -4,7 +4,7 @@ from stix_shifter_utils.modules.base.stix_translation.base_query_translator impo
 class QueryTranslator(BaseQueryTranslator):
 
     # data, antlr_parsing, data_model_mapper, options
-    def transform_query(self, data, antlr_parsing, data_model_mapper ,options={}, mapping=None, ):
+    def transform_query(self, data, antlr_parsing, data_model_mapper):
         """
         Takes in passed in query string and returns it
         :param data: query string that gets returned

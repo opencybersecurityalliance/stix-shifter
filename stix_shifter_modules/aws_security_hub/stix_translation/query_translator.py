@@ -5,7 +5,7 @@ from os import path
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, data_model_mapper)

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class StixToElastic(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
