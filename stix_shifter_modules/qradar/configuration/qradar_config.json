@@ -37,7 +37,22 @@
             "optional": true
         },
         "proxy": {
-            "type": "text",
+            "url": {
+                "type": "text",
+                "optional": true
+            },
+            "auth": {
+                "type": "password",
+                "optional": true
+            },
+            "x_forward_proxy": {
+                "type": "text",
+                "optional": true
+            },
+            "x_forward_proxy_auth": {
+                "type": "password",
+                "optional": true
+            },
             "optional": true
         },
         "data_lake": {
