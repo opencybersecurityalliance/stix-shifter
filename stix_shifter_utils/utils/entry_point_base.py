@@ -158,7 +158,38 @@ class EntryPointBase:
     def get_dialects(self):
         return self.__dialects_visible
 
-    def setup_transmission_basic(self, connector):
+    def setup_transmission_simple(self, connection, configuration):
+        module_name = self.__connector_module
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
+        module = importlib.import_module(module_path + ".api_client")        
+        api_client = module.APIClient(connection, configuration)
+
+        module = importlib.import_module(module_path + ".ping_connector")
+        connector = module.PingConnector(api_client)
+        self.set_ping_connector(connector)
+
+        module = importlib.import_module(module_path + ".query_connector")
+        connector = module.QueryConnector(api_client)
+        self.set_query_connector(connector)
+
+        module = importlib.import_module(module_path + ".status_connector")
+        connector = module.StatusConnector(api_client)
+        self.set_status_connector(connector)
+
+        module = importlib.import_module(module_path + ".results_connector")
+        connector = module.ResultsConnector(api_client)
+        self.set_results_connector(connector)
+
+        module = importlib.import_module(module_path + ".delete_connector")
+        connector = module.DeleteConnector(api_client)
+        self.set_delete_connector(connector)
+
+    def setup_transmission_basic(self, connection, configuration):
+        module_name = self.__connector_module
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
+        module = importlib.import_module(module_path + ".connector")
+        connector = module.Connector(connection, configuration)
+
         if not isinstance(connector, BaseConnector):
             raise Exception('connector is not instance of BaseConnector')
         self.set_query_connector(connector)
