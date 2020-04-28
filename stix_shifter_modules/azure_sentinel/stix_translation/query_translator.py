@@ -8,7 +8,7 @@ LOGGER = logging.getLogger(__name__)
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
@@ -25,5 +25,5 @@ class QueryTranslator(BaseQueryTranslator):
         LOGGER.info("Converting STIX2 Pattern to data source query")
 
         query_string = query_constructor.translate_pattern(
-            antlr_parsing_object, data_model_mapper, options)
+            antlr_parsing_object, data_model_mapper, self.options)
         return query_string

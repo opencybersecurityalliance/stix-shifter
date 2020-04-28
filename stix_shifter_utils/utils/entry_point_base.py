@@ -103,7 +103,7 @@ class EntryPointBase:
         module_name = self.__connector_module
         module = importlib.import_module(
                     "stix_shifter_modules." + module_name + ".stix_translation.query_translator")
-        query_translator = module.QueryTranslator(dialect)
+        query_translator = module.QueryTranslator(self.__options, dialect)
         return query_translator
 
     def create_default_results_translator(self, dialect):
@@ -144,13 +144,13 @@ class EntryPointBase:
         return self.__dialect_to_results_translator[self.__dialect_default]
 
     @translation
-    def transform_query(self, dialect, data, antlr_parsing, options, mapping=None):
+    def transform_query(self, dialect, data, antlr_parsing):
         data_model_mapper = self.get_data_mapper(dialect)
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data, antlr_parsing, data_model_mapper, options, mapping)
+        return translator.transform_query(data, antlr_parsing, data_model_mapper)
 
     @translation
-    def translate_results(self, data_source, data, options):
+    def translate_results(self, data_source, data):
         translator = self.get_results_translator()
         return translator.translate_results(data_source, data)
 
@@ -158,7 +158,38 @@ class EntryPointBase:
     def get_dialects(self):
         return self.__dialects_visible
 
-    def setup_transmission_basic(self, connector):
+    def setup_transmission_simple(self, connection, configuration):
+        module_name = self.__connector_module
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
+        module = importlib.import_module(module_path + ".api_client")        
+        api_client = module.APIClient(connection, configuration)
+
+        module = importlib.import_module(module_path + ".ping_connector")
+        connector = module.PingConnector(api_client)
+        self.set_ping_connector(connector)
+
+        module = importlib.import_module(module_path + ".query_connector")
+        connector = module.QueryConnector(api_client)
+        self.set_query_connector(connector)
+
+        module = importlib.import_module(module_path + ".status_connector")
+        connector = module.StatusConnector(api_client)
+        self.set_status_connector(connector)
+
+        module = importlib.import_module(module_path + ".results_connector")
+        connector = module.ResultsConnector(api_client)
+        self.set_results_connector(connector)
+
+        module = importlib.import_module(module_path + ".delete_connector")
+        connector = module.DeleteConnector(api_client)
+        self.set_delete_connector(connector)
+
+    def setup_transmission_basic(self, connection, configuration):
+        module_name = self.__connector_module
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
+        module = importlib.import_module(module_path + ".connector")
+        connector = module.Connector(connection, configuration)
+
         if not isinstance(connector, BaseConnector):
             raise Exception('connector is not instance of BaseConnector')
         self.set_query_connector(connector)

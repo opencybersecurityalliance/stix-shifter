@@ -3,7 +3,7 @@ from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 
-API_PATH = "stix_shifter_modules.bigfix.stix_transmission.bigfix_api_client.APIClient"
+API_PATH = "stix_shifter_modules.bigfix.stix_transmission.api_client.APIClient"
 
 
 class BigFixMockJsonResponse:
@@ -212,7 +212,7 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
-    @patch('stix_shifter_modules.bigfix.stix_transmission.bigfix_status_connector.time')
+    @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running(mock_time, mock_sync_query_results, mock_status_response):
         mock_time.sleep.return_value = None
 
@@ -238,7 +238,7 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
-    @patch('stix_shifter_modules.bigfix.stix_transmission.bigfix_status_connector.time')
+    @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_50_complete(mock_time, mock_sync_query_results, mock_status_response):
         mock_time.sleep.return_value = None
 
@@ -264,7 +264,7 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
-    @patch('stix_shifter_modules.bigfix.stix_transmission.bigfix_status_connector.time')
+    @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_75_complete(mock_time, mock_sync_query_results, mock_status_response):
         mock_time.sleep.return_value = None
 
@@ -313,7 +313,7 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
-    @patch('stix_shifter_modules.bigfix.stix_transmission.bigfix_status_connector.time')
+    @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_bad_client_query(mock_time, mock_sync_query_results, mock_status_response):
         mock_time.sleep.return_value = None
 

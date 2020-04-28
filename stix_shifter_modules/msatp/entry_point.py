@@ -1,5 +1,4 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.msatp_connector import Connector
 
 class EntryPoint(EntryPointBase):
 
@@ -8,7 +7,6 @@ class EntryPoint(EntryPointBase):
         self.set_async(False)
         
         if connection:
-            connector = Connector(connection, configuration)
-            self.setup_transmission_basic(connector)
+            self.setup_transmission_basic(connection, configuration)
         else:
             self.setup_translation_simple('default')

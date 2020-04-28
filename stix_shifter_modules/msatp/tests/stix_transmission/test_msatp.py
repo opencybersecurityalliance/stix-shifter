@@ -14,7 +14,7 @@ class MSATPMockResponse:
         return bytearray(self.object, 'utf-8')
 
 
-@patch('stix_shifter_modules.msatp.stix_transmission.msatp_connector.Connector.generate_token')
+@patch('stix_shifter_modules.msatp.stix_transmission.connector.Connector.generate_token')
 @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     config = {

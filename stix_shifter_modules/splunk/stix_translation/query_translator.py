@@ -12,7 +12,7 @@ DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
@@ -28,8 +28,8 @@ class QueryTranslator(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to Splunk query")
 
         translate_options = {}
-        translate_options['result_limit'] = options['result_limit']
-        time_range = options['time_range']
+        translate_options['result_limit'] = self.options['result_limit']
+        time_range = self.options['time_range']
         # append '-' as prefix and 'minutes' as suffix in time_range to convert minutes in SPL query format
         time_range = '-' + str(time_range) + 'minutes'
         translate_options['time_range'] = time_range

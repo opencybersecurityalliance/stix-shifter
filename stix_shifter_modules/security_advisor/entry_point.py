@@ -1,11 +1,11 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_translation.security_advisor_query_translator import SecurityAdvisorQueryTranslator
-from .stix_translation.security_advisor_results_translator import JSONToStixObservablesDecorator
-from .stix_transmission.security_advisor_ping_connector import SecurityAdvisorPingConnector
-from .stix_transmission.security_advisor_query_connector import SecurityAdvisorQueryConnector
-from .stix_transmission.security_advisor_status_connector import SecurityAdvisorStatusConnector
-from .stix_transmission.security_advisor_results_connector import SecurityAdvisorResultsConnector
-from .stix_transmission.security_advisor_delete_connector import SecurityAdvisorDeleteConnector
+from .stix_translation.query_translator import QueryTranslator
+from .stix_translation.results_translator import JSONToStixObservablesDecorator
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 from stix_shifter_utils.modules.base.stix_translation.empty_data_mapper import EmptyDataMapper
 from os import path
 
@@ -18,11 +18,11 @@ class EntryPoint(EntryPointBase):
             auth = configuration.get("auth")
             host = connection.get("host")
 
-            ping_connector = SecurityAdvisorPingConnector(host, auth)
-            query_connector = SecurityAdvisorQueryConnector(host, auth)
-            status_connector = SecurityAdvisorStatusConnector(host, auth)
-            results_connector = SecurityAdvisorResultsConnector(host, auth)
-            delete_connector = SecurityAdvisorDeleteConnector(host, auth)
+            ping_connector = PingConnector(host, auth)
+            query_connector = QueryConnector(host, auth)
+            status_connector = StatusConnector(host, auth)
+            results_connector = ResultsConnector(host, auth)
+            delete_connector = DeleteConnector(host, auth)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)
@@ -31,6 +31,6 @@ class EntryPoint(EntryPointBase):
             self.set_delete_connector(delete_connector)
         else:
             dialect = 'default'
-            query_translator = SecurityAdvisorQueryTranslator(dialect)
+            query_translator = QueryTranslator(dialect)
             results_translator = JSONToStixObservablesDecorator(options, dialect)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, data_mapper=EmptyDataMapper(options, dialect, None), default=True)

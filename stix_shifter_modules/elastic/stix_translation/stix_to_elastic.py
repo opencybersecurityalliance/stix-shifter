@@ -2,14 +2,14 @@ import logging
 import importlib
 
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
-from . import elastic_query_constructor
+from . import query_constructor
 
 logger = logging.getLogger(__name__)
 
 
 class StixToElastic(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern
@@ -22,6 +22,6 @@ class StixToElastic(BaseQueryTranslator):
         :rtype: str
         """
 
-        query_string = elastic_query_constructor.translate_pattern(
+        query_string = query_constructor.translate_pattern(
             antlr_parsing_object, data_model_mapper)
         return query_string

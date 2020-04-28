@@ -106,7 +106,7 @@ class StixTranslation:
                                 unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
                                 continue
-                        translated_queries = entry_point.transform_query(dialect, data, antlr_parsing, options)
+                        translated_queries = entry_point.transform_query(dialect, data, antlr_parsing)
                         
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]
@@ -131,7 +131,7 @@ class StixTranslation:
 
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                return entry_point.translate_results(data_source, data, options)
+                return entry_point.translate_results(data_source, data)
             elif translate_type == MAPPING:
                 mappings = {}
                 for dialect in dialects:

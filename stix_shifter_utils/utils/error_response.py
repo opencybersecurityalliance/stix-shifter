@@ -112,7 +112,7 @@ class ErrorResponder():
             module_path = 'stix_shifter_utils.stix_translation.stix_translation_error_mapper'
         else:
             caller_module_name = caller_path_list[-3:-1]
-            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'
+            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.error_mapper'
 
         # path_start_position = ErrorResponder.rindex(caller_path_list, 'stix-shifter')
         # module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'

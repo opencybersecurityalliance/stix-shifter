@@ -14,7 +14,7 @@ class QRadarMockResponse:
     def read(self):
         return self.object    
 
-@patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.__init__', autospec=True)
+@patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.__init__', autospec=True)
 class TestQRadarConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
@@ -34,7 +34,7 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         assert check_async
 
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.ping_box')
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
@@ -57,7 +57,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.create_search')
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.create_search')
     def test_query_response(self, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211"}'
@@ -82,7 +82,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
 
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211", "status": "COMPLETED", "progress": "100"}'
@@ -108,7 +108,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert 'status' in status_response
         assert status_response['status'] == Status.COMPLETED.value
 
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = """{
@@ -149,9 +149,9 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert 'events' in results_response['data']
         assert len(results_response['data']) > 0
 
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.create_search', autospec=True)
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.get_search', autospec=True)
-    @patch('stix_shifter_modules.qradar.stix_transmission.arielapiclient.APIClient.get_search_results', autospec=True)
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.create_search', autospec=True)
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.get_search', autospec=True)
+    @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response, mock_api_client):
         mock_api_client.return_value = None
         query_mock = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211"}'
