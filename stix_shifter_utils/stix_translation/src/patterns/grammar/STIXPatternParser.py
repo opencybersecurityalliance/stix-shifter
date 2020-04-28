@@ -1,9 +1,13 @@
-# Generated from STIXPattern.g4 by ANTLR 4.7.1
+# Generated from stix_shifter_utils/stix_translation/src/patterns/grammar/STIXPattern.g4 by ANTLR 4.8
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
-from typing.io import TextIO
 import sys
+if sys.version_info[1] > 5:
+	from typing import TextIO
+else:
+	from typing.io import TextIO
+
 
 def serializedATN():
     with StringIO() as buf:
@@ -235,9 +239,10 @@ class STIXPatternParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.7.1")
+        self.checkVersion("4.8")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
+
 
 
 
@@ -291,6 +296,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class ObservationExpressionsContext(ParserRuleContext):
 
@@ -373,6 +379,7 @@ class STIXPatternParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class ObservationExpressionOrContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -454,6 +461,7 @@ class STIXPatternParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class ObservationExpressionAndContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -534,6 +542,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.unrollRecursionContexts(_parentctx)
         return localctx
+
 
     class ObservationExpressionContext(ParserRuleContext):
 
@@ -789,6 +798,7 @@ class STIXPatternParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class ComparisonExpressionContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -906,6 +916,7 @@ class STIXPatternParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class ComparisonExpressionAndContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1022,6 +1033,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.unrollRecursionContexts(_parentctx)
         return localctx
+
 
     class PropTestContext(ParserRuleContext):
 
@@ -1473,6 +1485,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class OrderingComparatorContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1533,6 +1546,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class StringLiteralContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1577,6 +1591,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class StartStopQualifierContext(ParserRuleContext):
 
@@ -1637,6 +1652,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class WithinQualifierContext(ParserRuleContext):
 
@@ -1702,6 +1718,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class RepeatedQualifierContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1756,6 +1773,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class ObjectPathContext(ParserRuleContext):
 
@@ -1827,6 +1845,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class ObjectTypeContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1881,6 +1900,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class FirstPathComponentContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1934,6 +1954,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class ObjectPathComponentContext(ParserRuleContext):
 
@@ -2016,6 +2037,8 @@ class STIXPatternParser ( Parser ):
             super().__init__(parser)
             self.copyFrom(ctx)
 
+        def DOT(self):
+            return self.getToken(STIXPatternParser.DOT, 0)
         def IdentifierWithoutHyphen(self):
             return self.getToken(STIXPatternParser.IdentifierWithoutHyphen, 0)
         def StringLiteral(self):
@@ -2113,6 +2136,7 @@ class STIXPatternParser ( Parser ):
             self.unrollRecursionContexts(_parentctx)
         return localctx
 
+
     class SetLiteralContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2206,6 +2230,7 @@ class STIXPatternParser ( Parser ):
             self.exitRule()
         return localctx
 
+
     class PrimitiveLiteralContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -2267,6 +2292,7 @@ class STIXPatternParser ( Parser ):
         finally:
             self.exitRule()
         return localctx
+
 
     class OrderableLiteralContext(ParserRuleContext):
 
