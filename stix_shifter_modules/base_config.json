@@ -1,8 +1,5 @@
 {
     "connection": {
-        "type": {
-            "type": "type"
-        },
         "name": {
             "min": 5,
             "type": "text"
@@ -18,9 +15,6 @@
     "configuration":{
         "name": {
             "min": 5,
-            "type": "text"
-        },
-        "description": {
             "type": "text"
         },
         "connectionId": {
