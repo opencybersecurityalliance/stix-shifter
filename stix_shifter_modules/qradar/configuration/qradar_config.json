@@ -4,7 +4,8 @@
             "default": "QRadar"
         },
         "host": {
-            "type": "text"
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "default": 443,
@@ -34,6 +35,28 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "proxy": {
+            "url": {
+                "type": "text",
+                "optional": true
+            },
+            "auth": {
+                "type": "password",
+                "optional": true
+            },
+            "x_forward_proxy": {
+                "type": "text",
+                "optional": true
+            },
+            "x_forward_proxy_auth": {
+                "type": "password",
+                "optional": true
+            }
+        },
+        "data_lake": {
+            "type": "boolean",
+            "default": false
         }
     },
     "configuration": {

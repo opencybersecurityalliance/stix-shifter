@@ -1,5 +1,6 @@
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 
 
 RESULTS = 'results'
@@ -20,7 +21,13 @@ class StixTransmission:
             module = 'proxy'
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-            self.entry_point = connector_module.EntryPoint(connection, configuration)
+
+            validation_obj = {'connection': connection, 'configuration': configuration}
+            modernize_objects(module, validation_obj)
+            
+            validation_obj = param_validator(module, validation_obj)
+          
+            self.entry_point = connector_module.EntryPoint(validation_obj['connection'], validation_obj['configuration'])
         except Exception as e:
             self.init_error = e
 

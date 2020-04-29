@@ -5,23 +5,23 @@
         },
         "name": {
             "min": 5,
-            "type": "text"
+            "type": "text",
+            "regex": "^[A-Za-z0-9 _-]*$"
         },
         "description": {
-            "type": "text"
-        },
-        "concurrent": {
-            "default": 4,
-            "type": "number"
+            "type": "text",
+            "regex": "^[A-Za-z0-9 _-]*$"
         }
     },
     "configuration":{
         "name": {
             "min": 5,
-            "type": "text"
+            "type": "text",
+            "regex": "^[A-Za-z0-9 _-]*$"
         },
         "description": {
-            "type": "text"
+            "type": "text",
+            "regex": "^[A-Za-z0-9 _-]*$"
         },
         "connectionId": {
             "type": "text"
