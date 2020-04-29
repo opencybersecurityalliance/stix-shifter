@@ -1,8 +1,5 @@
 {
     "connection": {
-        "type": {
-            "type": "type"
-        },
         "name": {
             "min": 5,
             "type": "text",
@@ -16,10 +13,6 @@
     "configuration":{
         "name": {
             "min": 5,
-            "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
-        },
-        "description": {
             "type": "text",
             "regex": "^[A-Za-z0-9 _-]*$"
         },
