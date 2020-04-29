@@ -32,12 +32,13 @@
     "configuration": {
         "auth": {
             "username": {
-                "type": "password"
+                "type": "password",
+                "optional": true
             },
             "password": {
-                "type": "password"
-            },
-            "optional": true
+                "type": "password",
+                "optional": true
+            }
         }
     }
 }

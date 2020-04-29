@@ -86,10 +86,10 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
             if key in input_configs:
                 if is_leaf(expected_configs[key]):
                     if 'min' in expected_configs[key]:
-                        if not check_min(input_configs[key], expected_configs[key]['min'], expected_configs[key]['type']):
+                        if not check_min(input_configs[key], expected_configs[key]['min'], expected_configs[key]['type'], key):
                             raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]), str(expected_configs[key]['min'])))
                     elif 'max' in expected_configs[key]:
-                        if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type']):
+                        if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type'], key):
                             raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]), str(expected_configs[key]['max'])))
                     elif 'regex' in expected_configs[key]:
                         if not check_regex(input_configs[key], expected_configs[key]['regex']):
@@ -104,14 +104,26 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     if not input_configs[key]:
                         del input_configs[key]
             else:
-                if isinstance(expected_configs[key], dict):
-                    if not 'optional' in expected_configs[key] and not 'default' in expected_configs[key]:
-                        errors.append(key_path)
+                if optional_section(expected_configs[key], key):
+                    pass
+                elif 'default' in expected_configs[key]:
+                    validated_params[key] = value['default']
+                elif ('optional' in expected_configs[key] and expected_configs[key]['optional']):
+                    pass
+                else:
+                    errors.append(key_path)
 
-                    if 'default' in expected_configs[key]:
-                        validated_params[key] = value['default']
-                    elif 'optional' in expected_configs[key] and not expected_configs[key]['optional']:
-                        errors.append(key_path)
+def optional_section(item, key):
+    if isinstance(item, dict):
+        for key, value in item.items():
+            if isinstance(value, dict):
+                if 'optional' in value and value['optional'] or 'default' in value:
+                    pass
+                else:
+                    return False
+            else:
+                return False
+    return True
 
 def is_leaf(config):
     if isinstance(config, dict):
@@ -120,20 +132,21 @@ def is_leaf(config):
                 return False
     return True
 
-def check_min(input_value, min_value, type):
+def check_min(input_value, min_value, type, key):
     if type == 'number':
         if input_value >= min_value:
             return True
         else:
             return False
 
-    if type == 'number':
+    if type == 'text':
         if len(input_value) >= len(min_value):
             return True
         else:
-            return False 
+            return False
+    raise ValueError('Min value property cannot be specified for type {} of field {}'.format(type, key))
 
-def check_max(input_value, max_value, type):
+def check_max(input_value, max_value, type, key):
     if type == 'number':
         if input_value <= max_value:
             return True
@@ -145,6 +158,9 @@ def check_max(input_value, max_value, type):
             return True
         else:
             return False
+
+    raise ValueError('Min value property cannot be specified for type {} of field {}'.format(type, key))
+
 
 def check_regex(input_value, regex_value):
     pattern = re.compile(regex_value)

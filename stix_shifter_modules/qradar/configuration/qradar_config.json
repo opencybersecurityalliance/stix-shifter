@@ -52,10 +52,10 @@
             "x_forward_proxy_auth": {
                 "type": "password",
                 "optional": true
-            },
-            "optional": true
+            }
         },
         "data_lake": {
+            "type": "boolean",
             "default": false
         }
     },
