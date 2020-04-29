@@ -244,8 +244,19 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_ping(mock_ping):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_ping.return_value = AWSMockJsonResponse()
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -270,9 +281,19 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_query_exception(mock_create_query):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
         mock_create_query.return_value = Exception("Invalid Query")
         query = 'sample query'
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         query_response = transmission.query(query)
         assert query_response is not None
         assert 'success' in query_response
@@ -285,6 +306,17 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_query_connection(mock_create_query):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_create_query.return_value = AWSMockJsonResponse()
         query = "{\"logType\": \"vpcflow\", \"limit\": 2, \"logGroupName\": \"USEast1_FlowLogs\", " \
                 "\"queryString\": \"fields @timestamp, " \
@@ -292,7 +324,7 @@ class TestAWSConnection(unittest.TestCase):
                 "filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | " \
                 "filter ((srcAddr = '172.31.88.64' OR dstAddr = '172.31.88.64'))\", \"startTime\": 1569919390," \
                 " \"endTime\": 1577730600}"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -306,6 +338,18 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_iam_create_query_connection(mock_create_query):
+        iam_config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz",
+                "aws_iam_role": "ABC"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+        
         mock_create_query.return_value = AWSMockJsonResponse()
         query = "{\"logType\": \"vpcflow\", \"limit\": 10000, \"logGroupName\": \"USEast1_FlowLogs\", " \
                 "\"queryString\": \"fields @timestamp, " \
@@ -313,7 +357,7 @@ class TestAWSConnection(unittest.TestCase):
                 "filter strlen(srcAddr) > 0 or strlen(dstAddr) > 0 or strlen(protocol) > 0 | " \
                 "filter ((srcAddr = '172.31.88.64' OR dstAddr = '172.31.88.64'))\", \"startTime\": 1569919390," \
                 " \"endTime\": 1577730600}"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, IAM_CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, iam_config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -379,9 +423,20 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_delete_query_connection(mock_delete_query):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_delete_query.return_value = AWSMockJsonResponse()
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         delete_response = transmission.delete(search_id)
 
         assert delete_response is not None
@@ -407,9 +462,20 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_connection(mock_create_status):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_create_status.return_value = AWSMockJsonResponse()
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -423,9 +489,20 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_running(mock_create_status):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_create_status.return_value = MockStatusResponse()
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -439,9 +516,20 @@ class TestAWSConnection(unittest.TestCase):
         'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
         '.client')
     def test_create_status_exception(mock_create_status):
+        config = {
+            "auth": {
+                "aws_access_key_id": "abc",
+                "aws_secret_access_key": "xyz"
+            }
+        }
+
+        connection = {
+            "options": {"region": "xyz"}
+        }
+
         mock_create_status.return_value = MockExceptionResponse()
         search_id = "xyz"
-        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
         assert status_response is not None
         assert 'success' in status_response

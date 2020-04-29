@@ -24,8 +24,8 @@ class APIClient():
         headers['version'] = '8.0'
         headers['accept'] = 'application/json'
         auth = configuration.get('auth')
-        if auth != None and auth.get('SEC', None) != None:
-            headers['sec'] = auth.get('SEC')
+        if auth != None and auth.get('sec', None) != None:
+            headers['sec'] = auth.get('sec')
         url_modifier_function = None
         proxy = connection.get('proxy')
         if proxy is not None:

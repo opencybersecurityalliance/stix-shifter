@@ -57,10 +57,22 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
     def test_ping_endpoint_good_return(mock_ping_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
         mocked_return_value = MockHttpResponse('/api/clientquery')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -98,10 +110,23 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
     def test_ping_endpoint_bad_return_code(mock_ping_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_return_value = MockHttpResponse('/exception')
         mock_ping_response.return_value = BigFixMockHttpXMLResponse(500, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         ping_response = transmission.ping()
 
         assert ping_response is not None
@@ -112,6 +137,19 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
     def test_query_response_found(mock_query_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         big_fix_return_value = '<?xml version="1.0" encoding="UTF-8"?>' \
                                '<BESAPI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' \
                                ' xsi:noNamespaceSchemaLocation="BESAPI.xsd">' \
@@ -123,7 +161,7 @@ class TestBigfixConnection(unittest.TestCase):
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
         query = 'bigfix query text'
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -135,13 +173,26 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
     def test_query_response_not_found(mock_query_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
 
         query = 'bigfix query text'
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -172,13 +223,26 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
     def test_query_response_bad_return_code(mock_query_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
         mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
         
         query = 'bigfix query text'
 
-        entry_point = EntryPoint(CONNECTION, CONFIG)
+        entry_point = EntryPoint(connection, config)
         query_response = entry_point.create_query_connection(query)
 
         assert query_response is not None
@@ -190,6 +254,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_completed(mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -198,7 +275,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -214,6 +291,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running(mock_time, mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
@@ -224,7 +314,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -240,6 +330,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_50_complete(mock_time, mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
@@ -250,7 +353,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -266,6 +369,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_75_complete(mock_time, mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">10000</Answer>')
@@ -276,7 +392,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -291,6 +407,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_error(mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -299,7 +428,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -315,6 +444,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     @patch('stix_shifter_modules.bigfix.stix_transmission.status_connector.time')
     def test_status_response_running_bad_client_query(mock_time, mock_sync_query_results, mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
@@ -325,7 +467,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -384,6 +526,19 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_error_exception_result_bad_return_code(mock_sync_query_results,
                                                                     mock_status_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
 
@@ -392,7 +547,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         status_response = transmission.status(search_id)
 
         assert status_response is not None
@@ -414,6 +569,19 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_file(mock_results_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -444,7 +612,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -456,6 +624,19 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_process(mock_results_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -487,7 +668,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "103"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -499,6 +680,19 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_network(mock_results_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -528,7 +722,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
@@ -540,6 +734,19 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_mac_addr(mock_results_response):
+        config = {
+            "auth": {
+                "username": "abc",
+                "password": "xyz"
+            }
+        }
+
+        connection = {
+            "host": "123.123.123.123",
+            "port": "443",
+            "selfSignedCert": False,
+        }
+
         mocked_return_value = """{
                                     "reportingAgents": 2,
                                     "totalResults": 2,
@@ -567,7 +774,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         results_response = transmission.results(search_id, offset, length)
 
         assert results_response is not None
