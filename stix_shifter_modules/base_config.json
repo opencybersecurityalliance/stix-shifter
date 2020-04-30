@@ -8,6 +8,10 @@
         "description": {
             "type": "text",
             "regex": "^[A-Za-z0-9 _-]*$"
+        },
+        "concurrent": {
+            "default": 4,
+            "type": "number"
         }
     },
     "configuration":{
