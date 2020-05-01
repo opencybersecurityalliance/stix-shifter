@@ -5,7 +5,6 @@ import functools
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
-from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
@@ -62,10 +61,10 @@ class EntryPointBase:
             query_translator = self.create_default_query_translator(dialect)
         if not results_translator:
             results_translator = self.create_default_results_translator(dialect)
-        if not (isinstance(query_translator, (BaseTranslator, BaseQueryTranslator))):
-            raise Exception('query_translator is not instance of BaseTranslator or BaseQueryTranslator')
-        if not (isinstance(results_translator, (BaseTranslator, BaseResultTranslator))):
-            raise Exception('results_translator is not instance of BaseTranslator or BaseResultTranslator')
+        if not (isinstance(query_translator, BaseQueryTranslator)):
+            raise Exception('query_translator is not instance of BaseQueryTranslator')
+        if not (isinstance(results_translator, BaseResultTranslator)):
+            raise Exception('results_translator is not instance of BaseResultTranslator')
         if data_mapper:
             if not (isinstance(data_mapper, BaseDataMapper)):
                 raise Exception('data_mapper is not instance of BaseDataMapper')
