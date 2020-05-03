@@ -3,10 +3,9 @@ from abc import ABCMeta, abstractmethod
 
 class BaseQueryTranslator(object, metaclass=ABCMeta):
 
-    def __init__(self, options, dialect=None, default_mapping_file_path=None):
+    def __init__(self, options, dialect=None):
         self.options = options
         self.dialect = dialect
-        self.default_mapping_file_path = default_mapping_file_path
 
     @abstractmethod
     def transform_query(self, data, antlr_parsing_object, data_model_mapper):

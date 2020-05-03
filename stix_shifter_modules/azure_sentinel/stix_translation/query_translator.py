@@ -1,6 +1,6 @@
 import logging
 
-from stix_shifter_utils.modules.base.stix_translation.base_translator import BaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from . import query_constructor
 
 LOGGER = logging.getLogger(__name__)
