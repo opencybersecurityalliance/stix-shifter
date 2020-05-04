@@ -41,7 +41,6 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
                 filepath = self.__fetch_from_stix_mapping_file(basepath)
             else:                
                 filepath = path.abspath(path.join(basepath, "json", 'from_stix_map.json'))
-            print('!!!!!!!! LOADING file: ' + filepath)
             map_file = open(filepath).read()
             map_data = json.loads(map_file)
             return map_data
