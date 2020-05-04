@@ -5,7 +5,6 @@ from .stix_transmission.query_connector import QueryConnector
 from .stix_transmission.status_connector import StatusConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
-from .stix_translation.data_mapper import DataMapper
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
 import os
@@ -42,13 +41,11 @@ class EntryPoint(EntryPointBase):
                 os.path.join(basepath, "stix_translation"))
 
             dialect = 'dialect1'
-            data_mapper = DataMapper(option, dialect, filepath)
-            query_translator = QueryTranslator(dialect, filepath)
+            query_translator = QueryTranslator(options, dialect, filepath)
             results_translator = ResultsTranslator(options, dialect)
-            self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=True)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
-            data_mapper = DataMapper(option, dialect, filepath)
-            query_translator = QueryTranslator(dialect, filepath)
+            query_translator = QueryTranslator(options, dialect, filepath)
             results_translator = ResultsTranslator(options, dialect)
-            self.add_dialect(dialect,  data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)

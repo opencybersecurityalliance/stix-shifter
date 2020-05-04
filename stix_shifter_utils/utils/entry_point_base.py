@@ -4,7 +4,6 @@ import os
 import functools
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
-from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
@@ -22,7 +21,6 @@ class EntryPointBase:
         self.__connector_module = stack[-2].filename.split('/')[-2]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
-        self.__dialect_to_data_mapper = {}
         self.__dialects_visible = []
         self.__dialect_default = None
         self.__options = options
@@ -54,9 +52,7 @@ class EntryPointBase:
         if not(self.__results_connector and self.__status_connector and self.__delete_connector and self.__query_connector):
             raise Exception('EntryPoint: one of transmission connectors is not configured')
 
-    def add_dialect(self, dialect, data_mapper=None, query_translator=None, results_translator=None, default=False, default_include=True):
-        if not data_mapper:
-            data_mapper = self.create_default_data_mapper(dialect)
+    def add_dialect(self, dialect, query_translator=None, results_translator=None, default=False, default_include=True):
         if not query_translator:
             query_translator = self.create_default_query_translator(dialect)
         if not results_translator:
@@ -65,12 +61,8 @@ class EntryPointBase:
             raise Exception('query_translator is not instance of BaseQueryTranslator')
         if not (isinstance(results_translator, BaseResultTranslator)):
             raise Exception('results_translator is not instance of BaseResultTranslator')
-        if data_mapper:
-            if not (isinstance(data_mapper, BaseDataMapper)):
-                raise Exception('data_mapper is not instance of BaseDataMapper')
         self.__dialect_to_query_translator[dialect] = query_translator
         self.__dialect_to_results_translator[dialect] = results_translator
-        self.__dialect_to_data_mapper[dialect] = data_mapper
         if default:
             self.__dialect_default = dialect
         if default_include:
@@ -80,29 +72,16 @@ class EntryPointBase:
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
         module_name = self.__connector_module
         dialects = dialect_list(module_name)
-
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation.data_mapper")
-        basepath = os.path.dirname(module.__file__)
-        mapping_filepath = os.path.abspath(basepath)
         for dialect in dialects:            
-            data_mapper = module.DataMapper(self.__options, dialect, mapping_filepath)
-            self.add_dialect(dialect, data_mapper, query_translator=query_translator, results_translator=results_translator, default=(dialect==dialect_default))
-
-    def create_default_data_mapper(self, dialect):
-        module_name = self.__connector_module
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation.data_mapper")
-        basepath = os.path.dirname(module.__file__)
-        mapping_filepath = os.path.abspath(basepath)
-        data_mapper = module.DataMapper(self.__options, dialect, mapping_filepath)
-        return data_mapper
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=(dialect==dialect_default))
 
     def create_default_query_translator(self, dialect):
         module_name = self.__connector_module
         module = importlib.import_module(
                     "stix_shifter_modules." + module_name + ".stix_translation.query_translator")
-        query_translator = module.QueryTranslator(self.__options, dialect)
+        basepath = os.path.dirname(module.__file__)
+        mapping_filepath = os.path.abspath(basepath)
+        query_translator = module.QueryTranslator(self.__options, dialect, mapping_filepath)
         return query_translator
 
     def create_default_results_translator(self, dialect):
@@ -116,19 +95,13 @@ class EntryPointBase:
 
     @translation
     def get_mapping(self, dialect=None):
-        data_mapper = self.get_data_mapper(dialect)
+        query_translator = self.get_query_translator(dialect)
         results_translator = self.get_results_translator(dialect)
-        mapping = {'from_stix': data_mapper.get_mapping() if data_mapper else {}, 'to_stix': results_translator.get_mapping()}
-        select_fields = data_mapper.get_select_fields()
+        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {}, 'to_stix': results_translator.get_mapping()}
+        select_fields = query_translator.get_select_fields()
         if select_fields:
             mapping['select_fields'] = select_fields
         return mapping
-
-    @translation
-    def get_data_mapper(self, dialect=None):
-        if dialect:
-            return self.__dialect_to_data_mapper[dialect]
-        return self.__dialect_to_data_mapper[self.__dialect_default]
 
     @translation    
     def get_query_translator(self, dialect=None):
@@ -144,9 +117,8 @@ class EntryPointBase:
 
     @translation
     def transform_query(self, dialect, data, antlr_parsing):
-        data_model_mapper = self.get_data_mapper(dialect)
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data, antlr_parsing, data_model_mapper)
+        return translator.transform_query(data, antlr_parsing)
 
     @translation
     def translate_results(self, data_source, data):

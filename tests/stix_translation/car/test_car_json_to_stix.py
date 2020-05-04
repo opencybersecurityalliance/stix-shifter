@@ -1,10 +1,10 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.modules.car.stix_translation.car_translator import CARToStix
+from stix_shifter_utils.modules.car.stix_translation.results_translator import CarBaseResultsTranslator
 import json
 import base64
 
 options = {}
-results_translator = CARToStix(options)
+results_translator = CarBaseResultsTranslator(options)
 data_source = {
     "type": "identity",
     "id": "identity--56c5a276-a192-4c46-a61f-b81724c61096",

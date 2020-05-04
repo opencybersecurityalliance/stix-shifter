@@ -1,10 +1,12 @@
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
-from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
+import logging
 from os import path
 
+logger = logging.getLogger(__name__)
 
-class CarDataMapper(BaseDataMapper):
 
+class CarBaseQueryTranslator(BaseQueryTranslator):
     def __init__(self, options={}, dialect=None):
         super().__init__(options, dialect, path.dirname(__file__))        
 

@@ -3,7 +3,7 @@ from os import path
 import json
 
 
-class CARToStix(JSONToStix):
+class CarBaseResultsTranslator(JSONToStix):
 
   def __init__(self, options, dialect=None, callback=None):
     super().__init__(options, dialect, path.dirname(__file__), callback)

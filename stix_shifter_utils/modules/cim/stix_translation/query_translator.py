@@ -1,10 +1,11 @@
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
-from stix_shifter_utils.modules.base.stix_translation.base_data_mapper import BaseDataMapper
+import logging
 from os import path
 
+logger = logging.getLogger(__name__)
 
-class CimDataMapper(BaseDataMapper):
-
+class CimBaseQueryTranslator(BaseQueryTranslator):
     FIELDS_DEFAULT = {
         "default": [
             "src_ip",
@@ -41,4 +42,3 @@ class CimDataMapper(BaseDataMapper):
             return self.map_data[stix_object_name]["cim_type"]
         else:
             raise DataMappingException("Unable to map object `{}` into CIM".format(stix_object_name))
-
