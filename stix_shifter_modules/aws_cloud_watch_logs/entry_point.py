@@ -1,4 +1,4 @@
-from stix_shifter_utils.utils.entry_point_base import EntryPointBase
+from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 from .stix_transmission.boto3_client import BOTO3Client
 from .stix_transmission.ping_connector import PingConnector
 from .stix_transmission.query_connector import QueryConnector
@@ -6,7 +6,7 @@ from .stix_transmission.status_connector import StatusConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
 
-class EntryPoint(EntryPointBase):
+class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)

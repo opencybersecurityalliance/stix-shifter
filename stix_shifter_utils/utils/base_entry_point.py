@@ -13,7 +13,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 
-class EntryPointBase:
+class BaseEntryPoint:
 
     def __init__(self, options):
         self.__async = True

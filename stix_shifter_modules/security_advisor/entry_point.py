@@ -1,4 +1,4 @@
-from stix_shifter_utils.utils.entry_point_base import EntryPointBase
+from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import JSONToStixObservablesDecorator
 from .stix_transmission.ping_connector import PingConnector
@@ -8,7 +8,7 @@ from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
 from os import path
 
-class EntryPoint(EntryPointBase):
+class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
