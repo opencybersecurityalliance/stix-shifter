@@ -7,7 +7,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 from stix_shifter_utils.utils.module_discovery import process_dialects
-from stix_shifter_utils.modules.base.stix_translation.empty_data_mapper import EmptyDataMapper
+from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
 import sys
 import glob
 from os import path
@@ -97,9 +97,9 @@ class StixTranslation:
                     unmapped_stix_collection = []
                     for dialect in dialects:
                         antlr_parsing = generate_query(data)
-                        data_model_mapper = entry_point.get_data_mapper(dialect)
-                        if data_model_mapper and not isinstance(data_model_mapper, EmptyDataMapper):
-                            stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
+                        query_translator = entry_point.get_query_translator(dialect)
+                        if query_translator and not isinstance(query_translator, EmptyQueryTranslator):
+                            stripped_parsing = strip_unmapped_attributes(antlr_parsing, query_translator)
                             antlr_parsing = stripped_parsing.get('parsing')
                             unmapped_stix = stripped_parsing.get('unmapped_stix')
                             if unmapped_stix:
@@ -142,8 +142,8 @@ class StixTranslation:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
                 for dialect in dialects:
-                    data_model_mapper = entry_point.get_data_mapper(dialect)
-                    result[dialect] = data_model_mapper.map_data
+                    query_translator = entry_point.get_query_translator(dialect)
+                    result[dialect] = query_translator.map_data
                     
                 return {'supported_attributes': result}
             else:

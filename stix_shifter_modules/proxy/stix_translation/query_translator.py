@@ -5,7 +5,7 @@ from .utils import unwrap_connection_options
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object={}, data_model_mapper={}):
+    def transform_query(self, data, antlr_parsing_object={}):
         # A proxy translation call passes the entire data source connection object in as the options
         # Top-most connection host and port are for the proxy
         proxy_host = options['host']

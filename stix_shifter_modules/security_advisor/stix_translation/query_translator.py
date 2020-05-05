@@ -1,10 +1,9 @@
-from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
 
 
-class QueryTranslator(BaseQueryTranslator):
+class QueryTranslator(EmptyQueryTranslator):
 
-    # data, antlr_parsing, data_model_mapper, options
-    def transform_query(self, data, antlr_parsing, data_model_mapper):
+    def transform_query(self, data, antlr_parsing):
         """
         Takes in passed in query string and returns it
         :param data: query string that gets returned

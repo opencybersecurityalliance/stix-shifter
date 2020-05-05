@@ -1,4 +1,4 @@
-from stix_shifter_utils.utils.entry_point_base import EntryPointBase
+from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import JSONToStixObservablesDecorator
 from .stix_transmission.ping_connector import PingConnector
@@ -6,10 +6,9 @@ from .stix_transmission.query_connector import QueryConnector
 from .stix_transmission.status_connector import StatusConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
-from stix_shifter_utils.modules.base.stix_translation.empty_data_mapper import EmptyDataMapper
 from os import path
 
-class EntryPoint(EntryPointBase):
+class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
@@ -31,6 +30,6 @@ class EntryPoint(EntryPointBase):
             self.set_delete_connector(delete_connector)
         else:
             dialect = 'default'
-            query_translator = QueryTranslator(dialect)
+            query_translator = QueryTranslator(options, dialect)
             results_translator = JSONToStixObservablesDecorator(options, dialect)
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, data_mapper=EmptyDataMapper(options, dialect, None), default=True)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
