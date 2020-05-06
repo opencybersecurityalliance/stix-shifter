@@ -1,69 +1,9 @@
-# Developing a new STIX-shifter connector
+# STIX Translation
 
-- [Introduction](../README.md)
-- [Scenario](#scenario)
-- [Prerequisites](#prerequisites)
-- [Steps](#steps)
+The steps below assume you have renamed the `async_dummy` module directory to our example connector name, `abc_security_monitor`.
 
-## Scenario
 
-### Participants
-
-This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new connector for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
-
-### Problem to solve
-
-_User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter connectors.
-
-_User A_ would like to:
-
-1. Submit one STIX pattern to query all the user’s security products at once. The use of a STIX pattern simplifies the search process because _User A_ does not need to know the query language or API calls for each security product.
-1. See the query results from all the security products in one unified format (STIX bundle). With the assumption that the submitted pattern represents a potential security incident, the STIX bundle presents the query results in the context of the security event.
-
-By implementing a new connector, _Developer A_ allows _Product A_ to fit into the workflow.
-
-## Prerequisites
-
-- Your development environment must use Python 3.6.
-- You must have access to the target data source. In the sample scenario, you must have access to Product A data source.
-- You must be familiar with Product A's query language and APIs.
-- You must be familiar or understand the following concepts:
-  - Observable objects. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)
-  - Stix patterning. See [STIX™ Version 2.0. Part 5: STIX Patterning](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part5-stix-patterning.html)
-
-## Steps
-
-To develop a STIX-shifter connector for a data source:
-
-1. Fork the `opencybersecurityalliance/stix-shifter` repository from https://github.com/opencybersecurityalliance/stix-shifter to work on your own copy of the library.
-1. [Create a module folder](#create-a-module-folder).
-1. [Create a Translation module](develop-translation-module.md).
-1. [Create a Transmission module](develop-transmission-module.md).
-1. [Create Configuration JSONs](develop-configuration-json.md)
-1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
-
-### Create a module folder
-
-Connector modules are stored under the `stix_shifter_modules` directory. To help you get started with creating a new connector, two module templates are available. If your data source executes queries synchronously (there is no API call to check the status of the query), make a copy of the `synchronous_dummy` folder in the `stix_shifter_modules` directory. If your data source executes queries asynchronously, make a copy of the `async_dummy` folder. The instructions that follow use the async template as an example.
-
-Rename the copied folder to match the data source your new connector is being developed for. For example, `abc_security_monitor`.
-
-<!-- Todo: reword this, it sounds awkward -->
-The module name is used as an argument when either translation or transmission is called. This argument is used throughout the project so that STIX-shifter knows which modules to use.
-
-Each module contains the following directories and files: 
-
-[stix_translation](develop-translation-module.md): Directory containing files needed for STIX translation. 
-
-[stix_transmission](develop-transmission-module.md): Directory containing files for executing API calls to run data source queries.   
-
-[configuration](develop-configuration-json.md): Directory containing configuration files.
-
-entry_point.py: Initializes classes and paths used by the connector. 
-
-### STIX Translation
-
-1. [Exploring the stix_translation director](#step-1-explore-the-stix_translation-directory)
+1. [Exploring the stix_translation directory](#step-1-exploring-the-stix_translation-directory)
 1. [Edit the from_stix_map.json file](#step-2-edit-the-from_stix_map-json-file)
 1. [Edit the query_constructor.py file](#step-3-edit-the-query-constructor-file)
 1. [Edit the to_stix_map.json file](#step-4-edit-the-to_stix_map-json-file)
@@ -71,11 +11,7 @@ entry_point.py: Initializes classes and paths used by the connector.
 1. [Update the MANIFEST.in file to include the path to the json mapping folder](#step-6-update-the-manifest-file-to-include-the-path-to-the-json-mapping-folder)
 1. [Verify that the translation module was created successfully](#step-7-verify-that-the-translation-module-was-created-successfully)
 
-#### Step 1. Exploring the stix_translation directory
-
-
-
-
+## Step 1. Exploring the stix_translation directory
 
 Verify that your `stix_translation` directory contains the following folders and files.
 
@@ -88,15 +24,15 @@ Verify that your `stix_translation` directory contains the following folders and
 | query_constructor.py    | This file contains the QueryStringPatternTranslator class, which translates the ANTLR parsing of the STIX pattern to the native data source query.                                                                                                                                                         |
 | query_translator.py        | This file contains the QueryTranslator class, which inherits the BaseQueryTranslator class. <br><br>QueryTranslator calls out to the ANTLR parser, which returns a parsing of the STIX pattern. The parsing is then passed onto the query_constructor.py where it is translated into the native data source query. |
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
-#### Step 2. Edit the from_stix_map JSON files
+## Step 2. Edit the from_stix_map JSON files
 
 The `<DIALECT>_from_stix_map.json` files is where you define HOW to translate a STIX pattern to a native data source query. STIX patterns are expressions that represent Cyber Observable objects. The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query.
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
-3. In your `abc` translation module folder, go to your json/ subfolder and edit the `from_stix_map.json` file. The `from_stix_map.json` file contains a sample mapping of STIX objects and properties to data source fields in the following format:
+3. Edit the `from_stix_map.json` file found in the `json` directory. The `dialect1_from_stix_map.json` file contains a sample mapping of STIX objects and properties to data source fields in the following format:
    ```
    {
        "stix-object": {
@@ -151,13 +87,13 @@ Pattern translation can use dialects to differentiate between multiple from-STIX
 
 If your data source uses multiple dialects, rename the `<DIALECT>_from_stix_map.json` files to include the dialect at the beginning of the file name. Include as many mapping files as needed; one for each dialect. If your data source only uses one dialect, include only one from-STIX mapping file with the name `from_stix_map.json` in the json directory.
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
 **Using Custom STIX Objects and Properties**
 
 As shown below in [Step 4](#step-4-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
 
-#### Step 3. Edit the query constructor file
+## Step 3. Edit the query constructor file
 
 When a STIX pattern is translated by STIX-shifter, it is first parsed with ANTLR 4 into nested expression objects. The native data source query is constructed from these nested objects.
 
@@ -194,7 +130,7 @@ The `query_constructor.py` file is where the native query is built from the ANTL
 
 ---
 
-#### How STIX-shifter handles unmapped STIX properties
+### How STIX-shifter handles unmapped STIX properties
 
 If a STIX pattern contains an unmapped property, and any joining operators allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
 
@@ -218,9 +154,9 @@ _The pattern only contains one observation with one unmapped property; nothing w
 
 ---
 
-In your `abc` translation module folder, edit the `query_constructor.py` file. Update the following sections based on the requirements of your data source.
+Edit the `query_constructor.py` file in the translation directory. Update the following sections based on the requirements of your data source.
 
-##### 1. Define the comparator_lookup mapping
+### 1. Define the comparator_lookup mapping
 
 The comparator_lookup maps the STIX pattern operators to the data source query operators. Change the comparator values to match the operators supported in your data source.
 
@@ -242,7 +178,7 @@ The default operators that are defined in your translation module are the ones t
 | ComparisonComparators.In                         | IN                          |
 | ComparisonComparators.Matches                    | LIKE                        |
 
-##### 2. Define the \_parse_expression method
+### 2. Define the \_parse_expression method
 
 The ANTLR parsing is recursively run through the \_parse_expression method. The type of expression is determined on each iteration. When the expression is a ComparisonExpression, a query string is added to the final data source query.
 
@@ -261,7 +197,7 @@ ComparisonExpression(
 Would add the following string to the native query:
 `"SourcePort = 37020"`
 
-##### 3. Define the final query that gets returned in the translate_pattern method
+### 3. Define the final query that gets returned in the translate_pattern method
 
 Depending on your data source, edit this section to:
 
@@ -271,9 +207,9 @@ Depending on your data source, edit this section to:
 
 The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `<DIALECT>_from_stix_map.json`).
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
-#### Step 4. Edit the to_stix_map JSON file
+## Step 4. Edit the to_stix_map JSON file
 
 The `to_stix_map.json` file is where you define HOW to translate data source query results into a bundle of STIX objects. Query results must be in JSON format; otherwise, the data source cannot be supported.
 
@@ -281,7 +217,7 @@ Results from unmapped data source fields are ignored during translation and are 
 
 1. Identify your data source fields.
 2. Refer to the following documentation [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for the list of STIX objects that you can map your data source fields.
-3. In your `abc` translation module folder, go to your json/ sub-folder and edit the `to_stix_map.json` file. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
+3. Edit the `to_stix_map.json` file in the `translation/json` directory. The `to_stix_map.json` file contains a sample mapping of data source fields to STIX objects and properties in the following format:
 
    ```
    {
@@ -456,24 +392,24 @@ Every STIX observed-data object must include the following properties:
 
 The code for translating data source results to STIX is found in `stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py`. Normally, there is no need to edit this file.
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
-#### Step 5. If required by your data source, update the transformers file
+## Step 5. If required by your data source, update the transformers file
 
 The `transformers.py` file is located in `stix_shifter_utils/stix_translation/src/utils/transformers.py`. It contains classes that transform data formats. Each class has a method that takes in data and transforms it into the preferred format. For example, an integer value is transformed into a string. These classes can be used in cases such as:
 
 - When converting from STIX, the data source query language requires specific data formats. For example, time stamps. In this case, the format of a value in the STIX pattern must be transformed during pattern translation if the STIX and query language data formats are different.
 - When converting to STIX, the STIX object requires specific data formats. In this case, the format of a value that is returned in the data source results must be transformed during translation into a bundle of STIX objects. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for STIX data formats.
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
-#### Step 6. Update the MANIFEST file to include the path to the json mapping folder
+## Step 6. Update the MANIFEST file to include the path to the json mapping folder
 
 The `MANIFEST.in` file is required by Python so that the new mapping files can be found when STIX-shifter is packaged.
 
-[Back to top](#create-a-translation-module)
+[Back to top](#stix-translation)
 
-#### Step 7. Verify that the translation module was created successfully
+## Step 7. Verify that the translation module was created successfully
 
 You must have access to the data source either through a UI or CLI so that you can run the translated query and confirm that it works.
 The translation module can be tested by calling the `main.py file` from the command line and passing in the required arguments. The order of arguments is as follows:
@@ -483,31 +419,31 @@ python main.py translate <data source (module) name> <"query" or "result"> <STIX
 be translated> <options>
 ```
 
-##### Test the STIX pattern to data source query translation
+### Test the STIX pattern to data source query translation
 
-1. Run the translation module from the command line. For example, using abc as a data source:
+1. Run the translation module from the command line. For example, using `abc_security_monitor` as a data source:
 
 ```
-python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'"
+python main.py translate abc_security_monitor query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'"
 ```
 
 To run validation on the STIX pattern, add `'{"validate_pattern": "true"}'` as an option to the end of the CLI command:
 
 ```
-python main.py translate abc query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
+python main.py translate abc_security_monitor query '{}' "[network-traffic:src_port = 37020 and network-traffic:dst_port = 635] OR [ipv4-addr:value = '333.333.333.0'] AND [url:value = 'www.example.com'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'" '{"validate_pattern": "true"}'
 ```
 
-If the translation module uses multiple from-STIX mapping files, you can append the dialects to the module name before passing it into the CLI. Given that module abc has two dialects, it could be passed in as: `abc:dialect_1:dialect_2` Only the appended dialects will be used during pattern translation. `abc:dialect_2` would only use the mapping for the second dialect and thus only return one translated query, not two. If the module uses dialects, but only the module name is passed in, all dialects will automatically be used; so `abc` would still use both dialects.
+If the translation module uses multiple from-STIX mapping files, you can append the dialects to the module name before passing it into the CLI. Given that module abc_security_monitor has two dialects, it could be passed in as: `abc_security_monitor:dialect_1:dialect_2` Only the appended dialects will be used during pattern translation. `abc_security_monitor:dialect_2` would only use the mapping for the second dialect and thus only return one translated query, not two. If the module uses dialects, but only the module name is passed in, all dialects will automatically be used; so `abc_security_monitor` would still use both dialects.
 
 2. Visually verify the returned query by running it against the data source.
 
-##### Test the JSON data source results to STIX translation
+### Test the JSON data source results to STIX translation
 
-1. Run the translation module from the command line. For example, using abc as a data source:
+1. Run the translation module from the command line. For example, using `abc_security_monitor` as a data source:
 
 ```
-python main.py translate abc results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
-6a4751cae5ff","name": "abc","identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
+python main.py translate abc_security_monitor results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
+6a4751cae5ff", "name": "abc_security_monitor", "identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
 ```
 
 Adding the `stix_validator` option at the end will ensure the observed-data objects conform to the STIX 2 standard.
@@ -521,239 +457,4 @@ Adding the `stix_validator` option at the end will ensure the observed-data obje
 - The `<STIX identity object>` is only used when translating data source results to STIX. As such, an empty JSON object can be passed in when converting a STIX pattern to a data source query.
 - For more information about identity objects, see the [STIX 2 documentation](http://docs.oasis-open.org/cti/stix/v2.0/cs01/part2-stix-objects/stix-v2.0-cs01-part2-stix-objects.html#_Toc496714310).
 
-[Back to top](#create-a-translation-module)
-
-### Create a Transmission module
-
-{: #transmission-mod}
-
-1. [Create a transmission module folder](#step-1-create-a-transmission-module-folder)
-1. [Edit the apiclient.py file](#step-2-edit-the-apiclient-file)
-1. [Edit the dummy_connector.py file](#step-3-edit-the-dummy-connector-file)
-1. [Edit the dummy_error_mapper.py file](#step-4-edit-the-dummy-error-mapper-file)
-1. [Add the module name to the stix transmission file](#step-5-add-the-module-name-to-stix_transmission.py)
-1. [Verify that the transmission module was created successfully](#step-6-verify-that-the-transmission-module-was-created-successfully)
-
-#### Step 1. Create a transmission module folder
-
-1. Go to `stix_shifter/stix_transmission/src/modules/`.
-2. Copy the `async_dummy` or `synchronous_dummy` folder, whichever is appropriate for your data source, based on the data source API.
-
-   These dummy folders are templates to help you get started quickly. They contain the necessary files that your transmission module needs. You need to customize it based on your data source.
-
-3. Rename your `async_dummy` or `synchronous_dummy` transmission module folder to match the name of your data source. It must match the same name that you assigned for your translation module. For example, abc.
-
-   The data source name is used as an argument when either translation or transmission is called. This argument is used throughout the project so that STIX-shifter knows which modules to use.
-
-   **Note:** The translation and transmission modules must have the same name.
-
-4. Verify that your transmission module folder contains the following folders and files.
-
-   For an asynchronous transmission module, you must have the following files:
-
-   | Folder/file                 | Why is it important? Where is it used?                                  |
-   | --------------------------- | ----------------------------------------------------------------------- |
-   | **init**.py                 | This file is required by Python to properly handle library directories. |
-   | apiclient.py                |
-   | async_dummy_connector.py    |
-   | async_dummy_error_mapper.py |
-
-   For a synchronous transmission module, you must have the following files:
-
-   | Folder/file                       | Why is it important? Where is it used?                                  |
-   | --------------------------------- | ----------------------------------------------------------------------- |
-   | **init**.py                       | This file is required by Python to properly handle library directories. |
-   | synchronous_dummy_connector.py    |
-   | synchronous_dummy_error_mapper.py |
-
-[Back to top](#create-a-transmission-module)
-
-#### Step 2. Edit the apiclient file
-
-You can implement an API client for an asynchronous or a synchronous data source. If your data source has a simpler way of calling the APIs, you don’t need an API client and you can skip this step.
-
-Edit the `apiclient.py` file's APIClient class to include the methods to call your data source' APIs. Each method calls out to the relevant API.
-
-- At a minimum, methods must be implemented for:
-  - Pinging the data source
-  - Creating a search; sending a query to the data source
-  - Checking the status of a search (only used for asynchronous data sources)
-  - Retrieving search results (only used for asynchronous data sources)
-- You can add methods for the following and others, if supported by your data source:
-  - Updating a search
-  - Deleting a search
-
-[Back to top](#create-a-transmission-module)
-
-#### Step 3. Edit the dummy connector file
-
-1. In your abc transmission module folder, rename the `async_dummy_connector.py` file or `synchronous_dummy_connector.py` file to <module_name>\_connector.py.
-
-   The `dummy_connector.py` file contains the Connector class, which gets instantiated when the transmission module is invoked. The Connector class contains all the methods that call out to the data source API through the API client.
-
-   The <module_name> must match the name that you assigned to your module folder in step 1. For example, abc_connector.py.
-
-   When STIX-shifter uses a transmission module to connect to a data source, the data source name is passed in as an argument. This argument is used to determine which module and files to use. If the argument name doesn't match the name of the module, an error occurs when the new transmission module is used.
-
-2. Edit the `abc_connector.py` file's Connector(BaseConnector) class to include the methods to run each of the API client methods.
-
-   - Change each method implementation as needed. Keep method names and signatures as they are.
-   - You can add the methods in the same file or create individual files for each.
-   - At a minimum, methods must be implemented for:
-
-     - ping
-     - create_query_connection (only used for asynchronous data sources)
-     - create_status_connection (only used for asynchronous data sources)
-     - create_results_connection
-
-       **Note:** The data source results need to be in JSON format before they are converted into STIX. If the results are not returned as JSON, the create_results_connection is one place where any needed JSON conversion might take place.
-
-   - You can add other methods, if supported by your data source. For example, delete_query_connection.
-
-**Note on synchronous data sources**
-
-For synchronous data sources, the query is sent to the API from the create_results_connection method. The query is sent, and the results are received in the same step. Although create_query_connection, and create_status_connection are not technically used, they still get called by UDS during the transmission execution and must be implemented as follows:
-
-_Create Query Connection_
-
-```
-def create_query_connection(self, query):
-      return { "success": True, "search_id": query }
-```
-
-_Create Status Connection_
-
-```
-def create_status_connection(self, search_id):
-      return {"success": True, "status": "COMPLETED", "progress": 100}
-```
-
-For asynchronous sources, the search id that gets passed into the connection methods is a UUID. This is used to keep track of the original query, allowing the status and results to be fetched. However, in the case a synchronous data source, the query is sent and the results are returned in the same action. Therefore, the search id in this case is not a UUID but the search query itself.
-
-[Back to top](#create-a-transmission-module)
-
-#### Step 4. Edit the dummy error mapper file
-
-The error mapper associates data source error codes, returned by the API, with error messages defined in the `ErrorCode` class. Update the keys in the `error_mapping` dictionary to match any error codes that may be returned by the API and set the appropriate value to one of the existing error codes defined in `error_reponse.py`.
-
-As an example, `1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS` would return an error code of 'no_results' if the API returned a 1002 code. Stix-shifter returns errors in the following format:
-
-`{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
-
-[Back to top](#create-a-transmission-module)
-
-#### Step 5. Add the module name to stix_transmission.py
-
-The `stix_transmission.py` file contains a `TRANSMISSION_MODULES` constant who's value is a list of the currently supported data sources. You must add the name of your module to this list. So if the module folder name is abc, a new entry, `abc`, will be added to the `TRANSMISSION_MODULES` list.
-
-[Back to top](#create-a-transmission-module)
-
-#### Step 6. Verify that the transmission module was created successfully
-
-1. You must have:
-
-   - Authentication credentials to connect to the data source.
-   - A private key and certificate for the cert.
-
-   Authentication depends on the data source and can be:
-
-   ```
-   '{"auth": {"username": "<username>","password": "<password>"}}' or
-   '{"auth": {"SEC":"<SEC TOKEN>"}}'
-   ```
-
-2. Test the transmission ping method.
-
-   1. Use the following CLI command:
-
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' ping
-      ```
-
-   2. Visually confirm that a result comes back with
-      ```
-      {'success': True}
-      ```
-
-3. Test the transmission is_async method.
-
-   1. Use the following CLI command:
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' is_async
-      ```
-   2. Visually confirm that it returns true if the data source is asynchronous. Otherwise, it must return false.
-
-4. Test the transmission query method.
-
-   1. Use the following CLI command:
-
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' query "<Native data source Query String>"
-      ```
-
-   2. Visually confirm that a result comes back with
-
-      ```
-      {'success': True, 'search_id': '<some query UUID>'}
-      ```
-
-   3. Take note of the UUID that is returned. It is the ID to use in the rest of the tests.
-
-5. Test the transmission status method.
-
-   1. Use the following CLI command:
-
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' status "<Query UUID from test 4>"
-      ```
-
-   2. Visually confirm that a result comes back with
-      ```
-      {'success': True, 'status': 'COMPLETED', 'progress': 100}
-      ```
-
-6. Test the transmission results method.
-
-   1. Use the following CLI command:
-
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' results "<Query UUID from test 4>" <Offset Integer> <Length Integer>
-      ```
-
-   2. You can set the offset and length command line arguments to 1.
-   3. Visually confirm that query results are returned as JSON objects. These results can be compared to what is returned when running the query string used in test C directly on the data source API, either through a UI or the CLI.
-
-7. Test the transmission delete method if the data source supports it.
-
-   1. Use the following CLI command:
-
-      ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN PRIVATE KEY-----<private key>-----END PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' delete "<Query UUID from test 4>"
-      ```
-
-   2. Visually confirm that a result comes back with
-      ```
-      {'success': True}
-      ```
-
-### Testing a new connector using the proxy host
-
-Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
-
-Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
-
-```
-python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
-```
-
-As an example:
-
-```
-python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
-```
+[Back to top](#stix-translation)
