@@ -8,8 +8,7 @@ The steps below assume you have renamed the `async_dummy` module directory to ou
 1. [Edit the apiclient.py file](#step-2-edit-the-apiclient-file)
 1. [Edit the dummy_connector.py file](#step-3-edit-the-dummy-connector-file)
 1. [Edit the dummy_error_mapper.py file](#step-4-edit-the-dummy-error-mapper-file)
-1. [Add the module name to the stix transmission file](#step-5-add-the-module-name-to-stix_transmission.py)
-1. [Verify that the transmission module was created successfully](#step-6-verify-that-the-transmission-module-was-created-successfully)
+1. [Verify the implementation of each transmission method](#step-5-verify-each-transmission-method)
 
 ## Step 1. Exploring the stix_transmission directory
 
@@ -76,31 +75,21 @@ As an example, `1002: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS` would retur
 [Back to top](#create-a-transmission-module)
 
 
-## Step 5. Verify that the transmission module was created successfully
+## Step 5. Verify each transmission method 
 
 The stix-shifter CLI can be used to test each of the transmission methods. Open a terminal on your local machine, and navigate to the root of the stix-shifter project. The format for calling a method is:
 
 `python main.py <connector name> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' <METHOD NAME> '<METHOD ARGUMENTS>'`
 
-1. You must have:
+The connection and configuration objects are explained in the transmission section of the stix-shifter [OVERVIEW.md](../OVERVIEW.md#transmit) The objects used in the CLI commands below are just an example.
 
-   - Authentication credentials to connect to the data source, (ex. username and password).
-   - A self-signed certificate if required by your data source.
 
-   Authentication depends on the data source and can be:
-
-   ```
-   '{"auth": {"username": "<username>","password": "<password>"}}' or
-   '{"auth": {"SEC":"<SEC TOKEN>"}}'
-   ```
-
-2. Test the transmission ping method.
+### Test the transmission **ping** method.
 
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' ping
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' ping
       ```
 
    2. Visually confirm that a result comes back with
@@ -108,22 +97,20 @@ The stix-shifter CLI can be used to test each of the transmission methods. Open 
       {'success': True}
       ```
 
-3. Test the transmission is_async method.
+### Test the transmission **is_async** method.
 
    1. Use the following CLI command:
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' is_async
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' is_async
       ```
    2. Visually confirm that it returns true if the data source is asynchronous. Otherwise, it must return false.
 
-4. Test the transmission query method.
+### Test the transmission **query** method.
 
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' query "<Native data source Query String>"
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' query "<Native data source Query String>"
       ```
 
    2. Visually confirm that a result comes back with
@@ -134,13 +121,12 @@ The stix-shifter CLI can be used to test each of the transmission methods. Open 
 
    3. Take note of the UUID that is returned. It is the ID to use in the rest of the tests.
 
-5. Test the transmission status method.
+### Test the transmission **status** method.
 
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' status "<Query UUID from test 4>"
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' status "<Query UUID from query test>"
       ```
 
    2. Visually confirm that a result comes back with
@@ -148,25 +134,23 @@ The stix-shifter CLI can be used to test each of the transmission methods. Open 
       {'success': True, 'status': 'COMPLETED', 'progress': 100}
       ```
 
-6. Test the transmission results method.
+### Test the transmission **results** method.
 
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth{"auth": <authentication object>}' results "<Query UUID from test 4>" <Offset Integer> <Length Integer>
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' results "<Query UUID from query test>" <Offset Integer> <Length Integer>
       ```
 
    2. You can set the offset and length command line arguments to 1.
    3. Visually confirm that query results are returned as JSON objects. These results can be compared to what is returned when running the query string used in test C directly on the data source API, either through a UI or the CLI.
 
-7. Test the transmission delete method if the data source supports it.
+### Test the transmission **delete** method.
 
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"<IP address or URL to data source>", "port":"<port number>", "cert":
-      "-----BEGIN CERTIFICATE-----<certificate>-----END CERTIFICATE-----\n"}' '{"auth": <authentication object>}' delete "<Query UUID from test 4>"
+      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' delete "<Query UUID from query test>"
       ```
 
    2. Visually confirm that a result comes back with
@@ -174,18 +158,3 @@ The stix-shifter CLI can be used to test each of the transmission methods. Open 
       {'success': True}
       ```
 
-# Testing a new connector using the proxy host
-
-Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
-
-Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
-
-```
-python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
-```
-
-As an example:
-
-```
-python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
-```
