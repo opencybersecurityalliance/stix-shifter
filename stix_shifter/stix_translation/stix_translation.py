@@ -7,6 +7,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 from stix_shifter_utils.utils.module_discovery import process_dialects
+from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
 import sys
 import glob
 from os import path
@@ -15,6 +16,7 @@ import traceback
 RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
+MAPPING = 'mapping'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 DEFAULT_LIMIT = 10000
 DEFAULT_TIMERANGE = 5
@@ -47,7 +49,7 @@ class StixTranslation:
         Translated queries to a specified format
         :param module: What module to use
         :type module: one of connector modules: 'qradar', 'dummy'
-        :param translate_type: translation of a query or result set must be either 'results' or 'query'
+        :param translate_type: translation of a query or result set must be one of: 'parse', 'mapping' 'query', 'results' 
         :type translate_type: str
         :param data: the data to translate
         :type data: str
@@ -95,16 +97,16 @@ class StixTranslation:
                     unmapped_stix_collection = []
                     for dialect in dialects:
                         antlr_parsing = generate_query(data)
-                        data_model_mapper = entry_point.get_data_mapper(dialect)
-                        if data_model_mapper:
-                            stripped_parsing = strip_unmapped_attributes(antlr_parsing, data_model_mapper)
+                        query_translator = entry_point.get_query_translator(dialect)
+                        if query_translator and not isinstance(query_translator, EmptyQueryTranslator):
+                            stripped_parsing = strip_unmapped_attributes(antlr_parsing, query_translator)
                             antlr_parsing = stripped_parsing.get('parsing')
                             unmapped_stix = stripped_parsing.get('unmapped_stix')
                             if unmapped_stix:
                                 unmapped_stix_collection.append(unmapped_stix)
                             if not antlr_parsing:
                                 continue
-                        translated_queries = entry_point.transform_query(dialect, data, antlr_parsing, options)
+                        translated_queries = entry_point.transform_query(dialect, data, antlr_parsing)
                         
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]
@@ -129,13 +131,19 @@ class StixTranslation:
 
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                return entry_point.translate_results(data_source, data, options)
+                return entry_point.translate_results(data_source, data)
+            elif translate_type == MAPPING:
+                mappings = {}
+                for dialect in dialects:
+                    mapping = entry_point.get_mapping(dialect)
+                    mappings[dialect] = mapping                
+                return mappings
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
                 for dialect in dialects:
-                    data_model_mapper = entry_point.get_data_mapper(dialect)
-                    result[dialect] = data_model_mapper.map_data
+                    query_translator = entry_point.get_query_translator(dialect)
+                    result[dialect] = query_translator.map_data
                     
                 return {'supported_attributes': result}
             else:

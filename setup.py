@@ -126,12 +126,13 @@ for project_name in projects.keys():
     shutil.rmtree('MANIFEST.in', ignore_errors=True)
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
-    for src_folder in src_folders:
-        json_search_path = src_folder
+    for json_search_path in src_folders:
         for r, d, f in os.walk(json_search_path):
-            for file in f:
-                if '.json' in file:
-                    json_include_lines.append('include '+os.path.join(r, file)+' \n')
+            r_split = r.split(os.sep)
+            if not (len(r_split) > 3 and 'tests' == r_split[2]):
+                for file in f:
+                    if '.json' in file:
+                        json_include_lines.append('include '+os.path.join(r, file)+' \n')
     with open('MANIFEST.in', 'a') as out_file:
         out_file.writelines(json_include_lines)
     

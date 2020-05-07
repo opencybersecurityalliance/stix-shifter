@@ -1,11 +1,11 @@
-stix2-patterns>=1.1.0
-stix2-validator>=0.5.0
-python-dateutil>=2.7.3
-antlr4-python3-runtime>=4.7
-boto3>=1.9.76
-xmltodict>=0.11.0
+stix2-patterns==1.3.0
+stix2-validator==1.1.2
+python-dateutil==2.8.1
+antlr4-python3-runtime==4.8
+boto3==1.12.40
+xmltodict==0.12.0
 requests_toolbelt==0.9.1
 flatten_json==0.1.7
-adal>=1.2.2
-flask>=1.0.2
+adal==1.2.2
+flask==1.1.2
 # git+git://github.com/oasis-open/cti-pattern-matcher.git@b265862971eb63c04a8a054a2adb13860edf7846#egg=stix2-matcher #uncomment when running locally

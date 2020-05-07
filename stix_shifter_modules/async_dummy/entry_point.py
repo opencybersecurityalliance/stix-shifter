@@ -1,16 +1,15 @@
-from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.async_dummy_api_client import APIClient
-from .stix_transmission.async_dummy_ping_connector import AsyncDummyPingConnector
-from .stix_transmission.async_dummy_query_connector import AsyncDummyQueryConnector
-from .stix_transmission.async_dummy_status_connector import AsyncDummyStatusConnector
-from .stix_transmission.async_dummy_results_connector import AsyncDummyResultsConnector
-from .stix_transmission.async_dummy_delete_connector import AsyncDummyDeleteConnector
-from .stix_translation.data_mapper import DataMapper
+from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from .stix_transmission.api_client import APIClient
+from .stix_transmission.ping_connector import PingConnector
+from .stix_transmission.query_connector import QueryConnector
+from .stix_transmission.status_connector import StatusConnector
+from .stix_transmission.results_connector import ResultsConnector
+from .stix_transmission.delete_connector import DeleteConnector
 from .stix_translation.query_translator import QueryTranslator
-from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
+from .stix_translation.results_translator import ResultsTranslator
 import os
 
-class EntryPoint(EntryPointBase):
+class EntryPoint(BaseEntryPoint):
 
     # python main.py translate async_dummy query '{}' "[ipv4-addr:value = '127.0.0.1']"
     # python main.py translate async_dummy:dialect1 query '{}' "[ipv4-addr:value = '127.0.0.1']"
@@ -20,11 +19,11 @@ class EntryPoint(EntryPointBase):
         super().__init__(options)
         if connection:
             api_client = APIClient(connection, configuration)
-            ping_connector = AsyncDummyPingConnector(api_client)
-            query_connector = AsyncDummyQueryConnector(api_client)
-            status_connector = AsyncDummyStatusConnector(api_client)
-            results_connector = AsyncDummyResultsConnector(api_client)
-            delete_connector = AsyncDummyDeleteConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
+            status_connector = StatusConnector(api_client)
+            results_connector = ResultsConnector(api_client)
+            delete_connector = DeleteConnector(api_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)
@@ -36,16 +35,17 @@ class EntryPoint(EntryPointBase):
             # self.setup_translation_simple('default')      #   <-------------
             # all the lines below can be replaced with one line configuration |
             
-            query_translator = QueryTranslator()
+            
             basepath = os.path.dirname(__file__)
             filepath = os.path.abspath(
-                os.path.join(basepath, "stix_translation", "json", "to_stix_map.json"))
-            results_translator = JSONToStix(filepath)
+                os.path.join(basepath, "stix_translation"))
 
             dialect = 'dialect1'
-            data_mapper = DataMapper(options, dialect=dialect)
-            self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=True)
+            query_translator = QueryTranslator(options, dialect, filepath)
+            results_translator = ResultsTranslator(options, dialect)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
-            data_mapper = DataMapper(options, dialect=dialect)
-            self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)
+            query_translator = QueryTranslator(options, dialect, filepath)
+            results_translator = ResultsTranslator(options, dialect)
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)

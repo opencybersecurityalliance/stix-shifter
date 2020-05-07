@@ -1,11 +1,12 @@
-from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from stix_shifter_utils.modules.cim.stix_translation.cim_data_mapper import CimDataMapper
-from stix_shifter_utils.modules.car.stix_translation.car_data_mapper import CarDataMapper
-from .stix_translation.stix_to_elastic  import StixToElastic
-class EntryPoint(EntryPointBase):
+from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from .stix_translation.cim_query_translator import CimQueryTranslator
+from .stix_translation.car_query_translator import CarQueryTranslator
+
+class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
-        self.add_dialect('default', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default=True)
-        self.add_dialect('cim', query_translator=StixToElastic(), data_mapper=CimDataMapper(options), default_include=False)
-        self.add_dialect('car', query_translator=StixToElastic(), data_mapper=CarDataMapper(options), default_include=False)
+        dialect = 'car'
+        self.add_dialect(dialect, query_translator=CarQueryTranslator(options, dialect), default=True)
+        dialect = 'cim'
+        self.add_dialect(dialect, query_translator=CimQueryTranslator(options, dialect), default_include=False)

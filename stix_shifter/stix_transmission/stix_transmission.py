@@ -1,5 +1,6 @@
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 
 
 RESULTS = 'results'
@@ -20,7 +21,13 @@ class StixTransmission:
             module = 'proxy'
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-            self.entry_point = connector_module.EntryPoint(connection, configuration)
+
+            validation_obj = {'connection': connection, 'configuration': configuration}
+            modernize_objects(module, validation_obj)
+            
+            validation_obj = param_validator(module, validation_obj)
+          
+            self.entry_point = connector_module.EntryPoint(validation_obj['connection'], validation_obj['configuration'])
         except Exception as e:
             self.init_error = e
 
@@ -74,6 +81,17 @@ class StixTransmission:
             if self.init_error is not None:
                 raise Exception(self.init_error)
             return self.entry_point.ping_connection()
+        except Exception as ex:
+            return_obj = dict()
+            ErrorResponder.fill_error(return_obj, error=ex)
+            return return_obj
+
+    def mappings(self):
+        # Returns default module mappings 
+        try:
+            if self.init_error is not None:
+                raise Exception(self.init_error)
+            return self.entry_point.get_mappings()
         except Exception as ex:
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)

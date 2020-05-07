@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.modules.car.stix_translation.car_data_mapper import CarDataMapper
+from stix_shifter_utils.modules.car.stix_translation.query_translator import CarBaseQueryTranslator
 
 from . import encoders
 from . import object_scopers
@@ -188,7 +188,7 @@ class _ObservationExpressionTranslator:
                 encoders.simple(expression.value)
             ), expression.negated)
 
-            if isinstance(self.dmm, CarDataMapper):
+            if isinstance(self.dmm, CarBaseQueryTranslator):
                 return "({} AND {})".format(object_scoping, splunk_comparison)
             else:
                 return "({})".format(splunk_comparison)
@@ -216,7 +216,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
     time_range = options['time_range']
     # CAR + Splunk = we want to override the default object scoper, I guess?
     is_cim = False
-    if isinstance(data_model_mapping, CarDataMapper):
+    if isinstance(data_model_mapping, CarBaseQueryTranslator):
         x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range, object_scoper=object_scopers.car_object_scoper)
         is_cim = False
     else:
@@ -229,7 +229,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
     # adding default fields for query
 
     if is_cim:
-        map_data = data_model_mapping.FIELDS["default"]
+        map_data = data_model_mapping.select_fields["default"]
         fields = ""
         for field in map_data:
             if field != map_data[-1]:

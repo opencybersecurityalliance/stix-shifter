@@ -1,14 +1,36 @@
 from abc import ABCMeta, abstractmethod
+import json
+import os
 
 
 class BaseResultTranslator(object, metaclass=ABCMeta):
 
-    def __init__(self, default_mapping_file_path=None, callback=None):
-        self.default_mapping_file_path = default_mapping_file_path
+    def __init__(self, options, dialect, base_file_path=None, callback=None):
+        self.dialect = dialect
+        self.options = options
+        filepath = os.path.abspath(
+            os.path.join(base_file_path, "json", "to_stix_map.json"))
+        self.default_mapping_file_path = filepath
         self.callback = callback
+        self.map_data = {}
+
+        mapping = options['mapping'] if 'mapping' in options else {}
+        if mapping and dialect in mapping:
+            map_data = mapping[dialect]
+            if 'to_stix' in map_data:
+                self.map_data = map_data['to_stix']
+        if not self.map_data:
+            try:
+                map_file = open(self.default_mapping_file_path).read()
+                self.map_data = json.loads(map_file)
+            except Exception as ex:
+                print(ex)
+
+    def get_mapping(self):
+        return self.map_data
 
     @abstractmethod
-    def translate_results(self, data_source, data, options, mapping=None):
+    def translate_results(self, data_source, data):
         """
         Translates data into STIX results based on a mapping file
         :param data_source: STIX identity object representing a data source
@@ -21,4 +43,4 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         :rtype: str
         """
         # if translating some datasource to STIX results...
-        pass
+        raise NotImplementedError()
