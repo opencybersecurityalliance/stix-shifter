@@ -2,7 +2,6 @@ import requests
 from requests_toolbelt.adapters import host_header_ssl
 import sys
 import collections
-import urllib.parse
 import os
 import errno
 import uuid
@@ -82,14 +81,6 @@ class RestApiClient:
                 for header_key in headers:
                     actual_headers[header_key] = headers[header_key]
 
-            if urldata:
-                urldata = urllib.parse.urlencode(urldata)
-                if '?' in endpoint:
-                    endpoint += '&'
-                else:
-                    endpoint += '?'
-                endpoint += urldata
-
             if self.url_modifier_function is not None:
                 url = self.url_modifier_function(
                     self.server_ip, endpoint, actual_headers)
@@ -105,8 +96,7 @@ class RestApiClient:
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
                     actual_headers["Host"] = self.sni
 
-                response = call(url, headers=actual_headers,
-                                cert=self.client_cert_content, data=data, verify=self.server_cert_content, timeout=timeout)
+                response = call(url, headers=actual_headers, params=urldata, cert=self.client_cert_content, data=data, verify=self.server_cert_content, timeout=timeout)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
                         and "Deprecated" in response.headers['Content-Type']:

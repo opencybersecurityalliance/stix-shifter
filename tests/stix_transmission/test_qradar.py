@@ -259,7 +259,7 @@ class TestRequests(unittest.TestCase, object):
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.ping()
 
-        mock_get.assert_called_with('x_forward_proxy_host1', cert=None, data=None, headers={'version': '8.0', 'accept': 'application/json', \
+        mock_get.assert_called_with('x_forward_proxy_host1', params=None, cert=None, data=None, headers={'version': '8.0', 'accept': 'application/json', \
                                     'sec': 'sec0', 'proxy': 'proxy_url0:8088', 'proxy-authorization': 'Basic proxy_auth_data0', \
                                     'x-forward-url': 'https://somehost0:15004/api/help/resources', 'x-forward-auth': 'x_forward_proxy_auth_data1', 'user-agent': 'UDS'}, timeout=10, verify=True)
 
@@ -268,6 +268,9 @@ class TestRequests(unittest.TestCase, object):
 @patch('requests.get', autospec = True)
 class TestQRadarCloudDataLake(unittest.TestCase, object):
     def test_query_response(self, mock_get, mock_post):
+        mocked_return_value = '{"search_id":"1"}'
+        mock_post.return_value = MockResponseWrapper(201, mocked_return_value)
+
         connection = {
             "host" : "somehost0",
             "port" : "15000",
@@ -281,9 +284,14 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.query('some-query')
-        assert 'https://somehost0:15000/api/ariel/searches?data_lake=%22qcdl%22' in mock_post.call_args[0]
+        call_args = mock_post.call_args
+        assert 'https://somehost0:15000/api/ariel/searches' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']
 
     def test_status_response(self, mock_get, mock_post):
+        mocked_return_value = '{"status": "COMPLETED", "progress":"100"}'
+        mock_get.return_value = MockResponseWrapper(200, mocked_return_value)
+
         connection = {
             "host" : "somehost0",
             "port" : "15000",
@@ -297,9 +305,15 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.status('some-search-id')
-        assert 'https://somehost0:15000/api/ariel/searches/some-search-id?data_lake=%22qcdl%22' in mock_get.call_args[0]
+        
+        call_args = mock_get.call_args
+        assert 'https://somehost0:15000/api/ariel/searches/some-search-id' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']
+
 
     def test_results_response(self, mock_get, mock_post):
+        mocked_return_value = '{"status": "COMPLETED", "progress":"100"}'
+        mock_get.return_value = MockResponseWrapper(200, mocked_return_value)
         connection = {
             "host" : "somehost0",
             "port" : "15000",
@@ -313,4 +327,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         }
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.results('some-search-id', 0, 1)
-        assert 'https://somehost0:15000/api/ariel/searches/some-search-id/results?data_lake=%22qcdl%22' in mock_get.call_args[0]
+
+        call_args = mock_get.call_args
+        assert 'https://somehost0:15000/api/ariel/searches/some-search-id/results' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']

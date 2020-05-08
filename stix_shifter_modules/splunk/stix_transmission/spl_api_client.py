@@ -1,8 +1,5 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
-import urllib.parse
 import json
-from urllib.parse import urlencode
-
 
 class APIClient():
     # API METHODS
@@ -44,8 +41,6 @@ class APIClient():
         data = {'username': auth['username'], 'password': auth['password'], 'output_mode': 'json'}
         endpoint = self.endpoint_start + 'auth/login'
         try:
-            data = urlencode(data)
-            data = data.encode('utf-8')
             response_json = json.load(self.client.call_api(endpoint, 'POST', headers, data=data))
             headers['Authorization'] = "Splunk " + response_json['sessionKey']
         except KeyError as e:
@@ -63,8 +58,6 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + "search/jobs"
         data = {'search': query_expression, 'output_mode': self.output_mode}
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')
         return self.client.call_api(endpoint, 'POST', data=data)
 
     def get_search(self, search_id):
@@ -96,6 +89,4 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id
         data = {'output_mode': self.output_mode}
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')
         return self.client.call_api(endpoint, 'DELETE', data=data)
