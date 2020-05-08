@@ -6,7 +6,7 @@ ___
 ### file
 - name
 - hashes.MD5
-- hahses.SHA-256
+- hashes.SHA-256
 - created
 - size
 
