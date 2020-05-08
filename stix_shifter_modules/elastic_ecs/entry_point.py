@@ -11,4 +11,4 @@ class EntryPoint(BaseEntryPoint):
             self.setup_transmission_basic(connection, configuration)
         else:
             dialect = 'default'
-            self.setup_translation_simple(dialect, results_translator=ResultTranslator(options, dialect))
+            self.setup_translation_simple(dialect_default=dialect, results_translator=ResultTranslator(options, dialect))

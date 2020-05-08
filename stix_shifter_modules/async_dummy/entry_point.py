@@ -9,6 +9,7 @@ from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
 import os
 
+
 class EntryPoint(BaseEntryPoint):
 
     # python main.py translate async_dummy query '{}' "[ipv4-addr:value = '127.0.0.1']"
@@ -18,6 +19,12 @@ class EntryPoint(BaseEntryPoint):
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
         if connection:
+
+            # Use default transmission setup otherwise...
+            # self.setup_transmission_simple(connection, configuration)
+
+            # ...implement your own setup similar to the following: 
+
             api_client = APIClient(connection, configuration)
             ping_connector = PingConnector(api_client)
             query_connector = QueryConnector(api_client)
@@ -31,11 +38,12 @@ class EntryPoint(BaseEntryPoint):
             self.set_results_connector(results_connector)
             self.set_delete_connector(delete_connector)
         else:
+          
+            # Use default translation setup with default dialect otherwise...
+            # self.setup_translation_simple(dialect_default='default') 
             
-            # self.setup_translation_simple('default')      #   <-------------
-            # all the lines below can be replaced with one line configuration |
-            
-            
+            # ...implement your own setup similar to the following:
+
             basepath = os.path.dirname(__file__)
             filepath = os.path.abspath(
                 os.path.join(basepath, "stix_translation"))
