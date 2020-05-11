@@ -39,7 +39,8 @@ To develop a STIX-shifter connector for a data source:
 1. [Create a module folder](#create-a-module-folder).
 1. [Create a Translation module](develop-translation-module.md).
 1. [Create a Transmission module](develop-transmission-module.md).
-1. [Create Configuration JSONs](develop-configuration-json.md)
+1. [Create Configuration JSONs](develop-configuration-json.md).
+1. [Create the module entry points](#create-module-entry-points).
 1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
 
 ### Create a module folder
@@ -60,6 +61,10 @@ Each module contains the following directories and files:
 [configuration](develop-configuration-json.md): Directory containing configuration files.
 
 entry_point.py: Initializes classes and paths used by the connector. 
+
+### Create the module entry points
+
+The `EntryPoint` class acts as a gateway to the various methods used by the translation and transmission classes. In most instances, it's fine to use the `setup_transmission_simple` and `setup_translation_simple(dialect_default='default')` methods. In cases where multiple dialects are used by the connector, the `dialect_default` argument is the dialect you wish to use as the default when the entire collection isn't passed in. See [Create a Translation module](develop-translation-module.md) to learn about dialects.
 
 
 ### Testing a new connector using the proxy host

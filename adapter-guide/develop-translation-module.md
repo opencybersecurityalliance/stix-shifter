@@ -8,8 +8,7 @@ The steps below assume you have renamed the `async_dummy` module directory to ou
 1. [Edit the query_constructor.py file](#step-3-edit-the-query-constructor-file)
 1. [Edit the to_stix_map.json file](#step-4-edit-the-to_stix_map-json-file)
 1. [If required by your data source, update the transformers.py file](#step-5-if-required-by-your-data-source-update-the-transformers-file)
-1. [Update the MANIFEST.in file to include the path to the json mapping folder](#step-6-update-the-manifest-file-to-include-the-path-to-the-json-mapping-folder)
-1. [Verify that the translation module was created successfully](#step-7-verify-that-the-translation-module-was-created-successfully)
+1. [Verify that the translation module was created successfully](#step-6-verify-that-the-translation-module-was-created-successfully)
 
 ## Step 1. Exploring the stix_translation directory
 
@@ -403,13 +402,8 @@ The `transformers.py` file is located in `stix_shifter_utils/stix_translation/sr
 
 [Back to top](#stix-translation)
 
-## Step 6. Update the MANIFEST file to include the path to the json mapping folder
 
-The `MANIFEST.in` file is required by Python so that the new mapping files can be found when STIX-shifter is packaged.
-
-[Back to top](#stix-translation)
-
-## Step 7. Verify that the translation module was created successfully
+## Step 6. Verify that the translation module was created successfully
 
 You must have access to the data source either through a UI or CLI so that you can run the translated query and confirm that it works.
 The translation module can be tested by calling the `main.py file` from the command line and passing in the required arguments. The order of arguments is as follows:
