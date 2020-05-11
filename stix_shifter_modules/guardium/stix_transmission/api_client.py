@@ -1,7 +1,6 @@
-from stix_shifter_modules.guardium.stix_transmission.utils.RestApiClient import RestApiClient
-from stix_shifter_modules.guardium.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
 from requests.models import Response
-import urllib.parse
 import sys
 import json
 import datetime
@@ -137,7 +136,7 @@ class APIClient():
             raise IOError(3001, "Guardium Credential object is found to be None. Error Raised.")
 #
         else:
-            data = urllib.parse.urlencode(self.credential)
+            data = self.credential
 #
         return data
 #
@@ -153,7 +152,7 @@ class APIClient():
         endpoint = "oauth/token"
         tNow = datetime.datetime.now()
         response = self.client.call_api(
-            endpoint, "POST", params=data, data=None)
+            endpoint, "POST", urldata=data, data=None)
         jResp = json.loads(str(response.read(), 'utf-8'))
 #
         #print(jResp)
@@ -320,7 +319,7 @@ class APIClient():
         if (self.get_accessToken()):
             endpoint = self.endpoint_start + "online_report"
 #
-            response = self.client.call_api(endpoint, 'POST', params=None, data=data)
+            response = self.client.call_api(endpoint, 'POST', data=data)
             status_code = response.response.status_code
 #
 #           Though the connector gets the authorization token just before fetching the actual result
@@ -332,7 +331,7 @@ class APIClient():
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
                     if (self.get_accessToken()):
-                        response = self.client.call_api(endpoint, 'POST', params=None, data=data)
+                        response = self.client.call_api(endpoint, 'POST', data=data)
                         status_code = response.response.status_code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
@@ -374,9 +373,7 @@ class APIClient():
             data['save_results'] = save_results
         if status:
             data['status'] = status
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')
-        return self.client.call_api(endpoint, 'POST', params=None, data=data)
+        return self.client.call_api(endpoint, 'POST', data=data)
 #
     def delete_search(self, search_id):
         # Subroto -- not used.
