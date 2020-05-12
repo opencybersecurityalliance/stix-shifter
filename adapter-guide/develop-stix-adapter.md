@@ -66,6 +66,19 @@ entry_point.py: Initializes classes and paths used by the connector.
 
 The `EntryPoint` class acts as a gateway to the various methods used by the translation and transmission classes. In most instances, it's fine to use the `setup_transmission_simple` and `setup_translation_simple(dialect_default='default')` methods. In cases where multiple dialects are used by the connector, the `dialect_default` argument is the dialect you wish to use as the default when the entire collection isn't passed in. See [Create a Translation module](develop-translation-module.md) to learn about dialects.
 
+If the data source is synchronous, you must include `set_async(False)` in the connector's entry point initialization. Otherwise the data source will be treated as asynchronous by default.
+
+```
+  class EntryPoint(EntryPointBase):
+    def __init__(self, connection={}, configuration={}, options={}):
+      super().__init__(options)
+      self.set_async(False)
+      if connection:
+        ...
+      else:
+        ...
+```
+
 
 ### Testing a new connector using the proxy host
 

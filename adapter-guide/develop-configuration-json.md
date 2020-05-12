@@ -27,7 +27,8 @@ The following example JSON contains the appropriate parameters that each module 
             "default": "QRadar"
         },
         "host": {
-            "type": "text"
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "default": 443,
@@ -87,6 +88,8 @@ Each parameter in both the connection and configuration object can also have few
     - Set this value to "true" if the parameter is optional. By default the value is "false" if not defined
 6. hidden
     - Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not defined
+7. regex
+    - Regular expression pattern that defines what characters are permitted in the value.
 
 Configuration object needs to have `auth` child object. `auth` object should contain the parameters that are needed for api authentication. We have put an example of qradar api authentication paramter in the above example. Here's another example of `auth` object-
 
