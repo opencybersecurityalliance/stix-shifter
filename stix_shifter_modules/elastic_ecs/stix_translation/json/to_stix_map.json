@@ -456,6 +456,17 @@
         "object": "proc",
         "references": "user"
       }
+    ],
+    "email": [
+      {
+        "key": "email-addr.value",
+        "object": "email"
+      },
+      {
+        "key": "email-addr.belongs_to_ref",
+        "object": "email",
+        "references": "user"
+      }
     ]
   },
   "agent": {

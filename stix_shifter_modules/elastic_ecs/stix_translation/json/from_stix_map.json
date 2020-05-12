@@ -55,5 +55,26 @@
     "fields": {
       "value": ["url.domain"]
     }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["registry.key"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["agent.name"]
+    }
+  },
+  "autonomous-system": {
+    "fields": {
+      "value": ["as.organization.name"],
+      "number": ["as.number"]
+    }
+  },
+  "email-addr.value": {
+    "fields": {
+      "name": ["user.email"]
+    }
   }
 }
