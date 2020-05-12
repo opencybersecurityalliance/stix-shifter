@@ -443,7 +443,19 @@
         "key": "x_com_elastic_ecs_code_signature.subject_name",
         "cybox": false
       }
-    }
+    },
+    "ppid": [
+      {
+        "key": "process.pid",
+        "object": "parent",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "parent",
+        "references": "proc"
+      }
+    ]
   },
   "user": {
     "name": [
@@ -545,8 +557,14 @@
     }
   },
   "dll":{
-    "name": {},
-    "path": {}
+    "name": {
+      "key": "x_com_elastic_ecs_dll.name",
+      "cybox": false
+    },
+    "path": {
+      "key": "x_com_elastic_ecs_dll.path",
+      "cybox": false
+    }
   },
   "dns": {
     "answers": {
@@ -959,6 +977,28 @@
       "cybox": false
     }
   },
+  "pe": {
+    "company": {
+      "key": "x_com_elastic_ecs_pe.company",
+      "cybox": false
+    },
+    "description": {
+      "key": "x_com_elastic_ecs_pe.description",
+      "cybox": false
+    },
+    "file_version": {
+      "key": "x_com_elastic_ecs_pe.file_version",
+      "cybox": false
+    },
+    "original_file_name": {
+      "key": "x_com_elastic_ecs_pe.original_file_name",
+      "cybox": false
+    },
+    "product": {
+      "key": "x_com_elastic_ecs_pe.product",
+      "cybox": false
+    }
+  },
   "package": {
     "name": {
       "key": "software.name"
@@ -970,6 +1010,20 @@
   "registry": {
     "key": {
       "key": "windows-registry-key.key"
+    }
+  },
+  "related": {
+    "hash": {
+      "key": "x_com_elastic_ecs_related.hash",
+      "cybox": false
+    },
+    "ip": {
+      "key": "x_com_elastic_ecs_related.ip",
+      "cybox": false
+    },
+    "user": {
+      "key": "x_com_elastic_ecs_related.user",
+      "cybox": false
     }
   },
   "rule": {

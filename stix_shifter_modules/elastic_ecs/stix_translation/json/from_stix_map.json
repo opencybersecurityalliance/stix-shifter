@@ -72,7 +72,7 @@
       "number": ["as.number"]
     }
   },
-  "email-addr.value": {
+  "email-addr": {
     "fields": {
       "name": ["user.email"]
     }
