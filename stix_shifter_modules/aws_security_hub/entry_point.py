@@ -1,4 +1,5 @@
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from .stix_translation.query_translator import QueryTranslator
 
 class EntryPoint(BaseEntryPoint):
 
