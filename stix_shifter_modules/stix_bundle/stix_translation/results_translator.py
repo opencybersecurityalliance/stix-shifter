@@ -5,7 +5,7 @@ import uuid
 
 class Translator(BaseResultTranslator):
 
-    def translate_results(self, data_source, data:
+    def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
         bundle = {
             "type": "bundle",
@@ -13,13 +13,13 @@ class Translator(BaseResultTranslator):
             "objects": []
         }
 
-        data_source_dict = json.loads(data_source)
-        bundle['objects'] += [data_source_dict]
+        data_source = json.loads(data_source)
+        bundle['objects'] += [data_source]
         # Data is already STIX and we don't want to touch it
         bundle_data = json.loads(data)
 
         for obs in bundle_data:
-            obs["created_by_ref"] = data_source_dict['id']
+            obs["created_by_ref"] = data_source['id']
 
         bundle['objects'] += bundle_data
         return json.dumps(bundle, indent=4, sort_keys=False)
