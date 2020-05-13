@@ -3,7 +3,7 @@ import json
 import requests
 from .utils import unwrap_connection_options
 
-class ResultsTranslator(BaseResultsTranslator):
+class ResultsTranslator(BaseResultTranslator):
 
     def translate_results(self, data_source, data, options={}, mapping=None):
         # A proxy translation call passes the entire data source connection object in as the options
