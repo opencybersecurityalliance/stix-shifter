@@ -13,13 +13,13 @@ class Translator(BaseResultTranslator):
             "objects": []
         }
 
-        data_source = json.loads(data_source)
-        bundle['objects'] += [data_source]
+        data_source_dict = json.loads(data_source)
+        bundle['objects'] += [data_source_dict]
         # Data is already STIX and we don't want to touch it
         bundle_data = json.loads(data)
 
         for obs in bundle_data:
-            obs["created_by_ref"] = data_source['id']
+            obs["created_by_ref"] = data_source_dict['id']
 
         bundle['objects'] += bundle_data
         return json.dumps(bundle, indent=4, sort_keys=False)
