@@ -66,7 +66,10 @@ entry_point.py: Initializes classes and paths used by the connector.
 
 The `EntryPoint` class acts as a gateway to the various methods used by the translation and transmission classes. In most instances, it's fine to use the `setup_transmission_simple` and `setup_translation_simple(dialect_default='default')` methods. In cases where multiple dialects are used by the connector, the `dialect_default` argument is the dialect you wish to use as the default when the entire collection isn't passed in. See [Create a Translation module](develop-translation-module.md) to learn about dialects.
 
-If the data source is synchronous, you must include `set_async(False)` in the connector's entry point initialization. Otherwise the data source will be treated as asynchronous by default.
+
+#### Entry points for synchronous connections
+
+If the data source is synchronous, you must include `set_async(False)` in the connector's entry point initialization, otherwise the data source will be treated as asynchronous by default. Even though a synchronous connector omits the `query_connector.py` and `status_connector.py` files from its transmission directory, those connectors are still called in every module's entry point. For synchronous data sources, those connectors call the `BaseSyncConnector()` methods which return `{"success": True, "status": "COMPLETED", "progress": 100}`. 
 
 ```
   class EntryPoint(EntryPointBase):
@@ -74,7 +77,17 @@ If the data source is synchronous, you must include `set_async(False)` in the co
       super().__init__(options)
       self.set_async(False)
       if connection:
+        api_client = APIClient(connection, configuration)
+        base_sync_connector = BaseSyncConnector()
+        ping_connector = PingConnector(api_client)
+        query_connector = base_sync_connector
+        status_connector = base_sync_connector
         ...
+        self.set_query_connector(query_connector)
+        self.set_ping_connector(ping_connector)
+        self.set_status_connector(status_connector)
+        self.set_delete_connector(delete_connector)
+        self.set_results_connector(results_connector)
       else:
         ...
 ```
