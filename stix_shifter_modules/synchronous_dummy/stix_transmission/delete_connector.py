@@ -16,7 +16,7 @@ class DeleteConnector(BaseDeleteConnector):
                 return_obj['success'] = response_code['success']
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-            return response
+            return return_obj
         except Exception as err:
             print('error when deleting search {}:'.format(err))
             raise
