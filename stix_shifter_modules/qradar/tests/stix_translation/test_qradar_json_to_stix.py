@@ -407,7 +407,7 @@ class TestTransform(object):
             "sha256hash": "someSHA-256hash",
             "logsourceid": 123,
             "filename": "someFile.exe",
-            "filepath": "C:/my/file/path"
+            "filepath": "C:/my/file/path/"
         }]
 
         data_string = json.dumps(data)
