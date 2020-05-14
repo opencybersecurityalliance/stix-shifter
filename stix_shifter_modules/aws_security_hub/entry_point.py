@@ -1,8 +1,9 @@
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from .stix_translation.query_translator import QueryTranslator
 
 class EntryPoint(BaseEntryPoint):
 
-    def __init__(self, options):
+    def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
         #TODO add transmission tests
         #TODO add translation tests

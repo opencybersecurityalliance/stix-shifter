@@ -5,7 +5,7 @@ import uuid
 
 class Translator(BaseResultTranslator):
 
-    def translate_results(self, data_source, data:
+    def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
         bundle = {
             "type": "bundle",
