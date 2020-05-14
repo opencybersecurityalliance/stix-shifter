@@ -10,4 +10,4 @@ class EntryPoint(BaseEntryPoint):
         if connection and configuration:
             self.setup_transmission_basic(connection, configuration)
         else:
-            self.setup_translation_simple('default', query_translator=QueryTranslator())
+            self.setup_translation_simple(dialect_default='default', query_translator=QueryTranslator())

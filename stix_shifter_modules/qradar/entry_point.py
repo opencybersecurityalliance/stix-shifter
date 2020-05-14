@@ -9,4 +9,4 @@ class EntryPoint(BaseEntryPoint):
         if connection:
             self.setup_transmission_simple(connection, configuration)
         else:
-            self.setup_translation_simple('flows')
+            self.setup_translation_simple(dialect_default='flows')

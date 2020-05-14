@@ -48,6 +48,10 @@ ___
 - protocols
 
 ___
+### software
+- name
+
+___
 ### url
 - value
 
@@ -63,7 +67,7 @@ ___
 - high_level_category_id
 - identity_ip
 - identity_host_name
-- qid_name
+- event_name
 - relevance
 - log_source_id
 - log_source_name
@@ -79,7 +83,16 @@ ___
 - severity
 - first_packet_time
 - last_packet_time
-- application_name
 - application_id
+- cre_event_list
+- rule_names
+- domain_id
+- device_type_name
+- device_type
+
+___
+### x_com_ibm_finding
+- name
+- description
 
 ___
