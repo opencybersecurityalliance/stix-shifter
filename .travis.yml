@@ -11,7 +11,7 @@ python:
 
 before_script:
   - python generate_requirements.py
-  - pip install ---upgrade pip setuptools wheel
+  - pip install --upgrade pip setuptools wheel
   - pip install -r requirements-dev.txt
   - pip install --upgrade flake8
   # stop the build if there are Python syntax errors or undefined names
