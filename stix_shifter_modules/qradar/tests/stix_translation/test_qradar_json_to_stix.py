@@ -407,7 +407,7 @@ class TestTransform(object):
             "sha256hash": "someSHA-256hash",
             "logsourceid": 123,
             "filename": "someFile.exe",
-            "filepath": "C:/my/file/path/"
+            "filepath": "/unix/files/system/someFile.exe"
         }]
 
         data_string = json.dumps(data)
@@ -429,7 +429,7 @@ class TestTransform(object):
         assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path', '')
-        assert(directory_object_path == "C:/my/file/path")
+        assert directory_object_path == "/unix/files/system"
 
     def test_hashtype_lookup_by_length(self):
         data_source_string = json.dumps(data_source)
