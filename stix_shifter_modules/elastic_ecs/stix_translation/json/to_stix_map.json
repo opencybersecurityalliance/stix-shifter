@@ -38,12 +38,12 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": "src_mac"
+        "references": ["src_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": "src_mac"
+        "references": ["src_mac"]
       }
     ]
   },
@@ -76,12 +76,12 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": "src_mac"
+        "references": ["src_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": "src_mac"
+        "references": ["src_mac"]
       }
     ]
   },
@@ -114,12 +114,12 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": "dst_mac"
+        "references": ["dst_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": "dst_mac"
+        "references": ["dst_mac"]
       }
     ]
   },
@@ -152,12 +152,12 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": "dst_mac"
+        "references": ["dst_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": "dst_mac"
+        "references": ["dst_mac"]
       }
     ]
   },
