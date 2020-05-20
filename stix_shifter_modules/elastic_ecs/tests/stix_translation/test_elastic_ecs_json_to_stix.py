@@ -196,6 +196,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert (ip_obj['type'] == 'ipv4-addr')
         assert (ip_obj['value'] == '100.101.0.69')
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
         ip_ref = nt_object['src_ref']
         assert (ip_ref in objects), f"src_ref with key {nt_object['src_ref']} not found"
@@ -203,6 +204,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert (ip_obj['type'] == 'ipv4-addr')
         assert (ip_obj['value'] == '107.0.0.48')
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
 
     def test_process_prop(self):

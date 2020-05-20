@@ -105,6 +105,7 @@ class TestTransform(object):
         assert(ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert(ip_obj['type'] == 'ipv4-addr')
         assert(ip_obj['value'] == destination_ip)
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
         ip_ref = nt_object['src_ref']
         assert(ip_ref in objects), f"src_ref with key {nt_object['src_ref']} not found"
@@ -112,6 +113,7 @@ class TestTransform(object):
         assert(ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == source_ip)
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
         assert(curr_obj is not None), 'url object type not found'
