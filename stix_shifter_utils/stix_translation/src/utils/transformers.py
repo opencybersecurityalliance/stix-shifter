@@ -4,7 +4,7 @@ import base64
 import socket
 import re
 import os
-
+import ntpath
 
 class ValueTransformer():
     """ Base class for value transformers """
@@ -209,7 +209,8 @@ class ToDirectoryPath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return os.path.dirname(obj) + os.path.basename(obj)
+            file_path, file_name = ntpath.split(obj)
+            return file_path
         except ValueError:
             print("Cannot convert input to directory path string")
 

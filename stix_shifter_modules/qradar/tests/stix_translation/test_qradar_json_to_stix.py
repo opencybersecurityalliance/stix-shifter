@@ -409,7 +409,7 @@ class TestTransform(object):
             "sha256hash": "someSHA-256hash",
             "logsourceid": 123,
             "filename": "someFile.exe",
-            "filepath": "C:/my/file/path"
+            "filepath": "C:/my/file/path/someFile.exe"
         }]
 
         data_string = json.dumps(data)
@@ -431,7 +431,7 @@ class TestTransform(object):
         assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path', '')
-        assert(directory_object_path == "C:/my/file/path")
+        assert directory_object_path == "C:/my/file/path"
 
     def test_hashtype_lookup_by_length(self):
         data_source_string = json.dumps(data_source)
@@ -487,3 +487,31 @@ class TestTransform(object):
         assert('url' not in obj_keys)
         # file object has empty string in results so url object will be skipped while creating the observables
         assert('file' not in obj_keys)
+
+    def test_filepath_with_directory_transformer(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "testfile.txt",
+            "filepath": "/unix/files/system/testfile.txt"
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = json.loads(result)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
+        directory_object_path = directory_object.get('path')
+        assert directory_object_path == "/unix/files/system"
