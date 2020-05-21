@@ -1,5 +1,33 @@
 ## IBM Cloud Security Advisor
+### directory
+- value
+
+___
+### domain-name
+- value
+
+___
 ### email-addr
+- value
+
+___
+### file
+- value
+
+___
+### ipv4-addr
+- value
+
+___
+### ipv6-addr
+- value
+
+___
+### mac-addr
+- value
+
+___
+### url
 - value
 
 ___
@@ -7,11 +35,8 @@ ___
 - user_id
 
 ___
-### x_author
+### x_com_security_advisor_finding
 - author_accountId
-
-___
-### x_finding
 - context_resourceName
 - description
 - finding_severity
@@ -21,16 +46,13 @@ ___
 - message
 - name
 - noteName
+- providerId
+- providerName
 - remediation
+- reportedBy_id
+- reportedBy_title
 - shortDescription
 - finding_next_steps_0_title
 - context_accountId
-
-___
-### x_provider
-- providerId
-- providerName
-- reportedBy_id
-- reportedBy_title
 
 ___

@@ -1,6 +1,4 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
-import urllib.parse
-
 
 class APIClient():
     # API METHODS
@@ -144,8 +142,6 @@ class APIClient():
             data['save_results'] = save_results
         if status:
             data['status'] = status
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')
 
         # Send requests to QRadar Cloud Data Lake
         if self.data_lake:

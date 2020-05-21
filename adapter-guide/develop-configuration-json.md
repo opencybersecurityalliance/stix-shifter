@@ -1,6 +1,6 @@
-# Configuration paramaters
+# Configuration Parameters
 
-A json file needs to be created that contains configuration paramters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and tranmission call. Please follow this naming convention when you create the file: `<module name>_config.json`
+A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: `<module name>_config.json`
 
 A second json file is required to translate the parameters defined in `<module name>_lang.json` for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format.
 
@@ -12,13 +12,13 @@ Create a directory named `configuration` in your module folder. The json files m
 /stix_shifter_modules/<module name>/configuration
 ```
 
-## JSON File description
+## JSON File Description
 
 ### config json file
 
-Two top level json object needs to be preset in the file `connection` and `configuration`. The child attributes of `connection` object should be the parameters required for making api call which can be used by multiple user and role level. `configuration` object should contain the parameters that are required for api authentication for individual user and role. 
+Two top level json objects needs to be preset in the file: `connection` and `configuration`. The child attributes of the `connection` object should be the parameters required for making API calls which can be used by multiple users and role levels. The `configuration` object should contain the parameters that are required for API authentication for individual users and roles. 
 
-Following example json contains the appropriate parameters that each module requires-
+The following example JSON contains the appropriate parameters that each module requires:
 
 ```
 {
@@ -27,7 +27,8 @@ Following example json contains the appropriate parameters that each module requ
             "default": "QRadar"
         },
         "host": {
-            "type": "text"
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "default": 443,
@@ -70,35 +71,37 @@ Following example json contains the appropriate parameters that each module requ
 }
 ```
 
-Each parameter in both connection and configuration object can also have few different child attribute to define the paramatere functionality. Below are the attributes that can be specified at least one or more based on the parameter funciton-
+Each parameter in both the connection and configuration object can also have few different child attributes to define the parameter functionality. Below are the attributes that can be specified at least one or more based on the parameter function:
 
 1. type
-    - Following types can be specified for the parameters(more can be added based on module requirements):
+    - The following types can be specified for the parameters (more can be added based on data source requirements):
         - text
         - number
         - password
 2. default
-    - Any value that needs to be default for the parameter
+    - The default value for the parameter
 3. min
-    - Minmum value for the parameter. If the type is text than it is the minimum number of character in the value.
+    - Minimum value for the parameter. If the type is text, then the value is the minimum number of characters in the value.
 4. max
-    - Maximum value for the parameter. If the type is text than it is the maximum number of character in the value.
+    - Maximum value for the parameter. If the type is text, then the value is the maximum number of characters in the value.
 5. optional
     - Set this value to "true" if the parameter is optional. By default the value is "false" if not defined
 6. hidden
     - Set this value to "true" if the parameter needs to be hidden by the UI. By default the value is "false" if not defined
+7. regex
+    - Regular expression pattern that defines what characters are permitted in the value.
 
 Configuration object needs to have `auth` child object. `auth` object should contain the parameters that are needed for api authentication. We have put an example of qradar api authentication paramter in the above example. Here's another example of `auth` object-
 
 ```
-        "auth": {
-            "username": {
-                "type": "password"
-            },
-            "password": {
-                "type": "password"
-            }
-        }
+"auth": {
+    "username": {
+        "type": "password"
+    },
+    "password": {
+        "type": "password"
+    }
+}
 ```
 
 Both connection and configuration object may contain more or different parameters than that are defined in the example above based on the individual module. 

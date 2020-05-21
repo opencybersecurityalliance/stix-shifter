@@ -1,4 +1,5 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import logging
 from os import path
 import json

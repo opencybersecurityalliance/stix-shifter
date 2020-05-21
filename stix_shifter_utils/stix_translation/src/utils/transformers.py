@@ -4,8 +4,7 @@ import base64
 import socket
 import re
 import os
-from urllib.parse import urlparse
-
+import ntpath
 
 class ValueTransformer():
     """ Base class for value transformers """
@@ -210,7 +209,8 @@ class ToDirectoryPath(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return os.path.dirname(obj) + os.path.basename(obj)
+            file_path, file_name = ntpath.split(obj)
+            return file_path
         except ValueError:
             print("Cannot convert input to directory path string")
 
@@ -234,8 +234,9 @@ class ToDomainName(ValueTransformer):
         try:
             if url is None:
                 return
-            parsed_url = urlparse(url)
-            domain_name = parsed_url.netloc
+            splits = url.split("://")
+            i = (0,1)[len(splits)>1]
+            domain_name = splits[i].split("?")[0].split('/')[0].split(':')[0].lower()
             return domain_name
         except ValueError:
             print("Cannot convert input to domain name")

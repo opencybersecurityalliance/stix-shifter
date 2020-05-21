@@ -8,6 +8,7 @@ from .stix_translation.query_translator import QueryTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 import os
 
+
 class EntryPoint(BaseEntryPoint):
 
     # python main.py translate synchronous_dummy query '{}' "[ipv4-addr:value = '127.0.0.1']"
@@ -17,7 +18,13 @@ class EntryPoint(BaseEntryPoint):
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(options)
         self.set_async(False)
-        if connection:            
+        if connection:  
+
+            # Use default transmission setup otherwise...
+            # self.setup_transmission_simple(connection, configuration)
+
+            # ...implement your own setup similar to the following:
+
             api_client = APIClient(connection, configuration)
             base_sync_connector = BaseSyncConnector()
             ping_connector = PingConnector(api_client)
@@ -32,9 +39,11 @@ class EntryPoint(BaseEntryPoint):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
         else:
+
+            # Use default translation setup with default dialect otherwise...
+            # self.setup_translation_simple(dialect_default='default')
             
-            # self.setup_translation_simple('default')      #   <-------------
-            # all the lines below can be replaced with one line configuration |
+            # ...implement your own setup similar to the following:
             
             basepath = os.path.dirname(__file__)
             filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
