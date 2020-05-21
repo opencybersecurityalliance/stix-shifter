@@ -7,7 +7,6 @@ import subprocess
 import json
 import io
 import os
-import shutil
 from jsonmerge import merge
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -19,12 +18,10 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 def fill_connectors(projects, modules_path):
     modules = [name for name in os.listdir(modules_path)
-               if (os.path.isdir(os.path.join(modules_path, name))
-                   and (not name.startswith('__')))]
+               if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')))]
     for module in modules:
         if not os.path.isfile(os.path.join(modules_path, module, 'SKIP.ME')):
-            projects['stix_shifter_modules_' + module] =\
-             ['stix_shifter_modules/' + module]
+            projects['stix_shifter_modules_' + module] = ['stix_shifter_modules/' + module]
 
 
 mode = '1'
@@ -86,16 +83,14 @@ for project_name in projects.keys():
     for src_folder in src_folders:
         for r, d, f in os.walk(src_folder):
             for file in f:
-                if 'requirements.txt' == file \
-                   and not os.path.isfile(os.path.join(r, 'SKIP.ME')):
+                if 'requirements.txt' == file and not os.path.isfile(os.path.join(r, 'SKIP.ME')):
                     requirements_files.append(os.path.join(r, file))
     print('requirements_files: %s' % requirements_files)
     for requirements_file in requirements_files:
         with open(requirements_file) as f:
             lines = f.readlines()
         lines = [x.strip() for x in lines]
-        lines = list(filter(lambda s: (not s.startswith('#'))
-                     and len(s) > 0, lines))
+        lines = list(filter(lambda s: (not s.startswith('#')) and len(s) > 0, lines))
         install_requires.update(lines)
     install_requires = list(install_requires)
     print('install_requires: %s' % install_requires)
@@ -104,12 +99,9 @@ for project_name in projects.keys():
     entry_points = {}
     entry_points_items = []
     for src_folder in src_folders:
-        entry_point_path = os.path.join(src_folder, 'scripts',
-                                        src_folder+'.py')
+        entry_point_path = os.path.join(src_folder, 'scripts', src_folder+'.py')
         if os.path.exists(entry_point_path):
-            entry_points_items.append('%s=%s.scripts.%s:main' %
-                                      (project_name.replace('_', '-'),
-                                       project_name, project_name))
+            entry_points_items.append('%s=%s.scripts.%s:main' % (project_name.replace('_', '-'), project_name, project_name))
     if len(entry_points_items) > 0:
         entry_points = {  # Optional
             'console_scripts': entry_points_items
@@ -120,16 +112,13 @@ for project_name in projects.keys():
     params = {
         'name': project_name,  # Required
         'version': version,  # Required
-        'description': 'Tools and interface to translate STIX formatted '
-                       + 'results and queries to different data source '
-                       + 'formats and to set up appropriate connection '
-                       + 'strings for invoking and triggering actions '
+        'description': 'Tools and interface to translate STIX formatted results and queries to different data source '
+                       + 'formats and to set up appropriate connection strings for invoking and triggering actions '
                        + 'in openwhisk',  # Required
         'long_description': long_description,  # Optional
         'long_description_content_type': 'text/markdown',
                                          # Optional (see note above)
-        'url': 'https://github.com/opencybersecurityalliance/stix-shifter',
-               # Optional
+        'url': 'https://github.com/opencybersecurityalliance/stix-shifter',  # Optional
         'author': 'ibm',
         'author_email': '',  # Optional
         # https://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -143,8 +132,7 @@ for project_name in projects.keys():
         'include_package_data': True,
         'entry_points': entry_points,  # Optional
         'project_urls': {  # Optional
-            'Source': 'https://github.com/opencybersecurityalliance/'
-                      + 'stix-shifter',
+            'Source': 'https://github.com/opencybersecurityalliance/stix-shifter',
         },
     }
 
@@ -155,11 +143,9 @@ for project_name in projects.keys():
     for json_search_path in src_folders:
         module_conf_path = os.path.join(json_search_path, 'conf')
         cleanup_file_list.append(module_conf_path)
-        shutil.rmtree(os.path.join(json_search_path, 'conf'),
-                      ignore_errors=True)
+        shutil.rmtree(os.path.join(json_search_path, 'conf'), ignore_errors=True)
         os.mkdir(module_conf_path)
-        for r, d, f in os.walk(os.path.join(json_search_path,
-                                            'configuration')):
+        for r, d, f in os.walk(os.path.join(json_search_path, 'configuration')):
             for file in f:
                 with open(os.path.join(r, file)) as json_file:
                     module_data = json.load(json_file)
@@ -174,11 +160,8 @@ for project_name in projects.keys():
 
                 json_file_path = os.path.join(r, '..', 'conf', file)
                 with open(json_file_path, 'w') as json_file:
-                    json_file.write(json.dumps(data, indent=4,
-                                               sort_keys=False))
-                json_include_lines.append('include '
-                                          + json_file_path
-                                          + ' \n')
+                    json_file.write(json.dumps(data, indent=4, sort_keys=False))
+                json_include_lines.append('include ' + json_file_path + ' \n')
 
         for r, d, f in os.walk(json_search_path):
             r_split = r.split(os.sep)
@@ -186,9 +169,7 @@ for project_name in projects.keys():
                                            or 'configuration' == r_split[2])):
                 for file in f:
                     if '.json' in file:
-                        json_include_lines.append('include '
-                                                  + os.path.join(r, file)
-                                                  + ' \n')
+                        json_include_lines.append('include ' + os.path.join(r, file) + ' \n')
     with open('MANIFEST.in', 'a') as out_file:
         out_file.writelines(json_include_lines)
 
@@ -203,8 +184,7 @@ for project_name in projects.keys():
         print(line.rstrip())
 
     # Cleanup
-    cleanup_file_list.extend(['build', 'MANIFEST.in',
-                             project_name + '.egg-info'])
+    cleanup_file_list.extend(['build', 'MANIFEST.in', project_name + '.egg-info'])
     for cleanup_file in cleanup_file_list:
         if os.path.exists(cleanup_file):
             if os.path.isdir(cleanup_file):
