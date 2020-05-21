@@ -4,6 +4,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 class APIClient:
     """API Client to handle all calls."""
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
     
     def __init__(self, connection, configuration):
         """Initialization.
@@ -47,7 +48,7 @@ class APIClient:
         params = dict()
         params['$filter'] = query_expression
         params['$top'] = length
-        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params)
+        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def next_page_run_search(self, next_page_url):
         """get the response from azure_sentinel endpoints
@@ -57,4 +58,4 @@ class APIClient:
         headers['Accept'] = 'application/json'
         url = next_page_url.split('?', maxsplit=1)[1]
         endpoint = self.endpoint + '?' + url
-        return self.client.call_api(endpoint, 'GET', headers)
+        return self.client.call_api(endpoint, 'GET', headers, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)

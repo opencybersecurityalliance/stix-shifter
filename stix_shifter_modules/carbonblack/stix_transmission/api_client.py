@@ -4,6 +4,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 class APIClient():
     PING_ENDPOINT = 'sensor'
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     @staticmethod
     def _dialect_to_endpoint(dialect):
@@ -40,4 +41,4 @@ class APIClient():
             sort_by = 'start asc'
         data.append(("sort", sort_by))
 
-        return self.client.call_api(endpoint, 'GET', headers, urldata=data)
+        return self.client.call_api(endpoint, 'GET', headers, urldata=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)

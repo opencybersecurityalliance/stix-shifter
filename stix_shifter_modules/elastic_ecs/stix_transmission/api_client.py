@@ -9,6 +9,7 @@ DEFAULT_LIMIT = 10000
 class APIClient():
     PING_ENDPOINT = '_cluster/health?pretty'
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
         headers = dict()
@@ -72,7 +73,7 @@ class APIClient():
             # addition of QueryString to API END point
             endpoint = endpoint + '?q=' + query_expression
 
-            return self.client.call_api(endpoint, 'GET', headers)
+            return self.client.call_api(endpoint, 'GET', headers, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
         # Request body search
         else:
             # add size value
@@ -98,4 +99,4 @@ class APIClient():
             print("URL endpoint: " + endpoint)
             print("URL data: " + json.dumps(data))
 
-            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data))
+            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)

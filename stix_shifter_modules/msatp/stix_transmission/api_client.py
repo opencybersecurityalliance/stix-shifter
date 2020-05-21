@@ -9,6 +9,7 @@ DEFAULT_OFFSET = 0
 class APIClient:
     """API Client to handle all calls."""
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -53,4 +54,4 @@ class APIClient:
         endpoint = self.endpoint
         query_expression = query_expression + serialize.format(offset=offset, length=length)
         query_expression = json.dumps({'Query': query_expression}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression)
+        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)

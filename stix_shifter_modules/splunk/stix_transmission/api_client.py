@@ -10,6 +10,7 @@ class APIClient():
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of its inherited class.
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
 
@@ -41,7 +42,7 @@ class APIClient():
         data = {'username': auth['username'], 'password': auth['password'], 'output_mode': 'json'}
         endpoint = self.endpoint_start + 'auth/login'
         try:
-            response_json = json.load(self.client.call_api(endpoint, 'POST', headers, data=data))
+            response_json = json.load(self.client.call_api(endpoint, 'POST', headers, data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS))
             headers['Authorization'] = "Splunk " + response_json['sessionKey']
         except KeyError as e:
             raise Exception('Authentication error occured while getting auth token: ' + str(e))
@@ -58,7 +59,7 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + "search/jobs"
         data = {'search': query_expression, 'output_mode': self.output_mode}
-        return self.client.call_api(endpoint, 'POST', data=data)
+        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_search(self, search_id):
         # sends a GET request to
@@ -67,7 +68,7 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id        
         data = {'output_mode': self.output_mode}        
-        return self.client.call_api(endpoint, 'GET', data=data)
+        return self.client.call_api(endpoint, 'GET', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_search_results(self, search_id, offset, count):
         # sends a GET request to
@@ -80,7 +81,7 @@ class APIClient():
             data['offset'] = str(offset)
             data['count'] = str(count)
         # response object body should contain information pertaining to search.
-        return self.client.call_api(endpoint, 'GET', urldata=data)
+        return self.client.call_api(endpoint, 'GET', urldata=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
     
     def delete_search(self, search_id):
         # sends a DELETE request to
@@ -89,4 +90,4 @@ class APIClient():
         self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id
         data = {'output_mode': self.output_mode}
-        return self.client.call_api(endpoint, 'DELETE', data=data)
+        return self.client.call_api(endpoint, 'DELETE', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)

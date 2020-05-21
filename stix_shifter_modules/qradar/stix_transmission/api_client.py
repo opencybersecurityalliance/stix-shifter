@@ -9,6 +9,7 @@ class APIClient():
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of the RestApiClient
     PING_TIMEOUT_IN_SECONDS = 10
+    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
         # This version of the ariel APIClient is designed to function with
@@ -73,13 +74,13 @@ class APIClient():
         # Sends a GET request
         # to  https://<server_ip>/api/ariel/databases
         endpoint = self.endpoint_start + 'databases'
-        return self.client.call_api(endpoint, 'GET')
+        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_database(self, database_name):
         # Sends a GET request
         # to https://<server_ip>/api/ariel/databases/<database_name>
         endpoint = self.endpoint_start + 'databases' + '/' + database_name
-        return self.client.call_api(endpoint, 'GET')
+        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_searches(self):
         # Sends a GET request
@@ -90,7 +91,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', urldata=self.urldata)
+        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def create_search(self, query_expression):
         # Sends a POST request
@@ -102,7 +103,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata)
+        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_search(self, search_id):
         # Sends a GET request to
@@ -113,7 +114,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', urldata=self.urldata)
+        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
         # Sends a GET request to
@@ -130,7 +131,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', headers, urldata=self.urldata)
+        return self.client.call_api(endpoint, 'GET', headers, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def update_search(self, search_id, save_results=None, status=None):
         # Sends a POST request to
@@ -147,7 +148,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata)
+        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
 
     def delete_search(self, search_id):
         # Sends a DELETE request to
@@ -159,4 +160,4 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'DELETE', urldata=self.urldata)
+        return self.client.call_api(endpoint, 'DELETE', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
