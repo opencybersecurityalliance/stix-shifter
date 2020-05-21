@@ -76,5 +76,299 @@
     "fields": {
       "name": ["user.email"]
     }
+  },
+  "x-ecs-client-geo": {
+    "fields": {
+      "city_name": ["geo.city_name"],
+      "continent_name": ["geo.continent_name"],
+      "country_iso_code": ["geo.country_iso_code"],
+      "country_name": ["geo.country_name"],
+      "location": ["geo.location"],
+      "name": ["geo.name"],
+      "region_iso_code": ["geo.region_iso_code"],
+      "region_name": ["geo.region_name"]
+    }
+  },
+  "x-ecs-destination-geo": {
+    "fields": {
+      "city_name": ["geo.city_name"],
+      "continent_name": ["geo.continent_name"],
+      "country_iso_code": ["geo.country_iso_code"],
+      "country_name": ["geo.country_name"],
+      "location": ["geo.location"],
+      "name": ["geo.name"],
+      "region_iso_code": ["geo.region_iso_code"],
+      "region_name": ["geo.region_name"]
+    }
+  },
+  "x-ecs-server-geo": {
+    "fields": {
+      "city_name": ["geo.city_name"],
+      "continent_name": ["geo.continent_name"],
+      "country_iso_code": ["geo.country_iso_code"],
+      "country_name": ["geo.country_name"],
+      "location": ["geo.location"],
+      "name": ["geo.name"],
+      "region_iso_code": ["geo.region_iso_code"],
+      "region_name": ["geo.region_name"]
+    }
+  },
+  "x-ecs-event": {
+    "fields": {
+      "action": ["event.action"],
+      "id": ["event.id"],
+      "category": ["event.category"],
+      "code": ["event.code"],
+      "created": ["event.created"],
+      "dataset": ["event.dataset"],
+      "duration": ["event.duration"],
+      "end": ["event.end"],
+      "hash": ["event.hash"],
+      "ingested": ["event.ingested"],
+      "kind": ["event.kind"],
+      "module": ["event.module"],
+      "outcome": ["event.outcome"],
+      "provider": ["event.provider"],
+      "risk_score": ["event.risk_score"],
+      "risk_score_norm": ["event.risk_score_norm"],
+      "sequence": ["event.sequence"],
+      "severity": ["event.severity"],
+      "start": ["event.start"],
+      "timezone": ["event.timezone"],
+      "type": ["event.type"],
+      "url": ["event.url"]
+    }
+  },
+  "x-ecs-code-signature": {
+    "fields": {
+      "exists": ["code_signature.exists"],
+      "subject_name": ["code_signature.subject_name"]
+    }
+  },
+  "x-ecs-cloud": {
+    "fields": {
+      "account_id": ["cloud.account.id"],
+      "availability_zone": ["cloud.availability_zone"],
+      "instance_id": ["cloud.instance.id"],
+      "instance_name": ["cloud.instance.name"],
+      "machine_type": ["cloud.machine.type"],
+      "provider": ["cloud.provider"],
+      "region": ["cloud.region"]
+    }
+  },
+  "x-ecs-container": {
+    "fields": {
+      "id": ["container.id"],
+      "image_name": ["container.image.name"],
+      "image_tag": ["container.image.tag"],
+      "labels": ["container.labels"],
+      "name": ["container.name"],
+      "runtime": ["container.runtime"]
+    }
+  },
+  "x-ecs-dll": {
+    "fields": {
+      "name": ["dll.name"],
+      "path": ["dll.path"]
+    }
+  },
+  "x-ecs-dns": {
+    "fields": {
+      "answers_class": ["dns.answers.class"],
+      "answers_data": ["dns.answers.data"],
+      "answers_name": ["dns.answers.name"],
+      "answers_ttl": ["dns.answers.ttl"],
+      "answers_type": ["dns.answers.type"],
+      "header_flags": ["dns.header_flags"],
+      "id": ["dns.id"],
+      "op_code": ["dns.op_code"],
+      "question_class": ["dns.question.class"],
+      "question_name": ["dns.question.name"],
+      "question_registered_domain": ["dns.question.registered_domain"],
+      "question_subdomain": ["dns.question.subdomain"],
+      "question_top_level_domain": ["dns.question.top_level_domain"],
+      "question_type": ["dns.question.type"],
+      "resolved_ip": ["dns.resolved_ip"],
+      "response_code": ["dns.response_code"],
+      "type": ["dns.type"]
+    }
+  },
+  "x-ecs": {
+    "fields": {
+      "version": ["ecs.version"]
+    }
+  },
+  "x-ecs-error": {
+    "fields": {
+      "code": ["error.code"],
+      "id": ["error.id"],
+      "message": ["error.message"],
+      "stack_trace": ["error.stack_trace"],
+      "type": ["error.type"]
+    }
+  },
+  "x-ecs-group": {
+    "fields": {
+      "domain": ["group.domain"],
+      "id": ["group.id"],
+      "name": ["group.name"]
+    }
+  },
+  "x-ecs-host": {
+    "fields": {
+      "architecture": ["host.architecture"],
+      "domain": ["host.domain"],
+      "hostname": ["host.hostname"],
+      "id": ["host.id"],
+      "ip": ["host.ip"],
+      "mac": ["host.mac"],
+      "name": ["host.name"],
+      "type": ["host.type"],
+      "uptime": ["host.uptime"]
+    }
+  },
+  "x-ecs-http": {
+    "fields": {
+      "request_body_bytes": ["http.request.body.bytes"],
+      "request_body_content": ["http.request.body.content"],
+      "request_bytes": ["http.request.bytes"],
+      "request_method": ["http.request.method"],
+      "request_referrer": ["http.request.referrer"],
+      "response_body_bytes": ["http.response.body.bytes"],
+      "response_body_content": ["http.response.body.content"],
+      "response_bytes": ["http.response.bytes"],
+      "response_status_code": ["http.response.method"],
+      "version": ["http.version"]
+    }
+  },
+  "x-ecs-log": {
+    "fields": {
+      "level": ["log.level"],
+      "logger": ["log.logger"],
+      "origin_file_line": ["log.origin.file.line"],
+      "origin_file_name": ["log.origin.file.name"],
+      "origin_function": ["log.origin.function"],
+      "original": ["log.original"],
+      "syslog_facility_code": ["log.syslog.facility.code"],
+      "syslog_facility_name": ["log.syslog.facility.name"],
+      "syslog_priority": ["log.syslog.priority"],
+      "severity_syslog_code": ["log.syslog.severity.code"],
+      "severity_syslog_name": ["log.syslog.severity.name"]
+    }
+  },
+  "x-ecs-observer": {
+    "fields": {
+      "egress_zone": ["observer.egress.zone"],
+      "egress_interface_alias": ["observer.egress.interface.alias"],
+      "egress_interface_id": ["observer.egress.interface.id"],
+      "egress_interface_name": ["observer.egress.interface.name"],
+      "hostname": ["observer.hostname"],
+      "ingress_zone": ["observer.ingress.zone"],
+      "ingress_interface_alias": ["observer.ingress.interface.alias"],
+      "ingress_interface_id": ["observer.ingress.interface.id"],
+      "ingress_interface_name": ["observer.ingress.interface.name"],
+      "ip": ["observer.ip"],
+      "mac": ["observer.mac"],
+      "name": ["observer.name"],
+      "product": ["observer.product"],
+      "serial_number": ["observer.serial_number"],
+      "type": ["observer.type"],
+      "vendor": ["observer.vendor"],
+      "version": ["observer.version"],
+      "os_name": ["observer.os.name"],
+      "os_platform": ["observer.os.platform"],
+      "os_version": ["observer.os.version"]
+    }
+  },
+  "x-ecs-organization": {
+    "fields": {
+      "id": ["organization.id"],
+      "name": ["organization.name"]
+    }
+  },
+  "x-ecs-pe": {
+    "fields": {
+      "company": ["pe.company"],
+      "description": ["pe.description"],
+      "file_version": ["pe.file_version"],
+      "original_file_name": ["pe.original_file_name"],
+      "product": ["pe.product"]
+    }
+  },
+  "x-ecs-related": {
+    "fields": {
+      "hash": ["related.hash"],
+      "ip": ["related.ip"],
+      "user": ["related.user"]
+    }
+  },
+  "x-ecs-rule": {
+    "fields": {
+      "author": ["rule.author"],
+      "category": ["rule.category"],
+      "description": ["rule.description"],
+      "id": ["rule.id"],
+      "license": ["rule.license"],
+      "name": ["rule.name"],
+      "reference": ["rule.reference"],
+      "ruleset": ["rule.ruleset"],
+      "uuid": ["rule.uuid"],
+      "version": ["rule.version"]
+    }
+  },
+  "x-ecs-service": {
+    "fields": {
+      "id": ["service.id"],
+      "name": ["service.name"],
+      "state": ["service.state"],
+      "type": ["service.type"],
+      "version": ["service.version"]
+    }
+  },
+  "x-ecs-threat": {
+    "fields": {
+      "framework": ["threat.framework"],
+      "tactic_id": ["threat.tactic.id"],
+      "tactic_name": ["threat.tactic.name"],
+      "tactic_reference": ["threat.tactic.reference"],
+      "technique_id": ["threat.technique.id"],
+      "technique_name": ["threat.technique.name"],
+      "technique_reference": ["threat.technique.reference"]
+    }
+  },
+  "x-ecs-trace": {
+    "fields": {
+      "id": ["trace.id"]
+    }
+  },
+  "x-ecs-transaction": {
+    "fields": {
+      "id": ["transaction.id"]
+    }
+  },
+  "x-ecs-user-agent": {
+    "fields": {
+      "name": ["user_agent.name"],
+      "original": ["user_agent.original"],
+      "version": ["user_agent.version"],
+      "device_name": ["user_agent.device.name"]
+    }
+  },
+  "x-ecs-vulnerability": {
+    "fields": {
+      "category": ["vulnerability.category"],
+      "classification": ["vulnerability.classification"],
+      "description": ["vulnerability.description"],
+      "enumeration": ["vulnerability.enumeration"],
+      "id": ["vulnerability.id"],
+      "reference": ["vulnerability.reference"],
+      "report_id": ["vulnerability.report_id"],
+      "severity": ["vulnerability.severity"],
+      "scanner_vendor": ["vulnerability.scanner.vendor"],
+      "score_base": ["vulnerability.score.base"],
+      "score_environmental": ["vulnerability.score.environmental"],
+      "score_temporal": ["vulnerability.score.temporal"],
+      "score_version": ["vulnerability.score.version"]
+    }
   }
 }
