@@ -7,8 +7,11 @@ import subprocess
 import json
 import io
 import os
+import shutil
+from jsonmerge import merge
 
 here = os.path.abspath(os.path.dirname(__file__))
+cleanup_file_list = []
 
 with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
@@ -54,9 +57,15 @@ elif mode == 'N':
     }
     fill_connectors(projects, "stix_shifter_modules")
 else:
-    print('Unexpected value in MODE environment variable: %s' % mode)
-    print('Allowed values: 1|3|N')
-    exit(1)
+    module_path = 'stix_shifter_modules/' + mode
+    if os.path.isdir(module_path):
+        projects = {
+            "stix_shifter_modules_" + mode: [module_path]
+        }
+    else:
+        print('Unexpected value in MODE environment variable: %s' % mode)
+        print('Allowed values: 1|3|N|module_name')
+        exit(1)
 
 for project_name in projects.keys():
     src_folders = projects[project_name]
@@ -144,9 +153,37 @@ for project_name in projects.keys():
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
     for json_search_path in src_folders:
+        module_conf_path = os.path.join(json_search_path, 'conf')
+        cleanup_file_list.append(module_conf_path)
+        shutil.rmtree(os.path.join(json_search_path, 'conf'),
+                      ignore_errors=True)
+        os.mkdir(module_conf_path)
+        for r, d, f in os.walk(os.path.join(json_search_path,
+                                            'configuration')):
+            for file in f:
+                with open(os.path.join(r, file)) as json_file:
+                    module_data = json.load(json_file)
+                base_data = None
+                data = dict()
+                base_path = os.path.join(r, '..', '..', file)
+                if os.path.isfile(base_path):
+                    with open(base_path) as json_file:
+                        base_data = json.load(json_file)
+                    data = base_data
+                data = merge(data, module_data)
+
+                json_file_path = os.path.join(r, '..', 'conf', file)
+                with open(json_file_path, 'w') as json_file:
+                    json_file.write(json.dumps(data, indent=4,
+                                               sort_keys=False))
+                json_include_lines.append('include '
+                                          + json_file_path
+                                          + ' \n')
+
         for r, d, f in os.walk(json_search_path):
             r_split = r.split(os.sep)
-            if not (len(r_split) > 3 and 'tests' == r_split[2]):
+            if not (len(r_split) >= 3 and ('tests' == r_split[2]
+                                           or 'configuration' == r_split[2])):
                 for file in f:
                     if '.json' in file:
                         json_include_lines.append('include '
@@ -166,7 +203,8 @@ for project_name in projects.keys():
         print(line.rstrip())
 
     # Cleanup
-    cleanup_file_list = ['build', 'MANIFEST.in', project_name + '.egg-info']
+    cleanup_file_list.extend(['build', 'MANIFEST.in',
+                             project_name + '.egg-info'])
     for cleanup_file in cleanup_file_list:
         if os.path.exists(cleanup_file):
             if os.path.isdir(cleanup_file):

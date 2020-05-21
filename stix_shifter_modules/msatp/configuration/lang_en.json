@@ -22,8 +22,8 @@
             "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
         },
         "cert": {
-            "label": "BigFix Certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
+            "label": "Microsoft Defender ATP Certificate",
+            "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender ATP is configured with a self-signed SSL certificate"
         },
         "sni": {
             "label": "Server Name Indicator",
@@ -32,13 +32,18 @@
     },
     "configuration": {
         "auth": {
-            "username": {
-                "label": "Username",
-                "description": "Username with access to the search API"
+            "type" : "fields",
+            "tenant": {
+                "label": "Tenant",
+                "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
-            "password": {
-                "label": "Password",
-                "description": "Password of the user with access to the search API"
+            "clientId": {
+                "label": "Client Id",
+                "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
+            },
+            "clientSecret": {
+                "label": "Client Secret",
+                "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
             }
         }
     }

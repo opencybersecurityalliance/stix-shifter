@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "default": "elastic_ecs"
+            "default": "carbonblack",
+            "displayName": "Carbon Black CB Response"
         },
         "host": {
             "type": "text",
@@ -12,7 +13,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-elastic.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-carbon-black.html",
             "type": "link"
         },
         "limit": {
@@ -39,10 +40,8 @@
     },
     "configuration": {
         "auth": {
-            "username": {
-                "type": "password"
-            },
-            "password": {
+            "type" : "fields",
+            "token": {
                 "type": "password"
             }
         }

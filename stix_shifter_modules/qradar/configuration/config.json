@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "default": "azure_sentinel"
+            "default": "QRadar",
+            "displayName": "IBM® QRadar"
         },
         "host": {
             "type": "text",
@@ -12,7 +13,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-azure-sentinel.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
             "type": "link"
         },
         "limit": {
@@ -35,17 +36,35 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "proxy": {
+            "type" : "fields",
+            "url": {
+                "type": "text",
+                "optional": true
+            },
+            "auth": {
+                "type": "password",
+                "optional": true
+            },
+            "x_forward_proxy": {
+                "type": "text",
+                "optional": true
+            },
+            "x_forward_proxy_auth": {
+                "type": "password",
+                "optional": true
+            }
+        },
+        "data_lake": {
+            "type": "boolean",
+            "default": false
         }
     },
     "configuration": {
         "auth": {
-            "tenant": {
-                "type": "password"
-            },
-            "clientId": {
-                "type": "password"
-            },
-            "clientSecret": {
+            "type" : "fields",
+            "sec": {
                 "type": "password"
             }
         }

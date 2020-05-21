@@ -3,8 +3,8 @@ import json
 
 def modernize_objects(module, params):
 
-    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
-    
+    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
+
     try:
         with open(config_json_path) as mapping_file:
             configs = json.load(mapping_file)
@@ -51,14 +51,14 @@ def del_dot_path(params, path):
 
 def param_validator(module, input_configs):
 
-    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
-    
+    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
+
     try:
         with open(config_json_path) as mapping_file:
             expected_configs = json.load(mapping_file)
     except Exception as ex:
         raise(ex)
-    
+
     validated_params = {}
     errors = []
     copy_valid_configs(input_configs, expected_configs, validated_params, errors)
@@ -121,6 +121,8 @@ def optional_section(item, key):
                     pass
                 else:
                     return False
+            elif key == 'type':
+                pass
             else:
                 return False
     return True
