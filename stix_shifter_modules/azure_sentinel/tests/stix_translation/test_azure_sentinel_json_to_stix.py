@@ -206,6 +206,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
 
         file_obj = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'file')
         process_obj = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'process')
+        directory_obj = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'directory')
 
         assert file_obj is not None, 'file object type not found'
         assert file_obj .keys() == {'type', 'name', 'parent_directory_ref'}
@@ -217,6 +218,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'services.exe'
         assert process_obj['binary_ref'] == '0'
+        assert directory_obj['path'] == 'c:\\windows\\system32'
 
     @staticmethod
     def test_network_json_to_stix():

@@ -405,7 +405,7 @@ transmit bigfix "{\"host\":\"xx.xx.xx.xx\", \"port\":\"xxxxx\", \"cert_verify\":
                 "0": {
                     "type": "ipv4-addr",
                     "value": "192.168.36.110",
-                    "resolves_to_refs": "2"
+                    "resolves_to_refs": ["2"]
                 },
                 "1": {
                     "type": "network-traffic",
