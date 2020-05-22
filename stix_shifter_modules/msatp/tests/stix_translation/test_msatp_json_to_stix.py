@@ -191,7 +191,8 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
         assert file_obj['parent_directory_ref'] == '1'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
-        assert directory_object.get('path') == data['FileCreationEvents']['FolderPath']
+        file_path = transformers.ToDirectoryPath.transform(data['FileCreationEvents']['FolderPath'])
+        assert directory_object.get('path') == file_path
 
     def test_process_json_to_stix(self):
         """
