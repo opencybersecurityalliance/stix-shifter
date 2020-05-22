@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "default": "proxy"
+            "default": "carbonblack",
+            "displayName": "Carbon Black Response"
         },
         "host": {
             "type": "text",
@@ -12,7 +13,7 @@
             "type": "number"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-proxy.html",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-carbon-black.html",
             "type": "link"
         },
         "limit": {
@@ -24,20 +25,24 @@
             "default": 5,
             "type": "number"
         },
-        "options": {
-            "type": "proxy",
+        "cert": {
+            "type": "password",
+            "optional": true
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
             "optional": true
         }
     },
     "configuration": {
         "auth": {
-            "username": {
-                "type": "password",
-                "optional": true
-            },
-            "password": {
-                "type": "password",
-                "optional": true
+            "type" : "fields",
+            "token": {
+                "type": "password"
             }
         }
     }

@@ -22,8 +22,8 @@
             "description": "The time limit in minutes for how long the query is run on the data source. The default time limit is 1. When the value is set to zero, there is no timeout. If the query takes longer than 1 min, it is likely to indicate a problem."
         },
         "cert": {
-            "label": "CB Response connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication"
+            "label": "BigFix Certificate",
+            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
         },
         "sni": {
             "label": "Server Name Indicator",
@@ -32,9 +32,14 @@
     },
     "configuration": {
         "auth": {
-            "token": {
-                "label": "API Token",
-                "description": "API Token of the CarbonBlack response account"
+            "type" : "fields",
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
             }
         }
     }

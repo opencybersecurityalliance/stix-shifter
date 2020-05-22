@@ -1,19 +1,17 @@
 import re
 import json
 
-def modernize_objects(module, params):
 
-    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
-    
+def modernize_objects(module, params):
+    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
     try:
         with open(config_json_path) as mapping_file:
             configs = json.load(mapping_file)
     except Exception as ex:
         raise(ex)
-
     modernize_step(configs, params, params)
-
     return params
+
 
 def modernize_step(configs, params, params_root):
     if isinstance(configs, dict):
@@ -28,6 +26,7 @@ def modernize_step(configs, params, params_root):
                 if key in params:
                     modernize_step(value, params[key], params_root)
 
+
 def get_dot_path(params, path):
     if '.' in path:
         pp = path.split('.')
@@ -39,6 +38,7 @@ def get_dot_path(params, path):
         else:
             raise ValueError('Parameter not found: ' + path)
 
+
 def del_dot_path(params, path):
     if '.' in path:
         pp = path.split('.')
@@ -49,16 +49,15 @@ def del_dot_path(params, path):
     else:
         del params[path]
 
-def param_validator(module, input_configs):
 
-    config_json_path = f'stix_shifter_modules/{module}/configuration/{module}_config.json'
-    
+def param_validator(module, input_configs):
+    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
     try:
         with open(config_json_path) as mapping_file:
             expected_configs = json.load(mapping_file)
     except Exception as ex:
         raise(ex)
-    
+
     validated_params = {}
     errors = []
     copy_valid_configs(input_configs, expected_configs, validated_params, errors)
@@ -86,11 +85,14 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
             if key in input_configs:
                 if is_leaf(expected_configs[key]):
                     if 'min' in expected_configs[key]:
-                        if not check_min(input_configs[key], expected_configs[key]['min'], expected_configs[key]['type'], key):
-                            raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]), str(expected_configs[key]['min'])))
+                        if not check_min(input_configs[key], expected_configs[key]['min'],
+                                         expected_configs[key]['type'], key):
+                            raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]),
+                                             str(expected_configs[key]['min'])))
                     elif 'max' in expected_configs[key]:
                         if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type'], key):
-                            raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]), str(expected_configs[key]['max'])))
+                            raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]),
+                                             str(expected_configs[key]['max'])))
                     elif 'regex' in expected_configs[key]:
                         if not check_regex(input_configs[key], expected_configs[key]['regex']):
                             raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
@@ -113,6 +115,7 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                 else:
                     errors.append(key_path)
 
+
 def optional_section(item, key):
     if isinstance(item, dict):
         for key, value in item.items():
@@ -121,16 +124,20 @@ def optional_section(item, key):
                     pass
                 else:
                     return False
+            elif key == 'type':
+                pass
             else:
                 return False
     return True
 
+
 def is_leaf(config):
     if isinstance(config, dict):
-        for key,value in config.items():
+        for key, value in config.items():
             if isinstance(value, dict):
                 return False
     return True
+
 
 def check_min(input_value, min_value, type, key):
     if type == 'number':
@@ -138,7 +145,6 @@ def check_min(input_value, min_value, type, key):
             return True
         else:
             return False
-
     if type == 'text':
         if len(input_value) >= len(min_value):
             return True
@@ -146,13 +152,13 @@ def check_min(input_value, min_value, type, key):
             return False
     raise ValueError('Min value property cannot be specified for type {} of field {}'.format(type, key))
 
+
 def check_max(input_value, max_value, type, key):
     if type == 'number':
         if input_value <= max_value:
             return True
         else:
             return False
-
     if type == 'text':
         if len(input_value) <= len(max_value):
             return True
@@ -165,8 +171,8 @@ def check_max(input_value, max_value, type, key):
 def check_regex(input_value, regex_value):
     pattern = re.compile(regex_value)
     match_str = pattern.search(input_value)
-
     return bool(match_str)
+
 
 def get_inner_keys(obj):
     keys = []

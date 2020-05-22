@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "default": "stix_bundle"
+            "default": "stix_bundle",
+            "displayName": "STIX Bundle"
         },
         "host": {
             "type": "text"
@@ -26,6 +27,7 @@
     },
     "configuration": {
         "auth": {
+            "type" : "fields",
             "username": {
                 "type": "password",
                 "optional": true
