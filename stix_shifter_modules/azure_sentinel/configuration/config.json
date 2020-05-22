@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "default": "azure_sentinel",
-            "displayName": "Amazon CloudWatch Logs"
+            "displayName": "Microsoft Azure Sentinel"
         },
         "host": {
             "type": "text",

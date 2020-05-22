@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "default": "carbonblack",
-            "displayName": "Carbon Black CB Response"
+            "displayName": "Carbon Black Response"
         },
         "host": {
             "type": "text",

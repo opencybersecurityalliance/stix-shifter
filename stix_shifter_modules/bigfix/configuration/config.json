@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "default": "bigfix",
-            "displayName": "IBM® BigFix"
+            "displayName": "BigFix"
         },
         "host": {
             "type": "text",
