@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "default": "QRadar"
+            "default": "QRadar",
+            "displayName": "IBM® QRadar"
         },
         "host": {
             "type": "text",
@@ -37,6 +38,7 @@
             "optional": true
         },
         "proxy": {
+            "type" : "fields",
             "url": {
                 "type": "text",
                 "optional": true
@@ -61,6 +63,7 @@
     },
     "configuration": {
         "auth": {
+            "type" : "fields",
             "sec": {
                 "type": "password"
             }
