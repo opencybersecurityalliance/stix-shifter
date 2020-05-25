@@ -18,7 +18,7 @@ class BaseEntryPoint:
     def __init__(self, options):
         self.__async = True
         stack = traceback.extract_stack()
-        self.__connector_module = stack[-2].filename.split('/')[-2]
+        self.__connector_module = os.path.split(os.path.split(stack[-2].filename)[0])[1]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
         self.__dialects_visible = []
