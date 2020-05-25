@@ -1,8 +1,7 @@
 {
     "connection": {
         "type": {
-            "type": "connectorType",
-            "default": null
+            "type": "connectorType"
         },
         "name": {
             "min": 5,
@@ -15,21 +14,32 @@
             "regex": "^[A-Za-z0-9 _-]*$",
             "default": null
         },
-        "concurrent": {
-            "default": 4,
-            "type": "number"
-        },
-        "result_limit": {
-            "default": 10000,
-            "type": "number"
-        },
-        "time_range": {
-            "default": 5,
-            "type": "number"
-        },
-        "timeout": {
-            "default": 5,
-            "type": "number"
+        "options": {
+            "type": "fields",
+            "concurrent": {
+                "default": 4,
+                "type": "number"
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "type": "number"
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "type": "number"
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "type": "number"
+            },
+            "dialects": {
+                "type": "array",
+                "default": [],
+                "hidden": true
+            }
         }
     },
     "configuration":{

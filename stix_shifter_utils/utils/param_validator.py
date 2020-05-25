@@ -1,5 +1,6 @@
 import re
 import json
+from jsonmerge import merge
 
 
 def modernize_objects(module, params):
@@ -49,14 +50,44 @@ def del_dot_path(params, path):
     else:
         del params[path]
 
-
-def param_validator(module, input_configs):
-    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
+def options_validator(input_configs):
+    base_config_path = f'stix_shifter_modules/config.json'
     try:
-        with open(config_json_path) as mapping_file:
-            expected_configs = json.load(mapping_file)
+        with open(base_config_path) as mapping_file:
+            base_configs = json.load(mapping_file)
     except Exception as ex:
         raise(ex)
+    
+    expected_configs = base_configs['connection']['options']
+
+    validated_params = {}
+    errors = []
+    copy_valid_configs(input_configs, expected_configs, validated_params, errors)
+    error_obj = {}
+    if errors:
+        error_obj['missing_params'] = errors
+    if input_configs:
+        if isinstance(input_configs, dict):
+            error_obj['unexpected_params'] = get_inner_keys(input_configs)
+
+    if error_obj:
+        raise ValueError(error_obj)
+    
+    return validated_params
+
+def param_validator(module, input_configs):
+    module_config_path = f'stix_shifter_modules/{module}/configuration/config.json'
+    base_config_path = f'stix_shifter_modules/config.json'
+    try:
+        with open(module_config_path) as mapping_file:
+            module_configs = json.load(mapping_file)
+        
+        with open(base_config_path) as mapping_file:
+            base_configs = json.load(mapping_file)
+    except Exception as ex:
+        raise(ex)
+    
+    expected_configs = merge(base_configs, module_configs)
 
     validated_params = {}
     errors = []
