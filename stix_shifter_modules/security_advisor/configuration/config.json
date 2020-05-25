@@ -1,17 +1,15 @@
 {
     "connection": {
         "type": {
-            "default": "async_dummy"
+            "default": "security_advisor",
+            "displayName": "IBM® Cloud Security Advisor"
         },
         "host": {
+            "default": "https://us-south.secadvisor.cloud.ibm.com/findings/v1",
             "type": "text"
         },
-        "port": {
-            "default": 443,
-            "type": "number"
-        },
         "help": {
-            "default": "<Help URL>",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-security-advisor.html",
             "type": "link"
         },
         "limit": {
@@ -22,26 +20,15 @@
         "timeout": {
             "default": 5,
             "type": "number"
-        },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
-        "selfSignedCert": {
-            "type": "password",
-            "optional": true
         }
     },
     "configuration": {
         "auth": {
-            "username": {
+            "type" : "fields",
+            "accountID": {
                 "type": "password"
             },
-            "password": {
+            "apiKey": {
                 "type": "password"
             }
         }
