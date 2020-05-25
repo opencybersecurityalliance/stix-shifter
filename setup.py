@@ -8,6 +8,7 @@ import json
 import io
 import os
 from jsonmerge import merge
+import tempfile
 
 here = os.path.abspath(os.path.dirname(__file__))
 cleanup_file_list = []
@@ -65,6 +66,9 @@ else:
         exit(1)
 
 for project_name in projects.keys():
+    temp_dir = None
+    module_dir = None
+
     src_folders = projects[project_name]
     print('processing project_name %s' % project_name)
 
@@ -141,13 +145,15 @@ for project_name in projects.keys():
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
     for json_search_path in src_folders:
-        module_conf_path = os.path.join(json_search_path, 'conf')
-        cleanup_file_list.append(module_conf_path)
-        shutil.rmtree(os.path.join(json_search_path, 'conf'), ignore_errors=True)
-        os.mkdir(module_conf_path)
-        for r, d, f in os.walk(os.path.join(json_search_path, 'configuration')):
+        module_dir = json_search_path
+        conf_path = os.path.join(module_dir, 'conf')
+        shutil.rmtree(conf_path, ignore_errors=True)
+        os.mkdir(conf_path)
+        configuration_path = os.path.join(module_dir, 'configuration')
+        for r, d, f in os.walk(configuration_path):
             for file in f:
-                with open(os.path.join(r, file)) as json_file:
+                configuration_file_path = os.path.join(r, file)
+                with open(configuration_file_path) as json_file:
                     module_data = json.load(json_file)
                 base_data = None
                 data = dict()
@@ -161,12 +167,15 @@ for project_name in projects.keys():
                 json_file_path = os.path.join(r, '..', 'conf', file)
                 with open(json_file_path, 'w') as json_file:
                     json_file.write(json.dumps(data, indent=4, sort_keys=False))
-                json_include_lines.append('include ' + json_file_path + ' \n')
 
-        for r, d, f in os.walk(json_search_path):
+        temp_dir = tempfile.TemporaryDirectory()
+        shutil.move(configuration_path, temp_dir.name)
+        os.rename(conf_path, configuration_path)
+        cleanup_file_list.append(configuration_path)
+
+        for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
-            if not (len(r_split) >= 3 and ('tests' == r_split[2]
-                                           or 'configuration' == r_split[2])):
+            if not (len(r_split) >= 3 and ('tests' == r_split[2])):
                 for file in f:
                     if '.json' in file:
                         json_include_lines.append('include ' + os.path.join(r, file) + ' \n')
@@ -191,5 +200,5 @@ for project_name in projects.keys():
                 shutil.rmtree(cleanup_file)
             else:
                 os.remove(cleanup_file)
-
+    shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
     print('---------------------------------')
