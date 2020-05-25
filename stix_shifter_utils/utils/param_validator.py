@@ -69,7 +69,7 @@ def param_validator(module, input_configs):
         if isinstance(input_configs, dict):
             error_obj['unexpected_params'] = get_inner_keys(input_configs)
 
-    if error_obj:
+    if 'missing_params' in error_obj:
         raise ValueError(error_obj)
 
     return validated_params
