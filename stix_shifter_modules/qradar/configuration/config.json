@@ -50,6 +50,16 @@
         "data_lake": {
             "type": "boolean",
             "default": false
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false,
+                "hidden": true
+            },
+            "hash_options": {
+                "optional": true,
+                "hidden": true
+            }
         }
     },
     "configuration": {

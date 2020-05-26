@@ -27,6 +27,11 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false
+            }
         }
     },
     "configuration": {

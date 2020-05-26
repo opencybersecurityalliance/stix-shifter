@@ -37,7 +37,19 @@
             },
             "dialects": {
                 "type": "array",
-                "default": [],
+                "default": null,
+                "hidden": true
+            },
+            "validate_pattern": {
+                "optional": true,
+                "hidden": true
+            },
+            "stix_validator": {
+                "optional": true,
+                "hidden": true
+            },
+            "mapping": {
+                "optional": true,
                 "hidden": true
             }
         }
