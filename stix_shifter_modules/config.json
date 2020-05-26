@@ -6,25 +6,64 @@
         "name": {
             "min": 5,
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
         "description": {
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
-        "concurrent": {
-            "default": 4,
-            "type": "number"
+        "options": {
+            "type": "fields",
+            "concurrent": {
+                "default": 4,
+                "type": "number"
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "type": "number"
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "type": "number"
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "type": "number"
+            },
+            "dialects": {
+                "type": "array",
+                "default": null,
+                "hidden": true
+            },
+            "validate_pattern": {
+                "optional": true,
+                "hidden": true
+            },
+            "stix_validator": {
+                "optional": true,
+                "hidden": true
+            },
+            "mapping": {
+                "optional": true,
+                "hidden": true
+            }
         }
     },
     "configuration":{
         "name": {
             "min": 5,
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
         "connectionId": {
-            "type": "text"
+            "type": "text",
+            "default": null
         }
     }
 }

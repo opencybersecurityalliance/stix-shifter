@@ -10,7 +10,7 @@ protocols_file = open('stix_shifter_modules/qradar/stix_translation/json/network
 OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
+DEFAULT_time_range = 5
 PROTOCOLS = json.loads(protocols_file)
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
@@ -21,7 +21,7 @@ from_statement = " FROM events "
 
 
 default_limit = "limit {}".format(DEFAULT_LIMIT)
-default_time = "last {} minutes".format(DEFAULT_TIMERANGE)
+default_time = "last {} minutes".format(DEFAULT_time_range)
 
 translation = stix_translation.StixTranslation()
 
@@ -235,8 +235,10 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        result_limit = OPTIONS['result_limit']
+        time_range = OPTIONS['time_range']
         query = translation.translate('qradar:events', 'query', '{}', stix_pattern, OPTIONS)
-        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(result_limit, time_range)
         assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     def test_domainname_query(self):
@@ -254,13 +256,13 @@ class TestQueryTranslator(unittest.TestCase, object):
     # def test_sha256_filehash_query(self):
     #     stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
     #     query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
-    #     where_statement = "WHERE (sha256hash = 'sha256hash' OR filehash = 'sha256hash') limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+    #     where_statement = "WHERE (sha256hash = 'sha256hash' OR filehash = 'sha256hash') limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['time_range'])
     #     assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     # def test_multi_filehash_query(self):
     #     stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash'] OR [file:hashes.'MD5' = 'md5hash']"
     #     query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
-    #     where_statement = "WHERE ((sha256hash = 'sha256hash' OR filehash = 'sha256hash')) OR ((md5hash = 'md5hash' OR filehash = 'md5hash')) limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+    #     where_statement = "WHERE ((sha256hash = 'sha256hash' OR filehash = 'sha256hash')) OR ((md5hash = 'md5hash' OR filehash = 'md5hash')) limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['time_range'])
     #     assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     def test_source_and_destination_references(self):
