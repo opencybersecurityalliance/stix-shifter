@@ -5,7 +5,7 @@ import unittest
 import random
 
 DEFAULT_LIMIT = 10000
-DEFAULT_time_range = 5
+DEFAULT_TIMERANGE = 5
 
 protocols = {
     "tcp": "6",
@@ -24,7 +24,7 @@ protocols = {
     "sctp": "132"
 }
 
-default_time_range_spl = '-' + str(DEFAULT_time_range) + 'minutes'
+default_time_range_spl = '-' + str(DEFAULT_TIMERANGE) + 'minutes'
 
 translation = stix_translation.StixTranslation()
 
