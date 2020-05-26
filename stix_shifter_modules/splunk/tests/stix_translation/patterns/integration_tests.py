@@ -4,7 +4,7 @@ from uuid import uuid4
 import types
 from collections import OrderedDict
 
-from stix_shifter_utils.stix_translation.src.patterns.translator import translate, SearchPlatforms, DataModels
+from stix_shifter_modules.splunk.tests.stix_translation.patterns.translator import translate, SearchPlatforms, DataModels
 from .helpers.input_file_helpers import input_files, collect_targets
 from .helpers.connectors import SplunkConnector, ElasticConnector
 

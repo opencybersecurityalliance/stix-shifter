@@ -1,5 +1,6 @@
 import re
 import json
+from jsonmerge import merge
 
 
 def modernize_objects(module, params):
@@ -49,15 +50,24 @@ def del_dot_path(params, path):
     else:
         del params[path]
 
-
-def param_validator(module, input_configs):
-    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
+def param_validator(module, input_configs, start_point=None):
+    module_config_path = f'stix_shifter_modules/{module}/configuration/config.json'
+    base_config_path = f'stix_shifter_modules/config.json'
     try:
-        with open(config_json_path) as mapping_file:
-            expected_configs = json.load(mapping_file)
+        with open(module_config_path) as mapping_file:
+            module_configs = json.load(mapping_file)
+        
+        with open(base_config_path) as mapping_file:
+            base_configs = json.load(mapping_file)
     except Exception as ex:
         raise(ex)
+    
+    expected_configs = merge(base_configs, module_configs)
 
+    if start_point:
+        start_points = start_point.split('.')
+        for item in start_points:
+            expected_configs = expected_configs[item]
     validated_params = {}
     errors = []
     copy_valid_configs(input_configs, expected_configs, validated_params, errors)
@@ -84,18 +94,19 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
             key_path = key_path + key
             if key in input_configs:
                 if is_leaf(expected_configs[key]):
-                    if 'min' in expected_configs[key]:
-                        if not check_min(input_configs[key], expected_configs[key]['min'],
-                                         expected_configs[key]['type'], key):
-                            raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]),
-                                             str(expected_configs[key]['min'])))
-                    elif 'max' in expected_configs[key]:
-                        if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type'], key):
-                            raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]),
-                                             str(expected_configs[key]['max'])))
-                    elif 'regex' in expected_configs[key]:
-                        if not check_regex(input_configs[key], expected_configs[key]['regex']):
-                            raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
+                    if input_configs[key]:
+                        if 'min' in expected_configs[key]:
+                            if not check_min(input_configs[key], expected_configs[key]['min'],
+                                            expected_configs[key]['type'], key):
+                                raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]),
+                                                str(expected_configs[key]['min'])))
+                        elif 'max' in expected_configs[key]:
+                            if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type'], key):
+                                raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]),
+                                                str(expected_configs[key]['max'])))
+                        elif 'regex' in expected_configs[key]:
+                            if not check_regex(input_configs[key], expected_configs[key]['regex']):
+                                raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
 
                     validated_params[key] = input_configs[key]
                     del input_configs[key]

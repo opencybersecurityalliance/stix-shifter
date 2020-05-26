@@ -8,18 +8,18 @@ from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMapping
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 from stix_shifter_utils.utils.module_discovery import process_dialects
 from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
+from stix_shifter_utils.utils.param_validator import param_validator
 import sys
 import glob
 from os import path
 import traceback
+import json
 
 RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
 MAPPING = 'mapping'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
-DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 DEFAULT_DIALECT = 'default'
@@ -69,7 +69,10 @@ class StixTranslation:
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             try: 
-                entry_point = connector_module.EntryPoint(options=options)
+                if options:
+                    validated_options = param_validator(module, options, 'connection.options')
+
+                entry_point = connector_module.EntryPoint(options=validated_options)
             except Exception as ex:
                 track = traceback.format_exc()
                 print(ex)
@@ -85,13 +88,11 @@ class StixTranslation:
                 if current_recursion_limit < recursion_limit:
                     print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
-                options['result_limit'] = options.get('resultSizeLimit', DEFAULT_LIMIT)
-                options['time_range'] = options.get('timeRange', DEFAULT_TIMERANGE)
 
                 if translate_type == QUERY:
                     # Carbon Black combines the mapping files into one JSON using process and binary keys.
                     # The query constructor has some logic around which of the two are used.
-                    if options.get('validate_pattern'):
+                    if validated_options.get('validate_pattern'):
                         self._validate_pattern(data)
                     queries = []
                     unmapped_stix_collection = []
@@ -123,7 +124,7 @@ class StixTranslation:
                     self._validate_pattern(data)
                     antlr_parsing = generate_query(data)
                     # Extract pattern elements into parsed stix object
-                    parsed_stix_dictionary = parse_stix(antlr_parsing, options['time_range'])
+                    parsed_stix_dictionary = parse_stix(antlr_parsing, validated_options['time_range'])
                     parsed_stix = parsed_stix_dictionary['parsed_stix']
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']

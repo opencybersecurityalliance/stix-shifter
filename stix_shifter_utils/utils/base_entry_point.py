@@ -3,7 +3,6 @@ import traceback
 import os
 import functools
 from stix_shifter_utils.utils.module_discovery import dialect_list
-from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
@@ -13,12 +12,13 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 
+
 class BaseEntryPoint:
 
     def __init__(self, options):
         self.__async = True
         stack = traceback.extract_stack()
-        self.__connector_module = stack[-2].filename.split('/')[-2]
+        self.__connector_module = stack[-2].filename.split(os.sep)[-2]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
         self.__dialects_visible = []
@@ -72,8 +72,9 @@ class BaseEntryPoint:
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
         module_name = self.__connector_module
         dialects = dialect_list(module_name)
-        for dialect in dialects:            
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=(dialect==dialect_default))
+        for dialect in dialects:
+            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator,
+                             default=(dialect == dialect_default))
 
     def create_default_query_translator(self, dialect):
         module_name = self.__connector_module
@@ -97,13 +98,14 @@ class BaseEntryPoint:
     def get_mapping(self, dialect=None):
         query_translator = self.get_query_translator(dialect)
         results_translator = self.get_results_translator(dialect)
-        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {}, 'to_stix': results_translator.get_mapping()}
+        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {},
+                   'to_stix': results_translator.get_mapping()}
         select_fields = query_translator.get_select_fields()
         if select_fields:
             mapping['select_fields'] = select_fields
         return mapping
 
-    @translation    
+    @translation
     def get_query_translator(self, dialect=None):
         if dialect:
             return self.__dialect_to_query_translator[dialect]
@@ -131,8 +133,8 @@ class BaseEntryPoint:
 
     def setup_transmission_simple(self, connection, configuration):
         module_name = self.__connector_module
-        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
-        module = importlib.import_module(module_path + ".api_client")        
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission"
+        module = importlib.import_module(module_path + ".api_client")
         api_client = module.APIClient(connection, configuration)
 
         module = importlib.import_module(module_path + ".ping_connector")
@@ -157,7 +159,7 @@ class BaseEntryPoint:
 
     def setup_transmission_basic(self, connection, configuration):
         module_name = self.__connector_module
-        module_path = "stix_shifter_modules." + module_name + ".stix_transmission" 
+        module_path = "stix_shifter_modules." + module_name + ".stix_transmission"
         module = importlib.import_module(module_path + ".connector")
         connector = module.Connector(connection, configuration)
 
@@ -186,7 +188,7 @@ class BaseEntryPoint:
     @transmission
     def create_status_connection(self, search_id):
         return self.__status_connector.create_status_connection(search_id)
-    
+
     def set_results_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseResultsConnector)):
             raise Exception('connector is not instance of BaseConnector or BaseResultsConnector')
