@@ -101,6 +101,6 @@
       }
     }
   },
-  "timeRange": 15,
-  "resultSizeLimit": 10000
+  "time_range": 15,
+  "result_limit": 10000
 }

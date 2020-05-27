@@ -6,25 +6,72 @@
         "name": {
             "min": 5,
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
         "description": {
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
-        "concurrent": {
-            "default": 4,
-            "type": "number"
+        "options": {
+            "type": "fields",
+            "concurrent": {
+                "default": 4,
+                "type": "number",
+                "previous": "connection.maxConcurrentSearches"
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "type": "number",
+                "previous": "connection.resultSizeLimit"
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "type": "number",
+                "previous": "connection.timerange"
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "type": "number",
+                "previous": "connection.timeoutLimit"
+            },
+            "dialects": {
+                "type": "array",
+                "default": null,
+                "hidden": true,
+                "previous": "connection.dialects"
+            },
+            "validate_pattern": {
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.validate_pattern"
+            },
+            "stix_validator": {
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.stix_validator"
+            },
+            "mapping": {
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.mapping"
+            }
         }
     },
     "configuration":{
         "name": {
             "min": 5,
             "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$"
+            "regex": "^[A-Za-z0-9 _-]*$",
+            "default": null
         },
         "connectionId": {
-            "type": "text"
+            "type": "text",
+            "default": null
         }
     }
 }
