@@ -45,7 +45,59 @@
         "object": "src_ip",
         "references": ["src_mac"]
       }
-    ]
+    ],
+    "bytes": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt"
+    },
+    "packets": {
+      "key": "network-traffic.src_packets",
+      "object": "nt"
+    },
+    "as": {
+      "number": [
+        {
+          "key": "autonomous-system.number",
+          "object": "autonomous-system"
+        },
+        {
+          "key": "ipv4-addr.belongs_to_refs",
+          "object": "src_ip",
+          "references": ["autonomous-system"]
+        }
+      ],
+      "organization": {
+        "name" : {
+          "key": "autonomous-system.name"
+        }
+      }
+    },
+    "address": {
+      "key": "x_ecs_source.address",
+      "cybox": false
+    },
+    "domain": {
+      "key": "x_ecs_source.domain",
+      "cybox": false
+    },
+    "nat": {
+      "ip": {
+        "key": "x_ecs_source.nat_ip",
+        "cybox": false
+      },
+      "port": {
+        "key": "x_ecs_source.nat_port",
+        "cybox": false
+      }
+    },
+    "registered_domain": {
+      "key": "x_ecs_source.registered_domain",
+      "cybox": false
+    },
+    "top_level_domain": {
+      "key": "x_ecs_source.top_level_domain",
+      "cybox": false
+    }
   },
   "client": {
     "ip": [
@@ -68,6 +120,14 @@
       "object": "nt",
       "transformer": "ToInteger"
     },
+    "bytes": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt"
+    },
+    "packets": {
+      "key": "network-traffic.src_packets",
+      "object": "nt"
+    },
     "mac": [
       {
         "key": "mac-addr.value",
@@ -85,46 +145,81 @@
       }
     ],
     "as": {
-        "number": {
-          "key": "autonomous-system.number"
+      "number": [
+        {
+          "key": "autonomous-system.number",
+          "object": "autonomous-system"
         },
-        "organization": {
-          "name" : {
-            "key": "autonomous-system.name"
-          }
+        {
+          "key": "ipv4-addr.belongs_to_refs",
+          "object": "src_ip",
+          "references": ["autonomous-system"]
+        }
+      ],
+      "organization": {
+        "name" : {
+          "key": "autonomous-system.name",
+          "object": "autonomous-system"
+        }
       }
+    },
+    "address": {
+      "key": "x_ecs_client.address",
+      "cybox": false
+    },
+    "domain": {
+      "key": "x_ecs_client.domain",
+      "cybox": false
+    },
+    "nat": {
+      "ip": {
+        "key": "x_ecs_client.nat_ip",
+        "cybox": false
+      },
+      "port": {
+        "key": "x_ecs_client.nat_port",
+        "cybox": false
+      }
+    },
+    "registered_domain": {
+      "key": "x_ecs_client.registered_domain",
+      "cybox": false
+    },
+    "top_level_domain": {
+      "key": "x_ecs_client.top_level_domain",
+      "cybox": false
     },
     "geo": {
       "city_name": {
-        "key": "x_ecs_client_geo.city_name",
+        "key": "x_ecs_client.geo_city_name",
         "cybox": false
       },
       "continent_name": {
-        "key": "x_ecs_client_geo.continent_name",
+        "key": "x_ecs_client.geo_continent_name",
         "cybox": false
       },
       "country_iso_code": {
-        "key": "x_ecs_client_geo.country_iso_code",
+        "key": "x_ecs_client.geo_country_iso_code",
         "cybox": false
       },
       "country_name": {
-        "key": "x_ecs_client_geo.country_name",
+        "key": "x_ecs_client.geo_country_name",
         "cybox": false
       },
       "location": {
-        "key": "x_ecs_client_geo.location",
+        "key": "x_ecs_client.geo_location",
         "cybox": false
       },
       "name": {
-        "key": "x_ecs_client_geo.name",
+        "key": "x_ecs_client.geo_name",
         "cybox": false
       },
       "region_iso_code": {
-        "key": "x_ecs_client_geo.region_iso_code",
+        "key": "x_ecs_client.geo_region_iso_code",
         "cybox": false
       },
       "region_name": {
-        "key": "x_ecs_client_geo.region_name",
+        "key": "x_ecs_client.geo_region_name",
         "cybox": false
       }
     }
@@ -166,37 +261,89 @@
         "references": ["dst_mac"]
       }
     ],
+    "bytes": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "nt"
+    },
+    "packets": {
+      "key": "network-traffic.dst_packets",
+      "object": "nt"
+    },
+    "as": {
+      "number": [
+        {
+          "key": "autonomous-system.number",
+          "object": "autonomous-system"
+        },
+        {
+          "key": "ipv4-addr.belongs_to_refs",
+          "object": "src_ip",
+          "references": ["autonomous-system"]
+        }
+      ],
+      "organization": {
+        "name" : {
+          "key": "autonomous-system.name"
+        }
+      }
+    },
+    "address": {
+      "key": "x_ecs_destination.address",
+      "cybox": false
+    },
+    "domain": {
+      "key": "x_ecs_destination.domain",
+      "cybox": false
+    },
+    "nat": {
+      "ip": {
+        "key": "x_ecs_destination.nat_ip",
+        "cybox": false
+      },
+      "port": {
+        "key": "x_ecs_destination.nat_port",
+        "cybox": false
+      }
+    },
+    "registered_domain": {
+      "key": "x_ecs_destination.registered_domain",
+      "cybox": false
+    },
+    "top_level_domain": {
+      "key": "x_ecs_destination.top_level_domain",
+      "cybox": false
+    },
     "geo": {
       "city_name": {
-        "key": "x_ecs_destination_geo.city_name",
+        "key": "x_ecs_destination.geo_city_name",
         "cybox": false
       },
       "continent_name": {
-        "key": "x_ecs_destination_geo.continent_name",
+        "key": "x_ecs_destination.geo_continent_name",
         "cybox": false
       },
       "country_iso_code": {
-        "key": "x_ecs_destination_geo.country_iso_code",
+        "key": "x_ecs_destination.geo_country_iso_code",
         "cybox": false
       },
       "country_name": {
-        "key": "x_ecs_destination_geo.country_name",
+        "key": "x_ecs_destination.geo_country_name",
         "cybox": false
       },
       "location": {
-        "key": "x_ecs_destination_geo.location",
+        "key": "x_ecs_destination.geo_location",
         "cybox": false
       },
       "name": {
-        "key": "x_ecs_destination_geo.name",
+        "key": "x_ecs_destination.geo_name",
         "cybox": false
       },
       "region_iso_code": {
-        "key": "x_ecs_destination_geo.region_iso_code",
+        "key": "x_ecs_destination.geo_region_iso_code",
         "cybox": false
       },
       "region_name": {
-        "key": "x_ecs_destination_geo.region_name",
+        "key": "x_ecs_destination.geo_region_name",
         "cybox": false
       }
     }
@@ -222,6 +369,14 @@
       "object": "nt",
       "transformer": "ToInteger"
     },
+    "bytes": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt"
+    },
+    "packets": {
+      "key": "network-traffic.src_packets",
+      "object": "nt"
+    },
     "mac": [
       {
         "key": "mac-addr.value",
@@ -238,37 +393,81 @@
         "references": ["dst_mac"]
       }
     ],
+    "as": {
+      "number": [
+        {
+          "key": "autonomous-system.number",
+          "object": "autonomous-system"
+        },
+        {
+          "key": "ipv4-addr.belongs_to_refs",
+          "object": "dst_ip",
+          "references": ["autonomous-system"]
+        }
+      ],
+      "organization": {
+        "name" : {
+          "key": "autonomous-system.name"
+        }
+      }
+    },
+    "address": {
+      "key": "x_ecs_server.address",
+      "cybox": false
+    },
+    "domain": {
+      "key": "x_ecs_server.domain",
+      "cybox": false
+    },
+    "nat": {
+      "ip": {
+        "key": "x_ecs_server.nat_ip",
+        "cybox": false
+      },
+      "port": {
+        "key": "x_ecs_server.nat_port",
+        "cybox": false
+      }
+    },
+    "registered_domain": {
+      "key": "x_ecs_server.registered_domain",
+      "cybox": false
+    },
+    "top_level_domain": {
+      "key": "x_ecs_server.top_level_domain",
+      "cybox": false
+    },
     "geo": {
       "city_name": {
-        "key": "x_ecs_server_geo.city_name",
+        "key": "x_ecs_server.geo_city_name",
         "cybox": false
       },
       "continent_name": {
-        "key": "x_ecs_server_geo.continent_name",
+        "key": "x_ecs_server.geo_continent_name",
         "cybox": false
       },
       "country_iso_code": {
-        "key": "x_ecs_server_geo.country_iso_code",
+        "key": "x_ecs_server.geo_country_iso_code",
         "cybox": false
       },
       "country_name": {
-        "key": "x_ecs_server_geo.country_name",
+        "key": "x_ecs_server.geo_country_name",
         "cybox": false
       },
       "location": {
-        "key": "x_ecs_server_geo.location",
+        "key": "x_ecs_server.geo_location",
         "cybox": false
       },
       "name": {
-        "key": "x_ecs_server_geo.name",
+        "key": "x_ecs_server.geo_name",
         "cybox": false
       },
       "region_iso_code": {
-        "key": "x_ecs_server_geo.region_iso_code",
+        "key": "x_ecs_server.geo_region_iso_code",
         "cybox": false
       },
       "region_name": {
-        "key": "x_ecs_server_geo.region_name",
+        "key": "x_ecs_server.geo_region_name",
         "cybox": false
       }
     }
@@ -410,52 +609,188 @@
     }
   },
   "process": {
-    "executable": {
-      "key": "process.command_line",
-      "object": "proc"
-    },
     "start": {
       "key": "process.created",
-      "object": "proc"
+      "object": "process"
     },
-    "pid": {
-      "key": "process.pid",
-      "object": "proc",
-      "transformer": "ToInteger"
-    },
-    "name": [
-      {
-        "key": "file.name",
-        "object": "file"
-      },
-      {
-        "key": "process.image_ref",
-        "object": "proc",
-        "references": "file"
-      }
-    ],
-    "code_signature": {
-      "exists": {
-        "key": "x_ecs_code_signature.exists",
-        "cybox": false
-      },
-      "subject_name": {
-        "key": "x_ecs_code_signature.subject_name",
-        "cybox": false
-      }
-    },
-    "ppid": [
+    "pid": [
       {
         "key": "process.pid",
-        "object": "parent",
+        "object": "process",
         "transformer": "ToInteger"
       },
       {
         "key": "process.parent_ref",
-        "object": "parent",
-        "references": "proc"
+        "object": "process",
+        "references": "process_ppid"
       }
-    ]
+    ],
+    "name": {
+      "key": "process.name",
+      "object": "process"
+    },
+    "code_signature": {
+      "exists": {
+        "key": "x_ecs_process.code_signature_exists",
+        "cybox": false
+      },
+      "subject_name": {
+        "key": "x_ecs_code_process.signature_subject_name",
+        "cybox": false
+      }
+    },
+    "ppid": {
+      "key": "process.pid",
+      "object": "process_ppid",
+      "transformer": "ToInteger"
+    },
+    "pe": {
+      "company": {
+        "key": "x_ecs_process.pe_company",
+        "cybox": false
+      },
+      "description": {
+        "key": "x_ecs_process.pe_description",
+        "cybox": false
+      },
+      "file_version": {
+        "key": "x_ecs_process.pe_file_version",
+        "cybox": false
+      },
+      "original_file_name": {
+        "key": "x_ecs_process.pe_original_file_name",
+        "cybox": false
+      },
+      "product": {
+        "key": "x_ecs_process.pe_product",
+        "cybox": false
+      }
+    },
+    "args": {
+      "key": "x_ecs_process.args",
+      "cybox": false
+    },
+    "args_count": {
+      "key": "x_ecs_process.args_count",
+      "cybox": false
+    },
+    "command_line": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "executable": {
+      "key": "x_ecs_process.executable",
+      "cybox": false
+    },
+    "entity_id": {
+      "key": "x_ecs_process.entity_id",
+      "cybox": false
+    },
+    "exit_code": {
+      "key": "x_ecs_process.exit_code",
+      "cybox": false
+    },
+    "parent": {
+      "args": {
+        "key": "x_ecs_process.parent.args",
+        "cybox": false
+      },
+      "args_count": {
+        "key": "x_ecs_process.parent.args",
+        "cybox": false
+      },
+      "command_line": {},
+      "entity_id": {
+        "key": "x_ecs_process.parent.args",
+        "cybox": false
+      },
+      "exit_code": {
+        "key": "x_ecs_process.parent.args",
+        "cybox": false
+      },
+      "name": {
+        "key": "process.name",
+        "object": "process_parent"
+      },
+      "pgid": {
+        "key": "x_ecs_process.parent.pgid",
+        "cybox": false
+      },
+      "pid": [
+        {
+          "key": "process.pid",
+          "object": "process_parent",
+          "transformer": "ToInteger"
+        },
+        {
+          "key": "process.parent_ref",
+          "object": "process_parent_ppid",
+          "references": "parent"
+        },
+        {
+          "key": "process.child_refs",
+          "object": "process",
+          "references": "parent"
+        }
+      ],
+      "ppid": {
+        "key": "process.pid",
+        "object": "process_parent_ppid",
+        "transformer": "ToInteger"
+      },
+      "start": {
+        "key": "process.created",
+        "object": "process_parent"
+      },
+      "thread": {
+        "id": {
+          "key": "x_ecs_process.parent.thread_id",
+          "cybox": false
+        },
+        "name": {
+          "key": "x_ecs_process.parent.thread_id",
+          "cybox": false
+        }
+      },
+      "title": {
+        "key": "x_ecs_process.parent.title",
+        "cybox": false
+      },
+      "uptime": {
+        "key": "x_ecs_process.parent.uptime",
+        "cybox": false
+      },
+      "working_directory": {
+        "key": "x_ecs_process.parent.working_directory",
+        "cybox": false
+      }
+    },
+    "pgid": {
+      "key": "x_ecs_process.exit_code",
+      "cybox": false
+    },
+    "thread": {
+      "id": {
+        "key": "x_ecs_process.thread_id",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_process.thread_name",
+        "cybox": false
+      }
+    },
+    "title": {
+      "key": "x_ecs_process.title",
+      "cybox": false
+    },
+    "uptime": {
+      "key": "x_ecs_process.uptime",
+      "cybox": false
+    },
+    "working_directory": {
+      "key": "x_ecs_process.working_directory",
+      "cybox": false
+    }
   },
   "user": {
     "name": [
@@ -465,7 +800,7 @@
       },
       {
         "key": "process.creator_user_ref",
-        "object": "proc",
+        "object": "process",
         "references": "user"
       }
     ],
@@ -564,6 +899,56 @@
     "path": {
       "key": "x_ecs_dll.path",
       "cybox": false
+    },
+    "pe": {
+      "company": {
+        "key": "x_ecs_dll.pe_company",
+        "cybox": false
+      },
+      "description": {
+        "key": "x_ecs_dll.pe_description",
+        "cybox": false
+      },
+      "file_version": {
+        "key": "x_ecs_dll.pe_file_version",
+        "cybox": false
+      },
+      "original_file_name": {
+        "key": "x_ecs_dll.pe_original_file_name",
+        "cybox": false
+      },
+      "product": {
+        "key": "x_ecs_dll.pe_product",
+        "cybox": false
+      }
+    },
+    "code_signature": {
+      "exists": {
+        "key": "x_ecs_dll.code_signature_exists",
+        "cybox": false
+      },
+      "subject_name": {
+        "key": "x_ecs_dll.code_signature_subject_name",
+        "cybox": false
+      }
+    },
+    "hash": {
+      "sha256": {
+        "key": "x_ecs_dll.hashes.SHA-256",
+        "cybox": false
+      },
+      "sha1": {
+        "key": "x_ecs_dll.hashes.SHA-1",
+        "cybox": false
+      },
+      "md5": {
+        "key": "x_ecs_dll.hashes.MD5",
+        "cybox": false
+      },
+      "sha512": {
+        "key": "x_ecs_dll.hashes.SHA-512",
+        "cybox": false
+      }
     }
   },
   "dns": {
@@ -714,6 +1099,38 @@
       "sha512": {
         "key": "file.hashes.SHA-512",
         "object": "file"
+      }
+    },
+    "pe": {
+      "company": {
+        "key": "x_ecs_file.pe_company",
+        "cybox": false
+      },
+      "description": {
+        "key": "x_ecs_file.pe_description",
+        "cybox": false
+      },
+      "file_version": {
+        "key": "x_ecs_file.pe_file_version",
+        "cybox": false
+      },
+      "original_file_name": {
+        "key": "x_ecs_file.pe_original_file_name",
+        "cybox": false
+      },
+      "product": {
+        "key": "x_ecs_file.pe_product",
+        "cybox": false
+      }
+    },
+    "code_signature": {
+      "exists": {
+        "key": "x_ecs_file.code_signature_exists",
+        "cybox": false
+      },
+      "subject_name": {
+        "key": "x_ecs_file.code_signature_subject_name",
+        "cybox": false
       }
     }
   },
@@ -977,28 +1394,6 @@
       "cybox": false
     }
   },
-  "pe": {
-    "company": {
-      "key": "x_ecs_pe.company",
-      "cybox": false
-    },
-    "description": {
-      "key": "x_ecs_pe.description",
-      "cybox": false
-    },
-    "file_version": {
-      "key": "x_ecs_pe.file_version",
-      "cybox": false
-    },
-    "original_file_name": {
-      "key": "x_ecs_pe.original_file_name",
-      "cybox": false
-    },
-    "product": {
-      "key": "x_ecs_pe.product",
-      "cybox": false
-    }
-  },
   "package": {
     "name": {
       "key": "software.name"
@@ -1010,6 +1405,32 @@
   "registry": {
     "key": {
       "key": "windows-registry-key.key"
+    },
+    "data": {
+      "bytes": {
+        "key": "x_ecs_registry.data_bytes",
+        "cybox": false
+      },
+      "strings": {
+        "key": "x_ecs_registry.data_strings",
+        "cybox": false
+      },
+      "type": {
+        "key": "x_ecs_registry.data_type",
+        "cybox": false
+      }
+    },
+    "hive": {
+      "key": "x_ecs_registry.hive",
+      "cybox": false
+    },
+    "path": {
+      "key": "x_ecs_registry.path",
+      "cybox": false
+    },
+    "value": {
+      "key": "x_ecs_registry.value",
+      "cybox": false
     }
   },
   "related": {
