@@ -118,7 +118,12 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                         del input_configs[key]
             else:
                 if optional_section(expected_configs[key], key):
-                    pass
+                    if default_section(expected_configs[key], key):
+                        if key not in validated_params:
+                            validated_params[key] = dict()
+                        copy_valid_configs(dict(), expected_configs[key], validated_params[key], errors, key_path)
+                    else:
+                        pass
                 elif 'default' in expected_configs[key]:
                     validated_params[key] = value['default']
                 elif ('optional' in expected_configs[key] and expected_configs[key]['optional']):
@@ -140,6 +145,14 @@ def optional_section(item, key):
             else:
                 return False
     return True
+
+
+def default_section(item, key):
+    if isinstance(item, dict):
+        for key, value in item.items():
+            if isinstance(value, dict):
+                return 'default' in value
+    return False
 
 
 def is_leaf(config):
