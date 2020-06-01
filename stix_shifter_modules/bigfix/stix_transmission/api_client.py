@@ -9,7 +9,6 @@ class APIClient:
     RESULT_ENDPOINT = 'clientqueryresults/'
     SYNC_QUERY_ENDPOINT = 'query'
     PING_TIMEOUT_IN_SECONDS = 10
-    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
         self.endpoint_start = 'api/'
@@ -19,11 +18,7 @@ class APIClient:
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
         self.connection = connection
         self.configuration = configuration
-        options = connection.get('options')
-        if options:
-            self.search_timeout = options.get('timeout')
-        else:
-            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
+        self.search_timeout = connection['options'].get('timeout')
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT

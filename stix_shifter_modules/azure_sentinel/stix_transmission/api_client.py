@@ -4,7 +4,6 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 class APIClient:
     """API Client to handle all calls."""
     PING_TIMEOUT_IN_SECONDS = 10
-    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
     
     def __init__(self, connection, configuration):
         """Initialization.
@@ -17,11 +16,7 @@ class APIClient:
         auth = configuration.get('auth')
         self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
         self.host = connection.get('host')
-        options = connection.get('options')
-        if options:
-            self.search_timeout = options.get('timeout')
-        else:
-            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
+        self.search_timeout = connection['options'].get('timeout')
 
         if auth:
             if 'access_token' in auth:

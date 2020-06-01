@@ -9,7 +9,6 @@ class APIClient():
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of the RestApiClient
     PING_TIMEOUT_IN_SECONDS = 10
-    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
 
     def __init__(self, connection, configuration):
         # This version of the ariel APIClient is designed to function with
@@ -43,11 +42,7 @@ class APIClient():
                 headers['user-agent'] = 'UDS'
                 url_modifier_function = self.add_endpoint_to_url_header
 
-        options = connection.get('options')
-        if options:
-            self.search_timeout = options.get('timeout')
-        else:
-            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
+        self.search_timeout = connection['options'].get('timeout')
 
         self.data_lake = connection.get('data_lake')
         if self.data_lake:

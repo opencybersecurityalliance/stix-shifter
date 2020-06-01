@@ -11,7 +11,6 @@ import base64
 class APIClient():
 
     PING_TIMEOUT_IN_SECONDS = 10
-    DEFAULT_SEARCH_TIMEOUT_IN_SECONDS = 30
     # API METHODS
 
     # These methods are used to retrive a) authorization token using
@@ -80,11 +79,7 @@ class APIClient():
                                         'use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
-        options = connection.get('options')
-        if options:
-            self.search_timeout = options.get('timeout')
-        else:
-            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
+        self.search_timeout = connection['options'].get('timeout')
 
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
