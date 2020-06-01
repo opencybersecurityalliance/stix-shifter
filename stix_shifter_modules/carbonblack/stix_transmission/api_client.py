@@ -24,6 +24,11 @@ class APIClient():
                                     mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        options = connection.get('options')
+        if options:
+            self.search_timeout = options.get('timeout')
+        else:
+            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
@@ -41,4 +46,4 @@ class APIClient():
             sort_by = 'start asc'
         data.append(("sort", sort_by))
 
-        return self.client.call_api(endpoint, 'GET', headers, urldata=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', headers, urldata=data, timeout=self.search_timeout)

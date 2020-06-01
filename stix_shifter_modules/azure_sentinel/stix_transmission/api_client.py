@@ -17,6 +17,11 @@ class APIClient:
         auth = configuration.get('auth')
         self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
         self.host = connection.get('host')
+        options = connection.get('options')
+        if options:
+            self.search_timeout = options.get('timeout')
+        else:
+            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
 
         if auth:
             if 'access_token' in auth:
@@ -48,7 +53,7 @@ class APIClient:
         params = dict()
         params['$filter'] = query_expression
         params['$top'] = length
-        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.search_timeout)
 
     def next_page_run_search(self, next_page_url):
         """get the response from azure_sentinel endpoints
@@ -58,4 +63,4 @@ class APIClient:
         headers['Accept'] = 'application/json'
         url = next_page_url.split('?', maxsplit=1)[1]
         endpoint = self.endpoint + '?' + url
-        return self.client.call_api(endpoint, 'GET', headers, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', headers, timeout=self.search_timeout)

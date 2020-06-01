@@ -43,6 +43,12 @@ class APIClient():
                 headers['user-agent'] = 'UDS'
                 url_modifier_function = self.add_endpoint_to_url_header
 
+        options = connection.get('options')
+        if options:
+            self.search_timeout = options.get('timeout')
+        else:
+            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
+
         self.data_lake = connection.get('data_lake')
         if self.data_lake:
             print('QRadar Cloud Data Lake enabled')
@@ -74,13 +80,13 @@ class APIClient():
         # Sends a GET request
         # to  https://<server_ip>/api/ariel/databases
         endpoint = self.endpoint_start + 'databases'
-        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.search_timeout)
 
     def get_database(self, database_name):
         # Sends a GET request
         # to https://<server_ip>/api/ariel/databases/<database_name>
         endpoint = self.endpoint_start + 'databases' + '/' + database_name
-        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.search_timeout)
 
     def get_searches(self):
         # Sends a GET request
@@ -91,7 +97,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.search_timeout)
 
     def create_search(self, query_expression):
         # Sends a POST request
@@ -103,7 +109,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.search_timeout)
 
     def get_search(self, search_id):
         # Sends a GET request to
@@ -114,7 +120,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', urldata=self.urldata, timeout=self.search_timeout)
 
     def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
         # Sends a GET request to
@@ -131,7 +137,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'GET', headers, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', headers, urldata=self.urldata, timeout=self.search_timeout)
 
     def update_search(self, search_id, save_results=None, status=None):
         # Sends a POST request to
@@ -148,7 +154,7 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'POST', data=data, urldata=self.urldata, timeout=self.search_timeout)
 
     def delete_search(self, search_id):
         # Sends a DELETE request to
@@ -160,4 +166,4 @@ class APIClient():
         if self.data_lake:
             self.urldata.update({'data_lake': '"qcdl"'})
 
-        return self.client.call_api(endpoint, 'DELETE', urldata=self.urldata, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'DELETE', urldata=self.urldata, timeout=self.search_timeout)

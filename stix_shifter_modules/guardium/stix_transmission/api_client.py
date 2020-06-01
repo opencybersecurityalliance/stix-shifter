@@ -31,14 +31,14 @@ class APIClient():
         self.authorization = None
         self.credential = None
 
-# Check if connection object contains the following
+        # Check if connection object contains the following
 
         username = configuration.get('auth').get("username", None)
         password = configuration.get('auth').get("password", None)
         grant_type = connection.get('options',{}).get("grant_type", 'password')
         client_id = connection.get('options',{}).get("client_id", None)
         client_secret = connection.get('options',{}).get("client_secret", None)
-# It is decided the authorization will not be sent by UDS
+        # It is decided the authorization will not be sent by UDS
 
         if(username is None or password is None or grant_type is None or client_id is None or client_secret is None):
             self.credential = None
@@ -80,6 +80,11 @@ class APIClient():
                                         'use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        options = connection.get('options')
+        if options:
+            self.search_timeout = options.get('timeout')
+        else:
+            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
 
     def add_endpoint_to_url_header(self, url, endpoint, headers):
         # this function is called from 'call_api' with proxy forwarding,
@@ -115,12 +120,12 @@ class APIClient():
     def get_databases(self):
         # Sends a GET request
         endpoint = self.endpoint_start + 'databases'
-        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.search_timeout)
 
     def get_database(self, database_name):
         # Sends a GET request
         endpoint = self.endpoint_start + 'databases' + '/' + database_name
-        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.search_timeout)
 
     def isTimestampValid(self, tstamp):
         if tstamp is not None:
@@ -237,7 +242,7 @@ class APIClient():
         # CAN NOT be implemented for Guardium
 
         endpoint = self.endpoint_start + "searches"
-        return self.client.call_api(endpoint, 'GET', timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'GET', timeout=self.search_timeout)
 
     def create_search(self, query_expression):
         # validate credential and create search_id.  No query submission -- Sync call
@@ -313,7 +318,7 @@ class APIClient():
         if (self.get_accessToken()):
             endpoint = self.endpoint_start + "online_report"
 
-            response = self.client.call_api(endpoint, 'POST', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+            response = self.client.call_api(endpoint, 'POST', data=data, timeout=self.search_timeout)
             status_code = response.response.status_code
 
 #           Though the connector gets the authorization token just before fetching the actual result
@@ -325,7 +330,7 @@ class APIClient():
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
                     if (self.get_accessToken()):
-                        response = self.client.call_api(endpoint, 'POST', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+                        response = self.client.call_api(endpoint, 'POST', data=data, timeout=self.search_timeout)
                         status_code = response.response.status_code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
@@ -366,7 +371,7 @@ class APIClient():
             data['save_results'] = save_results
         if status:
             data['status'] = status
-        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.search_timeout)
 
     def delete_search(self, search_id):
         # Subroto -- not used.

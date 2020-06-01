@@ -35,6 +35,11 @@ class APIClient:
                                     mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        options = connection.get('options')
+        if options:
+            self.search_timeout = options.get('timeout')
+        else:
+            self.search_timeout = self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS
 
     def ping_box(self):
         """Ping the endpoint."""
@@ -54,4 +59,4 @@ class APIClient:
         endpoint = self.endpoint
         query_expression = query_expression + serialize.format(offset=offset, length=length)
         query_expression = json.dumps({'Query': query_expression}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.DEFAULT_SEARCH_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.search_timeout)
