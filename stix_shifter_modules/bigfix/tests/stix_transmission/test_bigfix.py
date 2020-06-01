@@ -49,9 +49,9 @@ CONNECTION = {
 class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     def test_is_async():
-        entry_point = EntryPoint(CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
 
-        check_async = entry_point.is_async()
+        check_async = transmission.is_async()
         assert check_async
 
     @staticmethod
@@ -242,8 +242,8 @@ class TestBigfixConnection(unittest.TestCase):
         
         query = 'bigfix query text'
 
-        entry_point = EntryPoint(connection, config)
-        query_response = entry_point.create_query_connection(query)
+        transmission = stix_transmission.StixTransmission('bigfix',  connection, config)
+        query_response = transmission.query(query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -560,8 +560,8 @@ class TestBigfixConnection(unittest.TestCase):
     def test_delete_query():
         search_id = "104"
 
-        entry_point = EntryPoint(CONNECTION, CONFIG)
-        status_response = entry_point.delete_query_connection(search_id)
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        status_response = transmission.delete(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

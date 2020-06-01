@@ -98,7 +98,6 @@ class StixTransmission:
             return return_obj
 
     def is_async(self):
-        return self.entry_point.is_async()
         # Check if the module is async/sync
         try:
             if self.init_error is not None:

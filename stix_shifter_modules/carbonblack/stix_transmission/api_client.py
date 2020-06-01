@@ -23,6 +23,7 @@ class APIClient():
                                     mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        print(str(connection))
         self.search_timeout = connection['options'].get('timeout')
 
     def ping_box(self):
