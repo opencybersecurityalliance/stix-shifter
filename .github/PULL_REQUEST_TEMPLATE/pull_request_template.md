@@ -1,14 +1,18 @@
 **Solution Descrition:**
 
-A clear and concise solution description of the problem.
+A clear description of the problem and solution.
 
 **Current Behavior:**
 
 Describe with example of the current behavior of the proposed code changes.
 
-**Unittest Added?** Yes/No
+**Unit tests Added?** Yes/No
 
 Mention with Yes/No whether unittest added for the requested change. If `No`, please mention the reason.
+
+**Additional context**
+
+Add any other context or screenshots about the feature request here.
 
 **Author:**
 
