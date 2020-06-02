@@ -13,7 +13,8 @@ class TestSynchronousDummyConnection(unittest.TestCase, object):
     def configuration(self):
         return {
                 "auth": {
-
+                    "username": "u",
+                    "password": "p"
                 }
         }
 

@@ -143,7 +143,7 @@ def optional_section(item, key):
                     pass
                 else:
                     return False
-            elif key == 'type':
+            elif key == 'type' and value == 'fields':
                 pass
             else:
                 return False
