@@ -66,7 +66,8 @@
         "auth": {
             "type" : "fields",
             "sec": {
-                "type": "password"
+                "type": "password",
+                "previous": "configuration.auth.SEC"
             }
         }
     }

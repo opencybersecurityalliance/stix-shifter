@@ -16,9 +16,9 @@ class EntryPoint(BaseEntryPoint):
     # python main.py translate synchronous_dummy:dialect2 query '{}' "[ipv4-addr:value = '127.0.0.1']"
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
         self.set_async(False)
-        if connection:  
+        if connection:
 
             # Use default transmission setup otherwise...
             # self.setup_transmission_simple(connection, configuration)
@@ -29,9 +29,9 @@ class EntryPoint(BaseEntryPoint):
             base_sync_connector = BaseSyncConnector()
             ping_connector = PingConnector(api_client)
             query_connector = base_sync_connector
-            status_connector = base_sync_connector            
+            status_connector = base_sync_connector
             results_connector = ResultsConnector(api_client)
-            delete_connector = DeleteConnector(api_client)            
+            delete_connector = DeleteConnector(api_client)
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)

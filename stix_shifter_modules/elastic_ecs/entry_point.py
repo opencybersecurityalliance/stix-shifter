@@ -4,7 +4,7 @@ from .stix_translation.results_translator import ResultTranslator
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
         self.set_async(False)
 
         if connection:
