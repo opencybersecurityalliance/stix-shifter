@@ -74,7 +74,7 @@ If the data source is synchronous, you must include `set_async(False)` in the co
 ```
   class EntryPoint(EntryPointBase):
     def __init__(self, connection={}, configuration={}, options={}):
-      super().__init__(options)
+      super().__init__(connection, configuration, options)
       self.set_async(False)
       if connection:
         api_client = APIClient(connection, configuration)
