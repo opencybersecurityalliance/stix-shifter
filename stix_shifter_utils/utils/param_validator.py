@@ -3,14 +3,19 @@ import json
 from jsonmerge import merge
 
 
+def get_merged_config(module):
+    module_config_path = f'stix_shifter_modules/{module}/configuration/config.json'
+    base_config_path = f'stix_shifter_modules/config.json'
+    with open(module_config_path) as mapping_file:
+        module_configs = json.load(mapping_file)
+    with open(base_config_path) as mapping_file:
+        base_configs = json.load(mapping_file)
+    return merge(base_configs, module_configs)
+
+
 def modernize_objects(module, params):
-    config_json_path = f'stix_shifter_modules/{module}/configuration/config.json'
-    try:
-        with open(config_json_path) as mapping_file:
-            configs = json.load(mapping_file)
-    except Exception as ex:
-        raise(ex)
-    modernize_step(configs, params, params)
+    expected_configs = get_merged_config(module)
+    modernize_step(expected_configs, params, params)
     return params
 
 
@@ -20,9 +25,11 @@ def modernize_step(configs, params, params_root):
             if isinstance(value, dict):
                 if 'previous' in value:
                     old_path = value['previous']
-                    old_value = get_dot_path(params_root, old_path)
-                    if old_value:
-                        params[key] = old_value
+                    old_present, old_value = get_dot_path(params_root, old_path)
+                    if key not in params:
+                        if old_present:
+                            params[key] = old_value
+                    if old_present:
                         del_dot_path(params_root, old_path)
                 if key in params:
                     modernize_step(value, params[key], params_root)
@@ -35,9 +42,8 @@ def get_dot_path(params, path):
             return get_dot_path(params[pp[0]], '.'.join(pp[1:]))
     else:
         if path in params:
-            return params[path]
-        else:
-            raise ValueError('Parameter not found: ' + path)
+            return True, params[path]
+    return False, None
 
 
 def del_dot_path(params, path):
@@ -50,20 +56,9 @@ def del_dot_path(params, path):
     else:
         del params[path]
 
-def param_validator(module, input_configs, start_point=None):
-    module_config_path = f'stix_shifter_modules/{module}/configuration/config.json'
-    base_config_path = f'stix_shifter_modules/config.json'
-    try:
-        with open(module_config_path) as mapping_file:
-            module_configs = json.load(mapping_file)
-        
-        with open(base_config_path) as mapping_file:
-            base_configs = json.load(mapping_file)
-    except Exception as ex:
-        raise(ex)
-    
-    expected_configs = merge(base_configs, module_configs)
 
+def param_validator(module, input_configs, start_point=None):
+    expected_configs = get_merged_config(module)
     if start_point:
         start_points = start_point.split('.')
         for item in start_points:
@@ -77,7 +72,7 @@ def param_validator(module, input_configs, start_point=None):
         error_obj['missing_params'] = errors
     if input_configs:
         if isinstance(input_configs, dict):
-            error_obj['unexpected_params'] = get_inner_keys(input_configs)
+            error_obj['unexpected_params'] = input_configs
 
     if error_obj:
         raise ValueError(error_obj)
@@ -97,19 +92,27 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     if input_configs[key]:
                         if 'min' in expected_configs[key]:
                             if not check_min(input_configs[key], expected_configs[key]['min'],
-                                            expected_configs[key]['type'], key):
+                                             expected_configs[key]['type'], key):
                                 raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]),
-                                                str(expected_configs[key]['min'])))
+                                                 str(expected_configs[key]['min'])))
                         elif 'max' in expected_configs[key]:
-                            if not check_max(input_configs[key], expected_configs[key]['max'], expected_configs[key]['type'], key):
+                            if not check_max(input_configs[key], expected_configs[key]['max'],
+                                             expected_configs[key]['type'], key):
                                 raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]),
-                                                str(expected_configs[key]['max'])))
+                                                 str(expected_configs[key]['max'])))
                         elif 'regex' in expected_configs[key]:
                             if not check_regex(input_configs[key], expected_configs[key]['regex']):
                                 raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
 
-                    validated_params[key] = input_configs[key]
-                    del input_configs[key]
+                    input_value = input_configs[key]
+                    if input_value is not None or ('nullable' in expected_configs[key] and expected_configs[key]['nullable']):
+                        validated_params[key] = input_value
+                        del input_configs[key]
+                    elif 'default' in expected_configs[key]:
+                        validated_params[key] = expected_configs[key]['default']
+                        del input_configs[key]
+                    elif ('optional' in expected_configs[key] and expected_configs[key]['optional']):
+                        del input_configs[key]
                 else:
                     if key not in validated_params:
                         validated_params[key] = dict()
@@ -170,7 +173,7 @@ def check_min(input_value, min_value, type, key):
         else:
             return False
     if type == 'text':
-        if len(input_value) >= len(min_value):
+        if len(input_value) >= min_value:
             return True
         else:
             return False
@@ -184,7 +187,7 @@ def check_max(input_value, max_value, type, key):
         else:
             return False
     if type == 'text':
-        if len(input_value) <= len(max_value):
+        if len(input_value) <= max_value:
             return True
         else:
             return False
@@ -196,13 +199,3 @@ def check_regex(input_value, regex_value):
     pattern = re.compile(regex_value)
     match_str = pattern.search(input_value)
     return bool(match_str)
-
-
-def get_inner_keys(obj):
-    keys = []
-    for key, value in obj.items():
-        if isinstance(value, dict):
-            keys.extend(get_inner_keys(value))
-        else:
-            keys.append(key)
-    return keys
