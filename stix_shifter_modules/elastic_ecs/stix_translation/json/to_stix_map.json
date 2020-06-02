@@ -97,6 +97,40 @@
     "top_level_domain": {
       "key": "x_ecs_source.top_level_domain",
       "cybox": false
+    },
+    "geo": {
+      "city_name": {
+        "key": "x_ecs_source.geo_city_name",
+        "cybox": false
+      },
+      "continent_name": {
+        "key": "x_ecs_source.geo_continent_name",
+        "cybox": false
+      },
+      "country_iso_code": {
+        "key": "x_ecs_source.geo_country_iso_code",
+        "cybox": false
+      },
+      "country_name": {
+        "key": "x_ecs_source.geo_country_name",
+        "cybox": false
+      },
+      "location": {
+        "key": "x_ecs_source.geo_location",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_source.geo_name",
+        "cybox": false
+      },
+      "region_iso_code": {
+        "key": "x_ecs_source.geo_region_iso_code",
+        "cybox": false
+      },
+      "region_name": {
+        "key": "x_ecs_source.geo_region_name",
+        "cybox": false
+      }
     }
   },
   "client": {
@@ -500,6 +534,38 @@
         "key": "x_ecs_network.vlan_name",
         "cybox": false
       }
+    },
+    "inner": {
+      "vlan": {
+        "id": {
+          "key": "x_ecs_network.inner_vlan_id",
+          "cybox": false
+        },
+        "name": {
+          "key": "x_ecs_network.inner-vlan_name",
+          "cybox": false
+        }
+      }
+    },
+    "name": {
+      "key": "x_ecs_network.name",
+      "cybox": false
+    },
+    "application": {
+      "key": "x_ecs_network.application",
+      "cybox": false
+    },
+    "direction": {
+      "key": "x_ecs_network.direction",
+      "cybox": false
+    },
+    "forwarded_ip": {
+      "key": "x_ecs_network.forwarded_ip",
+      "cybox": false
+    },
+    "community_id": {
+      "key": "x_ecs_network.community_id",
+      "cybox": false
     }
   },
   "event": {
@@ -692,20 +758,23 @@
     },
     "parent": {
       "args": {
-        "key": "x_ecs_process.parent.args",
+        "key": "x_ecs_process.parent_args",
         "cybox": false
       },
       "args_count": {
-        "key": "x_ecs_process.parent.args",
+        "key": "x_ecs_process.parent_args_count",
         "cybox": false
       },
-      "command_line": {},
+      "command_line": {
+        "key": "process.command_line",
+        "object": "process_parent"
+      },
       "entity_id": {
-        "key": "x_ecs_process.parent.args",
+        "key": "x_ecs_process.parent_args",
         "cybox": false
       },
       "exit_code": {
-        "key": "x_ecs_process.parent.args",
+        "key": "x_ecs_process.parent_args",
         "cybox": false
       },
       "name": {
@@ -713,7 +782,7 @@
         "object": "process_parent"
       },
       "pgid": {
-        "key": "x_ecs_process.parent.pgid",
+        "key": "x_ecs_process.parent_pgid",
         "cybox": false
       },
       "pid": [
@@ -744,24 +813,24 @@
       },
       "thread": {
         "id": {
-          "key": "x_ecs_process.parent.thread_id",
+          "key": "x_ecs_process.parent_thread_id",
           "cybox": false
         },
         "name": {
-          "key": "x_ecs_process.parent.thread_id",
+          "key": "x_ecs_process.parent_thread_id",
           "cybox": false
         }
       },
       "title": {
-        "key": "x_ecs_process.parent.title",
+        "key": "x_ecs_process.parent_title",
         "cybox": false
       },
       "uptime": {
-        "key": "x_ecs_process.parent.uptime",
+        "key": "x_ecs_process.parent_uptime",
         "cybox": false
       },
       "working_directory": {
-        "key": "x_ecs_process.parent.working_directory",
+        "key": "x_ecs_process.parent_working_directory",
         "cybox": false
       }
     },
@@ -814,7 +883,37 @@
         "object": "email",
         "references": "user"
       }
-    ]
+    ],
+    "domain": {
+      "key": "x_ecs_user.domain",
+      "cybox": false
+    },
+    "full_name": {
+      "key": "x_ecs_user.full_name",
+      "cybox": false
+    },
+    "hash": {
+      "key": "x_ecs_user.hash",
+      "cybox": false
+    },
+    "id": {
+      "key": "x_ecs_user.id",
+      "cybox": false
+    },
+    "group": {
+      "domain": {
+        "key": "x_ecs_user.group_domain",
+        "cybox": false
+      },
+      "id": {
+        "key": "x_ecs_user.group_id",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_user.group_name",
+        "cybox": false
+      }
+    }
   },
   "agent": {
     "name": {
@@ -1082,7 +1181,7 @@
       "key" : "file.size",
       "object": "file",
       "transformer": "ToInteger"
-      },
+    },
     "hash": {
       "sha256": {
         "key": "file.hashes.SHA-256",
@@ -1132,6 +1231,74 @@
         "key": "x_ecs_file.code_signature_subject_name",
         "cybox": false
       }
+    },
+    "accessed": {
+      "key": "x_ecs_file.accessed",
+      "cybox": false
+    },
+    "attributes": {
+      "key": "x_ecs_file.attributes",
+      "cybox": false
+    },
+    "ctime": {
+      "key": "x_ecs_file.ctime",
+      "cybox": false
+    },
+    "device": {
+      "key": "x_ecs_file.device",
+      "cybox": false
+    },
+    "drive_letter": {
+      "key": "x_ecs_file.drive_letter",
+      "cybox": false
+    },
+    "extension": {
+      "key": "x_ecs_file.extension",
+      "cybox": false
+    },
+    "gid": {
+      "key": "x_ecs_file.gid",
+      "cybox": false
+    },
+    "group": {
+      "key": "x_ecs_file.group",
+      "cybox": false
+    },
+    "inode": {
+      "key": "x_ecs_file.inode",
+      "cybox": false
+    },
+    "mime_type": {
+      "key": "x_ecs_file.mime_type",
+      "cybox": false
+    },
+    "mode": {
+      "key": "x_ecs_file.mode",
+      "cybox": false
+    },
+    "mtime": {
+      "key": "x_ecs_file.mtime",
+      "cybox": false
+    },
+    "owner": {
+      "key": "x_ecs_file.owner",
+      "cybox": false
+    },
+    "path": {
+      "key": "x_ecs_file.path",
+      "cybox": false
+    },
+    "target_path": {
+      "key": "x_ecs_file.target_path",
+      "cybox": false
+    },
+    "type": {
+      "key": "x_ecs_file.type",
+      "cybox": false
+    },
+    "uid": {
+      "key": "x_ecs_file.uid",
+      "cybox": false
     }
   },
   "group": {
@@ -1184,6 +1351,94 @@
     "uptime": {
       "key": "x_ecs_host.uptime",
       "cybox": false
+    },
+    "geo": {
+      "city_name": {
+        "key": "x_ecs_host.geo_city_name",
+        "cybox": false
+      },
+      "continent_name": {
+        "key": "x_ecs_host.geo_continent_name",
+        "cybox": false
+      },
+      "country_iso_code": {
+        "key": "x_ecs_host.geo_country_iso_code",
+        "cybox": false
+      },
+      "country_name": {
+        "key": "x_ecs_host.geo_country_name",
+        "cybox": false
+      },
+      "location": {
+        "key": "x_ecs_host.geo_location",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_host.geo_name",
+        "cybox": false
+      },
+      "region_iso_code": {
+        "key": "x_ecs_host.geo_region_iso_code",
+        "cybox": false
+      },
+      "region_name": {
+        "key": "x_ecs_host.geo_region_name",
+        "cybox": false
+      }
+    },
+    "os": {
+      "name": {
+        "key": "x_ecs_host.os_name",
+        "cybox": false
+      },
+      "platform": {
+        "key": "x_ecs_host.os_platform",
+        "cybox": false
+      },
+      "version": {
+        "key": "x_ecs_host.os_version",
+        "cybox": false
+      }
+    },
+    "user": {
+      "domain": {
+        "key": "x_ecs_host.user_domain",
+        "cybox": false
+      },
+      "email": {
+        "key": "x_ecs_host.user_email",
+        "cybox": false
+      },
+      "full_name": {
+        "key": "x_ecs_host.user_full_name",
+        "cybox": false
+      },
+      "hash": {
+        "key": "x_ecs_host.user_hash",
+        "cybox": false
+      },
+      "id": {
+        "key": "x_ecs_host.user_id",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_host.user_name",
+        "cybox": false
+      },
+      "group": {
+        "domain": {
+          "key": "x_ecs_host.user_group_domain",
+          "cybox": false
+        },
+        "id": {
+          "key": "x_ecs_host.user_group_id",
+          "cybox": false
+        },
+        "name": {
+          "key": "x_ecs_host.user_group_name",
+          "cybox": false
+        }
+      }
     }
   },
   "http": {
@@ -1300,15 +1555,25 @@
       },
       "interface": {
         "alias": {
-          "key": "x_ecs_interface.egress_interface_alias",
+          "key": "x_ecs_observer.egress_interface_alias",
           "cybox": false
         },
         "id": {
-          "key": "x_ecs_interface.egress_interface_id",
+          "key": "x_ecs_observer.egress_interface_id",
           "cybox": false
         },
         "name": {
-          "key": "x_ecs_interface.egress_interface_name",
+          "key": "x_ecs_observer.egress_interface_name",
+          "cybox": false
+        }
+      },
+      "vlan": {
+        "id": {
+          "key": "x_ecs_observer.egress_vlan_id",
+          "cybox": false
+        },
+        "name": {
+          "key": "x_ecs_observer.egress_vlan_name",
           "cybox": false
         }
       }
@@ -1324,15 +1589,25 @@
       },
       "interface": {
         "alias": {
-          "key": "x_ecs_interface.ingress_interface_alias",
+          "key": "x_ecs_observer.ingress_interface_alias",
           "cybox": false
         },
         "id": {
-          "key": "x_ecs_interface.ingress_interface_id",
+          "key": "x_ecs_observer.ingress_interface_id",
           "cybox": false
         },
         "name": {
-          "key": "x_ecs_interface.ingress_interface_name",
+          "key": "x_ecs_observer.ingress_interface_name",
+          "cybox": false
+        }
+      },
+      "vlan": {
+        "id": {
+          "key": "x_ecs_observer.ingress_vlan_id",
+          "cybox": false
+        },
+        "name": {
+          "key": "x_ecs_observer.ingress_vlan_name",
           "cybox": false
         }
       }
@@ -1380,6 +1655,40 @@
       },
       "version": {
         "key": "x_ecs_observer.os_version",
+        "cybox": false
+      }
+    },
+    "geo": {
+      "city_name": {
+        "key": "x_ecs_observer.geo_city_name",
+        "cybox": false
+      },
+      "continent_name": {
+        "key": "x_ecs_observer.geo_continent_name",
+        "cybox": false
+      },
+      "country_iso_code": {
+        "key": "x_ecs_observer.geo_country_iso_code",
+        "cybox": false
+      },
+      "country_name": {
+        "key": "x_ecs_observer.geo_country_name",
+        "cybox": false
+      },
+      "location": {
+        "key": "x_ecs_observer.geo_location",
+        "cybox": false
+      },
+      "name": {
+        "key": "x_ecs_observer.geo_name",
+        "cybox": false
+      },
+      "region_iso_code": {
+        "key": "x_ecs_observer.geo_region_iso_code",
+        "cybox": false
+      },
+      "region_name": {
+        "key": "x_ecs_observer.geo_region_name",
         "cybox": false
       }
     }
@@ -1509,6 +1818,16 @@
     "version": {
       "key": "x_ecs_service.version",
       "cybox": false
+    },
+    "ephemeral_id": {
+      "key": "x_ecs_service.ephemeral_id",
+      "cybox": false
+    },
+    "node": {
+      "name": {
+        "key": "x_ecs_service.version",
+        "cybox": false
+      }
     }
   },
   "threat": {
@@ -1576,6 +1895,22 @@
       "subject": {
         "key": "x509-certificate.subject",
         "object": "client"
+      },
+      "certificate": {
+        "key": "x_ecs_tls.client_certificate",
+        "cybox": false
+      },
+      "certificate_chain": {
+        "key": "x_ecs_tls.client_certificate_chain",
+        "cybox": false
+      },
+      "ja3": {
+        "key": "x_ecs_tls.client_ja3",
+        "cybox": false
+      },
+      "supported_ciphers": {
+        "key": "x_ecs_tls.client_supported_ciphers",
+        "cybox": false
       }
     },
     "server": {
@@ -1608,7 +1943,47 @@
       "subject": {
         "key": "x509-certificate.subject",
         "object": "server"
+      },
+      "certificate": {
+        "key": "x_ecs_tls.server_certificate",
+        "cybox": false
+      },
+      "certificate_chain": {
+        "key": "x_ecs_tls.server_certificate_chain",
+        "cybox": false
+      },
+      "ja3s": {
+        "key": "x_ecs_tls.server_ja3s",
+        "cybox": false
       }
+    },
+    "cipher": {
+      "key": "x_ecs_tls.cipher",
+      "cybox": false
+    },
+    "curve": {
+      "key": "x_ecs_tls.curve",
+      "cybox": false
+    },
+    "established": {
+      "key": "x_ecs_tls.established",
+      "cybox": false
+    },
+    "next_protocol": {
+      "key": "x_ecs_tls.next_protocol",
+      "cybox": false
+    },
+    "resumed": {
+      "key": "x_ecs_tls.resumed",
+      "cybox": false
+    },
+    "version": {
+      "key": "x_ecs_tls.version",
+      "cybox": false
+    },
+    "version_protocol": {
+      "key": "x_ecs_tls.version_protocol",
+      "cybox": false
     }
   },
   "trace": {
