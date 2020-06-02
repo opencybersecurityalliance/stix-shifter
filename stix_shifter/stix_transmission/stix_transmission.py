@@ -24,9 +24,9 @@ class StixTransmission:
 
             validation_obj = {'connection': connection, 'configuration': configuration}
             modernize_objects(module, validation_obj)
-            
+
             validation_obj = param_validator(module, validation_obj)
-          
+
             self.entry_point = connector_module.EntryPoint(validation_obj['connection'], validation_obj['configuration'])
         except Exception as e:
             self.init_error = e
@@ -87,7 +87,7 @@ class StixTransmission:
             return return_obj
 
     def mappings(self):
-        # Returns default module mappings 
+        # Returns default module mappings
         try:
             if self.init_error is not None:
                 raise Exception(self.init_error)
@@ -98,7 +98,6 @@ class StixTransmission:
             return return_obj
 
     def is_async(self):
-        return self.entry_point.is_async()
         # Check if the module is async/sync
         try:
             if self.init_error is not None:
