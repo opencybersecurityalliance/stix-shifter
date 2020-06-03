@@ -31,7 +31,8 @@
                 "default": 5,
                 "min": 1,
                 "type": "number",
-                "previous": "connection.timerange"
+                "previous": "connection.timerange",
+                "nullable": true
             },
             "timeout": {
                 "default": 30,

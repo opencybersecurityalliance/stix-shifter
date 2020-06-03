@@ -244,7 +244,6 @@ def main():
         results = []
         for query in dsl['queries']:
             search_result = transmission.query(query)
-
             if search_result["success"]:
                 search_id = search_result["search_id"]
 
@@ -267,11 +266,12 @@ def main():
                 else:
                     raise RuntimeError("Fetching results failed; see log for details")
             else:
-                raise RuntimeError("Search failed to execute; see log for details")
+                print(str(search_result))
+                exit(0)
 
         # Translate results to STIX
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
-        print(result)
+        print(json.dumps(results, indent=4, sort_keys=False))
 
         exit(0)
 

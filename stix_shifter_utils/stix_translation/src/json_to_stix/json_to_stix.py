@@ -28,5 +28,5 @@ class JSONToStix(BaseResultTranslator):
             results = json_to_stix_translator.convert_to_stix(data_source, self.map_data, json_data, transformers.get_all_transformers(), self.options, self.callback)
         except Exception as ex:
             raise TranslationResultException("Error when converting results to STIX: {}".format(ex))
-        #TODO why does it return a string? check all other json.dumps
-        return json.dumps(results, indent=4, sort_keys=False)
+        
+        return results

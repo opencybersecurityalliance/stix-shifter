@@ -5,7 +5,7 @@ from .stix_translation.car_query_translator import CarQueryTranslator
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
         dialect = 'car'
         self.add_dialect(dialect, query_translator=CarQueryTranslator(options, dialect), default=True)
         dialect = 'cim'

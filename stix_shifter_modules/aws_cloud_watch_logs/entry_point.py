@@ -9,7 +9,7 @@ from .stix_transmission.delete_connector import DeleteConnector
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
 
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)

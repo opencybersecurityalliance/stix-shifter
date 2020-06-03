@@ -6,12 +6,12 @@ from .stix_transmission.query_connector import QueryConnector
 from .stix_transmission.status_connector import StatusConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
-from os import path
+
 
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
         self.set_async(False)
         if connection:
             auth = configuration.get("auth")

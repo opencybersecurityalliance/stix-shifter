@@ -4,7 +4,7 @@ from .stix_translation.query_translator import QueryTranslator
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
         #TODO add transmission tests
         #TODO add translation tests
         if connection and configuration:
