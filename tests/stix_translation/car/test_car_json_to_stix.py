@@ -33,8 +33,7 @@ class TestTransform(object):
           "number_observed": 3
         }
 
-        result_bundle = json.loads(results_translator.translate_results(
-            json.dumps(data_source), json.dumps([data]), options))
+        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -75,9 +74,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(results_translator.translate_results(
-            json.dumps(data_source), json.dumps([data]), options))
-
+        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
         fields = data['fields']
 
         assert(result_bundle['type'] == 'bundle')
@@ -138,8 +135,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(results_translator.translate_results(
-            json.dumps(data_source), json.dumps([data]), options))
+        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
 
         fields = data['fields']
 
@@ -213,8 +209,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = json.loads(results_translator.translate_results(
-            json.dumps(data_source), json.dumps([data]), options))
+        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
 
         fields = data['fields']
 
