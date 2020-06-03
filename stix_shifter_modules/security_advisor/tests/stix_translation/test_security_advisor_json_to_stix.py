@@ -162,8 +162,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         }}
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('security_advisor', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('security_advisor', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]

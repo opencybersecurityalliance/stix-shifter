@@ -205,8 +205,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -261,8 +260,7 @@ class TestTransform(object):
         data_string = json.dumps(data)
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -304,8 +302,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -345,8 +342,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -386,8 +382,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -416,8 +411,7 @@ class TestTransform(object):
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -444,8 +438,7 @@ class TestTransform(object):
             data_string = json.dumps(data)
             options = {}
             translation = stix_translation.StixTranslation()
-            result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-            result_bundle = json.loads(result)
+            result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
             result_bundle_objects = result_bundle['objects']
             observed_data = result_bundle_objects[1]
@@ -503,8 +496,7 @@ class TestTransform(object):
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]

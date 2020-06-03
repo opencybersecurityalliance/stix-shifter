@@ -386,8 +386,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('splunk', 'results', data_source, data, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('splunk', 'results', data_source, data, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
