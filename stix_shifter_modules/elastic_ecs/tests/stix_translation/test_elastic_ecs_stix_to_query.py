@@ -82,7 +82,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name = 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['process.name : "some_file.exe"']
+        test_query = ['file.name : "some_file.exe"']
         _test_query_assertions(translated_query, test_query)
 
     def test_complex_query(self):
@@ -97,7 +97,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name != 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(NOT process.name : "some_file.exe" AND process.name:*)']
+        test_query = ['(NOT file.name : "some_file.exe" AND file.name:*)']
         _test_query_assertions(translated_query, test_query)
 
     def test_port_queries(self):

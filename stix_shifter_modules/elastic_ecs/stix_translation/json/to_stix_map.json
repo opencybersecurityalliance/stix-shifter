@@ -542,7 +542,7 @@
           "cybox": false
         },
         "name": {
-          "key": "x_ecs_network.inner-vlan_name",
+          "key": "x_ecs_network.inner_vlan_name",
           "cybox": false
         }
       }
@@ -770,11 +770,11 @@
         "object": "process_parent"
       },
       "entity_id": {
-        "key": "x_ecs_process.parent_args",
+        "key": "x_ecs_process.parent_entity_id",
         "cybox": false
       },
       "exit_code": {
-        "key": "x_ecs_process.parent_args",
+        "key": "x_ecs_process.parent_exit_code",
         "cybox": false
       },
       "name": {
@@ -817,7 +817,7 @@
           "cybox": false
         },
         "name": {
-          "key": "x_ecs_process.parent_thread_id",
+          "key": "x_ecs_process.parent_thread_name",
           "cybox": false
         }
       },
@@ -1825,7 +1825,7 @@
     },
     "node": {
       "name": {
-        "key": "x_ecs_service.version",
+        "key": "x_ecs_service.node_name",
         "cybox": false
       }
     }
