@@ -3,24 +3,8 @@
         "type": {
             "type": "connectorType"
         },
-        "name": {
-            "min": 5,
-            "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$",
-            "default": null
-        },
-        "description": {
-            "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$",
-            "default": null
-        },
         "options": {
             "type": "fields",
-            "concurrent": {
-                "default": 4,
-                "type": "number",
-                "previous": "connection.maxConcurrentSearches"
-            },
             "result_limit": {
                 "default": 10000,
                 "min": 1,
@@ -61,18 +45,6 @@
                 "hidden": true,
                 "previous": "connection.mapping"
             }
-        }
-    },
-    "configuration":{
-        "name": {
-            "min": 5,
-            "type": "text",
-            "regex": "^[A-Za-z0-9 _-]*$",
-            "default": null
-        },
-        "connectionId": {
-            "type": "text",
-            "default": null
         }
     }
 }
