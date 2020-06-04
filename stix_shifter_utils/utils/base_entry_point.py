@@ -2,6 +2,7 @@ import importlib
 import traceback
 import os
 import functools
+import json
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -11,11 +12,12 @@ from stix_shifter_utils.modules.base.stix_transmission.base_query_connector impo
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 
 
 class BaseEntryPoint:
 
-    def __init__(self, options):
+    def __init__(self, connection, configuration, options):
         self.__async = True
         stack = traceback.extract_stack()
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
@@ -29,6 +31,16 @@ class BaseEntryPoint:
         self.__status_connector = None
         self.__delete_connector = None
         self.__query_connector = None
+
+        if connection:
+            validation_obj = {'connection': connection, 'configuration': configuration}
+            validation_obj = json.loads(json.dumps(validation_obj))
+            modernize_objects(self.__connector_module, validation_obj)
+            validation_obj = param_validator(self.__connector_module, validation_obj)
+            connection.clear()
+            configuration.clear()
+            connection.update(validation_obj['connection'])
+            configuration.update(validation_obj['configuration'])
 
     def translation(func):
         @functools.wraps(func)

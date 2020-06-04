@@ -8,9 +8,11 @@ import uuid
 
 # This is a simple HTTP client that can be used to access the REST API
 
+
 class RestApiClient:
-    #cert_verify can be True -- do proper signed cert check, False -- skip all cert checks, or a Cert -- use the proper cleint side cert
-    #mutual_auth is in the case the gateway is being used
+    # cert_verify can be True -- do proper signed cert check, False -- skip all cert checks,
+    #             or a Cert -- use the proper cleint side cert
+    # mutual_auth is in the case the gateway is being used
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
                  mutual_auth=False, sni=None):
 
@@ -21,16 +23,16 @@ class RestApiClient:
         if port is not None:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
-        #sni is none unless we are using a server cert
+        # sni is none unless we are using a server cert
         self.sni = None
-        #Gateway Case -- use client cert cert_verify is None
+        # Gateway Case -- use client cert cert_verify is None
         if mutual_auth:
             self.server_cert_content = None
             self.server_cert_file_content_exists = False
             self.client_cert_content = self.client_cert_name
             self.client_cert_file_content_exists = True
             self.client_cert_file_content = cert
-        #verify is true or false
+        # verify is true or false
         elif isinstance(cert_verify, bool):
             if cert_verify:
                 self.server_cert_content = True
@@ -42,7 +44,7 @@ class RestApiClient:
                 self.server_cert_file_content_exists = False
                 self.client_cert_content = None
                 self.client_cert_file_content_exists = False
-        #server cert provided
+        # server cert provided
         elif isinstance(cert_verify, str):
             self.server_cert_content = self.server_cert_name
             self.server_cert_file_content_exists = True
@@ -96,10 +98,11 @@ class RestApiClient:
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
                     actual_headers["Host"] = self.sni
 
-                response = call(url, headers=actual_headers, params=urldata, cert=self.client_cert_content, data=data, verify=self.server_cert_content, timeout=timeout)
+                response = call(url, headers=actual_headers, params=urldata, cert=self.client_cert_content, data=data, 
+                                verify=self.server_cert_content, timeout=timeout)
 
-                if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
-                        and "Deprecated" in response.headers['Content-Type']:
+                if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
+                   'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     print("WARNING: " +
                           response.headers['Content-Type'], file=sys.stderr)
                 return ResponseWrapper(response)

@@ -43,6 +43,8 @@ class APIClient():
                                     mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        
+        self.search_timeout = connection['options'].get('timeout')
 
     def ping_box(self):
         return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.PING_TIMEOUT_IN_SECONDS)
@@ -72,7 +74,7 @@ class APIClient():
             # addition of QueryString to API END point
             endpoint = endpoint + '?q=' + query_expression
 
-            return self.client.call_api(endpoint, 'GET', headers)
+            return self.client.call_api(endpoint, 'GET', headers, timeout=self.search_timeout)
         # Request body search
         else:
             # add size value
@@ -98,4 +100,4 @@ class APIClient():
             print("URL endpoint: " + endpoint)
             print("URL data: " + json.dumps(data))
 
-            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data))
+            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.search_timeout)
