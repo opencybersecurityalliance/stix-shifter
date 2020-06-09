@@ -5,6 +5,16 @@ from . import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 
+import logging
+from colorlog import ColoredFormatter
+
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = ColoredFormatter('%(log_color)s %(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+
 
 # convert JSON data to STIX object using map_data and transformers
 
@@ -55,7 +65,7 @@ class DataSourceObjToStixObj:
         :return: the resulting STIX value
         """
         if ds_key not in obj:
-            print('{} not found in object'.format(ds_key))
+            logger.debug('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
         # Is this getting his with a none-type value?
@@ -125,7 +135,7 @@ class DataSourceObjToStixObj:
 
         #  Causing a couple of failing tests in MSATP
         if stix_value is None or stix_value == '':
-            print("Removing invalid value '{}' for {}".format(stix_value, key))
+            logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
@@ -138,11 +148,11 @@ class DataSourceObjToStixObj:
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            print('{} is not found in map, skipping'.format(ds_key))
+            logger.debug('{} is not found in map, skipping'.format(ds_key))
             return
 
         if isinstance(to_map, dict):
-            print('{} is complex; descending'.format(to_map))
+            logger.debug('{} is complex; descending'.format(to_map))
             # If the object is complex we must descend into the map on both sides
             for key in to_map.keys():
                 self._transform(object_map, observation, ds_map[ds_key], key, to_map)
@@ -166,7 +176,7 @@ class DataSourceObjToStixObj:
 
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
-                print('{} is not valid (None, or missing key)'.format(ds_key_def))
+                logger.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
                 continue
 
             if generic_hash_key:
@@ -250,7 +260,7 @@ class DataSourceObjToStixObj:
             for ds_key in obj.keys():
                 self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
-            print("Not a dict: {}".format(obj))
+            logger.debug("Not a dict: {}".format(obj))
         
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:
