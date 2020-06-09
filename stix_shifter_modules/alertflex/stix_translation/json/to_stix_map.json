@@ -27,7 +27,7 @@
                 "references": "src_ip"
             }
         ],
-    "dstip": [
+  "dstip": [
       {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
@@ -74,6 +74,10 @@
   },
   "sha1": {
     "key": "file.hashes.SHA-1",
+    "object": "file"
+  },
+  "sha256": {
+    "key": "file.hashes.SHA-256",
     "object": "file"
   },
   "md5": {

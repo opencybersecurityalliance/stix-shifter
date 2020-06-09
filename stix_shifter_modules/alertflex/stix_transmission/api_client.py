@@ -6,7 +6,7 @@ class APIClient():
     PING_TIMEOUT_IN_SECONDS = 10
 
     def __init__(self, connection, configuration):
-        self.endpoint_start = 'alertflex-ctrl/rest/stix'
+        self.endpoint_start = 'alertflex-ctrl/rest/stix-alerts'
         headers = dict()
         auth = configuration.get('auth')
         headers['Authorization'] = b"Basic " + base64.b64encode(
@@ -25,6 +25,5 @@ class APIClient():
         endpoint = self.endpoint_start + '/search'
         data = {'query': query_expression}
         result = self.client.call_api(endpoint, 'GET', urldata=data)
-        # print(result.read())
         return result
 

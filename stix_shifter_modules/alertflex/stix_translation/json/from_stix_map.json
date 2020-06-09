@@ -1,44 +1,48 @@
 {
   "ipv4-addr": {
     "fields": {
-      "src_ip": ["a.srcip"],
-      "dst_ip": ["a.dstip"],
-      "ip": ["a.dstip", "a.srcip"]
+      "src_ip": ["a.srcIp"],
+      "dst_ip": ["a.dstIp"],
+      "ip": ["a.dstIp", "a.srcIp"]
     }
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["a.srcport"],
-      "dst_port": ["a.dstport"]
+      "src_port": ["a.srcPort"],
+      "dst_port": ["a.dstPort"]
     }
   },
   "file": {
     "fields": {
-      "name": ["a.file"]
+      "name": ["a.fileName"],
+      "hashes.SHA-256": ["a.hashSha256"],
+      "hashes.SHA-1": ["a.hashSha1"],
+      "hashes.MD5": ["a.hashMd5"]
+    }
+  },
+  "process": {
+    "fields": {
+      "name": ["a.processName"],
+      "pid": ["a.processId"]
     }
   },
   "user": {
     "fields": {
-      "name": ["a.user"]
+      "name": ["a.userName"]
     }
   },
   "host": {
     "fields": {
-      "agent": ["a.agent", "a.srcagent", "a.dstagent"]
-    }
-  },
-  "process" : {
-    "fields": {
-      "name": ["a.process"]
+      "agent": ["a.agentName", "a.srcHostname", "a.dstHostname"]
     }
   },
   "alert" : {
     "fields": {
-      "node": ["a.node"],
-      "source": ["a.source"],
-      "type": ["a.type"],
-      "id": ["a.event"],
-      "severity": ["a.severity"]
+      "node": ["a.nodeId"],
+      "source": ["a.alertSource"],
+      "type": ["a.alertType"],
+      "id": ["a.eventId"],
+      "severity": ["a.alertSeverity"]
     }
   }
 }
