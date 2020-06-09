@@ -322,10 +322,6 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "devicetypename": {
-    "key": "x_com_ibm_ariel.device_type_name",
-    "cybox": false
-  },
   "devicetype": {
     "key": "x_com_ibm_ariel.device_type",
     "cybox": false,
