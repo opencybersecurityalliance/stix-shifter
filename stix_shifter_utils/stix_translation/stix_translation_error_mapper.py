@@ -2,15 +2,7 @@ from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
-import logging
-from colorlog import ColoredFormatter
-
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = ColoredFormatter('%(log_color)s %(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+from stix_shifter_utils.utils.log_output import set_logger
 
 error_mapping = {
     NotImplementedError.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'wrong parameter'],
@@ -23,11 +15,11 @@ error_mapping = {
 
 
 class ErrorMapper():
-
     DEFAULT_ERROR = ErrorCode.TRANSLATION_MODULE_DEFAULT_ERROR
 
     @staticmethod
     def set_error_code(data_dict, return_obj):
+        logger = set_logger(__name__)
         exception = None
         if 'exception' in data_dict:
             exception = data_dict['exception']
