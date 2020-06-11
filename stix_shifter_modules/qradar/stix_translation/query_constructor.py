@@ -29,7 +29,7 @@ def _fetch_network_protocol_mapping():
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
-        logger.error('exception in reading mapping file:', ex)
+        logger.error('exception in reading mapping file: ' + ex)
         return {}
 
 

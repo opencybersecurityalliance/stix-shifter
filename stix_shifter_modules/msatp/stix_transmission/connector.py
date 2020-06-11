@@ -9,12 +9,13 @@ import copy
 
 class Connector(BaseSyncConnector):
     init_error = None
+    logger = logger.set_logger(__name__)
 
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        self.logger = logger.set_logger(__name__)
+        
         try:
             self.token = Connector.generate_token(connection, configuration)
             configuration['auth']['access_token'] = self.token
@@ -140,5 +141,5 @@ class Connector(BaseSyncConnector):
             return_obj = dict()
             if ex.error_response:
                 ErrorResponder.fill_error(return_obj, ex.error_response, ['reason'])
-                self.logger.error("Token generation Failed:", return_obj)
+                Connector.logger.error("Token generation Failed: " + return_obj)
             raise ex
