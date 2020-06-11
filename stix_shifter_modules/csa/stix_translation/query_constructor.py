@@ -13,7 +13,7 @@ from stix_shifter_utils.stix_translation.src.utils.transformers import Timestamp
 from stix_shifter_utils.utils import logger
 
 START_STOP_FIELD = "eventTime"
-
+LOGGER = logger.set_logger(__name__)
 
 def _fetch_network_protocol_mapping():
     try:
@@ -22,7 +22,7 @@ def _fetch_network_protocol_mapping():
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
-        self.logger.error('exception in reading mapping file:' + ex)
+        LOGGER.error('exception in reading mapping file:' + ex)
         return {}
 
 
@@ -45,12 +45,11 @@ class SqlQueryStringPatternTranslator:
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
-        self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
         query_split = self.translated.split("split")
-        self.logger.info("Query {}", query_split)
+        LOGGER.info("Query {}", query_split)
         if len(query_split) > 1:
             # remove empty strings in the array
             query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
