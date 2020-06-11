@@ -4,7 +4,7 @@ import uuid
 from . import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
-from stix_shifter_utils.utils.log_output import set_logger
+from stix_shifter_utils.utils import logger
 
 # convert JSON data to STIX object using map_data and transformers
 
@@ -30,7 +30,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
 
 class DataSourceObjToStixObj:
-    logger = set_logger(__name__)
+    logger = logger.set_logger(__name__)
 
     def __init__(self, identity_id, ds_to_stix_map, transformers, options, callback=None):
         self.identity_id = identity_id

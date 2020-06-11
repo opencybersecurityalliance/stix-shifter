@@ -14,7 +14,7 @@ import glob
 from os import path
 import traceback
 import json
-from stix_shifter_utils.utils.log_output import set_logger
+from stix_shifter_utils.utils import logger
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -33,7 +33,7 @@ class StixTranslation:
 
     def __init__(self):
         self.args = []
-        self.logger = set_logger(__name__)
+        self.logger = logger.set_logger(__name__)
 
     def _validate_pattern(self, pattern):
         errors = []

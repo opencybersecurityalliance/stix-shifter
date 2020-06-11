@@ -2,6 +2,7 @@ import sys
 import logging
 from colorlog import ColoredFormatter
 
+DEBUG = False
 
 def set_logger(module):
     logger = logging.getLogger(module)
@@ -9,6 +10,9 @@ def set_logger(module):
     formatter = ColoredFormatter('%(log_color)s %(asctime)s %(name)-12s %(levelname)-8s %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
+    if DEBUG:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
     
     return logger

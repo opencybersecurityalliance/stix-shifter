@@ -2,7 +2,7 @@ from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
-from stix_shifter_utils.utils.log_output import set_logger
+from stix_shifter_utils.utils import logger
 
 error_mapping = {
     NotImplementedError.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'wrong parameter'],
@@ -15,11 +15,11 @@ error_mapping = {
 
 
 class ErrorMapper():
+    logger = logger.set_logger(__name__)
     DEFAULT_ERROR = ErrorCode.TRANSLATION_MODULE_DEFAULT_ERROR
 
     @staticmethod
     def set_error_code(data_dict, return_obj):
-        logger = set_logger(__name__)
         exception = None
         if 'exception' in data_dict:
             exception = data_dict['exception']
@@ -29,7 +29,7 @@ class ErrorMapper():
 
         if exception is not None:
             exception_type = type(exception).__name__
-            logger.error("received exception => {}: {}".format(exception_type, exception))
+            ErrorMapper.logger.error("received exception => {}: {}".format(exception_type, exception))
             if exception_type in error_mapping:
                 error_code = error_mapping[exception_type][0]
                 error_message = error_mapping[exception_type][1]

@@ -1,5 +1,6 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
+from stix_shifter_utils.utils import logger
 from enum import Enum
 import json
 import dateutil.parser

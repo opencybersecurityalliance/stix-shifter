@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 from os import path
 import json
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
+from stix_shifter_utils.utils import logger
 import glob
 
 class BaseQueryTranslator(object, metaclass=ABCMeta):
@@ -12,6 +13,7 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         self.basepath = basepath #used in tests
         self.map_data = {}
         self.select_fields = {}
+        self.logger = logger.set_logger(__name__)
 
         mapping = options['mapping'] if 'mapping' in options else None
         if mapping and dialect in mapping:
@@ -45,7 +47,7 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
             map_data = json.loads(map_file)
             return map_data
         except Exception as ex:
-            print('exception in BaseQueryTranslator::fetch_mapping():', ex)
+            self.logger.error('exception in BaseQueryTranslator::fetch_mapping():', ex)
             return {}
 
     def map_field(self, stix_object_name, stix_property_name):

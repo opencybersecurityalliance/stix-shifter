@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_results_connector im
 import json
 import time
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 import xmltodict
 
 
@@ -12,6 +13,7 @@ class UnexpectedResponseException(Exception):
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     @staticmethod
     def get_success_status(data_dict):
@@ -49,7 +51,7 @@ class ResultsConnector(BaseResultsConnector):
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
         return return_obj
@@ -161,5 +163,5 @@ class ResultsConnector(BaseResultsConnector):
         elif result.lower().startswith('address'):
             formatted_obj = self._format_adapter_obj(obj_list, formatted_obj)
         else:
-            print('Unknown result')
+            self.logger.debug('Unknown result')
         return formatted_obj

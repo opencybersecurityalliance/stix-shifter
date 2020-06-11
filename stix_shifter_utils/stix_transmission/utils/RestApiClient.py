@@ -6,6 +6,8 @@ import os
 import errno
 import uuid
 
+from stix_shifter_utils.utils import logger
+
 # This is a simple HTTP client that can be used to access the REST API
 
 
@@ -15,7 +17,8 @@ class RestApiClient:
     # mutual_auth is in the case the gateway is being used
     def __init__(self, host, port=None, cert=None, headers={}, url_modifier_function=None, cert_verify=True,
                  mutual_auth=False, sni=None):
-
+        
+        self.logger = logger.set_logger(__name__)
         uniqueFileHandle = uuid.uuid4()
         self.client_cert_name = "/tmp/{0}-client_cert.pem".format(uniqueFileHandle)
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(uniqueFileHandle)
@@ -67,7 +70,7 @@ class RestApiClient:
                     try:
                         f.write(self.client_cert_file_content)
                     except IOError:
-                        print('Failed to setup certificate')
+                        self.logger.error('Failed to setup certificate')
 
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
@@ -75,7 +78,7 @@ class RestApiClient:
                     try:
                         f.write(self.server_cert_file_content)
                     except IOError:
-                        print('Failed to setup certificate')
+                        self.logger.error('Failed to setup certificate')
 
             url = None
             actual_headers = self.headers.copy()
@@ -103,11 +106,11 @@ class RestApiClient:
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
-                    print("WARNING: " +
+                    self.logger.error("WARNING: " +
                           response.headers['Content-Type'], file=sys.stderr)
                 return ResponseWrapper(response)
             except Exception as e:
-                print('exception occured during requesting url: ' + str(e))
+                self.logger.error('exception occured during requesting url: ' + str(e))
                 raise e
         finally:
             if self.server_cert_file_content_exists is True:

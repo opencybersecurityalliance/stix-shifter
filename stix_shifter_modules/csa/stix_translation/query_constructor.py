@@ -10,8 +10,8 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
+from stix_shifter_utils.utils import logger
 
-logger = logging.getLogger(__name__)
 START_STOP_FIELD = "eventTime"
 
 
@@ -22,7 +22,7 @@ def _fetch_network_protocol_mapping():
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
-        print('exception in reading mapping file:', ex)
+        self.logger.error('exception in reading mapping file:' + ex)
         return {}
 
 
@@ -45,11 +45,12 @@ class SqlQueryStringPatternTranslator:
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
+        self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
         query_split = self.translated.split("split")
-        logger.info("Query {}", query_split)
+        self.logger.info("Query {}", query_split)
         if len(query_split) > 1:
             # remove empty strings in the array
             query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
