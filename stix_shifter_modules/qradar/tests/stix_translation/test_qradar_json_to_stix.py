@@ -159,7 +159,6 @@ class TestTransform(object):
         custom_prop = observed_data['x_com_ibm_ariel']
         assert(custom_prop['severity'] == data['severity'])
         assert(custom_prop['event_name'] == data['qidname'])
-        assert(custom_prop['device_type_name'] == data['devicetypename'])
         assert(custom_prop['device_type'] == data['devicetype'])
         assert(custom_prop['cre_event_list'] == data['creeventlist'])
         assert(custom_prop['rule_names'] == data['rulenames'])
