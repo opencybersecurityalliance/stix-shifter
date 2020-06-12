@@ -14,7 +14,7 @@ class ErrorMapper():
 
     @staticmethod
     def set_error_code(json_data, return_obj):
-        code = None
+        error_type = ''
         try:
             error_type = json_data['error']['type']
         except Exception:
