@@ -28,7 +28,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
         check_async = entry_point.is_async()
 
@@ -48,7 +48,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
         
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
@@ -71,7 +71,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
 
         query = '{"query":"SELECT sourceIP from events"}'        
@@ -96,7 +96,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
         
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
@@ -134,7 +134,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
         
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
@@ -181,7 +181,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
         }
 
         query = '{"query":"SELECT sourceIP from events"}'
@@ -247,7 +247,7 @@ class TestRequests(unittest.TestCase, object):
 
             "host" : "somehost0",
             "port" : "15004",
-            "cert" : "somecert0"
+            "selfSignedCert" : True
         }
 
         config = {
@@ -259,7 +259,7 @@ class TestRequests(unittest.TestCase, object):
         transmission = stix_transmission.StixTransmission('qradar',  connection, config)
         transmission.ping()
 
-        mock_get.assert_called_with('x_forward_proxy_host1', params=None, cert=None, data=None, headers={'version': '8.0', 'accept': 'application/json', \
+        mock_get.assert_called_with('x_forward_proxy_host1', params=None, data=None, headers={'version': '8.0', 'accept': 'application/json', \
                                     'sec': 'sec0', 'proxy': 'proxy_url0:8088', 'proxy-authorization': 'Basic proxy_auth_data0', \
                                     'x-forward-url': 'https://somehost0:15004/api/help/resources', 'x-forward-auth': 'x_forward_proxy_auth_data1', 'user-agent': 'UDS'}, timeout=10, verify=True)
 
@@ -274,7 +274,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         connection = {
             "host" : "somehost0",
             "port" : "15000",
-            "cert" : "somecert0",
+            "selfSignedCert" : "somecert0",
             "data_lake": True
         }
         config = {
@@ -295,7 +295,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         connection = {
             "host" : "somehost0",
             "port" : "15000",
-            "cert" : "somecert0",
+            "selfSignedCert" : "somecert0",
             "data_lake": True
         }
         config = {
@@ -317,7 +317,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         connection = {
             "host" : "somehost0",
             "port" : "15000",
-            "cert" : "somecert0",
+            "selfSignedCert" : "somecert0",
             "data_lake": True
         }
         config = {
