@@ -150,13 +150,13 @@ class TestTransform(object):
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         observed_data = result_bundle['objects'][1]
 
-        assert('x_com_ibm_finding' in observed_data)
-        finding = observed_data['x_com_ibm_finding']
+        assert('x_ibm_finding' in observed_data)
+        finding = observed_data['x_ibm_finding']
         assert(finding['name'] == data['crename'])
         assert(finding['description'] == data['credescription'])
 
-        assert('x_com_ibm_ariel' in observed_data)
-        custom_prop = observed_data['x_com_ibm_ariel']
+        assert('x_ibm_ariel' in observed_data)
+        custom_prop = observed_data['x_ibm_ariel']
         assert(custom_prop['severity'] == data['severity'])
         assert(custom_prop['event_name'] == data['qidname'])
         assert(custom_prop['device_type'] == data['devicetype'])
@@ -171,8 +171,8 @@ class TestTransform(object):
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         observed_data = result_bundle['objects'][1]
 
-        assert('x_com_ibm_ariel' in observed_data)
-        custom_props = observed_data['x_com_ibm_ariel']
+        assert('x_ibm_ariel' in observed_data)
+        custom_props = observed_data['x_ibm_ariel']
         assert(custom_props['identity_ip'] == data['identityip'])
         assert(custom_props['log_source_id'] == data['logsourceid'])
         assert(custom_props['qid'] == data['qid'])
@@ -194,8 +194,8 @@ class TestTransform(object):
                 "flows": {
                     "to_stix": {
                         "username": {"key": "user-account.user_id"},
-                        "identityip": {"key": "x_com_ibm_ariel.identity_ip", "cybox": False},
-                        "qidname": {"key": "x_com_ibm_ariel.qid_name", "cybox": False},
+                        "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
+                        "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
                         "url": {"key": "url.value"},
                         "custompayload": {"key": "artifact.payload_bin"}
                     }

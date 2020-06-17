@@ -90,7 +90,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_com_msatp'] is not None
+        assert observed_data['x_msatp'] is not None
 
     def test_custom_property(self):
         """
@@ -130,7 +130,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_com_msatp']
+        custom_object = observed_data['x_msatp']
         assert custom_object.keys() == {'computer_name', 'machine_id'}
         assert custom_object['computer_name'] == 'desktop-536bt46'
 
