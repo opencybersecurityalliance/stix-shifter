@@ -13,7 +13,7 @@
             "label": "Help",
             "description": "More details on the datasource setting can be found in the specified link"
         },
-        "cert": {
+        "selfSignedCert": {
             "label": "IBM QRadar Certificate",
             "description": "Use self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2"
         },

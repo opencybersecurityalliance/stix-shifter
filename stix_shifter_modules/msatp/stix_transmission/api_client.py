@@ -27,11 +27,9 @@ class APIClient:
 
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
-                                    connection.get('cert', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
                                     cert_verify=connection.get('selfSignedCert', True),
-                                    mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
         self.search_timeout = connection['options'].get('timeout')

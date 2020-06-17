@@ -13,7 +13,7 @@
             "label": "Help",
             "description": "More details on the datasource setting can be found in the specified link"
         },
-        "cert": {
+        "selfSignedCert": {
             "label": "<Module> Connection Certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
         },

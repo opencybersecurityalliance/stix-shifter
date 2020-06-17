@@ -16,10 +16,6 @@
             "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-azure-sentinel.html",
             "type": "link"
         },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
         "sni": {
             "type": "text",
             "optional": true
