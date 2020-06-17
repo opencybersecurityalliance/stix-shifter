@@ -9,12 +9,12 @@
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
-            "default": 443,
-            "type": "number"
+            "type": "number",
+            "default": 443
         },
         "help": {
-            "default": "<Help URL>",
-            "type": "link"
+            "type": "link",
+            "default": "<Help URL>"
         },
         "cert": {
             "type": "password",

@@ -8,12 +8,12 @@
             "type": "text"
         },
         "port": {
-            "default": 443,
-            "type": "number"
+            "type": "number",
+            "default": 443
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-stix.html",
-            "type": "link"
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-stix.html"
         }
     },
     "configuration": {

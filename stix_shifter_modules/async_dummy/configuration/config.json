@@ -8,12 +8,12 @@
             "type": "text"
         },
         "port": {
-            "default": 443,
-            "type": "number"
+            "type": "number",
+            "default": 443
         },
         "help": {
-            "default": "<Help URL>",
-            "type": "link"
+            "type": "link",
+            "default": "<Help URL>"
         },
         "sni": {
             "type": "text",
