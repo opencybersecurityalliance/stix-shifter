@@ -9,6 +9,7 @@ import pandas as pd
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def get_rows_partition(self, statement):
         # First, remove the comments (NB: there will be errors if -- is in a string in the query, but I'm not writing a full parser here...)
@@ -25,7 +26,7 @@ class ResultsConnector(BaseResultsConnector):
         try:
             units = self.get_rows_partition(job['statement'])
         except Exception as e:
-            print('Error fetching query statement {}. Will pull all record pages.'.format(e))
+            self.logger.error('Error fetching query statement {}. Will pull all record pages.'.format(e))
         if units is None:
             r = self.api_client.get_result(query_id)
             return r.iloc[start_rec : end_rec+1]
@@ -58,7 +59,7 @@ class ResultsConnector(BaseResultsConnector):
             response_json = {}
             response_json['message'] = repr(e)
         except Exception as e:
-            print('error when getting search results: {}'.format(e))
+            self.logger.error('error when getting search results: {}'.format(e))
             raise
 
         # Construct a response object

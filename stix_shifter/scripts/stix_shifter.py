@@ -170,6 +170,11 @@ def main():
 
     help_and_exit = args.command is None
 
+    if args.debug:
+        logger.DEBUG = args.debug
+    
+    log = logger.set_logger(__name__)
+
     if 'module' in args:
         args_module_dialects = args.module
 
@@ -187,7 +192,7 @@ def main():
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
         except:
-            print(f"module '{module}' is not found")
+            log.error('Module {} not found'.format(module))
             help_and_exit = True
 
     if help_and_exit:
@@ -245,8 +250,6 @@ def main():
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
-        if args.debug:
-            logger.DEBUG = args.debug
 
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.module, 'query', args.data_source, args.query, {'validate_pattern': True})
@@ -266,21 +269,21 @@ def main():
                     status = transmission.status(search_id)
                     if status['success']:
                         while status['progress'] < 100 and status['status'] == 'RUNNING':
-                            print(status)
+                            log.debug(status)
                             status = transmission.status(search_id)
-                        print(status)
+                        log.debug(status)
                     else:
                         raise RuntimeError("Fetching status failed")
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
-                    print("Search {} results is:\n{}".format(search_id, result["data"]))
+                    log.debug("Search {} results is:\n{}".format(search_id, result["data"]))
 
                     # Collect all results
                     results += result["data"]
                 else:
                     raise RuntimeError("Fetching results failed; see log for details")
             else:
-                print(str(search_result))
+                log.error(str(search_result))
                 exit(0)
 
         # Translate results to STIX
@@ -304,7 +307,7 @@ def main():
         result = transmit(args)  # stix_transmission
 
     #TODO make all cli output json stings
-    print(result)
+    print(json.dumps(result, indent=4, sort_keys=False))
     exit(0)
 
 

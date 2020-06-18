@@ -17,6 +17,7 @@ class CloudSQLStatus(Enum):
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def __getStatus(self, cloudsql_status):
         switcher = {
@@ -36,7 +37,7 @@ class StatusConnector(BaseStatusConnector):
         except ValueError as e:
             response = {"message": repr(e)}
         except Exception as e:
-            print('error when getting search results: {}'.format(e))
+            self.logger.error('error when getting search results: {}'.format(e))
             raise
 
         response_json = response
