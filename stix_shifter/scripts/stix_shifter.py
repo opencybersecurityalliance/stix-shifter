@@ -315,7 +315,7 @@ def transmit(args):
     """
     Connects to datasource and executes a query, grabs status update or query results
     :param args:
-    args: <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
+    args: <module> '{"host": <host IP>, "port": <port>, "selfSignedCert": <certificate>}', '{"auth": <authentication>}',
     <
         query <query string>,
         status <search id>,

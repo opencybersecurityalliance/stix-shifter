@@ -15,10 +15,6 @@
             "default": "<Help URL>",
             "type": "link"
         },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
         "sni": {
             "type": "text",
             "optional": true
