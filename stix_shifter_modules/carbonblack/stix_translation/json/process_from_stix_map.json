@@ -53,7 +53,7 @@
       "path": ["path"]
     }
   },
-  "x-com-cb-response" : {
+  "x-cb-response" : {
     "fields": {
       "host_name": ["hostname"],
       "group": ["group"],

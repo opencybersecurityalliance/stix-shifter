@@ -22,7 +22,7 @@
       "end": ["end"]
     }
   },
-  "x-com-aws": {
+  "x-aws": {
     "fields": {
       "account_id": ["accountId"]
     }

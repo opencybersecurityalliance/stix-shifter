@@ -210,7 +210,7 @@ class AqlQueryStringPatternTranslator:
         comparator = self._lookup_comparison_operator(self, expression.comparator)
 
         # Special case where we want the risk finding
-        if stix_object == 'x-com-ibm-finding' and stix_field == 'name' and expression.value == "*":
+        if stix_object == 'x-ibm-finding' and stix_field == 'name' and expression.value == "*":
             return "devicetype = 18"
         
         if stix_field == 'protocols[*]':

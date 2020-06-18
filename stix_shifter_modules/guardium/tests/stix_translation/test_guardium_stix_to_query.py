@@ -22,7 +22,7 @@ class TestStixToQuery(unittest.TestCase):
             self.assertEqual(True, each_query in queries)
 
     def test_pattern_translation(self):
-        stix_pattern = "[x-com-guardium:remotesource = 'guardiumv10col01.guardiumlabservices.ibm.com'] START t'2018-06-01T00:00:00.009Z' STOP t'2019-11-01T01:11:11.009Z'"
+        stix_pattern = "[x-guardium:remotesource = 'guardiumv10col01.guardiumlabservices.ibm.com'] START t'2018-06-01T00:00:00.009Z' STOP t'2019-11-01T01:11:11.009Z'"
         query = translation.translate('guardium', 'query', '{}', stix_pattern)
 
         queries = ['{"reportName": "--IBM SC Session Details", "indexFrom": "0", "fetchSize": "1000", "sortType": "asc", "reportParameter": {"QUERY_FROM_DATE": "2018-06-01 00:00:00", "QUERY_TO_DATE": "2019-11-01 01:11:11", "SHOW_ALIASES": "TRUE", "REMOTE_SOURCE": "guardiumv10col01.guardiumlabservices.ibm.com", "CLIENTIP": "%", "SERVERIP": "%", "DBUSERNAME": "%", "SERVICENAME": "%", "DATABASENAME": "%"}}',
