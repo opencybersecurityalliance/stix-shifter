@@ -20,6 +20,16 @@
         "sni": {
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication. Not Required for QRadar on Cloud."
+        },
+        "data_lake": {
+            "label": "Data Lake",
+            "description": "Enable Data Lake datasource"
+        },
+        "options": {
+            "hash_options": {
+                "label": "Hash Options",
+                "description": "Hash Options"
+            }
         }
     },
     "configuration": {
