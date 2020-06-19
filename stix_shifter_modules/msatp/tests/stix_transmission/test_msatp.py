@@ -30,7 +30,7 @@ class TestMSATPConnection(unittest.TestCase):
         return {
             "host": "hostbla",
             "port": "8080",
-            "cert": "cert"
+            "selfSignedCert": "cert"
             }
 
     def test_is_async(self, mock_api_client, mock_generate_token):

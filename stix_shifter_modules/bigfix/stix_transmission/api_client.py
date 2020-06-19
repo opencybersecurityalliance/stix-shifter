@@ -53,9 +53,7 @@ class APIClient:
     def get_api_client(self):
         api_client = RestApiClient(self.connection.get('host'),
                                    self.connection.get('port'),
-                                   self.connection.get('cert', None),
                                    self.headers, cert_verify=self.connection.get('selfSignedCert', True),
-                                   mutual_auth=self.connection.get('use_securegateway', False),
                                    sni=self.connection.get('sni', None)
                                    )
         return api_client

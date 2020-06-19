@@ -271,7 +271,7 @@ def main():
 
         # Translate results to STIX
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
-        print(json.dumps(results, indent=4, sort_keys=False))
+        print(json.dumps(result, indent=4, sort_keys=False))
 
         exit(0)
 
@@ -298,7 +298,7 @@ def transmit(args):
     """
     Connects to datasource and executes a query, grabs status update or query results
     :param args:
-    args: <module> '{"host": <host IP>, "port": <port>, "cert": <certificate>}', '{"auth": <authentication>}',
+    args: <module> '{"host": <host IP>, "port": <port>, "selfSignedCert": <certificate>}', '{"auth": <authentication>}',
     <
         query <query string>,
         status <search id>,
