@@ -222,7 +222,7 @@ def main():
             return host.is_async()
 
         host_address = args.host_address.split(":")
-        app.run(debug=True, port=int(host_address[1]), host=host_address[0])
+        app.run(debug=False, port=int(host_address[1]), host=host_address[0])
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
