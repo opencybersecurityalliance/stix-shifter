@@ -23,10 +23,8 @@ class APIClient():
         headers = dict()
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
-                                    connection.get('cert', None),
                                     headers,
                                     cert_verify=connection.get('selfSignedCert', True),
-                                    mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
         self.auth = configuration.get('auth')

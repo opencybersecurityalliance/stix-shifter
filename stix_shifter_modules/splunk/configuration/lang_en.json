@@ -13,7 +13,7 @@
             "label": "Help",
             "description": "More details on the datasource setting can be found in the specified link"
         },
-        "cert": {
+        "selfSignedCert": {
             "label": "Splunk connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
         },

@@ -6,8 +6,9 @@
     "category as categoryid",
     "CATEGORYNAME(highlevelcategory) as high_level_category_name",
     "highlevelcategory as high_level_category_id",
-    "logsourceid as logsourceid",
-    "LOGSOURCETYPENAME(logsourceid) as logsourcetypename",
+    "logsourceid",
+    "devicetype",
+    "LOGSOURCETYPENAME(devicetype) as logsourcetypename",
     "LOGSOURCENAME(logsourceid) as logsourcename",
     "starttime",
     "endtime",
@@ -40,8 +41,6 @@
     "\"CRE Description\" as credescription",
     "creeventlist",
     "rulename(creeventlist) as rulenames",
-    "domainid",
-    "LOGSOURCETYPENAME(devicetype) as devicetypename",
-    "devicetype"
+    "domainid"
   ]
 }
