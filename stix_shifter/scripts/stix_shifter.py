@@ -263,7 +263,7 @@ def main():
 
         # Translate results to STIX
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
-        print(json.dumps(result, indent=4, sort_keys=False))
+        print(result)
 
         exit(0)
 
