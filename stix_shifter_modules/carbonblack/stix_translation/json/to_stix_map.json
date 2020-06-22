@@ -159,12 +159,44 @@
     "key": "x_cb_response.emet_count",
     "cybox": false
   },
+  "emet_config": {
+    "key": "x_com_cb_response.emet_config",
+    "cybox": false
+  },
   "processblock_count": {
     "key": "x_cb_response.processblock_count",
     "cybox": false
   },
   "filtering_known_dlls": {
     "key": "x_cb_response.filtering_known_dlls",
+    "cybox": false
+  },
+  "last_update": {
+    "key": "x_com_cb_response.last_update",
+    "cybox": false
+  },
+  "last_server_update": {
+    "key": "x_com_cb_response.last_server_update",
+    "cybox": false
+  },
+  "logon_type": {
+    "key": "x_com_cb_response.logon_type",
+    "cybox": false
+  },
+  "alliance_score_srstrust": {
+    "key": "x_com_cb_response.alliance_score_srstrust",
+    "cybox": false
+  },
+  "alliance_link_srstrust": {
+    "key": "x_com_cb_response.alliance_link_srstrust",
+    "cybox": false
+  },
+  "alliance_data_srstrust": {
+    "key": "x_com_cb_response.alliance_data_srstrust",
+    "cybox": false
+  },
+  "alliance_updated_srstrust": {
+    "key": "x_com_cb_response.alliance_updated_srstrust",
     "cybox": false
   },
   "server_added_timestamp": [

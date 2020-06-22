@@ -1,5 +1,6 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter_utils.utils import logger
 from flask import request
 import json
 
@@ -7,6 +8,7 @@ import json
 class ProxyHost():
 
     def __init__(self):
+        self.logger = logger.set_logger(__name__)
         self.request_args = request.get_json(force=True)
         self.connection = self.request_args.get("connection")
         self.configuration = self.request_args.get("configuration")
@@ -25,7 +27,7 @@ class ProxyHost():
     def translate_results(self, data_source_identity_object):
         data_source_results = json.dumps(self.request_args["results"] )
 
-        print(data_source_results)
+        self.logger.debug(data_source_results)
         translation_module = self.connection['type'].lower()
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(translation_module, 'results', data_source_identity_object, data_source_results, self.connection)

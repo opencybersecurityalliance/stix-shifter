@@ -1,11 +1,9 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
-import logging
+from stix_shifter_utils.utils import logger
 from os import path
 import json
 from . import query_constructor
-
-logger = logging.getLogger(__name__)
 
 
 class QueryTranslator(BaseQueryTranslator):
@@ -13,6 +11,7 @@ class QueryTranslator(BaseQueryTranslator):
     def __init__(self, options, dialect, basepath, rows=1024):
         super().__init__(options, dialect, basepath)
         self.rows = rows
+        self.logger = logger.set_logger(__name__)
 
     def _fetch_mapping(self, dialect=''):
         try:
@@ -26,7 +25,7 @@ class QueryTranslator(BaseQueryTranslator):
             map_data = json.loads(map_file)
             return map_data
         except Exception as ex:
-            print('exception in stix_shifter_modules/csa/stix_translation/query_translator.py::QueryTranslator::_fetch_mapping():', ex)
+            self.logger.error('exception in stix_shifter_modules/csa/stix_translation/query_translator.py::QueryTranslator::_fetch_mapping():' + ex)
             return {}
 
     def map_object(self, stix_object_name):
@@ -56,7 +55,7 @@ class QueryTranslator(BaseQueryTranslator):
             sql_select = ", ".join(field_list)
             return sql_select
         except Exception as ex:
-            print('Exception while reading sql fields file:', ex)
+            self.logger.error('Exception while reading sql fields file:' + ex)
             return {}
 
     def transform_query(self, data, antlr_parsing_object):
@@ -70,7 +69,7 @@ class QueryTranslator(BaseQueryTranslator):
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to sql")
+        self.logger.info("Converting STIX2 Pattern to sql")
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self, number_rows=self.rows)
         return query_string

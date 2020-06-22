@@ -1,5 +1,6 @@
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_response import ErrorCode
+from stix_shifter_utils.utils import logger
 
 error_mapping = {
     # These are only examples. Change the keys to reflect the error codes that come back from the data source API.
@@ -22,6 +23,7 @@ error_mapping = {
 class ErrorMapper():
 
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
+    logger = logger.set_logger(__name__)
 
     @staticmethod
     def set_error_code(json_data, return_obj):
@@ -37,6 +39,6 @@ class ErrorMapper():
             error_code = error_mapping[code]
 
         if error_code == ErrorMapper.DEFAULT_ERROR:
-            print("failed to map: " + str(json_data))
+            ErrorMapper.logger.error("failed to map: " + str(json_data))
 
         ErrorMapperBase.set_error_code(return_obj, error_code)

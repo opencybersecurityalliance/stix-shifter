@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .api_client import APIClient
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 class UnexpectedResponseException(Exception):
     pass
@@ -9,6 +10,7 @@ class UnexpectedResponseException(Exception):
 class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
+        self.logger = logger.set_logger(__name__)
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -38,7 +40,7 @@ class Connector(BaseSyncConnector):
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
 
@@ -55,6 +57,6 @@ class Connector(BaseSyncConnector):
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
