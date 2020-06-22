@@ -1,7 +1,7 @@
 {
     "connection": {
         "help": {
-            "label": "Help",
+            "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "region": {

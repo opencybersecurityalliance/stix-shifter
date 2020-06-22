@@ -10,7 +10,7 @@
             "description": "Set the port number that is associated with the Host name or IP"
         },
         "help": {
-            "label": "Help",
+            "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "selfSignedCert": {
@@ -19,7 +19,8 @@
         },
         "sni": {
             "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication. Not Required for QRadar on Cloud."
+            "placeholder": "Add a server name indicator",
+            "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection. Not Required for QRadar on Cloud."
         },
         "data_lake": {
             "label": "Data Lake",
