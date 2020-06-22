@@ -5,6 +5,7 @@ import re
 import sys
 import time
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 import xmltodict
 
 PROGRESS_THRESHOLD = 50
@@ -22,6 +23,7 @@ class StatusConnector(BaseStatusConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def _get_progress_status(self, client_count, reporting_agents, return_obj):
         """
@@ -123,7 +125,7 @@ class StatusConnector(BaseStatusConnector):
                 return_obj['status'] = Status.ERROR.value
             elif response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
         return return_obj

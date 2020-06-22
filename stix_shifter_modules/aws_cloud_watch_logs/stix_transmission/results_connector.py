@@ -1,14 +1,17 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 import json
 from flatten_json import flatten
 import copy
-from stix_shifter_utils.utils.error_response import ErrorResponder
 from os import path
+
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, client):
         self.client = client
+        self.logger = logger.set_logger(__name__)
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -38,7 +41,7 @@ class ResultsConnector(BaseResultsConnector):
             response_dict['message'] = ex
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         
-        print('RETURN OBJ: {}'.format(json.dumps(return_obj, indent=4)))
+        self.logger.debug('Return Object: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj
 
     def format_results(self, result_list, results, return_obj):

@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import json
 import os
 
+from stix_shifter_utils.utils import logger
 
 class BaseResultTranslator(object, metaclass=ABCMeta):
 
@@ -13,6 +14,7 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.default_mapping_file_path = filepath
         self.callback = callback
         self.map_data = {}
+        self.logger = logger.set_logger(__name__)
 
         mapping = options['mapping'] if 'mapping' in options else {}
         if mapping and dialect in mapping:
@@ -24,7 +26,7 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
                 map_file = open(self.default_mapping_file_path).read()
                 self.map_data = json.loads(map_file)
             except Exception as ex:
-                print(ex)
+                self.logger.error(ex)
 
     def get_mapping(self):
         return self.map_data
