@@ -140,7 +140,7 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     validated_params[key] = value['default']
                 elif ('optional' in expected_configs[key] and expected_configs[key]['optional']):
                     pass
-                else:
+                elif key_path != 'connection.type':
                     errors.append(key_path)
 
 
