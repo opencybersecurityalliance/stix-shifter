@@ -132,7 +132,7 @@ Below example json is the language translation file of the above QRadar config j
             "description": "Set the port number that is associated with the Host name or IP"
         },
         "help": {
-            "label": "Help",
+            "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "limit": {
