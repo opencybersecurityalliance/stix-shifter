@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "splunk",
             "displayName": "Splunk"
         },
         "host": {

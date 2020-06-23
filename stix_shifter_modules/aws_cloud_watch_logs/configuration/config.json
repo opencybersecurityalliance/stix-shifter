@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "aws_cloud_watch_logs",
             "displayName": "Amazon CloudWatch Logs"
         },
         "help": {

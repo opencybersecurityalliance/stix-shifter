@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "elastic_ecs",
             "displayName": "Elastic Search (ECS)"
         },
         "host": {

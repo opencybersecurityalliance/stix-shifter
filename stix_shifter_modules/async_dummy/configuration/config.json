@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "async_dummy",
             "displayName": "Async Sample"
         },
         "host": {

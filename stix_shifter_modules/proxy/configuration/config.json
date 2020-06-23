@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "proxy",
             "displayName": "Proxy"
         },
         "host": {

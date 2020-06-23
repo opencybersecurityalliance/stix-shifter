@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "azure_sentinel",
             "displayName": "Microsoft Azure Sentinel"
         },
         "host": {

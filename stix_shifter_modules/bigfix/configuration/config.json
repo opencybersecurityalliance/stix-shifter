@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "bigfix",
             "displayName": "BigFix"
         },
         "host": {

@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "stix_bundle",
             "displayName": "STIX Bundle"
         },
         "host": {

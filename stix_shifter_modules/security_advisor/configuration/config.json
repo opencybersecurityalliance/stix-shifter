@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "security_advisor",
             "displayName": "IBM® Cloud Security Advisor"
         },
         "host": {

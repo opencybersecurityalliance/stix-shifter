@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "synchronous_dummy",
             "displayName": "Sync Sample"
         },
         "host": {

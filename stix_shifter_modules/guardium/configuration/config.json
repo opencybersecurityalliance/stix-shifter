@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "guardium",
             "displayName": "IBM® Guardium"
         },
         "host": {

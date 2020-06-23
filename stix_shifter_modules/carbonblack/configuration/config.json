@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "carbonblack",
             "displayName": "Carbon Black Response"
         },
         "host": {
