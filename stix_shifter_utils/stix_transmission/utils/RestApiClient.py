@@ -6,6 +6,8 @@ import os
 import errno
 import uuid
 
+from stix_shifter_utils.utils import logger
+
 # This is a simple HTTP client that can be used to access the REST API
 
 
@@ -15,6 +17,7 @@ class RestApiClient:
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
     def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
+        self.logger = logger.set_logger(__name__)
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
         server_ip = host
@@ -53,7 +56,7 @@ class RestApiClient:
                     try:
                         f.write(self.server_cert_file_content)
                     except IOError:
-                        print('Failed to setup certificate')
+                        self.logger.error('Failed to setup certificate')
 
             url = None
             actual_headers = self.headers.copy()
@@ -81,11 +84,11 @@ class RestApiClient:
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
-                    print("WARNING: " +
+                    self.logger.error("WARNING: " +
                           response.headers['Content-Type'], file=sys.stderr)
                 return ResponseWrapper(response)
             except Exception as e:
-                print('exception occured during requesting url: ' + str(e))
+                self.logger.error('exception occured during requesting url: ' + str(e))
                 raise e
         finally:
             if self.server_cert_file_content_exists is True:

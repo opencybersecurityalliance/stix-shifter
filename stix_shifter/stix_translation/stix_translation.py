@@ -14,6 +14,7 @@ import glob
 from os import path
 import traceback
 import json
+from stix_shifter_utils.utils import logger
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -32,6 +33,7 @@ class StixTranslation:
 
     def __init__(self):
         self.args = []
+        self.logger = logger.set_logger(__name__)
 
     def _validate_pattern(self, pattern):
         errors = []
@@ -75,8 +77,8 @@ class StixTranslation:
                 entry_point = connector_module.EntryPoint(options=validated_options)
             except Exception as ex:
                 track = traceback.format_exc()
-                print(ex)
-                print(track) 
+                self.logger.error(ex)
+                self.logger.error(track) 
                 raise                
 
             if len(dialects) == 0:
@@ -86,7 +88,7 @@ class StixTranslation:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
                 current_recursion_limit = sys.getrecursionlimit()
                 if current_recursion_limit < recursion_limit:
-                    print("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
+                    self.logger.debug("Changing Python recursion limit from {} to {}".format(current_recursion_limit, recursion_limit))
                     sys.setrecursionlimit(recursion_limit)
 
                 if translate_type == QUERY:
@@ -150,7 +152,7 @@ class StixTranslation:
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
-            print('Caught exception: ' + str(ex) + " " + str(type(ex)))
+            self.logger.error('Caught exception: ' + str(ex) + " " + str(type(ex)))
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response

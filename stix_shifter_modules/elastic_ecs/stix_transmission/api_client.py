@@ -1,5 +1,6 @@
 import base64
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.utils import logger
 import json
 import re
 
@@ -11,6 +12,7 @@ class APIClient():
     PING_TIMEOUT_IN_SECONDS = 10
 
     def __init__(self, connection, configuration):
+        self.logger = logger.set_logger(__name__)
         headers = dict()
         url_modifier_function = None
         auth = configuration.get('auth')
@@ -95,7 +97,7 @@ class APIClient():
                 }
             }
 
-            print("URL endpoint: " + endpoint)
-            print("URL data: " + json.dumps(data))
+            self.logger.debug("URL endpoint: " + endpoint)
+            self.logger.debug("URL data: " + json.dumps(data))
 
             return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.search_timeout)
