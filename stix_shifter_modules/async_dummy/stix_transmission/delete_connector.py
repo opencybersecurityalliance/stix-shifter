@@ -1,9 +1,11 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def delete_query_connection(self, search_id):
         try:
@@ -18,5 +20,5 @@ class DeleteConnector(BaseDeleteConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
-            print('error when deleting search {}:'.format(err))
+            self.logger.error('error when deleting search {}:'.format(err))
             raise

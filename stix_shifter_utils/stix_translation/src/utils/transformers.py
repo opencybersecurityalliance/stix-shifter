@@ -6,6 +6,10 @@ import re
 import os
 import ntpath
 
+from stix_shifter_utils.utils import logger
+
+LOGGER = logger.set_logger(__name__)
+
 class ValueTransformer():
     """ Base class for value transformers """
 
@@ -39,7 +43,7 @@ class EpochToTimestamp(ValueTransformer):
         try:
             return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         except ValueError:
-            print("Cannot convert epoch value {} to timestamp".format(epoch))
+            LOGGER.error("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class FormatMac(ValueTransformer):
@@ -73,7 +77,7 @@ class FormatTCPProtocol(ValueTransformer):
             obj_array = [entry.lower() for entry in obj_array]
             return obj_array
         except ValueError:
-            print("Cannot convert input to array")
+            LOGGER.error("Cannot convert input to array")
 
 
 class MsatpToRegistryValue(ValueTransformer):
@@ -123,7 +127,7 @@ class EpochSecondsToTimestamp(ValueTransformer):
             return (datetime.fromtimestamp(int(epoch), timezone.utc)
                     .strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         except ValueError:
-            print("Cannot convert epoch value {} to timestamp".format(epoch))
+            LOGGER.error("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class TimestampToMilliseconds(ValueTransformer):
@@ -140,7 +144,7 @@ class TimestampToMilliseconds(ValueTransformer):
             converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
             return converted_time
         except ValueError:
-            print("Cannot convert the timestamp {} to milliseconds".format(timestamp))
+            LOGGER.error("Cannot convert the timestamp {} to milliseconds".format(timestamp))
 
 
 class ToInteger(ValueTransformer):
@@ -153,7 +157,7 @@ class ToInteger(ValueTransformer):
                 obj = float(obj)
             return int(obj)
         except ValueError:
-            print("Cannot convert input {} to integer".format(obj))
+            LOGGER.error("Cannot convert input {} to integer".format(obj))
 
 
 class ToString(ValueTransformer):
@@ -164,7 +168,7 @@ class ToString(ValueTransformer):
         try:
             return str(obj)
         except ValueError:
-            print("Cannot convert input to string")
+            LOGGER.error("Cannot convert input to string")
 
 
 class ToLowercaseArray(ValueTransformer):
@@ -178,7 +182,7 @@ class ToLowercaseArray(ValueTransformer):
             obj_array = [entry.lower() for entry in obj_array]
             return obj_array
         except ValueError:
-            print("Cannot convert input to array")
+            LOGGER.error("Cannot convert input to array")
 
 
 class ToBase64(ValueTransformer):
@@ -189,7 +193,7 @@ class ToBase64(ValueTransformer):
         try:
             return base64.b64encode(obj.encode('ascii')).decode('ascii')
         except ValueError:
-            print("Cannot convert input to base64")
+            LOGGER.error("Cannot convert input to base64")
 
 
 class ToFilePath(ValueTransformer):
@@ -200,7 +204,7 @@ class ToFilePath(ValueTransformer):
         try:
             return obj[0:len(obj) - len(re.split(r'[\\/]', obj)[-1])]
         except ValueError:
-            print("Cannot convert input to path string")
+            LOGGER.error("Cannot convert input to path string")
 
 
 class ToDirectoryPath(ValueTransformer):
@@ -212,7 +216,7 @@ class ToDirectoryPath(ValueTransformer):
             file_path, file_name = ntpath.split(obj)
             return file_path
         except ValueError:
-            print("Cannot convert input to directory path string")
+            LOGGER.error("Cannot convert input to directory path string")
 
 
 class ToFileName(ValueTransformer):
@@ -223,7 +227,7 @@ class ToFileName(ValueTransformer):
         try:
             return re.split(r'[\\/]', obj)[-1]
         except ValueError:
-            print("Cannot convert input to file name")
+            LOGGER.error("Cannot convert input to file name")
 
 
 class ToDomainName(ValueTransformer):
@@ -239,7 +243,7 @@ class ToDomainName(ValueTransformer):
             domain_name = splits[i].split("?")[0].split('/')[0].split(':')[0].lower()
             return domain_name
         except ValueError:
-            print("Cannot convert input to domain name")
+            LOGGER.error("Cannot convert input to domain name")
 
 
 class ToIPv4(ValueTransformer):
@@ -250,7 +254,7 @@ class ToIPv4(ValueTransformer):
         try:
             return socket.inet_ntoa((value & 0xffffffff).to_bytes(4, "big"))
         except ValueError:
-            print("Cannot convert input to IPv4 string")
+            LOGGER.error("Cannot convert input to IPv4 string")
 
 
 class DateTimeToUnixTimestamp(ValueTransformer):
@@ -261,7 +265,7 @@ class DateTimeToUnixTimestamp(ValueTransformer):
         try:
             return int((obj - datetime(1970, 1, 1)).total_seconds() * 1000)
         except ValueError:
-            print("Cannot convert input {} to Unix timestamp".format(obj))
+            LOGGER.error("Cannot convert input {} to Unix timestamp".format(obj))
 
 
 class NaiveToUTC(tzinfo):
@@ -321,7 +325,7 @@ class SetToOne(ValueTransformer):
         try:
             return int("1")
         except ValueError:
-            print("Cannot convert input {} to integer".format(obj))
+            LOGGER.error("Cannot convert input {} to integer".format(obj))
 
 # TODO: rename classes to be more generic since they can be reused by other data sources
 
@@ -334,7 +338,7 @@ class EpochToGuardium(ValueTransformer):
         try:
             return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
         except ValueError:
-            print("Cannot convert epoch value {} to timestamp".format(epoch))
+            LOGGER.error("Cannot convert epoch value {} to timestamp".format(epoch))
 
 
 class GuardiumToTimestamp(ValueTransformer):

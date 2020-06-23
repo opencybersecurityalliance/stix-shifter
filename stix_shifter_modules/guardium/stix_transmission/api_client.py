@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter_utils.utils import logger
 from requests.models import Response
 import sys
 import json
@@ -20,7 +21,7 @@ class APIClient():
     # This class will encode any data or query parameters which will then be
     # sent to the call_api() method of the RestApiClient
     def __init__(self, connection, configuration):
-
+        self.logger = logger.set_logger(__name__)
         self.endpoint_start = 'restAPI/'
         self.connection = connection
         self.configuration = configuration
@@ -70,13 +71,10 @@ class APIClient():
 
         self.client = RestApiClient(host_port,
                                     None,
-                                    connection.get('cert', None),
                                     self.headers,
                                     url_modifier_function,
                                     cert_verify=connection.get(
                                         'selfSignedCert', True),
-                                    mutual_auth=connection.get(
-                                        'use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
         self.search_timeout = connection['options'].get('timeout')
@@ -295,7 +293,7 @@ class APIClient():
             indx = int(indexFrom)
             fsize = int(fetchSize)
         except ValueError:
-            print("Offset (indexFrom) or length (fetchSize) is not an integer")
+            self.logger.error("Offset (indexFrom) or length (fetchSize) is not an integer")
 
         # replace the data string
         data["indexFrom"] = str(indx)

@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from enum import Enum
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 class DatasourceStatus(Enum):
     # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR
@@ -16,6 +17,7 @@ class DatasourceStatus(Enum):
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     # Map data source status to connector status
     def __getStatus(self, status):
@@ -49,5 +51,5 @@ class StatusConnector(BaseStatusConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
-            print('error when getting search status: {}'.format(err))
+            self.logger.error('error when getting search status: {}'.format(err))
             raise

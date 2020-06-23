@@ -1,9 +1,11 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 class QueryConnector(BaseQueryConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def create_query_connection(self, query):
         try:
@@ -18,5 +20,5 @@ class QueryConnector(BaseQueryConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
-            print('error when creating search: {}'.format(err))
+            self.logger.error('error when creating search: {}'.format(err))
             raise
