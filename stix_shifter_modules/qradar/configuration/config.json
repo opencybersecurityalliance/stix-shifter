@@ -1,7 +1,9 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® QRadar and QRadar On Cloud"
+            "default": "QRadar",
+            "displayName": "IBM\u00ae QRadar and QRadar On Cloud",
+            "type": "connectorType"
         },
         "host": {
             "type": "text",
@@ -30,7 +32,10 @@
         "options": {
             "validate_pattern": {
                 "default": false,
-                "hidden": true
+                "hidden": true,
+                "type": "boolean",
+                "optional": true,
+                "previous": "connection.validate_pattern"
             },
             "hash_options": {
                 "type": "json",
