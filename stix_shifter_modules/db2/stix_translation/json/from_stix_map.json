@@ -1,0 +1,44 @@
+{
+  "user-account": {
+    "fields": {
+      "user_id": ["UID"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["SIP", "DIP"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["SPORT"],
+      "dst_port": ["DPORT"],
+      "protocols[*]": ["PROTOCOL"],
+      "start": ["STIME"],
+      "end": ["ETIME"],
+      "src_ref.value": ["SIP", "sourcemac"],
+      "dst_ref.value": ["DIP", "destinationmac"],
+      "src_packets": ["PACKETS"],
+      "src_byte_count": ["BYTES"],
+      "ipfix": {
+        "icmpTypeIPv4": ["ICMP_TYPE"],
+        "icmpCodeIPv4": ["ICMP_CODE"],
+        "vlanId": ["INPUT"],
+        "postVlanId": ["OUTPUT"]
+      }
+    }
+  },
+  "x-com-db2": {
+    "fields": {
+      "tcp_flags": ["FLAGS"],
+      "duration": ["DURATION"],
+      "flow_sensor": ["SENSOR"],
+      "flow_type": ["FLOWTYPE"],
+      "application_label": ["APPLICATION"],
+      "initial_tcp_flags": ["INIT_FLAGS"],
+      "session_tcp_flags": ["SESSION_FLAGS"],
+      "flow_timeout": ["TIMEOUT"],
+      "flow_continuation": ["CONTINUATION"]
+    }
+  }
+}
