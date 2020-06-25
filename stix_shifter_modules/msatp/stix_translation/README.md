@@ -64,11 +64,11 @@
 
    1. `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (FolderPath contains "C:\\ProgramData\\Symantec" or InitiatingProcessFolderPath contains "C:\\ProgramData\\Symantec"))`
    
-## Example STIX pattern for Custom Attribute(x-com-msatp) query:
+## Example STIX pattern for Custom Attribute(x-msatp) query:
 
 #### STIX patterns:
 
-   1. `[x-com-msatp:computer_name = 'ds-win10' OR process:name = 'conhost.exe'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'`
+   1. `[x-msatp:computer_name = 'ds-win10' OR process:name = 'conhost.exe'] START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'`
    
 #### Translated query:
 

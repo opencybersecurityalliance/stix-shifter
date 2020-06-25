@@ -73,7 +73,7 @@
 #### STIX patterns:
 
 ```
-"([domain-name:value = 'guarddutyc2activityb.com' OR x-com-aws-instance:image_id = 'ami-00068cd7555f543d']) START 
+"([domain-name:value = 'guarddutyc2activityb.com' OR x-aws-instance:image_id = 'ami-00068cd7555f543d']) START 
 t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'" "{\"resultSizeLimit\":500}"
 ```
 
@@ -443,7 +443,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
 #### STIX patterns:(STIX pattern without resultSizeLimit)
 
 ```
-([x-com-aws-api:access_key_id = 'xxxxxxx']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
+([x-aws-api:access_key_id = 'xxxxxxx']) START t'2019-12-01T08:43:10.003Z' STOP t'2019-12-06T10:43:10.003Z'
 ```
 
 #### Translated query:
@@ -550,20 +550,20 @@ results
 | City name of Remote Ip address  | ipv4-addr:x_com_aws_remote_city_name | [ipv4-addr:x_com_aws_remote_city_name = 'Ashburn'] |
 | Country name of Remote Ip address  | ipv4-addr:x_com_aws_remote_country_name | [ipv4-addr:x_com_aws_remote_country_name = 'United States'] |
 | Network Interface id of the EC2 instance  | ipv6-addr:x_com_aws_interface_id | [ipv6-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
-| AWS Account Id | x-com-aws:account_id | [x-com-aws:account_id = '979326520502'] |
-| AWS Region | x-com-aws:aws_region | [x-com-aws:aws_region = 'us-east-1'] |
-| EC2 instance Id  | x-com-aws-instance:instance_id | [x-com-aws-instance:instance_id = 'i-091501e21e01d0602'] |
-| EC2 instance Image Id  | x-com-aws-instance:image_id| [x-com-aws-instance:image_id = 'ami-00068cd7555f543d5'] |
-| EC2 instance Availability Zone  | x-com-aws-instance:availability_zone | [x-com-aws-instance:availability_zone = 'us-east-1a'] |
-| VPC Id associated with EC2 Instance | x-com-aws-vpc:vpc_id | [x-com-aws-vpc:vpc_id = 'i-091501e21e01d0602'] |
-| Subnet Id associated with EC2 Instance | x-com-aws-vpc:subnet_id| [x-com-aws-vpc:subnet_id = 'ami-00068cd7555f543d5'] |
-| Security Group Name associated with EC2 Instance  | x-com-aws-vpc:security_group_name | [x-com-aws-vpc:security_group_name = 'launch-wizard-1'] |
-| Security Group Id associated with EC2 Instance | x-com-aws-vpc:security_group_id | [x-com-aws-vpc:security_group_id = 'sg-0aa89ff4646f71594'] |
-| AccessKey Id of User | x-com-aws-api:access_key_id | [x-com-aws-api:access_key_id = 'AAAABBBBCCCC'] |
-| AWS api name | x-com-aws-api:api | [x-com-aws-api:api = 'DescribeSecurityGroups'] |
-| AWS service name whose api is invoked | x-com-aws-api:api_service_name | [x-com-aws-api:api_service_name = 'ec2.amazonaws.com'] |
-| Id of guardduty finding | x-com-aws-guardduty-finding:finding_id | [x-com-aws-guardduty-finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |
-| Type of guardduty finding | x-com-aws-guardduty-finding:finding_type | [x-com-aws-guardduty-finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] |
+| AWS Account Id | x-aws:account_id | [x-aws:account_id = '979326520502'] |
+| AWS Region | x-aws:aws_region | [x-aws:aws_region = 'us-east-1'] |
+| EC2 instance Id  | x-aws-instance:instance_id | [x-aws-instance:instance_id = 'i-091501e21e01d0602'] |
+| EC2 instance Image Id  | x-aws-instance:image_id| [x-aws-instance:image_id = 'ami-00068cd7555f543d5'] |
+| EC2 instance Availability Zone  | x-aws-instance:availability_zone | [x-aws-instance:availability_zone = 'us-east-1a'] |
+| VPC Id associated with EC2 Instance | x-aws-vpc:vpc_id | [x-aws-vpc:vpc_id = 'i-091501e21e01d0602'] |
+| Subnet Id associated with EC2 Instance | x-aws-vpc:subnet_id| [x-aws-vpc:subnet_id = 'ami-00068cd7555f543d5'] |
+| Security Group Name associated with EC2 Instance  | x-aws-vpc:security_group_name | [x-aws-vpc:security_group_name = 'launch-wizard-1'] |
+| Security Group Id associated with EC2 Instance | x-aws-vpc:security_group_id | [x-aws-vpc:security_group_id = 'sg-0aa89ff4646f71594'] |
+| AccessKey Id of User | x-aws-api:access_key_id | [x-aws-api:access_key_id = 'AAAABBBBCCCC'] |
+| AWS api name | x-aws-api:api | [x-aws-api:api = 'DescribeSecurityGroups'] |
+| AWS service name whose api is invoked | x-aws-api:api_service_name | [x-aws-api:api_service_name = 'ec2.amazonaws.com'] |
+| Id of guardduty finding | x-aws-guardduty-finding:finding_id | [x-aws-guardduty-finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |
+| Type of guardduty finding | x-aws-guardduty-finding:finding_type | [x-aws-guardduty-finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] |
 
 ###References
 Click below link for different types of guardduty finding<br/>
