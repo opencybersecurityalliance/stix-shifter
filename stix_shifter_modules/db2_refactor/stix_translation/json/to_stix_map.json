@@ -1,115 +1,125 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
-  },
-  "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
-  },
-  "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
-  },
-  "SourceIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "SourceIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "EventCount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "StartTime": [
-    {
-      "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Url": {
-    "key": "url.value"
-  },
-  "FileName": {
-    "key": "file.name"
-  },
-  "Payload": {
-    "key": "artifact.payload_bin"
-  },
-  "DestinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "SourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "NetworkProtocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "transformer": "ToLowercaseArray"
-  },
-  "DomainName": {
-    "key": "domain-name.value"
-  },
-  "Process": {
-    "Path": [
-      {
-        "object": "proc",
-        "key": "process.command_line"
-      }
-    ],
-    "Pid": [
-      {
-        "object": "proc",
-        "key": "process.id"
-      }
-    ]
-  }
+	"UID": {
+		"key": "user-account.user_id",
+		"transformer": "ToString"
+	},
+	"SPORT": {
+		"key": "network-traffic.src_port",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"DPORT": {
+		"key": "network-traffic.dst_port",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"STIME": {
+		"key": "last_observed",
+		"transformer": "EpochToTimestamp",
+		"cybox": false
+	},
+	"ETIME": {
+			"key": "first_observed",
+			"transformer": "EpochToTimestamp",
+			"cybox": false
+	},
+	"SENSOR": {
+		"key": "x_com_db2.flow_sensor",
+		"cybox": false,
+		"transformer": "ToString"
+	},
+	"SIP": [
+		{
+			"key": "ipv4-addr.value",
+			"object": "src_ip"
+		},
+		{
+			"key": "network-traffic.src_ref",
+			"object": "nt",
+			"references": "src_ip"
+		}
+	],
+	"DIP": [
+		{
+			"key": "ipv4-addr.value",
+			"object": "dst_ip"
+		},
+		{
+			"key": "network-traffic.dst_ref",
+			"object": "nt",
+			"references": "dst_ip"
+		}
+	],
+	"PROTOCOL": {
+		"key": "network-traffic.protocols",
+		"object": "nt",
+		"transformer": "ToLowercaseArray"
+	},
+	"PACKETS": {
+		"key": "network-traffic.src_packets",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"BYTES": {
+		"key": "network-traffic.src_byte_count",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"DURATION": {
+		"key": "x_com_db2.duration",
+		"cybox": false
+	},
+	"ICMP_TYPE": {
+		"key": "network-traffic.ipfix.icmpTypeIPv4",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"ICMP_CODE": {
+		"key": "network-traffic.ipfix.icmpCodeIPv4",
+		"object": "nt",
+		"transformer": "ToInteger"
+	},
+	"INPUT": {
+		"key": "network-traffic.ipfix.vlanId",
+		"object": "nt"
+	},
+	"OUTPUT": {
+		"key": "network-traffix.ipfix.postVlanId",
+		"object": "nt"
+	},
+	"FLAGS": {
+		"key": "x_com_db2.tcp_flags",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"FLOWTYPE": {
+		"key": "x_com_db2.flow_type",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"APPLICATION": {
+		"key": "x_com_db2.application_label",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"INIT_FLAGS": {
+		"key": "x_com_db2.initial_tcp_flags",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"SESSION_FLAGS": {
+		"key": "x_com_db2.session_tcp_flags",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"TIMEOUT": {
+		"key": "x_com_db2.timeout",
+		"cybox": false,
+		"transformer": "ToInteger"
+	},
+	"CONTINUATION": {
+		"key": "x_com_db2.flow_continuation",
+		"cybox": false,
+		"transformer": "ToInteger"
+	}
 }
