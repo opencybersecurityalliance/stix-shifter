@@ -3,7 +3,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .stix_transmission.ping_connector import PingConnector
 from .stix_transmission.delete_connector import DeleteConnector
 from .stix_transmission.results_connector import ResultsConnector
-from .stix_transmission.api_client import APIClient
+from .stix_transmission.api_client import DB2Client
 from .stix_translation.query_translator import QueryTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 import os
@@ -25,7 +25,7 @@ class EntryPoint(BaseEntryPoint):
 
             # ...implement your own setup similar to the following:
 
-            api_client = APIClient(connection, configuration)
+            api_client = DB2Client(connection, configuration)
             base_sync_connector = BaseSyncConnector()
             ping_connector = PingConnector(api_client)
             query_connector = base_sync_connector
@@ -42,9 +42,9 @@ class EntryPoint(BaseEntryPoint):
 
             # Use default translation setup with default dialect otherwise...
             # self.setup_translation_simple(dialect_default='default')
-            
+
             # ...implement your own setup similar to the following:
-            
+
             basepath = os.path.dirname(__file__)
             filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
