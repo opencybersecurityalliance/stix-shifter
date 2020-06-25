@@ -113,13 +113,14 @@ class DataSourceObjToStixObj:
         DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value, group)
 
     @staticmethod
-    def _valid_stix_value(props_map, key, stix_value):
+    def _valid_stix_value(props_map, key, stix_value, unwind=False):
         """
         Checks that the given STIX value is valid for this STIX property
 
         :param props_map: the map of STIX properties which contains validation attributes
         :param key: the STIX property name
         :param stix_value: the STIX value translated from the input object
+        :param unwrap: unwrapping datasource field value of type list 
         :return: whether STIX value is valid for this STIX property
         :rtype: bool
         """
@@ -130,8 +131,13 @@ class DataSourceObjToStixObj:
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
-            if not pattern.match(str(stix_value)):
-                return False
+            if unwind and isinstance(stix_value, list):
+                for val in stix_value:
+                    if not pattern.match(str(val)):
+                        return False
+            else:
+                if not pattern.match(str(stix_value)):
+                    return False
         return True
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
@@ -178,6 +184,12 @@ class DataSourceObjToStixObj:
             transformer = self.transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
             group = False
+            unwrap = False
+
+            # unwrapping array of stix values to separate stix objects
+            if 'unwrap' in ds_key_def:
+                unwrap = True
+            
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
                 if 'references' in ds_key_def:
@@ -192,9 +204,17 @@ class DataSourceObjToStixObj:
                         if not stix_value:
                             continue
                     else:
-                        stix_value = object_map.get(references)
-                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                            continue
+                        if unwrap:
+                            stix_value = []
+                            pattern = re.compile("{}_[0-9]+".format(references))
+                            for obj_name in object_map:
+                                if pattern.match(obj_name):
+                                    val = object_map.get(obj_name)
+                                    stix_value.append(val)
+                        else:
+                            stix_value = object_map.get(references)
+                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
+                                continue
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
@@ -203,7 +223,14 @@ class DataSourceObjToStixObj:
                 # Group Values
                 if 'group' in ds_key_def:
                     group = True
-                DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
+
+                if unwrap and 'references' not in ds_key_def and isinstance(stix_value, list):
+                    for i in range(len(stix_value)):
+                        obj_i_name = "{}_{}".format(object_name, i+1)
+                        val = stix_value[i]
+                        DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, val, object_map, obj_i_name, group)
+                else:
+                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
                 # get the object name defined for custom attributes
                 if 'object' in ds_key_def:
