@@ -45,7 +45,8 @@
     "configuration": {
         "auth": {
             "sec": {
-                "type": "password"
+                "type": "password",
+                "previous": "SEC"
             }
         }
     }
