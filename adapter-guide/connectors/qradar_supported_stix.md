@@ -60,7 +60,7 @@ ___
 - user_id
 
 ___
-### x_com_ibm_ariel
+### x_ibm_ariel
 - category_id
 - category_name
 - high_level_category_name
@@ -91,7 +91,7 @@ ___
 - device_type
 
 ___
-### x_com_ibm_finding
+### x_ibm_finding
 - name
 - description
 

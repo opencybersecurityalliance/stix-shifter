@@ -2,15 +2,15 @@
   "ipv4-addr": {
     "fields": {
       "value": ["eth0_private_ip", "eth1_private_ip", "public_ip", "remote_ip"],
-      "x_com_aws_interface_id": ["interface_id"],
-      "x_com_aws_remote_city_name": ["city_name"],
-      "x_com_aws_remote_country_name": ["country_name"]
+      "x_aws_interface_id": ["interface_id"],
+      "x_aws_remote_city_name": ["city_name"],
+      "x_aws_remote_country_name": ["country_name"]
     }
   },
   "ipv6-addr": {
     "fields": {
       "value": ["ipv6_address"],
-      "x_com_aws_interface_id": ["interface_id"]
+      "x_aws_interface_id": ["interface_id"]
     }
   },
   "network-traffic": {

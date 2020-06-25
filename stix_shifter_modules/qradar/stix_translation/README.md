@@ -85,7 +85,7 @@ Will return the following STIX observable:
           "protocols": ["tcp"]
         }
       },
-      "x_com_ibm_ariel": {
+      "x_ibm_ariel": {
         "log_source_id": 126,
         "identity_ip": "0.0.0.0",
         "magnitude": 4,

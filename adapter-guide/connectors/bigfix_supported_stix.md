@@ -44,7 +44,7 @@ ___
 - user_id
 
 ___
-### x_com_bigfix_relevance
+### x_bigfix_relevance
 - computer_identity
 
 ___

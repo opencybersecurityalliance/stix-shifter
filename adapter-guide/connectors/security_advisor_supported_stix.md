@@ -35,7 +35,7 @@ ___
 - user_id
 
 ___
-### x_com_security_advisor_finding
+### x_security_advisor_finding
 - author_accountId
 - context_resourceName
 - description

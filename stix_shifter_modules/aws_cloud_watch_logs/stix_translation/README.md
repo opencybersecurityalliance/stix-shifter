@@ -138,7 +138,7 @@ results
                 "0": {
                     "type": "ipv6-addr",
                     "value": "2600:1f18:4036:e6fe:1ad2:4170:395a:da9a",
-                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe"
+                    "x_aws_interface_id": "eni-0a70b0fa1a9cd3dbe"
                 },
                 "1": {
                     "type": "domain-name",
@@ -150,8 +150,8 @@ results
                 "2": {
                     "type": "ipv4-addr",
                     "value": "172.31.13.238",
-                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
-                    "x_com_aws_ip_type": "private"
+                    "x_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
+                    "x_aws_ip_type": "private"
                 },
                 "3": {
                     "type": "domain-name",
@@ -163,30 +163,30 @@ results
                 "4": {
                     "type": "ipv4-addr",
                     "value": "3.231.163.216",
-                    "x_com_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
-                    "x_com_aws_ip_type": "public"
+                    "x_aws_interface_id": "eni-0a70b0fa1a9cd3dbe",
+                    "x_aws_ip_type": "public"
                 },
                 "5": {
                     "type": "domain-name",
                     "value": "guarddutyc2activityb.com"
                 }
             },
-            "x_com_aws_instance": {
+            "x_aws_instance": {
                 "instance_id": "i-091501e21e01d0602",
                 "availability_zone": "us-east-1a",
                 "image_id": "ami-00068cd7555f543d5"
             },
-            "x_com_aws_vpc": {
+            "x_aws_vpc": {
                 "subnet_id": "subnet-b9a994de",
                 "vpc_id": "vpc-10db926a",
                 "security_group_name": "launch-wizard-1",
                 "security_group_id": "sg-0aa89ff4646f71594"
             },
-            "x_com_aws": {
+            "x_aws": {
                 "account_id": "979326520502",
                 "region": "us-east-1"
             },
-            "x_com_aws_guardduty_finding": {
+            "x_aws_guardduty_finding": {
                 "id": "0ab76a9742c56179c3cfbc9d0616ff49",
                 "type": "Backdoor:EC2/C&CActivity.B!DNS",
                 "severity": 8,
@@ -308,8 +308,8 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
                 "1": {
                     "type": "ipv4-addr",
                     "value": "172.31.88.63",
-                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f",
-                    "x_com_aws_ip_type": "private"
+                    "x_aws_interface_id": "eni-02e70b8e842c70a2f",
+                    "x_aws_ip_type": "private"
                 },
                 "2": {
                     "type": "domain-name",
@@ -321,28 +321,28 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
                 "3": {
                     "type": "ipv4-addr",
                     "value": "54.211.223.78",
-                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f",
-                    "x_com_aws_ip_type": "public"
+                    "x_aws_interface_id": "eni-02e70b8e842c70a2f",
+                    "x_aws_ip_type": "public"
                 },
                 "4": {
                     "type": "ipv4-addr",
                     "value": "115.213.134.162",
-                    "x_com_aws_remote_city_name": "Lishui",
-                    "x_com_aws_remote_country_name": "China"
+                    "x_aws_remote_city_name": "Lishui",
+                    "x_aws_remote_country_name": "China"
                 }
             },
-            "x_com_aws_instance": {
+            "x_aws_instance": {
                 "instance_id": "i-0b8fd03ade35c681d",
                 "availability_zone": "us-east-1b",
                 "image_id": "ami-04763b3055de4860b"
             },
-            "x_com_aws_vpc": {
+            "x_aws_vpc": {
                 "subnet_id": "subnet-c62a11e8",
                 "vpc_id": "vpc-10db926a",
                 "security_group_name": "launch-wizard-1",
                 "security_group_id": "sg-0aa89ff4646f71594"
             },
-            "x_com_aws_guardduty_finding": {
+            "x_aws_guardduty_finding": {
                 "probe_port": 22,
                 "id": "9ab6e702ba673b8f1f3323956f0759d9",
                 "type": "Recon:EC2/PortProbeUnprotectedPort",
@@ -350,7 +350,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
                 "title": "Unprotected port on EC2 instance i-0b8fd03ade35c681d is being probed.",
                 "timestamp": "2019-10-18T09:45:05.000Z"
             },
-            "x_com_aws": {
+            "x_aws": {
                 "account_id": "979326520502",
                 "region": "us-east-1"
             },
@@ -374,7 +374,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
                 "0": {
                     "type": "ipv4-addr",
                     "value": "172.31.88.63",
-                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f"
+                    "x_aws_interface_id": "eni-02e70b8e842c70a2f"
                 },
                 "1": {
                     "type": "network-traffic",
@@ -395,7 +395,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
             },
             "first_observed": "2019-10-20T10:43:09.000Z",
             "last_observed": "2019-10-20T10:43:09.000Z",
-            "x_com_aws": {
+            "x_aws": {
                 "account_id": "979326520502"
             },
             "number_observed": 1
@@ -410,7 +410,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
                 "0": {
                     "type": "ipv4-addr",
                     "value": "120.192.217.102",
-                    "x_com_aws_interface_id": "eni-02e70b8e842c70a2f"
+                    "x_aws_interface_id": "eni-02e70b8e842c70a2f"
                 },
                 "1": {
                     "type": "network-traffic",
@@ -431,7 +431,7 @@ c3be3246-8b2b-4be7-b2de-d5d475c0ed8a:10000
             },
             "first_observed": "2019-10-20T10:43:09.000Z",
             "last_observed": "2019-10-20T10:43:09.000Z",
-            "x_com_aws": {
+            "x_aws": {
                 "account_id": "979326520502"
             },
             "number_observed": 1
@@ -514,20 +514,20 @@ results
                 "1": {
                     "type": "ipv4-addr",
                     "value": "157.46.15.243",
-                    "x_com_aws_remote_city_name": "Chennai",
-                    "x_com_aws_remote_country_name": "India"
+                    "x_aws_remote_city_name": "Chennai",
+                    "x_aws_remote_country_name": "India"
                 }
             },
-            "x_com_aws_api": {
+            "x_aws_api": {
                 "access_key_id": "xxxxxxx",
                 "api": "DescribeSecurityGroups",
                 "service_name": "ec2.amazonaws.com"
             },
-            "x_com_aws": {
+            "x_aws": {
                 "account_id": "979326520502",
                 "region": "us-east-1"
             },
-            "x_com_aws_guardduty_finding": {
+            "x_aws_guardduty_finding": {
                 "id": "14b76d5936d5f302695e67ac500ab78a",
                 "type": "Recon:IAMUser/NetworkPermissions",
                 "severity": 5,
@@ -546,10 +546,10 @@ results
 ### STIX pattern for custom attributes and sample values
 |  Description  |  STIX Pattern  |  Sample Values  |
 | --- | --- | --- |
-| Network Interface id of the EC2 instance  | ipv4-addr:x_com_aws_interface_id | [ipv4-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
-| City name of Remote Ip address  | ipv4-addr:x_com_aws_remote_city_name | [ipv4-addr:x_com_aws_remote_city_name = 'Ashburn'] |
-| Country name of Remote Ip address  | ipv4-addr:x_com_aws_remote_country_name | [ipv4-addr:x_com_aws_remote_country_name = 'United States'] |
-| Network Interface id of the EC2 instance  | ipv6-addr:x_com_aws_interface_id | [ipv6-addr:x_com_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
+| Network Interface id of the EC2 instance  | ipv4-addr:x_aws_interface_id | [ipv4-addr:x_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
+| City name of Remote Ip address  | ipv4-addr:x_aws_remote_city_name | [ipv4-addr:x_aws_remote_city_name = 'Ashburn'] |
+| Country name of Remote Ip address  | ipv4-addr:x_aws_remote_country_name | [ipv4-addr:x_aws_remote_country_name = 'United States'] |
+| Network Interface id of the EC2 instance  | ipv6-addr:x_aws_interface_id | [ipv6-addr:x_aws_interface_id = 'eni-0a70b0fa1a9cd3dbe'] |
 | AWS Account Id | x-aws:account_id | [x-aws:account_id = '979326520502'] |
 | AWS Region | x-aws:aws_region | [x-aws:aws_region = 'us-east-1'] |
 | EC2 instance Id  | x-aws-instance:instance_id | [x-aws-instance:instance_id = 'i-091501e21e01d0602'] |

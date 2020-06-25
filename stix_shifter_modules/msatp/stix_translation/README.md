@@ -191,7 +191,7 @@ results
             },
             "first_observed": "2019-10-30T08:44:56.805Z",
             "last_observed": "2019-10-30T08:44:56.805Z",
-            "x_com_msatp": {
+            "x_msatp": {
                 "machine_id": "babec47c12ad732b595e803c3320cc32aa26af33",
                 "computer_name": "lp-5cd84714zn.hclt.corp.hcl.in"
             },
@@ -259,7 +259,7 @@ results
             },
             "first_observed": "2019-10-30T08:40:53.609Z",
             "last_observed": "2019-10-30T08:40:53.609Z",
-            "x_com_msatp": {
+            "x_msatp": {
                 "machine_id": "fc0842373e54e76f5c55830e47526f6f1c187be6",
                 "computer_name": "car-dev-win"
             },
@@ -374,7 +374,7 @@ results
             },
             "first_observed": "2019-09-05T23:01:31.731Z",
             "last_observed": "2019-09-05T23:01:31.731Z",
-            "x_com_msatp": {
+            "x_msatp": {
                 "machine_id": "6a55e432bd1d390e9080fa0930f4e45292b95bf8",
                 "computer_name": "testmachine2"
             },
@@ -442,7 +442,7 @@ results
             },
             "first_observed": "2019-09-05T23:00:19.852Z",
             "last_observed": "2019-09-05T23:00:19.852Z",
-            "x_com_msatp": {
+            "x_msatp": {
                 "machine_id": "77725e40c068f4649a772db7512dc6da80bd4214",
                 "computer_name": "testmachine1"
             },
