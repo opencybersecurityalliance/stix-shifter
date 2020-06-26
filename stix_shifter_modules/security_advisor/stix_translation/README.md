@@ -52,7 +52,7 @@ Will return the following valid STIX Cyber Observable Object:
                     "value": "https://cloud.ibm.com/docs/services/cloud-object-storage?topic=cloud-object-storage-setting-a-firewall"
                 }
             },
-            "x_com_security_advisor_finding": {
+            "x_security_advisor_finding": {
                 "author_accountId": "4263e551d4a9460e8cdaccc06414198b",
                 "name": "67035ffbd96ead38e7e5bd6bf40f364a/providers/config-advisor/occurrences/datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",
                 "id": "datacos-not_in_private_network-crn%3Av1%3Abluemix%3Apublic%3Acloud-object-storage%3Aglobal%3Aa%2F67035ffbd96ead38e7e5bd6bf40f364a%3A895aa3a5-905f-4e78-90c9-d7e86d3032e1%3A%3A",

@@ -86,7 +86,7 @@ ___
 - subject_public_key_algorithm
 
 ___
-### x_com_splunk_spl
+### x_splunk_spl
 - user
 - bytes
 

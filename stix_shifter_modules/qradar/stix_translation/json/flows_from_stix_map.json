@@ -29,7 +29,7 @@
       "name": ["applicationname"]
     }
   },
-  "x-com-ibm-ariel": {
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
       "qid_name": ["qidname"],

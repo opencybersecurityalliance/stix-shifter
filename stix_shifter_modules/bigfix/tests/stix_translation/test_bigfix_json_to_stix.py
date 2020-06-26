@@ -68,7 +68,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_com_bigfix_relevance'] is not None
+        assert observed_data['x_bigfix_relevance'] is not None
 
     def test_custom_property(self):
         """
@@ -86,7 +86,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_com_bigfix_relevance']
+        custom_object = observed_data['x_bigfix_relevance']
         assert custom_object.keys() == {'computer_identity'}
         assert custom_object['computer_identity'] == '1626351170-xlcr.hcl.local'
 

@@ -152,7 +152,7 @@ transmit bigfix "{\"host\":\"xx.xx.xx.xx\", \"port\":\"xxxxx\", \"cert_verify\":
                     "user_id": "NT AUTHORITY\\SYSTEM"
                 }
             },
-            "x_com_bigfix_relevance": {
+            "x_bigfix_relevance": {
                 "computer_identity": "550872812-WIN-N11M78AV7BP"
             },
             "first_observed": "2019-08-15T13:28:13.000Z",
@@ -250,7 +250,7 @@ transmit bigfix "{\"host\":\"xx.xx.xx.xx\", \"port\":\"xxxxx\", \"cert_verify\":
                     "user_id": "root"
                 }
             },
-            "x_com_bigfix_relevance": {
+            "x_bigfix_relevance": {
                 "computer_identity": "13476923-archlinux"
             },
             "first_observed": "2019-08-12T13:21:41.000Z",
@@ -337,7 +337,7 @@ transmit bigfix "{\"host\":\"xx.xx.xx.xx\", \"port\":\"xxxxx\", \"cert_verify\":
                     "binary_ref": "0"
                 }
             },
-            "x_com_bigfix_relevance": {
+            "x_bigfix_relevance": {
                 "computer_identity": "1626351170-xlcr.hcl.local"
             },
             "first_observed": "2019-08-29T02:36:12.000Z",
@@ -416,7 +416,7 @@ transmit bigfix "{\"host\":\"xx.xx.xx.xx\", \"port\":\"xxxxx\", \"cert_verify\":
                     "value": "0a-ab-41-e0-89-f8"
                 }
             },
-            "x_com_bigfix_relevance": {
+            "x_bigfix_relevance": {
                 "computer_identity": "541866979-suse01"
             },
             "number_observed": 1

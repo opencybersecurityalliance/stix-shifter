@@ -164,7 +164,7 @@
       "value": ["MachineNetworkInfo.MacAddress"]
     }
   },
-  "x-com-msatp": {
+  "x-msatp": {
     "fields": {
       "computer_name": [
         "FileCreationEvents.ComputerName",

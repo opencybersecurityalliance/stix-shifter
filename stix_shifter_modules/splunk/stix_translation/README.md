@@ -66,7 +66,7 @@ Will return the following valid STIX Cyber Observable Object:
             "first_observed": "2018-08-21T15:11:55.000Z",                                               
             "last_observed": "2018-08-21T15:11:55.000Z",                                                
             "number_observed": 1,                                                                       
-            "x_com_splunk_spl": {                                                                       
+            "x_splunk_spl": {                                                                       
                 "bytes": "300",                                                                         
                 "user": "ibm_user"                                                                      
             }                                                                                           

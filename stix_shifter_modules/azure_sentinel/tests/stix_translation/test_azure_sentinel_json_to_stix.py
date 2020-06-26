@@ -141,8 +141,8 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object_1 = observed_data['x_com_msazure_sentinel']
-        custom_object_2 = observed_data['x_com_msazure_sentinel_alert']
+        custom_object_1 = observed_data['x_msazure_sentinel']
+        custom_object_2 = observed_data['x_msazure_sentinel_alert']
 
         assert custom_object_1.keys() == {'tenant_id', 'subscription_id'}
         assert custom_object_2.keys() == {'id','title', 'provider', 'vendor'}
