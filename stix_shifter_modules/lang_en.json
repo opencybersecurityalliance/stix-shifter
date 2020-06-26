@@ -18,7 +18,7 @@
             },
             "time_range": {
                 "label": "Query Time Range",
-                "description": "Time range for the search"
+                "description": "Time range for the search, in minutes, represented as last x minutes."
             },
             "timeout": {
                 "label": "Query Timeout Limit",
