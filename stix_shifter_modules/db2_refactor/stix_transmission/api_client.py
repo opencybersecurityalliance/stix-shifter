@@ -4,9 +4,10 @@ class DB2Client():
 
     def __init__(self, connection, configuration):
         self.auth = configuration.get('auth')
+
         try:
             self.client = ibm_db.pconnect(
-                "DATABASE=" + self.auth.get("database") +
+                "DATABASE=" + "bigsql" +
                 ";HOSTNAME=" + connection.get("host", "") +
                 ";PORT=" + connection.get("port", "31490") +
                 ";UID=" + self.auth.get("username") +
@@ -14,9 +15,10 @@ class DB2Client():
                 "", "")
 
         except Exception as e:
+            print("EXCEPTION in DB2Client", e)
             raise e
 
-        slef.state = ibm_db.active(self.client)
+        self.state = ibm_db.active(self.client)
 
     def ping_data_source(self):
         # Pings the data source
