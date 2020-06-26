@@ -15,6 +15,16 @@ REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
 
 logger = logging.getLogger(__name__)
 
+def _fetch_network_protocol_mapping():
+    try:
+        map_file = open(
+            'stix_shifter_modules/db2/stix_translation/json/network_protocol_map.json').read()
+        map_data = json.loads(map_file)
+        return map_data
+    except Exception as ex:
+        print('exception in reading mapping file:', ex)
+        return {}
+
 
 class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
@@ -138,6 +148,14 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
+            if stix_field == 'protocols[*]':
+                map_data = _fetch_network_protocol_mapping()
+                try:
+                    expression.value = map_data[expression.value.lower()]
+                except Exception as protocol_key:
+                    raise KeyError(
+                        "Network protocol {} is not supported.".format(protocol_key))
+
             if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
@@ -231,4 +249,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["SELECT * FROM tableName WHERE %s" % query]
+    return ["select * from BIGSQL.einstein2 where {}".format(query)]
