@@ -1053,42 +1053,42 @@
   "dns": {
     "answers": {
       "class": {
-        "key": "x_ecs_dns.answers_class",
-        "object": "x_dns"
+        "key": "x-ecs-dns.answers_class",
+        "object": "dns"
       },
       "data": {
-        "key": "x_ecs_dns.answers_data",
-        "object": "x_dns"
+        "key": "x-ecs-dns.answers_data",
+        "object": "dns"
       },
       "name": {
-        "key": "x_ecs_dns.answers_name",
-        "object": "x_dns"
+        "key": "x-ecs-dns.answers_name",
+        "object": "dns"
       },
       "ttl": {
-        "key": "x_ecs_dns.answers_ttl",
-        "object": "x_dns"
+        "key": "x-ecs-dns.answers_ttl",
+        "object": "dns"
       },
       "type": {
-        "key": "x_ecs_dns.answers_type",
-        "object": "x_dns"
+        "key": "x-ecs-dns.answers_type",
+        "object": "dns"
       }
     },
     "header_flags": {
-        "key": "x_ecs_dns.header_flags",
-        "object": "x_dns"
+        "key": "x-ecs-dns.header_flags",
+        "object": "dns"
     },
     "id": {
-      "key": "x_ecs_dns.id",
-      "object": "x_dns"
+      "key": "x-ecs-dns.id",
+      "object": "dns"
     },
     "op_code": {
-      "key": "x_ecs_dns.op_code",
-      "object": "x_dns"
+      "key": "x-ecs-dns.op_code",
+      "object": "dns"
     },
     "question": {
       "class": {
-        "key": "x_ecs_dns.question_class",
-        "object": "x_dns"
+        "key": "x-ecs-dns.question.class",
+        "object": "dns"
       },
       "name": [
         {
@@ -1097,7 +1097,7 @@
         },
         {
         "key": "x-ecs-dns.question.name_ref",
-        "object": "x_dns",
+        "object": "dns",
         "references": "dns_domain"
         }
       ],
@@ -1108,21 +1108,21 @@
         },
         {
         "key": "x-ecs-dns.question.registered_domain_ref",
-        "object": "x_dns",
+        "object": "dns",
         "references": "dns_registered_domain"
         }
       ],
       "subdomain": {
-        "key": "x_ecs_dns.question_subdomain",
-        "object": "x_dns"
+        "key": "x-ecs-dns.question.subdomain",
+        "object": "dns"
       },
       "top_level_domain": {
-        "key": "x_ecs_dns.question_top_level_domain",
-        "object": "x_dns"
+        "key": "x-ecs-dns.question.top_level_domain",
+        "object": "dns"
       },
       "type": {
-        "key": "x_ecs_dns.question_type",
-        "object": "x_dns"
+        "key": "x-ecs-dns.question.type",
+        "object": "dns"
       }
     },
     "resolved_ip": [
@@ -1133,18 +1133,18 @@
       },
       {
         "key": "x-ecs-dns.resolved_ip_refs",
-        "object": "x_dns",
+        "object": "dns",
         "references": "resolved_ip",
         "unwrap": true
       }
     ],
     "response_code": {
-      "key": "x_ecs_dns.response_code",
-      "object": "x_dns"
+      "key": "x-ecs-dns.response_code",
+      "object": "dns"
     },
     "type": {
-      "key": "x_ecs_dns.type",
-      "object": "x_dns"
+      "key": "x-ecs-dns.type",
+      "object": "dns"
     }
   },
   "ecs": {

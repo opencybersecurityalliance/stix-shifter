@@ -75,6 +75,14 @@ data = {
           "file": {
               "name": "example.png",
               "directory": "/home/alice"
+          },
+          "dns": {
+            "question": {
+                "name": "officehomeblobs.blob.core.windows.net",
+            },
+            "resolved_ip": [
+                "40.116.120.16", "1.2.3.4"
+            ]
           }
 }
 
@@ -313,3 +321,20 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         assert(objects == {})
+    
+    def test_unwrap_flag_in_mapping(self):        
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        assert (result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        
+        assert ('objects' in observed_data)
+        objects = observed_data['objects']
+
+        custom_dns_obj = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ecs-dns')
+        assert (isinstance(custom_dns_obj['resolved_ip_refs'], list) and isinstance(custom_dns_obj['resolved_ip_refs'][0], str))
+
+        assert objects[custom_dns_obj['resolved_ip_refs'][0]].get('value') == "40.116.120.16"
+        assert objects[custom_dns_obj['resolved_ip_refs'][1]].get('value') == "1.2.3.4"

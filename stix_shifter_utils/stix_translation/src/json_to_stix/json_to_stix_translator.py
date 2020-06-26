@@ -113,7 +113,7 @@ class DataSourceObjToStixObj:
         DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value, group)
 
     @staticmethod
-    def _valid_stix_value(props_map, key, stix_value, unwind=False):
+    def _valid_stix_value(props_map, key, stix_value, unwrap=False):
         """
         Checks that the given STIX value is valid for this STIX property
 
@@ -131,7 +131,7 @@ class DataSourceObjToStixObj:
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
-            if unwind and isinstance(stix_value, list):
+            if unwrap and isinstance(stix_value, list):
                 for val in stix_value:
                     if not pattern.match(str(val)):
                         return False
@@ -186,10 +186,10 @@ class DataSourceObjToStixObj:
             group = False
             unwrap = False
 
-            # unwrapping array of stix values to separate stix objects
+            # unwrap array of stix values to separate stix objects
             if 'unwrap' in ds_key_def:
                 unwrap = True
-            
+
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
                 if 'references' in ds_key_def:
@@ -213,11 +213,11 @@ class DataSourceObjToStixObj:
                                     stix_value.append(val)
                         else:
                             stix_value = object_map.get(references)
-                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
+                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                                 continue
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
                         continue
 
                 # Group Values
@@ -225,6 +225,7 @@ class DataSourceObjToStixObj:
                     group = True
 
                 if unwrap and 'references' not in ds_key_def and isinstance(stix_value, list):
+                    self.logger.debug("Unwrapping {} of {}".format(stix_value, object_name))
                     for i in range(len(stix_value)):
                         obj_i_name = "{}_{}".format(object_name, i+1)
                         val = stix_value[i]
