@@ -3,7 +3,7 @@
         "host": {
             "label": "Management IP address or Hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the IP address or hostname of the Alertflex controller"
         },
         "port": {
             "label": "Host Port",
@@ -23,7 +23,7 @@
         },
         "concurrent": {
             "label": "Concurrent Search Limit",
-            "description": "The number of simultaneous connections that can be made between Cloud Pak for Security and the data source. The default limit for the number of connections is 4."
+            "description": "The number of simultaneous connections to the data source. The default limit for the number of connections is 4."
         },
         "cert": {
             "label": "Synchronous dummy Connection Certificate",
