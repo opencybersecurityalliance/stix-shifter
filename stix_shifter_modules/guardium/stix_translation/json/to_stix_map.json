@@ -1,156 +1,115 @@
 {
-  "Login Succeeded": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
+  "UserName": {
+    "key": "user-account.user_id"
   },
-  "Client IP": [
+  "LogSourceId": {
+    "key": "x__custom_property.log_source_id",
+    "cybox": false
+  },
+  "Magnitude": {
+    "key": "x__custom_property.magnitude",
+    "cybox": false
+  },
+  "SourceIpV4": [
     {
       "key": "ipv4-addr.value",
       "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
     }
   ],
-  "Server IP": [
+  "DestinationIpV4": [
     {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
-    }
-  ],
-  "DB User Name": [
-    {
-      "key": "user-account.user_id"
     },
     {
-      "key": "x_com_guardium.db_user",
-      "cybox": false
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
     }
   ],
-  "OS User": [
+  "SourceIpV6": [
     {
-      "key": "user-account.user_id"
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
     },
     {
-      "key": "x_com_guardium.os_user",
-      "cybox": false
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
     }
   ],
-  "Count of Exceptions": {
+  "DestinationIpV6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "EventCount": {
     "key": "number_observed",
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "Audit Process Description": {
-    "key": "x_com_guardium.audit_process_description",
-    "cybox": false
-  },
-  "Audit Task Description": {
-    "key": "x_com_guardium.audit_task_description",
-    "cybox": false
-  },
-  "DETAIL": {
-    "key": "x_com_guardium.run_detail",
-    "cybox": false
-  },
-  "Event Type": {
-    "key": "x_com_guardium.event_type",
-    "cybox": false
-  },
-  "Audit Process Id": {
-    "key": "x_com_guardium.audit_process_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Audit Task Id": {
-    "key": "x_com_guardium.audit_task_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Run Id": {
-    "key": "x_com_guardium.run_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Database Name": {
-    "key": "x_com_guardium.database_name",
-    "cybox": false
-  },
-  "Full Sql": {
-    "key": "x_com_guardium.full_sql",
-    "cybox": false
-  },
-  "Service Name": {
-    "key": "x_com_guardium.service_name",
-    "cybox": false
-  },
-
-  "Error Code": {
-    "key": "x_com_guardium.exception_errorcode",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Exception Description": {
-    "key": "x_com_guardium.exception_description",
-    "cybox": false
-  },
-  "Database Error Text": {
-    "key": "x_com_guardium.exception_database_error_text",
-    "cybox": false
-  },
-  "SQL string that caused the Exception": {
-    "key": "x_com_guardium.sql_caused_exception",
-    "cybox": false
-  },
-  "Session Start": [
+  "StartTime": [
     {
       "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Session End": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
-    {
-      "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Exception Timestamp": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
-    {
-      "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
+      "transformer": "EpochToTimestamp",
       "cybox": false
     },
     {
       "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
+      "transformer": "EpochToTimestamp",
       "cybox": false
     }
   ],
-  "Timestamp": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
-    {
-      "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    }
-  ]
+  "Url": {
+    "key": "url.value"
+  },
+  "FileName": {
+    "key": "file.name"
+  },
+  "Payload": {
+    "key": "artifact.payload_bin"
+  },
+  "DestinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "SourcePort": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "NetworkProtocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "DomainName": {
+    "key": "domain-name.value"
+  },
+  "Process": {
+    "Path": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "Pid": [
+      {
+        "object": "proc",
+        "key": "process.id"
+      }
+    ]
+  }
 }
