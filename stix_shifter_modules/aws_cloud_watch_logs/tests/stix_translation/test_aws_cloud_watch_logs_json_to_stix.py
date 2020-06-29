@@ -162,8 +162,8 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert observed_data['id'] is not None
         assert observed_data['type'] == "observed-data"
         assert observed_data['created_by_ref'] == result_bundle_identity['id']
-        assert observed_data['x_com_aws_guardduty_finding'] is not None
-        assert observed_data['x_com_aws'] is not None
+        assert observed_data['x_aws_guardduty_finding'] is not None
+        assert observed_data['x_aws'] is not None
         assert observed_data['created'] is not None
         assert observed_data['modified'] is not None
         assert observed_data['number_observed'] is not None
@@ -221,7 +221,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
 
         assert 'objects' in observed_data
-        custom_object = observed_data['x_com_aws']
+        custom_object = observed_data['x_aws']
 
         assert custom_object.keys() == {'account_id'}
         assert custom_object['account_id'] == '979326520502'
@@ -462,7 +462,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
 
         assert 'objects' in observed_data
-        custom_object = observed_data['x_com_aws_guardduty_finding']
+        custom_object = observed_data['x_aws_guardduty_finding']
 
         assert custom_object.keys() == {'severity', 'id', 'type', 'title', 'timestamp'}
         assert custom_object['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'

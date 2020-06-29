@@ -131,8 +131,8 @@ class TestTransform(object):
     #         data_source, map_data, [data], transformers.get_all_transformers(), options)
     #     observed_data = result_bundle['objects'][1]
 
-    #     assert('x_com_ibm_ariel' in observed_data)
-    #     custom_props = observed_data['x_com_ibm_ariel']
+    #     assert('x_ibm_ariel' in observed_data)
+    #     custom_props = observed_data['x_ibm_ariel']
     #     assert(custom_props['identity_ip'] == data['identityip'])
     #     assert(custom_props['log_source_id'] == data['logsourceid'])
     #     assert(custom_props['qid'] == data['qid'])

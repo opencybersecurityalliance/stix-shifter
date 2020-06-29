@@ -6,15 +6,15 @@
 ___
 ### ipv4-addr
 - value
-- x_com_aws_interface_id
-- x_com_aws_ip_type
-- x_com_aws_remote_city_name
-- x_com_aws_remote_country_name
+- x_aws_interface_id
+- x_aws_ip_type
+- x_aws_remote_city_name
+- x_aws_remote_country_name
 
 ___
 ### ipv6-addr
 - value
-- x_com_aws_interface_id
+- x_aws_interface_id
 
 ___
 ### network-traffic
@@ -32,18 +32,18 @@ ___
 - account_login
 
 ___
-### x_com_aws
+### x_aws
 - account_id
 - region
 
 ___
-### x_com_aws_api
+### x_aws_api
 - access_key_id
 - api
 - service_name
 
 ___
-### x_com_aws_guardduty_finding
+### x_aws_guardduty_finding
 - probe_port
 - timestamp
 - id
@@ -52,13 +52,13 @@ ___
 - title
 
 ___
-### x_com_aws_instance
+### x_aws_instance
 - image_id
 - instance_id
 - availability_zone
 
 ___
-### x_com_aws_vpc
+### x_aws_vpc
 - subnet_id
 - vpc_id
 - security_group_id

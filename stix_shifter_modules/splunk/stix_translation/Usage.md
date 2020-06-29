@@ -93,7 +93,7 @@ Translated (Stix Results):
                     "payload_bin": "SmFuIDA4IDIwMTkgMTU6MTg6MDQgMTkyLjE2OC4zMy4xMzEgZmVub3RpZnktMi5hbGVydDogQ0VGOjB8RmlyZUV5ZXxNQVN8Ni4yLjAuNzQyOTh8TU98bWFsd2FyZS1vYmplY3R8NHxydD1KYW4gMDggMjAxOSAxNToxODowNCBaIHNyYz0xNjkuMjUwLjAuMSBkcHQ9MTEyMCBkc3Q9MTI3LjAuMC4xIHNwdD0xMjIwIHNtYWM9QUE6QkI6Q0M6REQ6MTE6MjIgZG1hYz1FRTpERDpCQjpBQTpDQzoxMSBjbjJMYWJlbD1zaWQgY24yPTExMSBmaWxlSGFzaD00MWEyNjI1NWQxNmQxMjFkYzUyNWE2NDQ1MTQ0Yjg5NSBwcm90bz10Y3AgcmVxdWVzdD1odHRwOi8vcWEtc2VydmVyLmVuZy5maXJlZXllLmNvbS9RRS9Ob3RpZmljYXRpb25QY2Fwcy81OC4yNTMuNjguMjlfODAtMTkyLjE2OC44NS4xMjhfMTE2NS0yMTE5MjgzMTA5X1QuZXhlIGNzM0xhYmVsPW9zaW5mbyBjczM9TWljcm9zb2Z0IFdpbmRvd3M3IFByb2Zlc3Npb25hbCA2LjEgc3AxIGR2Y2hvc3Q9d2FsbHkgZHZjPTEwLjIuMTAxLjEwMSBjbjFMYWJlbD12bGFuIGNuMT0wIGV4dGVybmFsSWQ9MSBjczRMYWJlbD1saW5rIGNzND1odHRwczovL3dhbGx5LmZpcmVleWUuY29tL21hbHdhcmVfYW5hbHlzaXMvYW5hbHlzZXM/bWFpZD0xIGNzMkxhYmVsPWFub21hbHkgY3MyPW1pc2MtYW5vbWFseSBjczFMYWJlbD1zbmFtZSBjczE9RkVfVVBYO1Ryb2phbi5QV1MuT25saW5lR2FtZXMgCg=="
                 }
             },
-            "x_com_splunk_spl": {
+            "x_splunk_spl": {
                 "user": "sname"
             },
             "created": "2019-01-08T15:18:04.000Z",

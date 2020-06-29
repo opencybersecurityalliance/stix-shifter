@@ -71,7 +71,7 @@
       "object": "authentication"
     },
     {
-      "key": "x_com_splunk_spl.user",
+      "key": "x_splunk_spl.user",
       "cybox": false
     },
     {
@@ -92,7 +92,7 @@
     }
   ],
   "bytes": {
-    "key": "x_com_splunk_spl.bytes",
+    "key": "x_splunk_spl.bytes",
     "cybox": false
   },
   "ssl_hash": [

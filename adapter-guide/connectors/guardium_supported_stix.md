@@ -7,7 +7,7 @@ ___
 - user_id
 
 ___
-### x_com_guardium
+### x_guardium
 - db_user
 - os_user
 - audit_process_description
