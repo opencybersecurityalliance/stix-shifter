@@ -2,15 +2,16 @@
     "connection": {
         "type": {
             "default": "QRadar",
-            "displayName": "IBM® QRadar"
+            "displayName": "IBM\u00ae QRadar and QRadar On Cloud",
+            "type": "connectorType"
         },
         "host": {
             "type": "text",
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
-            "default": 443,
-            "type": "number"
+            "type": "number",
+            "default": 443
         },
         "help": {
             "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
@@ -24,25 +25,6 @@
             "type": "password",
             "optional": true
         },
-        "proxy": {
-            "type" : "fields",
-            "url": {
-                "type": "text",
-                "optional": true
-            },
-            "auth": {
-                "type": "password",
-                "optional": true
-            },
-            "x_forward_proxy": {
-                "type": "text",
-                "optional": true
-            },
-            "x_forward_proxy_auth": {
-                "type": "password",
-                "optional": true
-            }
-        },
         "data_lake": {
             "type": "boolean",
             "default": false
@@ -50,9 +32,13 @@
         "options": {
             "validate_pattern": {
                 "default": false,
-                "hidden": true
+                "hidden": true,
+                "type": "boolean",
+                "optional": true,
+                "previous": "connection.validate_pattern"
             },
             "hash_options": {
+                "type": "json",
                 "optional": true,
                 "hidden": true
             }

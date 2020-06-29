@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "msatp",
             "displayName": "Microsoft Defender Advanced Threat Protection"
         },
         "host": {

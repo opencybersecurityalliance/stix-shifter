@@ -78,13 +78,13 @@ Will return the following STIX observable:
                     "user_id": "testadmin"
                 }
             },
-            "x_com_msazure_sentinel_alert": {
+            "x_msazure_sentinel_alert": {
                 "id": "2518255519019388960_5cc61270-5bd7-42df-b048-2a5eee65357f",
                 "title": "Suspicious SVCHOST process executed",
                 "provider": "ASC",
                 "vendor": "Microsoft"
             },
-            "x_com_msazure_sentinel": {
+            "x_msazure_sentinel": {
                 "tenant_id": "b73e5ba8-34d5-495a-9901-06bdb84cf13e",
                 "subscription_id": "083de1fb-cd2d-4b7c-895a-2b5af1d091e8"
             },
@@ -133,13 +133,13 @@ Will return the following STIX observable:
                     "user_id": "TEST-WINDOW-UPD$"
                 }
             },
-            "x_com_msazure_sentinel_alert": {
+            "x_msazure_sentinel_alert": {
                 "id": "2518258113113268043_0f54bc18-961c-48b7-8900-051e40dc8d22",
                 "title": "Rare SVCHOST service group executed",
                 "provider": "ASC",
                 "vendor": "Microsoft"
             },
-            "x_com_msazure_sentinel": {
+            "x_msazure_sentinel": {
                 "tenant_id": "b73e5ba8-34d5-495a-9901-06bdb84cf13e",
                 "subscription_id": "083de1fb-cd2d-4b7c-895a-2b5af1d091e8"
             },
@@ -188,13 +188,13 @@ Will return the following STIX observable:
                     "user_id": "test-window$"
                 }
             },
-            "x_com_msazure_sentinel_alert": {
+            "x_msazure_sentinel_alert": {
                 "id": "2518268485253060642_52b1a353-2fd8-4c45-8f8a-94db98dca29d",
                 "title": "Rare SVCHOST service group executed",
                 "provider": "ASC",
                 "vendor": "Microsoft"
             },
-            "x_com_msazure_sentinel": {
+            "x_msazure_sentinel": {
                 "tenant_id": "b73e5ba8-34d5-495a-9901-06bdb84cf13e",
                 "subscription_id": "083de1fb-cd2d-4b7c-895a-2b5af1d091e8"
             },
@@ -212,7 +212,7 @@ STIX to sentinel field mapping is defined in `from_stix_map.json` <br/>
 
 This example input pattern:
 
-`translate azure_sentinel query '{} "[x_com_msazure_sentinel_alert:provider = 'ASC'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
+`translate azure_sentinel query '{} "[x_msazure_sentinel_alert:provider = 'ASC'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
 
 Returns the following Odata(native) query:
 
@@ -267,13 +267,13 @@ Will return the following STIX observable:
                     "user_id": "testadmin"
                 }
             },
-            "x_com_msazure_sentinel_alert": {
+            "x_msazure_sentinel_alert": {
                 "id": "2518254730385772806_da637123660281149084_-953649836:4wVg68RS3EYNc3Qb7xJUNrYw9KEUBA1wZ3IVwRA0hmg=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df",
                 "title": "Suspected credential theft activity",
                 "provider": "ASC",
                 "vendor": "Microsoft"
             },
-            "x_com_msazure_sentinel": {
+            "x_msazure_sentinel": {
                 "tenant_id": "b73e5ba8-34d5-495a-9901-06bdb84cf13e",
                 "subscription_id": "083de1fb-cd2d-4b7c-895a-2b5af1d091e8"
             },
@@ -309,13 +309,13 @@ Will return the following STIX observable:
                     "user_id": "testadmin"
                 }
             },
-            "x_com_msazure_sentinel_alert": {
+            "x_msazure_sentinel_alert": {
                 "id": "2518254730385772806_da637123660281149084_-953649836:JGqJp4SlSroeE_6c3bZL6R6oWUal2lFJRO3d6N8jgyk=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df",
                 "title": "Suspected credential theft activity",
                 "provider": "ASC",
                 "vendor": "Microsoft"
             },
-            "x_com_msazure_sentinel": {
+            "x_msazure_sentinel": {
                 "tenant_id": "b73e5ba8-34d5-495a-9901-06bdb84cf13e",
                 "subscription_id": "083de1fb-cd2d-4b7c-895a-2b5af1d091e8"
             },
@@ -364,8 +364,8 @@ STIX attributes that map to multiple sentinel fields will have those fields with
 Sentinel does not support operator support for the following attributes,
 
 `IN/NOT-IN Operator`
-* x_com_msazure_sentinel_alert:provider
-* x_com_msazure_sentinel_alert:vendor
+* x_msazure_sentinel_alert:provider
+* x_msazure_sentinel_alert:vendor
 
 
 `LIKE Operator` 

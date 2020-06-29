@@ -57,7 +57,7 @@
       "path": ["path"]
     }
   },
-  "x-com-cb-response" : {
+  "x-cb-response" : {
     "fields": {
       "hostname": ["hostname"],
       "host_count": ["host_count"],
