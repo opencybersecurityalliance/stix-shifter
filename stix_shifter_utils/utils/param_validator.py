@@ -1,16 +1,25 @@
 import re
 import json
 from jsonmerge import merge
+import importlib
+from os import path
 
 
 def get_merged_config(module):
-    module_config_path = f'stix_shifter_modules/{module}/configuration/config.json'
-    base_config_path = f'stix_shifter_modules/config.json'
+    ss_modules_path = importlib.import_module('stix_shifter_modules')
+    if isinstance(ss_modules_path.__path__, list):
+        base_path = ss_modules_path.__path__[0]
+    else:
+        base_path = ss_modules_path.__path__._path[0]
+    module_config_path = path.join(base_path, module, 'configuration', 'config.json')
+    base_config_path = path.join(base_path, 'config.json')
     with open(module_config_path) as mapping_file:
         module_configs = json.load(mapping_file)
-    with open(base_config_path) as mapping_file:
-        base_configs = json.load(mapping_file)
-    return merge(base_configs, module_configs)
+    if path.isfile(base_config_path):
+        with open(base_config_path) as mapping_file:
+            base_configs = json.load(mapping_file)
+        module_configs = merge(base_configs, module_configs)
+    return module_configs
 
 
 def modernize_objects(module, params):
@@ -131,7 +140,7 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     validated_params[key] = value['default']
                 elif ('optional' in expected_configs[key] and expected_configs[key]['optional']):
                     pass
-                else:
+                elif key_path != 'connection.type':
                     errors.append(key_path)
 
 

@@ -1,7 +1,6 @@
 {
     "connection": {
         "type": {
-            "default": "carbonblack",
             "displayName": "Carbon Black Response"
         },
         "host": {
@@ -9,8 +8,8 @@
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
-            "default": 443,
-            "type": "number"
+            "type": "number",
+            "default": 443
         },
         "help": {
             "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-carbon-black.html",

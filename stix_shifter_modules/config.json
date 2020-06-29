@@ -31,16 +31,19 @@
                 "previous": "connection.dialects"
             },
             "validate_pattern": {
+                "type": "boolean",
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.validate_pattern"
             },
             "stix_validator": {
+                "type": "boolean",
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.stix_validator"
             },
             "mapping": {
+                "type": "json",
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.mapping"

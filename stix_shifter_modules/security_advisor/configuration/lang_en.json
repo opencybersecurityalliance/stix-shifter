@@ -5,7 +5,7 @@
             "description": "Specify theHost URL of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "help": {
-            "label": "Help",
+            "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         }
     },
