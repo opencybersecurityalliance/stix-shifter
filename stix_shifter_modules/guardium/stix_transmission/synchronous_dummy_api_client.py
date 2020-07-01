@@ -1,4 +1,5 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from .guard_utils import GuardUtil
 
 class APIClient():
 
@@ -16,9 +17,12 @@ class APIClient():
 
         # Placeholder client to allow dummy transmission calls.
         # Remove when implementing data source API client.
-        self.client = "data source API client"
+        url = "https://"+connection["host"]+":"+connection["port"]
+        self.client = GuardUtil(connection["options"]["client_id"], url, connection["options"]["client_secret"], configuration["auth"]["username"], configuration["auth"]["password"])
+        #self.client = "data source API client"
 
     def ping_data_source(self):
+        
         # Pings the data source
         return {"code": 200, "success": True}
 
@@ -30,3 +34,6 @@ class APIClient():
         # Optional since this may not be supported by the data source API
         # Delete the search
         return {"code": 200, "success": True}
+    
+    def create_search(self, query):
+        self.client.create_search(query)

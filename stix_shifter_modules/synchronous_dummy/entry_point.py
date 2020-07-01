@@ -22,7 +22,7 @@ class EntryPoint(EntryPointBase):
             api_client = APIClient(connection, configuration)
             base_sync_connector = BaseSyncConnector()
             ping_connector = SynchronousDummyPingConnector(api_client)
-            query_connector = base_sync_connector
+            query_connector = GuardiumQueryConnector(api_client)
             status_connector = base_sync_connector            
             results_connector = SynchronousDummyResultsConnector(api_client)
             delete_connector = SynchronousDummyDeleteConnector(api_client)            

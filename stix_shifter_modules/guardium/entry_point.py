@@ -3,6 +3,7 @@ from .stix_transmission.synchronous_dummy_ping_connector import SynchronousDummy
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .stix_transmission.synchronous_dummy_delete_connector import SynchronousDummyDeleteConnector
 from .stix_transmission.synchronous_dummy_results_connector import SynchronousDummyResultsConnector
+from stix_shifter_modules.guardium1.stix_transmission.guardium_query_connector import GuardiumQueryConnector
 from .stix_transmission.synchronous_dummy_api_client import APIClient
 from .stix_translation.data_mapper import DataMapper
 from .stix_translation.query_translator import QueryTranslator
@@ -22,7 +23,7 @@ class EntryPoint(EntryPointBase):
             api_client = APIClient(connection, configuration)
             base_sync_connector = BaseSyncConnector()
             ping_connector = SynchronousDummyPingConnector(api_client)
-            query_connector = base_sync_connector
+            query_connector = GuardiumQueryConnector(api_client)
             status_connector = base_sync_connector            
             results_connector = SynchronousDummyResultsConnector(api_client)
             delete_connector = SynchronousDummyDeleteConnector(api_client)            
