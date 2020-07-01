@@ -7,7 +7,11 @@ from . import query_constructor
 
 class QueryTranslator(BaseQueryTranslator):
 
+<<<<<<< HEAD
     def transform_query(self, data, antlr_parsing_object):
+=======
+    def transform_query(self, data, antlr_parsing_object, data_model_mapper, options, mapping=None):
+>>>>>>> guard-dev
         """
         Transforms STIX query into data source query format. Based on a mapping file
         :param data: STIX query string to transform into data source query format
@@ -23,5 +27,9 @@ class QueryTranslator(BaseQueryTranslator):
 #       Notes: data model mapper is passed now along with option.
 #               Options will contain "remote sources" and we should use the option to do the remote source selection
         query_string = query_constructor.translate_pattern(antlr_parsing_object, 
+<<<<<<< HEAD
             self, self.options)
+=======
+            data_model_mapper, options)
+>>>>>>> guard-dev
         return query_string

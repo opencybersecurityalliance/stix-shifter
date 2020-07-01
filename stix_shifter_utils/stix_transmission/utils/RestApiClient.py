@@ -78,6 +78,7 @@ class RestApiClient:
                     call = getattr(session, method.lower())
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
                     actual_headers["Host"] = self.sni
+<<<<<<< HEAD
 
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
                                 timeout=timeout)
@@ -85,7 +86,16 @@ class RestApiClient:
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
+=======
+                print("password="+urldata["password"])
+                response = call(url, headers=actual_headers, params=urldata, cert=self.client_cert_content, data=data, verify=self.server_cert_content, timeout=timeout)
+                #print(response)
+                if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and 'Content-Type' in response.headers \
+                        and "Deprecated" in response.headers['Content-Type']:
+                    print("WARNING: " +
+>>>>>>> guard-dev
                           response.headers['Content-Type'], file=sys.stderr)
+                print(response.json()['access_token'])          
                 return ResponseWrapper(response)
             except Exception as e:
                 self.logger.error('exception occured during requesting url: ' + str(e))

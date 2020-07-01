@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 from .stix_transmission.api_client import APIClient
 from .stix_transmission.ping_connector import PingConnector
@@ -7,9 +8,9 @@ from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
-import os
 
 
+<<<<<<< HEAD
 class EntryPoint(BaseEntryPoint):
 
     # python main.py translate async_dummy query '{}' "[ipv4-addr:value = '127.0.0.1']"
@@ -26,17 +27,16 @@ class EntryPoint(BaseEntryPoint):
             # ...implement your own setup similar to the following:
 
             api_client = APIClient(connection, configuration)
-            ping_connector = PingConnector(api_client)
-            query_connector = QueryConnector(api_client)
+            ping_connector = GuardiumPingConnector(api_client)
+            query_connector = GuardiumQueryConnector(api_client)
             status_connector = StatusConnector(api_client)
             results_connector = ResultsConnector(api_client)
             delete_connector = DeleteConnector(api_client)
-
-            self.set_ping_connector(ping_connector)
-            self.set_query_connector(query_connector)
-            self.set_status_connector(status_connector)
             self.set_results_connector(results_connector)
+            self.set_status_connector(status_connector)
             self.set_delete_connector(delete_connector)
+            self.set_query_connector(query_connector)
+            self.set_ping_connector(ping_connector)
         else:
             # Use default translation setup with default dialect otherwise...
             # self.setup_translation_simple(dialect_default='default')
