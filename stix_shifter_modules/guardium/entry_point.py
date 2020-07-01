@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.entry_point_base import EntryPointBase
-from .stix_transmission.synchronous_dummy_ping_connector import SynchronousDummyPingConnector
+from .stix_transmission.synchronous_dummy_ping_connector import GuardiumPingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .stix_transmission.synchronous_dummy_delete_connector import SynchronousDummyDeleteConnector
 from .stix_transmission.synchronous_dummy_results_connector import SynchronousDummyResultsConnector
@@ -22,7 +22,7 @@ class EntryPoint(EntryPointBase):
         if connection:            
             api_client = APIClient(connection, configuration)
             base_sync_connector = BaseSyncConnector()
-            ping_connector = SynchronousDummyPingConnector(api_client)
+            ping_connector = GuardiumPingConnector(api_client)
             query_connector = GuardiumQueryConnector(api_client)
             status_connector = base_sync_connector            
             results_connector = SynchronousDummyResultsConnector(api_client)
