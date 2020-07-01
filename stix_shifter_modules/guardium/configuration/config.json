@@ -1,11 +1,10 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® Guardium"
+            "displayName": "Async Sample"
         },
         "host": {
-            "type": "text",
-            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+            "type": "text"
         },
         "port": {
             "type": "number",
@@ -13,7 +12,7 @@
         },
         "help": {
             "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-elastic.html"
+            "default": "<Help URL>"
         },
         "sni": {
             "type": "text",
@@ -22,19 +21,11 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        },
-        "client_id": {
-            "type": "text",
-            "previous": "connection.options.client_id"
-        },
-        "client_secret": {
-            "type": "password",
-            "previous": "connection.options.client_secret"
         }
     },
     "configuration": {
+        "type" : "fields",
         "auth": {
-            "type" : "fields",
             "username": {
                 "type": "password"
             },
