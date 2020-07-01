@@ -27,19 +27,11 @@ class EntryPoint(BaseEntryPoint):
 
             api_client = APIClient(connection, configuration)
             base_sync_connector = BaseSyncConnector()
-<<<<<<< HEAD
             ping_connector = PingConnector(api_client)
             query_connector = base_sync_connector
             status_connector = base_sync_connector
             results_connector = ResultsConnector(api_client)
             delete_connector = DeleteConnector(api_client)
-=======
-            ping_connector = SynchronousDummyPingConnector(api_client)
-            query_connector = GuardiumQueryConnector(api_client)
-            status_connector = base_sync_connector            
-            results_connector = SynchronousDummyResultsConnector(api_client)
-            delete_connector = SynchronousDummyDeleteConnector(api_client)            
->>>>>>> guard-dev
 
             self.set_results_connector(results_connector)
             self.set_status_connector(status_connector)
@@ -62,11 +54,6 @@ class EntryPoint(BaseEntryPoint):
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
-<<<<<<< HEAD
             query_translator = QueryTranslator(options, dialect, filepath)
             results_translator = JSONToStix(options, dialect, filepath)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
-=======
-            data_mapper = DataMapper(options, dialect=dialect)
-            self.add_dialect(dialect, data_mapper=data_mapper, query_translator=query_translator, results_translator=results_translator, default=False)
->>>>>>> guard-dev

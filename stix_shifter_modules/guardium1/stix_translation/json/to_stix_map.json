@@ -21,11 +21,7 @@
       "key": "user-account.user_id"
     },
     {
-<<<<<<< HEAD
       "key": "x_guardium.db_user",
-=======
-      "key": "x_com_guardium.db_user",
->>>>>>> guard-dev
       "cybox": false
     }
   ],
@@ -34,11 +30,7 @@
       "key": "user-account.user_id"
     },
     {
-<<<<<<< HEAD
       "key": "x_guardium.os_user",
-=======
-      "key": "x_com_guardium.os_user",
->>>>>>> guard-dev
       "cybox": false
     }
   ],
@@ -48,7 +40,6 @@
     "transformer": "ToInteger"
   },
   "Audit Process Description": {
-<<<<<<< HEAD
     "key": "x_guardium.audit_process_description",
     "cybox": false
   },
@@ -66,48 +57,20 @@
   },
   "Audit Process Id": {
     "key": "x_guardium.audit_process_id",
-=======
-    "key": "x_com_guardium.audit_process_description",
-    "cybox": false
-  },
-  "Audit Task Description": {
-    "key": "x_com_guardium.audit_task_description",
-    "cybox": false
-  },
-  "DETAIL": {
-    "key": "x_com_guardium.run_detail",
-    "cybox": false
-  },
-  "Event Type": {
-    "key": "x_com_guardium.event_type",
-    "cybox": false
-  },
-  "Audit Process Id": {
-    "key": "x_com_guardium.audit_process_id",
->>>>>>> guard-dev
     "transformer": "ToInteger",
     "cybox": false
   },
   "Audit Task Id": {
-<<<<<<< HEAD
     "key": "x_guardium.audit_task_id",
-=======
-    "key": "x_com_guardium.audit_task_id",
->>>>>>> guard-dev
     "transformer": "ToInteger",
     "cybox": false
   },
   "Run Id": {
-<<<<<<< HEAD
     "key": "x_guardium.run_id",
-=======
-    "key": "x_com_guardium.run_id",
->>>>>>> guard-dev
     "transformer": "ToInteger",
     "cybox": false
   },
   "Database Name": {
-<<<<<<< HEAD
     "key": "x_guardium.database_name",
     "cybox": false
   },
@@ -117,31 +80,15 @@
   },
   "Service Name": {
     "key": "x_guardium.service_name",
-=======
-    "key": "x_com_guardium.database_name",
-    "cybox": false
-  },
-  "Full Sql": {
-    "key": "x_com_guardium.full_sql",
-    "cybox": false
-  },
-  "Service Name": {
-    "key": "x_com_guardium.service_name",
->>>>>>> guard-dev
     "cybox": false
   },
 
   "Error Code": {
-<<<<<<< HEAD
     "key": "x_guardium.exception_errorcode",
-=======
-    "key": "x_com_guardium.exception_errorcode",
->>>>>>> guard-dev
     "transformer": "ToInteger",
     "cybox": false
   },
   "Exception Description": {
-<<<<<<< HEAD
     "key": "x_guardium.exception_description",
     "cybox": false
   },
@@ -151,17 +98,6 @@
   },
   "SQL string that caused the Exception": {
     "key": "x_guardium.sql_caused_exception",
-=======
-    "key": "x_com_guardium.exception_description",
-    "cybox": false
-  },
-  "Database Error Text": {
-    "key": "x_com_guardium.exception_database_error_text",
-    "cybox": false
-  },
-  "SQL string that caused the Exception": {
-    "key": "x_com_guardium.sql_caused_exception",
->>>>>>> guard-dev
     "cybox": false
   },
   "Session Start": [
