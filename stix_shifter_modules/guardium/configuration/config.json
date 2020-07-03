@@ -1,18 +1,37 @@
 {
     "connection": {
         "type": {
-            "displayName": "Async Sample"
+            "default": "guardium"
         },
         "host": {
             "type": "text"
         },
         "port": {
-            "type": "number",
-            "default": 443
+            "default": 8443,
+            "type": "number"
         },
         "help": {
-            "type": "link",
-            "default": "<Help URL>"
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-elastic.html",
+            "type": "link"
+        },
+        "limit": {
+            "default": 1000,
+            "max": 10000,
+            "type": "number"
+        },
+        "timeout": {
+            "default": 1,
+            "max": 60,
+            "type": "number"
+        },
+        "concurrent": {
+            "default": 4,
+            "max": 60,
+            "type": "number"
+        },
+        "cert": {
+            "type": "password",
+            "optional": true
         },
         "sni": {
             "type": "text",
@@ -21,10 +40,26 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        }
+        },
+        "options": {
+            "client_id": {
+                "type": "string",
+                "optional": true,
+                "hidden": true
+            },
+            "client_secret": {
+                "type": "password",
+                "optional": true,
+                "hidden": true
+            },
+            "grant_type": {
+                "type": "string",
+                "optional": true,
+                "hidden": true
+            }
+        } 
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
             "username": {
                 "type": "password"
@@ -32,6 +67,10 @@
             "password": {
                 "type": "password"
             }
-        }
+          },
+          "logLevel": {
+            "type": "text",
+             "default": "debug"
+            }
     }
 }

@@ -4,12 +4,9 @@ import json
 import sys, argparse, traceback
 import hashlib
 import datetime, re
-import base64
-#from car_framework.context import context
-#from car_framework.util import IncrementalImportNotPossible, RecoverableFailure, UnrecoverableFailure
 
 
-class GuardUtil(object):
+class GuardApiClient(object):
 
     def __init__ (self,client_id, url, secret, user, password):
         super().__init__()
@@ -121,7 +118,7 @@ class GuardUtil(object):
                 raise Exception(prefix+"request faild "+str(p_response.status_code)+"-"+p_response.reason)
             return False
         return True    
-    
+    '''
     def create_search(self, query_expression):
         respObj = Response()
         respObj.code = "401"
@@ -169,7 +166,7 @@ class GuardUtil(object):
 #
         print(s_id)
         return s_id
-
+'''
     def handle_report(self, report_name, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # REPORT
@@ -181,7 +178,11 @@ class GuardUtil(object):
         rest_data = str(json.loads(json_dump))
 
         response = requests.post(self.url+self.report_target, data=rest_data,headers=self.headers,verify=False)
-        if self.validate_response(response, report_name):
+        return response
+        
+        
+        #todo - build the response dict
+        '''if self.validate_response(response, report_name):
             print(response.json())
             # print("TEXT")
             # print(response.text)
@@ -205,14 +206,17 @@ class GuardUtil(object):
                 results = ""
                # context().logger.error("ERROR:" + str(errorCode) + "  " + errorMsg)
         return results
+        '''
+        return response
 
     def handle_qs(self, category, params, filters, index_from, fetch_size):
+        tbd translate output per category
         # -------------------------------------------------------------------------------
         # QS
         # -------------------------------------------------------------------------------
         # print("filters:" +filters)
         results = ""
-        params_set = {"category":"{0}".format(category), "startTime": "{0}".format(self.qs_startTime), "endTime": "{0}".format(self.qs_endTime), \
+        params_set = {"category":"{0}".format(category), "startTime": "{0}".format(params["startTime"]), "endTime": "{0}".format(params["endTime"]), \
              "fetchSize": "{0}".format(fetch_size), "firstPosition": "{0}".format(index_from)}
         if filters:
             params_set["filters"] = "{0}".format(filters)
@@ -224,7 +228,7 @@ class GuardUtil(object):
         # print(rest_data)
 
         response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
-        if self.validate_response(response, "QS -"+category):
+        '''if self.validate_response(response, "QS -"+category):
             # print(response.json())
             # print("TEXT")
             # print(response.text)
@@ -244,8 +248,8 @@ class GuardUtil(object):
                         #context().logger.exception(e)
                         raise e
                #context().logger.error("ERROR:" + str(errorCode) + "  " + errorMsg)
-                results = ""
-        return results       
+                results = ""'''
+        return response       
 
 '''
     def get_hash(self, keys, values):
@@ -262,18 +266,3 @@ class GuardUtil(object):
         context().logger.debug("----------------------")               
         return hash_val.hexdigest()
 '''
-class ResponseWrapper:
-    def __init__(self, response):
-        self.response = response
-
-    def read(self):
-        return self.response.content
-
-    @property
-    def bytes(self):
-        return self.response.content
-
-    @property
-    def code(self):
-        return self.response.status_code
-

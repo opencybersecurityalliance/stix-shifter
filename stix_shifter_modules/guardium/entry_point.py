@@ -25,8 +25,8 @@ class EntryPoint(BaseEntryPoint):
             # ...implement your own setup similar to the following:
 
             api_client = APIClient(connection, configuration)
-            ping_connector = GuardiumPingConnector(api_client)
-            query_connector = GuardiumQueryConnector(api_client)
+            ping_connector = PingConnector(api_client)
+            query_connector = QueryConnector(api_client)
             status_connector = StatusConnector(api_client)
             results_connector = ResultsConnector(api_client)
             delete_connector = DeleteConnector(api_client)
