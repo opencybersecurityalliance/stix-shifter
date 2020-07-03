@@ -210,7 +210,7 @@ class GuardApiClient(object):
         return response
 
     def handle_qs(self, category, params, filters, index_from, fetch_size):
-        tbd translate output per category
+        #tbd translate output per category
         # -------------------------------------------------------------------------------
         # QS
         # -------------------------------------------------------------------------------
