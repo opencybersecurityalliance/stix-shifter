@@ -11,6 +11,7 @@ class APIClient():
         auth = configuration.get('auth')
         headers['Authorization'] = b"Basic " + base64.b64encode(
             (auth['username'] + ':' + auth['password']).encode('ascii'))
+        # cert_verify = connection.get('selfSignedCert', False)
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
                                     connection.get('cert', None),
@@ -21,7 +22,7 @@ class APIClient():
         endpoint = self.endpoint_start + '/status'
         return self.client.call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
-    def run_search(self, query_expression):
+    def run_search(self, query_expression, offset=None, length=None):
         endpoint = self.endpoint_start + '/search'
         data = {'query': query_expression}
         result = self.client.call_api(endpoint, 'GET', urldata=data)

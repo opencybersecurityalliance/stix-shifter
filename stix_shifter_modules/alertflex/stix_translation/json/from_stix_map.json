@@ -1,15 +1,15 @@
 {
   "ipv4-addr": {
     "fields": {
-      "src_ip": ["a.srcIp"],
-      "dst_ip": ["a.dstIp"],
-      "ip": ["a.dstIp", "a.srcIp"]
+      "value": ["a.dstIp", "a.srcIp"]
     }
   },
   "network-traffic": {
     "fields": {
       "src_port": ["a.srcPort"],
-      "dst_port": ["a.dstPort"]
+      "dst_port": ["a.dstPort"],
+      "src_ref": ["a.srcIp"],
+      "dst_ref": ["a.dstIp"]
     }
   },
   "file": {
@@ -26,18 +26,14 @@
       "pid": ["a.processId"]
     }
   },
-  "user": {
+  "user-account":{
     "fields": {
-      "name": ["a.userName"]
+      "user_id": ["a.userName"]
     }
   },
-  "host": {
+  "x_org_alertflex" : {
     "fields": {
-      "agent": ["a.agentName", "a.srcHostname", "a.dstHostname"]
-    }
-  },
-  "alert" : {
-    "fields": {
+      "agent": ["a.agentName"],
       "node": ["a.nodeId"],
       "source": ["a.alertSource"],
       "type": ["a.alertType"],

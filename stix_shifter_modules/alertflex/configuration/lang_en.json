@@ -26,7 +26,7 @@
             "description": "The number of simultaneous connections to the data source. The default limit for the number of connections is 4."
         },
         "cert": {
-            "label": "Synchronous dummy Connection Certificate",
+            "label": "Synchronous Connection Certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
         },
         "sni": {
