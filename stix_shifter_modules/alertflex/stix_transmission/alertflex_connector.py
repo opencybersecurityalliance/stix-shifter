@@ -13,13 +13,21 @@ class Connector(BaseSyncConnector):
         self.api_client = APIClient(connection, configuration)
 
     def _handle_errors(self, response, return_obj):
-        response_code = response['code']
+        response_code = response.code
+        response_txt = response.read().decode('utf-8')
 
         if 200 <= response_code < 300:
             return_obj['success'] = True
-            response_json = response
-            if 'results' in response_json:
-                return_obj['data'] = response_json['results']
+            if response_txt:
+                response_json = json.loads(response_txt)
+                if 'results' in response_json:
+                    return_obj['data'] = response_json['results']
+
+        elif ErrorResponder.is_plain_string(response_txt):
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+        elif ErrorResponder.is_json_string(response_txt):
+            response_json = json.loads(response_txt)
+            ErrorResponder.fill_error(return_obj, response_json, ['reason'])
         else:
             raise UnexpectedResponseException
         return return_obj
