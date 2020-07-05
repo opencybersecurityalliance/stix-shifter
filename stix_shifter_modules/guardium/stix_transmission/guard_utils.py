@@ -25,7 +25,8 @@ class GuardApiClient(object):
         self.token_target = '/oauth/token'
         self.report_target = '/restAPI/online_report'
         self.qs_target = '/restAPI/quick_search'
-        
+        self.fields_target = '/restAPI/fieldsTitles'
+        self.fields = {}
         self.get_token()
 
         # -------------------------------------------------------------------------------
@@ -215,6 +216,9 @@ class GuardApiClient(object):
         # QS
         # -------------------------------------------------------------------------------
         # print("filters:" +filters)
+        if not self.fields  :
+             self.get_field_titles()
+        
         results = ""
         params_set = {"category":"{0}".format(category), "startTime": "{0}".format(params["startTime"]), "endTime": "{0}".format(params["endTime"]), \
              "fetchSize": "{0}".format(fetch_size), "firstPosition": "{0}".format(index_from)}
@@ -249,7 +253,54 @@ class GuardApiClient(object):
                         raise e
                #context().logger.error("ERROR:" + str(errorCode) + "  " + errorMsg)
                 results = ""'''
+        response._content = self.translate_response(json.loads(self.fields), json.loads(response.content))        
         return response       
+    
+    def get_field_titles(self):
+        # get QS field titles from Guardium
+        response = requests.get(self.url+self.fields_target, headers=self.headers,verify=False)
+        print(json.loads(response.content)["Message"])
+        self.fields = json.loads(response.content)["Message"]
+
+    def translate_response(self, fields, results):
+        #trnaslate fields from numeric tags to field titles
+        # set to lower case, replace white spaces with _
+          for result in results: 
+                num_rows = result["numRows"]
+                count = result["count"]
+                category = result["searchArgs"]["category"]
+                print("total num rows " + str(num_rows) + " count " + str(count))
+                if num_rows > 0:
+                    res = []
+                    items = result["items"]
+                    # print(items)
+                    i = 0
+                    for item in items:
+                        res_item ={}
+                        for key, value in fields.items():
+                            try:
+                                if item.get(key) is None:
+                                    continue
+                                if type(value) is list:
+                                    item_value = ""
+                                    for val in value:
+                                        item_value = item_value + str(item[val]) + " "
+                                    item_value = item_value.rstrip()    
+                                else:
+                                    item_value = item[key]
+
+                                #if key in types.keys():
+                                #    print ("Type conversion:" + types[key])
+                                #    res[key] = self.convert(types[key], item_value)
+                                #else:
+                                value = value.lower().replace(" ", "_")
+                                res_item[value]=item_value
+                                #print(str(value)+ '->'+str(res_item[value]))
+                            except Exception as e:
+                                print("ERROR: Category: "+ category +" key: " + key + " value: " + value)
+                                print(e)
+                        res.append(res_item)        
+                return json.dumps(res)
 
 '''
     def get_hash(self, keys, values):
