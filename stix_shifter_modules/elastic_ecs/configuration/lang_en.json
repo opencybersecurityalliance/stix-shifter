@@ -31,6 +31,18 @@
             "password": {
                 "label": "Password",
                 "description": "Password of the user with access to the search API"
+            },
+            "access_token": {
+                "label": "Access Token (Token Based Access)",
+                "description": "Access Token is required for token based authentication"
+            },
+            "api_key": {
+                "label": "API Key (Key Based Access)",
+                "description": "API Key is required for Key based authentication"
+            },
+            "id": {
+                "label": "ID (Key Based Access)",
+                "description": "ID is required for Key based authentication with API Key"
             }
         }
     }

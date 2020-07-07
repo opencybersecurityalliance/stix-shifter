@@ -28,10 +28,24 @@
         "auth": {
             "type" : "fields",
             "username": {
-                "type": "password"
+                "type": "password",
+                "optional": true
             },
             "password": {
-                "type": "password"
+                "type": "password",
+                "optional": true
+            },
+            "access_token": {
+                "type": "password",
+                "optional": true
+            },
+            "api_key": {
+                "type": "password",
+                "optional": true
+            },
+            "id": {
+                "type": "password",
+                "optional": true
             }
         }
     }
