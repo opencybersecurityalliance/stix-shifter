@@ -59,7 +59,7 @@
       "value": ["domainname"]
     }
   },
-  "x-com-ibm-ariel": {
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
       "event_name": ["qidname"],
@@ -82,7 +82,7 @@
       "rule_names[*]": ["rulenames"]
     }
   },
-  "x-com-ibm-finding": {
+  "x-ibm-finding": {
     "fields": {
       "name": ["crename"],
       "description": ["credescription"]

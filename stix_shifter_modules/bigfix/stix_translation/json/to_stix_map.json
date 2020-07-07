@@ -82,7 +82,7 @@
         }
     ],
     "computer_identity": {
-      "key": "x_com_bigfix_relevance.computer_identity",
+      "key": "x_bigfix_relevance.computer_identity",
       "cybox": false
     },
     "event_count": {

@@ -123,7 +123,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        custom_props = observed_data['x_com_security_advisor_finding']
+        custom_props = observed_data['x_security_advisor_finding']
         assert(custom_props['author_accountId'] == data['author_accountId'])
 
         assert(custom_props['name'] == data['name'])

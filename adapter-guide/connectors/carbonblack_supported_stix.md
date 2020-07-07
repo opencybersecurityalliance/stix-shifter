@@ -31,7 +31,7 @@ ___
 - user_id
 
 ___
-### x_com_cb_response
+### x_cb_response
 - host_name
 - host_type
 - comms_ip

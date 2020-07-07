@@ -1,16 +1,15 @@
 {
     "connection": {
         "type": {
-            "default": "security_advisor",
             "displayName": "IBM® Cloud Security Advisor"
         },
         "host": {
-            "default": "https://us-south.secadvisor.cloud.ibm.com/findings/v1",
-            "type": "text"
+            "type": "text",
+            "default": "https://us-south.secadvisor.cloud.ibm.com/findings/v1"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-security-advisor.html",
-            "type": "link"
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-security-advisor.html"
         }
     },
     "configuration": {

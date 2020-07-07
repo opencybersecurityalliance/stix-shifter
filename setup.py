@@ -164,7 +164,7 @@ for project_name in projects.keys():
                         with open(base_path) as json_file:
                             base_data = json.load(json_file)
                         data = base_data
-                    data = merge(data, module_data)
+                    data = merge(module_data, data)
                     json_file_path = os.path.join(r, '..', 'conf', file)
                     with open(json_file_path, 'w') as json_file:
                         json_file.write(json.dumps(data, indent=4, sort_keys=False))

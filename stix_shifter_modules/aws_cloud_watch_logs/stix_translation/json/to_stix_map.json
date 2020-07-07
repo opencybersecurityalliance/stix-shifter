@@ -15,13 +15,13 @@
         "references": "src_ip"
       },
       {
-        "key": "ipv4-addr.x_com_aws_interface_id",
+        "key": "ipv4-addr.x_aws_interface_id",
         "object": "src_ip",
         "ds_key": "interfaceId",
         "cybox": false
       },
       {
-        "key": "ipv6-addr.x_com_aws_interface_id",
+        "key": "ipv6-addr.x_aws_interface_id",
         "object": "src_ip",
         "ds_key": "interfaceId",
         "cybox": false
@@ -79,7 +79,7 @@
     ],
     "accountId": [
       {
-        "key": "x_com_aws.account_id",
+        "key": "x_aws.account_id",
         "cybox": false
       }
     ],
@@ -121,13 +121,13 @@
           "references": ["nc_private_ip1"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "nc_private_ip1",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "nc_private_ip1",
           "value": "private",
           "cybox": false
@@ -139,7 +139,7 @@
           "object": "nc_ipv6_ip"
         },
         {
-          "key": "ipv6-addr.x_com_aws_interface_id",
+          "key": "ipv6-addr.x_aws_interface_id",
           "object": "nc_ipv6_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
@@ -156,13 +156,13 @@
           "references": ["nc_public_ip"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "nc_public_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "nc_public_ip",
           "value": "public",
           "cybox": false
@@ -191,13 +191,13 @@
           "references": ["nc_private_ip2"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "nc_private_ip2",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "nc_private_ip2",
           "value": "private",
           "cybox": false
@@ -220,13 +220,13 @@
           "references": "nc_remote_ip"
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "key": "ipv4-addr.x_aws_remote_city_name",
           "object": "nc_remote_ip",
           "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_city_cityName",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "key": "ipv4-addr.x_aws_remote_country_name",
           "object": "nc_remote_ip",
           "ds_key": "detail_service_action_networkConnectionAction_remoteIpDetails_country_countryName",
           "cybox": false
@@ -254,31 +254,31 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_com_aws_vpc.subnet_id",
+        "key": "x_aws_vpc.subnet_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_com_aws_vpc.vpc_id",
+        "key": "x_aws_vpc.vpc_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_com_aws_vpc.security_group_id",
+        "key": "x_aws_vpc.security_group_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_com_aws_vpc.security_group_name",
+        "key": "x_aws_vpc.security_group_name",
         "cybox": false
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_aws_instance.image_id",
+        "key": "x_aws_instance.image_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_aws_instance.instance_id",
+        "key": "x_aws_instance.instance_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_com_aws_instance.availability_zone",
+        "key": "x_aws_instance.availability_zone",
         "cybox": false
       }
     },
@@ -294,13 +294,13 @@
           "references": ["pp_private_ip1"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "pp_private_ip1",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "pp_private_ip1",
           "value": "private",
           "cybox": false
@@ -312,7 +312,7 @@
           "object": "pp_ipv6_ip"
         },
         {
-          "key": "ipv6-addr.x_com_aws_interface_id",
+          "key": "ipv6-addr.x_aws_interface_id",
           "object": "pp_ipv6_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
@@ -341,13 +341,13 @@
           "references": ["pp_public_ip"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "pp_public_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "pp_public_ip",
           "value": "public",
           "cybox": false
@@ -364,13 +364,13 @@
           "references": ["pp_private_ip2"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "pp_private_ip2",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "pp_private_ip2",
           "value": "private",
           "cybox": false
@@ -388,13 +388,13 @@
           "object": "pp_remote_ip"
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "key": "ipv4-addr.x_aws_remote_city_name",
           "object": "pp_remote_ip",
           "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_city_cityName",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "key": "ipv4-addr.x_aws_remote_country_name",
           "object": "pp_remote_ip",
           "ds_key": "detail_service_action_portProbeAction_portProbeDetails_0_remoteIpDetails_country_countryName",
           "cybox": false
@@ -402,36 +402,36 @@
       ],
       "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port": [
         {
-          "key": "x_com_aws_guardduty_finding.probe_port",
+          "key": "x_aws_guardduty_finding.probe_port",
           "cybox": false
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_com_aws_vpc.subnet_id",
+        "key": "x_aws_vpc.subnet_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_com_aws_vpc.vpc_id",
+        "key": "x_aws_vpc.vpc_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_com_aws_vpc.security_group_id",
+        "key": "x_aws_vpc.security_group_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_com_aws_vpc.security_group_name",
+        "key": "x_aws_vpc.security_group_name",
         "cybox": false
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_aws_instance.image_id",
+        "key": "x_aws_instance.image_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_aws_instance.instance_id",
+        "key": "x_aws_instance.instance_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_com_aws_instance.availability_zone",
+        "key": "x_aws_instance.availability_zone",
         "cybox": false
       }
     },
@@ -442,13 +442,13 @@
           "object": "api_remote_ip"
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_city_name",
+          "key": "ipv4-addr.x_aws_remote_city_name",
           "object": "api_remote_ip",
           "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_city_cityName",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_remote_country_name",
+          "key": "ipv4-addr.x_aws_remote_country_name",
           "object": "api_remote_ip",
           "ds_key": "detail_service_action_awsApiCallAction_remoteIpDetails_country_countryName",
           "cybox": false
@@ -463,15 +463,15 @@
         "object": "api_user"
       },
       "detail_resource_accessKeyDetails_accessKeyId": {
-        "key": "x_com_aws_api.access_key_id",
+        "key": "x_aws_api.access_key_id",
         "cybox": false
       },
       "detail_service_action_awsApiCallAction_api": {
-        "key": "x_com_aws_api.api",
+        "key": "x_aws_api.api",
         "cybox": false
       },
       "detail_service_action_awsApiCallAction_serviceName": {
-        "key": "x_com_aws_api.service_name",
+        "key": "x_aws_api.service_name",
         "cybox": false
       }
     },
@@ -487,13 +487,13 @@
           "references": ["dns_private_ip1"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "dns_private_ip1",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "dns_private_ip1",
           "value": "private",
           "cybox": false
@@ -505,7 +505,7 @@
           "object": "dns_ipv6_ip"
         },
         {
-          "key": "ipv6-addr.x_com_aws_interface_id",
+          "key": "ipv6-addr.x_aws_interface_id",
           "object": "dns_ipv6_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
@@ -522,13 +522,13 @@
           "references": ["dns_public_ip"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "dns_public_ip",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_0_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "dns_public_ip",
           "value": "public",
           "cybox": false
@@ -557,13 +557,13 @@
           "references": ["dns_private_ip2"]
         },
         {
-          "key": "ipv4-addr.x_com_aws_interface_id",
+          "key": "ipv4-addr.x_aws_interface_id",
           "object": "dns_private_ip2",
           "ds_key": "detail_resource_instanceDetails_networkInterfaces_1_networkInterfaceId",
           "cybox": false
         },
         {
-          "key": "ipv4-addr.x_com_aws_ip_type",
+          "key": "ipv4-addr.x_aws_ip_type",
           "object": "dns_private_ip2",
           "value": "private",
           "cybox": false
@@ -576,19 +576,19 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_com_aws_vpc.subnet_id",
+        "key": "x_aws_vpc.subnet_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_com_aws_vpc.vpc_id",
+        "key": "x_aws_vpc.vpc_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_com_aws_vpc.security_group_id",
+        "key": "x_aws_vpc.security_group_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_com_aws_vpc.security_group_name",
+        "key": "x_aws_vpc.security_group_name",
         "cybox": false
       },
       "detail_service_action_dnsRequestAction_domain":[
@@ -598,45 +598,45 @@
         }
       ],
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_com_aws_instance.image_id",
+        "key": "x_aws_instance.image_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_com_aws_instance.instance_id",
+        "key": "x_aws_instance.instance_id",
         "cybox": false
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_com_aws_instance.availability_zone",
+        "key": "x_aws_instance.availability_zone",
         "cybox": false
       }
     },
     "@timestamp": {
-        "key": "x_com_aws_guardduty_finding.timestamp",
+        "key": "x_aws_guardduty_finding.timestamp",
         "cybox": false,
         "transformer": "AwsToTimestamp"
     },
     "account": {
-      "key": "x_com_aws.account_id",
+      "key": "x_aws.account_id",
       "cybox": false
     },
     "detail_region": {
-      "key": "x_com_aws.region",
+      "key": "x_aws.region",
       "cybox": false
     },
     "detail_id": {
-      "key": "x_com_aws_guardduty_finding.id",
+      "key": "x_aws_guardduty_finding.id",
       "cybox": false
     },
     "detail_severity": {
-      "key": "x_com_aws_guardduty_finding.severity",
+      "key": "x_aws_guardduty_finding.severity",
       "cybox": false
     },
     "detail_type": {
-      "key": "x_com_aws_guardduty_finding.type",
+      "key": "x_aws_guardduty_finding.type",
       "cybox": false
     },
     "detail_title": {
-      "key": "x_com_aws_guardduty_finding.title",
+      "key": "x_aws_guardduty_finding.title",
       "cybox": false
     },
     "detail_service_eventFirstSeen": {

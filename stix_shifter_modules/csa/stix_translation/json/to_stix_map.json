@@ -1,25 +1,25 @@
 {
   "categoryid": {
-    "key": "x_com_ibm_ariel.category_id",
+    "key": "x_ibm_ariel.category_id",
     "cybox": false
   },
   "username": {
     "key": "user-account.user_id"
   },
   "categoryname": {
-    "key": "x_com_ibm_ariel.category_name",
+    "key": "x_ibm_ariel.category_name",
     "cybox": false
   },
   "logsourceid": {
-    "key": "x_com_ibm_ariel.log_source_id",
+    "key": "x_ibm_ariel.log_source_id",
     "cybox": false
   },
   "identityip": {
-    "key": "x_com_ibm_ariel.identity_ip",
+    "key": "x_ibm_ariel.identity_ip",
     "cybox": false
   },
   "qidname": {
-    "key": "x_com_ibm_ariel.qid_name",
+    "key": "x_ibm_ariel.qid_name",
     "cybox": false
   },
   "destinationip": [
@@ -55,11 +55,11 @@
     }
   ],
   "logsourcename": {
-    "key": "x_com_ibm_ariel.log_source_name",
+    "key": "x_ibm_ariel.log_source_name",
     "cybox": false
   },
   "magnitude": {
-    "key": "x_com_ibm_ariel.magnitude",
+    "key": "x_ibm_ariel.magnitude",
     "cybox": false
   },
   "sourceip": [
@@ -78,7 +78,7 @@
     }
   ],
   "qid": {
-    "key": "x_com_ibm_ariel.qid",
+    "key": "x_ibm_ariel.qid",
     "cybox": false
   },
   "url": {

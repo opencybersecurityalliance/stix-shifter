@@ -1,12 +1,11 @@
 {
     "connection": {
         "type": {
-            "default": "aws_cloud_watch_logs",
             "displayName": "Amazon CloudWatch Logs"
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-aws.html",
-            "type": "link"
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-aws.html"
         },
         "region": {
             "type": "text",

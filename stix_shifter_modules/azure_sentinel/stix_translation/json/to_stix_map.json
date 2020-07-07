@@ -15,27 +15,27 @@
     "transformer": "ToInteger"
   },
   "azureTenantId": {
-    "key": "x_com_msazure_sentinel.tenant_id",
+    "key": "x_msazure_sentinel.tenant_id",
     "cybox": false
   },
   "azureSubscriptionId": {
-    "key": "x_com_msazure_sentinel.subscription_id",
+    "key": "x_msazure_sentinel.subscription_id",
     "cybox": false
   },
   "id": {
-    "key": "x_com_msazure_sentinel_alert.id",
+    "key": "x_msazure_sentinel_alert.id",
     "cybox": false
   },
   "title": {
-    "key": "x_com_msazure_sentinel_alert.title",
+    "key": "x_msazure_sentinel_alert.title",
     "cybox": false
   },
   "vendorInformation_provider": {
-    "key": "x_com_msazure_sentinel_alert.provider",
+    "key": "x_msazure_sentinel_alert.provider",
     "cybox": false
   },
   "vendorInformation_vendor": {
-    "key": "x_com_msazure_sentinel_alert.vendor",
+    "key": "x_msazure_sentinel_alert.vendor",
     "cybox": false
   },
   "hostStates_0_fqdn": {
