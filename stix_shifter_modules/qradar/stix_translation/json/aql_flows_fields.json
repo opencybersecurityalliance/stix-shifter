@@ -50,7 +50,7 @@
     "sourcev6",
     "starttime",
     "endtime",
-    "BASE64(sourcepayload) as base64_source_payload",
-    "BASE64(destinationpayload) as base64_destination_payload"
+    "sourcepayload",
+    "destinationpayload"
   ]
 }
