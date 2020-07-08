@@ -140,8 +140,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('elastic_ecs', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('elastic_ecs', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
