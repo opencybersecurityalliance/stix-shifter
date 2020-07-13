@@ -3,7 +3,7 @@ import json
 import uuid
 
 
-class Translator(BaseResultTranslator):
+class ResultsTranslator(BaseResultTranslator):
 
     def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
