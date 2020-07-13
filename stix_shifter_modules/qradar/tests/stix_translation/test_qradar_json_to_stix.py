@@ -70,7 +70,7 @@ class TestTransform(object):
 
     def test_cybox_observables(self):
         payload = "Payload"
-        bas64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
+        base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
@@ -124,7 +124,7 @@ class TestTransform(object):
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert(curr_obj is not None), 'artifact object type not found'
         assert(curr_obj.keys() == {'type', 'payload_bin'})
-        assert(curr_obj['payload_bin'] == bas64_payload)
+        assert(curr_obj['payload_bin'] == base64_payload)
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert(curr_obj is not None), 'user-account object type not found'

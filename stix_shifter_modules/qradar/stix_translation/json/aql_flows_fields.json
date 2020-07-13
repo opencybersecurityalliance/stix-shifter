@@ -50,7 +50,7 @@
     "sourcev6",
     "starttime",
     "endtime",
-    "sourcepayload as flowsourcepayload",
-    "destinationpayload as flowdestinationpayload"
+    "UTF8(sourcepayload) as flowsourcepayload",
+    "UTF8(destinationpayload) as flowdestinationpayload"
   ]
 }
