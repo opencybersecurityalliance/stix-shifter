@@ -51,7 +51,7 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["utf8_payload"]
+      "payload_bin": ["eventpayload"]
     }
   },
   "domain-name": {

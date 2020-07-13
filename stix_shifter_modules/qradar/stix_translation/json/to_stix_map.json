@@ -197,11 +197,11 @@
       "transformer": "ToDirectoryPath"
     }
   ],
-  "utf8_payload": {
+  "eventpayload": {
     "key": "artifact.payload_bin",
     "transformer": "ToBase64"
   },
-  "sourcepayload": [
+  "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
       "object": "src_payload",
@@ -213,7 +213,7 @@
       "references": "src_payload"
     }
   ],
-  "destinationpayload": [
+  "flowdestinationpayload": [
     {
       "key": "artifact.payload_bin",
       "object": "dst_payload",

@@ -50,7 +50,7 @@
     "sourcev6",
     "starttime",
     "endtime",
-    "sourcepayload",
-    "destinationpayload"
+    "sourcepayload as flowsourcepayload",
+    "destinationpayload as flowdestinationpayload"
   ]
 }
