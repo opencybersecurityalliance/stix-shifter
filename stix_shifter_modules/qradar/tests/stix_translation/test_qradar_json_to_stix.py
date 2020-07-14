@@ -69,7 +69,7 @@ class TestTransform(object):
         assert(observed_data['last_observed'] is not None)
 
     def test_cybox_observables(self):
-        payload = "Payload"
+        payload = "utf payload"
         base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
