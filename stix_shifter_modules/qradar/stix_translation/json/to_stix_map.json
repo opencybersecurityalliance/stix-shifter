@@ -197,13 +197,15 @@
       "transformer": "ToDirectoryPath"
     }
   ],
-  "base64_payload": {
-    "key": "artifact.payload_bin"
+  "eventpayload": {
+    "key": "artifact.payload_bin",
+    "transformer": "ToBase64"
   },
-  "base64_source_payload": [
+  "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
-      "object": "src_payload"
+      "object": "src_payload",
+      "transformer": "ToBase64"
     },
     {
       "key": "network-traffic.src_payload_ref",
@@ -211,10 +213,11 @@
       "references": "src_payload"
     }
   ],
-  "base64_destination_payload": [
+  "flowdestinationpayload": [
     {
       "key": "artifact.payload_bin",
-      "object": "dst_payload"
+      "object": "dst_payload",
+      "transformer": "ToBase64"
     },
     {
       "key": "network-traffic.dst_payload_ref",
