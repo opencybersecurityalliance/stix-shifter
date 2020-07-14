@@ -467,7 +467,7 @@
       "geo.location": ["source.geo.location"],
       "geo.name": ["source.geo.name"],
       "geo.region_iso_code": ["source.geo.region_iso_code"],
-      "geo.region_name": ["source.geo.city_name"] 
+      "geo.region_name": ["source.geo.region_name"] 
     }
   },
   "x-ecs-destination": {
@@ -485,7 +485,7 @@
       "geo.location": ["destination.geo.location"],
       "geo.name": ["destination.geo.name"],
       "geo.region_iso_code": ["destination.geo.region_iso_code"],
-      "geo.region_name": ["destination.geo.city_name"] 
+      "geo.region_name": ["destination.geo.region_name"] 
     }
   },
   "x-ecs-client": {
@@ -503,7 +503,7 @@
       "geo.location": ["client.geo.location"],
       "geo.name": ["client.geo.name"],
       "geo.region_iso_code": ["client.geo.region_iso_code"],
-      "geo.region_name": ["client.geo.city_name"] 
+      "geo.region_name": ["client.geo.region_name"] 
     }
   },
   "x-ecs-server": {
@@ -521,7 +521,7 @@
       "geo.location": ["server.geo.location"],
       "geo.name": ["server.geo.name"],
       "geo.region_iso_code": ["server.geo.region_iso_code"],
-      "geo.region_name": ["server.geo.city_name"] 
+      "geo.region_name": ["server.geo.region_name"] 
     }
   }
 }

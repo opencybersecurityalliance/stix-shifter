@@ -100,8 +100,8 @@
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-source.geo_city_name",
+        "object": "source"
       },
       "continent_name": {
         "key": "x-ecs-source.geo_continent_name",
@@ -112,16 +112,16 @@
         "object": "source"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-source.geo_country_name",
+        "object": "source"
       },
       "location": {
         "key": "x-ecs-source.geo_location",
         "object": "source"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-source.geo_name",
+        "object": "source"
       },
       "region_iso_code": {
         "key": "x-ecs-source.geo_region_iso_code",
@@ -225,8 +225,8 @@
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-client.geo_city_name",
+        "object": "client"
       },
       "continent_name": {
         "key": "x-ecs-client.geo_continent_name",
@@ -237,16 +237,16 @@
         "object": "client"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-client.geo_country_name",
+        "object": "client"
       },
       "location": {
         "key": "x-ecs-client.geo_location",
         "object": "client"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-client.geo_name",
+        "object": "client"
       },
       "region_iso_code": {
         "key": "x-ecs-client.geo_region_iso_code",
@@ -349,8 +349,8 @@
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-destination.geo_city_name",
+        "object": "destination"
       },
       "continent_name": {
         "key": "x-ecs-destination.geo_continent_name",
@@ -361,16 +361,16 @@
         "object": "destination"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-destination.geo_country_name",
+        "object": "destination"
       },
       "location": {
         "key": "x-ecs-destination.geo_location",
         "object": "destination"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-destination.geo_name",
+        "object": "destination"
       },
       "region_iso_code": {
         "key": "x-ecs-destination.geo_region_iso_code",
@@ -447,62 +447,62 @@
     },
     "address": {
       "key": "x-ecs-server.address",
-      "object": "destination"
+      "object": "server"
     },
     "domain": {
       "key": "x-ecs-server.domain",
-      "object": "destination"
+      "object": "server"
     },
     "nat": {
       "ip": {
         "key": "x-ecs-server.nat_ip",
-        "object": "destination"
+        "object": "server"
       },
       "port": {
         "key": "x-ecs-server.nat_port",
-        "object": "destination"
+        "object": "server"
       }
     },
     "registered_domain": {
       "key": "x-ecs-server.registered_domain",
-      "object": "destination"
+      "object": "server"
     },
     "top_level_domain": {
       "key": "x-ecs-server.top_level_domain",
-      "object": "destination"
+      "object": "server"
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-server.geo_city_name",
+        "object": "server"
       },
       "continent_name": {
         "key": "x-ecs-server.geo_continent_name",
-        "object": "destination"
+        "object": "server"
       },
       "country_iso_code": {
         "key": "x-ecs-server.geo_country_iso_code",
-        "object": "destination"
+        "object": "server"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-server.geo_country_name",
+        "object": "server"
       },
       "location": {
         "key": "x-ecs-server.geo_location",
-        "object": "destination"
+        "object": "server"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-server.geo_name",
+        "object": "server"
       },
       "region_iso_code": {
         "key": "x-ecs-server.geo_region_iso_code",
-        "object": "destination"
+        "object": "server"
       },
       "region_name": {
         "key": "x-ecs-server.geo_region_name",
-        "object": "destination"
+        "object": "server"
       }
     }
   },
@@ -1377,8 +1377,8 @@
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-host.geo_city_name",
+        "object": "host"
       },
       "continent_name": {
         "key": "x-ecs-host.geo_continent_name",
@@ -1389,16 +1389,16 @@
         "object": "host"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-host.geo_country_name",
+        "object": "host"
       },
       "location": {
         "key": "x-ecs-host.geo_location",
         "object": "host"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-host.geo_name",
+        "object": "host"
       },
       "region_iso_code": {
         "key": "x-ecs-host.geo_region_iso_code",
@@ -1683,8 +1683,8 @@
     },
     "geo": {
       "city_name": {
-        "key": "location.city",
-        "object": "location"
+        "key": "x-ecs-observer.geo_city_name",
+        "object": "observer"
       },
       "continent_name": {
         "key": "x-ecs-observer.geo_continent_name",
@@ -1695,16 +1695,16 @@
         "object": "observer"
       },
       "country_name": {
-        "key": "location.country",
-        "object": "location"
+        "key": "x-ecs-observer.geo_country_name",
+        "object": "observer"
       },
       "location": {
         "key": "x-ecs-observer.geo_location",
         "object": "observer"
       },
       "name": {
-        "key": "location.name",
-        "object": "location"
+        "key": "x-ecs-observer.geo_name",
+        "object": "observer"
       },
       "region_iso_code": {
         "key": "x-ecs-observer.geo_region_iso_code",
