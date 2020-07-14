@@ -1,9 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "QRadar",
-            "displayName": "IBM\u00ae QRadar and QRadar On Cloud",
-            "type": "connectorType"
+            "displayName": "IBM\u00ae QRadar and QRadar On Cloud"
         },
         "host": {
             "type": "text",
