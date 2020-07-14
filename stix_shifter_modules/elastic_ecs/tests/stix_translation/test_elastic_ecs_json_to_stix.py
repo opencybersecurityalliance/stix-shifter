@@ -71,6 +71,18 @@ data = {
           },
           "user": {
             "name": "-"
+          },
+          "file": {
+              "name": "example.png",
+              "directory": "/home/alice"
+          },
+          "dns": {
+            "question": {
+                "name": "officehomeblobs.blob.core.windows.net",
+            },
+            "resolved_ip": [
+                "40.116.120.16", "1.2.3.4"
+            ]
           }
 }
 
@@ -128,8 +140,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('elastic_ecs', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('elastic_ecs', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -183,7 +194,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert (nt_object is not None), 'network-traffic object type not found'
         assert (nt_object.keys() ==
-                {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols'})
         assert (nt_object['type'] == 'network-traffic')
         assert (nt_object['src_port'] == 49745)
         assert (nt_object['dst_port'] == 443)
@@ -220,43 +231,17 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         proc_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_object is not None), 'process object type not found'
         assert (proc_object.keys() ==
-                {'type', 'pid', 'command_line', 'created', 'image_ref', 'creator_user_ref'})
+                {'type', 'pid', 'name', 'created', 'creator_user_ref', 'binary_ref'})
         assert (proc_object['type'] == 'process')
         assert (proc_object['pid'] == 609)
-        assert (proc_object['command_line'] == '/System/Library/CoreServices/SubmitDiagInfo')
         assert (proc_object['created'] == '2019-04-10T11:33:57.571Z')
-
-        image_ref = proc_object['image_ref']
-        assert (image_ref in objects), f"dst_ref with key {proc_object['image_ref']} not found"
-        image_obj = objects[image_ref]
-        assert (image_obj.keys() == {'type', 'name'})
-        assert (image_obj['type'] == 'file')
-        assert (image_obj['name'] == 'SubmitDiagInfo')
 
         creator_user_ref = proc_object['creator_user_ref']
         assert (creator_user_ref in objects), f"dst_ref with key {proc_object['creator_user_ref']} not found"
         creator_user_ref_obj = objects[creator_user_ref]
         assert (creator_user_ref_obj.keys() == {'type', 'user_id'})
-        assert (creator_user_ref_obj['type'] == 'user')
+        assert (creator_user_ref_obj['type'] == 'user-account')
         assert (creator_user_ref_obj['user_id'] == '-')
-
-    def test_process_prop(self):
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
-        assert (result_bundle['type'] == 'bundle')
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert ('objects' in observed_data)
-        objects = observed_data['objects']
-
-        artifact_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'artifact')
-        assert (artifact_object is not None), 'artifact object type not found'
-        assert (artifact_object.keys() ==
-                {'type', 'payload_bin'})
-        assert (artifact_object['type'] == 'artifact')
-        assert (artifact_object['payload_bin'] == 'MTAuNDIuNDIuNDIgLSAtIFswNy9EZWMvMjAxODoxMTowNTowNyArMDEwMF0gIkdFVCAvYmxvZyBIVFRQLzEuMSIgMjAwIDI1NzEgIi0iICJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xNF8wKSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvNzAuMC4zNTM4LjEwMiBTYWZhcmkvNTM3LjM2Ig==')
 
     def test_artifact_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -274,7 +259,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (artifact_object.keys() ==
                 {'type', 'payload_bin'})
         assert (artifact_object['type'] == 'artifact')
-
+        assert (artifact_object['payload_bin'] == 'MTAuNDIuNDIuNDIgLSAtIFswNy9EZWMvMjAxODoxMTowNTowNyArMDEwMF0gIkdFVCAvYmxvZyBIVFRQLzEuMSIgMjAwIDI1NzEgIi0iICJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xNF8wKSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvNzAuMC4zNTM4LjEwMiBTYWZhcmkvNTM3LjM2Ig==')
 
     def test_url_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -308,9 +293,9 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         file_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'file')
         assert (file_object is not None), 'file object type not found'
         assert (file_object.keys() ==
-                {'type', 'name'})
+                {'type', 'name', 'parent_directory_ref'})
         assert (file_object['type'] == 'file')
-        assert (file_object['name'] == 'SubmitDiagInfo')
+        assert (file_object['name'] == 'example.png')
 
     def test_unmapped_attribute_with_mapped_attribute(self):
         message = "\"GET /blog HTTP/1.1\" 200 2571"
@@ -335,3 +320,20 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         assert(objects == {})
+    
+    def test_unwrap_flag_in_mapping(self):        
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], transformers.get_all_transformers(), options)
+        assert (result_bundle['type'] == 'bundle')
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        
+        assert ('objects' in observed_data)
+        objects = observed_data['objects']
+
+        custom_dns_obj = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ecs-dns')
+        assert (isinstance(custom_dns_obj['resolved_ip_refs'], list) and isinstance(custom_dns_obj['resolved_ip_refs'][0], str))
+
+        assert objects[custom_dns_obj['resolved_ip_refs'][0]].get('value') == "40.116.120.16"
+        assert objects[custom_dns_obj['resolved_ip_refs'][1]].get('value') == "1.2.3.4"
