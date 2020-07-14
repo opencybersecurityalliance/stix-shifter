@@ -44,8 +44,12 @@
     },
     "configuration":{
         "name": {
-            "label": "Configuration name",
+            "label": "Configuration Name",
             "placeholder": "Add a configuration name"
+        },
+        "description": {
+            "label": "Configuration Description",
+            "placeholder": "Add a configuration description"
         }
     }
 }
