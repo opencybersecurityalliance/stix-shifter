@@ -47,7 +47,15 @@ ___
 - childproc_count
 - crossproc_count
 - emet_count
+- emet_config
 - processblock_count
 - filtering_known_dlls
+- last_update
+- last_server_update
+- logon_type
+- alliance_score_srstrust
+- alliance_link_srstrust
+- alliance_data_srstrust
+- alliance_updated_srstrust
 
 ___
