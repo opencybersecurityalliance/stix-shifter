@@ -87,7 +87,6 @@ ___
 - cre_event_list
 - rule_names
 - domain_id
-- device_type_name
 - device_type
 
 ___
