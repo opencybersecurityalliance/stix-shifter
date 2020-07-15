@@ -5,6 +5,9 @@ import uuid
 
 class ResultsTranslator(BaseResultTranslator):
 
+    def read_mapping_file(self, file_path):
+        return '{}'
+
     def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
         bundle = {
