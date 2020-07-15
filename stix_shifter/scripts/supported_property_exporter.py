@@ -3,7 +3,7 @@ from os import path
 
 current_dir = path.abspath(path.dirname(__file__))
 
-TRANSLATION_MODULE_PATH = path.abspath(path.join(current_dir, '../stix_translation/src/modules'))
+TRANSLATION_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
 ADAPTER_GUIDE_PATH = path.abspath(path.join(current_dir, '../../adapter-guide'))
 
 # Add new connectors to this dictionary as they become available. The key must match the name of the translation module.
@@ -39,7 +39,7 @@ def __main__():
 
     for index, (key, module) in enumerate(CONNECTORS.items()):
         try:
-            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "json", "to_stix_map.json"))     
+            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
             json_file = open(filepath)
             loaded_json = json.loads(json_file.read())
         except(Exception):

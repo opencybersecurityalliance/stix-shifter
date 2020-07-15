@@ -16,4 +16,4 @@ class BasePingConnector(object, metaclass=ABCMeta):
                     success (bool): True or False
                     error (str): error message (when success=False)
         """
-        pass
+        raise NotImplementedError()

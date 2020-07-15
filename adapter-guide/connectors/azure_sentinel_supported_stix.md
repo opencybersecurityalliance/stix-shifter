@@ -37,12 +37,12 @@ ___
 - account_last_login
 
 ___
-### x_com_msazure_sentinel
+### x_msazure_sentinel
 - tenant_id
 - subscription_id
 
 ___
-### x_com_msazure_sentinel_alert
+### x_msazure_sentinel_alert
 - id
 - title
 - provider

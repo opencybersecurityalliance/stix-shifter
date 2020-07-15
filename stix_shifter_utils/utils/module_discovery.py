@@ -2,7 +2,7 @@ import os
 
 def process_dialects(cli_module, options):
     module, cli_dialects = __split_module_dialects(cli_module)
-    if 'dialects' not in options:
+    if 'dialects' not in options or options['dialects'] is None:
         options['dialects'] = []
     options_dialects = options['dialects']
     

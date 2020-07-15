@@ -57,7 +57,7 @@ ___
 - values
 
 ___
-### x_com_msatp
+### x_msatp
 - computer_name
 - machine_id
 

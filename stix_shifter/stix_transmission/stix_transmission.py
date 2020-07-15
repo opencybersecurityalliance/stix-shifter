@@ -79,8 +79,18 @@ class StixTransmission:
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
+    def mappings(self):
+        # Returns default module mappings
+        try:
+            if self.init_error is not None:
+                raise Exception(self.init_error)
+            return self.entry_point.get_mappings()
+        except Exception as ex:
+            return_obj = dict()
+            ErrorResponder.fill_error(return_obj, error=ex)
+            return return_obj
+
     def is_async(self):
-        return self.entry_point.is_async()
         # Check if the module is async/sync
         try:
             if self.init_error is not None:

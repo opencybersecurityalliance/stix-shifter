@@ -4,6 +4,7 @@ import importlib
 import traceback
 #from ..utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter_utils.utils import logger
 import collections
 import json
 
@@ -29,6 +30,7 @@ class ErrorCode(Enum):
 
 
 class ErrorResponder():
+    logger = logger.set_logger(__name__)
 
     @staticmethod
     def get_struct_item(message_struct, message_path):
@@ -78,7 +80,7 @@ class ErrorResponder():
         if error is not None:
             str_error = str(error)
             #TODO replace with logger + stacktrace it to logger
-            print("error occurred: " + str_error)
+            ErrorResponder.logger.error("error occurred: " + str_error)
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
                 error_msg = 'Wrong certificate: ' + str_error
@@ -112,7 +114,7 @@ class ErrorResponder():
             module_path = 'stix_shifter_utils.stix_translation.stix_translation_error_mapper'
         else:
             caller_module_name = caller_path_list[-3:-1]
-            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'
+            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.error_mapper'
 
         # path_start_position = ErrorResponder.rindex(caller_path_list, 'stix-shifter')
         # module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'

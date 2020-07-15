@@ -7,6 +7,7 @@ python:
   - "3.6"
 
 before_script:
+  - python generate_requirements.py
   - pip install -r requirements-dev.txt
   - pip install flake8
   # stop the build if there are Python syntax errors or undefined names
