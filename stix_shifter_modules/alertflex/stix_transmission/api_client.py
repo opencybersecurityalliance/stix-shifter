@@ -11,20 +11,24 @@ class APIClient():
         auth = configuration.get('auth')
         headers['Authorization'] = b"Basic " + base64.b64encode(
             (auth['username'] + ':' + auth['password']).encode('ascii'))
-        # cert_verify = connection.get('selfSignedCert', False)
+        url_modifier_function = None
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port'),
-                                    connection.get('cert', None),
                                     headers,
-                                    cert_verify=False)
+                                    url_modifier_function,
+                                    cert_verify=connection.get('selfSignedCert', False))
 
-    def ping_box(self):
+    def ping_data_source(self):
         endpoint = self.endpoint_start + '/status'
         return self.client.call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
 
-    def run_search(self, query_expression, offset=None, length=None):
+    def get_search_results(self, query_expression, offset=None, length=None):
         endpoint = self.endpoint_start + '/search'
         data = {'query': query_expression}
         result = self.client.call_api(endpoint, 'GET', urldata=data)
         return result
 
+    def delete_search(self, search_id):
+        # Optional since this may not be supported by the data source API
+        # Delete the search
+        return {"code": 200, "success": True}

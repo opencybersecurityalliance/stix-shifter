@@ -88,6 +88,7 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
+    #TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
