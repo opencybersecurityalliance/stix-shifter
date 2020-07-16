@@ -265,6 +265,7 @@ class GuardApiClient(object):
     def translate_response(self, fields, results):
         #trnaslate fields from numeric tags to field titles
         # set to lower case, replace white spaces with _
+        #TBD - concat timestamp fields
           for result in results: 
                 num_rows = result["numRows"]
                 count = result["count"]
@@ -279,12 +280,13 @@ class GuardApiClient(object):
                         res_item ={}
                         for key, value in fields.items():
                             try:
-                                if item.get(key) is None:
+                                val = key.split(";")
+                                if item.get(val[0]) is None :
                                     continue
-                                if type(value) is list:
+                                if len(val) > 1:
                                     item_value = ""
-                                    for val in value:
-                                        item_value = item_value + str(item[val]) + " "
+                                    for val1 in val:
+                                        item_value = item_value + str(item[val1]) + " "
                                     item_value = item_value.rstrip()    
                                 else:
                                     item_value = item[key]
@@ -294,12 +296,15 @@ class GuardApiClient(object):
                                 #    res[key] = self.convert(types[key], item_value)
                                 #else:
                                 value = value.lower().replace(" ", "_")
+                                if value == "date_time" :
+                                    value = "timestamp"
                                 res_item[value]=item_value
                                 #print(str(value)+ '->'+str(res_item[value]))
                             except Exception as e:
                                 print("ERROR: Category: "+ category +" key: " + key + " value: " + value)
                                 print(e)
-                        res.append(res_item)        
+                        res.append(res_item)  
+                          
                 return json.dumps(res)
 
 '''

@@ -1,0 +1,17 @@
+{
+  "common": {
+    "QUERY_FROM_DATE": "*",
+    "QUERY_TO_DATE": "*",
+    "SHOW_ALIASES": "*",
+    "REMOTE_SOURCE": "*"
+
+  },
+  "maps": {
+    "DBUser": ["Threat:ATA Open Cases"],
+    "Database": ["Threat:ATA Open Cases"],
+    "ServerIP": ["Threat:ATA Open Cases"],
+    "Severity": ["Threat:ATA Open Cases"],
+    "OSUser": ["Threat:ATA Open Cases"]
+  },
+  "defaultReports":["Threat:ATA Open Cases"]
+}
