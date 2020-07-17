@@ -51,7 +51,7 @@
   },
   "artifact": {
     "fields": {
-      "payload_bin": ["utf8_payload"]
+      "payload_bin": ["eventpayload"]
     }
   },
   "domain-name": {
@@ -59,12 +59,13 @@
       "value": ["domainname"]
     }
   },
-  "x-com-ibm-ariel": {
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
       "event_name": ["qidname"],
       "magnitude": ["magnitude"],
       "log_source_id": ["logsourceid"],
+      "device_type": ["devicetype"],
       "log_source_name": ["logsourcename"],
       "log_source_type_name": ["logsourcetypename"],
       "category_id": ["categoryid"],
@@ -78,12 +79,10 @@
       "relevance": ["relevance"],
       "geographic": ["geographic"],
       "domain_id": ["domainid"],
-      "device_type_name": ["devicetypename"],
-      "device_type": ["devicetype"],
       "rule_names[*]": ["rulenames"]
     }
   },
-  "x-com-ibm-finding": {
+  "x-ibm-finding": {
     "fields": {
       "name": ["crename"],
       "description": ["credescription"]

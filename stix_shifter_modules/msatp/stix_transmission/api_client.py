@@ -27,13 +27,12 @@ class APIClient:
 
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
-                                    connection.get('cert', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
                                     cert_verify=connection.get('selfSignedCert', True),
-                                    mutual_auth=connection.get('use_securegateway', False),
                                     sni=connection.get('sni', None)
                                     )
+        self.search_timeout = connection['options'].get('timeout')
 
     def ping_box(self):
         """Ping the endpoint."""
@@ -53,4 +52,4 @@ class APIClient:
         endpoint = self.endpoint
         query_expression = query_expression + serialize.format(offset=offset, length=length)
         query_expression = json.dumps({'Query': query_expression}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression)
+        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.search_timeout)

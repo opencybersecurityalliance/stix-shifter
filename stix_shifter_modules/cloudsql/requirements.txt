@@ -1,2 +1,2 @@
-pandas>=0.25.0
-ibmcloudsql>=0.3.6
+pandas==1.0.3
+ibmcloudsql==0.3.14

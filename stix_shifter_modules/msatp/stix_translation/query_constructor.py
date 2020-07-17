@@ -39,7 +39,7 @@ class QueryStringPatternTranslator:
                           "network-traffic": "NetworkCommunicationEvents",
                           "url": "NetworkCommunicationEvents",
                           "windows-registry-key": "RegistryEvents",
-                          "x-com-msatp": "FileCreationEvents",
+                          "x-msatp": "FileCreationEvents",
                           "directory": "FileCreationEvents"
                           }
     # Join query to get MAC address value from MachineNetworkInfo

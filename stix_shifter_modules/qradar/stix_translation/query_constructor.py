@@ -3,11 +3,12 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.utils import logger
 import logging
 import json
 import re
 
-logger = logging.getLogger(__name__)
+logger = logger.set_logger(__name__)
 
 REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
                         "sourcemac": ["mac"],
@@ -28,7 +29,7 @@ def _fetch_network_protocol_mapping():
         map_data = json.loads(map_file)
         return map_data
     except Exception as ex:
-        print('exception in reading mapping file:', ex)
+        logger.error('exception in reading mapping file: ' + ex)
         return {}
 
 
@@ -84,7 +85,7 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
+            return '{}'.format(value.replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
         else:
             return value
 
@@ -210,7 +211,7 @@ class AqlQueryStringPatternTranslator:
         comparator = self._lookup_comparison_operator(self, expression.comparator)
 
         # Special case where we want the risk finding
-        if stix_object == 'x-com-ibm-finding' and stix_field == 'name' and expression.value == "*":
+        if stix_object == 'x-ibm-finding' and stix_field == 'name' and expression.value == "*":
             return "devicetype = 18"
         
         if stix_field == 'protocols[*]':
@@ -347,7 +348,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     for where_statement in translated_queries:
         has_start_stop = _test_START_STOP_format(where_statement)
         if(has_start_stop):
-            queries.append("SELECT {} FROM {} WHERE {}".format(select_statement, data_model_mapping.dialect, where_statement))
+            queries.append("SELECT %s FROM %s WHERE %s" % (select_statement, data_model_mapping.dialect, where_statement))
         else:
-            queries.append("SELECT {} FROM {} WHERE {} limit {} last {} minutes".format(select_statement, data_model_mapping.dialect, where_statement, result_limit, time_range))
+            queries.append("SELECT %s FROM %s WHERE %s limit %s last %s minutes" % (select_statement, data_model_mapping.dialect, where_statement, result_limit, time_range))
     return queries

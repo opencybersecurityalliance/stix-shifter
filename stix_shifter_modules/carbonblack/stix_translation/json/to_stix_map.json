@@ -99,72 +99,104 @@
     }
   ],
   "hostname": {
-    "key": "x_com_cb_response.host_name",
+    "key": "x_cb_response.host_name",
     "cybox": false
   },
   "host_type": {
-    "key": "x_com_cb_response.host_type",
+    "key": "x_cb_response.host_type",
     "cybox": false
   },
   "comms_ip": {
-    "key": "x_com_cb_response.comms_ip",
+    "key": "x_cb_response.comms_ip",
     "cybox": false,
     "transformer": "ToIPv4"
   },
   "os_type": {
-    "key": "x_com_cb_response.os_type",
+    "key": "x_cb_response.os_type",
     "cybox": false
   },
   "sensor_id": {
-    "key": "x_com_cb_response.sensor_id",
+    "key": "x_cb_response.sensor_id",
     "cybox": false
   },
   "group": {
-    "key": "x_com_cb_response.group",
+    "key": "x_cb_response.group",
     "cybox": false
   },
   "segment_id": {
-    "key": "x_com_cb_response.segment_id",
+    "key": "x_cb_response.segment_id",
     "cybox": false
   },
   "terminated": {
-    "key": "x_com_cb_response.terminated",
+    "key": "x_cb_response.terminated",
     "cybox": false
   },
   "regmod_count": {
-    "key": "x_com_cb_response.regmod_count",
+    "key": "x_cb_response.regmod_count",
     "cybox": false
   },
   "netconn_count": {
-    "key": "x_com_cb_response.netconn_count",
+    "key": "x_cb_response.netconn_count",
     "cybox": false
   },
   "filemod_count": {
-    "key": "x_com_cb_response.filemod_count",
+    "key": "x_cb_response.filemod_count",
     "cybox": false
   },
   "modload_count": {
-    "key": "x_com_cb_response.modload_count",
+    "key": "x_cb_response.modload_count",
     "cybox": false
   },
   "childproc_count": {
-    "key": "x_com_cb_response.childproc_count",
+    "key": "x_cb_response.childproc_count",
     "cybox": false
   },
   "crossproc_count": {
-    "key": "x_com_cb_response.crossproc_count",
+    "key": "x_cb_response.crossproc_count",
     "cybox": false
   },
   "emet_count": {
-    "key": "x_com_cb_response.emet_count",
+    "key": "x_cb_response.emet_count",
+    "cybox": false
+  },
+  "emet_config": {
+    "key": "x_cb_response.emet_config",
     "cybox": false
   },
   "processblock_count": {
-    "key": "x_com_cb_response.processblock_count",
+    "key": "x_cb_response.processblock_count",
     "cybox": false
   },
   "filtering_known_dlls": {
-    "key": "x_com_cb_response.filtering_known_dlls",
+    "key": "x_cb_response.filtering_known_dlls",
+    "cybox": false
+  },
+  "last_update": {
+    "key": "x_cb_response.last_update",
+    "cybox": false
+  },
+  "last_server_update": {
+    "key": "x_cb_response.last_server_update",
+    "cybox": false
+  },
+  "logon_type": {
+    "key": "x_cb_response.logon_type",
+    "cybox": false
+  },
+  "alliance_score_srstrust": {
+    "key": "x_cb_response.alliance_score_srstrust",
+    "cybox": false
+  },
+  "alliance_link_srstrust": {
+    "key": "x_cb_response.alliance_link_srstrust",
+    "cybox": false
+  },
+  "alliance_data_srstrust": {
+    "key": "x_cb_response.alliance_data_srstrust",
+    "cybox": false
+  },
+  "alliance_updated_srstrust": {
+    "key": "x_cb_response.alliance_updated_srstrust",
     "cybox": false
   },
   "server_added_timestamp": [

@@ -1,0 +1,35 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Amazon CloudWatch Logs"
+        },
+        "help": {
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-aws.html"
+        },
+        "region": {
+            "type": "text",
+            "previous": "connection.options.region"
+        },
+        "log_group_names": {
+            "type": "text",
+            "optional": true,
+            "previous": "connection.options.log_group_names"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "aws_access_key_id": {
+                "type": "password"
+            },
+            "aws_iam_role": {
+                "type": "password",
+                "optional": true
+            },
+            "aws_secret_access_key": {
+                "type": "password"
+            }
+        }
+    }
+}
