@@ -23,10 +23,13 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
                 self.map_data = map_data['to_stix']
         if not self.map_data:
             try:
-                map_file = open(self.default_mapping_file_path).read()
+                map_file = self.read_mapping_file(self.default_mapping_file_path)
                 self.map_data = json.loads(map_file)
             except Exception as ex:
                 self.logger.error(ex)
+
+    def read_mapping_file(self, path):
+        return open(path).read()
 
     def get_mapping(self):
         return self.map_data
