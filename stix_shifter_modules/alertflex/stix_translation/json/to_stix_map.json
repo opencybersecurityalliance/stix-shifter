@@ -1,0 +1,123 @@
+{
+  "create_time": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "srcip":
+        [
+            {
+                "key": "ipv4-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "src_ip"
+            }
+        ],
+  "dstip": [
+      {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "srcport": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+    },
+    "dstport": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+    },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["url.domain"]
+    }
+  },
+  "user": {
+    "key": "user-account.user_id"
+  },
+  "file": {
+    "key": "file.name"
+  },
+  "process": {
+    "key": "process.name",
+    "object": "process"
+  },
+  "sha1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file"
+  },
+  "sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file"
+  },
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "file"
+  },
+  "event": {
+    "key": "x_org_alertflex.event",
+    "cybox": false
+  },
+  "severity": {
+    "key": "x_org_alertflex.severity",
+    "cybox": false
+  },
+  "category": {
+    "key": "x_org_alertflex.category",
+    "cybox": false
+  },
+  "description": {
+    "key": "x_org_alertflex.description",
+    "cybox": false
+  },
+  "info": {
+    "key": "x_org_alertflex.info",
+    "cybox": false
+  },
+  "agent": {
+    "key": "x_org_alertflex.agent",
+    "cybox": false
+  },
+  "source": {
+    "key": "x_org_alertflex.source",
+    "cybox": false
+  },
+  "type": {
+    "key": "x_org_alertflex.type",
+    "cybox": false
+  },
+  "node": {
+    "key": "x_org_alertflex.node",
+    "cybox": false
+  }
+}
