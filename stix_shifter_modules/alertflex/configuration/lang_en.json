@@ -16,6 +16,10 @@
         "sni": {
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        },
+        "selfSignedCert": {
+            "label": "Alertflex Connection Certificate",
+            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
         }
     },
     "configuration": {
