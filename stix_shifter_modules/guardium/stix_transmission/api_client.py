@@ -34,7 +34,27 @@ class APIClient():
     def get_search_status(self, search_id):
         # Check the current status of the search
         return {"code": 200, "status": "COMPLETED"}
-
+    
+    def get_status(self, search_id):
+            # Subroto we do not need to send anything to Guardium
+        # We create response object and send "COMPLETED"
+        # Note: we may have an issue with this simplistic approach
+        respObj = Response()
+        if (self.client.access_token):
+            respObj.code = "200"
+            respObj.error_type = ""
+            respObj.status_code = 200
+            content = '{"search_id": "' + search_id + \
+                '", "progress":"Completed", "status":"COMPLETED", "data": {"message":"Completed for the search id provided."}}'
+            respObj._content = bytes(content, 'utf-8')
+        else:
+            respObj.code = "503"
+            respObj.error_type = "Service Unavailable"
+            respObj.status_code = 503
+            content = '{"status":"Failed", "data": {"message": "Could obtain status: Authentication issue / service unavailable."}}'
+            respObj._content = bytes(content, 'utf-8')
+        
+        return ResponseWrapper(respObj)
    
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
@@ -97,8 +117,8 @@ class APIClient():
         if (self.client.access_token):
             self.search_id=search_id
             self.decode_searchId()
-            indx = int(index_from)
-            fsize = int(fetch_size)
+            indx = int(index_from)+1
+            fsize = int(fetch_size)+1
             if "reportName" in self.query :
                 response = self.client.handle_report(self.query["reportName"], self.query["reportParameter"], indx, fsize)
                 respObj = ResponseWrapper(response)

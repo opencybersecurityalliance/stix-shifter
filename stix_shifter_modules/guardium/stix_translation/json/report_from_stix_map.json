@@ -6,7 +6,7 @@
       "end": ["QUERY_TO_DATE"],
       "database_name": ["Database"],
       "db_type":["db_type"],
-      "severity":["severity"]
+      "Severity":["Severity"]
     }
   },
   "ipv4-addr": {

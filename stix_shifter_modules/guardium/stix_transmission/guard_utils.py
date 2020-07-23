@@ -110,7 +110,7 @@ class GuardApiClient(object):
             self.access_token = response.json()['access_token']
             print("token="+ self.access_token)
             self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
-    
+            
     def validate_response(self, p_response, prefix, abort=False):
         if p_response.status_code != 200:
             #context().logger.error(prefix+"request faild "+str(p_response.status_code)+"-"+p_response.reason) 
@@ -306,6 +306,7 @@ class GuardApiClient(object):
                         res.append(res_item)  
                           
                 return json.dumps(res)
+   
 
 '''
     def get_hash(self, keys, values):

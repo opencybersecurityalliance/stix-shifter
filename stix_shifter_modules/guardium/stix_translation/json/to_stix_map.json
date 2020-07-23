@@ -1,7 +1,28 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
-  },
+  "DB User": [
+    {
+      "key": "user-account.user_id",
+      "object":"account"
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "user_id",
+      "cybox": false
+    }
+   ]
+  ,
+ "OS User": [
+    {
+      "key": "user-account.login_name",
+      "object":"account"
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "account",
+      "references": "user_id"
+    }
+   ],
   "LogSourceId": {
     "key": "x__custom_property.log_source_id",
     "cybox": false
@@ -21,15 +42,15 @@
       "references": "src_ip"
     }
   ],
-  "DestinationIpV4": [
+  "Server IP": [
     {
       "key": "ipv4-addr.value",
-      "object": "dst_ip"
+      "object": "nt"
     },
     {
-      "key": "network-traffic.dst_ref",
+      "key": "x-ibm-finding.dst_ip_ref",
       "object": "nt",
-      "references": "dst_ip"
+      "references": "value"
     }
   ],
   "SourceIpV6": [
@@ -43,7 +64,7 @@
       "references": "src_ip"
     }
   ],
-  "DestinationIpV6": [
+  "Server IP": [
     {
       "key": "ipv6-addr.value",
       "object": "dst_ip"
@@ -59,15 +80,15 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "StartTime": [
+  "Create Date": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "GuardiumToTimestamp",
       "cybox": false
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
   ],
@@ -111,5 +132,25 @@
         "key": "process.id"
       }
     ]
+  },
+ "Threat Category":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+ "Database":{
+	"key":"x-ibm-finding.dst_device",
+        "object":"finding"
+  },
+ "Server Type":{
+	"key":"x-ibm-finding.dst_application_name",
+	"object":"finding"
+  },
+  "Severity":{
+	"key":"x-ibm-finding.severity",
+	"object":"finding"
+  },
+  "Originating Unit":{
+	"key":"x-ibm-finding.source",
+	"object":"finding"
   }
 }
