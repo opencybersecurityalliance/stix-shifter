@@ -2,13 +2,12 @@
   "DB User": [
     {
       "key": "user-account.user_id",
-      "object":"account"
+      "object":"account" 
     },
     {
       "key": "x-ibm-finding.src_database_user_ref",
       "object": "finding",
-      "references": "user_id",
-      "cybox": false
+      "references": "account"
     }
    ]
   ,
@@ -42,38 +41,31 @@
       "references": "src_ip"
     }
   ],
-  "Server IP": [
+ "Server IP": [
     {
       "key": "ipv4-addr.value",
-      "object": "nt"
+      "object": "dst_ip" 
     },
-    {
-      "key": "x-ibm-finding.dst_ip_ref",
-      "object": "nt",
-      "references": "value"
-    }
-  ],
-  "SourceIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "Server IP": [
     {
       "key": "ipv6-addr.value",
       "object": "dst_ip"
     },
     {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
     }
+  ],
+ "Server Type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
   ],
   "EventCount": {
     "key": "number_observed",
@@ -140,10 +132,6 @@
  "Database":{
 	"key":"x-ibm-finding.dst_device",
         "object":"finding"
-  },
- "Server Type":{
-	"key":"x-ibm-finding.dst_application_name",
-	"object":"finding"
   },
   "Severity":{
 	"key":"x-ibm-finding.severity",
