@@ -3,6 +3,7 @@ import traceback
 import os
 import functools
 import json
+import glob
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -18,6 +19,7 @@ from stix_shifter_utils.utils.param_validator import param_validator, modernize_
 class BaseEntryPoint:
 
     def __init__(self, connection, configuration, options):
+        # TODO fail if 'json' folder is present but no 'to_stix.json' file in there
         self.__async = True
         stack = traceback.extract_stack()
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
@@ -108,13 +110,20 @@ class BaseEntryPoint:
 
     @translation
     def get_mapping(self, dialect=None):
-        query_translator = self.get_query_translator(dialect)
-        results_translator = self.get_results_translator(dialect)
-        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {},
-                   'to_stix': results_translator.get_mapping()}
-        select_fields = query_translator.get_select_fields()
-        if select_fields:
-            mapping['select_fields'] = select_fields
+        module_name = self.__connector_module
+        module = importlib.import_module(
+                    "stix_shifter_modules." + module_name + ".stix_translation")
+        basepath = os.path.dirname(module.__file__)
+        basepath = os.path.abspath(basepath)
+        basepath = os.path.join(basepath, 'json')
+        
+        mapping = {}
+        if os.path.isdir(basepath):
+            for filename in glob.glob(basepath + os.sep + "*.json"):
+                key = os.path.basename(filename)
+                with open(filename, 'r') as f:
+                    jsondata = json.load(f)
+                    mapping[key] = jsondata
         return mapping
 
     @translation

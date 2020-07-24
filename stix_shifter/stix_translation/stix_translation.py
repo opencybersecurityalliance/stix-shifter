@@ -136,10 +136,7 @@ class StixTranslation:
                 # Converting data from the datasource to STIX objects
                 return entry_point.translate_results(data_source, data)
             elif translate_type == MAPPING:
-                mappings = {}
-                for dialect in dialects:
-                    mapping = entry_point.get_mapping(dialect)
-                    mappings[dialect] = mapping                
+                mappings = entry_point.get_mapping(None)
                 return mappings
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source

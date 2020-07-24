@@ -26,9 +26,6 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         if not self.map_data:
             self.map_data = self.fetch_mapping(basepath)
 
-    def get_mapping(self):
-        return self.map_data
-
     def get_select_fields(self):
         return self.select_fields
 
