@@ -1,5 +1,6 @@
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 from .stix_translation.query_translator import QueryTranslator
+import os
 
 class EntryPoint(BaseEntryPoint):
 
@@ -10,4 +11,8 @@ class EntryPoint(BaseEntryPoint):
         if connection and configuration:
             self.setup_transmission_basic(connection, configuration)
         else:
-            self.setup_translation_simple(dialect_default='default', query_translator=QueryTranslator())
+            basepath = os.path.dirname(__file__)
+            filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
+
+            dialect = 'default'
+            self.setup_translation_simple(dialect_default=dialect, query_translator=QueryTranslator(options, dialect, filepath))
