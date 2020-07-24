@@ -11,6 +11,18 @@
     }
    ]
   ,
+ "db_user": [
+    {
+      "key": "user-account.user_id",
+      "object":"account" 
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "account"
+    }
+   ]
+  ,
  "OS User": [
     {
       "key": "user-account.login_name",
@@ -41,6 +53,36 @@
       "references": "src_ip"
     }
   ],
+   "client_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding", 
+      "references": "src_ip" 
+    }
+  ],
+ "server": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
+    }
+  ],
  "Server IP": [
     {
       "key": "ipv4-addr.value",
@@ -56,6 +98,17 @@
       "references": "dst_ip" 
     }
   ],
+  "db_type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
+  ],
  "Server Type":[
 	{
 	"key":"software.name",
@@ -65,6 +118,17 @@
 	"key":"x-ibm-finding.dst_application_ref",
 	"object":"finding",
 	"references":"software"
+	}
+  ],
+  "source_program":[
+	{
+	"key":"software.name",
+	"object":"source_software"
+	},
+	{
+	"key":"x-ibm-finding.src_application_ref",
+	"object":"finding",
+	"references":"source_software"
 	}
   ],
   "EventCount": {
@@ -125,16 +189,36 @@
       }
     ]
   },
+  "violation":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
  "Threat Category":{
 	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+  "details":{
+	"key":"x-ibm-finding.details",
+        "object":"finding"
+  },
+ "database":{
+	"key":"x-ibm-finding.dst_device",
         "object":"finding"
   },
  "Database":{
 	"key":"x-ibm-finding.dst_device",
         "object":"finding"
   },
+  "severity":{
+	"key":"x-ibm-finding.severity",
+	"object":"finding"
+  },
   "Severity":{
 	"key":"x-ibm-finding.severity",
+	"object":"finding"
+  },
+ "guardium_appliance":{
+	"key":"x-ibm-finding.source",
 	"object":"finding"
   },
   "Originating Unit":{
