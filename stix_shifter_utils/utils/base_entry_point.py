@@ -19,7 +19,6 @@ from stix_shifter_utils.utils.param_validator import param_validator, modernize_
 class BaseEntryPoint:
 
     def __init__(self, connection, configuration, options):
-        # TODO fail if 'json' folder is present but no 'to_stix.json' file in there
         self.__async = True
         stack = traceback.extract_stack()
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
