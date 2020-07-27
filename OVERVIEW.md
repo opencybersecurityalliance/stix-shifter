@@ -14,6 +14,7 @@
   - [Translate](#translate)
   - [Transmit](#transmit)
   - [Execute](#execute)
+  - [Debug](#Debug)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -436,6 +437,12 @@ The `execute` command tests all steps of the translation-transmission flow:
 #### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+
+#### Debug
+
+You can add `--debug` option at the end of your CLI command to see more logs. 
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
 
 #### OUTPUT:
 
