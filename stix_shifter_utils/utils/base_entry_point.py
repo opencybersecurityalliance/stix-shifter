@@ -119,7 +119,7 @@ class BaseEntryPoint:
         return results_translator
 
     @translation
-    def get_mapping(self, dialect=None):
+    def get_mapping(self):
         module_name = self.__connector_module
         module = importlib.import_module(
                     "stix_shifter_modules." + module_name + ".stix_translation")

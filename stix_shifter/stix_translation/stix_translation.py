@@ -136,7 +136,7 @@ class StixTranslation:
                 # Converting data from the datasource to STIX objects
                 return entry_point.translate_results(data_source, data)
             elif translate_type == MAPPING:
-                mappings = entry_point.get_mapping(None)
+                mappings = entry_point.get_mapping()
                 return mappings
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
