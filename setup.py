@@ -162,20 +162,11 @@ for project_name in projects.keys():
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
 
-    # connector_name = ''
-    # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+project_name)
-    # project_name_split = project_name.split(os.sep)
-    # if len(project_name_split)>1:
-        # connector_name = project_name_split[1]
-
     for json_search_path in src_folders:
         connector_name = ''
         json_search_path_split = json_search_path.split(os.sep)
         if len(json_search_path_split) > 1:
             connector_name = json_search_path_split[1]
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+json_search_path)
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + str(connector_name))
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ")
         module_dir = json_search_path
         configuration_path = os.path.join(module_dir, 'configuration')
         if os.path.isdir(configuration_path):
@@ -195,13 +186,10 @@ for project_name in projects.keys():
                             base_data = json.load(json_file)
                         data = base_data
                     data = merge(module_data, data)
-                    print('FILE: ' + file)
-                    # time.sleep(5000)
                     if file == 'config.json':
                         with open(os.path.join(TMP_MAPPING_DIR, connector_name+ '.json')) as f:
                             mapping = json.load(f)
                             data['connection']['options']['mapping']['default'] = mapping
-
                     json_file_path = os.path.join(r, '..', 'conf', file)
                     with open(json_file_path, 'w') as json_file:
                         json_file.write(json.dumps(data, indent=4, sort_keys=False))
@@ -239,6 +227,6 @@ for project_name in projects.keys():
                 os.remove(cleanup_file)
     if temp_dir is not None:
         shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
-        temp_dir = None    
+        temp_dir = None
     print('---------------------------------')
 shutil.rmtree(TMP_MAPPING_DIR)
