@@ -83,7 +83,7 @@ def param_validator(module, input_configs, start_point=None):
         if isinstance(input_configs, dict):
             error_obj['unexpected_params'] = input_configs
 
-    if error_obj:
+    if errors:
         raise ValueError(error_obj)
 
     return validated_params

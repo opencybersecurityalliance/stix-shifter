@@ -25,7 +25,7 @@ class ProxyHost():
         return json.dumps(dsl['queries'])
 
     def translate_results(self, data_source_identity_object):
-        data_source_results = json.dumps(self.request_args["results"] )
+        data_source_results = self.request_args["results"]
 
         self.logger.debug(data_source_results)
         translation_module = self.connection['type'].lower()

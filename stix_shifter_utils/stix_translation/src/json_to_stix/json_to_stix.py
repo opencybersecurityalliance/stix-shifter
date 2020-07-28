@@ -29,4 +29,4 @@ class JSONToStix(BaseResultTranslator):
         except Exception as ex:
             raise TranslationResultException("Error when converting results to STIX: {}".format(ex))
         
-        return results
+        return json.dumps(results, indent=4, sort_keys=False)
