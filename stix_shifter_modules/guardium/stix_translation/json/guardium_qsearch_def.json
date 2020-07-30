@@ -52,23 +52,35 @@
 	"ATA Open Cases": {
       "category": "VIOLATION",
       "sortType": "asc",
-
-      "filters": {
-        "startTime": {
+      "startTime": {
           "info": "START",
           "default": "1970-07-01T00:00:10.000Z",
           "transformer": "TimestampToGuardium"
-        },
+      },
       "endTime": {
           "info": "STOP",
           "default": "2019-07-01T00:00:10.000Z",
           "transformer": "TimestampToGuardium"
+      },
+
+      "filters": {
+        "Database": {
+          "info": "map",
+          "default": "*"
         },
         "DBUser":{
           "info": "map",
-          "default": "%"
-          }
-       },
+          "default": "*"
+        },
+        "Server": {
+          "info": "map",
+          "default": "*"
+        },
+        "OSUser": {
+          "info": "map",
+          "default": "*"
+        }
+      },
       "fetchSize": "1000"
     }
   }

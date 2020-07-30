@@ -13,5 +13,5 @@
     "Severity": ["Policy Violation:ATA Open Cases"],
     "OSUser": ["Policy Violation:ATA Open Cases"]
   },
-  "defaultReports":["Threat:ATA Open Cases"]
+  "defaultQsearch":["Policy Violation:ATA Open Cases"]
 }

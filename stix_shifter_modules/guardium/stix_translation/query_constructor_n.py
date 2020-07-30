@@ -266,20 +266,15 @@ class QueryStringPatternTranslator:
             #         qsearch["filters"][param] = transformer.transform(value)
             #     else:
             #         qsearch["filters"][param] = value
-
-
+            qsearch["startTime"] = self.qsearch_params_passed.get("START", default_from_date)
+            qsearch["endTime"] = self.qsearch_params_passed.get("STOP", default_to_date)
 
             for param in qsearch["filters"]:
                 # either the value will be default or passed in (report parameter passed)
                 if param not in self.qsearch_params_passed:
                     value = qsearch["filters"][param]["default"]
                 else:
-                    value = self.report_params_passed[param]
-                # Use START and STOP  instead of default to time parameter
-                if qsearch["filters"][param]["info"] == "START":
-                    value = self.qsearch_params_passed.get("START", default_from_date)
-                if qsearch["filters"][param]["info"] == "STOP":
-                    value = self.qsearch_params_passed.get("STOP", default_to_date)
+                    value = self.qsearch_params_passed[param]
                 # Transform the value or use it as-is
                 if "transformer" in qsearch["filters"][param]:
                     transformer = self.transformers[qsearch["filters"][param]["transformer"]]
@@ -322,7 +317,26 @@ class QueryStringPatternTranslator:
             # substitute Params
             qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
+        self.set_filters_format(qsearch_in_query)
+
         return qsearch_in_query
+
+    def set_filters_format(self, qse):
+        filters = json.loads(qse[0])["filters"]
+        qse_prefix = qse[0][0:str.find(qse[0], "filters") - 1:1]
+        qse_suffix = qse[0][str.find(qse[0], ", \"fetchSize")::1]
+        str_filters = ''
+        first = True
+        for key in filters:
+            if filters[key] == '*':
+                continue
+            if first:
+                first = False
+            else:
+                str_filters = str_filters + "&"
+            str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
+        str_filters = "filters=\"" + str_filters + "\""
+        qse[0] = qse_prefix + str_filters + qse_suffix
 
     def generate_report_definitions(self):
         # for Each param passed get all reports pertaining to that params  -- this is a set of param reports
