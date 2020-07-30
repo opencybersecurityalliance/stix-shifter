@@ -79,8 +79,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return AqlQueryStringPatternTranslator._escape_value(value)
+        return "'%{value}%'".format(value=value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
