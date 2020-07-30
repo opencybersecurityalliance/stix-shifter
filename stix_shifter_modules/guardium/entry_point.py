@@ -50,7 +50,7 @@ class EntryPoint(BaseEntryPoint):
             results_translator = ResultsTranslator(options, dialect, filepath)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
-            dialect = 'qsearch'
-            query_translator = QueryTranslator(options, dialect, filepath)
-            results_translator = ResultsTranslator(options, dialect, filepath)
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
+            dialect2 = 'qsearch'
+            query_translator2 = QueryTranslator(options, dialect2, filepath)
+            results_translator2 = ResultsTranslator(options, dialect2, filepath)
+            self.add_dialect(dialect2, query_translator=query_translator2, results_translator=results_translator2, default=False)

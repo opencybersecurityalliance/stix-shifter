@@ -1,7 +1,7 @@
 import logging
 
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
-from . import query_constructor
+from . import query_constructor_n
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +21,6 @@ class QueryTranslator(BaseQueryTranslator):
 
         logger.info("Converting STIX2 Pattern to data source query")
 
-        query_string = query_constructor.translate_pattern(
+        query_string = query_constructor_n.translate_pattern(
             antlr_parsing_object, self, self.options)
         return query_string
