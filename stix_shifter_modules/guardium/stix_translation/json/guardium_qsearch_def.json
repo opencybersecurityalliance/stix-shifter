@@ -55,12 +55,12 @@
       "startTime": {
           "info": "START",
           "default": "1970-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
+          "transformer": "TimestampToGuardiumQS"
       },
       "endTime": {
           "info": "STOP",
           "default": "2019-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
+          "transformer": "TimestampToGuardiumQS"
       },
 
       "filters": {

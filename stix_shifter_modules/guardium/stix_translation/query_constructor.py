@@ -244,30 +244,15 @@ class QueryStringPatternTranslator:
         #   TO_DATE IS SET TO NOW
         #   FROM_DATE IS SET TO DAYS FROM NOW
         current_date = datetime.datetime.now()
-        default_to_date = current_date.strftime(('%Y%m%d %H:%M:%S.%f')[:-3])
-        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(('%Y%m%d %H:%M:%S.%f')[:-3])
+        default_to_date = current_date.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         for qsearch_name in qsearch_definitions:
             qsearch = qsearch_definitions[qsearch_name]
 
-            # for param in qsearch["startTime"]:
-            #     # either the value will be default or passed in (report parameter passed)
-            #     if param not in self.qsearch_params_passed:
-            #         value = qsearch["startTime"][param]["default"]
-            #     else:
-            #         value = self.report_params_passed[param]
-            #     # Use START and STOP  instead of default to time parameter
-            #     if qsearch["filters"][param]["info"] == "START":
-            #         value = self.qsearch_params_passed.get("START", default_from_date)
-            #     if qsearch["filters"][param]["info"] == "STOP":
-            #         value = self.qsearch_params_passed.get("STOP", default_to_date)
-            #     # Transform the value or use it as-is
-            #     if "transformer" in qsearch["filters"][param]:
-            #         transformer = self.transformers[qsearch["filters"][param]["transformer"]]
-            #         qsearch["filters"][param] = transformer.transform(value)
-            #     else:
-            #         qsearch["filters"][param] = value
-            qsearch["startTime"] = self.qsearch_params_passed.get("START", default_from_date)
-            qsearch["endTime"] = self.qsearch_params_passed.get("STOP", default_to_date)
+            sta = self.qsearch_params_passed.get("START", default_from_date)
+            sto = self.qsearch_params_passed.get("STOP", default_to_date)
+            qsearch["startTime"] = self.transformers[qsearch["startTime"]["transformer"]].transform(sta)
+            qsearch["endTime"] = self.transformers[qsearch["endTime"]["transformer"]].transform(sto)
 
             for param in qsearch["filters"]:
                 # either the value will be default or passed in (report parameter passed)
