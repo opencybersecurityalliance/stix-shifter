@@ -51,7 +51,6 @@
 "Policy Violation": {
 	"ATA Open Cases": {
       "category": "VIOLATION",
-      "sortType": "asc",
       "startTime": {
           "info": "START",
           "default": "1970-07-01T00:00:10.000Z",
@@ -68,7 +67,7 @@
           "info": "map",
           "default": "*"
         },
-        "DBUser":{
+        "DB User":{
           "info": "map",
           "default": "*"
         },
@@ -76,12 +75,12 @@
           "info": "map",
           "default": "*"
         },
-        "OSUser": {
+        "OS User": {
           "info": "map",
           "default": "*"
         }
       },
-      "fetchSize": "1000"
+      "fetchSize": "100"
     }
   }
 }

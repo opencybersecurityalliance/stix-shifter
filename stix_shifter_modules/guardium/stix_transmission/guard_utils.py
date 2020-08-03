@@ -216,7 +216,7 @@ class GuardApiClient(object):
         # QS
         # -------------------------------------------------------------------------------
         # print("filters:" +filters)
-        if not self.fields  :
+        if not self.fields:
              self.get_field_titles()
         
         results = ""
@@ -259,14 +259,19 @@ class GuardApiClient(object):
     def get_field_titles(self):
         # get QS field titles from Guardium
         response = requests.get(self.url+self.fields_target, headers=self.headers,verify=False)
-        print(json.loads(response.content)["Message"])
+        try:
+            print(json.loads(response.content)["Message"])
+        except Exception as e:
+            self.fields = response.content
+            return
         self.fields = json.loads(response.content)["Message"]
 
     def translate_response(self, fields, results):
         #trnaslate fields from numeric tags to field titles
         # set to lower case, replace white spaces with _
         #TBD - concat timestamp fields
-          for result in results: 
+          res = []
+          for result in results:
                 num_rows = result["numRows"]
                 count = result["count"]
                 category = result["searchArgs"]["category"]
@@ -287,7 +292,7 @@ class GuardApiClient(object):
                                     item_value = ""
                                     for val1 in val:
                                         item_value = item_value + str(item[val1]) + " "
-                                    item_value = item_value.rstrip()    
+                                    item_value = item_value.rstrip()
                                 else:
                                     item_value = item[key]
 
@@ -303,8 +308,8 @@ class GuardApiClient(object):
                             except Exception as e:
                                 print("ERROR: Category: "+ category +" key: " + key + " value: " + value)
                                 print(e)
-                        res.append(res_item)  
-                          
+                        res.append(res_item)
+
                 return json.dumps(res)
    
 

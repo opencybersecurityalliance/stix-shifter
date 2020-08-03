@@ -320,8 +320,11 @@ class QueryStringPatternTranslator:
             else:
                 str_filters = str_filters + "&"
             str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
-        str_filters = "filters=\"" + str_filters + "\""
-        qse[0] = qse_prefix + str_filters + qse_suffix
+        if str_filters.__len__() > 0:
+            str_filters = "\"filters\":\"" + str_filters + "\""
+            qse[0] = qse_prefix + str_filters + qse_suffix
+        else:
+            qse[0] = qse_prefix + qse_suffix[2::1]
 
     def generate_report_definitions(self):
         # for Each param passed get all reports pertaining to that params  -- this is a set of param reports

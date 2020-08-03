@@ -368,7 +368,8 @@ class TimestampToGuardiumQS(ValueTransformer):
     def transform(timestamp):
         rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
         mtch = (re.findall(rgx, timestamp))[0]
-        return (mtch[0].replace("-","") + ' ' + mtch[1])
+        # return (mtch[0].replace("-","") + ' ' + mtch[1])
+        return "".join(mtch[0].rsplit("-", 1)).replace("-", "0") + ' ' + mtch[1]
 
 
 class Ymd_HMSToTimestamp(ValueTransformer):
