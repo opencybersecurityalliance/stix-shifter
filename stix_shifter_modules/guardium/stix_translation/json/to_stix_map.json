@@ -148,6 +148,18 @@
       "cybox": false
     }
   ],
+  "timestamp": [
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
   "Url": {
     "key": "url.value"
   },
