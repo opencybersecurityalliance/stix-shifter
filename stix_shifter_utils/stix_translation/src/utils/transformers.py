@@ -361,6 +361,22 @@ class TimestampToGuardium(ValueTransformer):
         return (mtch[0] + ' ' + mtch[1])
 
 
+class GuardiumQS(ValueTransformer):
+    """Send back Policy Violation string"""
+
+    @staticmethod
+    def transform(obj):
+        return "Policy Violation"
+
+
+class GuardiumRep(ValueTransformer):
+    """Send back Threat Case string"""
+
+    @staticmethod
+    def transform(obj):
+        return "Threat Case"
+
+
 class TimestampToGuardiumQS(ValueTransformer):
     """A value transformer for converting  regular timestamp to Guardium timestamp"""
 
@@ -392,4 +408,5 @@ def get_all_transformers():
             "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
             "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
-            "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp}
+            "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
+            "GuardiumQS": GuardiumQS}

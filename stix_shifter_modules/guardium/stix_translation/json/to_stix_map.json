@@ -221,14 +221,24 @@
 	"key":"x-ibm-finding.dst_device",
         "object":"finding"
   },
-  "severity":{
+  "severity":[
+     {
 	"key":"x-ibm-finding.severity",
-	"object":"finding"
-  },
-  "Severity":{
+	"object":"finding"},
+     {
+    "key":"x-ibm-finding.finding_type",
+	"object":"finding",
+    "transformer": "GuardiumQS"}
+  ],
+  "Severity":[
+     {
 	"key":"x-ibm-finding.severity",
-	"object":"finding"
-  },
+	"object":"finding"},
+     {
+    "key":"x-ibm-finding.finding_type",
+    "object":"finding",
+    "transformer": "GuardiumRep"}
+  ],
  "guardium_appliance":{
 	"key":"x-ibm-finding.source",
 	"object":"finding"

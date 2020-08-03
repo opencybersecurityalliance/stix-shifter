@@ -80,7 +80,7 @@
           "default": "*"
         }
       },
-      "fetchSize": "100"
+      "fetchSize": "1000"
     }
   }
 }
