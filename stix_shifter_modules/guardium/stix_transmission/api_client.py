@@ -66,7 +66,7 @@ class APIClient():
         respObj.code = "401"
         respObj.error_type = ""
         respObj.status_code = 401
-        print("query="+query_expression)
+        # print("query="+query_expression)
         if (self.client.access_token):
             self.query = query_expression
             response = self.build_searchId()
@@ -105,8 +105,8 @@ class APIClient():
             id_byt = id_str.encode('utf-8')
             s_id = base64.b64encode(id_byt).decode()
             self.search_id=s_id
-#
-        print(s_id)
+
+        # print(s_id)
         return s_id
 
 
@@ -119,11 +119,11 @@ class APIClient():
             self.decode_searchId()
             indx = int(index_from)+1
             fsize = int(fetch_size)+1
-            if "reportName" in self.query :
+            if "reportName" in self.query:
                 response = self.client.handle_report(self.query["reportName"], self.query["reportParameter"], indx, fsize)
                 respObj = ResponseWrapper(response)
-            if "category" in self.query :
-                print("TADA")
+            if "category" in self.query:
+                # print("TADA")
                 response = self.client.handle_qs(self.query["category"], self.query, "", indx, fsize)
                 respObj = ResponseWrapper(response)
             status_code = response.status_code

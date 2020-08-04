@@ -90,13 +90,14 @@ class GuardApiClient(object):
         # -------------------------------------------------------------------------------
         #curl -k -X POST -d 'client_id=stix-shifter&grant_type=password&client_secret=2de4e437-73f1-445e-b6eb-a87c62a8e4cb&username=admin&password=!QAZ2wsx' https://hgai-srv05.haifa.ibm.com:8443/oauth/token
         #{"access_token":"619f4340-4f22-4ae0-9fda-9c5e0e8e8091","token_type":"bearer","expires_in":10799,"scope":"read write"}
-        print("client_id="+self.client_id)
-        #self.client_id="stix-shifter"
-        print("secret="+self.secret)
-        #self.secret="2de4e437-73f1-445e-b6eb-a87c62a8e4cb"
-        print("user="+self.user)
-        #self.user="admin"
-        print("password="+self.password)
+        # comment in and out all prints
+        # print("client_id="+self.client_id)
+        # self.client_id="stix-shifter"
+        # print("secret="+self.secret)
+        # self.secret="2de4e437-73f1-445e-b6eb-a87c62a8e4cb"
+        # print("user="+self.user)
+        # self.user="admin"
+        # print("password="+self.password)
         #self.password="%21QAZ2wsx"
         self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(self.client_id,self.secret,self.user, self.password)
         #self.token_data = 'client_id=stix-shifter&grant_type=password&client_secret=2de4e437-73f1-445e-b6eb-a87c62a8e4cb&username=admin&password=!QAZ2wsx'
@@ -108,7 +109,7 @@ class GuardApiClient(object):
               #raise RecoverableFailure("token request faild {0}".format(e.args))
         if self.validate_response(response, "token ", True):
             self.access_token = response.json()['access_token']
-            print("token="+ self.access_token)
+            # print("token="+ self.access_token)
             self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
             
     def validate_response(self, p_response, prefix, abort=False):
@@ -275,7 +276,7 @@ class GuardApiClient(object):
                 num_rows = result["numRows"]
                 count = result["count"]
                 category = result["searchArgs"]["category"]
-                print("total num rows " + str(num_rows) + " count " + str(count))
+                # print("total num rows " + str(num_rows) + " count " + str(count))
                 if num_rows > 0:
                     res = []
                     items = result["items"]
