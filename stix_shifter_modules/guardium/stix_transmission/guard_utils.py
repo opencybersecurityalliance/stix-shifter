@@ -261,11 +261,11 @@ class GuardApiClient(object):
         # get QS field titles from Guardium
         response = requests.get(self.url+self.fields_target, headers=self.headers,verify=False)
         try:
-            print(json.loads(response.content)["Message"])
+            msg = json.loads(response.content)["Message"]
         except Exception as e:
             self.fields = response.content
             return
-        self.fields = json.loads(response.content)["Message"]
+        self.fields = msg
 
     def translate_response(self, fields, results):
         #trnaslate fields from numeric tags to field titles
