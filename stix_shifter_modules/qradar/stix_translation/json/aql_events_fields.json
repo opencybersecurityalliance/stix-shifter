@@ -29,7 +29,6 @@
     "URL as url",
     "magnitude",
     "Filename as filename",
-    "URL as domainname",
     "\"File Hash\" as filehash",
     "\"File Path\" as filepath",
     "severity",
@@ -40,6 +39,7 @@
     "\"CRE Description\" as credescription",
     "creeventlist",
     "rulename(creeventlist) as rulenames",
-    "domainid"
+    "domainid",
+    "DOMAINNAME(domainid) as domainname"
   ]
 }
