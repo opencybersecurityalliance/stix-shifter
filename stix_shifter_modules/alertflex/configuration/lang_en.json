@@ -11,7 +11,7 @@
         },
         "help": {
             "label": "Help",
-            "description": "More details on the datasource setting can be found in the specified link"
+            "description": "More details on the data source setting can be found in the specified link"
         },
         "sni": {
             "label": "Server Name Indicator",
@@ -19,7 +19,7 @@
         },
         "selfSignedCert": {
             "label": "Alertflex Connection Certificate",
-            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
+            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         }
     },
     "configuration": {
