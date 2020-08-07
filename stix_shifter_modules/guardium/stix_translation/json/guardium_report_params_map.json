@@ -7,13 +7,11 @@
 
   },
   "maps": {
-    "CLIENTIP": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "SERVERIP": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "DBUSERNAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "DATABASENAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "SERVICENAME": ["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "OSUSER": ["activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"],
-    "ERRORCODE": ["exceptions:--IBM SC Exception Details"]
+    "DBUser": ["Threat:ATA Open Cases"],
+    "Database": ["Threat:ATA Open Cases"],
+    "ServerIP": ["Threat:ATA Open Cases"],
+    "Severity": ["Threat:ATA Open Cases"],
+    "OSUser": ["Threat:ATA Open Cases"]
   },
-  "defaultReports":["session:--IBM SC Session Details","activity:--IBM SC Activity Details","exceptions:--IBM SC Exception Details"]
+  "defaultReports":["Threat:ATA Open Cases"]
 }
