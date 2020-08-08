@@ -1,14 +1,14 @@
 {
     "connection": {
         "type": {
-            "description": "Datasource type"
+            "description": "Data source type"
         },
         "name": {
-            "label": "Data Source Name",
+            "label": "Data source name",
             "placeholder": "Add a data source name"
         },
         "description": {
-            "label": "Data Source Description",
+            "label": "Data source description",
             "placeholder": "Add a data source description"
         },
         "options": {
@@ -26,11 +26,11 @@
             },
             "dialects": {
                 "label": "Dialect",
-                "description": "If datasource needs to search multiple schema or database tables"
+                "description": "If data source needs to search multiple schema or database tables"
             },
             "validate_pattern": {
                 "label": "STIX Pattern Validator",
-                "description": "Validate STIX patterns that needs to be translated into native datasource query"
+                "description": "Validate STIX patterns that needs to be translated into native data source query"
             },
             "stix_validator": {
                 "label": "STIX Object Validator",
