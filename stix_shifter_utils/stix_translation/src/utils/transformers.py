@@ -361,6 +361,33 @@ class TimestampToGuardium(ValueTransformer):
         return (mtch[0] + ' ' + mtch[1])
 
 
+class GuardiumQS(ValueTransformer):
+    """Send back Policy Violation string"""
+
+    @staticmethod
+    def transform(obj):
+        return "Policy Violation"
+
+
+class GuardiumRep(ValueTransformer):
+    """Send back Threat Case string"""
+
+    @staticmethod
+    def transform(obj):
+        return "Threat Case"
+
+
+class TimestampToGuardiumQS(ValueTransformer):
+    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+
+    @staticmethod
+    def transform(timestamp):
+        rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
+        mtch = (re.findall(rgx, timestamp))[0]
+        return mtch[0].replace("-", "") + ' ' + mtch[1]
+        # return "".join(mtch[0].rsplit("-", 1)).replace("-", "0") + ' ' + mtch[1]
+
+
 class Ymd_HMSToTimestamp(ValueTransformer):
     """A value transformer for the timestamps but adds ONE second to the time stamp.  Reason: Use when modified date is missing"""
 
@@ -380,4 +407,6 @@ def get_all_transformers():
             "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
             "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
-            "GuardiumToTimestamp": GuardiumToTimestamp, "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp}
+            "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
+            "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
+            "GuardiumQS": GuardiumQS}
