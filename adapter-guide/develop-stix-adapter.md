@@ -108,3 +108,40 @@ As an example:
 ```
 python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
 ```
+
+### Packaging individual connectors
+
+Stix-shifter can be broken into several python whl packages by using the `setup.py` script found in the root of the project. This packaging script can be called from the CLI:
+
+```
+MODE='<module name>' VERSION='<connector version>' python3 setup.py bdist_wheel
+```
+
+`MODE` is a required argument that is used to determine how the project is packaged. Mode options include:
+
+`'1'` = Include everything in one whl package
+
+`'3'` - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
+
+`'N'` - `stix-shifter`, `stix-shifter-utils`, and each connector is packaged separately
+
+`<module name>` - package only the specified connector
+
+The `VERSION` argument is optional. If missing, version 1.0.0 is attached to the package name.
+
+When the script is executed, a new `dist` directory is created at the root of the stix-shifter project; this contains the generated whl packages.
+
+A packaged connector follows the naming convention of: 
+
+`stix_shifter_modules_<module name>-<version>-py2.py3-none-any.whl`
+
+The contents of the package has the same directory structure as the module in the project:
+
+```
+stix_shifter_modules => 
+    <module name> =>
+        configuration
+        stix_translation
+        stix_transmission
+        entry_point
+```
