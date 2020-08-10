@@ -40,6 +40,11 @@ def fill_connectors(projects, modules_path):
         if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
             projects['stix_shifter_modules_' + module] = ['stix_shifter_modules/' + module]
 
+# The mode determines how the stix-shifter is packaged
+# 1 = Include everything in 1 whl package
+# 3 - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
+# N - stix-shifter, stix-shifter-utils, and each connector is packaged separately
+# <module name> - package only the specified connector
 
 mode = 'N'
 if 'MODE' in os.environ:
