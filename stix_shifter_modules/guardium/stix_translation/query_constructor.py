@@ -389,7 +389,7 @@ class QueryStringPatternTranslator:
             if param in param_map:
                 param_set = set(param_map[param])
             elif param in param_cmn:
-                param_set = set(self.QSEARCH_PARAMS_MAP["defaultQsearchs"])
+                param_set = set(self.QSEARCH_PARAMS_MAP["defaultQsearch"])
             else:
                 param_set = None
 
@@ -403,7 +403,7 @@ class QueryStringPatternTranslator:
 
         # Check if qsearch_set is null
         if (not bool(qsearch_set)):
-            qsearch_set = self.QSEARCH_PARAMS_MAP["defaultQsearchs"]
+            qsearch_set = self.QSEARCH_PARAMS_MAP["defaultQsearch"]
 
         # Now we have to create qsearch_definitions from this qsearch_set
         # Qsearch set --> data_category:qsearch_name
