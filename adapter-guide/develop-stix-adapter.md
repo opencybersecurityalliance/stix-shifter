@@ -145,3 +145,14 @@ stix_shifter_modules =>
         stix_transmission
         entry_point
 ```
+
+### Building images of the connectors
+
+You can build the docker image your developed connector locally and publish it to your desired repository. In order to do that, follow the below steps-
+
+1. Make sure you have built the wheel distribution of the connector module by following the steps in [Packaging individual connectors section](#Packaging-individual-connectors).
+2. `image_builder` directory in your stix-shifter project contains the required scripts that will automatically build the connector image. You can copy the directory in a separate location or keep it inside stix-shifter project.
+3. Create a folder named `bundle` inside `image_builder/` directory.
+4. Move your desired connector wheel file (`stix_shifter_modules_<module name>-<version>-py2.py3-none-any.whl`) to the bundle folder created in step 3.
+5. Run `build_local.sh` script.
+6. Image should be automatically built in your running docker client.
