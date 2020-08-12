@@ -87,14 +87,19 @@ class GuardApiClient(object):
         # print("secret="+self.secret)
         # print("user="+self.user)
         # print("password="+self.password)
-        self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(self.client_id,self.secret,self.user, self.password)
-        response = requests.post(self.url+self.token_target, params=self.token_data,verify=False)
+        response = self.request_token()
 
         if self.validate_response(response, "token ", True):
             self.access_token = response.json()['access_token']
             # print("token="+ self.access_token)
             self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
-            
+
+    def request_token(self):
+        self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(
+            self.client_id, self.secret, self.user, self.password)
+        response = requests.post(self.url + self.token_target, params=self.token_data, verify=False)
+        return response
+
     def validate_response(self, p_response, prefix, abort=False):
         if p_response.status_code != 200:
             if abort:
@@ -146,7 +151,7 @@ class GuardApiClient(object):
         try:
             msg = json.loads(response.content)["Message"]
         except Exception as e:
-            self.fields = response.content
+            self.fields = json.dumps(json.loads(response.content)[0])
             return
         self.fields = msg
 

@@ -1,6 +1,6 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from .guard_utils import GuardApiClient
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter_utils.utils import logger
 from requests.models import Response
 import json 
 import base64
@@ -8,35 +8,26 @@ import base64
 class APIClient():
 
     def __init__(self, connection, configuration):
-         # Uncomment when implementing data source API client.
-        # auth = configuration.get('auth')
-        # headers = dict()
-        # headers['X-Auth-Token'] = auth.get('token')
-        # self.client = RestApiClient(connection.get('host'),
-        #                             connection.get('port'),
-        #                             connection.get('cert', None),
-        #                             headers,
-        #                             cert_verify=connection.get('cert_verify', 'True')
-        #                             )
 
         # Placeholder client to allow dummy transmission calls.
         # Remove when implementing data source API client.
         url = "https://"+connection["host"]+":"+connection["port"]
-        self.client = GuardApiClient(connection["options"]["client_id"], url, connection["options"]["client_secret"], \
-                                            configuration["auth"]["username"], configuration["auth"]["password"])
-       
+        self.client = GuardApiClient(connection["client_id"], url, connection["client_secret"],
+                                     configuration["auth"]["username"], configuration["auth"]["password"])
 
     def ping_data_source(self):
         # Pings the data source
-        return {"code": 200, "success": True}
-
+        if self.client.validate_response(self.client.request_token(), "", False):
+            return {"code": 200, "success": True}
+        else:
+            return {"success": False}
 
     def get_search_status(self, search_id):
         # Check the current status of the search
         return {"code": 200, "status": "COMPLETED"}
     
     def get_status(self, search_id):
-            # Subroto we do not need to send anything to Guardium
+        # Subroto we do not need to send anything to Guardium
         # We create response object and send "COMPLETED"
         # Note: we may have an issue with this simplistic approach
         respObj = Response()
@@ -90,18 +81,18 @@ class APIClient():
         return ResponseWrapper(respObj)
         
     def build_searchId(self):
-        #       It should be called only ONCE when transmit query is called
+        # It should be called only ONCE when transmit query is called
         # Structure of the search id is
         # '{"query": ' + json.dumps(self.query) + ', "credential" : ' + json.dumps(self.credential) + '}'
         s_id = None
-#
+
         if(self.query is None):
             raise IOError(3001, 
             "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
-#
+
         else:
             id_str = '{"query": ' + json.dumps(self.query) + ', "target" : "' + self.client.url + '", "user":"'+self.client.user+'"}'
-            #print(id_str)
+            # print(id_str)
             id_byt = id_str.encode('utf-8')
             s_id = base64.b64encode(id_byt).decode()
             self.search_id=s_id
