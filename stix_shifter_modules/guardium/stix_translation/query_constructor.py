@@ -305,8 +305,6 @@ class QueryStringPatternTranslator:
             # substitute Params
             qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
-        # try to merge the queries?
-
         self.set_filters_format(qsearch_in_query)
 
         return qsearch_in_query
