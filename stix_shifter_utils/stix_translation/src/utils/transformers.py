@@ -377,6 +377,24 @@ class GuardiumRep(ValueTransformer):
         return "Threat Case"
 
 
+class GuardiumMapSeverity(object):
+    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+
+    @staticmethod
+    def transform(severity):
+        try:
+            num = int(severity)
+            if num < 5:
+                return "Low"
+            elif num > 5:
+                return "High"
+            else:
+                return "Medium"
+        except ValueError:
+            LOGGER.error("Cannot convert input to path string")
+
+
+
 class TimestampToGuardiumQS(ValueTransformer):
     """A value transformer for converting  regular timestamp to Guardium timestamp"""
 
@@ -385,7 +403,6 @@ class TimestampToGuardiumQS(ValueTransformer):
         rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
         mtch = (re.findall(rgx, timestamp))[0]
         return mtch[0].replace("-", "") + ' ' + mtch[1]
-        # return "".join(mtch[0].rsplit("-", 1)).replace("-", "0") + ' ' + mtch[1]
 
 
 class Ymd_HMSToTimestamp(ValueTransformer):
@@ -409,4 +426,4 @@ def get_all_transformers():
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
             "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
             "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
-            "GuardiumQS": GuardiumQS}
+            "GuardiumQS": GuardiumQS, "GuardiumMapSeverity": GuardiumMapSeverity}

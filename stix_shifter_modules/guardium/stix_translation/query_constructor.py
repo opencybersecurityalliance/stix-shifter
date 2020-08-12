@@ -291,9 +291,12 @@ class QueryStringPatternTranslator:
         qsearch_in_query = []
         for qsearch_param_index in range(self.qsearch_params_array_size):
             self.qsearch_params_passed = self.qsearch_params_array[qsearch_param_index]
+            clientip = self.qsearch_params_passed.get("Client", None)
+            if clientip is not None:
+                continue
             data_category = self.qsearch_params_passed.get("datacategory", None)
             if data_category is not None:
-                if data_category not in self.REPORT_DEF:
+                if data_category not in self.QSEARCH_DEF:
                     qsearch_definitions = None
                 else:
                     qsearch_definitions = copy.deepcopy(self.QSEARCH_DEF[data_category])
@@ -301,6 +304,8 @@ class QueryStringPatternTranslator:
                 qsearch_definitions = self.generate_qsearch_definitions()
             # substitute Params
             qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+
+        # try to merge the queries?
 
         self.set_filters_format(qsearch_in_query)
 
