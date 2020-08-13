@@ -223,7 +223,7 @@
   },
   "severity":[
      {
-	"key":"x-guardium.severity",
+	"key":"x-ibm-guardium.severity",
      "transformer": "GuardiumMapSeverity"},
      {
     "key":"x-ibm-finding.finding_type",
@@ -232,7 +232,7 @@
   ],
   "Severity":[
      {
-	"key":"x-guardium.severity"},
+	"key":"x-ibm-guardium.severity"},
      {
     "key":"x-ibm-finding.finding_type",
     "object":"finding",
