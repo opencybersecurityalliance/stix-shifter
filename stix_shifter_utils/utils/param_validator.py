@@ -169,6 +169,8 @@ def default_section(item, key):
 
 def is_leaf(config):
     if isinstance(config, dict):
+        if 'type' in config and config['type'] == 'json':
+            return True
         for key, value in config.items():
             if isinstance(value, dict):
                 return False

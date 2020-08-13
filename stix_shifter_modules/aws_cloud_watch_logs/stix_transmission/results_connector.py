@@ -2,6 +2,8 @@ import json
 from flatten_json import flatten
 import copy
 from os import path
+from importlib import import_module
+from pathlib import Path
 
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -40,7 +42,7 @@ class ResultsConnector(BaseResultsConnector):
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-        
+
         self.logger.debug('Return Object: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj
 
@@ -72,7 +74,6 @@ class ResultsConnector(BaseResultsConnector):
             elif 'source' not in record_dict.keys():
                 vpc_dict = dict()
                 vpc_dict['vpcflow'] = copy.deepcopy(record_dict)
-                
                 vpc_dict['vpcflow']['protocol'] = self.get_protocol(vpc_dict['vpcflow']['protocol'])
                 vpc_dict['vpcflow']['event_count'] = 1
                 result_list.append(vpc_dict)
@@ -114,8 +115,10 @@ class ResultsConnector(BaseResultsConnector):
         :param value: str, protocol
         :return: str, protocol
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
-                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
+        modules = import_module('stix_shifter_modules')
+        modules_path = Path(modules.__file__).parent
+        _json_path = path.abspath(path.join(modules_path,
+                                            'aws_cloud_watch_logs/stix_translation/json'
                                             '/network_protocol_map.json'))
         if path.exists(_json_path):
             with open(_json_path) as f_obj:
@@ -135,8 +138,10 @@ class ResultsConnector(BaseResultsConnector):
         Fetching guardduty common attributes from common attributes json
         :return: list, guardduty common attributes
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
-                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
+        modules = import_module('stix_shifter_modules')
+        modules_path = Path(modules.__file__).parent
+        _json_path = path.abspath(path.join(modules_path,
+                                            'aws_cloud_watch_logs/stix_translation/json'
                                             '/common_attributes.json'))
         if path.exists(_json_path):
             with open(_json_path) as f_obj:
