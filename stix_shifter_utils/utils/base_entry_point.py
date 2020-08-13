@@ -126,11 +126,11 @@ class BaseEntryPoint:
         basepath = os.path.dirname(module.__file__)
         basepath = os.path.abspath(basepath)
         basepath = os.path.join(basepath, 'json')
-        
+
         mapping = {}
         if os.path.isdir(basepath):
             for filename in glob.glob(basepath + os.sep + "*.json"):
-                key = os.path.basename(filename)
+                key = os.path.basename(filename)[:-5]
                 with open(filename, 'r') as f:
                     jsondata = json.load(f)
                     mapping[key] = jsondata
