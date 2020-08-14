@@ -27,11 +27,11 @@
 
         "OSUser": {
           "info": "map",
-          "default": "%"
+          "default": "*"
         },
         "DBUser": {
           "info": "map",
-          "default": "%"
+          "default": "*"
         },
         "Database": {
           "info": "map",
@@ -67,7 +67,7 @@
           "info": "map",
           "default": "*"
         },
-        "DB User":{
+        "DBUser":{
           "info": "map",
           "default": "*"
         },
@@ -75,7 +75,7 @@
           "info": "map",
           "default": "*"
         },
-        "OS User": {
+        "OSUser": {
           "info": "map",
           "default": "*"
         }

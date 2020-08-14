@@ -1,5 +1,5 @@
 {
-  "DB User": [
+  "DBUser": [
     {
       "key": "user-account.user_id",
       "object":"account" 
@@ -23,7 +23,7 @@
     }
    ]
   ,
- "OS User": [
+ "OSUser": [
     {
       "key": "user-account.login_name",
       "object":"account"

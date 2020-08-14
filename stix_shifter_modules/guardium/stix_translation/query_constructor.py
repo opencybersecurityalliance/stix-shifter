@@ -310,24 +310,25 @@ class QueryStringPatternTranslator:
         return qsearch_in_query
 
     def set_filters_format(self, qse):
-        filters = json.loads(qse[0])["filters"]
-        qse_prefix = qse[0][0:str.find(qse[0], "filters") - 1:1]
-        qse_suffix = qse[0][str.find(qse[0], ", \"fetchSize")::1]
-        str_filters = ''
-        first = True
-        for key in filters:
-            if filters[key] == '*':
-                continue
-            if first:
-                first = False
+        for i in range(len(qse)):
+            filters = json.loads(qse[i])["filters"]
+            qse_prefix = qse[i][0:str.find(qse[i], "filters") - 1:1]
+            qse_suffix = qse[i][str.find(qse[i], ", \"fetchSize")::1]
+            str_filters = ''
+            first = True
+            for key in filters:
+                if filters[key] == '*':
+                    continue
+                if first:
+                    first = False
+                else:
+                    str_filters = str_filters + "&"
+                str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
+            if str_filters.__len__() > 0:
+                str_filters = "\"filters\":\"" + str_filters + "\""
+                qse[i] = qse_prefix + str_filters + qse_suffix
             else:
-                str_filters = str_filters + "&"
-            str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
-        if str_filters.__len__() > 0:
-            str_filters = "\"filters\":\"" + str_filters + "\""
-            qse[0] = qse_prefix + str_filters + qse_suffix
-        else:
-            qse[0] = qse_prefix + qse_suffix[2::1]
+                qse[i] = qse_prefix + qse_suffix[2::1]
 
     def generate_report_definitions(self):
         # for Each param passed get all reports pertaining to that params  -- this is a set of param reports
