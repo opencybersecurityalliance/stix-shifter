@@ -27,16 +27,14 @@
             "type": "password",
             "optional": true
         },
-            "client_id": {
-                "type": "string",
-                "optional": true,
-                "hidden": true
-            },
-            "client_secret": {
-                "type": "password",
-                "optional": true,
-                "hidden": true
-            }
+        "client_id": {
+            "type": "text",
+            "previous": "connection.options.client_id"
+        },
+        "client_secret": {
+            "type": "password",
+            "previous": "connection.options.client_secret"
+        }
     },
     "configuration": {
         "auth": {

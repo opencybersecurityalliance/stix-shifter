@@ -27,8 +27,16 @@ class APIClient():
         return {"code": 200, "status": "COMPLETED"}
     
     def get_status(self, search_id):
-        # Not supported - it is a synchronous connector.
-        return {"code": 200, "status": "COMPLETED"}
+        # It is a synchronous connector.
+        # return {"code": 200, "status": "COMPLETED"}
+        respObj = Response()
+        respObj.code = "200"
+        respObj.error_type = ""
+        respObj.status_code = 200
+        content = '{"search_id": "' + search_id + \
+            '", "progress":"Completed", "status":"COMPLETED", "data": {"message":"Completed for the search id provided."}}'
+        respObj._content = bytes(content, 'utf-8')
+        return ResponseWrapper(respObj)
    
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
