@@ -27,25 +27,8 @@ class APIClient():
         return {"code": 200, "status": "COMPLETED"}
     
     def get_status(self, search_id):
-        # Subroto we do not need to send anything to Guardium
-        # We create response object and send "COMPLETED"
-        # Note: we may have an issue with this simplistic approach
-        respObj = Response()
-        if (self.client.access_token):
-            respObj.code = "200"
-            respObj.error_type = ""
-            respObj.status_code = 200
-            content = '{"search_id": "' + search_id + \
-                '", "progress":"Completed", "status":"COMPLETED", "data": {"message":"Completed for the search id provided."}}'
-            respObj._content = bytes(content, 'utf-8')
-        else:
-            respObj.code = "503"
-            respObj.error_type = "Service Unavailable"
-            respObj.status_code = 503
-            content = '{"status":"Failed", "data": {"message": "Could obtain status: Authentication issue / service unavailable."}}'
-            respObj._content = bytes(content, 'utf-8')
-        
-        return ResponseWrapper(respObj)
+        # Not supported - it is a synchronous connector.
+        return {"code": 200, "status": "COMPLETED"}
    
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
