@@ -39,10 +39,6 @@
             "password": {
                 "label": "Password",
                 "description": "Password of the user with access to the search API"
-            },
-            "logLevel": {
-                "label": "Password",
-                "description": "Set the Log Level of Guardium module."
             }
         }
     }

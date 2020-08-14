@@ -47,10 +47,6 @@
           "password": {
               "type": "password"
           }
-        },
-        "logLevel": {
-          "type": "text",
-          "default": "debug"
         }
     }
 }
