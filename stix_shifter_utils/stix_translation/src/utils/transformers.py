@@ -394,6 +394,21 @@ class GuardiumMapSeverity(object):
             LOGGER.error("Cannot convert input to path string")
 
 
+class GuardiumMapSeverityNum(object):
+    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+
+    @staticmethod
+    def transform(severity):
+        sev = severity.lower()
+        if sev == "low":
+            return '1'
+        elif sev == "high":
+            return '9'
+        elif sev == "medium":
+            return '5'
+        else:
+            return "*"
+
 
 class TimestampToGuardiumQS(ValueTransformer):
     """A value transformer for converting  regular timestamp to Guardium timestamp"""
@@ -426,4 +441,5 @@ def get_all_transformers():
             "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
             "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
             "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
-            "GuardiumQS": GuardiumQS, "GuardiumMapSeverity": GuardiumMapSeverity}
+            "GuardiumQS": GuardiumQS, "GuardiumMapSeverity": GuardiumMapSeverity,
+            "GuardiumMapSeverityNum": GuardiumMapSeverityNum}
