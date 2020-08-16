@@ -81,7 +81,8 @@
         },
         "Severity": {
           "info": "map",
-          "default": "*"
+          "default": "*",
+          "transformer": "GuardiumMapSeverityNum"
         }
       },
       "fetchSize": "1000"

@@ -74,7 +74,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_severity_query(self):
         stix_pattern = "[ x-guardium:severity='Low']"
         query = _translate_query(stix_pattern)
-        filters = "\"filters\":\"name=Severity&value=Low&isGroup=false\""
+        filters = "\"filters\":\"name=Severity&value=1&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
 
 
