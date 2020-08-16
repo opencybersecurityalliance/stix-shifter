@@ -71,6 +71,12 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
         assert MAPPING_ERROR in query['error']
 
+    def test_severity_query(self):
+        stix_pattern = "[ x-guardium:severity='Low']"
+        query = _translate_query(stix_pattern)
+        filters = "\"filters\":\"name=Severity&value=Low&isGroup=false\""
+        _test_query_assertions(query['queries'], 0, filters)
+
 
 
 

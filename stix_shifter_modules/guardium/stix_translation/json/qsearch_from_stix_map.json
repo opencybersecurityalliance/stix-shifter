@@ -35,7 +35,7 @@
     },
     "x-guardium": {
       "fields": {
-        "severity": ["severity"]
+        "severity": ["Severity"]
       }
     }
   }

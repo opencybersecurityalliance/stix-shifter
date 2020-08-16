@@ -78,6 +78,10 @@
         "OSUser": {
           "info": "map",
           "default": "*"
+        },
+        "Severity": {
+          "info": "map",
+          "default": "*"
         }
       },
       "fetchSize": "1000"
