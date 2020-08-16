@@ -35,12 +35,10 @@
     }
    ],
   "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
+    "key": "x-guardium.log_source_id"
   },
   "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
+    "key": "x-guardium.magnitude"
   },
   "SourceIpV4": [
     {
@@ -223,7 +221,7 @@
   },
   "severity":[
      {
-	"key":"x-ibm-guardium.severity",
+	"key":"x-guardium.severity",
      "transformer": "GuardiumMapSeverity"},
      {
     "key":"x-ibm-finding.finding_type",
@@ -232,7 +230,7 @@
   ],
   "Severity":[
      {
-	"key":"x-ibm-guardium.severity"},
+	"key":"x-guardium.severity"},
      {
     "key":"x-ibm-finding.finding_type",
     "object":"finding",

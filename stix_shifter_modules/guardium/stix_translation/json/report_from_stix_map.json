@@ -5,8 +5,7 @@
       "start": ["QUERY_FROM_DATE"],
       "end": ["QUERY_TO_DATE"],
       "database_name": ["Database"],
-      "db_type":["db_type"],
-      "Severity":["Severity"]
+      "db_type":["db_type"]
     }
   },
   "ipv4-addr": {
@@ -41,6 +40,11 @@
   "domain-name": {
     "fields": {
       "value": ["DomainName-dialect1"]
+    }
+  },
+  "x-guardium": {
+    "fields": {
+      "severity":["Severity"]
     }
   }
 }
