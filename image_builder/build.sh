@@ -97,8 +97,8 @@ if [ ! -f "$REPOSITORY_CERT_FILE" ]; then
 
   if [ ! -d "$REPOSITORY_CERT_DIR" ]; then
     echo "Certificate target directory '${REPOSITORY_CERT_DIR}' does not exist"
-    echo 'Please enter sudo password to create it..'
-    sudo mkdir $REPOSITORY_CERT_DIR
+    echo 'Please enter sudo password to create it...'
+    sudo mkdir -p $REPOSITORY_CERT_DIR
 
     if [ ! -d "$REPOSITORY_CERT_DIR" ]; then
       echo "Failed to create directory"
@@ -110,6 +110,15 @@ if [ ! -f "$REPOSITORY_CERT_FILE" ]; then
   echo 'Please enter sudo password (if required) to copy certificate..'
   sudo cp $REPOSITORY_CERT_TMP $REPOSITORY_CERT_FILE
   rm -rf $REPOSITORY_CERT_TMP | true
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -n "Adding certificate to docker VM... "
+    sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $REPOSITORY_CERT_FILE
+    echo 'Ok'
+    echo -n "Restarting docker... "
+    killall Docker && open /Applications/Docker.app
+    sleep 60
+    echo 'Ok'
+  fi
 fi
 
 if [ -z "${IMAGE_URL}" ]; then
