@@ -1,19 +1,19 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® Guardium"
+            "default": "IBM® Guardium"
         },
         "host": {
             "type": "text",
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
         },
         "port": {
-            "type": "number",
-            "default": 443
+            "default": 8443,
+            "type": "number"
         },
         "help": {
-            "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-elastic.html"
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.3.0/cp4s_v1r3/docs/scp-core/data-sources-guardium.html",
+            "type": "link"
         },
         "sni": {
             "type": "text",
@@ -34,13 +34,13 @@
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
-            "username": {
-                "type": "password"
-            },
-            "password": {
-                "type": "password"
-            }
+          "type" : "fields",
+          "username": {
+              "type": "password"
+          },
+          "password": {
+              "type": "password"
+          }
         }
     }
 }

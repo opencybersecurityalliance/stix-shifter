@@ -27,11 +27,11 @@
 
         "OSUser": {
           "info": "map",
-          "default": "%"
+          "default": "*"
         },
         "DBUser": {
           "info": "map",
-          "default": "%"
+          "default": "*"
         },
         "Database": {
           "info": "map",
@@ -51,32 +51,41 @@
 "Policy Violation": {
 	"ATA Open Cases": {
       "category": "VIOLATION",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "startTime": {
+      "startTime": {
           "info": "START",
           "default": "1970-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
-        },
-        "endTime": {
+          "transformer": "TimestampToGuardiumQS"
+      },
+      "endTime": {
           "info": "STOP",
           "default": "2019-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
+          "transformer": "TimestampToGuardiumQS"
+      },
+
+      "filters": {
+        "Database": {
+          "info": "map",
+          "default": "*"
         },
-	"Database":{
-	  "info": "map"
+        "DBUser":{
+          "info": "map",
+          "default": "*"
         },
-	"DBUser":{
-	  "info": "map"
+        "Server": {
+          "info": "map",
+          "default": "*"
         },
-	"Server":{
-	  "info": "map"
+        "OSUser": {
+          "info": "map",
+          "default": "*"
         },
-	"Database":{
-	  "info": "map"
+        "Severity": {
+          "info": "map",
+          "default": "*",
+          "transformer": "GuardiumMapSeverityNum"
         }
-     }
+      },
+      "fetchSize": "1000"
     }
   }
 }

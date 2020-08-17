@@ -46,6 +46,12 @@ class QueryStringPatternTranslator:
         self.report_params_passed = {}
         self.report_params_array = []
         self.report_params_array_size = 0
+
+        # Now qsearch_params_passed is a JSON object which is pointing to an array of JSON Objects (qsearch_params_array)
+        self.qsearch_params_passed = {}
+        self.qsearch_params_array = []
+        self.qsearch_params_array_size = 0
+
         self.translated = self.parse_expression(pattern)
         self.transformers = transformers.get_all_transformers()
 
@@ -62,9 +68,22 @@ class QueryStringPatternTranslator:
         filepath = path.abspath(path.join(basepath, "json", "guardium_report_params_map.json"))
         self.REPORT_PARAMS_MAP = json.loads(open(filepath).read())
 
+        # Read qsearch definition data
+        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_def.json"))
+        self.QSEARCH_DEF = json.loads(open(filepath).read())
+
+        # Read qsearch definition data
+        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_params_map.json"))
+        self.QSEARCH_PARAMS_MAP = json.loads(open(filepath).read())
+
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
         self.report_params_array_size = len(params_array)
+        return
+
+    def set_qsearch_params_passed(self, params_array):
+        self.qsearch_params_array = params_array
+        self.qsearch_params_array_size = len(params_array)
         return
 
     def transform_report_call_to_json(self, report_call):
@@ -100,10 +119,44 @@ class QueryStringPatternTranslator:
         out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
 
         return json.loads(out_str)
+
+    def transform_qsearch_call_to_json(self, qsearch_call):
+        # Convert the report call (string) into an array of JSON.  Note, inside each json obj multiple key/value parmeter are "OR"
+        # Where as each key/value parameter from two json objects are "AND"
+        # Put quote around key
+        # print(report_call)
+        regex = r"([a-zA-Z_]+)(\s=)"
+        out_str = re.sub(regex, r"'\1' :", qsearch_call, 0)
+
+        # Create the Json structure
+        regex1 = r"\(|\)"
+        out_str = re.sub(regex1, "", out_str, 0)
+        regex2 = r"\sAND\s"
+        out_str = "{" + re.sub(regex2, "} AND {", out_str, 0) + "}"
+        regex3 = r"START"
+        out_str = re.sub(regex3, "} AND {START ", out_str, 0)
+        # treat START and STOP parameters too
+        regex4 = r"(START|STOP)"
+        out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
+        regex5 = r"([Z\'\s]+STOP)"
+        out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
+        regex6 = r"(T|P)\'[\s\:t]+"
+        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+
+        # Finalize the structure -- replace by comma and then it becomes string containing
+        # an array of Json objects
+        regex7 = r"\sOR|\sAND"
+        out_str = re.sub(regex7, r",", out_str, 0)
+
+        # Single quotes have to be replaced by double quotes in order to make it as an Json obj
+        regex8 = r"'"
+        out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
+
+        return json.loads(out_str)
+
     # Guardium report parameters are "AND"ed in a Gaurdium query.
     # Our Json object array contains multiple json objects.  Each object may have one or many key/value pairs -- these are report params
     # Problem statement: get an array of json objects containing parameters which support a guardium report call
-
     def build_array_of_guardium_report_params(self, result_array, result_position, current_result_object, params_array, current_position):
         param_list_size = len(params_array)
         if current_result_object is None:
@@ -123,6 +176,30 @@ class QueryStringPatternTranslator:
                     cp_current_result_object[param] = param_json_object[param]
                     if (current_position + 1) < param_list_size:
                         result_array = self.build_array_of_guardium_report_params(result_array, result_position, cp_current_result_object, params_array, current_position)
+                    else:
+                        result_array.append(cp_current_result_object)
+                        result_position = result_position + 1
+        return result_array
+
+    def build_array_of_guardium_qsearch_params(self, result_array, result_position, current_result_object, params_array, current_position):
+        param_list_size = len(params_array)
+        if current_result_object is None:
+            current_result_object = {}
+        if current_position is None:
+            current_position = 0
+        else:
+            current_position = current_position + 1
+
+        if current_position < param_list_size:
+            param_json_object = params_array[current_position]
+            for param in param_json_object:
+                # Keep a copy of current_result_object before any modification from this invocation
+                cp_current_result_object = copy.deepcopy(current_result_object)
+                # Insert the param in the current_result_object
+                if param not in cp_current_result_object:
+                    cp_current_result_object[param] = param_json_object[param]
+                    if (current_position + 1) < param_list_size:
+                        result_array = self.build_array_of_guardium_qsearch_params(result_array, result_position, cp_current_result_object, params_array, current_position)
                     else:
                         result_array.append(cp_current_result_object)
                         result_position = result_position + 1
@@ -160,6 +237,39 @@ class QueryStringPatternTranslator:
             reports_in_query.append(json.dumps(report))
         return reports_in_query
 
+    def substitute_qsearch_params_passed(self, qsearch_definitions, qsearch_in_query):
+        #   for Each report in report_definitions substitute params for report Params Passed
+        #   generate all reports for the query
+        #   In the event START and STOP is missing, Generate the default From and To Dates
+        #   TO_DATE IS SET TO NOW
+        #   FROM_DATE IS SET TO DAYS FROM NOW
+        current_date = datetime.datetime.now()
+        default_to_date = current_date.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        for qsearch_name in qsearch_definitions:
+            qsearch = qsearch_definitions[qsearch_name]
+
+            sta = self.qsearch_params_passed.get("START", default_from_date)
+            sto = self.qsearch_params_passed.get("STOP", default_to_date)
+            qsearch["startTime"] = self.transformers[qsearch["startTime"]["transformer"]].transform(sta)
+            qsearch["endTime"] = self.transformers[qsearch["endTime"]["transformer"]].transform(sto)
+
+            for param in qsearch["filters"]:
+                # either the value will be default or passed in (report parameter passed)
+                if param not in self.qsearch_params_passed:
+                    value = qsearch["filters"][param]["default"]
+                else:
+                    value = self.qsearch_params_passed[param]
+                # Transform the value or use it as-is
+                if "transformer" in qsearch["filters"][param]:
+                    transformer = self.transformers[qsearch["filters"][param]["transformer"]]
+                    qsearch["filters"][param] = transformer.transform(value)
+                else:
+                    qsearch["filters"][param] = value
+
+            qsearch_in_query.append(json.dumps(qsearch))
+        return qsearch_in_query
+
     def get_report_params(self):
         reports_in_query = []
         for report_param_index in range(self.report_params_array_size):
@@ -176,7 +286,49 @@ class QueryStringPatternTranslator:
             reports_in_query = self.substitute_params_passed(report_definitions, reports_in_query)
 
         return reports_in_query
-# Report Defintions list
+
+    def get_qsearch_params(self):
+        qsearch_in_query = []
+        for qsearch_param_index in range(self.qsearch_params_array_size):
+            self.qsearch_params_passed = self.qsearch_params_array[qsearch_param_index]
+            clientip = self.qsearch_params_passed.get("Client", None)
+            if clientip is not None:
+                continue
+            data_category = self.qsearch_params_passed.get("datacategory", None)
+            if data_category is not None:
+                if data_category not in self.QSEARCH_DEF:
+                    qsearch_definitions = None
+                else:
+                    qsearch_definitions = copy.deepcopy(self.QSEARCH_DEF[data_category])
+            else:
+                qsearch_definitions = self.generate_qsearch_definitions()
+            # substitute Params
+            qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+
+        self.set_filters_format(qsearch_in_query)
+
+        return qsearch_in_query
+
+    def set_filters_format(self, qse):
+        for i in range(len(qse)):
+            filters = json.loads(qse[i])["filters"]
+            qse_prefix = qse[i][0:str.find(qse[i], "filters") - 1:1]
+            qse_suffix = qse[i][str.find(qse[i], ", \"fetchSize")::1]
+            str_filters = ''
+            first = True
+            for key in filters:
+                if filters[key] == '*':
+                    continue
+                if first:
+                    first = False
+                else:
+                    str_filters = str_filters + "&"
+                str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
+            if str_filters.__len__() > 0:
+                str_filters = "\"filters\":\"" + str_filters + "\""
+                qse[i] = qse_prefix + str_filters + qse_suffix
+            else:
+                qse[i] = qse_prefix + qse_suffix[2::1]
 
     def generate_report_definitions(self):
         # for Each param passed get all reports pertaining to that params  -- this is a set of param reports
@@ -228,6 +380,58 @@ class QueryStringPatternTranslator:
                     report_definitions[report] = data_category_reports[report]
 
         return report_definitions
+
+    def generate_qsearch_definitions(self):
+        # for Each param passed get all qsearchs pertaining to that params  -- this is a set of param qsearchs
+        # then take intersection of each set
+        # if the intersection is null use the default Category
+        qsearch_set = None
+        param_map = self.QSEARCH_PARAMS_MAP["maps"]
+        param_cmn = self.QSEARCH_PARAMS_MAP["common"]
+
+        for param in self.qsearch_params_passed:
+            if param in param_map:
+                param_set = set(param_map[param])
+            elif param in param_cmn:
+                param_set = set(self.QSEARCH_PARAMS_MAP["defaultQsearch"])
+            else:
+                param_set = None
+
+            # find interaction
+            # param_set
+            if param_set is not None:
+                if qsearch_set is None:
+                    qsearch_set = set(param_set)
+                else:
+                    qsearch_set = qsearch_set.intersection(param_set)
+
+        # Check if qsearch_set is null
+        if (not bool(qsearch_set)):
+            qsearch_set = self.QSEARCH_PARAMS_MAP["defaultQsearch"]
+
+        # Now we have to create qsearch_definitions from this qsearch_set
+        # Qsearch set --> data_category:qsearch_name
+        # Iterate through qsearch_definitions and pick the qsearchs and place them in the qsearch Defs
+        #
+        qsearch_definitions = {}
+
+        for key in qsearch_set:
+            data_category, qsearch = key.split(":")
+
+            if data_category not in self.QSEARCH_DEF:
+                raise RuntimeError(
+                    "Error in parameter mapping file (data category): " + str(
+                        data_category) + " not there. Ingored.")
+            else:
+                data_category_qsearch = copy.deepcopy(self.QSEARCH_DEF[data_category])
+
+                if qsearch not in data_category_qsearch:
+                    raise RuntimeError(
+                        "Error in parameter mapping file (qsearch name): " + str(qsearch) + " not there. Ingored.")
+                else:
+                    qsearch_definitions[qsearch] = data_category_qsearch[qsearch]
+
+        return qsearch_definitions
 
     @staticmethod
     def _format_set(values) -> str:
@@ -418,16 +622,24 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 # Subroto: I did not change the code much just adapted to get the report parameters
 # Subroto: added code to support report search parameters are "and" when sent to Guardium
     # translate the structure of report_call
-    json_report_call = guardium_query_translator.transform_report_call_to_json(report_call)
+    if data_model_mapping.dialect == 'report':
+        json_report_call = guardium_query_translator.transform_report_call_to_json(report_call)
+    else:
+        json_qsearch_call = guardium_query_translator.transform_qsearch_call_to_json(report_call)
 
     result_array = []
     result_position = 0
-    output_array = guardium_query_translator.build_array_of_guardium_report_params(result_array, result_position, None, json_report_call, None)
-    guardium_query_translator.set_report_params_passed(output_array)
 
-    # get report hearder -- multiple for
-    report_header = guardium_query_translator.get_report_params()
-    if (report_header):
+    if data_model_mapping.dialect == 'report':
+        output_array = guardium_query_translator.build_array_of_guardium_report_params(result_array, result_position, None, json_report_call, None)
+        guardium_query_translator.set_report_params_passed(output_array)
+        report_header = guardium_query_translator.get_report_params()
+    else:
+        output_array = guardium_query_translator.build_array_of_guardium_qsearch_params(result_array, result_position, None, json_qsearch_call, None)
+        guardium_query_translator.set_qsearch_params_passed(output_array)
+        report_header = guardium_query_translator.get_qsearch_params()
+
+    if report_header:
         # Change return statement as required to fit with data source query language.
         # If supported by the language, a limit on the number of results may be desired.
         # A single query string, or an array of query strings may be returned

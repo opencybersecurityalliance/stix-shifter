@@ -1,0 +1,42 @@
+{
+  "x-ibm-finding": {
+      "fields": {
+        "finding_type": ["finding_type"],
+        "start": ["startTime"],
+        "end": ["endTime"],
+        "database_name": ["Database"]
+      }
+    },
+    "ipv4-addr": {
+      "fields": {
+        "value": ["Client", "Server"],
+        "src_ip": ["Client"],
+        "dst_ip": ["Server"]
+      }
+    },
+    "ipv6-addr": {
+      "fields": {
+        "value": ["Client", "Server"],
+        "src_ip": ["Client"],
+        "dst_ip": ["Server"]
+      }
+    },
+    "network-traffic": {
+      "fields": {
+        "dst_ref.value": ["Server"]
+      }
+    },
+     "user-account": {
+      "fields": {
+        "value": ["DBUser", "OSUser"],
+        "db_user": ["DBUser"],
+        "os_user": ["OSUser"]
+      }
+    },
+    "x-guardium": {
+      "fields": {
+        "severity": ["Severity"]
+      }
+    }
+  }
+  
