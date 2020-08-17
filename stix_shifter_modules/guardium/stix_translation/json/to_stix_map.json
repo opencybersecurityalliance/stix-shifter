@@ -1,130 +1,140 @@
 {
-  "Login Succeeded": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
+  "DBUser": [
+    {
+      "key": "user-account.user_id",
+      "object":"account" 
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "account"
+    }
+   ]
+  ,
+ "db_user": [
+    {
+      "key": "user-account.user_id",
+      "object":"account" 
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "account"
+    }
+   ]
+  ,
+ "OSUser": [
+    {
+      "key": "user-account.login_name",
+      "object":"account"
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "account",
+      "references": "user_id"
+    }
+   ],
+  "LogSourceId": {
+    "key": "x-guardium.log_source_id"
   },
-  "Client IP": [
+  "Magnitude": {
+    "key": "x-guardium.magnitude"
+  },
+  "SourceIpV4": [
     {
       "key": "ipv4-addr.value",
       "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
     }
   ],
-  "Server IP": [
+   "client_ip": [
     {
       "key": "ipv4-addr.value",
+      "object": "src_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding", 
+      "references": "src_ip" 
+    }
+  ],
+ "server": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
       "object": "dst_ip"
-    }
-  ],
-  "DB User Name": [
-    {
-      "key": "user-account.user_id"
     },
     {
-      "key": "x_guardium.db_user",
-      "cybox": false
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
     }
   ],
-  "OS User": [
+ "Server IP": [
     {
-      "key": "user-account.user_id"
+      "key": "ipv4-addr.value",
+      "object": "dst_ip" 
     },
     {
-      "key": "x_guardium.os_user",
-      "cybox": false
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
     }
   ],
-  "Count of Exceptions": {
+  "db_type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
+  ],
+ "Server Type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
+  ],
+  "source_program":[
+	{
+	"key":"software.name",
+	"object":"source_software"
+	},
+	{
+	"key":"x-ibm-finding.src_application_ref",
+	"object":"finding",
+	"references":"source_software"
+	}
+  ],
+  "EventCount": {
     "key": "number_observed",
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "Audit Process Description": {
-    "key": "x_guardium.audit_process_description",
-    "cybox": false
-  },
-  "Audit Task Description": {
-    "key": "x_guardium.audit_task_description",
-    "cybox": false
-  },
-  "DETAIL": {
-    "key": "x_guardium.run_detail",
-    "cybox": false
-  },
-  "Event Type": {
-    "key": "x_guardium.event_type",
-    "cybox": false
-  },
-  "Audit Process Id": {
-    "key": "x_guardium.audit_process_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Audit Task Id": {
-    "key": "x_guardium.audit_task_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Run Id": {
-    "key": "x_guardium.run_id",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Database Name": {
-    "key": "x_guardium.database_name",
-    "cybox": false
-  },
-  "Full Sql": {
-    "key": "x_guardium.full_sql",
-    "cybox": false
-  },
-  "Service Name": {
-    "key": "x_guardium.service_name",
-    "cybox": false
-  },
-
-  "Error Code": {
-    "key": "x_guardium.exception_errorcode",
-    "transformer": "ToInteger",
-    "cybox": false
-  },
-  "Exception Description": {
-    "key": "x_guardium.exception_description",
-    "cybox": false
-  },
-  "Database Error Text": {
-    "key": "x_guardium.exception_database_error_text",
-    "cybox": false
-  },
-  "SQL string that caused the Exception": {
-    "key": "x_guardium.sql_caused_exception",
-    "cybox": false
-  },
-  "Session Start": [
-    {
-      "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Session End": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
-    {
-      "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Exception Timestamp": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
+  "Create Date": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
@@ -136,12 +146,7 @@
       "cybox": false
     }
   ],
-  "Timestamp": [
-    {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "SetToOne"
-    },
+  "timestamp": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
@@ -152,5 +157,91 @@
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
-  ]
+  ],
+  "Url": {
+    "key": "url.value"
+  },
+  "FileName": {
+    "key": "file.name"
+  },
+  "Payload": {
+    "key": "artifact.payload_bin"
+  },
+  "DestinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "SourcePort": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "NetworkProtocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "DomainName": {
+    "key": "domain-name.value"
+  },
+  "Process": {
+    "Path": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "Pid": [
+      {
+        "object": "proc",
+        "key": "process.id"
+      }
+    ]
+  },
+  "violation":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+ "Threat Category":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+  "details":{
+	"key":"x-ibm-finding.details",
+        "object":"finding"
+  },
+ "database":{
+	"key":"x-ibm-finding.dst_device",
+        "object":"finding"
+  },
+ "Database":{
+	"key":"x-ibm-finding.dst_device",
+        "object":"finding"
+  },
+  "severity":[
+     {
+	"key":"x-guardium.severity",
+     "transformer": "GuardiumMapSeverity"},
+     {
+    "key":"x-ibm-finding.finding_type",
+	"object":"finding",
+    "transformer": "GuardiumQS"}
+  ],
+  "Severity":[
+     {
+	"key":"x-guardium.severity"},
+     {
+    "key":"x-ibm-finding.finding_type",
+    "object":"finding",
+    "transformer": "GuardiumRep"}
+  ],
+ "guardium_appliance":{
+	"key":"x-ibm-finding.source",
+	"object":"finding"
+  },
+  "Originating Unit":{
+	"key":"x-ibm-finding.source",
+	"object":"finding"
+  }
 }
