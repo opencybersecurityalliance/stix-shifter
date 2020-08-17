@@ -31,9 +31,6 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
     def read_mapping_file(self, path):
         return open(path).read()
 
-    def get_mapping(self):
-        return self.map_data
-
     @abstractmethod
     def translate_results(self, data_source, data):
         """

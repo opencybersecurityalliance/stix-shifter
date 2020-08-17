@@ -163,9 +163,17 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "url": {
-    "key": "url.value"
-  },
+  "url": [
+    {
+      "key": "url.value",
+      "object": "url"
+    },
+    {
+      "key": "domain-name.value",
+      "object": "domain1",
+      "transformer": "ToDomainName"
+    }
+  ],
   "filename": {
     "key": "file.name",
     "object": "fl"
@@ -260,10 +268,17 @@
     "object": "nt",
     "transformer": "ToLowercaseArray"
   },
-  "domainname": {
-    "key": "domain-name.value",
-    "transformer": "ToDomainName"
-  },
+  "domainname": [
+    {
+      "key": "domain-name.value",
+      "object": "domain2",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x_ibm_ariel.domain_name",
+      "cybox": false
+    }
+  ],
   "flowsource": {
     "key": "x_ibm_ariel.flow_source",
     "cybox": false

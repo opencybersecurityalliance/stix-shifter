@@ -25,4 +25,4 @@ class ResultsTranslator(BaseResultTranslator):
             obs["created_by_ref"] = data_source['id']
 
         bundle['objects'] += bundle_data
-        return json.dumps(bundle, indent=4, sort_keys=False)
+        return bundle

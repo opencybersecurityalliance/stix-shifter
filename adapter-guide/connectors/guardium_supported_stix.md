@@ -1,28 +1,65 @@
 ## IBM Security Guardium
+### artifact
+- payload_bin
+
+___
+### domain-name
+- value
+
+___
+### file
+- name
+
+___
 ### ipv4-addr
+- value
+
+___
+### ipv6-addr
+- value
+
+___
+### network-traffic
+- src_ref
+- dst_port
+- src_port
+- protocols
+
+___
+### process
+- command_line
+- id
+
+___
+### software
+- name
+
+___
+### url
 - value
 
 ___
 ### user-account
 - user_id
+- login_name
 
 ___
-### x_guardium
-- db_user
-- os_user
-- audit_process_description
-- audit_task_description
-- run_detail
-- event_type
-- audit_process_id
-- audit_task_id
-- run_id
-- database_name
-- full_sql
-- service_name
-- exception_errorcode
-- exception_description
-- exception_database_error_text
-- sql_caused_exception
+### x-guardium
+- log_source_id
+- magnitude
+- severity
+
+___
+### x-ibm-finding
+- src_database_user_ref
+- src_ip_ref
+- dst_ip_ref
+- dst_application_ref
+- src_application_ref
+- name
+- details
+- dst_device
+- finding_type
+- source
 
 ___

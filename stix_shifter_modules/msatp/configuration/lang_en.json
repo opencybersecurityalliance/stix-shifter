@@ -11,7 +11,7 @@
         },
         "help": {
             "label": "Need additional help?",
-            "description": "More details on the datasource setting can be found in the specified link"
+            "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
             "label": "Microsoft Defender ATP Certificate",

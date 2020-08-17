@@ -3,6 +3,7 @@ import traceback
 import os
 import functools
 import json
+import glob
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -31,6 +32,17 @@ class BaseEntryPoint:
         self.__status_connector = None
         self.__delete_connector = None
         self.__query_connector = None
+
+        module_name = self.__connector_module
+        module = importlib.import_module(
+                    "stix_shifter_modules." + module_name + ".stix_translation")
+        json_path = os.path.dirname(module.__file__)
+        json_path = os.path.abspath(json_path)
+        json_path = os.path.join(json_path, 'json')
+        if os.path.isdir(json_path):
+            to_stix = os.path.join(json_path, 'to_stix_map.json')
+            if not os.path.isfile(to_stix):
+                raise Exception(to_stix + ' is not found')
 
         if connection:
             validation_obj = {'connection': connection, 'configuration': configuration}
@@ -107,14 +119,21 @@ class BaseEntryPoint:
         return results_translator
 
     @translation
-    def get_mapping(self, dialect=None):
-        query_translator = self.get_query_translator(dialect)
-        results_translator = self.get_results_translator(dialect)
-        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {},
-                   'to_stix': results_translator.get_mapping()}
-        select_fields = query_translator.get_select_fields()
-        if select_fields:
-            mapping['select_fields'] = select_fields
+    def get_mapping(self):
+        module_name = self.__connector_module
+        module = importlib.import_module(
+                    "stix_shifter_modules." + module_name + ".stix_translation")
+        basepath = os.path.dirname(module.__file__)
+        basepath = os.path.abspath(basepath)
+        basepath = os.path.join(basepath, 'json')
+
+        mapping = {}
+        if os.path.isdir(basepath):
+            for filename in glob.glob(basepath + os.sep + "*.json"):
+                key = os.path.basename(filename)[:-5]
+                with open(filename, 'r') as f:
+                    jsondata = json.load(f)
+                    mapping[key] = jsondata
         return mapping
 
     @translation

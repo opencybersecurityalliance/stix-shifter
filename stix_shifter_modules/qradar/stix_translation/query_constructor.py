@@ -79,8 +79,7 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return AqlQueryStringPatternTranslator._escape_value(value)
+        return "'%{value}%'".format(value=value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -104,7 +103,11 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
-            return None
+            if (mapped_field == 'sourceip' or mapped_field == 'destinationip') and comparator.upper() == 'LIKE':
+                return "str({mapped_field}) {comparator} {value}".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
+            else:
+                return None
         # These next two checks wouldn't be needed if events and flows used their own to-STIX mapping
         # This is here because both events and flows map sourceip and destinationip, but in different ways
         if value_type in REFERENCE_DATA_TYPES['sourcev6'] and (mapped_field == 'sourceip' or mapped_field == 'destinationip') and self.dmm.dialect == 'flows':
@@ -141,6 +144,14 @@ class AqlQueryStringPatternTranslator:
                 comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
             elif expression.object_path == 'artifact:payload_bin' and expression.comparator == ComparisonComparators.Like:
                 comparison_string += "TEXT SEARCH '{}'".format(value)
+            elif (expression.object_path == 'ipv4-addr:value'
+                  or expression.object_path == 'ipv6-addr:value'
+                  or expression.object_path == 'network-traffic:dst_ref.value'
+                  or expression.object_path == 'network-traffic:src_ref.value') \
+                 and expression.comparator == ComparisonComparators.Like:
+                comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                       comparator=comparator,
+                                                                                       value=value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:

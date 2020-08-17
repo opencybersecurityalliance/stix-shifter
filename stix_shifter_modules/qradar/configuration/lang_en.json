@@ -24,7 +24,7 @@
         },
         "data_lake": {
             "label": "Data Lake",
-            "description": "Enable Data Lake datasource"
+            "description": "Enable Data Lake data source"
         },
         "options": {
             "hash_options": {

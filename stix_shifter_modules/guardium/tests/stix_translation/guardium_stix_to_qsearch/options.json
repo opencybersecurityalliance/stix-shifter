@@ -1,0 +1,151 @@
+{
+  "mapping": {
+    "qsearch": {
+      "from_stix": {
+        "x-ibm-finding": {
+          "fields": {
+            "finding_type": [
+              "finding_type"
+            ],
+            "start": [
+              "startTime"
+            ],
+            "end": [
+              "endTime"
+            ],
+            "database_name": [
+              "Database"
+            ],
+            "db_type": [
+              "db_type"
+            ]
+          }
+        },
+        "ipv4-addr": {
+          "fields": {
+            "value": [
+              "Client",
+              "Server"
+            ],
+            "src_ip": [
+              "Client"
+            ],
+            "dst_ip": [
+              "Server"
+            ]
+          }
+        },
+        "ipv6-addr": {
+          "fields": {
+            "value": [
+              "Client",
+              "Server"
+            ],
+            "src_ip": [
+              "Client"
+            ],
+            "dst_ip": [
+              "Server"
+            ]
+          }
+        },
+        "network-traffic": {
+          "fields": {
+            "src_port": [
+              "port"
+            ],
+            "dst_port": [
+              "server_port"
+            ],
+            "start": [
+              "StartTime-dialect1"
+            ],
+            "end": [
+              "EndTime-dialect1"
+            ],
+            "protocols[*]": [
+              "NetworkProtocol-dialect1"
+            ],
+            "src_ref.value": [
+              "client_ip"
+            ],
+            "dst_ref.value": [
+              "server_ip"
+            ]
+          }
+        },
+        "user-account": {
+          "fields": {
+            "value": [
+              "DBUser",
+              "OSUser"
+            ],
+            "db_user": [
+              "DBUser"
+            ],
+            "os_user": [
+              "OSUser"
+            ]
+          }
+        },
+        "x-guardium": {
+          "fields": {
+            "severity": ["Severity"]
+          }
+        }
+      }
+    },
+    "report": {
+      "from_stix": {
+        "x-ibm-finding": {
+          "fields": {
+            "finding_type": ["datacategory"],
+            "start": ["QUERY_FROM_DATE"],
+            "end": ["QUERY_TO_DATE"],
+            "database_name": ["Database"],
+            "db_type":["db_type"]
+          }
+        },
+        "ipv4-addr": {
+          "fields": {
+            "value": ["ServerIP"],
+            "dst_ip": ["ServerIP"]
+          }
+        },
+        "ipv6-addr": {
+          "fields": {
+            "value": ["ServerIP"],
+            "dst_ip": ["ServerIP"]
+          }
+        },
+        "network-traffic": {
+          "fields": {
+            "dst_ref.value": ["ServerIP"]
+          }
+        },
+         "user-account": {
+          "fields": {
+            "value": ["DBUser", "OSUser"],
+            "db_user": ["DBUser"],
+            "os_user": ["OSUser"]
+          }
+        },
+        "artifact": {
+          "fields": {
+            "payload_bin": ["Payload-dialect1"]
+          }
+        },
+        "domain-name": {
+          "fields": {
+            "value": ["DomainName-dialect1"]
+          }
+        },
+        "x-guardium": {
+          "fields": {
+            "severity":["Severity"]
+          }
+        }
+      }
+    }
+  }
+}
