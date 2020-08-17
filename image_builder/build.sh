@@ -110,14 +110,15 @@ if [ ! -f "$REPOSITORY_CERT_FILE" ]; then
   echo 'Please enter sudo password (if required) to copy certificate..'
   sudo cp $REPOSITORY_CERT_TMP $REPOSITORY_CERT_FILE
   rm -rf $REPOSITORY_CERT_TMP | true
-  if [[ "$OSTYPE" == "darwin" ]]; then
+  if [[ "$OSTYPE" == "darwin"* ]]; then
     echo -n "Adding certificate to docker VM... "
     sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $REPOSITORY_CERT_FILE
     echo 'Ok'
     echo -n "Restarting docker... "
     killall Docker && open /Applications/Docker.app
+    sleep 60
     echo 'Ok'
-  done
+  fi
 fi
 
 if [ -z "${IMAGE_URL}" ]; then
