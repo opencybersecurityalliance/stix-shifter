@@ -75,6 +75,7 @@ ___
 - direction
 - magnitude
 - qid
+- domain_name
 - flow_source
 - flow_interface
 - flow_interface_id
