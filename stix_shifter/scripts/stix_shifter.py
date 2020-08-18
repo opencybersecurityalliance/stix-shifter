@@ -124,11 +124,11 @@ def main():
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
     # positional arguments
     execute_parser.add_argument(
-        'transmission_module', 
+        'transmission_module',
         help='Which connection module to use'
     )
     execute_parser.add_argument(
-        'module', 
+        'module',
         help='Which translation module to use for translation'
     )
     execute_parser.add_argument(
@@ -152,7 +152,7 @@ def main():
         help='Query String'
     )
     execute_parser.add_argument('-d', '--debug', action='store_true',
-                                  help='Print detail logs for debugging')
+                                help='Print detail logs for debugging')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -171,8 +171,8 @@ def main():
     help_and_exit = args.command is None
 
     if 'debug' in args and args.debug:
-        logger.DEBUG = args.debug
-    
+        logger.DEBUG = bool(args.debug)
+
     log = logger.set_logger(__name__)
 
     if 'module' in args:
@@ -181,7 +181,7 @@ def main():
         options = None
         if 'options' in args:
             options = args.options
-        if options == None:
+        if options is None:
             options = {}
         else:
             options = json.loads(options)
@@ -301,12 +301,11 @@ def main():
         result = translation.translate(
             args.module, args.translate_type, args.data_source, args.data, options=options, recursion_limit=recursion_limit)
     elif args.command == MAPPING:
-        translation = stix_translation.StixTranslation()        
+        translation = stix_translation.StixTranslation()
         result = translation.translate(args.module, stix_translation.MAPPING, None, None, options=options)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
-    #TODO make all cli output json stings
     print(json.dumps(result, indent=4, sort_keys=False))
     exit(0)
 

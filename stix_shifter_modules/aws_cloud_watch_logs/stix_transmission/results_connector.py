@@ -116,7 +116,10 @@ class ResultsConnector(BaseResultsConnector):
         :return: str, protocol
         """
         modules = import_module('stix_shifter_modules')
-        modules_path = Path(modules.__file__).parent
+        if '__file__' in dir(modules):
+            modules_path = Path(modules.__file__).parent
+        else:
+            modules_path = modules.__path__._path[0]
         _json_path = path.abspath(path.join(modules_path,
                                             'aws_cloud_watch_logs/stix_translation/json'
                                             '/network_protocol_map.json'))
@@ -139,7 +142,10 @@ class ResultsConnector(BaseResultsConnector):
         :return: list, guardduty common attributes
         """
         modules = import_module('stix_shifter_modules')
-        modules_path = Path(modules.__file__).parent
+        if '__file__' in dir(modules):
+            modules_path = Path(modules.__file__).parent
+        else:
+            modules_path = modules.__path__._path[0]
         _json_path = path.abspath(path.join(modules_path,
                                             'aws_cloud_watch_logs/stix_translation/json'
                                             '/common_attributes.json'))
