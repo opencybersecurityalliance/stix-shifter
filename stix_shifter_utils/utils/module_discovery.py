@@ -26,7 +26,10 @@ def __split_module_dialects(module_dialects):
 
 def dialect_list(module):
     modules = import_module('stix_shifter_modules')
-    modules_path = Path(modules.__file__).parent
+    if '__file__' in dir(modules):
+        modules_path = Path(modules.__file__).parent
+    else:
+        modules_path = modules.__path__._path[0]
     dialects_path = os.path.join(modules_path, f'{module}/stix_translation/json')
     ENDING = '_from_stix_map.json'
     dialects = []

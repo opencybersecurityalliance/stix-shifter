@@ -2,15 +2,15 @@ from requests.exceptions import SSLError, ConnectionError
 from enum import Enum
 import importlib
 import traceback
-#from ..utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
-from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils import logger as utils_logger
 import collections
 import json
 
+
 class ErrorCode(Enum):
     TRANSLATION_NOTIMPLEMENTED_MODE = 'not_implemented'
-    TRANSLATION_MODULE_DEFAULT_ERROR =  'invalid_parameter'
+    TRANSLATION_MODULE_DEFAULT_ERROR = 'invalid_parameter'
     TRANSLATION_MAPPING_ERROR = 'mapping_error'
     TRANSLATION_STIX_VALIDATION = 'invalid_parameter'
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
@@ -30,10 +30,17 @@ class ErrorCode(Enum):
 
 
 class ErrorResponder():
-    logger = logger.set_logger(__name__)
+
+    logger = None
+
+    @staticmethod
+    def set_logger():
+        if ErrorResponder.logger is None:
+            ErrorResponder.logger = utils_logger.set_logger(__name__)
 
     @staticmethod
     def get_struct_item(message_struct, message_path):
+        ErrorResponder.set_logger()
         # "+isFailure=True" means the current item is a list and the new item will be a list containing items with the field 'Failure' equal 'True'
         # '~result' means the current item is a list and new item will be a list containing specified field ('result') values
         # document it: '+' and '~'
@@ -63,9 +70,10 @@ class ErrorResponder():
 
     @staticmethod
     def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
+        ErrorResponder.set_logger()
         return_object['success'] = False
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
-        
+
         if message is None:
             message = ''
 
@@ -79,8 +87,8 @@ class ErrorResponder():
         error_msg = ''
         if error is not None:
             str_error = str(error)
-            #TODO replace with logger + stacktrace it to logger
             ErrorResponder.logger.error("error occurred: " + str_error)
+            ErrorResponder.logger.debug(utils_logger.exception_to_string(error))
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
                 error_msg = 'Wrong certificate: ' + str_error
@@ -95,7 +103,7 @@ class ErrorResponder():
                     message += '; '
                 message += error_msg
 
-        if message is not None and len(message)>0:
+        if message is not None and len(message) > 0:
             if error_code.value == ErrorCode.TRANSMISSION_UNKNOWN.value:
                 if 'uthenticat' in message or 'uthoriz' in message:
                     error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
@@ -127,7 +135,6 @@ class ErrorResponder():
                 ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR)
         except ModuleNotFoundError:
             pass
-
 
     @staticmethod
     def rindex(mylist, myvalue):
