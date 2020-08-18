@@ -171,7 +171,7 @@ def main():
     help_and_exit = args.command is None
 
     if 'debug' in args and args.debug:
-        logger.DEBUG = True
+        logger.DEBUG = bool(args.debug)
 
     log = logger.set_logger(__name__)
 
