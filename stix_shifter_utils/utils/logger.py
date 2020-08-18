@@ -1,6 +1,6 @@
-import sys
 import logging
 from colorlog import ColoredFormatter
+import traceback
 
 DEBUG = False
 
@@ -14,5 +14,10 @@ def set_logger(module):
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
-    
     return logger
+
+
+def exception_to_string(excp):
+    stack = traceback.extract_stack()[:-3] + traceback.extract_tb(excp.__traceback__)
+    pretty = traceback.format_list(stack)
+    return ''.join(pretty) + '\n  {} {}'.format(excp.__class__, excp)
