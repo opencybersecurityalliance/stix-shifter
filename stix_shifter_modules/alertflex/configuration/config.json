@@ -1,9 +1,7 @@
 {
     "connection": {
         "type": {
-            "default": "alertflex",
-            "displayName": "Alertflex",
-            "type": "connectorType"
+            "displayName": "Alertflex"
         },
         "host": {
             "type": "text",
