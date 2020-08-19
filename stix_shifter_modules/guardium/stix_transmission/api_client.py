@@ -11,7 +11,7 @@ class APIClient():
 
         # Placeholder client to allow dummy transmission calls.
         # Remove when implementing data source API client.
-        url = "https://"+connection["host"]+":"+connection["port"]
+        url = "https://"+connection["host"]+":"+str(connection.get('port', ''))
         self.client = GuardApiClient(connection["client_id"], url, connection["client_secret"],
                                      configuration["auth"]["username"], configuration["auth"]["password"])
 
