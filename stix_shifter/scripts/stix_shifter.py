@@ -17,6 +17,7 @@ EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
 
+
 def main():
     """
     Stix-shifter can either be called to either translate or transmit.
