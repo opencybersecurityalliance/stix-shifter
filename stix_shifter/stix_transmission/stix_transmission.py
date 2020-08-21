@@ -1,6 +1,6 @@
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
-from stix_shifter_utils.utils import logger as utils_logger
+
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -15,9 +15,6 @@ class StixTransmission:
     init_error = None
 
     def __init__(self, module, connection, configuration):
-        self.logger = utils_logger.set_logger(__name__)
-        self.logger.info('test info log output')
-        self.logger.debug('test debug log output')
         module = module.split(':')[0]
         if connection.get('options', {}).get('proxy'):
             module = 'proxy'
