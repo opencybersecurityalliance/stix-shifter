@@ -56,7 +56,7 @@ class QueryStringPatternTranslator:
     def _format_like(value) -> str:
         # Replacing value with % to * and _ to ? for to support Like comparator
         if isinstance(value, str):
-            return '{}'.format(value.replace('%', '*').replace('_', '?'))
+            return '"{}"'.format(value.replace('%', '*').replace('_', '?'))
         else:
             return value
 
