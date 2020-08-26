@@ -1,0 +1,16 @@
+{
+    "default": [
+        "src_ip",
+        "src_port",
+        "src_mac",
+        "src_ipv6",
+        "dest_ip",
+        "dest_port",
+        "dest_mac",
+        "dest_ipv6",
+        "file_hash",
+        "user",
+        "url",
+        "protocol"
+    ]
+}

@@ -4,8 +4,7 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.utils import logger
-import logging
-import json
+from stix_shifter_utils.utils.file_helper import read_json
 import re
 
 logger = logger.set_logger(__name__)
@@ -20,17 +19,6 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
 START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = "\.\d+Z$"
-
-
-def _fetch_network_protocol_mapping():
-    try:
-        map_file = open(
-            'stix_shifter_modules/qradar/stix_translation/json/network_protocol_map.json').read()
-        map_data = json.loads(map_file)
-        return map_data
-    except Exception as ex:
-        logger.error('exception in reading mapping file: ' + ex)
-        return {}
 
 
 class AqlQueryStringPatternTranslator:
@@ -52,7 +40,8 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, options):
+        self.options = options
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
@@ -61,7 +50,6 @@ class AqlQueryStringPatternTranslator:
         # Translated query string without any qualifiers
         self.translated = self.parse_expression(pattern)
         self.qualified_queries.append(self.translated)
-
         self.qualified_queries = _format_translated_queries(self.qualified_queries)
 
     @staticmethod
@@ -148,10 +136,10 @@ class AqlQueryStringPatternTranslator:
                   or expression.object_path == 'ipv6-addr:value'
                   or expression.object_path == 'network-traffic:dst_ref.value'
                   or expression.object_path == 'network-traffic:src_ref.value') \
-                 and expression.comparator == ComparisonComparators.Like:
-                comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                       comparator=comparator,
-                                                                                       value=value)
+                  and expression.comparator == ComparisonComparators.Like:
+                      comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                             comparator=comparator,
+                                                                                             value=value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
@@ -224,9 +212,8 @@ class AqlQueryStringPatternTranslator:
         # Special case where we want the risk finding
         if stix_object == 'x-ibm-finding' and stix_field == 'name' and expression.value == "*":
             return "devicetype = 18"
-        
         if stix_field == 'protocols[*]':
-            map_data = _fetch_network_protocol_mapping()
+            map_data = read_json('network_protocol_map', self.options)
             try:
                 expression.value = map_data[expression.value.lower()]
             except Exception as protocol_key:
@@ -352,7 +339,7 @@ def _format_translated_queries(query_array):
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, options)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries

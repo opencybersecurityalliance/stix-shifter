@@ -1,15 +1,12 @@
+import json
+import base64
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
-import json
-import base64
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-# Using default mapping in modules/qradar/json/to_stix_map.json
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -30,7 +27,7 @@ class TestTransform(object):
     @staticmethod
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
-    
+
     @staticmethod
     def get_object_keys(objects):
         for k, v in objects.items():
@@ -192,14 +189,12 @@ class TestTransform(object):
 
         options = {
             "mapping": {
-                "flows": {
-                    "to_stix": {
-                        "username": {"key": "user-account.user_id"},
-                        "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                        "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
-                        "url": {"key": "url.value"},
-                        "custompayload": {"key": "artifact.payload_bin"}
-                    }
+                "to_stix_map": {
+                    "username": {"key": "user-account.user_id"},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
+                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "url": {"key": "url.value"},
+                    "custompayload": {"key": "artifact.payload_bin"}
                 }
             }
         }
@@ -448,7 +443,7 @@ class TestTransform(object):
             hashes = file_object['hashes']
             assert(key in hashes), "{} hash not included".format(key)
             assert(hashes[key] == value)
-    
+
     def test_none_empty_values_in_results(self):
         payload = "Payload"
         user_id = "someuserid2018"
