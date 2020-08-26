@@ -1,15 +1,16 @@
 import argparse
 import sys
-from stix_shifter.stix_translation import stix_translation
-from stix_shifter.stix_transmission import stix_transmission
-from flask import Flask
 import json
 import time
+import importlib
+from flask import Flask
+import logging
+from stix_shifter.stix_translation import stix_translation
+from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.proxy_host import ProxyHost
 from stix_shifter_utils.utils.module_discovery import process_dialects
-import importlib
 from stix_shifter_utils.utils import logger as utils_logger
-import logging
+from stix_shifter_utils.utils.logger import exception_to_string
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -179,24 +180,23 @@ def main():
 
     log = utils_logger.set_logger(__name__)
 
-
     if 'module' in args:
         args_module_dialects = args.module
 
         options = None
         if 'options' in args:
             options = args.options
-        if options is None:
+        if not options:
             options = {}
         else:
             options = json.loads(options)
 
         module = process_dialects(args_module_dialects, options)[0]
-        args.options = json.dumps(options)
 
         try:
-            connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-        except:
+            importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
             log.error('Module {} not found'.format(module))
             help_and_exit = True
 
@@ -298,7 +298,6 @@ def main():
         exit(0)
 
     elif args.command == TRANSLATE:
-        options = json.loads(args.options) if bool(args.options) else {}
         if args.stix_validator:
             options['stix_validator'] = args.stix_validator
         recursion_limit = args.recursion_limit if args.recursion_limit else 1000

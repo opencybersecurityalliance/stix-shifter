@@ -58,3 +58,6 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         """
         # if translating STIX pattern to a datasource query...
         raise NotImplementedError()
+
+    def get_language(self):
+        return 'stix'

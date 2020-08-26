@@ -1,7 +1,5 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 import logging
-from os import path
-import json
 from . import query_constructor
 from stix_shifter_utils.utils.file_helper import read_json
 

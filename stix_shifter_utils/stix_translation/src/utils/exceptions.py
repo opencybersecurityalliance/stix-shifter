@@ -17,3 +17,7 @@ class LoadJsonResultsException(Exception):
 
 class UnsupportedDataSourceException(Exception):
     pass
+
+
+class UnsupportedDialectException(Exception):
+    pass
