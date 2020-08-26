@@ -8,13 +8,15 @@ import time
 from stix_shifter_utils.utils.proxy_host import ProxyHost
 from stix_shifter_utils.utils.module_discovery import process_dialects
 import importlib
-from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils import logger as utils_logger
+import logging
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
+
 
 def main():
     """
@@ -171,9 +173,12 @@ def main():
     help_and_exit = args.command is None
 
     if 'debug' in args and args.debug:
-        logger.DEBUG = bool(args.debug)
+        utils_logger.init(logging.DEBUG)
+    else:
+        utils_logger.init(logging.INFO)
 
-    log = logger.set_logger(__name__)
+    log = utils_logger.set_logger(__name__)
+
 
     if 'module' in args:
         args_module_dialects = args.module
