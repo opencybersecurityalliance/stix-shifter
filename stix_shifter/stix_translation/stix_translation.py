@@ -1,19 +1,16 @@
 import importlib
-from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
-from stix2patterns.validator import run_validator
-from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import parse_stix
+import sys
 import re
-from stix_shifter_utils.utils.error_response import ErrorResponder
+import traceback
+from stix2patterns.validator import run_validator
+from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
+from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import parse_stix
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException
 from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
 from stix_shifter_utils.utils.module_discovery import process_dialects
 from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils.param_validator import param_validator
-import sys
-import glob
-from os import path
-import traceback
-import json
 from stix_shifter_utils.utils import logger
 
 RESULTS = 'results'
@@ -63,13 +60,12 @@ class StixTranslation:
         """
 
         module, dialects = process_dialects(module, options)
-
         try:
             try:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
-            try: 
+            try:
                 if options:
                     validated_options = param_validator(module, options, 'connection.options')
 
@@ -77,7 +73,7 @@ class StixTranslation:
             except Exception as ex:
                 track = traceback.format_exc()
                 self.logger.error(ex)
-                self.logger.error(track)
+                self.logger.debug(track)
                 raise
 
             if len(dialects) == 0:
@@ -109,7 +105,6 @@ class StixTranslation:
                             if not antlr_parsing:
                                 continue
                         translated_queries = entry_point.transform_query(dialect, data, antlr_parsing)
-
                         if isinstance(translated_queries, str):
                             translated_queries = [translated_queries]
                         for query in translated_queries:
@@ -143,7 +138,6 @@ class StixTranslation:
                 for dialect in dialects:
                     query_translator = entry_point.get_query_translator(dialect)
                     result[dialect] = query_translator.map_data
-
                 return {'supported_attributes': result}
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)

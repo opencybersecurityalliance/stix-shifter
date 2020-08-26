@@ -43,10 +43,6 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         else:
             return []
 
-    # def __fetch_from_stix_mapping_file(self, basepath):
-    #     mapping_paths = glob.glob(path.abspath(path.join(basepath, "json", "{}_from_stix*.json".format(self.dialect))))
-    #     return mapping_paths[0]
-
     @abstractmethod
     def transform_query(self, data, antlr_parsing_object):
         """
