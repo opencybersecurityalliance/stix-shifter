@@ -2,6 +2,7 @@ import re
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json
 
