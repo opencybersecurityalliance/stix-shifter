@@ -253,6 +253,7 @@ def main():
 
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.module, 'query', args.data_source, args.query, {'validate_pattern': True})
+        log.debug('Translated Queries: ' + json.dumps(dsl))
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
 

@@ -351,3 +351,9 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE rulenames = '{}' {} {}".format(rule_name, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
+        
+    def test_text_search(self):
+        stix_pattern = "[artifact:payload_bin LIKE '%Set-ItemProperty%' AND artifact:payload_bin LIKE '%New-Item%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)

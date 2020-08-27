@@ -90,3 +90,9 @@ class TestStixToAql(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (destinationpackets = '1' AND sourcepackets = '2898') OR (destinationbytes = '604' AND sourcebytes = '306') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_text_search(self):
+        stix_pattern = "[artifact:payload_bin LIKE '%Set-ItemProperty%' AND artifact:payload_bin LIKE '%New-Item%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
