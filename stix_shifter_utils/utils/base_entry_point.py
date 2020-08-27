@@ -14,6 +14,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
+from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 
 
 class BaseEntryPoint:
@@ -138,9 +139,12 @@ class BaseEntryPoint:
 
     @translation
     def get_query_translator(self, dialect=None):
-        if dialect:
-            return self.__dialect_to_query_translator[dialect]
-        return self.__dialect_to_query_translator[self.__dialect_default]
+        try:
+            if dialect:
+                return self.__dialect_to_query_translator[dialect]
+            return self.__dialect_to_query_translator[self.__dialect_default]
+        except KeyError as ex:
+            raise UnsupportedDialectException(dialect)
 
     @translation
     def get_results_translator(self, dialect=None):
