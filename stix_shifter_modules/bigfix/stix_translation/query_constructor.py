@@ -1,12 +1,11 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
-import json
-import os.path as path
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToUTC
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from datetime import datetime, timedelta
 from functools import reduce
+from stix_shifter_utils.utils.file_helper import read_json
 import operator as op
 import re
 
@@ -94,7 +93,7 @@ class RelevanceQueryStringPatternTranslator:
                     mac address of it as string | "n/a") of adapters {}'''
         }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range, options):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self._time_range = time_range
@@ -105,25 +104,11 @@ class RelevanceQueryStringPatternTranslator:
         self._split_master_obj_list = []
         self._relevance_string_list = []
         self._relevance_query_for_split_attr = []
-        self._relevance_property_format_string_dict = self.load_json(RELEVANCE_PROPERTY_MAP_JSON)
+        self._relevance_property_format_string_dict = read_json(RELEVANCE_PROPERTY_MAP_JSON, options)
         self._time_range_comparator_list = [self._lookup_comparison_operator(each) for each in
                                             (ComparisonComparators.GreaterThanOrEqual,
                                              ComparisonComparators.LessThanOrEqual)]
         self.parse_expression(pattern)
-
-    @staticmethod
-    def load_json(rel_path_of_file):
-        """
-        Consumes the relevance property format string mapping json and returns a dictionary
-        :param rel_path_of_file: str, path of relevance property format string mapping json file
-        :return: dictionary
-        """
-        relevance_json_path = path.abspath(path.join(path.join(__file__, ".."), rel_path_of_file))
-        if path.exists(relevance_json_path):
-            with open(relevance_json_path) as f_obj:
-                return json.load(f_obj)
-        else:
-            raise FileNotFoundError
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -769,7 +754,7 @@ def translate_pattern(pattern: Pattern, data_model_mapper, options):
     """
     time_range = options['time_range']
     list_final_query = []
-    translated_dictionary = RelevanceQueryStringPatternTranslator(pattern, data_model_mapper, time_range)
+    translated_dictionary = RelevanceQueryStringPatternTranslator(pattern, data_model_mapper, time_range, options)
     final_query = translated_dictionary.qualified_queries
     for each_query in final_query:
         besapi_query = '<BESAPI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:' \
