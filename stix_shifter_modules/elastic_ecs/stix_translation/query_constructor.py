@@ -49,8 +49,10 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-
-        return '"{}"'.format(value)
+        if isinstance(value, str):
+            return '"{}"'.format(value.replace('\\', '\\\\'))
+        else:
+            return '"{}"'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
