@@ -19,7 +19,12 @@ STiX, an OASIS Open Project, is committed to building an open, inclusive, produc
 
 ## Project Leadership
 
+> In most projects, the TSC will oversee appointing maintainers or core contributors who drive the day-to-day development. Project Maintainers are the ‘trail guides’ for your repositories and pull requests. As such, they need to clearly understand your project’s scope, so they can accept or reject contributions accordingly.
+
+> Make sure your TSC has a solid process for appointing Maintainers and regularly communicates project priorities. It’s a good idea to make sure there are open lines of communication between the Maintainers, TSC, and PGB members so that any unexpected issues can be easily addressed.
+
 * **Technical Steering Commitee**: ???
+
 * **Change Control Board**: Group responsible for the overall technical health and direction of the project; final reviewers of PRs, responsible for releases, responsible for overseeing work of maintainers and community leaders.
 
 ### List of CCB Members
