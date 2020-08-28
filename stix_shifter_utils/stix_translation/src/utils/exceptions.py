@@ -21,3 +21,7 @@ class UnsupportedDataSourceException(Exception):
 
 class UnsupportedDialectException(Exception):
     pass
+
+
+class UnsupportedLanguageException(Exception):
+    pass

@@ -25,7 +25,8 @@ class BaseEntryPoint:
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
-        self.__dialects_visible = []
+        self.__dialects_all = []
+        self.__dialects_active_default = []
         self.__dialect_default = None
         self.__options = options
 
@@ -90,8 +91,9 @@ class BaseEntryPoint:
         self.__dialect_to_results_translator[dialect] = results_translator
         if default:
             self.__dialect_default = dialect
+        self.__dialects_all.append(dialect)
         if default_include:
-            self.__dialects_visible.append(dialect)
+            self.__dialects_active_default.append(dialect)
         return self
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
@@ -163,8 +165,10 @@ class BaseEntryPoint:
         return translator.translate_results(data_source, data)
 
     @translation
-    def get_dialects(self):
-        return self.__dialects_visible
+    def get_dialects(self, include_hidden=False):
+        if include_hidden:
+            return self.__dialects_all
+        return self.__dialects_active_default
 
     def setup_transmission_simple(self, connection, configuration):
         module_name = self.__connector_module

@@ -19,6 +19,7 @@ class ErrorCode(Enum):
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
     TRANSLATION_RESULT = 'mapping_error'
     TRANSLATION_UNKNOWN_DIALOG = 'invalid_parameter'
+    TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
     TRANSMISSION_UNKNOWN = 'unknown'
     TRANSMISSION_CONNECT = 'service_unavailable'
