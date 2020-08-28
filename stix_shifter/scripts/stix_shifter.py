@@ -183,13 +183,9 @@ def main():
     if 'module' in args:
         args_module_dialects = args.module
 
-        options = None
-        if 'options' in args:
-            options = args.options
-        if not options:
-            options = {}
-        else:
-            options = json.loads(options)
+        options = {}
+        if 'options' in args and args.options:
+            options = json.loads(args.options)
 
         module = process_dialects(args_module_dialects, options)[0]
 
@@ -256,13 +252,16 @@ def main():
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
 
-        translation = stix_translation.StixTranslation()
-        dsl = translation.translate(args.module, 'query', args.data_source, args.query, {'validate_pattern': True})
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
+        if 'options' in connection_dict:
+            options.update(connection_dict['options'])
+        options['validate_pattern'] = True
+
+        translation = stix_translation.StixTranslation()
+        dsl = translation.translate(args.module, 'query', args.data_source, args.query, options)
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
-
         results = []
         for query in dsl['queries']:
             search_result = transmission.query(query)
