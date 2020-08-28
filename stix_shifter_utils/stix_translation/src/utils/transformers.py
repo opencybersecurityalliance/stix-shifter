@@ -191,7 +191,7 @@ class ToBase64(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            return base64.b64encode(obj.encode('ascii')).decode('ascii')
+            return base64.b64encode(obj.encode()).decode('ascii')
         except ValueError:
             LOGGER.error("Cannot convert input to base64")
 
