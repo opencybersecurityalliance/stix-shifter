@@ -1,104 +1,102 @@
 {
   "mapping": {
-    "events": {
-      "from_stix": {
-        "ipv4-addr": {
-          "fields": {
-            "value": ["sourceip", "destinationip", "identityip"]
-          }
-        },
-        "ipv6-addr": {
-          "fields": {
-            "value": ["sourceip", "destinationip"]
-          }
-        },
-        "url": {
-          "fields": {
-            "value": ["url"]
-          }
-        },
-        "mac-addr": {
-          "fields": {
-            "value": ["sourcemac", "destinationmac"]
-          }
-        },
-        "file": {
-          "fields": {
-            "name": ["filename"],
-            "hashes.SHA-256": ["sha256hash", "filehash"],
-            "hashes.MD5": ["md5hash", "filehash"],
-            "hashes.SHA-1": ["sha1hash", "filehash"]
-          }
-        },
-        "network-traffic": {
-          "fields": {
-            "src_port": ["sourceport"],
-            "dst_port": ["destinationport"],
-            "protocols[*]": ["protocolid"],
-            "start": ["starttime"],
-            "end": ["endtime"],
-            "src_ref.value": ["sourceip", "sourcemac"],
-            "dst_ref.value": ["destinationip", "destinationmac"]
-          }
-        },
-        "user-account": {
-          "fields": {
-            "user_id": ["username"]
-          }
-        },
-        "artifact": {
-          "fields": {
-            "payload_bin": ["base64_payload"]
-          }
-        },
-        "domain-name": {
-          "fields": {
-            "value": ["domainname"]
-          }
-        },
-        "x-readable-payload": {
-          "fields": {
-            "value": ["utf8_payload"]
-          }
+    "from_stix_map": {
+      "ipv4-addr": {
+        "fields": {
+          "value": ["sourceip", "destinationip", "identityip"]
         }
       },
-      "select_fields": {
-        "default": [
-          "QIDNAME(qid) as qidname",
-          "qid",
-          "CATEGORYNAME(category) as categoryname",
-          "category as categoryid",
-          "CATEGORYNAME(highlevelcategory) as high_level_category_name",
-          "highlevelcategory as high_level_category_id",
-          "logsourceid",
-          "LOGSOURCETYPENAME(devicetype) as logsourcetypename",
-          "LOGSOURCENAME(logsourceid) as logsourcename",
-          "starttime",
-          "endtime",
-          "devicetime",
-          "sourceaddress as sourceip",
-          "sourceport",
-          "sourcemac",
-          "destinationaddress as destinationip",
-          "destinationport",
-          "destinationmac",
-          "username",
-          "eventdirection as direction",
-          "identityip",
-          "identityhostname as identity_host_name",
-          "eventcount",
-          "PROTOCOLNAME(protocolid) as protocol",
-          "BASE64(payload) as payload",
-          "URL as url",
-          "magnitude",
-          "Filename as filename",
-          "URL as domainname",
-          "\"File Hash\" as filehash",
-          "\"SHA256 Hash\" as sha256hash",
-          "\"SHA1 Hash\" as sha1hash",
-          "\"MD5 Hash\" as md5hash"
-        ]
+      "ipv6-addr": {
+        "fields": {
+          "value": ["sourceip", "destinationip"]
+        }
+      },
+      "url": {
+        "fields": {
+          "value": ["url"]
+        }
+      },
+      "mac-addr": {
+        "fields": {
+          "value": ["sourcemac", "destinationmac"]
+        }
+      },
+      "file": {
+        "fields": {
+          "name": ["filename"],
+          "hashes.SHA-256": ["sha256hash", "filehash"],
+          "hashes.MD5": ["md5hash", "filehash"],
+          "hashes.SHA-1": ["sha1hash", "filehash"]
+        }
+      },
+      "network-traffic": {
+        "fields": {
+          "src_port": ["sourceport"],
+          "dst_port": ["destinationport"],
+          "protocols[*]": ["protocolid"],
+          "start": ["starttime"],
+          "end": ["endtime"],
+          "src_ref.value": ["sourceip", "sourcemac"],
+          "dst_ref.value": ["destinationip", "destinationmac"]
+        }
+      },
+      "user-account": {
+        "fields": {
+          "user_id": ["username"]
+        }
+      },
+      "artifact": {
+        "fields": {
+          "payload_bin": ["base64_payload"]
+        }
+      },
+      "domain-name": {
+        "fields": {
+          "value": ["domainname"]
+        }
+      },
+      "x-readable-payload": {
+        "fields": {
+          "value": ["utf8_payload"]
+        }
       }
+    },
+    "aql_events_fields": {
+      "default": [
+        "QIDNAME(qid) as qidname",
+        "qid",
+        "CATEGORYNAME(category) as categoryname",
+        "category as categoryid",
+        "CATEGORYNAME(highlevelcategory) as high_level_category_name",
+        "highlevelcategory as high_level_category_id",
+        "logsourceid",
+        "LOGSOURCETYPENAME(devicetype) as logsourcetypename",
+        "LOGSOURCENAME(logsourceid) as logsourcename",
+        "starttime",
+        "endtime",
+        "devicetime",
+        "sourceaddress as sourceip",
+        "sourceport",
+        "sourcemac",
+        "destinationaddress as destinationip",
+        "destinationport",
+        "destinationmac",
+        "username",
+        "eventdirection as direction",
+        "identityip",
+        "identityhostname as identity_host_name",
+        "eventcount",
+        "PROTOCOLNAME(protocolid) as protocol",
+        "BASE64(payload) as payload",
+        "URL as url",
+        "magnitude",
+        "Filename as filename",
+        "URL as domainname",
+        "\"File Hash\" as filehash",
+        "\"SHA256 Hash\" as sha256hash",
+        "\"SHA1 Hash\" as sha1hash",
+        "\"MD5 Hash\" as md5hash"
+      ]
     }
   },
   "time_range": 15,

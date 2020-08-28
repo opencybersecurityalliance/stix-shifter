@@ -7,8 +7,7 @@ from stix_shifter.stix_translation import stix_translation
 
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",

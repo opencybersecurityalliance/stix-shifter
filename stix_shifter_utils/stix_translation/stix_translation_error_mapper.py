@@ -1,6 +1,7 @@
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_response import ErrorCode
-from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, UnsupportedDataSourceException, TranslationResultException
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, StixValidationException, \
+    UnsupportedDataSourceException, TranslationResultException, UnsupportedDialectException, UnsupportedLanguageException
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 from stix_shifter_utils.utils import logger
 
@@ -10,7 +11,9 @@ error_mapping = {
     StixValidationException.__name__: [ErrorCode.TRANSLATION_STIX_VALIDATION, 'stix validation error'],
     SearchFeatureNotSupportedError.__name__: [ErrorCode.TRANSLATION_NOTSUPPORTED, 'search feature is not supported'],
     TranslationResultException.__name__: [ErrorCode.TRANSLATION_RESULT, 'result translation error'],
-    UnsupportedDataSourceException.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'unsupported datasource']
+    UnsupportedDataSourceException.__name__: [ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE, 'unsupported datasource'],
+    UnsupportedDialectException.__name__: [ErrorCode.TRANSLATION_UNKNOWN_DIALOG, 'unknown dialect'],
+    UnsupportedLanguageException.__name__: [ErrorCode.TRANSLATION_UNKNOWN_LANGUAGE, 'unsupported language']
 }
 
 

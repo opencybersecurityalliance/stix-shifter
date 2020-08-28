@@ -6,16 +6,9 @@ import json
 
 class PingConnector(BasePingConnector):
 
-    logger = None
-
-    @staticmethod
-    def set_logger():
-        if PingConnector.logger is None:
-            PingConnector.logger = utils_logger.set_logger(__name__)
-
     def __init__(self, api_client):
-        PingConnector.set_logger()
         self.api_client = api_client
+        self.logger = utils_logger.set_logger(__name__)
 
     def ping_connection(self):
         response = self.api_client.ping_box()
@@ -27,7 +20,7 @@ class PingConnector(BasePingConnector):
         try:
             response_dict = json.loads(response_txt)
         except Exception as ex:
-            PingConnector.logger.error(response_txt)
+            self.logger.debug(response_txt)
             error = Exception('Can not parse response: ' + str(ex))
 
         return_obj = dict()

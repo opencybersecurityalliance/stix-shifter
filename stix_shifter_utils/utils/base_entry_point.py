@@ -14,6 +14,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
+from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 
 
 class BaseEntryPoint:
@@ -24,7 +25,8 @@ class BaseEntryPoint:
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
-        self.__dialects_visible = []
+        self.__dialects_all = []
+        self.__dialects_active_default = []
         self.__dialect_default = None
         self.__options = options
 
@@ -89,8 +91,9 @@ class BaseEntryPoint:
         self.__dialect_to_results_translator[dialect] = results_translator
         if default:
             self.__dialect_default = dialect
+        self.__dialects_all.append(dialect)
         if default_include:
-            self.__dialects_visible.append(dialect)
+            self.__dialects_active_default.append(dialect)
         return self
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
@@ -138,9 +141,12 @@ class BaseEntryPoint:
 
     @translation
     def get_query_translator(self, dialect=None):
-        if dialect:
-            return self.__dialect_to_query_translator[dialect]
-        return self.__dialect_to_query_translator[self.__dialect_default]
+        try:
+            if dialect:
+                return self.__dialect_to_query_translator[dialect]
+            return self.__dialect_to_query_translator[self.__dialect_default]
+        except KeyError as ex:
+            raise UnsupportedDialectException(dialect)
 
     @translation
     def get_results_translator(self, dialect=None):
@@ -159,8 +165,10 @@ class BaseEntryPoint:
         return translator.translate_results(data_source, data)
 
     @translation
-    def get_dialects(self):
-        return self.__dialects_visible
+    def get_dialects(self, include_hidden=False):
+        if include_hidden:
+            return self.__dialects_all
+        return self.__dialects_active_default
 
     def setup_transmission_simple(self, connection, configuration):
         module_name = self.__connector_module

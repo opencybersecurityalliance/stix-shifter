@@ -1,3 +1,4 @@
+import logging
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter.stix_translation import stix_translation
@@ -5,15 +6,11 @@ from stix_shifter_modules.splunk.entry_point import EntryPoint
 from stix2validator import validate_instance
 from stix_shifter_modules.splunk.stix_translation.splunk_utils import hash_type_lookup
 
-import json
-import logging
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",

@@ -1,14 +1,14 @@
+import re
+import json
+import datetime
+import copy
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.utils import transformers
-import re
-import json
-import datetime
-import copy
-from os import path
+from stix_shifter_utils.utils.file_helper import read_json
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
@@ -39,7 +39,7 @@ class QueryStringPatternTranslator:
         ObservationOperators.And: 'AND'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, options):
         self.dmm = data_model_mapper
         self.pattern = pattern
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -56,25 +56,19 @@ class QueryStringPatternTranslator:
         self.transformers = transformers.get_all_transformers()
 
         # Read reference data
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(path.join(basepath, "json", "reference_data_types4Query.json"))
-        self.REFERENCE_DATA_TYPES = json.loads(open(filepath).read())
+        self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
 
         # Read report definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_reports_def.json"))
-        self.REPORT_DEF = json.loads(open(filepath).read())
+        self.REPORT_DEF = read_json('guardium_reports_def', options)
 
         # Read report definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_report_params_map.json"))
-        self.REPORT_PARAMS_MAP = json.loads(open(filepath).read())
+        self.REPORT_PARAMS_MAP = read_json('guardium_report_params_map', options)
 
         # Read qsearch definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_def.json"))
-        self.QSEARCH_DEF = json.loads(open(filepath).read())
+        self.QSEARCH_DEF = read_json('guardium_qsearch_def', options)
 
         # Read qsearch definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_params_map.json"))
-        self.QSEARCH_PARAMS_MAP = json.loads(open(filepath).read())
+        self.QSEARCH_PARAMS_MAP = read_json('guardium_qsearch_params_map', options)
 
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
@@ -612,7 +606,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
 
-    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
+    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
     report_call = guardium_query_translator.translated
 
     # Add space around START STOP qualifiers

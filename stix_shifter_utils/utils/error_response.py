@@ -8,6 +8,9 @@ import collections
 import json
 
 
+logger = utils_logger.set_logger(__name__)
+
+
 class ErrorCode(Enum):
     TRANSLATION_NOTIMPLEMENTED_MODE = 'not_implemented'
     TRANSLATION_MODULE_DEFAULT_ERROR = 'invalid_parameter'
@@ -15,6 +18,8 @@ class ErrorCode(Enum):
     TRANSLATION_STIX_VALIDATION = 'invalid_parameter'
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
     TRANSLATION_RESULT = 'mapping_error'
+    TRANSLATION_UNKNOWN_DIALOG = 'invalid_parameter'
+    TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
     TRANSMISSION_UNKNOWN = 'unknown'
     TRANSMISSION_CONNECT = 'service_unavailable'
@@ -31,16 +36,8 @@ class ErrorCode(Enum):
 
 class ErrorResponder():
 
-    logger = None
-
-    @staticmethod
-    def set_logger():
-        if ErrorResponder.logger is None:
-            ErrorResponder.logger = utils_logger.set_logger(__name__)
-
     @staticmethod
     def get_struct_item(message_struct, message_path):
-        ErrorResponder.set_logger()
         # "+isFailure=True" means the current item is a list and the new item will be a list containing items with the field 'Failure' equal 'True'
         # '~result' means the current item is a list and new item will be a list containing specified field ('result') values
         # document it: '+' and '~'
@@ -70,7 +67,6 @@ class ErrorResponder():
 
     @staticmethod
     def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
-        ErrorResponder.set_logger()
         return_object['success'] = False
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
 
@@ -87,8 +83,8 @@ class ErrorResponder():
         error_msg = ''
         if error is not None:
             str_error = str(error)
-            ErrorResponder.logger.error("error occurred: " + str_error)
-            ErrorResponder.logger.debug(utils_logger.exception_to_string(error))
+            logger.error("error occurred: " + str_error)
+            logger.debug(utils_logger.exception_to_string(error))
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
                 error_msg = 'Wrong certificate: ' + str_error
