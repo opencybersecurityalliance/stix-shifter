@@ -251,7 +251,6 @@ def main():
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
-
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
         if 'options' in connection_dict:
@@ -260,6 +259,7 @@ def main():
 
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.module, 'query', args.data_source, args.query, options)
+        log.debug('Translated Queries: ' + json.dumps(dsl))
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []

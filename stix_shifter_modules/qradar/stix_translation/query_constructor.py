@@ -130,8 +130,6 @@ class AqlQueryStringPatternTranslator:
             # For [ipv4-addr:value = <CIDR value>]
             elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
                 comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
-            elif expression.object_path == 'artifact:payload_bin' and expression.comparator == ComparisonComparators.Like:
-                comparison_string += "TEXT SEARCH '{}'".format(value)
             elif (expression.object_path == 'ipv4-addr:value'
                   or expression.object_path == 'ipv6-addr:value'
                   or expression.object_path == 'network-traffic:dst_ref.value'
@@ -185,15 +183,27 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _parse_combined_comparison_expression(self, expression, qualifier=None):
         operator = self._lookup_comparison_operator(self, expression.operator)
-        expression_01 = self._parse_expression(expression.expr1)
-        expression_02 = self._parse_expression(expression.expr2)
-        if not expression_01 or not expression_02:
-            return ''
-        if isinstance(expression.expr1, CombinedComparisonExpression):
-            expression_01 = "({})".format(expression_01)
-        if isinstance(expression.expr2, CombinedComparisonExpression):
-            expression_02 = "({})".format(expression_02)
-        query_string = "{} {} {}".format(expression_01, operator, expression_02)
+
+        # TEXT SEARCH operator is special case. Parsing combined expression of artifact:payload_bin translated into invalid aql query
+        # Two TEXT SEARCH operator cannot be used in a single aql query thats why two expressions are not passed into _parse_expression()
+        # Instead we can just construct the query string by adding two values with the oprators
+        if isinstance(expression.expr1, ComparisonExpression) and (expression.expr1.object_path == 'artifact:payload_bin' 
+            and expression.expr1.comparator == ComparisonComparators.Like 
+            and expression.expr2.object_path == 'artifact:payload_bin' 
+            and expression.expr2.comparator == ComparisonComparators.Like):
+            
+            query_string = "TEXT SEARCH '{} {} {}' ".format(expression.expr1.value, operator, expression.expr2.value)
+        else:
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if not expression_01 or not expression_02:
+                return ''
+            if isinstance(expression.expr1, CombinedComparisonExpression):
+                expression_01 = "({})".format(expression_01)
+            if isinstance(expression.expr2, CombinedComparisonExpression):
+                expression_02 = "({})".format(expression_02)
+            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+
         if qualifier:
             self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
             return ''
@@ -208,6 +218,10 @@ class AqlQueryStringPatternTranslator:
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         # Resolve the comparison symbol to use in the query string (usually just ':')
         comparator = self._lookup_comparison_operator(self, expression.comparator)
+
+        # Special case for artifact:payload_bin object with Like operator where we apply aql TEXT SEARCH
+        if expression.comparator == ComparisonComparators.Like and (expression.object_path == 'artifact:payload_bin'):
+            return "TEXT SEARCH '{}'".format(expression.value)
 
         # Special case where we want the risk finding
         if stix_object == 'x-ibm-finding' and stix_field == 'name' and expression.value == "*":
