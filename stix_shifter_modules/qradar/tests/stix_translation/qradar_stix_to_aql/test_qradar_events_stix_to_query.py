@@ -16,7 +16,7 @@ MAPPING_ERROR = "Unable to map the following STIX objects and properties to data
 
 
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
-custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['events']['select_fields']['default']))
+custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['aql_events_fields']['default']))
 from_statement = " FROM events "
 
 

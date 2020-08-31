@@ -2,32 +2,16 @@ from stix_shifter_utils.modules.base.stix_translation.base_query_translator impo
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import logging
 from os import path
+from stix_shifter_utils.utils.file_helper import read_json
 
 logger = logging.getLogger(__name__)
 
+
 class CimBaseQueryTranslator(BaseQueryTranslator):
-    FIELDS_DEFAULT = {
-        "default": [
-            "src_ip",
-            "src_port",
-            "src_mac",
-            "src_ipv6",
-            "dest_ip",
-            "dest_port",
-            "dest_mac",
-            "dest_ipv6",
-            "file_hash",
-            "user",
-            "url",
-            "protocol"
-        ]
-    }
 
     def __init__(self, options={}, dialect=None):
         super().__init__(options, dialect, path.dirname(__file__))
-        if not self.select_fields:
-            self.select_fields = self.FIELDS_DEFAULT
-        
+        self.select_fields = read_json('cim_select_fields', options)
     # TODO:
     # This mapping is not super straightforward. It could use the following improvements:
     # * Registry keys need to pull the path apart from the key name, I believe. Need to investigate with Splunk
