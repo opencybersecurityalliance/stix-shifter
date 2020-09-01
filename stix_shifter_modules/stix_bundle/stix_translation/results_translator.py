@@ -5,7 +5,7 @@ import uuid
 
 class ResultsTranslator(BaseResultTranslator):
 
-    def read_mapping_file(self, file_path):
+    def read_json(self, filepath, options):
         return '{}'
 
     def translate_results(self, data_source, data):

@@ -19,6 +19,7 @@ RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
 MAPPING = 'mapping'
+DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
@@ -97,7 +98,7 @@ class StixTranslation:
                     dialects_used = 0
                     for dialect in dialects:
                         query_translator = entry_point.get_query_translator(dialect)
-                        if language == query_translator.get_language():
+                        if not query_translator.get_language() or language == query_translator.get_language():
                             dialects_used += 1
                             antlr_parsing = None
                             if query_translator.get_language() == 'stix':
@@ -141,6 +142,9 @@ class StixTranslation:
             elif translate_type == MAPPING:
                 mappings = entry_point.get_mapping()
                 return mappings
+            elif translate_type == DIALECTS:
+                dialects = entry_point.get_dialects_full()
+                return dialects
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
