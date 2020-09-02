@@ -5,7 +5,7 @@ from .utils import unwrap_connection_options
 
 class ResultsTranslator(BaseResultTranslator):
 
-    def read_mapping_file(self, path):
+    def read_json(self, filepath, options):
         return '{}'
 
     def translate_results(self, data_source, data, options={}, mapping=None):
