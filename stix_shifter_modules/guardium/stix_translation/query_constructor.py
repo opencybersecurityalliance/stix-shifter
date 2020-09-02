@@ -100,8 +100,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
@@ -134,8 +134,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
