@@ -26,7 +26,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_db_user_query(self):
         stix_pattern = "[ user-account:db_user='MARCI']"
         query = _translate_query(stix_pattern)
-        filters = "\"filters\":\"name=DBUser&value=MARCI&isGroup=false\""
+        filters = "\"filters\":\"name=DB User&value=MARCI&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
 
     def test_ipv4_query(self):
@@ -46,7 +46,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
-        filters = "\"filters\":\"name=DBUser&value=MARCI&isGroup=false\""
+        filters = "\"filters\":\"name=DB User&value=MARCI&isGroup=false\""
         _test_query_assertions(query['queries'], 1, filters)
 
     def test_query_and(self):
@@ -54,7 +54,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         filters = "name=Server&value=1.2.3.4&isGroup=false"
         _test_query_assertions(query['queries'], 0, filters)
-        filters = "name=DBUser&value=MARCI&isGroup=false"
+        filters = "name=DB User&value=MARCI&isGroup=false"
         _test_query_assertions(query['queries'], 0, filters)
 
     def test_query_or_with_non_qs_field(self):
