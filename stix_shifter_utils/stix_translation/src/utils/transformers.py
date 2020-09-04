@@ -378,7 +378,7 @@ class GuardiumRep(ValueTransformer):
 
 
 class GuardiumMapSeverity(object):
-    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+    """A value transformer for converting numeric severity rating to literal """
 
     @staticmethod
     def transform(severity):
@@ -391,11 +391,12 @@ class GuardiumMapSeverity(object):
             else:
                 return "Medium"
         except ValueError:
-            LOGGER.error("Cannot convert input to path string")
+            #LOGGER.error("Cannot convert input to path string")
+            return severity
 
 
 class GuardiumMapSeverityNum(object):
-    """A value transformer for converting  regular timestamp to Guardium timestamp"""
+    """A value transformer for converting  severity literal to numeric """
 
     @staticmethod
     def transform(severity):
@@ -407,7 +408,7 @@ class GuardiumMapSeverityNum(object):
         elif sev == "medium":
             return '5'
         else:
-            return "*"
+            return severity
 
 
 class TimestampToGuardiumQS(ValueTransformer):
