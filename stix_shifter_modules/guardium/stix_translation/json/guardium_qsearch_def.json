@@ -25,11 +25,11 @@
           "default": "%"
         },
 
-        "OSUser": {
+        "OS User": {
           "info": "map",
           "default": "*"
         },
-        "DBUser": {
+        "DB User": {
           "info": "map",
           "default": "*"
         },
@@ -43,7 +43,8 @@
         },
         "Severity": {
           "info": "map",
-          "default": "%"
+          "default": "%",
+          "transformer":"GuardiumMapSeverityNum"
         }
       }
     }
@@ -67,7 +68,7 @@
           "info": "map",
           "default": "*"
         },
-        "DBUser":{
+        "DB User":{
           "info": "map",
           "default": "*"
         },
@@ -75,7 +76,11 @@
           "info": "map",
           "default": "*"
         },
-        "OSUser": {
+        "Client IP": {
+          "info": "map",
+          "default": "*"
+        },
+        "OS User": {
           "info": "map",
           "default": "*"
         },

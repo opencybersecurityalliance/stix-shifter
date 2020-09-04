@@ -43,7 +43,8 @@
         },
         "Severity": {
           "info": "map",
-          "default": "%"
+          "default": "*",
+          "transformer":"GuardiumMapSeverity"
         }
       }
     }
@@ -71,9 +72,6 @@
 	  "info": "map"
         },
 	"Server":{
-	  "info": "map"
-        },
-	"Database":{
 	  "info": "map"
         }
      }

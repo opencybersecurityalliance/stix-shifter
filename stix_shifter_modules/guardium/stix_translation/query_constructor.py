@@ -100,8 +100,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
@@ -119,8 +119,8 @@ class QueryStringPatternTranslator:
         # Where as each key/value parameter from two json objects are "AND"
         # Put quote around key
         # print(report_call)
-        regex = r"([a-zA-Z_]+)(\s=)"
-        out_str = re.sub(regex, r"'\1' :", qsearch_call, 0)
+        regex = r"(^|\(|OR |AND )([a-zA-Z_ ]+)(\s=)"
+        out_str = re.sub(regex, r"\1'\2' :", qsearch_call, 0)
 
         # Create the Json structure
         regex1 = r"\(|\)"
@@ -134,8 +134,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
@@ -285,9 +285,9 @@ class QueryStringPatternTranslator:
         qsearch_in_query = []
         for qsearch_param_index in range(self.qsearch_params_array_size):
             self.qsearch_params_passed = self.qsearch_params_array[qsearch_param_index]
-            clientip = self.qsearch_params_passed.get("Client", None)
-            if clientip is not None:
-                continue
+            #clientip = self.qsearch_params_passed.get("Client", None)
+            #if clientip is not None:
+            #    continue
             data_category = self.qsearch_params_passed.get("datacategory", None)
             if data_category is not None:
                 if data_category not in self.QSEARCH_DEF:
