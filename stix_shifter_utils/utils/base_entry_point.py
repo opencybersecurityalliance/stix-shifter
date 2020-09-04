@@ -170,6 +170,17 @@ class BaseEntryPoint:
             return self.__dialects_all
         return self.__dialects_active_default
 
+    @translation
+    def get_dialects_full(self):
+        result = {}
+        for dialect in self.__dialects_all:
+            query_translator = self.get_query_translator(dialect)
+            dialect_item = {}
+            dialect_item['language'] = query_translator.get_language()
+            dialect_item['default'] = dialect in self.__dialects_active_default
+            result[dialect] = dialect_item
+        return result
+
     def setup_transmission_simple(self, connection, configuration):
         module_name = self.__connector_module
         module_path = "stix_shifter_modules." + module_name + ".stix_transmission"

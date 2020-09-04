@@ -8,7 +8,7 @@ import logging
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.proxy_host import ProxyHost
-from stix_shifter_utils.utils.module_discovery import process_dialects
+from stix_shifter_utils.utils.module_discovery import process_dialects, modules_list
 from stix_shifter_utils.utils import logger as utils_logger
 from stix_shifter_utils.utils.logger import exception_to_string
 
@@ -17,6 +17,7 @@ TRANSMIT = 'transmit'
 EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
+MODULES = 'modules'
 
 
 def main():
@@ -71,17 +72,14 @@ def main():
                                   help='Run the STIX 2 validator against the translated results')
     translate_parser.add_argument('-d', '--debug', action='store_true',
                                   help='Print detail logs for debugging')
+    # modules parser
+    parent_subparsers.add_parser(MODULES, help='Get modules list')
 
-    # mapping parser parser
+    # mapping parser
     mapping_parser = parent_subparsers.add_parser(
         MAPPING, help='Get module mapping')
     # positional arguments
-    mapping_parser.add_argument(
-        'module',
-         help='The translation module to use')
-    # optional arguments
-    mapping_parser.add_argument('-x', '--stix-validator', action='store_true',
-                                  help='Run the STIX 2 validator against the translated results')
+    mapping_parser.add_argument('module', help='The translation module to use')
 
     # transmit parser
     transmit_parser = parent_subparsers.add_parser(
@@ -251,7 +249,6 @@ def main():
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
-
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
         if 'options' in connection_dict:
@@ -260,6 +257,7 @@ def main():
 
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(args.module, 'query', args.data_source, args.query, options)
+        log.debug('Translated Queries: ' + json.dumps(dsl))
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []
@@ -312,6 +310,12 @@ def main():
     elif args.command == MAPPING:
         translation = stix_translation.StixTranslation()
         result = translation.translate(args.module, stix_translation.MAPPING, None, None, options=options)
+    elif args.command == MODULES:
+        translation = stix_translation.StixTranslation()
+        result = {}
+        all_modules = modules_list()
+        for m in all_modules:
+            result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
