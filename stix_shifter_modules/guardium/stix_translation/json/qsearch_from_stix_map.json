@@ -1,7 +1,7 @@
 {
   "x-ibm-finding": {
       "fields": {
-        "finding_type": ["finding_type"],
+        "finding_type": ["datacategory"],
         "start": ["startTime"],
         "end": ["endTime"],
         "database_name": ["Database"]
