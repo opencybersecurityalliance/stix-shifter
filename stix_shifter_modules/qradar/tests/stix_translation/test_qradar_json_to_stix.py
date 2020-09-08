@@ -1,15 +1,12 @@
+import json
+import base64
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
-import json
-import base64
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-# Using default mapping in modules/qradar/json/to_stix_map.json
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -30,7 +27,7 @@ class TestTransform(object):
     @staticmethod
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
-    
+
     @staticmethod
     def get_object_keys(objects):
         for k, v in objects.items():
@@ -73,13 +70,14 @@ class TestTransform(object):
         base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
+        domain = "test.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -140,8 +138,7 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-
-        assert(objects.keys() == set(map(str, range(0, 10))))
+        assert(objects.keys() == set(map(str, range(0, 11))))
 
     def test_risk_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
@@ -192,14 +189,12 @@ class TestTransform(object):
 
         options = {
             "mapping": {
-                "flows": {
-                    "to_stix": {
-                        "username": {"key": "user-account.user_id"},
-                        "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                        "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
-                        "url": {"key": "url.value"},
-                        "custompayload": {"key": "artifact.payload_bin"}
-                    }
+                "to_stix_map": {
+                    "username": {"key": "user-account.user_id"},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
+                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "url": {"key": "url.value"},
+                    "custompayload": {"key": "artifact.payload_bin"}
                 }
             }
         }
@@ -448,7 +443,7 @@ class TestTransform(object):
             hashes = file_object['hashes']
             assert(key in hashes), "{} hash not included".format(key)
             assert(hashes[key] == value)
-    
+
     def test_none_empty_values_in_results(self):
         payload = "Payload"
         user_id = "someuserid2018"

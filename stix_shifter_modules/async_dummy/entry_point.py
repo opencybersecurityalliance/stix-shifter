@@ -48,10 +48,10 @@ class EntryPoint(BaseEntryPoint):
 
             dialect = 'dialect1'
             query_translator = QueryTranslator(options, dialect, filepath)
-            results_translator = ResultsTranslator(options, dialect)
+            results_translator = ResultsTranslator(options, dialect, filepath)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
             dialect = 'dialect2'
             query_translator = QueryTranslator(options, dialect, filepath)
-            results_translator = ResultsTranslator(options, dialect)
+            results_translator = ResultsTranslator(options, dialect, filepath)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)

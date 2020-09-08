@@ -9,22 +9,44 @@ import io
 import os
 from jsonmerge import merge
 import tempfile
+import importlib
 
 here = os.path.abspath(os.path.dirname(__file__))
+SKIP_ME = 'SKIP.ME'
 
 with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+TMP_MAPPING_DIR = 'tmp_mapping'
+MODULES_DIR = 'stix_shifter_modules'
+if os.path.isdir(TMP_MAPPING_DIR):
+    shutil.rmtree(TMP_MAPPING_DIR)
+
+os.mkdir(TMP_MAPPING_DIR)
+
+for module in [o for o in os.listdir(MODULES_DIR) if (os.path.isdir(os.path.join(MODULES_DIR,o)) and not o.startswith('_'))]:
+    if not os.path.isfile(os.path.join(MODULES_DIR, module, 'SKIP.ME')):
+        print(module + '..')
+        connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
+        entry_point = connector_module.EntryPoint()
+        mapping = entry_point.get_mapping()
+        with open(os.path.join(TMP_MAPPING_DIR, module+'.json'), 'w') as f:
+            json.dump(mapping, f, sort_keys=False, indent=4)
 
 def fill_connectors(projects, modules_path):
     modules = [name for name in os.listdir(modules_path)
                if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')))]
     for module in modules:
-        if not os.path.isfile(os.path.join(modules_path, module, 'SKIP.ME')):
+        if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
             projects['stix_shifter_modules_' + module] = ['stix_shifter_modules/' + module]
 
+# The mode determines how the stix-shifter is packaged
+# 1 = Include everything in 1 whl package
+# 3 - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
+# N - stix-shifter, stix-shifter-utils, and each connector is packaged separately
+# <module name> - package only the specified connector
 
-mode = '1'
+mode = 'N'
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
 
@@ -87,7 +109,7 @@ for project_name in projects.keys():
     for src_folder in src_folders:
         for r, d, f in os.walk(src_folder):
             for file in f:
-                if 'requirements.txt' == file and not os.path.isfile(os.path.join(r, 'SKIP.ME')):
+                if 'requirements.txt' == file and not os.path.isfile(os.path.join(r, SKIP_ME)):
                     requirements_files.append(os.path.join(r, file))
     print('requirements_files: %s' % requirements_files)
     for requirements_file in requirements_files:
@@ -146,6 +168,10 @@ for project_name in projects.keys():
     json_include_lines = []
 
     for json_search_path in src_folders:
+        connector_name = ''
+        json_search_path_split = json_search_path.split(os.sep)
+        if len(json_search_path_split) > 1:
+            connector_name = json_search_path_split[1]
         module_dir = json_search_path
         configuration_path = os.path.join(module_dir, 'configuration')
         if os.path.isdir(configuration_path):
@@ -165,9 +191,18 @@ for project_name in projects.keys():
                             base_data = json.load(json_file)
                         data = base_data
                     data = merge(module_data, data)
+                    if file == 'config.json':
+                        with open(os.path.join(TMP_MAPPING_DIR, connector_name+ '.json')) as f:
+                            mapping = json.load(f)
+                            data['connection']['options']['mapping']['default'] = mapping
                     json_file_path = os.path.join(r, '..', 'conf', file)
                     with open(json_file_path, 'w') as json_file:
                         json_file.write(json.dumps(data, indent=4, sort_keys=False))
+            connector_module = importlib.import_module("stix_shifter_modules." + connector_name + ".entry_point")
+            entry_point = connector_module.EntryPoint()
+            dialects_full = entry_point.get_dialects_full()
+            with open(os.path.join(conf_path, 'dialects.json'), 'w') as f:
+                f.write(json.dumps(dialects_full, indent=4, sort_keys=False))
             temp_dir = tempfile.TemporaryDirectory()
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)
@@ -204,3 +239,4 @@ for project_name in projects.keys():
         shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
         temp_dir = None
     print('---------------------------------')
+shutil.rmtree(TMP_MAPPING_DIR)

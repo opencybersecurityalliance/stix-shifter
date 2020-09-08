@@ -68,15 +68,11 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_custom_mapping(self):
         custom_mappings = {
-            "default": {
-                "from_stix" : {
-                    "binary":{}, 
-                    "process": {
-                        "file" : {
-                            "fields": {
-                                "custom_name": ["observed_filename"],
-                            }
-                        }
+            "binary_from_stix_map": {},
+            "process_from_stix_map": {
+                "file" : {
+                    "fields": {
+                        "custom_name": ["observed_filename"],
                     }
                 }
             }

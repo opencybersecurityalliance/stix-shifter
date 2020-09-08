@@ -5,7 +5,7 @@ import uuid
 
 class ResultsTranslator(BaseResultTranslator):
 
-    def read_mapping_file(self, file_path):
+    def read_json(self, filepath, options):
         return '{}'
 
     def translate_results(self, data_source, data):
@@ -25,4 +25,4 @@ class ResultsTranslator(BaseResultTranslator):
             obs["created_by_ref"] = data_source['id']
 
         bundle['objects'] += bundle_data
-        return json.dumps(bundle, indent=4, sort_keys=False)
+        return bundle

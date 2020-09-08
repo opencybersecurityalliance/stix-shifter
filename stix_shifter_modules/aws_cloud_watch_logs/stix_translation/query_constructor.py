@@ -2,13 +2,14 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
+from stix_shifter_utils.utils.file_helper import read_json
 from datetime import datetime, timedelta
 import os.path as path
 import json
 import re
 
-PROTOCOL_LOOKUP_JSON_FILE = 'json/network_protocol_map.json'
-MASTER_CONFIG_FILE = 'json/master_config.json'
+PROTOCOL_LOOKUP_JSON_FILE = 'network_protocol_map.json'
+MASTER_CONFIG_FILE = 'master_config.json'
 TIMESTAMP_PATTERN = r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"
 
 
@@ -32,12 +33,13 @@ class QueryStringPatternTranslator:
     }
     aws_query = "fields {fields}{stix_filter} {parse_filter}{logtype_filter} | filter ({filter_query})"
 
-    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range, options):
+        self.options = options
         self.dmm = data_model_mapper
         self.pattern = pattern
         self._time_range = time_range
         self.log_type = self.dmm.dialect
-        self._log_config_data = self.load_json(MASTER_CONFIG_FILE)
+        self._log_config_data = read_json(MASTER_CONFIG_FILE, self.options)
         self._protocol_lookup_needed = True if self.log_type in ['vpcflow'] else False
         self._parse_statement = []
         self.qualified_queries = []
@@ -75,27 +77,13 @@ class QueryStringPatternTranslator:
         :return:str or list, protocol
         """
         value = value.values if hasattr(value, 'values') else value
-        protocol_json = self.load_json(PROTOCOL_LOOKUP_JSON_FILE)
+        protocol_json = read_json(PROTOCOL_LOOKUP_JSON_FILE, self.options)
         if isinstance(value, list):
             protocol_value = [protocol_json.get(each_value.lower()) for each_value in value if each_value.lower() in
                               protocol_json]
         else:
             protocol_value = protocol_json.get(value.lower())
         return protocol_value
-
-    @staticmethod
-    def load_json(rel_path_of_file):
-        """
-        Consumes a json file and returns a dictionary
-        :param rel_path_of_file: str, path of json file
-        :return: dictionary
-        """
-        _json_path = path.abspath(path.join(path.join(__file__, ".."), rel_path_of_file))
-        if path.exists(_json_path):
-            with open(_json_path) as f_obj:
-                return json.load(f_obj)
-        else:
-            raise FileNotFoundError
 
     @staticmethod
     def _format_set(values) -> list:
@@ -373,7 +361,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     time_range = options['time_range']
     limit = options['result_limit']
     final_queries = []
-    queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
+    queries_obj = QueryStringPatternTranslator(pattern, data_model_mapping, time_range, options)
     qualifier_list = list(zip(*queries_obj.time_range_lst))
     queries_string = queries_obj.qualified_queries
     for index, each_query in enumerate(queries_string, start=0):

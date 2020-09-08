@@ -1,0 +1,68 @@
+{
+  "type": "bundle",
+  "id": "bundle--258c4b63-6b04-4a0e-985d-f64a3a8c8ec7",
+  "spec_version": "2.0",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
+      "created": "2020-07-29T09:44:40.150Z",
+      "modified": "2020-07-29T09:44:40.150Z",
+      "name": "threat demo",
+      "identity_class": "program"
+    },
+    {
+      "type": "observed-data",
+      "id": "observed-data--ed82dd61-cc41-485b-b608-d278469e6259",
+      "created_by_ref": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
+      "created": "2020-07-29T09:44:40.150Z",
+      "modified": "2020-07-29T09:44:40.150Z",
+      "first_observed": "2020-07-29T09:44:40.150Z",
+      "last_observed": "2020-07-29T09:44:40.150Z",
+      "number_observed": 1,
+      "objects": {
+        "0": {
+          "type": "ipv4-addr",
+          "value": "68.109.83.22"
+        },
+        "1": {
+          "type": "ipv4-addr",
+          "value": "192.168.0.15"
+        },
+        "2": {
+          "type": "url",
+          "value": "onedrivefiles.digital"
+        },
+        "3": {
+          "type": "ipv4-addr",
+          "value": "1.1.1.1"
+        },
+        "4": {
+          "type": "url",
+          "value": "http://kbfvzoboss.bid/alien/fre.php"
+        },
+        "5": {
+          "type": "ipv4-addr",
+          "value": "45.128.134.14"
+        },
+        "6": {
+          "type": "network-traffic",
+          "start": "2020-07-29T09:44:40.150Z",
+          "end": "2020-07-29T09:44:40.150Z",
+          "is_active": false,
+          "src_ref": "0",
+          "dst_ref": "1",
+          "src_port": 58767,
+          "dst_port": 443,
+          "protocols": ["ip", "tcp", "tls"],
+          "src_byte_count": 125194360,
+          "dst_byte_count": 122956560
+        },
+        "7": {
+          "type": "url",
+          "value": "faceb00k-verify-account-dept.com"
+        }
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import traceback
 import os
 import functools
 import json
+import glob
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -13,6 +14,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_status_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
+from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 
 
 class BaseEntryPoint:
@@ -23,7 +25,8 @@ class BaseEntryPoint:
         self.__connector_module = stack[-2].filename.split(os.sep)[-2]
         self.__dialect_to_query_translator = {}
         self.__dialect_to_results_translator = {}
-        self.__dialects_visible = []
+        self.__dialects_all = []
+        self.__dialects_active_default = []
         self.__dialect_default = None
         self.__options = options
 
@@ -31,6 +34,17 @@ class BaseEntryPoint:
         self.__status_connector = None
         self.__delete_connector = None
         self.__query_connector = None
+
+        module_name = self.__connector_module
+        module = importlib.import_module(
+                    "stix_shifter_modules." + module_name + ".stix_translation")
+        json_path = os.path.dirname(module.__file__)
+        json_path = os.path.abspath(json_path)
+        json_path = os.path.join(json_path, 'json')
+        if os.path.isdir(json_path):
+            to_stix = os.path.join(json_path, 'to_stix_map.json')
+            if not os.path.isfile(to_stix):
+                raise Exception(to_stix + ' is not found')
 
         if connection:
             validation_obj = {'connection': connection, 'configuration': configuration}
@@ -77,8 +91,9 @@ class BaseEntryPoint:
         self.__dialect_to_results_translator[dialect] = results_translator
         if default:
             self.__dialect_default = dialect
+        self.__dialects_all.append(dialect)
         if default_include:
-            self.__dialects_visible.append(dialect)
+            self.__dialects_active_default.append(dialect)
         return self
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
@@ -107,21 +122,31 @@ class BaseEntryPoint:
         return results_translator
 
     @translation
-    def get_mapping(self, dialect=None):
-        query_translator = self.get_query_translator(dialect)
-        results_translator = self.get_results_translator(dialect)
-        mapping = {'from_stix': query_translator.get_mapping() if query_translator else {},
-                   'to_stix': results_translator.get_mapping()}
-        select_fields = query_translator.get_select_fields()
-        if select_fields:
-            mapping['select_fields'] = select_fields
+    def get_mapping(self):
+        module_name = self.__connector_module
+        module = importlib.import_module(
+                    "stix_shifter_modules." + module_name + ".stix_translation")
+        basepath = os.path.dirname(module.__file__)
+        basepath = os.path.abspath(basepath)
+        basepath = os.path.join(basepath, 'json')
+
+        mapping = {}
+        if os.path.isdir(basepath):
+            for filename in glob.glob(basepath + os.sep + "*.json"):
+                key = os.path.basename(filename)[:-5]
+                with open(filename, 'r') as f:
+                    jsondata = json.load(f)
+                    mapping[key] = jsondata
         return mapping
 
     @translation
     def get_query_translator(self, dialect=None):
-        if dialect:
-            return self.__dialect_to_query_translator[dialect]
-        return self.__dialect_to_query_translator[self.__dialect_default]
+        try:
+            if dialect:
+                return self.__dialect_to_query_translator[dialect]
+            return self.__dialect_to_query_translator[self.__dialect_default]
+        except KeyError as ex:
+            raise UnsupportedDialectException(dialect)
 
     @translation
     def get_results_translator(self, dialect=None):
@@ -140,8 +165,21 @@ class BaseEntryPoint:
         return translator.translate_results(data_source, data)
 
     @translation
-    def get_dialects(self):
-        return self.__dialects_visible
+    def get_dialects(self, include_hidden=False):
+        if include_hidden:
+            return self.__dialects_all
+        return self.__dialects_active_default
+
+    @translation
+    def get_dialects_full(self):
+        result = {}
+        for dialect in self.__dialects_all:
+            query_translator = self.get_query_translator(dialect)
+            dialect_item = {}
+            dialect_item['language'] = query_translator.get_language()
+            dialect_item['default'] = dialect in self.__dialects_active_default
+            result[dialect] = dialect_item
+        return result
 
     def setup_transmission_simple(self, connection, configuration):
         module_name = self.__connector_module

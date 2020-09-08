@@ -1,14 +1,11 @@
+import unittest
+import json
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.msatp.entry_point import EntryPoint
-import json
-import unittest
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",

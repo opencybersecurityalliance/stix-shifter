@@ -1,193 +1,48 @@
 {
-  "session": {
-    "--IBM SC Session Details": {
-      "reportName": "--IBM SC Session Details",
+"Threat Case": {
+    "ATA Open Cases": {
+      "reportName": "ATA Open Cases",
       "indexFrom": "0",
       "fetchSize": "1000",
       "sortType": "asc",
       "reportParameter": {
         "QUERY_FROM_DATE": {
-          "default": "12:00:00",
-          "transformer": "EpochToGuardium"
+          "info": "START",
+          "default": "1970-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
         },
         "QUERY_TO_DATE": {
-          "default": "00:00:00",
-          "transformer": "EpochToGuardium"
+          "info": "STOP",
+          "default": "2019-07-01T00:00:10.000Z",
+          "transformer": "TimestampToGuardium"
         },
         "SHOW_ALIASES": {
+          "info": "None",
           "default": "TRUE"
         },
         "REMOTE_SOURCE": {
+          "info": "None",
           "default": "%"
         },
-        "CLIENTIP": {
+
+        "OSUser": {
+          "info": "map",
           "default": "%"
         },
-        "SERVERIP": {
+        "DBUser": {
+          "info": "map",
           "default": "%"
         },
-        "DBUSERNAME": {
+        "Database": {
+          "info": "map",
           "default": "%"
         },
-        "SERVICENAME": {
+        "ServerIP": {
+          "info": "map",
           "default": "%"
         },
-        "DATABASENAME": {
-          "default": "%"
-        }
-      }
-    }
-  },
-  "activity": {
-    "--IBM SC Activity Details": {
-      "reportName": "--IBM SC Activity Details",
-      "indexFrom": "0",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "QUERY_FROM_DATE": {
-          "default": "12:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "QUERY_TO_DATE": {
-          "default": "00:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "SHOW_ALIASES": {
-          "default": "TRUE"
-        },
-        "REMOTE_SOURCE": {
-          "default": "%"
-        },
-        "CLIENTIP": {
-          "default": "%"
-        },
-        "SERVERIP": {
-          "default": "%"
-        },
-        "DBUSERNAME": {
-          "default": "%"
-        },
-        "SERVICENAME": {
-          "default": "%"
-        },
-        "OSUSER": {
-          "default": "%"
-        },
-        "DATABASENAME": {
-          "default": "%"
-        }
-      }
-    }
-  },
-  "exceptions": {
-    "--IBM SC Exception Details": {
-      "reportName": "--IBM SC Exception Details",
-      "indexFrom": "0",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "QUERY_FROM_DATE": {
-          "default": "12:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "QUERY_TO_DATE": {
-          "default": "00:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "SHOW_ALIASES": {
-          "default": "TRUE"
-        },
-        "REMOTE_SOURCE": {
-          "default": "%"
-        },
-        "CLIENTIP": {
-          "default": "%"
-        },
-        "SERVERIP": {
-          "default": "%"
-        },
-        "DBUSERNAME": {
-          "default": "%"
-        },
-        "SERVICENAME": {
-          "default": "%"
-        },
-        "OSUSER": {
-          "default": "%"
-        },
-        "DATABASENAME": {
-          "default": "%"
-        },
-        "ERRORCODE": {
-          "default": "%"
-        }
-      }
-    }
-  },
-  "audit": {
-    "reportName": "--IBM Audit Process Log",
-    "indexFrom": "0",
-    "fetchSize": "1000",
-    "sortType": "asc",
-    "reportParameter": {
-      "QUERY_FROM_DATE": {
-        "default": "12:00:00",
-        "transformer": "EpochToGuardium"
-      },
-      "QUERY_TO_DATE": {
-        "default": "00:00:00",
-        "transformer": "EpochToGuardium"
-      },
-      "SHOW_ALIASES": {
-        "default": "TRUE"
-      },
-      "REMOTE_SOURCE": {
-        "default": "%"
-      }
-    }
-  },
-  "userActivity": {
-    "reportName": "--My User Activity",
-    "indexFrom": "0",
-    "fetchSize": "1000",
-    "sortType": "asc",
-    "reportParameter": {
-      "QUERY_FROM_DATE": {
-        "default": "12:00:00",
-        "transformer": "EpochToGuardium"
-      },
-      "QUERY_TO_DATE": {
-        "default": "00:00:00",
-        "transformer": "EpochToGuardium"
-      },
-      "SHOW_ALIASES": {
-        "default": true
-      },
-      "REMOTE_SOURCE": {
-        "default": "%"
-      }
-    }
-  },
-  "realtime": {
-    "ISC_Report_Realtime": {
-      "reportName": "ISC_Report_Realtime",
-      "indexFrom": "0",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "QUERY_FROM_DATE": {
-          "default": "12:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "QUERY_TO_DATE": {
-          "default": "00:00:00",
-          "transformer": "EpochToGuardium"
-        },
-        "SHOW_ALIASES": {
-          "default": true
-        },
-        "REMOTE_SOURCE": {
+        "Severity": {
+          "info": "map",
           "default": "%"
         }
       }
