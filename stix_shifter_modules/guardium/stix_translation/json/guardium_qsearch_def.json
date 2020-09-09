@@ -1,53 +1,4 @@
 {
-  "Threat": {
-    "ATA Open Cases": {
-      "reportName": "ATA Open Cases",
-      "indexFrom": "0",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "QUERY_FROM_DATE": {
-          "info": "START",
-          "default": "1970-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
-        },
-        "QUERY_TO_DATE": {
-          "info": "STOP",
-          "default": "2019-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
-        },
-        "SHOW_ALIASES": {
-          "info": "None",
-          "default": "TRUE"
-        },
-        "REMOTE_SOURCE": {
-          "info": "None",
-          "default": "%"
-        },
-
-        "OSUser": {
-          "info": "map",
-          "default": "*"
-        },
-        "DBUser": {
-          "info": "map",
-          "default": "*"
-        },
-        "Database": {
-          "info": "map",
-          "default": "%"
-        },
-        "ServerIP": {
-          "info": "map",
-          "default": "%"
-        },
-        "Severity": {
-          "info": "map",
-          "default": "%"
-        }
-      }
-    }
-  },
 "Policy Violation": {
 	"ATA Open Cases": {
       "category": "VIOLATION",
@@ -67,7 +18,7 @@
           "info": "map",
           "default": "*"
         },
-        "DBUser":{
+        "DB User":{
           "info": "map",
           "default": "*"
         },
@@ -75,7 +26,11 @@
           "info": "map",
           "default": "*"
         },
-        "OSUser": {
+        "Client IP": {
+          "info": "map",
+          "default": "*"
+        },
+        "OS User": {
           "info": "map",
           "default": "*"
         },

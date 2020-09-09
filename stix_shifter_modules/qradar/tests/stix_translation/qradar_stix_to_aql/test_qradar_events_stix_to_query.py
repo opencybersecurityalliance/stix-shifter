@@ -16,7 +16,7 @@ MAPPING_ERROR = "Unable to map the following STIX objects and properties to data
 
 
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
-custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['events']['select_fields']['default']))
+custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['aql_events_fields']['default']))
 from_statement = " FROM events "
 
 
@@ -350,4 +350,10 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern="[x-ibm-ariel:rule_names[*] = '{}']".format(rule_name)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE rulenames = '{}' {} {}".format(rule_name, default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+        
+    def test_text_search(self):
+        stix_pattern = "[artifact:payload_bin LIKE '%Set-ItemProperty%' AND artifact:payload_bin LIKE '%New-Item%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

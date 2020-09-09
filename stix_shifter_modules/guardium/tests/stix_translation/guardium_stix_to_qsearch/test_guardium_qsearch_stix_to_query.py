@@ -26,43 +26,57 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_db_user_query(self):
         stix_pattern = "[ user-account:db_user='MARCI']"
         query = _translate_query(stix_pattern)
-        filters = "\"filters\":\"name=DBUser&value=MARCI&isGroup=false\""
+        filters = "\"filters\":\"name=DB User&value=MARCI&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
+        filters = "\"filters\":\"name=Client IP&value=1.2.3.4&isGroup=false\""
+        _test_query_assertions(query['queries'], 0, filters)        
         filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
-        _test_query_assertions(query['queries'], 0, filters)
+        _test_query_assertions(query['queries'], 1, filters)
 
     def test_ipv6_query(self):
         stix_pattern = "[ipv6-addr:value = '1:2:3:4:5:6:7:8']"
         query = _translate_query(stix_pattern)
+        filters = "\"filters\":\"name=Client IP&value=1:2:3:4:5:6:7:8&isGroup=false\""
+        _test_query_assertions(query['queries'], 0, filters)        
         filters = "\"filters\":\"name=Server&value=1:2:3:4:5:6:7:8&isGroup=false\""
-        _test_query_assertions(query['queries'], 0, filters)
+        _test_query_assertions(query['queries'], 1, filters)
 
     def test_query_or(self):
         stix_pattern = "[ user-account:db_user='MARCI' OR ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
-        filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
+        filters = "\"filters\":\"name=Client IP&value=1.2.3.4&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
-        filters = "\"filters\":\"name=DBUser&value=MARCI&isGroup=false\""
+        filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
         _test_query_assertions(query['queries'], 1, filters)
+        filters = "\"filters\":\"name=DB User&value=MARCI&isGroup=false\""
+        _test_query_assertions(query['queries'], 2, filters)
 
     def test_query_and(self):
         stix_pattern = "[ user-account:db_user='MARCI' AND ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
+        filters = "name=DB User&value=MARCI&isGroup=false"
+        _test_query_assertions(query['queries'], 0, filters)
+        #filters = "name=Server&value=1.2.3.4&isGroup=false"
+        #_test_query_assertions(query['queries'], 0, filters)
+        filters = "name=Client IP&value=1.2.3.4&isGroup=false"
+        _test_query_assertions(query['queries'], 0, filters)
+        filters = "name=DB User&value=MARCI&isGroup=false"
+        _test_query_assertions(query['queries'], 1, filters)
         filters = "name=Server&value=1.2.3.4&isGroup=false"
-        _test_query_assertions(query['queries'], 0, filters)
-        filters = "name=DBUser&value=MARCI&isGroup=false"
-        _test_query_assertions(query['queries'], 0, filters)
+        _test_query_assertions(query['queries'], 1, filters)
 
     def test_query_or_with_non_qs_field(self):
         stix_pattern = "[ unmapped-object:some_invalid_attribute = 'whatever' OR ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
         filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
+        _test_query_assertions(query['queries'], 1, filters)
+        filters = "name=Client IP&value=1.2.3.4&isGroup=false"
         _test_query_assertions(query['queries'], 0, filters)
-        assert 1 == len(query['queries'])
+        assert 2 == len(query['queries'])
 
     def test_query_and_with_non_qs_field(self):
         stix_pattern = "[ unmapped-object:some_invalid_attribute = 'whatever' AND ipv4-addr:value = '1.2.3.4']"

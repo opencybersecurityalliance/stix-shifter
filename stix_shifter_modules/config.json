@@ -30,6 +30,12 @@
                 "hidden": true,
                 "previous": "connection.dialects"
             },
+            "language": {
+                "type": "string",
+                "default": "stix",
+                "optional": true,
+                "hidden": true
+            },
             "validate_pattern": {
                 "type": "boolean",
                 "optional": true,

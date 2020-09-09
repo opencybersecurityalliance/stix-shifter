@@ -3,10 +3,14 @@ import json
 import requests
 from .utils import unwrap_connection_options
 
+
 class QueryTranslator(BaseQueryTranslator):
 
-    def fetch_mapping(self, basepath):
-        return {}
+    def read_json(self, filepath, options):
+        return '{}'
+
+    def get_language(self):
+        return None
 
     def transform_query(self, data, antlr_parsing_object={}):
         # A proxy translation call passes the entire data source connection object in as the options

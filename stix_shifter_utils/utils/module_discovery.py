@@ -24,6 +24,20 @@ def __split_module_dialects(module_dialects):
     return module, dialects
 
 
+def modules_list():
+    modules = import_module('stix_shifter_modules')
+    if '__file__' in dir(modules):
+        modules_path = Path(modules.__file__).parent
+    else:
+        modules_path = modules.__path__._path[0]
+
+    mlist = [name for name in os.listdir(modules_path) if (os.path.isdir(os.path.join(modules_path, name))
+                                                           and not os.path.isfile(os.path.join(modules_path, name, 'SKIP.ME'))
+                                                           and not name.startswith('__'))]
+    mlist.sort()
+    return mlist
+
+
 def dialect_list(module):
     modules = import_module('stix_shifter_modules')
     if '__file__' in dir(modules):

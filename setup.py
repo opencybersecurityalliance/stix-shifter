@@ -198,6 +198,11 @@ for project_name in projects.keys():
                     json_file_path = os.path.join(r, '..', 'conf', file)
                     with open(json_file_path, 'w') as json_file:
                         json_file.write(json.dumps(data, indent=4, sort_keys=False))
+            connector_module = importlib.import_module("stix_shifter_modules." + connector_name + ".entry_point")
+            entry_point = connector_module.EntryPoint()
+            dialects_full = entry_point.get_dialects_full()
+            with open(os.path.join(conf_path, 'dialects.json'), 'w') as f:
+                f.write(json.dumps(dialects_full, indent=4, sort_keys=False))
             temp_dir = tempfile.TemporaryDirectory()
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)

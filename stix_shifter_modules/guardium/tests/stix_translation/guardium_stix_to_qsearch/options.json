@@ -24,11 +24,11 @@
         "ipv4-addr": {
           "fields": {
             "value": [
-              "Client",
+              "Client IP",
               "Server"
             ],
             "src_ip": [
-              "Client"
+              "Client IP"
             ],
             "dst_ip": [
               "Server"
@@ -38,11 +38,11 @@
         "ipv6-addr": {
           "fields": {
             "value": [
-              "Client",
+              "Client IP",
               "Server"
             ],
             "src_ip": [
-              "Client"
+              "Client IP"
             ],
             "dst_ip": [
               "Server"
@@ -77,14 +77,14 @@
         "user-account": {
           "fields": {
             "value": [
-              "DBUser",
-              "OSUser"
+              "DB User",
+              "OS User"
             ],
             "db_user": [
-              "DBUser"
+              "DB User"
             ],
             "os_user": [
-              "OSUser"
+              "OS User"
             ]
           }
         },

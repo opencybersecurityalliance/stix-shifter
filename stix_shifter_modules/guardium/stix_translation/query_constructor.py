@@ -1,14 +1,14 @@
+import re
+import json
+import datetime
+import copy
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.utils import transformers
-import re
-import json
-import datetime
-import copy
-from os import path
+from stix_shifter_utils.utils.file_helper import read_json
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
@@ -39,7 +39,7 @@ class QueryStringPatternTranslator:
         ObservationOperators.And: 'AND'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, options):
         self.dmm = data_model_mapper
         self.pattern = pattern
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -56,25 +56,19 @@ class QueryStringPatternTranslator:
         self.transformers = transformers.get_all_transformers()
 
         # Read reference data
-        basepath = path.dirname(__file__)
-        filepath = path.abspath(path.join(basepath, "json", "reference_data_types4Query.json"))
-        self.REFERENCE_DATA_TYPES = json.loads(open(filepath).read())
+        self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
 
         # Read report definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_reports_def.json"))
-        self.REPORT_DEF = json.loads(open(filepath).read())
+        self.REPORT_DEF = read_json('guardium_reports_def', options)
 
         # Read report definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_report_params_map.json"))
-        self.REPORT_PARAMS_MAP = json.loads(open(filepath).read())
+        self.REPORT_PARAMS_MAP = read_json('guardium_report_params_map', options)
 
         # Read qsearch definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_def.json"))
-        self.QSEARCH_DEF = json.loads(open(filepath).read())
+        self.QSEARCH_DEF = read_json('guardium_qsearch_def', options)
 
         # Read qsearch definition data
-        filepath = path.abspath(path.join(basepath, "json", "guardium_qsearch_params_map.json"))
-        self.QSEARCH_PARAMS_MAP = json.loads(open(filepath).read())
+        self.QSEARCH_PARAMS_MAP = read_json('guardium_qsearch_params_map', options)
 
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
@@ -106,8 +100,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
@@ -125,8 +119,8 @@ class QueryStringPatternTranslator:
         # Where as each key/value parameter from two json objects are "AND"
         # Put quote around key
         # print(report_call)
-        regex = r"([a-zA-Z_]+)(\s=)"
-        out_str = re.sub(regex, r"'\1' :", qsearch_call, 0)
+        regex = r"(^|\(|OR |AND )([a-zA-Z_ ]+)(\s=)"
+        out_str = re.sub(regex, r"\1'\2' :", qsearch_call, 0)
 
         # Create the Json structure
         regex1 = r"\(|\)"
@@ -140,8 +134,8 @@ class QueryStringPatternTranslator:
         out_str = re.sub(regex4, r"'\1' : ", out_str, 0)
         regex5 = r"([Z\'\s]+STOP)"
         out_str = re.sub(regex5, r"'} AND {'STOP", out_str, 0)
-        regex6 = r"(T|P)\'[\s\:t]+"
-        out_str = re.sub(regex6, r"\1' : ", out_str, 0)
+        regex6 = r"(START|STOP)\'[\s\:t\']+"
+        out_str = re.sub(regex6, r"\1' : '", out_str, 0)
 
         # Finalize the structure -- replace by comma and then it becomes string containing
         # an array of Json objects
@@ -283,17 +277,17 @@ class QueryStringPatternTranslator:
             else:
                 report_definitions = self.generate_report_definitions()
             # substitute Params
-            reports_in_query = self.substitute_params_passed(report_definitions, reports_in_query)
-
+            if report_definitions:
+                reports_in_query = self.substitute_params_passed(report_definitions, reports_in_query)
         return reports_in_query
 
     def get_qsearch_params(self):
         qsearch_in_query = []
         for qsearch_param_index in range(self.qsearch_params_array_size):
             self.qsearch_params_passed = self.qsearch_params_array[qsearch_param_index]
-            clientip = self.qsearch_params_passed.get("Client", None)
-            if clientip is not None:
-                continue
+            #clientip = self.qsearch_params_passed.get("Client", None)
+            #if clientip is not None:
+            #    continue
             data_category = self.qsearch_params_passed.get("datacategory", None)
             if data_category is not None:
                 if data_category not in self.QSEARCH_DEF:
@@ -303,7 +297,8 @@ class QueryStringPatternTranslator:
             else:
                 qsearch_definitions = self.generate_qsearch_definitions()
             # substitute Params
-            qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+            if qsearch_definitions:
+               qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
         self.set_filters_format(qsearch_in_query)
 
@@ -367,17 +362,17 @@ class QueryStringPatternTranslator:
         for key in report_set:
             data_category, report = key.split(":")
 
-            if data_category not in self.REPORT_DEF:
+            '''if data_category not in self.REPORT_DEF:
                 raise RuntimeError(
                     "Error in parameter mapping file (data category): " + str(data_category) + " not there. Ingored.")
-            else:
-                data_category_reports = copy.deepcopy(self.REPORT_DEF[data_category])
+            else:'''
+            data_category_reports = copy.deepcopy(self.REPORT_DEF[data_category])
 
-                if report not in data_category_reports:
+            '''if report not in data_category_reports:
                     raise RuntimeError(
                         "Error in parameter mapping file (report name): " + str(report) + " not there. Ingored.")
-                else:
-                    report_definitions[report] = data_category_reports[report]
+                else:'''
+            report_definitions[report] = data_category_reports[report]
 
         return report_definitions
 
@@ -418,18 +413,18 @@ class QueryStringPatternTranslator:
         for key in qsearch_set:
             data_category, qsearch = key.split(":")
 
-            if data_category not in self.QSEARCH_DEF:
+            ''' if data_category not in self.QSEARCH_DEF:
                 raise RuntimeError(
                     "Error in parameter mapping file (data category): " + str(
                         data_category) + " not there. Ingored.")
-            else:
-                data_category_qsearch = copy.deepcopy(self.QSEARCH_DEF[data_category])
+            else:'''
+            data_category_qsearch = copy.deepcopy(self.QSEARCH_DEF[data_category])
 
-                if qsearch not in data_category_qsearch:
+            '''if qsearch not in data_category_qsearch:
                     raise RuntimeError(
                         "Error in parameter mapping file (qsearch name): " + str(qsearch) + " not there. Ingored.")
-                else:
-                    qsearch_definitions[qsearch] = data_category_qsearch[qsearch]
+                else: '''
+            qsearch_definitions[qsearch] = data_category_qsearch[qsearch]
 
         return qsearch_definitions
 
@@ -612,7 +607,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
 
-    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
+    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
     report_call = guardium_query_translator.translated
 
     # Add space around START STOP qualifiers
@@ -645,5 +640,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         # A single query string, or an array of query strings may be returned
         return report_header
     else:
-        report_header = {"ID": 2000, "message": "Could not generate query -- issue with data_category."}
+        # report_header = {"ID": 2000, "message": "Could not generate query -- issue with data_category."}
         return report_header
