@@ -41,7 +41,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -65,7 +65,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -87,7 +87,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -148,7 +148,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -178,7 +178,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -241,7 +241,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
