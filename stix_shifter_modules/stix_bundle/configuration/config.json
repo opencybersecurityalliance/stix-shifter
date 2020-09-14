@@ -17,11 +17,7 @@
         "options": {
             "type": "fields",
             "stix_validator": {
-                "type": "boolean",
-                "default": true,
-                "optional": true,
-                "hidden": true,
-                "previous": "connection.stix_validator"
+                "default": true
             }
         }
     },

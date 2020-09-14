@@ -44,6 +44,7 @@
             },
             "stix_validator": {
                 "type": "boolean",
+                "default": false,
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.stix_validator"
