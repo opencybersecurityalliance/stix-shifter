@@ -28,7 +28,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         entry_point = EntryPoint(connection, config)
@@ -50,7 +50,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         transmission = stix_transmission.StixTransmission('splunk',  connection, config)
@@ -73,7 +73,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         transmission = stix_transmission.StixTransmission('splunk',  connection, config)
@@ -97,7 +97,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
@@ -124,7 +124,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
@@ -153,7 +153,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -186,7 +186,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -219,7 +219,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -252,7 +252,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -286,7 +286,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -315,7 +315,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
         
         search_id = "1536832140.4293"
@@ -349,7 +349,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -383,7 +383,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         search_id = "1536832140.4293"
@@ -409,7 +409,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         query_mock = '{"sid":"1536832140.4293"}'
@@ -466,7 +466,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }      
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
         
         mocked_return_value = '{"messages":[{"type":"INFO","text":"Search job cancelled."}]}'
@@ -491,7 +491,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "host",
-            "port": "8080"
+            "port": 8080
         }
 
         
