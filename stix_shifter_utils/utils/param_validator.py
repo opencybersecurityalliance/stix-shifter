@@ -115,7 +115,7 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                         
                         if expected_configs[key]['type'] == 'number':
                             if not check_number(input_configs[key]):
-                                raise ValueError('Value "{}" type of {} must be a number'.format(input_configs[key] ,key))
+                                raise ValueError('{} "{}" type must be a number'.format(key, input_configs[key]))
 
                     input_value = input_configs[key]
                     if input_value is not None or ('nullable' in expected_configs[key] and expected_configs[key]['nullable']):
@@ -216,7 +216,4 @@ def check_regex(input_value, regex_value):
     return bool(match_str)
 
 def check_number(input_value):
-    if isinstance(input_value, int):
-        return True
-    else:
-        return False
+    return isinstance(input_value, int)
