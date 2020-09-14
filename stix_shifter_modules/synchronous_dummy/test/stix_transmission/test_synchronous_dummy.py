@@ -7,7 +7,7 @@ class TestSynchronousDummyConnection(unittest.TestCase, object):
     def connection(self):
         return {
                 "host": "hostbla",
-                "port": "8080",
+                "port": 8080,
                 }
 
     def configuration(self):
