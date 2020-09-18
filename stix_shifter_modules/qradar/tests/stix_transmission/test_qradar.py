@@ -27,7 +27,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
         check_async = entry_point.is_async()
@@ -47,7 +47,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
         
@@ -70,7 +70,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -95,7 +95,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
         
@@ -133,7 +133,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
         
@@ -180,7 +180,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
         }
 
@@ -240,7 +240,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
 
         connection = {
             "host" : "somehost0",
-            "port" : "15000",
+            "port" : 15000,
             "selfSignedCert" : "somecert0",
             "data_lake": True
         }
@@ -261,7 +261,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
 
         connection = {
             "host" : "somehost0",
-            "port" : "15000",
+            "port" : 15000,
             "selfSignedCert" : "somecert0",
             "data_lake": True
         }
@@ -283,7 +283,7 @@ class TestQRadarCloudDataLake(unittest.TestCase, object):
         mock_get.return_value = MockResponseWrapper(200, mocked_return_value)
         connection = {
             "host" : "somehost0",
-            "port" : "15000",
+            "port" : 15000,
             "selfSignedCert" : "somecert0",
             "data_lake": True
         }

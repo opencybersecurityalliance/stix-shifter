@@ -277,8 +277,8 @@ class QueryStringPatternTranslator:
             else:
                 report_definitions = self.generate_report_definitions()
             # substitute Params
-            reports_in_query = self.substitute_params_passed(report_definitions, reports_in_query)
-
+            if report_definitions:
+                reports_in_query = self.substitute_params_passed(report_definitions, reports_in_query)
         return reports_in_query
 
     def get_qsearch_params(self):
@@ -297,7 +297,8 @@ class QueryStringPatternTranslator:
             else:
                 qsearch_definitions = self.generate_qsearch_definitions()
             # substitute Params
-            qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+            if qsearch_definitions:
+               qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
         self.set_filters_format(qsearch_in_query)
 
@@ -361,17 +362,17 @@ class QueryStringPatternTranslator:
         for key in report_set:
             data_category, report = key.split(":")
 
-            if data_category not in self.REPORT_DEF:
+            '''if data_category not in self.REPORT_DEF:
                 raise RuntimeError(
                     "Error in parameter mapping file (data category): " + str(data_category) + " not there. Ingored.")
-            else:
-                data_category_reports = copy.deepcopy(self.REPORT_DEF[data_category])
+            else:'''
+            data_category_reports = copy.deepcopy(self.REPORT_DEF[data_category])
 
-                if report not in data_category_reports:
+            '''if report not in data_category_reports:
                     raise RuntimeError(
                         "Error in parameter mapping file (report name): " + str(report) + " not there. Ingored.")
-                else:
-                    report_definitions[report] = data_category_reports[report]
+                else:'''
+            report_definitions[report] = data_category_reports[report]
 
         return report_definitions
 
@@ -412,18 +413,18 @@ class QueryStringPatternTranslator:
         for key in qsearch_set:
             data_category, qsearch = key.split(":")
 
-            if data_category not in self.QSEARCH_DEF:
+            ''' if data_category not in self.QSEARCH_DEF:
                 raise RuntimeError(
                     "Error in parameter mapping file (data category): " + str(
                         data_category) + " not there. Ingored.")
-            else:
-                data_category_qsearch = copy.deepcopy(self.QSEARCH_DEF[data_category])
+            else:'''
+            data_category_qsearch = copy.deepcopy(self.QSEARCH_DEF[data_category])
 
-                if qsearch not in data_category_qsearch:
+            '''if qsearch not in data_category_qsearch:
                     raise RuntimeError(
                         "Error in parameter mapping file (qsearch name): " + str(qsearch) + " not there. Ingored.")
-                else:
-                    qsearch_definitions[qsearch] = data_category_qsearch[qsearch]
+                else: '''
+            qsearch_definitions[qsearch] = data_category_qsearch[qsearch]
 
         return qsearch_definitions
 
@@ -639,5 +640,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         # A single query string, or an array of query strings may be returned
         return report_header
     else:
-        report_header = {"ID": 2000, "message": "Could not generate query -- issue with data_category."}
+        # report_header = {"ID": 2000, "message": "Could not generate query -- issue with data_category."}
         return report_header

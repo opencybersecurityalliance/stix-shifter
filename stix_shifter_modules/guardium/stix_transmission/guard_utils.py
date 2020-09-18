@@ -131,7 +131,7 @@ class GuardApiClient(object):
         
         results = ""
         params_set = {"category":"{0}".format(category), "startTime": "{0}".format(params["startTime"]), "endTime": "{0}".format(params["endTime"]), \
-             "fetchSize": "{0}".format(fetch_size), "firstPosition": "{0}".format(index_from)}
+             "fetchSize": "{0}".format(int(fetch_size-1)), "firstPosition": "{0}".format(int(index_from-1))}
         if filters:
             params_set["filters"] = "{0}".format(filters)
 

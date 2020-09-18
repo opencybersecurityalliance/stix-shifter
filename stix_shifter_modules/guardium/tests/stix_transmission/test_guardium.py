@@ -29,7 +29,7 @@ class TestGuardiumConnection(unittest.TestCase, object):
             "client_id": 'WHO',
             "client_secret": "57695f99-fe23-4bb4-5116-4b7985c8532b",
             "host": "where.ibm.com",
-            "port": "22",
+            "port": 22,
             "selfSignedCert": False
         }
         check_async = entry_point.is_async()
@@ -52,7 +52,7 @@ class TestGuardiumConnection(unittest.TestCase, object):
             "client_id": 'WHO',
             "client_secret": "57695f99-fe23-4bb4-5116-4b7985c8532b",
             "host": "where.ibm.com",
-            "port": "22",
+            "port": 22,
             "selfSignedCert": False
         }
 
@@ -80,7 +80,7 @@ class TestGuardiumConnection(unittest.TestCase, object):
             "client_id": 'WHO',
             "client_secret": "57695f99-fe23-4bb4-5116-4b7985c8532b",
             "host": "where.ibm.com",
-            "port": "22",
+            "port": 22,
             "selfSignedCert": False
         }
         
