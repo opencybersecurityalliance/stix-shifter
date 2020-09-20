@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 MYDIR=`pwd`
-SS_HOME='..'
+SS_HOME='../..'
 SS_MODULES_HOME="${SS_HOME}/stix_shifter_modules"
 MODULE=$1
 BUILD_LOCATION=$2
@@ -19,11 +19,14 @@ if ! ([ $BUILD_LOCATION == "local" ] || [ $BUILD_LOCATION == "remote" ]); then
   exit 1
 fi
 
-echo "see this?"
-
 if [ ! -d "$SS_MODULES_HOME/$MODULE" ]; then
   echo "Module not found: ${MODULE}..."
   exit 1
+fi
+
+if [ -f cert.key ] && [ -f cert.pem ]; then
+  echo "Install cryptography for cert signing"
+  pip3 install cryptography pyopenssl
 fi
 
 cd $SS_HOME
@@ -34,10 +37,11 @@ fi
 pip3 install virtualenv
 pip3 install venv-run
 
+
 virtualenv -p python3 virtualenv
 
 venv-run pip install -r requirements.txt
-venv-run pip install setuptools wheel twine jsonmerge
+venv-run pip install setuptools wheel twine
 
 rm -rf dist
 venv-run setup.py bdist_wheel
@@ -52,6 +56,6 @@ elif [ $REPOSITORY != "" ]; then
   echo "Deploying image from repository: ${REPOSITORY}"
   ./build.sh $REPOSITORY
 else
-  echo "Building deploying image"
+  echo "Building and deploying image"
   ./build.sh
 fi
