@@ -19,18 +19,18 @@ The following needs to be installed on your local machine:
 * Kubernetes CLI (`kubectl`)
 * OpenSSL (`openssl`)
 
+Since the primary use-case for these scripts is to install a new or updated connector, it is assumed you have already cloned the [stix-shifter github project](https://github.com/opencybersecurityalliance/stix-shifter).
 
 ## Installing a stix-shifter connector into CP4S
 
 1. Open a terminal
-2. Clone the [stix-shifter github project](https://github.com/opencybersecurityalliance/stix-shifter)
-3. CD into `stix-shifter/deployment/ibm_cloud_pak_for_security`
-4. For an IBM validated connector, copy the `cert.key` and `cert.pem` files that you received from IBM into the current `ibm_cloud_pak_for_security` directory.
-5. Log into your CP4S cluster: 
+2. CD into `stix-shifter/deployment/ibm_cloud_pak_for_security`
+3. For an IBM validated connector, copy the `cert.key` and `cert.pem` files that you received from IBM into the current `ibm_cloud_pak_for_security` directory.
+4. Log into your CP4S cluster: 
 
     `cloudctl login -a <ICP CLUSTER URL> -u <USERNAME> -p <PASSWORD> -n <NAMESPACE>`
 
-6. Run the deployment script based on one of the following scenarios:
+5. Run the deployment script based on one of the following scenarios:
 
     ### A. Build the connector image and then deploy into your Kubernetes cluster
     ```
