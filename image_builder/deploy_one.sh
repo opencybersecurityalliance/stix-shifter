@@ -6,15 +6,23 @@ MYDIR=`pwd`
 SS_HOME='..'
 SS_MODULES_HOME="${SS_HOME}/stix_shifter_modules"
 MODULE=$1
+BUILD_LOCATION=$2
+REPOSITORY=$3
 
-if [ -z "$MODULE" ]
-then
-      printf 'Usage: %s module_name\n' "$(basename "$0")"
-      exit 1
+if [ -z "$MODULE" ]; then
+  printf 'Usage: %s module_name\n' "$(basename "$0")"
+  exit 1
 fi
 
+if ! ([ $BUILD_LOCATION == "local" ] || [ $BUILD_LOCATION == "remote" ]); then
+  echo "Image build location must be 'local' or 'remote'"
+  exit 1
+fi
+
+echo "see this?"
+
 if [ ! -d "$SS_MODULES_HOME/$MODULE" ]; then
-  echo "module is not found: ${MODULE}..."
+  echo "Module not found: ${MODULE}..."
   exit 1
 fi
 
@@ -37,4 +45,13 @@ cd $MYDIR
 rm -rf bundle
 mkdir bundle
 cp $SS_HOME/dist/stix_shifter_modules_$MODULE-* bundle/
-./build.sh
+if [ $BUILD_LOCATION == "local" ]; then
+  echo "Building image locally"
+  ./build_local.sh
+elif [ $REPOSITORY != "" ]; then
+  echo "Deploying image from repository: ${REPOSITORY}"
+  ./build.sh $REPOSITORY
+else
+  echo "Building deploying image"
+  ./build.sh
+fi
