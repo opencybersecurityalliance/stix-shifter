@@ -42,7 +42,7 @@ Since the primary use-case for these scripts is to install a new or updated conn
     ```
     ./deploy.sh <MODULE NAME> remote <IMAGE PATH>
     ```
-    (Ex: `./deploy.sh elastic_ecs remote docker.io/<REPOSITORY>/imagename:tag`)
+    (Ex: `./deploy.sh elastic_ecs remote docker.io/<REPOSITORY>/stix_shifter_modules_CONNECTORNAME:tag`)
 
     ### C. Build the connector image locally without deployment
     ```
