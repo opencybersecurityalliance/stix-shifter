@@ -163,7 +163,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["url.domain"]
+      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname"]
     }
   },
   "windows-registry-key": {
