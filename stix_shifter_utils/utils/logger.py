@@ -25,13 +25,11 @@ def init(level):
     jsonmerge.log.setLevel(logging.INFO)
 
 def set_external_logger(logger):
-    thread_local = threading.local()
-    loggers[thread_local.thread_id] = logger
+    loggers[threading.get_ident()] = logger
 
 def set_logger(module):
-    thread_local = threading.local()
-    if thread_local.thread_id in loggers:
-        return loggers[thread_local.thread_id]
+    if threading.get_ident() in loggers:
+        return loggers[threading.get_ident()]
     logger = logging.getLogger(module)
     return logger
 
