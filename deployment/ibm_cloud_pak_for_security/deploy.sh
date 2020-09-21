@@ -51,11 +51,11 @@ mkdir bundle
 cp $SS_HOME/dist/stix_shifter_modules_$MODULE-* bundle/
 if [ $BUILD_LOCATION == "local" ]; then
   echo "Building image locally"
-  ./build_local.sh
+  ./_build_local.sh
 elif [ $REPOSITORY != "" ]; then
   echo "Deploying image from repository: ${REPOSITORY}"
-  ./build.sh $REPOSITORY
+  ./_build.sh $REPOSITORY
 else
   echo "Building and deploying image"
-  ./build.sh
+  ./_build.sh
 fi

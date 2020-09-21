@@ -2,7 +2,7 @@
 
 The scripts contained here allow you to build an image of a new or existing connector, and deploy that image into your Kubernetes cluster on your CP4S environment. The are also options for deploying an existing image from a Docker registry and for building an image locally so that you may publish it to a registry of your choice. 
 
-The `deploy_one` script automatically: 
+The `deploy` script automatically: 
 
 1. Installs the required Python libraries.
 2. [Packages the desired stix-shifter module](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md#Packaging-individual-connectors) into a wheel file.
@@ -34,19 +34,19 @@ Since the primary use-case for these scripts is to install a new or updated conn
 
     ### A. Build the connector image and then deploy into your Kubernetes cluster
     ```
-    ./deploy_one.sh <MODULE NAME> remote
+    ./deploy.sh <MODULE NAME> remote
     ```  
-    (Ex: `./deploy_one.sh elastic_ecs remote`)
+    (Ex: `./deploy.sh elastic_ecs remote`)
 
     ### B. Deploy an existing connector image from a registry into your Kubernetes cluster
     ```
-    ./deploy_one.sh <MODULE NAME> remote <IMAGE PATH>
+    ./deploy.sh <MODULE NAME> remote <IMAGE PATH>
     ```
-    (Ex: `./deploy_one.sh elastic_ecs remote docker.io/<REPOSITORY>/imagename:tag`)
+    (Ex: `./deploy.sh elastic_ecs remote docker.io/<REPOSITORY>/imagename:tag`)
 
     ### C. Build the connector image locally without deployment
     ```
-    ./deploy_one.sh <MODULE NAME> local
+    ./deploy.sh <MODULE NAME> local
     ``` 
-    (Ex: `./deploy_one.sh elastic_ecs local`)
+    (Ex: `./deploy.sh elastic_ecs local`)
 
