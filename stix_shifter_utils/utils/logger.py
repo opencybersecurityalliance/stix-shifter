@@ -2,7 +2,9 @@ import logging
 from colorlog import ColoredFormatter
 import traceback
 import jsonmerge
+import threading
 
+loggers = {}
 
 def init(level):
     handler = logging.StreamHandler()
@@ -22,8 +24,14 @@ def init(level):
 
     jsonmerge.log.setLevel(logging.INFO)
 
+def set_external_logger(logger):
+    thread_local = threading.local()
+    loggers[thread_local.thread_id] = logger
 
 def set_logger(module):
+    thread_local = threading.local()
+    if thread_local.thread_id in loggers:
+        return loggers[thread_local.thread_id]
     logger = logging.getLogger(module)
     return logger
 
