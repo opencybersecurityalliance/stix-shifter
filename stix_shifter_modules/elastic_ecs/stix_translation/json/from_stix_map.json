@@ -1,17 +1,17 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
     }
   },
   "mac-addr": {
     "fields": {
-      "value": ["source.mac", "destination.mac", "client.mac", "server.mac"]
+      "value": ["source.mac", "destination.mac", "client.mac", "server.mac", "host.mac"]
     }
   },
   "network-traffic": {
