@@ -45,7 +45,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name"],
+      "name": ["file.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable"],
       "created": ["file.created"],
       "size": ["file.size"],
       "hashes.MD5": ["file.hash.md5"],
@@ -88,7 +88,7 @@
   },
   "directory": {
     "fields": {
-      "path": ["file.directory"]
+      "path": ["file.directory", "file.path"]
     }
   },
   "user-account":{
