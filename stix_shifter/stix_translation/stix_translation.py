@@ -70,7 +70,13 @@ class StixTranslation:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             try:
                 if options:
+                    print('original options: ')
+                    print(json.dumps(options, indent=4))
+                    print('=====================================')
                     validated_options = param_validator(module, options, 'connection.options')
+                    print('validated options: ')
+                    print(json.dumps(validated_options, indent=4))
+                    print('=====================================')
 
                 entry_point = connector_module.EntryPoint(options=validated_options)
             except Exception as ex:
