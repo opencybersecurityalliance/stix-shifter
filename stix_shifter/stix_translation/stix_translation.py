@@ -2,7 +2,6 @@ import importlib
 import sys
 import re
 import traceback
-import json
 from stix2patterns.validator import run_validator
 from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
 from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import parse_stix
