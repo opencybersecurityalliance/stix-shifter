@@ -69,9 +69,7 @@ class StixTranslation:
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             try:
-                if options:
-                    validated_options = param_validator(module, options, 'connection.options')
-
+                validated_options = param_validator(module, options, 'connection.options')
                 entry_point = connector_module.EntryPoint(options=validated_options)
             except Exception as ex:
                 track = traceback.format_exc()
