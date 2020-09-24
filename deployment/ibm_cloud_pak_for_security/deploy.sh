@@ -44,7 +44,8 @@ venv-run pip install -r requirements.txt
 venv-run pip install setuptools wheel twine
 
 rm -rf dist
-venv-run setup.py bdist_wheel
+MODE=$MODULE
+venv-run -- bash -c "MODE=$MODULE python setup.py bdist_wheel"
 cd $MYDIR
 rm -rf bundle
 mkdir bundle
@@ -52,7 +53,7 @@ cp $SS_HOME/dist/stix_shifter_modules_$MODULE-* bundle/
 if [ $BUILD_LOCATION == "local" ]; then
   echo "Building image locally"
   ./_build_local.sh
-elif [ $REPOSITORY != "" ]; then
+elif [ ! $REPOSITORY == "" ]; then
   echo "Deploying image from repository: ${REPOSITORY}"
   ./_build.sh $REPOSITORY
 else
