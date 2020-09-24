@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+PYTHONIOENCODING='utf8'
+
 MYDIR=`pwd`
 SS_HOME='../..'
 SS_MODULES_HOME="${SS_HOME}/stix_shifter_modules"
