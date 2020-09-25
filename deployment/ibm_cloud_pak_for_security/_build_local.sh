@@ -16,7 +16,14 @@ validate_cmd openssl
 validate_cmd python3
 validate_cmd pip3
 validate_cmd docker
-
+echo -n "Checking if it is possible to execute docker command.."
+docker ps > /dev/null
+if [ $? -eq 0 ]; then
+    echo "Ok"
+else
+    echo "Fail"
+    exit 1
+fi
 FILE_PREFIX=stix_shifter_modules_
 TIMESTAMP=`date '+%Y%m%d%H%M%S'`
 

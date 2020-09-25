@@ -16,6 +16,14 @@ validate_cmd openssl
 validate_cmd python3
 validate_cmd pip3
 validate_cmd docker
+echo -n "Checking if it is possible to execute docker command.."
+docker ps > /dev/null
+if [ $? -eq 0 ]; then
+    echo "Ok"
+else
+    echo "Fail"
+    exit 1
+fi
 validate_cmd kubectl
 validate_cmd oc
 
@@ -118,6 +126,14 @@ if [ ! -f "$REPOSITORY_CERT_FILE" ]; then
     killall Docker && open /Applications/Docker.app
     sleep 60
     echo 'Ok'
+    echo -n "Checking docker.."
+    docker ps > /dev/null
+    if [ $? -eq 0 ]; then
+        echo "Ok"
+    else
+        echo "Fail"
+        exit 1
+    fi
   fi
 fi
 
