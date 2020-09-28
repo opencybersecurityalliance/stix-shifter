@@ -40,7 +40,7 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        self.stix_validator = options.get('stix_validator', False)
+        self.stix_validator = options.get('stix_validator')
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
