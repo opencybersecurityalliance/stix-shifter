@@ -4,9 +4,13 @@ You can easily validate your stix bundle file by following the below steps:
 
 ## Prerequisites:
 
-Make sure you have Python 3 installed and a shell terminal available in your machine. 
+The following needs to be installed on your local machine:
 
-If you have not already cloned the [stix-shifter github project](https://github.com/opencybersecurityalliance/stix-shifter), you need to install GIT in order to clone the STIX-shifter git repository:
+1. Python 3
+2. GIT
+
+
+If you have not already cloned the [stix-shifter github project](https://github.com/opencybersecurityalliance/stix-shifter): 
 ```
 git clone https://github.com/opencybersecurityalliance/stix-shifter.git
 ```
