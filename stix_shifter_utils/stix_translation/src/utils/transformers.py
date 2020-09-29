@@ -431,6 +431,34 @@ class Ymd_HMSToTimestamp(ValueTransformer):
         return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
 
 
+class FilterIPv4List(ValueTransformer):
+    """A value transformer for filtering-out from a list all values which are not valid IPv4 values"""
+    @staticmethod
+    def transform(obj):
+        if isinstance(obj, list):
+            pattern = re.compile(r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+            result = []
+            for val in obj:
+                if pattern.match(str(val)):
+                    result.append(val)
+            return result
+        return obj
+
+
+class FilterIPv6List(ValueTransformer):
+    """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
+    @staticmethod
+    def transform(obj):
+        if isinstance(obj, list):
+            pattern = re.compile(r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+            result = []
+            for val in obj:
+                if pattern.match(str(val)):
+                    result.append(val)
+            return result
+        return obj
+
+
 def get_all_transformers():
     return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
             "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
@@ -443,4 +471,5 @@ def get_all_transformers():
             "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
             "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
             "GuardiumQS": GuardiumQS, "GuardiumMapSeverity": GuardiumMapSeverity,
-            "GuardiumMapSeverityNum": GuardiumMapSeverityNum}
+            "GuardiumMapSeverityNum": GuardiumMapSeverityNum, "FilterIPv4List": FilterIPv4List,
+            "FilterIPv6List": FilterIPv6List}

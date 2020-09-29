@@ -13,7 +13,7 @@ config = {
 }
 connection = {
     "host": "hostbla",
-    "port": "8080"
+    "port": 8080
 }
 
 
