@@ -78,28 +78,35 @@ class Connector(BaseSyncConnector):
             else:
                 raise UnexpectedResponseException
         else:
-            bundle = response.json()
+            try:
+                bundle = response.json()
 
-            if "validate" in self.configuration and self.configuration["validate"] is True:
-                results = validate_instance(bundle)
+                if "stix_validator" in self.connection['options'] and self.connection['options'].get("stix_validator") is True:
+                    results = validate_instance(bundle)
 
-                if results.is_valid is not True:
-                    return {"success": False, "message": "Invalid STIX received: " + json.dumps(results)}
+                    if results.is_valid is not True:
+                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.')
+                        return return_obj
 
-            for obj in bundle["objects"]:
-                if obj["type"] == "observed-data":
-                    observations.append(obj)
+                for obj in bundle["objects"]:
+                    if obj["type"] == "observed-data":
+                        observations.append(obj)
 
-            # Pattern match
-            results = self.match(search_id, observations, False)
+                # Pattern match
+                try:
+                    results = self.match(search_id, observations, False)
 
-            if len(results) != 0:
-                return_obj['success'] = True
-                return_obj['data'] = results[int(offset):int(offset + length)]
-            else:
-                return_obj['success'] = True
-                return_obj['data'] = []
-
+                    if len(results) != 0:
+                        return_obj['success'] = True
+                        return_obj['data'] = results[int(offset):int(offset + length)]
+                    else:
+                        return_obj['success'] = True
+                        return_obj['data'] = []
+                except Exception as ex:
+                    ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex))
+            except Exception as ex:
+                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
+            
         return return_obj
 
     def delete_query_connection(self, search_id):
