@@ -1,14 +1,18 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 import json
 from flatten_json import flatten
 import copy
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
-from os import path
+from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils.file_helper import read_json
 
 
 class ResultsConnector(BaseResultsConnector):
-    def __init__(self, client):
+    def __init__(self, client, options):
         self.client = client
+        self.logger = logger.set_logger(__name__)
+        self.mapping_protocol = read_json('network_protocol_map', options)
+        self.mapping_common_attr = read_json('common_attributes', options)
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -37,8 +41,8 @@ class ResultsConnector(BaseResultsConnector):
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-        
-        print('RETURN OBJ: {}'.format(json.dumps(return_obj, indent=4)))
+
+        self.logger.debug('Return Object: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj
 
     def format_results(self, result_list, results, return_obj):
@@ -69,7 +73,6 @@ class ResultsConnector(BaseResultsConnector):
             elif 'source' not in record_dict.keys():
                 vpc_dict = dict()
                 vpc_dict['vpcflow'] = copy.deepcopy(record_dict)
-                
                 vpc_dict['vpcflow']['protocol'] = self.get_protocol(vpc_dict['vpcflow']['protocol'])
                 vpc_dict['vpcflow']['event_count'] = 1
                 result_list.append(vpc_dict)
@@ -104,41 +107,22 @@ class ResultsConnector(BaseResultsConnector):
                 guard_dict['guardduty'][flatten_results['detail_service_action_actionType']].update({key: val})
         return guard_dict
 
-    @staticmethod
-    def get_protocol(value):
+    def get_protocol(self, value):
         """
         Converting protocol number to name
         :param value: str, protocol
         :return: str, protocol
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
-                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
-                                            '/network_protocol_map.json'))
-        if path.exists(_json_path):
-            with open(_json_path) as f_obj:
-                protocols = json.load(f_obj)
-                if value.isdigit():
-                    for key, val in protocols.items():
-                        if val == value:
-                            return key
-                else:
-                    return value
+        if value.isdigit():
+            for key, val in self.mapping_protocol.items():
+                if val == value:
+                    return key
         else:
-            raise FileNotFoundError
+            return value
 
-    @staticmethod
-    def get_guardduty_common_attr():
+    def get_guardduty_common_attr(self):
         """
         Fetching guardduty common attributes from common attributes json
         :return: list, guardduty common attributes
         """
-        _json_path = path.abspath(path.join(path.dirname(__file__), '../../..',
-                                            'stix_shifter_modules/aws_cloud_watch_logs/stix_translation/json'
-                                            '/common_attributes.json'))
-        if path.exists(_json_path):
-            with open(_json_path) as f_obj:
-                common_attr_dict = json.load(f_obj)
-                common_attr_list = common_attr_dict.get('guardduty')
-                return common_attr_list
-        else:
-            raise FileNotFoundError
+        return self.mapping_common_attr.get('guardduty')

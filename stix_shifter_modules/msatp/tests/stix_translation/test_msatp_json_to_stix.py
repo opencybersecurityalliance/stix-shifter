@@ -1,14 +1,11 @@
+import unittest
+import json
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.msatp.entry_point import EntryPoint
-import json
-import unittest
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
@@ -90,7 +87,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_com_msatp'] is not None
+        assert observed_data['x_msatp'] is not None
 
     def test_custom_property(self):
         """
@@ -130,7 +127,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_com_msatp']
+        custom_object = observed_data['x_msatp']
         assert custom_object.keys() == {'computer_name', 'machine_id'}
         assert custom_object['computer_name'] == 'desktop-536bt46'
 
@@ -191,7 +188,8 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
         assert file_obj['parent_directory_ref'] == '1'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
-        assert directory_object.get('path') == data['FileCreationEvents']['FolderPath']
+        file_path = transformers.ToDirectoryPath.transform(data['FileCreationEvents']['FolderPath'])
+        assert directory_object.get('path') == file_path
 
     def test_process_json_to_stix(self):
         """

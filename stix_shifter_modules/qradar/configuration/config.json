@@ -1,0 +1,54 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "IBM\u00ae QRadar and QRadar On Cloud"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 443
+        },
+        "help": {
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "type": "link"
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "data_lake": {
+            "type": "boolean",
+            "default": false
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false,
+                "hidden": true,
+                "type": "boolean",
+                "optional": true,
+                "previous": "connection.validate_pattern"
+            },
+            "hash_options": {
+                "type": "json",
+                "optional": true,
+                "hidden": true
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "sec": {
+                "type": "password",
+                "previous": "configuration.auth.SEC"
+            }
+        }
+    }
+}

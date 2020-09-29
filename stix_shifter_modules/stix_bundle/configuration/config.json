@@ -1,0 +1,31 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "STIX Bundle"
+        },
+        "host": {
+            "type": "text"
+        },
+        "port": {
+            "type": "number",
+            "default": 443
+        },
+        "help": {
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-stix.html"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "type": "password",
+                "optional": true
+            },
+            "password": {
+                "type": "password",
+                "optional": true
+            }
+        }
+    }
+}

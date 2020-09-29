@@ -24,7 +24,7 @@ protocols = {
     "sctp": "132"
 }
 
-default_timerange_spl = '-' + str(DEFAULT_TIMERANGE) + 'minutes'
+default_time_range_spl = '-' + str(DEFAULT_TIMERANGE) + 'minutes'
 
 translation = stix_translation.StixTranslation()
 
@@ -130,7 +130,7 @@ class TestStixToSpl(unittest.TestCase, object):
                 key = key.upper()
             stix_pattern = "[network-traffic:protocols[*] = '" + key + "']"
             query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search (protocol = "'+key+'") earliest="{}" | head {} | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'.format(default_timerange_spl, DEFAULT_LIMIT)
+        queries = 'search (protocol = "'+key+'") earliest="{}" | head {} | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'.format(default_time_range_spl, DEFAULT_LIMIT)
         _test_query_assertions(query, queries)
 
     def test_network_traffic_start_stop(self):
@@ -159,7 +159,7 @@ class TestStixToSpl(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
-        options = {"timeRange": 25, "resultSizeLimit": 5000}
+        options = {"time_range": 25, "result_limit": 5000}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
         queries = 'search ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-25minutes" | head 5000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)
@@ -168,31 +168,29 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND mac-addr:value = '00-00-5E-00-53-00']"
 
         options = {
-            "timeRange": 15,
-            "resultSizeLimit": 1000,
+            "time_range": 15,
+            "result_limit": 1000,
             "mapping": {
-                "cim": {
-                    "from_stix": {
-                        "mac-addr": {
-                            "cim_type": "flow",
-                            "fields": {
-                                "value": "mac"
-                            }
-                        },
-                        "ipv4-addr": {
-                            "cim_type": "flow",
-                            "fields": {
-                                "value": ["src_ip", "dest_ip"]
-                            }
+                "cim_from_stix_map": {
+                    "mac-addr": {
+                        "cim_type": "flow",
+                        "fields": {
+                            "value": "mac"
                         }
                     },
-                    "select_fields": {
-                        "default":
-                            [
-                                "src_ip",
-                                "src_port",
-                            ]
+                    "ipv4-addr": {
+                        "cim_type": "flow",
+                        "fields": {
+                            "value": ["src_ip", "dest_ip"]
+                        }
                     }
+                },
+                "cim_select_fields": {
+                    "default":
+                        [
+                            "src_ip",
+                            "src_port",
+                        ]
                 }
             }
         }
@@ -203,7 +201,7 @@ class TestStixToSpl(unittest.TestCase, object):
 
     def test_free_search(self):
         stix_pattern = "[x-readable-payload:value = 'malware']"
-        options = {"timeRange": 25, "resultSizeLimit": 5000}
+        options = {"time_range": 25, "result_limit": 5000}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
         queries = 'search _raw=*malware* earliest="-25minutes" | head 5000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)

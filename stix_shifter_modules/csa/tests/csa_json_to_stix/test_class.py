@@ -1,13 +1,9 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils  import transformers
+from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.csa.entry_point import EntryPoint
-import json
-import unittest
-from os import path
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -131,8 +127,8 @@ class TestTransform(object):
     #         data_source, map_data, [data], transformers.get_all_transformers(), options)
     #     observed_data = result_bundle['objects'][1]
 
-    #     assert('x_com_ibm_ariel' in observed_data)
-    #     custom_props = observed_data['x_com_ibm_ariel']
+    #     assert('x_ibm_ariel' in observed_data)
+    #     custom_props = observed_data['x_ibm_ariel']
     #     assert(custom_props['identity_ip'] == data['identityip'])
     #     assert(custom_props['log_source_id'] == data['logsourceid'])
     #     assert(custom_props['qid'] == data['qid'])

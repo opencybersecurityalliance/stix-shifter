@@ -74,7 +74,7 @@ If the data source is synchronous, you must include `set_async(False)` in the co
 ```
   class EntryPoint(EntryPointBase):
     def __init__(self, connection={}, configuration={}, options={}):
-      super().__init__(options)
+      super().__init__(connection, configuration, options)
       self.set_async(False)
       if connection:
         api_client = APIClient(connection, configuration)
@@ -108,3 +108,51 @@ As an example:
 ```
 python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
 ```
+
+### Packaging individual connectors
+
+Stix-shifter can be broken into several python whl packages by using the `setup.py` script found in the root of the project. This packaging script can be called from the CLI:
+
+```
+MODE='<module name>' VERSION='<connector version>' python3 setup.py bdist_wheel
+```
+
+`MODE` is a required argument that is used to determine how the project is packaged. Mode options include:
+
+`'1'` = Include everything in one whl package
+
+`'3'` - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
+
+`'N'` - `stix-shifter`, `stix-shifter-utils`, and each connector is packaged separately
+
+`<module name>` - package only the specified connector
+
+The `VERSION` argument is optional. If missing, version 1.0.0 is attached to the package name.
+
+When the script is executed, a new `dist` directory is created at the root of the stix-shifter project; this contains the generated whl packages.
+
+A packaged connector follows the naming convention of: 
+
+`stix_shifter_modules_<module name>-<version>-py2.py3-none-any.whl`
+
+The contents of the package has the same directory structure as the module in the project:
+
+```
+stix_shifter_modules => 
+    <module name> =>
+        configuration
+        stix_translation
+        stix_transmission
+        entry_point
+```
+
+### Building images of the connectors
+
+You can build the docker image your developed connector locally and publish it to your desired repository. In order to do that, follow the below steps-
+
+1. Make sure you have built the wheel distribution of the connector module by following the steps in [Packaging individual connectors section](#Packaging-individual-connectors).
+2. `image_builder` directory in your stix-shifter project contains the required scripts that will automatically build the connector image. You can copy the directory in a separate location or keep it inside stix-shifter project.
+3. Create a folder named `bundle` inside `image_builder/` directory.
+4. Move your desired connector wheel file (`stix_shifter_modules_<module name>-<version>-py2.py3-none-any.whl`) to the bundle folder created in step 3.
+5. Run `build_local.sh` script.
+6. Image should be automatically built in your running docker client.

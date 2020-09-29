@@ -10,18 +10,18 @@ protocols_file = open('stix_shifter_modules/qradar/stix_translation/json/network
 OPTIONS = json.loads(options_file)
 DEFAULT_SELECTIONS = json.loads(selections_file)
 DEFAULT_LIMIT = 10000
-DEFAULT_TIMERANGE = 5
+DEFAULT_time_range = 5
 PROTOCOLS = json.loads(protocols_file)
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 
 
 selections = "SELECT {}".format(", ".join(DEFAULT_SELECTIONS['default']))
-custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['events']['select_fields']['default']))
+custom_selections = "SELECT {}".format(", ".join(OPTIONS['mapping']['aql_events_fields']['default']))
 from_statement = " FROM events "
 
 
 default_limit = "limit {}".format(DEFAULT_LIMIT)
-default_time = "last {} minutes".format(DEFAULT_TIMERANGE)
+default_time = "last {} minutes".format(DEFAULT_time_range)
 
 translation = stix_translation.StixTranslation()
 
@@ -235,8 +235,10 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_custom_time_limit_and_result_count_and_mappings(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        result_limit = OPTIONS['result_limit']
+        time_range = OPTIONS['time_range']
         query = translation.translate('qradar:events', 'query', '{}', stix_pattern, OPTIONS)
-        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+        where_statement = "WHERE (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83') limit {} last {} minutes".format(result_limit, time_range)
         assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     def test_domainname_query(self):
@@ -254,13 +256,13 @@ class TestQueryTranslator(unittest.TestCase, object):
     # def test_sha256_filehash_query(self):
     #     stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
     #     query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
-    #     where_statement = "WHERE (sha256hash = 'sha256hash' OR filehash = 'sha256hash') limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+    #     where_statement = "WHERE (sha256hash = 'sha256hash' OR filehash = 'sha256hash') limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['time_range'])
     #     assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     # def test_multi_filehash_query(self):
     #     stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash'] OR [file:hashes.'MD5' = 'md5hash']"
     #     query = translation.translate('qradar', 'query', '{}', stix_pattern, OPTIONS)
-    #     where_statement = "WHERE ((sha256hash = 'sha256hash' OR filehash = 'sha256hash')) OR ((md5hash = 'md5hash' OR filehash = 'md5hash')) limit {} last {} minutes".format(OPTIONS['resultSizeLimit'], OPTIONS['timeRange'])
+    #     where_statement = "WHERE ((sha256hash = 'sha256hash' OR filehash = 'sha256hash')) OR ((md5hash = 'md5hash' OR filehash = 'md5hash')) limit {} last {} minutes".format(OPTIONS['result_limit'], OPTIONS['time_range'])
     #     assert query == {'queries': [custom_selections + from_statement + where_statement]}
 
     def test_source_and_destination_references(self):
@@ -315,7 +317,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         search_string = '^.*https://wally.fireeye.com.*$'
         stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
+        where_statement = "WHERE eventpayload MATCHES '{}' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_backslash_escaping(self):
@@ -326,7 +328,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
-        where_statement = "WHERE utf8_payload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
+        where_statement = "WHERE eventpayload MATCHES '{}' {} {}".format(translated_value, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_filepath_queries(self):
@@ -338,14 +340,20 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_risk_finding(self):
-        stix_pattern="[x-com-ibm-finding:name = '*']"
+        stix_pattern="[x-ibm-finding:name = '*']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE devicetype = 18 {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_rule_name_query(self):
         rule_name = 'Context is Local to Remote'
-        stix_pattern="[x-com-ibm-ariel:rule_names[*] = '{}']".format(rule_name)
+        stix_pattern="[x-ibm-ariel:rule_names[*] = '{}']".format(rule_name)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE rulenames = '{}' {} {}".format(rule_name, default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+        
+    def test_text_search(self):
+        stix_pattern = "[artifact:payload_bin LIKE '%Set-ItemProperty%' AND artifact:payload_bin LIKE '%New-Item%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

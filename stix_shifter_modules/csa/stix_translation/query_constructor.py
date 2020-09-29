@@ -1,29 +1,13 @@
-import logging
-import datetime
-import json
 import re
-
-
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
+from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils.file_helper import read_json
 
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds, ValueTransformer
-
-logger = logging.getLogger(__name__)
 START_STOP_FIELD = "eventTime"
-
-
-def _fetch_network_protocol_mapping():
-    try:
-        map_file = open(
-            'stix_shifter_modules/csa/stix_translation/json/network_protocol_map.json').read()
-        map_data = json.loads(map_file)
-        return map_data
-    except Exception as ex:
-        print('exception in reading mapping file:', ex)
-        return {}
+LOGGER = logger.set_logger(__name__)
 
 
 class SqlQueryStringPatternTranslator:
@@ -44,12 +28,13 @@ class SqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, options):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
+        self.mapping_network_protocol = read_json('network_protocol_map', options)
         query_split = self.translated.split("split")
-        logger.info("Query {}", query_split)
+        LOGGER.info("Query {}", query_split)
         if len(query_split) > 1:
             # remove empty strings in the array
             query_array = list(map(lambda x: x.rstrip(), list(filter(None, query_split))))
@@ -131,9 +116,8 @@ class SqlQueryStringPatternTranslator:
             original_stix_value = expression.value
 
             if stix_field == 'protocols[*]':
-                map_data = _fetch_network_protocol_mapping()
                 try:
-                    expression.value = map_data[expression.value.lower()]
+                    expression.value = self.mapping_network_protocol[expression.value.lower()]
                 except Exception as protocol_key:
                     raise KeyError(
                         "Network protocol {} is not supported.".format(protocol_key))

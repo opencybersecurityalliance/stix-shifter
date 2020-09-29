@@ -60,7 +60,7 @@ ___
 - user_id
 
 ___
-### x_com_ibm_ariel
+### x_ibm_ariel
 - category_id
 - category_name
 - high_level_category_name
@@ -75,6 +75,7 @@ ___
 - direction
 - magnitude
 - qid
+- domain_name
 - flow_source
 - flow_interface
 - flow_interface_id
@@ -87,11 +88,10 @@ ___
 - cre_event_list
 - rule_names
 - domain_id
-- device_type_name
 - device_type
 
 ___
-### x_com_ibm_finding
+### x_ibm_finding
 - name
 - description
 

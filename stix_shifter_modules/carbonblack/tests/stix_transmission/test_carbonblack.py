@@ -13,7 +13,7 @@ config = {
 }
 connection = {
     "host": "hostbla",
-    "port": "8080"
+    "port": 8080
 }
 
 
@@ -272,7 +272,6 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
     def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
-        request_parameter_list = []
 
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
@@ -283,4 +282,4 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
-        mock_requests_response.assert_called_with('https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')],cert=None, data=None, headers={'X-Auth-Token': 'bla'}, timeout=None, verify=True)
+        mock_requests_response.assert_called_with('https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=30, verify=True)

@@ -6,8 +6,9 @@
     "category as categoryid",
     "CATEGORYNAME(highlevelcategory) as high_level_category_name",
     "highlevelcategory as high_level_category_id",
-    "logsourceid as logsourceid",
-    "LOGSOURCETYPENAME(logsourceid) as logsourcetypename",
+    "logsourceid",
+    "devicetype",
+    "LOGSOURCETYPENAME(devicetype) as logsourcetypename",
     "LOGSOURCENAME(logsourceid) as logsourcename",
     "starttime",
     "endtime",
@@ -24,12 +25,10 @@
     "identityhostname",
     "eventcount",
     "PROTOCOLNAME(protocolid) as protocol",
-    "BASE64(payload) as base64_payload",
-    "UTF8(payload) as utf8_payload",
+    "UTF8(payload) as eventpayload",
     "URL as url",
     "magnitude",
     "Filename as filename",
-    "URL as domainname",
     "\"File Hash\" as filehash",
     "\"File Path\" as filepath",
     "severity",
@@ -41,7 +40,6 @@
     "creeventlist",
     "rulename(creeventlist) as rulenames",
     "domainid",
-    "LOGSOURCETYPENAME(devicetype) as devicetypename",
-    "devicetype"
+    "DOMAINNAME(domainid) as domainname"
   ]
 }

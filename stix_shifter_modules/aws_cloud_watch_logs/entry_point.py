@@ -9,14 +9,14 @@ from .stix_transmission.delete_connector import DeleteConnector
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
-        super().__init__(options)
+        super().__init__(connection, configuration, options)
 
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)
             ping_connector = PingConnector(boto3_client.client)
             query_connector = QueryConnector(boto3_client.client,boto3_client.log_group_names)
             status_connector = StatusConnector(boto3_client.client)
-            results_connector = ResultsConnector(boto3_client.client)
+            results_connector = ResultsConnector(boto3_client.client, options)
             delete_connector = DeleteConnector(boto3_client.client)
 
             self.set_ping_connector(ping_connector)

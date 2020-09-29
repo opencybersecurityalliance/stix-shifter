@@ -1,5 +1,6 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 
 class UnexpectedResponseException(Exception):
@@ -12,6 +13,7 @@ class PingConnector(BasePingConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client
+        self.logger = logger.set_logger(__name__)
 
     def ping_connection(self):
         response_txt = None
@@ -30,7 +32,7 @@ class PingConnector(BasePingConnector):
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
         

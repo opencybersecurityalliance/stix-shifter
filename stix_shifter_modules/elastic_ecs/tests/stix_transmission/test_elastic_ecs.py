@@ -41,8 +41,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
@@ -65,8 +65,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
@@ -87,8 +87,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         query = '(source.port : "64966" OR client.port : "64966")'
@@ -148,8 +148,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         search_id = '(source.port : "64966" OR client.port : "64966")'
@@ -178,8 +178,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         search_id = '(source.port : "64966" OR client.port : "64966")'
@@ -241,8 +241,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
         connection = {
             "host": "hostbla",
-            "port": "8080",
-            "cert": "cert"
+            "port": 8080,
+            "selfSignedCert": "cert"
         }
 
         query = '(source.port : "64966" OR client.port : "64966")'

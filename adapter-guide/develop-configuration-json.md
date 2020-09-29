@@ -1,8 +1,8 @@
 # Configuration Parameters
 
-A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: `<module name>_config.json`
+A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: `config.json`
 
-A second json file is required to translate the parameters defined in `<module name>_lang.json` for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format.
+A second json file is required to translate the parameters defined in `lang_en.json` for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format.
 
 ## File Location
 
@@ -108,7 +108,7 @@ Both connection and configuration object may contain more or different parameter
 
 ### lang json file
 
-The `<module name>_lang.json` file has the similar format like `<module name>_config.json`. It has different child attributes to translate the files for UI framework.
+The `lang_en.json` file has the similar format like `config.json`. It has different child attributes to translate the files for UI framework.
 
 1. label
     - Label of the parameter that is visiable in the UI
@@ -132,7 +132,7 @@ Below example json is the language translation file of the above QRadar config j
             "description": "Set the port number that is associated with the Host name or IP"
         },
         "help": {
-            "label": "Help",
+            "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "limit": {

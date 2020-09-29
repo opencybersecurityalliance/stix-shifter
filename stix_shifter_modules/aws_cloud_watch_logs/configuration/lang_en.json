@@ -1,0 +1,33 @@
+{
+    "connection": {
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "region": {
+            "label": "Region",
+            "placeholder": "us-east-2",
+            "description": "Specify the region of the CloudWatch Logs for the data source"
+        },
+        "log_group_names": {
+            "label": "Log Group Names",
+            "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "aws_access_key_id": {
+                "label": "AWS Access Key ID",
+                "description": "AWS Access Key ID is required for both AWS key-based and role-based authentication"
+            },
+            "aws_iam_role": {
+                "label": "AWS IAM Role",
+                "description": "AWS IAM Role is required for only AWS role-based authentication"
+            },
+            "aws_secret_access_key": {
+                "label": "AWS Secret Access Key",
+                "description": "AWS Secret Access Key ID is required for both AWS key-based and role-based authentication"
+            }
+        }
+    }
+}

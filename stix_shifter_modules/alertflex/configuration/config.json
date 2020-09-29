@@ -1,0 +1,38 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Alertflex"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "default": 8181,
+            "type": "number"
+        },
+        "help": {
+            "default": "https://github.com/olegzhr/cnode/blob/master/doc/integration.rst",
+            "type": "link"
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        }
+    },
+    "configuration": {
+        "type" : "fields",
+        "auth": {
+            "username": {
+                "type": "password"
+            },
+            "password": {
+                "type": "password"
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ from flatten_json import flatten
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 
 class Connector(BaseSyncConnector):
@@ -15,7 +16,7 @@ class Connector(BaseSyncConnector):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-
+        self.logger = logger.set_logger(__name__)
         self.adal_response = Connector.generate_token(connection, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']
@@ -28,7 +29,7 @@ class Connector(BaseSyncConnector):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error:
-            print("Token Generation Failed:")
+            self.logger.error("Token Generation Failed:")
             return self.adal_response
         response = self.api_client.ping_box()
         response_code = response.code
@@ -60,7 +61,7 @@ class Connector(BaseSyncConnector):
 
         try:
             if self.init_error:
-                print("Token Generation Failed:")
+                self.logger.error("Token Generation Failed:")
                 return self.adal_response
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
@@ -129,7 +130,7 @@ class Connector(BaseSyncConnector):
         except Exception as ex:
             if response_dict is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_dict))
+                self.logger.error('can not parse response: ' + str(response_dict))
             else:
                 raise ex
         return return_obj

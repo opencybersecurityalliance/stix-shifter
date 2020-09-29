@@ -29,7 +29,12 @@
       "name": ["applicationname"]
     }
   },
-  "x-com-ibm-ariel": {
+  "artifact": {
+    "fields": {
+      "payload_bin": ["flowsourcepayload", "flowdestinationpayload"]
+    }
+  },
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
       "qid_name": ["qidname"],

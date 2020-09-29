@@ -14,6 +14,7 @@
   - [Translate](#translate)
   - [Transmit](#transmit)
   - [Execute](#execute)
+  - [Debug](#Debug)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -128,7 +129,7 @@ List updated: March 6, 2020
 |         [IBM QRadar](adapter-guide/connectors/qradar_supported_stix.md)         |        qradar        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
 |    [IBM QRadar on Cloud](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Release    |
 |    [IBM Cloud Data Lake](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Planned    |
-|         [IBM BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|         [BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
 |  [Carbon Black CB Response](adapter-guide/connectors/carbonblack_supported_stix.md)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
 |       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Release    |
 |       [Elasticsearch](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Release    |
@@ -436,6 +437,12 @@ The `execute` command tests all steps of the translation-transmission flow:
 #### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+
+#### Debug
+
+You can add `--debug` option at the end of your CLI command to see more logs. 
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
 
 #### OUTPUT:
 

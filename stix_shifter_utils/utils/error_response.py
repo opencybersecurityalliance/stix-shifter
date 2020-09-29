@@ -2,18 +2,24 @@ from requests.exceptions import SSLError, ConnectionError
 from enum import Enum
 import importlib
 import traceback
-#from ..utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
+from stix_shifter_utils.utils import logger as utils_logger
 import collections
 import json
 
+
+logger = utils_logger.set_logger(__name__)
+
+
 class ErrorCode(Enum):
     TRANSLATION_NOTIMPLEMENTED_MODE = 'not_implemented'
-    TRANSLATION_MODULE_DEFAULT_ERROR =  'invalid_parameter'
+    TRANSLATION_MODULE_DEFAULT_ERROR = 'invalid_parameter'
     TRANSLATION_MAPPING_ERROR = 'mapping_error'
     TRANSLATION_STIX_VALIDATION = 'invalid_parameter'
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
     TRANSLATION_RESULT = 'mapping_error'
+    TRANSLATION_UNKNOWN_DIALOG = 'invalid_parameter'
+    TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
     TRANSMISSION_UNKNOWN = 'unknown'
     TRANSMISSION_CONNECT = 'service_unavailable'
@@ -63,7 +69,7 @@ class ErrorResponder():
     def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
         return_object['success'] = False
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
-        
+
         if message is None:
             message = ''
 
@@ -77,8 +83,8 @@ class ErrorResponder():
         error_msg = ''
         if error is not None:
             str_error = str(error)
-            #TODO replace with logger + stacktrace it to logger
-            print("error occurred: " + str_error)
+            logger.error("error occurred: " + str_error)
+            logger.debug(utils_logger.exception_to_string(error))
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
                 error_msg = 'Wrong certificate: ' + str_error
@@ -93,7 +99,7 @@ class ErrorResponder():
                     message += '; '
                 message += error_msg
 
-        if message is not None and len(message)>0:
+        if message is not None and len(message) > 0:
             if error_code.value == ErrorCode.TRANSMISSION_UNKNOWN.value:
                 if 'uthenticat' in message or 'uthoriz' in message:
                     error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
@@ -125,7 +131,6 @@ class ErrorResponder():
                 ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR)
         except ModuleNotFoundError:
             pass
-
 
     @staticmethod
     def rindex(mylist, myvalue):

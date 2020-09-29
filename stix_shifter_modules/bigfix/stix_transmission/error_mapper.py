@@ -1,6 +1,7 @@
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils.utils.error_response import ErrorResponder, ErrorCode
 from enum import Enum
+from stix_shifter_utils.utils import logger
 
 
 class ErrorCaptureType(Enum):
@@ -14,7 +15,7 @@ error_mapping = (
 )
 
 class ErrorMapper(ErrorMapperBase):
-
+    logger = logger.set_logger(__name__)
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value
 
     @staticmethod
@@ -37,7 +38,7 @@ class ErrorMapper(ErrorMapperBase):
                     error_code = result_error
 
         if error_code == ErrorMapper.DEFAULT_ERROR:
-            print('failed to map: ' + str(json_data))
+            ErrorMapper.logger.debug('failed to map: ' + str(json_data))
 
         if isinstance(error_code, tuple):
             ErrorMapperBase.set_error_code(return_obj, error_code[0], error_code[1])

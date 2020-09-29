@@ -71,7 +71,7 @@
       "object": "authentication"
     },
     {
-      "key": "x_com_splunk_spl.user",
+      "key": "x_splunk_spl.user",
       "cybox": false
     },
     {
@@ -92,7 +92,7 @@
     }
   ],
   "bytes": {
-    "key": "x_com_splunk_spl.bytes",
+    "key": "x_splunk_spl.bytes",
     "cybox": false
   },
   "ssl_hash": [
@@ -193,12 +193,12 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": "src_mac"
+      "references": ["src_mac"]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": "src_mac"
+      "references": ["src_mac"]
     }
   ],
   "dest_mac": [
@@ -209,12 +209,12 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": "dst_mac"
+      "references": ["dst_mac"]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": "dst_mac"
+      "references": ["dst_mac"]
     }
   ],
   "object_path": {

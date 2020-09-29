@@ -89,7 +89,7 @@ The connection and configuration objects are explained in the transmission secti
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' ping
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' ping
       ```
 
    2. Visually confirm that a result comes back with
@@ -101,7 +101,7 @@ The connection and configuration objects are explained in the transmission secti
 
    1. Use the following CLI command:
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' is_async
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' is_async
       ```
    2. Visually confirm that it returns true if the data source is asynchronous. Otherwise, it must return false.
 
@@ -110,7 +110,7 @@ The connection and configuration objects are explained in the transmission secti
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' query "<Native data source Query String>"
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' query "<Native data source Query String>"
       ```
 
    2. Visually confirm that a result comes back with
@@ -126,7 +126,7 @@ The connection and configuration objects are explained in the transmission secti
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' status "<Query UUID from query test>"
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' status "<Query UUID from query test>"
       ```
 
    2. Visually confirm that a result comes back with
@@ -139,7 +139,7 @@ The connection and configuration objects are explained in the transmission secti
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' results "<Query UUID from query test>" <Offset Integer> <Length Integer>
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' results "<Query UUID from query test>" <Offset Integer> <Length Integer>
       ```
 
    2. You can set the offset and length command line arguments to 1.
@@ -150,7 +150,7 @@ The connection and configuration objects are explained in the transmission secti
    1. Use the following CLI command:
 
       ```
-      python main.py transmit abc '{"host":"www.example.com", "port":"1234"}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' delete "<Query UUID from query test>"
+      python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' delete "<Query UUID from query test>"
       ```
 
    2. Visually confirm that a result comes back with

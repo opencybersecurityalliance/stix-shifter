@@ -2,13 +2,13 @@
   "ipv4-addr": {
     "fields": {
       "value": ["srcAddr", "dstAddr"],
-      "x_com_aws_interface_id": ["interfaceId"]
+      "x_aws_interface_id": ["interfaceId"]
     }
   },
   "ipv6-addr": {
     "fields": {
       "value": ["srcAddr", "dstAddr"],
-      "x_com_aws_interface_id": ["interfaceId"]
+      "x_aws_interface_id": ["interfaceId"]
     }
   },
   "network-traffic": {
@@ -22,7 +22,7 @@
       "end": ["end"]
     }
   },
-  "x-com-aws": {
+  "x-aws": {
     "fields": {
       "account_id": ["accountId"]
     }

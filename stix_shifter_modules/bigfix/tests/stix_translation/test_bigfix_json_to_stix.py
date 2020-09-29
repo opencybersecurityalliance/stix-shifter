@@ -1,12 +1,10 @@
-import json
+import unittest
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.bigfix.entry_point import EntryPoint
-import unittest
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -68,7 +66,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_com_bigfix_relevance'] is not None
+        assert observed_data['x_bigfix_relevance'] is not None
 
     def test_custom_property(self):
         """
@@ -86,7 +84,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_com_bigfix_relevance']
+        custom_object = observed_data['x_bigfix_relevance']
         assert custom_object.keys() == {'computer_identity'}
         assert custom_object['computer_identity'] == '1626351170-xlcr.hcl.local'
 

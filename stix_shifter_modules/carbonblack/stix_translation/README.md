@@ -39,7 +39,7 @@ $ python3 main.py execute carbonblack carbonblack "<data_source>" "<connection>"
 
 This example command executes the full STIX translation and transmission pipeline. The commands that make up this pipeline will be include below.
 ```
-$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}' "[process:name = 'cmd.exe']"
+$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.carbonblack.io", "port": 443}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}' "[process:name = 'cmd.exe']"
 ```
 
 Note in this example some logging is omitted.
@@ -206,7 +206,7 @@ $ python3 main.py translate carbonblack results '{"id": "identity--3532c56d-ea72
 ## Multiple API Endpoint Example
 
 ```
-$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.my.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}" "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']"
+$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.my.carbonblack.io", "port": 443}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}" "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']"
 ```
 
 The translation portion of this command will return:

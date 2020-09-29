@@ -3,16 +3,19 @@ import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 import copy
 
 
 class Connector(BaseSyncConnector):
     init_error = None
+    logger = logger.set_logger(__name__)
 
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
+        
         try:
             self.token = Connector.generate_token(connection, configuration)
             configuration['auth']['access_token'] = self.token
@@ -108,7 +111,7 @@ class Connector(BaseSyncConnector):
         except Exception as ex:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
-                print('can not parse response: ' + str(response_txt))
+                self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
 
@@ -138,5 +141,5 @@ class Connector(BaseSyncConnector):
             return_obj = dict()
             if ex.error_response:
                 ErrorResponder.fill_error(return_obj, ex.error_response, ['reason'])
-                print("Token generation Failed:", return_obj)
+                Connector.logger.error("Token generation Failed: " + return_obj)
             raise ex

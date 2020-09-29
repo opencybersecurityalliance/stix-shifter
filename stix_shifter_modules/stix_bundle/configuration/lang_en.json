@@ -1,0 +1,29 @@
+{
+    "connection": {
+        "host": {
+            "label": "Host IP address or Hostname",
+            "placeholder": "https://url.to.stix_bundle.json.file",
+            "description": "Specify the URL of the STIX Bundle JSON file so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
+            }
+        }
+    }
+}

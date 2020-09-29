@@ -16,24 +16,24 @@ For more information about this project, see the [STIX-shifter Overview](https:/
 
 This stix-shifter has the following dependencies:
 
-- [stix2-patterns>=1.1.0](https://pypi.org/project/stix2-patterns/)
-- [stix2-validator>=0.5.0](https://pypi.org/project/stix2-validator/)
-- [stix2-matcher](https://github.com/oasis-open/cti-pattern-matcher): There is no python package publish in pypi for stix2-matcher. The bellow command can be used to install this package:
-  ```
-  pip install git+git://github.com/oasis-open/cti-pattern-matcher.git@b265862971eb63c04a8a054a2adb13860edf7846#egg=stix2-matcher
-  ```
-- [antlr4-python3-runtime>=4.7](https://pypi.org/project/antlr4-python3-runtime/)
-- [python-dateutil>=2.7.3](https://pypi.org/project/python-dateutil/)
+- [stix2-patterns==1.3.0](https://pypi.org/project/stix2-patterns/)
+- [stix2-validator==1.1.2](https://pypi.org/project/stix2-validator/)
+- [stix2-matcher==1.0.0](https://pypi.org/project/stix2-matcher/)
+- [antlr4-python3-runtime==4.8](https://pypi.org/project/antlr4-python3-runtime/)
+- [python-dateutil==2.8.1](https://pypi.org/project/python-dateutil/)
 
 Your development environment must use Python 3.6.x
 
 ## Installation
 
-The recommended method for installing the STIX-shifter is via pip.
+The recommended method for installing the STIX-shifter is via pip. Two prerequisite packages needs to be installed inlcuding the package of stix-shifter connector module to complete a stix-shifter connector installation. Run below commands to install all the packages-
 
-```
-pip install stix-shifter
-```
+1. Main stix-shifter package:  `pip install stix-shifter`
+
+2. stix-shifter-utility package:  `pip install stix-shifter-utils`
+
+3. Desired stix-shifter connector module package:  `pip install stix-shifter-modules-<module name> `
+   Example:  `pip install stix-shifter-modules-qradar`
 
 ## Usage
 

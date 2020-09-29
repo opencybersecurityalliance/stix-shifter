@@ -4,7 +4,7 @@ import uuid
 from . import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
-
+from stix_shifter_utils.utils import logger
 
 # convert JSON data to STIX object using map_data and transformers
 
@@ -30,6 +30,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
 
 class DataSourceObjToStixObj:
+    logger = logger.set_logger(__name__)
 
     def __init__(self, identity_id, ds_to_stix_map, transformers, options, callback=None):
         self.identity_id = identity_id
@@ -39,7 +40,7 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        self.stix_validator = options.get('stix_validator', False)
+        self.stix_validator = options.get('stix_validator')
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
@@ -55,7 +56,7 @@ class DataSourceObjToStixObj:
         :return: the resulting STIX value
         """
         if ds_key not in obj:
-            print('{} not found in object'.format(ds_key))
+            DataSourceObjToStixObj.logger.debug('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
         # Is this getting his with a none-type value?
@@ -112,25 +113,31 @@ class DataSourceObjToStixObj:
         DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value, group)
 
     @staticmethod
-    def _valid_stix_value(props_map, key, stix_value):
+    def _valid_stix_value(props_map, key, stix_value, unwrap=False):
         """
         Checks that the given STIX value is valid for this STIX property
 
         :param props_map: the map of STIX properties which contains validation attributes
         :param key: the STIX property name
         :param stix_value: the STIX value translated from the input object
+        :param unwrap: unwrapping datasource field value of type list 
         :return: whether STIX value is valid for this STIX property
         :rtype: bool
         """
 
         #  Causing a couple of failing tests in MSATP
         if stix_value is None or stix_value == '':
-            print("Removing invalid value '{}' for {}".format(stix_value, key))
+            DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
-            if not pattern.match(str(stix_value)):
-                return False
+            if unwrap and isinstance(stix_value, list):
+                for val in stix_value:
+                    if not pattern.match(str(val)):
+                        return False
+            else:
+                if not pattern.match(str(stix_value)):
+                    return False
         return True
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
@@ -138,11 +145,11 @@ class DataSourceObjToStixObj:
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            print('{} is not found in map, skipping'.format(ds_key))
+            self.logger.debug('{} is not found in map, skipping'.format(ds_key))
             return
 
         if isinstance(to_map, dict):
-            print('{} is complex; descending'.format(to_map))
+            self.logger.debug('{} is complex; descending'.format(to_map))
             # If the object is complex we must descend into the map on both sides
             for key in to_map.keys():
                 self._transform(object_map, observation, ds_map[ds_key], key, to_map)
@@ -166,7 +173,7 @@ class DataSourceObjToStixObj:
 
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
-                print('{} is not valid (None, or missing key)'.format(ds_key_def))
+                self.logger.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
                 continue
 
             if generic_hash_key:
@@ -177,6 +184,12 @@ class DataSourceObjToStixObj:
             transformer = self.transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
 
             group = False
+            unwrap = False
+
+            # unwrap array of stix values to separate stix objects
+            if 'unwrap' in ds_key_def:
+                unwrap = True
+
             if ds_key_def.get('cybox', self.cybox_default):
                 object_name = ds_key_def.get('object')
                 if 'references' in ds_key_def:
@@ -191,18 +204,34 @@ class DataSourceObjToStixObj:
                         if not stix_value:
                             continue
                     else:
-                        stix_value = object_map.get(references)
-                        if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
-                            continue
+                        if unwrap:
+                            stix_value = []
+                            pattern = re.compile("{}_[0-9]+".format(references))
+                            for obj_name in object_map:
+                                if pattern.match(obj_name):
+                                    val = object_map.get(obj_name)
+                                    stix_value.append(val)
+                        else:
+                            stix_value = object_map.get(references)
+                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                                continue
                 else:
                     stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
                         continue
 
                 # Group Values
                 if 'group' in ds_key_def:
                     group = True
-                DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
+
+                if unwrap and 'references' not in ds_key_def and isinstance(stix_value, list):
+                    self.logger.debug("Unwrapping {} of {}".format(stix_value, object_name))
+                    for i in range(len(stix_value)):
+                        obj_i_name = "{}_{}".format(object_name, i+1)
+                        val = stix_value[i]
+                        DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, val, object_map, obj_i_name, group)
+                else:
+                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map, object_name, group)
             else:
                 # get the object name defined for custom attributes
                 if 'object' in ds_key_def:
@@ -250,7 +279,7 @@ class DataSourceObjToStixObj:
             for ds_key in obj.keys():
                 self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
-            print("Not a dict: {}".format(obj))
+            self.logger.debug("Not a dict: {}".format(obj))
         
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:

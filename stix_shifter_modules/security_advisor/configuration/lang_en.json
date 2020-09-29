@@ -1,0 +1,24 @@
+{
+    "connection": {
+        "host": {
+            "label": "Host URL",
+            "description": "Specify theHost URL of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "accountID": {
+                "label": "Account ID",
+                "description": "Account ID of IBM Cloud Security Advisor"
+            },
+            "apiKey": {
+                "label": "API Key",
+                "description": "API Key of IBM Cloud Security Advisor"
+            }
+        }
+    }
+}

@@ -3,7 +3,10 @@ import json
 import uuid
 
 
-class Translator(BaseResultTranslator):
+class ResultsTranslator(BaseResultTranslator):
+
+    def read_json(self, filepath, options):
+        return '{}'
 
     def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
@@ -22,4 +25,4 @@ class Translator(BaseResultTranslator):
             obs["created_by_ref"] = data_source['id']
 
         bundle['objects'] += bundle_data
-        return json.dumps(bundle, indent=4, sort_keys=False)
+        return bundle

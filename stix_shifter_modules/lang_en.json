@@ -1,0 +1,59 @@
+{
+    "connection": {
+        "type": {
+            "description": "Data source type"
+        },
+        "name": {
+            "label": "Data source name",
+            "placeholder": "Add a data source name"
+        },
+        "description": {
+            "label": "Data source description",
+            "placeholder": "Add a data source description"
+        },
+        "options": {
+            "result_limit": {
+                "label": "Result Size Limit",
+                "description": "The maximum number of entries or objects that are returned by search query."
+            },
+            "time_range": {
+                "label": "Query Time Range",
+                "description": "Time range for the search, in minutes, represented as last x minutes."
+            },
+            "timeout": {
+                "label": "Query Timeout Limit",
+                "description": "The limit on how long the query will run, in minutes, on the data source."
+            },
+            "dialects": {
+                "label": "Dialect",
+                "description": "If data source needs to search multiple schema or database tables"
+            },
+            "validate_pattern": {
+                "label": "STIX Pattern Validator",
+                "description": "Validate STIX patterns that needs to be translated into native data source query"
+            },
+            "stix_validator": {
+                "label": "STIX Object Validator",
+                "description": "Validate trasnlated STIX Objects"
+            },
+            "mapping": {
+                "label": "Custom Mapping",
+                "description": "Custom stix mapping if default mapping needs to be replaced"
+            },
+            "concurrent": {
+                "label": "Concurrent Search Limit",
+                "description": "The number of simultaneous connections that can be made between IBM Cloud Pak™ for Security and the data source."
+            }
+        }
+    },
+    "configuration":{
+        "name": {
+            "label": "Configuration Name",
+            "placeholder": "Add a configuration name"
+        },
+        "description": {
+            "label": "Configuration Description",
+            "placeholder": "Add a configuration description"
+        }
+    }
+}

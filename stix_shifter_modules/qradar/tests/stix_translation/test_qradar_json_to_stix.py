@@ -1,15 +1,12 @@
+import json
+import base64
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
-import json
-import base64
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-# Using default mapping in modules/qradar/json/to_stix_map.json
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -30,7 +27,7 @@ class TestTransform(object):
     @staticmethod
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
-    
+
     @staticmethod
     def get_object_keys(objects):
         for k, v in objects.items():
@@ -69,16 +66,18 @@ class TestTransform(object):
         assert(observed_data['last_observed'] is not None)
 
     def test_cybox_observables(self):
-        payload = "Payload"
+        payload = "utf payload"
+        base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
+        domain = "test.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
+        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], transformers.get_all_transformers(), options)
@@ -105,6 +104,7 @@ class TestTransform(object):
         assert(ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert(ip_obj['type'] == 'ipv4-addr')
         assert(ip_obj['value'] == destination_ip)
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
         ip_ref = nt_object['src_ref']
         assert(ip_ref in objects), f"src_ref with key {nt_object['src_ref']} not found"
@@ -112,6 +112,7 @@ class TestTransform(object):
         assert(ip_obj.keys() == {'type', 'value', 'resolves_to_refs'})
         assert(ip_obj['type'] == 'ipv6-addr')
         assert(ip_obj['value'] == source_ip)
+        assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'url')
         assert(curr_obj is not None), 'url object type not found'
@@ -121,7 +122,7 @@ class TestTransform(object):
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert(curr_obj is not None), 'artifact object type not found'
         assert(curr_obj.keys() == {'type', 'payload_bin'})
-        assert(curr_obj['payload_bin'] == payload)
+        assert(curr_obj['payload_bin'] == base64_payload)
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert(curr_obj is not None), 'user-account object type not found'
@@ -137,8 +138,7 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-
-        assert(objects.keys() == set(map(str, range(0, 10))))
+        assert(objects.keys() == set(map(str, range(0, 11))))
 
     def test_risk_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
@@ -148,16 +148,15 @@ class TestTransform(object):
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         observed_data = result_bundle['objects'][1]
 
-        assert('x_com_ibm_finding' in observed_data)
-        finding = observed_data['x_com_ibm_finding']
+        assert('x_ibm_finding' in observed_data)
+        finding = observed_data['x_ibm_finding']
         assert(finding['name'] == data['crename'])
         assert(finding['description'] == data['credescription'])
 
-        assert('x_com_ibm_ariel' in observed_data)
-        custom_prop = observed_data['x_com_ibm_ariel']
+        assert('x_ibm_ariel' in observed_data)
+        custom_prop = observed_data['x_ibm_ariel']
         assert(custom_prop['severity'] == data['severity'])
         assert(custom_prop['event_name'] == data['qidname'])
-        assert(custom_prop['device_type_name'] == data['devicetypename'])
         assert(custom_prop['device_type'] == data['devicetype'])
         assert(custom_prop['cre_event_list'] == data['creeventlist'])
         assert(custom_prop['rule_names'] == data['rulenames'])
@@ -170,8 +169,8 @@ class TestTransform(object):
             data_source, map_data, [data], transformers.get_all_transformers(), options)
         observed_data = result_bundle['objects'][1]
 
-        assert('x_com_ibm_ariel' in observed_data)
-        custom_props = observed_data['x_com_ibm_ariel']
+        assert('x_ibm_ariel' in observed_data)
+        custom_props = observed_data['x_ibm_ariel']
         assert(custom_props['identity_ip'] == data['identityip'])
         assert(custom_props['log_source_id'] == data['logsourceid'])
         assert(custom_props['qid'] == data['qid'])
@@ -190,21 +189,18 @@ class TestTransform(object):
 
         options = {
             "mapping": {
-                "flows": {
-                    "to_stix": {
-                        "username": {"key": "user-account.user_id"},
-                        "identityip": {"key": "x_com_ibm_ariel.identity_ip", "cybox": False},
-                        "qidname": {"key": "x_com_ibm_ariel.qid_name", "cybox": False},
-                        "url": {"key": "url.value"},
-                        "custompayload": {"key": "artifact.payload_bin"}
-                    }
+                "to_stix_map": {
+                    "username": {"key": "user-account.user_id"},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
+                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "url": {"key": "url.value"},
+                    "custompayload": {"key": "artifact.payload_bin"}
                 }
             }
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -259,8 +255,7 @@ class TestTransform(object):
         data_string = json.dumps(data)
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -302,8 +297,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -343,8 +337,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -384,8 +377,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -407,15 +399,14 @@ class TestTransform(object):
             "sha256hash": "someSHA-256hash",
             "logsourceid": 123,
             "filename": "someFile.exe",
-            "filepath": "C:/my/file/path"
+            "filepath": "C:/my/file/path/someFile.exe"
         }]
 
         data_string = json.dumps(data)
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -429,7 +420,7 @@ class TestTransform(object):
         assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path', '')
-        assert(directory_object_path == "C:/my/file/path")
+        assert directory_object_path == "C:/my/file/path"
 
     def test_hashtype_lookup_by_length(self):
         data_source_string = json.dumps(data_source)
@@ -442,8 +433,7 @@ class TestTransform(object):
             data_string = json.dumps(data)
             options = {}
             translation = stix_translation.StixTranslation()
-            result = translation.translate('qradar', 'results', data_source_string, data_string, options)
-            result_bundle = json.loads(result)
+            result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
 
             result_bundle_objects = result_bundle['objects']
             observed_data = result_bundle_objects[1]
@@ -453,7 +443,7 @@ class TestTransform(object):
             hashes = file_object['hashes']
             assert(key in hashes), "{} hash not included".format(key)
             assert(hashes[key] == value)
-    
+
     def test_none_empty_values_in_results(self):
         payload = "Payload"
         user_id = "someuserid2018"
@@ -485,3 +475,30 @@ class TestTransform(object):
         assert('url' not in obj_keys)
         # file object has empty string in results so url object will be skipped while creating the observables
         assert('file' not in obj_keys)
+
+    def test_filepath_with_directory_transformer(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "filehash": "unknownTypeHash",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "testfile.txt",
+            "filepath": "/unix/files/system/testfile.txt"
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
+        directory_object_path = directory_object.get('path')
+        assert directory_object_path == "/unix/files/system"

@@ -7,8 +7,7 @@ from stix_shifter.stix_translation import stix_translation
 
 
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -123,7 +122,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        custom_props = observed_data['x_com_security_advisor_finding']
+        custom_props = observed_data['x_security_advisor_finding']
         assert(custom_props['author_accountId'] == data['author_accountId'])
 
         assert(custom_props['name'] == data['name'])
@@ -162,8 +161,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         }}
 
         translation = stix_translation.StixTranslation()
-        result = translation.translate('security_advisor', 'results', data_source_string, data_string, options)
-        result_bundle = json.loads(result)
+        result_bundle = translation.translate('security_advisor', 'results', data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
