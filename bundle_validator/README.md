@@ -27,7 +27,7 @@ git clone https://github.com/opencybersecurityalliance/stix-shifter.git
 5. After successfull validation, you should see a messegae in your terminal: `STIX Bundle validated!!`
 6. For unsuccessfull validation, you should see mainly two types of error-
     1. If JSON format is invalid: `Malformed JSON in the STIX Bundle: <ERROR details>`
-    2. If the file contains invalid STIX Objects, you should see errors/warnings with heading `[X] STIX JSON: Invalid`. It is mandatory to fix the errors red marked as `[X]`. Warnings which are yellow marked as `[!]`, can be ingnored but recommended to fix. For example-
+    2. If the file contains invalid STIX Objects, you should see errors/warnings with heading `[X] STIX JSON: Invalid`. It is mandatory to fix the errors marked red as `[X]`. Warnings which are marked yellow as `[!]`, can be ingnored but recommended to fix. For example-
         ```
         [X] STIX JSON: Invalid
             [!] Warning: identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9: {213} identity_class contains a value not in the identity-class-ov vocabulary.
