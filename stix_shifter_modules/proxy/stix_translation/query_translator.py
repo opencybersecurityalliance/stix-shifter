@@ -16,8 +16,8 @@ class QueryTranslator(EmptyQueryTranslator):
         # A proxy translation call passes the entire data source connection object in as the options
         # Top-most connection host and port are for the proxy
         # print(f'HERE!!! {json.dumps(self.options, indent=4)}')
-        proxy_host = self.options['host']
-        proxy_port = self.options['port']
+        proxy_host = self.options['proxy_host']
+        proxy_port = self.options['proxy_port']
 
         connection, configuration = unwrap_connection_options(self.options)
         request_http_path = f"http://{proxy_host}:{proxy_port}"

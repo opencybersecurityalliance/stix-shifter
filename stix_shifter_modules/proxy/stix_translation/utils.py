@@ -2,10 +2,10 @@ import json
 
 
 def unwrap_connection_options(options):
-    proxy_params = options.get('proxy')
-    if type(proxy_params) == str:
-        if len(proxy_params):
-            proxy_params = json.loads(proxy_params)
+    destination_params = options.get('destination')
+    if type(destination_params) == str:
+        if len(destination_params):
+            destination_params = json.loads(destination_params)
         else:
-            proxy_params = {}
-    return proxy_params['connection'], proxy_params['configuration']
+            destination_params = {}
+    return destination_params['connection'], destination_params['configuration']

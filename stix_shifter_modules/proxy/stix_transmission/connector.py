@@ -6,7 +6,7 @@ import copy
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-        self.request_http_path = "http://{}:{}".format(connection['options']['host'], connection['options']['port'])
+        self.request_http_path = "http://{}:{}".format(connection['options']['proxy_host'], connection['options']['proxy_port'])
         self.connection, self.configuration = self._unwrap_connection_options(copy.deepcopy(connection), copy.deepcopy(configuration))
 
     def ping_connection(self):
@@ -40,13 +40,13 @@ class Connector(BaseConnector):
         return response.text
 
     def _unwrap_connection_options(self, connection, configuration):
-        if 'options' in connection and 'proxy' in connection['options']:
-            proxy_params = connection['options']['proxy']
-            if type(proxy_params) == str:
-                if len(proxy_params):
-                    proxy_params = json.loads(proxy_params)
+        if 'options' in connection and 'destination' in connection['options']:
+            destination_params = connection['options']['destination']
+            if type(destination_params) == str:
+                if len(destination_params):
+                    destination_params = json.loads(destination_params)
                 else:
-                    proxy_params = {}
-            if proxy_params:
-                return proxy_params['connection'], proxy_params['configuration']
+                    destination_params = {}
+            if destination_params:
+                return destination_params['connection'], destination_params['configuration']
         return connection, configuration
