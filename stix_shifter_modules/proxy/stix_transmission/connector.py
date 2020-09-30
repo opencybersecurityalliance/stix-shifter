@@ -6,10 +6,8 @@ import copy
 
 class Connector(BaseConnector):
     def __init__(self, connection, configuration):
-        self.configuration = configuration
-        self.request_http_path = "http://{}:{}".format(connection['host'], connection['port'])
-        # deep copy connection since it will be mutates as it is passed along the proxy chain
-        self.connection = self._unwrap_connection_options(copy.deepcopy(connection))
+        self.request_http_path = "http://{}:{}".format(connection['options']['host'], connection['options']['port'])
+        self.connection, self.configuration = self._unwrap_connection_options(copy.deepcopy(connection), copy.deepcopy(configuration))
 
     def ping_connection(self):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})
@@ -41,16 +39,14 @@ class Connector(BaseConnector):
         response = requests.post(self.request_http_path + "/is_async", data)
         return response.text
 
-    def _unwrap_connection_options(self, connection):
-        connection_options = connection.get('options', {})
-        embedded_connection_options = connection_options.get('options', {})
-        if embedded_connection_options and embedded_connection_options.get('host'):
-            connection['host'] = embedded_connection_options.get('host')
-            connection['port'] = embedded_connection_options.get('port')
-            connection['type'] = embedded_connection_options.get('type')
-            del connection['options']
-            connection.update(connection_options)
-        elif connection_options and connection_options.get('host'):
-            del connection['options']
-            connection.update(connection_options)
-        return connection
+    def _unwrap_connection_options(self, connection, configuration):
+        if 'options' in connection and 'proxy' in connection['options']:
+            proxy_params = connection['options']['proxy']
+            if type(proxy_params) == str:
+                if len(proxy_params):
+                    proxy_params = json.loads(proxy_params)
+                else:
+                    proxy_params = {}
+            if proxy_params:
+                return proxy_params['connection'], proxy_params['configuration']
+        return connection, configuration

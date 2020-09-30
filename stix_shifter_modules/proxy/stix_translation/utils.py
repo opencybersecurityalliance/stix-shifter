@@ -1,13 +1,11 @@
-def unwrap_connection_options(self, connection):
-    connection_options = connection.get('options', {})
-    embedded_connection_options = connection_options.get('options', {})
-    if embedded_connection_options and embedded_connection_options.get('host'):
-        connection['host'] = embedded_connection_options.get('host')
-        connection['port'] = embedded_connection_options.get('port')
-        connection['type'] = embedded_connection_options.get('type')
-        del connection['options']
-        connection.update(connection_options)
-    elif connection_options and connection_options.get('host'):
-        del connection['options']
-        connection.update(connection_options)
-    return connection
+import json
+
+
+def unwrap_connection_options(options):
+    proxy_params = options.get('proxy')
+    if type(proxy_params) == str:
+        if len(proxy_params):
+            proxy_params = json.loads(proxy_params)
+        else:
+            proxy_params = {}
+    return proxy_params['connection'], proxy_params['configuration']
