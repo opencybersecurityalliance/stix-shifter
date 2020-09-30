@@ -5,6 +5,7 @@ import time
 import importlib
 from flask import Flask
 import logging
+import copy
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.proxy_host import ProxyHost
@@ -194,7 +195,7 @@ def main():
         except Exception as ex:
             log.debug(exception_to_string(ex))
             log.error('Module {} not found'.format(module))
-            log.debug(logger.exception_to_string(ex))
+            log.debug(exception_to_string(ex))
             help_and_exit = True
 
     if help_and_exit:

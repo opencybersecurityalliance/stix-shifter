@@ -4,7 +4,7 @@ import requests
 from .utils import unwrap_connection_options
 
 
-class QueryTranslator(BaseQueryTranslator):
+class QueryTranslator(EmptyQueryTranslator):
 
     def read_json(self, filepath, options):
         return '{}'
