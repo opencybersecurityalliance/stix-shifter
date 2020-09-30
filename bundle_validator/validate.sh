@@ -1,14 +1,14 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    echo "Specify your bundle file name. Example: ./validate.sh <json file name>"
+    echo "Specify your bundle file name. Usage: ./validate.sh <json file name>"
     exit 1
 fi
 
 FILE=$1
 
 if [ -f "$FILE" ]; then
-    echo "Validating STIX Bundle file: $FILE....."
+    echo "Validating STIX Bundle file: $FILE "
     echo ""
 else
     echo "$FILE does not exists. Place your bundle file inside bundle_validator/ folder"
