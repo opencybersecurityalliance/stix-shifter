@@ -33,6 +33,7 @@ class ErrorMapper():
         if exception is not None:
             exception_type = type(exception).__name__
             ErrorMapper.logger.error("received exception => {}: {}".format(exception_type, exception))
+            ErrorMapper.logger.debug(logger.exception_to_string(exception))
             if exception_type in error_mapping:
                 error_code = error_mapping[exception_type][0]
                 error_message = error_mapping[exception_type][1]

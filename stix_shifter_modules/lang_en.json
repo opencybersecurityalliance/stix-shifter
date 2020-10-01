@@ -22,7 +22,7 @@
             },
             "timeout": {
                 "label": "Query Timeout Limit",
-                "description": "The limit on how long the query will run, in minutes, on the data source."
+                "description": "The limit on how long the query will run, in seconds, on the data source."
             },
             "dialects": {
                 "label": "Dialect",

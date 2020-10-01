@@ -8,14 +8,14 @@ class ResultsTranslator(BaseResultTranslator):
     def read_json(self, filepath, options):
         return '{}'
 
-    def translate_results(self, data_source, data, options={}, mapping=None):
+    def translate_results(self, data_source, data):
         # A proxy translation call passes the entire data source connection object in as the options
         # Top-most connection host and port are for the proxy
-        proxy_host = options['host']
-        proxy_port = options['port']
+        proxy_host = self.options['proxy_host']
+        proxy_port = self.options['proxy_port']
 
-        connection = self.unwrap_connection_options(options)
-        request_http_path = "http://{}:{}".format(proxy_host, proxy_port)
+        connection,configuration = unwrap_connection_options(self.options)
+        request_http_path = f"http://{proxy_host}:{proxy_port}"
         response = requests.post(request_http_path + "/translate_results",
-                                 data=json.dumps({"results": data, "options": connection}))
+                                 data=json.dumps({'module': connection['type'], "data_source": data_source, "results": data, "options": connection['options']}), timeout=self.options.get('timeout'))
         return response.json()
