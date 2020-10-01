@@ -14,7 +14,7 @@
             },
             "proxy_port": {
                 "type": "number",
-                "default": 443
+                "default": 5000
             },
             "destination": {
                 "type": "text"
