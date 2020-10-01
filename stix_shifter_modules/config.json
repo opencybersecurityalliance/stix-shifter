@@ -26,9 +26,8 @@
             },
             "dialects": {
                 "type": "array",
-                "default": null,
                 "hidden": true,
-                "previous": "connection.dialects"
+                "optional": true
             },
             "language": {
                 "type": "string",
