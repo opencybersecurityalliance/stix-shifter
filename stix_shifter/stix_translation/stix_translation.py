@@ -69,13 +69,20 @@ class StixTranslation:
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             try:
-                validated_options = param_validator(module, options, 'connection.options')
+                if not translate_type == DIALECTS:
+                    validated_options = param_validator(module, options, 'connection.options')
+                else:
+                    validated_options = {}
                 entry_point = connector_module.EntryPoint(options=validated_options)
             except Exception as ex:
                 track = traceback.format_exc()
                 self.logger.error(ex)
                 self.logger.debug(track)
                 raise
+
+            if translate_type == DIALECTS:
+                dialects = entry_point.get_dialects_full()
+                return dialects
 
             language = validated_options['language']
             if len(dialects) == 0:
@@ -122,7 +129,6 @@ class StixTranslation:
                         raise DataMappingException(
                             "{} {}".format(MAPPING_ERROR, unmapped_stix_collection)
                         )
-
                     return {'queries': queries}
                 else:
                     self._validate_pattern(data)
@@ -133,16 +139,12 @@ class StixTranslation:
                     start_time = parsed_stix_dictionary['start_time']
                     end_time = parsed_stix_dictionary['end_time']
                     return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
-
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 return entry_point.translate_results(data_source, data)
             elif translate_type == MAPPING:
                 mappings = entry_point.get_mapping()
                 return mappings
-            elif translate_type == DIALECTS:
-                dialects = entry_point.get_dialects_full()
-                return dialects
             elif translate_type == SUPPORTED_ATTRIBUTES:
                 # Return mapped STIX attributes supported by the data source
                 result = {}
