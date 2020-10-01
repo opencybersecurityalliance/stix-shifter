@@ -17,5 +17,5 @@ class ResultsTranslator(BaseResultTranslator):
         connection,configuration = unwrap_connection_options(self.options)
         request_http_path = f"http://{proxy_host}:{proxy_port}"
         response = requests.post(request_http_path + "/translate_results",
-                                 data=json.dumps({'module': connection['type'], "data_source": data_source, "results": data, "options": connection['options']}))
+                                 data=json.dumps({'module': connection['type'], "data_source": data_source, "results": data, "options": connection['options']}), timeout=self.options.get('timeout'))
         return response.json()

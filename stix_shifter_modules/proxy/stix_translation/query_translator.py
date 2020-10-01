@@ -22,5 +22,5 @@ class QueryTranslator(EmptyQueryTranslator):
         connection, configuration = unwrap_connection_options(self.options)
         request_http_path = f"http://{proxy_host}:{proxy_port}"
         response = requests.post(request_http_path + '/transform_query',
-                                 data=json.dumps({'module': connection['type'], 'query': data, 'options': connection['options']}))
+                                 data=json.dumps({'module': connection['type'], 'query': data, 'options': connection['options']}), timeout=self.options.get('timeout'))
         return response.json()
