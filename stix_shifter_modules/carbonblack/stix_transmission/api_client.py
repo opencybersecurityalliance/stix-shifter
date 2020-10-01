@@ -7,7 +7,6 @@ class APIClient():
 
     @staticmethod
     def _dialect_to_endpoint(dialect):
-        assert dialect in ["binary", "process"]
         return dialect
 
     def __init__(self, connection, configuration):

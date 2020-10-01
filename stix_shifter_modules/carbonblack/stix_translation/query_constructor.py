@@ -159,7 +159,6 @@ class CbQueryStringPatternTranslator:
             return
         else:
             self.logger.debug(type(expression), expression)
-            assert False
 
     # the return type of this function is a string for expressions types up to CombinedComparionExpression
     # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
