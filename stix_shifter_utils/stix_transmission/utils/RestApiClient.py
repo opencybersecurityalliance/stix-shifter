@@ -74,7 +74,6 @@ class RestApiClient:
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
-                # call = getattr(requests, method.lower())
                 session = requests.Session()
                 retry_strategy = Retry(total=RETRY_MAX, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504],
                                         method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
@@ -86,8 +85,6 @@ class RestApiClient:
                     actual_headers["Host"] = self.sni
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
-                print(f">>>>>>>>>>>>>>HTTP>>>>>>>{method}>>>>>>>>>{url}")
-                self.logger.warn(f">>>>>>>>>>>>>>HTTP>>>>>>>{method}>>>>>>>>>{url}")
                 call = getattr(session, method.lower())
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content, timeout=timeout)
 
