@@ -231,8 +231,8 @@ class MockResponseWrapper(QRadarMockResponse):
     def raise_for_status(self):
         pass
 
-@patch('requests.post', autospec = True)
-@patch('requests.get', autospec = True)
+@patch('requests.sessions.Session.post', autospec = True)
+@patch('requests.sessions.Session.get', autospec = True)
 class TestQRadarCloudDataLake(unittest.TestCase, object):
     def test_query_response(self, mock_get, mock_post):
         mocked_return_value = '{"search_id":"1"}'
