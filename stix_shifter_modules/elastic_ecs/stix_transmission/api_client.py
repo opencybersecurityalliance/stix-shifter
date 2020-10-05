@@ -9,7 +9,6 @@ DEFAULT_LIMIT = 10000
 
 class APIClient():
     PING_ENDPOINT = '_cluster/health?pretty'
-    PING_TIMEOUT_IN_SECONDS = 10
 
     def __init__(self, connection, configuration):
         self.logger = logger.set_logger(__name__)
@@ -44,10 +43,10 @@ class APIClient():
                                     sni=connection.get('sni', None)
                                     )
         
-        self.search_timeout = connection['options'].get('timeout')
+        self.timeout = connection['options'].get('timeout')
 
     def ping_box(self):
-        return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.PING_TIMEOUT_IN_SECONDS)
+        return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.timeout)
 
     def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
         headers = dict()
@@ -74,7 +73,7 @@ class APIClient():
             # addition of QueryString to API END point
             endpoint = endpoint + '?q=' + query_expression
 
-            return self.client.call_api(endpoint, 'GET', headers, timeout=self.search_timeout)
+            return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
         # Request body search
         else:
             # add size value
@@ -100,4 +99,4 @@ class APIClient():
             self.logger.debug("URL endpoint: " + endpoint)
             self.logger.debug("URL data: " + json.dumps(data))
 
-            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.search_timeout)
+            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
