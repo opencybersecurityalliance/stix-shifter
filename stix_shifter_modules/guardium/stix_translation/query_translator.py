@@ -1,12 +1,16 @@
 import logging
-
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from . import query_constructor
 
 logger = logging.getLogger(__name__)
 
 
 class QueryTranslator(BaseQueryTranslator):
+
+    def __init__(self, options, dialect, basepath):
+        super().__init__(options, dialect, basepath)
+        self.transformers = get_module_transformers('guardium')
 
     def transform_query(self, data, antlr_parsing_object):
         """
@@ -22,5 +26,5 @@ class QueryTranslator(BaseQueryTranslator):
         logger.info("Converting STIX2 Pattern to data source query")
 
         query_string = query_constructor.translate_pattern(
-            antlr_parsing_object, self, self.options)
+            antlr_parsing_object, self, self.options, self.transformers)
         return query_string

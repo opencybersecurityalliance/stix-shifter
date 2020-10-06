@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import os
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json as helper_read_json
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_transformers
 
 
 class BaseResultTranslator(object, metaclass=ABCMeta):
@@ -14,6 +15,7 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.logger = logger.set_logger(__name__)
         filepath = os.path.abspath(os.path.join(base_file_path, "json", "to_stix_map.json"))
         self.map_data = self.read_json(filepath, options)
+        self.transformers = get_transformers(f"{base_file_path}.transformers")
 
     def read_json(self, filepath, options):
         return helper_read_json(filepath, options)

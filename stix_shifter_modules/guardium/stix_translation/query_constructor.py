@@ -5,9 +5,8 @@ import copy
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToGuardium
+from stix_shifter_modules.guardium.stix_translation.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.utils.file_helper import read_json
 
 # Source and destination reference mapping for ip and mac addresses.
@@ -39,7 +38,7 @@ class QueryStringPatternTranslator:
         ObservationOperators.And: 'AND'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, options):
+    def __init__(self, pattern: Pattern, data_model_mapper, options, transformers):
         self.dmm = data_model_mapper
         self.pattern = pattern
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -53,7 +52,7 @@ class QueryStringPatternTranslator:
         self.qsearch_params_array_size = 0
 
         self.translated = self.parse_expression(pattern)
-        self.transformers = transformers.get_all_transformers()
+        self.transformers = transformers
 
         # Read reference data
         self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
@@ -602,12 +601,12 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, options):
+def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers):
 
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
 
-    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
+    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options, transformers)
     report_call = guardium_query_translator.translated
 
     # Add space around START STOP qualifiers
