@@ -18,8 +18,9 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
     identity_id = data_source['id']
     bundle['objects'] += [data_source]
+    data_source_name = data_source['name']
 
-    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, callback)
+    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, data_source_name, callback)
 
     # map data list to list of transformed objects
     results = list(map(ds2stix.transform, data))
@@ -32,7 +33,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
 
-    def __init__(self, identity_id, ds_to_stix_map, transformers, options, callback=None):
+    def __init__(self, identity_id, ds_to_stix_map, transformers, options, data_source, callback=None):
         self.identity_id = identity_id
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
@@ -44,6 +45,10 @@ class DataSourceObjToStixObj:
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
+
+        self.data_source = data_source
+        self.cust_attributes = dict()
+        self.ds_key_map = [val for val in self.gen_dict_extract('ds_key', ds_to_stix_map)]
 
     @staticmethod
     def _get_value(obj, ds_key, transformer):
@@ -140,12 +145,31 @@ class DataSourceObjToStixObj:
                     return False
         return True
 
+    # get the nested ds_keys in the mapping
+    def gen_dict_extract(self, key, var):
+        if hasattr(var, 'items'):
+            for k, v in var.items():
+                if k == key:
+                    yield v
+                if isinstance(v, dict):
+                    for result in self.gen_dict_extract(key, v):
+                        yield result
+                elif isinstance(v, list):
+                    for d in v:
+                        for result in self.gen_dict_extract(key, d):
+                            yield result
+
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
         to_map = obj[ds_key]
 
         if ds_key not in ds_map:
-            self.logger.debug('{} is not found in map, skipping'.format(ds_key))
+            self.logger.debug('{} is not found in map, adding as custom attributes'.format(ds_key))
+            if isinstance(to_map, dict):
+                self.cust_attributes[ds_key] = to_map
+                return
+            if ds_key not in self.ds_key_map:
+                self.cust_attributes[ds_key] = to_map
             return
 
         if isinstance(to_map, dict):
@@ -265,6 +289,8 @@ class DataSourceObjToStixObj:
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
 
+        self.cust_attributes = dict()
+
         observation = {
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
@@ -280,11 +306,22 @@ class DataSourceObjToStixObj:
                 self._transform(object_map, observation, ds_map, ds_key, obj)
         else:
             self.logger.debug("Not a dict: {}".format(obj))
-        
+
+        # Add unmapped attributes and required property to the observation if it wasn't added via the mapping
+        if self.options.get('unmapped_fallback'):
+            if self.cust_attributes:
+                self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the obseravble object: {}'.format(self.cust_attributes)) 
+                observation.update({"x_" + self.data_source: self.cust_attributes})
+
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
 
+        # check first_observed and last_observed if not present create them
+        if "first_observed" not in observation and "last_observed" not in observation:
+                observation['first_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+                observation['last_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+        
         # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)

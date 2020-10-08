@@ -502,3 +502,31 @@ class TestTransform(object):
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path')
         assert directory_object_path == "/unix/files/system"
+    
+    def test_unmapped_fallback(self):
+        data_source_string = json.dumps(data_source)
+
+        data = [{
+            "sourceip": "127.0.0.1",
+            "destinationip": "127.0.0.2",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "testfile.txt",
+            "filepath": "/unix/files/system/testfile.txt",
+            "unmapped1": "value1"
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        assert('x_QRadar' in observed_data)
+        custom_objects = observed_data['x_QRadar']
+
+        assert(custom_objects['unmapped1'] == "value1")
