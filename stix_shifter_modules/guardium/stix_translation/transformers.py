@@ -95,13 +95,3 @@ class TimestampToGuardiumQS(ValueTransformer):
         rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
         mtch = (re.findall(rgx, timestamp))[0]
         return mtch[0].replace("-", "") + ' ' + mtch[1]
-
-
-class Ymd_HMSToTimestamp(ValueTransformer):
-    """A value transformer for the timestamps but adds ONE second to the time stamp.  Reason: Use when modified date is missing"""
-
-    @staticmethod
-    def transform(dt_Str):
-        dt_obj = datetime.strptime(dt_Str, '%Y-%m-%d %H:%M:%S')
-        dt_objOne = dt_obj + timedelta(seconds=1)
-        return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
