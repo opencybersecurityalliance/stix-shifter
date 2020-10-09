@@ -1,7 +1,8 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.csa.entry_point import EntryPoint
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = "csa"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
@@ -30,7 +31,7 @@ class TestTransform(object):
         data = {"starttime": 1531169112, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -68,7 +69,7 @@ class TestTransform(object):
 #                "domain": domain, "payload": payload, "username": user_id, "protocol": 'TCP', "sourceport": 3000, "destinationport": 2000}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -124,7 +125,7 @@ class TestTransform(object):
     #             "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
     #     result_bundle = json_to_stix_translator.convert_to_stix(
-    #         data_source, map_data, [data], transformers.get_all_transformers(), options)
+    #         data_source, map_data, [data], get_module_transformers(MODULE), options)
     #     observed_data = result_bundle['objects'][1]
 
     #     assert('x_ibm_ariel' in observed_data)
@@ -174,7 +175,7 @@ class TestTransform(object):
                   "outcome": "success"
                   }
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         print (result_bundle)
         observed_data = result_bundle['objects'][1]
 

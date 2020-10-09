@@ -1,9 +1,10 @@
 import unittest
 import json
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.msatp.entry_point import EntryPoint
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = "msatp"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
@@ -70,7 +71,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
                                           'ReportId': 12048, 'rn': 1, 'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -122,7 +123,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
                                           'ReportId': 12048, 'rn': 1, 'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -164,7 +165,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                        'RequestProtocol': 'Unknown', 'ReportId': 11844, 'rn': 1, 'event_count': '1'}}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         result_bundle_objects = result_bundle['objects']
 
@@ -188,7 +189,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
         assert file_obj['parent_directory_ref'] == '1'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
-        file_path = transformers.ToDirectoryPath.transform(data['FileCreationEvents']['FolderPath'])
+        file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['FileCreationEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
 
     def test_process_json_to_stix(self):
@@ -224,7 +225,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
                                           'ReportId': 12048, 'rn': 1, 'Event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -280,7 +281,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'InitiatingProcessTokenElevation': 'TokenElevationTypeLimited',
                                                'ReportId': 24239, 'rn': 1, 'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -335,7 +336,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'InitiatingProcessTokenElevation': 'TokenElevationTypeLimited',
                                                'ReportId': 10787, 'rn': 1, 'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, data, transformers.get_all_transformers(), options)
+            data_source, map_data, data, get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -380,7 +381,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                                               'x86)\\google\\chrome\\application\\chrome.exe',
                                                'rn': 1, 'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -422,7 +423,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                        [{'RegistryValueType': 'Binary', 'RegistryValueName': 'Configuration'}],
                                    'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]

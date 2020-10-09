@@ -1,11 +1,11 @@
 import json
 import unittest
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.security_advisor.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
-
+MODULE = "security_advisor"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
@@ -46,7 +46,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         data = { 'createTime' : '2019-10-31T11:15:55.099615Z' , 'updateTime' : '2019-10-31T11:15:55.099635Z',
                  'occurence_count': 1 }
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -78,7 +78,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
                 }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -116,7 +116,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
             }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -183,7 +183,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         accountId = 'test_id_1',
         data = {"author_accountId": accountId, "unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
@@ -195,7 +195,7 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
