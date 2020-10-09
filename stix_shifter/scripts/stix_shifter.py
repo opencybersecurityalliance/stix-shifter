@@ -264,6 +264,9 @@ def main():
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []
+        if not 'queries' in dsl:
+            print(json.dumps(dsl, indent=4))
+            exit(1)
         for query in dsl['queries']:
             search_result = transmission.query(query)
             if search_result["success"]:
@@ -296,7 +299,6 @@ def main():
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), transation_options)
         print(json.dumps(result, indent=4, sort_keys=False))
-
         exit(0)
 
     elif args.command == TRANSLATE:

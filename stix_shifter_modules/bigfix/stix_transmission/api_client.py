@@ -8,7 +8,6 @@ class APIClient:
     QUERY_ENDPOINT = 'clientquery'
     RESULT_ENDPOINT = 'clientqueryresults/'
     SYNC_QUERY_ENDPOINT = 'query'
-    PING_TIMEOUT_IN_SECONDS = 10
 
     def __init__(self, connection, configuration):
         self.endpoint_start = 'api/'
@@ -18,11 +17,11 @@ class APIClient:
                 (auth['username'] + ':' + auth['password']).encode('ascii'))
         self.connection = connection
         self.configuration = configuration
-        self.search_timeout = connection['options'].get('timeout')
+        self.timeout = connection['options'].get('timeout')
 
     def ping_box(self):
         endpoint = self.endpoint_start + self.PING_ENDPOINT
-        return self.get_api_client().call_api(endpoint, 'GET', timeout=self.PING_TIMEOUT_IN_SECONDS)
+        return self.get_api_client().call_api(endpoint, 'GET', timeout=self.timeout)
 
     def create_search(self, query_expression):
         headers = dict()
@@ -30,7 +29,7 @@ class APIClient:
         endpoint = self.endpoint_start + self.QUERY_ENDPOINT
         data = query_expression
         data = data.encode('utf-8')
-        return self.get_api_client().call_api(endpoint, 'POST', headers, data=data, timeout=self.search_timeout)
+        return self.get_api_client().call_api(endpoint, 'POST', headers, data=data, timeout=self.timeout)
 
     def get_search_results(self, search_id, offset, length):
         headers = dict()
@@ -41,14 +40,14 @@ class APIClient:
         params['stats'] = '1'
         params['start'] = offset
         params['count'] = length
-        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params, timeout=self.search_timeout)
+        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
 
     def get_sync_query_results(self, relevance):
         headers = dict()
         endpoint = self.endpoint_start + self.SYNC_QUERY_ENDPOINT
         params = dict()
         params['relevance'] = relevance
-        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params, timeout=self.search_timeout)
+        return self.get_api_client().call_api(endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
 
     def get_api_client(self):
         api_client = RestApiClient(self.connection.get('host'),
