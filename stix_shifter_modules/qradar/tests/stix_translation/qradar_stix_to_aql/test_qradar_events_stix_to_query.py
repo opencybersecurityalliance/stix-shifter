@@ -293,7 +293,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
-    def test_complex_combined_observation_expression(self):
+    def test_complex_multiple_comparison_expression(self):
         stix_pattern = "[url:value = 'example01.ru' OR url:value = 'example02.ru' OR url:value = 'example01.com' OR url:value = 'example03.ru' OR url:value = 'example02.com' OR url:value = 'example04.ru'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE url = 'example04.ru' OR (url = 'example02.com' OR (url = 'example03.ru' OR (url = 'example01.com' OR (url = 'example02.ru' OR url = 'example01.ru')))) {} START 1561403143000 STOP 1561489543000".format(default_limit)
@@ -357,3 +357,12 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
+    
+    def test_combined_observation_expression_with_qualifier(self):
+        stix_pattern = "([ipv4-addr:value = '192.168.1.2'] OR [url:value LIKE '%.example.com']) START t'2020-09-11T13:00:52.000Z' STOP t'2020-09-11T13:59:04.000Z'"
+        query = _translate_query(stix_pattern)
+        where_statement_01 = "WHERE (sourceip = '192.168.1.2' OR destinationip = '192.168.1.2' OR identityip = '192.168.1.2') limit 10000 START 1599829252000 STOP 1599832744000"
+        where_statement_02 = "WHERE url LIKE '%%.example.com%' limit 10000 START 1599829252000 STOP 1599832744000"
+        assert len(query['queries']) == 2
+        assert query['queries'][0] == selections + from_statement + where_statement_01
+        assert query['queries'][1] == selections + from_statement + where_statement_02
