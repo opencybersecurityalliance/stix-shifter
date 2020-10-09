@@ -274,11 +274,10 @@ class AqlQueryStringPatternTranslator:
             return self._parse_observation_expression(self, expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+                self._parse_expression(expression.observation_expression.expr1, expression.qualifier)
+                self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
+                
+                return ''
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
