@@ -39,6 +39,9 @@
                 "type": "json",
                 "optional": true,
                 "hidden": true
+            },
+            "unmapped_fallback": {
+                "default": true
             }
         }
     },
