@@ -166,10 +166,10 @@ class DataSourceObjToStixObj:
         if ds_key not in ds_map:
             self.logger.debug('{} is not found in map, adding as custom attributes'.format(ds_key))
             if isinstance(to_map, dict):
-                self.cust_attributes[ds_key] = to_map
+                self.cust_attributes[ds_key.lower()] = to_map
                 return
             if ds_key not in self.ds_key_map:
-                self.cust_attributes[ds_key] = to_map
+                self.cust_attributes[ds_key.lower()] = to_map
             return
 
         if isinstance(to_map, dict):
@@ -311,7 +311,7 @@ class DataSourceObjToStixObj:
         if self.options.get('unmapped_fallback'):
             if self.cust_attributes:
                 self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the obseravble object: {}'.format(self.cust_attributes)) 
-                observation.update({"x_" + self.data_source: self.cust_attributes})
+                observation.update({"x-" + self.data_source.lower(): self.cust_attributes})
 
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:

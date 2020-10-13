@@ -513,7 +513,8 @@ class TestTransform(object):
             "logsourceid": 123,
             "filename": "testfile.txt",
             "filepath": "/unix/files/system/testfile.txt",
-            "unmapped1": "value1"
+            "unmapped1": "value1",
+            "Unmapped2": "value2"
         }]
 
         data_string = json.dumps(data)
@@ -526,7 +527,8 @@ class TestTransform(object):
         observed_data = result_bundle_objects[1]
 
         assert('objects' in observed_data)
-        assert('x_QRadar' in observed_data)
-        custom_objects = observed_data['x_QRadar']
+        assert('x-qradar' in observed_data)
+        custom_objects = observed_data['x-qradar']
 
         assert(custom_objects['unmapped1'] == "value1")
+        assert(custom_objects['unmapped2'] == "value2")
