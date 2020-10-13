@@ -139,32 +139,32 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 11))))
 
     def test_risk_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
-                "severity": 4, "devicetypename": "device type name", "devicetype": 15, "rulenames": ["one", "two"]}
+                "severity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, "rulenames": ["one", "two"]}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         observed_data = result_bundle['objects'][1]
+        print(observed_data)
+        finding = observed_data.get('objects').get('0')
 
-        assert('x_ibm_finding' in observed_data)
-        finding = observed_data['x_ibm_finding']
-        assert(finding['name'] == data['crename'])
-        assert(finding['description'] == data['credescription'])
+        assert(finding['type']) == "x-ibm-finding"
+        assert(finding['name'] == data['qidname'])
+        assert(finding['severity'] == data['severity'])
+        assert(finding['magnitude'] == data['magnitude'])
+        assert(finding['rule_names'] == data['rulenames'])
 
         assert('x_ibm_ariel' in observed_data)
         custom_prop = observed_data['x_ibm_ariel']
-        assert(custom_prop['severity'] == data['severity'])
-        assert(custom_prop['event_name'] == data['qidname'])
         assert(custom_prop['device_type'] == data['devicetype'])
         assert(custom_prop['cre_event_list'] == data['creeventlist'])
-        assert(custom_prop['rule_names'] == data['rulenames'])
+        assert(custom_prop['cre_description'] == data['credescription'])
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
-                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
+                "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -175,7 +175,6 @@ class TestTransform(object):
         assert(custom_props['identity_ip'] == data['identityip'])
         assert(custom_props['log_source_id'] == data['logsourceid'])
         assert(custom_props['qid'] == data['qid'])
-        assert(custom_props['magnitude'] == data['magnitude'])
         assert(custom_props['log_source_name'] == data['logsourcename'])
 
     def test_custom_mapping(self):
