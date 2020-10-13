@@ -1,10 +1,11 @@
 import json
 import base64
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = "qradar"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
@@ -41,7 +42,7 @@ class TestTransform(object):
         data = {"starttime": 1531169112, "endtime": 1531169254, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -80,7 +81,7 @@ class TestTransform(object):
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -145,7 +146,7 @@ class TestTransform(object):
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
                 "severity": 4, "devicetypename": "device type name", "devicetype": 15, "rulenames": ["one", "two"]}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         observed_data = result_bundle['objects'][1]
 
         assert('x_ibm_finding' in observed_data)
@@ -166,7 +167,7 @@ class TestTransform(object):
                 "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         observed_data = result_bundle['objects'][1]
 
         assert('x_ibm_ariel' in observed_data)
@@ -220,7 +221,7 @@ class TestTransform(object):
         url = "https://example.com"
         data = {"url": url, "unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -234,7 +235,7 @@ class TestTransform(object):
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -457,7 +458,7 @@ class TestTransform(object):
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
         
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         
         assert(result_bundle['type'] == 'bundle')
 

@@ -1,10 +1,11 @@
 import unittest
 import json
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = "elastic_ecs"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
@@ -95,7 +96,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_common_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -177,7 +178,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_network_traffic_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -214,7 +215,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_process_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -240,7 +241,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_artifact_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -258,7 +259,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_url_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -276,7 +277,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_file_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -296,7 +297,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         message = "\"GET /blog HTTP/1.1\" 200 2571"
         data = {"message": message, "unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -309,7 +310,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -318,7 +319,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
     
     def test_unwrap_flag_in_mapping(self):        
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
