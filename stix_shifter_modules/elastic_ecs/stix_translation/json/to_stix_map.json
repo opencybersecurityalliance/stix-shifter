@@ -901,8 +901,8 @@
       "object": "x_user"
     },
     "id": {
-        "key": "x-ecs-user.id",
-        "object": "x_user"
+      "key": "x-ecs-user.id",
+      "object": "x_user"
     },
     "group": {
       "domain": {
