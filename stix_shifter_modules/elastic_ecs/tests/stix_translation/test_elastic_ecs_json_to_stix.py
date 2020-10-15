@@ -235,7 +235,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         creator_user_ref = proc_object['creator_user_ref']
         assert (creator_user_ref in objects), f"dst_ref with key {proc_object['creator_user_ref']} not found"
         creator_user_ref_obj = objects[creator_user_ref]
-        assert (creator_user_ref_obj.keys() == {'type', 'user_id', 'account_login'})
+        assert (creator_user_ref_obj.keys() == {'type', 'user_id'})
         assert (creator_user_ref_obj['type'] == 'user-account')
         assert (creator_user_ref_obj['user_id'] == '-')
 
