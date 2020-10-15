@@ -135,11 +135,17 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'name'})
         assert(curr_obj['name'] == file_name)
 
+        proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'creator_user_ref'})
+        user_ref = proc_obj['creator_user_ref']
+        assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
+
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 11))))
+        assert(objects.keys() == set(map(str, range(0, 12))))
 
     def test_risk_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 

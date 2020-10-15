@@ -4,9 +4,17 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "username": {
-    "key": "user-account.user_id"
-  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process_image",
+      "references": "user"
+    }
+  ],
   "categoryname": {
     "key": "x_ibm_ariel.category_name",
     "cybox": false

@@ -868,6 +868,10 @@
         "object": "user"
       },
       {
+        "key": "user-account.account_login",
+        "object": "user"
+      },
+      {
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "user"
@@ -896,10 +900,20 @@
       "key": "x-ecs-user.hash",
       "object": "x_user"
     },
-    "id": {
-      "key": "x-ecs-user.id",
-      "object": "x_user"
-    },
+    "id": [
+      {
+        "key": "x-ecs-user.id",
+        "object": "x_user"
+      }, {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "user"
+      }
+    ],
     "group": {
       "domain": {
         "key": "x-ecs-user.group_domain",
