@@ -139,19 +139,16 @@
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
-    },
+    }
+  ],
+  "timestamp": [
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
   ],
-  "timestamp": [
-    {
-      "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
-    },
+  "Last updated": [
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",
