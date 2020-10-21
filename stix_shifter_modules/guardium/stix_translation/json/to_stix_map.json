@@ -134,6 +134,18 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
+  "timestamp": [
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+     },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
   "Create Date": [
     {
       "key": "first_observed",
@@ -141,7 +153,7 @@
       "cybox": false
     }
   ],
-  "timestamp": [
+  "Timestamp": [
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",
