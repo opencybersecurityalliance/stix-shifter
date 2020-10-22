@@ -36,10 +36,17 @@
     "key": "x_ibm_ariel.identity_host_name",
     "cybox": false
   },
-  "qidname": {
-    "key": "x-ibm-finding.name",
-    "object": "finding"
-  },
+  "qidname": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    {
+      "key": "finding.finding_type",
+      "object": "finding",
+      "value": "event"
+    }
+  ],
   "relevance": {
     "key": "x_ibm_ariel.relevance",
     "cybox": false,
