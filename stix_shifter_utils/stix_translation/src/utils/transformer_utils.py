@@ -7,9 +7,9 @@ def get_module_transformers(module=None):
     module_path = None
     if module:
         module_path = f"stix_shifter_modules.{module}.stix_translation.transformers"
-    return get_transformers(module_path)
+    return __get_transformers(module_path)
 
-def get_transformers(module_path):
+def __get_transformers(module_path):
     transformers = __load_transformers("stix_shifter_utils.stix_translation.src.utils.transformers")
     if module_path:
         transformers.update(__load_transformers(module_path))
