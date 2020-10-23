@@ -2,6 +2,7 @@ import importlib
 import sys
 import re
 import traceback
+from datetime import datetime, timedelta
 from stix2patterns.validator import run_validator
 from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
 from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import parse_stix
@@ -44,6 +45,49 @@ class StixTranslation:
         errors = run_validator(pattern, stix_version='2.1')
         if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
+    
+    def parse_aql(self, data):
+        start_stop_patterns = {
+            "\s?START\s?'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'\s?STOP\s?'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'": "%Y-%m-%d %H:%M",
+            "\s?START\s?'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y-%m-%d %H:%M:%S",
+            "\s?START\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d %H:%M:%S",
+            "\s?START\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d-%H:%M:%S",
+            "\s?START\s?'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'": "%Y:%m:%d-%H:%M:%S"
+        }
+
+        last_time_criteria = "\s?LAST\s?(\d*)\s?(MINUTES|HOURS|DAYS)"
+
+        match = re.search(last_time_criteria, data, re.IGNORECASE)
+        if match:
+            time_value = match.group(1)
+            interval_value = match.group(2)
+
+            current_time = datetime.now()
+            if interval_value == 'MINUTES'.lower():
+                before_time = current_time - timedelta(minutes=int(time_value))
+            elif interval_value == 'HOURS'.lower():
+                before_time = current_time - timedelta(hours=int(time_value))
+            elif interval_value == 'DAYS'.lower():
+                before_time = current_time - timedelta(days=int(time_value))
+            
+            start_dt_obj = datetime.strptime(str(before_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
+            start_time = int(float(start_dt_obj)*1000)
+
+            stop_dt_obj = datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
+            stop_time = int(float(stop_dt_obj)*1000)
+        else:
+            for key, value in start_stop_patterns.items():
+                match = re.search(key, data, re.IGNORECASE)
+                if match:
+                    start = match.group(1)
+                    stop = match.group(4)
+
+                    str_time = datetime.strptime(start, value).strftime('%s.%f')
+                    start_time = int(float(str_time)*1000)
+                    stp_time = datetime.strptime(stop, value).strftime('%s.%f')
+                    stop_time = int(float(stp_time)*1000)
+        return {'start_time': start_time, 'end_time': stop_time}
+
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         """
@@ -131,14 +175,17 @@ class StixTranslation:
                         )
                     return {'queries': queries}
                 else:
-                    self._validate_pattern(data)
-                    antlr_parsing = generate_query(data)
-                    # Extract pattern elements into parsed stix object
-                    parsed_stix_dictionary = parse_stix(antlr_parsing, validated_options['time_range'])
-                    parsed_stix = parsed_stix_dictionary['parsed_stix']
-                    start_time = parsed_stix_dictionary['start_time']
-                    end_time = parsed_stix_dictionary['end_time']
-                    return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+                    if validated_options.get('language') == 'stix':
+                        self._validate_pattern(data)
+                        antlr_parsing = generate_query(data)
+                        # Extract pattern elements into parsed stix object
+                        parsed_stix_dictionary = parse_stix(antlr_parsing, validated_options['time_range'])
+                        parsed_stix = parsed_stix_dictionary['parsed_stix']
+                        start_time = parsed_stix_dictionary['start_time']
+                        end_time = parsed_stix_dictionary['end_time']
+                        return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+                    else:
+                        return self.parse_aql(data)
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
                 return entry_point.translate_results(data_source, data)
