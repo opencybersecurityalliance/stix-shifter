@@ -40,11 +40,6 @@
     {
       "key": "x-ibm-finding.name",
       "object": "finding"
-    },
-    {
-      "key": "finding.finding_type",
-      "object": "finding",
-      "value": "event"
     }
   ],
   "relevance": {
@@ -83,21 +78,47 @@
       "references": "dst_ip"
     }
   ],
-  "eventcount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "starttime": {
-    "key": "first_observed",
-    "transformer": "EpochToTimestamp",
-    "cybox": false
-  },
-  "endtime": {
-    "key": "last_observed",
-    "transformer": "EpochToTimestamp",
-    "cybox": false
-  },
+  "eventcount": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-ibm-finding.event_count",
+      "transformer": "ToInteger",
+      "object": "finding"
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding",
+      "value": "event"
+    }
+  ],
+  "starttime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.start",
+      "transformer": "EpochToTimestamp",
+      "object": "finding"
+    }
+  ],
+  "endtime": [
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.end",
+      "transformer": "EpochToTimestamp",
+      "object": "finding"
+    }
+  ],
   "logsourceid": {
     "key": "x_ibm_ariel.log_source_id",
     "cybox": false,
@@ -304,10 +325,18 @@
       "cybox": false
     }
   ],
-  "flowsource": {
-    "key": "x_ibm_ariel.flow_source",
-    "cybox": false
-  },
+  "flowsource": [
+    {
+      "key": "x_ibm_ariel.flow_source",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding",
+      "value": "flow"
+    }
+  ]
+  ,
   "flowinterface": {
     "key": "x_ibm_ariel.flow_interface",
     "cybox": false
