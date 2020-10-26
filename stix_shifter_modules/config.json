@@ -53,6 +53,12 @@
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.mapping"
+            },
+            "unmapped_fallback": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
             }
         }
     }

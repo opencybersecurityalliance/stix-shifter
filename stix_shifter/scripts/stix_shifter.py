@@ -257,9 +257,9 @@ def main():
         translation = stix_translation.StixTranslation()
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
-        transation_options = copy.deepcopy(connection_dict['options'])
+        translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-        dsl = translation.translate(args.module, 'query', args.data_source, args.query, transation_options)
+        dsl = translation.translate(args.module, 'query', args.data_source, args.query, translation_options)
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
@@ -295,9 +295,9 @@ def main():
                 exit(0)
 
         # Translate results to STIX
-        transation_options = copy.deepcopy(connection_dict['options'])
+        translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), transation_options)
+        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
