@@ -61,6 +61,16 @@ class ConstructIntersecMap(unittest.TestCase):
         self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {}, "incorrect result")
 
 
+class ParseTimeRangeExc(unittest.TestCase):
+    def test_parse_time_range_exception(self):
+        with self.assertRaises(Exception) as context:
+            QueryStringPatternTranslator._parse_time_range(None, None)
+
+
+class ParseExpressionExc(unittest.TestCase):
+    def test_parse_expression_exception(self):
+        with self.assertRaises(Exception) as context:
+            QueryStringPatternTranslator._parse_expression(None)
 
 
 

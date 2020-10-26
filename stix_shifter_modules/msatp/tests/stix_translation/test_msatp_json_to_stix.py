@@ -50,7 +50,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
                                           'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
                                           'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
-                                          'ProcessIntegrityLevel': 'System',
+                                          'ProcessIntegrityLevel': 'System', "ReportId": 97827,
                                           'ProcessTokenElevation': 'TokenElevationTypeDefault',
                                           'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
                                           'AccountDomain': 'nt authority', 'AccountName': 'system',
@@ -102,7 +102,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
                                           'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
                                           'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
-                                          'ProcessIntegrityLevel': 'System',
+                                          'ProcessIntegrityLevel': 'System', "ReportId": 97827,
                                           'ProcessTokenElevation': 'TokenElevationTypeDefault',
                                           'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
                                           'AccountDomain': 'nt authority', 'AccountName': 'system',
@@ -129,7 +129,6 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-
     def test_file_json_to_stix(self):
         """
         to test file stix object properties
@@ -137,7 +136,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         data = {'DeviceFileEvents': {'Timestamp': '2019-09-20T06:50:17.3764965Z',
                                        'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                        'DeviceName': 'desktop-536bt46', 'ActionType': 'FileCreated',
-                                       'FileName': 'updater.exe',
+                                       'FileName': 'updater.exe', "ReportId": 97827,
                                        'FolderPath': '<C:\\Program Files\\Mozilla Firefox\\updated\\updater.exe>',
                                        'SHA1': 'cf864398950658185fad8207957b46c12f133ea5',
                                        'MD5': '64c52647783e6b3c0964e41aa38fa5c1',
@@ -174,15 +173,18 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
+        print(json.dumps(objects, sort_keys=True, indent=4))
 
         file_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'file')
+        print('FILE OBJ: {}'.format(json.dumps(file_obj)))
         assert file_obj is not None, 'file object type not found'
+        print('FILE KEYS: {}'.format(file_obj.keys()))
         assert file_obj.keys() == {'type', 'hashes', 'parent_directory_ref', 'name'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'updater.exe'
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
-        assert file_obj['parent_directory_ref'] == '3'
+        assert file_obj['parent_directory_ref'] == '4'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
         file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['DeviceFileEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
@@ -199,7 +201,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
                                           'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
                                           'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
-                                          'ProcessIntegrityLevel': 'System',
+                                          'ProcessIntegrityLevel': 'System', "ReportId": 97827,
                                           'ProcessTokenElevation': 'TokenElevationTypeDefault',
                                           'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
                                           'AccountDomain': 'nt authority', 'AccountName': 'system',
@@ -230,18 +232,17 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
+        print(json.dumps(objects, sort_keys=True, indent=4))
 
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
-        assert process_obj.keys() == {'type', 'name', 'binary_ref', 'pid', 'command_line', 'created',
-                                      'creator_user_ref'}
+        assert process_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'name', 'pid', 'command_line', 'created',
+                                      'parent_ref'}
         assert process_obj['type'] == 'process'
-        assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '2'
-        assert process_obj['pid'] == 20948
-        assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
-        assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '6'
+        assert process_obj['pid'] == 10088
+        assert process_obj['command_line'] == 'svchost.exe -k netsvcs -p -s Appinfo'
+        assert process_obj['created'] == '2019-09-18T05:56:15.268Z'
+        assert process_obj['creator_user_ref'] == '7'
 
 
     def test_network_json_to_stix(self):
@@ -249,7 +250,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-26T09:47:52.7091342Z',
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'DeviceName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
-                                               'RemoteIP': '168.159.213.203', 'RemotePort': 80,
+                                               'RemoteIP': '168.159.213.203', 'RemotePort': 80, "ReportId": 97827,
                                                'LocalIP': '172.16.2.22', 'LocalPort': 52240, 'Protocol': 'TcP',
                                                'LocalIPType': 'Private', 'RemoteIPType': 'Public',
                                                'InitiatingProcessSHA1': 'c12506914be39ee4f152369b6a6692733b1b70e9',
@@ -290,9 +291,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['dst_ref'] == '1'
+        assert network_obj['dst_ref'] == '2'
         assert network_obj['dst_port'] == 80
-        assert network_obj['src_ref'] == '3'
+        assert network_obj['src_ref'] == '5'
         assert network_obj['src_port'] == 52240
         assert network_obj['protocols'] == ['tcp']
 
@@ -303,7 +304,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'DeviceName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
                                                'RemoteIP': '168.159.213.203', 'RemotePort': 80,
                                                'RemoteUrl': 'https://play.google.com', 'LocalIP': '172.16.2.22',
-                                               'LocalPort': 63043, 'Protocol': 'TcpV4',
+                                               'LocalPort': 63043, 'Protocol': 'TcpV4', "ReportId": 97827,
                                                'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
                                                'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
                                                'InitiatingProcessFileName': 'chrome.exe', 'InitiatingProcessId': 10404,
@@ -350,11 +351,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'DeviceName': 'desktop-536bt46',
                                                 'LocalIP': '172.16.2.22',
-                                               'MacAddress': '484D7E9DBD97',
+                                               'MacAddressSet': ['484D7E9DBD97'],
                                                 'RemoteIP': '168.159.213.203',
                                                'LocalPort': 63043,
-                                                'RemotePort': 80,
-                                                'Protocol': 'TcpV4',
+                                               'RemotePort': 80,
+                                               "ReportId": 97827,
+                                               'Protocol': 'TcpV4',
                                                'RemoteUrl': 'https://play.google.com',
                                                'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
                                                'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
@@ -391,11 +393,21 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
 
-        network_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'mac-addr')
-        assert network_obj is not None, 'mac-addr object type not found'
-        assert network_obj.keys() == {'type', 'value'}
-        assert network_obj['type'] == 'mac-addr'
-        assert network_obj['value'] == '48:4d:7e:9d:bd:97'
+        mac_adder_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'mac-addr')
+        assert mac_adder_obj is not None, 'mac-addr object type not found'
+        assert mac_adder_obj.keys() == {'type', 'value'}
+        assert mac_adder_obj['type'] == 'mac-addr'
+        assert mac_adder_obj['value'] == '48:4d:7e:9d:bd:97'
+
+        network_traffic_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
+        assert network_traffic_obj is not None, 'network-traffic object type not found'
+        assert network_traffic_obj.keys() == {'type', 'src_ref', 'dst_ref', 'src_port', 'dst_port', 'protocols'}
+        assert network_traffic_obj['type'] == 'network-traffic'
+        assert network_traffic_obj['src_ref'] == '2'
+        assert network_traffic_obj['dst_ref'] == '5'
+        assert network_traffic_obj['src_port'] == 63043
+        assert network_traffic_obj['dst_port'] == 80
+        assert network_traffic_obj['protocols'] == ['tcp']
 
     def test_registry_json_to_stix(self):
         """to test registry stix object properties"""
@@ -439,3 +451,188 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj['type'] == 'windows-registry-key'
         assert network_obj['key'] == 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced Threat Protection'
         assert network_obj['values'] == [{'data_type': 'REG_BINARY', 'name': 'Configuration'}]
+
+    def test_network_info_json_to_stix(self):
+        """to test network stix object properties"""
+        data = {'DeviceNetworkInfo': {'Timestamp': '2019-09-26T09:47:52.7091342Z',
+                                      'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                      'DeviceName': 'desktop-536bt46',
+                                      'IPv4Dhcp': '198.51.100.2',
+                                      "ReportId": 97827,
+                                      'NetworkAdapterName': 'adapter_name',
+                                      'MacAddressSet': ['d2fb49243718'],
+                                      'NetworkAdapterType': 'AsymmetricDsl',
+                                      'NetworkAdapterStatus': 'Down',
+                                      'TunnelType': 'ISATAP',
+                                      'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4']
+                                      }
+                }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        host_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
+        assert host_obj is not None, 'x-oca-asset object type not found'
+        assert host_obj.keys() == {'type', 'device_id', 'hostname', 'ip_refs', 'mac_refs'}
+        assert host_obj['type'] == 'x-oca-asset'
+        assert host_obj['hostname'] == 'desktop-536bt46'
+        assert host_obj['ip_refs'] == ['4', '5', '6', '7']
+
+    def test_x_oca_event(self):
+        """
+         to test x-oca-asset properties
+         """
+        data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+                                        'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                        'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+                                        'FileName': 'consent.exe', 'FolderPath': 'C:\\Windows\\System32\\consent.exe',
+                                        'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
+                                        'LocalIP': '172.16.2.22', "ReportId": 97827,
+                                        'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
+                                        'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
+                                        'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
+                                        'ProcessIntegrityLevel': 'System',
+                                        'ProcessTokenElevation': 'TokenElevationTypeDefault',
+                                        'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
+                                        'AccountDomain': 'nt authority', 'AccountName': 'system',
+                                        'AccountSid': 'S-1-5-18', 'LogonId': 999,
+                                        'InitiatingProcessAccountDomain': 'nt authority',
+                                        'InitiatingProcessAccountName': 'system',
+                                        'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessLogonId': 999,
+                                        'InitiatingProcessIntegrityLevel': 'System',
+                                        'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
+                                        'InitiatingProcessSHA1': 'a1385ce20ad79f55df235effd9780c31442aa234',
+                                        'InitiatingProcessMD5': '8a0a29438052faed8a2532da50455756',
+                                        'InitiatingProcessFileName': 'svchost.exe', 'InitiatingProcessId': 10088,
+                                        'InitiatingProcessCommandLine': 'svchost.exe -k netsvcs -p -s Appinfo',
+                                        'InitiatingProcessCreationTime': '2019-09-18T05:56:15.268893Z',
+                                        'InitiatingProcessFolderPath': 'c:\\windows\\system32\\svchost.exe',
+                                        'InitiatingProcessParentId': 856,
+                                        'InitiatingProcessParentFileName': 'services.exe',
+                                        'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
+                                        'ReportId': 12048, 'rn': 1, 'event_count': '1'}}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        event_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
+        assert event_obj is not None, 'x-oca-event object type not found'
+        assert event_obj.keys() == {'type', 'created', 'host_ref', 'action', 'process_ref', 'file_ref', 'parent_process_ref'}
+        assert event_obj['type'] == 'x-oca-event'
+        assert event_obj['created'] == '2019-09-20T06:57:11.8218304Z'
+        assert event_obj['host_ref'] == '1'
+        assert event_obj['action'] == 'ProcessCreated'
+        assert event_obj['process_ref'] == '8'
+
+    def test_x_oca_asset(self):
+        """
+        to test x-oca-asset properties
+        """
+        data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+                                        'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                        'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+                                        'FileName': 'consent.exe', "ReportId": 97827,
+                                        'FolderPath': 'C:\\Windows\\System32\\consent.exe',
+                                        'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
+                                        'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
+                                        'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
+                                        'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
+                                        'ProcessIntegrityLevel': 'System',
+                                        'ProcessTokenElevation': 'TokenElevationTypeDefault',
+                                        'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
+                                        'AccountDomain': 'nt authority', 'AccountName': 'system',
+                                        'AccountSid': 'S-1-5-18', 'LogonId': 999,
+                                        'InitiatingProcessAccountDomain': 'nt authority',
+                                        'InitiatingProcessAccountName': 'system',
+                                        'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessLogonId': 999,
+                                        'InitiatingProcessIntegrityLevel': 'System',
+                                        'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
+                                        'InitiatingProcessSHA1': 'a1385ce20ad79f55df235effd9780c31442aa234',
+                                        'InitiatingProcessMD5': '8a0a29438052faed8a2532da50455756',
+                                        'InitiatingProcessFileName': 'svchost.exe', 'InitiatingProcessId': 10088,
+                                        'InitiatingProcessCommandLine': 'svchost.exe -k netsvcs -p -s Appinfo',
+                                        'InitiatingProcessCreationTime': '2019-09-18T05:56:15.268893Z',
+                                        'InitiatingProcessFolderPath': 'c:\\windows\\system32\\svchost.exe',
+                                        'InitiatingProcessParentId': 856,
+                                        'InitiatingProcessParentFileName': 'services.exe',
+                                        'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
+                                        'ReportId': 12048, 'rn': 1, 'event_count': '1'}}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        asset_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
+        assert asset_obj is not None, 'x-oca-asset object type not found'
+        assert asset_obj.keys() == {'type', 'device_id', 'hostname'}
+        assert asset_obj['hostname'] == 'desktop-536bt46'
+
+    def test_Alerts_info_json_to_stix(self):
+        """to test network stix object properties"""
+        data = {'DeviceNetworkInfo': {'Timestamp': '2019-09-26T09:47:52.7091342Z',
+                                      'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                      'DeviceName': 'desktop-536bt46',
+                                      'IPv4Dhcp': '198.51.100.2',
+                                      "ReportId": 97827,
+                                      'NetworkAdapterName': 'adapter_name',
+                                      'MacAddressSet': ['d2fb49243718'],
+                                      'NetworkAdapterType': 'AsymmetricDsl',
+                                      'NetworkAdapterStatus': 'Down',
+                                      'TunnelType': 'ISATAP',
+                                      'IPAddressesSet': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
+                                      'Alerts': [{'AlertId': '123123123','Severity': 'Medium',
+                                                  'Title': 'Registry queried for passwords',
+                                                  'Category': 'CredentialAccess',
+                                                  'AttackTechniques': ['OS Credential Dumping (T1003)',
+                                                                             'Query Registry (T1012)',
+                                                                             'Credentials in Registry (T1552.002)']}]
+                                      }}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        finding_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert finding_obj is not None, 'x-ibm-finding object type not found'
+        assert finding_obj.keys() == {'type', 'alert_id', 'severity', 'name', 'ttp_tagging_refs'}
+        assert finding_obj['type'] == 'x-ibm-finding'
+        assert finding_obj['severity'] == 33
+        assert finding_obj['name'] == 'Registry queried for passwords'
+
+        assert len([k for k in objects if objects[k]['type'] == 'x-ibm-ttp-tagging']) == 3
+        ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
+        assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
+        assert ttp_tagging_obj.keys() == {'type', 'extensions'}
+        assert ttp_tagging_obj['type'] == 'x-ibm-ttp-tagging'
+
+

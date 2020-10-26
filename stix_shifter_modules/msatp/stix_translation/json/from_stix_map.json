@@ -54,7 +54,8 @@
         "DeviceAlertEvents.DeviceName",
         "DeviceImageLoadEvents.DeviceName",
         "DeviceLogonEvents.DeviceName",
-        "DeviceNetworkInfo.DeviceName"
+        "DeviceNetworkInfo.DeviceName",
+        "DeviceNetworkEvents.RemoteUrl"
       ]
     }
   },
@@ -283,6 +284,19 @@
         "DeviceProcessEvents.InitiatingProcessFolderPath",
         "DeviceNetworkEvents.InitiatingProcessFolderPath",
         "DeviceRegistryEvents.InitiatingProcessFolderPath"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": [
+        "DeviceAlertEvents.AlertId"
+      ],
+      "name": [
+        "DeviceAlertEvents.Title"
+      ],
+      "time_observed": [
+        "DeviceAlertEvents.Timestamp"
       ]
     }
   },

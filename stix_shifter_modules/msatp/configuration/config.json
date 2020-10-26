@@ -28,7 +28,7 @@
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
+            "type": "fields",
             "tenant": {
                 "type": "password"
             },
@@ -37,6 +37,10 @@
             },
             "clientSecret": {
                 "type": "password"
+            },
+            "access_token": {
+                "type": "password",
+                "optional": true
             }
         }
     }

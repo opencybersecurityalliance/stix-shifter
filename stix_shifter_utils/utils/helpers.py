@@ -91,3 +91,29 @@ def find(element, dd, default=None):
         return rv
     except Exception:
         return default
+
+
+def remove_null(d):
+    clean = {}
+    for k, v in d.items():
+        if isinstance(v, dict):
+            nested = remove_null(v)
+            if nested and len(nested.keys()) > 0:
+                clean[k] = nested
+        elif v:
+            clean[k] = v
+
+    if clean == {}:
+        clean = None
+    return clean
+
+
+def nested_set(dic, keys, value):
+    """Set item in nested dictionary"""
+    from copy import deepcopy
+    from functools import reduce
+    from operator import getitem
+
+    new_dic = deepcopy(dic)
+    reduce(getitem, keys[:-1], new_dic)[keys[-1]] = value
+    return new_dic

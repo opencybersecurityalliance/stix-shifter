@@ -16,15 +16,24 @@ class QueryStringPatternTranslator:
     """
     Stix to kusto query translation
     """
-    # Join query to get MAC address value from DeviceNetworkInfo
-    join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
-                 'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
-                 'FormattedTimeKey) on DeviceId, $left.FormattedTimeKey ' \
-                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by Timestamp desc'
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "and",
+        ComparisonExpressionOperators.Or: "or",
+        ComparisonComparators.Equal: "==",
+        ComparisonComparators.NotEqual: "!=",
+        ComparisonComparators.Like: "contains",
+        ComparisonComparators.Matches: "matches",
+        ComparisonComparators.GreaterThan: ">",
+        ComparisonComparators.GreaterThanOrEqual: ">=",
+        ComparisonComparators.LessThan: "<",
+        ComparisonComparators.LessThanOrEqual: "<=",
+        ComparisonComparators.In: "in~",
+        ObservationOperators.Or: 'or',
+        ObservationOperators.And: 'or'
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.qualified_queries = []
         self.qualifier_string = ''
@@ -212,10 +221,10 @@ class QueryStringPatternTranslator:
         :param expression_operator: str
         :return: str
         """
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for MSATP connector".format(expression_operator.name))
-        return self.comparator_lookup.get(str(expression_operator))
+        return self.comparator_lookup.get(expression_operator)
 
     # get atomicQuery, map the query to tables
     def __eval_comparison_exp_map(self, expression):
@@ -224,7 +233,7 @@ class QueryStringPatternTranslator:
         if stix_field == 'created':
             value = self._format_datetime(expression.value, expression)
         elif 'path' in stix_field:
-            if comparator == self.comparator_lookup.get("ComparisonComparators.Like"):
+            if comparator == self.comparator_lookup.get(ComparisonComparators.Like):
                 value, comparator = self._format_like(expression.value, comparator)
             else:
                 raise TypeError("Comparator {comparator} unsupported for Directory Path, use only LIKE operator"
@@ -384,10 +393,4 @@ def translate_pattern(pattern: Pattern, data_model_mapper, options):
     time_range = options['time_range']
     translated_dictionary = QueryStringPatternTranslator(pattern, data_model_mapper, time_range)
     translated_query = translated_dictionary.qualified_queries
-    if len(translated_query) > 1:
-        # Query formation for multiple observation expression
-        final_query = ['union {}'.format(','.join(translated_query))]
-    else:
-        # Query formation for single observation expression
-        final_query = translated_query
-    return final_query
+    return translated_query
