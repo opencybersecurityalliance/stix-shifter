@@ -21,6 +21,8 @@ QUERY = 'query'
 PARSE = 'parse'
 MAPPING = 'mapping'
 DIALECTS = 'dialects'
+START_TIME = 'start_time'
+END_TIME = 'end_time'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 START_STOP_PATTERN = "\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
@@ -46,22 +48,35 @@ class StixTranslation:
         if (errors):
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
     
+    def search_for_pattern(self, data, time_pattens, label):
+        time_value = None
+        for key, value in time_pattens.items():
+            match = re.search(label+ '\s?' + key, data, re.IGNORECASE)
+            if match:
+                time_match = match.group(1)
+                time_value = int(float(datetime.strptime(time_match, value).strftime('%s.%f'))*1000)
+                
+        return time_value
+
     def parse_aql(self, data):
-        start_stop_patterns = {
-            "\s?START\s?'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'\s?STOP\s?'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'": "%Y-%m-%d %H:%M",
-            "\s?START\s?'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y-%m-%d %H:%M:%S",
-            "\s?START\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d %H:%M:%S",
-            "\s?START\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d-%H:%M:%S",
-            "\s?START\s?'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'\s?STOP\s?'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'": "%Y:%m:%d-%H:%M:%S"
+        last_time_criteria = "\s?LAST\s?(\d*)\s?(MINUTES|HOURS|DAYS)"
+        time_patterns = {
+            "'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'": "%Y-%m-%d %H:%M",
+            "'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y-%m-%d %H:%M:%S",
+            "'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d %H:%M:%S",
+            "'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d-%H:%M:%S",
+            "'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'": "%Y:%m:%d-%H:%M:%S",
         }
 
-        last_time_criteria = "\s?LAST\s?(\d*)\s?(MINUTES|HOURS|DAYS)"
-
+        labels = {'START': START_TIME, 'STOP': END_TIME}
+        result = {}
+        for label in labels.keys():
+            result[labels[label]] = None
+        
         match = re.search(last_time_criteria, data, re.IGNORECASE)
         if match:
             time_value = match.group(1)
             interval_value = match.group(2)
-
             current_time = datetime.now()
             if interval_value == 'MINUTES'.lower():
                 before_time = current_time - timedelta(minutes=int(time_value))
@@ -69,24 +84,17 @@ class StixTranslation:
                 before_time = current_time - timedelta(hours=int(time_value))
             elif interval_value == 'DAYS'.lower():
                 before_time = current_time - timedelta(days=int(time_value))
-            
             start_dt_obj = datetime.strptime(str(before_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
-            start_time = int(float(start_dt_obj)*1000)
-
+            result[START_TIME] = int(float(start_dt_obj)*1000)
             stop_dt_obj = datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
-            stop_time = int(float(stop_dt_obj)*1000)
+            result[END_TIME] = int(float(stop_dt_obj)*1000)
         else:
-            for key, value in start_stop_patterns.items():
-                match = re.search(key, data, re.IGNORECASE)
-                if match:
-                    start = match.group(1)
-                    stop = match.group(4)
-
-                    str_time = datetime.strptime(start, value).strftime('%s.%f')
-                    start_time = int(float(str_time)*1000)
-                    stp_time = datetime.strptime(stop, value).strftime('%s.%f')
-                    stop_time = int(float(stp_time)*1000)
-        return {'start_time': start_time, 'end_time': stop_time}
+            for label in labels.keys():
+                result[labels[label]] = self.search_for_pattern(data, time_patterns, label)
+                if result.get(START_TIME) and not result.get(END_TIME):
+                    current_time = datetime.now()
+                    result[END_TIME] = int(float(datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f'))*1000)
+        return result
 
 
     def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
