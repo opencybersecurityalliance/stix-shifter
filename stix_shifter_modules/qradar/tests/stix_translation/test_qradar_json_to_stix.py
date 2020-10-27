@@ -532,7 +532,7 @@ class TestTransform(object):
         assert directory_object_path == "/unix/files/system"
     
     def test_unmapped_fallback(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "sourceip": "127.0.0.1",
