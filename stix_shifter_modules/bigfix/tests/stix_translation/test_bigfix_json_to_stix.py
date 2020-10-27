@@ -1,12 +1,11 @@
-import json
-from stix_shifter_utils.stix_translation.src.utils import transformers
+import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.bigfix.entry_point import EntryPoint
-import unittest
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = "bigfix"
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
+map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -48,7 +47,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'file_path': '/tmp/big42E1.tmp', 'file_name': 'big42E1.tmp', 'file_size': '770', 'type': 'file',
                 'timestamp': '1567046172', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -81,7 +80,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'file_path': '/tmp/big42E1.tmp', 'file_name': 'big42E1.tmp', 'file_size': '770', 'type': 'file',
                 'timestamp': '1567046172', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -100,7 +99,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'file_path': '/tmp/big42E1.tmp', 'file_name': 'big42E1.tmp', 'file_size': '770', 'type': 'file',
                 'timestamp': '1567046172', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
 
         result_bundle_objects = result_bundle['objects']
 
@@ -134,7 +133,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'timestamp': '1565616101', 'process_name': 'systemd', 'process_id': '1', 'file_size': '1468376',
                 'type': 'process', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -164,7 +163,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'timestamp': '1565875693', 'process_name': 'System', 'process_id': '4', 'type': 'Socket',
                 'protocol': 'udp', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -190,7 +189,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         data = {'computer_identity': '541866979-suse01', 'subQueryID': 1, 'local_address': '192.168.36.110',
                 'mac': '0a-ab-41-e0-89-f8', 'type': 'Address', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -216,7 +215,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
                 'timestamp': '1565875693', 'process_name': 'System', 'process_id': '4', 'type': 'Socket',
                 'protocol': 'udp', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, data, transformers.get_all_transformers(), options)
+            data_source, map_data, data, get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -234,7 +233,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         message = "\"GET /blog HTTP/1.1\" 200 2571"
         data = {"message": message, "unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
@@ -246,7 +245,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)

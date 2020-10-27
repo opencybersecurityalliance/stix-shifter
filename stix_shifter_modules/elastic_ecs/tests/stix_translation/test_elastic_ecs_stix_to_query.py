@@ -40,14 +40,14 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(source.ip : "192.168.122.84" OR destination.ip : "192.168.122.84" OR client.ip : "192.168.122.84" OR server.ip : "192.168.122.84") OR (source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83")']
+        test_query = ['(source.ip : "192.168.122.84" OR destination.ip : "192.168.122.84" OR client.ip : "192.168.122.84" OR server.ip : "192.168.122.84" OR host.ip : "192.168.122.84" OR dns.resolved_ip : "192.168.122.84") OR (source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83" OR host.ip : "192.168.122.83" OR dns.resolved_ip : "192.168.122.83")']
         _test_query_assertions(translated_query, test_query)
 
     def test_ipv6_query(self):
         stix_pattern = "[ipv6-addr:value = '3001:0:0:0:0:0:0:2']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(source.ip : "3001:0:0:0:0:0:0:2" OR destination.ip : "3001:0:0:0:0:0:0:2" OR client.ip : "3001:0:0:0:0:0:0:2" OR server.ip : "3001:0:0:0:0:0:0:2")']
+        test_query = ['(source.ip : "3001:0:0:0:0:0:0:2" OR destination.ip : "3001:0:0:0:0:0:0:2" OR client.ip : "3001:0:0:0:0:0:0:2" OR server.ip : "3001:0:0:0:0:0:0:2" OR host.ip : "3001:0:0:0:0:0:0:2" OR dns.resolved_ip : "3001:0:0:0:0:0:0:2")']
         _test_query_assertions(translated_query, test_query)
 
     def test_url_query(self):
@@ -61,28 +61,28 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[mac-addr:value = '00-00-5E-00-53-00']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00")']
+        test_query = ['(source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00" OR host.mac : "00-00-5E-00-53-00")']
         _test_query_assertions(translated_query, test_query)
 
     def test_query_from_multiple_observation_expressions_joined_by_AND(self):
         stix_pattern = "[url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(url.original : "www.example.com") OR ((source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00"))']
+        test_query = ['(url.original : "www.example.com") OR ((source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00" OR host.mac : "00-00-5E-00-53-00"))']
         _test_query_assertions(translated_query, test_query)
 
     def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
         stix_pattern = "[(url:value = 'www.example.com' OR url:value = 'www.test.com') AND mac-addr:value = '00-00-5E-00-53-00']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00") AND (url.original : "www.test.com" OR url.original : "www.example.com")']
+        test_query = ['(source.mac : "00-00-5E-00-53-00" OR destination.mac : "00-00-5E-00-53-00" OR client.mac : "00-00-5E-00-53-00" OR server.mac : "00-00-5E-00-53-00" OR host.mac : "00-00-5E-00-53-00") AND (url.original : "www.test.com" OR url.original : "www.example.com")']
         _test_query_assertions(translated_query, test_query)
 
     def test_file_query(self):
         stix_pattern = "[file:name = 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['file.name : "some_file.exe"']
+        test_query = ['(file.name : "some_file.exe" OR file.path : "some_file.exe" OR process.name : "some_file.exe" OR process.executable : "some_file.exe" OR process.parent.name : "some_file.exe" OR process.parent.executable : "some_file.exe")']
         _test_query_assertions(translated_query, test_query)
 
     def test_complex_query(self):
@@ -97,7 +97,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name != 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(NOT file.name : "some_file.exe" AND file.name:*)']
+        test_query = ['((NOT file.name : "some_file.exe" AND file.name:*) OR (NOT file.path : "some_file.exe" AND file.path:*) OR (NOT process.name : "some_file.exe" AND process.name:*) OR (NOT process.executable : "some_file.exe" AND process.executable:*) OR (NOT process.parent.name : "some_file.exe" AND process.parent.name:*) OR (NOT process.parent.executable : "some_file.exe" AND process.parent.executable:*))']
         _test_query_assertions(translated_query, test_query)
 
     def test_port_queries(self):
@@ -225,7 +225,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "([network-traffic:src_port = 37020 AND user-account:user_id = 'root'] OR [ipv4-addr:value = '192.168.122.83']) START {} STOP {}".format(start_time, stop_time)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'][-1] = _remove_timestamp_from_query(translated_query['queries'][-1])
-        test_query = ['(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
+        test_query = ['(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83" OR host.ip : "192.168.122.83" OR dns.resolved_ip : "192.168.122.83") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
                       'user.name : "root" AND (source.port : "37020" OR client.port : "37020")']
         assert len(translated_query['queries']) == 2
         _test_query_assertions(translated_query, test_query)
@@ -238,7 +238,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         test_query = ['user.name : "root" AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
-                      '(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83") AND (@timestamp:["2019-04-01T03:55:00.123Z" TO "2019-04-01T04:30:24.743Z"])']
+                      '(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83" OR host.ip : "192.168.122.83" OR dns.resolved_ip : "192.168.122.83") AND (@timestamp:["2019-04-01T03:55:00.123Z" TO "2019-04-01T04:30:24.743Z"])']
         assert len(translated_query['queries']) == 2
         _test_query_assertions(translated_query, test_query)
 
@@ -252,7 +252,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'][-1] = _remove_timestamp_from_query(translated_query['queries'][-1])
         test_query = ['(destination.port : "635" OR server.port : "635") AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T00:00:00.123Z" TO "2019-04-01T01:11:11.456Z"])',
-                      '(source.ip : "333.333.333.0" OR destination.ip : "333.333.333.0" OR client.ip : "333.333.333.0" OR server.ip : "333.333.333.0") AND (@timestamp:["2019-04-07T02:22:22.789Z" TO "2019-04-07T03:33:33.012Z"])', 'url.original : "www.example.com"']
+                      '(source.ip : "333.333.333.0" OR destination.ip : "333.333.333.0" OR client.ip : "333.333.333.0" OR server.ip : "333.333.333.0" OR host.ip : "333.333.333.0" OR dns.resolved_ip : "333.333.333.0") AND (@timestamp:["2019-04-07T02:22:22.789Z" TO "2019-04-07T03:33:33.012Z"])', 'url.original : "www.example.com"']
         assert len(translated_query['queries']) == 3
         _test_query_assertions(translated_query, test_query)
 

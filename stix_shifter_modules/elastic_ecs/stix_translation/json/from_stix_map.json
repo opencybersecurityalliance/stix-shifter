@@ -1,17 +1,17 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["source.ip", "destination.ip", "client.ip", "server.ip"]
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
     }
   },
   "mac-addr": {
     "fields": {
-      "value": ["source.mac", "destination.mac", "client.mac", "server.mac"]
+      "value": ["source.mac", "destination.mac", "client.mac", "server.mac", "host.mac"]
     }
   },
   "network-traffic": {
@@ -45,7 +45,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name"],
+      "name": ["file.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable"],
       "created": ["file.created"],
       "size": ["file.size"],
       "hashes.MD5": ["file.hash.md5"],
@@ -88,7 +88,7 @@
   },
   "directory": {
     "fields": {
-      "path": ["file.directory"]
+      "path": ["file.directory", "file.path"]
     }
   },
   "user-account":{
@@ -163,7 +163,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["url.domain"]
+      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname"]
     }
   },
   "windows-registry-key": {

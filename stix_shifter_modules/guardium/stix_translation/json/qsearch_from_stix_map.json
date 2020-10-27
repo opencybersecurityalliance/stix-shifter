@@ -1,7 +1,7 @@
 {
   "x-ibm-finding": {
       "fields": {
-        "finding_type": ["finding_type"],
+        "finding_type": ["datacategory"],
         "start": ["startTime"],
         "end": ["endTime"],
         "database_name": ["Database"]
@@ -9,15 +9,15 @@
     },
     "ipv4-addr": {
       "fields": {
-        "value": ["Client", "Server"],
-        "src_ip": ["Client"],
+        "value": ["Client IP", "Server"],
+        "src_ip": ["Client IP"],
         "dst_ip": ["Server"]
       }
     },
     "ipv6-addr": {
       "fields": {
-        "value": ["Client", "Server"],
-        "src_ip": ["Client"],
+        "value": ["Client IP", "Server"],
+        "src_ip": ["Client IP"],
         "dst_ip": ["Server"]
       }
     },
@@ -28,9 +28,9 @@
     },
      "user-account": {
       "fields": {
-        "value": ["DBUser", "OSUser"],
-        "db_user": ["DBUser"],
-        "os_user": ["OSUser"]
+        "value": ["DB User", "OS User"],
+        "db_user": ["DB User"],
+        "os_user": ["OS User"]
       }
     },
     "x-guardium": {

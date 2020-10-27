@@ -30,7 +30,7 @@ for module in [o for o in os.listdir(MODULES_DIR) if (os.path.isdir(os.path.join
         connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
         entry_point = connector_module.EntryPoint()
         mapping = entry_point.get_mapping()
-        with open(os.path.join(TMP_MAPPING_DIR, module+'.json'), 'w') as f:
+        with open(os.path.join(TMP_MAPPING_DIR, module+'.json'), 'w', encoding="utf-8") as f:
             json.dump(mapping, f, sort_keys=False, indent=4)
 
 def fill_connectors(projects, modules_path):
@@ -113,7 +113,7 @@ for project_name in projects.keys():
                     requirements_files.append(os.path.join(r, file))
     print('requirements_files: %s' % requirements_files)
     for requirements_file in requirements_files:
-        with open(requirements_file) as f:
+        with open(requirements_file, encoding="utf-8") as f:
             lines = f.readlines()
         lines = [x.strip() for x in lines]
         lines = list(filter(lambda s: (not s.startswith('#')) and len(s) > 0, lines))
@@ -181,23 +181,28 @@ for project_name in projects.keys():
             for r, d, f in os.walk(configuration_path):
                 for file in f:
                     configuration_file_path = os.path.join(r, file)
-                    with open(configuration_file_path) as json_file:
+                    with open(configuration_file_path, encoding="utf-8") as json_file:
                         module_data = json.load(json_file)
                     base_data = None
                     data = dict()
                     base_path = os.path.join(r, '..', '..', file)
                     if os.path.isfile(base_path):
-                        with open(base_path) as json_file:
+                        with open(base_path, encoding="utf-8") as json_file:
                             base_data = json.load(json_file)
                         data = base_data
                     data = merge(module_data, data)
                     if file == 'config.json':
-                        with open(os.path.join(TMP_MAPPING_DIR, connector_name+ '.json')) as f:
+                        with open(os.path.join(TMP_MAPPING_DIR, connector_name+ '.json'), encoding="utf-8") as f:
                             mapping = json.load(f)
                             data['connection']['options']['mapping']['default'] = mapping
                     json_file_path = os.path.join(r, '..', 'conf', file)
                     with open(json_file_path, 'w') as json_file:
                         json_file.write(json.dumps(data, indent=4, sort_keys=False))
+            connector_module = importlib.import_module("stix_shifter_modules." + connector_name + ".entry_point")
+            entry_point = connector_module.EntryPoint()
+            dialects_full = entry_point.get_dialects_full()
+            with open(os.path.join(conf_path, 'dialects.json'), 'w', encoding="utf-8") as f:
+                f.write(json.dumps(dialects_full, indent=4, sort_keys=False))
             temp_dir = tempfile.TemporaryDirectory()
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)
@@ -209,7 +214,7 @@ for project_name in projects.keys():
                 for file in f:
                     if '.json' in file:
                         json_include_lines.append('include ' + os.path.join(r, file) + ' \n')
-    with open('MANIFEST.in', 'a') as out_file:
+    with open('MANIFEST.in', 'a', encoding="utf-8") as out_file:
         out_file.writelines(json_include_lines)
 
     # Run setup()

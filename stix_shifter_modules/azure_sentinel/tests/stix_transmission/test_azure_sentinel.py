@@ -39,7 +39,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
     def connection(self):
         return {
                 "host": "abc.amazon.com",
-                "port": "443"
+                "port": 443
                 }
 
     def test_is_async(self, mock_api_client, mock_generate_token):

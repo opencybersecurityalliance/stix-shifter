@@ -1,8 +1,7 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 import logging
-from os import path
-import json
 from . import query_constructor
+from stix_shifter_utils.utils.file_helper import read_json
 
 logger = logging.getLogger(__name__)
 
@@ -11,12 +10,7 @@ class QueryTranslator(BaseQueryTranslator):
 
     def __init__(self, options, dialect, basepath):
         super().__init__(options, dialect, basepath)
-        if not self.select_fields:
-            basepath = path.dirname(__file__)
-            aql_fields_json = f"aql_{self.dialect}_fields.json"
-            filepath = path.abspath(path.join(basepath, "json", aql_fields_json))
-            aql_fields_file = open(filepath).read()
-            self.select_fields = json.loads(aql_fields_file)
+        self.select_fields = read_json(f"aql_{self.dialect}_fields", options)
 
     def map_selections(self):
         return ", ".join(self.select_fields['default'])

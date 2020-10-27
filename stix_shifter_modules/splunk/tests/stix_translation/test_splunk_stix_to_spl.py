@@ -171,28 +171,26 @@ class TestStixToSpl(unittest.TestCase, object):
             "time_range": 15,
             "result_limit": 1000,
             "mapping": {
-                "cim": {
-                    "from_stix": {
-                        "mac-addr": {
-                            "cim_type": "flow",
-                            "fields": {
-                                "value": "mac"
-                            }
-                        },
-                        "ipv4-addr": {
-                            "cim_type": "flow",
-                            "fields": {
-                                "value": ["src_ip", "dest_ip"]
-                            }
+                "cim_from_stix_map": {
+                    "mac-addr": {
+                        "cim_type": "flow",
+                        "fields": {
+                            "value": "mac"
                         }
                     },
-                    "select_fields": {
-                        "default":
-                            [
-                                "src_ip",
-                                "src_port",
-                            ]
+                    "ipv4-addr": {
+                        "cim_type": "flow",
+                        "fields": {
+                            "value": ["src_ip", "dest_ip"]
+                        }
                     }
+                },
+                "cim_select_fields": {
+                    "default":
+                        [
+                            "src_ip",
+                            "src_port",
+                        ]
                 }
             }
         }

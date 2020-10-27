@@ -63,7 +63,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -129,7 +132,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -195,7 +201,13 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ],
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -261,7 +273,13 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ],
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -327,7 +345,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -393,7 +414,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -459,7 +483,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -525,7 +552,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -591,7 +621,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -657,7 +690,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -723,7 +759,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -789,7 +828,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -855,7 +897,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -921,7 +966,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -987,7 +1035,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1053,7 +1104,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1119,7 +1173,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1185,7 +1242,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1251,7 +1311,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1317,7 +1380,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1383,7 +1449,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1449,7 +1518,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1463,12 +1535,12 @@
             "type": "observed-data"
         },
         {
-            "created": "2019-08-03T02:56:06.66Z",
+            "created": "2019-08-03T02:56:06.665Z",
             "created_by_ref": "identity--8899d562-2667-4532-8e19-b4eca6c959bd",
             "first_observed": "2019-08-03T02:56:06.66Z",
             "id": "observed-data--f792d957-7cb0-4e0c-b045-7373a3f18554",
             "last_observed": "2019-08-03T02:56:06.66Z",
-            "modified": "2019-08-03T02:56:06.66Z",
+            "modified": "2019-08-03T02:56:06.665Z",
             "number_observed": 1,
             "objects": {
                 "0": {
@@ -1515,7 +1587,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1581,7 +1656,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1647,7 +1725,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1713,7 +1794,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1779,7 +1863,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1845,7 +1932,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1911,7 +2001,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -1977,7 +2070,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2043,7 +2139,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2109,7 +2208,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2175,7 +2277,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2241,7 +2346,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2307,7 +2415,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2373,7 +2484,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2439,7 +2553,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2505,7 +2622,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2571,7 +2691,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2637,7 +2760,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2703,7 +2829,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2769,7 +2898,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2835,7 +2967,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2901,7 +3036,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -2967,7 +3105,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3033,7 +3174,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3099,7 +3243,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3165,7 +3312,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3231,7 +3381,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3297,7 +3450,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3363,7 +3519,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3429,7 +3588,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3495,7 +3657,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3561,7 +3726,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3627,7 +3795,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3693,7 +3864,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3759,7 +3933,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3825,7 +4002,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3891,7 +4071,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -3957,7 +4140,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4023,7 +4209,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4089,7 +4278,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4155,7 +4347,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4221,7 +4416,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4287,7 +4485,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4353,7 +4554,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4419,7 +4623,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4485,7 +4692,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4551,7 +4761,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4617,7 +4830,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4683,7 +4899,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4749,7 +4968,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4815,7 +5037,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4881,7 +5106,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -4947,7 +5175,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5013,7 +5244,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5079,7 +5313,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5145,7 +5382,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5211,7 +5451,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5277,7 +5520,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5343,7 +5589,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5409,7 +5658,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5475,7 +5727,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5541,7 +5796,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5607,7 +5865,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5673,7 +5934,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5739,7 +6003,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5805,7 +6072,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5871,7 +6141,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -5937,7 +6210,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6003,7 +6279,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6069,7 +6348,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6135,7 +6417,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6201,7 +6486,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6267,7 +6555,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6333,7 +6624,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6399,7 +6693,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6465,7 +6762,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6531,7 +6831,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6597,7 +6900,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6663,7 +6969,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6729,7 +7038,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6795,7 +7107,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6861,7 +7176,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6927,7 +7245,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -6993,7 +7314,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7059,7 +7383,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7125,7 +7452,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7191,7 +7521,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7257,7 +7590,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7323,7 +7659,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7389,7 +7728,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7455,7 +7797,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7521,7 +7866,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7587,7 +7935,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7653,7 +8004,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7719,7 +8073,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7785,7 +8142,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7851,7 +8211,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7917,7 +8280,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -7983,7 +8349,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8049,7 +8418,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8115,7 +8487,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8181,7 +8556,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8247,7 +8625,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8313,7 +8694,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8379,7 +8763,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8445,7 +8832,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8511,7 +8901,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8577,7 +8970,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8643,7 +9039,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8709,7 +9108,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8775,7 +9177,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8841,7 +9246,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8907,7 +9315,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -8973,7 +9384,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9039,7 +9453,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9105,7 +9522,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9171,7 +9591,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9237,7 +9660,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9303,7 +9729,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9369,7 +9798,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9383,12 +9815,12 @@
             "type": "observed-data"
         },
         {
-            "created": "2019-08-03T03:18:36.42Z",
+            "created": "2019-08-03T03:18:36.422Z",
             "created_by_ref": "identity--8899d562-2667-4532-8e19-b4eca6c959bd",
             "first_observed": "2019-08-03T03:18:36.42Z",
             "id": "observed-data--26139ea4-093e-4fa4-b590-579307be8baa",
             "last_observed": "2019-08-03T03:18:36.42Z",
-            "modified": "2019-08-03T03:18:36.42Z",
+            "modified": "2019-08-03T03:18:36.422Z",
             "number_observed": 1,
             "objects": {
                 "0": {
@@ -9435,7 +9867,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9501,7 +9936,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9567,7 +10005,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9633,7 +10074,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9699,7 +10143,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9765,7 +10212,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9779,12 +10229,12 @@
             "type": "observed-data"
         },
         {
-            "created": "2019-08-20T18:57:31.27Z",
+            "created": "2019-08-20T18:57:31.272Z",
             "created_by_ref": "identity--8899d562-2667-4532-8e19-b4eca6c959bd",
             "first_observed": "2019-08-20T18:57:31.27Z",
             "id": "observed-data--d5803fe8-e207-4eca-919e-239181494c64",
             "last_observed": "2019-08-20T18:57:31.27Z",
-            "modified": "2019-08-20T18:57:31.27Z",
+            "modified": "2019-08-20T18:57:31.272Z",
             "number_observed": 1,
             "objects": {
                 "0": {
@@ -9831,7 +10281,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9897,7 +10350,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -9963,7 +10419,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -10029,7 +10488,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -10095,7 +10557,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -10161,7 +10626,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -10227,7 +10695,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",
@@ -10293,7 +10764,10 @@
                 "6": {
                     "dst_ref": "5",
                     "src_ref": "7",
-                    "type": "network-traffic"
+                    "type": "network-traffic",
+                    "protocols": [
+                        "tcp"
+                    ]
                 },
                 "7": {
                     "type": "ipv4-addr",

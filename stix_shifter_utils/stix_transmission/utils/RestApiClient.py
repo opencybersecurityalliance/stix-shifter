@@ -1,5 +1,8 @@
 import requests
 from requests_toolbelt.adapters import host_header_ssl
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys
 import collections
 import os
@@ -10,6 +13,7 @@ from stix_shifter_utils.utils import logger
 
 # This is a simple HTTP client that can be used to access the REST API
 
+RETRY_MAX = 3
 
 class RestApiClient:
     # cert_verify can be
@@ -48,7 +52,7 @@ class RestApiClient:
         self.url_modifier_function = url_modifier_function
 
     # This method is used to set up an HTTP request and send it to the server
-    def call_api(self, endpoint, method, headers=None, params=[], data=None, urldata=None, timeout=None):
+    def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
@@ -70,17 +74,19 @@ class RestApiClient:
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
-                call = getattr(requests, method.lower())
+                session = requests.Session()
+                retry_strategy = Retry(total=RETRY_MAX, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504],
+                                        method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
+                session.mount("http://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
-                # only use the tool belt session in case of SNI for safety
                 if self.sni is not None:
-                    session = requests.Session()
-                    call = getattr(session, method.lower())
-                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter())
+                    # only use the tool belt session in case of SNI for safety
+                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=RETRY_MAX))
                     actual_headers["Host"] = self.sni
-
-                response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
-                                timeout=timeout)
+                else:
+                    session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
+                call = getattr(session, method.lower())
+                response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content, timeout=timeout)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:

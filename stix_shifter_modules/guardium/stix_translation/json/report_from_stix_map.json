@@ -4,8 +4,7 @@
       "finding_type": ["datacategory"],
       "start": ["QUERY_FROM_DATE"],
       "end": ["QUERY_TO_DATE"],
-      "database_name": ["Database"],
-      "db_type":["db_type"]
+      "database_name": ["Database"]
     }
   },
   "ipv4-addr": {

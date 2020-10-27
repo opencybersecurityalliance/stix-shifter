@@ -1,5 +1,5 @@
 {
-  "Threat": {
+  "Threat Case": {
     "ATA Open Cases": {
       "reportName": "ATA Open Cases",
       "indexFrom": "0",
@@ -43,40 +43,10 @@
         },
         "Severity": {
           "info": "map",
-          "default": "%"
+          "default": "*",
+          "transformer":"GuardiumMapSeverity"
         }
       }
-    }
-  },
-"Policy Violation": {
-	"ATA Open Cases": {
-      "category": "VIOLATION",
-      "fetchSize": "1000",
-      "sortType": "asc",
-      "reportParameter": {
-        "startTime": {
-          "info": "START",
-          "default": "1970-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
-        },
-        "endTime": {
-          "info": "STOP",
-          "default": "2019-07-01T00:00:10.000Z",
-          "transformer": "TimestampToGuardium"
-        },
-	"Database":{
-	  "info": "map"
-        },
-	"DBUser":{
-	  "info": "map"
-        },
-	"Server":{
-	  "info": "map"
-        },
-	"Database":{
-	  "info": "map"
-        }
-     }
     }
   }
 }

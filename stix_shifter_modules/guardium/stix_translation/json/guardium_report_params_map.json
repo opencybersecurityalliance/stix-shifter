@@ -7,11 +7,11 @@
 
   },
   "maps": {
-    "DBUser": ["Threat:ATA Open Cases"],
-    "Database": ["Threat:ATA Open Cases"],
-    "ServerIP": ["Threat:ATA Open Cases"],
-    "Severity": ["Threat:ATA Open Cases"],
-    "OSUser": ["Threat:ATA Open Cases"]
+    "DBUser": ["Threat Case:ATA Open Cases"],
+    "Database": ["Threat Case:ATA Open Cases"],
+    "ServerIP": ["Threat Case:ATA Open Cases"],
+    "Severity": ["Threat Case:ATA Open Cases"],
+    "OSUser": ["Threat Case:ATA Open Cases"]
   },
-  "defaultReports":["Threat:ATA Open Cases"]
+  "defaultReports":["Threat Case:ATA Open Cases"]
 }

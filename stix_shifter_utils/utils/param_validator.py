@@ -3,7 +3,7 @@ import json
 from jsonmerge import merge
 import importlib
 from os import path
-
+import copy
 
 def get_merged_config(module):
     ss_modules_path = importlib.import_module('stix_shifter_modules')
@@ -67,6 +67,7 @@ def del_dot_path(params, path):
 
 
 def param_validator(module, input_configs, start_point=None):
+    input_configs = copy.deepcopy(input_configs)
     expected_configs = get_merged_config(module)
     if start_point:
         start_points = start_point.split('.')
@@ -104,14 +105,18 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                                              expected_configs[key]['type'], key):
                                 raise ValueError('\"{}: {}\" value must be more than {}'.format(key, str(input_configs[key]),
                                                  str(expected_configs[key]['min'])))
-                        elif 'max' in expected_configs[key]:
+                        if 'max' in expected_configs[key]:
                             if not check_max(input_configs[key], expected_configs[key]['max'],
                                              expected_configs[key]['type'], key):
                                 raise ValueError('\"{}: {}\" value must be less than {}'.format(key, str(input_configs[key]),
                                                  str(expected_configs[key]['max'])))
-                        elif 'regex' in expected_configs[key]:
+                        if 'regex' in expected_configs[key]:
                             if not check_regex(input_configs[key], expected_configs[key]['regex']):
                                 raise ValueError('Invalid {} value \"{}\" specified'.format(key, str(input_configs[key])))
+                        
+                        if expected_configs[key]['type'] == 'number':
+                            if not check_number(input_configs[key]):
+                                raise ValueError('{} "{}" type must be a number'.format(key, input_configs[key]))
 
                     input_value = input_configs[key]
                     if input_value is not None or ('nullable' in expected_configs[key] and expected_configs[key]['nullable']):
@@ -210,3 +215,6 @@ def check_regex(input_value, regex_value):
     pattern = re.compile(regex_value)
     match_str = pattern.search(input_value)
     return bool(match_str)
+
+def check_number(input_value):
+    return isinstance(input_value, int)

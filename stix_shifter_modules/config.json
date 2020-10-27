@@ -26,9 +26,14 @@
             },
             "dialects": {
                 "type": "array",
-                "default": null,
                 "hidden": true,
-                "previous": "connection.dialects"
+                "optional": true
+            },
+            "language": {
+                "type": "string",
+                "default": "stix",
+                "optional": true,
+                "hidden": true
             },
             "validate_pattern": {
                 "type": "boolean",
@@ -38,6 +43,7 @@
             },
             "stix_validator": {
                 "type": "boolean",
+                "default": false,
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.stix_validator"
@@ -47,6 +53,12 @@
                 "optional": true,
                 "hidden": true,
                 "previous": "connection.mapping"
+            },
+            "unmapped_fallback": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
             }
         }
     }

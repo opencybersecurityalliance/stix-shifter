@@ -1,6 +1,7 @@
 import boto3
 import string
 import random
+import json
 
 
 class BOTO3Client:
@@ -9,7 +10,14 @@ class BOTO3Client:
         auth = configuration.get('auth')
         aws_access_key_id = auth.get('aws_access_key_id')
         aws_secret_access_key = auth.get('aws_secret_access_key')
-        self.log_group_names = connection.get('log_group_names', {})
+        log_group_names = connection.get('log_group_names', {})
+        if type(log_group_names) == str:
+            if len(log_group_names):
+                log_group_names = json.loads(log_group_names)
+            else:
+                log_group_names = {}
+        self.log_group_names = log_group_names
+
         try:
             if not region_name:
                 raise KeyError('Region must be specified')
