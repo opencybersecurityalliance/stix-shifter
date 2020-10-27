@@ -347,7 +347,7 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_rule_name_query(self):
         rule_name = 'Context is Local to Remote'
-        stix_pattern="[x-ibm-ariel:rule_names[*] = '{}']".format(rule_name)
+        stix_pattern="[x-ibm-finding:rule_names[*] = '{}']".format(rule_name)
         query = _translate_query(stix_pattern)
         where_statement = "WHERE rulenames = '{}' {} {}".format(rule_name, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
