@@ -11,7 +11,7 @@
     },
     {
       "key": "process.creator_user_ref",
-      "object": "process_image",
+      "object": "process",
       "references": "user"
     }
   ],
@@ -353,5 +353,79 @@
     "key": "x_ibm_ariel.device_type",
     "cybox": false,
     "transformer": "ToInteger"
+  },
+  "Image": [
+    {
+      "key": "file.name",
+      "object": "file_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_image",
+      "references": "directory_image"
+    }
+  ],
+  "ParentImage": [
+    {
+      "key": "file.name",
+      "object": "file_parent_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_parent_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_parent_image",
+      "references": "directory_parent_image"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process_image",
+      "references": "file_parent_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process_image"
+    }
+  ],
+  "ProcessCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    }
+  ],
+  "ParentCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "parent_process_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process_image"
+    }
+  ],  
+  "ServiceFileName": {
+    "key": "process.extensions.windows-service-ext.service_dll_refs[*].name",
+    "object": "process"
+  },
+  "LoadedImage": {
+    "key": "process.extensions.windows-service-ext.service_dll_refs[*].name",
+    "object": "process"
   }
 }

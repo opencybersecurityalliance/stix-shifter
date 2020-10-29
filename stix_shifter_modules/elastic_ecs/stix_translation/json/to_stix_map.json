@@ -507,42 +507,24 @@
     }
   },
   "network": {
-    "transport": [{
+    "transport": {
       "key": "network-traffic.protocols",
       "object": "nt",
       "group": "True",
       "transformer": "ToLowercaseArray"
-    }, {
-        "key": "process.opened_connection_refs",
-        "object": "process",
-        "references": [
-          "nt"
-        ]
-    }],
-    "type": [{
+    },
+    "type": {
       "key": "network-traffic.protocols",
       "object": "nt",
       "group": "True",
       "transformer": "ToLowercaseArray"
-    }, {
-        "key": "process.opened_connection_refs",
-        "object": "process",
-        "references": [
-          "nt"
-        ]
-    }],
-    "protocol": [{
+    },
+    "protocol": {
       "key": "network-traffic.protocols",
       "object": "nt",
       "group": "True",
       "transformer": "ToLowercaseArray"
-    }, {
-        "key": "process.opened_connection_refs",
-        "object": "process",
-        "references": [
-          "nt"
-        ]
-    }],
+    },
     "vlan": {
       "id": {
         "key": "x-ecs-network.vlan_id",
