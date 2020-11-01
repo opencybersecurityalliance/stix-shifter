@@ -154,6 +154,10 @@ class TestTransform(object):
         assert(curr_obj['name'] == file_name)
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
+
+        with open("/data/t1.json", "w") as fp:
+            json.dump(proc_obj, fp)
+
         assert(proc_obj is not None), 'process object type not found'
         assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
         user_ref = proc_obj['creator_user_ref']
@@ -176,7 +180,7 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 17))))
+        assert(objects.keys() == set(map(str, range(0, 18))))
 
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 

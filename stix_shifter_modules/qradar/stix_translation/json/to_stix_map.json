@@ -17,7 +17,7 @@
     {
       "key": "process.creator_user_ref",
       "object": "process",
-      "references": "user"
+      "references": "useraccount"
     }
   ],
   "categoryname": {
