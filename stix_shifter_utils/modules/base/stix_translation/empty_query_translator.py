@@ -8,6 +8,3 @@ class EmptyQueryTranslator(BaseQueryTranslator):
         self.dialect = dialect
         self.map_data = {}
         self.select_fields = {}
-
-    def map_field(self, stix_object_name, stix_property_name):
-        raise NotImplementedError()

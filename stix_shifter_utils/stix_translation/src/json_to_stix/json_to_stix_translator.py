@@ -240,7 +240,11 @@ class DataSourceObjToStixObj:
                             if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
                                 continue
                 else:
-                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
+                    # use the hard-coded value in the mapping
+                    if 'value' in ds_key_def:
+                        stix_value = ds_key_def['value']
+                    else:
+                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
                     if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
                         continue
 
@@ -260,7 +264,7 @@ class DataSourceObjToStixObj:
                 # get the object name defined for custom attributes
                 if 'object' in ds_key_def:
                     object_name = ds_key_def.get('object')
-                    # get the value mapped
+                    # use the hard-coded value in the mapping
                     if 'value' in ds_key_def:
                         stix_value = ds_key_def['value']
                     # get the value from mapped key
@@ -310,8 +314,13 @@ class DataSourceObjToStixObj:
         # Add unmapped attributes and required property to the observation if it wasn't added via the mapping
         if self.options.get('unmapped_fallback'):
             if self.cust_attributes:
-                self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the obseravble object: {}'.format(self.cust_attributes)) 
-                observation.update({"x-" + self.data_source.lower(): self.cust_attributes})
+                self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the obseravble object: {}'.format(self.cust_attributes))
+                obj = {'type': "x-" + self.data_source.lower()}
+                obj_key = str(len(observation['objects']))
+                observation['objects'][obj_key] = obj
+                observation['objects'][obj_key].update(self.cust_attributes)
+                
+
 
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:
