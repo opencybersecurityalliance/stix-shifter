@@ -7,21 +7,17 @@
   "username": [
     {
       "key": "user-account.user_id",
-<<<<<<< HEAD
-      "object": "user"
-    },
-    {
-      "key": "process.creator_user_ref",
-      "object": "process",
-      "references": "user"
-=======
       "object": "useraccount"
     },
     {
       "key": "x-ibm-finding.src_application_user_ref",
       "object": "finding",
       "references": "useraccount"
->>>>>>> 8ae4a4cfb718b7f78617ba9686c6b7367c1a351d
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "user"
     }
   ],
   "categoryname": {
