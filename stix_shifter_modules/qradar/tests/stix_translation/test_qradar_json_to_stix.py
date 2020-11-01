@@ -155,9 +155,6 @@ class TestTransform(object):
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
 
-        with open("/data/t1.json", "w") as fp:
-            json.dump(proc_obj, fp)
-
         assert(proc_obj is not None), 'process object type not found'
         assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
         user_ref = proc_obj['creator_user_ref']
