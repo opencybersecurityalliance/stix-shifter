@@ -179,7 +179,8 @@ class TestArcsightConnection(unittest.TestCase):
             "results": [
                 ["189D1-2@Local", 1592820270803, "/usr/sbin/sshd", "http", 22,
                  "TCP", "ip-172-31-66-30.ec2.internal", "MD5=B66E3F36EDD5E0AC620C8FD08C55C0E1,"
-                                                        "SHA256=B66D93926841E798F5AE1EF97158E74D79263745C81501BF342AA9D0672419D8,"
+                                                        "SHA256=B66D93926841E798F5AE1EF97158E74"
+                                                        "D79263745C81501BF342AA9D0672419D8,"
                                                         "SHA1=4311466C7618176E1C51E56D8692E08E",
                  ' pid=20103 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:sshd_t:s0-s0:c0.c1023 '
                  'msg=\'op=start direction=from-client cipher=aes128-gcm@openssh.com ksize=128 mac= '
