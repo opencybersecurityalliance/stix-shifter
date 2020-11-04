@@ -82,9 +82,7 @@ class RestApiClient:
                     # only use the tool belt session in case of SNI for safety
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=RETRY_MAX))
                     actual_headers["Host"] = self.sni
-                    print('with sni')
                 else:
-                    print('without sni')
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
