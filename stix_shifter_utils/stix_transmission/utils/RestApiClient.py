@@ -37,9 +37,9 @@ class RestApiClient:
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
     def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
-        self.logger = logger.set_logger(__name__)
+        self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
-        requests_log = logger.set_logger("requests.packages.urllib3")
+        requests_log = logging.getLogger("requests.packages.urllib3")
         requests_log.setLevel(logging.DEBUG)
         requests_log.propagate = True
 
