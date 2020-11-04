@@ -1,6 +1,5 @@
 import requests
 from requests_toolbelt.adapters import host_header_ssl
-# from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys
@@ -8,27 +7,11 @@ import collections
 import os
 import errno
 import uuid
-import datetime
-import logging
 from stix_shifter_utils.utils import logger
 
 # This is a simple HTTP client that can be used to access the REST API
 
-RETRY_MAX = 3
-
-try:
-    import http.client as http_client
-except ImportError:
-    # Python 2
-    import httplib as http_client
-http_client.HTTPConnection.debuglevel = 1
-
-# You must initialize logging, otherwise you'll not see debug output.
-# logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
-requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.DEBUG)
-requests_log.propagate = True
+RETRY_MAX = 1
 
 
 class RestApiClient:
@@ -37,12 +20,7 @@ class RestApiClient:
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
     def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
-        requests_log = logging.getLogger("requests.packages.urllib3")
-        requests_log.setLevel(logging.DEBUG)
-        requests_log.propagate = True
-
+        self.logger = logger.set_logger(__name__)
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
         server_ip = host
@@ -74,10 +52,6 @@ class RestApiClient:
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
-        print('call_api')
-        print('timeout=5')
-        timeout = 5
-        print(datetime.datetime.now())
         try:
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
