@@ -19,7 +19,7 @@ class RestApiClient:
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
         self.logger = logger.set_logger(__name__)
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
@@ -49,6 +49,7 @@ class RestApiClient:
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
+        self.auth = auth
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
@@ -86,7 +87,7 @@ class RestApiClient:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
-                                timeout=timeout)
+                                timeout=timeout, auth=self.auth)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
@@ -118,6 +119,9 @@ class ResponseWrapper:
 
     def read(self):
         return self.response.content
+
+    def raise_for_status(self):
+        return self.response.raise_for_status()
 
     @property
     def bytes(self):
