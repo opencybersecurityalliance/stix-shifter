@@ -75,6 +75,8 @@ class RestApiClient:
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         print('call_api')
+        print('timeout=5')
+        timeout = 5
         print(datetime.datetime.now())
         try:
             # covnert server cert to file
