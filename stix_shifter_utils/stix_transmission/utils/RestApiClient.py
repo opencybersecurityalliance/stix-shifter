@@ -95,7 +95,7 @@ class RestApiClient:
                                       response.headers['Content-Type'], file=sys.stderr)
                 return ResponseWrapper(response)
             except Exception as e:
-                self.logger.error('exception occured during requesting url: ' + str(e))
+                self.logger.error('exception occured during requesting url: ' + str(e) + ' || ' + logger.exception_to_string(e))
                 raise e
         finally:
             if self.server_cert_file_content_exists is True:
