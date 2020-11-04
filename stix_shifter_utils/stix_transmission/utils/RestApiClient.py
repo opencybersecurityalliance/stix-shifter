@@ -98,7 +98,7 @@ class RestApiClient:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
                 session = requests.Session()
-                retry_strategy = Retry(total=RETRY_MAX, backoff_factor=0.1, status_forcelist=[429, 500, 502, 503, 504],
+                retry_strategy = Retry(total=RETRY_MAX, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
                                        method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
                 session.mount("http://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
