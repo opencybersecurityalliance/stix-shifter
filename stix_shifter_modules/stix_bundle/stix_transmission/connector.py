@@ -1,10 +1,10 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
-
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
-import requests
+# import requests
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -16,7 +16,13 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.connection = connection
         self.configuration = configuration
-        self.bundle_url = None
+        # self.bundle_url = None
+        # bundle_url = self.connection.get('host')
+        self.timeout = connection['options'].get('timeout')
+        self.bundle_url = self.connection.get('host')
+        self.client = RestApiClient(None,
+                                    auth=self.configuration.get('auth'),
+                                    url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
@@ -39,17 +45,17 @@ class Connector(BaseSyncConnector):
     def ping_connection(self):
         return_obj = dict()
 
-        if not self.bundle_url:
-            self.bundle_url = self.connection.get('host')
-        auth = self.configuration.get('auth')
+        # if not self.bundle_url:
+        #     self.bundle_url = self.connection.get('host')
+        # auth = self.configuration.get('auth')
 
-        response = self.call_api(self.bundle_url, auth, 'head')
+        # response = self.call_api(self.bundle_url, auth, 'head')
+        response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
-        response_code = response.status_code
 
-        if response_code == 200:
+        if response.code == 200:
             return_obj['success'] = True
-        elif response_code == 301:
+        elif response.code == 301:
             self.bundle_url = response.headers.get('Location')
             return self.ping_connection()
         else:
@@ -61,14 +67,13 @@ class Connector(BaseSyncConnector):
         observations = []
         return_obj = dict()
 
-        bundle_url = self.connection.get('host')
-        auth = self.configuration.get('auth')
+        # bundle_url = self.connection.get('host')
+        # auth = self.configuration.get('auth')
 
-        response = self.call_api(bundle_url, auth, 'get')
+        # response = self.call_api(bundle_url, auth, 'get')
+        response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
-        response_code = response.status_code
-
-        if response_code != 200:
+        if response.code != 200:
             response_txt = response.raise_for_status()
             if ErrorResponder.is_plain_string(response_txt):
                 ErrorResponder.fill_error(return_obj, message=response_txt)
@@ -114,17 +119,18 @@ class Connector(BaseSyncConnector):
         return_obj['success'] = True
         return return_obj
 
-    def call_api(self, bundle_url, auth, method):
-        call = getattr(requests, method.lower())
+    # def call_api(self, bundle_url, auth, method):
 
-        if auth is not None:
-            username = auth.get('username')
-            password = auth.get('password')
-            if username is not None or password is not None:
-                response = call(bundle_url, auth=(auth.get('username'), auth.get('password')))
-            else:
-                response = call(bundle_url)
-        else:
-            response = call(bundle_url)
+    #     call = getattr(requests, method.lower())
+
+    #     if auth is not None:
+    #         username = auth.get('username')
+    #         password = auth.get('password')
+    #         if username is not None or password is not None:
+    #             response = call(bundle_url, auth=(auth.get('username'), auth.get('password')))
+    #         else:
+    #             response = call(bundle_url)
+    #     else:
+    #         response = call(bundle_url)
         
-        return response
+    #     return response
