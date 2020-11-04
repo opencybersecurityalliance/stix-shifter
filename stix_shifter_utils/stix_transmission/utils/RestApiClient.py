@@ -8,6 +8,7 @@ import collections
 import os
 import errno
 import uuid
+import datetime
 
 from stix_shifter_utils.utils import logger
 
@@ -54,6 +55,8 @@ class RestApiClient:
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
+        print('call_api')
+        print(datetime.datetime.now())
         try:
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
@@ -84,7 +87,9 @@ class RestApiClient:
                     # only use the tool belt session in case of SNI for safety
                     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=RETRY_MAX))
                     actual_headers["Host"] = self.sni
+                    print('with sni')
                 else:
+                    print('without sni')
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
