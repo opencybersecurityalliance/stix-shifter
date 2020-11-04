@@ -24,7 +24,7 @@ except ImportError:
 http_client.HTTPConnection.debuglevel = 1
 
 # You must initialize logging, otherwise you'll not see debug output.
-logging.basicConfig()
+# logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
@@ -38,6 +38,11 @@ class RestApiClient:
     #  or The String content of your self signed cert required for TLS communication
     def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
         self.logger = logger.set_logger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        requests_log = logger.set_logger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
+
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
         server_ip = host
