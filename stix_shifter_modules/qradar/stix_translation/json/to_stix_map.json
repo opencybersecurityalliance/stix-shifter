@@ -38,8 +38,8 @@
   },
   "qidname": [
     {
-      "key": "x-ibm-finding.name",
-      "object": "finding"
+      "key": "x-qradar.qid_name",
+      "object": "x-qradar"
     }
   ],
   "relevance": {
@@ -334,11 +334,6 @@
     {
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
-    },
-    {
-      "key": "x-ibm-finding.finding_type",
-      "object": "finding",
-      "value": "flow"
     }
   ]
   ,
@@ -367,10 +362,15 @@
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "severity": {
+  "eventseverity": {
     "key": "x-ibm-finding.severity",
     "transformer": "ToInteger",
     "object": "finding"
+  },
+  "flowseverity": {
+    "key": "x-qradar.severity",
+    "transformer": "ToInteger",
+    "object": "x-qradar"
   },
   "firstpackettime": {
     "key": "x-qradar.first_packet_time",
@@ -396,12 +396,12 @@
     "object": "finding"
   },
   "crename": {
-    "key": "x-qradar.cre_name",
-    "object": "x-qradar"
+    "key": "x-ibm-finding.name",
+    "object": "finding"
   },
   "credescription": {
-    "key": "x-qradar.cre_description",
-    "object": "x-qradar"
+    "key": "x-ibm-finding.description",
+    "object": "finding"
   },
   "domainid": {
     "key": "x-qradar.domain_id",

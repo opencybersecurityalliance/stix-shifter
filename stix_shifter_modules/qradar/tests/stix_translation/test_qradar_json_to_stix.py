@@ -150,7 +150,7 @@ class TestTransform(object):
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
-                "severity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
+                "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
                 "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
@@ -159,8 +159,9 @@ class TestTransform(object):
         finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(finding['type']) == "x-ibm-finding"
-        assert(finding['name'] == data['qidname'])
-        assert(finding['severity'] == data['severity'])
+        assert(finding['name'] == data['crename'])
+        assert(finding['description'] == data['credescription'])
+        assert(finding['severity'] == data['eventseverity'])
         assert(finding['magnitude'] == data['magnitude'])
         assert(finding['rule_names'] == data['rulenames'])
         assert(finding['event_count'] == data['eventcount'])
@@ -172,23 +173,6 @@ class TestTransform(object):
         assert(custom_object is not None), 'domain-name object type not found'
         assert(custom_object['device_type'] == data['devicetype'])
         assert(custom_object['cre_event_list'] == data['creeventlist'])
-        assert(custom_object['cre_description'] == data['credescription'])
-
-    def test_flow_finding(self):
-        data = {"logsourceid": 126, "qidname": "flow name", "sourceip": "0.0.0.0", 
-                "severity": 4, "starttime": EPOCH_START, "endtime": EPOCH_END, "flowsource": "some flow source"}
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
-        observed_data = result_bundle['objects'][1]
-        objects = observed_data['objects']
-        finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
-
-        assert(finding['type']) == "x-ibm-finding"
-        assert(finding['name'] == data['qidname'])
-        assert(finding['severity'] == data['severity'])
-        assert(finding['finding_type'] == 'flow')
-        assert(finding['start'] == START_TIMESTAMP)
-        assert(finding['end'] == END_TIMESTAMP)
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
