@@ -31,7 +31,6 @@ def set_external_logger(logger):
 
 def set_logger(module):
     if threading.get_ident() in loggers:
-        print('returning logger for thread: ' + str(threading.get_ident()))
         return loggers[threading.get_ident()]
     return logging.getLogger(module)
 

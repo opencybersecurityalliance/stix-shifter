@@ -16,7 +16,7 @@ class Connector(BaseSyncConnector):
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
-        self.bundle_url = self.connection.get('host')
+        self.bundle_url = self.connection.get('url')
         auth = None
         conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
