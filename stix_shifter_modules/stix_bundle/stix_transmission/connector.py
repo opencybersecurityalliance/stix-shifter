@@ -16,8 +16,6 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.connection = connection
         self.configuration = configuration
-        # self.bundle_url = None
-        # bundle_url = self.connection.get('host')
         self.timeout = connection['options'].get('timeout')
         self.bundle_url = self.connection.get('host')
         auth = None
@@ -88,7 +86,10 @@ class Connector(BaseSyncConnector):
                 raise UnexpectedResponseException
         else:
             try:
-                bundle = response.json()
+                response_txt = response.read().decode('utf-8')
+                # print(response_txt)
+                bundle = json.loads(response_txt)
+                # bundle = response.json()
 
                 if "stix_validator" in self.connection['options'] and self.connection['options'].get("stix_validator") is True:
                     results = validate_instance(bundle)
