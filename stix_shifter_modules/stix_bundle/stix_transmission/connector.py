@@ -4,7 +4,6 @@ from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
-# import requests
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -47,11 +46,6 @@ class Connector(BaseSyncConnector):
     def ping_connection(self):
         return_obj = dict()
 
-        # if not self.bundle_url:
-        #     self.bundle_url = self.connection.get('host')
-        # auth = self.configuration.get('auth')
-
-        # response = self.call_api(self.bundle_url, auth, 'head')
         response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
 
@@ -69,10 +63,6 @@ class Connector(BaseSyncConnector):
         observations = []
         return_obj = dict()
 
-        # bundle_url = self.connection.get('host')
-        # auth = self.configuration.get('auth')
-
-        # response = self.call_api(bundle_url, auth, 'get')
         response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
         if response.code != 200:
@@ -87,9 +77,7 @@ class Connector(BaseSyncConnector):
         else:
             try:
                 response_txt = response.read().decode('utf-8')
-                # print(response_txt)
                 bundle = json.loads(response_txt)
-                # bundle = response.json()
 
                 if "stix_validator" in self.connection['options'] and self.connection['options'].get("stix_validator") is True:
                     results = validate_instance(bundle)
@@ -116,26 +104,9 @@ class Connector(BaseSyncConnector):
                     ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex))
             except Exception as ex:
                 ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
-            
         return return_obj
 
     def delete_query_connection(self, search_id):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
-
-    # def call_api(self, bundle_url, auth, method):
-
-    #     call = getattr(requests, method.lower())
-
-    #     if auth is not None:
-    #         username = auth.get('username')
-    #         password = auth.get('password')
-    #         if username is not None or password is not None:
-    #             response = call(bundle_url, auth=(auth.get('username'), auth.get('password')))
-    #         else:
-    #             response = call(bundle_url)
-    #     else:
-    #         response = call(bundle_url)
-        
-    #     return response
