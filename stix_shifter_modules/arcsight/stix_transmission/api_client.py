@@ -6,7 +6,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class APIClient:
-    USER_TOKEN = 'core-service/rest/LoginService/login'
+    TOKEN_ENDPOINT = 'core-service/rest/LoginService/login'
     STATUS_ENDPOINT = 'server/search/status'
     QUERY_ENDPOINT = 'server/search'
     RESULT_ENDPOINT = 'server/search/events'
@@ -92,7 +92,7 @@ class APIClient:
 
     def get_user_session_id(self):
         try:
-            response = self.client.call_api(self.USER_TOKEN, 'POST', data=self.auth)
+            response = self.client.call_api(self.TOKEN_ENDPOINT, 'POST', data=self.auth)
             if response.code == 200:
                 response_text = json.loads(response.read())
                 token = response_text['log.loginResponse']['log.return']
