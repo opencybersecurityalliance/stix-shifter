@@ -20,8 +20,12 @@ class Connector(BaseSyncConnector):
         # bundle_url = self.connection.get('host')
         self.timeout = connection['options'].get('timeout')
         self.bundle_url = self.connection.get('host')
+        auth = None
+        conf_auth = configuration['auth']
+        if 'username' in conf_auth and 'password' in conf_auth:
+            auth = (conf_auth['username'], conf_auth['password'])
         self.client = RestApiClient(None,
-                                    auth=self.configuration.get('auth'),
+                                    auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
