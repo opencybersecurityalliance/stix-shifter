@@ -11,7 +11,8 @@ from stix_shifter_utils.utils import logger
 
 # This is a simple HTTP client that can be used to access the REST API
 
-RETRY_MAX = 1
+RETRY_MAX_DEFAULT = 1
+CONNECT_TIMEOUT_DEFAULT = 2
 
 
 class RestApiClient:
@@ -20,6 +21,11 @@ class RestApiClient:
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
     def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
+        self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
+        self.retry_max = int(self.retry_max)
+        self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
+        self.connect_timeout = int(self.connect_timeout)
+
         self.logger = logger.set_logger(__name__)
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
@@ -75,19 +81,19 @@ class RestApiClient:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
                 session = requests.Session()
-                retry_strategy = Retry(total=RETRY_MAX, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
+                retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
                                        method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
                 session.mount("http://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
                 if self.sni is not None:
                     # only use the tool belt session in case of SNI for safety
-                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=RETRY_MAX))
+                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=self.retry_max))
                     actual_headers["Host"] = self.sni
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
                 response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
-                                timeout=timeout, auth=self.auth)
+                                timeout=(self.connect_timeout, timeout), auth=self.auth)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:

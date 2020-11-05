@@ -21,7 +21,7 @@ class Connector(BaseSyncConnector):
         self.timeout = connection['options'].get('timeout')
         self.bundle_url = self.connection.get('host')
         auth = None
-        conf_auth = configuration['auth']
+        conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
             auth = (conf_auth['username'], conf_auth['password'])
         self.client = RestApiClient(None,
