@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "MicroFocus ArcSight"
+            "displayName": "MicroFocus ArcSight Logger"
         },
         "host": {
             "type": "text"
@@ -21,11 +21,6 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        },
-        "options": {
-            "unmapped_fallback": {
-                "default": true
-            }
         }
     },
     "configuration": {
