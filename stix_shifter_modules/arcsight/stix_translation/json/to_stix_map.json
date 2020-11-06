@@ -31,6 +31,11 @@
         "key": "network-traffic.dst_ref",
         "object": "nt",
         "references": "dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "logger_finding",
+        "references": "dst_ip"
       }
     ],
     "c6a3": [
@@ -52,6 +57,11 @@
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-ibm-finding.src_ip_ref",
+        "object": "logger_finding",
         "references": "src_ip"
       }
     ],
@@ -240,12 +250,7 @@
       {
 	    "key": "x-ibm-finding.finding_type",
         "object": "logger_finding"
-	  },
-      {
-        "key": "x-ibm-finding.event_category_details_ref",
-        "object": "logger_finding",
-        "references": "event_category"
-      }
+	  }
     ],
     "categoryBehavior": {
       "key": "x-arcsight-event-category.category_behavior",
@@ -267,17 +272,10 @@
       "key": "x-arcsight-event-category.category_technique",
       "object": "event_category"
     },
-    "eventId": [
-      {
+    "eventId": {
       "key": "x-arcsight-event.event_id",
       "object": "event"
-      },
-      {
-        "key": "x-ibm-finding.event_details_ref",
-        "object": "logger_finding",
-        "references": "event"
-      }
-    ],
+    },
     "externalId": {
       "key": "x-arcsight-event.external_id",
       "object": "event"
@@ -290,12 +288,7 @@
       {
 	  "key": "x-ibm-finding.name",
 	  "object": "logger_finding"
-	  },
-      {
-        "key": "x-ibm-finding.event_details_ref",
-        "object": "logger_finding",
-        "references": "event"
-      }
+	  }
     ],
     "type": {
       "key": "x-arcsight-event.event_type",
@@ -343,28 +336,14 @@
       "key": "x-arcsight-event.request_method",
       "object": "event"
     },
-    "deviceProduct": [
-      {
+    "deviceProduct": {
       "key": "x-arcsight-event-device.device_product",
       "object": "device"
-      },
-      {
-        "key": "x-ibm-finding.device_details_ref",
-        "object": "logger_finding",
-        "references": "device"
-      }
-    ],
-    "deviceVendor": [
-      {
+    },
+    "deviceVendor": {
       "key": "x-arcsight-event-device.device_vendor",
       "object": "device"
-      },
-      {
-        "key": "x-ibm-finding.device_details_ref",
-        "object": "logger_finding",
-        "references": "device"
-      }
-    ],
+    },
     "deviceAction": {
       "key": "x-arcsight-event-device.device_action",
       "object": "device"
@@ -442,319 +421,140 @@
       "object": "destination"
       },
       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
+      "key": "x-ibm-finding.dst_device",
+      "object": "logger_finding"
       }
     ],
-    "destinationAssetName": [
-      {
+    "destinationAssetName": {
       "key": "x-arcsight-event-destination.destination_asset_name",
       "object": "destination"
-      },
-       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationDnsDomain": [
-      {
+    },
+    "destinationDnsDomain": {
       "key": "x-arcsight-event-destination.destination_dns_domain",
       "object": "destination"
-      },
-       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationFqdn": [
-      {
+    },
+    "destinationFqdn": {
       "key": "x-arcsight-event-destination.destination_fqdn",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationNtDomain": [
-      {
+    },
+    "destinationNtDomain": {
       "key": "x-arcsight-event-destination.destination_nt_domain",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeo": [
-      {
+    },
+    "destinationGeo": {
       "key": "x-arcsight-event-destination.destination_geo",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoCountryCode": [
-      {
+    },
+    "destinationGeoCountryCode": {
       "key": "x-arcsight-event-destination.destination_geo_country_code",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoCountryName": [
-      {
+    },
+    "destinationGeoCountryName": {
       "key": "x-arcsight-event-destination.destination_geo_country_name",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
+    },
     "destinationGeoLocationInfo": [
       {
       "key": "x-arcsight-event-destination.destination_geo_location_info",
       "object": "destination"
       },
       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "logger_finding"
       }
     ],
-    "destinationGeoRegionCode": [
-      {
+    "destinationGeoRegionCode": {
       "key": "x-arcsight-event-destination.destination_geo_region_code",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoPostalCode": [
-      {
+    },
+    "destinationGeoPostalCode": {
       "key": "x-arcsight-event-destination.destination_geo_postal_code",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
+    },
     "sourceAssetId": [
       {
       "key": "x-arcsight-event-source.source_asset_id",
       "object": "source"
       },
       {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
+      "key": "x-ibm-finding.src_device",
+      "object": "logger_finding"
       }
     ],
-    "sourceAssetName": [
-      {
+    "sourceAssetName": {
       "key": "x-arcsight-event-source.source_asset_name",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceDnsDomain": [
-      {
+    },
+    "sourceDnsDomain": {
       "key": "x-arcsight-event-source.source_dns_domain",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceFqdn": [
-      {
+    },
+    "sourceFqdn": {
       "key": "x-arcsight-event-source.source_fqdn",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceNtDomain": [
-      {
+    },
+    "sourceNtDomain": {
       "key": "x-arcsight-event-source.source_nt_domain",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeo": [
-      {
+    },
+    "sourceGeo": {
       "key": "x-arcsight-event-source.source_geo",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoCountryCode": [
-      {
+    },
+    "sourceGeoCountryCode": {
       "key": "x-arcsight-event-source.source_geo_country_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoCountryName": [
-      {
+    },
+    "sourceGeoCountryName": {
       "key": "x-arcsight-event-source.source_geo_country_name",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
+    },
     "sourceGeoLocationInfo": [
       {
       "key": "x-arcsight-event-source.source_geo_location_info",
       "object": "source"
       },
       {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
+      "key": "x-ibm-finding.src_geolocation",
+      "object": "logger_finding"
       }
     ],
-    "sourceGeoRegionCode": [
-      {
+    "sourceGeoRegionCode": {
       "key": "x-arcsight-event-source.source_geo_region_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoPostalCode": [
-      {
+    },
+    "sourceGeoPostalCode": {
       "key": "x-arcsight-event-source.source_geo_postal_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "vulnerability": [
-      {
+    },
+    "vulnerability": {
       "key": "x-arcsight-event-vulnerability.vulnerability",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityExternalID": [
-      {
+    },
+    "vulnerabilityExternalID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_external_id",
       "object": "vulnerability"
       },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityID": [
-      {
+	"vulnerabilityID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_id",
       "object": "vulnerability"
       },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityName": [
-      {
+    "vulnerabilityName": {
       "key": "x-arcsight-event-vulnerability.vulnerability_name",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityReferenceID": [
-      {
+    },
+	"vulnerabilityReferenceID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_reference_id",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityResource": [
-      {
+    },
+    "vulnerabilityResource": {
       "key": "x-arcsight-event-vulnerability.vulnerability_resource",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityURI": [
-      {
+    },
+	"vulnerabilityURI": {
       "key": "x-arcsight-event-vulnerability.vulnerability_uri",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ]
+    }
   },
   "other_events": {
     "Event Time": [
@@ -785,8 +585,8 @@
         "object": "dst_ip"
       },
       {
-        "key": "x-arcsight-event-destination.destination_address_ref",
-        "object": "destination",
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "logger_finding",
         "references": "dst_ip"
       }
     ],
@@ -807,8 +607,8 @@
         "object": "src_ip"
       },
       {
-        "key": "x-arcsight-event-source.source_address_ref",
-        "object": "source",
+        "key": "x-ibm-finding.src_ip_ref",
+        "object": "logger_finding",
         "references": "src_ip"
       }
     ],
@@ -996,12 +796,7 @@
       {
 	    "key": "x-ibm-finding.finding_type",
         "object": "logger_finding"
-	  },
-      {
-        "key": "x-ibm-finding.event_category_details_ref",
-        "object": "logger_finding",
-        "references": "event_category"
-      }
+	  }
     ],
     "categoryBehavior": {
       "key": "x-arcsight-event-category.category_behavior",
@@ -1023,17 +818,10 @@
       "key": "x-arcsight-event-category.category_technique",
       "object": "event_category"
     },
-    "eventId": [
-      {
+    "eventId": {
       "key": "x-arcsight-event.event_id",
       "object": "event"
-      },
-      {
-        "key": "x-ibm-finding.event_details_ref",
-        "object": "logger_finding",
-        "references": "event"
-      }
-    ],
+    },
     "externalId": {
       "key": "x-arcsight-event.external_id",
       "object": "event"
@@ -1046,12 +834,7 @@
        {
 	  "key": "x-ibm-finding.name",
 	  "object": "logger_finding"
-	  },
-      {
-        "key": "x-ibm-finding.event_details_ref",
-        "object": "logger_finding",
-        "references": "event"
-      }
+	  }
     ],
     "type": {
       "key": "x-arcsight-event.event_type",
@@ -1099,28 +882,14 @@
       "key": "x-arcsight-event.request_method",
       "object": "event"
     },
-    "deviceProduct": [
-      {
+    "deviceProduct": {
       "key": "x-arcsight-event-device.device_product",
       "object": "device"
-      },
-      {
-        "key": "x-ibm-finding.device_details_ref",
-        "object": "logger_finding",
-        "references": "device"
-      }
-    ],
-    "deviceVendor": [
-      {
+    },
+    "deviceVendor": {
       "key": "x-arcsight-event-device.device_vendor",
       "object": "device"
-      },
-      {
-        "key": "x-ibm-finding.device_details_ref",
-        "object": "logger_finding",
-        "references": "device"
-      }
-    ],
+    },
     "deviceAction": {
       "key": "x-arcsight-event-device.device_action",
       "object": "device"
@@ -1198,318 +967,139 @@
       "object": "destination"
       },
       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
+      "key": "x-ibm-finding.dst_device",
+      "object": "logger_finding"
       }
     ],
-    "destinationAssetName": [
-      {
+    "destinationAssetName": {
       "key": "x-arcsight-event-destination.destination_asset_name",
       "object": "destination"
-      },
-       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationDnsDomain": [
-      {
+    },
+    "destinationDnsDomain": {
       "key": "x-arcsight-event-destination.destination_dns_domain",
       "object": "destination"
-      },
-       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationFqdn": [
-      {
+    },
+    "destinationFqdn": {
       "key": "x-arcsight-event-destination.destination_fqdn",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationNtDomain": [
-      {
+    },
+    "destinationNtDomain": {
       "key": "x-arcsight-event-destination.destination_nt_domain",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeo": [
-      {
+    },
+    "destinationGeo": {
       "key": "x-arcsight-event-destination.destination_geo",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoCountryCode": [
-      {
+    },
+    "destinationGeoCountryCode": {
       "key": "x-arcsight-event-destination.destination_geo_country_code",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoCountryName": [
-      {
+    },
+    "destinationGeoCountryName": {
       "key": "x-arcsight-event-destination.destination_geo_country_name",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
+    },
     "destinationGeoLocationInfo": [
       {
       "key": "x-arcsight-event-destination.destination_geo_location_info",
       "object": "destination"
       },
       {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "logger_finding"
       }
     ],
-    "destinationGeoRegionCode": [
-      {
+    "destinationGeoRegionCode": {
       "key": "x-arcsight-event-destination.destination_geo_region_code",
       "object": "destination"
-      },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
-    "destinationGeoPostalCode": [
-      {
+    },
+    "destinationGeoPostalCode": {
       "key": "x-arcsight-event-destination.destination_geo_postal_code",
       "object": "destination"
       },
-      {
-        "key": "x-ibm-finding.destination_details_ref",
-        "object": "logger_finding",
-        "references": "destination"
-      }
-    ],
     "sourceAssetId": [
       {
       "key": "x-arcsight-event-source.source_asset_id",
       "object": "source"
       },
       {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
+      "key": "x-ibm-finding.src_device",
+      "object": "logger_finding"
       }
     ],
-    "sourceAssetName": [
-      {
+    "sourceAssetName": {
       "key": "x-arcsight-event-source.source_asset_name",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceDnsDomain": [
-      {
+    },
+    "sourceDnsDomain": {
       "key": "x-arcsight-event-source.source_dns_domain",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceFqdn": [
-      {
+    },
+    "sourceFqdn": {
       "key": "x-arcsight-event-source.source_fqdn",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceNtDomain": [
-      {
+    },
+    "sourceNtDomain": {
       "key": "x-arcsight-event-source.source_nt_domain",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeo": [
-      {
+    },
+    "sourceGeo": {
       "key": "x-arcsight-event-source.source_geo",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoCountryCode": [
-      {
+    },
+    "sourceGeoCountryCode": {
       "key": "x-arcsight-event-source.source_geo_country_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoCountryName": [
-      {
+    },
+    "sourceGeoCountryName": {
       "key": "x-arcsight-event-source.source_geo_country_name",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
+    },
     "sourceGeoLocationInfo": [
       {
       "key": "x-arcsight-event-source.source_geo_location_info",
       "object": "source"
       },
       {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
+      "key": "x-ibm-finding.src_geolocation",
+      "object": "logger_finding"
       }
     ],
-    "sourceGeoRegionCode": [
-      {
+    "sourceGeoRegionCode": {
       "key": "x-arcsight-event-source.source_geo_region_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "sourceGeoPostalCode": [
-      {
+    },
+    "sourceGeoPostalCode": {
       "key": "x-arcsight-event-source.source_geo_postal_code",
       "object": "source"
-      },
-      {
-        "key": "x-ibm-finding.source_details_ref",
-        "object": "logger_finding",
-        "references": "source"
-      }
-    ],
-    "vulnerability": [
-      {
+    },
+    "vulnerability": {
       "key": "x-arcsight-event-vulnerability.vulnerability",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityExternalID": [
-      {
+    },
+    "vulnerabilityExternalID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_external_id",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityID": [
-      {
+    },
+	"vulnerabilityID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_id",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityName": [
-      {
+    },
+    "vulnerabilityName": {
       "key": "x-arcsight-event-vulnerability.vulnerability_name",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityReferenceID": [
-      {
+    },
+	"vulnerabilityReferenceID": {
       "key": "x-arcsight-event-vulnerability.vulnerability_reference_id",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-    "vulnerabilityResource": [
-      {
+    },
+    "vulnerabilityResource": {
       "key": "x-arcsight-event-vulnerability.vulnerability_resource",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ],
-	"vulnerabilityURI": [
-      {
+    },
+	"vulnerabilityURI": {
       "key": "x-arcsight-event-vulnerability.vulnerability_uri",
       "object": "vulnerability"
-      },
-      {
-        "key": "x-ibm-finding.vulnerability_details_ref",
-        "object": "logger_finding",
-        "references": "vulnerability"
-      }
-    ]
+    }
   }
 }

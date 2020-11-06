@@ -55,7 +55,7 @@ transmit "arcsight" "{"host": "xxxx", "port": 443}" "{"auth":{"login": "xxx", "p
 ```json
 {
     "type": "bundle",
-    "id": "bundle--0be4b7c6-8ec8-4eca-9186-8aa9384489d8",
+    "id": "bundle--3309fa00-c6fa-4547-8ef3-c0494e12eccc",
     "spec_version": "2.0",
     "objects": [
         {
@@ -65,22 +65,21 @@ transmit "arcsight" "{"host": "xxxx", "port": 443}" "{"auth":{"login": "xxx", "p
             "identity_class": "events"
         },
         {
-            "id": "observed-data--be662d39-eaed-4b74-8004-6a503ede9ea9",
+            "id": "observed-data--feeb98ad-95f8-41bc-8ea6-f2e4851e8e83",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2020-09-24T09:16:27.709Z",
-            "modified": "2020-09-24T09:16:27.709Z",
+            "created": "2020-11-06T17:05:15.268Z",
+            "modified": "2020-11-06T17:05:15.268Z",
             "objects": {
                 "0": {
                     "type": "x-ibm-finding",
                     "time_observed": "2020-06-29T11:49:04.528Z",
                     "name": "The Windows Filtering Platform has allowed a connection.",
                     "finding_type": "/Informational",
-                    "event_details_ref": "1",
-                    "event_category_details_ref": "2",
-                    "source_details_ref": "5",
-                    "device_details_ref": "3",
-                    "severity": "0"
+                    "src_device": "49Y2d73IBABCDULfrMYOBPw==",
+                    "dst_ip_ref": "7",
+                    "severity": "0",
+                    "src_ip_ref": "8"
                 },
                 "1": {
                     "type": "x-arcsight-event",
@@ -194,7 +193,7 @@ transmit "arcsight" "{"host": "xxxx", "port": 443}" "{"auth":{"login": "xxx", "p
 ```json
 {
     "type": "bundle",
-    "id": "bundle--adadbfbf-50b7-42f3-8eb3-1d54e34a0735",
+    "id": "bundle--70e2ff95-dd13-47e9-976f-20e9f2ea560f",
     "spec_version": "2.0",
     "objects": [
         {
@@ -204,22 +203,21 @@ transmit "arcsight" "{"host": "xxxx", "port": 443}" "{"auth":{"login": "xxx", "p
             "identity_class": "events"
         },
         {
-            "id": "observed-data--c7d3b542-bcca-4b39-84d4-c00ae4095593",
+            "id": "observed-data--bf9c1651-5942-476b-8808-e358bb1d26c7",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2020-09-24T09:18:45.297Z",
-            "modified": "2020-09-24T09:18:45.297Z",
+            "created": "2020-11-06T17:09:25.833Z",
+            "modified": "2020-11-06T17:09:25.833Z",
             "objects": {
                 "0": {
                     "type": "x-ibm-finding",
                     "time_observed": "2020-06-17T07:20:53.924Z",
                     "name": "NETBIOS SMB-DS C$ share unicode access",
                     "finding_type": "/Suspicious",
-                    "event_details_ref": "1",
-                    "event_category_details_ref": "2",
-                    "source_details_ref": "5",
-                    "device_details_ref": "3",
-                    "severity": "3"
+                    "src_geolocation": "Frankfurt am Main",
+                    "dst_ip_ref": "7",
+                    "severity": "3",
+                    "src_ip_ref": "9"
                 },
                 "1": {
                     "type": "x-arcsight-event",

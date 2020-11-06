@@ -312,5 +312,6 @@ class TestArcsightResultsToStix(unittest.TestCase):
 
         assert custom_obj['type'] == 'x-ibm-finding'
         assert custom_obj['name'] == 'Registry value set'
-        assert custom_obj['event_details_ref'] == '3'
-        assert custom_obj['device_details_ref'] == '6'
+        assert custom_obj['finding_type'] == '/Informational'
+        assert custom_obj['severity'] == '0'
+        assert custom_obj['src_ip_ref'] == '4'
