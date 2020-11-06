@@ -130,6 +130,10 @@ class ResponseWrapper:
         return self.response.raise_for_status()
 
     @property
+    def headers(self):
+        return self.response.headers
+
+    @property
     def bytes(self):
         return self.response.content
 
