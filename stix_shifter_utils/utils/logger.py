@@ -6,6 +6,7 @@ import threading
 
 loggers = {}
 
+
 def init(level):
     handler = logging.StreamHandler()
     formatter = ColoredFormatter('%(log_color)s %(asctime)s %(name)-12s %(levelname)-8s %(message)s',
@@ -21,17 +22,17 @@ def init(level):
                                  )
     handler.setFormatter(formatter)
     logging.basicConfig(level=level, handlers=(handler,))
-
     jsonmerge.log.setLevel(logging.INFO)
+
 
 def set_external_logger(logger):
     loggers[threading.get_ident()] = logger
 
+
 def set_logger(module):
     if threading.get_ident() in loggers:
         return loggers[threading.get_ident()]
-    logger = logging.getLogger(module)
-    return logger
+    return logging.getLogger(module)
 
 
 def exception_to_string(excp):
