@@ -28,11 +28,11 @@ class AqlQueryTranslator(BaseQueryTranslator):
             time_value = match.group(1)
             interval_value = match.group(2)
             current_time = datetime.now()
-            if interval_value == 'MINUTES'.lower():
+            if interval_value.lower() == 'MINUTES'.lower():
                 before_time = current_time - timedelta(minutes=int(time_value))
-            elif interval_value == 'HOURS'.lower():
+            elif interval_value.lower() == 'HOURS'.lower():
                 before_time = current_time - timedelta(hours=int(time_value))
-            elif interval_value == 'DAYS'.lower():
+            elif interval_value.lower() == 'DAYS'.lower():
                 before_time = current_time - timedelta(days=int(time_value))
             start_dt_obj = datetime.strptime(str(before_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
             result[START_TIME] = int(float(start_dt_obj)*1000)
@@ -44,6 +44,17 @@ class AqlQueryTranslator(BaseQueryTranslator):
                 if result.get(START_TIME) and not result.get(END_TIME):
                     current_time = datetime.now()
                     result[END_TIME] = int(float(datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f'))*1000)
+        
+        # User time_range from options when no time specified in the query 
+        if not result.get(START_TIME) and not result.get(END_TIME):
+            time_range = self.options.get('time_range')
+            current_time = datetime.now()
+            before_time = current_time - timedelta(minutes=int(time_range))
+            start_dt_obj = datetime.strptime(str(before_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
+            result[START_TIME] = int(float(start_dt_obj)*1000)
+            stop_dt_obj = datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
+            result[END_TIME] = int(float(stop_dt_obj)*1000)
+
         return result
 
     def get_language(self):
