@@ -97,7 +97,57 @@
       "device_version": ["deviceVersion"],
       "device_address": ["deviceAddress"],
       "device_hostname": ["deviceHostName"],
-      "device_external_id": ["deviceExternalId"]
+      "device_external_id": ["deviceExternalId"],
+      "device_asset_id": ["fulltextSearch"],
+      "device_asset_name": ["fulltextSearch"],
+      "device_dns_domain": ["fulltextSearch"],
+      "device_domain": ["fulltextSearch"],
+      "device_nt_domain": ["fulltextSearch"]
+    }
+  },
+  "x-arcsight-event-destination": {
+    "fields": {
+      "destination_asset_id": ["fulltextSearch"],
+      "destination_asset_name": ["fulltextSearch"],
+      "destination_dns_domain": ["destinationDnsDomain"],
+      "destination_fqdn": ["fulltextSearch"],
+      "destination_nt_domain": ["destinationNtDomain"],
+      "destination_geo_location_info": ["fulltextSearch"],
+      "destination_geo_postal_code": ["fulltextSearch"]
+    }
+  },
+  "x-arcsight-event-source": {
+    "fields": {
+      "source_asset_id": ["fulltextSearch"],
+      "source_asset_name": ["fulltextSearch"],
+      "source_dns_domain": ["fulltextSearch"],
+      "source_fqdn": ["fulltextSearch"],
+      "source_nt_domain": ["sourceNtDomain"],
+      "source_geo_location_info": ["fulltextSearch"],
+      "source_geo_postal_code": ["fulltextSearch"]
+    }
+  },
+  "x-arcsight-event-vulnerability": {
+    "fields": {
+      "vulnerability": ["fulltextSearch"],
+      "vulnerability_external_id": ["vulnerabilityExternalID"],
+      "vulnerability_id": ["fulltextSearch"],
+      "vulnerability_name": ["fulltextSearch"],
+      "vulnerability_reference_id": ["fulltextSearch"],
+      "vulnerability_resource": ["fulltextSearch"],
+      "vulnerability_uri": ["vulnerabilityURI"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["name"],
+      "finding_type": ["categorySignificance"],
+      "src_device": ["fulltextSearch"],
+      "dst_device": ["fulltextSearch"],
+      "src_geolocation": ["fulltextSearch"],
+      "dst_geolocation": ["fulltextSearch"],
+      "src_ip_ref.value": ["sourceAddress"],
+      "dst_ip_ref.value": ["destinationAddress"]
     }
   }
 }
