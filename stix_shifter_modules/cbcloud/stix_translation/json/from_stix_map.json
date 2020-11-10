@@ -1,0 +1,62 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["netconn_ipv4", "netconn_local_ipv4"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["netconn_ipv6", "netconn_local_ipv6"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filemod_name", "modload_name"],
+      "hashes.MD5": ["filemod_hash", "modload_hash"],
+      "hashes.SHA-256": ["filemod_hash", "modload_hash"]
+    }
+  },
+  "process": {
+    "fields": {
+      "created": ["process_start_time"],
+      "command_line": ["process_cmdline"],
+      "pid": ["process_pid"],
+      "name": ["process_name"],
+      "service_name":["process_service_name"],
+      "parent_ref.command_line": ["parent_cmdline"],
+      "parent_ref.pid": ["parent_pid"],
+      "parent_ref.name": ["parent_name"],
+      "parent_ref.binary_ref.hashes.MD5": ["parent_hash"],
+      "parent_ref.binary_ref.hashes.SHA-256": ["parent_hash"],
+      "creator_user_ref.account_login": ["process_username"],
+      "binary_ref.hashes.MD5": ["process_hash"],
+      "binary_ref.hashes.SHA-256": ["process_hash", "process_sha256"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["process_product_name", "process_original_filename", "process_internal_filename"],
+      "vendor": ["process_company_name", "process_publisher"],
+      "version": ["process_product_version"] 
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["netconn_port"],
+      "dst_port": ["netconn_port"],
+      "protocols[*]": ["netconn_protocol"],
+      "src_ref.value": ["netconn_local_ipv4", "netconn_local_ipv6"],
+      "dst_ref.value": ["netconn_ipv4", "netconn_ipv6"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "account_login": ["process_username"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["netconn_domain"]
+    }
+  }
+}
