@@ -36,17 +36,11 @@ class AqlQueryTranslator(BaseQueryTranslator):
                 before_time = current_time - timedelta(days=int(time_value))
             start_dt_obj = datetime.strptime(str(before_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
             result[START_TIME] = int(float(start_dt_obj)*1000)
-            stop_dt_obj = datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f')
-            result[END_TIME] = int(float(stop_dt_obj)*1000)
         else:
             for label in labels.keys():
                 result[labels[label]] = self.search_for_pattern(data, time_patterns, label)
-                if result.get(START_TIME) and not result.get(END_TIME):
-                    current_time = datetime.now()
-                    result[END_TIME] = int(float(datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f'))*1000)
-        
-        # Set end_time as current when no time specified in the query 
-        if not result.get(START_TIME) and not result.get(END_TIME):
+
+        if not result.get(END_TIME):
             current_time = datetime.now()
             result[END_TIME] = int(float(datetime.strptime(str(current_time), '%Y-%m-%d %H:%M:%S.%f').strftime('%s.%f'))*1000)
 
