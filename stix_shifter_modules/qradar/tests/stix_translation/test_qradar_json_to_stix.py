@@ -84,8 +84,19 @@ class TestTransform(object):
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
+        process_image_dir = "C:\\example\\process\\image"
+        process_image_file = "proc_img.exe"
+        process_image = process_image_dir + "\\" + process_image_file
+        process_parent_image_dir = "C:\\example\\process\\parent\\image"
+        process_parent_image_file = "proc_parent_img.exe"
+        process_parent_image = process_parent_image_dir + "\\" + process_parent_image_file
+        process_command_line = "C:\\example\\executable.exe --example"
+        process_parent_command_line = "C:\\example\\parent.exe --example"
+        process_loaded_image = "C:\\example\\some.dll"
+        
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac}
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, 
+                "Image": process_image, "ParentImage": process_parent_image, "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
@@ -142,10 +153,31 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'name'})
         assert(curr_obj['name'] == file_name)
 
+        proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
+
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
+        user_ref = proc_obj['creator_user_ref']
+        assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
+        binary_ref = proc_obj['binary_ref']
+        assert(binary_ref in objects), f"binary_ref with key {proc_obj['binary_ref']} not found"
+        binary = objects[binary_ref]
+        assert(binary.keys() == { 'type', 'name', 'parent_directory_ref' })
+        assert(binary['name'] == process_image_file)
+        assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {binary_ref['parent_directory_ref']} not found"
+        assert(objects[binary['parent_directory_ref']]['path'] == process_image_dir)
+
+        #todo: check filename and file path and also for parent
+        parent_ref = proc_obj['parent_ref']
+        assert(parent_ref in objects), f"parent_ref with key {proc_obj['parent_ref']} not found"
+
+        assert(proc_obj['command_line'] == process_command_line)
+
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
+        assert(objects.keys() == set(map(str, range(0, 18))))
 
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
