@@ -35,7 +35,7 @@
   },
   "software": {
     "fields": {
-      "name": ["process_product_name", "process_original_filename", "process_internal_filename"],
+      "name": ["process_file_description", "process_internal_name"],
       "vendor": ["process_company_name", "process_publisher"],
       "version": ["process_product_version"] 
     }

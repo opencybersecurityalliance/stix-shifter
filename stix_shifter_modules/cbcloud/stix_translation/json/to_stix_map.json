@@ -1,115 +1,111 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
+  "process_start_time": [
+    {
+      "key": "process.created",
+      "object": "process"
+    }
+  ],
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
   },
-  "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
+  "id": {
+    "key": "process.x_id",
+    "object": "process"
   },
-  "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
+  "unique_id": {
+    "key": "process.x_unique_id",
+    "object": "process"
   },
-  "SourceIpV4": [
+  "parent_name": {
+    "key": "process.name",
+    "object": "parent_process"
+  },
+  "parent_pid": [
+    {
+      "key": "process.pid",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "parent_id": {
+    "key": "process.x_id",
+    "object": "parent_process"
+  },
+  "parent_unique_id": {
+    "key": "process.x_unique_id",
+    "object": "parent_process"
+  },
+  "process_md5": {
+    "key": "file.hashes.MD5",
+    "object": "process_file"
+  },
+  "process_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "process_file"
+  },
+  "cmdline": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "interface_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
+      "transformer": "ToIPv4"
     }
   ],
-  "DestinationIpV4": [
+  "path": [
     {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
+      "key": "directory.path",
+      "object": "dir"
     }
   ],
-  "SourceIpV6": [
+  "server_added_timestamp": [
     {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
+      "key": "file.created",
+      "object": "binary_file"
     }
   ],
-  "DestinationIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "EventCount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
+  "original_filename": {
+    "key": "file.name",
+    "object": "binary_file"
   },
-  "StartTime": [
-    {
-      "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
-    }
-  ],
-  "Url": {
-    "key": "url.value"
+  "orig_mod_length": {
+    "key": "file.size",
+    "object": "binary_file"
   },
-  "FileName": {
-    "key": "file.name"
-  },
-  "Payload": {
-    "key": "artifact.payload_bin"
-  },
-  "DestinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "SourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "NetworkProtocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "transformer": "ToLowercaseArray"
-  },
-  "DomainName": {
-    "key": "domain-name.value"
-  },
-  "Process": {
-    "Path": [
-      {
-        "object": "proc",
-        "key": "process.command_line"
-      }
-    ],
-    "Pid": [
-      {
-        "object": "proc",
-        "key": "process.id"
-      }
-    ]
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "binary_file"
   }
 }

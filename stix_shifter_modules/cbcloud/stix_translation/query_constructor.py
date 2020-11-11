@@ -250,9 +250,17 @@ class CbCloudQueryStringPatternTranslator:
 
         return queries
 
+    def _add_no_enriched(self, queries):
+        """Only retrieve non-enriched events."""
+        for query in queries:
+            query['query'] += ' AND -enriched:True'
+
+        return queries
+
     def parse_expression(self, pattern: Pattern):
         queries = self._parse_expression(pattern)
-        return self._add_default_timerange(queries)
+        queries = self._add_default_timerange(queries)
+        return self._add_no_enriched(queries)
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
