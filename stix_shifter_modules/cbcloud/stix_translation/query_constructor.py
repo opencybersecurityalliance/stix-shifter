@@ -33,10 +33,7 @@ class CbCloudQueryStringPatternTranslator:
         self.pattern = pattern
         self.result_limit = result_limit
         self.time_range = time_range  # filter results to the last x minutes
-        self.translated = self.parse_expression(pattern)
-        self.queries = []
-        for translation in self.translated:
-            self.queries.append(json.dumps(translation))
+        self.queries = [json.dumps(translation) for translation in self.parse_expression(pattern)]
 
     @classmethod
     def _format_equality(cls, value) -> str:
@@ -96,23 +93,6 @@ class CbCloudQueryStringPatternTranslator:
     @staticmethod
     def _stix_to_cbcloud_timestamp(timestamp: str) -> str:
         return timestamp[2:-1]
-
-    @staticmethod
-    def _combine_queries(queries) -> list:
-        results = []
-        query_strs = [q["query"] for q in queries]
-
-        # Here we are using the assumption that all observable expressions are OR'ed together
-        if not query_strs:
-            pass
-        elif len(query_strs) == 1:
-            query = query_strs[0]
-            results.append({"query": query})
-        else:
-            query = f"({') OR ('.join(query_strs)})"
-            results.append({"query": query})
-
-        return results
 
     @staticmethod
     def _parse_mapped_fields(value, comparator, mapped_fields_array) -> str:
@@ -214,53 +194,48 @@ class CbCloudQueryStringPatternTranslator:
 
         elif isinstance(expression, ObservationExpression):
             query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
-            return [{'query': query_string}]
+            return query_string
 
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             return self._parse_expression(expression.observation_expression, expression)
 
         elif isinstance(expression, CombinedObservationExpression):
-            # Note this code is only correct because we assume AND is OR for observation expressions
+            # This code is only correct because we assume AND is OR for observation expressions
             operator = self.comparator_lookup[expression.operator]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
+            # OR both ObservationExpressions together
             return f'({expr1}) {operator} ({expr2})'
 
         elif isinstance(expression, Pattern):
-            queries = self._parse_expression(expression.expression)
-            return self._combine_queries(queries)
+            return self._parse_expression(expression.expression)
 
         else:
             raise RuntimeError(
                 f'Unknown Recursion Case for expression={expression}, type(expression)={type(expression)}'
             )
 
-    def _add_default_timerange(self, queries):
+    def _add_default_timerange(self, query):
         today = datetime.utcnow()
         start = self._datetime_to_cbcloud_timestamp(today - timedelta(minutes=self.time_range))
         stop = self._datetime_to_cbcloud_timestamp(today)
         trange = f'[{start} TO {stop}]'
 
-        if self.time_range:
-            for query in queries:
-                # check if there's an existing time constraint on the query
-                if 'process_start_time' not in query['query'] and 'device_timestamp' not in query['query']:
-                    query['query'] = f"({query['query']})"
-                    query['query'] += f' AND (process_start_time:{trange} OR device_timestamp:{trange})'
+        # Only add default timerange if there's no existing time constraint on the query
+        if self.time_range and 'process_start_time' not in query and 'device_timestamp' not in query:
+            query = f'({query}) AND (process_start_time:{trange} OR device_timestamp:{trange})'
 
-        return queries
+        return query
 
-    def _add_no_enriched(self, queries):
+    def _add_no_enriched(self, query):
         """Only retrieve non-enriched events."""
-        for query in queries:
-            query['query'] += ' AND -enriched:True'
-
-        return queries
+        return query + ' AND -enriched:True'
 
     def parse_expression(self, pattern: Pattern):
         queries = self._parse_expression(pattern)
         queries = self._add_default_timerange(queries)
-        return self._add_no_enriched(queries)
+        # Return a single-item list
+        return [self._add_no_enriched(queries)]
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
