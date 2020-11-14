@@ -7,6 +7,7 @@ class EntryPoint(BaseEntryPoint):
         super().__init__(connection, configuration, options)
 
         if connection:
-            self.setup_transmission_basic(connection, configuration)
+            # Use default transmission setup otherwise...
+            self.setup_transmission_simple(connection, configuration)
         else:
             self.setup_translation_simple(dialect_default='default')

@@ -13,19 +13,22 @@
         },
         "help": {
             "type": "link",
-            "default": "https://dummy.example/"
+            "default": "https://add.a.link.to.the.carbonblackcloud/connector/documentation.html"
         },
-        "sslVerify": {
-            "regex": "^([tT]rue|[fF]alse)$",
+        "sni": {
             "type": "text",
-            "default": "True"
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
         }
     },
     "configuration": {
         "type" : "fields",
         "auth": {
-            "orgkey": {
-                "type": "text"
+            "org_key": {
+                "type": "password"
             },
             "token": {
                 "type": "password"

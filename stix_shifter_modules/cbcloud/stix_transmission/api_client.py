@@ -1,41 +1,78 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
+DEFAULT_START = 0
+DEFAULT_ROWS = 500
+DEFAULT_FIELDS = [
+    "*",
+    "process_cmdline",
+    "process_start_time",
+    "device_internal_ip",
+    "device_external_ip",
+    "parent_hash",
+    "device_os"
+]
+
 
 class APIClient():
-
     def __init__(self, connection, configuration):
-         # Uncomment when implementing data source API client.
-        # auth = configuration.get('auth')
-        # headers = dict()
-        # headers['X-Auth-Token'] = auth.get('token')
-        # self.client = RestApiClient(connection.get('host'),
-        #                             connection.get('port'),
-        #                             connection.get('cert', None),
-        #                             headers,
-        #                             cert_verify=connection.get('cert_verify', 'True')
-        #                             )
-
-        # Placeholder client to allow dummy transmission calls.
-        # Remove when implementing data source API client.
-        self.client = "data source API client"
+        auth = configuration.get('auth')
+        headers = dict()
+        headers['X-Auth-Token'] = auth.get('token')
+        headers['Accept'] = 'application/json'
+        headers['Content-Type'] = 'application/json'
+        self.org_key = auth.get('org_key')
+        self.client = RestApiClient(
+            connection.get('host'),
+            connection.get('port'),
+            headers,
+            cert_verify=connection.get('selfSignedCert', True),
+            sni=connection.get('sni', None)
+        )
+        self.timeout = connection['options'].get('timeout')
+        self.result_limit = connection['options'].get('result_limit')
 
     def ping_data_source(self):
-        # Pings the data source
-        return {"code": 200, "success": True}
+        """Pings the data source by sending a GET request to
+        https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/limits
+        """
+        endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/limits'
+        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
     def create_search(self, query_expression):
-        # Queries the data source
-        return {"code": 200, "query_id": "uuid_1234567890"}
+        """Queries the data source by sending a POST request to
+        https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs
+        """
+        endpoint = f'api/investigate/v2/orgs/{self.org_key}/processes/search_jobs'
+        data = {
+            'query': query_expression,
+            'fields': DEFAULT_FIELDS,
+            'start': 0,
+            'rows': self.result_limit,
+            'sort': {
+                'field': 'device_timestamp',
+                'order': 'asc'
+            }
+        }
+        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
 
-    def get_search_status(self, search_id):
-        # Check the current status of the search
-        return {"code": 200, "status": "COMPLETED"}
+    def get_search_status(self, job_id):
+        """ Check the status of the search by sending a GET request to
+        https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/search_jobs/{job_id}
+        """
+        endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
+        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_search_results(self, search_id, range_start=None, range_end=None):
-        # Return the search results. Results must be in JSON format before being translated into STIX
-        return {"code": 200, "data": "Results from search"}
+    def get_search_results(self, job_id, start=DEFAULT_START, rows=DEFAULT_ROWS):
+        """Return the JSON-formatted search results by sending a GET request to
+        https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs/{job_id}/results
+        """
+        urldata = [("start", start), ("rows", rows)]
+        endpoint = f'api/investigate/v2/orgs/{self.org_key}/processes/search_jobs/{job_id}/results'
+        return self.client.call_api(endpoint, 'GET', urldata=urldata, timeout=self.timeout)
 
-    def delete_search(self, search_id):
-        # Optional since this may not be supported by the data source API
-        # Delete the search
-        return {"code": 200, "success": True}
+    def delete_search(self, job_id):
+        """Delete the search by sending a DELETE request to
+        https://<server_ip>/api/investigate/v1/orgs/{orgkey}/processes/search_jobs/{job_id}
+        """
+        endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
+        return self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)

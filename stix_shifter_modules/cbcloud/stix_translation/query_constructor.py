@@ -24,14 +24,12 @@ class CbCloudQueryStringPatternTranslator:
         ComparisonComparators.LessThan: ':',
         ComparisonComparators.LessThanOrEqual: ':',
         ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
+        ObservationOperators.And: 'AND'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.result_limit = result_limit
         self.time_range = time_range  # filter results to the last x minutes
         self.queries = [json.dumps(translation) for translation in self.parse_expression(pattern)]
 
@@ -75,7 +73,7 @@ class CbCloudQueryStringPatternTranslator:
         start = cls._stix_to_cbcloud_timestamp(qualifier.start)
         stop = cls._stix_to_cbcloud_timestamp(qualifier.stop)
 
-        return f'(({expression}) AND process_start_time:[{start} TO *] AND device_timestamp:[* TO {stop}])'
+        return f'({expression}) AND device_timestamp:[{start} TO {stop}]'
 
     @staticmethod
     def _negate_comparison(comparison_string: str) -> str:
@@ -120,9 +118,6 @@ class CbCloudQueryStringPatternTranslator:
 
         return str_
 
-    # the return type of this function is a string for expressions types up to CombinedComparionExpression
-    # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
-    # e.g. [{'query': 'foo'}, {'query':'bar'}]
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
             # Base Case
@@ -175,6 +170,7 @@ class CbCloudQueryStringPatternTranslator:
             # Wrap nested combined comparison expressions in parentheses
             fmt1 = "({})" if isinstance(expression.expr2, CombinedComparisonExpression) else "{}"
             fmt2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
+            operator = self.comparator_lookup[expression.operator]
 
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
@@ -193,22 +189,23 @@ class CbCloudQueryStringPatternTranslator:
             return query_string
 
         elif isinstance(expression, ObservationExpression):
+            # An observation can contain a qualifier
             query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
             return query_string
 
-        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            return self._parse_expression(expression.observation_expression, expression)
-
         elif isinstance(expression, CombinedObservationExpression):
-            # This code is only correct because we assume AND is OR for observation expressions
+            # A combined observation can consist of observations containing a qualifier
             operator = self.comparator_lookup[expression.operator]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
-            # OR both ObservationExpressions together
             return f'({expr1}) {operator} ({expr2})'
 
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
+
+        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            # When there's a startstop qualifier the object type is StartStopQualifier
+            return self._parse_expression(expression.observation_expression, qualifier=expression)
 
         else:
             raise RuntimeError(
@@ -219,11 +216,10 @@ class CbCloudQueryStringPatternTranslator:
         today = datetime.utcnow()
         start = self._datetime_to_cbcloud_timestamp(today - timedelta(minutes=self.time_range))
         stop = self._datetime_to_cbcloud_timestamp(today)
-        trange = f'[{start} TO {stop}]'
 
         # Only add default timerange if there's no existing time constraint on the query
-        if self.time_range and 'process_start_time' not in query and 'device_timestamp' not in query:
-            query = f'({query}) AND (process_start_time:{trange} OR device_timestamp:{trange})'
+        if self.time_range and 'device_timestamp' not in query:
+            query = f'({query}) AND device_timestamp:[{start} TO {stop}]'
 
         return query
 
@@ -239,7 +235,6 @@ class CbCloudQueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit']
     time_range = options['time_range']
-    translated_statements = CbCloudQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
+    translated_statements = CbCloudQueryStringPatternTranslator(pattern, data_model_mapping, time_range)
     return translated_statements.queries
