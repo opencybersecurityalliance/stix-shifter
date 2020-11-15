@@ -1,4 +1,5 @@
 import json
+import ntpath
 import re
 
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
@@ -23,7 +24,6 @@ class ResultsTranslator(JSONToStix):
     def translate_results(self, data_source, data):
         """Convert and translate the JSON data to STIX."""
         json_data = json.loads(data)
-
         for json_entry in json_data:
             # Split process hash lists into separate md5 and sha256 entries
             if json_entry.get('process_hash', False):
@@ -36,22 +36,26 @@ class ResultsTranslator(JSONToStix):
                 json_entry['parent_md5'] = md5
                 json_entry['parent_sha256'] = sha256
 
-            # Split lists across separate JSON fields
-            count = 1
+            # Convert the process_name and parent_name to split path and name fields
+            if json_entry.get('process_name', False):
+                tmp = json_entry['process_name']
+                json_entry['process_name'] = ntpath.basename(tmp)
+                json_entry['process_path'] = ntpath.dirname(tmp)
+
+            if json_entry.get('parent_name', False):
+                tmp = json_entry['parent_name']
+                json_entry['parent_name'] = ntpath.basename(tmp)
+                json_entry['parent_path'] = ntpath.dirname(tmp)
+
+            # Convert list values
             for key in json_entry:
-                if isinstance(json_entry.get(key, False), list) and self.map_data.get(key, False):
-                    # If only 1 value in the list, replace the list with the value and keep the mapping definition
+                if isinstance(json_entry.get(key, False), list):
+                    # If only 1 value, replace the list with the value
                     if len(json_entry[key]) == 1:
                         json_entry[key] = json_entry[key][0]
-                    # If more than 1 value in the list, remove the item and add separate entries and mapping definitions
+                    # If more than 1 value, convert the list items to a string
                     elif len(json_entry[key]) > 1:
-                        # Get the mapping definition for the field
-                        map_value = self.map_data.pop(key)
-                        # Add new fields for each value with a copy of the original mapping definition
-                        for json_value in json_entry.pop(key):
-                            json_entry[key + str(count)] = json_value
-                            self.map_data[key + str(count)] = map_value
-                            count += 1
+                        json_entry[key] = f"[{', '.join(str(x) for x in json_entry[key])}]"
 
         data = json.dumps(json_data)
         # Throw the updated JSON data to JSONToStix for translation to STIX

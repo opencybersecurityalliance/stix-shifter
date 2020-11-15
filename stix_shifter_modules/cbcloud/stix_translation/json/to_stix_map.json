@@ -1,7 +1,7 @@
 {
-  "username": [
+  "process_username": [
     {
-      "key": "user-account.user_id",
+      "key": "user-account.account_login",
       "object": "process_creator"
     },
     {
@@ -35,36 +35,9 @@
     "key": "process.pid",
     "object": "process"
   },
-  "id": {
-    "key": "process.x_id",
-    "object": "process"
-  },
-  "unique_id": {
+  "process_guid": {
     "key": "process.x_unique_id",
     "object": "process"
-  },
-  "parent_name": {
-    "key": "process.name",
-    "object": "parent_process"
-  },
-  "parent_pid": [
-    {
-      "key": "process.pid",
-      "object": "parent_process"
-    },
-    {
-      "key": "process.parent_ref",
-      "object": "process",
-      "references": "parent_process"
-    }
-  ],
-  "parent_id": {
-    "key": "process.x_id",
-    "object": "parent_process"
-  },
-  "parent_unique_id": {
-    "key": "process.x_unique_id",
-    "object": "parent_process"
   },
   "process_md5": {
     "key": "file.hashes.MD5",
@@ -74,38 +47,134 @@
     "key": "file.hashes.SHA-256",
     "object": "process_file"
   },
-  "cmdline": {
+  "process_cmdline": {
     "key": "process.command_line",
     "object": "process"
   },
-  "interface_ip": [
-    {
-      "key": "ipv4-addr.value",
-      "transformer": "ToIPv4"
-    }
-  ],
-  "path": [
+  "process_path": [
     {
       "key": "directory.path",
-      "object": "dir"
-    }
-  ],
-  "server_added_timestamp": [
+      "object": "process_dir"
+    },
     {
-      "key": "file.created",
-      "object": "binary_file"
+      "key": "file.parent_directory_ref",
+      "object": "process_file",
+      "references": "process_dir"
     }
   ],
-  "original_filename": {
-    "key": "file.name",
-    "object": "binary_file"
+  "parent_name": [
+    {
+      "key": "file.name",
+      "object": "parent_file"
+    },
+    {
+      "key": "process.name",
+      "object": "parent"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent",
+      "references": "parent_file"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent"
+    }
+  ],
+  "parent_pid": {
+    "key": "process.pid",
+    "object": "parent"
   },
-  "orig_mod_length": {
-    "key": "file.size",
-    "object": "binary_file"
+  "parent_guid": {
+    "key": "process.x_unique_id",
+    "object": "parent"
   },
-  "md5": {
+  "parent_md5": {
     "key": "file.hashes.MD5",
-    "object": "binary_file"
+    "object": "parent_file"
+  },
+  "parent_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "parent_file"
+  },
+  "parent_cmdline": {
+    "key": "process.command_line",
+    "object": "parent"
+  },
+  "parent_path": [
+    {
+      "key": "directory.path",
+      "object": "parent_dir"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "parent_file",
+      "references": "parent_dir"
+    }
+  ],
+  "device_name": {
+    "key": "x_cbcloud.device_name",
+    "cybox": false
+  },
+  "device_internal_ip": {
+    "key": "x_cbcloud.device_internal_ip",
+    "cybox": false
+  },
+  "device_external_ip": {
+    "key": "x_cbcloud.device_external_ip",
+    "cybox": false
+  },
+  "device_os": {
+    "key": "x_cbcloud.device_os",
+    "cybox": false
+  },
+  "device_id": {
+    "key": "x_cbcloud.device_id",
+    "cybox": false
+  },
+  "device_timestamp": {
+    "key": "x_cbcloud.device_timestamp",
+    "cybox": false
+  },
+  "org_id": {
+    "key": "x_cbcloud.org_id",
+    "cybox": false
+  },
+  "device_group_id": {
+    "key": "x_cbcloud.device_group_id",
+    "cybox": false
+  },
+  "process_terminated": {
+    "key": "x_cbcloud.process_terminated",
+    "cybox": false
+  },
+  "regmod_count": {
+    "key": "x_cbcloud.regmod_count",
+    "cybox": false
+  },
+  "netconn_count": {
+    "key": "x_cbcloud.netconn_count",
+    "cybox": false
+  },
+  "filemod_count": {
+    "key": "x_cbcloud.filemod_count",
+    "cybox": false
+  },
+  "modload_count": {
+    "key": "x_cbcloud.modload_count",
+    "cybox": false
+  },
+  "childproc_count": {
+    "key": "x_cbcloud.childproc_count",
+    "cybox": false
+  },
+  "crossproc_count": {
+    "key": "x_cbcloud.crossproc_count",
+    "cybox": false
+  },
+  "scriptload_count": {
+    "key": "x_cbcloud.scriptload_count",
+    "cybox": false
   }
 }
