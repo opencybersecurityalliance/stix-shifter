@@ -1,7 +1,7 @@
+import json
+
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
-DEFAULT_START = 0
-DEFAULT_ROWS = 500
 DEFAULT_FIELDS = [
     "*",
     "process_cmdline",
@@ -59,12 +59,12 @@ class APIClient():
             'fields': DEFAULT_FIELDS,
             'start': 0,
             'rows': self.result_limit,
-            'sort': {
+            'sort': [{
                 'field': 'device_timestamp',
                 'order': 'asc'
-            }
+            }]
         }
-        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
+        return self.client.call_api(endpoint, 'POST', data=json.dumps(data), timeout=self.timeout)
 
     def get_search_status(self, job_id):
         """ Check the status of the search by sending a GET request to
@@ -78,7 +78,7 @@ class APIClient():
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
         return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_search_results(self, job_id, start=DEFAULT_START, rows=DEFAULT_ROWS):
+    def get_search_results(self, job_id, start=0, rows=100):
         """Return the JSON-formatted search results by sending a GET request to
         https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs/{job_id}/results
 

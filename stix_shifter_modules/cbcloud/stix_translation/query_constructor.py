@@ -9,10 +9,12 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 
 
-LOGGER = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class CbCloudQueryStringPatternTranslator:
+    """Carbon Black Cloud STIX to query string pattern translator."""
+
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: 'AND',
@@ -28,6 +30,7 @@ class CbCloudQueryStringPatternTranslator:
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
+        """CbCloudQueryStringPatternTranslator constructor."""
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.time_range = time_range  # filter results to the last x minutes
@@ -35,31 +38,54 @@ class CbCloudQueryStringPatternTranslator:
 
     @classmethod
     def _format_equality(cls, value) -> str:
+        """Format a value that's part of an equality comparison."""
         return f'{cls._escape_value(value)}'
 
     @classmethod
     def _format_lte(cls, value) -> str:
+        """Format a value that's part of a LessThanOrEqual comparison."""
         return f'[* TO {cls._escape_value(value)}]'
 
     @classmethod
     def _format_gte(cls, value) -> str:
+        """Format a value that's part of a GreaterThanOrEqual comparison."""
         return f'[{cls._escape_value(value)} TO *]'
 
-    # Note: documentation appears to be wrong
     @classmethod
     def _format_lt(cls, value) -> str:
+        """Format a value that's part of a LessThan comparison."""
         if isinstance(value, int):
             value = value - 1
         return cls._format_lte(value)
 
     @classmethod
     def _format_gt(cls, value) -> str:
+        """Format a value that's part of a GreaterThan comparison."""
         if isinstance(value, int):
             value = value + 1
         return cls._format_gte(value)
 
+    @classmethod
+    def _format_start_stop_qualifier(cls, expression, qualifier: StartStopQualifier) -> str:
+        """Convert a STIX start stop qualifier into a query string.
+
+        Carbon Black Cloud defines a timerange with a start and stop value
+        based on the device_timestamp field. The timerange can either be
+        specified as part of the process search query using the device_timestamp
+        field directly or via a separate field in the API JSON request:
+
+        "time_range": {
+          "end": "2020-01-27T18:34:04Z",
+          "start": "2020-01-18T18:34:04Z,
+        }
+        """
+        start = cls._stix_to_cbcloud_timestamp(qualifier.start)
+        stop = cls._stix_to_cbcloud_timestamp(qualifier.stop)
+        return f'({expression}) AND device_timestamp:[{start} TO {stop}]'
+
     @staticmethod
     def _escape_value(value) -> str:
+        """Escape specific characters in a value."""
         if isinstance(value, str):
             value = value.replace('\\', '\\\\')
             value = value.replace('\"', '\\"')
@@ -68,19 +94,13 @@ class CbCloudQueryStringPatternTranslator:
             value = value.replace(' ', '\\ ')
         return value
 
-    @classmethod
-    def _format_start_stop_qualifier(cls, expression, qualifier: StartStopQualifier) -> str:
-        start = cls._stix_to_cbcloud_timestamp(qualifier.start)
-        stop = cls._stix_to_cbcloud_timestamp(qualifier.stop)
-
-        return f'({expression}) AND device_timestamp:[{start} TO {stop}]'
-
     @staticmethod
     def _negate_comparison(comparison_string: str) -> str:
         return '-{}'.format(comparison_string)
 
     @staticmethod
     def _datetime_to_cbcloud_timestamp(timestamp: datetime) -> str:
+        """Convert a datetime object to a Carbon Black Cloud timestamp."""
         try:
             str_ = timestamp.strftime('%Y-%m-%dT%H:%M:%S')
         except ValueError:
@@ -90,10 +110,12 @@ class CbCloudQueryStringPatternTranslator:
 
     @staticmethod
     def _stix_to_cbcloud_timestamp(timestamp: str) -> str:
+        """Convert a STIX timestamp to a Carbon Black Cloud timestamp."""
         return timestamp[2:-1]
 
     @staticmethod
     def _parse_mapped_fields(value, comparator, mapped_fields_array) -> str:
+        """Convert a list of mapped fields into a query string."""
         comparison_strings = []
         value_type = None
 
@@ -119,8 +141,8 @@ class CbCloudQueryStringPatternTranslator:
         return str_
 
     def _parse_expression(self, expression, qualifier=None):
+        """Parse a STIX expression into a query string."""
         if isinstance(expression, ComparisonExpression):
-            # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
 
@@ -213,21 +235,32 @@ class CbCloudQueryStringPatternTranslator:
             )
 
     def _add_default_timerange(self, query):
+        """Add a default timerange to a query string."""
         today = datetime.utcnow()
         start = self._datetime_to_cbcloud_timestamp(today - timedelta(minutes=self.time_range))
         stop = self._datetime_to_cbcloud_timestamp(today)
 
-        # Only add default timerange if there's no existing time constraint on the query
+        # Add a default timerange when there's no time constraint in the query.
+        # Carbon Black Cloud defines a timerange with a start and stop value
+        # based on the device_timestamp field. The timerange can either be
+        # specified as part of the process search query using the device_timestamp
+        # field directly or via a separate field in the API JSON request:
+        #
+        # "time_range": {
+        #   "end": "2020-01-27T18:34:04Z",
+        #   "start": "2020-01-18T18:34:04Z,
+        # }
         if self.time_range and 'device_timestamp' not in query:
             query = f'({query}) AND device_timestamp:[{start} TO {stop}]'
 
         return query
 
     def _add_no_enriched(self, query):
-        """Only retrieve non-enriched events."""
+        """Append exclusion for enriched events to the query string."""
         return query + ' AND -enriched:True'
 
     def parse_expression(self, pattern: Pattern):
+        """Translation entry point."""
         queries = self._parse_expression(pattern)
         queries = self._add_default_timerange(queries)
         # Return a single-item list
