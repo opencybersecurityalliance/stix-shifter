@@ -1,6 +1,9 @@
+import json
+
 from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
+
 
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
@@ -8,17 +11,28 @@ class DeleteConnector(BaseDeleteConnector):
         self.logger = logger.set_logger(__name__)
 
     def delete_query_connection(self, search_id):
-        try:
-            response_dict = self.api_client.delete_search(search_id)
-            response_code = response_dict["code"]
+        response = self.api_client.delete_search(search_id)
+        response_code = response.code
+        response_text = response.read()
+        error = None
+        response_dict = dict()
 
-            # Construct a response object
-            return_obj = dict()
-            if response_code == 200:
-                return_obj['success'] = response_code['success']
-            else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-            return return_obj
-        except Exception as err:
-            self.logger.error('error when deleting search {}:'.format(err))
-            raise
+        try:
+            # Successful deletion returns a 204 status code and empty response
+            if response_text:
+                response_dict = json.loads(response_text)
+        except ValueError as ex:
+            self.logger.debug(response_text)
+            error = Exception(f'Can not parse response: {ex}')
+
+        # Construct a response object
+        return_obj = dict()
+        return_obj['success'] = False
+
+        # Successful deletion returns a 204 status code and empty response
+        if response_code == 204:
+            return_obj['success'] = True
+        else:
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+
+        return return_obj

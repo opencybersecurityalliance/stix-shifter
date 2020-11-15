@@ -21,7 +21,7 @@ class PingConnector(BasePingConnector):
             response_dict = json.loads(response_text)
         except ValueError as ex:
             self.logger.debug(response_text)
-            error = Exception('Can not parse response: ' + str(ex))
+            error = Exception(f'Can not parse response: {ex}')
 
         return_obj = dict()
         return_obj['success'] = False

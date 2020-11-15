@@ -32,8 +32,14 @@ class APIClient():
         self.result_limit = connection['options'].get('result_limit')
 
     def ping_data_source(self):
-        """Pings the data source by sending a GET request to
+        """Verifies the data source API is working by sending a GET request to
         https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/limits
+
+        Status codes:
+        200: successfully fetched the upper and lower time limits (i.e API works)
+        400: malformed JSON body or invalid value
+        403: forbidden
+        500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/limits'
         return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
@@ -41,6 +47,11 @@ class APIClient():
     def create_search(self, query_expression):
         """Queries the data source by sending a POST request to
         https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs
+
+        200: successfully submitted search for processes
+        400: malformed JSON body or invalid value
+        403: forbidden
+        500: internal server error
         """
         endpoint = f'api/investigate/v2/orgs/{self.org_key}/processes/search_jobs'
         data = {
@@ -58,6 +69,11 @@ class APIClient():
     def get_search_status(self, job_id):
         """ Check the status of the search by sending a GET request to
         https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/search_jobs/{job_id}
+
+        200: successfully retrieved status of process search
+        400: malformed JSON body or invalid value
+        403: forbidden
+        500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
         return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
@@ -65,6 +81,11 @@ class APIClient():
     def get_search_results(self, job_id, start=DEFAULT_START, rows=DEFAULT_ROWS):
         """Return the JSON-formatted search results by sending a GET request to
         https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs/{job_id}/results
+
+        200: successfully fetched processes
+        400: malformed JSON body or invalid value
+        403: forbidden
+        500: internal server error
         """
         urldata = [("start", start), ("rows", rows)]
         endpoint = f'api/investigate/v2/orgs/{self.org_key}/processes/search_jobs/{job_id}/results'
@@ -73,6 +94,11 @@ class APIClient():
     def delete_search(self, job_id):
         """Delete the search by sending a DELETE request to
         https://<server_ip>/api/investigate/v1/orgs/{orgkey}/processes/search_jobs/{job_id}
+
+        204: success deleted a process search
+        400: malformed JSON body or invalid value
+        403: forbidden
+        500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
         return self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)
