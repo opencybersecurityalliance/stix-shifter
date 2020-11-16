@@ -26,14 +26,20 @@
       "object": "x-qradar"
     },
     {
+      "key": "x-ibm-event.outcome",
+      "object": "event"
+    }
+  ],
+  "high_level_category_name": [
+    {
+      "key": "x-qradar.high_level_category_name",
+      "object": "x-qradar"
+    },
+    {
       "key": "x-ibm-event.category",
       "object": "event"
     }
   ],
-  "high_level_category_name": {
-    "key": "x-qradar.high_level_category_name",
-    "object": "x-qradar"
-  },
   "high_level_category_id": {
     "key": "x-qradar.high_level_category_id",
     "object": "x-qradar",
@@ -112,7 +118,7 @@
       "key": "x-ibm-event.created",
       "transformer": "EpochToTimestamp",
       "object": "event"
-    },
+    }
   ],
   "destinationip": [
     {
@@ -191,10 +197,16 @@
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "logsourcename": {
-    "key": "x-qradar.log_source_name",
-    "object": "x-qradar"
-  },
+  "logsourcename": [
+    {
+      "key": "x-qradar.log_source_name",
+      "object": "x-qradar"
+    },
+    {
+      "key": "x-ibm-event.agent",
+      "object": "event"
+    }
+  ],
   "logsourcetypename": [
     {
       "key": "x-qradar.log_source_type_name",
@@ -312,23 +324,6 @@
       "references": "domain1"
     }
   ],
-  "UrlHost": [
-    {
-      "key": "domain-name.value",
-      "object": "domain1",
-      "transformer": "ToDomainName"
-    },
-    {
-      "key": "network-traffic.extensions.dns-ext.question.domain_ref",
-      "object": "nt",
-      "references": "domain1"
-    },
-    {
-      "key": "x-ibm-event.domain_ref",
-      "object": "event",
-      "references": "domain1"
-    }
-  ],
   "filename": [
     {
       "key": "file.name",
@@ -370,12 +365,25 @@
       "key": "x-ibm-event.file_ref",
       "object": "event",
       "references": "fl"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "dir"
     }
   ],
-  "eventpayload": {
-    "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
-  },
+  "eventpayload": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-ibm-event.original_ref",
+      "object": "event",
+      "references": "artifact"
+    }
+  ],
   "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
@@ -553,7 +561,7 @@
     {
       "key": "x-ibm-event.process_ref",
       "object": "event",
-      "references": "process_image"
+      "references": "process"
     }
   ],
   "ParentImage": [
@@ -596,7 +604,7 @@
     {
       "key": "x-ibm-event.process_ref",
       "object": "event",
-      "references": "process_image"
+      "references": "process"
     }
   ],
   "ParentCommandLine": [
@@ -618,65 +626,5 @@
   "ServiceFileName": {
     "key": "process.extensions.windows-service-ext.service_dll_refs[*].name",
     "object": "process"
-  },
-  "LoadedImage": {
-    "key": "process.extensions.windows-service-ext.service_dll_refs[*].name",
-    "object": "process"
-  },
-  "EventID": [
-    {
-      "key": "x-ibm-event.id",
-      "object": "event"
-    },
-    {
-      "key": "x-ibm-event.code",
-      "object": "event"
-    }
-  ],
-  "RegistryValueData": {
-    "key": "windows-registry-key.values[*].data",
-    "object": "reg"
-  },
-  "RegistryValueName": {
-    "key": "windows-registry-key.values[*].name",
-    "object": "reg"
-  },
-  "ObjectName": [
-    {
-      "key": "windows-registry-key.key",
-      "object": "reg"
-    },
-    {
-      "key": "x-ibm-event.registry_ref",
-      "object": "event",
-      "references": "reg"
-    }
-  ],
-  "RegistryKey": [
-    {
-      "key": "windows-registry-key.key",
-      "object": "reg"
-    },
-    {
-      "key": "x-ibm-event.registry_ref",
-      "object": "event",
-      "references": "reg"
-    }
-  ],
-  "Message": [
-    {
-      "key": "artifact.payload_bin",
-      "object": "event_payload",
-      "transformer": "ToBase64"
-    },
-    {
-      "key": "x-ibm-event.original_ref",
-      "object": "event",
-      "references": "event_payload"
-    },
-    {
-      "key": "x-ibm-event.original",
-      "object": "event"
-    }
-  ],
+  }
 }

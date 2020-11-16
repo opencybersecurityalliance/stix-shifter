@@ -112,7 +112,7 @@ class TestTransform(object):
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
-               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
         assert(nt_object['src_port'] == 3000)
         assert(nt_object['dst_port'] == 2000)
         assert(nt_object['protocols'] == ['tcp'])
@@ -156,7 +156,7 @@ class TestTransform(object):
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
 
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
+        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line' })
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         binary_ref = proc_obj['binary_ref']
@@ -177,7 +177,136 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 18))))
+        assert(objects.keys() == set(map(str, range(0, 21))))
+
+    def test_x_ibm_event(self):
+        payload = "utf payload"
+        base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
+        user_id = "someuserid2018"
+        url = "https://example.com"
+        domain = "test.com"
+        sourceip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
+        destination_ip = "255.255.255.1"
+        filename = "somefile.exe"
+        filepath = "C:\\example\\filepath"
+        sourcemac = "00-00-5E-00-53-00"
+        destination_mac = "00-00-5A-00-55-01"
+        process_image_dir = "C:\\example\\process\\image"
+        process_image_file = "proc_img.exe"
+        process_image = process_image_dir + "\\" + process_image_file
+        process_parent_image_dir = "C:\\example\\process\\parent\\image"
+        process_parent_image_file = "proc_parent_img.exe"
+        process_parent_image = process_parent_image_dir + "\\" + process_parent_image_file
+        process_command_line = "C:\\example\\executable.exe --example"
+        process_parent_command_line = "C:\\example\\parent.exe --example"
+        process_loaded_image = "C:\\example\\some.dll"
+        logsourceid = 126
+        logsourcename = "WindowsAuthServer"
+        logsourcetypename = "Microsoft Windows Security Event Log"
+        qidname = "Process Create"
+        categoryname = "Process Creation Success"
+        hostname = "example host"
+        high_level_category_name = "System"
+
+        data = {"qidname": qidname, "categoryname": categoryname, "identityip": sourceip, "identityhostname": hostname, 
+                "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
+                "url": domain, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
+                "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
+                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+
+        event = TestTransform.get_first_of_type(objects.values(), 'x-ibm-event')
+
+        assert(event['type']) == "x-ibm-event"
+        assert(event['outcome'] == categoryname)
+        assert(event['action'] == qidname)
+        assert(event['created'] == START_TIMESTAMP)
+        assert(event['provider'] == logsourcetypename)
+        assert(event['category'] == high_level_category_name)
+        assert(event['agent'] == logsourcename)
+        
+        host_ref = event['host_ref']
+        assert(host_ref in objects), f"host_ref with key {event['host_ref']} not found"
+        host = objects[host_ref]
+        assert(host['type'] == "x-ibm-host")
+        assert(host['hostname'] == hostname)
+        assert(host['ip'] == sourceip)
+
+        original_ref = event['original_ref']
+        assert(original_ref in objects), f"original_ref with key {event['original_ref']} not found"
+        original = objects[original_ref]
+        assert(original['type'] == "artifact")
+        assert(original['payload_bin'] == base64_payload)
+        
+        mac_refs = host['mac_refs']
+        assert(mac_refs is not None), "host mac_refs not found"
+        assert(len(mac_refs) == 1)
+        mac_obj = objects[mac_refs[0]]
+        assert(mac_obj.keys() == {'type', 'value'})
+        assert(mac_obj['type'] == 'mac-addr')
+        assert(mac_obj['value'] == sourcemac)
+
+        ip_refs = host['ipv6_refs']
+        assert(ip_refs is not None), "host ipv6_refs not found"
+        assert(len(ip_refs) == 1)
+        hostip = objects[ip_refs[0]]
+        assert(hostip.keys() == {'type', 'value'})
+        assert(hostip['type'] == 'ipv6-addr')
+        assert(hostip['value'] == sourceip)
+
+        domain_ref = event['domain_ref']
+        assert(domain_ref in objects), f"domain_ref with key {event['domain_ref']} not found"
+        domain_obj = objects[domain_ref]
+        assert(domain_obj.keys() == {'type', 'value'})
+        assert(domain_obj['type'] == 'domain-name')
+        assert(domain_obj['value'] == domain)
+
+        file_ref = event['file_ref']
+        assert(file_ref in objects), f"file_ref with key {event['file_ref']} not found"
+        file_obj = objects[file_ref]
+        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(file_obj['type'] == 'file')
+        assert(file_obj['name'] == filename)
+        parent_obj = objects[file_obj['parent_directory_ref']]
+        assert(parent_obj is not None), "file parent ref not found"
+        assert(parent_obj.keys() == {'type', 'path'})
+        assert(parent_obj['type'] == "directory")
+        assert(parent_obj['path'] == filepath)
+
+        process_ref = event['process_ref']
+        assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
+        process_obj = objects[process_ref]
+        assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref', 'command_line'})
+        assert(process_obj['type'] == 'process')
+        assert(process_obj['command_line'] == process_command_line)
+        binary_obj = objects[process_obj['binary_ref']]
+        assert(binary_obj is not None), "process binary ref not found"
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj['type'] == "file")
+        assert(binary_obj['name'] == process_image_file)
+        binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
+        assert(binary_parent_dir_obj is not None), "process binary parent directory ref not found"
+        assert(binary_parent_dir_obj['type'] == "directory")
+        assert(binary_parent_dir_obj['path'] == process_image_dir)
+
+        process_parent_ref = process_obj['parent_ref']
+        assert(process_parent_ref in objects), f"parent_ref with key {process_obj['parent_ref']} not found"
+        parent_obj = objects[process_parent_ref]
+        assert(parent_obj.keys() == {'type', 'binary_ref', 'command_line'})
+        assert(parent_obj['type'] == "process")
+        assert(parent_obj['command_line'] == process_parent_command_line)
+        binary_obj = objects[parent_obj['binary_ref']]
+        assert(binary_obj is not None), "process parent binary ref not found"
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj['type'] == "file")
+        assert(binary_obj['name'] == process_parent_image_file)
+        binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
+        assert(binary_parent_dir_obj is not None), "process parent binary parent directory ref not found"
+        assert(binary_parent_dir_obj['type'] == "directory")
+        assert(binary_parent_dir_obj['path'] == process_parent_image_dir)
 
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
