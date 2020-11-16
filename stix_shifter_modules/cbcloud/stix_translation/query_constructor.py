@@ -34,7 +34,7 @@ class CbCloudQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.time_range = time_range  # filter results to the last x minutes
-        self.queries = [json.dumps(translation) for translation in self.parse_expression(pattern)]
+        self.queries = self.parse_expression(pattern)
 
     @classmethod
     def _format_equality(cls, value) -> str:
@@ -85,8 +85,10 @@ class CbCloudQueryStringPatternTranslator:
 
     @staticmethod
     def _escape_value(value) -> str:
-        """Escape specific characters in a value."""
+        """Trim whitespace and escape specific characters in a value."""
         if isinstance(value, str):
+            value = value.strip()
+        if isinstance(value, str) and not re.match(r'^\[[\*\sa-z0-9.:-]*to[\*\sa-z0-9.:-]*\]$', value.lower()):
             value = value.replace('\\', '\\\\')
             value = value.replace('\"', '\\"')
             value = value.replace('(', '\\(')
@@ -257,14 +259,13 @@ class CbCloudQueryStringPatternTranslator:
 
     def _add_no_enriched(self, query):
         """Append exclusion for enriched events to the query string."""
-        return query + ' AND -enriched:True'
+        return f'({query}) AND -enriched:True'
 
     def parse_expression(self, pattern: Pattern):
         """Translation entry point."""
-        queries = self._parse_expression(pattern)
-        queries = self._add_default_timerange(queries)
-        # Return a single-item list
-        return [self._add_no_enriched(queries)]
+        query = self._parse_expression(pattern)
+        query = self._add_default_timerange(query)
+        return self._add_no_enriched(query)
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):

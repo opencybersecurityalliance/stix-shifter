@@ -56,6 +56,11 @@
       "account_login": ["process_username"]
     }
   },
+  "url": {
+    "fields": {
+      "value": ["netconn_domain"]
+    }
+  },
   "domain-name": {
     "fields": {
       "value": ["netconn_domain"]
