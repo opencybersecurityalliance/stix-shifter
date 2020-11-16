@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "MicroFocus ArcSight Logger"
+            "displayName": "Micro Focus ArcSight"
         },
         "host": {
             "type": "text"
@@ -24,8 +24,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "login": {
                 "type": "password"
             },
