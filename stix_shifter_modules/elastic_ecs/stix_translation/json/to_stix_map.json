@@ -687,18 +687,35 @@
       "key": "x-ibm-event.event_type",
       "object": "event"
     },
-    "url": {
-      "key": "x-ibm-event.url",
-      "object": "event"
-    }
+    "url": [
+      {
+        "key": "x-ibm-event.url",
+        "object": "event"
+      }, {
+        "key": "domain-name.value",
+        "object": "event_domain"
+      }, {
+        "key": "x-ibm-event.domain_ref",
+        "object": "event",
+        "references": "event_domain"
+      }
+    ]
   },
   "url": {
     "original": {
       "key": "url.value"
     },
-    "domain": {
-      "key": "domain-name.value"
-    }
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "domain"
+      },
+      {
+        "key": "x-ibm-event",
+        "object": "event",
+        "references": "domain"
+      }
+    ]
   },
   "process": {
     "start": {
@@ -921,7 +938,7 @@
         },
         {
           "key": "process.binary_ref",
-          "object": "process_aprent",
+          "object": "process_parent",
           "references": "process_parent_executable"
         },
         {
@@ -930,7 +947,7 @@
           "references": "process_parent_executable_dir"
         },
         {
-          "key": "x-ibm-event.parent_rocess_ref",
+          "key": "x-ibm-event.parent_process_ref",
           "object": "event",
           "references": "process"
         }
@@ -1208,9 +1225,14 @@
           "object": "dns_domain"
         },
         {
-        "key": "x-ecs-dns.question.name_ref",
-        "object": "dns",
-        "references": "dns_domain"
+          "key": "x-ecs-dns.question.name_ref",
+          "object": "dns",
+          "references": "dns_domain"
+        },
+        {
+          "key": "x-ibm-event.domain_ref",
+          "object": "event",
+          "references": "dns_domain"
         }
       ],
       "registered_domain": [
@@ -1241,12 +1263,25 @@
       {
         "key": "ipv4-addr.value",
         "object": "resolved_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "resolved_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-ibm-event.ip_refs",
+        "object": "event",
+        "references": ["resolved_ip", "resolved_ipv6"],
         "unwrap": true
       },
       {
         "key": "x-ecs-dns.resolved_ip_refs",
         "object": "dns",
-        "references": "resolved_ip",
+        "references": ["resolved_ip", "resolved_ipv6"],
         "unwrap": true
       }
     ],
@@ -1288,10 +1323,17 @@
     }
   },
   "file": {
-    "name": {
-      "key": "file.name",
-      "object": "file"
-    },
+    "name": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-ibm-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
     "created": {
       "key": "file.created",
       "object": "file"

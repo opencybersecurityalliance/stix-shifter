@@ -85,75 +85,19 @@ data = {
 event_data = {
     "@timestamp": "2020-11-15T16:29:12.130Z",
     "message": "Process Create:\nRuleName: -\nUtcTime: 2020-11-15 16:29:12.130\nProcessGuid: {253acf67-5758-5fb1-3d3c-000000000800}\nProcessId: 26424\nImage: C:\\Windows\\System32\\wbem\\unsecapp.exe\nFileVersion: 10.0.19041.546 (WinBuild.160101.0800)\nDescription: Sink to receive asynchronous callbacks for WMI client application\nProduct: Microsoft® Windows® Operating System\nCompany: Microsoft Corporation\nOriginalFileName: unsecapp.dll\nCommandLine: C:\\WINDOWS\\system32\\wbem\\unsecapp.exe -Embedding\nCurrentDirectory: C:\\WINDOWS\\system32\\\nUser: AzureAD\\USERNAME\nLogonGuid: {253acf67-bb01-5fac-d398-0a0200000000}\nLogonId: 0x20A98D3\nTerminalSessionId: 2\nIntegrityLevel: Medium\nHashes: MD5=EB249AE927EB20812BDEB5484CEC67B0,SHA256=F1BE6DDD38CEE4959B58C5DD593A8A4BFF32E05638426C30A4D4ADD43E387590,IMPHASH=87E54E3D04D772F26002D8B564B2426C\nParentProcessGuid: {253acf67-5e7e-5fac-1200-000000000800}\nParentProcessId: 1248\nParentImage: C:\\Windows\\System32\\svchost.exe\nParentCommandLine: C:\\WINDOWS\\system32\\svchost.exe -k DcomLaunch -p",
-    "log": {
-      "level": "information"
-    },
-    "fields": {
-      "env": "lab"
-    },
     "user": {
       "name": "USERNAME",
       "domain": "AzureAD"
     },
-    "related": {
-      "user": "USERNAME",
-      "hash": [
-        "eb249ae927eb20812bdeb5484cec67b0",
-        "f1be6ddd38cee4959b58c5dd593a8a4bff32e05638426c30a4d4add43e387590",
-        "87e54e3d04d772f26002d8b564b2426c"
-      ]
-    },
-    "hash": {
-      "md5": "eb249ae927eb20812bdeb5484cec67b0",
-      "sha256": "f1be6ddd38cee4959b58c5dd593a8a4bff32e05638426c30a4d4add43e387590",
-      "imphash": "87e54e3d04d772f26002d8b564b2426c"
-    },
-    "ecs": {
-      "version": "1.5.0"
-    },
     "agent": {
-      "id": "1c41d016-c266-495a-9fc1-876f58d41b0d",
       "name": "HOST-NAME",
       "type": "winlogbeat",
       "version": "7.9.1",
-      "hostname": "HOST-NAME",
-      "ephemeral_id": "46a01ea4-1d3a-45bf-96da-dd3d20b69759"
+      "hostname": "HOST-NAME"
     },
-    "winlog": {
-      "process": {
-        "pid": 6620,
-        "thread": {
-          "id": 7392
-        }
-      },
-      "api": "wineventlog",
-      "record_id": 551617,
-      "task": "Process Create (rule: ProcessCreate)",
-      "computer_name": "HOST-NAME",
-      "opcode": "Info",
-      "provider_guid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
-      "event_id": 1,
-      "provider_name": "Microsoft-Windows-Sysmon",
-      "event_data": {
-        "Product": "Microsoft® Windows® Operating System",
-        "FileVersion": "10.0.19041.546 (WinBuild.160101.0800)",
-        "IntegrityLevel": "Medium",
-        "LogonId": "0x20a98d3",
-        "TerminalSessionId": "2",
-        "Description": "Sink to receive asynchronous callbacks for WMI client application",
-        "RuleName": "-",
-        "LogonGuid": "{253acf67-bb01-5fac-d398-0a0200000000}",
-        "OriginalFileName": "unsecapp.dll",
-        "Company": "Microsoft Corporation"
-      },
-      "version": 5,
-      "user": {
-        "name": "SYSTEM",
-        "domain": "NT AUTHORITY",
-        "type": "User",
-        "identifier": "S-1-5-18"
-      },
-      "channel": "Microsoft-Windows-Sysmon/Operational"
+    "file": {
+        "name": "example.png",
+        "directory": "/home/alice"
     },
     "event": {
       "kind": "event",
@@ -175,12 +119,7 @@ event_data = {
       "hostname": "HOST-NAME",
       "architecture": "x86_64",
       "os": {
-        "version": "10.0",
-        "family": "windows",
         "name": "Windows 10 Enterprise",
-        "kernel": "10.0.19041.572 (WinBuild.160101.0800)",
-        "build": "19041.572",
-        "platform": "windows"
       },
       "id": "253acf67-a779-42fc-8e15-e55230de7e64",
       "ip": [
@@ -192,36 +131,21 @@ event_data = {
       ]
     },
     "process": {
-      "entity_id": "{253acf67-5758-5fb1-3d3c-000000000800}",
       "command_line": "C:\\WINDOWS\\system32\\wbem\\unsecapp.exe -Embedding",
       "parent": {
-        "entity_id": "{253acf67-5e7e-5fac-1200-000000000800}",
         "pid": 1248,
         "executable": "C:\\Windows\\System32\\svchost.exe",
         "command_line": "C:\\WINDOWS\\system32\\svchost.exe -k DcomLaunch -p",
-        "name": "svchost.exe",
-        "args": [
-          "C:\\WINDOWS\\system32\\svchost.exe",
-          "-k",
-          "DcomLaunch",
-          "-p"
-        ]
+        "name": "svchost.exe"
       },
       "hash": {
         "md5": "eb249ae927eb20812bdeb5484cec67b0",
         "sha256": "f1be6ddd38cee4959b58c5dd593a8a4bff32e05638426c30a4d4add43e387590"
       },
-      "pe": {
-        "imphash": "87e54e3d04d772f26002d8b564b2426c"
-      },
       "pid": 26424,
       "executable": "C:\\Windows\\System32\\wbem\\unsecapp.exe",
       "working_directory": "C:\\WINDOWS\\system32\\",
-      "name": "unsecapp.exe",
-      "args": [
-        "C:\\WINDOWS\\system32\\wbem\\unsecapp.exe",
-        "-Embedding"
-      ]
+      "name": "unsecapp.exe"
     }
   }
 
@@ -367,9 +291,6 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
 
-#        with open("/data/test_ecs.json", "w") as fp:
-#            json.dump(objects, fp)
-
         proc_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_object is not None), 'process object type not found'
         assert (proc_object.keys() ==
@@ -403,8 +324,8 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
 
-        #with open('/data/test_ecs.json', 'w') as fp:
-        #    json.dump(objects, fp)
+        with open('/data/test_ecs.json', 'w') as fp:
+            json.dump(objects, fp)
 
         event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ibm-event')
         assert (event_object is not None), 'x-ibm-event object type not found'
@@ -436,14 +357,16 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
         assert(binary_parent_dir_obj is not None), "process binary parent directory ref not found"
         assert(binary_parent_dir_obj['type'] == "directory")
-        assert(binary_parent_dir_obj['path'] == "C:\\WINDOWS\\system32\\wbem")
+        assert(binary_parent_dir_obj['path'] == "C:\\Windows\\System32\\wbem")
 
         process_parent_ref = process_obj['parent_ref']
         assert(process_parent_ref in objects), f"parent_ref with key {process_obj['parent_ref']} not found"
         parent_obj = objects[process_parent_ref]
-        assert(parent_obj.keys() == {'type', 'binary_ref', 'command_line'})
+        assert(parent_obj.keys() == {'type', 'pid', 'binary_ref', 'command_line', 'name'})
         assert(parent_obj['type'] == "process")
-        assert(parent_obj['command_line'] == process_parent_command_line)
+        assert(parent_obj['command_line'] == "C:\\WINDOWS\\system32\\svchost.exe -k DcomLaunch -p")
+        assert(parent_obj['pid'] == 1248)
+        assert(parent_obj['name'] == "svchost.exe")
         binary_obj = objects[parent_obj['binary_ref']]
         assert(binary_obj is not None), "process parent binary ref not found"
         assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
@@ -454,6 +377,24 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(binary_parent_dir_obj['type'] == "directory")
         assert(binary_parent_dir_obj['path'] == "C:\\Windows\\System32")
 
+        file_ref = event_object['file_ref']
+        assert(file_ref in objects), f"file_ref with key {event_object['file_ref']} not found"
+        file_obj = objects[file_ref]
+        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(file_obj['type'] == 'file')
+        assert(file_obj['name'] == "example.png")
+        parent_obj = objects[file_obj['parent_directory_ref']]
+        assert(parent_obj is not None), "file parent ref not found"
+        assert(parent_obj.keys() == {'type', 'path'})
+        assert(parent_obj['type'] == "directory")
+        assert(parent_obj['path'] == "/home/alice")
+
+#        domain_ref = event_object['domain_ref']
+#        assert(domain_ref in objects), f"domain_ref with key {event_object['domain_ref']} not found"
+#        domain_obj = objects[domain_ref]
+#        assert(domain_obj.keys() == {'type', 'value'})
+#        assert(domain_obj['type'] == 'domain-name')
+#        assert(domain_obj['value'] == "example.com")
 
     def test_artifact_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
