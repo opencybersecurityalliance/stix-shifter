@@ -1474,19 +1474,37 @@
       "key": "x-ibm-host.id",
       "object": "host"
     },
-    "ip": {
-      "key": "x-ibm-host.ip",
-      "object": "host"
-    },
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "host_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "host_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-ibm-host.ip_refs",
+        "object": "host",
+        "references": ["host_ip", "host_ipv6"],
+        "unwrap": true
+      }
+    ], 
     "mac": [
       {
         "key": "mac-addr.value",
-        "object": "host_mac"
+        "object": "host_mac",
+        "unwrap": true
       },
       {
         "key": "x-ibm-host.mac_refs",
         "object": "host",
-        "references": "host_mac"
+        "references": "host_mac",
+        "unwrap": true
       }
     ],
     "name": [
