@@ -587,100 +587,108 @@
     }
   },
   "event": {
-    "original": {
-      "key": "artifact.payload_bin",
-      "transformer": "ToBase64"
-    },
+    "original": [
+      {
+        "key": "artifact.payload_bin",
+        "transformer": "ToBase64",
+        "object": "artifact"
+      },
+      {
+        "key": "x-ibm-event.original_ref",
+        "object": "event",
+        "references": "artifact"
+      }
+    ],
     "action": {
-      "key": "x-ecs-event.action",
+      "key": "x-ibm-event.action",
       "object": "event"
     },
     "id": {
-      "key": "x-ecs-event.id",
+      "key": "x-ibm-event.id",
       "object": "event"
     },
     "category": {
-      "key": "x-ecs-event.category",
+      "key": "x-ibm-event.category",
       "object": "event"
     },
     "code": {
-      "key": "x-ecs-event.code",
+      "key": "x-ibm-event.code",
       "object": "event"
     },
     "created": {
-      "key": "x-ecs-event.created",
+      "key": "x-ibm-event.created",
       "object": "event"
     },
     "dataset": {
-      "key": "x-ecs-event.dataset",
+      "key": "x-ibm-event.dataset",
       "object": "event"
     },
     "duration": {
-      "key": "x-ecs-event.duration",
+      "key": "x-ibm-event.duration",
       "object": "event"
     },
     "end": {
-      "key": "x-ecs-event.end",
+      "key": "x-ibm-event.end",
       "object": "event"
     },
     "hash": {
-      "key": "x-ecs-event.hash",
+      "key": "x-ibm-event.hash",
       "object": "event"
     },
     "ingested": {
-      "key": "x-ecs-event.ingested",
+      "key": "x-ibm-event.ingested",
       "object": "event"
     },
     "kind": {
-      "key": "x-ecs-event.kind",
+      "key": "x-ibm-event.kind",
       "object": "event"
     },
     "module": {
-      "key": "x-ecs-event.module",
+      "key": "x-ibm-event.module",
       "object": "event"
     },
     "outcome": {
-      "key": "x-ecs-event.outcome",
+      "key": "x-ibm-event.outcome",
       "object": "event"
     },
     "provider": {
-      "key": "x-ecs-event.provider",
+      "key": "x-ibm-event.provider",
       "object": "event"
     },
     "reference": {
-      "key": "x-ecs-event.reference",
+      "key": "x-ibm-event.reference",
       "object": "event"
     },
     "risk_score": {
-      "key": "x-ecs-event.risk_score",
+      "key": "x-ibm-event.risk_score",
       "object": "event"
     },
     "risk_score_norm": {
-      "key": "x-ecs-event.risk_score_norm",
+      "key": "x-ibm-event.risk_score_norm",
       "object": "event"
     },
     "sequence": {
-      "key": "x-ecs-event.sequence",
+      "key": "x-ibm-event.sequence",
       "object": "event"
     },
     "severity": {
-      "key": "x-ecs-event.severity",
+      "key": "x-ibm-event.severity",
       "object": "event"
     },
     "start": {
-      "key": "x-ecs-event.start",
+      "key": "x-ibm-event.start",
       "object": "event"
     },
     "timezone": {
-      "key": "x-ecs-event.timezone",
+      "key": "x-ibm-event.timezone",
       "object": "event"
     },
     "type": {
-      "key": "x-ecs-event.type",
+      "key": "x-ibm-event.event_type",
       "object": "event"
     },
     "url": {
-      "key": "x-ecs-event.url",
+      "key": "x-ibm-event.url",
       "object": "event"
     }
   },
@@ -704,15 +712,22 @@
         "transformer": "ToInteger"
       },
       {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "process_ppid"
+        "key": "x-ibm-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
-    "name": {
-      "key": "process.name",
-      "object": "process"
-    },
+    "name": [
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "x-ibm-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
     "code_signature": {
       "exists": {
         "key": "x-ecs-process.code_signature_exists",
@@ -723,11 +738,18 @@
         "object": "x_process"
       }
     },
-    "ppid": {
-      "key": "process.pid",
-      "object": "process_ppid",
-      "transformer": "ToInteger"
-    },
+    "ppid": [
+      {
+        "key": "process.pid",
+        "object": "process_parent",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "process_parent"
+      }
+    ],
     "pe": {
       "company": {
         "key": "x-ecs-process.pe_company",
@@ -762,10 +784,33 @@
       "key": "process.command_line",
       "object": "process"
     },
-    "executable": {
-      "key": "x-ecs-process.executable",
-      "object": "x_process"
-    },
+    "executable": [
+      {
+        "key": "file.name",
+        "object": "process_executable",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "process_executable_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "process_executable"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "process_executable",
+        "references": "process_executable_dir"
+      },
+      {
+        "key": "x-ibm-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
     "entity_id": {
       "key": "x-ecs-process.entity_id",
       "object": "x_process"
@@ -795,10 +840,22 @@
         "key": "x-ecs-process.parent_exit_code",
         "object": "x_process"
       },
-      "name": {
-        "key": "process.name",
-        "object": "process_parent"
-      },
+      "name": [
+        {
+          "key": "process.name",
+          "object": "process_parent"
+        },
+        {
+          "key": "process.parent_ref",
+          "object": "process",
+          "references": "process_parent"
+        },
+        {
+          "key": "x-ibm-event.parent_process_ref",
+          "object": "event",
+          "references": "process_parent"
+        }
+      ],
       "pgid": {
         "key": "x-ecs-process.parent_pgid",
         "object": "x_process"
@@ -811,18 +868,18 @@
         },
         {
           "key": "process.parent_ref",
-          "object": "process_parent_ppid",
-          "references": "parent"
+          "object": "process",
+          "references": "process_parent"
         },
         {
-          "key": "process.child_refs",
-          "object": "process",
-          "references": "parent"
+          "key": "x-ibm-event.parent_process_ref",
+          "object": "event",
+          "references": "process_parent"
         }
       ],
       "ppid": {
-        "key": "process.pid",
-        "object": "process_parent_ppid",
+        "key": "x-ecs-process.parent_ppid",
+        "object": "x_process",
         "transformer": "ToInteger"
       },
       "start": {
@@ -850,7 +907,34 @@
       "working_directory": {
         "key": "x-ecs-process.parent_working_directory",
         "object": "x_process"
-      }
+      },
+      "executable": [
+        {
+          "key": "file.name",
+          "object": "process_parent_executable",
+          "transformer": "ToFileName"
+        },
+        {
+          "key": "directory.path",
+          "object": "process_parent_executable_dir",
+          "transformer": "ToDirectoryPath"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process_aprent",
+          "references": "process_parent_executable"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "process_parent_executable",
+          "references": "process_parent_executable_dir"
+        },
+        {
+          "key": "x-ibm-event.parent_rocess_ref",
+          "object": "event",
+          "references": "process"
+        }
+      ]
     },
     "pgid": {
       "key": "x-ecs-process.exit_code",
@@ -938,9 +1022,15 @@
     }
   },
   "agent": {
-    "name": {
-      "key": "software.name"
-    },
+    "name": [
+      {
+        "key": "software.name"
+      },
+      {
+        "key": "x-ibm-event.agent",
+        "object": "event"
+      }
+    ],
     "type": {
       "key": "software.vendor"
     },
@@ -1362,125 +1452,146 @@
   },
   "host": {
     "architecture": {
-      "key": "x-ecs-host.architecture",
+      "key": "x-ibm-host.architecture",
       "object": "host"
     },
     "domain": {
-      "key": "x-ecs-host.domain",
+      "key": "x-ibm-host.domain",
       "object": "host"
     },
-    "hostname": {
-      "key": "x-ecs-host.hostname",
-      "object": "host"
-    },
+    "hostname": [
+      {
+        "key": "x-ibm-host.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-ibm-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "id": {
-      "key": "x-ecs-host.id",
+      "key": "x-ibm-host.id",
       "object": "host"
     },
     "ip": {
-      "key": "x-ecs-host.ip",
+      "key": "x-ibm-host.ip",
       "object": "host"
     },
-    "mac": {
-      "key": "x-ecs-host.mac",
-      "object": "host"
-    },
-    "name": {
-      "key": "x-ecs-host.name",
-      "object": "host"
-    },
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "host_mac"
+      },
+      {
+        "key": "x-ibm-host.mac_refs",
+        "object": "host",
+        "references": "host_mac"
+      }
+    ],
+    "name": [
+      {
+        "key": "x-ibm-host.name",
+        "object": "host"
+      },
+      {
+        "key": "x-ibm-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "type": {
-      "key": "x-ecs-host.type",
+      "key": "x-ibm-host.host_type",
       "object": "host"
     },
     "uptime": {
-      "key": "x-ecs-host.uptime",
+      "key": "x-ibm-host.uptime",
       "object": "host"
     },
     "geo": {
       "city_name": {
-        "key": "x-ecs-host.geo_city_name",
+        "key": "x-ibm-host.geo_city_name",
         "object": "host"
       },
       "continent_name": {
-        "key": "x-ecs-host.geo_continent_name",
+        "key": "x-ibm-host.geo_continent_name",
         "object": "host"
       },
       "country_iso_code": {
-        "key": "x-ecs-host.geo_country_iso_code",
+        "key": "x-ibm-host.geo_country_iso_code",
         "object": "host"
       },
       "country_name": {
-        "key": "x-ecs-host.geo_country_name",
+        "key": "x-ibm-host.geo_country_name",
         "object": "host"
       },
       "location": {
-        "key": "x-ecs-host.geo_location",
+        "key": "x-ibm-host.geo_location",
         "object": "host"
       },
       "name": {
-        "key": "x-ecs-host.geo_name",
+        "key": "x-ibm-host.geo_name",
         "object": "host"
       },
       "region_iso_code": {
-        "key": "x-ecs-host.geo_region_iso_code",
+        "key": "x-ibm-host.geo_region_iso_code",
         "object": "host"
       },
       "region_name": {
-        "key": "x-ecs-host.geo_region_name",
+        "key": "x-ibm-host.geo_region_name",
         "object": "host"
       }
     },
     "os": {
       "name": {
-        "key": "x-ecs-host.os_name",
+        "key": "x-ibm-host.os_name",
         "object": "host"
       },
       "platform": {
-        "key": "x-ecs-host.os_platform",
+        "key": "x-ibm-host.os_platform",
         "object": "host"
       },
       "version": {
-        "key": "x-ecs-host.os_version",
+        "key": "x-ibm-host.os_version",
         "object": "host"
       }
     },
     "user": {
       "domain": {
-        "key": "x-ecs-host.user_domain",
+        "key": "x-ibm-host.user_domain",
         "object": "host"
       },
       "email": {
-        "key": "x-ecs-host.user_email",
+        "key": "x-ibm-host.user_email",
         "object": "host"
       },
       "full_name": {
-        "key": "x-ecs-host.user_full_name",
+        "key": "x-ibm-host.user_full_name",
         "object": "host"
       },
       "hash": {
-        "key": "x-ecs-host.user_hash",
+        "key": "x-ibm-host.user_hash",
         "object": "host"
       },
       "id": {
-        "key": "x-ecs-host.user_id",
+        "key": "x-ibm-host.user_id",
         "object": "host"
       },
       "name": {
-        "key": "x-ecs-host.user_name",
+        "key": "x-ibm-host.user_name",
         "object": "host"
       },
       "group": {
         "domain": {
-          "key": "x-ecs-host.user_group_domain",
+          "key": "x-ibm-host.user_group_domain",
           "object": "host"
         },
         "id": {
-          "key": "x-ecs-host.user_group_id",
+          "key": "x-ibm-host.user_group_id",
           "object": "host"
         },
         "name": {
-          "key": "x-ecs-host.user_group_name",
+          "key": "x-ibm-host.user_group_name",
           "object": "host"
         }
       }
