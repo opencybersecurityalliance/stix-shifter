@@ -264,8 +264,8 @@ def main():
 
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []
-        if not 'queries' in dsl:
-            print(json.dumps(dsl, indent=4))
+        print(json.dumps(dsl, indent=4))
+        if 'queries' not in dsl:
             exit(1)
         for query in dsl['queries']:
             search_result = transmission.query(query)
