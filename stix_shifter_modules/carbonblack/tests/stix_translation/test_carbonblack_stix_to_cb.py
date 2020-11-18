@@ -100,8 +100,8 @@ class TestQueryTranslator(unittest.TestCase, object):
                 "[file:hashes.MD5 ='79054025255fb1a26e4bc422aef54eb4']": [{"query": "md5:79054025255fb1a26e4bc422aef54eb4", "dialect": "binary"}],
                 "[process:name NOT = 'cmd.exe']" : [{"query": "-(process_name:cmd.exe)", "dialect": "process"}],
                 "[process:name != 'cmd.exe']" : [{"query": "-(process_name:cmd.exe)", "dialect": "process"}],
-                "[process:pid = 4] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z'": [{"query": "((process_pid:4) and start:[2019-01-22T00:04:52 TO *] and last_update:[* TO 2019-02-22T00:04:52])", "dialect": "process"}],
-                "[process:pid = 5 OR process:pid = 6] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{"query": "((process_pid:5 or process_pid:6) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])", "dialect": "process"}]
+                "[process:pid = 4] START t'2019-01-22T00:04:52.937Z' STOP t'2019-02-22T00:04:52.937Z'": [{"query": "((process_pid:4) and last_update:[2019-01-22T00:04:52 TO 2019-02-22T00:04:52])", "dialect": "process"}],
+                "[process:pid = 5 OR process:pid = 6] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{"query": "((process_pid:5 or process_pid:6) and last_update:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])", "dialect": "process"}]
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
             test_options = {"time_range": None} 
@@ -172,9 +172,9 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_start_stop_merged(self):
         stix_to_cb_mapping = {
                 "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': 'process_name:cmd.exe', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
-                "[process:name = 'cmd.exe'] START t'2014-01-13T07:03:17Z' STOP t'2019-01-13T07:03:17Z'  OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2019-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
-                "([process:name = 'cmd.exe'] OR [process:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '(((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])) or (((process_name:notepad.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17]))', 'dialect': 'process'}],
-                "([process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and start:[2014-01-13T07:03:17 TO *] and last_update:[* TO 2014-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                "[process:name = 'cmd.exe'] START t'2014-01-13T07:03:17Z' STOP t'2019-01-13T07:03:17Z'  OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '((process_name:cmd.exe) and last_update:[2014-01-13T07:03:17 TO 2019-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                "([process:name = 'cmd.exe'] OR [process:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'": [{'query': '(((process_name:cmd.exe) and last_update:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])) or (((process_name:notepad.exe) and last_update:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17]))', 'dialect': 'process'}],
+                "([process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']) START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and last_update:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
             test_options = {"time_range": None}
@@ -185,8 +185,8 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_time_range(self):
         # note queries with a START STOP specifying a query range should not have the default time_range applied
         stix_to_cb_mapping = {
-                "[ipv4-addr:value = '127.0.0.1'" : [{'query': '((ipaddr:127.0.0.1) and (start:-5m or last_update:-5m))', 'dialect': 'process'}],
-                "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and (start:-5m or last_update:-5m))', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
+                "[ipv4-addr:value = '127.0.0.1'" : [{'query': '((ipaddr:127.0.0.1) and last_update:-5m)', 'dialect': 'process'}],
+                "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe'] START t'2014-01-13T07:03:17Z' STOP t'2014-01-13T07:03:17Z'" : [{'query': '((process_name:cmd.exe) and last_update:-5m)', 'dialect': 'process'}, {'query': '((observed_filename:notepad.exe) and server_added_timestamp:[2014-01-13T07:03:17 TO 2014-01-13T07:03:17])', 'dialect': 'binary'}],
                 }
         for stix_pattern, queries in stix_to_cb_mapping.items():
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern, options={"time_range": 5})
