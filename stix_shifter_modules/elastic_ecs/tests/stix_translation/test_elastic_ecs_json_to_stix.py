@@ -146,6 +146,30 @@ event_data = {
       "executable": "C:\\Windows\\System32\\wbem\\unsecapp.exe",
       "working_directory": "C:\\WINDOWS\\system32\\",
       "name": "unsecapp.exe"
+    },
+    "url": {
+        "original": "http://domain.com/path?query=abc",
+        "domain": "domain.com"
+    },
+    "registry": {
+      "path": "HKLM\\a\\b\\c\\val",
+      "hive": "HKLM",
+      "key": "a\\b\\c\\val",
+      "value": "val",
+      "data": {
+        "strings": [
+          "ddd"
+        ],
+        "type": "SZ_DWORD"
+      }
+    },
+    "dns": {
+        "question": {
+            "name": "officehomeblobs.blob.core.windows.net",
+        },
+        "resolved_ip": [
+            "40.116.120.16", "1.2.3.4"
+        ]
     }
   }
 
@@ -257,7 +281,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert (nt_object is not None), 'network-traffic object type not found'
         assert (nt_object.keys() ==
-                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols'})
+                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
         assert (nt_object['type'] == 'network-traffic')
         assert (nt_object['src_port'] == 49745)
         assert (nt_object['dst_port'] == 443)
@@ -278,6 +302,21 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (ip_obj['type'] == 'ipv4-addr')
         assert (ip_obj['value'] == '107.0.0.48')
         assert (isinstance(ip_obj['resolves_to_refs'], list) and isinstance(ip_obj['resolves_to_refs'][0], str))
+
+        dns_ext = nt_object['extensions']['dns-ext']
+        assert(dns_ext is not None)
+        assert(dns_ext["question"] is not None)
+        name_ref = dns_ext["question"]["name_ref"]
+        assert(name_ref in objects), f"name_ref with key {dns_ext['question']['name_ref']} not found"
+        domain_obj = objects[name_ref]
+        assert(domain_obj["type"] == "domain-name")
+        assert(domain_obj["value"] == "officehomeblobs.blob.core.windows.net")
+        assert(dns_ext["resolved_ip_refs"] is not None)
+        for ip_ref in dns_ext["resolved_ip_refs"]:
+            assert(ip_ref in objects), f"resolved_ip_ref with key {ip_ref} not found"
+            ip_obj = objects[ip_ref]
+            assert(ip_obj["type"] == "ipv4-addr")
+            assert(ip_obj["value"] in ["40.116.120.16", "1.2.3.4"])
 
 
     def test_process_prop(self):
@@ -389,12 +428,23 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(parent_obj['type'] == "directory")
         assert(parent_obj['path'] == "/home/alice")
 
-#        domain_ref = event_object['domain_ref']
-#        assert(domain_ref in objects), f"domain_ref with key {event_object['domain_ref']} not found"
-#        domain_obj = objects[domain_ref]
-#        assert(domain_obj.keys() == {'type', 'value'})
-#        assert(domain_obj['type'] == 'domain-name')
-#        assert(domain_obj['value'] == "example.com")
+        domain_ref = event_object['domain_ref']
+        assert(domain_ref in objects), f"domain_ref with key {event_object['domain_ref']} not found"
+        domain_obj = objects[domain_ref]
+        assert(domain_obj.keys() == {'type', 'value'})
+        assert(domain_obj['type'] == 'domain-name')
+        assert(domain_obj['value'] == "domain.com")
+
+        registry_ref = event_object['registry_ref']
+        assert(registry_ref in objects), f"registry_ref with key {event_object['registry_ref']} not found"
+        reg_obj = objects[registry_ref]
+        assert(reg_obj['type'] == 'x-ecs-registry')
+
+        network_ref = event_object['network_ref']
+        assert(network_ref in objects), f"network_ref with key {event_object['network_ref']} not found"
+        nt_obj = objects[network_ref]
+        assert(nt_obj['type'] == 'network-traffic')
+
 
     def test_artifact_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -479,19 +529,3 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         objects = observed_data['objects']
         assert(objects == {})
     
-    def test_unwrap_flag_in_mapping(self):        
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], get_module_transformers(MODULE), options)
-        assert (result_bundle['type'] == 'bundle')
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-        
-        assert ('objects' in observed_data)
-        objects = observed_data['objects']
-
-        custom_dns_obj = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ecs-dns')
-        assert (isinstance(custom_dns_obj['resolved_ip_refs'], list) and isinstance(custom_dns_obj['resolved_ip_refs'][0], str))
-
-        assert objects[custom_dns_obj['resolved_ip_refs'][0]].get('value') == "40.116.120.16"
-        assert objects[custom_dns_obj['resolved_ip_refs'][1]].get('value') == "1.2.3.4"
