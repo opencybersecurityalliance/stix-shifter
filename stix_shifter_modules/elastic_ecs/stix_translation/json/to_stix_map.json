@@ -1347,11 +1347,6 @@
           "key": "file.parent_directory_ref",
           "object": "file",
           "references": "directory"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process",
-          "references": "file"
       }
     ],
     "size": {
