@@ -363,9 +363,6 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
 
-        with open('/data/test_ecs.json', 'w') as fp:
-            json.dump(objects, fp)
-
         event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ibm-event')
         assert (event_object is not None), 'x-ibm-event object type not found'
 
