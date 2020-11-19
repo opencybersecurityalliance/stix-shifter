@@ -1027,6 +1027,11 @@
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "user"
+      },
+      {
+        "key": "x-ibm-event.user_ref",
+        "object": "event",
+        "references": "user"
       }
     ],
     "email": [

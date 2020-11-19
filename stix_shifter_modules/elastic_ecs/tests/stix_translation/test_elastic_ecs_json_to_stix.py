@@ -442,6 +442,12 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_obj = objects[network_ref]
         assert(nt_obj['type'] == 'network-traffic')
 
+        user_ref = event_object['user_ref']
+        assert(user_ref in objects), f"user_ref with key {event_object['user_ref']} not found"
+        user_obj = objects[user_ref]
+        assert(user_obj['type'] == 'user-account')
+        assert(user_obj['user_id'] == 'USERNAME')
+
 
     def test_artifact_prop(self):
         result_bundle = json_to_stix_translator.convert_to_stix(
