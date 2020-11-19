@@ -22,7 +22,7 @@
             },
             "timeout": {
                 "label": "Query Response Timeout Limit",
-                "description": "The limit on how long to wait for the data source response."
+                "description": "The limit on how long to wait for the data source response, in seconds."
             },
             "search_timeout": {
                 "label": "Query Search Timeout Limit",
