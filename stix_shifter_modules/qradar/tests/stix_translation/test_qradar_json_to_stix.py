@@ -271,6 +271,13 @@ class TestTransform(object):
         assert(domain_obj['type'] == 'domain-name')
         assert(domain_obj['value'] == domain)
 
+        url_ref = event['url_ref']
+        assert(url_ref in objects), f"url_ref with key {event['url_ref']} not found"
+        url_obj = objects[url_ref]
+        assert(url_obj.keys() == {'type', 'value'})
+        assert(url_obj['type'] == 'url')
+        assert(url_obj['value'] == url)
+
         file_ref = event['file_ref']
         assert(file_ref in objects), f"file_ref with key {event['file_ref']} not found"
         file_obj = objects[file_ref]

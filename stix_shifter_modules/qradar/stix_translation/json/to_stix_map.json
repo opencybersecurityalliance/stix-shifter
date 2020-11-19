@@ -328,6 +328,11 @@
       "key": "x-ibm-event.domain_ref",
       "object": "event",
       "references": "domain1"
+    },
+    {
+      "key": "x-ibm-event.url_ref",
+      "object": "event",
+      "references": "url"
     }
   ],
   "filename": [
