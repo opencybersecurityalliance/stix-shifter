@@ -208,12 +208,13 @@ class TestTransform(object):
         hostname = "example host"
         high_level_category_name = "System"
         identityip = "1.2.3.4"
+        username = "username"
 
         data = {"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
                 "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
                 "url": domain, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
-                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename }
+                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username }
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
@@ -256,6 +257,13 @@ class TestTransform(object):
         assert(hostip.keys() == {'type', 'value'})
         assert((hostip['type'] == 'ipv6-addr' and hostip['value'] == sourceip) or (hostip['type'] == 'ipv4-addr' and hostip['value'] == identityip))
 
+        user_ref = event['user_ref']
+        assert(user_ref in objects), f"user_ref with key {event['user_ref']} not found"
+        user_obj = objects[user_ref]
+        assert(user_obj.keys() == {'type', 'user_id'})
+        assert(user_obj['type'] == 'user-account')
+        assert(user_obj['user_id'] == username)
+
         domain_ref = event['domain_ref']
         assert(domain_ref in objects), f"domain_ref with key {event['domain_ref']} not found"
         domain_obj = objects[domain_ref]
@@ -278,7 +286,7 @@ class TestTransform(object):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref', 'command_line'})
+        assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref', 'command_line', 'creator_user_ref'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == process_command_line)
         binary_obj = objects[process_obj['binary_ref']]
