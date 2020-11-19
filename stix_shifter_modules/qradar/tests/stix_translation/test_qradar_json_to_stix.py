@@ -207,8 +207,9 @@ class TestTransform(object):
         categoryname = "Process Creation Success"
         hostname = "example host"
         high_level_category_name = "System"
+        identityip = "1.2.3.4"
 
-        data = {"qidname": qidname, "categoryname": categoryname, "identityip": sourceip, "identityhostname": hostname, 
+        data = {"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
                 "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
                 "url": domain, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
@@ -225,7 +226,7 @@ class TestTransform(object):
         assert(event['action'] == qidname)
         assert(event['created'] == START_TIMESTAMP)
         assert(event['provider'] == logsourcetypename)
-        assert(event['category'] == high_level_category_name)
+        assert(event['category'] == [high_level_category_name])
         assert(event['agent'] == logsourcename)
         
         host_ref = event['host_ref']
@@ -233,7 +234,6 @@ class TestTransform(object):
         host = objects[host_ref]
         assert(host['type'] == "x-ibm-host")
         assert(host['hostname'] == hostname)
-        assert(host['ip'] == sourceip)
 
         original_ref = event['original_ref']
         assert(original_ref in objects), f"original_ref with key {event['original_ref']} not found"
@@ -249,13 +249,12 @@ class TestTransform(object):
         assert(mac_obj['type'] == 'mac-addr')
         assert(mac_obj['value'] == sourcemac)
 
-        ip_refs = host['ipv6_refs']
-        assert(ip_refs is not None), "host ipv6_refs not found"
-        assert(len(ip_refs) == 1)
+        ip_refs = host['ip_refs']
+        assert(ip_refs is not None), "host ip_refs not found"
+        assert(len(ip_refs) == 2)
         hostip = objects[ip_refs[0]]
         assert(hostip.keys() == {'type', 'value'})
-        assert(hostip['type'] == 'ipv6-addr')
-        assert(hostip['value'] == sourceip)
+        assert((hostip['type'] == 'ipv6-addr' and hostip['value'] == sourceip) or (hostip['type'] == 'ipv4-addr' and hostip['value'] == identityip))
 
         domain_ref = event['domain_ref']
         assert(domain_ref in objects), f"domain_ref with key {event['domain_ref']} not found"

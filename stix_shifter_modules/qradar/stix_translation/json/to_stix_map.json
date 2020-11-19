@@ -37,7 +37,8 @@
     },
     {
       "key": "x-ibm-event.category",
-      "object": "event"
+      "object": "event",
+      "transformer": "ValueToList"
     }
   ],
   "high_level_category_id": {
@@ -59,18 +60,16 @@
       "object": "host_ip_addr_v6"
     },
     {
-      "key": "x-ibm-host.ipv4_refs",
+      "key": "x-ibm-host.ip_refs",
       "object": "host",
-      "references": [
-        "host_ip_addr_v4"
-      ]
+      "references": ["host_ip_addr_v4"],
+      "group": true
     },
     {
-      "key": "x-ibm-host.ipv6_refs",
+      "key": "x-ibm-host.ip_refs",
       "object": "host",
-      "references": [
-        "host_ip_addr_v6"
-      ]
+      "references": ["host_ip_addr_v6"],
+      "group": true
     },
     {
       "key": "x-ibm-event.host_ref",
@@ -246,8 +245,10 @@
       "references": "src_ip" 
     },
     {
-      "key": "x-ibm-host.ip",
-      "object": "host"
+      "key": "x-ibm-host.ip_refs",
+      "object": "host",
+      "references": ["src_ip"],
+      "group": true
     }
   ],
   "sourcev6": [
