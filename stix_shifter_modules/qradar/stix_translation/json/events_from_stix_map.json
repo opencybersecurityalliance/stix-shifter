@@ -11,7 +11,7 @@
   },
   "url": {
     "fields": {
-      "value": ["url", "UrlHost"]
+      "value": ["url"]
     }
   },
   "mac-addr": {
@@ -25,7 +25,8 @@
       "hashes.SHA-256": ["filehash"],
       "hashes.MD5": ["filehash"],
       "hashes.SHA-1": ["filehash"],
-      "parent_directory_ref": ["filepath"]
+      "parent_directory_ref": ["filepath"],
+      "parent_directory_ref.path": ["filepath"]
     }
   },
   "directory": {
@@ -101,7 +102,21 @@
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName", "LoadedImage"]
+      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
+    }
+  },
+  "x-ibm-event": {
+    "fields": {
+      "action": ["qidname"],
+      "process_ref.command_line": ["ProcessCommandLine"],
+      "process_ref.binary_ref.name": ["Image"],
+      "process_ref.parent_ref.command_line": ["ParentCommandLine"],
+      "process_ref.creator_user_ref.user_id": ["username"],
+      "parent_process_ref.command_line": ["ParentCommandLine"],
+      "domain_ref.value": ["domainname"],
+      "file_ref.name": ["filename"],
+      "host_ref.hostname": ["identityhostname"],
+      "host_ref.name": ["identityhostname"]
     }
   }
 }
