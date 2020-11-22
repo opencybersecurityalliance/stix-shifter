@@ -246,7 +246,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE domainname LIKE '%example.com%' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (domainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_generic_filehash_query(self):
@@ -374,3 +374,48 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'][0] == selections + from_statement + where_statement_01
         assert query['queries'][1] == selections + from_statement + where_statement_02
+
+
+    def test_registry_search(self):
+        stix_pattern = "[windows-registry-key:values[*].name = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE RegistryValueName = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)        
+
+        stix_pattern = "[windows-registry-key:key = 'efgh']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE ObjectName = 'efgh' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_x_ibm_host_search(self):
+        stix_pattern = "[x-ibm-host:hostname = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE identityhostname = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-host:ip_refs[*].value = '9.9.9.9']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (identityip = '9.9.9.9' OR sourceip = '9.9.9.9') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-host:mac_refs[*].value = '00-00-5E-00-53-00']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE sourcemac = '00-00-5E-00-53-00' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_x_ibm_event_search(self):
+        stix_pattern = "[x-ibm-event:action = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE qidname = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-event:code = 1]"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE EventID = '1' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+
+        stix_pattern = "[x-ibm-event:process_ref.command_line = 'abc']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE ProcessCommandLine = 'abc' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)

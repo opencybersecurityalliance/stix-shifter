@@ -112,7 +112,7 @@ class TestTransform(object):
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
-               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
         assert(nt_object['src_port'] == 3000)
         assert(nt_object['dst_port'] == 2000)
         assert(nt_object['protocols'] == ['tcp'])
@@ -156,7 +156,7 @@ class TestTransform(object):
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
 
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line' })
+        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         binary_ref = proc_obj['binary_ref']
@@ -166,6 +166,12 @@ class TestTransform(object):
         assert(binary['name'] == process_image_file)
         assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {binary_ref['parent_directory_ref']} not found"
         assert(objects[binary['parent_directory_ref']]['path'] == process_image_dir)
+        assert(len(proc_obj['extensions']['x-ibm-windows-ext']['loaded_image_refs']) == 1)
+        loaded_image_ref = proc_obj['extensions']['x-ibm-windows-ext']['loaded_image_refs'][0]
+        assert(objects[loaded_image_ref] is not None), 'process loaded_image_refs not found'
+        loaded_image_obj = objects[loaded_image_ref]
+        assert(loaded_image_obj['type'] == "file")
+        assert(loaded_image_obj['name'] == "some.dll")
 
         #todo: check filename and file path and also for parent
         parent_ref = proc_obj['parent_ref']
@@ -176,8 +182,8 @@ class TestTransform(object):
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 21))))
+        assert(curr_obj['value'] == 'test.com')
+        assert(objects.keys() == set(map(str, range(0, 22))))
 
     def test_x_ibm_event(self):
         payload = "utf payload"
@@ -214,7 +220,8 @@ class TestTransform(object):
                 "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
                 "url": url, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
-                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username }
+                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
+                "UrlHost": domain }
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]

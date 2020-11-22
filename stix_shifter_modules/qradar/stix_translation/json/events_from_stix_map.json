@@ -57,7 +57,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["domainname"]
+      "value": ["domainname", "UrlHost"]
     }
   },
   "x-qradar": {
@@ -102,21 +102,64 @@
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
+      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName", "LoadedImage"]
     }
   },
   "x-ibm-event": {
     "fields": {
       "action": ["qidname"],
+      "code": ["EventID"],
+      "outcome": ["categoryname"],
+      "category": ["high_level_category_name"],
+      "created": ["devicetime"],
+      "agent": ["logsourcename"],
+      "provider": ["logsourcetypename"],
       "process_ref.command_line": ["ProcessCommandLine"],
       "process_ref.binary_ref.name": ["Image"],
       "process_ref.parent_ref.command_line": ["ParentCommandLine"],
       "process_ref.creator_user_ref.user_id": ["username"],
+      "process_ref.name": ["ProcessName"],
+      "process_ref.pid": ["ProcessId"],
       "parent_process_ref.command_line": ["ParentCommandLine"],
-      "domain_ref.value": ["domainname"],
+      "parent_process_ref.binary_ref.name": ["ParentImage"],
+      "domain_ref.value": ["domainname", "UrlHost"],
       "file_ref.name": ["filename"],
       "host_ref.hostname": ["identityhostname"],
-      "host_ref.name": ["identityhostname"]
+      "host_ref.ip_refs[*].value": ["identityip"],
+      "registry_ref.key": ["ObjectName", "RegistryKey"],
+      "user_ref.user_id": ["username"],
+      "url_ref.value": ["url"],
+      "original_ref.payload_bin": ["eventpayload", "Message"]
+    }
+  },
+  "x-ibm-host": {
+    "fields": {
+      "hostname": ["identityhostname"],
+      "ip_refs[*].value": ["identityip", "sourceip"],
+      "mac_refs[*].value": ["sourcemac"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["ObjectName"],
+      "values[*].data": ["RegistryValueData"],
+      "values[*].name": ["RegistryValueName"]
+    }
+  },
+  "x-ibm-windows": {
+    "fields": {
+      "initiatedconnection": ["InitiatedConnection"],
+      "targetimage": ["TargetImage"],
+      "grantedaccess": ["GrantedAccess"],
+      "calltrace": ["CallTrace"],
+      "sourceimage": ["Image"],
+      "pipename": ["PipeName"],
+      "startmodule": ["InitiatedConnection"],
+      "startfunction": ["InitiatedConnection"],
+      "signed": ["InitiatedConnection"],
+      "imphash": ["InitiatedConnection"],
+      "startaddress": ["InitiatedConnection"],
+      "integritylevel": ["InitiatedConnection"]
     }
   }
 }

@@ -315,24 +315,26 @@
       "object": "url"
     },
     {
+      "key": "x-ibm-event.url_ref",
+      "object": "event",
+      "references": "url"
+    }
+  ],
+  "UrlHost": [
+  {
       "key": "domain-name.value",
-      "object": "domain1",
+      "object": "dns_domain",
       "transformer": "ToDomainName"
     },
     {
       "key": "network-traffic.extensions.dns-ext.question.domain_ref",
       "object": "nt",
-      "references": "domain1"
+      "references": "dns_domain"
     },
     {
       "key": "x-ibm-event.domain_ref",
       "object": "event",
-      "references": "domain1"
-    },
-    {
-      "key": "x-ibm-event.url_ref",
-      "object": "event",
-      "references": "url"
+      "references": "dns_domain"
     }
   ],
   "filename": [
@@ -633,9 +635,165 @@
       "object": "event",
       "references": "parent_process_image"
     }
-  ],  
-  "ServiceFileName": {
-    "key": "process.extensions.windows-service-ext.service_dll_refs[*].name",
-    "object": "process"
-  }
+  ],
+  "ProcessName": [
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ProcessId": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "EventID": {
+    "key": "x-ibm-event.code",
+    "object": "event",
+    "transformer": "ToInteger"
+  },
+  "ObjectName": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "reg"
+    },
+    {
+      "key": "x-ibm-event.registry_ref",
+      "object": "event",
+      "references": "reg"
+    }
+  ],
+  "RegistryKey": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "reg"
+    },
+    {
+      "key": "x-ibm-event.registry_ref",
+      "object": "event",
+      "references": "reg"
+    }
+  ],
+  "InitiatedConnection": {
+    "key": "x-ibm-windows.initiated_connection",
+    "object": "xwin"
+  },
+  "TargetImage": {
+    "key": "x-ibm-windows.targetimage",
+    "object": "xwin"
+  },
+  "GrantedAccess": {
+    "key": "x-ibm-windows.granted_access",
+    "object": "xwin"
+  },
+  "CallTrace": {
+    "key": "x-ibm-windows.call_trace",
+    "object": "xwin"
+  },
+  "SourceImage": {
+    "key": "x-ibm-windows.source_image",
+    "object": "xwin"
+  },
+  "PipeName": {
+    "key": "x-ibm-windows.pipe_name",
+    "object": "xwin"
+  },
+  "StartModule": {
+    "key": "x-ibm-windows.start_module",
+    "object": "xwin"
+  },
+  "StartFunction": {
+    "key": "x-ibm-windows.start_function",
+    "object": "xwin"
+  },
+  "Signed": {
+    "key": "x-ibm-windows.signed",
+    "object": "xwin"
+  },
+  "Message": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "event_payload",
+      "transformer": "ToBase64"
+    },
+    {
+      "key": "x-event.original_ref",
+      "object": "event",
+      "references": "event_payload"
+    },
+    {
+      "key": "x-event.original",
+      "object": "event"
+    }
+  ],
+  "IMPHash": {
+    "key": "x-ibm-windows.imphash",
+    "object": "xwin"
+  },
+  "StartAddress": {
+    "key": "x-ibm-windows.start_address",
+    "object": "xwin"
+  },
+  "IntegrityLevel": {
+    "key": "x-ibm-windows.integrity_level",
+    "object": "xwin"
+  },
+  "ServiceFileName": [
+    {
+      "key": "file.name",
+      "object": "service_file_name",
+      "transformer": "ToFileName"
+    }, 
+    {
+      "key": "directory.path",
+      "object": "service_file_dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "service_file_name",
+      "references": "service_file_dir"
+    },
+    {
+      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "object": "process",
+      "group": true,
+      "references": ["service_file_name"]
+    }
+  ],
+  "LoadedImage": [
+    {
+      "key": "file.name",
+      "object": "service_file_name",
+      "transformer": "ToFileName"
+    }, 
+    {
+      "key": "directory.path",
+      "object": "service_file_dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "service_file_name",
+      "references": "service_file_dir"
+    },
+    {
+      "key": "process.extensions.x-ibm-windows-ext.loaded_image_refs",
+      "object": "process",
+      "group": true,
+      "references": ["service_file_name"]
+    }
+  ]
 }
