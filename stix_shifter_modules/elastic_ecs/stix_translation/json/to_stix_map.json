@@ -886,10 +886,6 @@
         "object": "user"
       },
       {
-        "key": "x-ecs-user.name",
-        "object": "x_user"
-      },
-      {
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "user"
