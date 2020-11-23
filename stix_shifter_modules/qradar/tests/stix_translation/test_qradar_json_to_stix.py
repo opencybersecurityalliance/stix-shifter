@@ -156,7 +156,7 @@ class TestTransform(object):
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
 
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line', 'extensions' })
+        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line'})
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         binary_ref = proc_obj['binary_ref']
@@ -166,12 +166,6 @@ class TestTransform(object):
         assert(binary['name'] == process_image_file)
         assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {binary_ref['parent_directory_ref']} not found"
         assert(objects[binary['parent_directory_ref']]['path'] == process_image_dir)
-        assert(len(proc_obj['extensions']['x-ibm-windows-ext']['loaded_image_refs']) == 1)
-        loaded_image_ref = proc_obj['extensions']['x-ibm-windows-ext']['loaded_image_refs'][0]
-        assert(objects[loaded_image_ref] is not None), 'process loaded_image_refs not found'
-        loaded_image_obj = objects[loaded_image_ref]
-        assert(loaded_image_obj['type'] == "file")
-        assert(loaded_image_obj['name'] == "some.dll")
 
         #todo: check filename and file path and also for parent
         parent_ref = proc_obj['parent_ref']
@@ -183,7 +177,7 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'test.com')
-        assert(objects.keys() == set(map(str, range(0, 22))))
+        assert(objects.keys() == set(map(str, range(0, 20))))
 
     def test_x_ibm_event(self):
         payload = "utf payload"

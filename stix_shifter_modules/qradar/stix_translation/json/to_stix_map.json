@@ -694,10 +694,6 @@
       "references": "winregistry"
     }
   ],
-  "InitiatedConnection": {
-    "key": "x-ibm-windows.initiated_connection",
-    "object": "xwin"
-  },
   "TargetImage": {
     "key": "x-ibm-windows.targetimage",
     "object": "xwin"
@@ -750,14 +746,6 @@
     "key": "x-ibm-windows.imphash",
     "object": "xwin"
   },
-  "StartAddress": {
-    "key": "x-ibm-windows.start_address",
-    "object": "xwin"
-  },
-  "IntegrityLevel": {
-    "key": "x-ibm-windows.integrity_level",
-    "object": "xwin"
-  },
   "ServiceFileName": [
     {
       "key": "file.name",
@@ -776,29 +764,6 @@
     },
     {
       "key": "process.extensions.windows-service-ext.service_dll_refs",
-      "object": "process",
-      "group": true,
-      "references": ["service_file_name"]
-    }
-  ],
-  "LoadedImage": [
-    {
-      "key": "file.name",
-      "object": "service_file_name",
-      "transformer": "ToFileName"
-    }, 
-    {
-      "key": "directory.path",
-      "object": "service_file_dir",
-      "transformer": "ToDirectoryPath"
-    },
-    {
-      "key": "file.parent_directory_ref",
-      "object": "service_file_name",
-      "references": "service_file_dir"
-    },
-    {
-      "key": "process.extensions.x-ibm-windows-ext.loaded_image_refs",
       "object": "process",
       "group": true,
       "references": ["service_file_name"]
