@@ -52,16 +52,14 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_url_query(self):
         stix_pattern = "[url:value = 'http://www.testaddress.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url = 'http://www.testaddress.com' OR UrlHost = 'http://www.testaddress.com') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE url = 'http://www.testaddress.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_NOT_and_not_equals_operators(self):
-        search_string1 = "www.example.com"
-        search_string2 = "www.example.ca"
-        stix_pattern = "[url:value != '{}' OR url:value NOT = '{}']".format(search_string1, search_string2)
+        stix_pattern = "[url:value != 'www.example.com' OR url:value NOT = 'www.example.ca']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE NOT ((url = '{1}' OR UrlHost = '{1}')) OR (url != '{0}' OR UrlHost != '{0}') {2} {3}".format(
-            search_string1, search_string2, default_limit, default_time)
+        where_statement = "WHERE NOT (url = 'www.example.ca') OR url != 'www.example.com' {} {}".format(
+            default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_mac_address_query(self):
@@ -74,14 +72,14 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
         # Expect the STIX and to convert to an AQL OR.
-        where_statement = "WHERE ((url = 'www.example.com' OR UrlHost = 'www.example.com')) OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
         stix_pattern = "[(url:value = 'www.example.com' OR url:value = 'www.test.com') AND mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
         # Expect the STIX and to convert to an AQL AND.
-        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND ((url = 'www.test.com' OR UrlHost = 'www.test.com') OR (url = 'www.example.com' OR UrlHost = 'www.example.com')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') AND (url = 'www.test.com' OR url = 'www.example.com') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_file_query(self):
@@ -126,13 +124,13 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_pattern_with_two_observation_exps_one_with_unmapped_attribute(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever'] OR [file:name = 'some_file.exe' AND url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url = 'www.example.com' OR UrlHost = 'www.example.com') AND filename = 'some_file.exe' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE url = 'www.example.com' AND filename = 'some_file.exe' {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_pattern_with_three_observation_exps_one_with_unmapped_attribute(self):
         stix_pattern = "[file:name = 'some_file.exe' AND network-traffic:some_invalid_attribute = 'whatever'] OR [url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE ((url = 'www.example.com' OR UrlHost = 'www.example.com')) OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_user_account_query(self):
@@ -206,7 +204,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement_01 = "WHERE destinationport = '635' AND sourceport = '37020' {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         where_statement_02 = "WHERE (sourceip = '333.333.333.0' OR destinationip = '333.333.333.0' OR identityip = '333.333.333.0') {} START {} STOP {}".format(default_limit, unix_start_time_02, unix_stop_time_02)
-        where_statement_03 = "WHERE (url = 'www.example.com' OR UrlHost = 'www.example.com') {} {}".format(default_limit, default_time)
+        where_statement_03 = "WHERE url = 'www.example.com' {} {}".format(default_limit, default_time)
         assert len(query['queries']) == 3
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02, selections + from_statement + where_statement_03]
 
@@ -292,26 +290,20 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR ((url = 'www.example.com' OR UrlHost = 'www.example.com'))) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_complex_multiple_comparison_expression(self):
-        url_1 = "example01.ru"
-        url_2 = "example02.ru"
-        url_3 = "example01.com"
-        url_4 = "example03.ru"
-        url_5 = "example02.com"
-        url_6 = "example04.ru"
-        stix_pattern = "[url:value = '{0}' OR url:value = '{1}' OR url:value = '{2}' OR url:value = '{3}' OR url:value = '{4}' OR url:value = '{5}'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'".format(url_1, url_2, url_3, url_4, url_5, url_6)
+        stix_pattern = "[url:value = 'example01.ru' OR url:value = 'example02.ru' OR url:value = 'example01.com' OR url:value = 'example03.ru' OR url:value = 'example02.com' OR url:value = 'example04.ru'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url = '{5}' OR UrlHost = '{5}') OR ((url = '{4}' OR UrlHost = '{4}') OR ((url = '{3}' OR UrlHost = '{3}') OR ((url = '{2}' OR UrlHost = '{2}') OR ((url = '{1}' OR UrlHost = '{1}') OR (url = '{0}' OR UrlHost = '{0}'))))) {6} START 1561403143000 STOP 1561489543000".format(url_1, url_2, url_3, url_4, url_5, url_6, default_limit)
+        where_statement = "WHERE url = 'example04.ru' OR (url = 'example02.com' OR (url = 'example03.ru' OR (url = 'example01.com' OR (url = 'example02.ru' OR url = 'example01.ru')))) {} START 1561403143000 STOP 1561489543000".format(default_limit)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_LIKE_operator(self):
         search_string = 'example.com'
         stix_pattern = "[url:value LIKE '{}']".format(search_string)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url LIKE '%{0}%' OR UrlHost LIKE '%{0}%') {1} {2}".format(search_string, default_limit, default_time)
+        where_statement = "WHERE url LIKE '%{}%' {} {}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_payload_string_matching_with_LIKE(self):
@@ -370,7 +362,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "([ipv4-addr:value = '192.168.1.2'] OR [url:value LIKE '%.example.com']) START t'2020-09-11T13:00:52.000Z' STOP t'2020-09-11T13:59:04.000Z'"
         query = _translate_query(stix_pattern)
         where_statement_01 = "WHERE (sourceip = '192.168.1.2' OR destinationip = '192.168.1.2' OR identityip = '192.168.1.2') limit 10000 START 1599829252000 STOP 1599832744000"
-        where_statement_02 = "WHERE (url LIKE '%%.example.com%' OR UrlHost LIKE '%%.example.com%') limit 10000 START 1599829252000 STOP 1599832744000"
+        where_statement_02 = "WHERE url LIKE '%%.example.com%' limit 10000 START 1599829252000 STOP 1599832744000"
         assert len(query['queries']) == 2
         assert query['queries'][0] == selections + from_statement + where_statement_01
         assert query['queries'][1] == selections + from_statement + where_statement_02
