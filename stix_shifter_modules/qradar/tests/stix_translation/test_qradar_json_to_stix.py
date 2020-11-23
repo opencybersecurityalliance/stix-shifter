@@ -215,13 +215,17 @@ class TestTransform(object):
         high_level_category_name = "System"
         identityip = "1.2.3.4"
         username = "username"
+        object_name = "HKLM\\a\\b\\c\\val"
+        registry_key = "a\\b\\c"
+        registry_value_name = "val"
+
 
         data = {"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
                 "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
                 "url": url, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
                 "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
-                "UrlHost": domain }
+                "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
@@ -328,6 +332,18 @@ class TestTransform(object):
         assert(binary_parent_dir_obj is not None), "process parent binary parent directory ref not found"
         assert(binary_parent_dir_obj['type'] == "directory")
         assert(binary_parent_dir_obj['path'] == process_parent_image_dir)
+
+        registry_ref = event['registry_ref']
+        assert(registry_ref in objects), f"registry_ref with key {event['registry_ref']} not found"
+        registry_obj = objects[registry_ref]
+        assert(registry_obj.keys() == {'type', 'key', 'values'})
+        assert(registry_obj['type'] == 'windows-registry-key')
+        assert(registry_obj['key'] == "HKEY_LOCAL_MACHINE\\a\\b\\c")
+        assert(registry_obj['values'] is not None)
+        assert(len(registry_obj['values']) == 1)
+        assert(registry_obj['values'][0].keys() == {'name'})
+        assert(registry_obj['values'][0]['name'] == "val")
+
 
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 

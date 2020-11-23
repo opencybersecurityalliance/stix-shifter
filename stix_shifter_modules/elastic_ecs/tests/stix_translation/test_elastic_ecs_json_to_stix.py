@@ -435,7 +435,9 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         registry_ref = event_object['registry_ref']
         assert(registry_ref in objects), f"registry_ref with key {event_object['registry_ref']} not found"
         reg_obj = objects[registry_ref]
-        assert(reg_obj['type'] == 'x-ecs-registry')
+        assert(reg_obj['type'] == 'windows-registry-key')
+        assert(reg_obj['key'] == 'HKEY_LOCAL_MACHINE\\a\\b\\c')
+
 
         network_ref = event_object['network_ref']
         assert(network_ref in objects), f"network_ref with key {event_object['network_ref']} not found"

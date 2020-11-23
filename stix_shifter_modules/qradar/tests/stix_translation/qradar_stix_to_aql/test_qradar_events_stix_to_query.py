@@ -384,7 +384,7 @@ class TestQueryTranslator(unittest.TestCase, object):
 
         stix_pattern = "[windows-registry-key:key = 'efgh']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE ObjectName = 'efgh' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (ObjectName = 'efgh' OR RegistryKey = 'efgh') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_x_ibm_host_search(self):

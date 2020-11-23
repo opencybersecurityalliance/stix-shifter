@@ -141,7 +141,7 @@
   },
   "windows-registry-key": {
     "fields": {
-      "key": ["ObjectName"],
+      "key": ["ObjectName", "RegistryKey"],
       "values[*].data": ["RegistryValueData"],
       "values[*].name": ["RegistryValueName"]
     }

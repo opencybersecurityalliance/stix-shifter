@@ -1949,17 +1949,10 @@
     }
   },
   "registry": {
-    "key": [
-      {
-        "key": "windows-registry-key.key",
-        "object": "registry"
-      },
-      {
-        "key": "x-ibm-event.registry_ref",
-        "object": "event",
-        "references": "registry"
-      }
-    ],
+    "key": {
+      "key": "x-ecs-registry.key",
+      "object": "registry"
+    },
     "data": {
       "bytes": {
         "key": "x-ecs-registry.data_bytes",
@@ -1978,10 +1971,27 @@
       "key": "x-ecs-registry.hive",
       "object": "registry"
     },
-    "path": {
-      "key": "x-ecs-registry.path",
-      "object": "registry"
-    },
+    "path": [
+      {
+        "key": "x-ecs-registry.path",
+        "object": "registry"
+      },
+      {
+        "key": "windows-registry-key.key",
+        "object": "winregistry",
+        "transformer": "PathToStixRegistryKey"
+      },
+      {
+        "key": "windows-registry-key.values",
+        "object": "winregistry",
+        "transformer": "PathToStixRegistryValue"
+      },
+      {
+        "key": "x-ibm-event.registry_ref",
+        "object": "event",
+        "references": "winregistry"
+      }
+    ],
     "value": {
       "key": "x-ecs-registry.value",
       "object": "registry"

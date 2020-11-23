@@ -667,23 +667,31 @@
   "ObjectName": [
     {
       "key": "windows-registry-key.key",
-      "object": "reg"
+      "object": "winregistry",
+      "transformer": "ObjectnameToStixRegistryKey"
     },
     {
       "key": "x-ibm-event.registry_ref",
       "object": "event",
-      "references": "reg"
+      "references": "winregistry"
     }
   ],
   "RegistryKey": [
     {
-      "key": "windows-registry-key.key",
-      "object": "reg"
+      "key": "x-qradar.registry_key",
+      "object": "x-qradar"
+    }
+  ],
+  "RegistryValueName": [
+    {
+        "key": "windows-registry-key.values",
+        "object": "winregistry",
+        "transformer": "RegValueNameToStixRegistryValues"
     },
     {
       "key": "x-ibm-event.registry_ref",
       "object": "event",
-      "references": "reg"
+      "references": "winregistry"
     }
   ],
   "InitiatedConnection": {
