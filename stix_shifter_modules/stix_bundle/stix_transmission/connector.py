@@ -37,7 +37,8 @@ class Connector(BaseSyncConnector):
         if found_bindings:
             matching_sdos = []
             for binding in found_bindings:
-                matching_sdos = matching_sdos + matcher.get_sdos_from_binding(binding)
+                matches = [match for match in matcher.get_sdos_from_binding(binding) if match not in matching_sdos]
+                matching_sdos.extend(matches)
         else:
             matching_sdos = []
 
