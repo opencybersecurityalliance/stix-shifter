@@ -26,8 +26,8 @@ class TestQueryTranslator(unittest.TestCase):
         """
         self.assertIsInstance(query, dict)
         self.assertIsInstance(query['queries'], list)
-        for index, each_query in enumerate(query.get('queries'), start=0):
-            self.assertEqual(each_query, queries[index])
+        for each_query in query.get('queries'):
+            self.assertIn(each_query, queries)
 
     def test_network_exp(self):
         """
