@@ -66,7 +66,7 @@ class QueryConnector(BaseQueryConnector):
         :return: dict, result configuration
         """
         output_location = ''
-        path = self.connection.get('s3_output_location').strip()
+        path = self.connection.get('s3_bucket_location').strip()
         if path.startswith('s3://'):
             output_location = path
         elif path.startswith('s3'):

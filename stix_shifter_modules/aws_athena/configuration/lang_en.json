@@ -9,28 +9,28 @@
             "placeholder": "us-east-1",
             "description": "Specify the region of the Amazon Athena for the data source"
         },
-        "s3_output_location": {
-            "label": "S3 Output Location",
+        "s3_bucket_location": {
+            "label": "S3 Bucket Location",
             "placeholder": "s3://bucket_name/",
             "description": "Specify S3 bucket location to save the results of query in s3 bucket"
         },
         "vpcflow_database_name": {
-            "label": "vpcflow service database name",
+            "label": "Database name for VPC Flow log",
             "placeholder": "vpcflow_database_name",
             "description": "Specify database name containing vpcflow service logs table from which the data to be queried"
         },
         "vpcflow_table_name": {
-            "label": "vpcflow service table name",
+            "label": "Table name for VPC Flow log",
             "placeholder": "vpcflow_table_name",
             "description": "Specify vpcflow service table name from which the data to be queried"
         },
         "guardduty_database_name": {
-            "label": "Guardduty service database name",
+            "label": "Database name for GuardDuty",
             "placeholder": "guardduty_database_name",
             "description": "Specify database name containing guardduty service logs table from which the data to be queried"
         },
         "guardduty_table_name": {
-            "label": "Guardduty service table name",
+            "label": "Table name for GuardDuty",
             "placeholder": "guardduty_table_name",
             "description": "Specify guardduty service table name from which the data to be queried"
         }

@@ -24,7 +24,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
         ```
         transmit
         "aws_athena"
-        "{\"region\": \"<athena configured region>\", \"s3_output_location\":\"s3://<path to output bucket>/\",
+        "{\"region\": \"<athena configured region>\", \"s3_bucket_location\":\"s3://<path to output bucket>/\",
         \"vpcflow_database_name\":\"flow_logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
         \"guardduty_database_name\":\"guardduty_logs_db\",\"guardduty_table_name\":\"gd_logs\"}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"yyyy\"}}"
@@ -36,7 +36,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
         ```
         transmit
         "aws_athena"
-        "{\"region\": \"<athena configured region>\", \"s3_output_location\":\"s3://<path to output bucket>/\", 
+        "{\"region\": \"<athena configured region>\", \"s3_bucket_location\":\"s3://<path to output bucket>/\", 
         \"vpcflow_database_name\":\"flow_logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
         \"guardduty_database_name\":\"guardduty_logs_db\",\"guardduty_table_name\":\"gd_logs\"}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": 
@@ -53,7 +53,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
         ```
         transmit
         "aws_athena"
-        "{\"region\": \"<athena configured region>\", \"s3_output_location\":\"s3://<path to output bucket>/\",
+        "{\"region\": \"<athena configured region>\", \"s3_bucket_location\":\"s3://<path to output bucket>/\",
         \"vpcflow_database_name\":\"flow_logs_db\", \"vpcflow_table_name\":\"vpc_flow_logs\", 
         \"guardduty_database_name\":\"guardduty_logs_db\",\"guardduty_table_name\":\"gd_logs\"}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"yyyy\"}}"
@@ -64,7 +64,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
         ```
         transmit
         "aws_athena"
-        "{\"region\": \"<athena configured region>\", \"s3_output_location\":\"s3://<path to output bucket>/\",
+        "{\"region\": \"<athena configured region>\", \"s3_bucket_location\":\"s3://<path to output bucket>/\",
         \"guardduty_database_name\":\"guardduty_logs_db\",\"guardduty_table_name\":\"gd_logs\"}"
         "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"yyyy\"}}"
         query <translated_query>
@@ -89,7 +89,7 @@ lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.
 #### Transmit query: GuardDuty query is passed to STIX transmission module
 
 ```
- transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://queryresults-athena-s3/\", 
+ transmit aws_athena "{\"region\": \"us-east-1\", \"s3_bucket_location\": \"s3://queryresults-athena-s3/\", 
  \"vpcflow_database_name\":\"logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
  \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": 
  \"xxxx\", 
@@ -100,7 +100,7 @@ lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.
 #### Transmit query: VPCFlow query is passed to STIX transmission module
 
 ```
-transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://queryresults-athena-s3/\", 
+transmit aws_athena "{\"region\": \"us-east-1\", \"s3_bucket_location\": \"s3://queryresults-athena-s3/\", 
 \"vpcflow_database_name\":\"logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
 \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", 
 \"aws_secret_access_key\": \"yyyy\"}}" query "{\"vpcflow\": \"((lower(sourceaddress) = lower('172.31.76.105') OR lower
@@ -122,7 +122,7 @@ transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://
 #### GuardDuty Transmit result: (provide search id in transmit result with offset and length)
 
 ```
- transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://queryresults-athena-s3/\", 
+ transmit aws_athena "{\"region\": \"us-east-1\", \"s3_bucket_location\": \"s3://queryresults-athena-s3/\", 
  \"vpcflow_database_name\":\"logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
  \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"yyyy\"}}" 
  results "d512d194-396e-4afb-9e38-4011c2472edc:guardduty" 0 2
@@ -131,7 +131,7 @@ transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://
 #### VPCFlow Transmit result : (provide search id in transmit result with offset and length)
 
 ```
-transmit aws_athena "{\"region\": \"us-east-1\", \"s3_output_location\": \"s3://queryresults-athena-s3/\", 
+transmit aws_athena "{\"region\": \"us-east-1\", \"s3_bucket_location\": \"s3://queryresults-athena-s3/\", 
 \"vpcflow_database_name\":\"logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
 \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", \"aws_secret_access_key\": \"yyyy\"}}" 
 results "19b3ad96-a8de-4894-bb9d-f63c50c99b0a:vpcflow" 0 2

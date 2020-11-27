@@ -25,7 +25,7 @@ IAM_CONFIG = {
 
 CONNECTION = {
     "region": "us-east-1",
-    "s3_output_location": "s3://queryresults-athena-s3/",
+    "s3_bucket_location": "s3://queryresults-athena-s3/",
     "vpcflow_database_name": "all",
     "vpcflow_table_name": "gd_logs",
     "guardduty_database_name": "gd_logs",

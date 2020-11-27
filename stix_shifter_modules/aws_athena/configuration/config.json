@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "AWS Athena"
+            "displayName": "Amazon Athena"
         },
         "help": {
             "type": "link",
@@ -10,7 +10,7 @@
         "region": {
             "type": "text"
         },
-        "s3_output_location": {
+        "s3_bucket_location": {
             "type": "text"
         },
         "vpcflow_database_name": {

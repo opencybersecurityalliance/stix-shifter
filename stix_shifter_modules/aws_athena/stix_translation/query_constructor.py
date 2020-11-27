@@ -85,7 +85,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _escape_value(value) -> str:
         if isinstance(value, str):
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
+            return '{}'.format(value.replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
         else:
             return value
 
