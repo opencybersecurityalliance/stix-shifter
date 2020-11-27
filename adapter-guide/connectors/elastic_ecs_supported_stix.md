@@ -60,6 +60,7 @@ ___
 
 ___
 ### process
+- opened_connection_refs
 - created
 - pid
 - parent_ref
@@ -82,10 +83,6 @@ ___
 ___
 ### user-account
 - user_id
-
-___
-### windows-registry-key
-- key
 
 ___
 ### x-ecs-client
@@ -383,15 +380,6 @@ ___
 - title
 - uptime
 - working_directory
-
-___
-### x-ecs-registry
-- data_bytes
-- data_strings
-- data_type
-- hive
-- path
-- value
 
 ___
 ### x-ecs-related
