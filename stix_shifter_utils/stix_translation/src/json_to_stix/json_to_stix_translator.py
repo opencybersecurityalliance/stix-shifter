@@ -164,7 +164,7 @@ class DataSourceObjToStixObj:
                 if ds_key not in self.ds_key_map:
                     self.logger.info(
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
-                    cust_obj = {"key": "x-" + self.data_source.replace("_", "-").lower() + "." + ds_key, "object":
+                    cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
                                 "cust_object"}
                     DataSourceObjToStixObj._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map,
                                                                  cust_obj["object"])

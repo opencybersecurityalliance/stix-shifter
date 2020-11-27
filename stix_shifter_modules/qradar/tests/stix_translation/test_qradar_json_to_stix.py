@@ -542,7 +542,7 @@ class TestTransform(object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         
-        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-QRadar')
 
         assert(custom_objects['unmapped1'] == "value1")
         assert(custom_objects['unmapped2'] == "value2")
