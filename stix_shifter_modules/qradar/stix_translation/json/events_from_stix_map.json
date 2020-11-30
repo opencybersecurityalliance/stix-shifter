@@ -47,7 +47,8 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["username"]
+      "user_id": ["username"],
+      "account_login":  ["username"]
     }
   },
   "artifact": {
