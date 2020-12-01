@@ -7,32 +7,32 @@
         "region": {
             "label": "Region",
             "placeholder": "us-east-1",
-            "description": "Specify the region of the Amazon Athena for the data source"
+            "description": "Specify the region of the Amazon Athena data source"
         },
         "s3_bucket_location": {
-            "label": "S3 Bucket Location",
+            "label": "Amazon S3 Bucket Location",
             "placeholder": "s3://bucket_name/",
-            "description": "Specify S3 bucket location to save the results of query in s3 bucket"
+            "description": "Specify the location of the S3 bucket where query results will be stored"
         },
         "vpcflow_database_name": {
-            "label": "Database name for VPC Flow log",
+            "label": "VPC Flow Logs database name",
             "placeholder": "vpcflow_database_name",
-            "description": "Specify database name containing vpcflow service logs table from which the data to be queried"
+            "description": "Specify the name of the database containing the VPC Flow Logs"
         },
         "vpcflow_table_name": {
-            "label": "Table name for VPC Flow log",
+            "label": "VPC Flow Logs table name",
             "placeholder": "vpcflow_table_name",
-            "description": "Specify vpcflow service table name from which the data to be queried"
+            "description": "Specify the name of the table containing the VPC Flow Logs"
         },
         "guardduty_database_name": {
-            "label": "Database name for GuardDuty",
+            "label": "Amazon GuardDuty database name",
             "placeholder": "guardduty_database_name",
-            "description": "Specify database name containing guardduty service logs table from which the data to be queried"
+            "description": "Specify the name of the database containing the Amazon GuardDuty logs"
         },
         "guardduty_table_name": {
-            "label": "Table name for GuardDuty",
+            "label": "Amazon GuardDuty table name",
             "placeholder": "guardduty_table_name",
-            "description": "Specify guardduty service table name from which the data to be queried"
+            "description": "Specify the name of the table containing the Amazon GuardDuty logs"
         }
     },
     "configuration": {
