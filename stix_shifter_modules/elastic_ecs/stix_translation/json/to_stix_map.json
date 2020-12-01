@@ -1262,7 +1262,7 @@
           "object": "dns_question_domain"
         },
         {
-          "key": "network-traffic.extensions.dns-ext.question.name_ref",
+          "key": "network-traffic.extensions.dns-ext.question.domain_ref",
           "object": "nt",
           "references": "dns_question_domain"
         },
