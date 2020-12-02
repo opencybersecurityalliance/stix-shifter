@@ -1,7 +1,7 @@
 {
     "connection": {
         "host": {
-            "label": "ArcSight logger IP address or Hostname",
+            "label": "ArcSight Logger IP address or Hostname",
             "description": "Use IP address or Hostname of the ArcSight logger"
         },
         "port": {
@@ -24,11 +24,11 @@
     "configuration": {
         "auth": {
             "login": {
-                "label": "ArcSight Login",
+                "label": "ArcSight Logger Username",
                 "description": "ArcSight Logger user's login name with access to the search API"
             },
             "password": {
-                "label": "ArcSight Password",
+                "label": "ArcSight Logger Password",
                 "description": "ArcSight Logger user's password with access to the search API"
             }
         }
