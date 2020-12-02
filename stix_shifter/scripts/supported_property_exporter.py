@@ -19,7 +19,8 @@ CONNECTORS = {
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
     "azure_sentinel": "Microsoft Azure Sentinel",
     "alertflex": "Alertflex",
-    "arcsight": "Micro Focus ArcSight"
+    "arcsight": "Micro Focus ArcSight",
+    "aws_athena": "Amazon Athena"
 }
 
 

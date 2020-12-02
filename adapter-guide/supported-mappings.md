@@ -22,3 +22,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Microsoft Azure Sentinel](connectors/azure_sentinel_supported_stix.md)
 - [Alertflex](connectors/alertflex_supported_stix.md)
 - [Micro Focus ArcSight](connectors/arcsight_supported_stix.md)
+- [Amazon Athena](connectors/aws_athena_supported_stix.md)
