@@ -473,10 +473,6 @@
       "key": "x-ibm-finding.severity",
       "object": "ibm_finding"
     },
-  "id":{
-    "key": "x-ibm-finding.finding_id",
-    "object": "ibm_finding"
-  },
   "title": {
       "key": "x-ibm-finding.name",
       "object": "ibm_finding"

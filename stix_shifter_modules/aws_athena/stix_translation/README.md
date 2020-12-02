@@ -165,7 +165,6 @@ results "19b3ad96-a8de-4894-bb9d-f63c50c99b0a:vpcflow" 0 2
                 },
                 "1": {
                     "type": "x-ibm-finding",
-                    "finding_id": "24bae74503647e535aa16eeb246de329",
                     "finding_type": "UnauthorizedAccess:EC2/RDPBruteForce",
                     "src_ip_ref": "3",
                     "src_os_ref": "9",
@@ -241,6 +240,7 @@ results "19b3ad96-a8de-4894-bb9d-f63c50c99b0a:vpcflow" 0 2
                     "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/24bae74503647e535aa16eeb246de329",
                     "createdat": "2020-11-16T00:52:33.609Z",
                     "partition": "aws",
+                    "id": "7ab9d1cb6248e05a0e419a79528761cb",
                     "resource": {
                         "instancedetails": {
                             "instancestate": "running",
@@ -416,7 +416,6 @@ Athena does not provide operator support for the following attributes,
 | AWS api name | x-aws-api:api | [x-aws-api:api = 'DescribeSecurityGroups'] |
 | AWS service name whose api is invoked | x-aws-api:api_service_name | [x-aws-api:api_service_name = 'ec2.amazonaws.com'] |
 | Name of ibm finding | x-ibm-finding:name | [x-ibm-finding:name = '146.168.246.36 is performing SSH brute force attacks against i-03d7e6195920aa4c0.'] |
-| Id of ibm finding | x-ibm-finding:finding_id | [x-ibm-finding:finding_id = '14b76d5936d5f302695e67ac500ab78a'] |
 | Type of ibm finding | x-ibm-finding:finding_type | [x-ibm-finding:finding_type = 'Recon:IAMUser/NetworkPermissions'] |
 | Description of ibm finding | x-ibm-finding:description | [x-ibm-finding:description = 'EC2 instance i-99999999 is generating unusually large amounts of network traffic to remote host 198.51.100.0.'] |
 | Country name of Remote Ip address | x-ibm-finding:dst_geolocation | [x-ibm-finding:dst_geolocation = 'Russia'] |

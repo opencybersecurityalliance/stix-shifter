@@ -64,7 +64,6 @@
  "x-ibm-finding": {
   "fields": {
     "name": ["title"],
-    "finding_id": ["id"],
     "finding_type": ["type"],
     "description": ["description"],
     "src_ip_ref.value": ["eth0_private_ip"],
