@@ -85,6 +85,10 @@ ___
 - user_id
 
 ___
+### windows-registry-key
+- key
+
+___
 ### x-ecs-client
 - address
 - domain
@@ -380,6 +384,15 @@ ___
 - title
 - uptime
 - working_directory
+
+___
+### x-ecs-registry
+- data_bytes
+- data_strings
+- data_type
+- hive
+- path
+- value
 
 ___
 ### x-ecs-related

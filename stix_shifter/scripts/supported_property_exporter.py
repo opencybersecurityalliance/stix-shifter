@@ -79,7 +79,7 @@ def _parse_attributes(element, module, stix_attribute_collection):
             _parse_attributes(value, module, stix_attribute_collection)
     if isinstance(element, dict) and element.get("key"):
         if isinstance(element["key"], dict): # Case where there is a "key" field coming from the data source
-            for key, value in element["key"].items():
+            for key, value in element.items():
                 _parse_attributes(value, module, stix_attribute_collection)
         else:
             split_stix_object = element["key"].split(".")
