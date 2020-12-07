@@ -33,11 +33,14 @@
         "OS User": {
           "info": "map",
           "default": "*"
-        },
-        "Severity": {
-          "info": "map",
-          "default": "*",
-          "transformer": "GuardiumMapSeverityNum"
+        }        
+      },
+      "query":{
+      "Severity": {
+        "info": "map",
+        "default": "Low",
+        "transformer": "GuardiumMapSeverityNum",
+        "default_operator":">"
         }
       },
       "fetchSize": "1000"

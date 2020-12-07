@@ -1,13 +1,9 @@
 {
     "connection": {
-        "host": {
-            "label": "Host IP address or Hostname",
+        "url": {
+            "label": "Full URL of a stix-bundle file",
             "placeholder": "https://url.to.stix_bundle.json.file",
             "description": "Specify the URL of the STIX Bundle JSON file so that IBM Cloud Pak for Security can communicate with it"
-        },
-        "port": {
-            "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
         },
         "help": {
             "label": "Need additional help?",

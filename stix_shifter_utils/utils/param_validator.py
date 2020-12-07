@@ -3,7 +3,7 @@ import json
 from jsonmerge import merge
 import importlib
 from os import path
-
+import copy
 
 def get_merged_config(module):
     ss_modules_path = importlib.import_module('stix_shifter_modules')
@@ -67,6 +67,7 @@ def del_dot_path(params, path):
 
 
 def param_validator(module, input_configs, start_point=None):
+    input_configs = copy.deepcopy(input_configs)
     expected_configs = get_merged_config(module)
     if start_point:
         start_points = start_point.split('.')

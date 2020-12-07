@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class QueryTranslator(BaseQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing_object):
+    def transform_antlr(self, data, antlr_parsing_object):
         """
         Transforms STIX query into KQL query format. Based on a mapping file
         :param data: STIX query string to transform into kql query format

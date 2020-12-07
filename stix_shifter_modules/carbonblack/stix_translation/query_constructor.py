@@ -87,7 +87,7 @@ class CbQueryStringPatternTranslator:
         stop = self._to_cb_timestamp(qualifier.stop)
 
         if dialect == "process":
-            return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(expression, start, stop)
+            return "(({}) and last_update:[{} TO {}])".format(expression, start, stop)
         else:
             assert(dialect == "binary")
             return "(({}) and server_added_timestamp:[{} TO {}])".format(expression, start, stop)
@@ -159,7 +159,6 @@ class CbQueryStringPatternTranslator:
             return
         else:
             self.logger.debug(type(expression), expression)
-            assert False
 
     # the return type of this function is a string for expressions types up to CombinedComparionExpression
     # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
@@ -245,10 +244,10 @@ class CbQueryStringPatternTranslator:
     def _add_default_timerange(self, queries):
         if self.time_range:
             for q in queries:
-                if "start" not in q['query'] and "last_update" not in q['query'] and "server_added_timestamp" not in q['query']:
+                if "last_update" not in q['query'] and "server_added_timestamp" not in q['query']:
                     # check if there's an existing time constraint on the query
                     if q['dialect'] == "process":
-                        q['query'] = "(({}) and (start:-{}m or last_update:-{}m))".format(q['query'], self.time_range, self.time_range)
+                        q['query'] = "(({}) and last_update:-{}m)".format(q['query'], self.time_range)
                     else:
                         assert(q['dialect'] == "binary")
                         q['query'] = "(({}) and server_added_timestamp:-{}m)".format(q['query'], self.time_range)

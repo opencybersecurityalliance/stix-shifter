@@ -134,24 +134,33 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "Create Date": [
+  "timestamp": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
-    },
+     },
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
   ],
-  "timestamp": [
+  "Create Date": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
-    },
+    }
+  ],
+  "Timestamp": [
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Last updated": [
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",

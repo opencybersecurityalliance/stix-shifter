@@ -16,6 +16,8 @@ from stix_shifter_utils.modules.base.stix_transmission.base_results_connector im
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 
+OPTION_LANGUAGE = 'language'
+
 
 class BaseEntryPoint:
 
@@ -27,7 +29,7 @@ class BaseEntryPoint:
         self.__dialect_to_results_translator = {}
         self.__dialects_all = []
         self.__dialects_active_default = []
-        self.__dialect_default = None
+        self.__dialect_default = {}
         self.__options = options
 
         self.__results_connector = None
@@ -90,7 +92,7 @@ class BaseEntryPoint:
         self.__dialect_to_query_translator[dialect] = query_translator
         self.__dialect_to_results_translator[dialect] = results_translator
         if default:
-            self.__dialect_default = dialect
+            self.__dialect_default[query_translator.get_language()] = dialect
         self.__dialects_all.append(dialect)
         if default_include:
             self.__dialects_active_default.append(dialect)
@@ -144,7 +146,7 @@ class BaseEntryPoint:
         try:
             if dialect:
                 return self.__dialect_to_query_translator[dialect]
-            return self.__dialect_to_query_translator[self.__dialect_default]
+            return self.__dialect_to_query_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
         except KeyError as ex:
             raise UnsupportedDialectException(dialect)
 
@@ -152,12 +154,17 @@ class BaseEntryPoint:
     def get_results_translator(self, dialect=None):
         if dialect:
             return self.__dialect_to_results_translator[dialect]
-        return self.__dialect_to_results_translator[self.__dialect_default]
+        return self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
 
     @translation
-    def transform_query(self, dialect, data, antlr_parsing):
+    def parse_query(self, data):
+        translator = self.get_query_translator()
+        return translator.parse_query(data)
+
+    @translation
+    def transform_query(self, dialect, data):
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data, antlr_parsing)
+        return translator.transform_query(data)
 
     @translation
     def translate_results(self, data_source, data):

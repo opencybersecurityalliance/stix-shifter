@@ -59,7 +59,7 @@
       "value": ["domainname"]
     }
   },
-  "x-ibm-ariel": {
+  "x-qradar": {
     "fields": {
       "qid": ["qid"],
       "event_name": ["qidname"],
@@ -74,10 +74,9 @@
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
       "identity_host_name": ["identityhostname"],
-      "severity": ["severity"],
+      "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "geographic": ["geographic"],
       "domain_id": ["domainid"],
       "rule_names[*]": ["rulenames"]
     }
@@ -85,7 +84,14 @@
   "x-ibm-finding": {
     "fields": {
       "name": ["crename"],
-      "description": ["credescription"]
+      "description": ["credescription"],
+      "severity": ["eventseverity"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "magnitude": ["magnitude"],
+      "event_count": ["eventcount"],
+      "src_geolocation": ["sourcegeographic"],
+      "dst_geolocation": ["destinationgeographic"]
     }
   }
 }

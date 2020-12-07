@@ -1,0 +1,102 @@
+{
+	"guardduty": {
+		"extract_fields": {
+          "principal_id": {
+            "json_extract_query": "resource,'$.accesskeydetails.principalid'"
+          },
+          "user_name": {
+            "json_extract_query": "resource,'$.accesskeydetails.username'"
+          },
+          "instance_id": {
+            "json_extract_query": "resource,'$.instancedetails.instanceid'"
+          },
+          "image_id": {
+            "json_extract_query": "resource,'$.instancedetails.imageid'"
+          },
+          "availability_zone": {
+            "json_extract_query": "resource,'$.instancedetails.availabilityzone'"
+          },
+          "security_group_name": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.securitygroups.0.groupname'"
+          },
+          "security_group_id": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.securitygroups.0.groupid'"
+          },
+          "access_key_id": {
+            "json_extract_query": "resource,'$.accesskeydetails.accesskeyid'"
+          },
+          "api": {
+            "json_extract_query": "service,'$.action.accesawsapicallactionskeyid.api'"
+          },
+          "api_service_name": {
+            "json_extract_query": "service,'$.action.accesawsapicallactionskeyid.servicename'"
+          },
+          "remote_ip": {
+            "json_extract_query": ["service,'$.action.networkconnectionaction.remoteipdetails.ipaddressv4'",
+                                   "service,'$.action.portprobeaction.remoteipdetails.ipaddressv4'",
+                                   "service,'$.action.awsapicallaction.remoteipdetails.ipaddressv4'"]
+          },
+          "remote_port": {
+            "json_extract_query": "service,'$.action.networkconnectionaction.remoteportdetails.port'"
+          },
+          "eth0_private_ip": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.privateipaddress'"
+          },
+          "eth0_private_dns_name": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.privatednsname'"
+          },
+          "eth1_private_ip": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.1.privateipaddress'"
+          },
+          "eth1_private_dns_name": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.1.privatednsname'"
+          },
+          "local_port": {
+            "json_extract_query": ["service,'$.action.networkconnectionaction.localportdetails.port'",
+                                   "service,'$.action.portprobeaction.localportdetails.port'"]
+          },
+          "public_ip": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.publicip'"
+          },
+          "ipv6_address": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.ipv6addresses.0'"
+          },
+          "protocol": {
+            "json_extract_query": "service,'$.action.networkconnectionaction.protocol'"
+          },
+          "public_dns_name": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.publicdnsname'"
+          },
+          "dns_domain": {
+            "json_extract_query": "service,'$.action.dnsrequestaction.domain'"
+          },
+          "interface_id": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.networkinterfaceid'"
+          },
+          "subnet_id": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.subnetid'"
+          },
+          "vpc_id": {
+            "json_extract_query": "resource,'$.instancedetails.networkinterfaces.0.vpcid'"
+          },
+          "city_name": {
+            "json_extract_query": ["service,'$.action.networkconnectionaction.remoteipdetails.city.cityname'",
+                                   "service,'$.action.portprobeaction.remoteipdetails.city.cityname'",
+                                   "service,'$.action.awsapicallaction.remoteipdetails.city.cityname'"]
+          },
+          "country_name": {
+            "json_extract_query": ["service,'$.action.networkconnectionaction.remoteipdetails.country.countryname'",
+                                   "service,'$.action.portprobeaction.remoteipdetails.country.countryname'",
+                                   "service,'$.action.awsapicallaction.remoteipdetails.country.countryname'"]
+          },
+          "event_firstseen": {
+            "json_extract_query": "service,'$.eventfirstseen'"
+          },
+          "event_lastseen": {
+            "json_extract_query": "service,'$.eventlastseen'"
+          },
+          "platform": {
+            "json_extract_query": "resource,'$.instancedetails.platform'"
+          }
+	}
+}}

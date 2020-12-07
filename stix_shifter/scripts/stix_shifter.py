@@ -5,6 +5,7 @@ import time
 import importlib
 from flask import Flask
 import logging
+import copy
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.proxy_host import ProxyHost
@@ -166,6 +167,8 @@ def main():
         type=str,
         help='Proxy Host:Port'
     )
+    host_parser.add_argument('-d', '--debug', action='store_true',
+                                help='Print detail logs for debugging')
 
     args = parent_parser.parse_args()
 
@@ -192,6 +195,7 @@ def main():
         except Exception as ex:
             log.debug(exception_to_string(ex))
             log.error('Module {} not found'.format(module))
+            log.debug(exception_to_string(ex))
             help_and_exit = True
 
     if help_and_exit:
@@ -249,18 +253,18 @@ def main():
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
+        
+        translation = stix_translation.StixTranslation()
         connection_dict = json.loads(args.connection)
         configuration_dict = json.loads(args.configuration)
-        if 'options' in connection_dict:
-            options.update(connection_dict['options'])
+        translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-
-        translation = stix_translation.StixTranslation()
-        dsl = translation.translate(args.module, 'query', args.data_source, args.query, options)
-        log.debug('Translated Queries: ' + json.dumps(dsl))
-
+        dsl = translation.translate(args.module, 'query', args.data_source, args.query, translation_options)
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []
+        log.info('Translated Queries: \n' + json.dumps(dsl, indent=4))
+        if 'queries' not in dsl:
+            exit(1)
         for query in dsl['queries']:
             search_result = transmission.query(query)
             if search_result["success"]:
@@ -289,9 +293,10 @@ def main():
                 exit(0)
 
         # Translate results to STIX
-        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), {"stix_validator": True})
-        print(json.dumps(result, indent=4, sort_keys=False))
-
+        translation_options = copy.deepcopy(connection_dict.get('options', {}))
+        options['validate_pattern'] = True
+        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
+        log.info('STIX Results: \n' + json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
     elif args.command == TRANSLATE:

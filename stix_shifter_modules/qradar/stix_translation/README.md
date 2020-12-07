@@ -83,13 +83,14 @@ Will return the following STIX observable:
           "dst_ref": "0",
           "dst_port": 0,
           "protocols": ["tcp"]
+        },
+        "3": {
+          "type": "x-qradar",
+          "log_source_id": 126,
+          "identity_ip": "0.0.0.0",
+          "magnitude": 4,
+          "qid": 55500004
         }
-      },
-      "x_ibm_ariel": {
-        "log_source_id": 126,
-        "identity_ip": "0.0.0.0",
-        "magnitude": 4,
-        "qid": 55500004
       },
       "number_observed": 1,
       "created": "2018-04-20T12:36:17.191Z",

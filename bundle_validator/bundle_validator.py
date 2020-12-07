@@ -14,11 +14,11 @@ def __main__():
             print_results(results)
             raise Exception()
         
-        print('STIX Bundle validated!!')
+        print('*** STIX Bundle validated!!\n')
     except ValueError as ex:
-        print("Malformed JSON in the STIX Bundle: " + str(ex))
+        print("*** Malformed JSON in the STIX Bundle: " + str(ex))
     except Exception as ex:
-        print("\n *** Invalid STIX Objects found in the bundle. Please fix the error marked as Red[X]. Warnings marked as yellow [!] can be ingnored but recommended to fix ***")
+        print("\n *** Invalid STIX Objects found in the bundle. Please fix the error marked as Red[X]. Warnings marked as yellow [!] can be ingnored but recommended to fix ***\n")
 
 if __name__ == "__main__":
     __main__()
