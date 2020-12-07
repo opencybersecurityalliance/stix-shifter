@@ -1,4 +1,4 @@
-## QRadar
+## IBM QRadar
 ### artifact
 - payload_bin
 

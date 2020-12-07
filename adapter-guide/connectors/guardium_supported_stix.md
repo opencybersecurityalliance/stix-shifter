@@ -1,4 +1,4 @@
-## IBM Security Guardium
+## IBM Guardium
 ### artifact
 - payload_bin
 
