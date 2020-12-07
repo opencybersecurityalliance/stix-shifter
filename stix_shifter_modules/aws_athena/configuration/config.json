@@ -14,19 +14,19 @@
             "type": "text"
         },
         "vpcflow_database_name": {
-            "type": "string",
+            "type": "text",
             "optional": true
         },
         "vpcflow_table_name": {
-            "type": "string",
+            "type": "text",
             "optional": true
         },
         "guardduty_database_name": {
-            "type": "string",
+            "type": "text",
             "optional": true
         },
         "guardduty_table_name": {
-            "type": "string",
+            "type": "text",
             "optional": true
         },
         "options": {
