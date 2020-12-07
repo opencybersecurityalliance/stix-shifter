@@ -15,6 +15,7 @@
   - [Transmit](#transmit)
   - [Execute](#execute)
   - [Debug](#Debug)
+- [Limitations](#limitations)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -446,6 +447,10 @@ You can add `--debug` option at the end of your CLI command to see more logs.
 #### OUTPUT:
 
 A bundle of STIX objects
+
+## Limitations
+
+STIX-Shifter has some pattern length translation limitations. As the STIX pattern length increases, the translation time seems to increase exponentially. For details of the limitation, see the [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md)   
 
 ## Glossary
 
