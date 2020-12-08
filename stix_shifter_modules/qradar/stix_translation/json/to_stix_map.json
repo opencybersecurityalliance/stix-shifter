@@ -142,6 +142,11 @@
       "key": "x-ibm-finding.dst_ip_ref",
       "object": "finding", 
       "references": "dst_ip" 
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "destinationv6": [
@@ -153,6 +158,11 @@
       "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "eventcount": [
@@ -254,6 +264,11 @@
       "object": "host",
       "references": ["src_ip"],
       "group": true
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcev6": [
@@ -265,6 +280,11 @@
       "key": "network-traffic.src_ref",
       "object": "nt",
       "references": "src_ip"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcemac": [
@@ -335,6 +355,11 @@
       "key": "x-ibm-event.domain_ref",
       "object": "event",
       "references": "dns_domain"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "filename": [
