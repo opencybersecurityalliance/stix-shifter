@@ -17,7 +17,7 @@ class DeleteConnector(BaseDeleteConnector):
         response_dict = dict()
         try:
             search_id = search_id.split(':')[0]
-            if 'athena' in search_id:
+            if 'dummy' in search_id:
                 return_obj['success'] = True
                 return return_obj
             self.client.stop_query_execution(QueryExecutionId=search_id)

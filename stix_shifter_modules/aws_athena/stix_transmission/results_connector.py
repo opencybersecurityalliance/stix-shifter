@@ -38,7 +38,7 @@ class ResultsConnector(BaseResultsConnector):
             length = int(length)
             total_records = offset+length
             search_id, service_type = search_id.split(':')[0], search_id.split(':')[1]
-            if 'athena' in search_id:
+            if 'dummy' in search_id:
                 return_obj = {'success': True, 'data': []}
                 return return_obj
             paginator = self.client.get_paginator('get_query_results')

@@ -2,8 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_connector import Bas
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import json
 import re
-import random
-import string
+import uuid
 
 # static lookup for athena service types
 service_types = {
@@ -38,8 +37,7 @@ class QueryConnector(BaseQueryConnector):
             query_service_type = list(query.keys())[0]
             config_details = service_types[query_service_type]
             if all([True if config not in self.connection.keys() else False for config in config_details]):
-                random_id = ''.join([random.choice(string.ascii_letters + string.digits) for _ in range(30)])
-                return_obj = {'success': True, 'search_id': 'athena-' + random_id.lower() + ':' + query_service_type}
+                return_obj = {'success': True, 'search_id': str(uuid.uuid4()) + '-dummy:' + query_service_type}
                 return return_obj
             for config in config_details:
                 if config not in self.connection.keys():
