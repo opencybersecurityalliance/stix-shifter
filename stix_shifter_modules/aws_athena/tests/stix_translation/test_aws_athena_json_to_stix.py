@@ -75,7 +75,7 @@ class TestAwsResultsToStix(unittest.TestCase):
                 "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
                                "Brute force attacks are used to gain unauthorized access to your instance by "
                                "guessing the SSH password.",
-                "id": "7ab9d1cb6248e05a0e419a79528761cb",
+                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
                 "partition": "aws",
                 "resource": {
                     "instancedetails": {
@@ -268,7 +268,7 @@ class TestAwsResultsToStix(unittest.TestCase):
                 "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
                                "Brute force attacks are used to gain unauthorized access to your instance by "
                                "guessing the SSH password.",
-                "id": "7ab9d1cb6248e05a0e419a79528761cb",
+                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
                 "partition": "aws",
                 "resource": {
                     "instancedetails": {
@@ -377,7 +377,7 @@ class TestAwsResultsToStix(unittest.TestCase):
                 "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1."
                                " Brute force attacks are used to gain unauthorized access to your instance by guessing "
                                "the SSH password.",
-                "id": "7ab9d1cb6248e05a0e419a79528761cb",
+                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
                 "partition": "aws",
                 "resource": {
                     "instancedetails": {
@@ -442,11 +442,11 @@ class TestAwsResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         custom_object = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-athena')
 
-        assert custom_object.keys() == {'type', 'id', 'arn', 'createdat', 'partition', 'resource',
+        assert custom_object.keys() == {'type', 'finding_id', 'arn', 'createdat', 'partition', 'resource',
                                         'schemaversion', 'service', 'updatedat'}
         assert custom_object['arn'] == 'arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed' \
                                        '494f3b7ca56acdc74df/finding/7ab9d1cb6248e05a0e419a79528761cb'
-        assert custom_object['id'] == '7ab9d1cb6248e05a0e419a79528761cb'
+        assert custom_object['finding_id'] == '7ab9d1cb6248e05a0e419a79528761cb'
         assert custom_object['createdat'] == '2020-07-31T06:37:13.745Z'
         assert custom_object['partition'] == 'aws'
         assert custom_object['schemaversion'] == 2.0

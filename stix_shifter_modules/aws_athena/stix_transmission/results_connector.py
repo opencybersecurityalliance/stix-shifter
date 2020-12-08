@@ -18,8 +18,8 @@ class AccessDeniedException(Exception):
 
 
 class ResultsConnector(BaseResultsConnector):
-    def __init__(self, athena_client, s3_client):
-        self.athena_client = athena_client
+    def __init__(self, client, s3_client):
+        self.client = client
         self.s3_client = s3_client
         self.logger = logger.set_logger(__name__)
 
@@ -38,7 +38,10 @@ class ResultsConnector(BaseResultsConnector):
             length = int(length)
             total_records = offset+length
             search_id, service_type = search_id.split(':')[0], search_id.split(':')[1]
-            paginator = self.athena_client.get_paginator('get_query_results')
+            if 'dummy' in search_id:
+                return_obj = {'success': True, 'data': []}
+                return return_obj
+            paginator = self.client.get_paginator('get_query_results')
             get_query_response = paginator.paginate(QueryExecutionId=search_id)
             result_response_list = []
             for page in get_query_response:
@@ -62,7 +65,7 @@ class ResultsConnector(BaseResultsConnector):
             return_obj['success'] = True
             return_obj['data'] = formatted_result
             # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
-            get_query_response = self.athena_client.get_query_execution(QueryExecutionId=search_id)
+            get_query_response = self.client.get_query_execution(QueryExecutionId=search_id)
             s3_output_location = get_query_response['QueryExecution']['ResultConfiguration']['OutputLocation']
             s3_output_bucket_with_file = s3_output_location.split('//')[1]
             s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
@@ -103,6 +106,8 @@ class ResultsConnector(BaseResultsConnector):
                 flatten_obj.update({'name': 'VPC flow log'})
                 temp = flatten_obj.get("action")
                 flatten_obj["action"] = "network-traffic-" + temp.lower()
+            if 'id' in flatten_obj:
+                flatten_obj['finding_id'] = flatten_obj.pop('id')
             # Formatting to differentiate common key available in different action types for to STIX mapping
             if private_ip_address_key in flatten_obj and flatten_obj[action_type_key] == 'PORT_PROBE':
                 flatten_obj['portprobe#'+private_ip_address_key] = flatten_obj.pop(private_ip_address_key)
