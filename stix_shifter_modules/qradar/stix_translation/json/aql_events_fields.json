@@ -64,6 +64,7 @@
     "ObjectName",
     "UrlHost",
     "\"Process Name\" as ProcessName",
-    "\"Process ID\" as ProcessId"
+    "\"Process ID\" as ProcessId",
+    "\"Parent Process ID\" as ParentProcessId"
   ]
 }

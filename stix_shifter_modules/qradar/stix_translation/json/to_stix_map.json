@@ -595,18 +595,18 @@
     },
     {
       "key": "process.binary_ref",
-      "object": "parent_process_image",
+      "object": "parent_process",
       "references": "file_parent_image"
     },
     {
       "key": "process.parent_ref",
       "object": "process",
-      "references": "parent_process_image"
+      "references": "parent_process"
     },
     {
       "key": "x-ibm-event.parent_process_ref",
       "object": "event",
-      "references": "parent_process_image"
+      "references": "parent_process"
     }
   ],
   "ProcessCommandLine": [
@@ -623,17 +623,17 @@
   "ParentCommandLine": [
     {
       "key": "process.command_line",
-      "object": "parent_process_image"
+      "object": "parent_process"
     },
     {
       "key": "process.parent_ref",
       "object": "process",
-      "references": "parent_process_image"
+      "references": "parent_process"
     },
     {
       "key": "x-ibm-event.parent_process_ref",
       "object": "event",
-      "references": "parent_process_image"
+      "references": "parent_process"
     }
   ],
   "ProcessName": [
@@ -664,6 +664,23 @@
     "object": "event",
     "transformer": "ToInteger"
   },
+  "ParentProcessId": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-ibm-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
   "ObjectName": [
     {
       "key": "windows-registry-key.key",
