@@ -106,6 +106,8 @@ class ResultsConnector(BaseResultsConnector):
                 flatten_obj.update({'name': 'VPC flow log'})
                 temp = flatten_obj.get("action")
                 flatten_obj["action"] = "network-traffic-" + temp.lower()
+            if 'id' in flatten_obj:
+                flatten_obj['finding_id'] = flatten_obj.pop('id')
             # Formatting to differentiate common key available in different action types for to STIX mapping
             if private_ip_address_key in flatten_obj and flatten_obj[action_type_key] == 'PORT_PROBE':
                 flatten_obj['portprobe#'+private_ip_address_key] = flatten_obj.pop(private_ip_address_key)

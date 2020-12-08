@@ -240,7 +240,7 @@ results "19b3ad96-a8de-4894-bb9d-f63c50c99b0a:vpcflow" 0 2
                     "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/24bae74503647e535aa16eeb246de329",
                     "createdat": "2020-11-16T00:52:33.609Z",
                     "partition": "aws",
-                    "id": "7ab9d1cb6248e05a0e419a79528761cb",
+                    "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
                     "resource": {
                         "instancedetails": {
                             "instancestate": "running",
