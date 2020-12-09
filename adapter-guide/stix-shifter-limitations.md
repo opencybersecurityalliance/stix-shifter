@@ -1,8 +1,8 @@
 # STIX-Shifter Limitations
 
-##  Limitations on pattern length tranlsation
+##  Length limitations on STIX pattern translation
 
-As the STIX pattern length increases, the translation time seems to increase exponentially. We also hit a the limitations on the python recursion limit due to the way the antlr parsing works. We have run test on our local machine different on pattern length to verify and show how the pattern trasnlattion time increases with the increase of the pattern lenght: 
+Pattern length refers to the number of comparison operations used in the STIX pattern. These can be operators either in an observation expression or separating multiple observation expressions. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 recursively parses the pattern. Python recursion limits can be exceeded for the same reason; when this happens, stix-shifter will throw an error (`RecursionError: maximum recursion depth exceeded`). The following tests were run on a local machine using different pattern lengths to show these limitations:
 
 **Test Machine Configuration:**
 
@@ -11,15 +11,14 @@ As the STIX pattern length increases, the translation time seems to increase exp
     Processor: 2.6 GHz 6-Core Intel Core i7
     Memory: 16 GB 2400 MHz DDR4
 
-|     Pattern Length              |   Recursion Limit    | Pattern Translation Time(seconds) |
+|     Pattern Length (operators)            |   Python Recursion Limit    | Pattern Translation Time (seconds) |
 | :-----------------------------: | :------------------: | :-------------------------------: |
 |     500                         |   10000              |          45.61                    |
 |     1000                        |   10000              |          154.24                   |
 |     2000                        |   15000              |          859.97                   |
-|     2000(Combined Observation)  |   20000              |          1078.52                  |
+|     2000 (Combined Observation)  |   20000              |          1078.52                  |
 |     4000                        |   25000              |          4090.36                  |
 
 
-**Note:** The value in the Recursion limit coloumn is the approximate minimum limit of python recursion to translate the pattern
 
 
