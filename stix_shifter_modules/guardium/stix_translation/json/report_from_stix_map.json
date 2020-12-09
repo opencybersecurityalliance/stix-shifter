@@ -28,7 +28,9 @@
     "fields": {
       "value": ["DBUser", "OSUser"],
       "db_user": ["DBUser"],
-      "os_user": ["OSUser"]
+      "os_user": ["OSUser"],
+      "user_id": ["DBUser"],
+      "login_name": ["OSUser"]
     }
   },
   "artifact": {
