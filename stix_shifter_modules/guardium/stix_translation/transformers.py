@@ -78,11 +78,11 @@ class GuardiumMapSeverityNum(object):
     def transform(severity):
         sev = severity.lower()
         if sev == "low":
-            return '1'
+            return '01'
         elif sev == "high":
-            return '9'
+            return '09'
         elif sev == "medium":
-            return '5'
+            return '05'
         else:
             return severity
 

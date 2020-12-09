@@ -19,8 +19,10 @@
                 "nullable": true
             },
             "timeout": {
-                "default": 30,
+                "default": 10,
                 "min": 1,
+                "max": 60,
+                "hidden": true,
                 "type": "number",
                 "previous": "connection.timeoutLimit"
             },

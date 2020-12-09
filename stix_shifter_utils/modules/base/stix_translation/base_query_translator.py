@@ -1,7 +1,15 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from os import path
+import re
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json as helper_read_json
+from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
+from stix_shifter_utils.stix_translation.src.utils.stix_pattern_parser import parse_stix
+from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper import strip_unmapped_attributes
+from stix2patterns.validator import run_validator
+from stix_shifter_utils.stix_translation.src.utils.exceptions import StixValidationException
+
+START_STOP_PATTERN = r"\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
 
 
 class BaseQueryTranslator(object, metaclass=ABCMeta):
@@ -13,7 +21,7 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         self.select_fields = {}
         self.logger = logger.set_logger(__name__)
         self.map_data = self.fetch_mapping(basepath, dialect, options)
-    
+
     def read_json(self, filepath, options):
         return helper_read_json(filepath, options)
 
@@ -46,8 +54,46 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         else:
             return []
 
-    @abstractmethod
-    def transform_query(self, data, antlr_parsing_object):
+    def _validate_pattern(self, pattern):
+        errors = []
+        # Temporary work around since pattern validator currently treats multiple qualifiers of the same type as invalid.
+        start_stop_count = len(re.findall(START_STOP_PATTERN, pattern))
+        if(start_stop_count > 1):
+            pattern = re.sub(START_STOP_PATTERN, " ", pattern)
+        errors = run_validator(pattern, stix_version='2.1')
+        if errors:
+            raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
+
+    def parse_query(self, data):
+        self._validate_pattern(data)
+        antlr_parsing = generate_query(data)
+        # Extract pattern elements into parsed stix object
+        parsed_stix_dictionary = parse_stix(antlr_parsing, self.options['time_range'])
+        parsed_stix = parsed_stix_dictionary['parsed_stix']
+        start_time = parsed_stix_dictionary['start_time']
+        end_time = parsed_stix_dictionary['end_time']
+        return {'parsed_stix': parsed_stix, 'start_time': start_time, 'end_time': end_time}
+
+    def transform_query(self, data):
+        antlr_parsing = None
+        unmapped_stix_collection = []
+        translated_queries = []
+        # if query_translator.get_language() == 'stix':
+        if self.options.get('validate_pattern'):
+            self._validate_pattern(data)
+        antlr_parsing = generate_query(data)
+        stripped_parsing = strip_unmapped_attributes(antlr_parsing, self)
+        antlr_parsing = stripped_parsing.get('parsing')
+        unmapped_stix = stripped_parsing.get('unmapped_stix')
+        if unmapped_stix:
+            unmapped_stix_collection.append(unmapped_stix)
+        if antlr_parsing:
+            translated_queries = self.transform_antlr(data, antlr_parsing)
+            if isinstance(translated_queries, str):
+                translated_queries = [translated_queries]
+        return {'queries': translated_queries, 'unmapped_attributes': unmapped_stix_collection}
+
+    def transform_antlr(self, data, antlr_parsing_object):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param data: STIX pattern to transform into native data source query
