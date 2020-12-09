@@ -4,7 +4,8 @@
         "finding_type": ["datacategory"],
         "start": ["startTime"],
         "end": ["endTime"],
-        "database_name": ["Database"]
+        "database_name": ["Database"],
+        "dst_device": ["Database"]
       }
     },
     "ipv4-addr": {
