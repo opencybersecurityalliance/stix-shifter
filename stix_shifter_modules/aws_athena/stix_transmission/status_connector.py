@@ -47,6 +47,9 @@ class StatusConnector(BaseStatusConnector):
         response_dict = dict()
         try:
             search_id = search_id.split(':')[0]
+            if 'dummy' in search_id:
+                return_obj = {'success': True, 'status': 'COMPLETED', 'progress': 100}
+                return return_obj
             response_dict = self.client.get_query_execution(QueryExecutionId=search_id)
             return_obj['success'] = True
             return_obj['status'] = self._getstatus(response_dict.get('QueryExecution', 'FAILED').
