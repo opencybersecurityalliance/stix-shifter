@@ -15,6 +15,7 @@
   - [Transmit](#transmit)
   - [Execute](#execute)
   - [Debug](#Debug)
+- [Limitations](#limitations)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -449,6 +450,10 @@ You can add `--debug` option at the end of your CLI command to see more logs.
 #### OUTPUT:
 
 A bundle of STIX objects
+
+## Limitations
+
+STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md) for more details.  
 
 ## Glossary
 
