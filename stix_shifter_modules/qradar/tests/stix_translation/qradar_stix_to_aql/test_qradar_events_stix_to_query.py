@@ -227,7 +227,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
 
-    def test_set_operators(self):
+    def test_issubset_operators(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {} {}".format(default_limit, default_time)
@@ -366,3 +366,9 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'][0] == selections + from_statement + where_statement_01
         assert query['queries'][1] == selections + from_statement + where_statement_02
+    
+    def test_in_operators(self):
+        stix_pattern = "[network-traffic:dst_port IN ('22','443')]" 
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
