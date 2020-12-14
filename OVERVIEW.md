@@ -123,7 +123,7 @@ Each connector supports a set of STIX objects and properties as defined in the c
 
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
 
-List updated: March 6, 2020
+List updated: December 11, 2020
 
 |         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
 | :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
@@ -135,7 +135,7 @@ List updated: March 6, 2020
 |       [Elasticsearch (ECS)](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Released    |
 | [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
 |           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft ATP](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Microsoft ATP](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Doesn't work with current version of Microsoft Defender    |
 |        [IBM Guardium](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
