@@ -298,3 +298,10 @@ class FilterIPv6List(ValueTransformer):
                     result.append(val)
             return result
         return obj
+
+class ValueToList(ValueTransformer):
+    """A value transformer that converts a single value into a list container the value"""
+    @staticmethod
+    def transform(obj):
+        return [obj]
+
