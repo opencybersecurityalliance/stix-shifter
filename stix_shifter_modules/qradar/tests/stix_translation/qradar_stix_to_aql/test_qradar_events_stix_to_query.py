@@ -418,8 +418,8 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE ProcessCommandLine = 'abc' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
-  
-  def test_in_operators(self):
+        
+    def test_in_operators(self):
         stix_pattern = "[network-traffic:dst_port IN ('22','443')]" 
         query = _translate_query(stix_pattern)
         where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
