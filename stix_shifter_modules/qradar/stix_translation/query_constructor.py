@@ -53,9 +53,9 @@ class AqlQueryStringPatternTranslator:
         self.qualified_queries = _format_translated_queries(self.qualified_queries)
 
     @staticmethod
-    def _format_set(values) -> str:
+    def _format_in(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([AqlQueryStringPatternTranslator._escape_value(value) for value in gen]))
+        return "({})".format(', '.join("'{}'".format(value) for value in gen))
 
     @staticmethod
     def _format_match(value) -> str:
@@ -242,7 +242,7 @@ class AqlQueryStringPatternTranslator:
             value = self._format_match(expression.value)
         # should be (x, y, z, ...)
         elif expression.comparator == ComparisonComparators.In:
-            value = self._format_set(expression.value)
+            value = self._format_in(expression.value)
         elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
             # Should be in single-quotes
             value = self._format_equality(expression.value)
