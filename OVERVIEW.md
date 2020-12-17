@@ -179,7 +179,7 @@ OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
@@ -193,6 +193,17 @@ The module name refers to the name of the folder in stix-shifter that contains t
 Using the Qradar connector as an example:
 
 `python main.py translate qradar query "{}" "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"`
+
+### Pattern translation using an input file
+
+Create a text file with the pattern you wish to translate. The file can be used in the query translation call using standard input.
+
+_pattern.txt_
+```
+[network-traffic:src_ref.value = '127.0.0.1'] OR [ipv4-addr:value = '0.0.0.0']
+```
+
+`python main.py translate qradar query '{}' '' < /path/to/file/pattern.txt`
 
 ### 2. Translate a JSON data source query result to a STIX bundle of observable objects
 
@@ -255,7 +266,7 @@ Using the Qradar connector as an example:
 }
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
@@ -275,6 +286,29 @@ python main.py translate qradar results \
 ```
 
 The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+
+### Results translation using an input file
+
+Create a JSON file with the results you wish to translate. The file can be used in the results translation call using standard input.
+
+_results.json_
+```
+[
+    {
+        "starttime": "1563892019916",
+        "endtime": "1563892019916",
+        "sourceip": "9.21.122.127",
+        "sourceport": "100",
+        "identityip": "0.0.0.0",
+        "destinationip": "127.0.0.1",
+        "destinationport": "800",
+        "username": "admin",
+        "protocol": "tcp"
+    }
+]
+```
+
+`python main.py translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' '' < /path/to/file/results.json`
 
 ## Transmit
 
