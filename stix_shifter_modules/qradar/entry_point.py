@@ -11,4 +11,4 @@ class EntryPoint(BaseEntryPoint):
         else:
             self.setup_translation_simple(dialect_default='flows')
             dialect = 'aql'
-            self.add_dialect(dialect,  AqlQueryTranslator(options, dialect, None), default_include=True)
+            self.add_dialect(dialect,  AqlQueryTranslator(options, dialect, None), default_include=True, default=True)
