@@ -29,7 +29,7 @@
       "object":"account"
     },
     {
-      "key": "x-ibm-finding.src_database_user_ref",
+      "key": "x-ibm-finding.src_os_user_ref",
       "object": "account",
       "references": "user_id"
     }
