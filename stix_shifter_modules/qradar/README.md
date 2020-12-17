@@ -1,10 +1,10 @@
 # QRadar
 
-### Format for calling stix-shifter from the command line
+### Format for making STIX translation calls via the CLI
 
 python stix_shifter.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 
-(Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL. Keyword arguments should be implemented to overcome this).
+Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL.
 
 ## Converting from STIX patterns to AQL queries
 
@@ -20,9 +20,6 @@ Returns the following AQL query:
 
 `SELECT <defined QRadar fields> FROM events WHERE (sourcemac='00-00-5E-00-53-00' OR destinationmac='00-00-5E-00-53-00') AND url='www.example.com'`
 
-and returns the parsed STIX pattern:
-
-`[{'attribute': 'mac-addr:value', 'comparison_operator': '=', 'value': '00-00-5E-00-53-00'}, {'attribute': 'url:value', 'comparison_operator': '=', 'value': 'www.example.com'}]`
 
 ### AQL query construction: SELECT statement
 
@@ -30,25 +27,34 @@ The QRadar event columns that make up the SELECT portion of the AQL query are de
 
 ### AQL query construction: WHERE clause
 
-STIX to AQL field mapping is defined in `from_stix_map.json` <br/>
+STIX to AQL field mapping is defined in `events_from_stix_map.json` and `flows_from_stix_map.json`<br/>
 STIX attributes that map to multiple AQL fields will have those fields joined by ORs in the returned query. <br/>
 Translated STIX attributes are inserted into the AQL query in the order they are defined in the mapping file. <br/>
-When translating from STIX patterns to AQL queries, the following objects and attributes can be used:
+When translating from STIX patterns to AQL queries, the following [list](../../adapter-guide/connectors/qradar_supported_stix.md) of objects and properties can be used.
 
-- ipv4-addr:value
-- ipv6-addr:value
-- url:value
-- mac-addr:value
-- file:name
-- network-traffic:src_port, network=traffic:dst_port
+### AQL Passthrough
 
-## Converting from QRadar events to STIX
+In addition to translating STIX patterns into AQL, the QRadar connector can also take in a native AQL query using the `{"language":"aql"}` option. This will just return back the passed-in query, where it can then be passed to the query transmission call and onto the QRadar search API.
+
+`translate qradar query '{}' "select * from events" '{"language":"aql"}'`
+
+will return
+
+```
+{
+    "queries": [
+        "select * from events"
+    ]
+}
+```
+
+## Converting from QRadar events and flows to STIX
 
 QRadar data to STIX mapping is defined in `to_stix_map.json`
 
 This example QRadar data:
 
-`python main.py translate "qradar" "results" '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
+`python main.py translate "qradar" "results" '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "system"}' '[{"starttime": 1524227777191, "protocolid": 255, "sourceip": "9.21.123.112", "logsourceid":126, "qid": 55500004, "sourceport": 0, "eventcount": 1, "magnitude": 4, "identityip": "0.0.0.0", "destinationip": "9.21.123.112", "destinationport": 0, "category": 10009, "username": null}]'`
 
 Will return the following STIX observable:
 
@@ -61,7 +67,7 @@ Will return the following STIX observable:
       "type": "identity",
       "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
       "name": "QRadar",
-      "identity_class": "events"
+      "identity_class": "system"
     },
     {
       "id": "observed-data--62392b84-66a7-4984-a49d-7872986e0c48",
