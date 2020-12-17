@@ -377,10 +377,8 @@ class TestTransform(object):
 
         custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
         assert(custom_object is not None), 'domain-name object type not found'
-        assert(custom_object['identity_ip'] == data['identityip'])
         assert(custom_object['log_source_id'] == data['logsourceid'])
         assert(custom_object['qid'] == data['qid'])
-        assert(custom_object['log_source_name'] == data['logsourcename'])
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(DATA_SOURCE)
@@ -719,7 +717,7 @@ class TestTransform(object):
             "filename": "testfile.txt",
             "filepath": "/unix/files/system/testfile.txt",
             "unmapped1": "value1",
-            "Unmapped2": "value2"
+            "unmapped2": "value2"
         }]
 
         data_string = json.dumps(data)
@@ -734,7 +732,7 @@ class TestTransform(object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         
-        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-QRadar')
 
         assert(custom_objects['unmapped1'] == "value1")
         assert(custom_objects['unmapped2'] == "value2")

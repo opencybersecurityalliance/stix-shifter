@@ -64,18 +64,12 @@
   "x-qradar": {
     "fields": {
       "qid": ["qid"],
-      "event_name": ["qidname"],
       "magnitude": ["magnitude"],
       "log_source_id": ["logsourceid"],
       "device_type": ["devicetype"],
-      "log_source_name": ["logsourcename"],
-      "log_source_type_name": ["logsourcetypename"],
       "category_id": ["categoryid"],
-      "category_name": ["categoryname"],
-      "high_level_category_name": ["high_level_category_name"],
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
-      "identity_host_name": ["identityhostname"],
       "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],

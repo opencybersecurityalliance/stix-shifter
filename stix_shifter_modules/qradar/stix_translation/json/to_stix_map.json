@@ -27,19 +27,11 @@
   ],
   "categoryname": [
     {
-      "key": "x-qradar.category_name",
-      "object": "x-qradar"
-    },
-    {
       "key": "x-ibm-event.outcome",
       "object": "event"
     }
   ],
   "high_level_category_name": [
-    {
-      "key": "x-qradar.high_level_category_name",
-      "object": "x-qradar"
-    },
     {
       "key": "x-ibm-event.category",
       "object": "event",
@@ -52,10 +44,6 @@
     "transformer": "ToInteger"
   },
   "identityip": [
-    {
-      "key": "x-qradar.identity_ip",
-      "object": "x-qradar"
-    },
     {
       "key": "ipv4-addr.value",
       "object": "host_ip_addr_v4"
@@ -84,10 +72,6 @@
   ],
   "identityhostname": [
     {
-      "key": "x-qradar.identity_host_name",
-      "object": "x-qradar"
-    },
-    {
       "key": "x-ibm-host.hostname",
       "object": "host"
     },
@@ -99,10 +83,6 @@
   ],
   "qidname": [
     {
-      "key": "x-qradar.qid_name",
-      "object": "x-qradar"
-    },
-    {
       "key": "x-ibm-event.action",
       "object": "event"
     }
@@ -113,11 +93,6 @@
     "transformer": "ToInteger"
   },
   "devicetime": [
-    {
-      "key": "x-qradar.device_time",
-      "object": "x-qradar",
-      "transformer": "EpochToTimestamp"
-    },
     {
       "key": "x-ibm-event.created",
       "transformer": "EpochToTimestamp",
@@ -213,19 +188,11 @@
   },
   "logsourcename": [
     {
-      "key": "x-qradar.log_source_name",
-      "object": "x-qradar"
-    },
-    {
       "key": "x-ibm-event.agent",
       "object": "event"
     }
   ],
   "logsourcetypename": [
-    {
-      "key": "x-qradar.log_source_type_name",
-      "object": "x-qradar"
-    },
     {
       "key": "x-ibm-event.provider",
       "object": "event"
@@ -793,7 +760,7 @@
       "key": "file.name",
       "object": "service_file_name",
       "transformer": "ToFileName"
-    }, 
+    },
     {
       "key": "directory.path",
       "object": "service_file_dir",

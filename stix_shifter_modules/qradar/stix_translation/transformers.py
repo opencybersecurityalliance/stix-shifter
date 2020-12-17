@@ -33,10 +33,3 @@ class RegValueNameToStixRegistryValues(ValueTransformer):
             return [{ 'name': value }]
         except ValueError:
             LOGGER.error("Cannot convert root key to Stix formatted windows registry key")
-
-
-class ValueToList(ValueTransformer):
-    """A value transformer that converts a single value into a list container the value"""
-    @staticmethod
-    def transform(obj):
-        return [obj]
