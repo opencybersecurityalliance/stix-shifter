@@ -513,14 +513,14 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
         "references": [
           "nt"
         ]
-      }, 
+      },
       {
         "key": "x-ibm-event.network_ref",
         "object": "event",
@@ -533,7 +533,7 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
@@ -553,7 +553,7 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
@@ -1234,7 +1234,7 @@
     }
   },
   "dns": {
-    "answers": 
+    "answers":
     {
       "key": "network-traffic.extensions.dns-ext.answers",
       "object": "nt"
@@ -1572,7 +1572,7 @@
         "references": ["host_ip", "host_ipv6"],
         "unwrap": true
       }
-    ], 
+    ],
     "mac": [
       {
         "key": "mac-addr.value",
