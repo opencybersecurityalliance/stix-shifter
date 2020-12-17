@@ -6,7 +6,7 @@ The QRadar connector works with QRadar 7.3.1 and newer versions. The Sysmon and 
 
 ### Format for making STIX translation calls via the CLI
 
-python stix_shifter.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
+`python main.py <translator_module> <query or result> <STIX identity object> <data>`
 
 Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL.
 

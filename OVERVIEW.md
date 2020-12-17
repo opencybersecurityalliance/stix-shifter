@@ -467,17 +467,54 @@ The `execute` command tests all steps of the translation-transmission flow:
 4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
 5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
 
-#### CLI Command
+### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
 
-#### Debug
+### Debug
 
 You can add `--debug` option at the end of your CLI command to see more logs. 
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
 
-#### OUTPUT:
+## Modules
+
+The `modules` command will return a JSON of the existing connectors along with their dialects and supported languages that are used in query translation. 
+
+### CLI Command
+
+`python main.py modules`
+
+returns
+```
+{
+    "qradar": {
+        "flows": {
+            "language": "stix",
+            "default": true
+        },
+        "events": {
+            "language": "stix",
+            "default": true
+        },
+        "aql": {
+            "language": "aql",
+            "default": false
+        }
+    },
+    "security_advisor": {
+        "default": {
+            "language": "stix",
+            "default": true
+        }
+    },
+    ...
+}
+```
+
+In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
+
+### OUTPUT:
 
 A bundle of STIX objects
 
