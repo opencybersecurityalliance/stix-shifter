@@ -13,33 +13,78 @@
       "key": "x-ibm-finding.src_application_user_ref",
       "object": "finding",
       "references": "useraccount"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "useraccount"
+    },
+    {
+      "key": "x-ibm-event.user_ref",
+      "object": "event",
+      "references": "useraccount"
     }
   ],
-  "categoryname": {
-    "key": "x-qradar.category_name",
-    "object": "x-qradar"
-  },
-  "high_level_category_name": {
-    "key": "x-qradar.high_level_category_name",
-    "object": "x-qradar"
-  },
+  "categoryname": [
+    {
+      "key": "x-ibm-event.outcome",
+      "object": "event"
+    }
+  ],
+  "high_level_category_name": [
+    {
+      "key": "x-ibm-event.category",
+      "object": "event",
+      "transformer": "ValueToList"
+    }
+  ],
   "high_level_category_id": {
     "key": "x-qradar.high_level_category_id",
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "identityip": {
-    "key": "x-qradar.identity_ip",
-    "object": "x-qradar"
-  },
-  "identityhostname": {
-    "key": "x-qradar.identity_host_name",
-    "object": "x-qradar"
-  },
+  "identityip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "host_ip_addr_v4"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "host_ip_addr_v6"
+    },
+    {
+      "key": "x-ibm-host.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v4"],
+      "group": true
+    },
+    {
+      "key": "x-ibm-host.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v6"],
+      "group": true
+    },
+    {
+      "key": "x-ibm-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "identityhostname": [
+    {
+      "key": "x-ibm-host.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-ibm-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
   "qidname": [
     {
-      "key": "x-qradar.qid_name",
-      "object": "x-qradar"
+      "key": "x-ibm-event.action",
+      "object": "event"
     }
   ],
   "relevance": {
@@ -47,11 +92,13 @@
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "devicetime": {
-    "key": "x-qradar.device_time",
-    "object": "x-qradar",
-    "transformer": "EpochToTimestamp"
-  },
+  "devicetime": [
+    {
+      "key": "x-ibm-event.created",
+      "transformer": "EpochToTimestamp",
+      "object": "event"
+    }
+  ],
   "destinationip": [
     {
       "key": "ipv4-addr.value",
@@ -129,14 +176,18 @@
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "logsourcename": {
-    "key": "x-qradar.log_source_name",
-    "object": "x-qradar"
-  },
-  "logsourcetypename": {
-    "key": "x-qradar.log_source_type_name",
-    "object": "x-qradar"
-  },
+  "logsourcename": [
+    {
+      "key": "x-ibm-event.agent",
+      "object": "event"
+    }
+  ],
+  "logsourcetypename": [
+    {
+      "key": "x-ibm-event.provider",
+      "object": "event"
+    }
+  ],
   "direction": {
     "key": "x-qradar.direction",
     "object": "x-qradar"
@@ -164,6 +215,12 @@
       "key": "x-ibm-finding.src_ip_ref",
       "object": "finding", 
       "references": "src_ip" 
+    },
+    {
+      "key": "x-ibm-host.ip_refs",
+      "object": "host",
+      "references": ["src_ip"],
+      "group": true
     }
   ],
   "sourcev6": [
@@ -190,6 +247,11 @@
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
+      "references": ["src_mac"]
+    },
+    {
+      "key": "x-ibm-host.mac_refs",
+      "object": "host",
       "references": ["src_mac"]
     }
   ],
@@ -220,15 +282,39 @@
       "object": "url"
     },
     {
-      "key": "domain-name.value",
-      "object": "domain1",
-      "transformer": "ToDomainName"
+      "key": "x-ibm-event.url_ref",
+      "object": "event",
+      "references": "url"
     }
   ],
-  "filename": {
-    "key": "file.name",
-    "object": "fl"
-  },
+  "UrlHost": [
+  {
+      "key": "domain-name.value",
+      "object": "dns_domain",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "network-traffic.extensions.dns-ext.question.domain_ref",
+      "object": "nt",
+      "references": "dns_domain"
+    },
+    {
+      "key": "x-ibm-event.domain_ref",
+      "object": "event",
+      "references": "dns_domain"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "fl"
+    },
+    {
+      "key": "x-ibm-event.file_ref",
+      "object": "event",
+      "references": "fl"
+    }
+  ],
   "sha256hash": {
     "key": "file.hashes.SHA-256",
     "object": "fl"
@@ -254,12 +340,30 @@
       "key": "directory.path",
       "object": "dir",
       "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "x-ibm-event.file_ref",
+      "object": "event",
+      "references": "fl"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "dir"
     }
   ],
-  "eventpayload": {
-    "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
-  },
+  "eventpayload": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-ibm-event.original_ref",
+      "object": "event",
+      "references": "artifact"
+    }
+  ],
   "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
@@ -412,5 +516,224 @@
     "key": "x-qradar.device_type",
     "object": "x-qradar",
     "transformer": "ToInteger"
-  }
+  },
+  "Image": [
+    {
+      "key": "file.name",
+      "object": "file_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_image",
+      "references": "directory_image"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ParentImage": [
+    {
+      "key": "file.name",
+      "object": "file_parent_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_parent_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_parent_image",
+      "references": "directory_parent_image"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process_image",
+      "references": "file_parent_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process_image"
+    },
+    {
+      "key": "x-ibm-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process_image"
+    }
+  ],
+  "ProcessCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ParentCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "parent_process_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process_image"
+    },
+    {
+      "key": "x-ibm-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process_image"
+    }
+  ],
+  "ProcessName": [
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ProcessId": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-ibm-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "EventID": {
+    "key": "x-ibm-event.code",
+    "object": "event",
+    "transformer": "ToInteger"
+  },
+  "ObjectName": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "winregistry",
+      "transformer": "ObjectnameToStixRegistryKey"
+    },
+    {
+      "key": "x-ibm-event.registry_ref",
+      "object": "event",
+      "references": "winregistry"
+    }
+  ],
+  "RegistryKey": [
+    {
+      "key": "x-qradar.registry_key",
+      "object": "x-qradar"
+    }
+  ],
+  "RegistryValueName": [
+    {
+        "key": "windows-registry-key.values",
+        "object": "winregistry",
+        "transformer": "RegValueNameToStixRegistryValues"
+    },
+    {
+      "key": "x-ibm-event.registry_ref",
+      "object": "event",
+      "references": "winregistry"
+    }
+  ],
+  "TargetImage": {
+    "key": "x-ibm-windows.targetimage",
+    "object": "xwin"
+  },
+  "GrantedAccess": {
+    "key": "x-ibm-windows.granted_access",
+    "object": "xwin"
+  },
+  "CallTrace": {
+    "key": "x-ibm-windows.call_trace",
+    "object": "xwin"
+  },
+  "SourceImage": {
+    "key": "x-ibm-windows.source_image",
+    "object": "xwin"
+  },
+  "PipeName": {
+    "key": "x-ibm-windows.pipe_name",
+    "object": "xwin"
+  },
+  "StartModule": {
+    "key": "x-ibm-windows.start_module",
+    "object": "xwin"
+  },
+  "StartFunction": {
+    "key": "x-ibm-windows.start_function",
+    "object": "xwin"
+  },
+  "Signed": {
+    "key": "x-ibm-windows.signed",
+    "object": "xwin"
+  },
+  "Message": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "event_payload",
+      "transformer": "ToBase64"
+    },
+    {
+      "key": "x-event.original_ref",
+      "object": "event",
+      "references": "event_payload"
+    },
+    {
+      "key": "x-event.original",
+      "object": "event"
+    }
+  ],
+  "IMPHash": {
+    "key": "x-ibm-windows.imphash",
+    "object": "xwin"
+  },
+  "ServiceFileName": [
+    {
+      "key": "file.name",
+      "object": "service_file_name",
+      "transformer": "ToFileName"
+    }, 
+    {
+      "key": "directory.path",
+      "object": "service_file_dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "service_file_name",
+      "references": "service_file_dir"
+    },
+    {
+      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "object": "process",
+      "group": true,
+      "references": ["service_file_name"]
+    }
+  ]
 }
