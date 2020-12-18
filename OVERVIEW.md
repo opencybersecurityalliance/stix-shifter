@@ -183,7 +183,7 @@ OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
@@ -197,6 +197,17 @@ The module name refers to the name of the folder in stix-shifter that contains t
 Using the Qradar connector as an example:
 
 `python main.py translate qradar query "{}" "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"`
+
+### Pattern translation using an input file
+
+Create a text file with the pattern you wish to translate. The file can be used in the query translation call using standard input.
+
+_pattern.txt_
+```
+[network-traffic:src_ref.value = '127.0.0.1'] OR [ipv4-addr:value = '0.0.0.0']
+```
+
+`python main.py translate qradar query '{}' '' < /path/to/file/pattern.txt`
 
 ### 2. Translate a JSON data source query result to a STIX bundle of observable objects
 
@@ -259,7 +270,7 @@ Using the Qradar connector as an example:
 }
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
@@ -279,6 +290,29 @@ python main.py translate qradar results \
 ```
 
 The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+
+### Results translation using an input file
+
+Create a JSON file with the results you wish to translate. The file can be used in the results translation call using standard input.
+
+_results.json_
+```
+[
+    {
+        "starttime": "1563892019916",
+        "endtime": "1563892019916",
+        "sourceip": "9.21.122.127",
+        "sourceport": "100",
+        "identityip": "0.0.0.0",
+        "destinationip": "127.0.0.1",
+        "destinationport": "800",
+        "username": "admin",
+        "protocol": "tcp"
+    }
+]
+```
+
+`python main.py translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' '' < /path/to/file/results.json`
 
 ## Transmit
 
@@ -437,17 +471,54 @@ The `execute` command tests all steps of the translation-transmission flow:
 4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
 5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
 
-#### CLI Command
+### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
 
-#### Debug
+### Debug
 
 You can add `--debug` option at the end of your CLI command to see more logs. 
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
 
-#### OUTPUT:
+## Modules
+
+The `modules` command will return a JSON of the existing connectors along with their dialects and supported languages that are used in query translation. 
+
+### CLI Command
+
+`python main.py modules`
+
+returns
+```
+{
+    "qradar": {
+        "flows": {
+            "language": "stix",
+            "default": true
+        },
+        "events": {
+            "language": "stix",
+            "default": true
+        },
+        "aql": {
+            "language": "aql",
+            "default": false
+        }
+    },
+    "security_advisor": {
+        "default": {
+            "language": "stix",
+            "default": true
+        }
+    },
+    ...
+}
+```
+
+In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
+
+### OUTPUT:
 
 A bundle of STIX objects
 
