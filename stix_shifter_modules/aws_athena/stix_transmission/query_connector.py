@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_connector import Bas
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import json
 import re
+import uuid
 
 # static lookup for athena service types
 service_types = {
@@ -35,10 +36,13 @@ class QueryConnector(BaseQueryConnector):
                 query = json.loads(query)
             query_service_type = list(query.keys())[0]
             config_details = service_types[query_service_type]
+            if all([True if config not in self.connection.keys() else False for config in config_details]):
+                return_obj = {'success': True, 'search_id': str(uuid.uuid4()) + '-dummy:' + query_service_type}
+                return return_obj
             for config in config_details:
                 if config not in self.connection.keys():
-                    raise InvalidParameterException("{} and {} are required for query operation".format(
-                        config_details[0], config_details[1]))
+                    raise InvalidParameterException("{} is required for {} query operation".format(config,
+                                                                                                   query_service_type))
             table_config = self.connection[config_details[0]] + "." + self.connection[config_details[1]]
             select_statement = "SELECT * FROM {table_config} WHERE ".format(table_config=table_config)
             # for multiple observation operators union and intersect, select statement will be added

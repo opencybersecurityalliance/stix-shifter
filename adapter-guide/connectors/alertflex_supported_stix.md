@@ -1,15 +1,9 @@
-## HCL BigFix
-### directory
-- path
-
-___
+## Alertflex
 ### file
 - name
-- parent_directory_ref
-- hashes.SHA-256
 - hashes.SHA-1
+- hashes.SHA-256
 - hashes.MD5
-- size
 
 ___
 ### ipv4-addr
@@ -17,10 +11,6 @@ ___
 
 ___
 ### ipv6-addr
-- value
-
-___
-### mac-addr
 - value
 
 ___
@@ -33,18 +23,22 @@ ___
 
 ___
 ### process
-- binary_ref
 - name
-- pid
-- parent_ref
-- creator_user_ref
 
 ___
 ### user-account
 - user_id
 
 ___
-### x_bigfix_relevance
-- computer_identity
+### x_org_alertflex
+- event
+- severity
+- category
+- description
+- info
+- agent
+- source
+- type
+- node
 
 ___

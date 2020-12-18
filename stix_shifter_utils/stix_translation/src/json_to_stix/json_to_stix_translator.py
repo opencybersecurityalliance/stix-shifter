@@ -195,6 +195,7 @@ class DataSourceObjToStixObj:
 
             ds_key_def_list = [ds_key_def_obj]
 
+
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
                 self.logger.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
@@ -221,10 +222,17 @@ class DataSourceObjToStixObj:
                     if isinstance(references, list):
                         stix_value = []
                         for ref in references:
-                            val = object_map.get(ref)
-                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, val):
-                                continue
-                            stix_value.append(val)
+                            if unwrap:
+                                pattern = re.compile("{}_[0-9]+".format(ref))
+                                for obj_name in object_map:
+                                    if pattern.match(obj_name):
+                                        val = object_map.get(obj_name)
+                                        stix_value.append(val)
+                            else:
+                                val = object_map.get(ref)
+                                if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, val):
+                                    continue
+                                stix_value.append(val)
                         if not stix_value:
                             continue
                     else:
