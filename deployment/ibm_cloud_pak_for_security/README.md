@@ -24,13 +24,17 @@ Since the primary use-case for these scripts is to install a new or updated conn
 ## Installing a stix-shifter connector into CP4S
 
 1. Open a terminal
-2. CD into `stix-shifter/deployment/ibm_cloud_pak_for_security`
-3. For an IBM validated connector, copy the `cert.key` and `cert.pem` files that you received from IBM into the current `ibm_cloud_pak_for_security` directory.
-4. Log into your CP4S cluster: 
+2. CD into the root `stix-shifter` directory
+3. Build the `requirements.txt` file using the supplied script: `python3 generate_requirements.py`
+4. Install the python libraries required by stix-shifter: `pip3 install -r requirements.txt`
+5. Install the python libraries required for packaging: `pip3 install setuptools wheel twine jsonmerge`
+6. CD into `stix-shifter/deployment/ibm_cloud_pak_for_security`
+7. For an IBM validated connector, copy the `cert.key` and `cert.pem` files that you received from IBM into the current `ibm_cloud_pak_for_security` directory.
+8. Log into your CP4S cluster: 
 
     `cloudctl login -a <ICP CLUSTER URL> -u <USERNAME> -p <PASSWORD> -n <NAMESPACE>`
 
-5. Run the deployment script based on one of the following scenarios:
+9. Run the deployment script based on one of the following scenarios:
 
     ### A. Build the connector image and then deploy into your Kubernetes cluster
     ```
