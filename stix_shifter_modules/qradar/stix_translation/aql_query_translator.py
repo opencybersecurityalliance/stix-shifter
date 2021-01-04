@@ -22,7 +22,7 @@ class AqlQueryTranslator(BaseQueryTranslator):
         result = {}
         for label in labels.keys():
             result[labels[label]] = None
-        
+
         match = re.search(last_time_criteria, data, re.IGNORECASE)
         if match:
             time_value = match.group(1)
@@ -38,7 +38,7 @@ class AqlQueryTranslator(BaseQueryTranslator):
             result[START_TIME] = int(float(start_dt_obj)*1000)
         else:
             for label in labels.keys():
-                result[labels[label]] = self.search_for_pattern(data, time_patterns, label)
+                result[labels[label]] = self.__search_for_pattern(data, time_patterns, label)
 
         if not result.get(END_TIME):
             current_time = datetime.now()
@@ -46,20 +46,22 @@ class AqlQueryTranslator(BaseQueryTranslator):
 
         return result
 
+    def transform_query(self, data):
+        unmapped_stix_collection = []
+        translated_queries = [data]
+        return {'queries': translated_queries, 'unmapped_attributes': unmapped_stix_collection}
+
     def get_language(self):
         return 'aql'
 
     def fetch_mapping(self, basepath, dialect, options):
         pass
 
-    def transform_antlr(self, data, unused_antlr_parsing_object=None):
-        return data
-
-    def search_for_pattern(self, data, time_pattens, label):
+    def __search_for_pattern(self, data, time_pattens, label):
         time_value = None
         for key, value in time_pattens.items():
             match = re.search(f'{label}\\s?{key}', data, re.IGNORECASE)
             if match:
                 time_match = match.group(1)
-                time_value = int(float(datetime.strptime(time_match, value).strftime('%s.%f'))*1000)              
+                time_value = int(float(datetime.strptime(time_match, value).strftime('%s.%f'))*1000)
         return time_value
