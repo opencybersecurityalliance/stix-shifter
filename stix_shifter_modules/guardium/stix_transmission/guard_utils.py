@@ -114,28 +114,26 @@ class GuardApiClient(object):
         # -------------------------------------------------------------------------------
         results = ""
         #context().logger.debug('-------------------  ' + report_name + ' ----------------------')
-        params_set = {"reportName":"{0}".format(report_name), "indexFrom": "{0}".format(index_from), "fetchSize": "{0}".format(fetch_size), "reportParameter":params, "inputTZ":"GMT"}
+        params_set = {"reportName":"{0}".format(report_name), "indexFrom": "{0}".format(index_from), "fetchSize": "{0}".format(fetch_size), 
+        "reportParameter":params, "inputTZ":"UTC"}
         json_dump = json.dumps(params_set)
         rest_data = str(json.loads(json_dump))
-        # For compatibility with Guardium - inputTZ parameter was aded after v11.3 so in case it does not exist execute the query without it
-        for x in range(2):
-            response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)
-            results = response.json()
-            check_list = isinstance(results, list)
-            if check_list == False:
-                try:
-                    errorCode = results["ErrorCode"]
-                    print(errorCode)
-                    if errorCode ==  "27":
-                        params_set.pop("inputTZ")
-                        json_dump = json.dumps(params_set)
-                        rest_data = str(json.loads(json_dump))
-                        self.logger.warn("InputTZ not suppoerted - running query without it")
-                        print("InputTZ not suppoerted - running query without it")
-                        continue
-                except:
-                    pass    
-            break        
+        response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)
+        results = response.json()
+        if not isinstance(results, list):
+            try:
+                errorCode = results["ErrorCode"]
+                # For compatibility with Guardium - 
+                # inputTZ parameter was aded after v11.3 
+                # so in case it does not exist execute the query without it
+                if errorCode ==  "27":
+                    params_set.pop("inputTZ")
+                    json_dump = json.dumps(params_set)
+                    rest_data = str(json.loads(json_dump))
+                    self.logger.warn("InputTZ not suppoerted - running query without it")
+                    response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)            
+            except:
+                pass        
         return response
 
 
@@ -149,31 +147,29 @@ class GuardApiClient(object):
         
         results = ""
         params_set = {"category":"{0}".format(category), "startTime": "{0}".format(params["startTime"]), "endTime": "{0}".format(params["endTime"]), \
-             "fetchSize": "{0}".format(int(fetch_size-1)), "firstPosition": "{0}".format(int(index_from-1)), "inputTZ":"GMT"}
+             "fetchSize": "{0}".format(int(fetch_size-1)), "firstPosition": "{0}".format(int(index_from-1)), "inputTZ":"UTC"}
         if filters:
             params_set["filters"] = "{0}".format(filters)
 
         all_params = {**params_set, **params}
         json_dump = json.dumps(all_params)
         rest_data = str(json.loads(json_dump))
-        
-        # For compatibility with Guardium - inputTZ parameter was aded after v11.3 so in case it does not exist execute the query without it
-        for x in range(2):
-            response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
-            results = response.json()
-            check_list = isinstance(results, list)
-            if check_list == False:
-                try:
-                    errorCode = results["ErrorCode"]
-                    if errorCode ==  "27":
-                        params_set.pop("inputTZ")
-                        json_dump = json.dumps(params_set)
-                        rest_data = str(json.loads(json_dump))
-                        self.logger.warn("InputTZ not suppoerted - running query without it")
-                        continue
-                except:
-                    pass    
-            break        
+        response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
+        results = response.json()
+        if not isinstance(results, list):
+            try:
+                errorCode = results["ErrorCode"]
+                # For compatibility with Guardium - 
+                # inputTZ parameter was aded after v11.3 
+                # so in case it does not exist execute the query without it
+                if errorCode ==  "27":
+                    params_set.pop("inputTZ")
+                    json_dump = json.dumps(params_set)
+                    rest_data = str(json.loads(json_dump))
+                    self.logger.warn("InputTZ not suppoerted - running query without it")
+                    response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
+            except:
+                pass    
         response._content = self.translate_response(json.loads(self.fields), json.loads(response.content))        
         return response       
     
