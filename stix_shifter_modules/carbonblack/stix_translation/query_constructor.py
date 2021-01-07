@@ -87,35 +87,6 @@ class CbQueryStringPatternTranslator:
 
         return "({}) and last_update:[{} TO {}]".format(expression, start, stop)
 
-    def _combine_queries(self, queries):
-        results = []
-        process_queries = [q["query"] for q in queries if q["dialect"] == "process"]
-        # binary_queries = [q["query"] for q in queries if q["dialect"] == "binary"]
-
-        # Here we are using the assumption that all observable expressions are OR'ed together
-        if len(process_queries) == 0:
-            pass
-        elif len(process_queries) == 1:
-            process_query = process_queries[0]
-            results.append({"query": process_query, "dialect": "process"})
-        else:
-            process_query = "({})".format(") or (".join(process_queries))
-            results.append({"query": process_query, "dialect": "process"})
-
-        # if len(binary_queries) == 0:
-        #     pass
-        # elif len(binary_queries) == 1:
-        #     binary_query = binary_queries[0]
-        #     results.append({"query": binary_query, "dialect": "binary"})
-        # else:
-        #     binary_query = "({})".format(") or (".join(binary_queries))
-        #     results.append({"query": binary_query, "dialect": "binary"})
-
-        return results
-
-    # the return type of this function is a string for expressions types up to CombinedComparionExpression
-    # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
-    # e.g. [{'query': 'blah', 'dialect': 'process'}, {'query':'blha', 'dialect':'binary'}]
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
             # Base Case
@@ -185,9 +156,6 @@ class CbQueryStringPatternTranslator:
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
             return f'({expr1}) {operator} ({expr2})'
-            # operator = self.comparator_lookup[expression.operator]
-            # # Note this code is only correct because we assume AND is OR for observation expressions
-            # return self._parse_expression(expression.expr1, qualifier=qualifier) + self._parse_expression(expression.expr2, qualifier=qualifier)
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
