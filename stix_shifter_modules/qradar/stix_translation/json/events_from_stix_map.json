@@ -72,8 +72,7 @@
       "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "domain_id": ["domainid"],
-      "rule_names[*]": ["rulenames"]
+      "domain_id": ["domainid"]
     }
   },
   "x-ibm-finding": {
@@ -86,7 +85,8 @@
       "magnitude": ["magnitude"],
       "event_count": ["eventcount"],
       "src_geolocation": ["sourcegeographic"],
-      "dst_geolocation": ["destinationgeographic"]
+      "dst_geolocation": ["destinationgeographic"],
+      "rule_names[*]": ["rulenames"]
     }
   },
   "process": {
