@@ -29,6 +29,16 @@ class TestQueryTranslator(unittest.TestCase, object):
         filters = "\"filters\":\"name=DB User&value=MARCI&isGroup=false\""
         _test_query_assertions(query['queries'], 0, filters)
 
+    def test_db_network_traffic_query(self):
+        stix_pattern = "[network-traffic:dst_ref.value='9.42.54.193']"
+        query = _translate_query(stix_pattern)
+        filters = "\"filters\":\"name=Server&value=9.42.54.193&isGroup=false\""
+        _test_query_assertions(query['queries'], 0, filters)
+        stix_pattern = "[network-traffic:src_ref.value='9.42.54.193']"
+        query = _translate_query(stix_pattern)
+        filters = "\"filters\":\"name=Client IP&value=9.42.54.193&isGroup=false\""
+        _test_query_assertions(query['queries'], 0, filters)
+
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)

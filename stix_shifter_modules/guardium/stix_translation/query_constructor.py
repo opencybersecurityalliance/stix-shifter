@@ -8,12 +8,23 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from stix_shifter_modules.guardium.stix_translation.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.utils.file_helper import read_json
+from stix_shifter_utils.utils import logger
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
 # REFERENCE_DATA_TYPES = {"QUERY_FROM_DATE": ["start"],
 #                        "QUERY_TO_DATE": ["end"],"OSUser":["%"],"DBUser":"newuser",
 #                        "SHOW_ALIASES":["TRUE","FALSE"],"REMOTE_SOURCE":["%"]}
+#REFERENCE_DATA_TYPES = {"QUERY_FROM_DATE": ["start"],"QUERY_TO_DATE": ["end"],
+#                       "SHOW_ALIASES": ["TRUE", "FALSE"],
+#                        "REMOTE_SOURCE": ["remotesource"],
+#                       "Server": ["ipv4","ipv6"],
+#                        "ServerIP": ["ipv4","ipv6"],
+#                        "Client IP":["ipv4","ipv6"],
+#                        "DBUser": ["db_user"],
+#                        "Database": ["database_name"],
+#                        "Severity": ["severity"],
+#                        "OSUser": ["os_user"]}
 DEFAULT_DAYS_BACK = 2
 
 
@@ -41,6 +52,7 @@ class QueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper, options, transformers):
         self.dmm = data_model_mapper
         self.pattern = pattern
+        self.logger = logger.set_logger(__name__)
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
         self.report_params_passed = {}
         self.report_params_array = []
@@ -55,8 +67,8 @@ class QueryStringPatternTranslator:
         self.transformers = transformers
 
         # Read reference data
-        self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
-
+        #self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
+        #self.logger.info(self.REFERENCE_DATA_TYPES)
         # Read report definition data
         self.REPORT_DEF = read_json('guardium_reports_def', options)
 
@@ -502,10 +514,16 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
-        if value_type not in self.REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
-            return None
-        else:
-            return "{mapped_field} {comparator} {value}".format(
+        #self.logger.info("stix_field="+stix_field+" value_type="+value_type+" mapped_field="+mapped_field+" value="+value)
+        #self.logger.info("****** "+REFERENCE_DATA_TYPES["{}".format(mapped_field)])
+        #if value_type not in self.REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
+        #    if (mapped_field == 'Server' or mapped_field == 'ServerIP'):
+        #        return "str({mapped_field}) {comparator} {value}".format(
+        #            mapped_field=mapped_field, comparator=comparator, value=value)
+        #    else:
+        #        return None
+        #else:
+        return "{mapped_field} {comparator} {value}".format(
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
     @staticmethod
