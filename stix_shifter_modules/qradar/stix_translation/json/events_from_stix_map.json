@@ -99,7 +99,7 @@
       "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
     }
   },
-  "x-ibm-event": {
+  "x-oca-event": {
     "fields": {
       "action": ["qidname"],
       "code": ["EventID"],
@@ -126,7 +126,7 @@
       "original_ref.payload_bin": ["eventpayload", "Message"]
     }
   },
-  "x-ibm-host": {
+  "x-oca-asset": {
     "fields": {
       "hostname": ["identityhostname"],
       "ip_refs[*].value": ["identityip", "sourceip"],

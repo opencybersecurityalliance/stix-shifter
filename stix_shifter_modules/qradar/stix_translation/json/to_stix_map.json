@@ -20,20 +20,20 @@
       "references": "useraccount"
     },
     {
-      "key": "x-ibm-event.user_ref",
+      "key": "x-oca-event.user_ref",
       "object": "event",
       "references": "useraccount"
     }
   ],
   "categoryname": [
     {
-      "key": "x-ibm-event.outcome",
+      "key": "x-oca-event.outcome",
       "object": "event"
     }
   ],
   "high_level_category_name": [
     {
-      "key": "x-ibm-event.category",
+      "key": "x-oca-event.category",
       "object": "event",
       "transformer": "ValueToList"
     }
@@ -53,37 +53,37 @@
       "object": "host_ip_addr_v6"
     },
     {
-      "key": "x-ibm-host.ip_refs",
+      "key": "x-oca-asset.ip_refs",
       "object": "host",
       "references": ["host_ip_addr_v4"],
       "group": true
     },
     {
-      "key": "x-ibm-host.ip_refs",
+      "key": "x-oca-asset.ip_refs",
       "object": "host",
       "references": ["host_ip_addr_v6"],
       "group": true
     },
     {
-      "key": "x-ibm-event.host_ref",
+      "key": "x-oca-event.host_ref",
       "object": "event",
       "references": "host"
     }
   ],
   "identityhostname": [
     {
-      "key": "x-ibm-host.hostname",
+      "key": "x-oca-asset.hostname",
       "object": "host"
     },
     {
-      "key": "x-ibm-event.host_ref",
+      "key": "x-oca-event.host_ref",
       "object": "event",
       "references": "host"
     }
   ],
   "qidname": [
     {
-      "key": "x-ibm-event.action",
+      "key": "x-oca-event.action",
       "object": "event"
     }
   ],
@@ -94,7 +94,7 @@
   },
   "devicetime": [
     {
-      "key": "x-ibm-event.created",
+      "key": "x-oca-event.created",
       "transformer": "EpochToTimestamp",
       "object": "event"
     }
@@ -178,13 +178,13 @@
   },
   "logsourcename": [
     {
-      "key": "x-ibm-event.agent",
+      "key": "x-oca-event.agent",
       "object": "event"
     }
   ],
   "logsourcetypename": [
     {
-      "key": "x-ibm-event.provider",
+      "key": "x-oca-event.provider",
       "object": "event"
     }
   ],
@@ -217,7 +217,7 @@
       "references": "src_ip" 
     },
     {
-      "key": "x-ibm-host.ip_refs",
+      "key": "x-oca-asset.ip_refs",
       "object": "host",
       "references": ["src_ip"],
       "group": true
@@ -250,7 +250,7 @@
       "references": ["src_mac"]
     },
     {
-      "key": "x-ibm-host.mac_refs",
+      "key": "x-oca-asset.mac_refs",
       "object": "host",
       "references": ["src_mac"]
     }
@@ -282,7 +282,7 @@
       "object": "url"
     },
     {
-      "key": "x-ibm-event.url_ref",
+      "key": "x-oca-event.url_ref",
       "object": "event",
       "references": "url"
     }
@@ -299,7 +299,7 @@
       "references": "dns_domain"
     },
     {
-      "key": "x-ibm-event.domain_ref",
+      "key": "x-oca-event.domain_ref",
       "object": "event",
       "references": "dns_domain"
     }
@@ -310,7 +310,7 @@
       "object": "fl"
     },
     {
-      "key": "x-ibm-event.file_ref",
+      "key": "x-oca-event.file_ref",
       "object": "event",
       "references": "fl"
     }
@@ -342,7 +342,7 @@
       "transformer": "ToDirectoryPath"
     },
     {
-      "key": "x-ibm-event.file_ref",
+      "key": "x-oca-event.file_ref",
       "object": "event",
       "references": "fl"
     },
@@ -359,7 +359,7 @@
       "object": "artifact"
     },
     {
-      "key": "x-ibm-event.original_ref",
+      "key": "x-oca-event.original_ref",
       "object": "event",
       "references": "artifact"
     }
@@ -539,7 +539,7 @@
       "references": "directory_image"
     },
     {
-      "key": "x-ibm-event.process_ref",
+      "key": "x-oca-event.process_ref",
       "object": "event",
       "references": "process"
     }
@@ -571,7 +571,7 @@
       "references": "parent_process_image"
     },
     {
-      "key": "x-ibm-event.parent_process_ref",
+      "key": "x-oca-event.parent_process_ref",
       "object": "event",
       "references": "parent_process_image"
     }
@@ -582,7 +582,7 @@
       "object": "process"
     },
     {
-      "key": "x-ibm-event.process_ref",
+      "key": "x-oca-event.process_ref",
       "object": "event",
       "references": "process"
     }
@@ -598,7 +598,7 @@
       "references": "parent_process_image"
     },
     {
-      "key": "x-ibm-event.parent_process_ref",
+      "key": "x-oca-event.parent_process_ref",
       "object": "event",
       "references": "parent_process_image"
     }
@@ -609,7 +609,7 @@
       "object": "process"
     },
     {
-      "key": "x-ibm-event.process_ref",
+      "key": "x-oca-event.process_ref",
       "object": "event",
       "references": "process"
     }
@@ -621,13 +621,13 @@
       "transformer": "ToInteger"
     },
     {
-      "key": "x-ibm-event.process_ref",
+      "key": "x-oca-event.process_ref",
       "object": "event",
       "references": "process"
     }
   ],
   "EventID": {
-    "key": "x-ibm-event.code",
+    "key": "x-oca-event.code",
     "object": "event",
     "transformer": "ToInteger"
   },
@@ -638,7 +638,7 @@
       "transformer": "ObjectnameToStixRegistryKey"
     },
     {
-      "key": "x-ibm-event.registry_ref",
+      "key": "x-oca-event.registry_ref",
       "object": "event",
       "references": "winregistry"
     }
@@ -656,7 +656,7 @@
         "transformer": "RegValueNameToStixRegistryValues"
     },
     {
-      "key": "x-ibm-event.registry_ref",
+      "key": "x-oca-event.registry_ref",
       "object": "event",
       "references": "winregistry"
     }

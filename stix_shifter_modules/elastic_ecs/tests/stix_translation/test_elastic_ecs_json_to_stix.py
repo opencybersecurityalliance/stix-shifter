@@ -363,13 +363,13 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
 
-        event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ibm-event')
-        assert (event_object is not None), 'x-ibm-event object type not found'
+        event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-oca-event')
+        assert (event_object is not None), 'x-oca-event object type not found'
 
         host_ref = event_object['host_ref']
         assert (host_ref in objects), f"host_ref with key {event_object['host_ref']} not found"
         host_obj = objects[host_ref]
-        assert(host_obj['type'] == 'x-ibm-host')
+        assert(host_obj['type'] == 'x-oca-asset')
         assert(host_obj['hostname'] == 'HOST-NAME')
 
         mac_refs = host_obj['mac_refs']
