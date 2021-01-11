@@ -107,7 +107,7 @@
             },
             "first_observed": "2020-09-29T17:15:50.209Z",
             "last_observed": "2020-09-29T17:16:50.209Z",
-            "number_observed": 10
+            "number_observed": 1
         },
         {
             "id": "observed-data--88880ac9-fbf2-4b63-ad56-2d9d14882c08",
@@ -1597,7 +1597,7 @@
             },
             "first_observed": "2020-09-29T17:15:50.473Z",
             "last_observed": "2020-09-29T17:16:50.473Z",
-            "number_observed": 2
+            "number_observed": 1
         },
         {
             "id": "observed-data--ded06aa2-a9a6-4176-812b-964aa1d93af4",

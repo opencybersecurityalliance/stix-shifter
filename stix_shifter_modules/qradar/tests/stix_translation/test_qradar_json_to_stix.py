@@ -150,17 +150,18 @@ class TestTransform(object):
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
-                "severity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
+                "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
                 "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
-        print(observed_data)
-        finding = observed_data.get('objects').get('0')
+        objects = observed_data['objects']
+        finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(finding['type']) == "x-ibm-finding"
-        assert(finding['name'] == data['qidname'])
-        assert(finding['severity'] == data['severity'])
+        assert(finding['name'] == data['crename'])
+        assert(finding['description'] == data['credescription'])
+        assert(finding['severity'] == data['eventseverity'])
         assert(finding['magnitude'] == data['magnitude'])
         assert(finding['rule_names'] == data['rulenames'])
         assert(finding['event_count'] == data['eventcount'])
@@ -168,27 +169,10 @@ class TestTransform(object):
         assert(finding['start'] == START_TIMESTAMP)
         assert(finding['end'] == END_TIMESTAMP)
 
-        assert('x_ibm_ariel' in observed_data)
-        custom_prop = observed_data['x_ibm_ariel']
-        assert(custom_prop['device_type'] == data['devicetype'])
-        assert(custom_prop['cre_event_list'] == data['creeventlist'])
-        assert(custom_prop['cre_description'] == data['credescription'])
-
-    def test_flow_finding(self):
-        data = {"logsourceid": 126, "qidname": "flow name", "sourceip": "0.0.0.0", 
-                "severity": 4, "starttime": EPOCH_START, "endtime": EPOCH_END, "flowsource": "some flow source"}
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
-        observed_data = result_bundle['objects'][1]
-        print(observed_data)
-        finding = observed_data.get('objects').get('0')
-
-        assert(finding['type']) == "x-ibm-finding"
-        assert(finding['name'] == data['qidname'])
-        assert(finding['severity'] == data['severity'])
-        assert(finding['finding_type'] == 'flow')
-        assert(finding['start'] == START_TIMESTAMP)
-        assert(finding['end'] == END_TIMESTAMP)
+        custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        assert(custom_object is not None), 'domain-name object type not found'
+        assert(custom_object['device_type'] == data['devicetype'])
+        assert(custom_object['cre_event_list'] == data['creeventlist'])
 
     def test_custom_props(self):
         data = {"logsourceid": 126, "qid": 55500004,
@@ -197,13 +181,14 @@ class TestTransform(object):
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
 
-        assert('x_ibm_ariel' in observed_data)
-        custom_props = observed_data['x_ibm_ariel']
-        assert(custom_props['identity_ip'] == data['identityip'])
-        assert(custom_props['log_source_id'] == data['logsourceid'])
-        assert(custom_props['qid'] == data['qid'])
-        assert(custom_props['log_source_name'] == data['logsourcename'])
+        custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        assert(custom_object is not None), 'domain-name object type not found'
+        assert(custom_object['identity_ip'] == data['identityip'])
+        assert(custom_object['log_source_id'] == data['logsourceid'])
+        assert(custom_object['qid'] == data['qid'])
+        assert(custom_object['log_source_name'] == data['logsourcename'])
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(DATA_SOURCE)
@@ -532,7 +517,7 @@ class TestTransform(object):
         assert directory_object_path == "/unix/files/system"
     
     def test_unmapped_fallback(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "sourceip": "127.0.0.1",
@@ -555,8 +540,9 @@ class TestTransform(object):
         observed_data = result_bundle_objects[1]
 
         assert('objects' in observed_data)
-        assert('x-qradar' in observed_data)
-        custom_objects = observed_data['x-qradar']
+        objects = observed_data['objects']
+        
+        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
 
         assert(custom_objects['unmapped1'] == "value1")
         assert(custom_objects['unmapped2'] == "value2")
