@@ -27,14 +27,6 @@ class StringToBool(ValueTransformer):
         return value.lower() in ("yes", "true", "t", "1")
 
 
-class SplunkToTimestamp(ValueTransformer):
-    """A value transformer for converting Splunk timestamp to regular timestamp"""
-
-    @staticmethod
-    def transform(splunkTime):
-        return splunkTime[:-6]+'Z'
-
-
 class EpochToTimestamp(ValueTransformer):
     """A value transformer for the timestamps"""
 
@@ -55,16 +47,6 @@ class FormatMac(ValueTransformer):
         return value.lower()
 
 
-class MsatpToTimestamp(ValueTransformer):
-    """A value transformer to truncate milliseconds"""
-
-    @staticmethod
-    def transform(msatptime):
-        time_array = msatptime.split('.')
-        converted_time = time_array[0] + '.' + time_array[1][:3] + 'Z' if len(time_array) > 1 else time_array[0] + 'Z'
-        return converted_time
-
-
 class FormatTCPProtocol(ValueTransformer):
     """A value transformer to convert TCP protocol to IANA format"""
 
@@ -78,44 +60,6 @@ class FormatTCPProtocol(ValueTransformer):
             return obj_array
         except ValueError:
             LOGGER.error("Cannot convert input to array")
-
-
-class MsatpToRegistryValue(ValueTransformer):
-    """A value transformer to convert MSATP Registry value protocol to windows-registry-value-type STIX"""
-
-    @staticmethod
-    def transform(registryvalues):
-        stix_mapping = {"RegistryValueName": "name", "RegistryValueData": "data", "RegistryValueType": "data_type"}
-        stix_datatype_mapping = {"None": "REG_NONE", "String": "REG_SZ", "Dword": "REG_DWORD",
-                                 "ExpandString": "REG_EXPAND_SZ", "MultiString": "REG_MULTI_SZ",
-                                 "Binary": "REG_BINARY", "Qword": "REG_QWORD"}
-        converted_value = list()
-        registryvalue_dict = dict()
-        for each_value in registryvalues:
-            for key, value in each_value.items():
-                is_data_add = True
-                if key == "RegistryValueType":
-                    if value in stix_datatype_mapping.keys():
-                        value = stix_datatype_mapping[value]
-                    else:
-                        is_data_add = False
-                if is_data_add:
-                    registryvalue_dict.update({stix_mapping[key]: value})
-        converted_value.append(registryvalue_dict)
-        return converted_value
-
-
-class AwsToTimestamp(ValueTransformer):
-    """
-    A value transformer for converting AWS timestamp (YYYY-MM-DD hh:mm:ss.000)
-    to UTC timestamp (YYYY-MM-DDThh:mm:ss.000Z)
-    """
-
-    @staticmethod
-    def transform(aws_time):
-        time_array = aws_time.split(' ')
-        converted_time = time_array[0] + 'T' + time_array[1] + 'Z'
-        return converted_time
 
 
 class EpochSecondsToTimestamp(ValueTransformer):
@@ -327,120 +271,37 @@ class SetToOne(ValueTransformer):
         except ValueError:
             LOGGER.error("Cannot convert input {} to integer".format(obj))
 
-# TODO: rename classes to be more generic since they can be reused by other data sources
 
-
-class EpochToGuardium(ValueTransformer):
-    """A value transformer for Epoch to Guardium timestamp"""
-
-    @staticmethod
-    def transform(epoch):
-        try:
-            return (datetime.fromtimestamp(int(epoch) / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
-        except ValueError:
-            LOGGER.error("Cannot convert epoch value {} to timestamp".format(epoch))
-
-
-class GuardiumToTimestamp(ValueTransformer):
-    """A value transformer for converting Guardium timestamp to regular timestamp"""
-
-    @staticmethod
-    def transform(gdmTime):
-        rgx = r"(\d\d\d\d-\d\d-\d\d)\s(\d\d:\d\d:\d\d)"
-        mtch = (re.findall(rgx, gdmTime))[0]
-        return (mtch[0] + 'T' + mtch[1]) + '.000Z'
-
-
-class TimestampToGuardium(ValueTransformer):
-    """A value transformer for converting  regular timestamp to Guardium timestamp"""
-
-    @staticmethod
-    def transform(timestamp):
-        rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
-        mtch = (re.findall(rgx, timestamp))[0]
-        return (mtch[0] + ' ' + mtch[1])
-
-
-class GuardiumQS(ValueTransformer):
-    """Send back Policy Violation string"""
-
+class FilterIPv4List(ValueTransformer):
+    """A value transformer for filtering-out from a list all values which are not valid IPv4 values"""
     @staticmethod
     def transform(obj):
-        return "Policy Violation"
+        if isinstance(obj, list):
+            pattern = re.compile(r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+            result = []
+            for val in obj:
+                if pattern.match(str(val)):
+                    result.append(val)
+            return result
+        return obj
 
 
-class GuardiumRep(ValueTransformer):
-    """Send back Threat Case string"""
-
+class FilterIPv6List(ValueTransformer):
+    """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
     @staticmethod
     def transform(obj):
-        return "Threat Case"
+        if isinstance(obj, list):
+            pattern = re.compile(r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+            result = []
+            for val in obj:
+                if pattern.match(str(val)):
+                    result.append(val)
+            return result
+        return obj
 
-
-class GuardiumMapSeverity(object):
-    """A value transformer for converting numeric severity rating to literal """
-
+class ValueToList(ValueTransformer):
+    """A value transformer that converts a single value into a list container the value"""
     @staticmethod
-    def transform(severity):
-        try:
-            num = int(severity)
-            if num < 5:
-                return "Low"
-            elif num > 5:
-                return "High"
-            else:
-                return "Medium"
-        except ValueError:
-            #LOGGER.error("Cannot convert input to path string")
-            return severity
+    def transform(obj):
+        return [obj]
 
-
-class GuardiumMapSeverityNum(object):
-    """A value transformer for converting  severity literal to numeric """
-
-    @staticmethod
-    def transform(severity):
-        sev = severity.lower()
-        if sev == "low":
-            return '1'
-        elif sev == "high":
-            return '9'
-        elif sev == "medium":
-            return '5'
-        else:
-            return severity
-
-
-class TimestampToGuardiumQS(ValueTransformer):
-    """A value transformer for converting  regular timestamp to Guardium timestamp"""
-
-    @staticmethod
-    def transform(timestamp):
-        rgx = r"(\d\d\d\d-\d\d-\d\d).(\d\d:\d\d:\d\d)"
-        mtch = (re.findall(rgx, timestamp))[0]
-        return mtch[0].replace("-", "") + ' ' + mtch[1]
-
-
-class Ymd_HMSToTimestamp(ValueTransformer):
-    """A value transformer for the timestamps but adds ONE second to the time stamp.  Reason: Use when modified date is missing"""
-
-    @staticmethod
-    def transform(dt_Str):
-        dt_obj = datetime.strptime(dt_Str, '%Y-%m-%d %H:%M:%S')
-        dt_objOne = dt_obj + timedelta(seconds=1)
-        return (datetime.fromtimestamp(datetime.timestamp(dt_objOne), timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
-
-
-def get_all_transformers():
-    return {"SplunkToTimestamp": SplunkToTimestamp, "EpochToTimestamp": EpochToTimestamp, "ToInteger": ToInteger, "ToString": ToString,
-            "ToLowercaseArray": ToLowercaseArray, "ToBase64": ToBase64, "ToFilePath": ToFilePath, "ToFileName": ToFileName,
-            "StringToBool": StringToBool, "ToDomainName": ToDomainName, "TimestampToMilliseconds": TimestampToMilliseconds,
-            "EpochSecondsToTimestamp": EpochSecondsToTimestamp, "ToIPv4": ToIPv4,
-            "DateTimeToUnixTimestamp": DateTimeToUnixTimestamp, "NaiveTimestampToUTC": TimestampToUTC,
-            "ToDirectoryPath": ToDirectoryPath, "MsatpToTimestamp": MsatpToTimestamp, "FormatTCPProtocol": FormatTCPProtocol,
-            "MsatpToRegistryValue": MsatpToRegistryValue, "FormatMac": FormatMac,
-            "SetToOne": SetToOne, "Ymd_HMSToTimestamp": Ymd_HMSToTimestamp, "TimestampToGuardium": TimestampToGuardium,
-            "TimestampToGuardiumQS": TimestampToGuardiumQS, "GuardiumToTimestamp": GuardiumToTimestamp,
-            "EpochToGuardium": EpochToGuardium, "AwsToTimestamp": AwsToTimestamp, "GuardiumRep": GuardiumRep,
-            "GuardiumQS": GuardiumQS, "GuardiumMapSeverity": GuardiumMapSeverity,
-            "GuardiumMapSeverityNum": GuardiumMapSeverityNum}

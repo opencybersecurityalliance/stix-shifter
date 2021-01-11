@@ -5,9 +5,8 @@ import copy
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToGuardium
+from stix_shifter_modules.guardium.stix_translation.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
-from stix_shifter_utils.stix_translation.src.utils import transformers
 from stix_shifter_utils.utils.file_helper import read_json
 
 # Source and destination reference mapping for ip and mac addresses.
@@ -34,12 +33,12 @@ class QueryStringPatternTranslator:
         #        ComparisonComparators.Matches: 'LIKE',
         # ComparisonComparators.IsSubSet: '',
         # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'AND',
+        ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'AND'
+        ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, options):
+    def __init__(self, pattern: Pattern, data_model_mapper, options, transformers):
         self.dmm = data_model_mapper
         self.pattern = pattern
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -53,7 +52,7 @@ class QueryStringPatternTranslator:
         self.qsearch_params_array_size = 0
 
         self.translated = self.parse_expression(pattern)
-        self.transformers = transformers.get_all_transformers()
+        self.transformers = transformers
 
         # Read reference data
         self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
@@ -260,7 +259,13 @@ class QueryStringPatternTranslator:
                     qsearch["filters"][param] = transformer.transform(value)
                 else:
                     qsearch["filters"][param] = value
-
+            for param in qsearch["query"]:
+                if param in self.qsearch_params_passed:
+                    value = self.qsearch_params_passed[param]
+                    if "transformer" in qsearch["query"][param]:
+                        transformer = self.transformers[qsearch["query"][param]["transformer"]]
+                        qsearch["query"][param]["value"] = transformer.transform(value)
+                        qsearch["query"][param]["operation"] = qsearch["query"][param]["default_operator"]
             qsearch_in_query.append(json.dumps(qsearch))
         return qsearch_in_query
 
@@ -301,14 +306,14 @@ class QueryStringPatternTranslator:
                qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
         self.set_filters_format(qsearch_in_query)
-
+        self.set_query_format(qsearch_in_query)
         return qsearch_in_query
 
     def set_filters_format(self, qse):
         for i in range(len(qse)):
             filters = json.loads(qse[i])["filters"]
             qse_prefix = qse[i][0:str.find(qse[i], "filters") - 1:1]
-            qse_suffix = qse[i][str.find(qse[i], ", \"fetchSize")::1]
+            qse_suffix = qse[i][str.find(qse[i], ", \"query")::1]
             str_filters = ''
             first = True
             for key in filters:
@@ -322,6 +327,27 @@ class QueryStringPatternTranslator:
             if str_filters.__len__() > 0:
                 str_filters = "\"filters\":\"" + str_filters + "\""
                 qse[i] = qse_prefix + str_filters + qse_suffix
+            else:
+                qse[i] = qse_prefix + qse_suffix[2::1]
+
+    def set_query_format(self, qse):
+        for i in range(len(qse)):
+            query = json.loads(qse[i])["query"]
+            qse_prefix = qse[i][0:str.find(qse[i], "query") - 1:1]
+            qse_suffix = qse[i][str.find(qse[i], ", \"fetchSize")::1]
+            str_query = ''
+            first = True
+            for key in query:
+                if "value" not in query[key]:
+                    continue
+                if first:
+                    first = False
+                else:
+                    str_query = str_query + " AND "
+                str_query = str_query +  key + query[key]["operation"] +query[key]["value"] 
+            if str_query.__len__() > 0:
+                str_query = "\"query\":\"" + str_query + "\""
+                qse[i] = qse_prefix + str_query + qse_suffix
             else:
                 qse[i] = qse_prefix + qse_suffix[2::1]
 
@@ -602,12 +628,12 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, options):
+def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers):
 
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
 
-    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
+    guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options, transformers)
     report_call = guardium_query_translator.translated
 
     # Add space around START STOP qualifiers

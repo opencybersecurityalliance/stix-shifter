@@ -76,3 +76,5 @@ virtualenv/
 
 .vscode
 *.sqlite
+deployment/ibm_cloud_pak_for_security/backup_*
+deployment/ibm_cloud_pak_for_security/bundle

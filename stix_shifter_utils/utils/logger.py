@@ -2,6 +2,9 @@ import logging
 from colorlog import ColoredFormatter
 import traceback
 import jsonmerge
+import threading
+
+loggers = {}
 
 
 def init(level):
@@ -19,13 +22,17 @@ def init(level):
                                  )
     handler.setFormatter(formatter)
     logging.basicConfig(level=level, handlers=(handler,))
-
     jsonmerge.log.setLevel(logging.INFO)
 
 
+def set_external_logger(logger):
+    loggers[threading.get_ident()] = logger
+
+
 def set_logger(module):
-    logger = logging.getLogger(module)
-    return logger
+    if threading.get_ident() in loggers:
+        return loggers[threading.get_ident()]
+    return logging.getLogger(module)
 
 
 def exception_to_string(excp):

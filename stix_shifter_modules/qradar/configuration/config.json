@@ -23,10 +23,6 @@
             "type": "password",
             "optional": true
         },
-        "data_lake": {
-            "type": "boolean",
-            "default": false
-        },
         "options": {
             "validate_pattern": {
                 "default": false,
@@ -39,6 +35,9 @@
                 "type": "json",
                 "optional": true,
                 "hidden": true
+            },
+            "unmapped_fallback": {
+                "default": true
             }
         }
     },

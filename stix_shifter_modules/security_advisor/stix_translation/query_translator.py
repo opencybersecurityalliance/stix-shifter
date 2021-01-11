@@ -3,7 +3,7 @@ from stix_shifter_utils.modules.base.stix_translation.empty_query_translator imp
 
 class QueryTranslator(EmptyQueryTranslator):
 
-    def transform_query(self, data, antlr_parsing):
+    def transform_query(self, data):
         """
         Takes in passed in query string and returns it
         :param data: query string that gets returned
@@ -13,6 +13,4 @@ class QueryTranslator(EmptyQueryTranslator):
         :return: the passed in data
         :rtype: str
         """
-        l = []
-        l.append(data)
-        return l
+        return {'queries': [data]}
