@@ -28,8 +28,8 @@ class RequestMockResponse:
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
     @staticmethod
-    def _create_query_list(query_string, dialect="process"):
-        return [json.dumps({"query": query_string, "dialect": dialect})]
+    def _create_query_list(query_string):
+        return [query_string]
 
     def test_ping_endpoint(self, mock_requests_response):
         ping_response = """ [

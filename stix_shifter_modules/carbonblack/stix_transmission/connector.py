@@ -44,14 +44,11 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def create_results_connection(self, search_id, offset, length):
+    def create_results_connection(self, query, offset, length):
         response_txt = None
         return_obj = {}
         try:
-            search_id = json.loads(search_id)
-            query = search_id["query"]
-            dialect = search_id["dialect"]
-            response = self.api_client.run_search(query, dialect, start=offset, rows=length)
+            response = self.api_client.run_search(query, start=offset, rows=length)
             return self._handle_errors(response, return_obj)
 
         except Exception as e:
