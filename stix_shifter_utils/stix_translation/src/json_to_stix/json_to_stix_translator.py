@@ -312,21 +312,10 @@ class DataSourceObjToStixObj:
             self.logger.debug("Not a dict: {}".format(obj))
 
         # Add unmapped attributes and required property to the observation if it wasn't added via the mapping
-        if self.options.get('unmapped_fallback') and self.cust_attributes:
-            custom_object_type = "x-" + self.data_source.lower()
-            self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the observable object: {}'.format(self.cust_attributes))
-            obj_key = str(len(observation['objects']))
-            for key, value in observation['objects'].items():
-                if 'type' in value and value.get('type') == custom_object_type:
-                    obj_key = key
-                    break
-            if observation['objects'].get(obj_key):
-                observation['objects'][obj_key].update({'type': custom_object_type})
-            else:
-                observation['objects'][obj_key] = {'type': custom_object_type}
-            observation['objects'][obj_key].update(self.cust_attributes)
-                
-
+        if self.options.get('unmapped_fallback'):
+            if self.cust_attributes:
+                self.logger.info('Unmapped fallback is enabled. Adding custom attributes to the obseravble object: {}'.format(self.cust_attributes)) 
+                observation.update({"x-" + self.data_source.lower(): self.cust_attributes})
 
         # Add required property to the observation if it wasn't added via the mapping
         if NUMBER_OBSERVED_KEY not in observation:

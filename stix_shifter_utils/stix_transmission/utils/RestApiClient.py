@@ -1,5 +1,6 @@
 import requests
 from requests_toolbelt.adapters import host_header_ssl
+from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys
@@ -7,25 +8,19 @@ import collections
 import os
 import errno
 import uuid
+
 from stix_shifter_utils.utils import logger
 
 # This is a simple HTTP client that can be used to access the REST API
 
-RETRY_MAX_DEFAULT = 1
-CONNECT_TIMEOUT_DEFAULT = 2
-
+RETRY_MAX = 3
 
 class RestApiClient:
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
-        self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
-        self.retry_max = int(self.retry_max)
-        self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
-        self.connect_timeout = int(self.connect_timeout)
-
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None):
         self.logger = logger.set_logger(__name__)
         unique_file_handle = uuid.uuid4()
         self.server_cert_name = "/tmp/{0}-server_cert.pem".format(unique_file_handle)
@@ -55,7 +50,6 @@ class RestApiClient:
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
-        self.auth = auth
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
@@ -81,24 +75,23 @@ class RestApiClient:
                 url = 'https://' + self.server_ip + '/' + endpoint
             try:
                 session = requests.Session()
-                retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
-                                       method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
+                retry_strategy = Retry(total=RETRY_MAX, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504],
+                                        method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
                 session.mount("http://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
                 if self.sni is not None:
                     # only use the tool belt session in case of SNI for safety
-                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=self.retry_max))
+                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=RETRY_MAX))
                     actual_headers["Host"] = self.sni
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
-                response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
-                                timeout=(self.connect_timeout, timeout), auth=self.auth)
+                response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content, timeout=timeout)
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
-                                      response.headers['Content-Type'], file=sys.stderr)
+                          response.headers['Content-Type'], file=sys.stderr)
                 return ResponseWrapper(response)
             except Exception as e:
                 self.logger.error('exception occured during requesting url: ' + str(e))
@@ -125,13 +118,6 @@ class ResponseWrapper:
 
     def read(self):
         return self.response.content
-
-    def raise_for_status(self):
-        return self.response.raise_for_status()
-
-    @property
-    def headers(self):
-        return self.response.headers
 
     @property
     def bytes(self):

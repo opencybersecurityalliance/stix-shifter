@@ -3,9 +3,12 @@
         "type": {
             "displayName": "STIX Bundle"
         },
-        "url": {
-            "type": "text",
-            "previous": "connection.host"
+        "host": {
+            "type": "text"
+        },
+        "port": {
+            "type": "number",
+            "default": 443
         },
         "help": {
             "type": "link",

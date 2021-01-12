@@ -37,7 +37,7 @@
     "processorid",
     "relevance",
     "retentionbucket",
-    "severity as flowseverity",
+    "severity",
     "sourceasn",
     "sourcebytes",
     "sourcedscp",

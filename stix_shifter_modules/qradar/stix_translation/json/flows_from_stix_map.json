@@ -34,23 +34,29 @@
       "payload_bin": ["flowsourcepayload", "flowdestinationpayload"]
     }
   },
-  "x-qradar": {
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
-      "qid_name": ["qidname"],
       "flow_source": ["flowsource"],
       "flow_interface_id": ["flowinterfaceid"],
       "flow_interface": ["flowinterface"],
       "geographic": ["geographic"],
       "category_name": ["categoryname"],
       "credibility": ["credibility"],
-      "severity": ["flowseverity"],
       "direction": ["direction"],
       "relevance": ["relevance"],
       "first_packet_time": ["firstpackettime"],
       "last_packet_time": ["lastpackettime"],
       "application_id": ["applicationid"],
       "application_name": ["applicationname"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["qidname"],
+      "severity": ["severity"],
+      "start": ["starttime"],
+      "end": ["endtime"]    
     }
   }
 }

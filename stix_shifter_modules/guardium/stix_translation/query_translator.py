@@ -13,7 +13,7 @@ class QueryTranslator(BaseQueryTranslator):
         super().__init__(options, dialect, basepath)
         self.transformers = get_module_transformers('guardium')
 
-    def transform_antlr(self, data, antlr_parsing_object):
+    def transform_query(self, data, antlr_parsing_object):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern

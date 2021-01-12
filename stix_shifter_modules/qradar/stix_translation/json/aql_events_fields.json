@@ -31,7 +31,7 @@
     "Filename as filename",
     "\"File Hash\" as filehash",
     "\"File Path\" as filepath",
-    "severity as eventseverity",
+    "severity",
     "credibility",
     "relevance",
     "sourcegeographiclocation as sourcegeographic", 

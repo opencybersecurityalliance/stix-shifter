@@ -7,10 +7,9 @@ logger = logging.getLogger(__name__)
 DEFAULT_SEARCH_KEYWORD = "search"
 DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
-
 class CarQueryTranslator(CarBaseQueryTranslator):
 
-    def transform_antlr(self, data, antlr_parsing_object):
+    def transform_query(self, data, antlr_parsing_object):
         """
         Transforms STIX pattern into a different query format. Based on a mapping file
         :param antlr_parsing_object: Antlr parsing objects for the STIX pattern

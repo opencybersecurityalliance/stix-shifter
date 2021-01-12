@@ -230,3 +230,71 @@ class MockResponseWrapper(QRadarMockResponse):
 
     def raise_for_status(self):
         pass
+
+@patch('requests.sessions.Session.post', autospec = True)
+@patch('requests.sessions.Session.get', autospec = True)
+class TestQRadarCloudDataLake(unittest.TestCase, object):
+    def test_query_response(self, mock_get, mock_post):
+        mocked_return_value = '{"search_id":"1"}'
+        mock_post.return_value = MockResponseWrapper(201, mocked_return_value)
+
+        connection = {
+            "host" : "somehost0",
+            "port" : 15000,
+            "selfSignedCert" : "somecert0",
+            "data_lake": True
+        }
+        config = {
+            "auth": {
+                "sec": "sec0"
+            }
+        }
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        transmission.query('some-query')
+        call_args = mock_post.call_args
+        assert 'https://somehost0:15000/api/ariel/searches' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']
+
+    def test_status_response(self, mock_get, mock_post):
+        mocked_return_value = '{"status": "COMPLETED", "progress":"100"}'
+        mock_get.return_value = MockResponseWrapper(200, mocked_return_value)
+
+        connection = {
+            "host" : "somehost0",
+            "port" : 15000,
+            "selfSignedCert" : "somecert0",
+            "data_lake": True
+        }
+        config = {
+            "auth": {
+                "sec": "sec0"
+            }
+        }
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        transmission.status('some-search-id')
+        
+        call_args = mock_get.call_args
+        assert 'https://somehost0:15000/api/ariel/searches/some-search-id' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']
+
+
+    def test_results_response(self, mock_get, mock_post):
+        mocked_return_value = '{"status": "COMPLETED", "progress":"100"}'
+        mock_get.return_value = MockResponseWrapper(200, mocked_return_value)
+        connection = {
+            "host" : "somehost0",
+            "port" : 15000,
+            "selfSignedCert" : "somecert0",
+            "data_lake": True
+        }
+        config = {
+            "auth": {
+                "sec": "sec0"
+            }
+        }
+        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
+        transmission.results('some-search-id', 0, 1)
+
+        call_args = mock_get.call_args
+        assert 'https://somehost0:15000/api/ariel/searches/some-search-id/results' in call_args[0]
+        assert {'data_lake': '"qcdl"'} == call_args[1]['params']
