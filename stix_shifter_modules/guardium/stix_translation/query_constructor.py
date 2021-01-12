@@ -10,21 +10,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.utils.file_helper import read_json
 from stix_shifter_utils.utils import logger
 
-# Source and destination reference mapping for ip and mac addresses.
-# Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
-# REFERENCE_DATA_TYPES = {"QUERY_FROM_DATE": ["start"],
-#                        "QUERY_TO_DATE": ["end"],"OSUser":["%"],"DBUser":"newuser",
-#                        "SHOW_ALIASES":["TRUE","FALSE"],"REMOTE_SOURCE":["%"]}
-#REFERENCE_DATA_TYPES = {"QUERY_FROM_DATE": ["start"],"QUERY_TO_DATE": ["end"],
-#                       "SHOW_ALIASES": ["TRUE", "FALSE"],
-#                        "REMOTE_SOURCE": ["remotesource"],
-#                       "Server": ["ipv4","ipv6"],
-#                        "ServerIP": ["ipv4","ipv6"],
-#                        "Client IP":["ipv4","ipv6"],
-#                        "DBUser": ["db_user"],
-#                        "Database": ["database_name"],
-#                        "Severity": ["severity"],
-#                        "OSUser": ["os_user"]}
+
 DEFAULT_DAYS_BACK = 2
 
 
@@ -66,9 +52,6 @@ class QueryStringPatternTranslator:
         self.translated = self.parse_expression(pattern)
         self.transformers = transformers
 
-        # Read reference data
-        #self.REFERENCE_DATA_TYPES = read_json('reference_data_types4Query', options)
-        #self.logger.info(self.REFERENCE_DATA_TYPES)
         # Read report definition data
         self.REPORT_DEF = read_json('guardium_reports_def', options)
 
@@ -512,19 +495,6 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    @staticmethod
-    def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
-        #self.logger.info("stix_field="+stix_field+" value_type="+value_type+" mapped_field="+mapped_field+" value="+value)
-        #self.logger.info("****** "+REFERENCE_DATA_TYPES["{}".format(mapped_field)])
-        #if value_type not in self.REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
-        #    if (mapped_field == 'Server' or mapped_field == 'ServerIP'):
-        #        return "str({mapped_field}) {comparator} {value}".format(
-        #            mapped_field=mapped_field, comparator=comparator, value=value)
-        #    else:
-        #        return None
-        #else:
-        return "{mapped_field} {comparator} {value}".format(
-                mapped_field=mapped_field, comparator=comparator, value=value)
 
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
@@ -536,7 +506,7 @@ class QueryStringPatternTranslator:
 
         for mapped_field in mapped_fields_array:
             if is_reference_value:
-                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
+                parsed_reference = "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
                 if not parsed_reference:
                     continue
                 comparison_string += parsed_reference
