@@ -59,11 +59,9 @@
       "value": ["domainname"]
     }
   },
-  "x-qradar": {
+  "x-ibm-ariel": {
     "fields": {
       "qid": ["qid"],
-      "event_name": ["qidname"],
-      "magnitude": ["magnitude"],
       "log_source_id": ["logsourceid"],
       "device_type": ["devicetype"],
       "log_source_name": ["logsourcename"],
@@ -74,21 +72,20 @@
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
       "identity_host_name": ["identityhostname"],
-      "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
       "domain_id": ["domainid"],
-      "rule_names[*]": ["rulenames"]
+      "cre_name": ["crename"]
     }
   },
   "x-ibm-finding": {
     "fields": {
-      "name": ["crename"],
-      "description": ["credescription"],
-      "severity": ["eventseverity"],
+      "name": ["qidname"],
+      "severity": ["severity"],
       "start": ["starttime"],
       "end": ["endtime"],
       "magnitude": ["magnitude"],
+      "rule_names[*]": ["rulenames"],
       "event_count": ["eventcount"],
       "src_geolocation": ["sourcegeographic"],
       "dst_geolocation": ["destinationgeographic"]

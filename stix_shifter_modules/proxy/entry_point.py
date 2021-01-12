@@ -3,7 +3,6 @@ from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
 import os
 
-
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
@@ -17,5 +16,4 @@ class EntryPoint(BaseEntryPoint):
             filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
             dialect = 'default'
-            self.add_dialect(dialect, query_translator=QueryTranslator(options, dialect, basepath),
-                             results_translator=ResultsTranslator(options, dialect, filepath), default=True)
+            self.add_dialect(dialect, query_translator=QueryTranslator(options, dialect, basepath), results_translator=ResultsTranslator(options, dialect, basepath), default=True)

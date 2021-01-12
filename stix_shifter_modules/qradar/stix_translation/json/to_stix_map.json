@@ -1,7 +1,7 @@
 {
   "categoryid": {
-    "key": "x-qradar.category_id",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.category_id",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "username": [
@@ -16,41 +16,36 @@
     }
   ],
   "categoryname": {
-    "key": "x-qradar.category_name",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.category_name",
+    "cybox": false
   },
   "high_level_category_name": {
-    "key": "x-qradar.high_level_category_name",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.high_level_category_name",
+    "cybox": false
   },
   "high_level_category_id": {
-    "key": "x-qradar.high_level_category_id",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.high_level_category_id",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "identityip": {
-    "key": "x-qradar.identity_ip",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.identity_ip",
+    "cybox": false
   },
   "identityhostname": {
-    "key": "x-qradar.identity_host_name",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.identity_host_name",
+    "cybox": false
   },
   "qidname": [
     {
-      "key": "x-qradar.qid_name",
-      "object": "x-qradar"
+      "key": "x-ibm-finding.name",
+      "object": "finding"
     }
   ],
   "relevance": {
-    "key": "x-qradar.relevance",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.relevance",
+    "cybox": false,
     "transformer": "ToInteger"
-  },
-  "devicetime": {
-    "key": "x-qradar.device_time",
-    "object": "x-qradar",
-    "transformer": "EpochToTimestamp"
   },
   "destinationip": [
     {
@@ -125,21 +120,21 @@
     }
   ],
   "logsourceid": {
-    "key": "x-qradar.log_source_id",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.log_source_id",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "logsourcename": {
-    "key": "x-qradar.log_source_name",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.log_source_name",
+    "cybox": false
   },
   "logsourcetypename": {
-    "key": "x-qradar.log_source_type_name",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.log_source_type_name",
+    "cybox": false
   },
   "direction": {
-    "key": "x-qradar.direction",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.direction",
+    "cybox": false
   },
   "magnitude": {
     "key": "x-ibm-finding.magnitude",
@@ -210,8 +205,8 @@
     }
   ],
   "qid": {
-    "key": "x-qradar.qid",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.qid",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "url": [
@@ -326,28 +321,33 @@
       "transformer": "ToDomainName"
     },
     {
-      "key": "x-qradar.domain_name",
-      "object": "x-qradar"
+      "key": "x_ibm_ariel.domain_name",
+      "cybox": false
     }
   ],
   "flowsource": [
     {
-      "key": "x-qradar.flow_source",
-      "object": "x-qradar"
+      "key": "x_ibm_ariel.flow_source",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding",
+      "value": "flow"
     }
   ]
   ,
   "flowinterface": {
-    "key": "x-qradar.flow_interface",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.flow_interface",
+    "cybox": false
   },
   "flowinterfaceid": {
-    "key": "x-qradar.flow_interface_id",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.flow_interface_id",
+    "cybox": false
   },
   "geographic": {
-    "key": "x-qradar.geographic",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.geographic",
+    "cybox": false
   },
   "sourcegeographic": {
     "key": "x-ibm-finding.src_geolocation",
@@ -358,59 +358,54 @@
     "object": "finding"
   },
   "credibility": {
-    "key": "x-qradar.credibility",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.credibility",
+    "cybox": false,
     "transformer": "ToInteger"
   },
-  "eventseverity": {
+  "severity": {
     "key": "x-ibm-finding.severity",
     "transformer": "ToInteger",
     "object": "finding"
   },
-  "flowseverity": {
-    "key": "x-qradar.severity",
-    "transformer": "ToInteger",
-    "object": "x-qradar"
-  },
   "firstpackettime": {
-    "key": "x-qradar.first_packet_time",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.first_packet_time",
+    "cybox": false
   },
   "lastpackettime": {
-    "key": "x-qradar.last_packet_time",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.last_packet_time",
+    "cybox": false
   },
   "applicationname": {
     "key": "software.name"
   },
   "applicationid": {
-    "key": "x-qradar.application_id",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.application_id",
+    "cybox": false
   },
   "creeventlist": {
-    "key": "x-qradar.cre_event_list",
-    "object": "x-qradar"
+    "key": "x_ibm_ariel.cre_event_list",
+    "cybox": false
   },
   "rulenames": {
     "key": "x-ibm-finding.rule_names",
     "object": "finding"
   },
   "crename": {
-    "key": "x-ibm-finding.name",
-    "object": "finding"
+    "key": "x_ibm_ariel.cre_name",
+    "cybox": false
   },
   "credescription": {
-    "key": "x-ibm-finding.description",
-    "object": "finding"
+    "key": "x_ibm_ariel.cre_description",
+    "cybox": false
   },
   "domainid": {
-    "key": "x-qradar.domain_id",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.domain_id",
+    "cybox": false,
     "transformer": "ToInteger"
   },
   "devicetype": {
-    "key": "x-qradar.device_type",
-    "object": "x-qradar",
+    "key": "x_ibm_ariel.device_type",
+    "cybox": false,
     "transformer": "ToInteger"
   }
 }

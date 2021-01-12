@@ -1,6 +1,7 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from . import query_constructor
-
+from os import path
 
 class QueryTranslator(BaseQueryTranslator):
 
@@ -10,7 +11,7 @@ class QueryTranslator(BaseQueryTranslator):
         else:
             return []
 
-    def transform_antlr(self, data, antlr_parsing_object):
+    def transform_query(self, data, antlr_parsing_object):
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self)

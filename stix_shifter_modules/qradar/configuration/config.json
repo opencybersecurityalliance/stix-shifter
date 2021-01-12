@@ -23,6 +23,11 @@
             "type": "password",
             "optional": true
         },
+        "data_lake": {
+            "type": "boolean",
+            "default": false,
+            "hidden": true
+        },
         "options": {
             "validate_pattern": {
                 "default": false,

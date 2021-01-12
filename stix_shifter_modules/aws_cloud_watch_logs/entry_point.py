@@ -6,7 +6,6 @@ from .stix_transmission.status_connector import StatusConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.delete_connector import DeleteConnector
 
-
 class EntryPoint(BaseEntryPoint):
 
     def __init__(self, connection={}, configuration={}, options={}):
@@ -15,7 +14,7 @@ class EntryPoint(BaseEntryPoint):
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)
             ping_connector = PingConnector(boto3_client.client)
-            query_connector = QueryConnector(boto3_client.client, boto3_client.log_group_names)
+            query_connector = QueryConnector(boto3_client.client,boto3_client.log_group_names)
             status_connector = StatusConnector(boto3_client.client)
             results_connector = ResultsConnector(boto3_client.client, options)
             delete_connector = DeleteConnector(boto3_client.client)

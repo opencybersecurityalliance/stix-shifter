@@ -34,7 +34,7 @@ class QueryTranslator(BaseQueryTranslator):
         sql_select = ", ".join(field_list)
         return sql_select
 
-    def transform_antlr(self, data, antlr_parsing_object):
+    def transform_query(self, data, antlr_parsing_object):
         """
         Transforms STIX query into sql query format. Based on a mapping file
         :param data: STIX query string to transform into sql query format

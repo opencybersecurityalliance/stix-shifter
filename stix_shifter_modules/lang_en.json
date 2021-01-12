@@ -21,12 +21,8 @@
                 "description": "Time range for the search, in minutes, represented as last x minutes."
             },
             "timeout": {
-                "label": "Query Response Timeout Limit",
-                "description": "The limit on how long to wait for the data source response, in seconds."
-            },
-            "search_timeout": {
-                "label": "Query Search Timeout Limit",
-                "description": "The limit on how long the query will run, in minutes, on the data source."
+                "label": "Query Timeout Limit",
+                "description": "The limit on how long the query will run, in seconds, on the data source."
             },
             "dialects": {
                 "label": "Dialect",

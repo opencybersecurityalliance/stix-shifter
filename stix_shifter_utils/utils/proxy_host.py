@@ -22,7 +22,7 @@ class ProxyHost():
         query = self.request_args["query"]
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(self.module, 'query', '{}', query, self.options)
-        return json.dumps(dsl)
+        return json.dumps(dsl['queries'])
 
     def translate_results(self, data_source_identity_object):
         data_source_results = self.request_args["results"]

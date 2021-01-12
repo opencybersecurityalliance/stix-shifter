@@ -1,7 +1,8 @@
 {
   "file": {
     "fields": {
-      "placeholder": ["placeholder_field"]
+      "name": ["observed_filename"],
+      "hashes.MD5": ["md5"]
     }
   }
 }
