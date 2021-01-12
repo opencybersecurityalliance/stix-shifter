@@ -93,7 +93,8 @@
   },
   "user-account":{
     "fields": {
-      "user_id": ["user.name"]
+      "user_id": ["user.name", "user.id"],
+      "account_login": ["user.name"]
     }
   },
   "x-ecs-user": {

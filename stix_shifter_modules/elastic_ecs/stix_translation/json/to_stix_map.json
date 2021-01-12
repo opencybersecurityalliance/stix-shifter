@@ -513,14 +513,14 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
         "references": [
           "nt"
         ]
-      }, 
+      },
       {
         "key": "x-ibm-event.network_ref",
         "object": "event",
@@ -533,7 +533,7 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
@@ -553,7 +553,7 @@
         "object": "nt",
         "group": "True",
         "transformer": "ToLowercaseArray"
-      }, 
+      },
       {
         "key": "process.opened_connection_refs",
         "object": "process",
@@ -1020,8 +1020,8 @@
         "object": "user"
       },
       {
-        "key": "x-ecs-user.name",
-        "object": "x_user"
+        "key": "user-account.account_login",
+        "object": "user"
       },
       {
         "key": "process.creator_user_ref",
@@ -1057,10 +1057,26 @@
       "key": "x-ecs-user.hash",
       "object": "x_user"
     },
-    "id": {
-      "key": "x-ecs-user.id",
-      "object": "x_user"
-    },
+    "id": [
+      {
+        "key": "x-ecs-user.id",
+        "object": "x_user"
+      },
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "user"
+      },
+      {
+        "key": "x-ibm-event.user_ref",
+        "object": "event",
+        "references": "user"
+      }
+    ],
     "group": {
       "domain": {
         "key": "x-ecs-user.group_domain",
@@ -1218,7 +1234,7 @@
     }
   },
   "dns": {
-    "answers": 
+    "answers":
     {
       "key": "network-traffic.extensions.dns-ext.answers",
       "object": "nt"
@@ -1246,7 +1262,7 @@
           "object": "dns_question_domain"
         },
         {
-          "key": "network-traffic.extensions.dns-ext.question.name_ref",
+          "key": "network-traffic.extensions.dns-ext.question.domain_ref",
           "object": "nt",
           "references": "dns_question_domain"
         },
@@ -1556,7 +1572,7 @@
         "references": ["host_ip", "host_ipv6"],
         "unwrap": true
       }
-    ], 
+    ],
     "mac": [
       {
         "key": "mac-addr.value",
