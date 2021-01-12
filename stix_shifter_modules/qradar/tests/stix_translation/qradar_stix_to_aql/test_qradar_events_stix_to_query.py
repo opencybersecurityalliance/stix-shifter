@@ -56,10 +56,12 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_NOT_and_not_equals_operators(self):
-        stix_pattern = "[url:value != 'www.example.com' OR url:value NOT = 'www.example.ca']"
+        search_string1 = "www.example.com"
+        search_string2 = "www.example.ca"
+        stix_pattern = "[url:value != '{}' OR url:value NOT = '{}']".format(search_string1, search_string2)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE NOT (url = 'www.example.ca') OR url != 'www.example.com' {} {}".format(
-            default_limit, default_time)
+        where_statement = "WHERE NOT (url = '{1}') OR url != '{0}' {2} {3}".format(
+            search_string1, search_string2, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_mac_address_query(self):
@@ -227,7 +229,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'] == [selections + from_statement + where_statement_01, selections + from_statement + where_statement_02]
 
-    def test_set_operators(self):
+    def test_issubset_operators(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (INCIDR('198.51.100.0/24',sourceip) OR INCIDR('198.51.100.0/24',destinationip) OR INCIDR('198.51.100.0/24',identityip)) {} {}".format(default_limit, default_time)
@@ -244,7 +246,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE domainname LIKE '%example.com%' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (domainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_generic_filehash_query(self):
@@ -294,16 +296,22 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_complex_multiple_comparison_expression(self):
-        stix_pattern = "[url:value = 'example01.ru' OR url:value = 'example02.ru' OR url:value = 'example01.com' OR url:value = 'example03.ru' OR url:value = 'example02.com' OR url:value = 'example04.ru'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'"
+        url_1 = "example01.ru"
+        url_2 = "example02.ru"
+        url_3 = "example01.com"
+        url_4 = "example03.ru"
+        url_5 = "example02.com"
+        url_6 = "example04.ru"
+        stix_pattern = "[url:value = '{0}' OR url:value = '{1}' OR url:value = '{2}' OR url:value = '{3}' OR url:value = '{4}' OR url:value = '{5}'] START t'2019-06-24T19:05:43.000Z' STOP t'2019-06-25T19:05:43.000Z'".format(url_1, url_2, url_3, url_4, url_5, url_6)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE url = 'example04.ru' OR (url = 'example02.com' OR (url = 'example03.ru' OR (url = 'example01.com' OR (url = 'example02.ru' OR url = 'example01.ru')))) {} START 1561403143000 STOP 1561489543000".format(default_limit)
+        where_statement = "WHERE url = '{5}' OR (url = '{4}' OR (url = '{3}' OR (url = '{2}' OR (url = '{1}' OR url = '{0}')))) {6} START 1561403143000 STOP 1561489543000".format(url_1, url_2, url_3, url_4, url_5, url_6, default_limit)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_LIKE_operator(self):
         search_string = 'example.com'
         stix_pattern = "[url:value LIKE '{}']".format(search_string)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE url LIKE '%{}%' {} {}".format(search_string, default_limit, default_time)
+        where_statement = "WHERE url LIKE '%{0}%' {1} {2}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_payload_string_matching_with_LIKE(self):
@@ -366,3 +374,53 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 2
         assert query['queries'][0] == selections + from_statement + where_statement_01
         assert query['queries'][1] == selections + from_statement + where_statement_02
+
+    def test_registry_search(self):
+        stix_pattern = "[windows-registry-key:values[*].name = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE RegistryValueName = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)        
+
+        stix_pattern = "[windows-registry-key:key = 'efgh']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (ObjectName = 'efgh' OR RegistryKey = 'efgh') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_x_ibm_host_search(self):
+        stix_pattern = "[x-ibm-host:hostname = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE identityhostname = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-host:ip_refs[*].value = '9.9.9.9']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (identityip = '9.9.9.9' OR sourceip = '9.9.9.9') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-host:mac_refs[*].value = '00-00-5E-00-53-00']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE sourcemac = '00-00-5E-00-53-00' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_x_ibm_event_search(self):
+        stix_pattern = "[x-ibm-event:action = 'abcd']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE qidname = 'abcd' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+        stix_pattern = "[x-ibm-event:code = 1]"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE EventID = '1' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+
+        stix_pattern = "[x-ibm-event:process_ref.command_line = 'abc']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE ProcessCommandLine = 'abc' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+        
+    def test_in_operators(self):
+        stix_pattern = "[network-traffic:dst_port IN ('22','443')]" 
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)

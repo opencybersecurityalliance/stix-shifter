@@ -1,26 +1,26 @@
 {
   "categoryid": {
-    "key": "x_ibm_ariel.category_id",
-    "cybox": false
+    "key": "x-qradar.category_id",
+    "object": "x-qradar"
   },
   "username": {
     "key": "user-account.user_id"
   },
   "categoryname": {
-    "key": "x_ibm_ariel.category_name",
-    "cybox": false
+    "key": "x-qradar.category_name",
+    "object": "x-qradar"
   },
   "logsourceid": {
-    "key": "x_ibm_ariel.log_source_id",
-    "cybox": false
+    "key": "x-qradar.log_source_id",
+    "object": "x-qradar"
   },
   "identityip": {
-    "key": "x_ibm_ariel.identity_ip",
-    "cybox": false
+    "key": "x-qradar.identity_ip",
+    "object": "x-qradar"
   },
   "qidname": {
-    "key": "x_ibm_ariel.qid_name",
-    "cybox": false
+    "key": "x-qradar.qid_name",
+    "object": "x-qradar"
   },
   "destinationip": [
     {
@@ -39,28 +39,28 @@
   ],
   "eventcount": {
     "key": "number_observed",
-    "cybox": false,
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
   "starttime": [
     {
       "key": "first_observed",
       "transformer": "EpochSecondsToTimestamp",
-      "cybox": false
+      "object": "x-qradar"
     },
     {
       "key": "last_observed",
       "transformer": "EpochSecondsToTimestamp",
-      "cybox": false
+      "object": "x-qradar"
     }
   ],
   "logsourcename": {
-    "key": "x_ibm_ariel.log_source_name",
-    "cybox": false
+    "key": "x-qradar.log_source_name",
+    "object": "x-qradar"
   },
   "magnitude": {
-    "key": "x_ibm_ariel.magnitude",
-    "cybox": false
+    "key": "x-qradar.magnitude",
+    "object": "x-qradar"
   },
   "sourceip": [
     {
@@ -78,8 +78,8 @@
     }
   ],
   "qid": {
-    "key": "x_ibm_ariel.qid",
-    "cybox": false
+    "key": "x-qradar.qid",
+    "object": "x-qradar"
   },
   "url": {
     "key": "url.value"

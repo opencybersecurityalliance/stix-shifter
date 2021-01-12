@@ -15,6 +15,7 @@
   - [Transmit](#transmit)
   - [Execute](#execute)
   - [Debug](#Debug)
+- [Limitations](#limitations)
 - [Glossary](#glossary)
 - [Architecture Context](#architecture-context)
 - [Contributing](#contributing)
@@ -122,23 +123,25 @@ Each connector supports a set of STIX objects and properties as defined in the c
 
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
 
-List updated: March 6, 2020
+List updated: December 11, 2020
 
 |         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
 | :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
-|         [IBM QRadar](adapter-guide/connectors/qradar_supported_stix.md)         |        qradar        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|    [IBM QRadar on Cloud](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Release    |
-|    [IBM Cloud Data Lake](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | IBM QRadar | IBM Security |     Yes     |     Yes      |   Planned    |
-|         [BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|  [Carbon Black CB Response](adapter-guide/connectors/carbonblack_supported_stix.md)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Release    |
-|       [Elasticsearch](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Release    |
-| [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Release    |
-|           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Release    |
-|       [Microsoft ATP](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|        [IBM Security Guardium](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
-|       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Release    |
+|         [IBM QRadar](adapter-guide/connectors/qradar_supported_stix.md)         |        qradar        |  QRadar AQL   | IBM Security |     Yes     |     Yes      |   Released    |
+|    [IBM QRadar on Cloud](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | QRadar AQL | IBM Security |     Yes     |     Yes      |   Released    |
+|         [HCL BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|  [Carbon Black CB Response](adapter-guide/connectors/carbonblack_supported_stix.md)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Released    |
+|       [Elasticsearch (ECS)](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Released    |
+| [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
+|           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Microsoft ATP](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Doesn't work with current version of Microsoft Defender    |
+|        [IBM Guardium](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Alertflex](adapter-guide/connectors/alertflex_supported_stix.md)       |    alertflex    |  Default   | Alertflex |     Yes     |     Yes      |   Released    |
+|       [Micro Focus ArcSight](adapter-guide/connectors/arcsight_supported_stix.md)       |    arcsight    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [AWS Athena](adapter-guide/connectors/aws_athena_supported_stix.md)       |   aws_athena   |  SQL   | IBM Security |     Yes     |     Yes      |   Released    |
 
 ## How to use
 
@@ -180,7 +183,7 @@ OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
@@ -194,6 +197,17 @@ The module name refers to the name of the folder in stix-shifter that contains t
 Using the Qradar connector as an example:
 
 `python main.py translate qradar query "{}" "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"`
+
+### Pattern translation using an input file
+
+Create a text file with the pattern you wish to translate. The file can be used in the query translation call using standard input.
+
+_pattern.txt_
+```
+[network-traffic:src_ref.value = '127.0.0.1'] OR [ipv4-addr:value = '0.0.0.0']
+```
+
+`python main.py translate qradar query '{}' '' < /path/to/file/pattern.txt`
 
 ### 2. Translate a JSON data source query result to a STIX bundle of observable objects
 
@@ -256,7 +270,7 @@ Using the Qradar connector as an example:
 }
 ```
 
-#### CLI Command
+### CLI Command
 Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
@@ -276,6 +290,29 @@ python main.py translate qradar results \
 ```
 
 The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+
+### Results translation using an input file
+
+Create a JSON file with the results you wish to translate. The file can be used in the results translation call using standard input.
+
+_results.json_
+```
+[
+    {
+        "starttime": "1563892019916",
+        "endtime": "1563892019916",
+        "sourceip": "9.21.122.127",
+        "sourceport": "100",
+        "identityip": "0.0.0.0",
+        "destinationip": "127.0.0.1",
+        "destinationport": "800",
+        "username": "admin",
+        "protocol": "tcp"
+    }
+]
+```
+
+`python main.py translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' '' < /path/to/file/results.json`
 
 ## Transmit
 
@@ -434,19 +471,60 @@ The `execute` command tests all steps of the translation-transmission flow:
 4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
 5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
 
-#### CLI Command
+### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
 
-#### Debug
+### Debug
 
 You can add `--debug` option at the end of your CLI command to see more logs. 
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
 
-#### OUTPUT:
+## Modules
+
+The `modules` command will return a JSON of the existing connectors along with their dialects and supported languages that are used in query translation. 
+
+### CLI Command
+
+`python main.py modules`
+
+returns
+```
+{
+    "qradar": {
+        "flows": {
+            "language": "stix",
+            "default": true
+        },
+        "events": {
+            "language": "stix",
+            "default": true
+        },
+        "aql": {
+            "language": "aql",
+            "default": false
+        }
+    },
+    "security_advisor": {
+        "default": {
+            "language": "stix",
+            "default": true
+        }
+    },
+    ...
+}
+```
+
+In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
+
+### OUTPUT:
 
 A bundle of STIX objects
+
+## Limitations
+
+STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md) for more details.  
 
 ## Glossary
 

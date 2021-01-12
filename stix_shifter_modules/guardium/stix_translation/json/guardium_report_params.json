@@ -43,7 +43,7 @@
         },
         "Severity": {
           "info": "map",
-          "default": "%"
+          "default": "low"
         }
       }
     }
