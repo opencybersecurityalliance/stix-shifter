@@ -60,20 +60,37 @@ ___
 - user_id
 
 ___
-### x_ibm_ariel
+### x-ibm-finding
+- src_application_user_ref
+- dst_ip_ref
+- event_count
+- finding_type
+- start
+- end
+- magnitude
+- src_ip_ref
+- src_geolocation
+- dst_geolocation
+- severity
+- rule_names
+- name
+- description
+
+___
+### x-qradar
 - category_id
 - category_name
 - high_level_category_name
 - high_level_category_id
 - identity_ip
 - identity_host_name
-- event_name
+- qid_name
 - relevance
+- device_time
 - log_source_id
 - log_source_name
 - log_source_type_name
 - direction
-- magnitude
 - qid
 - domain_name
 - flow_source
@@ -86,13 +103,7 @@ ___
 - last_packet_time
 - application_id
 - cre_event_list
-- rule_names
 - domain_id
 - device_type
-
-___
-### x_ibm_finding
-- name
-- description
 
 ___

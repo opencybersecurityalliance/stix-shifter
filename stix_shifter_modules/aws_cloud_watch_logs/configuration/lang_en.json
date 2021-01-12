@@ -11,7 +11,8 @@
         },
         "log_group_names": {
             "label": "Log Group Names",
-            "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from"
+            "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from in a JSON format. For example:  {\"vpcflow\": \"<log group name>\"}. To get logs from multiple service type logs: {\"vpcflow\": \"<log group name>\", \"guardduty\": \"<log group name>\"}",
+            "placeholder": "{\"vpcflow\": \"YOUR_LOG_GROUP_NAME1\"}"
         }
     },
     "configuration": {
