@@ -1072,7 +1072,7 @@
         "references": "user"
       },
       {
-        "key": "x-ibm-event.user_ref",
+        "key": "x-oca-event.user_ref",
         "object": "event",
         "references": "user"
       }
