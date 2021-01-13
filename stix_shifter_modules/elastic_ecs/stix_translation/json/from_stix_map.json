@@ -188,7 +188,7 @@
       "name": ["user.email"]
     }
   },
-  "x-ibm-event": {
+  "x-oca-event": {
     "fields": {
       "action": ["event.action"],
       "id": ["event.id"],
@@ -308,7 +308,7 @@
       "name": ["group.name"]
     }
   },
-  "x-ibm-host": {
+  "x-oca-asset": {
     "fields": {
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
