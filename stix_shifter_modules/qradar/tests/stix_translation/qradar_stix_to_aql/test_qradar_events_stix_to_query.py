@@ -379,7 +379,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[windows-registry-key:values[*].name = 'abcd']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE RegistryValueName = 'abcd' {} {}".format(default_limit, default_time)
-        _test_query_assertions(query, selections, from_statement, where_statement)        
+        _test_query_assertions(query, selections, from_statement, where_statement)
 
         stix_pattern = "[windows-registry-key:key = 'efgh']"
         query = _translate_query(stix_pattern)
@@ -387,40 +387,40 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_x_ibm_host_search(self):
-        stix_pattern = "[x-ibm-host:hostname = 'abcd']"
+        stix_pattern = "[x-oca-asset:hostname = 'abcd']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE identityhostname = 'abcd' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-        stix_pattern = "[x-ibm-host:ip_refs[*].value = '9.9.9.9']"
+        stix_pattern = "[x-oca-asset:ip_refs[*].value = '9.9.9.9']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (identityip = '9.9.9.9' OR sourceip = '9.9.9.9') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-        stix_pattern = "[x-ibm-host:mac_refs[*].value = '00-00-5E-00-53-00']"
+        stix_pattern = "[x-oca-asset:mac_refs[*].value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE sourcemac = '00-00-5E-00-53-00' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_x_ibm_event_search(self):
-        stix_pattern = "[x-ibm-event:action = 'abcd']"
+        stix_pattern = "[x-oca-event:action = 'abcd']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE qidname = 'abcd' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-        stix_pattern = "[x-ibm-event:code = 1]"
+        stix_pattern = "[x-oca-event:code = 1]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE EventID = '1' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
 
-        stix_pattern = "[x-ibm-event:process_ref.command_line = 'abc']"
+        stix_pattern = "[x-oca-event:process_ref.command_line = 'abc']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE ProcessCommandLine = 'abc' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
-        
+
     def test_in_operators(self):
-        stix_pattern = "[network-traffic:dst_port IN ('22','443')]" 
+        stix_pattern = "[network-traffic:dst_port IN ('22','443')]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
