@@ -13,18 +13,10 @@ class PingConnector(BasePingConnector):
     def ping_connection(self):
         response = self.api_client.ping_data_source()
         response_code = response.code
-        response_text = response.read()
-        response_dict = dict()
-
-        try:
-            response_dict = json.loads(response_text)
-        except ValueError as ex:
-            self.logger.debug(response_text)
-
         return_obj = dict()
         return_obj['success'] = False
 
-        if response_dict and response_code == 200:
+        if response_code == 200:
             return_obj['success'] = True
         else:
             # Use response code and content to raise an error
