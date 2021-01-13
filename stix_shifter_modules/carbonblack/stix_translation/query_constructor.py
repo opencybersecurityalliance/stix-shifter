@@ -36,8 +36,7 @@ class CbQueryStringPatternTranslator:
         self.time_range = time_range # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
         self.queries = []
-        for t in self.translated:
-            self.queries.append(json.dumps(t))
+        self.queries.append(self.translated)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -82,96 +81,20 @@ class CbQueryStringPatternTranslator:
             stripped = stripped.split('.', 1)[0]
         return stripped
 
-    def _format_start_stop_qualifier(self, expression, dialect, qualifier: StartStopQualifier) -> str:
+    def _format_start_stop_qualifier(self, expression, qualifier: StartStopQualifier) -> str:
         start = self._to_cb_timestamp(qualifier.start)
         stop = self._to_cb_timestamp(qualifier.stop)
 
-        if dialect == "process":
-            return "(({}) and start:[{} TO *] and last_update:[* TO {}])".format(expression, start, stop)
-        else:
-            assert(dialect == "binary")
-            return "(({}) and server_added_timestamp:[{} TO {}])".format(expression, start, stop)
+        return "({}) and last_update:[{} TO {}]".format(expression, start, stop)
 
-    def _combine_queries(self, queries):
-        results = []
-        process_queries = [q["query"] for q in queries if q["dialect"] == "process"]
-        binary_queries = [q["query"] for q in queries if q["dialect"] == "binary"]
-
-        # Here we are using the assumption that all observable expressions are OR'ed together
-        if len(process_queries) == 0:
-            pass
-        elif len(process_queries) == 1:
-            process_query = process_queries[0]
-            results.append({"query": process_query, "dialect": "process"})
-        else:
-            process_query = "({})".format(") or (".join(process_queries))
-            results.append({"query": process_query, "dialect": "process"})
-
-        if len(binary_queries) == 0:
-            pass
-        elif len(binary_queries) == 1:
-            binary_query = binary_queries[0]
-            results.append({"query": binary_query, "dialect": "binary"})
-        else:
-            binary_query = "({})".format(") or (".join(binary_queries))
-            results.append({"query": binary_query, "dialect": "binary"})
-
-        return results
-
-    # we annotate all of the observable expressions with either
-    # expression.annotation = 'process'
-    # or
-    # expression.annotation = 'binary'
-    # because all of the query fields in the binary api are a subset of the process query fields
-    # e.g. md5 and file_name we will default these queries to only the binary api
-    # if the observable expression contains any process fields then we will map that observable
-    # to the process api
-
-    def _annotate_expression(self, expression):
-        if isinstance(expression, ComparisonExpression):
-            stix_object, stix_field = expression.object_path.split(':')
-            (mapped_field, dialect) = self.dmm.map_field(stix_object, stix_field)[0]  # default to binary mapping first
-            expression.annotation = dialect
-            return
-        elif isinstance(expression, CombinedComparisonExpression):
-            self._annotate_expression(expression.expr1)
-            self._annotate_expression(expression.expr2)
-            if 'process' in [expression.expr1.annotation, expression.expr2.annotation]:
-                expression.annotation = 'process'
-            else:
-                expression.annotation = 'binary'
-            return
-        elif isinstance(expression, ObservationExpression):
-            self._annotate_expression(expression.comparison_expression)
-            expression.annotation = expression.comparison_expression.annotation
-            return
-        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            self._annotate_expression(expression.observation_expression)
-            if not isinstance(expression.observation_expression, CombinedObservationExpression):
-                expression.annotation = expression.observation_expression.annotation
-            return
-        elif isinstance(expression, CombinedObservationExpression):
-            self._annotate_expression(expression.expr1)
-            self._annotate_expression(expression.expr2)
-            return
-        elif isinstance(expression, Pattern):
-            self._annotate_expression(expression.expression)
-            return
-        else:
-            self.logger.debug(type(expression), expression)
-
-    # the return type of this function is a string for expressions types up to CombinedComparionExpression
-    # for expressions of ObservableExpression or Higher in the grammar the return type is a list of dictionaries
-    # e.g. [{'query': 'blah', 'dialect': 'process'}, {'query':'blha', 'dialect':'binary'}]
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
             # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
 
-            (mapped_field, dialect) = self.dmm.map_field(stix_object, stix_field)[0]  # default to binary mapping first
-            assert(len(mapped_field) == 1)
-            mapped_field = mapped_field[0]
+            mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+            mapped_field = mapped_fields_array[0]
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
@@ -202,7 +125,7 @@ class CbQueryStringPatternTranslator:
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._format_start_stop_qualifier(comparison_string, expression.annotation, qualifier)
+                    return self._format_start_stop_qualifier(comparison_string, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
@@ -220,41 +143,34 @@ class CbQueryStringPatternTranslator:
                                                      self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._format_start_stop_qualifier(query_string, expression.annotation, qualifier)
+                    return self._format_start_stop_qualifier(query_string, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
             query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
-            return [{"query": query_string, "dialect": expression.annotation}]
-        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            return self._parse_expression(expression.observation_expression, expression)
+            return query_string
         elif isinstance(expression, CombinedObservationExpression):
             operator = self.comparator_lookup[expression.operator]
-            # Note this code is only correct because we assume AND is OR for observation expressions
-            return self._parse_expression(expression.expr1, qualifier=qualifier) + self._parse_expression(expression.expr2, qualifier=qualifier)
+            expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
+            expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
+            return f'({expr1}) {operator} ({expr2})'
         elif isinstance(expression, Pattern):
-            queries = self._parse_expression(expression.expression)
-            return self._combine_queries(queries)
+            return self._parse_expression(expression.expression)
+        elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            return self._parse_expression(expression.observation_expression, expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
 
-    def _add_default_timerange(self, queries):
-        if self.time_range:
-            for q in queries:
-                if "start" not in q['query'] and "last_update" not in q['query'] and "server_added_timestamp" not in q['query']:
-                    # check if there's an existing time constraint on the query
-                    if q['dialect'] == "process":
-                        q['query'] = "(({}) and (start:-{}m or last_update:-{}m))".format(q['query'], self.time_range, self.time_range)
-                    else:
-                        assert(q['dialect'] == "binary")
-                        q['query'] = "(({}) and server_added_timestamp:-{}m)".format(q['query'], self.time_range)
-        return queries
+    def _add_default_timerange(self, query):
+        if self.time_range and 'last_update' not in query:
+            query = "(({}) and last_update:-{}m)".format(query, self.time_range)
+
+        return query
 
     def parse_expression(self, pattern: Pattern):
-        self._annotate_expression(pattern)
         queries = self._parse_expression(pattern)
         return self._add_default_timerange(queries)
 
