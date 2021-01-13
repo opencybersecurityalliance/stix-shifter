@@ -90,7 +90,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         print(str(translated_query))
         test_query = ['(source.port:>443 OR client.port:>443) AND (network.transport : ipv? OR network.type : ipv? OR network.protocol : ipv?) AND (@timestamp:["2019-04-11T08:42:39.297Z" TO "2019-04-11T08:43:39.297Z"])',
-                      'event.original : * AND user.name : "_" AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-21T16:35:44.011Z"])', '(user.name : ("root" OR "admin") AND url.original : *) OR (process.pid:<700 OR process.ppid:<700 OR process.parent.pid:<700 OR process.parent.ppid:<700) AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-17T14:35:44.011Z"])']
+                      'event.original : * AND (user.name : "_" OR user.id : "_") AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-21T16:35:44.011Z"])', '(user.name : ("root" OR "admin") AND url.original : *) OR (process.pid:<700 OR process.ppid:<700 OR process.parent.pid:<700 OR process.parent.ppid:<700) AND (@timestamp:["2019-04-11T14:35:44.011Z" TO "2019-04-17T14:35:44.011Z"])']
         assert translated_query['queries'] == test_query
 
     def test_file_not_equal_query(self):
@@ -174,7 +174,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:user_id = 'root']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['user.name : "root"']
+        test_query = ['(user.name : "root" OR user.id : "root")']
         _test_query_assertions(translated_query, test_query)
 
     def test_invalid_stix_pattern(self):
@@ -226,7 +226,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'][-1] = _remove_timestamp_from_query(translated_query['queries'][-1])
         test_query = ['(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83" OR host.ip : "192.168.122.83" OR dns.resolved_ip : "192.168.122.83") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
-                      'user.name : "root" AND (source.port : "37020" OR client.port : "37020")']
+                      '(user.name : "root" OR user.id : "root") AND (source.port : "37020" OR client.port : "37020")']
         assert len(translated_query['queries']) == 2
         _test_query_assertions(translated_query, test_query)
 
@@ -237,7 +237,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stop_time_02 = "t'2019-04-01T04:30:24.743Z'"
         stix_pattern = "[network-traffic:src_port = 37020 AND user-account:user_id = 'root'] START {} STOP {} OR [ipv4-addr:value = '192.168.122.83'] START {} STOP {}".format(start_time_01, stop_time_01, start_time_02, stop_time_02)
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
-        test_query = ['user.name : "root" AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
+        test_query = ['(user.name : "root" OR user.id : "root") AND (source.port : "37020" OR client.port : "37020") AND (@timestamp:["2019-04-01T01:30:00.123Z" TO "2019-04-01T02:20:00.123Z"])',
                       '(source.ip : "192.168.122.83" OR destination.ip : "192.168.122.83" OR client.ip : "192.168.122.83" OR server.ip : "192.168.122.83" OR host.ip : "192.168.122.83" OR dns.resolved_ip : "192.168.122.83") AND (@timestamp:["2019-04-01T03:55:00.123Z" TO "2019-04-01T04:30:24.743Z"])']
         assert len(translated_query['queries']) == 2
         _test_query_assertions(translated_query, test_query)

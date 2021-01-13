@@ -117,6 +117,11 @@
       "key": "x-ibm-finding.dst_ip_ref",
       "object": "finding", 
       "references": "dst_ip" 
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "destinationv6": [
@@ -128,6 +133,11 @@
       "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "eventcount": [
@@ -221,6 +231,11 @@
       "object": "host",
       "references": ["src_ip"],
       "group": true
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcev6": [
@@ -232,6 +247,11 @@
       "key": "network-traffic.src_ref",
       "object": "nt",
       "references": "src_ip"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcemac": [
@@ -302,6 +322,11 @@
       "key": "x-ibm-event.domain_ref",
       "object": "event",
       "references": "dns_domain"
+    },
+    {
+      "key": "x-ibm-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "filename": [
@@ -562,18 +587,18 @@
     },
     {
       "key": "process.binary_ref",
-      "object": "parent_process_image",
+      "object": "parent_process",
       "references": "file_parent_image"
     },
     {
       "key": "process.parent_ref",
       "object": "process",
-      "references": "parent_process_image"
+      "references": "parent_process"
     },
     {
       "key": "x-ibm-event.parent_process_ref",
       "object": "event",
-      "references": "parent_process_image"
+      "references": "parent_process"
     }
   ],
   "ProcessCommandLine": [
@@ -590,17 +615,17 @@
   "ParentCommandLine": [
     {
       "key": "process.command_line",
-      "object": "parent_process_image"
+      "object": "parent_process"
     },
     {
       "key": "process.parent_ref",
       "object": "process",
-      "references": "parent_process_image"
+      "references": "parent_process"
     },
     {
       "key": "x-ibm-event.parent_process_ref",
       "object": "event",
-      "references": "parent_process_image"
+      "references": "parent_process"
     }
   ],
   "ProcessName": [
@@ -631,6 +656,23 @@
     "object": "event",
     "transformer": "ToInteger"
   },
+  "ParentProcessId": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-ibm-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
   "ObjectName": [
     {
       "key": "windows-registry-key.key",
@@ -718,7 +760,7 @@
       "key": "file.name",
       "object": "service_file_name",
       "transformer": "ToFileName"
-    }, 
+    },
     {
       "key": "directory.path",
       "object": "service_file_dir",
