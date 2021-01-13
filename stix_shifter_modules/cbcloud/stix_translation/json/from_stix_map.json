@@ -53,7 +53,7 @@
   },
   "user-account": {
     "fields": {
-      "account_login": ["process_username"]
+      "user_id": ["process_username"]
     }
   },
   "url": {

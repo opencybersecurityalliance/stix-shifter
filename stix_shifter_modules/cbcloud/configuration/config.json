@@ -14,14 +14,6 @@
         "help": {
             "type": "link",
             "default": "https://add.a.link.to.the.carbonblackcloud/connector/documentation.html"
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
-        "selfSignedCert": {
-            "type": "password",
-            "optional": true
         }
     },
     "configuration": {

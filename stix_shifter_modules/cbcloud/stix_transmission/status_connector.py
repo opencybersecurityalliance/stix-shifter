@@ -57,10 +57,8 @@ class StatusConnector(BaseStatusConnector):
             completed = response_dict['completed']
             contacted = response_dict['contacted']
             return_obj['success'] = True
-            return_obj['progress'] = {
-                'completed': completed,
-                'contacted': contacted
-            }
+            return_obj['progress'] = completed
+            return_obj['contacted'] = contacted
 
             # Not all searchers have returned their results
             if completed < contacted:

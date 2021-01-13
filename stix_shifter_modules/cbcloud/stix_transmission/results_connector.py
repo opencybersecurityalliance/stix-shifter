@@ -11,7 +11,6 @@ class ResultsConnector(BaseResultsConnector):
         self.logger = logger.set_logger(__name__)
 
     def create_results_connection(self, search_id, offset, length):
-        # TODO: confirm offset starts at 0 or 1 (CbCloud starts at 0)
         response = self.api_client.get_search_results(search_id, offset, length)
         response_code = response.code
         response_text = response.read()
