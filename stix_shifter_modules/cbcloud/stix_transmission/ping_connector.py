@@ -14,14 +14,12 @@ class PingConnector(BasePingConnector):
         response = self.api_client.ping_data_source()
         response_code = response.code
         response_text = response.read()
-        error = None
         response_dict = dict()
 
         try:
             response_dict = json.loads(response_text)
         except ValueError as ex:
             self.logger.debug(response_text)
-            error = Exception(f'Can not parse response: {ex}')
 
         return_obj = dict()
         return_obj['success'] = False
@@ -29,6 +27,7 @@ class PingConnector(BasePingConnector):
         if response_dict and response_code == 200:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            # Use response code and content to raise an error
+            response.raise_for_status()
 
         return return_obj
