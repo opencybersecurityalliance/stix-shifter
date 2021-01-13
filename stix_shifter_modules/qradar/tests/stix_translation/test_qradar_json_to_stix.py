@@ -225,9 +225,9 @@ class TestTransform(object):
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
 
-        event = TestTransform.get_first_of_type(objects.values(), 'x-ibm-event')
+        event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
 
-        assert(event['type']) == "x-ibm-event"
+        assert(event['type']) == "x-oca-event"
         assert(event['outcome'] == categoryname)
         assert(event['action'] == qidname)
         assert(event['created'] == START_TIMESTAMP)
@@ -238,7 +238,7 @@ class TestTransform(object):
         host_ref = event['host_ref']
         assert(host_ref in objects), f"host_ref with key {event['host_ref']} not found"
         host = objects[host_ref]
-        assert(host['type'] == "x-ibm-host")
+        assert(host['type'] == "x-oca-asset")
         assert(host['hostname'] == hostname)
 
         original_ref = event['original_ref']
