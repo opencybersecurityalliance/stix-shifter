@@ -261,11 +261,9 @@ def main():
         options['validate_pattern'] = True
         dsl = translation.translate(args.module, 'query', args.data_source, args.query, translation_options)
         transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
-
-        transmission = stix_transmission.StixTransmission(args.transmission_module, connection_dict, configuration_dict)
         results = []
-        if not 'queries' in dsl:
-            print(json.dumps(dsl, indent=4))
+        log.info('Translated Queries: \n' + json.dumps(dsl, indent=4))
+        if 'queries' not in dsl:
             exit(1)
         for query in dsl['queries']:
             search_result = transmission.query(query)
@@ -298,7 +296,7 @@ def main():
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
-        print(json.dumps(result, indent=4, sort_keys=False))
+        log.info('STIX Results: \n' + json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
     elif args.command == TRANSLATE:

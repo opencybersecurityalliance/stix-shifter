@@ -93,7 +93,8 @@
   },
   "user-account":{
     "fields": {
-      "user_id": ["user.name"]
+      "user_id": ["user.name", "user.id"],
+      "account_login": ["user.name"]
     }
   },
   "x-ecs-user": {
@@ -109,7 +110,7 @@
   },
   "process" : {
     "fields": {
-      "command_line": ["process.command_line"],
+      "command_line": ["process.command_line", "powershell.command.value"],
       "created": ["process.start"],
       "pid": ["process.pid", "process.ppid", "process.parent.pid", "process.parent.ppid"],
       "name": ["process.name", "process.parent.name"],
@@ -187,7 +188,7 @@
       "name": ["user.email"]
     }
   },
-  "x-ecs-event": {
+  "x-oca-event": {
     "fields": {
       "action": ["event.action"],
       "id": ["event.id"],
@@ -210,7 +211,22 @@
       "start": ["event.start"],
       "timezone": ["event.timezone"],
       "type": ["event.type"],
-      "url": ["event.url"]
+      "url": ["event.url"],
+      "original": ["message", "powershell.file.script_block_text"],
+      "process_ref.pid": ["process.pid"],
+      "process_ref.name": ["process.name"],
+      "process_ref.command_line": ["process.command_line", "powershell.command.value"],
+      "process_ref.binary_ref.name": ["file.name", "process.executable"],
+      "process_ref.parent_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "process_ref.parent_ref.command_line": ["process.parent.command_line"],
+      "process_ref.creator_user_ref.user_id": ["user.name"],
+      "parent_process_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "parent_process_ref.command_line": ["process.parent.command_line"],
+      "domain_ref.value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname"],
+      "file_ref.name": ["file.name"],
+      "host_ref.hostname": ["host.hostname"],
+      "host_ref.name": ["host.name"],
+      "registry_ref.key": ["registry.key", "registry.path"]
     }
   },
   "x-ecs-cloud": {
@@ -292,7 +308,7 @@
       "name": ["group.name"]
     }
   },
-  "x-ecs-host": {
+  "x-oca-asset": {
     "fields": {
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
