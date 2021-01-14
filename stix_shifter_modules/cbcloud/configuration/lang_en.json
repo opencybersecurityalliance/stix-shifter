@@ -12,14 +12,6 @@
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link."
-        },
-        "selfSignedCert": {
-            "label": "Carbon Black Cloud connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication."
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
         }
     },
     "configuration": {
