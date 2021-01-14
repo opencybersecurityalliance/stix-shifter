@@ -133,10 +133,20 @@
     "key": "x_cbcloud.device_id",
     "cybox": false
   },
-  "device_timestamp": {
-    "key": "x_cbcloud.device_timestamp",
-    "cybox": false
-  },
+  "device_timestamp": [
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    },
+    {
+      "key": "x_cbcloud.device_timestamp",
+      "cybox": false
+    }
+  ],
   "org_id": {
     "key": "x_cbcloud.org_id",
     "cybox": false
