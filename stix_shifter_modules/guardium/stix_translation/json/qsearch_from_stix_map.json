@@ -24,7 +24,8 @@
     },
     "network-traffic": {
       "fields": {
-        "dst_ref.value": ["Server"]
+        "dst_ref.value": ["Server"],
+        "src_ref.value":["Client IP"]
       }
     },
      "user-account": {
