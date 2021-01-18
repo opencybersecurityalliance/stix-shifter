@@ -66,6 +66,7 @@ class StatusConnector(BaseStatusConnector):
             # Search has completed
             else:
                 return_obj['status'] = self.__getStatus('COMPLETED')
+                return_obj['progress'] = 100
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
 
