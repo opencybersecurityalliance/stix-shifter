@@ -67,9 +67,11 @@ class StixTranslation:
                 dialects = entry_point.get_dialects_full()
                 return dialects
 
-            language = validated_options['language']
             if len(dialects) == 0:
                 dialects = entry_point.get_dialects()
+                language = validated_options['language']
+            else:
+                language = options.get('language')
 
             if translate_type == QUERY or translate_type == PARSE:
                 # Increase the python recursion limit to allow ANTLR to parse large patterns
@@ -86,7 +88,7 @@ class StixTranslation:
                     dialects_used = 0
                     for dialect in dialects:
                         query_translator = entry_point.get_query_translator(dialect)
-                        if language == query_translator.get_language():
+                        if not language or language == query_translator.get_language():
                             dialects_used += 1
                             transform_result = entry_point.transform_query(dialect, data)
                             queries.extend(transform_result.get('queries', []))

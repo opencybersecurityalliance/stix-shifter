@@ -109,6 +109,16 @@ As an example:
 python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
 ```
 
+#### Calling the proxy host
+
+Each of the translate and transmit CLI commands outlined in the stix-shifter overview can be used to call the proxy host.
+
+As an example:
+
+```
+python main.py transmit proxy '{"options": {"proxy_host": "127.0.0.1", "proxy_port": 5000, "destination": {"connection": {"options": {"result_limit": 10000, "time_range": 5, "timeout": 30}, "host": "<HOST>", "port": <PORT>, "type": "qradar"}, "configuration": {"auth": { "SEC": "<SEC TOKEN>"} } } }}' '{}' ping
+```
+
 ### Packaging individual connectors
 
 Stix-shifter can be broken into several python whl packages by using the `setup.py` script found in the root of the project. This packaging script can be called from the CLI:

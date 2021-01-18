@@ -13,7 +13,8 @@ CONFIG = {
 
 CONNECTION = {
     "host": "logger_host",
-    "port": 443
+    "port": 443,
+    "selfSignedCert": "cert"
 }
 
 SEARCH_ID = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA."
