@@ -238,7 +238,8 @@ class CbCloudQueryStringPatternTranslator:
     def _add_default_timerange(self, query):
         """Add a default timerange to a query string."""
         today = datetime.utcnow()
-        start = self._datetime_to_cbcloud_timestamp(today - timedelta(minutes=self.time_range))
+        if self.time_range:
+            start = self._datetime_to_cbcloud_timestamp(today - timedelta(minutes=self.time_range))
         stop = self._datetime_to_cbcloud_timestamp(today)
 
         # Add a default timerange when there's no time constraint in the query.
