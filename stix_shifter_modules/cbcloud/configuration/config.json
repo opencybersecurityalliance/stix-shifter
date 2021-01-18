@@ -17,8 +17,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "org_key": {
                 "type": "password"
             },
