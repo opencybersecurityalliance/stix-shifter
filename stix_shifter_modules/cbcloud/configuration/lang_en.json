@@ -16,7 +16,6 @@
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
             "org_key": {
                 "label": "Org key",
                 "description": "Organization key"
