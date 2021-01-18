@@ -17,11 +17,11 @@
     "configuration": {
         "auth": {
             "type" : "fields",
-            "orgkey": {
+            "org_key": {
                 "label": "Org key",
                 "description": "Organization key"
             },
-            "password": {
+            "token": {
                 "label": "Token",
                 "description": "API token"
             }
