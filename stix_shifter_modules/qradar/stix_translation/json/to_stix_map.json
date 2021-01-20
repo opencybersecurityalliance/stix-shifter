@@ -742,12 +742,12 @@
       "transformer": "ToBase64"
     },
     {
-      "key": "x-event.original_ref",
+      "key": "x-oca-event.original_ref",
       "object": "event",
       "references": "event_payload"
     },
     {
-      "key": "x-event.original",
+      "key": "x-oca-event.original",
       "object": "event"
     }
   ],

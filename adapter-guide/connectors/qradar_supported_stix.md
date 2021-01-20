@@ -77,11 +77,6 @@ ___
 - values
 
 ___
-### x-event
-- original_ref
-- original
-
-___
 ### x-ibm-finding
 - src_application_user_ref
 - dst_ip_ref
@@ -135,6 +130,7 @@ ___
 - parent_process_ref
 - code
 - registry_ref
+- original
 
 ___
 ### x-qradar
