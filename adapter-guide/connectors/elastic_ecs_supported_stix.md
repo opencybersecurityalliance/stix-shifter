@@ -23,8 +23,8 @@ ___
 ___
 ### file
 - name
-- created
 - parent_directory_ref
+- created
 - size
 - hashes.SHA-256
 - hashes.SHA-1
@@ -57,18 +57,30 @@ ___
 - dst_byte_count
 - dst_packets
 - protocols
+- extensions.dns-ext.answers
+- extensions.dns-ext.header_flags
+- extensions.dns-ext.dns_id
+- extensions.dns-ext.op_code
+- extensions.dns-ext.question.class
+- extensions.dns-ext.question.domain_ref
+- extensions.dns-ext.question.registered_domain_ref
+- extensions.dns-ext.question.subdomain
+- extensions.dns-ext.question.top_level_domain
+- extensions.dns-ext.question.type
+- extensions.dns-ext.resolved_ip_refs
+- extensions.dns-ext.response_code
+- extensions.dns-ext.type
 
 ___
 ### process
 - opened_connection_refs
 - created
 - pid
-- parent_ref
 - name
+- parent_ref
 - command_line
-- child_refs
-- creator_user_ref
 - binary_ref
+- creator_user_ref
 
 ___
 ### software
@@ -83,10 +95,12 @@ ___
 ___
 ### user-account
 - user_id
+- account_login
 
 ___
 ### windows-registry-key
 - key
+- values
 
 ___
 ### x-ecs-client
@@ -158,58 +172,12 @@ ___
 - hashes.SHA-512
 
 ___
-### x-ecs-dns
-- answers_class
-- answers_data
-- answers_name
-- answers_ttl
-- answers_type
-- header_flags
-- id
-- op_code
-- question.class
-- question.name_ref
-- question.registered_domain_ref
-- question.subdomain
-- question.top_level_domain
-- question.type
-- resolved_ip_refs
-- response_code
-- type
-
-___
 ### x-ecs-error
 - code
 - id
 - message
 - stack_trace
 - type
-
-___
-### x-ecs-event
-- action
-- id
-- category
-- code
-- created
-- dataset
-- duration
-- end
-- hash
-- ingested
-- kind
-- module
-- outcome
-- provider
-- reference
-- risk_score
-- risk_score_norm
-- sequence
-- severity
-- start
-- timezone
-- type
-- url
 
 ___
 ### x-ecs-file
@@ -243,38 +211,6 @@ ___
 - domain
 - id
 - name
-
-___
-### x-ecs-host
-- architecture
-- domain
-- hostname
-- id
-- ip
-- mac
-- name
-- type
-- uptime
-- geo_city_name
-- geo_continent_name
-- geo_country_iso_code
-- geo_country_name
-- geo_location
-- geo_name
-- geo_region_iso_code
-- geo_region_name
-- os_name
-- os_platform
-- os_version
-- user_domain
-- user_email
-- user_full_name
-- user_hash
-- user_id
-- user_name
-- user_group_domain
-- user_group_id
-- user_group_name
 
 ___
 ### x-ecs-http
@@ -366,7 +302,6 @@ ___
 - pe_product
 - args
 - args_count
-- executable
 - entity_id
 - exit_code
 - parent_args
@@ -374,6 +309,7 @@ ___
 - parent_entity_id
 - parent_exit_code
 - parent_pgid
+- parent_ppid
 - parent_thread_id
 - parent_thread_name
 - parent_title
@@ -387,6 +323,7 @@ ___
 
 ___
 ### x-ecs-registry
+- key
 - data_bytes
 - data_strings
 - data_type
@@ -524,6 +461,76 @@ ___
 - score_environmental
 - score_temporal
 - score_version
+
+___
+### x-oca-asset
+- architecture
+- domain
+- hostname
+- id
+- ip_refs
+- mac_refs
+- name
+- host_type
+- uptime
+- geo_city_name
+- geo_continent_name
+- geo_country_iso_code
+- geo_country_name
+- geo_location
+- geo_name
+- geo_region_iso_code
+- geo_region_name
+- os_name
+- os_platform
+- os_version
+- user_domain
+- user_email
+- user_full_name
+- user_hash
+- user_id
+- user_name
+- user_group_domain
+- user_group_id
+- user_group_name
+
+___
+### x-oca-event
+- network_ref
+- original_ref
+- action
+- id
+- category
+- code
+- created
+- dataset
+- duration
+- end
+- hash
+- ingested
+- kind
+- module
+- outcome
+- provider
+- reference
+- risk_score
+- risk_score_norm
+- sequence
+- severity
+- start
+- timezone
+- event_type
+- url
+- domain_ref
+- url_ref
+- process_ref
+- parent_process_ref
+- user_ref
+- agent
+- ip_refs
+- file_ref
+- host_ref
+- registry_ref
 
 ___
 ### x509-certificate
