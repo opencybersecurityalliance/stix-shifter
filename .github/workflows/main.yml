@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python generate_requirements.py
-        pip install --upgrade pip setuptools
+        pip install --upgrade pip setuptools wheel
         pip install -r requirements-dev.txt
     - name: Lint with flake8
       run: |
