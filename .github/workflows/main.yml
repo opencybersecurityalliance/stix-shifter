@@ -35,3 +35,9 @@ jobs:
       run: |
         pip install pytest
         pytest
+    - name: Upload coverage information to Codecov
+      pip install codecov
+      uses: codecov/codecov-action@v1
+      with:
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
