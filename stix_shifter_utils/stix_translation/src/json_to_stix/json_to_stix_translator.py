@@ -166,6 +166,9 @@ class DataSourceObjToStixObj:
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
                     cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
                                 "cust_object"}
+                    if to_map is None or to_map == '':
+                        self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
+                        return
                     DataSourceObjToStixObj._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map,
                                                                  cust_obj["object"])
             else:
