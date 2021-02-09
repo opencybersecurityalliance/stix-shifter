@@ -44,7 +44,7 @@ class QueryConnector(BaseQueryConnector):
                     raise InvalidParameterException("{} is required for {} query operation".format(config,
                                                                                                    query_service_type))
             table_config = self.connection[config_details[0]] + "." + self.connection[config_details[1]]
-            select_statement = "SELECT * FROM {table_config} WHERE ".format(table_config=table_config)
+            select_statement = "SELECT * FROM %s WHERE " % (table_config)
             # for multiple observation operators union and intersect, select statement will be added
             if 'UNION' in query[query_service_type] or 'INTERSECT' in query[query_service_type]:
                 query_string = re.sub(r'\(\(', '(({}'.format(select_statement), query[query_service_type], 1)
