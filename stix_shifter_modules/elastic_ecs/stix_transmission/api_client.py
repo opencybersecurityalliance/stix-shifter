@@ -15,9 +15,14 @@ class APIClient():
         headers = dict()
         url_modifier_function = None
         auth = configuration.get('auth')
-        self.indices = configuration.get('elastic_ecs', {}).get('indices', None)
+        indices = connection.get('indices', None)
+
+        if type(indices) == str:
+            if len(indices):
+                self.indices = indices.split(",")
 
         if isinstance(self.indices, list):  # Get list of all indices
+            self.indices = [i.strip(' ') for i in self.indices]
             self.indices = ",".join(self.indices)
 
         if self.indices:
