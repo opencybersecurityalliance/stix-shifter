@@ -81,83 +81,6 @@ process_data_1 = json.loads("""
 }""")
 
 
-binary_data_1 = json.loads("""
-{
-  "terms": [
-    "md5:F5AE03DE0AD60F5B17B82F2CD68402FE"
-  ],
-  "total_results": 1,
-  "highlights": [
-    {
-      "name": "PREPREPREF5AE03DE0AD60F5B17B82F2CD68402FEPOSTPOSTPOST",
-      "ids": [
-        "F5AE03DE0AD60F5B17B82F2CD68402FE"
-      ]
-    }
-  ],
-  "facets": {},
-  "results": [
-    {
-      "host_count": 13,
-      "alliance_updated_srstrust": "2016-09-04T04:59:53Z",
-      "original_filename": "Cmd.Exe.MUI",
-      "legal_copyright": "\u00a9 Microsoft Corporation. All rights reserved.",
-      "digsig_result": "Signed",
-      "observed_filename": [
-        "c:\\\\windows\\\\system32\\\\cmd.exe"
-      ],
-      "product_version": "6.3.9600.16384",
-      "alliance_score_srstrust": -100,
-      "watchlists": [
-        {
-          "wid": "5",
-          "value": "2016-10-19T10:20:05.424Z"
-        }
-      ],
-      "facet_id": 431419,
-      "copied_mod_len": 357376,
-      "server_added_timestamp": "2016-10-19T10:00:25.734Z",
-      "digsig_sign_time": "2014-11-07T08:02:00Z",
-      "orig_mod_len": 357376,
-      "alliance_data_srstrust": [
-        "f5ae03de0ad60f5b17b82f2cd68402fe"
-      ],
-      "is_executable_image": true,
-      "is_64bit": true,
-      "md5": "F5AE03DE0AD60F5B17B82F2CD68402FE",
-      "digsig_publisher": "Microsoft Corporation",
-      "endpoint": [
-        "ADTWO|24",
-        "ADONE|26",
-        "CERT|27",
-        "REPO|29",
-        "adone|26",
-        "cert|27",
-        "adtwo|24",
-        "iestestmachine3|53",
-        "iestestmachine0|52",
-        "iestestmachine1|54"
-      ],
-      "group": [ "CTF Lab", "Default Group", "ctf lab", "default group" ],
-      "event_partition_id": [ 97777295491072, 97794283536384, 97811271778304, 97828260020224, 97845247737856, 97862235979776, 97879224221696, 97896211152896, 97913199394816 ],
-      "digsig_result_code": "0",
-      "file_version": "6.3.9600.16384 (winblue_rtm.130821-1623)",
-      "signed": "Signed",
-      "alliance_link_srstrust": "https://services.bit9.com/Services/extinfo.aspx?ak=b8b4e631d4884ad1c56f50e4a5ee9279&sg=0313e1735f6cec221b1d686bd4de23ee&md5=f5ae03de0ad60f5b17b82f2cd68402fe",
-      "company_name": "Microsoft Corporation",
-      "internal_name": "cmd",
-      "timestamp": "2016-10-19T10:00:25.734Z",
-      "cb_version": 624,
-      "os_type": "Windows",
-      "file_desc": "Windows Command Processor",
-      "product_name": "Microsoft\u00ae Windows\u00ae Operating System",
-      "last_seen": "2019-01-14T03:19:05.687Z"
-    }
-  ],
-  "elapsed": 0.02470088005065918,
-  "start": 0
-}""")
-
 process_data_2 = json.loads("""
 {
   "terms": [
@@ -288,134 +211,6 @@ process_data_2 = json.loads("""
 }
 """)
 
-binary_data_2 = json.loads("""
-{
-  "terms": [
-    "observed_filename:notepad.exe"
-  ],
-  "total_results": 10,
-  "highlights": [
-    {
-      "name": "c:\\\\windows\\\\system32\\\\PREPREPREnotepad.exePOSTPOSTPOST",
-      "ids": [
-        "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9",
-        "959A31D0CD013CEA0C66DB7C03BCBDDF"
-      ]
-    }
-  ],
-  "facets": {},
-  "results": [
-    {
-      "host_count": 4,
-      "alliance_updated_srstrust": "2017-11-05T07:05:38Z",
-      "original_filename": "NOTEPAD.EXE",
-      "legal_copyright": "\\u00a9 Microsoft Corporation. All rights reserved.",
-      "digsig_result": "Signed",
-      "observed_filename": [
-        "c:\\\\windows\\\\system32\\\\notepad.exe"
-      ],
-      "product_version": "6.3.9600.17930",
-      "alliance_score_srstrust": -100,
-      "watchlists": [
-        {
-          "wid": "5",
-          "value": "2017-03-14T10:10:05.217Z"
-        }
-      ],
-      "facet_id": 2272,
-      "copied_mod_len": 221184,
-      "server_added_timestamp": "2017-03-14T10:04:35.779Z",
-      "digsig_sign_time": "2015-07-11T00:18:00Z",
-      "orig_mod_len": 221184,
-      "alliance_data_srstrust": [
-        "fc2ea5bd5307d2cfa5aaa38e0c0ddce9"
-      ],
-      "is_executable_image": true,
-      "is_64bit": true,
-      "md5": "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9",
-      "digsig_publisher": "Microsoft Corporation",
-      "endpoint": [
-        "REPO|29",
-        "VSPHERE|28",
-        "vsphere|28",
-        "iestestmachine1|54"
-      ],
-      "group": [
-        "CTF Lab",
-        "ctf lab",
-        "default group"
-      ],
-      "event_partition_id": [
-        97777295491072,
-        98439833845760,
-        98847548112896,
-        99679970852864,
-        101310831263744
-      ],
-      "digsig_result_code": "0",
-      "file_version": "6.3.9600.17930 (winblue_ltsb.150709-0600)",
-      "signed": "Signed",
-      "alliance_link_srstrust": "https://services.bit9.com/Services/extinfo.aspx?ak=b8b4e631d4884ad1c56f50e4a5ee9279&sg=0313e1735f6cec221b1d686bd4de23ee&md5=fc2ea5bd5307d2cfa5aaa38e0c0ddce9",
-      "company_name": "Microsoft Corporation",
-      "internal_name": "Notepad",
-      "timestamp": "2017-03-14T10:04:35.779Z",
-      "cb_version": 624,
-      "os_type": "Windows",
-      "file_desc": "Notepad",
-      "product_name": "Microsoft\\u00ae Windows\\u00ae Operating System",
-      "last_seen": "2018-12-29T12:41:54.355Z"
-    },
-    {
-      "host_count": 1,
-      "original_filename": "NOTEPAD.EXE",
-      "legal_copyright": "\\u00a9 Microsoft Corporation. All rights reserved.",
-      "digsig_result": "Signed",
-      "observed_filename": [
-        "c:\\\\windows\\\\system32\\\\notepad.exe"
-      ],
-      "product_version": "6.3.9600.17415",
-      "watchlists": [
-        {
-          "wid": "5",
-          "value": "2017-04-12T21:10:04.604Z"
-        }
-      ],
-      "facet_id": 87425,
-      "copied_mod_len": 221184,
-      "server_added_timestamp": "2017-04-12T21:06:15.216Z",
-      "digsig_sign_time": "2014-11-07T07:55:00Z",
-      "orig_mod_len": 221184,
-      "is_executable_image": true,
-      "is_64bit": true,
-      "md5": "959A31D0CD013CEA0C66DB7C03BCBDDF",
-      "digsig_publisher": "Microsoft Corporation",
-      "endpoint": [
-        "REPO|31"
-      ],
-      "group": [
-        "Default Group"
-      ],
-      "event_partition_id": [
-        97777295491072
-      ],
-      "digsig_result_code": "0",
-      "file_version": "6.3.9600.17415 (winblue_r4.141028-1500)",
-      "signed": "Signed",
-      "company_name": "Microsoft Corporation",
-      "internal_name": "Notepad",
-      "timestamp": "2017-04-12T21:06:15.216Z",
-      "cb_version": 610,
-      "os_type": "Windows",
-      "file_desc": "Notepad",
-      "product_name": "Microsoft\\u00ae Windows\\u00ae Operating System",
-      "last_seen": "2017-04-12T21:10:06.095Z"
-    }
-  ],
-  "elapsed": 0.011963844299316406,
-  "start": 0
-}
-""")
-
 
 class TestCarbonBlackTransformResults(unittest.TestCase, object):
     @staticmethod
@@ -446,7 +241,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(observed_data['created'] is not None)
         assert(observed_data['modified'] is not None)
         assert(observed_data['first_observed'] == "2019-01-22T00:04:52.87Z")
-        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.87Z")
+        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.937Z")
 
     def test_change_cb_process_api_results_to_stix(self):
 
@@ -494,62 +289,27 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(observed_data['created'] is not None)
         assert(observed_data['modified'] is not None)
         assert(observed_data['first_observed'] == "2019-01-22T00:04:52.875Z")
-        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.875Z")
+        assert(observed_data['last_observed'] == "2019-01-22T00:04:52.937Z")
 
-    def test_change_cb_binary_api_results_to_stix(self):
-        results = binary_data_1["results"]
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(results))
-
-        assert(result_bundle['type'] == 'bundle')
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
-        file_obj = curr_obj  # used in later test
-        assert(curr_obj is not None), 'file object type not found'
-        assert(curr_obj.keys() == {'type', 'name', 'created', 'hashes'})
-        assert(curr_obj['name'] == "Cmd.Exe.MUI")
-        assert(curr_obj['hashes']['MD5'] == "F5AE03DE0AD60F5B17B82F2CD68402FE")
-
-        assert(observed_data['created'] is not None)
-        assert(observed_data['modified'] is not None)
-        assert(observed_data['first_observed'] == "2016-10-19T10:00:25.734Z")
-        assert(observed_data['last_observed'] == "2016-10-19T10:00:25.734Z")
-        assert(observed_data['number_observed'] == 1)
 
     def test_merge_results_mixed_to_stix(self):
-        results = process_data_2["results"] + binary_data_2["results"]  # we assume the data pipeline will combine the results in a list
+        results = process_data_2["results"]
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(results))
 
         assert(result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
-        assert(len(result_bundle_objects) == 5)
+        assert(len(result_bundle_objects) == 3)
 
         objects = result_bundle_objects[1]['objects']
         types = [o.get('type') for o in objects.values()]
         assert (types == ['file', 'process', 'process', 'ipv4-addr', 'user-account', 'directory'])
         assert (result_bundle_objects[1]['number_observed'] == 1)
 
-        file_start_time = "2018-12-17T08:37:13.318Z"
+        start_time = "2018-12-17T08:37:13.318Z"
+        last_time = "2018-12-17T08:37:13.396Z"
 
         assert(result_bundle_objects[1]['created'] is not None)
         assert(result_bundle_objects[1]['modified'] is not None)
-        assert(result_bundle_objects[1]['first_observed'] == file_start_time)
-        assert(result_bundle_objects[1]['last_observed'] == file_start_time)
-
-        objects = result_bundle_objects[4]['objects']
-        types = [o.get('type') for o in objects.values()]
-        assert (types == ['file'])
-
-        binary_time = "2017-04-12T21:06:15.216Z"
-        assert (result_bundle_objects[4]['number_observed'] == 1)
-
-        assert(result_bundle_objects[4]['created'] is not None)
-        assert(result_bundle_objects[4]['modified'] is not None)
-        assert(result_bundle_objects[4]['first_observed'] == binary_time)
-        assert(result_bundle_objects[4]['last_observed'] == binary_time)
+        assert(result_bundle_objects[1]['first_observed'] == start_time)
+        assert(result_bundle_objects[1]['last_observed'] == last_time)
