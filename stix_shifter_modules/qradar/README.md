@@ -2,7 +2,7 @@
 
 ### Required versions and Content Packs
 
-The QRadar connector works with QRadar 7.3.1 and newer versions. The Sysmon and Windows content packs must be installed on your QRadar environment before using this connector.
+The QRadar connector works with QRadar 7.3.3 and newer versions. The Sysmon and Windows content packs must be installed on your QRadar environment before using this connector.
 
 ### Format for making STIX translation calls via the CLI
 
