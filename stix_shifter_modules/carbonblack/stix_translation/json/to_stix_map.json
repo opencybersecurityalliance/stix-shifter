@@ -18,10 +18,6 @@
     {
       "key": "first_observed",
       "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "cybox": false
     }
   ],
   "process_name": [
@@ -172,7 +168,7 @@
     "cybox": false
   },
   "last_update": {
-    "key": "x_cb_response.last_update",
+    "key": "last_observed",
     "cybox": false
   },
   "last_server_update": {
@@ -199,20 +195,11 @@
     "key": "x_cb_response.alliance_updated_srstrust",
     "cybox": false
   },
-  "server_added_timestamp": [
-    {
+  "server_added_timestamp": 
+  {
       "key": "file.created",
       "object": "binary_file"
-    },
-    {
-      "key": "first_observed",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "cybox": false
-    }
-  ],
+  },
   "original_filename": {
     "key": "file.name",
     "object": "binary_file"
