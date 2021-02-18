@@ -15,11 +15,10 @@ class APIClient():
         headers = dict()
         url_modifier_function = None
         auth = configuration.get('auth')
-        indices = connection.get('indices', None)
+        self.indices = connection.get('indices', None)
 
-        if type(indices) == str:
-            if len(indices):
-                self.indices = indices.split(",")
+        if self.indices and type(self.indices) == str:
+            self.indices = self.indices.split(",")
 
         if isinstance(self.indices, list):  # Get list of all indices
             self.indices = [i.strip(' ') for i in self.indices]
