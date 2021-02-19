@@ -26,5 +26,4 @@ class QueryTranslator(EmptyQueryTranslator):
                                                                                 'data': data,
                                                                                 'options': connection['options']}),
                                    timeout=self.options.get('timeout'))
-        print('>> ' + str(response.bytes))
         return json.loads(response.bytes)
