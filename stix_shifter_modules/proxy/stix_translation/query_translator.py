@@ -22,7 +22,9 @@ class QueryTranslator(EmptyQueryTranslator):
 
         client = RestApiClient(proxy_host, proxy_port, url_modifier_function=lambda host_port, endpoint, headers: f'http://{host_port}{endpoint}')
         response = client.call_api('/transform_query', 'POST', data=json.dumps({'module': connection['type'],
-                                                                                'query': data,
+                                                                                'data_source': {},
+                                                                                'data': data,
                                                                                 'options': connection['options']}),
                                    timeout=self.options.get('timeout'))
+        print('>> ' + str(response.bytes))
         return json.loads(response.bytes)
