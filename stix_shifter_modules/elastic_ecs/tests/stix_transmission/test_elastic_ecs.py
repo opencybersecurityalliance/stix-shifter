@@ -42,7 +42,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
+            "selfSignedCert": "cert",
+            "indices": "index1,index2"
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
@@ -66,7 +67,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
+            "selfSignedCert": "cert",
+            "indices": "index1"
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
@@ -88,7 +90,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
+            "selfSignedCert": "cert",
+            "indices": "index1,index2"
         }
 
         query = '(source.port : "64966" OR client.port : "64966")'
@@ -149,7 +152,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
+            "selfSignedCert": "cert",
+            "indices": "index1,index2"
         }
 
         search_id = '(source.port : "64966" OR client.port : "64966")'
@@ -179,7 +183,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
+            "selfSignedCert": "cert",
+            "indices": ""
         }
 
         search_id = '(source.port : "64966" OR client.port : "64966")'
