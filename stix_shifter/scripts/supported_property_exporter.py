@@ -11,7 +11,8 @@ CONNECTORS = {
     "qradar": "IBM QRadar", 
     "splunk": "Splunk Enterprise Security", 
     "bigfix": "HCL BigFix", 
-    "carbonblack": "Carbon Black CB Response", 
+    "carbonblack": "Carbon Black CB Response",
+    "cbcloud": "Carbon Black Cloud", 
     "elastic_ecs": "Elasticsearch ECS", 
     "msatp": "Microsoft Defender Advanced Threat Protection",
     "security_advisor": "IBM Cloud Security Advisor",
@@ -84,14 +85,15 @@ def _parse_attributes(element, module, stix_attribute_collection):
                 _parse_attributes(value, module, stix_attribute_collection)
         else:
             split_stix_object = element["key"].split(".")
-            if len(split_stix_object) == 1:
+            if len(split_stix_object) == 0 or len(split_stix_object) == 1:
                 return None
-            if len(split_stix_object) == 2:
-                stix_object = split_stix_object[0]
-                stix_property = split_stix_object[1]
-            elif len(split_stix_object) == 3:
-                stix_object = split_stix_object[0]
-                stix_property = split_stix_object[1] + "." + split_stix_object[2]
+            else:
+                stix_object = split_stix_object.pop(0)
+                stix_property = ""
+                while len(split_stix_object) > 0:
+                    stix_property += split_stix_object.pop(0)
+                    if len(split_stix_object) > 0:
+                        stix_property += "."
             stix_object_properties = stix_attribute_collection.get(stix_object)
             if stix_object_properties and stix_property not in stix_object_properties:
                 stix_attribute_collection[stix_object].append(stix_property)

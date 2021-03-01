@@ -306,7 +306,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         dns_ext = nt_object['extensions']['dns-ext']
         assert(dns_ext is not None)
         assert(dns_ext["question"] is not None)
-        name_ref = dns_ext["question"]["name_ref"]
+        name_ref = dns_ext["question"]["domain_ref"]
         assert(name_ref in objects), f"name_ref with key {dns_ext['question']['name_ref']} not found"
         domain_obj = objects[name_ref]
         assert(domain_obj["type"] == "domain-name")
@@ -341,7 +341,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         creator_user_ref = proc_object['creator_user_ref']
         assert (creator_user_ref in objects), f"creator_user_ref with key {proc_object['creator_user_ref']} not found"
         creator_user_ref_obj = objects[creator_user_ref]
-        assert (creator_user_ref_obj.keys() == {'type', 'user_id'})
+        assert (creator_user_ref_obj.keys() == {'type', 'user_id', 'account_login'})
         assert (creator_user_ref_obj['type'] == 'user-account')
         assert (creator_user_ref_obj['user_id'] == '-')
 
@@ -363,13 +363,13 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
 
-        event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-ibm-event')
-        assert (event_object is not None), 'x-ibm-event object type not found'
+        event_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'x-oca-event')
+        assert (event_object is not None), 'x-oca-event object type not found'
 
         host_ref = event_object['host_ref']
         assert (host_ref in objects), f"host_ref with key {event_object['host_ref']} not found"
         host_obj = objects[host_ref]
-        assert(host_obj['type'] == 'x-ibm-host')
+        assert(host_obj['type'] == 'x-oca-asset')
         assert(host_obj['hostname'] == 'HOST-NAME')
 
         mac_refs = host_obj['mac_refs']

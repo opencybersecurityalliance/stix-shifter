@@ -13,6 +13,11 @@
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
+        "indices": {
+            "label": "Indices (Optional)",
+            "description": "To search specific Elasticsearch indices, specify a single index or multiple indices in a comma separated list",
+            "placeholder": "index1,index2"
+        },
         "selfSignedCert": {
             "label": " Elasticsearch connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"

@@ -47,7 +47,8 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["username"]
+      "user_id": ["username"],
+      "account_login":  ["username"]
     }
   },
   "artifact": {
@@ -72,8 +73,7 @@
       "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "domain_id": ["domainid"],
-      "rule_names[*]": ["rulenames"]
+      "domain_id": ["domainid"]
     }
   },
   "x-ibm-finding": {
@@ -86,20 +86,23 @@
       "magnitude": ["magnitude"],
       "event_count": ["eventcount"],
       "src_geolocation": ["sourcegeographic"],
-      "dst_geolocation": ["destinationgeographic"]
+      "dst_geolocation": ["destinationgeographic"],
+      "rule_names[*]": ["rulenames"]
     }
   },
   "process": {
     "fields": {
+      "pid": ["ProcessId"],
+      "name": ["ProcessName", "Image", "ParentImage"],
       "binary_ref.name": ["Image"],
       "binary_ref.parent_directory_ref.path": ["Image"],
       "parent_ref.binary_ref.name": ["ParentImage"],
-      "command_line": ["ProcessCommandLine"],
+      "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
       "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
     }
   },
-  "x-ibm-event": {
+  "x-oca-event": {
     "fields": {
       "action": ["qidname"],
       "code": ["EventID"],
@@ -126,7 +129,7 @@
       "original_ref.payload_bin": ["eventpayload", "Message"]
     }
   },
-  "x-ibm-host": {
+  "x-oca-asset": {
     "fields": {
       "hostname": ["identityhostname"],
       "ip_refs[*].value": ["identityip", "sourceip"],
@@ -136,7 +139,6 @@
   "windows-registry-key": {
     "fields": {
       "key": ["ObjectName", "RegistryKey"],
-      "values[*].data": ["RegistryValueData"],
       "values[*].name": ["RegistryValueName"]
     }
   },

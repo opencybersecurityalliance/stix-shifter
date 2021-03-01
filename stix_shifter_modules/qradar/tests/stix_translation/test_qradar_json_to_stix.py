@@ -225,9 +225,9 @@ class TestTransform(object):
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
 
-        event = TestTransform.get_first_of_type(objects.values(), 'x-ibm-event')
+        event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
 
-        assert(event['type']) == "x-ibm-event"
+        assert(event['type']) == "x-oca-event"
         assert(event['outcome'] == categoryname)
         assert(event['action'] == qidname)
         assert(event['created'] == START_TIMESTAMP)
@@ -238,7 +238,7 @@ class TestTransform(object):
         host_ref = event['host_ref']
         assert(host_ref in objects), f"host_ref with key {event['host_ref']} not found"
         host = objects[host_ref]
-        assert(host['type'] == "x-ibm-host")
+        assert(host['type'] == "x-oca-asset")
         assert(host['hostname'] == hostname)
 
         original_ref = event['original_ref']
@@ -367,7 +367,7 @@ class TestTransform(object):
         assert(custom_object['cre_event_list'] == data['creeventlist'])
 
     def test_custom_props(self):
-        data = {"logsourceid": 126, "qid": 55500004,
+        data = {"logsourceid": 126, "qid": None,
                 "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -378,7 +378,7 @@ class TestTransform(object):
         custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
         assert(custom_object is not None), 'domain-name object type not found'
         assert(custom_object['log_source_id'] == data['logsourceid'])
-        assert(custom_object['qid'] == data['qid'])
+        assert 'qid' not in custom_object.keys()
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(DATA_SOURCE)
@@ -717,7 +717,9 @@ class TestTransform(object):
             "filename": "testfile.txt",
             "filepath": "/unix/files/system/testfile.txt",
             "unmapped1": "value1",
-            "unmapped2": "value2"
+            "unmapped2": "value2",
+            "unmapped3": None,
+            "unmapped4": ""
         }]
 
         data_string = json.dumps(data)
@@ -736,3 +738,5 @@ class TestTransform(object):
 
         assert(custom_objects['unmapped1'] == "value1")
         assert(custom_objects['unmapped2'] == "value2")
+        assert 'unmapped3' not in custom_objects.keys()
+        assert 'unmapped4' not in custom_objects.keys()

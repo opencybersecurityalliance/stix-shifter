@@ -57,13 +57,13 @@
     "Signed",
     "Message",
     "\"Registry Value Name\" as RegistryValueName",
-    "\"Registry Value Data\" as RegistryValueData",
     "\"IMP Hash\" as IMPHash",
     "ServiceFileName",
     "\"Registry Key\" as RegistryKey",
     "ObjectName",
     "UrlHost",
     "\"Process Name\" as ProcessName",
-    "\"Process ID\" as ProcessId"
+    "\"Process ID\" as ProcessId",
+    "\"Parent Process ID\" as ParentProcessId"
   ]
 }

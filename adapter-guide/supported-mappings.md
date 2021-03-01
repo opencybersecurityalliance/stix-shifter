@@ -14,6 +14,7 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Splunk Enterprise Security](connectors/splunk_supported_stix.md)
 - [HCL BigFix](connectors/bigfix_supported_stix.md)
 - [Carbon Black CB Response](connectors/carbonblack_supported_stix.md)
+- [Carbon Black Cloud](connectors/cbcloud_supported_stix.md)
 - [Elasticsearch ECS](connectors/elastic_ecs_supported_stix.md)
 - [Microsoft Defender Advanced Threat Protection](connectors/msatp_supported_stix.md)
 - [IBM Cloud Security Advisor](connectors/security_advisor_supported_stix.md)
