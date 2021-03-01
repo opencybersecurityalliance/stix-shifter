@@ -14,8 +14,9 @@ class ArcsightToRegistryKey(ValueTransformer):
                                   "HKPD": "HKEY_PERFORMANCE_DATA", "HKU": "HKEY_USERS", "HKDD": "HKEY_DYN_DATA"}
         try:
             root_key = registry_key.split("\\")
-            map_root_key = stix_root_keys_mapping[root_key[0]]
-            root_key[0] = map_root_key
+            if splited[0] in stix_root_keys_mapping:
+                map_root_key = stix_root_keys_mapping[root_key[0]]
+                root_key[0] = map_root_key
             converted_root_key = '\\'.join(root_key)
             return converted_root_key
         except ValueError:
