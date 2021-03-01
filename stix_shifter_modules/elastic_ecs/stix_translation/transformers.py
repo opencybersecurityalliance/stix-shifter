@@ -14,8 +14,9 @@ class PathToStixRegistryKey(ValueTransformer):
                                   "HKPD": "HKEY_PERFORMANCE_DATA", "HKU": "HKEY_USERS", "HKDD": "HKEY_DYN_DATA"}
         try:
             splited = registry.split("\\")
-            map_root_key = stix_root_keys_mapping[splited[0]]
-            splited[0] = map_root_key
+            if splited[0] in stix_root_keys_mapping:
+                map_root_key = stix_root_keys_mapping[splited[0]]
+                splited[0] = map_root_key
             splited = splited[:-1]
             key = '\\'.join(splited)
             return key;
