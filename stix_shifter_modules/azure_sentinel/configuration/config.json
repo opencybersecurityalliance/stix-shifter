@@ -35,6 +35,11 @@
             },
             "clientSecret": {
                 "type": "password"
+            },
+            "access_token": {
+                "type": "password",
+                "hidden": true,
+                "optional": true
             }
         }
     }
