@@ -2,7 +2,6 @@ import json
 from .utils import unwrap_connection_options
 from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
-from stix_shifter_utils.utils import logger
 
 
 class QueryTranslator(EmptyQueryTranslator):
