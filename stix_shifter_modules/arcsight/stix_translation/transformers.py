@@ -13,10 +13,11 @@ class ArcsightToRegistryKey(ValueTransformer):
                                   "HKCR": "HKEY_CLASSES_ROOT", "HKCC": "HKEY_CURRENT_CONFIG",
                                   "HKPD": "HKEY_PERFORMANCE_DATA", "HKU": "HKEY_USERS", "HKDD": "HKEY_DYN_DATA"}
         try:
-            root_key = registry_key.split("\\")
-            map_root_key = stix_root_keys_mapping[root_key[0]]
-            root_key[0] = map_root_key
-            converted_root_key = '\\'.join(root_key)
+            splited = registry_key.split("\\")
+            if splited[0] in stix_root_keys_mapping:
+                map_root_key = stix_root_keys_mapping[splited[0]]
+                splited[0] = map_root_key
+            converted_root_key = '\\'.join(splited)
             return converted_root_key
         except ValueError:
             LOGGER.error("Cannot convert root key to Stix formatted windows registry key")
