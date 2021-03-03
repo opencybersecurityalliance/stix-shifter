@@ -34,6 +34,13 @@ class InterruptableThread(threading.Thread):
         return self._result
 
 
+def exception_catcher(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except Exception as ex:
+        return ex
+
+
 class RestApiClient:
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
@@ -111,17 +118,18 @@ class RestApiClient:
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
-                print('TIMEOUT: ' + str(timeout))
-                it = InterruptableThread(call, url, headers=actual_headers, params=urldata, data=data,
+                self.connect_timeout = 15
+                it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
                                          verify=self.server_cert_content,
                                          timeout=(self.connect_timeout, timeout),
                                          auth=self.auth)
-
                 it.start()
                 it.join(timeout)
                 if it.is_alive():
-                    raise Exception('timeout_error')
+                    raise Exception(f'timeout_error ({timeout} sec)')
                 response = it.result
+                if isinstance(response, Exception):
+                    raise response
 
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
