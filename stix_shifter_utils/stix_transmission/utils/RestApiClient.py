@@ -118,7 +118,6 @@ class RestApiClient:
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
-                self.connect_timeout = 15
                 it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
                                          verify=self.server_cert_content,
                                          timeout=(self.connect_timeout, timeout),
