@@ -9,7 +9,6 @@ import errno
 import uuid
 from stix_shifter_utils.utils import logger
 import threading
-from time import sleep
 
 # This is a simple HTTP client that can be used to access the REST API
 
@@ -129,7 +128,6 @@ class RestApiClient:
                 response = it.result
                 if isinstance(response, Exception):
                     raise response
-
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
