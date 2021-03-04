@@ -1,4 +1,4 @@
-## IBM Security Guardium
+## IBM Guardium
 ### artifact
 - payload_bin
 
@@ -52,6 +52,7 @@ ___
 ___
 ### x-ibm-finding
 - src_database_user_ref
+- src_os_user_ref
 - src_ip_ref
 - dst_ip_ref
 - dst_application_ref

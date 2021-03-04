@@ -8,16 +8,20 @@ ADAPTER_GUIDE_PATH = path.abspath(path.join(current_dir, '../../adapter-guide'))
 
 # Add new connectors to this dictionary as they become available. The key must match the name of the translation module.
 CONNECTORS = {
-    "qradar": "QRadar", 
+    "qradar": "IBM QRadar", 
     "splunk": "Splunk Enterprise Security", 
-    "bigfix": "BigFix", 
-    "carbonblack": "Carbon Black CB Response", 
+    "bigfix": "HCL BigFix", 
+    "carbonblack": "Carbon Black CB Response",
+    "cbcloud": "Carbon Black Cloud", 
     "elastic_ecs": "Elasticsearch ECS", 
     "msatp": "Microsoft Defender Advanced Threat Protection",
     "security_advisor": "IBM Cloud Security Advisor",
-    "guardium": "IBM Security Guardium",
+    "guardium": "IBM Guardium",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
-    "azure_sentinel": "Microsoft Azure Sentinel"
+    "azure_sentinel": "Microsoft Azure Sentinel",
+    "alertflex": "Alertflex",
+    "arcsight": "Micro Focus ArcSight",
+    "aws_athena": "Amazon Athena"
 }
 
 
@@ -76,20 +80,25 @@ def _parse_attributes(element, module, stix_attribute_collection):
         for key, value in element.items():
             _parse_attributes(value, module, stix_attribute_collection)
     if isinstance(element, dict) and element.get("key"):
-        split_stix_object = element["key"].split(".")
-        if len(split_stix_object) == 1:
-            return None
-        if len(split_stix_object) == 2:
-            stix_object = split_stix_object[0]
-            stix_property = split_stix_object[1]
-        elif len(split_stix_object) == 3:
-            stix_object = split_stix_object[0]
-            stix_property = split_stix_object[1] + "." + split_stix_object[2]
-        stix_object_properties = stix_attribute_collection.get(stix_object)
-        if stix_object_properties and stix_property not in stix_object_properties:
-            stix_attribute_collection[stix_object].append(stix_property)
-        elif not stix_object_properties:
-            stix_attribute_collection[stix_object] = [stix_property]
+        if isinstance(element["key"], dict): # Case where there is a "key" field coming from the data source
+            for key, value in element.items():
+                _parse_attributes(value, module, stix_attribute_collection)
+        else:
+            split_stix_object = element["key"].split(".")
+            if len(split_stix_object) == 0 or len(split_stix_object) == 1:
+                return None
+            else:
+                stix_object = split_stix_object.pop(0)
+                stix_property = ""
+                while len(split_stix_object) > 0:
+                    stix_property += split_stix_object.pop(0)
+                    if len(split_stix_object) > 0:
+                        stix_property += "."
+            stix_object_properties = stix_attribute_collection.get(stix_object)
+            if stix_object_properties and stix_property not in stix_object_properties:
+                stix_attribute_collection[stix_object].append(stix_property)
+            elif not stix_object_properties:
+                stix_attribute_collection[stix_object] = [stix_property]
     return stix_attribute_collection
 
 

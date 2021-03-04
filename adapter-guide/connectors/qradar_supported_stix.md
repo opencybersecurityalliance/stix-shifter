@@ -1,4 +1,4 @@
-## QRadar
+## IBM QRadar
 ### artifact
 - payload_bin
 
@@ -18,6 +18,7 @@ ___
 - hashes.MD5
 - hashes.UNKNOWN
 - size
+- parent_directory_ref
 
 ___
 ### ipv4-addr
@@ -37,6 +38,7 @@ ___
 ### network-traffic
 - dst_ref
 - src_ref
+- extensions.dns-ext.question.domain_ref
 - src_payload_ref
 - dst_payload_ref
 - dst_port
@@ -46,6 +48,16 @@ ___
 - src_packets
 - dst_packets
 - protocols
+
+___
+### process
+- creator_user_ref
+- binary_ref
+- parent_ref
+- command_line
+- name
+- pid
+- extensions.windows-service-ext.service_dll_refs
 
 ___
 ### software
@@ -60,20 +72,73 @@ ___
 - user_id
 
 ___
-### x_ibm_ariel
+### windows-registry-key
+- key
+- values
+
+___
+### x-ibm-finding
+- src_application_user_ref
+- dst_ip_ref
+- event_count
+- finding_type
+- start
+- end
+- magnitude
+- src_ip_ref
+- src_geolocation
+- dst_geolocation
+- severity
+- rule_names
+- name
+- description
+
+___
+### x-ibm-windows
+- targetimage
+- granted_access
+- call_trace
+- source_image
+- pipe_name
+- start_module
+- start_function
+- signed
+- imphash
+
+___
+### x-oca-asset
+- ip_refs
+- hostname
+- mac_refs
+
+___
+### x-oca-event
+- user_ref
+- outcome
+- category
+- host_ref
+- action
+- created
+- nt_ref
+- agent
+- provider
+- url_ref
+- domain_ref
+- file_ref
+- original_ref
+- process_ref
+- parent_process_ref
+- code
+- registry_ref
+- original
+
+___
+### x-qradar
 - category_id
-- category_name
-- high_level_category_name
 - high_level_category_id
-- identity_ip
-- identity_host_name
-- event_name
 - relevance
 - log_source_id
-- log_source_name
-- log_source_type_name
 - direction
-- magnitude
 - qid
 - domain_name
 - flow_source
@@ -86,13 +151,8 @@ ___
 - last_packet_time
 - application_id
 - cre_event_list
-- rule_names
 - domain_id
 - device_type
-
-___
-### x_ibm_finding
-- name
-- description
+- registry_key
 
 ___

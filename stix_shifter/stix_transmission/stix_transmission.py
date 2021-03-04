@@ -16,7 +16,7 @@ class StixTransmission:
 
     def __init__(self, module, connection, configuration):
         module = module.split(':')[0]
-        if connection.get('options', {}).get('proxy'):
+        if connection.get('options', {}).get('proxy_host'):
             module = 'proxy'
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
@@ -71,8 +71,8 @@ class StixTransmission:
     def ping(self):
         # Creates and sends a ping request to confirm we are connected and authenticated
         try:
-            if self.init_error is not None:
-                raise Exception(self.init_error)
+            if self.init_error:
+                raise self.init_error
             return self.entry_point.ping_connection()
         except Exception as ex:
             return_obj = dict()

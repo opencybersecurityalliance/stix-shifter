@@ -5,7 +5,7 @@
       "start": ["QUERY_FROM_DATE"],
       "end": ["QUERY_TO_DATE"],
       "database_name": ["Database"],
-      "db_type":["db_type"]
+      "dst_device": ["Database"]
     }
   },
   "ipv4-addr": {
@@ -29,7 +29,9 @@
     "fields": {
       "value": ["DBUser", "OSUser"],
       "db_user": ["DBUser"],
-      "os_user": ["OSUser"]
+      "os_user": ["OSUser"],
+      "user_id": ["DBUser"],
+      "login_name": ["OSUser"]
     }
   },
   "artifact": {

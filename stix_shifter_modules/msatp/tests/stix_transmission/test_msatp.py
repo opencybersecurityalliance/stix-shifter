@@ -29,7 +29,7 @@ class TestMSATPConnection(unittest.TestCase):
     def connection(self):
         return {
             "host": "hostbla",
-            "port": "8080",
+            "port": 8080,
             "selfSignedCert": "cert"
             }
 

@@ -90,3 +90,18 @@ class TestStixToAql(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (destinationpackets = '1' AND sourcepackets = '2898') OR (destinationbytes = '604' AND sourcebytes = '306') {} START {} STOP {}".format(default_limit, unix_start_time_01, unix_stop_time_01)
         _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_text_search(self):
+        stix_pattern = "[artifact:payload_bin LIKE '%Set-ItemProperty%' AND artifact:payload_bin LIKE '%New-Item%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE TEXT SEARCH '%New-Item% AND %Set-ItemProperty%' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_combined_observation_expression_with_qualifier(self):
+        stix_pattern = "([ipv4-addr:value = '192.168.1.2'] OR [network-traffic:src_port = 8080]) START t'2020-09-11T13:00:52.000Z' STOP t'2020-09-11T13:59:04.000Z'"
+        query = _translate_query(stix_pattern)
+        where_statement_01 = "WHERE (sourceip = '192.168.1.2' OR destinationip = '192.168.1.2') limit 10000 START 1599829252000 STOP 1599832744000"
+        where_statement_02 = "WHERE sourceport = '8080' limit 10000 START 1599829252000 STOP 1599832744000"
+        assert len(query['queries']) == 2
+        assert query['queries'][0] == selections + from_statement + where_statement_01
+        assert query['queries'][1] == selections + from_statement + where_statement_02

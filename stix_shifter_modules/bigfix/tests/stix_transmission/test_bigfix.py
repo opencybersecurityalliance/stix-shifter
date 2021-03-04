@@ -41,7 +41,7 @@ CONFIG = {
 
 CONNECTION = {
     "host": "123.123.123.123",
-    "port": "443",
+    "port": 443,
     "selfSignedCert": False,
 }
 
@@ -66,7 +66,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
         mocked_return_value = MockHttpResponse('/api/clientquery')
@@ -119,7 +119,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -146,7 +146,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -182,7 +182,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -232,7 +232,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -263,7 +263,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -300,7 +300,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -339,7 +339,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -378,7 +378,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -416,7 +416,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -453,7 +453,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -535,7 +535,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -578,7 +578,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -633,7 +633,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -689,7 +689,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 
@@ -743,7 +743,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         connection = {
             "host": "123.123.123.123",
-            "port": "443",
+            "port": 443,
             "selfSignedCert": False,
         }
 

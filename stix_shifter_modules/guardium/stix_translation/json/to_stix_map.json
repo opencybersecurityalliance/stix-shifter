@@ -1,5 +1,5 @@
 {
-  "DBUser": [
+  "DB User": [
     {
       "key": "user-account.user_id",
       "object":"account" 
@@ -29,7 +29,7 @@
       "object":"account"
     },
     {
-      "key": "x-ibm-finding.src_database_user_ref",
+      "key": "x-ibm-finding.src_os_user_ref",
       "object": "account",
       "references": "user_id"
     }
@@ -134,24 +134,33 @@
     "cybox": false,
     "transformer": "ToInteger"
   },
-  "Create Date": [
+  "timestamp": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
-    },
+     },
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
     }
   ],
-  "timestamp": [
+  "Create Date": [
     {
       "key": "first_observed",
       "transformer": "GuardiumToTimestamp",
       "cybox": false
-    },
+    }
+  ],
+  "Timestamp": [
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Last updated": [
     {
       "key": "last_observed",
       "transformer": "GuardiumToTimestamp",

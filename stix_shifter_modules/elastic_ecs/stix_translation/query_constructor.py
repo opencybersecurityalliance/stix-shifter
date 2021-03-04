@@ -49,8 +49,8 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-
-        return '"{}"'.format(value)
+        value_escaped = QueryStringPatternTranslator._escape_value(value)
+        return '"{}"'.format(value_escaped)
 
     @staticmethod
     def _format_like(value) -> str:
@@ -167,7 +167,7 @@ class QueryStringPatternTranslator:
                 expression_01 = "({})".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+            query_string = "({} {} {})".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 self.qualified_queries.append("{} {}".format(query_string, qualifier))
                 return ''

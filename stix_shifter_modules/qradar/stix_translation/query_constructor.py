@@ -4,8 +4,7 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.utils import logger
-import logging
-import json
+from stix_shifter_utils.utils.file_helper import read_json
 import re
 
 logger = logger.set_logger(__name__)
@@ -20,17 +19,6 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
 START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = "\.\d+Z$"
-
-
-def _fetch_network_protocol_mapping():
-    try:
-        map_file = open(
-            'stix_shifter_modules/qradar/stix_translation/json/network_protocol_map.json').read()
-        map_data = json.loads(map_file)
-        return map_data
-    except Exception as ex:
-        logger.error('exception in reading mapping file: ' + ex)
-        return {}
 
 
 class AqlQueryStringPatternTranslator:
@@ -52,7 +40,8 @@ class AqlQueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit):
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, options):
+        self.options = options
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
@@ -61,13 +50,12 @@ class AqlQueryStringPatternTranslator:
         # Translated query string without any qualifiers
         self.translated = self.parse_expression(pattern)
         self.qualified_queries.append(self.translated)
-
         self.qualified_queries = _format_translated_queries(self.qualified_queries)
 
     @staticmethod
-    def _format_set(values) -> str:
+    def _format_in(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([AqlQueryStringPatternTranslator._escape_value(value) for value in gen]))
+        return "({})".format(', '.join("'{}'".format(value) for value in gen))
 
     @staticmethod
     def _format_match(value) -> str:
@@ -142,16 +130,14 @@ class AqlQueryStringPatternTranslator:
             # For [ipv4-addr:value = <CIDR value>]
             elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
                 comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
-            elif expression.object_path == 'artifact:payload_bin' and expression.comparator == ComparisonComparators.Like:
-                comparison_string += "TEXT SEARCH '{}'".format(value)
             elif (expression.object_path == 'ipv4-addr:value'
                   or expression.object_path == 'ipv6-addr:value'
                   or expression.object_path == 'network-traffic:dst_ref.value'
                   or expression.object_path == 'network-traffic:src_ref.value') \
-                 and expression.comparator == ComparisonComparators.Like:
-                comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                       comparator=comparator,
-                                                                                       value=value)
+                  and expression.comparator == ComparisonComparators.Like:
+                      comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                             comparator=comparator,
+                                                                                             value=value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
@@ -197,15 +183,27 @@ class AqlQueryStringPatternTranslator:
     @staticmethod
     def _parse_combined_comparison_expression(self, expression, qualifier=None):
         operator = self._lookup_comparison_operator(self, expression.operator)
-        expression_01 = self._parse_expression(expression.expr1)
-        expression_02 = self._parse_expression(expression.expr2)
-        if not expression_01 or not expression_02:
-            return ''
-        if isinstance(expression.expr1, CombinedComparisonExpression):
-            expression_01 = "({})".format(expression_01)
-        if isinstance(expression.expr2, CombinedComparisonExpression):
-            expression_02 = "({})".format(expression_02)
-        query_string = "{} {} {}".format(expression_01, operator, expression_02)
+
+        # TEXT SEARCH operator is special case. Parsing combined expression of artifact:payload_bin translated into invalid aql query
+        # Two TEXT SEARCH operator cannot be used in a single aql query thats why two expressions are not passed into _parse_expression()
+        # Instead we can just construct the query string by adding two values with the oprators
+        if isinstance(expression.expr1, ComparisonExpression) and (expression.expr1.object_path == 'artifact:payload_bin' 
+            and expression.expr1.comparator == ComparisonComparators.Like 
+            and expression.expr2.object_path == 'artifact:payload_bin' 
+            and expression.expr2.comparator == ComparisonComparators.Like):
+            
+            query_string = "TEXT SEARCH '{} {} {}' ".format(expression.expr1.value, operator, expression.expr2.value)
+        else:
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
+            if not expression_01 or not expression_02:
+                return ''
+            if isinstance(expression.expr1, CombinedComparisonExpression):
+                expression_01 = "({})".format(expression_01)
+            if isinstance(expression.expr2, CombinedComparisonExpression):
+                expression_02 = "({})".format(expression_02)
+            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+
         if qualifier:
             self.qualified_queries.append("{} limit {} {}".format(query_string, self.result_limit, qualifier))
             return ''
@@ -221,12 +219,15 @@ class AqlQueryStringPatternTranslator:
         # Resolve the comparison symbol to use in the query string (usually just ':')
         comparator = self._lookup_comparison_operator(self, expression.comparator)
 
+        # Special case for artifact:payload_bin object with Like operator where we apply aql TEXT SEARCH
+        if expression.comparator == ComparisonComparators.Like and (expression.object_path == 'artifact:payload_bin'):
+            return "TEXT SEARCH '{}'".format(expression.value)
+
         # Special case where we want the risk finding
         if stix_object == 'x-ibm-finding' and stix_field == 'name' and expression.value == "*":
             return "devicetype = 18"
-        
         if stix_field == 'protocols[*]':
-            map_data = _fetch_network_protocol_mapping()
+            map_data = read_json('network_protocol_map', self.options)
             try:
                 expression.value = map_data[expression.value.lower()]
             except Exception as protocol_key:
@@ -241,7 +242,7 @@ class AqlQueryStringPatternTranslator:
             value = self._format_match(expression.value)
         # should be (x, y, z, ...)
         elif expression.comparator == ComparisonComparators.In:
-            value = self._format_set(expression.value)
+            value = self._format_in(expression.value)
         elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
             # Should be in single-quotes
             value = self._format_equality(expression.value)
@@ -273,11 +274,10 @@ class AqlQueryStringPatternTranslator:
             return self._parse_observation_expression(self, expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+                self._parse_expression(expression.observation_expression.expr1, expression.qualifier)
+                self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
+                
+                return ''
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
@@ -352,7 +352,7 @@ def _format_translated_queries(query_array):
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
-    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit)
+    translated_where_statements = AqlQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, options)
     select_statement = translated_where_statements.dmm.map_selections()
     queries = []
     translated_queries = translated_where_statements.qualified_queries

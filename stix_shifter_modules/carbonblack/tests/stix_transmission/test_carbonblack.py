@@ -1,8 +1,9 @@
+import json
+import unittest
+from unittest.mock import ANY
+from unittest.mock import patch
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from unittest.mock import patch
-import unittest
-import json
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
 
 
@@ -13,7 +14,7 @@ config = {
 }
 connection = {
     "host": "hostbla",
-    "port": "8080"
+    "port": 8080
 }
 
 
@@ -23,12 +24,12 @@ class RequestMockResponse:
         self.content = content
 
 
-@patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.requests.get', autospec=True)
+@patch('requests.sessions.Session.get', autospec=True)
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
     @staticmethod
-    def _create_query_list(query_string, dialect="process"):
-        return [json.dumps({"query": query_string, "dialect": dialect})]
+    def _create_query_list(query_string):
+        return [query_string]
 
     def test_ping_endpoint(self, mock_requests_response):
         ping_response = """ [
@@ -282,4 +283,4 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
-        mock_requests_response.assert_called_with('https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=30, verify=True)
+        mock_requests_response.assert_called_with(ANY, 'https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=(2, 10), verify=True, auth=None)

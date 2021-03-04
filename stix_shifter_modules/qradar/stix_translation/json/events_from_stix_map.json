@@ -25,7 +25,8 @@
       "hashes.SHA-256": ["filehash"],
       "hashes.MD5": ["filehash"],
       "hashes.SHA-1": ["filehash"],
-      "parent_directory_ref": ["filepath"]
+      "parent_directory_ref": ["filepath"],
+      "parent_directory_ref.path": ["filepath"]
     }
   },
   "directory": {
@@ -46,7 +47,8 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["username"]
+      "user_id": ["username"],
+      "account_login":  ["username"]
     }
   },
   "artifact": {
@@ -56,36 +58,97 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["domainname"]
+      "value": ["domainname", "UrlHost"]
     }
   },
-  "x-ibm-ariel": {
+  "x-qradar": {
     "fields": {
       "qid": ["qid"],
-      "event_name": ["qidname"],
       "magnitude": ["magnitude"],
       "log_source_id": ["logsourceid"],
       "device_type": ["devicetype"],
-      "log_source_name": ["logsourcename"],
-      "log_source_type_name": ["logsourcetypename"],
       "category_id": ["categoryid"],
-      "category_name": ["categoryname"],
-      "high_level_category_name": ["high_level_category_name"],
       "high_level_category_id": ["high_level_category_id"],
       "direction": ["direction"],
-      "identity_host_name": ["identityhostname"],
-      "severity": ["severity"],
+      "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "geographic": ["geographic"],
-      "domain_id": ["domainid"],
-      "rule_names[*]": ["rulenames"]
+      "domain_id": ["domainid"]
     }
   },
   "x-ibm-finding": {
     "fields": {
       "name": ["crename"],
-      "description": ["credescription"]
+      "description": ["credescription"],
+      "severity": ["eventseverity"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "magnitude": ["magnitude"],
+      "event_count": ["eventcount"],
+      "src_geolocation": ["sourcegeographic"],
+      "dst_geolocation": ["destinationgeographic"],
+      "rule_names[*]": ["rulenames"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["ProcessId"],
+      "name": ["ProcessName", "Image", "ParentImage"],
+      "binary_ref.name": ["Image"],
+      "binary_ref.parent_directory_ref.path": ["Image"],
+      "parent_ref.binary_ref.name": ["ParentImage"],
+      "command_line": ["ProcessCommandLine", "ParentCommandLine"],
+      "parent_ref.command_line": ["ParentCommandLine"],
+      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": ["qidname"],
+      "code": ["EventID"],
+      "outcome": ["categoryname"],
+      "category": ["high_level_category_name"],
+      "created": ["devicetime"],
+      "agent": ["logsourcename"],
+      "provider": ["logsourcetypename"],
+      "process_ref.command_line": ["ProcessCommandLine"],
+      "process_ref.binary_ref.name": ["Image"],
+      "process_ref.parent_ref.command_line": ["ParentCommandLine"],
+      "process_ref.creator_user_ref.user_id": ["username"],
+      "process_ref.name": ["ProcessName"],
+      "process_ref.pid": ["ProcessId"],
+      "parent_process_ref.command_line": ["ParentCommandLine"],
+      "parent_process_ref.binary_ref.name": ["ParentImage"],
+      "domain_ref.value": ["domainname", "UrlHost"],
+      "file_ref.name": ["filename"],
+      "host_ref.hostname": ["identityhostname"],
+      "host_ref.ip_refs[*].value": ["identityip"],
+      "registry_ref.key": ["ObjectName", "RegistryKey"],
+      "user_ref.user_id": ["username"],
+      "url_ref.value": ["url"],
+      "original_ref.payload_bin": ["eventpayload", "Message"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["identityhostname"],
+      "ip_refs[*].value": ["identityip", "sourceip"],
+      "mac_refs[*].value": ["sourcemac"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["ObjectName", "RegistryKey"],
+      "values[*].name": ["RegistryValueName"]
+    }
+  },
+  "x-ibm-windows": {
+    "fields": {
+      "targetimage": ["TargetImage"],
+      "grantedaccess": ["GrantedAccess"],
+      "calltrace": ["CallTrace"],
+      "sourceimage": ["Image"],
+      "pipename": ["PipeName"]
     }
   }
 }

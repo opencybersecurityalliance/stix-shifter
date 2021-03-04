@@ -34,7 +34,7 @@
       "payload_bin": ["flowsourcepayload", "flowdestinationpayload"]
     }
   },
-  "x-ibm-ariel": {
+  "x-qradar": {
     "fields": {
       "qid": ["qid"],
       "qid_name": ["qidname"],
@@ -44,7 +44,7 @@
       "geographic": ["geographic"],
       "category_name": ["categoryname"],
       "credibility": ["credibility"],
-      "severity": ["severity"],
+      "severity": ["flowseverity"],
       "direction": ["direction"],
       "relevance": ["relevance"],
       "first_packet_time": ["firstpackettime"],

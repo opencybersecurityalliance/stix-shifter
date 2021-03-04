@@ -1,42 +1,104 @@
 {
   "categoryid": {
-    "key": "x_ibm_ariel.category_id",
-    "cybox": false,
+    "key": "x-qradar.category_id",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "username": {
-    "key": "user-account.user_id"
-  },
-  "categoryname": {
-    "key": "x_ibm_ariel.category_name",
-    "cybox": false
-  },
-  "high_level_category_name": {
-    "key": "x_ibm_ariel.high_level_category_name",
-    "cybox": false
-  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    },
+    {
+      "key": "x-ibm-finding.src_application_user_ref",
+      "object": "finding",
+      "references": "useraccount"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "useraccount"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event",
+      "references": "useraccount"
+    }
+  ],
+  "categoryname": [
+    {
+      "key": "x-oca-event.outcome",
+      "object": "event"
+    }
+  ],
+  "high_level_category_name": [
+    {
+      "key": "x-oca-event.category",
+      "object": "event",
+      "transformer": "ValueToList"
+    }
+  ],
   "high_level_category_id": {
-    "key": "x_ibm_ariel.high_level_category_id",
-    "cybox": false,
+    "key": "x-qradar.high_level_category_id",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "identityip": {
-    "key": "x_ibm_ariel.identity_ip",
-    "cybox": false
-  },
-  "identityhostname": {
-    "key": "x_ibm_ariel.identity_host_name",
-    "cybox": false
-  },
-  "qidname": {
-    "key": "x_ibm_ariel.event_name",
-    "cybox": false
-  },
+  "identityip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "host_ip_addr_v4"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "host_ip_addr_v6"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v4"],
+      "group": true
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v6"],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "identityhostname": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "qidname": [
+    {
+      "key": "x-oca-event.action",
+      "object": "event"
+    }
+  ],
   "relevance": {
-    "key": "x_ibm_ariel.relevance",
-    "cybox": false,
+    "key": "x-qradar.relevance",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
+  "devicetime": [
+    {
+      "key": "x-oca-event.created",
+      "transformer": "EpochToTimestamp",
+      "object": "event"
+    }
+  ],
   "destinationip": [
     {
       "key": "ipv4-addr.value",
@@ -50,6 +112,16 @@
       "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "destinationv6": [
@@ -61,44 +133,79 @@
       "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
-  "eventcount": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "starttime": {
-    "key": "first_observed",
-    "transformer": "EpochToTimestamp",
-    "cybox": false
-  },
-  "endtime": {
-    "key": "last_observed",
-    "transformer": "EpochToTimestamp",
-    "cybox": false
-  },
+  "eventcount": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-ibm-finding.event_count",
+      "transformer": "ToInteger",
+      "object": "finding"
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding",
+      "value": "event"
+    }
+  ],
+  "starttime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.start",
+      "transformer": "EpochToTimestamp",
+      "object": "finding"
+    }
+  ],
+  "endtime": [
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "x-ibm-finding.end",
+      "transformer": "EpochToTimestamp",
+      "object": "finding"
+    }
+  ],
   "logsourceid": {
-    "key": "x_ibm_ariel.log_source_id",
-    "cybox": false,
+    "key": "x-qradar.log_source_id",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "logsourcename": {
-    "key": "x_ibm_ariel.log_source_name",
-    "cybox": false
-  },
-  "logsourcetypename": {
-    "key": "x_ibm_ariel.log_source_type_name",
-    "cybox": false
-  },
+  "logsourcename": [
+    {
+      "key": "x-oca-event.agent",
+      "object": "event"
+    }
+  ],
+  "logsourcetypename": [
+    {
+      "key": "x-oca-event.provider",
+      "object": "event"
+    }
+  ],
   "direction": {
-    "key": "x_ibm_ariel.direction",
-    "cybox": false
+    "key": "x-qradar.direction",
+    "object": "x-qradar"
   },
   "magnitude": {
-    "key": "x_ibm_ariel.magnitude",
-    "cybox": false,
-    "transformer": "ToInteger"
+    "key": "x-ibm-finding.magnitude",
+    "transformer": "ToInteger",
+    "object": "finding"
   },
   "sourceip": [
     {
@@ -113,6 +220,22 @@
       "key": "network-traffic.src_ref",
       "object": "nt",
       "references": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding", 
+      "references": "src_ip" 
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["src_ip"],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcev6": [
@@ -124,6 +247,11 @@
       "key": "network-traffic.src_ref",
       "object": "nt",
       "references": "src_ip"
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
     }
   ],
   "sourcemac": [
@@ -139,6 +267,11 @@
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
+      "references": ["src_mac"]
+    },
+    {
+      "key": "x-oca-asset.mac_refs",
+      "object": "host",
       "references": ["src_mac"]
     }
   ],
@@ -159,8 +292,8 @@
     }
   ],
   "qid": {
-    "key": "x_ibm_ariel.qid",
-    "cybox": false,
+    "key": "x-qradar.qid",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
   "url": [
@@ -169,15 +302,44 @@
       "object": "url"
     },
     {
-      "key": "domain-name.value",
-      "object": "domain1",
-      "transformer": "ToDomainName"
+      "key": "x-oca-event.url_ref",
+      "object": "event",
+      "references": "url"
     }
   ],
-  "filename": {
-    "key": "file.name",
-    "object": "fl"
-  },
+  "UrlHost": [
+  {
+      "key": "domain-name.value",
+      "object": "dns_domain",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "network-traffic.extensions.dns-ext.question.domain_ref",
+      "object": "nt",
+      "references": "dns_domain"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "event",
+      "references": "dns_domain"
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "fl"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "fl"
+    }
+  ],
   "sha256hash": {
     "key": "file.hashes.SHA-256",
     "object": "fl"
@@ -203,12 +365,30 @@
       "key": "directory.path",
       "object": "dir",
       "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "fl"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "dir"
     }
   ],
-  "eventpayload": {
-    "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
-  },
+  "eventpayload": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "event",
+      "references": "artifact"
+    }
+  ],
   "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
@@ -275,75 +455,327 @@
       "transformer": "ToDomainName"
     },
     {
-      "key": "x_ibm_ariel.domain_name",
-      "cybox": false
+      "key": "x-qradar.domain_name",
+      "object": "x-qradar"
     }
   ],
-  "flowsource": {
-    "key": "x_ibm_ariel.flow_source",
-    "cybox": false
-  },
+  "flowsource": [
+    {
+      "key": "x-qradar.flow_source",
+      "object": "x-qradar"
+    }
+  ]
+  ,
   "flowinterface": {
-    "key": "x_ibm_ariel.flow_interface",
-    "cybox": false
+    "key": "x-qradar.flow_interface",
+    "object": "x-qradar"
   },
   "flowinterfaceid": {
-    "key": "x_ibm_ariel.flow_interface_id",
-    "cybox": false
+    "key": "x-qradar.flow_interface_id",
+    "object": "x-qradar"
   },
   "geographic": {
-    "key": "x_ibm_ariel.geographic",
-    "cybox": false
+    "key": "x-qradar.geographic",
+    "object": "x-qradar"
+  },
+  "sourcegeographic": {
+    "key": "x-ibm-finding.src_geolocation",
+    "object": "finding"
+  },
+  "destinationgeographic": {
+    "key": "x-ibm-finding.dst_geolocation",
+    "object": "finding"
   },
   "credibility": {
-    "key": "x_ibm_ariel.credibility",
-    "cybox": false,
+    "key": "x-qradar.credibility",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
-  "severity": {
-    "key": "x_ibm_ariel.severity",
-    "cybox": false,
-    "transformer": "ToInteger"
+  "eventseverity": {
+    "key": "x-ibm-finding.severity",
+    "transformer": "ToInteger",
+    "object": "finding"
+  },
+  "flowseverity": {
+    "key": "x-qradar.severity",
+    "transformer": "ToInteger",
+    "object": "x-qradar"
   },
   "firstpackettime": {
-    "key": "x_ibm_ariel.first_packet_time",
-    "cybox": false
+    "key": "x-qradar.first_packet_time",
+    "object": "x-qradar"
   },
   "lastpackettime": {
-    "key": "x_ibm_ariel.last_packet_time",
-    "cybox": false
+    "key": "x-qradar.last_packet_time",
+    "object": "x-qradar"
   },
   "applicationname": {
     "key": "software.name"
   },
   "applicationid": {
-    "key": "x_ibm_ariel.application_id",
-    "cybox": false
+    "key": "x-qradar.application_id",
+    "object": "x-qradar"
   },
   "creeventlist": {
-    "key": "x_ibm_ariel.cre_event_list",
-    "cybox": false
+    "key": "x-qradar.cre_event_list",
+    "object": "x-qradar"
   },
   "rulenames": {
-    "key": "x_ibm_ariel.rule_names",
-    "cybox": false
+    "key": "x-ibm-finding.rule_names",
+    "object": "finding"
   },
   "crename": {
-    "key": "x_ibm_finding.name",
-    "cybox": false
+    "key": "x-ibm-finding.name",
+    "object": "finding"
   },
   "credescription": {
-    "key": "x_ibm_finding.description",
-    "cybox": false
+    "key": "x-ibm-finding.description",
+    "object": "finding"
   },
   "domainid": {
-    "key": "x_ibm_ariel.domain_id",
-    "cybox": false,
+    "key": "x-qradar.domain_id",
+    "object": "x-qradar",
     "transformer": "ToInteger"
   },
   "devicetype": {
-    "key": "x_ibm_ariel.device_type",
-    "cybox": false,
+    "key": "x-qradar.device_type",
+    "object": "x-qradar",
     "transformer": "ToInteger"
-  }
+  },
+  "Image": [
+    {
+      "key": "file.name",
+      "object": "file_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_image",
+      "references": "directory_image"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ParentImage": [
+    {
+      "key": "file.name",
+      "object": "file_parent_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_parent_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_parent_image",
+      "references": "directory_parent_image"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "file_parent_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
+  "ProcessCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ParentCommandLine": [
+    {
+      "key": "process.command_line",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
+  "ProcessName": [
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "ProcessId": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "EventID": {
+    "key": "x-oca-event.code",
+    "object": "event",
+    "transformer": "ToInteger"
+  },
+  "ParentProcessId": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
+  "ObjectName": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "winregistry",
+      "transformer": "ObjectnameToStixRegistryKey"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "winregistry"
+    }
+  ],
+  "RegistryKey": [
+    {
+      "key": "x-qradar.registry_key",
+      "object": "x-qradar"
+    }
+  ],
+  "RegistryValueName": [
+    {
+        "key": "windows-registry-key.values",
+        "object": "winregistry",
+        "transformer": "RegValueNameToStixRegistryValues"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "winregistry"
+    }
+  ],
+  "TargetImage": {
+    "key": "x-ibm-windows.targetimage",
+    "object": "xwin"
+  },
+  "GrantedAccess": {
+    "key": "x-ibm-windows.granted_access",
+    "object": "xwin"
+  },
+  "CallTrace": {
+    "key": "x-ibm-windows.call_trace",
+    "object": "xwin"
+  },
+  "SourceImage": {
+    "key": "x-ibm-windows.source_image",
+    "object": "xwin"
+  },
+  "PipeName": {
+    "key": "x-ibm-windows.pipe_name",
+    "object": "xwin"
+  },
+  "StartModule": {
+    "key": "x-ibm-windows.start_module",
+    "object": "xwin"
+  },
+  "StartFunction": {
+    "key": "x-ibm-windows.start_function",
+    "object": "xwin"
+  },
+  "Signed": {
+    "key": "x-ibm-windows.signed",
+    "object": "xwin"
+  },
+  "Message": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "event_payload",
+      "transformer": "ToBase64"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "event",
+      "references": "event_payload"
+    },
+    {
+      "key": "x-oca-event.original",
+      "object": "event"
+    }
+  ],
+  "IMPHash": {
+    "key": "x-ibm-windows.imphash",
+    "object": "xwin"
+  },
+  "ServiceFileName": [
+    {
+      "key": "file.name",
+      "object": "service_file_name",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "service_file_dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "service_file_name",
+      "references": "service_file_dir"
+    },
+    {
+      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "object": "process",
+      "group": true,
+      "references": ["service_file_name"]
+    }
+  ]
 }

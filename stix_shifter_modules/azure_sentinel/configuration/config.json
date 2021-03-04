@@ -9,7 +9,9 @@
         },
         "port": {
             "type": "number",
-            "default": 443
+            "default": 443,
+            "min": 1,
+            "max": 65535
         },
         "help": {
             "type": "link",
@@ -35,6 +37,11 @@
             },
             "clientSecret": {
                 "type": "password"
+            },
+            "access_token": {
+                "type": "password",
+                "hidden": true,
+                "optional": true
             }
         }
     }

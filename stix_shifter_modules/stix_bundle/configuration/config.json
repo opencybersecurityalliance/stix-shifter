@@ -3,16 +3,18 @@
         "type": {
             "displayName": "STIX Bundle"
         },
-        "host": {
-            "type": "text"
-        },
-        "port": {
-            "type": "number",
-            "default": 443
+        "url": {
+            "type": "text",
+            "previous": "connection.host"
         },
         "help": {
             "type": "link",
             "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-stix.html"
+        },
+        "options": {
+            "result_limit": {
+                "hidden": true
+            }
         }
     },
     "configuration": {

@@ -1,16 +1,21 @@
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_utils.stix_translation.src.utils import transformers
-from stix_shifter_modules.qradar.entry_point import EntryPoint
-from stix_shifter.stix_translation import stix_translation
 import json
 import base64
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_modules.qradar.entry_point import EntryPoint
+from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
+MODULE = 'qradar'
+RESULTS = 'results'
+TRANSFORMERS = get_module_transformers(MODULE)
+epoch_to_timestamp_class = TRANSFORMERS.get('EpochToTimestamp')
+EPOCH_START = 1531169112
+EPOCH_END = 1531169254
+START_TIMESTAMP = epoch_to_timestamp_class.transform(EPOCH_START)
+END_TIMESTAMP = epoch_to_timestamp_class.transform(EPOCH_END)
 entry_point = EntryPoint()
-map_file = open(entry_point.get_results_translator().default_mapping_file_path).read()
-map_data = json.loads(map_file)
-# Using default mapping in modules/qradar/json/to_stix_map.json
-map_data = json.loads(map_file)
-data_source = {
+MAP_DATA = entry_point.get_results_translator().map_data
+DATA_SOURCE = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
     "name": "QRadar",
@@ -30,7 +35,7 @@ class TestTransform(object):
     @staticmethod
     def get_first_of_type(itr, typ):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
-    
+
     @staticmethod
     def get_object_keys(objects):
         for k, v in objects.items():
@@ -41,20 +46,20 @@ class TestTransform(object):
                     yield id_val
 
     def test_common_prop(self):
-        data = {"starttime": 1531169112, "endtime": 1531169254, "eventcount": 5}
+        data = {"starttime": EPOCH_START, "endtime": EPOCH_END, "eventcount": 5}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
-        assert(result_bundle_identity['type'] == data_source['type'])
-        assert(result_bundle_identity['id'] == data_source['id'])
-        assert(result_bundle_identity['name'] == data_source['name'])
+        assert(result_bundle_identity['type'] == DATA_SOURCE['type'])
+        assert(result_bundle_identity['id'] == DATA_SOURCE['id'])
+        assert(result_bundle_identity['name'] == DATA_SOURCE['name'])
         assert(result_bundle_identity['identity_class']
-               == data_source['identity_class'])
+               == DATA_SOURCE['identity_class'])
 
         observed_data = result_bundle_objects[1]
 
@@ -65,8 +70,8 @@ class TestTransform(object):
         assert(observed_data['number_observed'] == 5)
         assert(observed_data['created'] is not None)
         assert(observed_data['modified'] is not None)
-        assert(observed_data['first_observed'] is not None)
-        assert(observed_data['last_observed'] is not None)
+        assert(observed_data['first_observed'] == START_TIMESTAMP)
+        assert(observed_data['last_observed'] == END_TIMESTAMP)
 
     def test_cybox_observables(self):
         payload = "utf payload"
@@ -79,11 +84,22 @@ class TestTransform(object):
         file_name = "somefile.exe"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
+        process_image_dir = "C:\\example\\process\\image"
+        process_image_file = "proc_img.exe"
+        process_image = process_image_dir + "\\" + process_image_file
+        process_parent_image_dir = "C:\\example\\process\\parent\\image"
+        process_parent_image_file = "proc_parent_img.exe"
+        process_parent_image = process_parent_image_dir + "\\" + process_parent_image_file
+        process_command_line = "C:\\example\\executable.exe --example"
+        process_parent_command_line = "C:\\example\\parent.exe --example"
+        process_loaded_image = "C:\\example\\some.dll"
+        
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac}
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, 
+                "Image": process_image, "ParentImage": process_parent_image, "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -137,51 +153,235 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'name'})
         assert(curr_obj['name'] == file_name)
 
+        proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
+
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'parent_ref', 'command_line'})
+        user_ref = proc_obj['creator_user_ref']
+        assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
+        binary_ref = proc_obj['binary_ref']
+        assert(binary_ref in objects), f"binary_ref with key {proc_obj['binary_ref']} not found"
+        binary = objects[binary_ref]
+        assert(binary.keys() == { 'type', 'name', 'parent_directory_ref' })
+        assert(binary['name'] == process_image_file)
+        assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {binary_ref['parent_directory_ref']} not found"
+        assert(objects[binary['parent_directory_ref']]['path'] == process_image_dir)
+
+        #todo: check filename and file path and also for parent
+        parent_ref = proc_obj['parent_ref']
+        assert(parent_ref in objects), f"parent_ref with key {proc_obj['parent_ref']} not found"
+
+        assert(proc_obj['command_line'] == process_command_line)
+
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'domain-name')
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
-        assert(curr_obj['value'] == 'example.com')
-        assert(objects.keys() == set(map(str, range(0, 11))))
+        assert(curr_obj['value'] == 'test.com')
+        assert(objects.keys() == set(map(str, range(0, 20))))
 
-    def test_risk_finding(self):
+    def test_x_ibm_event(self):
+        payload = "utf payload"
+        base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
+        user_id = "someuserid2018"
+        url = "https://test.com"
+        domain = "test.com"
+        sourceip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
+        destination_ip = "255.255.255.1"
+        filename = "somefile.exe"
+        filepath = "C:\\example\\filepath"
+        sourcemac = "00-00-5E-00-53-00"
+        destination_mac = "00-00-5A-00-55-01"
+        process_image_dir = "C:\\example\\process\\image"
+        process_image_file = "proc_img.exe"
+        process_image = process_image_dir + "\\" + process_image_file
+        process_parent_image_dir = "C:\\example\\process\\parent\\image"
+        process_parent_image_file = "proc_parent_img.exe"
+        process_parent_image = process_parent_image_dir + "\\" + process_parent_image_file
+        process_command_line = "C:\\example\\executable.exe --example"
+        process_parent_command_line = "C:\\example\\parent.exe --example"
+        process_loaded_image = "C:\\example\\some.dll"
+        logsourceid = 126
+        logsourcename = "WindowsAuthServer"
+        logsourcetypename = "Microsoft Windows Security Event Log"
+        qidname = "Process Create"
+        categoryname = "Process Creation Success"
+        hostname = "example host"
+        high_level_category_name = "System"
+        identityip = "1.2.3.4"
+        username = "username"
+        object_name = "HKLM\\a\\b\\c\\val"
+        registry_key = "a\\b\\c"
+        registry_value_name = "val"
+
+
+        data = {"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
+                "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
+                "url": url, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
+                "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
+                "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
+                "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+
+        event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
+
+        assert(event['type']) == "x-oca-event"
+        assert(event['outcome'] == categoryname)
+        assert(event['action'] == qidname)
+        assert(event['created'] == START_TIMESTAMP)
+        assert(event['provider'] == logsourcetypename)
+        assert(event['category'] == [high_level_category_name])
+        assert(event['agent'] == logsourcename)
+        
+        host_ref = event['host_ref']
+        assert(host_ref in objects), f"host_ref with key {event['host_ref']} not found"
+        host = objects[host_ref]
+        assert(host['type'] == "x-oca-asset")
+        assert(host['hostname'] == hostname)
+
+        original_ref = event['original_ref']
+        assert(original_ref in objects), f"original_ref with key {event['original_ref']} not found"
+        original = objects[original_ref]
+        assert(original['type'] == "artifact")
+        assert(original['payload_bin'] == base64_payload)
+        
+        mac_refs = host['mac_refs']
+        assert(mac_refs is not None), "host mac_refs not found"
+        assert(len(mac_refs) == 1)
+        mac_obj = objects[mac_refs[0]]
+        assert(mac_obj.keys() == {'type', 'value'})
+        assert(mac_obj['type'] == 'mac-addr')
+        assert(mac_obj['value'] == sourcemac)
+
+        ip_refs = host['ip_refs']
+        assert(ip_refs is not None), "host ip_refs not found"
+        assert(len(ip_refs) == 2)
+        hostip = objects[ip_refs[0]]
+        assert(hostip.keys() == {'type', 'value'})
+        assert((hostip['type'] == 'ipv6-addr' and hostip['value'] == sourceip) or (hostip['type'] == 'ipv4-addr' and hostip['value'] == identityip))
+
+        user_ref = event['user_ref']
+        assert(user_ref in objects), f"user_ref with key {event['user_ref']} not found"
+        user_obj = objects[user_ref]
+        assert(user_obj.keys() == {'type', 'user_id'})
+        assert(user_obj['type'] == 'user-account')
+        assert(user_obj['user_id'] == username)
+
+        domain_ref = event['domain_ref']
+        assert(domain_ref in objects), f"domain_ref with key {event['domain_ref']} not found"
+        domain_obj = objects[domain_ref]
+        assert(domain_obj.keys() == {'type', 'value'})
+        assert(domain_obj['type'] == 'domain-name')
+        assert(domain_obj['value'] == domain)
+
+        url_ref = event['url_ref']
+        assert(url_ref in objects), f"url_ref with key {event['url_ref']} not found"
+        url_obj = objects[url_ref]
+        assert(url_obj.keys() == {'type', 'value'})
+        assert(url_obj['type'] == 'url')
+        assert(url_obj['value'] == url)
+
+        file_ref = event['file_ref']
+        assert(file_ref in objects), f"file_ref with key {event['file_ref']} not found"
+        file_obj = objects[file_ref]
+        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(file_obj['type'] == 'file')
+        assert(file_obj['name'] == filename)
+        parent_obj = objects[file_obj['parent_directory_ref']]
+        assert(parent_obj is not None), "file parent ref not found"
+        assert(parent_obj.keys() == {'type', 'path'})
+        assert(parent_obj['type'] == "directory")
+        assert(parent_obj['path'] == filepath)
+
+        process_ref = event['process_ref']
+        assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
+        process_obj = objects[process_ref]
+        assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref', 'command_line', 'creator_user_ref'})
+        assert(process_obj['type'] == 'process')
+        assert(process_obj['command_line'] == process_command_line)
+        binary_obj = objects[process_obj['binary_ref']]
+        assert(binary_obj is not None), "process binary ref not found"
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj['type'] == "file")
+        assert(binary_obj['name'] == process_image_file)
+        binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
+        assert(binary_parent_dir_obj is not None), "process binary parent directory ref not found"
+        assert(binary_parent_dir_obj['type'] == "directory")
+        assert(binary_parent_dir_obj['path'] == process_image_dir)
+
+        process_parent_ref = process_obj['parent_ref']
+        assert(process_parent_ref in objects), f"parent_ref with key {process_obj['parent_ref']} not found"
+        parent_obj = objects[process_parent_ref]
+        assert(parent_obj.keys() == {'type', 'binary_ref', 'command_line'})
+        assert(parent_obj['type'] == "process")
+        assert(parent_obj['command_line'] == process_parent_command_line)
+        binary_obj = objects[parent_obj['binary_ref']]
+        assert(binary_obj is not None), "process parent binary ref not found"
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj['type'] == "file")
+        assert(binary_obj['name'] == process_parent_image_file)
+        binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
+        assert(binary_parent_dir_obj is not None), "process parent binary parent directory ref not found"
+        assert(binary_parent_dir_obj['type'] == "directory")
+        assert(binary_parent_dir_obj['path'] == process_parent_image_dir)
+
+        registry_ref = event['registry_ref']
+        assert(registry_ref in objects), f"registry_ref with key {event['registry_ref']} not found"
+        registry_obj = objects[registry_ref]
+        assert(registry_obj.keys() == {'type', 'key', 'values'})
+        assert(registry_obj['type'] == 'windows-registry-key')
+        assert(registry_obj['key'] == "HKEY_LOCAL_MACHINE\\a\\b\\c")
+        assert(registry_obj['values'] is not None)
+        assert(len(registry_obj['values']) == 1)
+        assert(registry_obj['values'][0].keys() == {'name'})
+        assert(registry_obj['values'][0]['name'] == "val")
+
+
+    def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
-                "severity": 4, "devicetypename": "device type name", "devicetype": 15, "rulenames": ["one", "two"]}
+                "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
+                "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+        finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
 
-        assert('x_ibm_finding' in observed_data)
-        finding = observed_data['x_ibm_finding']
+        assert(finding['type']) == "x-ibm-finding"
         assert(finding['name'] == data['crename'])
         assert(finding['description'] == data['credescription'])
+        assert(finding['severity'] == data['eventseverity'])
+        assert(finding['magnitude'] == data['magnitude'])
+        assert(finding['rule_names'] == data['rulenames'])
+        assert(finding['event_count'] == data['eventcount'])
+        assert(finding['finding_type'] == 'event')
+        assert(finding['start'] == START_TIMESTAMP)
+        assert(finding['end'] == END_TIMESTAMP)
 
-        assert('x_ibm_ariel' in observed_data)
-        custom_prop = observed_data['x_ibm_ariel']
-        assert(custom_prop['severity'] == data['severity'])
-        assert(custom_prop['event_name'] == data['qidname'])
-        assert(custom_prop['device_type'] == data['devicetype'])
-        assert(custom_prop['cre_event_list'] == data['creeventlist'])
-        assert(custom_prop['rule_names'] == data['rulenames'])
+        custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        assert(custom_object is not None), 'domain-name object type not found'
+        assert(custom_object['device_type'] == data['devicetype'])
+        assert(custom_object['cre_event_list'] == data['creeventlist'])
 
     def test_custom_props(self):
-        data = {"logsourceid": 126, "qid": 55500004,
-                "identityip": "0.0.0.0", "magnitude": 4, "logsourcename": "someLogSourceName"}
+        data = {"logsourceid": 126, "qid": None,
+                "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
 
-        assert('x_ibm_ariel' in observed_data)
-        custom_props = observed_data['x_ibm_ariel']
-        assert(custom_props['identity_ip'] == data['identityip'])
-        assert(custom_props['log_source_id'] == data['logsourceid'])
-        assert(custom_props['qid'] == data['qid'])
-        assert(custom_props['magnitude'] == data['magnitude'])
-        assert(custom_props['log_source_name'] == data['logsourcename'])
+        custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
+        assert(custom_object is not None), 'domain-name object type not found'
+        assert(custom_object['log_source_id'] == data['logsourceid'])
+        assert 'qid' not in custom_object.keys()
 
     def test_custom_mapping(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
         data = [{
             "custompayload": "SomeBase64Payload",
             "url": "www.example.com",
@@ -192,20 +392,18 @@ class TestTransform(object):
 
         options = {
             "mapping": {
-                "flows": {
-                    "to_stix": {
-                        "username": {"key": "user-account.user_id"},
-                        "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                        "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
-                        "url": {"key": "url.value"},
-                        "custompayload": {"key": "artifact.payload_bin"}
-                    }
+                "to_stix_map": {
+                    "username": {"key": "user-account.user_id"},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
+                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "url": {"key": "url.value"},
+                    "custompayload": {"key": "artifact.payload_bin"}
                 }
             }
         }
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -225,7 +423,7 @@ class TestTransform(object):
         url = "https://example.com"
         data = {"url": url, "unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -239,7 +437,7 @@ class TestTransform(object):
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -247,7 +445,7 @@ class TestTransform(object):
         assert(objects == {})
 
     def test_file_hash_mapping_with_type(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "filename": "somefile.exe",
@@ -260,7 +458,7 @@ class TestTransform(object):
         data_string = json.dumps(data)
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -284,7 +482,7 @@ class TestTransform(object):
         assert(hashes['MD5'] == 'someMD5hash')
 
     def test_hashtype_lookup_with_matching_logsource_id(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "sha256hash": "someSHA-256hash",
@@ -302,7 +500,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -324,7 +522,7 @@ class TestTransform(object):
         assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
 
     def test_hashtype_lookup_without_matching_logsource_id(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "sha256hash": "someSHA-256hash",
@@ -342,7 +540,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -364,7 +562,7 @@ class TestTransform(object):
         assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_matching_generic_hash_name(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -382,7 +580,7 @@ class TestTransform(object):
         }
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -397,7 +595,7 @@ class TestTransform(object):
         assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_hash_options(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -411,7 +609,7 @@ class TestTransform(object):
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -428,7 +626,7 @@ class TestTransform(object):
         assert directory_object_path == "C:/my/file/path"
 
     def test_hashtype_lookup_by_length(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
         hashes = {'SHA-256': '05503abea7b8ac0a01db3cb35179242c0c1d43c7002c51e5982318244bdcaba9',
                   'SHA-1': '05503abea7b8ac0a01db3cb35179242c0c1d43c7',
                   'MD5': '05503abea7b8ac0a01db3cb35179242c',
@@ -438,7 +636,7 @@ class TestTransform(object):
             data_string = json.dumps(data)
             options = {}
             translation = stix_translation.StixTranslation()
-            result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+            result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
             result_bundle_objects = result_bundle['objects']
             observed_data = result_bundle_objects[1]
@@ -448,7 +646,7 @@ class TestTransform(object):
             hashes = file_object['hashes']
             assert(key in hashes), "{} hash not included".format(key)
             assert(hashes[key] == value)
-    
+
     def test_none_empty_values_in_results(self):
         payload = "Payload"
         user_id = "someuserid2018"
@@ -462,7 +660,7 @@ class TestTransform(object):
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
         
         result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], transformers.get_all_transformers(), options)
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         
         assert(result_bundle['type'] == 'bundle')
 
@@ -482,7 +680,7 @@ class TestTransform(object):
         assert('file' not in obj_keys)
 
     def test_filepath_with_directory_transformer(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = json.dumps(DATA_SOURCE)
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -496,7 +694,7 @@ class TestTransform(object):
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -507,3 +705,38 @@ class TestTransform(object):
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path')
         assert directory_object_path == "/unix/files/system"
+    
+    def test_unmapped_fallback(self):
+        data_source_string = json.dumps(DATA_SOURCE)
+
+        data = [{
+            "sourceip": "127.0.0.1",
+            "destinationip": "127.0.0.2",
+            "sha256hash": "someSHA-256hash",
+            "logsourceid": 123,
+            "filename": "testfile.txt",
+            "filepath": "/unix/files/system/testfile.txt",
+            "unmapped1": "value1",
+            "unmapped2": "value2",
+            "unmapped3": None,
+            "unmapped4": ""
+        }]
+
+        data_string = json.dumps(data)
+        options = {}
+
+        translation = stix_translation.StixTranslation()
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+        
+        custom_objects = TestTransform.get_first_of_type(objects.values(), 'x-QRadar')
+
+        assert(custom_objects['unmapped1'] == "value1")
+        assert(custom_objects['unmapped2'] == "value2")
+        assert 'unmapped3' not in custom_objects.keys()
+        assert 'unmapped4' not in custom_objects.keys()

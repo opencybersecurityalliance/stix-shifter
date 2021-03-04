@@ -1,8 +1,8 @@
 # CarbonBlack
 
-## CarbonBlack Process API Supported STIX Pattern values (Querying):
+## CarbonBlack Supported STIX Pattern values (Querying):
 
-The supported query values are defined in the mapping file [process_api_from_stix_map.json](json/process_api_from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [process_api_to_stix_map.json](json/process_api_to_stix_map.json).
+The supported query values are defined in the mapping file [from_stix_map.json](json/from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [to_stix_map.json](json/to_stix_map.json).
 
 
 - `network-traffic:src_port`
@@ -18,18 +18,10 @@ The supported query values are defined in the mapping file [process_api_from_sti
 - `process:parent_ref.pid`
 - `domain-name:value`
 
-## CarbonBlack Binary API Supported STIX Pattern values (Querying):
 
+## CarbonBlack Module Search API Endpoints
 
-Similarly the mapping files for the carbonblack binary api are [binary_api_from_stix_map.json](json/binary_api_from_stix_map.json) and [process_api_to_stix_map.json](json/binary_api_to_stix_map.json).
-The following query values are supported for the binary api:
-
-- `file:name`
-- `file:hashes.MD5`
-
-## CarbonBlack Multiple API Endpoints
-
-The STIX Patterns are mapped seamlessly to the desired API depending on the query. If any of the STIX observable expressions (query inside of [ ]'s) reference the process object then that query will be mapped to the CarbonBlack Process API. If multiple observable expressions are used that result in separate calls to the Process and Binary API endpoints then multiple queries will be created, one for each endpoint. There is an [example](#Multiple-API-Endpoint-Example) of the translator mapping to both APIs below.
+CarbonBlack Module searches Process API Endpoint.
 
 ### Execute a STIX pattern on a CarbonBlack instance
 
@@ -39,7 +31,7 @@ $ python3 main.py execute carbonblack carbonblack "<data_source>" "<connection>"
 
 This example command executes the full STIX translation and transmission pipeline. The commands that make up this pipeline will be include below.
 ```
-$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}' "[process:name = 'cmd.exe']"
+$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.carbonblack.io", "port": 443}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}' "[process:name = 'cmd.exe']"
 ```
 
 Note in this example some logging is omitted.
@@ -48,18 +40,18 @@ Translated CarbonBlack query and parsed STIX expression:
 ```
 $ python3 main.py translate carbonblack query '{}' "[process:name = 'cmd.exe']"
 ['process_name:cmd.exe']
-{'queries': ['process_name:cmd.exe'], 'parsed_stix': [{'attribute': 'process:name', 'comparison_operator': '=', 'value': 'cmd.exe'}]}
+{'queries': ['((process_name:cmd.exe) and last_update:-5m)']}
 ```
 
 Note that because the carbonblack api is synchronous the search id is the same as the translated query.
 ```
-$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"000000000000000000000000000"}}' query '{"query":"process_name:cmd.exe", "dialect":"process"}'
-{'success': True, 'search_id': 'process_name:cmd.exe'}
+$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"000000000000000000000000000"}}' query '((process_name:cmd.exe) and last_update:-5m)'
+{'success': True, 'search_id': '((process_name:cmd.exe) and last_update:-5m)'}
 ```
 
-Note unlike other modules this module accepts a json string with the keys 'query' and 'dialect' set as it's search_id.
+As the synchronous connector, module uses the search id which is the same as translated query:
 ```
-$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results '{"query":"process_name:cmd.exe", "dialect":"process"}' 0 1
+$ python3 main.py transmit carbonblack '{"host": "example.carbonblack.io", "port":443}' '{"auth": {"token":"0000000000000000000000000000000000000000"}}' results '((process_name:cmd.exe) and last_update:-5m)' 0 1
 {
   "terms": [
     "process_name:cmd.exe"
@@ -196,182 +188,6 @@ $ python3 main.py translate carbonblack results '{"id": "identity--3532c56d-ea72
                 '8': {
                     'type': 'user-account',
                     'user_id': 'SYSTEM'
-                }
-            }
-        }
-    ]
-}
-```
-
-## Multiple API Endpoint Example
-
-```
-$ python3 main.py execute carbonblack carbonblack '{"id": "asdf"}' '{"host":"example.my.carbonblack.io", "port": "443"}' '{"auth":{"token":"0000000000000000000000000000000000000000"}}" "[process:name = 'cmd.exe'] OR [file:name = 'notepad.exe']"
-```
-
-The translation portion of this command will return:
-```
-[{'query': 'process_name:cmd.exe', 'dialect': 'process'}, {'query': 'observed_filename:notepad.exe', 'dialect': 'binary'}]
-```
-
-The final results will be translated as follows:
-```
-{
-    "type": "bundle",
-    "id": "bundle--0cfca80c-e630-45a3-9d50-1d98b1fe2570",
-    "objects": [
-        {
-            "id": "asdf"
-        },
-        {
-            "id": "observed-data--7168e8cb-2daa-4566-8546-418f459e7d4a",
-            "type": "observed-data",
-            "created_by_ref": "asdf",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "hashes": {
-                        "MD5": "5746bd7e255dd6a8afa06f7c42c1ba41"
-                    },
-                    "name": "cmd.exe"
-                },
-                "1": {
-                    "type": "process",
-                    "command_line": "cmd /c \"\"C:\\ProgramData\\VMware\\VMware CAF\\pme\\\\config\\..\\scripts\\is-listener-running.bat\" \"",
-                    "created": "2018-12-17T08:37:13.318Z",
-                    "opened_connection_refs": [
-                        "6"
-                    ],
-                    "pid": 2184,
-                    "creator_user_ref": "8",
-                    "name": "cmd.exe",
-                    "binary_ref": "0",
-                    "parent_ref": "3"
-                },
-                "2": {
-                    "type": "file",
-                    "name": "managementagenthost.exe",
-                    "hashes": {
-                        "MD5": "000000000000000000000000000000"
-                    }
-                },
-                "3": {
-                    "type": "process",
-                    "name": "managementagenthost.exe",
-                    "binary_ref": "2",
-                    "pid": 2564
-                },
-                "4": {
-                    "type": "domain-name",
-                    "value": "redlab-vuln2"
-                },
-                "5": {
-                    "type": "ipv4-addr",
-                    "value": "12.166.224.2"
-                },
-                "6": {
-                    "type": "network-traffic",
-                    "dst_ref": "5",
-                    "src_ref": "7"
-                },
-                "7": {
-                    "type": "ipv4-addr",
-                    "value": "10.239.15.201"
-                },
-                "8": {
-                    "type": "user-account",
-                    "user_id": "SYSTEM"
-                }
-            }
-        },
-        {
-            "id": "observed-data--2fea7e59-4940-4409-95d2-7fe62dd5af45",
-            "type": "observed-data",
-            "created_by_ref": "asdf",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "hashes": {
-                        "MD5": "5746bd7e255dd6a8afa06f7c42c1ba41"
-                    },
-                    "name": "cmd.exe"
-                },
-                "1": {
-                    "type": "process",
-                    "command_line": "cmd /c \"\"C:\\ProgramData\\VMware\\VMware CAF\\pme\\\\config\\..\\scripts\\is-listener-running.bat\" \"",
-                    "created": "2018-12-17T08:37:13.318Z",
-                    "opened_connection_refs": [
-                        "6"
-                    ],
-                    "pid": 2184,
-                    "creator_user_ref": "8",
-                    "name": "cmd.exe",
-                    "binary_ref": "0",
-                    "parent_ref": "3"
-                },
-                "2": {
-                    "type": "file",
-                    "name": "managementagenthost.exe",
-                    "hashes": {
-                        "MD5": "000000000000000000000000000000"
-                    }
-                },
-                "3": {
-                    "type": "process",
-                    "name": "managementagenthost.exe",
-                    "binary_ref": "2",
-                    "pid": 2564
-                },
-                "4": {
-                    "type": "domain-name",
-                    "value": "redlab-vuln2"
-                },
-                "5": {
-                    "type": "ipv4-addr",
-                    "value": "12.166.224.2"
-                },
-                "6": {
-                    "type": "network-traffic",
-                    "dst_ref": "5",
-                    "src_ref": "7"
-                },
-                "7": {
-                    "type": "ipv4-addr",
-                    "value": "10.239.15.201"
-                },
-                "8": {
-                    "type": "user-account",
-                    "user_id": "SYSTEM"
-                }
-            }
-        },
-        {
-            "id": "observed-data--69aa8cd8-94d3-4bea-b479-066eaded8d2f",
-            "type": "observed-data",
-            "created_by_ref": "asdf",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "name": "NOTEPAD.EXE",
-                    "created": "2017-03-14T10:04:35.779Z",
-                    "hashes": {
-                        "MD5": "FC2EA5BD5307D2CFA5AAA38E0C0DDCE9"
-                    }
-                }
-            }
-        },
-        {
-            "id": "observed-data--a3b32d7b-c641-4f65-87c5-7e00292412a9",
-            "type": "observed-data",
-            "created_by_ref": "asdf",
-            "objects": {
-                "0": {
-                    "type": "file",
-                    "name": "NOTEPAD.EXE",
-                    "created": "2017-04-12T21:06:15.216Z",
-                    "hashes": {
-                        "MD5": "959A31D0CD013CEA0C66DB7C03BCBDDF"
-                    }
                 }
             }
         }

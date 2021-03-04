@@ -1,0 +1,54 @@
+{
+    "connection": {
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the datasource setting can be found in the specified link"
+        },
+        "region": {
+            "label": "Region",
+            "placeholder": "us-east-1",
+            "description": "Specify the region of the Amazon Athena data source"
+        },
+        "s3_bucket_location": {
+            "label": "Amazon S3 Bucket Location",
+            "placeholder": "s3://bucket_name/",
+            "description": "Specify the location of the S3 bucket where query results will be stored"
+        },
+        "vpcflow_database_name": {
+            "label": "VPC Flow Logs database name",
+            "placeholder": "vpcflow_database_name",
+            "description": "Specify the name of the database containing the VPC Flow Logs"
+        },
+        "vpcflow_table_name": {
+            "label": "VPC Flow Logs table name",
+            "placeholder": "vpcflow_table_name",
+            "description": "Specify the name of the table containing the VPC Flow Logs"
+        },
+        "guardduty_database_name": {
+            "label": "Amazon GuardDuty database name",
+            "placeholder": "guardduty_database_name",
+            "description": "Specify the name of the database containing the Amazon GuardDuty logs"
+        },
+        "guardduty_table_name": {
+            "label": "Amazon GuardDuty table name",
+            "placeholder": "guardduty_table_name",
+            "description": "Specify the name of the table containing the Amazon GuardDuty logs"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "aws_access_key_id": {
+                "label": "AWS Access Key ID",
+                "description": "AWS Access Key ID is required for both AWS key-based and role-based authentication"
+            },
+            "aws_iam_role": {
+                "label": "AWS IAM Role",
+                "description": "AWS IAM Role is required for only AWS role-based authentication"
+            },
+            "aws_secret_access_key": {
+                "label": "AWS Secret Access Key",
+                "description": "AWS Secret Access Key ID is required for both AWS key-based and role-based authentication"
+            }
+        }
+    }
+}
