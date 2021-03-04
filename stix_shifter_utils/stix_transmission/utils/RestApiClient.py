@@ -8,11 +8,36 @@ import os
 import errno
 import uuid
 from stix_shifter_utils.utils import logger
+import threading
 
 # This is a simple HTTP client that can be used to access the REST API
 
 RETRY_MAX_DEFAULT = 1
 CONNECT_TIMEOUT_DEFAULT = 2
+
+
+class InterruptableThread(threading.Thread):
+    def __init__(self, func, *args, **kwargs):
+        threading.Thread.__init__(self)
+        self._func = func
+        self._args = args
+        self._kwargs = kwargs
+        self._result = None
+        self.setDaemon(True)
+
+    def run(self):
+        self._result = self._func(*self._args, **self._kwargs)
+
+    @property
+    def result(self):
+        return self._result
+
+
+def exception_catcher(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except Exception as ex:
+        return ex
 
 
 class RestApiClient:
@@ -92,9 +117,17 @@ class RestApiClient:
                 else:
                     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
-                response = call(url, headers=actual_headers, params=urldata, data=data, verify=self.server_cert_content,
-                                timeout=(self.connect_timeout, timeout), auth=self.auth)
-
+                it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
+                                         verify=self.server_cert_content,
+                                         timeout=(self.connect_timeout, timeout),
+                                         auth=self.auth)
+                it.start()
+                it.join(timeout)
+                if it.is_alive():
+                    raise Exception(f'timeout_error ({timeout} sec)')
+                response = it.result
+                if isinstance(response, Exception):
+                    raise response
                 if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
