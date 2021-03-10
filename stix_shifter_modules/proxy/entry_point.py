@@ -11,11 +11,10 @@ class EntryPoint(BaseEntryPoint):
 
         if connection:
             self.setup_transmission_basic(connection, configuration)
-        else:
 
-            basepath = os.path.dirname(__file__)
-            filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
+        basepath = os.path.dirname(__file__)
+        filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
-            dialect = 'default'
-            self.add_dialect(dialect, query_translator=QueryTranslator(options, dialect, basepath),
-                             results_translator=ResultsTranslator(options, dialect, filepath), default=True)
+        dialect = 'default'
+        self.add_dialect(dialect, query_translator=QueryTranslator(options, dialect, basepath),
+                         results_translator=ResultsTranslator(options, dialect, filepath), default=True)

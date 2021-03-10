@@ -1,8 +1,10 @@
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
+import json
 
 
 RESULTS = 'results'
+RESULTS_IN_STIX = 'results_in_stix'
 QUERY = 'query'
 DELETE = 'delete'
 STATUS = 'status'
@@ -20,7 +22,7 @@ class StixTransmission:
             module = 'proxy'
         try:
             connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
-            self.entry_point = connector_module.EntryPoint(connection, configuration)
+            self.entry_point = connector_module.EntryPoint(connection, configuration, connection.get('options', {}))
         except Exception as e:
             self.init_error = e
 
@@ -28,7 +30,7 @@ class StixTransmission:
         # Creates and sends a query to the correct datasource
         try:
             if self.init_error is not None:
-                raise Exception(self.init_error)
+                raise self.init_error
             return self.entry_point.create_query_connection(query)
         except Exception as ex:
             return_obj = dict()
@@ -39,7 +41,7 @@ class StixTransmission:
         # Creates and sends a status query to the correct datasource asking for the status of the specific query
         try:
             if self.init_error is not None:
-                raise Exception(self.init_error)
+                raise self.init_error
             return self.entry_point.create_status_connection(search_id)
         except Exception as ex:
             return_obj = dict()
@@ -50,18 +52,24 @@ class StixTransmission:
         # Creates and sends a query to the correct datasource asking for results of the specific query
         try:
             if self.init_error is not None:
-                raise Exception(self.init_error)
+                raise self.init_error
             return self.entry_point.create_results_connection(search_id, offset, length)
         except Exception as ex:
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
+    def results_in_stix(self, search_id, offset, length, data_source):
+        result = self.results(search_id, offset, length)
+        if result and 'success' in result and result['success']:
+            result = self.entry_point.translate_results(data_source, json.dumps(result['data']))
+        return result
+
     def delete(self, search_id):
         # Sends a request to the correct datasource, asking to terminate a specific query
         try:
             if self.init_error is not None:
-                raise Exception(self.init_error)
+                raise self.init_error
             return self.entry_point.delete_query_connection(search_id)
         except Exception as ex:
             return_obj = dict()
@@ -83,7 +91,7 @@ class StixTransmission:
         # Check if the module is async/sync
         try:
             if self.init_error is not None:
-                raise Exception(self.init_error)
+                raise self.init_error
             return self.entry_point.is_async()
         except Exception as ex:
             return_obj = dict()

@@ -55,7 +55,9 @@ class BaseEntryPoint:
             validation_obj = param_validator(self.__connector_module, validation_obj)
             connection.clear()
             configuration.clear()
+            options.clear()
             connection.update(validation_obj['connection'])
+            options.update(validation_obj['connection']['options'])
             configuration.update(validation_obj['configuration'])
 
     def translation(func):

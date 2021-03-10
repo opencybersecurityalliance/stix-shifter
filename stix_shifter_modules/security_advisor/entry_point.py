@@ -28,8 +28,8 @@ class EntryPoint(BaseEntryPoint):
             self.set_status_connector(status_connector)
             self.set_results_connector(results_connector)
             self.set_delete_connector(delete_connector)
-        else:
-            dialect = 'default'
-            query_translator = QueryTranslator(options, dialect)
-            results_translator = JSONToStixObservablesDecorator(options, dialect)
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
+
+        dialect = 'default'
+        query_translator = QueryTranslator(options, dialect)
+        results_translator = JSONToStixObservablesDecorator(options, dialect)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
