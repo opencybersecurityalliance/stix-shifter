@@ -17,17 +17,30 @@ STiX, an OASIS Open Project, is committed to building an open, inclusive, produc
 * **Contributors:** People who make regular contributions to our project (documentation, code reviews, responding to issues, participation in proposal discussions, contributing code, etc.).
 * **Maintainers**: People who have been selected by project leadership to oversee one or more components of the project, review code and PRs, prepare releases, triage issues, and similar tasks.
 
+### Maintainers
+
+| Maintainer | GitHub ID | Affiliation |
+|------------|-----------|-------------|
+| Md Azam | [mdazam1942](https://github.com/mdazam1942) | [IBM](https://github.com/IBM) |
+| Danny Elliott | [delliott90](https://github.com/delliott90) | [IBM](https://github.com/IBM) |
+| Yurii Klymenko | [yurii-klymenko](https://github.com/yurii-klymenko) | [IBM](https://github.com/IBM) |
+
+
 ## Project Leadership
 
 > In most projects, the TSC will oversee appointing maintainers or core contributors who drive the day-to-day development. Project Maintainers are the ‘trail guides’ for your repositories and pull requests. As such, they need to clearly understand your project’s scope, so they can accept or reject contributions accordingly.
 
 > Make sure your TSC has a solid process for appointing Maintainers and regularly communicates project priorities. It’s a good idea to make sure there are open lines of communication between the Maintainers, TSC, and PGB members so that any unexpected issues can be easily addressed.
 
-* **Technical Steering Commitee**: ???
+### Technical Steering Commitee (TSC)
 
-* **Change Control Board**: Group responsible for the overall technical health and direction of the project; final reviewers of PRs, responsible for releases, responsible for overseeing work of maintainers and community leaders.
+> To be done
 
-### List of CCB Members
+### Change Control Board (CCB): 
+
+Group responsible for the overall technical health and direction of the project; final reviewers of PRs, responsible for releases, responsible for overseeing work of maintainers and community leaders.
+
+### CCB Members
 
 * Chair of CCB: 
 * CCB Members:
@@ -46,7 +59,7 @@ Special Majority is a vote in which at least 2/3 (two thirds) of the eligible vo
 
 ### Lazy Consensus
 
-Out of respect for other contributors, major changes should also be accompanied by a ping on Slack or a note on the Harbor dev mailing list as appropriate. Author(s) of proposal, Pull Requests, issues, etc.  will give a time period of no less than five (5) working days for comment and remain cognizant of popular observed world holidays.
+Out of respect for other contributors, major changes should also be accompanied by a ping on Slack or a note on the OCA dev mailing list as appropriate. Author(s) of proposals, Pull Requests, issues, etc.  will give a time period of no less than five (5) working days for comment and remain cognizant of popular observed world holidays.
 Other maintainers may chime in and request additional time for review, but should remain cognizant of blocking progress and abstain from delaying progress unless absolutely needed. The expectation is that blocking progress is accompanied by a guarantee to review and respond to the relevant action(s) (proposals, PRs, issues, etc.) in short order.
 Lazy Consensus is practiced for all projects in our org, including the main project repository, community-driven sub-projects, and the community repo that includes proposals and governing documents.
 Lazy consensus does _not_ apply to the process of:
