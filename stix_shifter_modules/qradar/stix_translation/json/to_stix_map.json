@@ -119,7 +119,7 @@
       "references": "dst_ip" 
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -135,7 +135,7 @@
       "references": "dst_ip"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -233,7 +233,7 @@
       "group": true
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -249,7 +249,7 @@
       "references": "src_ip"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -324,7 +324,7 @@
       "references": "dns_domain"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
