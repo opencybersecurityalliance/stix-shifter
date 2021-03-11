@@ -51,6 +51,26 @@
     "starttime",
     "endtime",
     "UTF8(sourcepayload) as flowsourcepayload",
-    "UTF8(destinationpayload) as flowdestinationpayload"
+    "UTF8(destinationpayload) as flowdestinationpayload",
+    "CASE flowtype WHEN 0 THEN 'Standard Flow' WHEN 3 THEN 'Network Scan (Type A)' WHEN 4 THEN 'DDoS (Type B)' WHEN 5 THEN 'Port Scan (Type C)' ELSE 'Unknown Type' END AS flowtype",
+    "\"md5 file hash\" as md5hash",
+    "\"sha1 file hash\" as sha1hash",
+    "\"sha256 file hash\" as sha256hash", 
+    "\"file name\" as filename",
+    "\"file size\" as filesize",
+    "\"file entropy\" as fileentropy",
+    "\"http host\" as httphost",
+    "\"http referrer\" as httpreferrer",
+    "\"http response code\" as httpresponsecode",
+    "\"http server\" as httpserver",
+    "\"http user agent\" as httpuseragent",
+    "\"http version\" as httpversion",
+    "\"dns domain name\" as dnsdomainname",
+    "\"tls server name indication\" as tlsservernameindication",
+    "\"tls ja3 hash\" as tlsja3hash",
+    "\"tls ja3s hash\" as tlsja3shash",
+    "\"suspect content descriptions\" as suspectcontentdescriptions",
+    "flowid",
+    "\"content type\" as contenttype"
   ]
 }
