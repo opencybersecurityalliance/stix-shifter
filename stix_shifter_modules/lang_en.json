@@ -14,15 +14,15 @@
         "options": {
             "result_limit": {
                 "label": "Result Size Limit",
-                "description": "The maximum number of entries or objects that are returned by search query."
+                "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
             },
             "time_range": {
                 "label": "Query Time Range",
-                "description": "Time range for the search, in minutes, represented as last x minutes."
+                "description": "Time range for the search, in minutes, represented as last x minutes.  Valid input range is {{min}} to {{max}}."
             },
             "timeout": {
                 "label": "Query Response Timeout Limit",
-                "description": "The limit on how long to wait for the data source response, in seconds."
+                "description": "The limit on how long to wait for the data source response, in seconds. Valid input range is {{min}} to {{max}}."
             },
             "search_timeout": {
                 "label": "Query Search Timeout Limit",
@@ -46,7 +46,7 @@
             },
             "concurrent": {
                 "label": "Concurrent Search Limit",
-                "description": "The number of simultaneous connections that can be made between IBM Cloud Pak™ for Security and the data source."
+                "description": "The number of simultaneous connections that can be made between IBM Cloud Pak™ for Security and the data source.  Valid input range is {{min}} to {{max}}."
             }
         }
     },

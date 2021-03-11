@@ -14,7 +14,9 @@
             },
             "proxy_port": {
                 "type": "number",
-                "default": 5000
+                "default": 5000,
+                "min": 1,
+                "max": 65535
             },
             "destination": {
                 "type": "text"

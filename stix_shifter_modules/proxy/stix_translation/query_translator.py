@@ -12,6 +12,20 @@ class QueryTranslator(EmptyQueryTranslator):
     def get_language(self):
         return self.options.get('language')
 
+    def parse_query(self, data):
+        proxy_host = self.options['proxy_host']
+        proxy_port = self.options['proxy_port']
+
+        connection, configuration = unwrap_connection_options(self.options)
+
+        client = RestApiClient(proxy_host, proxy_port, url_modifier_function=lambda host_port, endpoint, headers: f'http://{host_port}{endpoint}')
+        response = client.call_api('/parse_query', 'POST', data=json.dumps({'module': connection['type'],
+                                                                            'data_source': {},
+                                                                            'data': data,
+                                                                            'options': connection['options']}),
+                                   timeout=self.options.get('timeout'))
+        return json.loads(response.bytes)
+
     def transform_query(self, data):
         # A proxy translation call passes the entire data source connection object in as the options
         # Top-most connection host and port are for the proxy
@@ -22,7 +36,8 @@ class QueryTranslator(EmptyQueryTranslator):
 
         client = RestApiClient(proxy_host, proxy_port, url_modifier_function=lambda host_port, endpoint, headers: f'http://{host_port}{endpoint}')
         response = client.call_api('/transform_query', 'POST', data=json.dumps({'module': connection['type'],
-                                                                                'query': data,
+                                                                                'data_source': {},
+                                                                                'data': data,
                                                                                 'options': connection['options']}),
                                    timeout=self.options.get('timeout'))
         return json.loads(response.bytes)
