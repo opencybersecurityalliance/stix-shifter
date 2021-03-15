@@ -20,6 +20,7 @@ class ResultsConnector(BaseResultsConnector):
         params["host"] = self.host
 
         try:
+            self.auth_token.validate_location(self.auth["accountID"], self.host)
             params["accessToken"] = self.auth_token.obtainAccessToken()
             
         except Exception as e:

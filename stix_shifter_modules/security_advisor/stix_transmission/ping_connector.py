@@ -21,6 +21,7 @@ class PingConnector(BasePingConnector):
 
         url = self.host + "/" + self.auth["accountID"] + "/providers"
         try:
+            self.auth_token.validate_location(self.auth["accountID"], self.host)
             authorization = "Bearer {}".format(self.auth_token.obtainAccessToken())
 
             header["Authorization"] = authorization
