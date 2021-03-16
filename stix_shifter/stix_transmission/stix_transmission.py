@@ -4,7 +4,7 @@ import json
 
 
 RESULTS = 'results'
-RESULTS_IN_STIX = 'results_in_stix'
+RESULTS_STIX = 'results_stix'
 QUERY = 'query'
 DELETE = 'delete'
 STATUS = 'status'
@@ -59,7 +59,7 @@ class StixTransmission:
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
-    def results_in_stix(self, search_id, offset, length, data_source):
+    def results_stix(self, search_id, offset, length, data_source):
         result = self.results(search_id, offset, length)
         if result and 'success' in result and result['success']:
             result = self.entry_point.translate_results(data_source, json.dumps(result['data']))

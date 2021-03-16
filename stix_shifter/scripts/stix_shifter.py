@@ -115,7 +115,7 @@ def main():
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
     results_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
-    resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_IN_STIX, help="Fetches the results of the data source query, response is translated in STIX")
+    resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
     resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
     resultsstix_operation_parser.add_argument('offset', help='offset of results')
     resultsstix_operation_parser.add_argument('length', help='length of results')
@@ -343,7 +343,7 @@ def transmit(args):
         query <query string>,
         status <search id>,
         results <search id> <offset> <length>,
-        results_in_stix <search id> <offset> <length> <data_source>
+        results_stix <search id> <offset> <length> <data_source>
         ping,
         is_async
     >
@@ -365,12 +365,12 @@ def transmit(args):
         offset = args.offset
         length = args.length
         result = transmission.results(search_id, offset, length)
-    elif operation_command == stix_transmission.RESULTS_IN_STIX:
+    elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset
         length = args.length
         data_source = args.data_source
-        result = transmission.results_in_stix(search_id, offset, length, data_source)
+        result = transmission.results_stix(search_id, offset, length, data_source)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)
