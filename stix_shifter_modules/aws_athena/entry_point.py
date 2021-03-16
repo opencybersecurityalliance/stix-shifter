@@ -25,5 +25,5 @@ class EntryPoint(BaseEntryPoint):
             self.set_status_connector(status_connector)
             self.set_results_connector(results_connector)
             self.set_delete_connector(delete_connector)
-        else:
-            self.setup_translation_simple(dialect_default='guardduty')
+
+        self.setup_translation_simple(dialect_default='guardduty')
