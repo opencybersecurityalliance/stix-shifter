@@ -1,4 +1,5 @@
 import requests
+import os
 
 class Auth():
     def __init__(self, apiKey):
@@ -9,7 +10,7 @@ class Auth():
         if(not self.apiKey):
             raise Exception("Authorizaion Failed")
 
-        iamTokenURL = 'https://iam.cloud.ibm.com/identity/token'
+        iamTokenURL = os.getenv('IAM_URL', 'https://iam.cloud.ibm.com/identity/token')
         requestBody = "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey={}&response_type=cloud_iam".format(self.apiKey)
 
         header = {
@@ -26,3 +27,14 @@ class Auth():
 
         else:
             raise Exception("Authorizaion Failed")
+
+    def find_location(self, accountID, host):
+        if host == "":
+            adminApiUrl = os.getenv('ADMIN_API_URL', 'https://compliance.cloud.ibm.com/admin/v1')
+            headers = {"Authorization": "Bearer {0}".format(self.obtainAccessToken())}
+            resp = requests.get("{0}/accounts/{1}/settings".format(adminApiUrl, accountID), headers=headers)
+            current_location_id = resp.json()["location"]["id"]
+            resp = requests.get("{0}/locations/{1}".format(adminApiUrl, current_location_id), headers=headers)
+            return "{0}/v1".format(resp.json()["si_findings_endpoint_url"])
+        else:
+            return host
