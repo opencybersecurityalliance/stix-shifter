@@ -35,5 +35,6 @@ class Auth():
         current_location_id = resp.json()["location"]["id"]
         resp = requests.get("{0}/locations/{1}".format(adminApiUrl, current_location_id), headers=headers)
         actual_service_url = resp.json()["si_findings_endpoint_url"]
-        if "{0}/v1".format(actual_service_url) != host:
+        if "{0}/v1".format(actual_service_url) != host and host != "":
             raise ValueError("The service URL you specified is incorrect for the location selected for the account. The correct URL is: {0}/v1".format(actual_service_url))
+        return actual_service_url
