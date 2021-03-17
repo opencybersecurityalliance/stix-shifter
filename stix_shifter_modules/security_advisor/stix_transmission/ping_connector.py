@@ -6,10 +6,10 @@ from .auth import Auth
 
 class PingConnector(BasePingConnector):
     def __init__(self, host, auth):
-        self.host = host
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = Auth(api_key)
+        self.host = "{0}/v1".format(self.auth_token.validate_location(self.auth["accountID"], host))
 
     def ping_connection(self):
         return_obj = {}        
@@ -21,7 +21,6 @@ class PingConnector(BasePingConnector):
 
         url = self.host + "/" + self.auth["accountID"] + "/providers"
         try:
-            self.auth_token.validate_location(self.auth["accountID"], self.host)
             authorization = "Bearer {}".format(self.auth_token.obtainAccessToken())
 
             header["Authorization"] = authorization
