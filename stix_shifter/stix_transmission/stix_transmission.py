@@ -60,10 +60,14 @@ class StixTransmission:
             return return_obj
 
     def results_stix(self, search_id, offset, length, data_source):
-        result = self.results(search_id, offset, length)
-        if result and 'success' in result and result['success']:
-            result = self.entry_point.translate_results(data_source, json.dumps(result['data']))
-        return result
+        try:
+            if self.init_error is not None:
+                raise self.init_error
+            return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
+        except Exception as ex:
+            return_obj = dict()
+            ErrorResponder.fill_error(return_obj, error=ex)
+            return return_obj
 
     def delete(self, search_id):
         # Sends a request to the correct datasource, asking to terminate a specific query
