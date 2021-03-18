@@ -3,6 +3,7 @@ from .base_query_connector import BaseQueryConnector
 from .base_status_connector import BaseStatusConnector
 from .base_delete_connector import BaseDeleteConnector
 from .base_results_connector import BaseResultsConnector
+import json
 
 
 class BaseConnector:
