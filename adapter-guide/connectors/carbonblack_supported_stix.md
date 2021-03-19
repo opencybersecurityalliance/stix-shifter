@@ -50,7 +50,6 @@ ___
 - emet_config
 - processblock_count
 - filtering_known_dlls
-- last_update
 - last_server_update
 - logon_type
 - alliance_score_srstrust

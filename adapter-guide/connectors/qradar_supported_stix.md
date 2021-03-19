@@ -11,6 +11,10 @@ ___
 - value
 
 ___
+### email-message
+- content_type
+
+___
 ### file
 - name
 - hashes.SHA-256
@@ -19,6 +23,7 @@ ___
 - hashes.UNKNOWN
 - size
 - parent_directory_ref
+- mime_type
 
 ___
 ### ipv4-addr
@@ -48,6 +53,13 @@ ___
 - src_packets
 - dst_packets
 - protocols
+- extensions.http-request-ext.request_header.Host
+- extensions.http-request-ext.request_header.Referer
+- extensions.http-request-ext.request_header.Server
+- extensions.http-request-ext.request_header.User-Agent
+- extensions.http-request-ext.request_version
+- ipfix.flowId
+- extensions.http-request-ext.request_header.Content-Type
 
 ___
 ### process
@@ -119,7 +131,7 @@ ___
 - host_ref
 - action
 - created
-- nt_ref
+- network_ref
 - agent
 - provider
 - url_ref
@@ -153,6 +165,13 @@ ___
 - cre_event_list
 - domain_id
 - device_type
+- flow_type
+- file_entropy
+- http_response_code
+- tls_ja3_hash
+- tls_ja3s_hash
+- suspect_content_descriptions
+- tls_server_name_indication
 - registry_key
 
 ___
