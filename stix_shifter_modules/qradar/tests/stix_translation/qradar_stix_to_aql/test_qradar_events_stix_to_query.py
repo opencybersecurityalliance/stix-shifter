@@ -252,7 +252,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_generic_filehash_query(self):
         stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE filehash = 'sha256hash' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE sha256hash = 'sha256hash' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     # def test_sha256_filehash_query(self):
