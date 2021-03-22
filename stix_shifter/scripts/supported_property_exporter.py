@@ -1,5 +1,6 @@
 import json
 from os import path
+import re
 
 current_dir = path.abspath(path.dirname(__file__))
 
@@ -47,8 +48,19 @@ def __main__():
             json_file = open(filepath)
             loaded_json = json.loads(json_file.read())
         except(Exception):
-            print("Error for {} module with: {}".format(key))
+            print("Error for {} module".format(key))
             continue
+
+        aliased_data_fields = []
+        if key == 'qradar':
+            try:
+                fields_filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
+                fields_json_file = open(fields_filepath)
+                loaded_fields_json = json.loads(fields_json_file.read())
+                aliased_data_fields = loaded_fields_json.get('default') # array of fields
+            except(Exception):
+                print("Error for {} module".format(key))
+                continue
         
         stix_attribute_collection = _parse_attributes(loaded_json, key, {})
         json_file.close()
@@ -65,6 +77,8 @@ def __main__():
         for stix_object, property_list in sorted_objects.items():
             for index, prop in enumerate(property_list):
                 stix_property, data_field = prop.split(":")
+                if aliased_data_fields:
+                    data_field = _get_data_field(data_field, aliased_data_fields)
                 output_string += "| {} | {} | {} |\n".format(stix_object, stix_property, data_field)
             output_string += "| <br> | | |\n"
 
@@ -72,6 +86,15 @@ def __main__():
         supported_stix_file.close()
     table_of_contents_file.write(table_of_contents)
     table_of_contents_file.close()
+
+
+def _get_data_field(data_field, aliased_data_fields):
+    for value in aliased_data_fields:
+        pattern_match = re.search("\sas\s{}$".format(data_field), value)
+        if pattern_match:
+            data_field = re.sub(pattern_match[0], "", value)
+            break
+    return data_field
 
 
 def _parse_attributes(element, module, stix_attribute_collection, data_source_field=None):

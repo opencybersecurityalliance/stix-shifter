@@ -1,29 +1,29 @@
 ## IBM QRadar
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
-| artifact | payload_bin | eventpayload |
+| artifact | payload_bin | UTF8(payload) |
 | artifact | payload_bin | flowsourcepayload |
 | artifact | payload_bin | flowdestinationpayload |
 | artifact | payload_bin | Message |
 | <br> | | |
-| directory | path | filepath |
+| directory | path | "File Path" |
 | directory | path | Image |
 | directory | path | ParentImage |
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
-| domain-name | value | domainname |
+| domain-name | value | DOMAINNAME(domainid) |
 | domain-name | value | dnsdomainname |
 | <br> | | |
 | email-message | content_type | contenttype |
 | <br> | | |
-| file | name | filename |
+| file | name | Filename |
 | file | hashes.SHA-256 | sha256hash |
 | file | hashes.SHA-1 | sha1hash |
 | file | hashes.MD5 | md5hash |
-| file | hashes.UNKNOWN | filehash |
+| file | hashes.UNKNOWN | "File Hash" |
 | file | size | filesize |
-| file | parent_directory_ref | filepath |
+| file | parent_directory_ref | "File Path" |
 | file | mime_type | contenttype |
 | file | name | Image |
 | file | parent_directory_ref | Image |
@@ -33,15 +33,15 @@
 | file | parent_directory_ref | ServiceFileName |
 | <br> | | |
 | ipv4-addr | value | identityip |
-| ipv4-addr | value | destinationip |
-| ipv4-addr | value | sourceip |
+| ipv4-addr | value | destinationaddress |
+| ipv4-addr | value | sourceaddress |
 | ipv4-addr | resolves_to_refs | sourcemac |
 | ipv4-addr | resolves_to_refs | destinationmac |
 | <br> | | |
 | ipv6-addr | value | identityip |
-| ipv6-addr | value | destinationip |
+| ipv6-addr | value | destinationaddress |
 | ipv6-addr | value | destinationv6 |
-| ipv6-addr | value | sourceip |
+| ipv6-addr | value | sourceaddress |
 | ipv6-addr | value | sourcev6 |
 | ipv6-addr | resolves_to_refs | sourcemac |
 | ipv6-addr | resolves_to_refs | destinationmac |
@@ -49,9 +49,9 @@
 | mac-addr | value | sourcemac |
 | mac-addr | value | destinationmac |
 | <br> | | |
-| network-traffic | dst_ref | destinationip |
+| network-traffic | dst_ref | destinationaddress |
 | network-traffic | dst_ref | destinationv6 |
-| network-traffic | src_ref | sourceip |
+| network-traffic | src_ref | sourceaddress |
 | network-traffic | src_ref | sourcev6 |
 | network-traffic | extensions.dns-ext.question.domain_ref | UrlHost |
 | network-traffic | src_payload_ref | flowsourcepayload |
@@ -62,7 +62,7 @@
 | network-traffic | dst_byte_count | destinationbytes |
 | network-traffic | src_packets | sourcepackets |
 | network-traffic | dst_packets | destinationpackets |
-| network-traffic | protocols | protocol |
+| network-traffic | protocols | PROTOCOLNAME(protocolid) |
 | network-traffic | extensions.http-request-ext.request_header.Host | httphost |
 | network-traffic | extensions.http-request-ext.request_header.Referer | httpreferrer |
 | network-traffic | extensions.http-request-ext.request_header.Server | httpserver |
@@ -75,18 +75,18 @@
 | process | binary_ref | Image |
 | process | binary_ref | ParentImage |
 | process | parent_ref | ParentImage |
-| process | command_line | ProcessCommandLine |
+| process | command_line | "Process CommandLine" |
 | process | command_line | ParentCommandLine |
 | process | parent_ref | ParentCommandLine |
-| process | name | ProcessName |
-| process | pid | ProcessId |
-| process | pid | ParentProcessId |
-| process | parent_ref | ParentProcessId |
+| process | name | "Process Name" |
+| process | pid | "Process ID" |
+| process | pid | "Parent Process ID" |
+| process | parent_ref | "Parent Process ID" |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
 | <br> | | |
 | software | name | applicationname |
 | <br> | | |
-| url | value | url |
+| url | value | URL |
 | url | value | dnsdomainname |
 | url | value | httphost |
 | url | value | tlsservernameindication |
@@ -94,77 +94,77 @@
 | user-account | user_id | username |
 | <br> | | |
 | windows-registry-key | key | ObjectName |
-| windows-registry-key | values | RegistryValueName |
+| windows-registry-key | values | "Registry Value Name" |
 | <br> | | |
 | x-ibm-finding | src_application_user_ref | username |
-| x-ibm-finding | dst_ip_ref | destinationip |
+| x-ibm-finding | dst_ip_ref | destinationaddress |
 | x-ibm-finding | event_count | eventcount |
 | x-ibm-finding | finding_type | eventcount |
 | x-ibm-finding | start | starttime |
 | x-ibm-finding | end | endtime |
 | x-ibm-finding | magnitude | magnitude |
-| x-ibm-finding | src_ip_ref | sourceip |
-| x-ibm-finding | src_geolocation | sourcegeographic |
-| x-ibm-finding | dst_geolocation | destinationgeographic |
-| x-ibm-finding | severity | eventseverity |
-| x-ibm-finding | rule_names | rulenames |
-| x-ibm-finding | name | crename |
-| x-ibm-finding | description | credescription |
+| x-ibm-finding | src_ip_ref | sourceaddress |
+| x-ibm-finding | src_geolocation | sourcegeographiclocation |
+| x-ibm-finding | dst_geolocation | destinationgeographiclocation |
+| x-ibm-finding | severity | severity |
+| x-ibm-finding | rule_names | rulename(creeventlist) |
+| x-ibm-finding | name | "CRE Name" |
+| x-ibm-finding | description | "CRE Description" |
 | <br> | | |
 | x-ibm-windows | targetimage | TargetImage |
-| x-ibm-windows | granted_access | GrantedAccess |
-| x-ibm-windows | call_trace | CallTrace |
+| x-ibm-windows | granted_access | "Granted Access" |
+| x-ibm-windows | call_trace | "Call Trace" |
 | x-ibm-windows | source_image | SourceImage |
 | x-ibm-windows | pipe_name | PipeName |
 | x-ibm-windows | start_module | StartModule |
 | x-ibm-windows | start_function | StartFunction |
 | x-ibm-windows | signed | Signed |
-| x-ibm-windows | imphash | IMPHash |
+| x-ibm-windows | imphash | "IMP Hash" |
 | <br> | | |
 | x-oca-asset | ip_refs | identityip |
 | x-oca-asset | hostname | identityhostname |
-| x-oca-asset | ip_refs | sourceip |
+| x-oca-asset | ip_refs | sourceaddress |
 | x-oca-asset | mac_refs | sourcemac |
 | <br> | | |
 | x-oca-event | user_ref | username |
-| x-oca-event | outcome | categoryname |
-| x-oca-event | category | high_level_category_name |
+| x-oca-event | outcome | CATEGORYNAME(category) |
+| x-oca-event | category | CATEGORYNAME(highlevelcategory) |
 | x-oca-event | host_ref | identityip |
 | x-oca-event | host_ref | identityhostname |
-| x-oca-event | action | qidname |
+| x-oca-event | action | QIDNAME(qid) |
 | x-oca-event | created | devicetime |
-| x-oca-event | network_ref | destinationip |
+| x-oca-event | network_ref | destinationaddress |
 | x-oca-event | network_ref | destinationv6 |
-| x-oca-event | agent | logsourcename |
-| x-oca-event | provider | logsourcetypename |
-| x-oca-event | network_ref | sourceip |
+| x-oca-event | agent | LOGSOURCENAME(logsourceid) |
+| x-oca-event | provider | LOGSOURCETYPENAME(devicetype) |
+| x-oca-event | network_ref | sourceaddress |
 | x-oca-event | network_ref | sourcev6 |
-| x-oca-event | url_ref | url |
+| x-oca-event | url_ref | URL |
 | x-oca-event | domain_ref | UrlHost |
 | x-oca-event | network_ref | UrlHost |
-| x-oca-event | file_ref | filename |
-| x-oca-event | file_ref | filepath |
-| x-oca-event | original_ref | eventpayload |
+| x-oca-event | file_ref | Filename |
+| x-oca-event | file_ref | "File Path" |
+| x-oca-event | original_ref | UTF8(payload) |
 | x-oca-event | process_ref | Image |
 | x-oca-event | parent_process_ref | ParentImage |
-| x-oca-event | process_ref | ProcessCommandLine |
+| x-oca-event | process_ref | "Process CommandLine" |
 | x-oca-event | parent_process_ref | ParentCommandLine |
-| x-oca-event | process_ref | ProcessName |
-| x-oca-event | process_ref | ProcessId |
+| x-oca-event | process_ref | "Process Name" |
+| x-oca-event | process_ref | "Process ID" |
 | x-oca-event | code | EventID |
-| x-oca-event | parent_process_ref | ParentProcessId |
+| x-oca-event | parent_process_ref | "Parent Process ID" |
 | x-oca-event | registry_ref | ObjectName |
-| x-oca-event | registry_ref | RegistryValueName |
+| x-oca-event | registry_ref | "Registry Value Name" |
 | x-oca-event | original_ref | Message |
 | x-oca-event | original | Message |
 | <br> | | |
-| x-qradar | category_id | categoryid |
-| x-qradar | high_level_category_id | high_level_category_id |
+| x-qradar | category_id | category |
+| x-qradar | high_level_category_id | highlevelcategory |
 | x-qradar | relevance | relevance |
 | x-qradar | log_source_id | logsourceid |
-| x-qradar | direction | direction |
+| x-qradar | direction | eventdirection |
 | x-qradar | qid | qid |
-| x-qradar | domain_name | domainname |
+| x-qradar | domain_name | DOMAINNAME(domainid) |
 | x-qradar | domain_name | dnsdomainname |
 | x-qradar | flow_source | flowsource |
 | x-qradar | flow_interface | flowinterface |
@@ -185,5 +185,5 @@
 | x-qradar | tls_ja3s_hash | tlsja3shash |
 | x-qradar | suspect_content_descriptions | suspectcontentdescriptions |
 | x-qradar | tls_server_name_indication | tlsservernameindication |
-| x-qradar | registry_key | RegistryKey |
+| x-qradar | registry_key | "Registry Key" |
 | <br> | | |
