@@ -5,7 +5,7 @@
         },
         "name": {
             "label": "Data source name",
-            "description": "Assign a name to identify the connection minimum of 5 characters"
+            "description": "Assign a name to identify the connection (minimum of 5 characters)"
         },
         "description": {
             "label": "Data source description",
