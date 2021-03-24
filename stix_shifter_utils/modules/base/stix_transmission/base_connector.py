@@ -3,6 +3,7 @@ from .base_query_connector import BaseQueryConnector
 from .base_status_connector import BaseStatusConnector
 from .base_delete_connector import BaseDeleteConnector
 from .base_results_connector import BaseResultsConnector
+import json
 
 
 class BaseConnector:
@@ -86,3 +87,9 @@ class BaseConnector:
                     error (str): error message (when success=False)
         """
         raise NotImplementedError()
+
+    def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
+        result = entry_point.create_results_connection(search_id, offset, length)
+        if result and 'success' in result and result['success']:
+            result = entry_point.translate_results(data_source, json.dumps(result['data']))
+        return result

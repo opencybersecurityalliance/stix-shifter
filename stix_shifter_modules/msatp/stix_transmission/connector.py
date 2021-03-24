@@ -50,8 +50,8 @@ class Connector(BaseSyncConnector):
     def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error is not None:
-            raise Exception(self.init_error)
+        if self.init_error:
+            raise self.init_error
         response = self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
@@ -75,8 +75,8 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
 
         try:
-            if self.init_error is not None:
-                raise Exception(self.init_error)
+            if self.init_error:
+                raise self.init_error
             response = self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
             response_json = json.loads(return_obj["data"])
