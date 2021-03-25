@@ -257,6 +257,10 @@ class BaseEntryPoint:
     def create_results_connection(self, search_id, offset, length):
         return self.__results_connector.create_results_connection(search_id, offset, length)
 
+    @transmission
+    def create_results_stix_connection(self, search_id, offset, length, data_source):
+        return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+
     def set_delete_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):
             raise Exception('connector is not instance of BaseConnector or BaseDeleteConnector')
