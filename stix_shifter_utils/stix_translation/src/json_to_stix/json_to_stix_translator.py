@@ -130,6 +130,10 @@ class DataSourceObjToStixObj:
         if stix_value is None or stix_value == '':
             DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
+        elif isinstance(stix_value, list):
+            if len(stix_value) == 0:
+                DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
+                return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
             if unwrap and isinstance(stix_value, list):
@@ -154,6 +158,22 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
+    
+    #update the object key of the mapping
+    @staticmethod
+    def _update_object_key(ds_map, indx):
+        for key, value in ds_map.items():
+            if isinstance(value, dict):
+                if 'object' in value:
+                    value['object'] = str(value['object']) +'_' + str(indx)
+            if isinstance(value, list):
+                for item in value:
+                    if 'object' in item:
+                        item['object'] = str(item['object']) +'_' + str(indx)
+                        if 'references' in item:
+                            item['references'] = str(item['references']) +'_' + str(indx)
+
+        return ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
@@ -179,6 +199,15 @@ class DataSourceObjToStixObj:
                 self._transform(object_map, observation, ds_map[ds_key], key, to_map)
             return
 
+        # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
+        if isinstance(to_map, list):
+            self.logger.debug('{} is a list; unwrapping.'.format(to_map))
+            for item in to_map:
+                if isinstance(item, dict):
+                    new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
+                    for field in item.keys():
+                        self._transform(object_map, observation, new_ds_map, field, item)
+        
         generic_hash_key = ''
 
         # get the stix keys that are mapped

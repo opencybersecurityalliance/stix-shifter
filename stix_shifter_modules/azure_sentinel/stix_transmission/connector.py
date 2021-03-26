@@ -89,40 +89,27 @@ class Connector(BaseSyncConnector):
                 # slice the cumulative records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:total_records]
 
-                single_level_json = []
-                # flatten result json to single level
+                update_node = []
+
+                # customize results for fileHashes
                 for node in return_obj['data']:
-
-                    # new code
-                    if len(node['processes']) > 1:
-                        del node['fileStates']
-
-                    # customize results for fileHashes
                     if 'fileStates' in node:
                         for file in node["fileStates"]:
                             if file["fileHash"] is not None:
-                                file[file["fileHash"]['hashType']] = file["fileHash"]['hashValue']
+                                file["fileHash"][file["fileHash"]['hashType']] = file["fileHash"]['hashValue']
+                                file["fileHash"].pop('hashType')
+                                file["fileHash"].pop('hashValue')
 
                     if 'processes' in node:
                         for process in node["processes"]:
                             if process["fileHash"] is not None:
-                                process[process["fileHash"]['hashType']] = process["fileHash"]['hashValue']
+                                process["fileHash"][process["fileHash"]['hashType']] = process["fileHash"]['hashValue']
+                                process["fileHash"].pop('hashType')
+                                process["fileHash"].pop('hashValue')
 
-                    # pass the alert nodes for JSON flattening
-                    flat_json = Connector.flatten_json(node)
-                    # extract and replace valid IP values
-                    for key in list(flat_json):
-                        # check for string attributes to extract IP value
-                        if flat_json[key] is not None and isinstance(flat_json[key], str):
-                            ip_value = re.findall(r'[0-9]+(?:\.[0-9]+){3}', flat_json[key])
-                            if ip_value:
-                                flat_json[key] = ip_value[0]
-                        # check for removing keys (none and bool type)
-                        elif flat_json[key] is None or isinstance(flat_json[key], bool):
-                            flat_json.pop(key)
-                    single_level_json.append(flat_json)
+                    update_node.append(node)
 
-                return_obj['data'] = single_level_json
+                return_obj['data'] = update_node
 
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
@@ -166,16 +153,3 @@ class Connector(BaseSyncConnector):
                 ErrorResponder.fill_error(return_obj, message=str(ex))
 
         return return_obj
-
-    @staticmethod
-    def flatten_json(nested_json):
-        """
-            Flatten json object with nested keys into a single level.
-            param:nested_json: A nested json object.
-            :return: The flattened json object if successful, None otherwise.
-        """
-
-        result = flatten(nested_json)
-        result['event_count'] = '1'
-
-        return result
