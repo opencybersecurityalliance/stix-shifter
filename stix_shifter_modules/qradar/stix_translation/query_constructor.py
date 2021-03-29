@@ -168,7 +168,7 @@ class AqlQueryStringPatternTranslator:
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
         if expression_01 and expression_02:
-            return "({}) {} ({})".format(expression_01, operator, expression_02)
+            return "{} {} {}".format(expression_01, operator, expression_02)
         elif expression_01:
             return "{}".format(expression_01)
         elif expression_02:

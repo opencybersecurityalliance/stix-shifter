@@ -8,5 +8,5 @@ class EntryPoint(BaseEntryPoint):
         self.set_async(False)
         if connection:
             self.setup_transmission_simple(connection, configuration)
-        else:
-            self.setup_translation_simple(dialect_default='report')
+
+        self.setup_translation_simple(dialect_default='report')
