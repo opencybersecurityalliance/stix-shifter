@@ -1,18 +1,38 @@
+import json
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
-import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
+from .event_parser import supported_event_types, parse_raw_event_to_obj, create_event_obj
+
 
 class UnexpectedResponseException(Exception):
     pass
 
+
 class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
+        self.show_events = Connector.get_show_events_mode(connection)
+        self.result_limit = Connector.get_result_limit(connection)
         self.logger = logger.set_logger(__name__)
 
-    def _handle_errors(self, response, return_obj):
+    @staticmethod
+    def get_show_events_mode(connection):
+        if 'options' in connection:
+            return connection['options'].get('events_mode', False)
+        return False
+
+    @staticmethod
+    def get_result_limit(connection):
+        # result_limit = 0 => no limit
+        default_result_limit = 10000
+        if 'options' in connection:
+            return connection['options'].get('result_limit', default_result_limit)
+        return default_result_limit
+
+    @staticmethod
+    def _handle_errors(response, return_obj, results_key='results'):
         response_code = response.code
         response_txt = response.read().decode('utf-8')
 
@@ -20,8 +40,8 @@ class Connector(BaseSyncConnector):
             return_obj['success'] = True
             if response_txt:
                 response_json = json.loads(response_txt)
-                if 'results' in response_json:
-                    return_obj['data'] = response_json['results']
+                if results_key in response_json:
+                    return_obj['data'] = response_json[results_key]
         elif ErrorResponder.is_plain_string(response_txt):
             ErrorResponder.fill_error(return_obj, message=response_txt)
         elif ErrorResponder.is_json_string(response_txt):
@@ -30,6 +50,21 @@ class Connector(BaseSyncConnector):
         else:
             raise UnexpectedResponseException
         return return_obj
+
+    @staticmethod
+    def _get_events(process_data: dict):
+        raw_events = []
+        for event_type in supported_event_types:
+            event_key = '{}_complete'.format(event_type)
+            if event_key in process_data:
+                for event_data in process_data[event_key]:
+                    parsed_event = parse_raw_event_to_obj(event_type, event_data)
+                    if parsed_event is not None:
+                        raw_events.append({
+                            'event_type': event_type,
+                            'parsed_event_data': parsed_event
+                        })
+        return raw_events
 
     def ping_connection(self):
         response_txt = None
@@ -47,9 +82,29 @@ class Connector(BaseSyncConnector):
     def create_results_connection(self, query, offset, length):
         response_txt = None
         return_obj = {}
+        all_events = []
         try:
-            response = self.api_client.run_search(query, start=offset, rows=length)
-            return self._handle_errors(response, return_obj)
+            processes_obj = {}
+            processes_search_response = self.api_client.run_processes_search(query, start=offset, rows=length)
+            processes_search_parsed_response = self._handle_errors(processes_search_response, processes_obj)
+            if not self.show_events:
+                return processes_search_parsed_response
+            if 'success' in processes_search_parsed_response and processes_search_parsed_response['success']:
+                for process in processes_search_parsed_response['data']:
+                    try:
+                        events_obj = {}
+                        events_response = self.api_client.run_search_events(process_id=process['id'],
+                                                                            segment_id=process['segment_id'])
+                        events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
+                        if 'success' in events_parsed_response and events_parsed_response['success']:
+                            events = Connector._get_events(events_parsed_response['data'])
+                            for raw_event in events:
+                                event = create_event_obj(process, raw_event)
+                                if event and (self.result_limit == 0 or len(all_events) < self.result_limit):
+                                    all_events.append(event)
+                    except Exception:
+                        self.logger.warn('cannot fetch events for process: ' + str(process['process_id']))
+            return {'success': True, 'data': all_events}
 
         except Exception as e:
             if response_txt is not None:
