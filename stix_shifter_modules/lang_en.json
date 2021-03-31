@@ -5,11 +5,11 @@
         },
         "name": {
             "label": "Data source name",
-            "placeholder": "Add a data source name"
+            "description": "Assign a name to identify the connection (minimum of 5 characters)"
         },
         "description": {
             "label": "Data source description",
-            "placeholder": "Add a data source description"
+            "description": "Assign a description to indicate the purpose of the connection"
         },
         "options": {
             "result_limit": {

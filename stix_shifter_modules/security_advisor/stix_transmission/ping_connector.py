@@ -6,10 +6,10 @@ from .auth import Auth
 
 class PingConnector(BasePingConnector):
     def __init__(self, host, auth):
-        self.host = host
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = Auth(api_key)
+        self.host = self.auth_token.find_location(self.auth["accountID"], host)
 
     def ping_connection(self):
         return_obj = {}        

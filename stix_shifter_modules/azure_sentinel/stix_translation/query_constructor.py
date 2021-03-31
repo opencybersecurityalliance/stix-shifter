@@ -331,9 +331,6 @@ class QueryStringPatternTranslator:
                                                                  stix_field=stix_field))
                 value = self._format_value_without_quotes(value)
 
-            if stix_field not in ['provider', 'vendor']:
-                value = self._format_value_to_lower_case(value)
-
             # COUNTER is used to form sequential lambda function names for OData4 queries per comparison observation
             ''' eg. processes/any(query1:contains(tolower(query1/path), 'c:\\windows\\system32')) and 
             processes/any(query2:contains(tolower(query2/name), 'exe')) '''

@@ -150,7 +150,11 @@ class GuardApiClient(object):
         if filters:
             params_set["filters"] = "{0}".format(filters)
         else:
-            params_set["filters"] = "{0}".format(params["filters"])
+            if params:
+                if "filters" in params:
+                   params_set["filters"] = "{0}".format(params["filters"])
+                else: 
+                    params_set["filters"] = ""
         all_params = {**params_set, **params}
         json_dump = json.dumps(all_params)
         rest_data = str(json.loads(json_dump))
