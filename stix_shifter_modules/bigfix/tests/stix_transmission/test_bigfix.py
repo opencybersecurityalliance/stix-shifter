@@ -588,7 +588,7 @@ class TestBigfixConnection(unittest.TestCase):
                                     "results": [
                                         {
                                         "computerID": 12369754,
-                                        "computerName": "bigdata4545.canlab.ibm.com",
+                                        "DeviceName": "bigdata4545.canlab.ibm.com",
                                         "subQueryID": 1,
                                         "isFailure": false,
                                         "result": "file, .X0-lock, sha256, \
@@ -599,7 +599,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         },
                                         {
                                         "computerID": 14821900,
-                                        "computerName": "DESKTOP-C30V1JF",
+                                        "DeviceName": "DESKTOP-C30V1JF",
                                         "subQueryID": 1,
                                         "isFailure": true,
                                         "result": "Singular expression refers to nonexistent object.",
@@ -643,7 +643,7 @@ class TestBigfixConnection(unittest.TestCase):
                                     "results": [
                                         {
                                         "computerID": 1619109363,
-                                        "computerName": "hclhero.hcl.local",
+                                        "DeviceName": "hclhero.hcl.local",
                                         "subQueryID": 1,
                                         "isFailure": false,
                                         "result": "process, systemd, 1, sha256, \
@@ -655,7 +655,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         },
                                         {
                                         "computerID": 14821900,
-                                        "computerName": "DESKTOP-C30V1JF",
+                                        "DeviceName": "DESKTOP-C30V1JF",
                                         "subQueryID": 1,
                                         "isFailure": true,
                                         "result": "Singular expression refers to nonexistent object.",
@@ -699,7 +699,7 @@ class TestBigfixConnection(unittest.TestCase):
                                     "results": [
                                         {
                                         "computerID": 550872812,
-                                        "computerName": "WIN-N11M78AV7BP",
+                                        "DeviceName": "WIN-N11M78AV7BP",
                                         "subQueryID": 1,
                                         "isFailure": false,
                                         "result": "Local Address, 192.168.36.10, Remote Address, n/a, Local port,\
@@ -709,7 +709,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         },
                                         {
                                         "computerID": 14821900,
-                                        "computerName": "DESKTOP-C30V1JF",
+                                        "DeviceName": "DESKTOP-C30V1JF",
                                         "subQueryID": 1,
                                         "isFailure": true,
                                         "result": "Singular expression refers to nonexistent object.",
@@ -753,7 +753,7 @@ class TestBigfixConnection(unittest.TestCase):
                                     "results": [
                                         {
                                         "computerID": 550872812,
-                                        "computerName": "WIN-N11M78AV7BP",
+                                        "DeviceName": "WIN-N11M78AV7BP",
                                         "subQueryID": 1,
                                         "isFailure": false,
                                         "result": "Address, 192.168.36.110, 0a-ab-41-e0-89-f8",
@@ -761,7 +761,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         },
                                         {
                                         "computerID": 14821900,
-                                        "computerName": "DESKTOP-C30V1JF",
+                                        "DeviceName": "DESKTOP-C30V1JF",
                                         "subQueryID": 1,
                                         "isFailure": false,
                                         "result": "Remote Address, 192.168.36.110, 0a-ab-41-e0-89-f8",
@@ -809,14 +809,14 @@ class TestBigfixConnection(unittest.TestCase):
                                     [
                                         {
                                             "computerID":12369754,
-                                            "computerName":"fake.computer.name",
+                                            "DeviceName":"fake.computer.name",
                                             "subQueryID":1,"isFailure":false,
                                             "result":".err, d41d8cd98f00b204e9800998ecf8427e, u002f.err",
                                             "ResponseTime":0
                                         },
                                         {
                                             "computerID":14821900,
-                                            "computerName":"DESKTOP-C30V1JF",
+                                            "DeviceName":"DESKTOP-C30V1JF",
                                             "subQueryID":1,
                                             "isFailure":true,
                                             "result":"12520437.cpx, 0a0feb9eb28bde8cd835716343b03b14,\
@@ -847,14 +847,14 @@ class TestBigfixConnection(unittest.TestCase):
                                     [aDAsdadDAS
                                         {
                                             "computerID":12369754,
-                                            "computerName":"fake.computer.name",
+                                            "DeviceName":"fake.computer.name",
                                             "subQueryID":1,"isFailure":false,
                                             "result":".err, d41d8cd98f00b204e9800998ecf8427e, u002f.err",
                                             "ResponseTime":0
                                         },
                                         {
                                             "computerID":14821900,
-                                            "computerName":"DESKTOP-C30V1JF",
+                                            "DeviceName":"DESKTOP-C30V1JF",
                                             "subQueryID":1,
                                             "isFailure":true,
                                             "result":"12520437.cpx, 0a0feb9eb28bde8cd835716343b03b14,\
