@@ -77,9 +77,9 @@ class TestMSATPConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
-        query = "(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime(" \
-                "2019-09-24T16:32:32.993821Z) and EventTime < datetime(2019-09-24T16:37:32.993821Z) | order by " \
-                "EventTime desc | where LocalPort < 443)"
+        query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime(" \
+                "2019-09-24T16:32:32.993821Z) and Timestamp < datetime(2019-09-24T16:37:32.993821Z) | order by " \
+                "Timestamp desc | where LocalPort < 443)"
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         query_response = transmission.query(query)
 
@@ -97,8 +97,8 @@ class TestMSATPConnection(unittest.TestCase):
         mock_generate_token.return_value = None
         mocked_return_value = """{
                             "Results": [{
-                                "TableName": "FileCreationEvents",
-                                "EventTime": "2019-09-13T11:34:14.0075314Z",
+                                "TableName": "DeviceFileEvents",
+                                "Timestamp": "2019-09-13T11:34:14.0075314Z",
                                 "ComputerName": "desktop-536bt46",
                                 "FileName": "runcit_tlm_hw.bat",
                                 "SHA1": "93b458752aea37a257a7dd2ed51e98ffffc35be8",
@@ -108,7 +108,7 @@ class TestMSATPConnection(unittest.TestCase):
                             }"""
         mock_results_response.return_value = MSATPMockResponse(200, mocked_return_value)
 
-        query = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
+        query = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by ' \
                 'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                 'or InitiatingProcessParentFileName !~ "updater.exe")'
@@ -129,14 +129,14 @@ class TestMSATPConnection(unittest.TestCase):
 
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
-        mocked_return_value = """{"Results": [{"TableName": "RegistryEvents","EventTime": "2019-10-10T10:43:07.2363291Z","MachineId":
+        mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","ComputerName": "testmachine1","ActionType": "RegistryValueSet",
 "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
 "RegistryValueType":
 "Binary","RegistryValueName": "FailureActions","RegistryValueData": ""}]}"""
         mock_results_response.return_value = MSATPMockResponse(200, mocked_return_value)
 
-        query = '(find withsource = TableName in (RegistryEvents) where EventTime >= datetime(' \
+        query = '(find withsource = TableName in (DeviceRegistryEvents) where EventTime >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | order by EventTime ' \
                 'desc | where RegistryKey !~ "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows ' \
                 'NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\Microsoft\\Windows\\UpdateOrchestrator\\AC Power ' \
@@ -161,7 +161,7 @@ class TestMSATPConnection(unittest.TestCase):
         mocked_return_value = """ {    } """
         mock_results_response.return_value = MSATPMockResponse(404, mocked_return_value)
 
-        query = "(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime(" \
+        query = "(find withsource = TableName in (DeviceNetworkEvents) where EventTime >= datetime(" \
                 "2019-09-24T16:32:32.993821Z) and EventTime < datetime(2019-09-24T16:37:32.993821Z) | order by " \
                 "EventTime desc | where LocalPort < 443)"
         offset = 0
@@ -180,7 +180,7 @@ class TestMSATPConnection(unittest.TestCase):
         mock_generate_token.return_value = None
         results_mock = """{
                             "Results": [{
-                                "TableName": "FileCreationEvents",
+                                "TableName": "DeviceFileEvents",
                                 "EventTime": "2019-10-13T11:34:14.0075314Z",
                                 "ComputerName": "desktop-536bt46",
                                 "FileName": "runcit_tlm_hw.bat",
@@ -192,7 +192,7 @@ class TestMSATPConnection(unittest.TestCase):
 
         mock_results_response.return_value = MSATPMockResponse(200, results_mock)
 
-        query = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
+        query = '(find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime ' \
                 'desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" or ' \
                 'InitiatingProcessParentFileName !~ "updater.exe")'
@@ -202,7 +202,7 @@ class TestMSATPConnection(unittest.TestCase):
 
         assert query_response is not None
         assert 'search_id' in query_response
-        assert query_response['search_id'] == '(find withsource = TableName in (FileCreationEvents) where ' \
+        assert query_response['search_id'] == '(find withsource = TableName in (DeviceFileEvents) where ' \
                                               'EventTime >= datetime(' \
                                               '2019-09-01T08:43:10.003Z) and EventTime < datetime(' \
                                               '2019-10-01T10:43:10.003Z) | ' \
@@ -223,7 +223,7 @@ class TestMSATPConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
-        search_id = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
+        search_id = '(find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by ' \
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
@@ -240,7 +240,7 @@ class TestMSATPConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
-        search_id = '(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(' \
+        search_id = '(find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by ' \
                     'EventTime desc | where FileName !~ "updater.exe" or InitiatingProcessFileName !~ "updater.exe" ' \
                     'or InitiatingProcessParentFileName !~ "updater.exe")'

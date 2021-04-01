@@ -1,6 +1,6 @@
 {
-  "NetworkCommunicationEvents": {
-    "EventTime": [
+  "DeviceNetworkEvents": {
+    "Timestamp": [
       {
         "key": "first_observed",
         "cybox": false,
@@ -218,19 +218,23 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": ["src_mac"]
+        "references": [
+          "src_mac"
+        ]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": ["src_mac"]
+        "references": [
+          "src_mac"
+        ]
       }
     ],
-    "ComputerName": {
+    "DeviceName": {
       "key": "x_msatp.computer_name",
       "cybox": false
     },
-    "MachineId": {
+    "DeviceId": {
       "key": "x_msatp.machine_id",
       "cybox": false
     },
@@ -240,8 +244,224 @@
       "transformer": "ToInteger"
     }
   },
-  "ProcessCreationEvents": {
-    "EventTime": [
+  "DeviceNetworkEvents": {
+    "Timestamp": [
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      }
+    ],
+    "LocalIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "LocalPort": [
+      {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ],
+    "RemotePort": [
+      {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      }
+    ],
+    "Protocol": {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "FormatTCPProtocol"
+    },
+    "RemoteUrl": {
+      "key": "url.value"
+    },
+    "InitiatingProcessSHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "nc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_process",
+        "references": "nc_process_file"
+      }
+    ],
+    "InitiatingProcessSHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "nc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_process",
+        "references": "nc_process_file"
+      }
+    ],
+    "InitiatingProcessMD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "nc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_process",
+        "references": "nc_process_file"
+      }
+    ],
+    "InitiatingProcessFileName": [
+      {
+        "key": "file.name",
+        "object": "nc_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "nc_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_process",
+        "references": "nc_process_file"
+      }
+    ],
+    "InitiatingProcessId": {
+      "key": "process.pid",
+      "object": "nc_process",
+      "transformer": "ToInteger"
+    },
+    "InitiatingProcessCommandLine": {
+      "key": "process.command_line",
+      "object": "nc_process"
+    },
+    "InitiatingProcessCreationTime": {
+      "key": "process.created",
+      "object": "nc_process",
+      "transformer": "MsatpToTimestamp"
+    },
+    "InitiatingProcessFolderPath": [
+      {
+        "key": "directory.path",
+        "object": "nc_process_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "nc_process_file",
+        "references": "nc_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_process",
+        "references": "nc_process_file"
+      }
+    ],
+    "InitiatingProcessParentFileName": [
+      {
+        "key": "file.name",
+        "object": "nc_parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "nc_parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "nc_process",
+        "references": "nc_parent_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "nc_parent_process",
+        "references": "nc_parent_process_file"
+      }
+    ],
+    "InitiatingProcessParentId": [
+      {
+        "key": "process.pid",
+        "object": "nc_parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "nc_process",
+        "references": "nc_parent_process"
+      }
+    ],
+    "InitiatingProcessParentCreationTime": [
+      {
+        "key": "process.created",
+        "object": "nc_parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "nc_process",
+        "references": "nc_parent_process"
+      }
+    ],
+    "InitiatingProcessAccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "nc_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "nc_process",
+        "references": "nc_process_creator"
+      }
+    ],
+    "InitiatingProcessAccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "nc_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "nc_process",
+        "references": "nc_process_creator"
+      }
+    ],
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    }
+  },
+  "DeviceProcessEvents": {
+    "Timestamp": [
       {
         "key": "first_observed",
         "cybox": false,
@@ -535,11 +755,11 @@
         "references": "parent_process_file"
       }
     ],
-    "ComputerName": {
+    "DeviceName": {
       "key": "x_msatp.computer_name",
       "cybox": false
     },
-    "MachineId": {
+    "DeviceId": {
       "key": "x_msatp.machine_id",
       "cybox": false
     },
@@ -549,8 +769,311 @@
       "transformer": "ToInteger"
     }
   },
-  "FileCreationEvents": {
-    "EventTime": [
+  "DeviceProcessEvents": {
+    "Timestamp": [
+      {
+        "key": "x-oca-event.start",
+        "object": "event"
+      },
+      {
+        "key": "x-oca-event.end",
+        "object": "event"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      }
+    ],
+    "ActionType": [
+      {
+        "key": "x-oca-event.action",
+        "object": "event"
+      }
+    ],
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event"
+      }
+    ],
+    "FolderPath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "SHA1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "SHA256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "ProcessId": [
+      {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event"
+      }
+    ],
+    "ProcessCommandLine": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "ProcessCreationTime": {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "MsatpToTimestamp"
+    },
+    "InitiatingProcessSHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "parent_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_process",
+        "references": "parent_process_file"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessSHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "parent_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_process",
+        "references": "parent_process_file"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessMD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "parent_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_process",
+        "references": "parent_process_file"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessFileName": [
+      {
+        "key": "file.name",
+        "object": "parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_process",
+        "references": "parent_process_file"
+      }
+    ],
+    "InitiatingProcessParentFileName": [
+      {
+        "key": "file.name",
+        "object": "parent_parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "parent_parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "parent_process",
+        "references": "parent_parent_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_parent_process",
+        "references": "parent_parent_process_file"
+      }
+    ],
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessParentId": [
+      {
+        "key": "process.pid",
+        "object": "parent_parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "parent_process",
+        "references": "parent_parent_process"
+      }
+    ],
+    "InitiatingProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessParentCreationTime": [
+      {
+        "key": "process.created",
+        "object": "parent_parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "parent_process",
+        "references": "parent_parent_process"
+      }
+    ],
+    "AccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "process_creator"
+      }
+    ],
+    "InitiatingProcessAccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "parent_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "parent_process",
+        "references": "parent_process_creator"
+      }
+    ],
+    "AccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "process_creator"
+      }
+    ],
+    "InitiatingProcessAccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "parent_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "parent_process",
+        "references": "parent_process_creator"
+      }
+    ],
+    "InitiatingProcessFolderPath": [
+      {
+        "key": "directory.path",
+        "object": "parent_process_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "parent_process_file",
+        "references": "parent_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "parent_process",
+        "references": "parent_process_file"
+      }
+    ],
+    "DeviceName": {
+      "key": "x_msatp.computer_name",
+      "cybox": false
+    },
+    "DeviceId": {
+      "key": "x_msatp.machine_id",
+      "cybox": false
+    },
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    }
+  },
+  "DeviceFileEvents": {
+    "Timestamp": [
       {
         "key": "first_observed",
         "cybox": false,
@@ -735,11 +1258,11 @@
         "references": "fc_process_file"
       }
     ],
-    "ComputerName": {
+    "DeviceName": {
       "key": "x_msatp.computer_name",
       "cybox": false
     },
-    "MachineId": {
+    "DeviceId": {
       "key": "x_msatp.machine_id",
       "cybox": false
     },
@@ -749,8 +1272,252 @@
       "transformer": "ToInteger"
     }
   },
-  "RegistryEvents": {
-    "EventTime": [
+  "DeviceFileEvents": {
+    "Timestamp": [
+      {
+        "key": "x-oca-event.start",
+        "object": "event"
+      },
+      {
+        "key": "x-oca-event.end",
+        "object": "event"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      }
+    ],
+    "ActionType": [
+      {
+        "key": "x-oca-event.action",
+        "object": "event"
+      }
+    ],
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event"
+      }
+    ],
+    "SHA1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "SHA256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "InitiatingProcessSHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "fc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_process",
+        "references": "fc_process_file"
+      }
+    ],
+    "InitiatingProcessSHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "fc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_process",
+        "references": "fc_process_file"
+      }
+    ],
+    "InitiatingProcessMD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "fc_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_process",
+        "references": "fc_process_file"
+      }
+    ],
+    "InitiatingProcessFileName": [
+      {
+        "key": "file.name",
+        "object": "fc_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "fc_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_process",
+        "references": "fc_process_file"
+      }
+    ],
+    "InitiatingProcessParentFileName": [
+      {
+        "key": "file.name",
+        "object": "fc_parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "fc_parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "fc_process",
+        "references": "fc_parent_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_parent_process",
+        "references": "fc_parent_process_file"
+      }
+    ],
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "fc_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
+    "InitiatingProcessParentId": [
+      {
+        "key": "process.pid",
+        "object": "fc_parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "fc_process",
+        "references": "fc_parent_process"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "fc_parent_process"
+      }
+    ],
+    "InitiatingProcessCommandLine": {
+      "key": "process.command_line",
+      "object": "fc_process"
+    },
+    "InitiatingProcessCreationTime": {
+      "key": "process.created",
+      "object": "fc_process",
+      "transformer": "MsatpToTimestamp"
+    },
+    "InitiatingProcessParentCreationTime": [
+      {
+        "key": "process.created",
+        "object": "fc_parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "fc_process",
+        "references": "fc_parent_process"
+      }
+    ],
+    "InitiatingProcessAccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "fc_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "fc_process",
+        "references": "fc_process_creator"
+      },
+      {
+        "key": "x-oca-event.user_ref",
+        "object": "event",
+        "references": "fc_process_creator"
+      }
+    ],
+    "InitiatingProcessAccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "fc_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "fc_process",
+        "references": "fc_process_creator"
+      }
+    ],
+    "FolderPath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "InitiatingProcessFolderPath": [
+      {
+        "key": "directory.path",
+        "object": "fc_process_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "fc_process_file",
+        "references": "fc_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_process",
+        "references": "fc_process_file"
+      }
+    ],
+    "DeviceId": {
+      "key": "x-oca-asset.id",
+      "object": "host"
+    },
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    }
+  },
+  "DeviceRegistryEvents": {
+    "Timestamp": [
       {
         "key": "first_observed",
         "cybox": false,
@@ -916,11 +1683,11 @@
         "references": "re_process_file"
       }
     ],
-    "ComputerName": {
+    "DeviceName": {
       "key": "x_msatp.computer_name",
       "cybox": false
     },
-    "MachineId": {
+    "DeviceId": {
       "key": "x_msatp.machine_id",
       "cybox": false
     },
@@ -929,5 +1696,252 @@
       "cybox": false,
       "transformer": "ToInteger"
     }
+  },
+  "DeviceRegistryEvents": {
+    "Timestamp": [
+      {
+        "key": "x-oca-event.start",
+        "object": "event"
+      },
+      {
+        "key": "x-oca-event.end",
+        "object": "event"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      }
+    ],
+    "ActionType": [
+      {
+        "key": "x-oca-event.action",
+        "object": "event"
+      }
+    ],
+    "RegistryKey": {
+      "key": "windows-registry-key.key",
+      "object": "re_key"
+    },
+    "RegistryValues": {
+      "key": "windows-registry-key.values",
+      "object": "re_key",
+      "transformer": "MsatpToRegistryValue"
+    },
+    "InitiatingProcessSHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "re_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_process",
+        "references": "re_process_file"
+      }
+    ],
+    "InitiatingProcessSHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "re_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_process",
+        "references": "re_process_file"
+      }
+    ],
+    "InitiatingProcessMD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "re_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_process",
+        "references": "re_process_file"
+      }
+    ],
+    "InitiatingProcessFileName": [
+      {
+        "key": "file.name",
+        "object": "re_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "re_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_process",
+        "references": "re_process_file"
+      }
+    ],
+    "InitiatingProcessParentFileName": [
+      {
+        "key": "file.name",
+        "object": "re_parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "re_parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "re_process",
+        "references": "re_parent_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_parent_process",
+        "references": "re_parent_process_file"
+      }
+    ],
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "re_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
+      }
+    ],
+    "InitiatingProcessParentId": [
+      {
+        "key": "process.pid",
+        "object": "re_parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "re_process",
+        "references": "re_parent_process"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "re_parent_process"
+      }
+    ],
+    "InitiatingProcessCommandLine": {
+      "key": "process.command_line",
+      "object": "re_process"
+    },
+    "InitiatingProcessCreationTime": {
+      "key": "process.created",
+      "object": "re_process",
+      "transformer": "MsatpToTimestamp"
+    },
+    "InitiatingProcessParentCreationTime": [
+      {
+        "key": "process.created",
+        "object": "re_parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "re_process",
+        "references": "re_parent_process"
+      }
+    ],
+    "InitiatingProcessAccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "re_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "re_process",
+        "references": "re_process_creator"
+      }
+    ],
+    "InitiatingProcessAccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "re_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "re_process",
+        "references": "re_process_creator"
+      }
+    ],
+    "InitiatingProcessFolderPath": [
+      {
+        "key": "directory.path",
+        "object": "re_process_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "re_process_file",
+        "references": "re_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "re_process",
+        "references": "re_process_file"
+      }
+    ],
+    "DeviceId": {
+      "key": "x-oca-asset.id",
+      "object": "host"
+    },
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    }
+  },
+  "DeviceNetworkInfo": {
+    "IpAddresses": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "host_ip",
+        "unwrap": true,
+        "transformer": "MsatpIpTransformer"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "host_ipv6",
+        "unwrap": true,
+        "transformer": "MsatpIpTransformer"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": ["host_ip", "host_ipv6"],
+        "unwrap": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "host_mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": "host_mac"
+      }
+    ]
   }
 }

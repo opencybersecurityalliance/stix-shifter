@@ -9,8 +9,8 @@
 
 #### Translated query(in the same order as STIX patterns):
 
-   1. `(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-30T18:22:12.682690Z) and EventTime < datetime(2019-09-30T18:27:12.682690Z) | order by EventTime desc | where FileName =~ "updater.exe" or InitiatingProcessFileName =~ "updater.exe" or InitiatingProcessParentFileName =~ "updater.exe")`
-   2. `(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime desc | where FileName in~ ("updater.exe", "reg.exe") or InitiatingProcessFileName in~ ("updater.exe", "reg.exe") or InitiatingProcessParentFileName in~ ("updater.exe", "reg.exe"))`
+   1. `(find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(2019-09-30T18:22:12.682690Z) and EventTime < datetime(2019-09-30T18:27:12.682690Z) | order by EventTime desc | where FileName =~ "updater.exe" or InitiatingProcessFileName =~ "updater.exe" or InitiatingProcessParentFileName =~ "updater.exe")`
+   2. `(find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-01T10:43:10.003Z) | order by EventTime desc | where FileName in~ ("updater.exe", "reg.exe") or InitiatingProcessFileName in~ ("updater.exe", "reg.exe") or InitiatingProcessParentFileName in~ ("updater.exe", "reg.exe"))`
 
 ## Example STIX pattern for process query:
 
@@ -21,8 +21,8 @@
 
 #### Translated query(in the same order as STIX patterns):
 
-   1.  `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T11:55:44.588517Z) and EventTime < datetime(2019-10-01T12:00:44.588517Z) | order by EventTime desc | where FileName =~ "find.exe")`
-   2.  `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-08-01T08:43:10.003Z) and EventTime < datetime(2019-09-30T10:43:10.003Z) | order by EventTime desc | where ProcessId > 5804)`
+   1.  `(find withsource = TableName in (DeviceProcessEvents) where EventTime >= datetime(2019-10-01T11:55:44.588517Z) and EventTime < datetime(2019-10-01T12:00:44.588517Z) | order by EventTime desc | where FileName =~ "find.exe")`
+   2.  `(find withsource = TableName in (DeviceProcessEvents) where EventTime >= datetime(2019-08-01T08:43:10.003Z) and EventTime < datetime(2019-09-30T10:43:10.003Z) | order by EventTime desc | where ProcessId > 5804)`
 
 ## Example STIX pattern for network query:
 
@@ -32,7 +32,7 @@
 
 #### Translated query:
 
-  1. `(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime(2017-01-10T08:43:10.003Z) and EventTime < datetime(2019-10-23T10:43:10.003Z) | order by EventTime desc | where tostring(LocalPort) =~ "55099")`
+  1. `(find withsource = TableName in (DeviceNetworkEvents) where EventTime >= datetime(2017-01-10T08:43:10.003Z) and EventTime < datetime(2019-10-23T10:43:10.003Z) | order by EventTime desc | where tostring(LocalPort) =~ "55099")`
   
 ## Example STIX pattern for MAC query:
 
@@ -42,7 +42,7 @@
 
 #### Translated query:
 
-  1. `(find withsource = TableName in (NetworkCommunicationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | extend FormattedTimeKey = bin(EventTime, 1m) | join kind= inner (MachineNetworkInfo | where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | extend FormattedTimeKey = bin(EventTime, 1m)| mvexpand parse_json(IPAddresses) | extend IP = IPAddresses.IPAddress | project EventTime ,MachineId , MacAddress, IP, FormattedTimeKey) on MachineId, $left.FormattedTimeKey == $right.FormattedTimeKey | where LocalIP == IP | where MacAddress =~ "484D7E9DBD97" | order by EventTime desc)`
+  1. `(find withsource = TableName in (DeviceNetworkEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | extend FormattedTimeKey = bin(EventTime, 1m) | join kind= inner (DeviceNetworkInfo | where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | extend FormattedTimeKey = bin(EventTime, 1m)| mvexpand parse_json(IPAddresses) | extend IP = IPAddresses.IPAddress | project EventTime ,MachineId , MacAddress, IP, FormattedTimeKey) on MachineId, $left.FormattedTimeKey == $right.FormattedTimeKey | where LocalIP == IP | where MacAddress =~ "484D7E9DBD97" | order by EventTime desc)`
 
 ## Example STIX pattern for RegistryEvents query:
 
@@ -52,7 +52,7 @@
   
 #### Translated query:
 
-  1. `(find withsource = TableName in (RegistryEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | order by EventTime desc | where RegistryKey =~ @"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsAdvancedThreatProtection")`
+  1. `(find withsource = TableName in (DeviceRegistryEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-10T10:43:10.003Z) | order by EventTime desc | where RegistryKey =~ @"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsAdvancedThreatProtection")`
  
 ## Example STIX pattern for DirectoryPath query:
 
@@ -62,7 +62,7 @@
         (Note: Only LIKE operator is supported for STIX object with 'path' value)
 #### Translated query:
 
-   1. `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (FolderPath contains "C:\\ProgramData\\Symantec" or InitiatingProcessFolderPath contains "C:\\ProgramData\\Symantec"))`
+   1. `(find withsource = TableName in (DeviceProcessEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (FolderPath contains "C:\\ProgramData\\Symantec" or InitiatingProcessFolderPath contains "C:\\ProgramData\\Symantec"))`
    
 ## Example STIX pattern for Custom Attribute(x-msatp) query:
 
@@ -72,7 +72,7 @@
    
 #### Translated query:
 
-   1. `(find withsource = TableName in (ProcessCreationEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (ComputerName =~ "ds-win10"))`
+   1. `(find withsource = TableName in (DeviceProcessEvents) where EventTime >= datetime(2019-10-01T08:43:10.003Z) and EventTime < datetime(2019-10-30T10:43:10.003Z) | order by EventTime desc | where (FileName =~ "conhost.exe") or (ComputerName =~ "ds-win10"))`
    
 ## Example STIX pattern for Combined Observation:
 
@@ -82,7 +82,7 @@
 
 #### Translated query:
 
-   1.  `union (find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (SHA1 =~ "c98dbe4cb8caad5a521915f6e3f82197d53030ee" or InitiatingProcessSHA1 =~ "c98dbe4cb8caad5a521915f6e3f82197d53030ee") and (FileName =~ "AM_Delta_Patch_1.301.613.0.exe" or InitiatingProcessFileName =~ "AM_Delta_Patch_1.301.613.0.exe" or InitiatingProcessParentFileName =~ "AM_Delta_Patch_1.301.613.0.exe")),(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (MD5 =~ "b3b863d8c5c2f3605a5b25adec80f0de" or InitiatingProcessMD5 =~ "b3b863d8c5c2f3605a5b25adec80f0de") and (FileName matches regex"(mpas.*)" or InitiatingProcessFileName matches regex"(mpas.*)" or InitiatingProcessParentFileName matches regex"(mpas.*)"))`
+   1.  `union (find withsource = TableName in (DeviceFileEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (SHA1 =~ "c98dbe4cb8caad5a521915f6e3f82197d53030ee" or InitiatingProcessSHA1 =~ "c98dbe4cb8caad5a521915f6e3f82197d53030ee") and (FileName =~ "AM_Delta_Patch_1.301.613.0.exe" or InitiatingProcessFileName =~ "AM_Delta_Patch_1.301.613.0.exe" or InitiatingProcessParentFileName =~ "AM_Delta_Patch_1.301.613.0.exe")),(find withsource = TableName in (FileCreationEvents) where EventTime >= datetime(2019-09-01T08:43:10.003Z) and EventTime < datetime(2019-10-25T10:43:10.003Z) | order by EventTime desc | where (MD5 =~ "b3b863d8c5c2f3605a5b25adec80f0de" or InitiatingProcessMD5 =~ "b3b863d8c5c2f3605a5b25adec80f0de") and (FileName matches regex"(mpas.*)" or InitiatingProcessFileName matches regex"(mpas.*)" or InitiatingProcessParentFileName matches regex"(mpas.*)"))`
 
 
 ## Translate, Transmit, Translate Result flow of a STIX pattern:
