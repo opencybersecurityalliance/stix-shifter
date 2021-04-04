@@ -108,15 +108,16 @@ class GuardApiClient(object):
             return False
         return True    
 
-    def handle_report(self, report_name, params, index_from, fetch_size):
+    def handle_report(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # REPORT
         # -------------------------------------------------------------------------------
         results = ""
         #context().logger.debug('-------------------  ' + report_name + ' ----------------------')
-        params_set = {"reportName":"{0}".format(report_name), "indexFrom": "{0}".format(index_from), "fetchSize": "{0}".format(fetch_size), 
-        "reportParameter":params, "inputTZ":"UTC"}
-        json_dump = json.dumps(params_set)
+        params["fetchSize"] = int(fetch_size)
+        params["index_from"]=int(index_from)
+        params["inputTZ"]="UTC"
+        json_dump = json.dumps(params)
         rest_data = str(json.loads(json_dump))
         response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)
         results = response.json()
@@ -127,8 +128,8 @@ class GuardApiClient(object):
                 # inputTZ parameter was aded after v11.3 
                 # so in case it does not exist execute the query without it
                 if errorCode ==  "27":
-                    params_set.pop("inputTZ")
-                    json_dump = json.dumps(params_set)
+                    params.pop("inputTZ")
+                    json_dump = json.dumps(params)
                     rest_data = str(json.loads(json_dump))
                     self.logger.warn("InputTZ not suppoerted - running query without it")
                     response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)            
@@ -137,7 +138,7 @@ class GuardApiClient(object):
         return response
 
 
-    def handle_qs(self, category, params, filters, index_from, fetch_size):
+    def handle_qs(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # QS
         # -------------------------------------------------------------------------------
@@ -145,18 +146,11 @@ class GuardApiClient(object):
              self.get_field_titles()
         
         results = ""
-        params_set = {"category":"{0}".format(category), "startTime": "{0}".format(params["startTime"]), "endTime": "{0}".format(params["endTime"]), \
-             "fetchSize": "{0}".format(int(fetch_size-1)), "firstPosition": "{0}".format(int(index_from-1)), "inputTZ":"UTC"}
-        if filters:
-            params_set["filters"] = "{0}".format(filters)
-        else:
-            if params:
-                if "filters" in params:
-                   params_set["filters"] = "{0}".format(params["filters"])
-                else: 
-                    params_set["filters"] = ""
-        all_params = {**params_set, **params}
-        json_dump = json.dumps(all_params)
+        params["fetchSize"] = int(fetch_size-1)
+        params["firstPosition"]=int(index_from-1)
+        params["inputTZ"]="UTC"
+
+        json_dump = json.dumps(params)
         rest_data = str(json.loads(json_dump))
         response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
         results = response.json()
@@ -167,8 +161,8 @@ class GuardApiClient(object):
                 # inputTZ parameter was aded after v11.3 
                 # so in case it does not exist execute the query without it
                 if errorCode ==  "27":
-                    params_set.pop("inputTZ")
-                    json_dump = json.dumps(params_set)
+                    params.pop("inputTZ")
+                    json_dump = json.dumps(params)
                     rest_data = str(json.loads(json_dump))
                     self.logger.warn("InputTZ not suppoerted - running query without it")
                     response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
