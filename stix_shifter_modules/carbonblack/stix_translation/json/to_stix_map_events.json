@@ -9,7 +9,7 @@
       "cybox": false
     },
     {
-      "key": "x-oca-event.start",
+      "key": "x-oca-event.created",
       "object": "event"
     }
   ],
