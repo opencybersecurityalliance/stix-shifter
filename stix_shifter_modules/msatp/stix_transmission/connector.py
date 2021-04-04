@@ -15,7 +15,7 @@ class Connector(BaseSyncConnector):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        
+
         try:
             self.token = Connector.generate_token(connection, configuration)
             configuration['auth']['access_token'] = self.token
@@ -143,3 +143,5 @@ class Connector(BaseSyncConnector):
                 ErrorResponder.fill_error(return_obj, ex.error_response, ['reason'])
                 Connector.logger.error("Token generation Failed: " + return_obj)
             raise ex
+
+
