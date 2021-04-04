@@ -143,7 +143,7 @@ class ResultsConnector(BaseResultsConnector):
         return formatted_obj
 
     def format_computer_obj(self, computer_obj):
-        # {"computerID": 12369754, "ComputerName": "bigdata4545.canlab.ibm.com", "subQueryID": 1,
+        # {"computerID": 12369754, "computerName": "bigdata4545.canlab.ibm.com", "subQueryID": 1,
         # "isFailure": false, "result": "file, .X0-lock,
         # sha256, 7236f966f07259a1de3ee0d48a3ef0ee47c4a551af7f0d76dcabbbb9d6e00940,
         # sha1, 8b5e953be1db90172af66631132f6f27dda402d2, md5, e5307d27f0eb9a27af8597a1ddc51e89,
