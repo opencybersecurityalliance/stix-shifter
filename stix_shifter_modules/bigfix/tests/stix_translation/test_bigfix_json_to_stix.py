@@ -1,3 +1,4 @@
+import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.bigfix.entry_point import EntryPoint
@@ -67,7 +68,6 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_bigfix_relevance'] is not None
 
     def test_custom_property(self):
         """
@@ -85,8 +85,13 @@ class TestBigFixResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_bigfix_relevance']
-        assert custom_object.keys() == {'computer_identity'}
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        
+        custom_object = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'x-bigfix-relevance')
+        assert custom_object is not None, 'Custom object type not found'
+        assert custom_object.keys() == {'type', 'computer_identity'}
         assert custom_object['computer_identity'] == '1626351170-xlcr.hcl.local'
 
     def test_file_json_to_stix(self):
@@ -119,7 +124,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert file_obj['hashes'] == {'SHA-256': '89698504cb73fefacd012843a5ba2e0acda7fd8d5db4efaad22f7fe54fa422f5',
                                       'SHA-1': '41838ed7a546aeefe184fb8515973ffee7c3ba7e',
                                       'MD5': '958d9ba84826e48094e361102a272fd6'}
-        assert file_obj['parent_directory_ref'] == '1'
+        assert file_obj['parent_directory_ref'] == '2'
         assert file_obj['size'] == 770
 
     def test_process_json_to_stix(self):
@@ -150,9 +155,9 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'systemd'
         assert process_obj['pid'] == 1
-        assert process_obj['binary_ref'] == '0'
-        assert process_obj['parent_ref'] == '3'
-        assert process_obj['creator_user_ref'] == '4'
+        assert process_obj['binary_ref'] == '1'
+        assert process_obj['parent_ref'] == '4'
+        assert process_obj['creator_user_ref'] == '5'
 
     def test_network_json_to_stix(self):
         """
@@ -178,7 +183,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['src_ref'] == '0'
+        assert network_obj['src_ref'] == '1'
         assert network_obj['src_port'] == 139
         assert network_obj['protocols'] == ['udp']
 
@@ -204,7 +209,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'src_ref'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['src_ref'] == '0'
+        assert network_obj['src_ref'] == '1'
 
     def test_network_json_to_stix_negative(self):
         """
