@@ -21,8 +21,18 @@
   ],
   "process_name": [
     {
+      "key": "file.name",
+      "object": "file",
+      "transformer": "ToFileName"
+    },
+    {
       "key": "process.name",
       "object": "process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file"
     },
     {
       "key": "x-oca-event.process_ref",
@@ -293,10 +303,11 @@
       "references": "host"
     }
   ],
-  "device_external_ip": [
+  "interface_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "ipv4-addr"
+      "object": "ipv4-addr",
+      "transformer": "ToIPv4"
     },
     {
       "key": "x-oca-asset.ip_refs",
@@ -305,6 +316,22 @@
         "ipv4-addr"
       ],
       "group": true
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "device_external_ip": {
+    "key": "x_cb_response.comms_ip",
+    "cybox": false,
+    "transformer": "ToIPv4"
+  },
+  "host_type": [
+    {
+      "key": "x-oca-asset.host_type",
+      "object": "host"
     },
     {
       "key": "x-oca-event.host_ref",

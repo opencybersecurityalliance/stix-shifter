@@ -47,10 +47,17 @@
     "key": "process.x_unique_id",
     "object": "process"
   },
-  "parent_name": {
-    "key": "process.name",
-    "object": "parent_process"
-  },
+  "parent_name": [
+    {
+      "key": "process.name",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
   "parent_pid": [
     {
       "key": "process.pid",
@@ -85,32 +92,65 @@
   "interface_ip": [
     {
       "key": "ipv4-addr.value",
+      "object": "ipv4-addr",
       "transformer": "ToIPv4"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "ipv4-addr"
+      ],
+      "group": true
     }
   ],
   "path": [
     {
       "key": "directory.path",
-      "object": "dir"
+      "object": "dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "process_file",
+      "references": "dir"
     }
   ],
-  "hostname": {
-    "key": "x_cb_response.host_name",
-    "cybox": false
-  },
-  "host_type": {
-    "key": "x_cb_response.host_type",
-    "cybox": false
-  },
+  "hostname": [
+    {
+      "key": "x_cb_response.host_name",
+      "cybox": false
+    },
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    }
+  ],
+  "host_type": [
+    {
+      "key": "x_cb_response.host_type",
+      "cybox": false
+    },
+    {
+      "key": "x-oca-asset.host_type",
+      "object": "host"
+    }
+  ],
   "comms_ip": {
     "key": "x_cb_response.comms_ip",
     "cybox": false,
     "transformer": "ToIPv4"
   },
-  "os_type": {
-    "key": "x_cb_response.os_type",
-    "cybox": false
-  },
+  "os_type": [
+    {
+      "key": "x_cb_response.os_type",
+      "cybox": false
+    },
+    {
+      "key": "x-oca-asset.os_name",
+      "object": "host"
+    }
+  ],
   "sensor_id": {
     "key": "x_cb_response.sensor_id",
     "cybox": false

@@ -23,9 +23,15 @@ str_event_fields = {
     'modload': modload_fields,
     'crossproc': crossproc_fields
 }
-CB_PROVIDER = 'Carbon Black Response'
+
+# Textual values adopted from API documentation for file modification event type
+# https://developer.carbonblack.com/reference/enterprise-response/6.3/rest-api/#filemod_complete
 filemod_operation_dict = {'1': 'Created the file', '2': 'First wrote to the file', '4': 'Deleted the file', '8': 'Last wrote to the file'}
-regmond_operation_dict = {'1': 'Created the registry key', '2': 'First wrote to the registry key', '4': 'Deleted the key', '8': 'Deleted the value'}
+
+# Textual values adopted from API documentation for registry modification event type
+# https://developer.carbonblack.com/reference/enterprise-response/6.3/rest-api/#regmod_complete
+regmod_operation_dict = {'1': 'Created the registry key', '2': 'First wrote to the registry key', '4': 'Deleted the key', '8': 'Deleted the value'}
+CB_PROVIDER = 'Carbon Black Response'
 
 
 def parse_raw_event_to_obj(event_type, raw_event_data):
@@ -62,15 +68,16 @@ def _format_timestamp(_timestamp):
 def get_common_fields_as_dict(cbr_process):
     common_fields = {'device_os': cbr_process.get('os_type'),
                      'device_name': cbr_process.get('hostname'),
+                     'host_type': cbr_process.get('host_type'),
                      'process_pid': cbr_process.get('process_pid'),
                      'process_name': cbr_process.get('process_name'),
                      'parent_pid': cbr_process.get('parent_pid'),
                      'parent_name': cbr_process.get('parent_name'),
                      'process_cmdline': cbr_process.get('cmdline'),
+                     'interface_ip': cbr_process.get('interface_ip'),
+                     'device_external_ip': cbr_process.get('comms_ip'),
                      'provider': CB_PROVIDER
                      }
-    ip4_val = cbr_process.get('comms_ip')
-    common_fields['device_external_ip'] = ToIPv4.transform(ip4_val) if ip4_val is not None else None
     return common_fields
 
 
@@ -80,7 +87,7 @@ def create_regmod_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
     event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
     event_dict['regmod_name'] = cbr_event.get('registry_key_path')
-    event_dict['regmod_action'] = regmond_operation_dict[val] if val is not None else None
+    event_dict['regmod_action'] = regmod_operation_dict[val] if val is not None else None
     return event_dict
 
 
@@ -149,6 +156,8 @@ def create_event_obj(process, event):
 
     try:
         common_fields = get_common_fields_as_dict(process)
+        # Fields in event object are mapped as close as possible to Carbon Black Cloud event's fields,
+        # in order to re-use "to_stix.json" mapping file.
         event_obj = create_event_obj_by_type[event_type](common_fields, event_type, event['parsed_event_data'])
     except Exception:
         logger.warn('Unsupported event {}'.format(event_type))
