@@ -1,5 +1,6 @@
 import json
 from os import path
+import re
 
 current_dir = path.abspath(path.dirname(__file__))
 
@@ -47,8 +48,19 @@ def __main__():
             json_file = open(filepath)
             loaded_json = json.loads(json_file.read())
         except(Exception):
-            print("Error for {} module with: {}".format(key))
+            print("Error for {} module".format(key))
             continue
+
+        aliased_data_fields = []
+        if key == 'qradar':
+            try:
+                fields_filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
+                fields_json_file = open(fields_filepath)
+                loaded_fields_json = json.loads(fields_json_file.read())
+                aliased_data_fields = loaded_fields_json.get('default') # array of fields
+            except(Exception):
+                print("Error for {} module".format(key))
+                continue
         
         stix_attribute_collection = _parse_attributes(loaded_json, key, {})
         json_file.close()
@@ -60,11 +72,15 @@ def __main__():
         table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
         sorted_objects = json.dumps(stix_attribute_collection, sort_keys=True)
         sorted_objects = json.loads(sorted_objects)
+        output_string += "| STIX Object | STIX Property | Data Source Field |\n"
+        output_string += "|--|--|--|\n"
         for stix_object, property_list in sorted_objects.items():
-            output_string += "### " + stix_object + "\n"
             for index, prop in enumerate(property_list):
-                output_string += "- {}\n".format(prop)
-            output_string += "\n___\n"
+                stix_property, data_field = prop.split(":")
+                if aliased_data_fields:
+                    data_field = _get_data_field(data_field, aliased_data_fields)
+                output_string += "| {} | {} | {} |\n".format(stix_object, stix_property, data_field)
+            output_string += "| <br> | | |\n"
 
         supported_stix_file.write(output_string)
         supported_stix_file.close()
@@ -72,17 +88,26 @@ def __main__():
     table_of_contents_file.close()
 
 
-def _parse_attributes(element, module, stix_attribute_collection):
+def _get_data_field(data_field, aliased_data_fields):
+    for value in aliased_data_fields:
+        pattern_match = re.search("\sas\s{}$".format(data_field), value)
+        if pattern_match:
+            data_field = re.sub(pattern_match[0], "", value)
+            break
+    return data_field
+
+
+def _parse_attributes(element, module, stix_attribute_collection, data_source_field=None):
     if isinstance(element, list):
         for value in element:
-            _parse_attributes(value, module, stix_attribute_collection)
-    if isinstance(element, dict) and not element.get("key"):
+            _parse_attributes(value, module, stix_attribute_collection, data_source_field)
+    if isinstance(element, dict) and not element.get("key"): # Outer layer of mapping
         for key, value in element.items():
-            _parse_attributes(value, module, stix_attribute_collection)
+            _parse_attributes(value, module, stix_attribute_collection, key)
     if isinstance(element, dict) and element.get("key"):
         if isinstance(element["key"], dict): # Case where there is a "key" field coming from the data source
             for key, value in element.items():
-                _parse_attributes(value, module, stix_attribute_collection)
+                _parse_attributes(value, module, stix_attribute_collection, data_source_field)
         else:
             split_stix_object = element["key"].split(".")
             if len(split_stix_object) == 0 or len(split_stix_object) == 1:
@@ -94,11 +119,13 @@ def _parse_attributes(element, module, stix_attribute_collection):
                     stix_property += split_stix_object.pop(0)
                     if len(split_stix_object) > 0:
                         stix_property += "."
+                stix_property += ":{}".format(data_source_field)
             stix_object_properties = stix_attribute_collection.get(stix_object)
             if stix_object_properties and stix_property not in stix_object_properties:
                 stix_attribute_collection[stix_object].append(stix_property)
             elif not stix_object_properties:
                 stix_attribute_collection[stix_object] = [stix_property]
+    # print("COLLECTION {}".format(stix_attribute_collection))
     return stix_attribute_collection
 
 
