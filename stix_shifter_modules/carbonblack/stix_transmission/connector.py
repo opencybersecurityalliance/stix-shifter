@@ -87,16 +87,16 @@ class Connector(BaseSyncConnector):
             processes_obj = {}
             processes_search_response = self.api_client.run_processes_search(query, start=offset, rows=length)
             processes_search_parsed_response = self._handle_errors(processes_search_response, processes_obj)
-            if not self.show_events:
+            if not self.show_events or not processes_search_parsed_response.get('success', False):
                 return processes_search_parsed_response
-            if 'success' in processes_search_parsed_response and processes_search_parsed_response['success']:
+            if processes_search_parsed_response.get('success', False):
                 for process in processes_search_parsed_response['data']:
                     try:
                         events_obj = {}
                         events_response = self.api_client.run_events_search(process_id=process['id'],
                                                                             segment_id=process['segment_id'])
                         events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
-                        if 'success' in events_parsed_response and events_parsed_response['success']:
+                        if events_parsed_response.get('success', False):
                             events = Connector._get_events(events_parsed_response['data'])
                             for raw_event in events:
                                 event = create_event_obj(process, raw_event)

@@ -53,16 +53,20 @@ def _raw_event_str_to_obj(event_type, raw_event_data):
     return None
 
 
-def _format_timestamp(_timestamp):
+def format_timestamp(_timestamp):
     """
      to TZ format
     :param _timestamp: 2021-03-14 13:17:07.716
-    :return: 2021-03-14T13:17:07.716Z
+    :return: 2021-03-14T13:17:07.716000Z
     """
     if not _timestamp:
         return _timestamp
-    dt = datetime.strptime(_timestamp, '%Y-%m-%d %H:%M:%S.%f')
-    return dt.isoformat() + 'Z'
+    try:
+        dt = datetime.strptime(_timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        return dt.isoformat() + 'Z'
+    except Exception:
+        pass
+    return _timestamp
 
 
 def get_common_fields_as_dict(cbr_process):
@@ -85,7 +89,7 @@ def create_regmod_obj(event_dict, event_type, cbr_event):
     val = cbr_event.get('operation_type')
 
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
     event_dict['regmod_name'] = cbr_event.get('registry_key_path')
     event_dict['regmod_action'] = regmod_operation_dict[val] if val is not None else None
     return event_dict
@@ -93,17 +97,16 @@ def create_regmod_obj(event_dict, event_type, cbr_event):
 
 def create_crossproc_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
     event_dict['crossproc_name'] = cbr_event.get('target_path')
     event_dict['crossproc_action'] = cbr_event.get('crossproc_type')
     event_dict['crossproc_md5'] = cbr_event.get('target_md5')
-    event_dict['crossproc_process_guid'] = cbr_event.get('target_unique_id')
     return event_dict
 
 
 def create_modload_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
     event_dict['modload_name'] = cbr_event.get('path')
     event_dict['modload_md5'] = cbr_event.get('md5')
     return event_dict
@@ -113,7 +116,7 @@ def create_filemod_obj(event_dict, event_type, cbr_event):
     val = cbr_event.get('operation_type')
 
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
     event_dict['filemod_name'] = cbr_event.get('file_path')
     event_dict['filemod_action'] = filemod_operation_dict[val] if val is not None else None
     event_dict['filemod_md5'] = cbr_event.get('md5')
@@ -122,7 +125,7 @@ def create_filemod_obj(event_dict, event_type, cbr_event):
 
 def create_childproc_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
     event_dict['childproc_name'] = cbr_event.get('path')
     event_dict['childproc_md5'] = cbr_event.get('md5')
     event_dict['childproc_sha256'] = cbr_event.get('sha256')
@@ -134,7 +137,7 @@ def create_childproc_obj(event_dict, event_type, cbr_event):
 
 def create_netconn_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = _format_timestamp(cbr_event.get('timestamp'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('timestamp'))
     event_dict['domain'] = cbr_event['domain']
     event_dict['netconn_remote_port'] = cbr_event.get('remote_port')
     event_dict['netconn_remote_ipv4'] = cbr_event.get('remote_ip')
@@ -159,7 +162,7 @@ def create_event_obj(process, event):
         # Fields in event object are mapped as close as possible to Carbon Black Cloud event's fields,
         # in order to re-use "to_stix.json" mapping file.
         event_obj = create_event_obj_by_type[event_type](common_fields, event_type, event['parsed_event_data'])
-    except Exception:
-        logger.warn('Unsupported event {}'.format(event_type))
+    except Exception as ex:
+        logger.warn('Unsupported event {}, {}'.format(event_type, str(ex)))
         return None
     return event_obj
