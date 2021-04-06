@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
-from .test_carbonblack import RequestMockResponse
+from stix_shifter_modules.carbonblack.tests.stix_transmission.test_carbonblack import RequestMockResponse
 
 config = {
     "auth": {
