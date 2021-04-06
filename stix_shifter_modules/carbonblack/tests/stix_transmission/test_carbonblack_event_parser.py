@@ -147,6 +147,15 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
         return event_obj
 
     def test_parse_raw_event(self):
+        raw_event_obj = None
+        assert parse_raw_event_to_obj('netconn', raw_event_obj) is None
+
+        raw_event_str = ""
+        assert parse_raw_event_to_obj('unknown', raw_event_str) is None
+
+        unknown_event = create_event_obj(process_response, {'parsed_event_data': None})
+        assert unknown_event is None
+
         raw_event_obj = events_response['process']['netconn_complete'][0]
         event_obj = parse_raw_event_to_obj('netconn', raw_event_obj)
         assert event_obj == raw_event_obj  # object form stays as-is
@@ -199,6 +208,9 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
         assert filemod_event.get('filemod_name') == "c:\\programdata\\microsoft\\windows\\wer\\temp\\7fb39f69-3a0a-4b59-8afb-0bd9667730d1"
         assert filemod_event.get('filemod_action') == "Created the file"
         assert filemod_event.get('filemod_md5') == ""
+
+        unknown_event = create_event_obj(process_response, {'event_type': 'unknown', 'parsed_event_data': event_obj})
+        assert unknown_event is None
 
     def test_format_timestamp(self):
         input_timestamp = None
