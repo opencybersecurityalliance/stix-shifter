@@ -154,7 +154,7 @@ def create_event_obj(process, event):
     try:
         event_type = event['event_type']
     except KeyError:
-        logger.warn('Event type key is unknown')
+        logger.warning('Event type key is unknown')
         return None
 
     try:
@@ -163,6 +163,6 @@ def create_event_obj(process, event):
         # in order to re-use "to_stix.json" mapping file.
         event_obj = create_event_obj_by_type[event_type](common_fields, event_type, event['parsed_event_data'])
     except Exception as ex:
-        logger.warn('Unsupported event {}, {}'.format(event_type, str(ex)))
+        logger.warning('Unsupported event {}, {}'.format(event_type, str(ex)))
         return None
     return event_obj
