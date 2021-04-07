@@ -1,0 +1,49 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Demo SQL Connector"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "database": {
+            "type": "text"
+        },
+        "table": {
+            "type": "text"
+        },
+        "help": {
+            "type": "link",
+            "default": "https://www.ibm.com/docs/en/cloud-paks/cp-security/1.6.0?topic=administering-universal-data-insights-connectors"
+        },
+        "cert": {
+            "type": "password",
+            "optional": true
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "options": {
+            "unmapped_fallback": {
+                "default": true
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "type": "password"
+            },
+            "password": {
+                "type": "password"
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["host_ipaddr", "dest_ipaddr"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["host_ipaddr", "dest_ipaddr"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["dest_url"]
+    }
+  }
+}

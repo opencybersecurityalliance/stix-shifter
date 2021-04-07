@@ -1,0 +1,41 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "database": {
+            "label": "Database",
+            "description": "The name of the database"
+        },
+        "table": {
+            "label": "Table",
+            "description": "The table this connector will query"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "cert": {
+            "label": "Synchronous dummy Connection Certificate",
+            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the database"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the database"
+            }
+        }
+    }
+}

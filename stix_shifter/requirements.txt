@@ -11,3 +11,4 @@ xmltodict==0.12.0
 jsonmerge==1.7.0
 colorlog==4.1.0
 stix2-matcher==2.0.1
+mysql-connector-python
