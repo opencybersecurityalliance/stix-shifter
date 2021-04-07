@@ -22,6 +22,11 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "unmapped_fallback": {
+                "default": true
+            }
         }
     },
     "configuration": {
