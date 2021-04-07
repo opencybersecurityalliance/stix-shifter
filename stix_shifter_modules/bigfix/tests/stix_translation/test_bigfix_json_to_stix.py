@@ -10,7 +10,7 @@ map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-    "name": "BigFix",
+    "name": "bigfix",
     "identity_class": "events"
 }
 options = {}
@@ -235,17 +235,22 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert network_obj is None
 
     def test_unmapped_attribute_with_mapped_attribute(self):
-        message = "\"GET /blog HTTP/1.1\" 200 2571"
-        data = {"message": message, "unmapped": "nothing to see here"}
+        options = {"unmapped_fallback": True}
+        data = {'process_id': '4', "subQueryID": 1, "unmapped": "value"}
+
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
         objects = observed_data['objects']
-        assert (objects == {})
-        curr_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'message')
-        assert (curr_obj is None), 'url object type not found'
+        assert (objects != {})
+        
+        curr_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'process')
+        assert (curr_obj is not None), 'process object type not found'
+
+        curr_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'x-bigfix')
+        assert (curr_obj is not None), 'x-bigfix object type not found'
 
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
