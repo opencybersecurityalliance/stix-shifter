@@ -187,7 +187,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert file_obj['name'] == 'updater.exe'
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
-        assert file_obj['parent_directory_ref'] == '1'
+        assert file_obj['parent_directory_ref'] == '3'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
         file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['DeviceFileEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
@@ -243,12 +243,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'creator_user_ref', 'parent_ref'}
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '0'
+        assert process_obj['binary_ref'] == '1'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '3'
-        assert process_obj['parent_ref'] == '5'
+        assert process_obj['creator_user_ref'] == '4'
+        assert process_obj['parent_ref'] == '6'
 
     def test_network_json_to_stix(self):
         """to test network stix object properties"""
@@ -354,9 +354,13 @@ class TestMsatpResultsToStix(unittest.TestCase):
         """to test mac stix object properties"""
         data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-20T06:24:16.830101Z',
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                               'DeviceName': 'desktop-536bt46', 'LocalIP': '172.16.2.22',
-                                               'MacAddress': '484D7E9DBD97', 'RemoteIP': '168.159.213.203',
-                                               'LocalPort': 63043, 'RemotePort': 80, 'Protocol': 'TcpV4',
+                                               'DeviceName': 'desktop-536bt46',
+                                                'LocalIP': '172.16.2.22',
+                                               'MacAddress': '484D7E9DBD97',
+                                                'RemoteIP': '168.159.213.203',
+                                               'LocalPort': 63043,
+                                                'RemotePort': 80,
+                                                'Protocol': 'TcpV4',
                                                'RemoteUrl': 'https://play.google.com',
                                                'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
                                                'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
@@ -380,6 +384,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'InitiatingProcessFolderPath': 'c:\\program files ('
                                                                               'x86)\\google\\chrome\\application\\chrome.exe',
                                                'rn': 1, 'event_count': '1'}}
+
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
