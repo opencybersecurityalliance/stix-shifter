@@ -117,8 +117,7 @@ class GuardApiClient(object):
         params["fetchSize"] = int(fetch_size)
         params["index_from"]=int(index_from)
         params["inputTZ"]="UTC"
-        json_dump = json.dumps(params)
-        rest_data = str(json.loads(json_dump))
+        rest_data = json.dumps(params)
         response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)
         results = response.json()
         if not isinstance(results, list):
@@ -129,8 +128,7 @@ class GuardApiClient(object):
                 # so in case it does not exist execute the query without it
                 if errorCode ==  "27":
                     params.pop("inputTZ")
-                    json_dump = json.dumps(params)
-                    rest_data = str(json.loads(json_dump))
+                    rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
                     response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)            
             except:
@@ -150,8 +148,7 @@ class GuardApiClient(object):
         params["firstPosition"]=int(index_from-1)
         params["inputTZ"]="UTC"
 
-        json_dump = json.dumps(params)
-        rest_data = str(json.loads(json_dump))
+        rest_data = json.dumps(params)
         response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
         results = response.json()
         if not isinstance(results, list):
@@ -162,8 +159,7 @@ class GuardApiClient(object):
                 # so in case it does not exist execute the query without it
                 if errorCode ==  "27":
                     params.pop("inputTZ")
-                    json_dump = json.dumps(params)
-                    rest_data = str(json.loads(json_dump))
+                    rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
                     response = requests.post(self.url+self.qs_target, data=rest_data,headers=self.headers,verify=False)
             except:
