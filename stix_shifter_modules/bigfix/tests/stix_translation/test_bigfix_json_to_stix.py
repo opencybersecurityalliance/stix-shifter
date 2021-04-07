@@ -261,3 +261,32 @@ class TestBigFixResultsToStix(unittest.TestCase):
         assert ('objects' in observed_data)
         objects = observed_data['objects']
         assert (objects == {})
+    
+    def test_common_prop_without_timestamp_data(self):
+        """
+        to test the common stix object properties where no timestamp data field in results
+        """
+        options = {"unmapped_fallback": True}
+        data = {'computer_identity': '1626351170-xlcr.hcl.local', 'subQueryID': 1,
+                'file_path': '/tmp/big42E1.tmp', 'file_name': 'big42E1.tmp', 'event_count': '1'}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        assert result_bundle['type'] == 'bundle'
+        result_bundle_objects = result_bundle['objects']
+        
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+        assert result_bundle_identity['id'] == data_source['id']
+        assert result_bundle_identity['name'] == data_source['name']
+        assert result_bundle_identity['identity_class'] == data_source['identity_class']
+
+        observed_data = result_bundle_objects[1]
+        assert observed_data['id'] is not None
+        assert observed_data['type'] == "observed-data"
+        assert observed_data['created_by_ref'] == result_bundle_identity['id']
+
+        assert observed_data['modified'] is not None
+        assert observed_data['created'] is not None
+        assert observed_data['first_observed'] is not None
+        assert observed_data['last_observed'] is not None
+        assert observed_data['number_observed'] is not None
