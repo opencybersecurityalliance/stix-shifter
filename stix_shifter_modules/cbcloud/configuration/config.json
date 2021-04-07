@@ -15,7 +15,7 @@
         },
         "help": {
             "type": "link",
-            "default": "data-sources-carbon-black.html"
+            "default": "data-sources.html"
         }
     },
     "configuration": {

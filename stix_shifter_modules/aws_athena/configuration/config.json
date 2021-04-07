@@ -5,7 +5,7 @@
         },
         "help": {
             "type": "link",
-            "default": "data-sources-aws.html"
+            "default": "data-sources.html"
         },
         "region": {
             "type": "text"
