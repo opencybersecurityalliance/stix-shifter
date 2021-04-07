@@ -5,6 +5,11 @@
         },
         "options": {
             "type": "fields",
+            "async_call": {
+                "type": "text",
+                "hidden": true,
+                "optional": true
+            },
             "result_limit": {
                 "default": 10000,
                 "min": 1,
