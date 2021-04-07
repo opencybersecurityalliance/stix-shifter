@@ -1,4 +1,3 @@
-import requests
 import json
 from .utils import unwrap_connection_options
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
