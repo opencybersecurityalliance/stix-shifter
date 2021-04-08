@@ -64,8 +64,7 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["username"],
-      "account_login": ["username"]
+      "user_id": ["username"]
     }
   },
   "directory": {
