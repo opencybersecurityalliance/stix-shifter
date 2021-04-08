@@ -82,8 +82,7 @@
         }
     ],
     "computer_identity": {
-      "key": "x_bigfix_relevance.computer_identity",
-      "cybox": false
+      "key": "x-bigfix-relevance.computer_identity"
     },
     "event_count": {
         "key": "number_observed",
