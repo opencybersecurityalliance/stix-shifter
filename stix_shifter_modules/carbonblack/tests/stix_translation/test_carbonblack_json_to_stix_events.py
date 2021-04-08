@@ -153,7 +153,7 @@ class TestCarbonBlackTransformEventsResults(unittest.TestCase, object):
 
         objects = result_bundle_objects[1]['objects']
         types = [o.get('type') for o in objects.values()]
-        assert (types == ['x-oca-asset', 'x-oca-event', 'process', 'file', 'process', 'ipv4-addr', 'file', 'directory', 'process'])
+        assert (types == ['x-oca-asset', 'x-oca-event', 'process', 'file', 'process', 'ipv4-addr', 'x-cb-response', 'file', 'directory', 'process'])
         assert (result_bundle_objects[1]['number_observed'] == 1)
 
         start_time = "2021-04-05T01:52:46.594000Z"

@@ -324,8 +324,8 @@
     }
   ],
   "device_external_ip": {
-    "key": "x_cb_response.comms_ip",
-    "cybox": false,
+    "key": "x-cb-response.comms_ip",
+    "object": "cb",
     "transformer": "ToIPv4"
   },
   "host_type": [

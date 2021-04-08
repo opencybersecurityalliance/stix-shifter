@@ -118,8 +118,8 @@
   ],
   "hostname": [
     {
-      "key": "x_cb_response.host_name",
-      "cybox": false
+      "key": "x-cb-response.host_name",
+      "object": "cb"
     },
     {
       "key": "x-oca-asset.hostname",
@@ -128,8 +128,8 @@
   ],
   "host_type": [
     {
-      "key": "x_cb_response.host_type",
-      "cybox": false
+      "key": "x-cb-response.host_type",
+      "object": "cb"
     },
     {
       "key": "x-oca-asset.host_type",
@@ -137,14 +137,14 @@
     }
   ],
   "comms_ip": {
-    "key": "x_cb_response.comms_ip",
-    "cybox": false,
+    "key": "x-cb-response.comms_ip",
+    "object": "cb",
     "transformer": "ToIPv4"
   },
   "os_type": [
     {
-      "key": "x_cb_response.os_type",
-      "cybox": false
+      "key": "x-cb-response.os_type",
+      "object": "cb"
     },
     {
       "key": "x-oca-asset.os_name",
@@ -152,88 +152,88 @@
     }
   ],
   "sensor_id": {
-    "key": "x_cb_response.sensor_id",
-    "cybox": false
+    "key": "x-cb-response.sensor_id",
+    "object": "cb"
   },
   "group": {
-    "key": "x_cb_response.group",
-    "cybox": false
+    "key": "x-cb-response.group",
+    "object": "cb"
   },
   "segment_id": {
-    "key": "x_cb_response.segment_id",
-    "cybox": false
+    "key": "x-cb-response.segment_id",
+    "object": "cb"
   },
   "terminated": {
-    "key": "x_cb_response.terminated",
-    "cybox": false
+    "key": "x-cb-response.terminated",
+    "object": "cb"
   },
   "regmod_count": {
-    "key": "x_cb_response.regmod_count",
-    "cybox": false
+    "key": "x-cb-response.regmod_count",
+    "object": "cb"
   },
   "netconn_count": {
-    "key": "x_cb_response.netconn_count",
-    "cybox": false
+    "key": "x-cb-response.netconn_count",
+    "object": "cb"
   },
   "filemod_count": {
-    "key": "x_cb_response.filemod_count",
-    "cybox": false
+    "key": "x-cb-response.filemod_count",
+    "object": "cb"
   },
   "modload_count": {
-    "key": "x_cb_response.modload_count",
-    "cybox": false
+    "key": "x-cb-response.modload_count",
+    "object": "cb"
   },
   "childproc_count": {
-    "key": "x_cb_response.childproc_count",
-    "cybox": false
+    "key": "x-cb-response.childproc_count",
+    "object": "cb"
   },
   "crossproc_count": {
-    "key": "x_cb_response.crossproc_count",
-    "cybox": false
+    "key": "x-cb-response.crossproc_count",
+    "object": "cb"
   },
   "emet_count": {
-    "key": "x_cb_response.emet_count",
-    "cybox": false
+    "key": "x-cb-response.emet_count",
+    "object": "cb"
   },
   "emet_config": {
-    "key": "x_cb_response.emet_config",
-    "cybox": false
+    "key": "x-cb-response.emet_config",
+    "object": "cb"
   },
   "processblock_count": {
-    "key": "x_cb_response.processblock_count",
-    "cybox": false
+    "key": "x-cb-response.processblock_count",
+    "object": "cb"
   },
   "filtering_known_dlls": {
-    "key": "x_cb_response.filtering_known_dlls",
-    "cybox": false
+    "key": "x-cb-response.filtering_known_dlls",
+    "object": "cb"
   },
   "last_update": {
     "key": "last_observed",
     "cybox": false
   },
   "last_server_update": {
-    "key": "x_cb_response.last_server_update",
-    "cybox": false
+    "key": "x-cb-response.last_server_update",
+    "object": "cb"
   },
   "logon_type": {
-    "key": "x_cb_response.logon_type",
-    "cybox": false
+    "key": "x-cb-response.logon_type",
+    "object": "cb"
   },
   "alliance_score_srstrust": {
-    "key": "x_cb_response.alliance_score_srstrust",
-    "cybox": false
+    "key": "x-cb-response.alliance_score_srstrust",
+    "object": "cb"
   },
   "alliance_link_srstrust": {
-    "key": "x_cb_response.alliance_link_srstrust",
-    "cybox": false
+    "key": "x-cb-response.alliance_link_srstrust",
+    "object": "cb"
   },
   "alliance_data_srstrust": {
-    "key": "x_cb_response.alliance_data_srstrust",
-    "cybox": false
+    "key": "x-cb-response.alliance_data_srstrust",
+    "object": "cb"
   },
   "alliance_updated_srstrust": {
-    "key": "x_cb_response.alliance_updated_srstrust",
-    "cybox": false
+    "key": "x-cb-response.alliance_updated_srstrust",
+    "object": "cb"
   },
   "server_added_timestamp": 
   {
