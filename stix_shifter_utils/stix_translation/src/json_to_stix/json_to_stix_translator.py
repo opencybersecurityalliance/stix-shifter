@@ -13,6 +13,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
+        "spec_version": "2.0",
         "objects": []
     }
 
@@ -177,7 +178,7 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
-    
+
     #update the object key of the mapping
     @staticmethod
     def _update_object_key(ds_map, indx):
@@ -229,7 +230,7 @@ class DataSourceObjToStixObj:
                     new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
-        
+
         generic_hash_key = ''
 
         # get the stix keys that are mapped
@@ -419,7 +420,7 @@ class DataSourceObjToStixObj:
 
         # Add required unmapped properties
         if "valid_from" not in indicator:
-            indicator['valid_from'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])        
+            indicator['valid_from'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
 
         # Add required property to the observation if it wasn't added via the mapping
         if self.options.get('unmapped_fallback'):
