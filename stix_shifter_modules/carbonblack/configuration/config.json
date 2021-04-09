@@ -28,12 +28,16 @@
         "options": {
             "validate_pattern": {
                 "default": false
+            },
+            "events_mode": {
+                "type": "boolean",
+                "default": false
             }
         }
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
+            "type": "fields",
             "token": {
                 "type": "password"
             }
