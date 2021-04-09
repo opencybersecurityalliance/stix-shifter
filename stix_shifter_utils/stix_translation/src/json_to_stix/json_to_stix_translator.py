@@ -2,7 +2,7 @@ import re
 import uuid
 
 from . import observable
-from stix2validator import validate_instance, print_results, ValidationOptions
+from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
 
