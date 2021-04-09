@@ -8,6 +8,7 @@ from stix_shifter_utils.utils import logger
 
 
 # convert JSON data to STIX object using map_data and transformers
+DEFAULT_SPEC_VERSION = "2.1"
 
 def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
     bundle = {
@@ -32,7 +33,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
 def convert_to_stix_indicator(data_source, map_data, data, transformers, options, callback=None):
 
-    DEFAULT_SPEC_VERSION = "2.1"
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
@@ -399,7 +399,6 @@ class DataSourceObjToStixObj:
         stix_type = 'indicator'
         ds_map = self.ds_to_stix_map
         pattern_type = 'stix'
-        DEFAULT_SPEC_VERSION = "2.1"
 
         indicator = {
             'id': stix_type + '--' + str(uuid.uuid4()),
