@@ -2,7 +2,7 @@ import re
 import uuid
 
 from . import observable
-from stix2validator import validate_instance, print_results
+from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
 
@@ -13,7 +13,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     bundle = {
         "type": "bundle",
         "id": "bundle--" + str(uuid.uuid4()),
-        "spec_version": "2.0",
         "objects": []
     }
 
@@ -30,6 +29,26 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
     return bundle
 
+def convert_to_stix_indicator(data_source, map_data, data, transformers, options, callback=None):
+
+    DEFAULT_SPEC_VERSION = "2.1"
+    bundle = {
+        "type": "bundle",
+        "id": "bundle--" + str(uuid.uuid4()),
+        "spec_version": DEFAULT_SPEC_VERSION,
+        "objects": []
+    }
+
+    identity_id = data_source['id']
+    bundle['objects'] += [data_source]
+    data_source_name = data_source['name']
+
+    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, data_source_name, callback)
+    # map data list to list of transformed objects
+    results = list(map(ds2stix.transform_to_indicator, data))
+    bundle["objects"] += results
+
+    return bundle
 
 class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
@@ -368,3 +387,50 @@ class DataSourceObjToStixObj:
             print_results(validated_result)
 
         return observation
+
+    def transform_to_indicator(self, obj):
+        """
+        Transforms the given object in to a STIX indicator based on the mapping file and transform functions
+        :param obj: the datasource object that is being converted to stix
+        :return: the input object converted to stix valid json
+        """
+        object_map = {}
+        stix_type = 'indicator'
+        ds_map = self.ds_to_stix_map
+        pattern_type = 'stix'
+        DEFAULT_SPEC_VERSION = "2.1"
+
+        indicator = {
+            'id': stix_type + '--' + str(uuid.uuid4()),
+            'spec_version': DEFAULT_SPEC_VERSION,
+            'type': stix_type,
+            'pattern_type': pattern_type,
+            'created_by_ref': self.identity_id,
+            'created': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
+            'modified': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+        }
+
+        # create normal type objects
+        if isinstance(obj, dict):
+            for ds_key in obj.keys():
+                self._transform(object_map, indicator, ds_map, ds_key, obj)
+        else:
+            self.logger.debug("Not a dict: {}".format(obj))
+
+        # Add required unmapped properties
+        if "valid_from" not in indicator:
+            indicator['valid_from'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])        
+
+        # Add required property to the observation if it wasn't added via the mapping
+        if self.options.get('unmapped_fallback'):
+            if "pattern" not in indicator:
+                indicator['pattern'] = "[unknown]"
+            if "valid_from" not in indicator:
+                indicator['valid_from'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+
+        # Validate each STIX object
+        if self.stix_validator:
+            validated_result = validate_instance(indicator)
+            print_results(validated_result)
+
+        return indicator

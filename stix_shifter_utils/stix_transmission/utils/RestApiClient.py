@@ -85,7 +85,7 @@ class RestApiClient:
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
-            # covnert server cert to file
+            # convert server cert to file
             if self.server_cert_file_content_exists is True:
                 with open(self.server_cert_name, 'w') as f:
                     try:
