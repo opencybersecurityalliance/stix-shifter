@@ -1,17 +1,50 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["host_ipaddr", "dest_ipaddr"]
+      "value": ["source_ipaddr", "dest_ipaddr"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["host_ipaddr", "dest_ipaddr"]
+      "value": ["source_ipaddr", "dest_ipaddr"]
     }
   },
   "url": {
     "fields": {
-      "value": ["dest_url"]
+      "value": ["url"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"],
+      "hashes.SHA-256": ["sha256hash"],
+      "parent_directory_ref.path": ["file_path"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["file_path"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref.value": ["source_ipaddr"],
+      "dst_ref.value": ["dest_ipaddr"],
+      "src_port": ["source_port"],
+      "dst_port": ["dest_port"],
+      "protocols[*]": ["protocol"],
+      "start": ["entry_time"],
+      "end": ["entry_time"]
+    }
+  },
+  "x-sql": {
+    "fields": {
+      "system_name": ["system_name"]
     }
   }
 }

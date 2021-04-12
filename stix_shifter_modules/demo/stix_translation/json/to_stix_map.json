@@ -1,16 +1,5 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
-  },
-  "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
-  },
-  "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
-  },
-  "host_ipaddr": [
+  "source_ipaddr": [
     {
       "key": "ipv4-addr.value",
       "object": "src_ip"
@@ -44,7 +33,49 @@
       "cybox": false
     }
   ],
-  "dest_url": {
+  "url": {
     "key": "url.value"
-  }
+  },
+  "source_port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "dest_port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "fl"
+    }
+  ],
+  "sha256hash": {
+    "key": "file.hashes.SHA-256",
+    "object": "fl"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "file_path": [
+    {
+      "key": "directory.path",
+      "object": "file_directory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "file_directory"
+    }
+  ]
 }
