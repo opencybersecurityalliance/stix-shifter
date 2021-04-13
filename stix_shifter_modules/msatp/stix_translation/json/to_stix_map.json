@@ -218,7 +218,7 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": "mac"
+        "references": ["mac"]
       },
       {
         "key": "network-traffic.src_ref",
@@ -784,7 +784,7 @@
       }
     ],
     "DeviceId": {
-      "key": "x-oca-asset.id",
+      "key": "x-oca-asset.device_id",
       "object": "host"
     },
     "DeviceName": [
@@ -998,7 +998,7 @@
       }
     ],
     "DeviceId": {
-      "key": "x-oca-asset.id",
+      "key": "x-oca-asset.device_id",
       "object": "host"
     },
     "DeviceName": [
