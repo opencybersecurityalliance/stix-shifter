@@ -18,6 +18,11 @@
                 "min": 1,
                 "max": 65535
             },
+            "proxy_cert": {
+                "type": "password",
+                "optional": true,
+                "hidden": true
+            },
             "destination": {
                 "type": "text"
             }
