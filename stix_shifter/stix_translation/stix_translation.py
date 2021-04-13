@@ -91,7 +91,10 @@ class StixTranslation:
                         if not language or language == query_translator.get_language():
                             dialects_used += 1
                             transform_result = entry_point.transform_query(dialect, data)
-                            queries.extend(transform_result.get('queries', []))
+                            if 'async_call' in transform_result:
+                                queries.append(transform_result)
+                            else:
+                                queries.extend(transform_result.get('queries', []))
                             unmapped_stix_collection.extend(transform_result.get('unmapped_attributes', []))
                     if not dialects_used:
                         raise UnsupportedLanguageException(language)

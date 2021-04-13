@@ -259,7 +259,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         curr_obj = TestCarbonBlackTransformResults.get_first_of_type(objects.values(), 'file')
         file_obj = curr_obj  # used in later test
         assert(curr_obj is not None), 'file object type not found'
-        assert(curr_obj.keys() == {'type', 'name', 'hashes'})
+        assert(curr_obj.keys() == {'type', 'name', 'hashes', 'parent_directory_ref'})
         assert(curr_obj['name'] == "cmd.exe")
         assert(curr_obj['hashes']['MD5'] == "5746bd7e255dd6a8afa06f7c42c1ba41")
 
@@ -291,7 +291,6 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
         assert(observed_data['first_observed'] == "2019-01-22T00:04:52.875Z")
         assert(observed_data['last_observed'] == "2019-01-22T00:04:52.937Z")
 
-
     def test_merge_results_mixed_to_stix(self):
         results = process_data_2["results"]
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(results))
@@ -303,7 +302,7 @@ class TestCarbonBlackTransformResults(unittest.TestCase, object):
 
         objects = result_bundle_objects[1]['objects']
         types = [o.get('type') for o in objects.values()]
-        assert (types == ['file', 'process', 'process', 'ipv4-addr', 'user-account', 'directory'])
+        assert (types == ['file', 'x-cb-response', 'process', 'process', 'x-oca-asset', 'ipv4-addr', 'user-account', 'directory'])
         assert (result_bundle_objects[1]['number_observed'] == 1)
 
         start_time = "2018-12-17T08:37:13.318Z"
