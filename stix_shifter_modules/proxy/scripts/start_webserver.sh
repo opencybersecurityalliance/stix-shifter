@@ -1,3 +1,6 @@
+cd "$(dirname "$0")"
+cd ../../..
+pwd
 FILE_CERT='cert.pem'
 FILE_KEY='key.pem'
 # export REQUESTS_CA_BUNDLE="`pwd`/$FILE_CERT"
