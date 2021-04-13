@@ -78,6 +78,6 @@
 | windows-registry-key | key | RegistryKey |
 | windows-registry-key | values | RegistryValues |
 | <br> | | |
-| x_msatp | computer_name | ComputerName |
-| x_msatp | machine_id | MachineId |
+| x_msatp | computer_name | DeviceName |
+| x_msatp | machine_id | DeviceId |
 | <br> | | |
