@@ -52,6 +52,7 @@ class APIClient():
             result_collection = cursor.fetchall()
             results_list = []
 
+            # Put table data in JSON format
             for tuple in result_collection:
                 results_object = {}
                 for index, datum in enumerate(tuple):

@@ -62,6 +62,10 @@
     "key": "file.hashes.SHA-256",
     "object": "fl"
   },
+  "md5hash": {
+    "key": "file.hashes.MD5",
+    "object": "fl"
+  },
   "protocol": {
     "key": "network-traffic.protocols",
     "object": "nt",

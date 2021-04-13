@@ -18,6 +18,7 @@
     "fields": {
       "name": ["filename"],
       "hashes.SHA-256": ["sha256hash"],
+      "hashes.MD5": ["md5hash"],
       "parent_directory_ref.path": ["file_path"]
     }
   },
@@ -44,7 +45,8 @@
   },
   "x-sql": {
     "fields": {
-      "system_name": ["system_name"]
+      "system_name": ["system_name"],
+      "severity": ["severity"]
     }
   }
 }
