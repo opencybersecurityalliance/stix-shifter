@@ -90,6 +90,10 @@ class BaseConnector:
 
     def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
         result = entry_point.create_results_connection(search_id, offset, length)
+        print('** BASE CREATE RESULTS STIX CONNECTION RESSULTS')
+        print(result)
         if result and 'success' in result and result['success']:
             result = entry_point.translate_results(data_source, json.dumps(result['data']))
+        print('** BEFORE BASE CREATE RESULTS RETURN')
+        print(result)
         return result
