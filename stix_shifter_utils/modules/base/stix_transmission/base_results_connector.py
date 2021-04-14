@@ -24,6 +24,10 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
 
     def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
         result = entry_point.create_results_connection(search_id, offset, length)
+        print('** CREATE RESULTS STIX CONNECTION RESSULTS')
+        print(result)
         if result and 'success' in result and result['success']:
             result = entry_point.translate_results(data_source, json.dumps(result['data']))
+        print('** BEFORE CREATE RESULTS RETURN')
+        print(result)
         return result
