@@ -74,13 +74,6 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
 
         response = None
-        print('*** OPTIONS:')
-        print(self.connection['options'])
-        print('*** ERROR TYPE:')
-        print(self.connection['options'].get('error_type'))
-
-        print("*** BUNDLE URL:")
-        print(self.bundle_url)
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
             print('Error type is timeout')
             response = self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)

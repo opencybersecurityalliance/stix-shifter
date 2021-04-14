@@ -16,6 +16,7 @@ class QueryTranslator(EmptyQueryTranslator):
         print('**IN PARSE QUERY')
         print(self.options.get('error_type'))
         if self.options.get('error_type') == ERROR_TYPE_PARSE_EXCEPTION:
+            print('** triggering parse exception')
             raise Exception('test exception in parse query')
         return super().parse_query(data)
         # if self.options.get('validate_pattern'):
@@ -33,6 +34,7 @@ class QueryTranslator(EmptyQueryTranslator):
         print('*** IN TRANSFORM QUERY OF NEW CONNECTOR')
         print(self.options.get('error_type'))
         if self.options.get('error_type') == ERROR_TYPE_TRANSFORM_EXCEPTION:
+            print('** triggering transform exception')
             raise Exception('test exception in transform query')
         # Data is a STIX pattern.
         # stix2-matcher will break on START STOP qualifiers so remove before returning pattern.

@@ -121,8 +121,12 @@ class StixTranslation:
             else:
                 raise NotImplementedError('wrong parameter: ' + translate_type)
         except Exception as ex:
+            print('*** THIS CODE IS CATCHING MY EXCEPTION')
+            print(ex)
             self.logger.error('Caught exception: ' + str(ex) + " " + str(type(ex)))
             self.logger.debug(exception_to_string(ex))
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex})
+            print('*** RESPONSE')
+            print(response)
             return response
