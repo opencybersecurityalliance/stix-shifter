@@ -48,7 +48,6 @@ class Connector(BaseSyncConnector):
         return matching_sdos
 
     def ping_connection(self):
-        print(self.connection['options']['error_type'])
         return_obj = dict()
 
         response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
@@ -64,24 +63,17 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     def create_results_connection(self, search_id, offset, length):
-        # TODO: WAIT HERE for slow ds on sending results (I think)
-        # search_id is the pattern
-        
-# httpstat.us/200?sleep=60000 for slow connection that is valid
-# www.google.com:81 for a bad connection that will timeout
-
         observations = []
         return_obj = dict()
 
         response = None
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
-            print('Error type is timeout')
+            # httpstat.us/200?sleep=60000 for slow connection that is valid
             response = self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)
         elif self.connection['options'].get('error_type') == ERROR_TYPE_BAD_CONNECTION:
-            print('Error type is bad connection')
+            # www.google.com:81 for a bad connection that will timeout
             response = self.client.call_api('https://www.google.com:81', 'get', timeout=self.timeout)
         else:
-            print('no matching error types')
             response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
         if response.code != 200:
             response_txt = response.raise_for_status()
@@ -125,12 +117,9 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     def create_query_connection(self, query):
-        # time.sleep(60)
-        # TODO: Make slow for slow ds, with timeout (I think)
         return {"success": True, "search_id": query}
 
     def create_status_connection(self, search_id):
-        # TODO: Make slow for slow ds to connect (I think)
         return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def delete_query_connection(self, search_id):

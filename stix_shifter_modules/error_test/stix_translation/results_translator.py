@@ -11,12 +11,8 @@ class ResultsTranslator(BaseResultTranslator):
         return '{}'
 
     def translate_results(self, data_source, data):
-        # TODO: Cause exception here for tests
-        print('*** CHECKING TRANSLATE RESULTS ERROR TYPE')
         error_type = self.options.get('error_type')
-        print(error_type)
         if self.options.get('error_type') == ERROR_TYPE_TRANSLATE_EXCEPTION:
-            print('** triggering translate exception')
             raise TranslationResultException("Test exception in translate_results")
         
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object

@@ -65,8 +65,6 @@ class StixTransmission:
                 raise self.init_error
             return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
         except Exception as ex:
-            print('** EXCEPTION HANDLING IN RESULT-STIX')
-            print(ex)
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
