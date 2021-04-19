@@ -1,10 +1,18 @@
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import json_to_stix_translator
-from os import path
+from ..stix_transmission.connector import Connector
+import os
 import json
 
 
 class ResultsTranslator(BaseResultTranslator):
+
+    def __init__(self, options, dialect, base_file_path=None, callback=None):
+        super().__init__(options, dialect, base_file_path, callback)
+        show_events = Connector.get_show_events_mode({'options': options})
+        if show_events:
+            filepath = os.path.abspath(os.path.join(base_file_path, "json", "to_stix_map_events.json"))
+            self.map_data = self.read_json(filepath, options)
 
     def translate_results(self, data_source, data):
         """

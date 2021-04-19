@@ -92,7 +92,7 @@ class Connector(BaseSyncConnector):
                 event_data.pop('TableName')
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-                if lookup_table == "RegistryEvents":
+                if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
                     registry_build_data[lookup_table]["RegistryValues"] = []
                     registry_value_dict = {}
