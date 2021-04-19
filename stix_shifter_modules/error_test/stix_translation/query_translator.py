@@ -9,7 +9,6 @@ ERROR_TYPE_TRANSFORM_EXCEPTION = 'transform_exception'
 class QueryTranslator(EmptyQueryTranslator):
 
     def parse_query(self, data):
-        print('**IN PARSE QUERY')
         print(self.options.get('error_type'))
         if self.options.get('error_type') == ERROR_TYPE_PARSE_EXCEPTION:
             print('** triggering parse exception')
@@ -18,7 +17,6 @@ class QueryTranslator(EmptyQueryTranslator):
 
 
     def transform_query(self, data):
-        print('*** IN TRANSFORM QUERY OF NEW CONNECTOR')
         print(self.options.get('error_type'))
         if self.options.get('error_type') == ERROR_TYPE_TRANSFORM_EXCEPTION:
             print('** triggering transform exception')
