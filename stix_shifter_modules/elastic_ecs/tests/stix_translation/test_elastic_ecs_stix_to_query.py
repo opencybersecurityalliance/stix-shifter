@@ -268,3 +268,10 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
         test_query = ['event.original : 1*']
         _test_query_assertions(translated_query, test_query)
+
+    def test_process_references(self):
+        stix_pattern = "[process:binary_ref.name = 'node' OR process:parent_ref.name = 'node']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.parent.name : "node" OR (process.executable : "node" OR process.parent.executable : "node"))']
+        _test_query_assertions(translated_query, test_query)

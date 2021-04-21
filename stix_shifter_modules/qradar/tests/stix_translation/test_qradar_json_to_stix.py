@@ -730,7 +730,10 @@ class TestTransform(object):
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
-
+        assert('first_observed' in observed_data)
+        assert('last_observed' in observed_data)
+        assert('created' in observed_data)
+        assert('modified' in observed_data)
         assert('objects' in observed_data)
         objects = observed_data['objects']
         
