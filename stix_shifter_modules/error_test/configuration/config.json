@@ -1,0 +1,39 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Error test"
+        },
+        "url": {
+            "type": "text",
+            "previous": "connection.host"
+        },
+        "help": {
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.6.0/platform/docs/scp-core/data-sources-stix.html"
+        },
+        "options": {
+            "result_limit": {
+                "hidden": true
+            },
+            "error_type": {
+                "type": "text"
+            },
+            "timeout": {
+                "default": 30
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "type": "password",
+                "optional": true
+            },
+            "password": {
+                "type": "password",
+                "optional": true
+            }
+        }
+    }
+}
