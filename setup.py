@@ -162,10 +162,14 @@ for project_name in projects.keys():
         },
     }
 
-    # Prepare MANIFEST.in, include json files
+    # Prepare MANIFEST.in, include json files, utitls
     shutil.rmtree('MANIFEST.in', ignore_errors=True)
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
+    utils_include_list = {
+        'stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py': '%s/stix_translation/json_to_stix_translator.py',
+        'stix_shifter_utils/stix_translation/src/json_to_stix/observable.py': '%s/stix_translation/observable.py'
+    }
 
     for json_search_path in src_folders:
         connector_name = ''
@@ -207,6 +211,12 @@ for project_name in projects.keys():
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)
             cleanup_file_list.append(configuration_path)
+
+        # Unject util files 
+        for util_src, util_dest in utils_include_list.items():
+            util_dest = util_dest % module_dir
+            shutil.copyfile(util_src, util_dest)
+            cleanup_file_list.append(util_dest)
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
