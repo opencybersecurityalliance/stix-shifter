@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector imp
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
+
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client

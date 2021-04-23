@@ -10,7 +10,6 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, query, offset, length):
         return_obj = dict()
-
         response = self.api_client.run_search(query, start=offset, rows=length)
         response_code = response.get('code')
         response_txt = response.get('message')

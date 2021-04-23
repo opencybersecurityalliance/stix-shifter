@@ -1,6 +1,6 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 import mysql.connector
 from mysql.connector import errorcode
+
 
 class APIClient():
 
@@ -72,7 +72,6 @@ class APIClient():
         else:
             cnx.close()
         return response
-
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
