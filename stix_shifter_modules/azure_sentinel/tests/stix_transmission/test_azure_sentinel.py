@@ -4,6 +4,7 @@ from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 
+import json
 
 class AzureSentinelMockResponse:
 
@@ -136,6 +137,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
                     ],
                     "processes": [
                         {
+                            "processId": 1234,
                             "fileHash": {
                                "hashType": "sha256",
                                "hashValue": "33a1cf85c6ab96df38a4023f0cee4df60f62280768fc9c06a235e6d644169d"

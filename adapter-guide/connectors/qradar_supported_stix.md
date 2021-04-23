@@ -18,6 +18,7 @@ ___
 - hashes.MD5
 - hashes.UNKNOWN
 - size
+- parent_directory_ref
 
 ___
 ### ipv4-addr
@@ -37,6 +38,7 @@ ___
 ### network-traffic
 - dst_ref
 - src_ref
+- extensions.dns-ext.question.domain_ref
 - src_payload_ref
 - dst_payload_ref
 - dst_port
@@ -46,6 +48,16 @@ ___
 - src_packets
 - dst_packets
 - protocols
+
+___
+### process
+- creator_user_ref
+- binary_ref
+- parent_ref
+- command_line
+- name
+- pid
+- extensions.windows-service-ext.service_dll_refs
 
 ___
 ### software
@@ -58,6 +70,11 @@ ___
 ___
 ### user-account
 - user_id
+
+___
+### windows-registry-key
+- key
+- values
 
 ___
 ### x-ibm-finding
@@ -77,19 +94,50 @@ ___
 - description
 
 ___
+### x-ibm-windows
+- targetimage
+- granted_access
+- call_trace
+- source_image
+- pipe_name
+- start_module
+- start_function
+- signed
+- imphash
+
+___
+### x-oca-asset
+- ip_refs
+- hostname
+- mac_refs
+
+___
+### x-oca-event
+- user_ref
+- outcome
+- category
+- host_ref
+- action
+- created
+- nt_ref
+- agent
+- provider
+- url_ref
+- domain_ref
+- file_ref
+- original_ref
+- process_ref
+- parent_process_ref
+- code
+- registry_ref
+- original
+
+___
 ### x-qradar
 - category_id
-- category_name
-- high_level_category_name
 - high_level_category_id
-- identity_ip
-- identity_host_name
-- qid_name
 - relevance
-- device_time
 - log_source_id
-- log_source_name
-- log_source_type_name
 - direction
 - qid
 - domain_name
@@ -105,5 +153,6 @@ ___
 - cre_event_list
 - domain_id
 - device_type
+- registry_key
 
 ___
