@@ -60,7 +60,7 @@ class APIClient():
                 results_list.append(results_object)
 
             response["result"] = results_list
-                   
+
         except mysql.connector.Error as err:
             response["code"] = err.errno
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -72,8 +72,3 @@ class APIClient():
         else:
             cnx.close()
         return response
-
-    def delete_search(self, search_id):
-        # Optional since this may not be supported by the data source API
-        # Delete the search
-        return {"code": 200, "success": True}
