@@ -161,9 +161,7 @@ class TestMSATPConnection(unittest.TestCase):
         mocked_return_value = """ {    } """
         mock_results_response.return_value = MSATPMockResponse(404, mocked_return_value)
 
-        query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime(" \
-                "2019-09-24T16:32:32.993821Z) and Timestamp < datetime(2019-09-24T16:37:32.993821Z) | order by " \
-                "Timestamp desc | where LocalPort < 443)"
+        query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime('2021-04-25T14:09:15.093Z) and Timestamp < datetime(2021-04-25T14:14:15.093Z) | order by Timestamp desc | where LocalPort < 443)"
         offset = 0
         length = 1
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())

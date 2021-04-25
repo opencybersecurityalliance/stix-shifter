@@ -74,6 +74,8 @@ class Connector(BaseSyncConnector):
             return 'DeviceRegistryEvents'
         elif ('LocalIP' in event_data) and (event_data['LocalIP'] not in ""):
             return 'DeviceNetworkEvents'
+        elif ('IPv4Dhcp' in event_data) and (event_data['IPv4Dhcp'] not in ""):
+            return 'DeviceNetworkInfo'
         else:
             return 'DeviceFileEvents'
 

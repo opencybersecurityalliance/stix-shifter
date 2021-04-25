@@ -240,15 +240,15 @@ class TestMsatpResultsToStix(unittest.TestCase):
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
         assert process_obj.keys() == {'type', 'name', 'binary_ref', 'pid', 'command_line', 'created',
-                                      'creator_user_ref', 'parent_ref'}
+                                      'creator_user_ref'}
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'consent.exe'
         assert process_obj['binary_ref'] == '1'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '4'
-        assert process_obj['parent_ref'] == '6'
+        assert process_obj['creator_user_ref'] == '5'
+
 
     def test_network_json_to_stix(self):
         """to test network stix object properties"""

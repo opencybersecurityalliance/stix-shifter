@@ -29,8 +29,8 @@ class QueryStringPatternTranslator:
         ComparisonComparators.LessThan: "<",
         ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.In: "in~",
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'OR'
+        ObservationOperators.Or: 'or',
+        ObservationOperators.And: 'and'
     }
     # STIX attribute to MSATP table mapping
     msatp_lookup_table = {"file": "DeviceFileEvents",
@@ -52,7 +52,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
-        self._time_range = 10000
+        self._time_range = 5
         self.qualified_queries = []
         self.qualifier_string = ''
         self.lookup_table_object = None
@@ -128,7 +128,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _negate_comparison(comparison_string):
-        return "(not ({}))".format(comparison_string)
+        return "not ({})".format(comparison_string)
 
     @staticmethod
     def _check_value_type(value, expression):
@@ -188,6 +188,7 @@ class QueryStringPatternTranslator:
         :return: str, where condition will be constructed for value
         """
         comparison_string = ""
+        add_parenthesis = False
         is_int_field = False
         is_date_field = False
         for index_of_field, map_field in enumerate(mapped_fields_array):
@@ -211,10 +212,17 @@ class QueryStringPatternTranslator:
                     raise NotImplementedError(
                         "Comparison operator {} unsupported for MSATP attribute {}".format(comparator, mapped_field))
 
-            comparison_string += '({mapped_field} {comparator} {value})'.format(mapped_field=mapped_field,
-                                                                                comparator=comparator, value=value)
+            curr_comparison_string = '{mapped_field} {comparator} {value}'.format(mapped_field=mapped_field,
+                                                                                  comparator=comparator, value=value)
             if index_of_field < len(mapped_fields_array) - 1:
-                comparison_string += " or "
+                curr_comparison_string = '({}) or '.format(curr_comparison_string)
+                add_parenthesis = True
+
+            elif add_parenthesis:
+                curr_comparison_string = '({})'.format(curr_comparison_string)
+
+            comparison_string += curr_comparison_string
+
         return comparison_string
 
     @staticmethod
@@ -226,6 +234,7 @@ class QueryStringPatternTranslator:
         """
         return re.sub(r'\r|\n|\s{2,}|\t', ' ', format_string)
 
+    '''
     def get_lookup_table_of_obs_exp(self, expression, lookup_table, objects_dict):
         """
         Function to parse observation expression and return the object(i.e DeviceFileEvents
@@ -260,6 +269,8 @@ class QueryStringPatternTranslator:
             self.get_lookup_table_of_obs_exp(expression.expr1, lookup_table, objects_dict)
             self.get_lookup_table_of_obs_exp(expression.expr2, lookup_table, objects_dict)
 
+    '''
+
     def _lookup_comparison_operator(self, expression_operator):
         """
         Comparison operator lookup with error handling for un-supported operators
@@ -272,7 +283,7 @@ class QueryStringPatternTranslator:
         return self.comparator_lookup.get(expression_operator)
 
     '''
-    def _parse_expression_01(self, expression, qualifier=None):
+    def _parse_expression(self, expression, qualifier=None):
         """
         Complete formation of Kusto query from ANTLR expression object
         :param expression: expression object, ANTLR parsed expression object
@@ -309,14 +320,14 @@ class QueryStringPatternTranslator:
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
-    
     '''
 
     # get atomicQuery, map the query to tables
     def __eval_comparison_exp_map(self, expression):
         stix_object, stix_field = expression.object_path.split(':')
-        value = expression.value.values if hasattr(expression.value, 'values') else expression.value
-        # value_type = self._check_value_type(value, expression)  # ?????????????
+        # add later for mac
+        # value = expression.value.values if hasattr(expression.value, 'values') else expression.value
+        # value_type = self._check_value_type(value, expression)
         comparator = self._lookup_comparison_operator(expression.comparator)
         if stix_field == 'created':
             value = self._format_datetime(expression.value, expression)
@@ -366,7 +377,7 @@ class QueryStringPatternTranslator:
         """
         if isinstance(expression, ComparisonExpression):  # Base Case
             return self.__eval_comparison_exp_map(expression)
-        elif isinstance(expression, CombinedComparisonExpression):
+        elif isinstance(expression, CombinedComparisonExpression) or isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(expression.operator)
             exp_map_01 = self._parse_expression(expression.expr1)
             exp_map_02 = self._parse_expression(expression.expr2)
@@ -376,23 +387,19 @@ class QueryStringPatternTranslator:
                 kusto_query_map = exp_map_01
             else:
                 if (operator == 'and'):
-                    return self.construct_and_op_map(exp_map_01, exp_map_02)
+                    kusto_query_map = self.construct_and_op_map(exp_map_01, exp_map_02)
                 else:
-                    return self.construct_op_map(exp_map_01, exp_map_02, operator)
+                    kusto_query_map = self.construct_op_map(exp_map_01, exp_map_02, operator)
+
             return kusto_query_map
 
         elif isinstance(expression, ObservationExpression):
-            kusto_query = self.__eval_observation_exp(expression, qualifier)
-            final_comparison_exp = '({})'.format(kusto_query)
-            self.qualified_queries.append(final_comparison_exp)
-            return None
-        elif isinstance(expression, CombinedObservationExpression):
-            self._parse_expression(expression.expr1, qualifier)
-            self._parse_expression(expression.expr2, qualifier)
-            return None
+            return self._parse_expression(expression.comparison_expression)
+
         elif isinstance(expression, StartStopQualifier):
             if hasattr(expression, 'observation_expression'):
                 return self._parse_expression(getattr(expression, 'observation_expression'), expression.qualifier)
+
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         else:
@@ -404,9 +411,13 @@ class QueryStringPatternTranslator:
 
         for table in merged_map:
             if (isinstance(merged_map[table], list) and len(merged_map[table])) > 1:
-                merged_query = f'({list(merged_map[table])[0]})'
+                merged_query = '{}'.format(list(merged_map[table])[0])
                 for query in merged_map[table][1:]:
-                    merged_map[table] = merged_query + ' {} ({})'.format(query, operator)
+                    merged_query = '({}) {} ({})'.format(merged_query, operator, query)
+                merged_map[table] = merged_query
+
+            else:
+                merged_map[table] = '({})'.format(merged_map[table])
 
         return merged_map
 
@@ -418,14 +429,14 @@ class QueryStringPatternTranslator:
 
         for table in merged_map:
             if (len(merged_map[table])) > 1:
-                merged_query = f'({merged_map[table][0]})'
+                merged_query = '({})'.format(list(merged_map[table])[0])
                 for query in merged_map[table][1:]:
                     merged_map[table] = merged_query + ' and ({})'.format(query)
 
         return merged_map
 
     '''
-    def __eval_observation_exp_01(self, expression, qualifier):
+    def __eval_observation_exp(self, expression, qualifier):
         """
         Function for parsing observation expression value
         :param expression: expression object
@@ -453,27 +464,12 @@ class QueryStringPatternTranslator:
             kusto_query = self.lookup_table_object + self.qualifier_string + '| order by Timestamp desc | ' \
                                                                              'where ' + kusto_query
         return kusto_query
+    
     '''
-
-    def __eval_observation_exp(self, expression, qualifier):
-        """
-        Function for parsing observation expression value
-        :param expression: expression object
-        :param qualifier: qualifier
-        :return:
-        """
-        self._is_mac = False
-        self.lookup_table = []
-        map_kusto_query = self._parse_expression(expression.comparison_expression)
-        self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
-        self.qualifier_string = self.clean_format_string(self.qualifier_string)
-        kusto_query = self.construct_query_from_map(map_kusto_query)
-
-        return kusto_query
 
     def construct_query_from_map(self, map_kusto_query):
 
-        if (len(map_kusto_query.keys()) > 1):
+        if len(map_kusto_query.keys()) > 1:
             return self.construct_union_query_from_map(map_kusto_query)
         else:
             return self.construct_non_union_query_from_map(map_kusto_query)
@@ -482,12 +478,12 @@ class QueryStringPatternTranslator:
         first_entry = list(map_kusto_query.keys())[0]
         kusto_query = '{} | {} | order by Timestamp desc | where {}'.format(first_entry, self.qualifier_string,
                                                                             map_kusto_query[first_entry])
-        # query = 'union withsource=DeviceProcessEvents kind=outer (DeviceProcessEvents | where Timestamp >= datetime(2021-04-14T11:38:10.366Z) and Timestamp < datetime(2021-04-21T10:18:10.366Z) | order by Timestamp desc| where (FileName =~ "powershell.exe") | union kind=outer  (DeviceNetworkEvents | where Timestamp >= datetime(2021-04-14T11:38:10.366Z) and Timestamp < datetime(2021-04-21T10:18:10.366Z) | order by Timestamp desc | where (InitiatingProcessFileName =~ "powershell.exe") or (InitiatingProcessParentFileName =~ "powershell.exe")) | union  kind=outer (DeviceRegistryEvents | where Timestamp >= datetime(2021-04-14T11:38:10.366Z) and Timestamp < datetime(2021-04-21T10:18:10.366Z) | order by Timestamp desc | where (InitiatingProcessFileName =~ "powershell.exe") or (InitiatingProcessParentFileName =~ "powershell.exe")))'
-
         map_kusto_query.pop(first_entry, None)
         for table in map_kusto_query:
-            kusto_query += ' | union kind=outer ({} | {} | order by Timestamp desc | where {})'.format(table, self.qualifier_string, map_kusto_query[table])
-
+            kusto_query += ' | union kind=outer ({} | {} | order by Timestamp desc | where {})'.format(table,
+                                                                                                       self.qualifier_string,
+                                                                                                       map_kusto_query[
+                                                                                                           table])
         return kusto_query
 
     def construct_non_union_query_from_map(self, map_kusto_query):
@@ -502,7 +498,15 @@ class QueryStringPatternTranslator:
         :param pattern: expression object, ANTLR parsed expression object
         :return:str, Kusto query(native query)
         """
-        return self._parse_expression(pattern)
+        map_kusto_query = self._parse_expression(pattern)
+        return self.construct_and_update_queries(map_kusto_query)
+
+    def construct_and_update_queries(self, map_kusto_query, qualifier=None):
+        self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
+        self.qualifier_string = self.clean_format_string(self.qualifier_string)
+        kusto_query = self.construct_query_from_map(map_kusto_query)
+        final_comparison_exp = '({})'.format(kusto_query)
+        self.qualified_queries.append(final_comparison_exp)
 
     def __eval_comparison_value(self, expression, comparator):
         """
@@ -525,7 +529,6 @@ class QueryStringPatternTranslator:
                 value = self._format_matches(expression.value)
         return value, comparator
 
-    '''
     def __eval_comparison_exp(self, expression):
         """
         Function for parsing comparsion expression and returning query
@@ -563,7 +566,6 @@ class QueryStringPatternTranslator:
             comparison_string = self._negate_comparison(comparison_string)
         comparison_string = self.clean_format_string(comparison_string)
         return "{}".format(comparison_string)
-    '''
 
 
 def translate_pattern(pattern: Pattern, data_model_mapper, options):
