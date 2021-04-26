@@ -167,8 +167,7 @@ for project_name in projects.keys():
     shutil.copyfile('build_templates/MANIFEST.in', 'MANIFEST.in')
     json_include_lines = []
     utils_include_list = {
-        'stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py': '%s/stix_translation/json_to_stix_translator.py',
-        'stix_shifter_utils/stix_translation/src/json_to_stix/observable.py': '%s/stix_translation/observable.py'
+        'stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py': '%s/stix_translation/json_to_stix_translator.py'
     }
 
     for json_search_path in src_folders:

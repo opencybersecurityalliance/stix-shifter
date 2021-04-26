@@ -1,7 +1,7 @@
 import re
 import uuid
 
-from . import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
@@ -16,6 +16,8 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
         "spec_version": "2.0",
         "objects": []
     }
+
+    print('>>>>>>>>> I AM DEFAULT json_to_stix_translator!!!!!! ')
 
     identity_id = data_source['id']
     bundle['objects'] += [data_source]

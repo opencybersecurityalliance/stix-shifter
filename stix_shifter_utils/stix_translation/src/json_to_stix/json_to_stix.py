@@ -3,9 +3,9 @@ import importlib
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import LoadJsonResultsException, TranslationResultException
 
-json_to_stix_translator = None
-
 # Concrete BaseResultTranslator
+
+json_to_stix_translator = None
 
 
 class JSONToStix(BaseResultTranslator):
