@@ -52,7 +52,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
-        self._time_range = 5
+        self._time_range = time_range
         self.qualified_queries = []
         self.qualifier_string = ''
         self.lookup_table_object = None
@@ -377,7 +377,8 @@ class QueryStringPatternTranslator:
         """
         if isinstance(expression, ComparisonExpression):  # Base Case
             return self.__eval_comparison_exp_map(expression)
-        elif isinstance(expression, CombinedComparisonExpression) or isinstance(expression, CombinedObservationExpression):
+        elif isinstance(expression, CombinedComparisonExpression) or \
+                isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(expression.operator)
             exp_map_01 = self._parse_expression(expression.expr1)
             exp_map_02 = self._parse_expression(expression.expr2)
@@ -394,7 +395,9 @@ class QueryStringPatternTranslator:
             return kusto_query_map
 
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression)
+            self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
+            self.qualifier_string = self.clean_format_string(self.qualifier_string)
+            return self._parse_expression(expression.comparison_expression, qualifier)
 
         elif isinstance(expression, StartStopQualifier):
             if hasattr(expression, 'observation_expression'):
@@ -472,25 +475,20 @@ class QueryStringPatternTranslator:
         if len(map_kusto_query.keys()) > 1:
             return self.construct_union_query_from_map(map_kusto_query)
         else:
-            return self.construct_non_union_query_from_map(map_kusto_query)
+            return self.construct_single_table_query_from_map(map_kusto_query)
 
     def construct_union_query_from_map(self, map_kusto_query):
-        first_entry = list(map_kusto_query.keys())[0]
-        kusto_query = '{} | {} | order by Timestamp desc | where {}'.format(first_entry, self.qualifier_string,
-                                                                            map_kusto_query[first_entry])
-        map_kusto_query.pop(first_entry, None)
         for table in map_kusto_query:
-            kusto_query += ' | union kind=outer ({} | {} | order by Timestamp desc | where {})'.format(table,
-                                                                                                       self.qualifier_string,
-                                                                                                       map_kusto_query[
-                                                                                                           table])
-        return kusto_query
+            curr_query = '(find withsource = TableName in ({}) {} | order by Timestamp desc | where {})' \
+                .format(table, self.qualifier_string, map_kusto_query[table])
+            self.qualified_queries.append(curr_query)
 
-    def construct_non_union_query_from_map(self, map_kusto_query):
+    def construct_single_table_query_from_map(self, map_kusto_query):
         self.lookup_table_object = 'find withsource = TableName in ({})'.format(list(map_kusto_query.keys())[0])
         kusto_query = self.lookup_table_object + self.qualifier_string + '| order by Timestamp desc | ' \
                                                                          'where ' + list(map_kusto_query.values())[0]
-        return kusto_query
+        kusto_query = '({})'.format((kusto_query))
+        self.qualified_queries.append(kusto_query)
 
     def parse_expression(self, pattern: Pattern):
         """
@@ -499,14 +497,7 @@ class QueryStringPatternTranslator:
         :return:str, Kusto query(native query)
         """
         map_kusto_query = self._parse_expression(pattern)
-        return self.construct_and_update_queries(map_kusto_query)
-
-    def construct_and_update_queries(self, map_kusto_query, qualifier=None):
-        self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
-        self.qualifier_string = self.clean_format_string(self.qualifier_string)
-        kusto_query = self.construct_query_from_map(map_kusto_query)
-        final_comparison_exp = '({})'.format(kusto_query)
-        self.qualified_queries.append(final_comparison_exp)
+        self.construct_query_from_map(map_kusto_query)
 
     def __eval_comparison_value(self, expression, comparator):
         """
@@ -540,12 +531,10 @@ class QueryStringPatternTranslator:
         value_type = self._check_value_type(value, expression)
         ######################
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-        # debug - take all the fields that are contained in self.lookup_table_object
         mapped_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == self.lookup_table_object]
         mapped_mac_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == 'DeviceNetworkInfo'
                            and 'mac' in value_type]
         # raise ValueError as the Stix object are not matching in the observation
-        # debug - if there are not matching fileds for the chosen table (this object is not mapped to the lookup_table_object) raise an error
         if not mapped_list and not mapped_mac_list:
             raise ValueError("STIX_objects is not mapping with lookup table attributes")
         comparator = self._lookup_comparison_operator(expression.comparator)

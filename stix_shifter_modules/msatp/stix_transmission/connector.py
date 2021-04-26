@@ -65,20 +65,6 @@ class Connector(BaseSyncConnector):
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def get_table_name(self, event_data):
-        """Extract the table name according to a unique field"""
-        # processEvents
-        if ('ProcessId' in event_data) and (event_data['ProcessId'] is not None):
-            return 'DeviceProcessEvents'
-        elif ('RegistryKey' in event_data) and (event_data['RegistryKey'] not in ""):
-            return 'DeviceRegistryEvents'
-        elif ('LocalIP' in event_data) and (event_data['LocalIP'] not in ""):
-            return 'DeviceNetworkEvents'
-        elif ('IPv4Dhcp' in event_data) and (event_data['IPv4Dhcp'] not in ""):
-            return 'DeviceNetworkInfo'
-        else:
-            return 'DeviceFileEvents'
-
     def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
@@ -102,11 +88,8 @@ class Connector(BaseSyncConnector):
             # Customizing of Registryvalues json
             table_event_data = []
             for event_data in return_obj['data']:
-                if ('TableName' in event_data):
-                    lookup_table = event_data['TableName']
-                    event_data.pop('TableName')
-                else:
-                    lookup_table = self.get_table_name(event_data)
+                lookup_table = event_data['TableName']
+                event_data.pop('TableName')
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
                 if lookup_table == "DeviceRegistryEvents":
