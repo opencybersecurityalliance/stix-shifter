@@ -211,7 +211,7 @@ for project_name in projects.keys():
             os.rename(conf_path, configuration_path)
             cleanup_file_list.append(configuration_path)
 
-        # Unject util files 
+        # Inject util files 
         for util_src, util_dest in utils_include_list.items():
             util_dest = util_dest % module_dir
             shutil.copyfile(util_src, util_dest)

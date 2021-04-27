@@ -17,8 +17,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
         "objects": []
     }
 
-    print('>>>>>>>>> I AM DEFAULT json_to_stix_translator!!!!!! ')
-
     identity_id = data_source['id']
     bundle['objects'] += [data_source]
     data_source_name = data_source['name']

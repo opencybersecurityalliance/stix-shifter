@@ -4,10 +4,6 @@ from stix_shifter_utils.modules.base.stix_translation.base_results_translator im
 from stix_shifter_utils.stix_translation.src.utils.exceptions import LoadJsonResultsException, TranslationResultException
 
 # Concrete BaseResultTranslator
-
-json_to_stix_translator = None
-
-
 class JSONToStix(BaseResultTranslator):
 
     def translate_results(self, data_source, data):
