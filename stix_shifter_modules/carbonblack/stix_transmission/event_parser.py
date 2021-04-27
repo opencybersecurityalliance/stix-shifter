@@ -125,7 +125,7 @@ def create_filemod_obj(event_dict, event_type, cbr_event):
 
 def create_childproc_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('end'))
     event_dict['childproc_name'] = cbr_event.get('path')
     event_dict['childproc_md5'] = cbr_event.get('md5')
     event_dict['childproc_sha256'] = cbr_event.get('sha256')
