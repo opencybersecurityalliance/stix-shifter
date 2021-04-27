@@ -19,7 +19,7 @@ class ResultsConnector(BaseResultsConnector):
         return_obj = dict()
         response_dict = json.loads(response.read())
         
-        if response_code == 200:
+        if 200 <= response_code <= 299:
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:

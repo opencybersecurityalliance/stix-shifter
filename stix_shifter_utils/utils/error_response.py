@@ -114,12 +114,11 @@ class ErrorResponder():
     def call_module_error_mapper(json_data, return_object):
         caller_path_list = traceback.extract_stack()[-3].filename.split('/')
 
-        if 'stix_translation.py' in caller_path_list[-1]:
+        if 'stix_translation.py' == caller_path_list[-1] or 'base_entry_point.py' == caller_path_list[-1]:
             module_path = 'stix_shifter_utils.stix_translation.stix_translation_error_mapper'
         else:
             caller_module_name = caller_path_list[-3:-1]
-            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.error_mapper'
-
+            module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.' + caller_module_name[1] + '.error_mapper'
         # path_start_position = ErrorResponder.rindex(caller_path_list, 'stix-shifter')
         # module_path = 'stix_shifter_modules.' + caller_module_name[0] + '.'  + caller_module_name[1] + '.' + caller_module_name[0] + '_error_mapper'
         # module_path = '.'.join(caller_path_list[path_start_position: -1]) + '.' + caller_module_name + '_error_mapper'

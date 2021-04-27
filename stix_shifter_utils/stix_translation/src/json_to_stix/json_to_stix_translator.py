@@ -331,6 +331,8 @@ class DataSourceObjToStixObj:
         :return: the input object converted to stix valid json
         """
         NUMBER_OBSERVED_KEY = 'number_observed'
+        FIRST_OBSERVED_KEY = 'first_observed'
+        LAST_OBSERVED_KEY = 'last_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
@@ -352,13 +354,11 @@ class DataSourceObjToStixObj:
         else:
             self.logger.debug("Not a dict: {}".format(obj))
 
-        # Add required property to the observation if it wasn't added via the mapping
-        if self.options.get('unmapped_fallback'):
-            if "first_observed" not in observation and "last_observed" not in observation:
-                observation['first_observed'] = now
-                observation['last_observed'] = now
-
-        # Add required property to the observation if it wasn't added via the mapping
+        # Add required properties to the observation if it wasn't added from the mapping
+        if FIRST_OBSERVED_KEY not in observation:
+            observation[FIRST_OBSERVED_KEY] = now
+        if LAST_OBSERVED_KEY not in observation:
+            observation[LAST_OBSERVED_KEY] = now
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
 

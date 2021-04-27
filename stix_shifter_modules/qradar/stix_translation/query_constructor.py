@@ -94,6 +94,9 @@ class AqlQueryStringPatternTranslator:
             if (mapped_field == 'sourceip' or mapped_field == 'destinationip') and comparator.upper() == 'LIKE':
                 return "str({mapped_field}) {comparator} {value}".format(
                     mapped_field=mapped_field, comparator=comparator, value=value)
+            elif (mapped_field == 'sourceip' or mapped_field == 'destinationip') and comparator.upper() == 'IN':
+                return "str({mapped_field}) {comparator} {value}".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
             else:
                 return None
         # These next two checks wouldn't be needed if events and flows used their own to-STIX mapping
