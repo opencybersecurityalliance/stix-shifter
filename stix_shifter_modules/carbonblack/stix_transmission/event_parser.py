@@ -77,7 +77,6 @@ def extract_time_window(query):
             if len(time_window) == 2:
                 return [datetime.strptime(time_window[0], '%Y-%m-%dT%H:%M:%S'),
                         datetime.strptime(time_window[1], '%Y-%m-%dT%H:%M:%S')]
-        print('specific time window')
     elif re.search(r'last_update:-(\d*)m', query):
         # Case: '((process_name:erl.exe) and last_update:-5m)'
         last_update_arr = re.findall(r'last_update:-(\d*)m', query)
