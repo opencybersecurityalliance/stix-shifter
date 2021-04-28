@@ -59,8 +59,7 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
         mocked_process_return_value = """
 {
   "terms": [
-    "process_name:cmd.exe",
-    "start:[2019-01-22T00:00:00 TO *]"
+    "process_name:erl.exe and last_update:[2021-03-15T16:20:00 TO 2021-03-15T16:30:00]"
   ],
   "results": [
     {
@@ -92,7 +91,7 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
       "alliance_data_srstrust": [
         "5746bd7e255dd6a8afa06f7c42c1ba41"
       ],
-      "process_name": "cmd.exe",
+      "process_name": "erl.exe",
       "emet_config": "",
       "last_server_update": "2019-01-22T00:07:07.064Z",
       "path": "c:\\\\windows\\\\system32\\\\cmd.exe",
@@ -158,7 +157,7 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
       "2021-03-15 16:26:14.566|450e6430481940a25e7b268dcc29a6d4|c:\\\\windows\\\\system32\\\\security.dll|b25396c5300483595967adce4eb4d2337876695bba7b1f6021f2a63788c60af4",
       "2021-03-15 16:26:14.566|6e13163214c64bd6453fbe3af96f8944|c:\\\\windows\\\\system32\\\\secur32.dll|1cafa15cba7a29317359c6851292470e01b36ff92d9df2e2c9474c3b02036305",
       "2021-03-15 16:26:14.582|fa6aa982ddf1b76de85e7dcee1a929a7|c:\\\\windows\\\\system32\\\\netapi32.dll|4f13048a6699d50c780db9d072a2ca3c30294ccedcc411167e49c4e8fdedca6e",
-      "2021-03-15 16:26:14.582|6debee59947584cfcb818ed7d4017ed8|c:\\\\windows\\\\system32\\\\schedcli.dll|5100efdacdf9c3f323d9240190e31c4953e7a0440d4ee6385e33de52467f1396"
+      "2021-03-15 16:36:14.582|6debee59947584cfcb818ed7d4017ed8|c:\\\\windows\\\\system32\\\\schedcli.dll|5100efdacdf9c3f323d9240190e31c4953e7a0440d4ee6385e33de52467f1396"
     ],
     "last_update": "2021-03-15T16:26:14.582Z",
     "last_server_update": "2021-03-15T16:27:21.017Z",
@@ -185,16 +184,16 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
             RequestMockResponse(200, mocked_events_return_value.encode()),
         ]
         entry_point = EntryPoint(connection, config)
-        query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
+        query_expression = self._create_query_list("process_name:erl.exe and last_update:[2021-03-15T16:20:00 TO 2021-03-15T16:30:00]")[0]
         results_response = entry_point.create_results_connection(query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success']
         assert 'data' in results_response
-        assert len(results_response['data']) == 4
+        assert len(results_response['data']) == 3
         assert 'process_name' in results_response['data'][0]
-        assert results_response['data'][0]['process_name'] == 'cmd.exe'
+        assert results_response['data'][0]['process_name'] == 'erl.exe'
         assert 'modload_md5' in results_response['data'][0]
         assert results_response['data'][0]['modload_md5'] == '450e6430481940a25e7b268dcc29a6d4'
 

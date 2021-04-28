@@ -3,7 +3,8 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-from .event_parser import supported_event_types, parse_raw_event_to_obj, create_event_obj
+from .event_parser import supported_event_types, parse_raw_event_to_obj, create_event_obj, extract_time_window, \
+    get_timestamp_by_event_type, is_timestamp_in_window, format_timestamp
 
 
 class UnexpectedResponseException(Exception):
@@ -52,7 +53,7 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     @staticmethod
-    def _get_events(process_data: dict):
+    def _get_events(process_data: dict, time_window: list):  # add time window to function
         raw_events = []
         for event_type in supported_event_types:
             event_key = '{}_complete'.format(event_type)
@@ -60,10 +61,14 @@ class Connector(BaseSyncConnector):
                 for event_data in process_data[event_key]:
                     parsed_event = parse_raw_event_to_obj(event_type, event_data)
                     if parsed_event is not None:
-                        raw_events.append({
-                            'event_type': event_type,
-                            'parsed_event_data': parsed_event
-                        })
+                        timestamp = get_timestamp_by_event_type(event_obj=parsed_event, event_type=event_type)
+                        if timestamp:
+                            if (time_window and is_timestamp_in_window(timestamp, time_window)) or (not time_window):
+                                parsed_event['parsed_timestamp'] = format_timestamp(timestamp)
+                                raw_events.append({
+                                    'event_type': event_type,
+                                    'parsed_event_data': parsed_event
+                                })
         return raw_events
 
     def ping_connection(self):
@@ -90,6 +95,7 @@ class Connector(BaseSyncConnector):
             if not self.show_events or not processes_search_parsed_response.get('success', False):
                 return processes_search_parsed_response
             if processes_search_parsed_response.get('success', False):
+                time_window = extract_time_window(query)
                 for process in processes_search_parsed_response['data']:
                     if 0 < self.result_limit <= len(all_events):
                         break
@@ -99,7 +105,7 @@ class Connector(BaseSyncConnector):
                                                                             segment_id=process['segment_id'])
                         events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
                         if events_parsed_response.get('success', False):
-                            events = Connector._get_events(events_parsed_response['data'])
+                            events = Connector._get_events(events_parsed_response['data'], time_window)
                             for raw_event in events:
                                 event = create_event_obj(process, raw_event)
                                 if event:
