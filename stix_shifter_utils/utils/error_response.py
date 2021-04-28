@@ -22,6 +22,7 @@ class ErrorCode(Enum):
     TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
     TRANSMISSION_UNKNOWN = 'unknown'
+    TRANSMISSION_FORBIDDEN = 'forbidden'
     TRANSMISSION_CONNECT = 'service_unavailable'
     TRANSMISSION_AUTH_SSL = 'authentication_fail'
     TRANSMISSION_AUTH_CREDENTIALS = 'authentication_fail'
@@ -105,6 +106,8 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
                 elif 'query_syntax_error' in message:
                     error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
+                elif 'Forbidden' in message or 'forbidden' in message:
+                    error_code = ErrorCode.TRANSMISSION_FORBIDDEN
             return_object['error'] = str(message)
         ErrorMapperBase.set_error_code(return_object, error_code.value)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
