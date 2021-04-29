@@ -7,6 +7,12 @@
             "type": "text",
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
+        "port": {
+            "type": "number",
+            "default": 3306,
+            "min": 1,
+            "max": 65535
+        },
         "database": {
             "type": "text"
         },

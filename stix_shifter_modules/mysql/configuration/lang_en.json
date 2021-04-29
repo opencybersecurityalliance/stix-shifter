@@ -5,6 +5,11 @@
             "placeholder": "192.168.1.10",
             "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
+        "port": {
+            "label": "Host Port",
+            "placeholder": "3306",
+            "description": "Specify the associated port number of the data source."
+        },
         "database": {
             "label": "Database",
             "description": "The name of the database"
@@ -18,7 +23,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "cert": {
-            "label": "Synchronous dummy Connection Certificate",
+            "label": "Connection Certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         },
         "sni": {
