@@ -26,6 +26,6 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
         result = entry_point.create_results_connection(search_id, offset, length)
         if result.get('success'):
             data = result['data']
-            data = data[:length + 1]
+            data = data[:length]
             result = entry_point.translate_results(data_source, json.dumps(data))
         return result
