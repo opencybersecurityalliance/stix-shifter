@@ -214,8 +214,9 @@ for project_name in projects.keys():
         # Inject util files 
         for util_src, util_dest in utils_include_list.items():
             util_dest = util_dest % module_dir
-            shutil.copyfile(util_src, util_dest)
-            cleanup_file_list.append(util_dest)
+            if not shutil.os.path.exists(util_dest):
+                shutil.copyfile(util_src, util_dest)
+                cleanup_file_list.append(util_dest)
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
