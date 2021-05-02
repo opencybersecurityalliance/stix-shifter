@@ -96,9 +96,8 @@ class Connector(BaseSyncConnector):
                 return processes_search_parsed_response
             if processes_search_parsed_response.get('success', False):
                 time_window = extract_time_window(query)
+                events_limit_reached = False
                 for process in processes_search_parsed_response['data']:
-                    if 0 < self.result_limit <= len(all_events):
-                        break
                     try:
                         events_obj = {}
                         events_response = self.api_client.run_events_search(process_id=process['id'],
@@ -110,8 +109,13 @@ class Connector(BaseSyncConnector):
                                 event = create_event_obj(process, raw_event)
                                 if event:
                                     all_events.append(event)
+                                    if 0 < self.result_limit <= len(all_events):
+                                        events_limit_reached = True
+                                        break
                     except Exception:
                         self.logger.warn('cannot fetch events for process: ' + str(process['process_id']))
+                    if events_limit_reached:
+                        break
             return {'success': True, 'data': all_events}
 
         except Exception as e:
