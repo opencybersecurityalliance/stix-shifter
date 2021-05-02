@@ -229,16 +229,13 @@
       }
     ],
     "DeviceName": {
-      "key": "x_msatp.computer_name",
-      "cybox": false
+      "key": "x-msatp.computer_name"
     },
     "DeviceId": {
-      "key": "x_msatp.machine_id",
-      "cybox": false
+      "key": "x-msatp.machine_id"
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     }
   },
@@ -534,16 +531,13 @@
       }
     ],
     "DeviceName": {
-      "key": "x_msatp.computer_name",
-      "cybox": false
+      "key": "x-msatp.computer_name"
     },
     "DeviceId": {
-      "key": "x_msatp.machine_id",
-      "cybox": false
+      "key": "x-msatp.machine_id"
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     }
   },
@@ -788,7 +782,6 @@
     ],
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     }
   },
@@ -1002,7 +995,6 @@
     ],
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     }
   },

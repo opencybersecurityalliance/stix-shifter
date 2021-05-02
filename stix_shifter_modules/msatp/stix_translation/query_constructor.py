@@ -4,7 +4,6 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
 from datetime import datetime, timedelta
 import re
-import random
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 DS_INT_FIELDS = ["InitiatingProcessParentId", "InitiatingProcessId", "ProcessId", "LocalPort", "RemotePort"]
@@ -32,18 +31,7 @@ class QueryStringPatternTranslator:
         ObservationOperators.Or: 'or',
         ObservationOperators.And: 'and'
     }
-    # STIX attribute to MSATP table mapping
-    msatp_lookup_table = {"file": "DeviceFileEvents",
-                          "process": "DeviceProcessEvents",
-                          "user-account": "DeviceProcessEvents",
-                          "ipv4-addr": "DeviceNetworkEvents",
-                          "ipv6-addr": "DeviceNetworkEvents",
-                          "network-traffic": "DeviceNetworkEvents",
-                          "url": "DeviceNetworkEvents",
-                          "windows-registry-key": "DeviceRegistryEvents",
-                          "x-msatp": "DeviceFileEvents",
-                          "directory": "DeviceFileEvents"
-                          }
+
     # Join query to get MAC address value from DeviceNetworkInfo
     join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
                  'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
@@ -56,7 +44,6 @@ class QueryStringPatternTranslator:
         self.qualified_queries = []
         self.qualifier_string = ''
         self.lookup_table_object = None
-        self.lookup_table = None
         self._is_mac = None
         self.parse_expression(pattern)
 
@@ -234,43 +221,6 @@ class QueryStringPatternTranslator:
         """
         return re.sub(r'\r|\n|\s{2,}|\t', ' ', format_string)
 
-    '''
-    def get_lookup_table_of_obs_exp(self, expression, lookup_table, objects_dict):
-        """
-        Function to parse observation expression and return the object(i.e DeviceFileEvents
-        , DeviceProcessEvents, DeviceNetworkEvents, DeviceRegistryEvents) involved
-        :param expression: expression object, ANTLR parsed expression object
-        :param lookup_table: list, empty list
-        :param objects_dict: dict, dictionary of objects as keys and respective fields as values
-        :return: None
-        """
-
-        if hasattr(expression, 'object_path'):
-            stix_object = expression.object_path.split(':')[0]
-            value = expression.value.values if hasattr(expression.value, 'values') else expression.value
-            value_type = self._check_value_type(value, expression)
-            if 'mac' in value_type:
-                self._is_mac = True
-            lookup_table.append(objects_dict.get(stix_object))
-            final_lookup = list(set(lookup_table))
-            if self._is_mac:
-                self.lookup_table_object = 'DeviceNetworkEvents'
-            else:
-                if len(final_lookup) == 1:
-                    self.lookup_table_object = final_lookup[0]
-                elif 'DeviceNetworkEvents' in final_lookup:
-                    self.lookup_table_object = 'DeviceNetworkEvents'
-                elif 'DeviceRegistryEvents' in final_lookup:
-                    self.lookup_table_object = 'DeviceRegistryEvents'
-                elif 'DeviceProcessEvents' in final_lookup:
-                    self.lookup_table_object = 'DeviceProcessEvents'
-
-        else:
-            self.get_lookup_table_of_obs_exp(expression.expr1, lookup_table, objects_dict)
-            self.get_lookup_table_of_obs_exp(expression.expr2, lookup_table, objects_dict)
-
-    '''
-
     def _lookup_comparison_operator(self, expression_operator):
         """
         Comparison operator lookup with error handling for un-supported operators
@@ -281,46 +231,6 @@ class QueryStringPatternTranslator:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for MSATP connector".format(expression_operator.name))
         return self.comparator_lookup.get(expression_operator)
-
-    '''
-    def _parse_expression(self, expression, qualifier=None):
-        """
-        Complete formation of Kusto query from ANTLR expression object
-        :param expression: expression object, ANTLR parsed expression object
-        :param qualifier: str, default in None
-        :return: None or kusto query as the method call is recursive
-        """
-        if isinstance(expression, ComparisonExpression):  # Base Case
-            return self.__eval_comparison_exp(expression)
-        elif isinstance(expression, CombinedComparisonExpression):
-            operator = self._lookup_comparison_operator(expression.operator)
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if not expression_01:
-                kusto_query = "{}".format(expression_02)
-            elif not expression_02:
-                kusto_query = "{}".format(expression_01)
-            else:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            return kusto_query
-        elif isinstance(expression, ObservationExpression):
-            kusto_query = self.__eval_observation_exp(expression, qualifier)
-            final_comparison_exp = '({})'.format(kusto_query)
-            self.qualified_queries.append(final_comparison_exp)
-            return None
-        elif isinstance(expression, CombinedObservationExpression):
-            self._parse_expression(expression.expr1, qualifier)
-            self._parse_expression(expression.expr2, qualifier)
-            return None
-        elif isinstance(expression, StartStopQualifier):
-            if hasattr(expression, 'observation_expression'):
-                return self._parse_expression(getattr(expression, 'observation_expression'), expression.qualifier)
-        elif isinstance(expression, Pattern):
-            return self._parse_expression(expression.expression)
-        else:
-            raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
-                expression, type(expression)))
-    '''
 
     # get atomicQuery, map the query to tables
     def __eval_comparison_exp_map(self, expression):
@@ -388,9 +298,10 @@ class QueryStringPatternTranslator:
                 kusto_query_map = exp_map_01
             else:
                 if (operator == 'and'):
-                    kusto_query_map = self.construct_and_op_map(exp_map_01, exp_map_02)
+                    kusto_query_map = QueryStringPatternTranslator.construct_and_op_map(exp_map_01, exp_map_02)
+
                 else:
-                    kusto_query_map = self.construct_op_map(exp_map_01, exp_map_02, operator)
+                    kusto_query_map = QueryStringPatternTranslator.construct_op_map(exp_map_01, exp_map_02, operator)
 
             return kusto_query_map
 
@@ -409,8 +320,9 @@ class QueryStringPatternTranslator:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
 
-    def construct_op_map(self, exp_map_01, exp_map_02, operator):
-        merged_map = self.mergeDict(exp_map_01, exp_map_02)
+    @staticmethod
+    def construct_op_map(exp_map_01, exp_map_02, operator):
+        merged_map = QueryStringPatternTranslator.mergeDict(exp_map_01, exp_map_02)
 
         for table in merged_map:
             if (isinstance(merged_map[table], list) and len(merged_map[table])) > 1:
@@ -424,12 +336,9 @@ class QueryStringPatternTranslator:
 
         return merged_map
 
-    def construct_and_op_map(self, exp_map_01, exp_map_02):
-        intesec_tables = [table for table in exp_map_01.keys() if table in exp_map_02.keys()]
-        dict_01 = {table: exp_map_01[table] for table in intesec_tables}
-        dict_02 = {table: exp_map_02[table] for table in intesec_tables}
-        merged_map = self.mergeDict(dict_01, dict_02)
-
+    @staticmethod
+    def construct_and_op_map(exp_map_01, exp_map_02):
+        merged_map = QueryStringPatternTranslator.construct_intesec_map(exp_map_01, exp_map_02)
         for table in merged_map:
             if (len(merged_map[table])) > 1:
                 merged_query = '({})'.format(list(merged_map[table])[0])
@@ -438,57 +347,18 @@ class QueryStringPatternTranslator:
 
         return merged_map
 
-    '''
-    def __eval_observation_exp(self, expression, qualifier):
-        """
-        Function for parsing observation expression value
-        :param expression: expression object
-        :param qualifier: qualifier
-        :return:
-        """
-        self._is_mac = False
-        self.lookup_table = []
-        self.get_lookup_table_of_obs_exp(expression.comparison_expression, self.lookup_table,
-                                         self.msatp_lookup_table)
-        kusto_query = self._parse_expression(expression.comparison_expression)
-        self.qualifier_string = self._parse_time_range(qualifier, self._time_range)
-        self.qualifier_string = self.clean_format_string(self.qualifier_string)
-        self.lookup_table_object = 'find withsource = TableName in ({})'.format(self.lookup_table_object)
-        join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
-                     'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
-                     'FormattedTimeKey) on DeviceId, $left.FormattedTimeKey ' \
-                     '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by Timestamp desc'
-
-        if self._is_mac:
-            kusto_query = self.lookup_table_object + self.qualifier_string + FLOOR_TIME + \
-                          self.join_query.format(mac_query=kusto_query, qualifier_string='|' + self.qualifier_string,
-                                                 floor_time=FLOOR_TIME)
-        else:
-            kusto_query = self.lookup_table_object + self.qualifier_string + '| order by Timestamp desc | ' \
-                                                                             'where ' + kusto_query
-        return kusto_query
-    
-    '''
+    @staticmethod
+    def construct_intesec_map(exp_map_01, exp_map_02):
+        intesec_tables = [table for table in exp_map_01.keys() if table in exp_map_02.keys()]
+        dict_01 = {table: exp_map_01[table] for table in intesec_tables}
+        dict_02 = {table: exp_map_02[table] for table in intesec_tables}
+        return QueryStringPatternTranslator.mergeDict(dict_01, dict_02)
 
     def construct_query_from_map(self, map_kusto_query):
-
-        if len(map_kusto_query.keys()) > 1:
-            return self.construct_union_query_from_map(map_kusto_query)
-        else:
-            return self.construct_single_table_query_from_map(map_kusto_query)
-
-    def construct_union_query_from_map(self, map_kusto_query):
         for table in map_kusto_query:
             curr_query = '(find withsource = TableName in ({}) {} | order by Timestamp desc | where {})' \
                 .format(table, self.qualifier_string, map_kusto_query[table])
             self.qualified_queries.append(curr_query)
-
-    def construct_single_table_query_from_map(self, map_kusto_query):
-        self.lookup_table_object = 'find withsource = TableName in ({})'.format(list(map_kusto_query.keys())[0])
-        kusto_query = self.lookup_table_object + self.qualifier_string + '| order by Timestamp desc | ' \
-                                                                         'where ' + list(map_kusto_query.values())[0]
-        kusto_query = '({})'.format((kusto_query))
-        self.qualified_queries.append(kusto_query)
 
     def parse_expression(self, pattern: Pattern):
         """
@@ -529,7 +399,6 @@ class QueryStringPatternTranslator:
         stix_object, stix_field = expression.object_path.split(':')
         value = expression.value.values if hasattr(expression.value, 'values') else expression.value
         value_type = self._check_value_type(value, expression)
-        ######################
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         mapped_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == self.lookup_table_object]
         mapped_mac_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == 'DeviceNetworkInfo'
