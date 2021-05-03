@@ -218,14 +218,17 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": [
-          "mac"
-        ]
+        "references": ["mac"]
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "DeviceName": {
@@ -236,17 +239,14 @@
     },
     "event_count": {
       "key": "number_observed",
+      "cybox": false,
       "transformer": "ToInteger"
     }
   },
   "DeviceProcessEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -538,17 +538,14 @@
     },
     "event_count": {
       "key": "number_observed",
+      "cybox": false,
       "transformer": "ToInteger"
     }
   },
   "DeviceFileEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -782,17 +779,14 @@
     ],
     "event_count": {
       "key": "number_observed",
+      "cybox": false,
       "transformer": "ToInteger"
     }
   },
   "DeviceRegistryEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -995,6 +989,7 @@
     ],
     "event_count": {
       "key": "number_observed",
+      "cybox": false,
       "transformer": "ToInteger"
     }
   },

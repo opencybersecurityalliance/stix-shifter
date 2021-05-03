@@ -153,7 +153,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    #'''
+    '''
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
@@ -174,7 +174,7 @@ class TestMSATPConnection(unittest.TestCase):
 
         assert results_response['code'] == 'unknown'
         assert results_response['success'] is False
-    #'''
+    '''
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
