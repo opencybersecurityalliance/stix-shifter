@@ -68,3 +68,14 @@ As long as `error_test` is the type and you pass in one of the folloing `error_t
 - `translate_exception` If you want to test an exception occuring during the translation of results in stix-shifter
 - `timeout` If you want to test a timeout error connecting to a datasource
 - `bad_connection` If you want to test an error during the connection of a datasource (bad url, credentials, etc)
+
+
+Example of error_test transmission:
+```
+python main.py transmit error_test '{"host":"https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/data/cybox/1.json", "options" : {"error_type" : "bad_connection"}}' '{}' results "[ipv4-addr:value = '127.0.0.1']" 0 9
+```
+
+Example of error_test translate:
+```
+python main.py translate error_test query '{}' "[ipv4-addr:value = '127.0.0.1']" '{"options": {"error_type": "translate_exception"}}'
+```
