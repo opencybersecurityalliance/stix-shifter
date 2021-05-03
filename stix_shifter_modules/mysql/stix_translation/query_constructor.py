@@ -8,10 +8,9 @@ import re
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
-REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
-                        "SourceIpV6": ["ipv6"],
-                        "DestinationIpV4": ["ipv4", "ipv4_cidr"],
-                        "DestinationIpV6": ["ipv6"]}
+REFERENCE_DATA_TYPES = {"source_ipaddr": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cidr"],
+                        "dest_ipaddr": ["ipv4", "ipv4_cidr"],
+                        }
 
 logger = logging.getLogger(__name__)
 
