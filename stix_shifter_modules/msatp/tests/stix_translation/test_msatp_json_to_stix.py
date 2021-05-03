@@ -88,7 +88,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_msatp'] is not None
+
 
     def test_custom_property(self):
         """
@@ -128,9 +128,6 @@ class TestMsatpResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_msatp']
-        assert custom_object.keys() == {'computer_name', 'machine_id'}
-        assert custom_object['computer_name'] == 'desktop-536bt46'
 
     def test_file_json_to_stix(self):
         """
@@ -240,15 +237,15 @@ class TestMsatpResultsToStix(unittest.TestCase):
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
         assert process_obj.keys() == {'type', 'name', 'binary_ref', 'pid', 'command_line', 'created',
-                                      'creator_user_ref', 'parent_ref'}
+                                      'creator_user_ref'}
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '1'
+        assert process_obj['binary_ref'] == '3'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '4'
-        assert process_obj['parent_ref'] == '6'
+        assert process_obj['creator_user_ref'] == '7'
+
 
     def test_network_json_to_stix(self):
         """to test network stix object properties"""
@@ -296,9 +293,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['dst_ref'] == '0'
+        assert network_obj['dst_ref'] == '2'
         assert network_obj['dst_port'] == 80
-        assert network_obj['src_ref'] == '2'
+        assert network_obj['src_ref'] == '4'
         assert network_obj['src_port'] == 52240
         assert network_obj['protocols'] == ['tcp']
 
