@@ -324,10 +324,7 @@
         "DeviceLogonEvents.DeviceName",
         "DeviceNetworkInfo.DeviceName"
       ],
-      "ip": [
-        "DeviceNetworkInfo.IPv4Dhcp",
-        "DeviceNetworkInfo.IPv6Dhcp"
-      ],
+      "ip": ["DeviceNetworkEvents.LocalIP"],
       "os.name": [
         "DeviceInfo.OSPlatform"
       ],
@@ -429,13 +426,9 @@
         "DeviceFileEvents.DeviceName"
       ],
       "file_ref.name": [
-        "DeviceProcessEvents.FileName",
         "DeviceProcessEvents.InitiatingProcessFileName",
-        "DeviceProcessEvents.InitiatingProcessParentFileName",
         "DeviceNetworkEvents.InitiatingProcessFileName",
-        "DeviceNetworkEvents.InitiatingProcessParentFileName",
-        "DeviceRegistryEvents.InitiatingProcessFileName",
-        "DeviceRegistryEvents.InitiatingProcessParentFileName"
+        "DeviceRegistryEvents.InitiatingProcessFileName"
       ],
       "registry_ref.key": [
         "DeviceRegistryEvents.RegistryKey"
