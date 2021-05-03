@@ -128,9 +128,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_msatp']
-        assert custom_object.keys() == {'computer_name', 'machine_id'}
-        assert custom_object['computer_name'] == 'desktop-536bt46'
+
 
     def test_file_json_to_stix(self):
         """
