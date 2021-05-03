@@ -29,7 +29,7 @@ class QueryStringPatternTranslator:
         ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.In: "in~",
         ObservationOperators.Or: 'or',
-        ObservationOperators.And: 'and'
+        ObservationOperators.And: 'or'
     }
 
     # Join query to get MAC address value from DeviceNetworkInfo

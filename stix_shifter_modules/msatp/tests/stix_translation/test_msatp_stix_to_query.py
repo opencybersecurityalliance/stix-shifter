@@ -34,18 +34,18 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ['union (find withsource = TableName in (DeviceFileEvents)  where Timestamp >= datetime('
-                   '2021-04-25T21:22:47.568Z) and Timestamp < datetime(2021-04-26T14:02:47.568Z)  | order by '
+                   '2021-05-03T08:54:32.159Z) and Timestamp < datetime(2021-05-03T08:59:32.159Z)  | order by '
                    'Timestamp desc | where (FileName =~ "updater.exe") or (InitiatingProcessFileName =~ '
                    '"updater.exe") or (InitiatingProcessParentFileName =~ "updater.exe")),(find withsource = '
-                   'TableName in (DeviceProcessEvents)  where Timestamp >= datetime(2021-04-25T21:22:47.568Z) and '
-                   'Timestamp < datetime(2021-04-26T14:02:47.568Z)  | order by Timestamp desc | where (FileName =~ '
+                   'TableName in (DeviceProcessEvents)  where Timestamp >= datetime(2021-05-03T08:54:32.159Z) and '
+                   'Timestamp < datetime(2021-05-03T08:59:32.159Z)  | order by Timestamp desc | where (FileName =~ '
                    '"updater.exe") or (InitiatingProcessFileName =~ "updater.exe") or ('
                    'InitiatingProcessParentFileName =~ "updater.exe")),(find withsource = TableName in ('
-                   'DeviceNetworkEvents)  where Timestamp >= datetime(2021-04-25T21:22:47.568Z) and Timestamp < '
-                   'datetime(2021-04-26T14:02:47.568Z)  | order by Timestamp desc | where (InitiatingProcessFileName '
+                   'DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T08:54:32.159Z) and Timestamp < '
+                   'datetime(2021-05-03T08:59:32.159Z)  | order by Timestamp desc | where (InitiatingProcessFileName '
                    '=~ "updater.exe") or (InitiatingProcessParentFileName =~ "updater.exe")),(find withsource = '
-                   'TableName in (DeviceRegistryEvents)  where Timestamp >= datetime(2021-04-25T21:22:47.568Z) and '
-                   'Timestamp < datetime(2021-04-26T14:02:47.568Z)  | order by Timestamp desc | where ('
+                   'TableName in (DeviceRegistryEvents)  where Timestamp >= datetime(2021-05-03T08:54:32.159Z) and '
+                   'Timestamp < datetime(2021-05-03T08:59:32.159Z)  | order by Timestamp desc | where ('
                    'InitiatingProcessFileName =~ "updater.exe") or (InitiatingProcessParentFileName =~ '
                    '"updater.exe"))']
 
@@ -59,13 +59,14 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
-            '2021-04-25T20:21:47.167Z) and Timestamp < datetime(2021-04-26T13:01:47.167Z)  | order by Timestamp desc '
-            '| where FileName =~ "consent.exe"),(find withsource = TableName in (DeviceNetworkEvents)  where '
-            'Timestamp >= datetime(2021-04-25T20:21:47.167Z) and Timestamp < datetime(2021-04-26T13:01:47.167Z)  | '
-            'order by Timestamp desc | where (InitiatingProcessFileName =~ "consent.exe") or ('
-            'InitiatingProcessParentFileName =~ "consent.exe")),(find withsource = TableName in ('
-            'DeviceRegistryEvents)  where Timestamp >= datetime(2021-04-25T20:21:47.167Z) and Timestamp < datetime('
-            '2021-04-26T13:01:47.167Z)  | order by Timestamp desc | where (InitiatingProcessFileName =~ '
+            '2021-05-03T08:55:09.199Z) and Timestamp < datetime(2021-05-03T09:00:09.199Z)  | order by Timestamp desc '
+            '| where (FileName =~ "consent.exe") or (InitiatingProcessFileName =~ "consent.exe") or ('
+            'InitiatingProcessParentFileName =~ "consent.exe")),(find withsource = TableName in (DeviceNetworkEvents) '
+            ' where Timestamp >= datetime(2021-05-03T08:55:09.199Z) and Timestamp < datetime('
+            '2021-05-03T09:00:09.199Z)  | order by Timestamp desc | where (InitiatingProcessFileName =~ '
+            '"consent.exe") or (InitiatingProcessParentFileName =~ "consent.exe")),(find withsource = TableName in ('
+            'DeviceRegistryEvents)  where Timestamp >= datetime(2021-05-03T08:55:09.199Z) and Timestamp < datetime('
+            '2021-05-03T09:00:09.199Z)  | order by Timestamp desc | where (InitiatingProcessFileName =~ '
             '"consent.exe") or (InitiatingProcessParentFileName =~ "consent.exe"))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -76,9 +77,9 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
-            '(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime('
-            '2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z) | order by Timestamp desc | '
-            'where (LocalIP =~ "172.16.2.22") or (RemoteIP =~ "172.16.2.22"))']
+            '(find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime('
+            '2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | order by Timestamp desc '
+            '| where (LocalIP =~ "172.16.2.22") or (RemoteIP =~ "172.16.2.22"))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -89,9 +90,9 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            '(find withsource = TableName in (DeviceNetworkInfo) where Timestamp >= datetime('
-            '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-10T10:43:10.003Z) | order by Timestamp desc | '
-            'where MacAddress =~ "484D7E9DBD97")']
+            '(find withsource = TableName in (DeviceNetworkInfo)  where Timestamp >= datetime('
+            '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-10T10:43:10.003Z)  | order by Timestamp desc '
+            '| where MacAddress =~ "484D7E9DBD97")']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -102,9 +103,9 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            '(find withsource = TableName in (DeviceRegistryEvents) where Timestamp >= datetime('
-            '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-10T10:43:10.003Z) | order by Timestamp desc | '
-            'where RegistryValueName in~ ("SD", "Index"))']
+            '(find withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= datetime('
+            '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-10T10:43:10.003Z)  | order by Timestamp desc '
+            '| where RegistryValueName in~ ("SD", "Index"))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -137,15 +138,20 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
-            '2021-04-25T20:59:47.175Z) and Timestamp < datetime(2021-04-26T13:39:47.175Z)  | order by Timestamp desc '
-            '| where ProcessCreationTime >= datetime(2019-09-04T09:29:29.0882Z)),(find withsource = TableName in ('
-            'DeviceNetworkEvents)  where Timestamp >= datetime(2021-04-25T20:59:47.175Z) and Timestamp < datetime('
-            '2021-04-26T13:39:47.175Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime >= datetime('
-            '2019-09-04T09:29:29.0882Z)) or (InitiatingProcessParentCreationTime >= datetime('
+            '2021-05-03T08:57:38.841Z) and Timestamp < datetime(2021-05-03T09:02:38.841Z)  | order by Timestamp desc '
+            '| where (ProcessCreationTime >= datetime(2019-09-04T09:29:29.0882Z)) or ('
+            'InitiatingProcessParentCreationTime >= datetime(2019-09-04T09:29:29.0882Z))),(find withsource = '
+            'TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T08:57:38.841Z) and Timestamp '
+            '< datetime(2021-05-03T09:02:38.841Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime '
+            '>= datetime(2019-09-04T09:29:29.0882Z)) or (InitiatingProcessParentCreationTime >= datetime('
             '2019-09-04T09:29:29.0882Z))),(find withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= '
-            'datetime(2021-04-25T20:59:47.175Z) and Timestamp < datetime(2021-04-26T13:39:47.175Z)  | order by '
+            'datetime(2021-05-03T08:57:38.841Z) and Timestamp < datetime(2021-05-03T09:02:38.841Z)  | order by '
             'Timestamp desc | where (InitiatingProcessCreationTime >= datetime(2019-09-04T09:29:29.0882Z)) or ('
-            'InitiatingProcessParentCreationTime >= datetime(2019-09-04T09:29:29.0882Z)))']
+            'InitiatingProcessParentCreationTime >= datetime(2019-09-04T09:29:29.0882Z))),(find withsource = '
+            'TableName in (DeviceFileEvents)  where Timestamp >= datetime(2021-05-03T08:57:38.841Z) and Timestamp < '
+            'datetime(2021-05-03T09:02:38.841Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime >= '
+            'datetime(2019-09-04T09:29:29.0882Z)) or (InitiatingProcessParentCreationTime >= datetime('
+            '2019-09-04T09:29:29.0882Z)))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -155,9 +161,9 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            '(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime('
-            '2021-04-25T21:00:34.295Z) and Timestamp < datetime(2021-04-26T13:40:34.295Z) | order by Timestamp desc | '
-            'where LocalPort < 443)']
+            '(find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime('
+            '2021-05-03T08:58:07.130Z) and Timestamp < datetime(2021-05-03T09:03:07.130Z)  | order by Timestamp desc '
+            '| where LocalPort < 443)']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -170,10 +176,11 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
             '2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | order by Timestamp desc '
-            '| where FileName !~ "consent.exe"),(find withsource = TableName in (DeviceNetworkEvents)  where '
-            'Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | '
-            'order by Timestamp desc | where (InitiatingProcessFileName !~ "consent.exe") or ('
-            'InitiatingProcessParentFileName !~ "consent.exe")),(find withsource = TableName in ('
+            '| where (FileName !~ "consent.exe") or (InitiatingProcessFileName !~ "consent.exe") or ('
+            'InitiatingProcessParentFileName !~ "consent.exe")),(find withsource = TableName in (DeviceNetworkEvents) '
+            ' where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
+            '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where (InitiatingProcessFileName !~ '
+            '"consent.exe") or (InitiatingProcessParentFileName !~ "consent.exe")),(find withsource = TableName in ('
             'DeviceRegistryEvents)  where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
             '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where (InitiatingProcessFileName !~ '
             '"consent.exe") or (InitiatingProcessParentFileName !~ "consent.exe"))']
@@ -187,17 +194,17 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             'union (find withsource = TableName in (DeviceFileEvents)  where Timestamp >= datetime('
-            '2021-04-25T21:01:57.191Z) and Timestamp < datetime(2021-04-26T13:41:57.191Z)  | order by Timestamp desc '
+            '2021-05-03T08:58:56.445Z) and Timestamp < datetime(2021-05-03T09:03:56.445Z)  | order by Timestamp desc '
             '| where (FileName contains "upd") or (InitiatingProcessFileName contains "upd") or ('
             'InitiatingProcessParentFileName contains "upd")),(find withsource = TableName in (DeviceProcessEvents)  '
-            'where Timestamp >= datetime(2021-04-25T21:01:57.191Z) and Timestamp < datetime(2021-04-26T13:41:57.191Z) '
+            'where Timestamp >= datetime(2021-05-03T08:58:56.445Z) and Timestamp < datetime(2021-05-03T09:03:56.445Z) '
             ' | order by Timestamp desc | where (FileName contains "upd") or (InitiatingProcessFileName contains '
             '"upd") or (InitiatingProcessParentFileName contains "upd")),(find withsource = TableName in ('
-            'DeviceNetworkEvents)  where Timestamp >= datetime(2021-04-25T21:01:57.191Z) and Timestamp < datetime('
-            '2021-04-26T13:41:57.191Z)  | order by Timestamp desc | where (InitiatingProcessFileName contains "upd") '
+            'DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T08:58:56.445Z) and Timestamp < datetime('
+            '2021-05-03T09:03:56.445Z)  | order by Timestamp desc | where (InitiatingProcessFileName contains "upd") '
             'or (InitiatingProcessParentFileName contains "upd")),(find withsource = TableName in ('
-            'DeviceRegistryEvents)  where Timestamp >= datetime(2021-04-25T21:01:57.191Z) and Timestamp < datetime('
-            '2021-04-26T13:41:57.191Z)  | order by Timestamp desc | where (InitiatingProcessFileName contains "upd") '
+            'DeviceRegistryEvents)  where Timestamp >= datetime(2021-05-03T08:58:56.445Z) and Timestamp < datetime('
+            '2021-05-03T09:03:56.445Z)  | order by Timestamp desc | where (InitiatingProcessFileName contains "upd") '
             'or (InitiatingProcessParentFileName contains "upd"))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -208,18 +215,18 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ['union (find withsource = TableName in (DeviceFileEvents)  where Timestamp >= datetime('
-                   '2021-04-25T21:02:42.167Z) and Timestamp < datetime(2021-04-26T13:42:42.167Z)  | order by '
+                   '2021-05-03T08:59:41.105Z) and Timestamp < datetime(2021-05-03T09:04:41.105Z)  | order by '
                    'Timestamp desc | where (FileName matches regex"(^chr)") or (InitiatingProcessFileName matches '
                    'regex"(^chr)") or (InitiatingProcessParentFileName matches regex"(^chr)")),(find withsource = '
-                   'TableName in (DeviceProcessEvents)  where Timestamp >= datetime(2021-04-25T21:02:42.167Z) and '
-                   'Timestamp < datetime(2021-04-26T13:42:42.167Z)  | order by Timestamp desc | where (FileName '
+                   'TableName in (DeviceProcessEvents)  where Timestamp >= datetime(2021-05-03T08:59:41.105Z) and '
+                   'Timestamp < datetime(2021-05-03T09:04:41.105Z)  | order by Timestamp desc | where (FileName '
                    'matches regex"(^chr)") or (InitiatingProcessFileName matches regex"(^chr)") or ('
                    'InitiatingProcessParentFileName matches regex"(^chr)")),(find withsource = TableName in ('
-                   'DeviceNetworkEvents)  where Timestamp >= datetime(2021-04-25T21:02:42.167Z) and Timestamp < '
-                   'datetime(2021-04-26T13:42:42.167Z)  | order by Timestamp desc | where (InitiatingProcessFileName '
+                   'DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T08:59:41.105Z) and Timestamp < '
+                   'datetime(2021-05-03T09:04:41.105Z)  | order by Timestamp desc | where (InitiatingProcessFileName '
                    'matches regex"(^chr)") or (InitiatingProcessParentFileName matches regex"(^chr)")),'
                    '(find withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= datetime('
-                   '2021-04-25T21:02:42.167Z) and Timestamp < datetime(2021-04-26T13:42:42.167Z)  | order by '
+                   '2021-05-03T08:59:41.105Z) and Timestamp < datetime(2021-05-03T09:04:41.105Z)  | order by '
                    'Timestamp desc | where (InitiatingProcessFileName matches regex"(^chr)") or ('
                    'InitiatingProcessParentFileName matches regex"(^chr)"))']
         queries = _remove_timestamp_from_query(queries)
@@ -232,15 +239,21 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
-            '2021-04-25T21:03:16.252Z) and Timestamp < datetime(2021-04-26T13:43:16.252Z)  | order by Timestamp desc '
-            '| where ProcessCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), datetime('
-            '2019-09-04T09:29:29.0881372Z))),(find withsource = TableName in (DeviceNetworkEvents)  where Timestamp '
-            '>= datetime(2021-04-25T21:03:16.252Z) and Timestamp < datetime(2021-04-26T13:43:16.252Z)  | order by '
-            'Timestamp desc | where (InitiatingProcessCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), '
+            '2021-05-03T09:00:15.898Z) and Timestamp < datetime(2021-05-03T09:05:15.898Z)  | order by Timestamp desc '
+            '| where (ProcessCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), datetime('
+            '2019-09-04T09:29:29.0881372Z))) or (InitiatingProcessParentCreationTime in~ (datetime('
+            '2019-09-04T09:29:29.0882Z), datetime(2019-09-04T09:29:29.0881372Z)))),(find withsource = TableName in ('
+            'DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T09:00:15.898Z) and Timestamp < datetime('
+            '2021-05-03T09:05:15.898Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime in~ ('
+            'datetime(2019-09-04T09:29:29.0882Z), datetime(2019-09-04T09:29:29.0881372Z))) or ('
+            'InitiatingProcessParentCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), '
+            'datetime(2019-09-04T09:29:29.0881372Z)))),(find withsource = TableName in (DeviceRegistryEvents)  where '
+            'Timestamp >= datetime(2021-05-03T09:00:15.898Z) and Timestamp < datetime(2021-05-03T09:05:15.898Z)  | '
+            'order by Timestamp desc | where (InitiatingProcessCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), '
             'datetime(2019-09-04T09:29:29.0881372Z))) or (InitiatingProcessParentCreationTime in~ (datetime('
             '2019-09-04T09:29:29.0882Z), datetime(2019-09-04T09:29:29.0881372Z)))),(find withsource = TableName in ('
-            'DeviceRegistryEvents)  where Timestamp >= datetime(2021-04-25T21:03:16.252Z) and Timestamp < datetime('
-            '2021-04-26T13:43:16.252Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime in~ ('
+            'DeviceFileEvents)  where Timestamp >= datetime(2021-05-03T09:00:15.898Z) and Timestamp < datetime('
+            '2021-05-03T09:05:15.898Z)  | order by Timestamp desc | where (InitiatingProcessCreationTime in~ ('
             'datetime(2019-09-04T09:29:29.0882Z), datetime(2019-09-04T09:29:29.0881372Z))) or ('
             'InitiatingProcessParentCreationTime in~ (datetime(2019-09-04T09:29:29.0882Z), '
             'datetime(2019-09-04T09:29:29.0881372Z))))']
@@ -259,9 +272,10 @@ class TestQueryTranslator(unittest.TestCase):
             '| where ((FileName =~ "updater.exe") or (InitiatingProcessFileName =~ "updater.exe") or ('
             'InitiatingProcessParentFileName =~ "updater.exe"))),(find withsource = TableName in ('
             'DeviceProcessEvents)  where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
-            '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where (FileName in~ ("consent.exe", "reg.exe")) '
-            'or ((FileName =~ "updater.exe") or (InitiatingProcessFileName =~ "updater.exe") or ('
-            'InitiatingProcessParentFileName =~ "updater.exe"))),(find withsource = TableName in ('
+            '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where ((FileName in~ ("consent.exe", "reg.exe")) '
+            'or (InitiatingProcessFileName in~ ("consent.exe", "reg.exe")) or (InitiatingProcessParentFileName in~ ('
+            '"consent.exe", "reg.exe"))) or ((FileName =~ "updater.exe") or (InitiatingProcessFileName =~ '
+            '"updater.exe") or (InitiatingProcessParentFileName =~ "updater.exe"))),(find withsource = TableName in ('
             'DeviceNetworkEvents)  where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
             '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where ((InitiatingProcessFileName in~ ('
             '"consent.exe", "reg.exe")) or (InitiatingProcessParentFileName in~ ("consent.exe", "reg.exe"))) or (('
@@ -283,13 +297,15 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
             '2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | order by Timestamp desc '
-            '| where (not (FileName =~ "python.exe"))),(find withsource = TableName in (DeviceNetworkEvents)  where '
-            'Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | '
-            'order by Timestamp desc | where (tostring(LocalPort) =~ "454") or (not ((InitiatingProcessFileName =~ '
-            '"python.exe") or (InitiatingProcessParentFileName =~ "python.exe")))),(find withsource = TableName in ('
-            'DeviceRegistryEvents)  where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
-            '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where (not ((InitiatingProcessFileName =~ '
-            '"python.exe") or (InitiatingProcessParentFileName =~ "python.exe"))))']
+            '| where (not ((FileName =~ "python.exe") or (InitiatingProcessFileName =~ "python.exe") or ('
+            'InitiatingProcessParentFileName =~ "python.exe")))),(find withsource = TableName in ('
+            'DeviceNetworkEvents)  where Timestamp >= datetime(2019-09-10T08:43:10.003Z) and Timestamp < datetime('
+            '2019-09-23T10:43:10.453Z)  | order by Timestamp desc | where (tostring(LocalPort) =~ "454") or (not (('
+            'InitiatingProcessFileName =~ "python.exe") or (InitiatingProcessParentFileName =~ "python.exe")))),'
+            '(find withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= datetime('
+            '2019-09-10T08:43:10.003Z) and Timestamp < datetime(2019-09-23T10:43:10.453Z)  | order by Timestamp desc '
+            '| where (not ((InitiatingProcessFileName =~ "python.exe") or (InitiatingProcessParentFileName =~ '
+            '"python.exe"))))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -301,23 +317,26 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime('
-            '2021-04-25T21:05:39.435Z) and Timestamp < datetime(2021-04-26T13:45:39.435Z)  | order by Timestamp desc '
+            '2021-05-03T09:01:44.549Z) and Timestamp < datetime(2021-05-03T09:06:44.549Z)  | order by Timestamp desc '
             '| where ((FileName matches regex"(upd.ter.exe$)") or (InitiatingProcessFileName matches regex"('
-            'upd.ter.exe$)") or (InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")) or (tostring('
-            'ProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z))),(find withsource = TableName in ('
-            'DeviceNetworkEvents)  where Timestamp >= datetime(2021-04-25T21:05:39.435Z) and Timestamp < datetime('
-            '2021-04-26T13:45:39.435Z)  | order by Timestamp desc | where ((InitiatingProcessFileName matches regex"('
             'upd.ter.exe$)") or (InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")) or ((tostring('
-            'InitiatingProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)) or (tostring('
+            'ProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)) or (tostring('
             'InitiatingProcessParentCreationTime) == datetime(2019-09-04T09:29:29.0882Z)))),(find withsource = '
-            'TableName in (DeviceRegistryEvents)  where Timestamp >= datetime(2021-04-25T21:05:39.435Z) and Timestamp '
-            '< datetime(2021-04-26T13:45:39.435Z)  | order by Timestamp desc | where ((InitiatingProcessFileName '
+            'TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2021-05-03T09:01:44.549Z) and Timestamp '
+            '< datetime(2021-05-03T09:06:44.549Z)  | order by Timestamp desc | where ((InitiatingProcessFileName '
             'matches regex"(upd.ter.exe$)") or (InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")) or (('
             'tostring(InitiatingProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)) or (tostring('
             'InitiatingProcessParentCreationTime) == datetime(2019-09-04T09:29:29.0882Z)))),(find withsource = '
-            'TableName in (DeviceFileEvents)  where Timestamp >= datetime(2021-04-25T21:05:39.435Z) and Timestamp < '
-            'datetime(2021-04-26T13:45:39.435Z)  | order by Timestamp desc | where ((FileName matches regex"('
+            'TableName in (DeviceRegistryEvents)  where Timestamp >= datetime(2021-05-03T09:01:44.549Z) and Timestamp '
+            '< datetime(2021-05-03T09:06:44.549Z)  | order by Timestamp desc | where ((InitiatingProcessFileName '
+            'matches regex"(upd.ter.exe$)") or (InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")) or (('
+            'tostring(InitiatingProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)) or (tostring('
+            'InitiatingProcessParentCreationTime) == datetime(2019-09-04T09:29:29.0882Z)))),(find withsource = '
+            'TableName in (DeviceFileEvents)  where Timestamp >= datetime(2021-05-03T09:01:44.549Z) and Timestamp < '
+            'datetime(2021-05-03T09:06:44.549Z)  | order by Timestamp desc | where ((FileName matches regex"('
             'upd.ter.exe$)") or (InitiatingProcessFileName matches regex"(upd.ter.exe$)") or ('
-            'InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")))']
+            'InitiatingProcessParentFileName matches regex"(upd.ter.exe$)")) or ((tostring('
+            'InitiatingProcessCreationTime) == datetime(2019-09-04T09:29:29.0882Z)) or (tostring('
+            'InitiatingProcessParentCreationTime) == datetime(2019-09-04T09:29:29.0882Z))))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
