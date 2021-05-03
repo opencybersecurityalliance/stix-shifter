@@ -420,7 +420,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_in_operators(self):
-        stix_pattern = "[network-traffic:dst_port IN ('22','443')]"
+        stix_pattern = "[network-traffic:dst_ref.value IN ('1.1.1.1', '2.2.2.2')] OR [network-traffic:dst_port IN ('22','443')]"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE str(destinationip) IN ('1.1.1.1', '2.2.2.2') OR destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
