@@ -237,6 +237,10 @@
     "key": "process.command_line",
     "object": "child_process"
   },
+  "childproc_action": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
   "regmod_name": [
     {
       "key": "windows-registry-key.key",
