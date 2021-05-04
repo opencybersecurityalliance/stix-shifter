@@ -1,6 +1,8 @@
 import unittest
+from datetime import datetime, timedelta
 from stix_shifter_modules.carbonblack.stix_transmission.event_parser import parse_raw_event_to_obj, \
-  create_event_obj, str_event_fields, format_timestamp, get_common_fields_as_dict
+  create_event_obj, str_event_fields, format_timestamp, get_common_fields_as_dict, get_timestamp_by_event_type, \
+  extract_time_window, is_timestamp_in_window
 
 process_response = {
                        "unique_id": "00000003-0000-6248-01d7-298f8ee90bb5-01789e8c0344",
@@ -158,7 +160,9 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
 
         raw_event_obj = events_response['process']['netconn_complete'][0]
         event_obj = parse_raw_event_to_obj('netconn', raw_event_obj)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='netconn')
         assert event_obj == raw_event_obj  # object form stays as-is
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         netconn_event = create_event_obj(process_response, {'event_type': 'netconn', 'parsed_event_data': event_obj})
         assert netconn_event.get('process_name') == "wermgr.exe"
         assert netconn_event.get('domain') == "resources.jetbrains.com"
@@ -166,10 +170,13 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
         assert netconn_event.get('netconn_remote_ipv4') == "99.86.3.45"
         assert netconn_event.get('netconn_local_port') == 58380
         assert netconn_event.get('netconn_local_ipv4') == "192.168.14.18"
+        assert netconn_event.get('event_timestamp') == "2021-04-04T18:10:24.835000Z"
 
         raw_event_obj = events_response['process']['childproc_complete'][0]
         event_obj = parse_raw_event_to_obj('childproc', raw_event_obj)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='childproc')
         assert event_obj == raw_event_obj  # object form stays as-is
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         childproc_event = create_event_obj(process_response, {'event_type': 'childproc', 'parsed_event_data': event_obj})
         assert childproc_event.get('process_name') == "wermgr.exe"
         assert childproc_event.get('childproc_name') == "c:\\program files\\jetbrains\\pycharm community edition 2020.1\\bin\\runnerw64.exe"
@@ -178,36 +185,49 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
         assert childproc_event.get('childproc_cmdline') == ""
         assert childproc_event.get('childproc_username') == ""
         assert childproc_event.get('childproc_pid') == 10412
+        assert childproc_event.get('event_timestamp') == "2021-04-04T18:10:08.548000Z"
 
         raw_event_str = events_response['process']['regmod_complete'][0]
         event_obj = TestCarbonBlackEventParser.check_str_event('regmod', raw_event_str)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='regmod')
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         regmod_event = create_event_obj(process_response, {'event_type': 'regmod', 'parsed_event_data': event_obj})
         assert regmod_event.get('process_name') == "wermgr.exe"
         assert regmod_event.get('regmod_name') == "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows advanced threat protection\\\\crashheartbeat"
         assert regmod_event.get('regmod_action') == "First wrote to the registry key"
+        assert regmod_event.get('event_timestamp') == '2021-04-04T18:11:40.309000Z'
 
         raw_event_str = events_response['process']['modload_complete'][0]
         event_obj = TestCarbonBlackEventParser.check_str_event('modload', raw_event_str)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='modload')
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         modload_event = create_event_obj(process_response, {'event_type': 'modload', 'parsed_event_data': event_obj})
         assert modload_event.get('process_name') == "wermgr.exe"
         assert modload_event.get('modload_name') == 'c:\\windows\\system32\\wbem\\wbemdisp.dll'
         assert modload_event.get('modload_md5') == "756df8beaf018e982e2383702d905729"
+        assert modload_event.get('event_timestamp') == '2021-04-04T18:11:41.244000Z'
 
         raw_event_str = events_response['process']['crossproc_complete'][0]
         event_obj = TestCarbonBlackEventParser.check_str_event('crossproc', raw_event_str)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='crossproc')
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         crossproc_event = create_event_obj(process_response, {'event_type': 'crossproc', 'parsed_event_data': event_obj})
         assert crossproc_event.get('process_name') == "wermgr.exe"
         assert crossproc_event.get('crossproc_name') == "c:\\windows\\system32\\svchost.exe"
         assert crossproc_event.get('crossproc_action') == "ProcessOpen"
         assert crossproc_event.get('crossproc_md5') == "f586835082f632dc8d9404d83bc16316"
+        assert crossproc_event.get('event_timestamp') == '2021-04-04T18:11:31.938000Z'
 
         raw_event_str = events_response['process']['filemod_complete'][0]
         event_obj = TestCarbonBlackEventParser.check_str_event('filemod', raw_event_str)
+        timestamp = get_timestamp_by_event_type(event_obj=event_obj, event_type='filemod')
+        event_obj['parsed_timestamp'] = format_timestamp(timestamp)
         filemod_event = create_event_obj(process_response, {'event_type': 'filemod', 'parsed_event_data': event_obj})
         assert filemod_event.get('process_name') == "wermgr.exe"
         assert filemod_event.get('filemod_name') == "c:\\programdata\\microsoft\\windows\\wer\\temp\\7fb39f69-3a0a-4b59-8afb-0bd9667730d1"
         assert filemod_event.get('filemod_action') == "Created the file"
         assert filemod_event.get('filemod_md5') == ""
+        assert filemod_event.get('event_timestamp') == '2021-04-04T20:17:38.590000Z'
 
         unknown_event = create_event_obj(process_response, {'event_type': 'unknown', 'parsed_event_data': event_obj})
         assert unknown_event is None
@@ -216,11 +236,64 @@ class TestCarbonBlackEventParser(unittest.TestCase, object):
         input_timestamp = None
         assert format_timestamp(input_timestamp) is None
 
-        input_timestamp = "2021-03-14T13:17:08.716000Z"
-        assert format_timestamp(input_timestamp) == "2021-03-14T13:17:08.716000Z"
+        input_timestamp = "not-datetime"
+        assert format_timestamp(input_timestamp) == "not-datetime"
 
-        input_timestamp = "2021-03-14 13:17:07.716"
-        assert format_timestamp(input_timestamp) == "2021-03-14T13:17:07.716000Z"
+        input_timestamp = datetime.strptime('2021-04-04T20:17:38.59', '%Y-%m-%dT%H:%M:%S.%f')
+        assert format_timestamp(input_timestamp) == '2021-04-04T20:17:38.590000Z'
+
+    def test_extract_time_window(self):
+        query = '(process_name:erl.exe)'
+        time_window = extract_time_window(query)
+        assert time_window is None
+
+        query = '(process_name:erl.exe) and last_update:[2021-04-22T11:09:00 TO 2021-04-22T11:39:00]'
+        time_window = extract_time_window(query)
+        assert len(time_window) == 2
+        assert time_window[0] == datetime(2021, 4, 22, 11, 9)
+        assert time_window[1] == datetime(2021, 4, 22, 11, 39)
+
+        query = '((process_name:erl.exe) and last_update:-5m)'
+        time_window = extract_time_window(query)
+        time_diff: timedelta = time_window[1] - time_window[0]
+        assert len(time_window) == 2
+        assert time_diff.total_seconds() == 5 * 60
+
+    def test_get_timestamp_by_event_type(self):
+        netconn_event = {'timestamp': "2021-04-04T18:10:24.835Z"}
+        timestamp = get_timestamp_by_event_type(netconn_event, 'w00t')
+        assert timestamp is None
+
+        timestamp = get_timestamp_by_event_type(netconn_event, 'netconn')
+        assert timestamp == datetime(2021, 4, 4, 18, 10, 24, 835000)
+
+        childproc_event = {'end': "2021-04-04T18:10:24.835Z", 'type': 'end'}
+        timestamp = get_timestamp_by_event_type(childproc_event, 'childproc')
+        assert timestamp == datetime(2021, 4, 4, 18, 10, 24, 835000)
+
+        childproc_event = {'end': "2021-04-04T18:10:24Z", 'type': 'end'}
+        timestamp = get_timestamp_by_event_type(childproc_event, 'childproc')
+        assert timestamp == datetime(2021, 4, 4, 18, 10, 24)
+
+        childproc_event = {'end': "not-datetime", 'type': 'end'}
+        timestamp = get_timestamp_by_event_type(childproc_event, 'childproc')
+        assert timestamp is None
+
+        regmod_event = {'event_time': '2021-04-04 18:11:40.309'}
+        timestamp = get_timestamp_by_event_type(regmod_event, 'regmod')
+        assert timestamp == datetime(2021, 4, 4, 18, 11, 40, 309000)
+
+    def test_is_timestamp_in_window(self):
+        query = '(process_name:erl.exe) and last_update:[2021-04-22T11:09:00 TO 2021-04-22T11:10:00]'
+        time_window = extract_time_window(query)
+        timestamp = datetime(2021, 4, 22, 11, 9, 40)
+        assert is_timestamp_in_window(timestamp, time_window) is True
+
+        timestamp = datetime(2021, 4, 22, 11, 5, 40)
+        assert is_timestamp_in_window(timestamp, time_window) is False
+
+        assert is_timestamp_in_window(timestamp, None) is False
+        assert is_timestamp_in_window(None, time_window) is False
 
     def test_get_process_common_fields(self):
         common_fields = get_common_fields_as_dict(process_response)
