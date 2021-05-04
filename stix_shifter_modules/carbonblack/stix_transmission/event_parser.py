@@ -1,5 +1,5 @@
-from datetime import datetime
-from stix_shifter_utils.stix_translation.src.utils.transformers import ToIPv4
+from datetime import datetime, timedelta, timezone
+import re
 from stix_shifter_utils.utils import logger
 
 logger = logger.set_logger(__name__)
@@ -53,20 +53,75 @@ def _raw_event_str_to_obj(event_type, raw_event_data):
     return None
 
 
-def format_timestamp(_timestamp):
+def format_timestamp(timestamp):
     """
-     to TZ format
-    :param _timestamp: 2021-03-14 13:17:07.716
+    to TZ format
+    :param timestamp: datetime object
     :return: 2021-03-14T13:17:07.716000Z
     """
-    if not _timestamp:
-        return _timestamp
+    if not timestamp:
+        return timestamp
     try:
-        dt = datetime.strptime(_timestamp, '%Y-%m-%d %H:%M:%S.%f')
-        return dt.isoformat() + 'Z'
+        return timestamp.isoformat() + 'Z'
     except Exception:
         pass
-    return _timestamp
+    return timestamp
+
+
+def extract_time_window(query):
+    if re.search(r'last_update:\[(.*?)]', query):
+        # Case: 'last_update:[2021-04-22T11:09:00 TO 2021-04-22T11:10:00]'
+        last_update_arr = re.findall(r'last_update:\[(.*?)]', query)
+        if len(last_update_arr) > 0:
+            time_window = last_update_arr[0].split(' TO ')
+            if len(time_window) == 2:
+                return [datetime.strptime(time_window[0], '%Y-%m-%dT%H:%M:%S'),
+                        datetime.strptime(time_window[1], '%Y-%m-%dT%H:%M:%S')]
+    elif re.search(r'last_update:-(\d*)m', query):
+        # Case: '((process_name:erl.exe) and last_update:-5m)'
+        last_update_arr = re.findall(r'last_update:-(\d*)m', query)
+        if len(last_update_arr) > 0:
+            last_minutes = float(last_update_arr[0])
+            end_time = datetime.now(timezone.utc)
+            start_time = end_time - timedelta(minutes=last_minutes)
+            return [start_time.replace(tzinfo=None), end_time.replace(tzinfo=None)]
+    return None
+
+
+def get_timestamp_by_event_type(event_obj, event_type):
+    try:
+        if event_type in str_event_fields.keys():
+            # format: 2014-01-23 09:19:08.331
+            timestamp = event_obj.get('event_time')
+            return datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        elif event_type == 'netconn':
+            # format: 2017-01-11T16:20:04.892Z
+            timestamp = event_obj.get('timestamp')
+            return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+        elif event_type == 'childproc':
+            # format: 2017-01-11T19:57:44.066000Z / 2017-01-11T19:57:44Z
+            action_type = event_obj.get('type')
+            if action_type:
+                timestamp = event_obj.get(action_type)
+                try:
+                    return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+                except ValueError:
+                    pass
+                try:
+                    return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+                except ValueError:
+                    pass
+    except Exception as ex:
+        logger.warning('Failed to parse timestamp for {} event, skipping, {}'.format(event_type, str(ex)))
+    return None
+
+
+def is_timestamp_in_window(timestamp, time_window):
+    try:
+        return time_window[0] <= timestamp <= time_window[1]
+    except Exception as ex:
+        logger.warning('Failed to check if timestamp in time_window, {}'.format(str(ex)))
+        return False
 
 
 def get_common_fields_as_dict(cbr_process):
@@ -87,9 +142,8 @@ def get_common_fields_as_dict(cbr_process):
 
 def create_regmod_obj(event_dict, event_type, cbr_event):
     val = cbr_event.get('operation_type')
-
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['regmod_name'] = cbr_event.get('registry_key_path')
     event_dict['regmod_action'] = regmod_operation_dict[val] if val is not None else None
     return event_dict
@@ -97,7 +151,7 @@ def create_regmod_obj(event_dict, event_type, cbr_event):
 
 def create_crossproc_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['crossproc_name'] = cbr_event.get('target_path')
     event_dict['crossproc_action'] = cbr_event.get('crossproc_type')
     event_dict['crossproc_md5'] = cbr_event.get('target_md5')
@@ -106,7 +160,7 @@ def create_crossproc_obj(event_dict, event_type, cbr_event):
 
 def create_modload_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['modload_name'] = cbr_event.get('path')
     event_dict['modload_md5'] = cbr_event.get('md5')
     return event_dict
@@ -114,9 +168,8 @@ def create_modload_obj(event_dict, event_type, cbr_event):
 
 def create_filemod_obj(event_dict, event_type, cbr_event):
     val = cbr_event.get('operation_type')
-
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['filemod_name'] = cbr_event.get('file_path')
     event_dict['filemod_action'] = filemod_operation_dict[val] if val is not None else None
     event_dict['filemod_md5'] = cbr_event.get('md5')
@@ -125,19 +178,20 @@ def create_filemod_obj(event_dict, event_type, cbr_event):
 
 def create_childproc_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('event_time'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['childproc_name'] = cbr_event.get('path')
     event_dict['childproc_md5'] = cbr_event.get('md5')
     event_dict['childproc_sha256'] = cbr_event.get('sha256')
     event_dict['childproc_cmdline'] = cbr_event.get('commandLine')
     event_dict['childproc_username'] = cbr_event.get('userName')
     event_dict['childproc_pid'] = cbr_event.get('pid')
+    event_dict['childproc_action'] = cbr_event.get('type')
     return event_dict
 
 
 def create_netconn_obj(event_dict, event_type, cbr_event):
     event_dict['event_type'] = event_type
-    event_dict['event_timestamp'] = format_timestamp(cbr_event.get('timestamp'))
+    event_dict['event_timestamp'] = cbr_event.get('parsed_timestamp')
     event_dict['domain'] = cbr_event['domain']
     event_dict['netconn_remote_port'] = cbr_event.get('remote_port')
     event_dict['netconn_remote_ipv4'] = cbr_event.get('remote_ip')
