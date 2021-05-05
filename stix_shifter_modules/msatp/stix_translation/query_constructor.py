@@ -390,41 +390,6 @@ class QueryStringPatternTranslator:
                 value = self._format_matches(expression.value)
         return value, comparator
 
-    def __eval_comparison_exp(self, expression):
-        """
-        Function for parsing comparsion expression and returning query
-        :param expression: expression object, ANTLR parsed expression object
-        :return: str, query string for the comparison expression
-        """
-        stix_object, stix_field = expression.object_path.split(':')
-        value = expression.value.values if hasattr(expression.value, 'values') else expression.value
-        value_type = self._check_value_type(value, expression)
-        mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-        mapped_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == self.lookup_table_object]
-        mapped_mac_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == 'DeviceNetworkInfo'
-                           and 'mac' in value_type]
-        # raise ValueError as the Stix object are not matching in the observation
-        if not mapped_list and not mapped_mac_list:
-            raise ValueError("STIX_objects is not mapping with lookup table attributes")
-        comparator = self._lookup_comparison_operator(expression.comparator)
-        mapped_from_stix_list = mapped_mac_list if mapped_mac_list else mapped_list
-        if stix_field == 'created':
-            value = self._format_datetime(expression.value, expression)
-        elif 'path' in stix_field:
-            if comparator == self.comparator_lookup.get(ComparisonComparators.Like):
-                value, comparator = self._format_like(expression.value, comparator)
-            else:
-                raise TypeError("Comparator {comparator} unsupported for Directory Path, use only LIKE operator"
-                                .format(comparator=comparator))
-        else:
-            value, comparator = self.__eval_comparison_value(expression, comparator)
-        comparison_string = self._parse_mapped_fields(expression, value, comparator,
-                                                      mapped_from_stix_list)
-        if expression.negated:
-            comparison_string = self._negate_comparison(comparison_string)
-        comparison_string = self.clean_format_string(comparison_string)
-        return "{}".format(comparison_string)
-
 
 def translate_pattern(pattern: Pattern, data_model_mapper, options):
     """
