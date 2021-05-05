@@ -340,3 +340,19 @@ class TestQueryTranslator(unittest.TestCase):
             'InitiatingProcessParentCreationTime) == datetime(2019-09-04T09:29:29.0882Z))))']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
+
+    def test_and_op_comb_comparison_exp(self):
+        stix_pattern = "[ipv4-addr:value = '9.147.31.113' AND process:name = 'python3']"
+        query = translation.translate('msatp', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+
+        queries = [
+            '(find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime('
+            '2021-05-05T12:45:04.124Z) and Timestamp < datetime(2021-05-05T12:50:04.124Z)  | order by Timestamp desc '
+            '| where ((LocalIP =~ "9.147.31.113") or (RemoteIP =~ "9.147.31.113")) and ((InitiatingProcessFileName =~ '
+            '"python3") or (InitiatingProcessParentFileName =~ "python3")))']
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
+
+
+

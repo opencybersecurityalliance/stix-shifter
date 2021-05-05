@@ -57,7 +57,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success']
 
-
+    '''
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -72,6 +72,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+    '''
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
 
