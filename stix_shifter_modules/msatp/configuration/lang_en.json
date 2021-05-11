@@ -15,7 +15,7 @@
         },
         "selfSignedCert": {
             "label": "Microsoft Defender ATP Certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender ATP is configured with a self-signed SSL certificate"
+            "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
         },
         "sni": {
             "label": "Server Name Indicator",

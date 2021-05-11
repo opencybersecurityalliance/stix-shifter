@@ -1,4 +1,4 @@
-# MSATP UDS Connector
+# Microsoft Defender for Endpoint(previously Microsoft Defender ATP) UDS Connector
 
 ## Example STIX pattern for file query:
 
