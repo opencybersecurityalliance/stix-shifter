@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Defender ATP Certificate",
+            "label": "Microsoft Defender for Endpoint Certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
         },
         "sni": {
