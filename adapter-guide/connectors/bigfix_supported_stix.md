@@ -33,5 +33,5 @@
 | <br> | | |
 | user-account | user_id | process_user |
 | <br> | | |
-| x_bigfix_relevance | computer_identity | computer_identity |
+| x-bigfix-relevance | computer_identity | computer_identity |
 | <br> | | |

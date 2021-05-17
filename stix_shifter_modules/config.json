@@ -60,7 +60,6 @@
             "mapping": {
                 "type": "json",
                 "optional": true,
-                "hidden": true,
                 "previous": "connection.mapping"
             },
             "unmapped_fallback": {
