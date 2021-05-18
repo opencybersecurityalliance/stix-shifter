@@ -235,9 +235,6 @@ class QueryStringPatternTranslator:
     # get atomicQuery, map the query to tables
     def __eval_comparison_exp_map(self, expression):
         stix_object, stix_field = expression.object_path.split(':')
-        # add later for mac
-        # value = expression.value.values if hasattr(expression.value, 'values') else expression.value
-        # value_type = self._check_value_type(value, expression)
         comparator = self._lookup_comparison_operator(expression.comparator)
         if stix_field == 'created':
             value = self._format_datetime(expression.value, expression)
