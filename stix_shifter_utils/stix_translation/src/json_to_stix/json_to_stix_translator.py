@@ -1,7 +1,7 @@
 import re
 import uuid
 
-from . import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
@@ -331,16 +331,19 @@ class DataSourceObjToStixObj:
         :return: the input object converted to stix valid json
         """
         NUMBER_OBSERVED_KEY = 'number_observed'
+        FIRST_OBSERVED_KEY = 'first_observed'
+        LAST_OBSERVED_KEY = 'last_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
+        now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
 
         observation = {
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
             'created_by_ref': self.identity_id,
-            'created': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
-            'modified': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
+            'created': now,
+            'modified': now,
             'objects': {}
         }
 
@@ -351,13 +354,11 @@ class DataSourceObjToStixObj:
         else:
             self.logger.debug("Not a dict: {}".format(obj))
 
-        # Add required property to the observation if it wasn't added via the mapping
-        if self.options.get('unmapped_fallback'):
-            if "first_observed" not in observation and "last_observed" not in observation:
-                observation['first_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
-                observation['last_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
-
-        # Add required property to the observation if it wasn't added via the mapping
+        # Add required properties to the observation if it wasn't added from the mapping
+        if FIRST_OBSERVED_KEY not in observation:
+            observation[FIRST_OBSERVED_KEY] = now
+        if LAST_OBSERVED_KEY not in observation:
+            observation[LAST_OBSERVED_KEY] = now
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
 

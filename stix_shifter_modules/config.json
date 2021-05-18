@@ -5,6 +5,11 @@
         },
         "options": {
             "type": "fields",
+            "async_call": {
+                "type": "text",
+                "hidden": true,
+                "optional": true
+            },
             "result_limit": {
                 "default": 10000,
                 "min": 1,
@@ -21,7 +26,7 @@
                 "nullable": true
             },
             "timeout": {
-                "default": 10,
+                "default": 30,
                 "min": 1,
                 "max": 60,
                 "hidden": true,
@@ -55,7 +60,6 @@
             "mapping": {
                 "type": "json",
                 "optional": true,
-                "hidden": true,
                 "previous": "connection.mapping"
             },
             "unmapped_fallback": {

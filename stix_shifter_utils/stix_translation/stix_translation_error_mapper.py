@@ -24,11 +24,15 @@ class ErrorMapper():
     @staticmethod
     def set_error_code(data_dict, return_obj):
         exception = None
+        exception_str = None
         if 'exception' in data_dict:
             exception = data_dict['exception']
+            exception_str = str(exception)
 
         error_code = ErrorMapper.DEFAULT_ERROR
         error_message = 'Error when converting STIX pattern to data source query'
+        if exception_str:
+            error_message += ': ' + exception_str
 
         if exception is not None:
             exception_type = type(exception).__name__

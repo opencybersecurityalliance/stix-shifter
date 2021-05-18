@@ -8,7 +8,7 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 DS_INT_FIELDS = ["InitiatingProcessParentId", "InitiatingProcessId", "ProcessId", "LocalPort", "RemotePort"]
 DS_DATETIME_FIELD = ["InitiatingProcessCreationTime", "InitiatingProcessParentCreationTime", "ProcessCreationTime"]
 MAC = '(([0-9a-fA-F]{0,2}[:-]){1,5}([0-9a-fA-F]{0,2}))'
-FLOOR_TIME = '| extend FormattedTimeKey = bin(EventTime, 1m)'
+FLOOR_TIME = '| extend FormattedTimeKey = bin(Timestamp, 1m)'
 
 
 class QueryStringPatternTranslator:
@@ -31,22 +31,22 @@ class QueryStringPatternTranslator:
         ObservationOperators.And: 'OR'
     }
     # STIX attribute to MSATP table mapping
-    msatp_lookup_table = {"file": "FileCreationEvents",
-                          "process": "ProcessCreationEvents",
-                          "user-account": "ProcessCreationEvents",
-                          "ipv4-addr": "NetworkCommunicationEvents",
-                          "ipv6-addr": "NetworkCommunicationEvents",
-                          "network-traffic": "NetworkCommunicationEvents",
-                          "url": "NetworkCommunicationEvents",
-                          "windows-registry-key": "RegistryEvents",
-                          "x-msatp": "FileCreationEvents",
-                          "directory": "FileCreationEvents"
+    msatp_lookup_table = {"file": "DeviceFileEvents",
+                          "process": "DeviceProcessEvents",
+                          "user-account": "DeviceProcessEvents",
+                          "ipv4-addr": "DeviceNetworkEvents",
+                          "ipv6-addr": "DeviceNetworkEvents",
+                          "network-traffic": "DeviceNetworkEvents",
+                          "url": "DeviceNetworkEvents",
+                          "windows-registry-key": "DeviceRegistryEvents",
+                          "x-msatp": "DeviceFileEvents",
+                          "directory": "DeviceFileEvents"
                           }
-    # Join query to get MAC address value from MachineNetworkInfo
-    join_query = ' | join kind= inner (MachineNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
-                 'IPAddresses) | extend IP = IPAddresses.IPAddress | project EventTime ,MachineId , MacAddress, IP, ' \
-                 'FormattedTimeKey) on MachineId, $left.FormattedTimeKey ' \
-                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by EventTime desc'
+    # Join query to get MAC address value from DeviceNetworkInfo
+    join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
+                 'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
+                 'FormattedTimeKey) on DeviceId, $left.FormattedTimeKey ' \
+                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by Timestamp desc'
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
@@ -155,7 +155,7 @@ class QueryStringPatternTranslator:
         """
         try:
             compile_timestamp_regex = re.compile(START_STOP_PATTERN)
-            mapped_field = "EventTime"
+            mapped_field = "Timestamp"
             if qualifier and compile_timestamp_regex.search(qualifier):
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                 time_range_list = [each.group() for each in time_range_iterator]
@@ -226,8 +226,8 @@ class QueryStringPatternTranslator:
 
     def get_lookup_table_of_obs_exp(self, expression, lookup_table, objects_dict):
         """
-        Function to parse observation expression and return the object(i.e FileCreationEvents
-        , ProcessCreationEvents, NetworkCommunicationEvents, RegistryEvents) involved
+        Function to parse observation expression and return the object(i.e DeviceFileEvents
+        , DeviceProcessEvents, DeviceNetworkEvents, DeviceRegistryEvents) involved
         :param expression: expression object, ANTLR parsed expression object
         :param lookup_table: list, empty list
         :param objects_dict: dict, dictionary of objects as keys and respective fields as values
@@ -243,16 +243,16 @@ class QueryStringPatternTranslator:
             lookup_table.append(objects_dict.get(stix_object))
             final_lookup = list(set(lookup_table))
             if self._is_mac:
-                self.lookup_table_object = 'NetworkCommunicationEvents'
+                self.lookup_table_object = 'DeviceNetworkEvents'
             else:
                 if len(final_lookup) == 1:
                     self.lookup_table_object = final_lookup[0]
-                elif 'NetworkCommunicationEvents' in final_lookup:
-                    self.lookup_table_object = 'NetworkCommunicationEvents'
-                elif 'RegistryEvents' in final_lookup:
-                    self.lookup_table_object = 'RegistryEvents'
-                elif 'ProcessCreationEvents' in final_lookup:
-                    self.lookup_table_object = 'ProcessCreationEvents'
+                elif 'DeviceNetworkEvents' in final_lookup:
+                    self.lookup_table_object = 'DeviceNetworkEvents'
+                elif 'DeviceRegistryEvents' in final_lookup:
+                    self.lookup_table_object = 'DeviceRegistryEvents'
+                elif 'DeviceProcessEvents' in final_lookup:
+                    self.lookup_table_object = 'DeviceProcessEvents'
 
         else:
             self.get_lookup_table_of_obs_exp(expression.expr1, lookup_table, objects_dict)
@@ -327,7 +327,7 @@ class QueryStringPatternTranslator:
                 self.join_query.format(mac_query=kusto_query, qualifier_string='|' + self.qualifier_string,
                                        floor_time=FLOOR_TIME)
         else:
-            kusto_query = self.lookup_table_object + self.qualifier_string + '| order by EventTime desc | ' \
+            kusto_query = self.lookup_table_object + self.qualifier_string + '| order by Timestamp desc | ' \
                                                                              'where ' + kusto_query
         return kusto_query
 
@@ -371,7 +371,7 @@ class QueryStringPatternTranslator:
         value_type = self._check_value_type(value, expression)
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
         mapped_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == self.lookup_table_object]
-        mapped_mac_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == 'MachineNetworkInfo'
+        mapped_mac_list = [fields for fields in mapped_fields_array if fields.split('.')[0] == 'DeviceNetworkInfo'
                            and 'mac' in value_type]
         # raise ValueError as the Stix object are not matching in the observation
         if not mapped_list and not mapped_mac_list:

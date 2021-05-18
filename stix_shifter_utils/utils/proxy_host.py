@@ -19,13 +19,13 @@ class ProxyHost():
             self.options = self.request_args.get("options", {})
 
     def transform_query(self):
-        query = self.request_args["query"]
+        query = self.request_args["data"]
         translation = stix_translation.StixTranslation()
         dsl = translation.translate(self.module, 'query', '{}', query, self.options)
         return json.dumps(dsl)
 
     def translate_results(self, data_source_identity_object):
-        data_source_results = self.request_args["results"]
+        data_source_results = self.request_args["data"]
         data_source = self.request_args.get("data_source")
         if data_source_identity_object:
             data_source = data_source_identity_object
