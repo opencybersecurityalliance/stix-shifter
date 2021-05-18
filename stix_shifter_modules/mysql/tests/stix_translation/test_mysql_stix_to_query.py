@@ -42,7 +42,7 @@ def _translate_query(stix_pattern):
     return translation.translate('mysql', 'query', '{}', stix_pattern)
 
 
-def _fix_hash_property(stix_property):
+def _add_single_quotes(stix_property):
     stix_property = re.sub("SHA-256", "'SHA-256'", stix_property)
     stix_property = re.sub("MD5", "'MD5'", stix_property)
     return stix_property
@@ -54,7 +54,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         for stix_object, value in FROM_STIX_MAPPINGS.items():
             for stix_property, field_list in value["fields"].items():
                 if stix_object == 'file':
-                    stix_property = _fix_hash_property(stix_property)
+                    stix_property = _add_single_quotes(stix_property)
                 field_count = len(field_list)
                 stix_pattern = "["
                 for field in field_list:

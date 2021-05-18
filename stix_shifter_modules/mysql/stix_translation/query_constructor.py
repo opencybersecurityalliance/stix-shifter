@@ -1,5 +1,5 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+    ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier,\
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
@@ -67,6 +67,20 @@ class QueryStringPatternTranslator:
     def _format_like(value) -> str:
         value = "'%{value}%'".format(value=value)
         return QueryStringPatternTranslator._escape_value(value)
+
+    @classmethod
+    def _format_start_stop_qualifier(self, expression, qualifier) -> str:
+        """Convert a STIX start stop qualifier into a query string.
+
+        The sample MySQL schema included in this connector defines a timerange with a start and stop value
+        based on the entry_time field. 
+        """
+        transformer = TimestampToMilliseconds()
+        qualifier_split = qualifier.split("'")
+        start = transformer.transform(qualifier_split[1])
+        stop = transformer.transform(qualifier_split[3])
+        qualified_query = "%s AND (entry_time >= %s OR entry_time <= %s)" % (expression, start, stop)
+        return qualified_query
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -163,8 +177,9 @@ class QueryStringPatternTranslator:
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
-            if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+            if qualifier:
+                comparison_string = self._format_start_stop_qualifier(comparison_string, qualifier)
+                return comparison_string
             else:
                 return "{}".format(comparison_string)
 
@@ -175,12 +190,16 @@ class QueryStringPatternTranslator:
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-            if qualifier is not None:
-                return "{} {}".format(query_string, qualifier)
+                expression_02 = "{}".format(expression_02)
+            if operator == 'AND':
+                query_string = "({} {} {})".format(expression_01, operator, expression_02)
+            else:
+                query_string = "{} {} {}".format(expression_01, operator, expression_02)
+            if qualifier:
+                query_string = self._format_start_stop_qualifier(query_string, qualifier)
+                return query_string
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
