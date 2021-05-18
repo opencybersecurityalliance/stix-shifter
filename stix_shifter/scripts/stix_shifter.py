@@ -173,6 +173,17 @@ def main():
         type=str,
         help='Proxy Host:Port'
     )
+    host_parser.add_argument(
+        'ssl_cert',
+        type=str,
+        help='SSL certificate filename'
+    )
+    host_parser.add_argument(
+        'ssl_key',
+        type=str,
+        help='SSL key filename'
+    )
+
     host_parser.add_argument('-d', '--debug', action='store_true',
                              help='Print detail logs for debugging')
 
@@ -255,7 +266,7 @@ def main():
             return host.is_async()
 
         host_address = args.host_address.split(":")
-        app.run(debug=False, port=int(host_address[1]), host=host_address[0])
+        app.run(debug=True, port=int(host_address[1]), host=host_address[0], ssl_context=(args.ssl_cert, args.ssl_key))
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
@@ -285,7 +296,7 @@ def main():
                             status = transmission.status(search_id)
                         log.debug(status)
                     else:
-                        raise RuntimeError("Fetching status failed")
+                        raise RuntimeError("Fetching status failed")               
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
                     log.debug("Search {} results is:\n{}".format(search_id, result["data"]))

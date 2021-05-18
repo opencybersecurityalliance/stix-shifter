@@ -10,19 +10,20 @@
 | file | name | InitiatingProcessFileName |
 | file | name | InitiatingProcessParentFileName |
 | file | parent_directory_ref | InitiatingProcessFolderPath |
+| file | name | FileName |
+| file | parent_directory_ref | FolderPath |
 | file | hashes.SHA-1 | SHA1 |
 | file | hashes.SHA-256 | SHA256 |
 | file | hashes.MD5 | MD5 |
-| file | name | FileName |
-| file | parent_directory_ref | FolderPath |
 | <br> | | |
 | ipv4-addr | value | LocalIP |
 | ipv4-addr | value | RemoteIP |
 | ipv4-addr | resolves_to_refs | MacAddress |
+| ipv4-addr | value | IpAddresses |
 | <br> | | |
 | ipv6-addr | value | LocalIP |
 | ipv6-addr | value | RemoteIP |
-| ipv6-addr | resolves_to_refs | MacAddress |
+| ipv6-addr | value | IpAddresses |
 | <br> | | |
 | mac-addr | value | MacAddress |
 | <br> | | |
@@ -31,6 +32,7 @@
 | network-traffic | src_port | LocalPort |
 | network-traffic | dst_port | RemotePort |
 | network-traffic | protocols | Protocol |
+| network-traffic | src_ref | MacAddress |
 | <br> | | |
 | process | binary_ref | InitiatingProcessSHA1 |
 | process | binary_ref | InitiatingProcessSHA256 |
@@ -50,23 +52,20 @@
 | process | creator_user_ref | InitiatingProcessAccountSid |
 | process | creator_user_ref | InitiatingProcessAccountName |
 | process | binary_ref | InitiatingProcessFolderPath |
-| process | binary_ref | SHA1 |
-| process | binary_ref | SHA256 |
-| process | binary_ref | MD5 |
+| process | name | FileName |
+| process | binary_ref | FileName |
+| process | pid | ProcessId |
+| process | command_line | ProcessCommandLine |
+| process | created | ProcessCreationTime |
 | process | parent_ref | InitiatingProcessSHA1 |
 | process | parent_ref | InitiatingProcessSHA256 |
 | process | parent_ref | InitiatingProcessMD5 |
-| process | name | FileName |
 | process | parent_ref | InitiatingProcessFileName |
-| process | pid | ProcessId |
 | process | parent_ref | InitiatingProcessId |
-| process | command_line | ProcessCommandLine |
 | process | parent_ref | InitiatingProcessCommandLine |
-| process | created | ProcessCreationTime |
 | process | parent_ref | InitiatingProcessCreationTime |
 | process | creator_user_ref | AccountSid |
 | process | creator_user_ref | AccountName |
-| process | binary_ref | FolderPath |
 | <br> | | |
 | url | value | RemoteUrl |
 | <br> | | |
@@ -78,6 +77,22 @@
 | windows-registry-key | key | RegistryKey |
 | windows-registry-key | values | RegistryValues |
 | <br> | | |
-| x_msatp | computer_name | ComputerName |
-| x_msatp | machine_id | MachineId |
+| x-oca-asset | device_id | DeviceId |
+| x-oca-asset | hostname | DeviceName |
+| x-oca-asset | ip_refs | IpAddresses |
+| x-oca-asset | mac_refs | MacAddress |
+| <br> | | |
+| x-oca-event | start | Timestamp |
+| x-oca-event | end | Timestamp |
+| x-oca-event | action | ActionType |
+| x-oca-event | process_ref | FileName |
+| x-oca-event | file_ref | FileName |
+| x-oca-event | process_ref | ProcessId |
+| x-oca-event | process_ref | InitiatingProcessId |
+| x-oca-event | parent_process_ref | InitiatingProcessParentId |
+| x-oca-event | user_ref | InitiatingProcessAccountSid |
+| x-oca-event | host_ref | DeviceName |
+| <br> | | |
+| x_msatp | computer_name | DeviceName |
+| x_msatp | machine_id | DeviceId |
 | <br> | | |

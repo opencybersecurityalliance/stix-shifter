@@ -115,7 +115,9 @@
       "pid": ["process.pid", "process.ppid", "process.parent.pid", "process.parent.ppid"],
       "name": ["process.name", "process.parent.name"],
       "creator_user_ref.user_id": ["user.name"],
-      "parent_ref.pid": ["process.ppid", "process.parent.ppid"]
+      "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "parent_ref.name": ["process.parent.name"],
+      "binary_ref.name": ["process.executable", "process.parent.executable"]
     }
   },
   "x-ecs-process": {

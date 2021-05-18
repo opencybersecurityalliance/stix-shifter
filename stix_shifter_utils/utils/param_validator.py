@@ -134,7 +134,10 @@ def copy_valid_configs(input_configs, expected_configs, validated_params, errors
                     if not input_configs[key]:
                         del input_configs[key]
             else:
-                if optional_section(expected_configs[key], key):
+                if not is_leaf(expected_configs[key]):
+                    validated_params[key] = dict()
+                    copy_valid_configs(dict(), expected_configs[key], validated_params[key], errors, key_path)
+                elif optional_section(expected_configs[key], key):
                     if default_section(expected_configs[key], key):
                         if key not in validated_params:
                             validated_params[key] = dict()
