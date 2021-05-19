@@ -114,24 +114,19 @@
     }
   ],
   "device_name": {
-    "key": "x_cbcloud.device_name",
-    "cybox": false
+    "key": "x-cbcloud.device_name"
   },
   "device_internal_ip": {
-    "key": "x_cbcloud.device_internal_ip",
-    "cybox": false
+    "key": "x-cbcloud.device_internal_ip"
   },
   "device_external_ip": {
-    "key": "x_cbcloud.device_external_ip",
-    "cybox": false
+    "key": "x-cbcloud.device_external_ip"
   },
   "device_os": {
-    "key": "x_cbcloud.device_os",
-    "cybox": false
+    "key": "x-cbcloud.device_os"
   },
   "device_id": {
-    "key": "x_cbcloud.device_id",
-    "cybox": false
+    "key": "x-cbcloud.device_id"
   },
   "device_timestamp": [
     {
@@ -143,48 +138,37 @@
       "cybox": false
     },
     {
-      "key": "x_cbcloud.device_timestamp",
-      "cybox": false
+      "key": "x-cbcloud.device_timestamp"
     }
   ],
   "org_id": {
-    "key": "x_cbcloud.org_id",
-    "cybox": false
+    "key": "x-cbcloud.org_id"
   },
   "device_group_id": {
-    "key": "x_cbcloud.device_group_id",
-    "cybox": false
+    "key": "x-cbcloud.device_group_id"
   },
   "process_terminated": {
-    "key": "x_cbcloud.process_terminated",
-    "cybox": false
+    "key": "x-cbcloud.process_terminated"
   },
   "regmod_count": {
-    "key": "x_cbcloud.regmod_count",
-    "cybox": false
+    "key": "x-cbcloud.regmod_count"
   },
   "netconn_count": {
-    "key": "x_cbcloud.netconn_count",
-    "cybox": false
+    "key": "x-cbcloud.netconn_count"
   },
   "filemod_count": {
-    "key": "x_cbcloud.filemod_count",
-    "cybox": false
+    "key": "x-cbcloud.filemod_count"
   },
   "modload_count": {
-    "key": "x_cbcloud.modload_count",
-    "cybox": false
+    "key": "x-cbcloud.modload_count"
   },
   "childproc_count": {
-    "key": "x_cbcloud.childproc_count",
-    "cybox": false
+    "key": "x-cbcloud.childproc_count"
   },
   "crossproc_count": {
-    "key": "x_cbcloud.crossproc_count",
-    "cybox": false
+    "key": "x-cbcloud.crossproc_count"
   },
   "scriptload_count": {
-    "key": "x_cbcloud.scriptload_count",
-    "cybox": false
+    "key": "x-cbcloud.scriptload_count"
   }
 }
