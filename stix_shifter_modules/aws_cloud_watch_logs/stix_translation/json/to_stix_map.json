@@ -79,8 +79,7 @@
     ],
     "accountId": [
       {
-        "key": "x_aws.account_id",
-        "cybox": false
+        "key": "x-aws.account_id"
       }
     ],
     "@timestamp": [
@@ -254,32 +253,25 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_aws_vpc.subnet_id",
-        "cybox": false
+        "key": "x-aws-vpc.subnet_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_aws_vpc.vpc_id",
-        "cybox": false
+        "key": "x-aws-vpc.vpc_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_aws_vpc.security_group_id",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_aws_vpc.security_group_name",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_name"
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_aws_instance.image_id",
-        "cybox": false
+        "key": "x-aws-instance.image_id"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_aws_instance.instance_id",
-        "cybox": false
+        "key": "x-aws-instance.instance_id"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_aws_instance.availability_zone",
-        "cybox": false
+        "key": "x-aws-instance.availability_zone"
       }
     },
     "PORT_PROBE": {
@@ -402,37 +394,29 @@
       ],
       "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port": [
         {
-          "key": "x_aws_guardduty_finding.probe_port",
-          "cybox": false
+          "key": "x-aws-guardduty-finding.probe_port"
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_aws_vpc.subnet_id",
-        "cybox": false
+        "key": "x-aws-vpc.subnet_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_aws_vpc.vpc_id",
-        "cybox": false
+        "key": "x-aws-vpc.vpc_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_aws_vpc.security_group_id",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_aws_vpc.security_group_name",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_name"
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_aws_instance.image_id",
-        "cybox": false
+        "key": "x-aws-instance.image_id"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_aws_instance.instance_id",
-        "cybox": false
+        "key": "x-aws-instance.instance_id"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_aws_instance.availability_zone",
-        "cybox": false
+        "key": "x-aws-instance.availability_zone"
       }
     },
     "AWS_API_CALL": {
@@ -463,16 +447,13 @@
         "object": "api_user"
       },
       "detail_resource_accessKeyDetails_accessKeyId": {
-        "key": "x_aws_api.access_key_id",
-        "cybox": false
+        "key": "x-aws-api.access_key_id"
       },
       "detail_service_action_awsApiCallAction_api": {
-        "key": "x_aws_api.api",
-        "cybox": false
+        "key": "x-aws-api.api"
       },
       "detail_service_action_awsApiCallAction_serviceName": {
-        "key": "x_aws_api.service_name",
-        "cybox": false
+        "key": "x-aws-api.service_name"
       }
     },
     "DNS_REQUEST": {
@@ -576,20 +557,16 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x_aws_vpc.subnet_id",
-        "cybox": false
+        "key": "x-aws-vpc.subnet_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x_aws_vpc.vpc_id",
-        "cybox": false
+        "key": "x-aws-vpc.vpc_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x_aws_vpc.security_group_id",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_id"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x_aws_vpc.security_group_name",
-        "cybox": false
+        "key": "x-aws-vpc.security_group_name"
       },
       "detail_service_action_dnsRequestAction_domain":[
         {
@@ -598,46 +575,36 @@
         }
       ],
       "detail_resource_instanceDetails_imageId":{
-        "key": "x_aws_instance.image_id",
-        "cybox": false
+        "key": "x-aws-instance.image_id"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x_aws_instance.instance_id",
-        "cybox": false
+        "key": "x-aws-instance.instance_id"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x_aws_instance.availability_zone",
-        "cybox": false
+        "key": "x-aws-instance.availability_zone"
       }
     },
     "@timestamp": {
-        "key": "x_aws_guardduty_finding.timestamp",
-        "cybox": false,
+        "key": "x-aws-guardduty-finding.timestamp",
         "transformer": "AwsToTimestamp"
     },
     "account": {
-      "key": "x_aws.account_id",
-      "cybox": false
+      "key": "x-aws.account_id"
     },
     "detail_region": {
-      "key": "x_aws.region",
-      "cybox": false
+      "key": "x-aws.region"
     },
     "detail_id": {
-      "key": "x_aws_guardduty_finding.id",
-      "cybox": false
+      "key": "x-aws-guardduty-finding.id"
     },
     "detail_severity": {
-      "key": "x_aws_guardduty_finding.severity",
-      "cybox": false
+      "key": "x-aws-guardduty-finding.severity"
     },
     "detail_type": {
-      "key": "x_aws_guardduty_finding.type",
-      "cybox": false
+      "key": "x-aws-guardduty-finding.type"
     },
     "detail_title": {
-      "key": "x_aws_guardduty_finding.title",
-      "cybox": false
+      "key": "x-aws-guardduty-finding.title"
     },
     "detail_service_eventFirstSeen": {
         "key": "first_observed",
