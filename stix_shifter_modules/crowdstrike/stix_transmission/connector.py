@@ -1,8 +1,7 @@
 import json
 import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
-from .detection_api_client import DetectionAPIClient
-from .threat_graph_api_client import ThreatGraphAPIClient
+from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import copy
@@ -18,10 +17,7 @@ class Connector(BaseSyncConnector):
         :param configuration: dict,config dict"""
 
         try:
-            self.token = Connector.generate_token(connection, configuration)
-            configuration['auth']['access_token'] = self.token
-            self.detection_api_client = DetectionAPIClient(connection, configuration)
-            self.threat_graph_api_client = ThreatGraphAPIClient(connection, configuration)
+            self.api_client = APIClient(connection, configuration)
 
         except Exception as ex:
             self.init_error = ex
@@ -56,15 +52,21 @@ class Connector(BaseSyncConnector):
         :param length: int,length value"""
 
         response_txt = None
-        return_obj = dict()
+        ids_obj = dict()
 
         try:
             if self.init_error:
                 raise self.init_error
-            response = self.detection_api_client.get_incidents_IDs(filter, sort)
-            return_obj = self._handle_errors(response, return_obj)
-            response_json = json.loads(return_obj["data"])
-            return_obj['data'] = response_json['Results']
+            for q in query:
+                response = self.api_client.get_detections_IDs(q)
+                #response_dict = json.loads(response.text)
+                print(response)
+                return_obj = self._handle_errors(response, ids_obj)
+                response_json = json.loads(ids_obj["data"])
+                ids_obj['ids'] = response_json['resources']
+                #### PROBLEM HERE WITH IDS FORMAT ##############################################
+                response = self.api_client.get_detections_info(ids_obj['ids'])
+                print(response)
             # Customizing the output json,
             # Get 'TableName' attribute from each row of event data
             # Create a dictionary with 'TableName' as key and other attributes in an event data as value
@@ -99,31 +101,5 @@ class Connector(BaseSyncConnector):
             else:
                 raise ex
 
-    @staticmethod
-    def generate_token(connection, configuration):
-        """To generate the Token
-        :param connection: dict, connection dict
-        :param configuration: dict,config dict"""
 
-        authority_url = ('https://login.windows.net/' +
-                         configuration['auth']['tenant'])
-        resource = "https://" + str(connection.get('host'))
 
-        try:
-            context = adal.AuthenticationContext(
-                authority_url, validate_authority=configuration['auth']['tenant'] != 'adfs',
-            )
-            token = context.acquire_token_with_client_credentials(
-                resource,
-                configuration['auth']['clientId'],
-                configuration['auth']['clientSecret'])
-
-            token_value = token['accessToken']
-            return token_value
-
-        except Exception as ex:
-            return_obj = dict()
-            if ex.error_response:
-                ErrorResponder.fill_error(return_obj, ex.error_response, ['reason'])
-                Connector.logger.error("Token generation Failed: " + return_obj)
-            raise ex

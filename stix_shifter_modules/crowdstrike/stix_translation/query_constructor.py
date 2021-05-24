@@ -31,7 +31,7 @@ class CSQueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.result_limit = result_limit
-        self.time_range = time_range  # filter results to last x minutes
+        self.time_range = 10000000  # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
         self.queries = []
         self.queries.append(self.translated)
