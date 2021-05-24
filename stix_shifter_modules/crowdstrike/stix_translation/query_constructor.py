@@ -22,8 +22,8 @@ class CSQueryStringPatternTranslator:
         ComparisonComparators.LessThan: ":<",
         ComparisonComparators.LessThanOrEqual: ":<=",
         # ComparisonComparators.In: "in~",
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'OR'
+        # ObservationOperators.Or: 'OR',
+        # ObservationOperators.And: 'OR'
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
@@ -40,42 +40,14 @@ class CSQueryStringPatternTranslator:
     def _format(value) -> str:
         return '{}'.format(CSQueryStringPatternTranslator._escape_value(value))
 
-    '''
-    @staticmethod
-    def _format_lt(value) -> str:
-        return '[* TO {}]'.format(CSQueryStringPatternTranslator._escape_value(value))
-
-    @staticmethod
-    def _format_gte(value) -> str:
-        return '[{} TO *]'.format(CSQueryStringPatternTranslator._escape_value(value))
-
-    # Note: target query language doesn't support '<=' or '>' directly so we implement it indirectly for integers
-    @staticmethod
-    def _format_lte(value) -> str:
-        if isinstance(value, int):
-            value = value + 1
-        return CSQueryStringPatternTranslator._format_lt(value)
-
-    @staticmethod
-    def _format_gt(value) -> str:
-        if isinstance(value, int):
-            value = value + 1
-        return CSQueryStringPatternTranslator._format_gte(value)
-    '''
-
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
             return '{}'.format(
                 value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(
-                        ' ', '\\ '))
+                    ' ', '\\ '))
         else:
             return value
-
-
-    # @staticmethod
-    # def _negate_comparison(comparison_string) -> str:
-    #     return "-({})".format(comparison_string)
 
     @staticmethod
     def _to_cb_timestamp(ts: str) -> str:
@@ -105,22 +77,17 @@ class CSQueryStringPatternTranslator:
             comparator = self.comparator_lookup[expression.comparator]
             original_stix_value = expression.value
 
-            # Some values are formatted differently based on how they're being compared
-            # if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
-            #     value = self._format(expression.value)
-            # elif expression.comparator == ComparisonComparators.LessThan:
-            #     value = self._format(expression.value)
-            # elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
-            #     value = self._format(expression.value)
-            # elif expression.comparator == ComparisonComparators.LessThanOrEqual:
-            #     value = self._format(expression.value)
-            # elif expression.comparator == ComparisonComparators.GreaterThan:
-            #     value = self._format(expression.value)
-            # else:
+            # Some values are formatted differently based on how they're being compared if expression.comparator ==
+            # ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual: value =
+            # self._format(expression.value) elif expression.comparator == ComparisonComparators.LessThan: value =
+            # self._format(expression.value) elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
+            # value = self._format(expression.value) elif expression.comparator ==
+            # ComparisonComparators.LessThanOrEqual: value = self._format(expression.value) elif
+            # expression.comparator == ComparisonComparators.GreaterThan: value = self._format(expression.value) else:
             value = self._escape_value(expression.value)
 
             comparison_string = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
-                                                                           comparator=comparator, value=value)
+                                                                              comparator=comparator, value=value)
 
             # translate != to NOT equals
             # if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
