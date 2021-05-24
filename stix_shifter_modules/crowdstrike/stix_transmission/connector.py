@@ -72,27 +72,8 @@ class Connector(BaseSyncConnector):
             # Create a dictionary with 'TableName' as key and other attributes in an event data as value
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
-            table_event_data = []
-            for event_data in return_obj['data']:
-                lookup_table = event_data['TableName']
-                event_data.pop('TableName')
-                build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-                if lookup_table == "RegistryEvents":
-                    registry_build_data = copy.deepcopy(build_data)
-                    registry_build_data[lookup_table]["RegistryValues"] = []
-                    registry_value_dict = {}
-                    for k, v in build_data[lookup_table].items():
-                        if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
-                            registry_value_dict.update({k: v})
-                            registry_build_data[lookup_table].pop(k)
-                    registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
 
-                    build_data[lookup_table] = registry_build_data[lookup_table]
-                build_data[lookup_table]['event_count'] = '1'
-                table_event_data.append(build_data)
-            return_obj['data'] = table_event_data
-            return return_obj
+            return
 
         except Exception as ex:
             if response_txt is not None:
