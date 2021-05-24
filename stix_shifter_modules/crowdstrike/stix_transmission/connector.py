@@ -49,7 +49,7 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
-    def create_results_connection(self, filter, sort, offset, length):
+    def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
