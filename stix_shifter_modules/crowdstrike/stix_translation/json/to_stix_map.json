@@ -1,1 +1,103 @@
-{}
+{
+    "behaviors[].user_name": {
+      "key": "user-account.user_id"
+    },
+    "NA-LogSourceId": {
+      "key": "x__custom_property.log_source_id",
+      "cybox": false
+    },
+    "NA-Magnitude": {
+      "key": "x__custom_property.magnitude",
+      "cybox": false
+    },
+    "device.local_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "NA-DestinationIpV4": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "NA-SourceIpV6": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "NA-DestinationIpV6": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "NA-EventCount": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    "first_behavior": {
+        "key": "first_observed",
+        "cybox": false
+      },
+    "last_behavior": 
+      {
+        "key": "last_observed",
+        "cybox": false
+      },
+    "NA-Url": {
+      "key": "url.value"
+    },
+    "behaviors[].filename": {
+      "key": "file.name"
+    },
+    "NA-Payload": {
+      "key": "artifact.payload_bin"
+    },
+    "NA-DestinationPort": {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "NA-SourcePort": {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "NA-NetworkProtocol": {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "ToLowercaseArray"
+    },
+    "NA-DomainName": {
+      "key": "domain-name.value"
+    },
+    "behaviors.cmdline":
+        {
+          "object": "proc",
+          "key": "process.command_line"
+        }
+  }
