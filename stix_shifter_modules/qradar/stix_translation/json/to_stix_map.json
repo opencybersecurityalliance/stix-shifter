@@ -115,8 +115,8 @@
     },
     {
       "key": "x-ibm-finding.dst_ip_ref",
-      "object": "finding", 
-      "references": "dst_ip" 
+      "object": "finding",
+      "references": "dst_ip"
     },
     {
       "key": "x-oca-event.network_ref",
@@ -223,8 +223,8 @@
     },
     {
       "key": "x-ibm-finding.src_ip_ref",
-      "object": "finding", 
-      "references": "src_ip" 
+      "object": "finding",
+      "references": "src_ip"
     },
     {
       "key": "x-oca-asset.ip_refs",
@@ -872,5 +872,9 @@
       "group": true,
       "references": ["service_file_name"]
     }
-  ]
+  ],
+  "hasOffense": {
+    "key": "x-qradar.has_offense",
+    "object": "x-qradar"
+  }
 }

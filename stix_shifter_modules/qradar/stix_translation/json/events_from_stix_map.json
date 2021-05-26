@@ -73,7 +73,8 @@
       "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "domain_id": ["domainid"]
+      "domain_id": ["domainid"],
+      "has_offense": ["hasOffense"]
     }
   },
   "x-ibm-finding": {

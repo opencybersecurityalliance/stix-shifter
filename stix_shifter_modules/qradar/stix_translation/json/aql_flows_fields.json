@@ -71,6 +71,7 @@
     "\"tls ja3s hash\" as tlsja3shash",
     "\"suspect content descriptions\" as suspectcontentdescriptions",
     "flowid",
-    "\"content type\" as contenttype"
+    "\"content type\" as contenttype",
+    "hasOffense"
   ]
 }
