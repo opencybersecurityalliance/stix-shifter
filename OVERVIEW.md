@@ -448,7 +448,21 @@ Uses the data source API to fetch the query results based on the search ID, offs
 
 `{'success': True, 'data': [<QUERY RESULTS>]}`
 
-The offset and length control what pages/rows of data are returned in the query results.
+The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results.
+
+### Results as STIX
+
+Uses the data source API to fetch the query results based on the search ID, offset, and length, and transforms into a bundle of STIX objects.
+
+#### CLI Command
+
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results_stix <SEARCH ID> <OFFSET> <LENGTH> '<STIX IDENTITY OBJECT>'`
+
+#### OUTPUT:
+
+STIX bundle of objects.
+
+The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results.
 
 ### Is Async
 
