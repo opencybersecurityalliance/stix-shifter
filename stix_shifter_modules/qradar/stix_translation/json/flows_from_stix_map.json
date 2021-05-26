@@ -85,7 +85,7 @@
       "tls_ja3_hash": [ "tlsja3hash" ],
       "tls_ja3s_hash": [ "tlsja3shash" ],
       "suspect_content_descriptions": [ "suspectcontentdescriptions" ],
-      "has_offense": ["hasOffense"],
+      "has_offense": ["hasoffense"],
       "INOFFENSE": ["INOFFENSE"]
     }
   }

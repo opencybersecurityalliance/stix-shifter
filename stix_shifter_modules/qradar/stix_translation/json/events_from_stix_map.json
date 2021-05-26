@@ -74,7 +74,7 @@
       "credibility": ["credibility"],
       "relevance": ["relevance"],
       "domain_id": ["domainid"],
-      "has_offense": ["hasOffense"],
+      "has_offense": ["hasoffense"],
       "INOFFENSE": ["INOFFENSE"]
     }
   },
