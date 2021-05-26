@@ -54,7 +54,12 @@ Example:
 $ stix-shifter translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
 ```
 
-**Note:** In order to create python executable `stix-shifter` from source run the following command from stix-shifter parent directory in your python 3 environment: `python setup.py install`
+**Note:** In order to build `stix-shifter` packages from source follow the below prerequisite steps:
+   1. Go to the stix-shifter parent directory
+   2. Generate latest requirements.txt: `python3 generate_requirements.py`
+   3. Install the dependencies in your python 3 environment: `pip install -r requirements.txt` 
+   4. Alternatively you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && pip install -r requirements-dev.txt`
 
 ### As A Library
 
