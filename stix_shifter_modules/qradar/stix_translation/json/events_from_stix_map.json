@@ -74,7 +74,8 @@
       "credibility": ["credibility"],
       "relevance": ["relevance"],
       "domain_id": ["domainid"],
-      "has_offense": ["hasOffense"]
+      "has_offense": ["hasOffense"],
+      "INOFFENSE": ["INOFFENSE"]
     }
   },
   "x-ibm-finding": {
