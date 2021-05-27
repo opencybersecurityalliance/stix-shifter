@@ -68,7 +68,7 @@ class APIClient:
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = self.INCIDENTS_INFO_ENDPOINT
         ids_expression = json.dumps({'ids': ids}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, urldata=ids_expression, timeout=self.timeout)
+        return self.client.call_api(endpoint, 'POST', headers=headers, data=ids_expression, timeout=self.timeout)
 
     def get_token(self) -> str:
         """Request a new OAuth2 token.

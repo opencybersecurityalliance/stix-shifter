@@ -102,11 +102,11 @@
     "fields": {
       "domain": ["device.hostname"],
       "hostname": ["device.hostname"],
-      "ip": ["device.external_ip", "device.local_ip"],
+      "ip_refs": ["device.external_ip", "device.local_ip"],
       "name": ["device.hostname"],
       "type": ["device.product_type_desc"],
-      "os.name": ["device.platform_name"],
-      "os.platform": ["device.platform_name"]
+      "os_name": ["device.platform_name"],
+      "os_platform": ["device.platform_name"]
     }
   },
   "x-cs-response": {

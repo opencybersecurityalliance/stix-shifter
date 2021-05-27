@@ -22,8 +22,8 @@ class CSQueryStringPatternTranslator:
         ComparisonComparators.LessThan: ":<",
         ComparisonComparators.LessThanOrEqual: ":<=",
         # ComparisonComparators.In: "in~",
-        # ObservationOperators.Or: 'OR',
-        # ObservationOperators.And: 'OR'
+        ObservationOperators.Or: 'OR',
+        ObservationOperators.And: 'OR'
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
@@ -50,15 +50,15 @@ class CSQueryStringPatternTranslator:
             return value
 
     @staticmethod
-    def _to_cb_timestamp(ts: str) -> str:
+    def _to_cs_timestamp(ts: str) -> str:
         stripped = ts[2:-2]
         if '.' in stripped:
             stripped = stripped.split('.', 1)[0]
         return stripped
 
     def _format_start_stop_qualifier(self, expression, qualifier: StartStopQualifier) -> str:
-        start = self._to_cb_timestamp(qualifier.start)
-        stop = self._to_cb_timestamp(qualifier.stop)
+        start = self._to_cs_timestamp(qualifier.start)
+        stop = self._to_cs_timestamp(qualifier.stop)
 
         start_stop_query = "(device.first_seen:>= '{}' + device.last_seen:<= '{}')".format(start, stop)
 
@@ -73,9 +73,14 @@ class CSQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             mapped_field = mapped_fields_array[0]
 
-            # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[expression.comparator]
-            original_stix_value = expression.value
+
+            # Handle negate exp
+            if expression.negated and expression.comparator == ComparisonComparators.Equal:
+                comparator = self._get_negate_comparator()
+
+            elif expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
+                comparator = self._get_negate_comparator()
 
             # Some values are formatted differently based on how they're being compared if expression.comparator ==
             # ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual: value =
@@ -88,13 +93,6 @@ class CSQueryStringPatternTranslator:
 
             comparison_string = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
                                                                               comparator=comparator, value=value)
-
-            # translate != to NOT equals
-            # if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
-            #    expression.negated = True
-
-            # if expression.negated:
-            #    comparison_string = self._negate_comparison(comparison_string)
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
@@ -128,7 +126,10 @@ class CSQueryStringPatternTranslator:
             operator = self.comparator_lookup[expression.operator]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
-            CSQueryStringPatternTranslator.QUERIES.extend([expr1, expr2])
+            if(not isinstance(expr1, list)):
+                CSQueryStringPatternTranslator.QUERIES.extend([expr1])
+            if (not isinstance(expr2, list)):
+                CSQueryStringPatternTranslator.QUERIES.extend([expr2])
             return CSQueryStringPatternTranslator.QUERIES
             # return f'({expr1}) {operator} ({expr2})'
         elif isinstance(expression, Pattern):
@@ -138,6 +139,9 @@ class CSQueryStringPatternTranslator:
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def _get_negate_comparator(self):
+        return self.comparator_lookup[ComparisonComparators.NotEqual]
 
     def _add_default_timerange(self, query):
         if self.time_range and 'device.first_seen' not in query:

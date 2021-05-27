@@ -53,27 +53,36 @@ class Connector(BaseSyncConnector):
 
         response_txt = None
         ids_obj = dict()
+        return_obj = dict()
 
         try:
             if self.init_error:
                 raise self.init_error
             for q in query:
                 response = self.api_client.get_detections_IDs(q)
-                #response_dict = json.loads(response.text)
                 print(response)
-                return_obj = self._handle_errors(response, ids_obj)
+                self._handle_errors(response, ids_obj)
                 response_json = json.loads(ids_obj["data"])
                 ids_obj['ids'] = response_json['resources']
-                #### PROBLEM HERE WITH IDS FORMAT ##############################################
                 response = self.api_client.get_detections_info(ids_obj['ids'])
                 print(response)
+                return_obj = self._handle_errors(response, return_obj)
+                response_json = json.loads(return_obj["data"])
+                return_obj['data'] = response_json['resources']
+                print(return_obj)
+                return return_obj
+
+
+
+
+
             # Customizing the output json,
             # Get 'TableName' attribute from each row of event data
             # Create a dictionary with 'TableName' as key and other attributes in an event data as value
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
 
-            return
+
 
         except Exception as ex:
             if response_txt is not None:
