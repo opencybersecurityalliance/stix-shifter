@@ -873,7 +873,7 @@
       "references": ["service_file_name"]
     }
   ],
-  "hasOffense": {
+  "hasoffense": {
     "key": "x-qradar.has_offense",
     "object": "x-qradar"
   }
