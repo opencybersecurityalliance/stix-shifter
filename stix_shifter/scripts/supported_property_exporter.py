@@ -22,7 +22,8 @@ CONNECTORS = {
     "azure_sentinel": "Microsoft Azure Sentinel",
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
-    "aws_athena": "Amazon Athena"
+    "aws_athena": "Amazon Athena",
+    "crowdstrike": 'CrowdStrike'
 }
 
 
