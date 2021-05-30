@@ -5,6 +5,7 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from datetime import datetime, timedelta
 
 
+
 class CSQueryStringPatternTranslator:
     QUERIES = []
     """
