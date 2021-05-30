@@ -1,5 +1,4 @@
 import json
-import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -10,6 +9,7 @@ import copy
 class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
+    PROVIDER = 'CrowdStrike'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -54,6 +54,7 @@ class Connector(BaseSyncConnector):
         response_txt = None
         ids_obj = dict()
         return_obj = dict()
+        table_event_data = []
 
         try:
             if self.init_error:
@@ -64,17 +65,37 @@ class Connector(BaseSyncConnector):
                 self._handle_errors(response, ids_obj)
                 response_json = json.loads(ids_obj["data"])
                 ids_obj['ids'] = response_json['resources']
+
+                if not ids_obj['ids']:  # There are not detections that match the filter arg
+                    continue
+
                 response = self.api_client.get_detections_info(ids_obj['ids'])
                 print(response)
                 return_obj = self._handle_errors(response, return_obj)
                 response_json = json.loads(return_obj["data"])
                 return_obj['data'] = response_json['resources']
-                print(return_obj)
-                return return_obj
 
+                for event_data in return_obj['data']:
+                    device_data = event_data['device']
+                    hostinfo_date = event_data['hostinfo']
+                    device_data.update(hostinfo_date)  # device & host
+                    build_device_data = {k: v for k, v in device_data.items() if v}  # device & host
+                    build_data = {k: v for k, v in event_data.items() if not isinstance(v, dict)
+                                  and k not in 'behaviors'}  # other detection fields
+                    build_data.update(build_device_data)
 
+                    for behavior in event_data['behaviors']:
+                        parent_details_data = behavior['parent_details']
+                        build_event_data = {k: v for k, v in behavior.items() if v and not isinstance(v, dict)}
+                        build_event_data.update(parent_details_data)
+                        build_event_data.update(build_data)
+                        #build_event_data['device'] = build_device_data
+                        build_event_data.pop('device_id')
+                        build_event_data['provider'] = Connector.PROVIDER
+                        table_event_data.append(build_event_data)
 
-
+            return_obj['data'] = table_event_data
+            return return_obj
 
             # Customizing the output json,
             # Get 'TableName' attribute from each row of event data
@@ -82,14 +103,9 @@ class Connector(BaseSyncConnector):
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
 
-
-
         except Exception as ex:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
-
-
-

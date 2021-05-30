@@ -35,7 +35,7 @@ class CSQueryStringPatternTranslator:
         self.time_range = 10000000  # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
         self.queries = []
-        self.queries.append(self.translated)
+        self.queries.extend(self.translated)
 
     @staticmethod
     def _format(value) -> str:
@@ -93,7 +93,7 @@ class CSQueryStringPatternTranslator:
             value = self._escape_value(expression.value)
 
             comparison_string = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
-                                                                              comparator=comparator, value=value)
+                                                                            comparator=comparator, value=value)
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):

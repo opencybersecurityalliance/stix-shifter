@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "Carbon Black Response"
+            "displayName": "CrowdStrike"
         },
         "host": {
             "type": "text",

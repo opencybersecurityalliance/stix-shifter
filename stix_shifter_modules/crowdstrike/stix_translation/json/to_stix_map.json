@@ -1,103 +1,298 @@
 {
-    "behaviors[].user_name": {
-      "key": "user-account.user_id"
-    },
-    "NA-LogSourceId": {
-      "key": "x__custom_property.log_source_id",
+  "timestamp": [
+    {
+      "key": "first_observed",
       "cybox": false
     },
-    "NA-Magnitude": {
-      "key": "x__custom_property.magnitude",
+    {
+      "key": "last_observed",
       "cybox": false
     },
-    "device.local_ip": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      }
-    ],
-    "NA-DestinationIpV4": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "network-traffic.dst_ref",
-        "object": "nt",
-        "references": "dst_ip"
-      }
-    ],
-    "NA-SourceIpV6": [
-      {
-        "key": "ipv6-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      }
-    ],
-    "NA-DestinationIpV6": [
-      {
-        "key": "ipv6-addr.value",
-        "object": "dst_ip"
-      },
-      {
-        "key": "network-traffic.dst_ref",
-        "object": "nt",
-        "references": "dst_ip"
-      }
-    ],
-    "NA-EventCount": {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "ToInteger"
+    {
+      "key": "x-oca-event.created",
+      "object": "event"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "process_file"
     },
-    "first_behavior": {
-        "key": "first_observed",
-        "cybox": false
-      },
-    "last_behavior": 
-      {
-        "key": "last_observed",
-        "cybox": false
-      },
-    "NA-Url": {
-      "key": "url.value"
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
     },
-    "behaviors[].filename": {
-      "key": "file.name"
+    {
+      "key": "process.name",
+      "object": "process"
     },
-    "NA-Payload": {
-      "key": "artifact.payload_bin"
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "filepath": [
+    {
+      "key": "directory.path",
+      "object": "process_file_dir"
     },
-    "NA-DestinationPort": {
-      "key": "network-traffic.dst_port",
+    {
+      "key": "file.parent_directory_ref",
+      "object": "process_file",
+      "references": "process_file_dir"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "cmdline": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "display_name": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "description": {
+    "key": "x-oca-event.outcome",
+    "object": "event"
+  },
+  "user_name": [
+    {
+      "key": "user-account.account_login",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref ",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
+  "user_id": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref ",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
+  "sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "process_file"
+  },
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "process_file"
+  },
+  "parent_sha256": [
+    {
+      "key": "file.hashes.SHA-256",
+      "object": "parent_process_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "parent_process_file"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "parent_md5": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "parent_process_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "parent_process_file"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "parent_cmdline": [
+    {
+      "key": "process.command_line",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "external_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
       "object": "nt",
-      "transformer": "ToInteger"
+      "references": "dst_ip"
     },
-    "NA-SourcePort": {
-      "key": "network-traffic.src_port",
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    },
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ipv4-addr"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "dst_ipv4-addr"
+      ],
+      "group": true
+    }
+  ],
+  "hostname": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "local_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
       "object": "nt",
-      "transformer": "ToInteger"
+      "references": "src_ip"
     },
-    "NA-NetworkProtocol": {
-      "key": "network-traffic.protocols",
-      "object": "nt",
-      "transformer": "ToLowercaseArray"
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
     },
-    "NA-DomainName": {
-      "key": "domain-name.value"
+    {
+      "key": "ipv4-addr.value",
+      "object": "local_ipv4-addr"
     },
-    "behaviors.cmdline":
-        {
-          "object": "proc",
-          "key": "process.command_line"
-        }
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "local_ipv4-addr"
+      ],
+      "group": true
+    }
+  ],
+  "mac_address": [
+    {
+      "key": "mac-addr.value",
+      "object": "mac-addr"
+    },
+    {
+      "key": "x-oca-asset.mac_refs",
+      "object": "host",
+      "references": [
+        "mac-addr"
+      ],
+      "group": true
+    }
+  ],
+  "os_version": {
+    "key": "x-oca-asset.os_version",
+    "object": "host"
+  },
+  "platform_name": {
+    "key": "x-oca-asset.os_platform",
+    "object": "host"
+  },
+  "product_type_desc": {
+    "key": "x-oca-asset.type",
+    "object": "host"
+  },
+  "provider": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "device_id": {
+    "key": "x-crowdstrike.device_id",
+    "object": "x-crowdstrike"
+  },
+  "detection_id": {
+    "key": "x-crowdstrike.detection_id",
+    "object": "x-crowdstrike"
+  },
+  "scenario": {
+    "key": "x-crowdstrike.scenario",
+    "object": "x-crowdstrike"
+  },
+  "tactic_id": {
+    "key": "x-crowdstrike.tactic_id",
+    "object": "x-crowdstrike"
+  },
+  "severity": {
+    "key": "x-oca-event.severity",
+    "object": "event"
+  },
+  "technique_id": {
+    "key": "x-crowdstrike.technique_id",
+    "object": "x-crowdstrike"
+  },
+  "tactic": {
+    "key": "x-crowdstrike.tactic",
+    "object": "x-crowdstrike"
+  },
+  "technique": {
+    "key": "x-crowdstrike.technique",
+    "object": "x-crowdstrike"
+  },
+  "agent_local_time": {
+    "key": "x-crowdstrike.agent_local_time",
+    "object": "x-crowdstrike"
+  },
+  "agent_version": {
+    "key": "x-crowdstrike.agent_version",
+    "object": "x-crowdstrike"
+  },
+  "first_seen": {
+    "key": "x-crowdstrike.first_seen",
+    "object": "x-crowdstrike"
+  },
+  "last_seen": {
+    "key": "x-crowdstrike.last_seen",
+    "object": "x-crowdstrike"
+  },
+  "platform_id": {
+    "key": "x-crowdstrike.platform_id",
+    "object": "x-crowdstrike"
+  },
+  "confidence": {
+    "key": "x-crowdstrike.confidence",
+    "object": "x-crowdstrike"
+  },
+  "ioc_type": {
+    "key": "x-crowdstrike.ioc_type",
+    "object": "x-crowdstrike"
+  },
+  "ioc_value": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
   }
+}
