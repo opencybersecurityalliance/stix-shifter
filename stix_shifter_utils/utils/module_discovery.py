@@ -26,7 +26,7 @@ def __split_module_dialects(module_dialects):
 
 def modules_list():
     modules = import_module('stix_shifter_modules')
-    if '__file__' in dir(modules):
+    if '__file__' in dir(modules) and modules.__file__ is not None:
         modules_path = Path(modules.__file__).parent
     else:
         modules_path = modules.__path__._path[0]
@@ -40,7 +40,7 @@ def modules_list():
 
 def dialect_list(module):
     modules = import_module('stix_shifter_modules')
-    if '__file__' in dir(modules):
+    if '__file__' in dir(modules) and modules.__file__ is not None:
         modules_path = Path(modules.__file__).parent
     else:
         modules_path = modules.__path__._path[0]
