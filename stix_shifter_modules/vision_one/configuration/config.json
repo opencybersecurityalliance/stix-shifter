@@ -1,0 +1,46 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Trend Micro Vision One"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535
+        },
+        "help": {
+            "type": "link",
+            "default": "https://automation.trendmicro.com/xdr/api-v2#tag/Search/paths/~1v2.0~1xdr~1search~1data/post"
+        },
+        "cert": {
+            "type": "password",
+            "optional": true
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "options": {
+            "timeout": {
+                "type": "number"
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type": "fields",
+            "tok": {
+                "type": "password"
+            }
+        }
+    }
+}
