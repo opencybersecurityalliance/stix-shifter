@@ -95,6 +95,8 @@ class Connector(BaseSyncConnector):
                         table_event_data.append(build_event_data)
 
             return_obj['data'] = table_event_data
+            if not return_obj.get('success'):
+                return_obj['success'] = True
             return return_obj
 
             # Customizing the output json,

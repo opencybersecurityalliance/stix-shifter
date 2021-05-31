@@ -17,6 +17,11 @@
       "value": ""
     }
   },
+    "mac-addr": {
+      "fields": {
+        "value": ["device.mac_address"]
+      }
+    },
   "file": {
     "fields": {
       "name": ["behaviors.filename"],
@@ -32,7 +37,7 @@
   "process": {
     "fields": {
       "command_line": ["behaviors.cmdline"],
-      "created": "",
+      "created": ["behaviors.timestamp"],
       "pid": ["process_pid"],
       "name": ["behaviors.filename"],
       "creator_user_ref.user_id": ["behaviors.user_id"],
