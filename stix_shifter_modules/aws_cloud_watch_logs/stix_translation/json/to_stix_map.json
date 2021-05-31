@@ -79,7 +79,8 @@
     ],
     "accountId": [
       {
-        "key": "x-aws.account_id"
+        "key": "x-aws.account_id",
+        "object": "x_aws"
       }
     ],
     "@timestamp": [
@@ -253,25 +254,32 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x-aws-vpc.subnet_id"
+        "key": "x-aws-vpc.subnet_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x-aws-vpc.vpc_id"
+        "key": "x-aws-vpc.vpc_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x-aws-vpc.security_group_id"
+        "key": "x-aws-vpc.security_group_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x-aws-vpc.security_group_name"
+        "key": "x-aws-vpc.security_group_name",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x-aws-instance.image_id"
+        "key": "x-aws-instance.image_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x-aws-instance.instance_id"
+        "key": "x-aws-instance.instance_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x-aws-instance.availability_zone"
+        "key": "x-aws-instance.availability_zone",
+        "object": "x_aws_instance"
       }
     },
     "PORT_PROBE": {
@@ -394,29 +402,37 @@
       ],
       "detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port": [
         {
-          "key": "x-aws-guardduty-finding.probe_port"
+          "key": "x-aws-guardduty-finding.probe_port",
+          "object": "x_aws_guardduty_finding"
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x-aws-vpc.subnet_id"
+        "key": "x-aws-vpc.subnet_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x-aws-vpc.vpc_id"
+        "key": "x-aws-vpc.vpc_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x-aws-vpc.security_group_id"
+        "key": "x-aws-vpc.security_group_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x-aws-vpc.security_group_name"
+        "key": "x-aws-vpc.security_group_name",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_imageId":{
-        "key": "x-aws-instance.image_id"
+        "key": "x-aws-instance.image_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x-aws-instance.instance_id"
+        "key": "x-aws-instance.instance_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x-aws-instance.availability_zone"
+        "key": "x-aws-instance.availability_zone",
+        "object": "x_aws_instance"
       }
     },
     "AWS_API_CALL": {
@@ -447,13 +463,16 @@
         "object": "api_user"
       },
       "detail_resource_accessKeyDetails_accessKeyId": {
-        "key": "x-aws-api.access_key_id"
+        "key": "x-aws-api.access_key_id",
+        "object": "x_aws_api"
       },
       "detail_service_action_awsApiCallAction_api": {
-        "key": "x-aws-api.api"
+        "key": "x-aws-api.api",
+        "object": "x_aws_api"
       },
       "detail_service_action_awsApiCallAction_serviceName": {
-        "key": "x-aws-api.service_name"
+        "key": "x-aws-api.service_name",
+        "object": "x_aws_api"
       }
     },
     "DNS_REQUEST": {
@@ -557,16 +576,20 @@
         }
       ],
       "detail_resource_instanceDetails_networkInterfaces_0_subnetId": {
-        "key": "x-aws-vpc.subnet_id"
+        "key": "x-aws-vpc.subnet_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_vpcId": {
-        "key": "x-aws-vpc.vpc_id"
+        "key": "x-aws-vpc.vpc_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId": {
-        "key": "x-aws-vpc.security_group_id"
+        "key": "x-aws-vpc.security_group_id",
+        "object": "x_aws_vpc"
       },
       "detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName":{
-        "key": "x-aws-vpc.security_group_name"
+        "key": "x-aws-vpc.security_group_name",
+        "object": "x_aws_vpc"
       },
       "detail_service_action_dnsRequestAction_domain":[
         {
@@ -575,36 +598,45 @@
         }
       ],
       "detail_resource_instanceDetails_imageId":{
-        "key": "x-aws-instance.image_id"
+        "key": "x-aws-instance.image_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_instanceId": {
-        "key": "x-aws-instance.instance_id"
+        "key": "x-aws-instance.instance_id",
+        "object": "x_aws_instance"
       },
       "detail_resource_instanceDetails_availabilityZone": {
-        "key": "x-aws-instance.availability_zone"
+        "key": "x-aws-instance.availability_zone",
+        "object": "x_aws_instance"
       }
     },
     "@timestamp": {
         "key": "x-aws-guardduty-finding.timestamp",
-        "transformer": "AwsToTimestamp"
+        "transformer": "AwsToTimestamp",
+        "object": "x_aws_guardduty_finding"
     },
     "account": {
-      "key": "x-aws.account_id"
+      "key": "x-aws.account_id",
+      "object": "x_aws"
     },
     "detail_region": {
-      "key": "x-aws.region"
+      "key": "x-aws.region",
+      "object": "x_aws"
     },
     "detail_id": {
-      "key": "x-aws-guardduty-finding.id"
+      "key": "x-aws-guardduty-finding.id",
+      "object": "x_aws_guardduty_finding"
     },
     "detail_severity": {
-      "key": "x-aws-guardduty-finding.severity"
+      "key": "x-aws-guardduty-finding.severity",
+      "object": "x_aws_guardduty_finding"
     },
     "detail_type": {
-      "key": "x-aws-guardduty-finding.type"
+      "key": "x-ibm-finding.finding_type"
     },
     "detail_title": {
-      "key": "x-aws-guardduty-finding.title"
+      "key": "x-aws-guardduty-finding.title",
+      "object": "x_aws_guardduty_finding"
     },
     "detail_service_eventFirstSeen": {
         "key": "first_observed",

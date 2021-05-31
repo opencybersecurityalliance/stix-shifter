@@ -347,7 +347,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert network_obj['type'] == 'network-traffic'
         assert network_obj['dst_port'] == 32820
         assert network_obj['src_ref'] == '2'
-        assert network_obj['dst_ref'] == '12'
+        assert network_obj['dst_ref'] == '7'
         assert network_obj['src_port'] == 22
         assert network_obj['protocols'] == ['tcp']
 
@@ -459,13 +459,14 @@ class TestAwsResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        # assert 'objects' in observed_data
-        # custom_object = observed_data['x_aws_guardduty_finding']
-
-        # assert custom_object.keys() == {'severity', 'id', 'type', 'title', 'timestamp'}
-        # assert custom_object['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
-        # assert custom_object['type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
-        # assert custom_object['severity'] == 2
-        # assert custom_object['timestamp'] == '2019-10-17T09:30:05.000Z'
-        # assert custom_object[
-        #            'title'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        xaws_guardduty_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-guardduty-finding')
+        assert xaws_guardduty_obj is not None, 'x-aws-guardduty-finding object type not found'
+        assert xaws_guardduty_obj.keys() == {'severity', 'id', 'type', 'title', 'timestamp'}
+        assert xaws_guardduty_obj['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
+        # assert xaws_guardduty_obj['type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
+        assert xaws_guardduty_obj['severity'] == 2
+        assert xaws_guardduty_obj['timestamp'] == '2019-10-17T09:30:05.000Z'
+        assert xaws_guardduty_obj[
+                   'title'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
