@@ -461,12 +461,16 @@ class TestAwsResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
-        xaws_guardduty_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-guardduty-finding')
+        xaws_guardduty_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         assert xaws_guardduty_obj is not None, 'x-aws-guardduty-finding object type not found'
-        assert xaws_guardduty_obj.keys() == {'severity', 'id', 'type', 'title', 'timestamp'}
-        assert xaws_guardduty_obj['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
-        # assert xaws_guardduty_obj['type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
+        assert xaws_guardduty_obj.keys() == {'severity', 'finding_type', 'name', 'type'}
+        # assert xaws_guardduty_obj['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
+        assert xaws_guardduty_obj['finding_type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
         assert xaws_guardduty_obj['severity'] == 2
-        assert xaws_guardduty_obj['timestamp'] == '2019-10-17T09:30:05.000Z'
         assert xaws_guardduty_obj[
-                   'title'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
+                   'name'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
+
+        xaws_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws')
+        assert xaws_obj is not None, 'x-aws object type not found'
+        assert xaws_obj.keys() == {'detail_id', 'account_id', 'region', 'type'}
+        assert xaws_obj['detail_id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'

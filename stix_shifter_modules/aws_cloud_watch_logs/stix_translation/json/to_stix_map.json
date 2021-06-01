@@ -610,11 +610,6 @@
         "object": "x_aws_instance"
       }
     },
-    "@timestamp": {
-        "key": "x-aws-guardduty-finding.timestamp",
-        "transformer": "AwsToTimestamp",
-        "object": "x_aws_guardduty_finding"
-    },
     "account": {
       "key": "x-aws.account_id",
       "object": "x_aws"
@@ -624,19 +619,20 @@
       "object": "x_aws"
     },
     "detail_id": {
-      "key": "x-aws-guardduty-finding.id",
-      "object": "x_aws_guardduty_finding"
+      "key": "x-aws.detail_id",
+      "object": "x_aws"
     },
     "detail_severity": {
-      "key": "x-aws-guardduty-finding.severity",
-      "object": "x_aws_guardduty_finding"
+      "key": "x-ibm-finding.severity",
+      "object": "x_ibm_finding"
     },
     "detail_type": {
-      "key": "x-ibm-finding.finding_type"
+      "key": "x-ibm-finding.finding_type",
+      "object": "x_ibm_finding"
     },
     "detail_title": {
-      "key": "x-aws-guardduty-finding.title",
-      "object": "x_aws_guardduty_finding"
+      "key": "x-ibm-finding.name",
+      "object": "x_ibm_finding"
     },
     "detail_service_eventFirstSeen": {
         "key": "first_observed",
