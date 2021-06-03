@@ -121,32 +121,33 @@ class TestAlertflexResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
         objects_data = observed_data['objects']
 
-        ipv4_addr_data = objects_data['0']
+        print(objects_data)
+        ipv4_addr_data = objects_data['1']
         assert ipv4_addr_data['type'] == "ipv4-addr"
         assert ipv4_addr_data['value'] == "0.0.0.0"
 
-        ipv4_addr_data = objects_data['1']
+        ipv4_addr_data = objects_data['2']
         assert ipv4_addr_data['type'] == "network-traffic"
-        assert ipv4_addr_data['src_ref'] == '0'
+        assert ipv4_addr_data['src_ref'] == '1'
         assert ipv4_addr_data['src_port'] == 0
-        assert ipv4_addr_data['dst_ref'] == '4'
+        assert ipv4_addr_data['dst_ref'] == '5'
         assert ipv4_addr_data['dst_port'] == 0
 
-        file_data = objects_data['2']
+        file_data = objects_data['3']
         assert file_data['type'] == "file"
         hashes_data = file_data['hashes']
         assert hashes_data['SHA-1'] == '6232e4a0f37b583182aad75d18b3a4147a54f85b'
         assert hashes_data['MD5'] == '7d351ff6fea9e9dc100b7deb0e03fd35'
 
-        file_data = objects_data['3']
+        file_data = objects_data['4']
         assert file_data['type'] == "file"
         assert file_data['name'] == "/etc/altprobe/altprobe.yaml"
 
-        ipv4_addr_data = objects_data['4']
+        ipv4_addr_data = objects_data['5']
         assert ipv4_addr_data['type'] == "ipv4-addr"
         assert ipv4_addr_data['value'] == "0.0.0.0"
 
-        user_data = objects_data['5']
+        user_data = objects_data['6']
         assert user_data['type'] == "user-account"
         assert user_data['user_id'] == "indef"
 
@@ -182,19 +183,34 @@ class TestAlertflexResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        custom_object = observed_data['x_org_alertflex']
+        objects = observed_data['objects']
+        alert_flex_obj = TestAlertflexResultsToStix.get_first_of_type(objects.values(), 'x-org-alertflex')
+        assert alert_flex_obj is not None, 'x-org-alertflex object type not found'
+        assert alert_flex_obj.keys() == {'severity', 'agent', 'description', 'source', 'type', 'node', 'event', 'category', 'info', 'finding_type'}
+        assert alert_flex_obj['severity'] == 2
+        assert alert_flex_obj['agent'] == 'alertflex'
+        assert alert_flex_obj['description'] == 'Integrity checksum changed.'
+        assert alert_flex_obj['source'] == 'Wazuh'
+        assert alert_flex_obj['finding_type'] == 'FILE'
+        assert alert_flex_obj['node'] == 'test01'
+        assert alert_flex_obj['event'] == '550'
+        assert alert_flex_obj['category'] == 'ossec, syscheck, pci_dss_11.5, hipaa_164.312.c.1, hipaa_164.312.c.2, gdpr_II_5.1.f, nist_800_53_SI.7'
+        assert alert_flex_obj['info'] == 'File /etc/altprobe/altprobe.yaml'
 
-        assert custom_object.keys() == {'severity', 'agent', 'description', 'source', 'type', 'node', 'event', 'category', 'info'}
 
-        assert custom_object['severity'] == 2
-        assert custom_object['agent'] == 'alertflex'
-        assert custom_object['description'] == 'Integrity checksum changed.'
-        assert custom_object['source'] == 'Wazuh'
-        assert custom_object['type'] == 'FILE'
-        assert custom_object['node'] == 'test01'
-        assert custom_object['event'] == '550'
-        assert custom_object['category'] == 'ossec, syscheck, pci_dss_11.5, hipaa_164.312.c.1, hipaa_164.312.c.2, gdpr_II_5.1.f, nist_800_53_SI.7'
-        assert custom_object['info'] == 'File /etc/altprobe/altprobe.yaml'
+        # custom_object = observed_data['x_org_alertflex']
+
+        # assert custom_object.keys() == {'severity', 'agent', 'description', 'source', 'type', 'node', 'event', 'category', 'info'}
+
+        # assert custom_object['severity'] == 2
+        # assert custom_object['agent'] == 'alertflex'
+        # assert custom_object['description'] == 'Integrity checksum changed.'
+        # assert custom_object['source'] == 'Wazuh'
+        # assert custom_object['finding_type'] == 'FILE'
+        # assert custom_object['node'] == 'test01'
+        # assert custom_object['event'] == '550'
+        # assert custom_object['category'] == 'ossec, syscheck, pci_dss_11.5, hipaa_164.312.c.1, hipaa_164.312.c.2, gdpr_II_5.1.f, nist_800_53_SI.7'
+        # assert custom_object['info'] == 'File /etc/altprobe/altprobe.yaml'
 
 
     @staticmethod
