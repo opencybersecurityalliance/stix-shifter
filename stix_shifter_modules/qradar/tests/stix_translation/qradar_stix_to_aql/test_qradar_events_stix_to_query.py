@@ -424,3 +424,15 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE str(destinationip) IN ('1.1.1.1', '2.2.2.2') OR destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_hasoffense_query(self):
+        stix_pattern = "[x-qradar:has_offense = 'true']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE hasoffense = 'true' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_inoffense_query(self):
+        stix_pattern = "[x-qradar:INOFFENSE = '125']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE INOFFENSE('125') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
