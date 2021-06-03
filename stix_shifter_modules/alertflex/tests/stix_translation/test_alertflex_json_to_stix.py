@@ -197,22 +197,6 @@ class TestAlertflexResultsToStix(unittest.TestCase):
         assert alert_flex_obj['category'] == 'ossec, syscheck, pci_dss_11.5, hipaa_164.312.c.1, hipaa_164.312.c.2, gdpr_II_5.1.f, nist_800_53_SI.7'
         assert alert_flex_obj['info'] == 'File /etc/altprobe/altprobe.yaml'
 
-
-        # custom_object = observed_data['x_org_alertflex']
-
-        # assert custom_object.keys() == {'severity', 'agent', 'description', 'source', 'type', 'node', 'event', 'category', 'info'}
-
-        # assert custom_object['severity'] == 2
-        # assert custom_object['agent'] == 'alertflex'
-        # assert custom_object['description'] == 'Integrity checksum changed.'
-        # assert custom_object['source'] == 'Wazuh'
-        # assert custom_object['finding_type'] == 'FILE'
-        # assert custom_object['node'] == 'test01'
-        # assert custom_object['event'] == '550'
-        # assert custom_object['category'] == 'ossec, syscheck, pci_dss_11.5, hipaa_164.312.c.1, hipaa_164.312.c.2, gdpr_II_5.1.f, nist_800_53_SI.7'
-        # assert custom_object['info'] == 'File /etc/altprobe/altprobe.yaml'
-
-
     @staticmethod
     def test_unmapped_attribute_alone():
         data = {"unmapped": "nothing to see here"}
