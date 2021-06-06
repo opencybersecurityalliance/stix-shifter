@@ -6,7 +6,7 @@
         "options": {
             "type": "fields",
             "result_limit": {
-                "default": 10000,
+                "default": 500,
                 "min": 1,
                 "max": 60000,
                 "type": "number",

@@ -1,172 +1,286 @@
 {
-  "network-traffic": {
-    "fields": {
-      "src_port": [""],
-      "dst_port": [""],
-      "src_ref.value": ["device.external_ip", "device.local_ip"],
-      "dst_ref.value": ["device.external_ip", "device.local_ip"]
-    }
-  },
   "ipv4-addr": {
     "fields": {
-      "value": ["device.external_ip", "device.local_ip"]
+      "value": [
+        "device.local_ip",
+        "device.external_ip"
+      ]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ""
+      "value": [
+        "device.local_ip",
+        "device.external_ip"
+      ]
     }
   },
-    "mac-addr": {
-      "fields": {
-        "value": ["device.mac_address"]
-      }
-    },
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "device.mac_address"
+      ]
+    }
+  },
   "file": {
     "fields": {
-      "name": ["behaviors.filename"],
-      "hashes.MD5": ["behaviors.md5", "behaviors.parent_details.parent_md5"],
-      "hashes.SHA-256": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
-      "hashes.parent_MD5": ["behaviors.parent_details.parent_md5"],
-      "hashes.parent_SHA-256": ["behaviors.parent_details.parent_sha256"],
-      "hashes.child_MD5": ["behaviors.md5"],
-      "hashes.child_SHA-256": ["behaviors.sha256"],
-      "parent_directory_ref.path": ["behaviors.filepath"]
+      "name": [
+        "behaviors.filename"
+      ],
+      "hashes.MD5": [
+        "behaviors.md5",
+        "behaviors.parent_details.parent_md5"
+      ],
+      "hashes.SHA-256": [
+        "behaviors.sha256",
+        "behaviors.parent_details.parent_sha256"
+      ],
+      "hashes.parent_MD5": [
+        "behaviors.parent_details.parent_md5"
+      ],
+      "hashes.parent_SHA-256": [
+        "behaviors.parent_details.parent_sha256"
+      ],
+      "hashes.child_MD5": [
+        "behaviors.md5"
+      ],
+      "hashes.child_SHA-256": [
+        "behaviors.sha256"
+      ],
+      "parent_directory_ref.path": [
+        "behaviors.filepath"
+      ]
     }
   },
   "process": {
     "fields": {
-      "command_line": ["behaviors.cmdline"],
-      "created": ["behaviors.timestamp"],
-      "pid": ["process_pid"],
-      "name": ["behaviors.filename"],
-      "creator_user_ref.user_id": ["behaviors.user_id"],
-      "creator_user_ref.account_login": ["behaviors.user_name"],
-      "binary_ref.hashes.MD5": ["behaviors.md5"],
-      "binary_ref.hashes.SHA-256": ["behaviors.sha256"],
-      "parent_ref.pid": "",
-      "parent_ref.name": ["behaviors.filename"],
-      "parent_ref.command_line": ["behaviors.parent_cmdline"],
-      "parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"]
+      "command_line": [
+        "behaviors.cmdline"
+      ],
+      "created": [
+        "behaviors.timestamp"
+      ],
+      "pid": [
+        "process_pid"
+      ],
+      "name": [
+        "behaviors.filename"
+      ],
+      "creator_user_ref.user_id": [
+        "behaviors.user_id"
+      ],
+      "creator_user_ref.account_login": [
+        "behaviors.user_name"
+      ],
+      "binary_ref.hashes.MD5": [
+        "behaviors.md5"
+      ],
+      "binary_ref.hashes.SHA-256": [
+        "behaviors.sha256"
+      ],
+      "parent_ref.name": [
+        "behaviors.filename"
+      ],
+      "parent_ref.command_line": [
+        "behaviors.parent_cmdline"
+      ],
+      "parent_ref.binary_ref.hashes.MD5": [
+        "behaviors.parent_details.parent_md5"
+      ],
+      "parent_ref.binary_ref.hashes.SHA-256": [
+        "behaviors.parent_details.parent_sha256"
+      ]
     }
   },
   "url": {
     "fields": {
-      "value": ["domain"]
+      "value": [
+        "device.hostinfo.domain"
+      ]
     }
   },
   "domain-name": {
     "fields": {
-      "value": ["device.hostname"]
+      "value": [
+        "device.machine_domain"
+      ]
     }
   },
   "user-account": {
     "fields": {
-      "user_id": ["behaviors.user_id"]
+      "user_id": [
+        "behaviors.user_id"
+      ],
+      "account_login": [
+        "behaviors.user_name"
+      ]
     }
   },
   "directory": {
     "fields": {
-      "path": ["behaviors.filepath"]
-    }
-  },
-  "windows-registry-key": {
-    "fields": {
-      "key": ""
+      "path": [
+        "behaviors.filepath"
+      ]
     }
   },
   "x-oca-event": {
     "fields": {
-      "process_ref.pid": "",
-      "process_ref.name": ["behaviors.filename"],
-      "process_ref.command_line": ["behaviors.cmdline"],
-      "process_ref.binary_ref.name": ["behaviors.filename"],
-      "process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
-      "process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
-      "process_ref.parent_ref.name": ["behaviors.filename"],
-      "process_ref.parent_ref.pid": "",
-      "process_ref.parent_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
-      "process_ref.parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "process_ref.parent_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
-      "parent_process_ref.name": ["behaviors.filename"],
-      "parent_process_ref.pid": "",
-      "parent_process_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
-      "parent_process_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_process_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
-      "parent_process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
-      "parent_process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
-      "domain_ref.value": ["device.hostname"],
-      "file_ref.name": ["behaviors.filename"],
-      "host_ref.hostname": ["device.hostname"],
-      "host_ref.name": ["device.hostname"],
-      "registry_ref.key": ""
+      "process_ref.name": [
+        "behaviors.filename"
+      ],
+      "process_ref.command_line": [
+        "behaviors.cmdline"
+      ],
+      "process_ref.binary_ref.name": [
+        "behaviors.filename"
+      ],
+      "process_ref.creator_user_ref.user_id": [
+        "behaviors.user_id"
+      ],
+      "process_ref.creator_user_ref.account_login": [
+        "behaviors.user_name"
+      ],
+      "process_ref.parent_ref.name": [
+        "behaviors.filename"
+      ],
+      "process_ref.parent_ref.command_line": [
+        "behaviors.parent_details.parent_cmdline"
+      ],
+      "process_ref.parent_ref.binary_ref.hashes.MD5": [
+        "behaviors.parent_details.parent_md5"
+      ],
+      "process_ref.parent_ref.binary_ref.hashes.SHA-256": [
+        "behaviors.parent_details.parent_sha256"
+      ],
+      "parent_process_ref.name": [
+        "behaviors.filename"
+      ],
+      "parent_process_ref.command_line": [
+        "behaviors.parent_details.parent_cmdline"
+      ],
+      "parent_process_ref.binary_ref.hashes.MD5": [
+        "behaviors.parent_details.parent_md5"
+      ],
+      "parent_process_ref.binary_ref.hashes.SHA-256": [
+        "behaviors.parent_details.parent_sha256"
+      ],
+      "parent_process_ref.creator_user_ref.user_id": [
+        "behaviors.user_id"
+      ],
+      "parent_process_ref.creator_user_ref.account_login": [
+        "behaviors.user_name"
+      ],
+      "domain_ref.value": [
+        "device.hostname"
+      ],
+      "file_ref.name": [
+        "behaviors.filename"
+      ],
+      "host_ref.hostname": [
+        "device.hostname"
+      ],
+      "host_ref.name": [
+        "device.machine_domain"
+      ]
     }
   },
   "x-oca-asset": {
     "fields": {
-      "domain": ["device.hostname"],
-      "hostname": ["device.hostname"],
-      "ip_refs": ["device.external_ip", "device.local_ip"],
-      "name": ["device.hostname"],
-      "type": ["device.product_type_desc"],
-      "os_name": ["device.platform_name"],
-      "os_platform": ["device.platform_name"]
+      "domain": [
+        "device.machine_domain"
+      ],
+      "hostname": [
+        "device.hostname"
+      ],
+      "ip_refs": [
+        "device.external_ip",
+        "device.local_ip"
+      ],
+      "name": [
+        "device.hostname"
+      ],
+      "os_name": [
+        "device.platform_name"
+      ],
+      "os_platform": [
+        "device.platform_name"
+      ]
     }
   },
-  "x-cs-response": {
+  "x-crowdstrike": {
     "fields": {
-      "hostname": ["hostname"],
-      "host_count": ["host_count"],
-      "host_type": ["host_type"],
-      "group": ["group"],
-      "os_type": ["os_type"],
-      "crossproc_type": ["crossproc_type"],
-      "crossproc_count": ["crossproc_count"],
-      "crossproc_name": ["crossproc_name"],
-      "tampered": ["tampered"],
-      "block_status": ["block_status"],
-      "digsig_result": ["digsig_result"],
-      "digsig_publisher": ["digsig_publisher"],
-      "digsig_issuer": ["digsig_issuer"],
-      "digsig_prog_name": ["digsig_prog_name"],
-      "digsig_sign_time": ["digsig_sign_time"],
-      "digsig_subject": ["digsig_subject"],
-      "has_emet_event": ["has_emet_event"],
-      "has_emet_config": ["has_emet_config"],
-      "file_desc": ["file_desc"],
-      "file_version": ["file_version"],
-      "filemod_count": ["filemod_count"],
-      "filemod": ["filemod"],
-      "regmod_count": ["regmod_count"],
-      "regmod": ["regmod"],
-      "blocked_status": ["blocked_status"],
-      "childproc_count": ["childproc_count"],
-      "childproc_name": ["childproc_name"],
-      "company_name": ["company_name"],
-      "copied_mod_len": ["copied_mod_len"],
-      "internal_name": ["internal_name"],
-      "is_64bit": ["is_64bit"],
-      "is_executable_image": ["is_executable_image"],
-      "last_server_update": ["last_server_update"],
-      "last_update": ["last_update"],
-      "legal_copyright": ["legal_copyright"],
-      "legal_trademark": ["legal_trademark"],
-      "modload": ["modload"],
-      "modload_count": ["modload_count"],
-      "netconn_count": ["netconn_count"],
-      "observed_filename": ["observed_filename"],
-      "orig_mod_len": ["orig_mod_len"],
-      "original_filename": ["original_filename"],
-      "parent_id": ["parent_id"],
-      "parent_name": ["parent_name"],
-      "private_build": ["private_build"],
-      "process_id": ["process_id"],
-      "product_desc": ["product_desc"],
-      "product_name": ["product_name"],
-      "product_version": ["product_version"],
-      "sensor_id": ["sensor_id"],
-      "special_build": ["special_build"]
+      "device_id": [
+        "device.device_id"
+      ],
+      "detection_id": [
+        "device.detection_id"
+      ],
+      "scenario": [
+        "device.scenario"
+      ],
+      "tactic_id": [
+        "device.tactic_id"
+      ],
+      "severity": [
+        "device.severity"
+      ],
+      "technique_id": [
+        "device.technique_id"
+      ],
+      "agent_local_time": [
+        "device.agent_local_time"
+      ],
+      "agent_version": [
+        "device.agent_version"
+      ],
+      "first_seen": [
+        "device.first_seen"
+      ],
+      "last_seen": [
+        "device.last_seen"
+      ],
+      "platform_id": [
+        "device.platform_id"
+      ],
+      "confidence": [
+        "device.confidence"
+      ],
+      "bios_manufacturer": [
+        "device.bios_manufacturer"
+      ],
+      "bios_version": [
+        "device.bios_version"
+      ],
+      "config_id_base": [
+        "device.config_id_base"
+      ],
+      "config_id_build": [
+        "device.config_id_build"
+      ],
+      "config_id_platform": [
+        "device.config_id_platform"
+      ],
+      "platform_id": [
+        "device.platform_id"
+      ],
+      "product_type": [
+        "device.product_type"
+      ],
+      "product_type_desc": [
+        "device.product_type_desc"
+      ],
+      "site_name": [
+        "device.site_name"
+      ],
+      "site_name": [
+        "device.system_manufacturer"
+      ],
+      "system_product_name": [
+        "device.system_product_name"
+      ],
+      "modified_timestamp": [
+        "device.modified_timestamp"
+      ]
     }
   }
 }

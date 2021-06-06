@@ -38,10 +38,6 @@ class CSQueryStringPatternTranslator:
         self.queries.extend(self.translated)
 
     @staticmethod
-    def _format(value) -> str:
-        return '{}'.format(CSQueryStringPatternTranslator._escape_value(value))
-
-    @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
             return '{}'.format(
@@ -61,7 +57,7 @@ class CSQueryStringPatternTranslator:
         start = self._to_cs_timestamp(qualifier.start)
         stop = self._to_cs_timestamp(qualifier.stop)
 
-        start_stop_query = "(device.first_seen:>= '{}' + device.last_seen:<= '{}')".format(start, stop)
+        start_stop_query = "(behaviors.timestamp:>= '{}' + behaviors.timestamp:<= '{}')".format(start, stop)
 
         return "({}) + {}".format(expression, start_stop_query)
 
@@ -145,9 +141,9 @@ class CSQueryStringPatternTranslator:
         return self.comparator_lookup[ComparisonComparators.NotEqual]
 
     def _add_default_timerange(self, query):
-        if self.time_range and 'device.first_seen' not in query:
+        if self.time_range and 'behaviors.timestamp' not in query:
             d = (datetime.today() - timedelta(hours=0, minutes=self.time_range)).isoformat()
-            n_query = "(({}) + device.last_seen:> '{}')".format(query, d)
+            n_query = "(({}) + behaviors.timestamp:> '{}')".format(query, d)
             return n_query
 
         return query
@@ -170,5 +166,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
 
-    translated_statements = CSQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
-    return translated_statements.queries
+    translated_statements_lst = CSQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
+    translated_statements = ",".join(translated_statements_lst.queries)
+    return translated_statements

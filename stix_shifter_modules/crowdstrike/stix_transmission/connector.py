@@ -3,7 +3,6 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import copy
 
 
 class Connector(BaseSyncConnector):
@@ -18,6 +17,7 @@ class Connector(BaseSyncConnector):
 
         try:
             self.api_client = APIClient(connection, configuration)
+            self.result_limit = Connector.get_result_limit(connection)
 
         except Exception as ex:
             self.init_error = ex
@@ -45,6 +45,50 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
+    @staticmethod
+    def get_result_limit(connection):
+        # result_limit = 0 => no limit
+        default_result_limit = 500
+        if 'options' in connection:
+            return connection['options'].get('result_limit', default_result_limit)
+        return default_result_limit
+
+    @staticmethod
+    def _handle_quarantined_files(qua_files_lst, device_data):
+        qua_files_event_lst = []
+        if qua_files_lst:
+            for file_dict in qua_files_lst:
+                qua_file_data = dict()
+                qua_file_data['display_name'] = file_dict['state']
+                qua_file_data['quarantined_file_sha256'] = file_dict['sha256']
+                qua_file_data['provider'] = Connector.PROVIDER
+                qua_file_data.update(device_data)
+                qua_files_event_lst.append(qua_file_data)
+
+        return qua_files_event_lst
+
+    @staticmethod
+    def _handle_ioc(ioc_type, ioc_source, ioc_value):
+        ioc_data = dict()
+        file_sources = ['file_read', 'file_write', 'library_load']
+        # handle ioc_source = file_read / file_write
+        if ioc_source and ioc_source in file_sources and ioc_type:
+            if 'sha256' in ioc_type:
+                ioc_data['sha256_ioc'] = ioc_value
+            elif 'md5' in ioc_type:
+                ioc_data['md5_ioc'] = ioc_value.replace("_", " ")
+            ioc_data['display_name'] = ioc_source.replace("_", " ")
+
+        # handle ioc_type = domain
+        elif ioc_type and 'domain' in ioc_type:
+            ioc_data['domain_ioc'] = ioc_value
+
+        # handle ioc_type = 'registry_key'
+        elif ioc_type and 'registry_key' in ioc_type:
+            ioc_data['registry_key'] = ioc_value
+
+        return ioc_data
+
     def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
@@ -59,15 +103,14 @@ class Connector(BaseSyncConnector):
         try:
             if self.init_error:
                 raise self.init_error
-            for q in query:
-                response = self.api_client.get_detections_IDs(q)
-                print(response)
-                self._handle_errors(response, ids_obj)
-                response_json = json.loads(ids_obj["data"])
-                ids_obj['ids'] = response_json['resources']
 
-                if not ids_obj['ids']:  # There are not detections that match the filter arg
-                    continue
+            response = self.api_client.get_detections_IDs(query, self.result_limit)
+            print(response)
+            self._handle_errors(response, ids_obj)
+            response_json = json.loads(ids_obj["data"])
+            ids_obj['ids'] = response_json['resources']
+
+            if ids_obj['ids']:  # There are not detections that match the filter arg
 
                 response = self.api_client.get_detections_info(ids_obj['ids'])
                 print(response)
@@ -83,27 +126,34 @@ class Connector(BaseSyncConnector):
                     build_data = {k: v for k, v in event_data.items() if not isinstance(v, dict)
                                   and k not in 'behaviors'}  # other detection fields
                     build_data.update(build_device_data)
+                    quarantined_files = event_data.get('quarantined_files')
+
+                    if quarantined_files:
+                        quarantined_files_lst = self._handle_quarantined_files(quarantined_files, build_data)
+                        table_event_data.extend(quarantined_files_lst)
+                    event_data.pop("quarantined_files", None)
 
                     for behavior in event_data['behaviors']:
+                        ioc_type = behavior.pop("ioc_type", None)
+                        ioc_source = behavior.pop("ioc_source", None)
+                        ioc_value = behavior.pop("ioc_value", None)
+                        ioc_data = self._handle_ioc(ioc_type, ioc_source, ioc_value)
+                        build_ioc_data = {k: v for k, v in ioc_data.items() if v}
                         parent_details_data = behavior['parent_details']
                         build_event_data = {k: v for k, v in behavior.items() if v and not isinstance(v, dict)}
                         build_event_data.update(parent_details_data)
                         build_event_data.update(build_data)
-                        #build_event_data['device'] = build_device_data
+                        build_event_data.update(build_ioc_data)
+                        # build_event_data['device'] = build_device_data
                         build_event_data.pop('device_id')
                         build_event_data['provider'] = Connector.PROVIDER
+                        build_event_data = {k: v for k, v in build_event_data.items() if v != "N/A"}
                         table_event_data.append(build_event_data)
 
             return_obj['data'] = table_event_data
             if not return_obj.get('success'):
                 return_obj['success'] = True
             return return_obj
-
-            # Customizing the output json,
-            # Get 'TableName' attribute from each row of event data
-            # Create a dictionary with 'TableName' as key and other attributes in an event data as value
-            # Filter the "None" and empty values except for RegistryValueName, which support empty string
-            # Customizing of Registryvalues json
 
         except Exception as ex:
             if response_txt is not None:

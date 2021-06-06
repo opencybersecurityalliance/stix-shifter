@@ -5,7 +5,7 @@ translation = stix_translation.StixTranslation()
 
 
 def _remove_timestamp_from_query(queries):
-    timestamp_str = '+ device.last_seen'
+    timestamp_str = '+ behaviors.timestamp'
     ret = []
     for q in queries:
         ind = q.index(timestamp_str)
@@ -33,7 +33,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((behaviors.filename: 'updater.exe') + device.last_seen:> '2002-05-26T23:05:23.915261')"]
+            "((behaviors.filename: 'updater.exe') + behaviors.timestamp:> '2002-06-02T07:07:58.931211')"]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -44,7 +44,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((behaviors.filename: 'consent.exe') + device.last_seen:> '2002-05-26T23:13:29.169100')"]
+            "((behaviors.filename: 'consent.exe') + behaviors.timestamp:> '2002-06-02T07:08:22.401869')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -53,8 +53,8 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         queries = [
-            "(device.external_ip: '172.16.2.22') + (device.first_seen:>= '2019-09-10T08:43:10' +"
-            " device.last_seen:<= '2019-09-23T10:43:10')"]
+            "(device.local_ip: '172.16.2.22') + (behaviors.timestamp:>= '2019-09-10T08:43:10' + "
+            "behaviors.timestamp:<= '2019-09-23T10:43:10')"]
         self._test_query_assertions(query, queries)
 
     def test_mac_comp_exp(self):
@@ -63,8 +63,8 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
 
         queries = [
-            "(device.mac_address: '48:4D:7E:9D:BD:97') + (device.first_seen:>= '2019-09-01T08:43:10' "
-            "+ device.last_seen:<= '2019-10-10T10:43:10')"]
+            "(device.mac_address: '48:4D:7E:9D:BD:97') + (behaviors.timestamp:>= '2019-09-01T08:43:10' + "
+            "behaviors.timestamp:<= '2019-10-10T10:43:10')"]
         self._test_query_assertions(query, queries)
 
     def test_directory_comp_exp(self):  # NOT OK
@@ -72,28 +72,27 @@ class TestQueryTranslator(unittest.TestCase):
                        "START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
 
-        queries = ["(behaviors.filepath: 'ProgramData') + (device.first_seen:>= '2019-10-01T08:43:10' + "
-                   "device.last_seen:<= '2019-10-30T10:43:10')"]
+        queries = ["(behaviors.filepath: 'ProgramData' , device.local_ip: 'fe80::4161:ca84:4dc5:f5fc') + ("
+                   "behaviors.timestamp:>= '2019-10-01T08:43:10' + behaviors.timestamp:<= '2019-10-30T10:43:10')"]
         self._test_query_assertions(query, queries)
 
     def test_file_and_domain_exp(self):
         stix_pattern = "[file:name = 'some_file.exe' AND domain-name:value = 'example.com']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((behaviors.filename: 'some_file.exe' + device.hostname: 'example.com') + device.last_seen:> "
-                   "'2002-05-27T00:42:11.584976')"]
+        queries = ["((behaviors.filename: 'some_file.exe' + device.machine_domain: 'example.com') + "
+                   "behaviors.timestamp:> '2002-06-02T07:10:42.958765')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_gt_eq_datetime_comp_exp(self):
         stix_pattern = "[process:created >= '2019-09-04T09:29:29.0882Z']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
+        #query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((behaviors.timestamp:>= '2019-09-04T09:29:29.0882Z') + device.last_seen:> "
-            "'2002-05-26T23:23:57.933929')"]
-        queries = _remove_timestamp_from_query(queries)
+            "behaviors.timestamp:>= '2019-09-04T09:29:29.0882Z'"]
+        #queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_noteq_comp_exp(self):
@@ -102,18 +101,18 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
 
         queries = [
-            "(behaviors.filename:! 'consent.exe') + (device.first_seen:>= '2019-09-10T08:43:10' +"
-            " device.last_seen:<= '2019-09-23T10:43:10')"]
+            "(behaviors.filename:! 'consent.exe') + (behaviors.timestamp:>= '2019-09-10T08:43:10' + "
+            "behaviors.timestamp:<= '2019-09-23T10:43:10')"]
         self._test_query_assertions(query, queries)
 
     def test_in_comp_exp(self):
         stix_pattern = "[process:created > '2019-09-04T09:29:29.0882Z']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
+        #query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((behaviors.timestamp:> '2019-09-04T09:29:29.0882Z') + device.last_seen:> '2002-05-26T23:58:19.913729')"]
-        queries = _remove_timestamp_from_query(queries)
+            "behaviors.timestamp:> '2019-09-04T09:29:29.0882Z'"]
+        #queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_comb_comparison_exp(self):
@@ -122,9 +121,8 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
 
         queries = [
-            "(behaviors.filename: 'reg.exe' , behaviors.filename: 'updater.exe') + (device.first_seen:>= "
-            "'2019-09-10T08:43:10' "
-            "+ device.last_seen:<= '2019-09-23T10:43:10')"]
+            "(behaviors.filename: 'reg.exe' , behaviors.filename: 'updater.exe') + (behaviors.timestamp:>= "
+            "'2019-09-10T08:43:10' + behaviors.timestamp:<= '2019-09-23T10:43:10')"]
         self._test_query_assertions(query, queries)
 
     def test_comb_observation_obs(self):
@@ -133,8 +131,8 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((behaviors.timestamp: '2019-09-04T09:29:29.0882Z') + device.last_seen:> '2002-05-26T23:47:41.793563')",
-            "((behaviors.filename: 'upd_ter.exe') + device.last_seen:> '2002-05-26T23:47:41.793563')"]
+            "behaviors.timestamp: '2019-09-04T09:29:29.0882Z',((behaviors.filename: 'upd_ter.exe') + "
+            "behaviors.timestamp:> '2002-06-02T07:14:15.098673')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -142,26 +140,17 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[ipv4-addr:value = '198.51.100.5' OR unmapped:attribute = 'something']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((device.external_ip: '198.51.100.5') + device.last_seen:> '2002-05-27T00:48:12.787433')"]
+        queries = ["((device.local_ip: '198.51.100.5') + behaviors.timestamp:> '2002-06-02T07:14:52.919437')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
-
-    # def test_unmapped_attribute_handling_with_AND(self):
-    #     stix_pattern = "[ipv4-addr:value = '198.51.100.5' AND unmapped:attribute = 'something']"
-    #     query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
-    #     query['queries'] = _remove_timestamp_from_query(query['queries'])
-    #     queries = ["((device.external_ip: '198.51.100.5') + device.last_seen:> '2002-05-27T00:48:12.787433')"]
-    #     queries = _remove_timestamp_from_query(queries)
-    #     self._test_query_assertions(query, queries)
 
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND file:name = " \
-                       "'powershell.exe' OR user-account:user_id = 'root'] "
+                       "'powershell.exe' OR user-account:user_id = 'root']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((((device.external_ip: '192.168.122.83' , device.external_ip: '100.100.122.90') + "
-                   "behaviors.filename: 'powershell.exe') , behaviors.user_id: 'root') + device.last_seen:> "
-                   "'2002-05-27T01:03:41.747793')"]
+        queries = ["((((device.local_ip: '192.168.122.83' , device.local_ip: '100.100.122.90') + behaviors.filename: "
+                   "'powershell.exe') , behaviors.user_id: 'root') + behaviors.timestamp:> "
+                   "'2002-06-02T07:15:35.411587')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
-

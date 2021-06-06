@@ -33,6 +33,17 @@
       "references": "process"
     }
   ],
+  "machine_domain": [
+    {
+      "key": "domain_name.value",
+      "object": "domain"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "event",
+      "references": "domain"
+    }
+  ],
   "filepath": [
     {
       "key": "directory.path",
@@ -107,6 +118,83 @@
       "references": "parent_process"
     }
   ],
+  "parent_process_graph_id": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "GraphIDToPID"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "triggering_process_graph_id": {
+    "key": "process.pid",
+    "object": "process",
+    "transformer": "GraphIDToPID"
+  },
+  "registry_key": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "registry_key"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "registry_key"
+    }
+  ],
+  "domain_ioc": [
+    {
+      "key": "domain-name.value",
+      "object": "domain-name"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "network-traffic",
+      "references": "domain-name"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "network-traffic"
+    }
+  ],
+  "sha256_ioc": [
+    {
+      "key": "file.hashes.SHA-256",
+      "object": "ioc_file"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "ioc_file"
+    }
+  ],
+  "quarantined_file_sha256": [
+    {
+      "key": "file.hashes.SHA-256",
+      "object": "quarantined_file"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "quarantined_file"
+    }
+  ],
+  "md5_ioc": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "ioc_file"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "ioc_file"
+    }
+  ],
   "parent_md5": [
     {
       "key": "file.hashes.MD5",
@@ -120,6 +208,11 @@
     {
       "key": "process.parent_ref",
       "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
       "references": "parent_process"
     }
   ],
@@ -137,27 +230,13 @@
   "external_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "nt"
-    },
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ipv4-addr"
+      "object": "dst-ipv4-addr"
     },
     {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
       "references": [
-        "dst_ipv4-addr"
+        "dst-ipv4-addr"
       ],
       "group": true
     }
@@ -176,27 +255,13 @@
   "local_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "nt"
-    },
-    {
-      "key": "ipv4-addr.value",
-      "object": "local_ipv4-addr"
+      "object": "local-ipv4-addr"
     },
     {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
       "references": [
-        "local_ipv4-addr"
+        "local-ipv4-addr"
       ],
       "group": true
     }
@@ -215,16 +280,28 @@
       "group": true
     }
   ],
+  "tactic": {
+    "key": "x-oca-event.tactic",
+    "object": "event"
+  },
+  "tactic_id": {
+    "key": "x-oca-event.tactic_id",
+    "object": "event"
+  },
+  "technique": {
+    "key": "x-oca-event.technique",
+    "object": "event"
+  },
+  "technique_id": {
+    "key": "x-oca-event.technique_id",
+    "object": "event"
+  },
   "os_version": {
     "key": "x-oca-asset.os_version",
     "object": "host"
   },
   "platform_name": {
     "key": "x-oca-asset.os_platform",
-    "object": "host"
-  },
-  "product_type_desc": {
-    "key": "x-oca-asset.type",
     "object": "host"
   },
   "provider": {
@@ -253,14 +330,6 @@
   },
   "technique_id": {
     "key": "x-crowdstrike.technique_id",
-    "object": "x-crowdstrike"
-  },
-  "tactic": {
-    "key": "x-crowdstrike.tactic",
-    "object": "x-crowdstrike"
-  },
-  "technique": {
-    "key": "x-crowdstrike.technique",
     "object": "x-crowdstrike"
   },
   "agent_local_time": {
@@ -292,6 +361,50 @@
     "object": "x-crowdstrike"
   },
   "ioc_value": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "bios_manufacturer": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "bios_version": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "config_id_base": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "config_id_build": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "config_id_platform": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "platform_id": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "product_type": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "product_type_desc": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "site_name": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "system_product_name": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "x-crowdstrike"
+  },
+  "modified_timestamp": {
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"
   }

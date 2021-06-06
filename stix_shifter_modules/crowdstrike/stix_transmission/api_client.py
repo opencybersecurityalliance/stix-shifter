@@ -42,7 +42,7 @@ class APIClient:
         self._token = None
         self._token_time = None
 
-    def get_detections_IDs(self, filter, sort=None):
+    def get_detections_IDs(self, filter, limit, sort=None):
         """get the response from MSatp endpoints
         :param filter: filter incidents by certain value
         :param sort: sort incidents according to sort value
@@ -54,11 +54,12 @@ class APIClient:
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = self.INCIDENTS_IDS_ENDPOINT
         data['filter'] = filter
+        data['limit'] = limit
         if sort:
             data['sort'] = sort
         return self.client.call_api(endpoint, 'GET', headers=headers, urldata=data, timeout=self.timeout)
 
-    def get_detections_info(self, ids, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
+    def get_detections_info(self, ids):
         """get the response from crowdstrike endpoints
         :param ids: Provide one or more incident IDs
         :return: response, json object"""
