@@ -32,11 +32,9 @@ class APIClient:
 
     def ping_data_source(self):
         # Pings the data source
-        endpoint = self.endpoint_start + 'dmm/models'  # no 'ariel' in the path
+        endpoint = self.endpoint_start + 'dmm/models'
         resp = self.client.call_api(endpoint, 'GET', timeout=self.timeout)
-        resp_dict = dict()
-        resp_dict["code"] = resp.code
-        return resp_dict
+        return {"code": resp.code}
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
