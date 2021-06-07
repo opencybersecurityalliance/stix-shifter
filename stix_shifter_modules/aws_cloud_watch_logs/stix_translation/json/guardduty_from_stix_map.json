@@ -61,10 +61,10 @@
       "api_service_name": ["api_service_name"]
     }
   },
- "x-aws-guardduty-finding": {
-  "fields": {
-    "finding_id": ["finding_id"],
-    "finding_type": ["finding_type"]
+  "x-ibm-finding": {
+    "fields": {
+      "finding_id": ["finding_id"],
+      "finding_type": ["finding_type"]
     }
   }
 }
