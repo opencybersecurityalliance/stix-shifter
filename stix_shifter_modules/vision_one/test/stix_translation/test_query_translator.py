@@ -25,11 +25,11 @@ class TestStixParsingMixin:
 
     def _test_time_range(self, stix_pattern, expectation):
         query = self.retrieve_query(stix_pattern)
-        self.assertEqual(query["to"] - query["from"], expectation)
+        self.assertEqual(expectation, query["to"] - query["from"])
 
     def _test_pattern(self, pattern, expectation):
         query = self.retrieve_query(pattern)
-        self.assertEqual(query["query"], expectation)
+        self.assertEqual(expectation, query["query"])
 
 
 class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
@@ -125,6 +125,10 @@ class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
     def test_operator_like_escape(self):
         pattern = r"[process:command_line LIKE '(x86)\\internet']"
         expectation = r'(processCmd:\(x86\)\\internet OR parentCmd:\(x86\)\\internet OR objectCmd:\(x86\)\\internet)'
+        self._test_pattern(pattern, expectation)
+
+        pattern = r'''[process:command_line LIKE '"C:\\Program'] START t'2021-05-18T05:41:39Z' STOP t'2021-05-19T05:41:39Z' '''
+        expectation = r'(processCmd:\"C\:\\Program OR parentCmd:\"C\:\\Program OR objectCmd:\"C\:\\Program)'
         self._test_pattern(pattern, expectation)
 
     def test_operator_neq(self):
