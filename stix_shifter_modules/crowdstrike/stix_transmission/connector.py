@@ -9,6 +9,7 @@ class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
     PROVIDER = 'CrowdStrike'
+    IDS_LIMIT = 500
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -45,10 +46,29 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
+    def send_info_request_and_handle_errors(self, ids_lst):
+        return_obj = dict()
+        response = self.api_client.get_detections_info(ids_lst)
+        return_obj = self._handle_errors(response, return_obj)
+        response_json = json.loads(return_obj["data"])
+        return_obj['data'] = response_json['resources']
+
+        return return_obj
+
+    def handle_detection_info_request(self, ids):
+        ids = [ids[x:x + self.IDS_LIMIT] for x in range(0, len(ids), self.IDS_LIMIT)]
+        ids_lst = ids.pop(0)
+        return_obj = self.send_info_request_and_handle_errors(ids_lst)
+
+        for ids_lst in ids:
+            curr_obj = self.send_info_request_and_handle_errors(ids_lst)
+            return_obj['data'].extend(curr_obj['data'])
+
+        return return_obj
+
     @staticmethod
     def get_result_limit(connection):
-        # result_limit = 0 => no limit
-        default_result_limit = 500
+        default_result_limit = Connector.IDS_LIMIT
         if 'options' in connection:
             return connection['options'].get('result_limit', default_result_limit)
         return default_result_limit
@@ -69,10 +89,13 @@ class Connector(BaseSyncConnector):
 
     @staticmethod
     def _handle_ioc(ioc_type, ioc_source, ioc_value):
+        # ioc_value may contains many values separated by ','
+        # first, we'll take the first value
+        ioc_value = ioc_value.split(',')[0]  # TODO - handle the rest values
         ioc_data = dict()
         file_sources = ['file_read', 'file_write', 'library_load']
         # handle ioc_source = file_read / file_write
-        if ioc_source and ioc_source in file_sources and ioc_type:
+        if ioc_source and ioc_type and ioc_source in file_sources:
             if 'sha256' in ioc_type:
                 ioc_data['sha256_ioc'] = ioc_value
             elif 'md5' in ioc_type:
@@ -108,20 +131,15 @@ class Connector(BaseSyncConnector):
             print(response)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
-            ids_obj['ids'] = response_json['resources']
+            ids_obj['ids'] = response_json.get('resources')
 
             if ids_obj['ids']:  # There are not detections that match the filter arg
-
-                response = self.api_client.get_detections_info(ids_obj['ids'])
-                print(response)
-                return_obj = self._handle_errors(response, return_obj)
-                response_json = json.loads(return_obj["data"])
-                return_obj['data'] = response_json['resources']
+                return_obj = self.handle_detection_info_request(ids_obj['ids'])
 
                 for event_data in return_obj['data']:
                     device_data = event_data['device']
-                    hostinfo_date = event_data['hostinfo']
-                    device_data.update(hostinfo_date)  # device & host
+                    hostinfo_data = event_data['hostinfo']
+                    device_data.update(hostinfo_data)  # device & host
                     build_device_data = {k: v for k, v in device_data.items() if v}  # device & host
                     build_data = {k: v for k, v in event_data.items() if not isinstance(v, dict)
                                   and k not in 'behaviors'}  # other detection fields

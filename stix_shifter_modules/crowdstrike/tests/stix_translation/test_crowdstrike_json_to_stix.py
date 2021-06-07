@@ -154,7 +154,7 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
         curr_obj = TestCrowdStrikeTransformResults.get_first_of_type(objects.values(), 'x-oca-event')
         event_obj = curr_obj  # used in later test
         assert (curr_obj is not None), 'file object type not found'
-        assert (curr_obj.keys() == {'type', 'network_ref', 'host_ref', 'created', 'process_ref', 'action', 'outcome', 'severity'})
+        assert (curr_obj.keys() == {'type', 'host_ref', 'created', 'process_ref', 'action', 'outcome', 'severity', 'parent_process_ref'})
         assert (curr_obj['action'] == 'PShellDownloadRun')
         assert (curr_obj['severity'] == 70)
 
@@ -166,7 +166,6 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
         assert (curr_obj['os_platform'] == 'Windows')
 
         curr_obj = TestCrowdStrikeTransformResults.get_first_of_type(objects.values(), 'user-account')
-        user_obj = curr_obj  # used in later test
         assert (curr_obj is not None), 'user-account object type not found'
         assert (curr_obj.keys() == {'type', 'user_id', 'account_login'})
         assert (curr_obj['account_login'] == 'crowdstrike')
@@ -174,7 +173,7 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
 
         curr_obj = TestCrowdStrikeTransformResults.get_first_process(objects.values(), 'process')
         assert (curr_obj is not None), 'process object type not found'
-        assert (curr_obj.keys() == {'type', 'binary_ref', 'name', 'command_line', 'creator_user_ref ', 'parent_ref'})
+        assert (curr_obj.keys() == {'type', 'binary_ref', 'name', 'command_line', 'creator_user_ref ', 'pid', 'parent_ref'})
         assert (curr_obj['command_line'] == 'c:\\windows\\system32\\cmd.exe')
         assert (curr_obj['name'] == 'powershell.exe')
 
@@ -183,7 +182,7 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
         parent_index = curr_obj['parent_ref']
         curr_obj = objects[parent_index]
         assert (curr_obj is not None)
-        assert (curr_obj.keys() == {'type', 'binary_ref', 'command_line'})
+        assert (curr_obj.keys() == {'type', 'binary_ref', 'command_line', 'pid'})
         assert (curr_obj['command_line'] == 'C:\\Windows\\Explorer.EXE')
 
 

@@ -5,7 +5,6 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
 from datetime import datetime, timedelta
 
 
-
 class CSQueryStringPatternTranslator:
     QUERIES = []
     """
@@ -16,23 +15,17 @@ class CSQueryStringPatternTranslator:
         ComparisonExpressionOperators.Or: ",",
         ComparisonComparators.Equal: ":",
         ComparisonComparators.NotEqual: ":!",
-        # ComparisonComparators.Like: "contains",
-        # ComparisonComparators.Matches: "matches",
         ComparisonComparators.GreaterThan: ":>",
         ComparisonComparators.GreaterThanOrEqual: ":>=",
         ComparisonComparators.LessThan: ":<",
         ComparisonComparators.LessThanOrEqual: ":<=",
-        # ComparisonComparators.In: "in~",
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'OR'
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         # self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper
         self.pattern = pattern
-        self.result_limit = result_limit
-        self.time_range = 10000000  # filter results to last x minutes
+        self.time_range = time_range  # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
         self.queries = []
         self.queries.extend(self.translated)
@@ -69,7 +62,6 @@ class CSQueryStringPatternTranslator:
 
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             mapped_field = mapped_fields_array[0]
-
             comparator = self.comparator_lookup[expression.comparator]
 
             # Handle negate exp
@@ -79,18 +71,10 @@ class CSQueryStringPatternTranslator:
             elif expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
                 comparator = self._get_negate_comparator()
 
-            # Some values are formatted differently based on how they're being compared if expression.comparator ==
-            # ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual: value =
-            # self._format(expression.value) elif expression.comparator == ComparisonComparators.LessThan: value =
-            # self._format(expression.value) elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
-            # value = self._format(expression.value) elif expression.comparator ==
-            # ComparisonComparators.LessThanOrEqual: value = self._format(expression.value) elif
-            # expression.comparator == ComparisonComparators.GreaterThan: value = self._format(expression.value) else:
             value = self._escape_value(expression.value)
 
             comparison_string = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
-                                                                            comparator=comparator, value=value)
-
+                                                                              comparator=comparator, value=value)
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
                     return self._format_start_stop_qualifier(comparison_string, qualifier)
@@ -104,8 +88,6 @@ class CSQueryStringPatternTranslator:
             f1 = "({})" if isinstance(expression.expr2, CombinedComparisonExpression) else "{}"
             f2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
 
-            # Note: it seems the ordering of the expressions is reversed at a lower level
-            # so we reverse it here so that it is as expected.
             query_string = (f1 + " {} " + f2).format(self._parse_expression(expression.expr2),
                                                      self.comparator_lookup[expression.operator],
                                                      self._parse_expression(expression.expr1))
@@ -120,15 +102,13 @@ class CSQueryStringPatternTranslator:
             query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
             return query_string
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
-            if(not isinstance(expr1, list)):
+            if (not isinstance(expr1, list)):
                 CSQueryStringPatternTranslator.QUERIES.extend([expr1])
             if (not isinstance(expr2, list)):
                 CSQueryStringPatternTranslator.QUERIES.extend([expr2])
             return CSQueryStringPatternTranslator.QUERIES
-            # return f'({expr1}) {operator} ({expr2})'
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
@@ -163,9 +143,8 @@ class CSQueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit']
     time_range = options['time_range']
 
-    translated_statements_lst = CSQueryStringPatternTranslator(pattern, data_model_mapping, result_limit, time_range)
+    translated_statements_lst = CSQueryStringPatternTranslator(pattern, data_model_mapping, time_range)
     translated_statements = ",".join(translated_statements_lst.queries)
     return translated_statements

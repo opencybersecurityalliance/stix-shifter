@@ -42,6 +42,15 @@
       "key": "x-oca-event.domain_ref",
       "object": "event",
       "references": "domain"
+    },
+    {
+      "key": "x-oca-asset.name",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
     }
   ],
   "filepath": [
@@ -280,22 +289,6 @@
       "group": true
     }
   ],
-  "tactic": {
-    "key": "x-oca-event.tactic",
-    "object": "event"
-  },
-  "tactic_id": {
-    "key": "x-oca-event.tactic_id",
-    "object": "event"
-  },
-  "technique": {
-    "key": "x-oca-event.technique",
-    "object": "event"
-  },
-  "technique_id": {
-    "key": "x-oca-event.technique_id",
-    "object": "event"
-  },
   "os_version": {
     "key": "x-oca-asset.os_version",
     "object": "host"
@@ -318,6 +311,14 @@
   },
   "scenario": {
     "key": "x-crowdstrike.scenario",
+    "object": "x-crowdstrike"
+  },
+  "technique": {
+    "key": "x-crowdstrike.technique",
+    "object": "x-crowdstrike"
+  },
+  "tactic": {
+    "key": "x-crowdstrike.tactic",
     "object": "x-crowdstrike"
   },
   "tactic_id": {

@@ -4,9 +4,6 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 from datetime import datetime, timedelta
 import requests
 
-DEFAULT_LIMIT = 10000
-DEFAULT_OFFSET = 0
-
 
 class APIClient:
     INCIDENTS_IDS_ENDPOINT = 'detects/queries/detects/v1'
@@ -24,11 +21,6 @@ class APIClient:
         auth = configuration.get('auth')
         # self.endpoint_start = 'incidents/'
         self.host = connection.get('host')
-
-        # if auth:
-        #     if 'access_token' in auth:
-        #         headers['Authorization'] = "Bearer " + auth['access_token']
-
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
@@ -89,7 +81,8 @@ class APIClient:
                     f'&client_secret={self._client_secret}'
                 )
             )
-            self._token = resp.json()['access_token']
+            token = resp.json().get('access_token')
+            self._token = token
             self._token_time = datetime.now()
         return self._token
 
