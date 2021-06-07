@@ -91,7 +91,6 @@
       "name": ["device.machine_domain"],
       "hostname": ["device.hostname"],
       "ip_refs": ["device.external_ip", "device.local_ip"],
-      "name": ["device.hostname"],
       "os_name": ["device.platform_name"],
       "os_platform": ["device.platform_name"]
     }
@@ -108,7 +107,6 @@
       "agent_version": ["device.agent_version"],
       "first_seen": ["device.first_seen"],
       "last_seen": ["device.last_seen"],
-      "platform_id": ["device.platform_id"],
       "confidence": ["device.confidence"],
       "bios_manufacturer": ["device.bios_manufacturer"],
       "bios_version": ["device.bios_version"],
@@ -119,7 +117,7 @@
       "product_type": ["device.product_type"],
       "product_type_desc": ["device.product_type_desc"],
       "site_name": ["device.site_name"],
-      "site_name": ["device.system_manufacturer"],
+      "system_manufacturer": ["device.system_manufacturer"],
       "system_product_name": ["device.system_product_name"],
       "modified_timestamp": ["device.modified_timestamp"]
     }
