@@ -1,9 +1,5 @@
-import os
-
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 
-from .stix_translation.query_translator import QueryTranslator
-from .stix_translation.results_translator import ResultsTranslator
 from .stix_transmission.api_client import APIClient
 from .stix_transmission.delete_connector import DeleteConnector
 from .stix_transmission.ping_connector import PingConnector
@@ -31,15 +27,4 @@ class EntryPoint(BaseEntryPoint):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
 
-        basepath = os.path.dirname(__file__)
-        filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
-
-        dialect = 'endpointActivityData'
-        query_translator = QueryTranslator(options, dialect, filepath)
-        results_translator = ResultsTranslator(options, dialect, filepath)
-        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
-
-        dialect = 'messageActivityData'
-        query_translator = QueryTranslator(options, dialect, filepath)
-        results_translator = ResultsTranslator(options, dialect, filepath)
-        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
+        self.setup_translation_simple(dialect_default="endpointActivityData")
