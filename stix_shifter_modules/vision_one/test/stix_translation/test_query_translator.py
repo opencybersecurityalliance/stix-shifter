@@ -122,6 +122,11 @@ class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
         expectation = 'hostName:microsoft'
         self._test_pattern(pattern, expectation)
 
+    def test_operator_like_escape(self):
+        pattern = r"[process:command_line LIKE '(x86)\\internet']"
+        expectation = r'(processCmd:\(x86\)\\internet OR parentCmd:\(x86\)\\internet OR objectCmd:\(x86\)\\internet)'
+        self._test_pattern(pattern, expectation)
+
     def test_operator_neq(self):
         pattern = "[domain-name:value != 'aaa.bbb.ccc']"
         expectation = 'NOT (hostName:"aaa.bbb.ccc")'
