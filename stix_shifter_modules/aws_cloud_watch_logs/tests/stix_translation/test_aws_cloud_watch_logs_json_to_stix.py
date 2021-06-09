@@ -160,8 +160,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert observed_data['id'] is not None
         assert observed_data['type'] == "observed-data"
         assert observed_data['created_by_ref'] == result_bundle_identity['id']
-        assert observed_data['x_aws_guardduty_finding'] is not None
-        assert observed_data['x_aws'] is not None
         assert observed_data['created'] is not None
         assert observed_data['modified'] is not None
         assert observed_data['number_observed'] is not None
@@ -211,6 +209,7 @@ class TestAwsResultsToStix(unittest.TestCase):
                         'event_count': 1}}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
+        print (result_bundle)
         result_bundle_objects = result_bundle['objects']
 
         result_bundle_identity = result_bundle_objects[0]
@@ -219,10 +218,11 @@ class TestAwsResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
 
         assert 'objects' in observed_data
-        custom_object = observed_data['x_aws']
-
-        assert custom_object.keys() == {'account_id'}
-        assert custom_object['account_id'] == '979326520502'
+        objects = observed_data['objects']
+        xaws_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws')
+        assert xaws_obj is not None, 'x-aws object type not found'
+        assert xaws_obj.keys() == {'type', 'account_id'}
+        assert xaws_obj['account_id'] == '979326520502'
 
     def test_guardduty_network_json_to_stix(self):
         """to test network stix object properties"""
@@ -346,8 +346,8 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert network_obj.keys() == {'type', 'dst_port', 'src_ref', 'dst_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
         assert network_obj['dst_port'] == 32820
-        assert network_obj['src_ref'] == '1'
-        assert network_obj['dst_ref'] == '5'
+        assert network_obj['src_ref'] == '2'
+        assert network_obj['dst_ref'] == '7'
         assert network_obj['src_port'] == 22
         assert network_obj['protocols'] == ['tcp']
 
@@ -460,12 +460,17 @@ class TestAwsResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
 
         assert 'objects' in observed_data
-        custom_object = observed_data['x_aws_guardduty_finding']
+        objects = observed_data['objects']
+        xaws_guardduty_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert xaws_guardduty_obj is not None, 'x-aws-guardduty-finding object type not found'
+        assert xaws_guardduty_obj.keys() == {'severity', 'finding_type', 'name', 'type'}
+        # assert xaws_guardduty_obj['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
+        assert xaws_guardduty_obj['finding_type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
+        assert xaws_guardduty_obj['severity'] == 2
+        assert xaws_guardduty_obj[
+                   'name'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
 
-        assert custom_object.keys() == {'severity', 'id', 'type', 'title', 'timestamp'}
-        assert custom_object['id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
-        assert custom_object['type'] == 'UnauthorizedAccess:EC2/SSHBruteForce'
-        assert custom_object['severity'] == 2
-        assert custom_object['timestamp'] == '2019-10-17T09:30:05.000Z'
-        assert custom_object[
-                   'title'] == '54.211.162.49 is performing SSH brute force attacks against i-0b8fd03ade35c681d. '
+        xaws_obj = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws')
+        assert xaws_obj is not None, 'x-aws object type not found'
+        assert xaws_obj.keys() == {'detail_id', 'account_id', 'region', 'type'}
+        assert xaws_obj['detail_id'] == '6cb6e99751fcbed76aae1a9a64bb96a8'
