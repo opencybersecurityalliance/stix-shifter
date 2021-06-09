@@ -29,9 +29,7 @@
   "process": {
     "fields": {
       "command_line": ["behaviors.cmdline"],
-      "created": ["behaviors.timestamp"],
-      "pid": ["process_pid"],
-      "name": ["behaviors.filename"],
+      "created": ["behaviors.timestamp"], "name": ["behaviors.filename"],
       "creator_user_ref.user_id": ["behaviors.user_id"],
       "creator_user_ref.account_login": ["behaviors.user_name"],
       "binary_ref.hashes.MD5": ["behaviors.md5"],

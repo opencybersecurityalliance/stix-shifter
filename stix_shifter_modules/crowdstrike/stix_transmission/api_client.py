@@ -51,6 +51,13 @@ class APIClient:
             data['sort'] = sort
         return self.client.call_api(endpoint, 'GET', headers=headers, urldata=data, timeout=self.timeout)
 
+    def ping_box(self):
+        # Sends a GET request
+        headers = dict()
+        headers['Authorization'] = f'Bearer {self.get_token()}'
+        endpoint = 'detects/queries/detects/v1'  # Test if system alive
+        return self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
+
     def get_detections_info(self, ids):
         """get the response from crowdstrike endpoints
         :param ids: Provide one or more incident IDs
