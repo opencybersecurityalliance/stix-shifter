@@ -24,7 +24,7 @@
     },
     "configuration": {
         "auth": {
-            "tok": {
+            "token": {
                 "label": "Authentication Token",
                 "description": "Set the authentication token of Trend Micro Vision One search API"
             }
