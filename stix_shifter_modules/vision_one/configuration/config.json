@@ -38,7 +38,7 @@
     "configuration": {
         "auth": {
             "type": "fields",
-            "tok": {
+            "token": {
                 "type": "password"
             }
         }

@@ -14,7 +14,7 @@ CONNECTION = {
 }
 CONFIG = {
     "auth": {
-        "tok": "token"
+        "token": "token"
     }
 }
 
