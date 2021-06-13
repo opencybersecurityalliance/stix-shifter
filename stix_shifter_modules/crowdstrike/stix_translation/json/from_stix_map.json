@@ -97,9 +97,11 @@
     "fields": {
       "device_id": ["device.device_id"],
       "detection_id": ["device.detection_id"],
-      "scenario": ["device.scenario"],
+      "scenario": ["behaviors.scenario"],
       "tactic_id": ["device.tactic_id"],
       "severity": ["device.severity"],
+      "tactic": ["behaviors.tactic"],
+      "technique": ["behaviors.technique"],
       "technique_id": ["device.technique_id"],
       "agent_local_time": ["device.agent_local_time"],
       "agent_version": ["device.agent_version"],
