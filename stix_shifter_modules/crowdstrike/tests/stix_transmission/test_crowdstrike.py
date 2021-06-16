@@ -45,22 +45,6 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'progress' in results_response
         assert results_response['progress'] == 100
 
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = None
-        mocked_return_value = '["mock", "placeholder"]'
-
-        mock_ping_response.return_value = CROWDSTRIKEMockResponse(200, mocked_return_value)
-        print(str(self.connection))
-        print(str(self.config))
-        transmission = stix_transmission.StixTransmission('crowdstrike', self.connection(), self.config())
-        ping_response = transmission.ping()
-
-        assert ping_response is not None
-        assert ping_response['success']
-
     def test_create_query_connection(self, mock_api_client):
         mock_api_client.return_value = None
 
