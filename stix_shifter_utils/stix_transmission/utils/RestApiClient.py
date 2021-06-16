@@ -61,15 +61,12 @@ class RestApiClient:
         # sni is none unless we are using a server cert
         self.sni = None
 
+        self.server_cert_file_content_exists = False
+        self.server_cert_content = False
         if isinstance(cert_verify, bool):
             # verify certificate non self signed case
             if cert_verify:
                 self.server_cert_content = True
-                self.server_cert_file_content_exists = False
-            # ignore certificates all together
-            else:
-                self.server_cert_content = False
-                self.server_cert_file_content_exists = False
         # self signed cert provided
         elif isinstance(cert_verify, str):
             self.server_cert_content = self.server_cert_name

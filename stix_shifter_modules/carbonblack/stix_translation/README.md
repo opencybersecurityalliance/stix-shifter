@@ -23,6 +23,9 @@ The supported query values are defined in the mapping file [from_stix_map.json](
 
 CarbonBlack Module searches Process API Endpoint.
 
+> Notice: If "Include Process Events?" option is enabled, CarbonBlack module searches events API endpoint. Enabling this option requires Carbon Black Response of version >= 6.1.
+
+
 ### Execute a STIX pattern on a CarbonBlack instance
 
 ```

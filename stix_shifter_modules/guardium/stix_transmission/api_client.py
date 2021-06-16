@@ -102,12 +102,10 @@ class APIClient():
             indx = int(index_from)+1
             fsize = int(fetch_size)+1
             if "reportName" in self.query:
-                response = self.client.handle_report(self.query["reportName"], self.query["reportParameter"], indx, fsize)
-                respObj = ResponseWrapper(response)
+                response = self.client.handle_report(self.query, indx, fsize)
             if "category" in self.query:
                 # print("TADA")
-                response = self.client.handle_qs(self.query["category"], self.query, "", indx, fsize)
-                respObj = ResponseWrapper(response)
+                response = self.client.handle_qs(self.query, indx, fsize)
             status_code = response.status_code
 #           Though the connector gets the authorization token just before fetching the actual result
 #           there is a possibility that the token returned is only valid for a second and response_code = 401
@@ -118,7 +116,7 @@ class APIClient():
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
                     if (self.client.get_token()):
-                        response = self.client.handle_report(self.query["report_name"], self.query["reportParameter"], index_from, fetch_size)
+                        response = self.client.handle_report(self.query, index_from, fetch_size)
                         status_code = response.response.status_code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")

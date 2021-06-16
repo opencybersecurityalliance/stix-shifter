@@ -15,7 +15,7 @@ CONNECTORS = {
     "carbonblack": "Carbon Black CB Response",
     "cbcloud": "Carbon Black Cloud", 
     "elastic_ecs": "Elasticsearch ECS", 
-    "msatp": "Microsoft Defender Advanced Threat Protection",
+    "msatp": "Microsoft Defender for Endpoint",
     "security_advisor": "IBM Cloud Security Advisor",
     "guardium": "IBM Guardium",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",

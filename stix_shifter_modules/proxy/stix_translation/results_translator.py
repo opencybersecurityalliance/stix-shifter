@@ -1,4 +1,3 @@
-import requests
 import json
 from .utils import unwrap_connection_options
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -18,6 +17,6 @@ class ResultsTranslator(BaseResultTranslator):
 
         connection, configuration = unwrap_connection_options(self.options)
 
-        client = RestApiClient(proxy_host, proxy_port, url_modifier_function=lambda host_port, endpoint, headers: f'http://{host_port}{endpoint}')
+        client = RestApiClient(proxy_host, proxy_port, url_modifier_function=lambda host_port, endpoint, headers: f'https://{host_port}{endpoint}', cert_verify=self.options.get('proxy_cert'))
         response = client.call_api('/translate_results', 'POST', data=json.dumps({'module': connection['type'], "data_source": data_source, "data": data, "options": connection['options']}), timeout=self.options.get('timeout'))
         return json.loads(response.bytes)
