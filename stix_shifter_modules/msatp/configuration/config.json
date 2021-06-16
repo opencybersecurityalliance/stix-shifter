@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "Microsoft Defender Advanced Threat Protection"
+            "displayName": "Microsoft Defender for Endpoint"
         },
         "host": {
             "type": "text",

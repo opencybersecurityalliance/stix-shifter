@@ -283,4 +283,4 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
-        mock_requests_response.assert_called_with(ANY, 'https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=(2, 10), verify=True, auth=None)
+        mock_requests_response.assert_called_with(ANY, 'https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=(2, 30), verify=True, auth=None)

@@ -42,9 +42,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
         """
         to test the common stix object properties
         """
-        data = {'ProcessCreationEvents': {'EventTime': '2019-09-20T06:57:11.8218304Z',
-                                          'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                          'ComputerName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+        data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+                                          'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                          'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
                                           'FileName': 'consent.exe', 'FolderPath': 'C:\\Windows\\System32\\consent.exe',
                                           'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
@@ -88,15 +88,15 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert observed_data['first_observed'] is not None
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
-        assert observed_data['x_msatp'] is not None
+
 
     def test_custom_property(self):
         """
         to test the custom stix object properties
         """
-        data = {'ProcessCreationEvents': {'EventTime': '2019-09-20T06:57:11.8218304Z',
-                                          'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                          'ComputerName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+        data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+                                          'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                          'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
                                           'FileName': 'consent.exe', 'FolderPath': 'C:\\Windows\\System32\\consent.exe',
                                           'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
@@ -128,17 +128,15 @@ class TestMsatpResultsToStix(unittest.TestCase):
         result_bundle_objects = result_bundle['objects']
 
         observed_data = result_bundle_objects[1]
-        custom_object = observed_data['x_msatp']
-        assert custom_object.keys() == {'computer_name', 'machine_id'}
-        assert custom_object['computer_name'] == 'desktop-536bt46'
+
 
     def test_file_json_to_stix(self):
         """
         to test file stix object properties
         """
-        data = {'FileCreationEvents': {'EventTime': '2019-09-20T06:50:17.3764965Z',
-                                       'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                       'ComputerName': 'desktop-536bt46', 'ActionType': 'FileCreated',
+        data = {'DeviceFileEvents': {'Timestamp': '2019-09-20T06:50:17.3764965Z',
+                                       'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                       'DeviceName': 'desktop-536bt46', 'ActionType': 'FileCreated',
                                        'FileName': 'updater.exe',
                                        'FolderPath': '<C:\\Program Files\\Mozilla Firefox\\updated\\updater.exe>',
                                        'SHA1': 'cf864398950658185fad8207957b46c12f133ea5',
@@ -187,18 +185,18 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert file_obj['name'] == 'updater.exe'
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
-        assert file_obj['parent_directory_ref'] == '1'
+        assert file_obj['parent_directory_ref'] == '3'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
-        file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['FileCreationEvents']['FolderPath'])
+        file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['DeviceFileEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
 
     def test_process_json_to_stix(self):
         """
         to test process stix object properties
         """
-        data = {'ProcessCreationEvents': {'EventTime': '2019-09-20T06:57:11.8218304Z',
-                                          'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                          'ComputerName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+        data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+                                          'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                          'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
                                           'FileName': 'consent.exe', 'FolderPath': 'C:\\Windows\\System32\\consent.exe',
                                           'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
                                           'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
@@ -240,21 +238,21 @@ class TestMsatpResultsToStix(unittest.TestCase):
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
         assert process_obj.keys() == {'type', 'name', 'binary_ref', 'pid', 'command_line', 'created',
-                                      'creator_user_ref', 'parent_ref'}
+                                      'creator_user_ref'}
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '0'
+        assert process_obj['binary_ref'] == '3'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '3'
-        assert process_obj['parent_ref'] == '5'
+        assert process_obj['creator_user_ref'] == '7'
+
 
     def test_network_json_to_stix(self):
         """to test network stix object properties"""
-        data = {'NetworkCommunicationEvents': {'EventTime': '2019-09-26T09:47:52.7091342Z',
-                                               'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                               'ComputerName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
+        data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-26T09:47:52.7091342Z',
+                                               'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                               'DeviceName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
                                                'RemoteIP': '168.159.213.203', 'RemotePort': 80,
                                                'LocalIP': '172.16.2.22', 'LocalPort': 52240, 'Protocol': 'TcP',
                                                'LocalIPType': 'Private', 'RemoteIPType': 'Public',
@@ -296,17 +294,17 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['dst_ref'] == '0'
+        assert network_obj['dst_ref'] == '2'
         assert network_obj['dst_port'] == 80
-        assert network_obj['src_ref'] == '2'
+        assert network_obj['src_ref'] == '4'
         assert network_obj['src_port'] == 52240
         assert network_obj['protocols'] == ['tcp']
 
     def test_network_json_to_stix_negative(self):
         """to test negative test case for stix object"""
-        data = {'NetworkCommunicationEvents': {'EventTime': '2019-09-20T06:24:16.830101Z',
-                                               'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                               'ComputerName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
+        data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-20T06:24:16.830101Z',
+                                               'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                               'DeviceName': 'desktop-536bt46', 'ActionType': 'ConnectionSuccess',
                                                'RemoteIP': '168.159.213.203', 'RemotePort': 80,
                                                'RemoteUrl': 'https://play.google.com', 'LocalIP': '172.16.2.22',
                                                'LocalPort': 63043, 'Protocol': 'TcpV4',
@@ -352,11 +350,15 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
     def test_mac_json_to_stix(self):
         """to test mac stix object properties"""
-        data = {'NetworkCommunicationEvents': {'EventTime': '2019-09-20T06:24:16.830101Z',
-                                               'MachineId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                               'ComputerName': 'desktop-536bt46', 'LocalIP': '172.16.2.22',
-                                               'MacAddress': '484D7E9DBD97', 'RemoteIP': '168.159.213.203',
-                                               'LocalPort': 63043, 'RemotePort': 80, 'Protocol': 'TcpV4',
+        data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-20T06:24:16.830101Z',
+                                               'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                               'DeviceName': 'desktop-536bt46',
+                                                'LocalIP': '172.16.2.22',
+                                               'MacAddress': '484D7E9DBD97',
+                                                'RemoteIP': '168.159.213.203',
+                                               'LocalPort': 63043,
+                                                'RemotePort': 80,
+                                                'Protocol': 'TcpV4',
                                                'RemoteUrl': 'https://play.google.com',
                                                'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
                                                'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
@@ -380,6 +382,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'InitiatingProcessFolderPath': 'c:\\program files ('
                                                                               'x86)\\google\\chrome\\application\\chrome.exe',
                                                'rn': 1, 'event_count': '1'}}
+
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -400,9 +403,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
     def test_registry_json_to_stix(self):
         """to test registry stix object properties"""
-        data = {'RegistryEvents': {'EventTime': '2019-10-10T10:41:43.0469296Z',
-                                   'MachineId': 'db40e68dd7358aa450081343587941ce96ca4777',
-                                   'ComputerName': 'testmachine1', 'ActionType': 'RegistryValueSet',
+        data = {'DeviceRegistryEvents': {'Timestamp': '2019-10-10T10:41:43.0469296Z',
+                                   'DeviceId': 'db40e68dd7358aa450081343587941ce96ca4777',
+                                   'DeviceName': 'testmachine1', 'ActionType': 'RegistryValueSet',
                                    'RegistryKey': 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced Threat '
                                                   'Protection',
                                    'PreviousRegistryValueName': 'Configuration',

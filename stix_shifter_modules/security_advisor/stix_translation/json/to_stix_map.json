@@ -3,8 +3,8 @@
     "key": "user-account.user_id"
   },
   "author_accountId": {
-    "key": "x_security_advisor_finding.author_accountId",
-    "cybox": false
+    "key": "x-security-advisor-finding.author_accountId",
+    "object": "x_security_advisor_finding"
   },
   "ipv4address":{
     "key": "ipv4-addr.value"
@@ -31,72 +31,72 @@
     "key": "directory.value"
   },
   "context_resourceName": {
-    "key": "x_security_advisor_finding.context_resourceName",
-    "cybox": false
+    "key": "x-security-advisor-finding.context_resourceName",
+    "object": "x_security_advisor_finding"
   },
   "description": {
-    "key": "x_security_advisor_finding.description",
-    "cybox": false
+    "key": "x-security-advisor-finding.description",
+    "object": "x_security_advisor_finding"
   },
   "finding_severity": {
-    "key": "x_security_advisor_finding.finding_severity",
-    "cybox": false
+    "key": "x-security-advisor-finding.finding_severity",
+    "object": "x_security_advisor_finding"
   },
   "finding_certainty": {
-    "key": "x_security_advisor_finding.finding_certainty",
-    "cybox": false
+    "key": "x-security-advisor-finding.finding_certainty",
+    "object": "x_security_advisor_finding"
   },
   "id": {
-    "key": "x_security_advisor_finding.id",
-    "cybox": false
+    "key": "x-security-advisor-finding.id",
+    "object": "x_security_advisor_finding"
   },
   "longDescription": {
-    "key": "x_security_advisor_finding.longDescription",
-    "cybox": false
+    "key": "x-security-advisor-finding.longDescription",
+    "object": "x_security_advisor_finding"
   },
   "message": {
-    "key": "x_security_advisor_finding.message",
-    "cybox": false
+    "key": "x-security-advisor-finding.message",
+    "object": "x_security_advisor_finding"
   },
   "name": {
-    "key": "x_security_advisor_finding.name",
-    "cybox": false
+    "key": "x-security-advisor-finding.name",
+    "object": "x_security_advisor_finding"
   },
   "noteName": {
-    "key": "x_security_advisor_finding.noteName",
-    "cybox": false
+    "key": "x-security-advisor-finding.noteName",
+    "object": "x_security_advisor_finding"
   },
   "providerId": {
-    "key": "x_security_advisor_finding.providerId",
-    "cybox": false
+    "key": "x-security-advisor-finding.providerId",
+    "object": "x_security_advisor_finding"
   },
   "providerName": {
-    "key": "x_security_advisor_finding.providerName",
-    "cybox": false
+    "key": "x-security-advisor-finding.providerName",
+    "object": "x_security_advisor_finding"
   },
   "remediation": {
-    "key": "x_security_advisor_finding.remediation",
-    "cybox": false
+    "key": "x-security-advisor-finding.remediation",
+    "object": "x_security_advisor_finding"
   },
   "reportedBy_id": {
-    "key": "x_security_advisor_finding.reportedBy_id",
-    "cybox": false
+    "key": "x-security-advisor-finding.reportedBy_id",
+    "object": "x_security_advisor_finding"
   },
   "reportedBy_title": {
-    "key": "x_security_advisor_finding.reportedBy_title",
-    "cybox": false
+    "key": "x-security-advisor-finding.reportedBy_title",
+    "object": "x_security_advisor_finding"
   },
   "shortDescription": {
-    "key": "x_security_advisor_finding.shortDescription",
-    "cybox": false
+    "key": "x-security-advisor-finding.shortDescription",
+    "object": "x_security_advisor_finding"
   },
   "finding_next_steps_0_title": {
-    "key": "x_security_advisor_finding.finding_next_steps_0_title",
-    "cybox": false
+    "key": "x-security-advisor-finding.finding_next_steps_0_title",
+    "object": "x_security_advisor_finding"
   },
   "context_accountId": {
-    "key": "x_security_advisor_finding.context_accountId",
-    "cybox": false
+    "key": "x-security-advisor-finding.context_accountId",
+    "object": "x_security_advisor_finding"
   },
   "createTime": {
     "key": "first_observed",

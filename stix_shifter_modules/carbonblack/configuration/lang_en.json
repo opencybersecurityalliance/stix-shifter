@@ -20,11 +20,17 @@
         "sni": {
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        },
+        "options": {
+            "events_mode": {
+                "label": "Include Process Events?",
+                "description": "When enabled results will include process events. When disabled only process metadata will be included."
+            }
         }
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
+            "type": "fields",
             "token": {
                 "label": "API Token",
                 "description": "API Token of the CarbonBlack response account"

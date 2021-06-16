@@ -1338,7 +1338,7 @@
   },
   "ecs": {
     "version": {
-      "key": "x_ecs.version",
+      "key": "x-ecs.version",
       "object": "ecs"
     }
   },

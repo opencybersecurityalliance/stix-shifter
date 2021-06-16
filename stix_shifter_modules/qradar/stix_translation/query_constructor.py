@@ -16,6 +16,8 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
                         "sourcev6": ["ipv6", "ipv6_cidr"],
                         "destinationv6": ["ipv6", "ipv6_cidr"]}
 
+FILTERING_DATA_TYPES = {"x-qradar:INOFFENSE": "INOFFENSE"}
+
 START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = "\.\d+Z$"
@@ -94,6 +96,9 @@ class AqlQueryStringPatternTranslator:
             if (mapped_field == 'sourceip' or mapped_field == 'destinationip') and comparator.upper() == 'LIKE':
                 return "str({mapped_field}) {comparator} {value}".format(
                     mapped_field=mapped_field, comparator=comparator, value=value)
+            elif (mapped_field == 'sourceip' or mapped_field == 'destinationip') and comparator.upper() == 'IN':
+                return "str({mapped_field}) {comparator} {value}".format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
             else:
                 return None
         # These next two checks wouldn't be needed if events and flows used their own to-STIX mapping
@@ -120,7 +125,9 @@ class AqlQueryStringPatternTranslator:
 
         for mapped_field in mapped_fields_array:
             # if its a set operator() query construction will be different.
-            if expression.comparator == ComparisonComparators.IsSubSet:
+            if expression.object_path in FILTERING_DATA_TYPES.keys():
+                comparison_string += "{}({})".format(FILTERING_DATA_TYPES[expression.object_path], value)
+            elif expression.comparator == ComparisonComparators.IsSubSet:
                 comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
             elif is_reference_value:
                 parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
