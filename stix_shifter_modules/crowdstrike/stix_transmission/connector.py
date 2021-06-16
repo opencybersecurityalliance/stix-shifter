@@ -128,7 +128,6 @@ class Connector(BaseSyncConnector):
                 raise self.init_error
 
             response = self.api_client.get_detections_IDs(query, self.result_limit)
-            print(response)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')
