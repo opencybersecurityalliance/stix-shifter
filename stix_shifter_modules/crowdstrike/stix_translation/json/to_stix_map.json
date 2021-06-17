@@ -385,10 +385,6 @@
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"
   },
-  "platform_id": {
-    "key": "x-crowdstrike.ioc_value",
-    "object": "x-crowdstrike"
-  },
   "product_type": {
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"

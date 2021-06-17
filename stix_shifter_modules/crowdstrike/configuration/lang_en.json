@@ -25,9 +25,11 @@
     "configuration": {
         "auth": {
             "type" : "fields",
-            "token": {
-                "label": "API Token",
-                "description": "API Token of the CarbonBlack response account"
+            "client_id": {
+                "type": "password"
+            },
+            "client_secret": {
+                "type": "password"
             }
         }
     }

@@ -46,6 +46,19 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
+    def ping_connection(self):
+        response_txt = None
+        return_obj = {}
+        try:
+            response = self.api_client.ping_box()
+            return self._handle_errors(response, return_obj)
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                self.logger.error('can not parse response: ' + str(response_txt))
+            else:
+                raise e
+            
     def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
         response = self.api_client.get_detections_info(ids_lst)
@@ -128,7 +141,6 @@ class Connector(BaseSyncConnector):
                 raise self.init_error
 
             response = self.api_client.get_detections_IDs(query, self.result_limit)
-            print(response)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')
