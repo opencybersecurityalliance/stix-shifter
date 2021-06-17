@@ -15,7 +15,7 @@ class TestStixParsingMixin:
 
     @staticmethod
     def _parse_query(stix_pattern, dialect):
-        return translation.translate(f'vision_one:{dialect}', 'query', '{}', stix_pattern)
+        return translation.translate(f'trendmicro_vision_one:{dialect}', 'query', '{}', stix_pattern)
 
     def retrieve_query(self, stix_pattern):
         queries: dict = self._parse_query(stix_pattern, self.get_dialect())
