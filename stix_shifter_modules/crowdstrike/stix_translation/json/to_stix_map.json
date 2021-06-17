@@ -111,10 +111,18 @@
       "references": "parent_process"
     }
   ],
-  "parent_process_graph_id": {
-      "key": "parent.graph_id",
-      "object": "x-crowdstrike"
-  },
+  "parent_process_graph_id": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "GraphIDToPID"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
   "triggering_process_graph_id": {
     "key": "process.pid",
     "object": "process",

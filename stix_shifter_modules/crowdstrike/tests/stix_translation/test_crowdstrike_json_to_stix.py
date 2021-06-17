@@ -173,7 +173,7 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
 
         curr_obj = TestCrowdStrikeTransformResults.get_first_process(objects.values(), 'process')
         assert (curr_obj is not None), 'process object type not found'
-        assert (curr_obj.keys() == {'type', 'binary_ref', 'name', 'command_line', 'creator_user_ref ', 'pid', 'parent_ref'})
+        assert (curr_obj.keys() == {'type', 'binary_ref', 'name', 'command_line', 'creator_user_ref', 'pid', 'parent_ref'})
         assert (curr_obj['command_line'] == 'c:\\windows\\system32\\cmd.exe')
         assert (curr_obj['name'] == 'powershell.exe')
 
