@@ -25,6 +25,12 @@
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": ["src_ip"],
+        "unwrap": true
       }
     ],
     "RemoteIP": [
@@ -229,11 +235,25 @@
         "key": "x-oca-event.network_ref",
         "object": "event",
         "references": "nt"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": ["mac"],
+        "unwrap": true
       }
     ],
-    "DeviceName": {
-      "key": "x-msatp.computer_name"
-    },
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "DeviceId": {
       "key": "x-msatp.machine_id"
     },
@@ -530,9 +550,17 @@
         "references": "process_file"
       }
     ],
-    "DeviceName": {
-      "key": "x-msatp.computer_name"
-    },
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "DeviceId": {
       "key": "x-msatp.machine_id"
     },
@@ -763,8 +791,7 @@
       }
     ],
     "DeviceId": {
-      "key": "x-oca-asset.device_id",
-      "object": "host"
+      "key": "x-msatp.machine_id"
     },
     "DeviceName": [
       {
@@ -973,8 +1000,7 @@
       }
     ],
     "DeviceId": {
-      "key": "x-oca-asset.device_id",
-      "object": "host"
+      "key": "x-msatp.machine_id"
     },
     "DeviceName": [
       {
@@ -1025,7 +1051,8 @@
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
-        "references": "host_mac"
+        "references": ["host_mac"],
+        "unwrap": true
       }
     ]
   }

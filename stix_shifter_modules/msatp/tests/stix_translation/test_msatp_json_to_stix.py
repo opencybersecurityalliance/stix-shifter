@@ -443,3 +443,53 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj['type'] == 'windows-registry-key'
         assert network_obj['key'] == 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced Threat Protection'
         assert network_obj['values'] == [{'data_type': 'REG_BINARY', 'name': 'Configuration'}]
+
+    # def test_x_oca_asset(self):
+    #     """
+    #     to test x-oca-asset properties
+    #     """
+    #     data = {'DeviceProcessEvents': {'Timestamp': '2019-09-20T06:57:11.8218304Z',
+    #                                       'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+    #                                       'DeviceName': 'desktop-536bt46', 'ActionType': 'ProcessCreated',
+    #                                       'FileName': 'consent.exe', 'FolderPath': 'C:\\Windows\\System32\\consent.exe',
+    #                                       'SHA1': '9329b2362078de27242dd4534f588af3264bf0bf',
+    #                                       'SHA256': '8f112431143a22baaafb448eefd63bf90e7691c890ac69a296574fd07ba03ec6',
+    #                                       'MD5': '27992d7ebe51aec655a088de88bad5c9', 'ProcessId': 20948,
+    #                                       'ProcessCommandLine': 'consent.exe 10088 288 000001CB3AA92A80',
+    #                                       'ProcessIntegrityLevel': 'System',
+    #                                       'ProcessTokenElevation': 'TokenElevationTypeDefault',
+    #                                       'ProcessCreationTime': '2019-09-20T06:57:11.8212034Z',
+    #                                       'AccountDomain': 'nt authority', 'AccountName': 'system',
+    #                                       'AccountSid': 'S-1-5-18', 'LogonId': 999,
+    #                                       'InitiatingProcessAccountDomain': 'nt authority',
+    #                                       'InitiatingProcessAccountName': 'system',
+    #                                       'InitiatingProcessAccountSid': 'S-1-5-18', 'InitiatingProcessLogonId': 999,
+    #                                       'InitiatingProcessIntegrityLevel': 'System',
+    #                                       'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
+    #                                       'InitiatingProcessSHA1': 'a1385ce20ad79f55df235effd9780c31442aa234',
+    #                                       'InitiatingProcessMD5': '8a0a29438052faed8a2532da50455756',
+    #                                       'InitiatingProcessFileName': 'svchost.exe', 'InitiatingProcessId': 10088,
+    #                                       'InitiatingProcessCommandLine': 'svchost.exe -k netsvcs -p -s Appinfo',
+    #                                       'InitiatingProcessCreationTime': '2019-09-18T05:56:15.268893Z',
+    #                                       'InitiatingProcessFolderPath': 'c:\\windows\\system32\\svchost.exe',
+    #                                       'InitiatingProcessParentId': 856,
+    #                                       'InitiatingProcessParentFileName': 'services.exe',
+    #                                       'InitiatingProcessParentCreationTime': '2019-09-17T14:54:59.5778638Z',
+    #                                       'ReportId': 12048, 'rn': 1, 'event_count': '1'}}
+    #     result_bundle = json_to_stix_translator.convert_to_stix(
+    #         data_source, map_data, [data], get_module_transformers(MODULE), options)
+    #     result_bundle_objects = result_bundle['objects']
+
+    #     result_bundle_identity = result_bundle_objects[0]
+    #     assert result_bundle_identity['type'] == data_source['type']
+
+    #     observed_data = result_bundle_objects[1]
+
+    #     assert 'objects' in observed_data
+    #     objects = observed_data['objects']
+
+    #     asset_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
+    #     assert asset_obj is not None, 'x-oca-asset object type not found'
+    #     assert asset_obj.keys() == {'type', 'hostname', 'ip_refs', 'mac_refs'}
+    #     assert asset_obj['hostname'] == 'desktop-536bt46'
+        
