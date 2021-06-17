@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "CB Response connection certificate",
+            "label": "CrowdStrike Falcon host connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication"
         },
         "sni": {
@@ -26,10 +26,12 @@
         "auth": {
             "type" : "fields",
             "client_id": {
-                "type": "password"
+                "label": "Client Id",
+                "description": "Client ID of CrowdStrike Falcon host user"
             },
             "client_secret": {
-                "type": "password"
+                "label": "Client Secret",
+                "description": "Client Secret of CrowdStrike Falcon host user"
             }
         }
     }

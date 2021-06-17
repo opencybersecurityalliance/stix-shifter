@@ -142,7 +142,7 @@ class Connector(BaseSyncConnector):
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
-
+        result_limit = offset + length
         response_txt = None
         ids_obj = dict()
         return_obj = dict()
@@ -152,7 +152,7 @@ class Connector(BaseSyncConnector):
             if self.init_error:
                 raise self.init_error
 
-            response = self.api_client.get_detections_IDs(query, self.result_limit)
+            response = self.api_client.get_detections_IDs(query, result_limit)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')
