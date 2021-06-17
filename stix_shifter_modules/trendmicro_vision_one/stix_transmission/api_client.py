@@ -17,7 +17,7 @@ class APIClient:
         headers['accept'] = 'application/json'
         auth = configuration.get('auth')
         if auth is not None and auth.get('token', None) is not None:
-            headers['Authorization'] = 'Bearer {}'.format(auth.get('tok'))
+            headers['Authorization'] = 'Bearer {}'.format(auth.get('token'))
         url_modifier_function = None
         headers['user-agent'] = _USER_AGENT
 

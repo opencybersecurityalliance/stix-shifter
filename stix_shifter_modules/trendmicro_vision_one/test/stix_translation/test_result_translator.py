@@ -6,7 +6,7 @@ from datetime import datetime
 
 from stix_shifter_utils.stix_translation.src.utils.exceptions import LoadJsonResultsException, TranslationResultException
 
-from stix_shifter_modules.vision_one.entry_point import EntryPoint
+from stix_shifter_modules.trendmicro_vision_one.entry_point import EntryPoint
 
 
 class TestResultTranslatorMixin:
