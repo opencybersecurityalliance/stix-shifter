@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from stix_shifter.stix_transmission.stix_transmission import StixTransmission
 
-from stix_shifter_modules.vision_one.entry_point import EntryPoint
+from stix_shifter_modules.trendmicro_vision_one.entry_point import EntryPoint
 
 CONNECTION = {
     "host": "visionone-host.test",
@@ -46,7 +46,7 @@ class TestTransmission(unittest.TestCase):
             ]
         }
         mock_ping.side_effect = [MockResponse(200, json.dumps(response))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertTrue(ping_response["success"])
 
@@ -59,7 +59,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_ping.side_effect = [MockResponse(400, json.dumps(response))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "invalid_parameter")
@@ -80,7 +80,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_ping.side_effect = [MockResponse(401, json.dumps(response))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "authentication_fail")
@@ -93,7 +93,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_ping.side_effect = [MockResponse(503, json.dumps(response))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "unknown")
@@ -106,7 +106,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_ping.side_effect = [MockResponse(None, json.dumps(response))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "unknown")
@@ -114,14 +114,14 @@ class TestTransmission(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_query(self, mock_query):
         mock_query.side_effect = [MockResponse(200, self._get_query())]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         query_response = transmission.query(self._get_query())
         self.assertTrue(query_response["success"])
         self.assertEqual(query_response["search_id"], self._get_query())
@@ -135,7 +135,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_query.side_effect = [MockResponse(400, json.dumps(payload))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], "invalid_parameter")
@@ -157,7 +157,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_query.side_effect = [MockResponse(401, json.dumps(payload))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], 'authentication_fail')
@@ -172,7 +172,7 @@ class TestTransmission(unittest.TestCase):
             }
         }
         mock_query.side_effect = [MockResponse(408, json.dumps(payload))]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], "unknown")
@@ -195,7 +195,7 @@ class TestTransmission(unittest.TestCase):
         for i in range(0, 20):
             mock_responses.append(MockResponse(200, self._get_response(1, i)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 20)
         self.assertTrue(result_response["success"])
         # 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 -> reach max_fetch_count -> break
@@ -207,7 +207,7 @@ class TestTransmission(unittest.TestCase):
         for i in range(0, 20):
             mock_responses.append(MockResponse(200, self._get_response(3, i)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 20)
         self.assertTrue(result_response["success"])
         # 3 + 3 + 3 + 3 + 3 + 3 + 2 -> break
@@ -220,7 +220,7 @@ class TestTransmission(unittest.TestCase):
             mock_responses.append(MockResponse(200, self._get_response(3, i)))
         mock_responses.append(MockResponse(200, self._get_response(0)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 20)
         self.assertTrue(result_response["success"])
         # 3 + 3 + 3 + 3 + 3 + 3 + 0-> break
@@ -232,7 +232,7 @@ class TestTransmission(unittest.TestCase):
         for i in range(0, 6):
             mock_responses.append(MockResponse(200, self._get_response(4, i)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 20)
         self.assertTrue(result_response["success"])
         # 4 + 4 + 4 + 4 + 4 -> break
@@ -245,7 +245,7 @@ class TestTransmission(unittest.TestCase):
             mock_responses.append(MockResponse(200, self._get_response(4, i)))
         mock_responses.append(MockResponse(200, self._get_response(0, 4)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 20)
         self.assertTrue(result_response["success"])
         # 4 + 4 + 4 + 0 -> break
@@ -257,7 +257,7 @@ class TestTransmission(unittest.TestCase):
         for i in range(0, 4):
             mock_responses.append(MockResponse(200, self._get_response(500, i)))
         mock_results.side_effect = mock_responses
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 1200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1000)
@@ -273,7 +273,7 @@ class TestTransmission(unittest.TestCase):
             (MockResponse(200, self._get_response(500))),
             (MockResponse(200, self._get_response(500))),
         ]
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         result_response = transmission.results(self._get_query(), 0, 200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 200)
@@ -305,7 +305,7 @@ class TestTransmission(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_result_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.results(self._get_query(), 600, 100)
         self.assertFalse(ping_response["success"])
 
@@ -328,13 +328,13 @@ class TestTransmission(unittest.TestCase):
         return json.dumps(response)
 
     def test_status(self):
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         status_response = transmission.status("search_id")
         self.assertTrue(status_response["success"])
         self.assertEqual(status_response["status"], "COMPLETED")
         self.assertEqual(status_response["progress"], 100)
 
     def test_delete(self):
-        transmission = StixTransmission("vision_one", CONNECTION, CONFIG)
+        transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         status_response = transmission.delete("search_id")
         self.assertTrue(status_response["success"])
