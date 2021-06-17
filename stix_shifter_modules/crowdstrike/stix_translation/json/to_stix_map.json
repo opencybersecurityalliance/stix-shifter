@@ -33,26 +33,10 @@
       "references": "process"
     }
   ],
-  "machine_domain": [
-    {
-      "key": "domain_name.value",
-      "object": "domain"
-    },
-    {
-      "key": "x-oca-event.domain_ref",
-      "object": "event",
-      "references": "domain"
-    },
-    {
-      "key": "x-oca-asset.name",
-      "object": "host"
-    },
-    {
-      "key": "x-oca-event.host_ref",
-      "object": "event",
-      "references": "host"
-    }
-  ],
+  "machine_domain": {
+    "key": "x-crowdstrike.machine_domain",
+    "object": "x-crowdstrike"
+  },
   "filepath": [
     {
       "key": "directory.path",
@@ -87,7 +71,7 @@
       "object": "process_creator"
     },
     {
-      "key": "process.creator_user_ref ",
+      "key": "process.creator_user_ref",
       "object": "process",
       "references": "process_creator"
     }
@@ -98,7 +82,7 @@
       "object": "process_creator"
     },
     {
-      "key": "process.creator_user_ref ",
+      "key": "process.creator_user_ref",
       "object": "process",
       "references": "process_creator"
     }
@@ -127,18 +111,10 @@
       "references": "parent_process"
     }
   ],
-  "parent_process_graph_id": [
-    {
-      "key": "process.pid",
-      "object": "parent_process",
-      "transformer": "GraphIDToPID"
-    },
-    {
-      "key": "process.parent_ref",
-      "object": "process",
-      "references": "parent_process"
-    }
-  ],
+  "parent_process_graph_id": {
+      "key": "parent.graph_id",
+      "object": "x-crowdstrike"
+  },
   "triggering_process_graph_id": {
     "key": "process.pid",
     "object": "process",
@@ -278,7 +254,8 @@
   "mac_address": [
     {
       "key": "mac-addr.value",
-      "object": "mac-addr"
+      "object": "mac-addr",
+      "transformer": "CrowdStrikeFormatMac"
     },
     {
       "key": "x-oca-asset.mac_refs",
