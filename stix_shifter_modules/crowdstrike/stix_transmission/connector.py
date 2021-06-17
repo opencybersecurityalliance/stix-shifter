@@ -3,6 +3,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
+import traceback
 
 
 class Connector(BaseSyncConnector):
@@ -51,13 +52,24 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         try:
             response = self.api_client.ping_box()
-            return self._handle_errors(response, return_obj)
+            response_code = response.code
+            response_txt = response.read().decode('utf-8')
+            if 199 < response_code < 300:
+                return_obj['success'] = True
+            elif isinstance(json.loads(response_txt), dict):
+                response_error_ping = json.loads(response_txt)
+                response_dict = response_error_ping['errors'][0]
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            else:
+                raise Exception(response_txt)
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
+        
+        return return_obj
             
     def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
