@@ -22,6 +22,9 @@
         "options": {
             "validate_pattern": {
                 "default": false
+            },
+            "result_limit": {
+                "default": 1000
             }
         }
     },

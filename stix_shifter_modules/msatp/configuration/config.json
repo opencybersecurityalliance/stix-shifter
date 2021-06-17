@@ -26,7 +26,7 @@
             "optional": true
         }
     },
-  "configuration": {
+    "configuration": {
         "auth": {
             "type" : "fields",
             "tenant": {

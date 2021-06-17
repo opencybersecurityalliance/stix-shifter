@@ -11,7 +11,7 @@
                 "optional": true
             },
             "result_limit": {
-                "default": 1000,
+                "default": 10000,
                 "min": 1,
                 "max": 60000,
                 "type": "number",
