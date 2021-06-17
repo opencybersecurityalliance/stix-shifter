@@ -1,0 +1,42 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Crowdstrike"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "help": {
+            "default": "https://falcon.crowdstrike.com/documentation/46/crowdstrike-oauth2-based-apis",
+            "type": "link"
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false
+            },
+            "result_limit": {
+                "default": 1000
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "client_id": {
+                "type": "password"
+            },
+            "client_secret": {
+                "type": "password"
+            }
+        }
+    }
+}
