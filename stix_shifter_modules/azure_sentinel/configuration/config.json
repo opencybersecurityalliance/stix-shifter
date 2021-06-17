@@ -9,11 +9,13 @@
         },
         "port": {
             "type": "number",
-            "default": 443
+            "default": 443,
+            "min": 1,
+            "max": 65535
         },
         "help": {
             "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-azure-sentinel.html"
+            "default": "data-sources-sentinel.html"
         },
         "sni": {
             "type": "text",
@@ -35,6 +37,11 @@
             },
             "clientSecret": {
                 "type": "password"
+            },
+            "access_token": {
+                "type": "password",
+                "hidden": true,
+                "optional": true
             }
         }
     }

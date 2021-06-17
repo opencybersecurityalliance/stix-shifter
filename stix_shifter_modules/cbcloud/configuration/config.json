@@ -9,11 +9,13 @@
         },
         "port": {
             "type": "number",
-            "default": 443
+            "default": 443,
+            "min": 1,
+            "max": 65535
         },
         "help": {
             "type": "link",
-            "default": "https://add.a.link.to.the.carbonblackcloud/connector/documentation.html"
+            "default": "data-sources.html"
         }
     },
     "configuration": {

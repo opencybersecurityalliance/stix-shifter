@@ -22,9 +22,9 @@
   "file": {
     "fields": {
       "name": ["filename"],
-      "hashes.SHA-256": ["filehash"],
-      "hashes.MD5": ["filehash"],
-      "hashes.SHA-1": ["filehash"],
+      "hashes.SHA-256": ["sha256hash"],
+      "hashes.MD5": ["md5hash"],
+      "hashes.SHA-1": ["sha1hash"],
       "parent_directory_ref": ["filepath"],
       "parent_directory_ref.path": ["filepath"]
     }
@@ -73,7 +73,9 @@
       "severity": ["eventseverity"],
       "credibility": ["credibility"],
       "relevance": ["relevance"],
-      "domain_id": ["domainid"]
+      "domain_id": ["domainid"],
+      "has_offense": ["hasoffense"],
+      "INOFFENSE": ["INOFFENSE"]
     }
   },
   "x-ibm-finding": {

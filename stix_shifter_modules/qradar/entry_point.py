@@ -8,7 +8,7 @@ class EntryPoint(BaseEntryPoint):
         super().__init__(connection, configuration, options)
         if connection:
             self.setup_transmission_simple(connection, configuration)
-        else:
-            self.setup_translation_simple(dialect_default='flows')
-            dialect = 'aql'
-            self.add_dialect(dialect,  AqlQueryTranslator(options, dialect, None), default_include=True, default=True)
+
+        self.setup_translation_simple(dialect_default='flows')
+        dialect = 'aql'
+        self.add_dialect(dialect,  AqlQueryTranslator(options, dialect, None), default_include=True, default=True)

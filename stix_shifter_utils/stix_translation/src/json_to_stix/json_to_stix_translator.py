@@ -1,7 +1,7 @@
 import re
 import uuid
 
-from . import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
@@ -130,6 +130,10 @@ class DataSourceObjToStixObj:
         if stix_value is None or stix_value == '':
             DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
+        elif isinstance(stix_value, list):
+            if len(stix_value) == 0:
+                DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
+                return False
         elif key in props_map and 'valid_regex' in props_map[key]:
             pattern = re.compile(props_map[key]['valid_regex'])
             if unwrap and isinstance(stix_value, list):
@@ -154,6 +158,22 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
+    
+    #update the object key of the mapping
+    @staticmethod
+    def _update_object_key(ds_map, indx):
+        for key, value in ds_map.items():
+            if isinstance(value, dict):
+                if 'object' in value:
+                    value['object'] = str(value['object']) +'_' + str(indx)
+            if isinstance(value, list):
+                for item in value:
+                    if 'object' in item:
+                        item['object'] = str(item['object']) +'_' + str(indx)
+                        if 'references' in item:
+                            item['references'] = str(item['references']) +'_' + str(indx)
+
+        return ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
@@ -166,6 +186,9 @@ class DataSourceObjToStixObj:
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
                     cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
                                 "cust_object"}
+                    if to_map is None or to_map == '':
+                        self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
+                        return
                     DataSourceObjToStixObj._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map,
                                                                  cust_obj["object"])
             else:
@@ -179,6 +202,15 @@ class DataSourceObjToStixObj:
                 self._transform(object_map, observation, ds_map[ds_key], key, to_map)
             return
 
+        # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
+        if isinstance(to_map, list):
+            self.logger.debug('{} is a list; unwrapping.'.format(to_map))
+            for item in to_map:
+                if isinstance(item, dict):
+                    new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
+                    for field in item.keys():
+                        self._transform(object_map, observation, new_ds_map, field, item)
+        
         generic_hash_key = ''
 
         # get the stix keys that are mapped
@@ -299,16 +331,19 @@ class DataSourceObjToStixObj:
         :return: the input object converted to stix valid json
         """
         NUMBER_OBSERVED_KEY = 'number_observed'
+        FIRST_OBSERVED_KEY = 'first_observed'
+        LAST_OBSERVED_KEY = 'last_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
+        now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
 
         observation = {
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
             'created_by_ref': self.identity_id,
-            'created': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
-            'modified': "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]),
+            'created': now,
+            'modified': now,
             'objects': {}
         }
 
@@ -319,13 +354,11 @@ class DataSourceObjToStixObj:
         else:
             self.logger.debug("Not a dict: {}".format(obj))
 
-        # Add required property to the observation if it wasn't added via the mapping
-        if self.options.get('unmapped_fallback'):
-            if "first_observed" not in observation and "last_observed" not in observation:
-                observation['first_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
-                observation['last_observed'] = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
-
-        # Add required property to the observation if it wasn't added via the mapping
+        # Add required properties to the observation if it wasn't added from the mapping
+        if FIRST_OBSERVED_KEY not in observation:
+            observation[FIRST_OBSERVED_KEY] = now
+        if LAST_OBSERVED_KEY not in observation:
+            observation[LAST_OBSERVED_KEY] = now
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
 

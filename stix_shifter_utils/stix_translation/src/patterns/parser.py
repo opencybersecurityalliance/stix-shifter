@@ -7,6 +7,7 @@ from .pattern_objects import ObservationExpression, CombinedComparisonExpression
     ComparisonExpressionOperators, ComparisonComparators, SetValue, ComparisonExpression, CombinedObservationExpression, Pattern, Qualifier, StartStopQualifier
 
 logger = logging.getLogger(__name__)
+DEBUG = logger.getEffectiveLevel() == logging.DEBUG
 
 
 class STIXQueryBuilder(STIXPatternListener):
@@ -30,34 +31,40 @@ class STIXQueryBuilder(STIXPatternListener):
         return self._stack.pop()
 
     def exitObjectPath(self, ctx) -> None:
-        logger.debug("{} {} {}".format("ObjectPath", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObjectPath", ctx, ctx.getText()))
         # Single quotes are valid for any path but required for those with dashes.
         # They're not really relevant once they're parsed out, so just remove them
         self.push(ctx.getText().replace("'", ""))
 
     def exitPropTestLike(self, ctx: STIXPatternParser.PropTestLikeContext) -> None:
-        logger.debug("{} {} {}".format("PropTestLike", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("PropTestLike", ctx, ctx.getText()))
         value = self.pop()
         object_path = self.pop()
         negated = ctx.NOT()
         self.push(ComparisonExpression(object_path, value, ComparisonComparators.Like, negated=negated))
 
     def exitPrimitiveLiteral(self, ctx) -> None:
-        logger.debug("{} {} {}".format("PrimitiveLiteral", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("PrimitiveLiteral", ctx, ctx.getText()))
         # This can be TimestampLiteral or BoolLiteral.  These should be handed with more specific targets, e.g.
         #   exitTimestampLiteral and exitBoolLiteral.
         # self.push(ctx.getText().strip("'"))
+        pass
 
     def exitPropTestRegex(self, ctx: STIXPatternParser.PropTestRegexContext) -> None:
-        logger.debug("{} {} {}".format("PropTestRegex", ctx, ctx.getText()))
-        logger.debug("stack={}".format(self._stack))
+        if DEBUG:
+            logger.debug("{} {} {}".format("PropTestRegex", ctx, ctx.getText()))
+            logger.debug("stack={}".format(self._stack))
         value = self.pop()
         object_path = self.pop()
         negated = ctx.NOT()
         self.push(ComparisonExpression(object_path, value, ComparisonComparators.Matches, negated=negated))
 
     def exitPropTestEqual(self, ctx: STIXPatternParser.PropTestEqualContext) -> None:
-        logger.debug("{} {} {} | stack={}".format("PropTestEqual", ctx, ctx.getText(), self._stack))
+        if DEBUG:
+            logger.debug("{} {} {} | stack={}".format("PropTestEqual", ctx, ctx.getText(), self._stack))
         value = self.pop()
         object_path = self.pop()
         negated = ctx.NOT()
@@ -71,7 +78,8 @@ class STIXQueryBuilder(STIXPatternListener):
         self.push(ComparisonExpression(object_path, value, comparator, negated=negated))
 
     def exitPropTestOrder(self, ctx: STIXPatternParser.PropTestOrderContext) -> None:
-        logger.debug("{} {} {} | stack={}".format("PropTestOrder", ctx, ctx.getText(), self._stack))
+        if DEBUG:
+            logger.debug("{} {} {} | stack={}".format("PropTestOrder", ctx, ctx.getText(), self._stack))
         value = self.pop()
         object_path = self.pop()
         negated = str(ctx.NOT()) == "NOT"
@@ -90,7 +98,8 @@ class STIXQueryBuilder(STIXPatternListener):
         self.push(ComparisonExpression(object_path, value, comparator=comparator, negated=negated))
 
     def exitPropTestSet(self, ctx: STIXPatternParser.PropTestSetContext) -> None:
-        logger.debug("{} {} {} | stack={}".format("PropTestSet", ctx, ctx.getText(), self._stack))
+        if DEBUG:
+            logger.debug("{} {} {} | stack={}".format("PropTestSet", ctx, ctx.getText(), self._stack))
         vals = self.pop()
         object_path = self.pop()
         negated = str(ctx.NOT()) == "NOT"
@@ -117,7 +126,8 @@ class STIXQueryBuilder(STIXPatternListener):
 
     def exitOrderableLiteral(self, ctx: STIXPatternParser.OrderableLiteralContext):
         """  Can be IntPosLiteral, IntNegLiteral, FloatPosLiteral, FloatNegLiteral, stringLiteral, BinaryLiteral, HexLiteral, TimestampLiteral """
-        logger.debug("{} {} {}".format("OrderableLiteral", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("OrderableLiteral", ctx, ctx.getText()))
         if ctx.stringLiteral():
             pass  # Strings should have already been pushed onto the stack
         elif ctx.IntPosLiteral() or ctx.IntNegLiteral():
@@ -135,13 +145,15 @@ class STIXQueryBuilder(STIXPatternListener):
             self.push(ts)
 
     def exitComparisonExpressionAnded(self, ctx):
-        logger.debug("{} {} {}".format("ComparisonExpressionAnded", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ComparisonExpressionAnded", ctx, ctx.getText()))
         exp1 = self.pop()
         exp2 = self.pop()
         self.push(CombinedComparisonExpression(exp1, exp2, ComparisonExpressionOperators.And))
 
     def exitComparisonExpressionOred(self, ctx) -> None:
-        logger.debug("{} {} {}".format("ComparisonExpressionOred", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ComparisonExpressionOred", ctx, ctx.getText()))
         exp1 = self.pop()
         exp2 = self.pop()
         self.push(CombinedComparisonExpression(exp1, exp2, ComparisonExpressionOperators.Or))
@@ -152,20 +164,23 @@ class STIXQueryBuilder(STIXPatternListener):
 
     def exitObservationExpressionSimple(self, ctx):
         # Roughly analogous to CQL DataModelQuery
-        logger.debug("{} {} {}".format("ObservationExpressionSimple", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObservationExpressionSimple", ctx, ctx.getText()))
         comparison_expression = self.pop()
 
         # Done with this observation expression, the next one might have a different object type
         # object_name = self._current_object_type
         # self._current_object_type = None
 
-        logger.debug("Current Parser Stack: {}".format(self._stack))
+        if DEBUG:
+            logger.debug("Current Parser Stack: {}".format(self._stack))
         # logger.debug("Building DMQ with object_name={}, action={}, query={}".format(object_name, self.action, query))
         # self.push(DataModelQuery(object_name=object_name, action=self.action, query=query))
         self.push(ObservationExpression(comparison_expression))
 
     def exitObservationExpressionAnd(self, ctx: STIXPatternParser.ObservationExpressionAndContext):
-        logger.debug("{} {} {}".format("ObservationExpressionAnd", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObservationExpressionAnd", ctx, ctx.getText()))
         if ctx.AND():
             expr2 = self.pop()
             expr1 = self.pop()
@@ -173,7 +188,8 @@ class STIXQueryBuilder(STIXPatternListener):
             self.push(CombinedObservationExpression(expr1, expr2, operator))
 
     def exitObservationExpressionOr(self, ctx: STIXPatternParser.ObservationExpressionOrContext):
-        logger.debug("{} {} {}".format("ObservationExpressionOr", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObservationExpressionOr", ctx, ctx.getText()))
         if ctx.OR():  # Check if there's OR'd Observation Expressions
             expr2 = self.pop()
             expr1 = self.pop()
@@ -181,10 +197,13 @@ class STIXQueryBuilder(STIXPatternListener):
             self.push(CombinedObservationExpression(expr1, expr2, operator))
 
     def exitObservationExpressionStartStop(self, ctx: STIXPatternParser.ObservationExpressionStartStopContext):
-        logger.debug("{} {} {}".format("ObservationExpressionStartStop", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObservationExpressionStartStop", ctx, ctx.getText()))
         qualifier = ctx.startStopQualifier()
         qualifier_text = qualifier.getText()  # Ex: "START'2016-06-01T00:00:00Z'STOP'2016-06-01T01:11:11Z'"
-        observation = ctx.observationExpression()
+        if DEBUG:
+            # observation = ctx.observationExpression()
+            pass
         expression = self.pop()
         start_time = str(qualifier.TimestampLiteral(i=0))
         stop_time = str(qualifier.TimestampLiteral(i=1))
@@ -192,7 +211,8 @@ class STIXQueryBuilder(STIXPatternListener):
         self.push(observation_expression_with_qualifier)
 
     def exitObservationExpressions(self, ctx: STIXPatternParser.ObservationExpressionsContext):
-        logger.debug("{} {} {}".format("ObservationExpressions", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("ObservationExpressions", ctx, ctx.getText()))
         if ctx.FOLLOWEDBY():
             expr2 = self.pop()
             expr1 = self.pop()
@@ -200,18 +220,21 @@ class STIXQueryBuilder(STIXPatternListener):
             self.push(CombinedObservationExpression(expr1, expr2, operator))
 
     def exitPattern(self, ctx):
-        logger.debug("{} {} {}".format("Pattern", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("Pattern", ctx, ctx.getText()))
         observation_expression = self.pop()
         self.push(Pattern(observation_expression))
 
     def exitPropTestIsSuperset(self, ctx: STIXPatternParser.PropTestIsSupersetContext) -> None:
-        logger.debug("{} {} {}".format("exitPropTestIsSuperset", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("exitPropTestIsSuperset", ctx, ctx.getText()))
         value = self.pop()
         object_path = self.pop()
         self.push(ComparisonExpression(object_path, value, ComparisonComparators.IsSuperSet))
 
     def exitPropTestIsSubset(self, ctx: STIXPatternParser.PropTestIsSubsetContext) -> None:
-        logger.debug("{} {} {}".format("propTestIsSubset", ctx, ctx.getText()))
+        if DEBUG:
+            logger.debug("{} {} {}".format("propTestIsSubset", ctx, ctx.getText()))
         value = self.pop()
         object_path = self.pop()
         negated = ctx.NOT()

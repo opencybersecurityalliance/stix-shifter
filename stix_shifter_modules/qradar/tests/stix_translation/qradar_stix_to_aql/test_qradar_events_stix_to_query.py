@@ -74,7 +74,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
         # Expect the STIX and to convert to an AQL OR.
-        where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE url = 'www.example.com' OR (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
@@ -132,7 +132,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_pattern_with_three_observation_exps_one_with_unmapped_attribute(self):
         stix_pattern = "[file:name = 'some_file.exe' AND network-traffic:some_invalid_attribute = 'whatever'] OR [url:value = 'www.example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (url = 'www.example.com') OR ((sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE url = 'www.example.com' OR (sourcemac = '00-00-5E-00-53-00' OR destinationmac = '00-00-5E-00-53-00') {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_user_account_query(self):
@@ -252,7 +252,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_generic_filehash_query(self):
         stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE filehash = 'sha256hash' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE sha256hash = 'sha256hash' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     # def test_sha256_filehash_query(self):
@@ -292,7 +292,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_nested_parenthesis_in_pattern(self):
         stix_pattern = "[(ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '100.100.122.90') AND network-traffic:src_port = 37020] OR [user-account:user_id = 'root'] AND [url:value = 'www.example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83'))) OR ((username = 'root') OR (url = 'www.example.com')) {} {}".format(default_limit, default_time)
+        where_statement = "WHERE sourceport = '37020' AND ((sourceip = '100.100.122.90' OR destinationip = '100.100.122.90' OR identityip = '100.100.122.90') OR (sourceip = '192.168.122.83' OR destinationip = '192.168.122.83' OR identityip = '192.168.122.83')) OR username = 'root' OR url = 'www.example.com' {} {}".format(default_limit, default_time)
         assert query['queries'] == [selections + from_statement + where_statement]
 
     def test_complex_multiple_comparison_expression(self):
@@ -420,7 +420,19 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_in_operators(self):
-        stix_pattern = "[network-traffic:dst_port IN ('22','443')]"
+        stix_pattern = "[network-traffic:dst_ref.value IN ('1.1.1.1', '2.2.2.2')] OR [network-traffic:dst_port IN ('22','443')]"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE str(destinationip) IN ('1.1.1.1', '2.2.2.2') OR destinationport IN ('22', '443') {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_hasoffense_query(self):
+        stix_pattern = "[x-qradar:has_offense = 'true']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE hasoffense = 'true' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_inoffense_query(self):
+        stix_pattern = "[x-qradar:INOFFENSE = '125']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE INOFFENSE('125') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

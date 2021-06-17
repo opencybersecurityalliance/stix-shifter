@@ -3,12 +3,12 @@
     "key": "user-account.user_id"
   },
   "LogSourceId": {
-    "key": "x__custom_property.log_source_id",
-    "cybox": false
+    "key": "x-custom-property.log_source_id",
+    "object": "x_custom_property"
   },
   "Magnitude": {
-    "key": "x__custom_property.magnitude",
-    "cybox": false
+    "key": "x-custom-property.magnitude",
+    "object": "x_custom_property"
   },
   "SourceIpV4": [
     {

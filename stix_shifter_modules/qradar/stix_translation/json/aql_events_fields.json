@@ -30,6 +30,9 @@
     "magnitude",
     "Filename as filename",
     "\"File Hash\" as filehash",
+    "\"SHA1 Hash\" as sha1hash",
+    "\"SHA256 Hash\" as sha256hash",
+    "\"MD5 Hash\" as md5hash",
     "\"File Path\" as filepath",
     "severity as eventseverity",
     "credibility",
@@ -64,6 +67,7 @@
     "UrlHost",
     "\"Process Name\" as ProcessName",
     "\"Process ID\" as ProcessId",
-    "\"Parent Process ID\" as ParentProcessId"
+    "\"Parent Process ID\" as ParentProcessId",
+    "hasoffense"
   ]
 }

@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+import json
 
 
 class BaseResultsConnector(object, metaclass=ABCMeta):
@@ -20,3 +21,11 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
                     error (str): error message (when success=False)
         """
         raise NotImplementedError()
+
+    def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
+        result = entry_point.create_results_connection(search_id, offset, length)
+        if result.get('success'):
+            data = result['data']
+            data = data[:int(length)]
+            result = entry_point.translate_results(data_source, json.dumps(data))
+        return result

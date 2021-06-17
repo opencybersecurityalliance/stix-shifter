@@ -1,7 +1,8 @@
 adal==1.2.2
 antlr4-python3-runtime==4.8
-boto3==1.12.40
+boto3==1.17.20
 flask==1.1.2
+pyOpenSSL==20.0.1
 flatten_json==0.1.7
 python-dateutil==2.8.1
 requests_toolbelt==0.9.1
@@ -10,4 +11,4 @@ stix2-validator==1.1.2
 xmltodict==0.12.0
 jsonmerge==1.7.0
 colorlog==4.1.0
-stix2-matcher==1.0.0
+stix2-matcher==2.0.1

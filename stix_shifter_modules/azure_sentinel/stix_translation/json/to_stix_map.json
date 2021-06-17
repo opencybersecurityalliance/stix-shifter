@@ -1,509 +1,603 @@
 {
     "eventDateTime": [
-    {
-      "key": "first_observed",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "cybox": false
-    }
-  ],
-  "event_count": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "azureTenantId": {
-    "key": "x_msazure_sentinel.tenant_id",
-    "cybox": false
-  },
-  "azureSubscriptionId": {
-    "key": "x_msazure_sentinel.subscription_id",
-    "cybox": false
-  },
-  "id": {
-    "key": "x_msazure_sentinel_alert.id",
-    "cybox": false
-  },
-  "title": {
-    "key": "x_msazure_sentinel_alert.title",
-    "cybox": false
-  },
-  "vendorInformation_provider": {
-    "key": "x_msazure_sentinel_alert.provider",
-    "cybox": false
-  },
-  "vendorInformation_vendor": {
-    "key": "x_msazure_sentinel_alert.vendor",
-    "cybox": false
-  },
-  "hostStates_0_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_0"
-  },
-  "hostStates_1_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_1"
-  },
-  "hostStates_2_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_2"
-  },
-  "hostStates_3_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_3"
-  },
-  "hostStates_0_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_0"
-  },
-  "hostStates_1_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_1"
-  },
-  "hostStates_2_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_2"
-  },
-  "hostStates_3_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_3"
-  },
-  "networkConnections_0_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip0"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt0",
-      "references": "src_ip0"
-    }
-  ],
-  "networkConnections_1_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip1"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt1",
-      "references": "src_ip1"
-    }
-  ],
-  "networkConnections_2_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip2"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt2",
-      "references": "src_ip2"
-    }
-  ],
-  "networkConnections_3_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip3"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt3",
-      "references": "src_ip3"
-    }
-  ],
-  "networkConnections_0_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip0"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt0",
-      "references": "dst_ip0"
-    }
-  ],
-  "networkConnections_1_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip1"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt1",
-      "references": "dst_ip1"
-    }
-  ],
-  "networkConnections_2_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip2"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt2",
-      "references": "dst_ip2"
-    }
-  ],
-  "networkConnections_3_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip3"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt3",
-      "references": "dst_ip3"
-    }
-  ],
-  "networkConnections_0_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt0",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_1_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt1",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_2_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt2",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_3_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt3",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_0_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt0",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_1_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt1",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_2_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt2",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_3_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt3",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_0_sourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt0",
-    "transformer": "ToInteger"
-  },
-  "fileStates_0_name": {
-    "key": "file.name",
-    "object": "file0"
-  },
-    "fileStates_1_name": {
-    "key": "file.name",
-    "object": "file1"
-  },
-  "fileStates_2_name": {
-    "key": "file.name",
-    "object": "file2"
-  },
-  "fileStates_3_name": {
-    "key": "file.name",
-    "object": "file3"
-  },
-  "fileStates_0_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file0"
-  },
-  "fileStates_1_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file1"
-  },
-  "fileStates_2_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file2"
-  },
-  "fileStates_3_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file3"
-  },
-  "fileStates_0_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file0"
-  },
-  "fileStates_1_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file1"
-  },
-  "fileStates_2_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file2"
-  },
-  "fileStates_3_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file3"
-  },
-  "processes_0_name": [
-    {
-    "key": "file.name",
-    "object": "file0"
-    },
-    {
-    "key": "process.name",
-    "object": "process0"
-    }
-  ],
-  "processes_1_name": [
-    {
-    "key": "file.name",
-    "object": "file1"
-    },
-    {
-    "key": "process.name",
-    "object": "process1"
-   }
-  ],
-  "processes_2_name": {
-    "key": "process.name",
-    "object": "process2"
-  },
-  "processes_3_name": {
-    "key": "process.name",
-    "object": "process3"
-  },
-  "processes_0_sha1": {
-    "key": "process.binary_ref",
-    "object": "process0",
-    "references": "file0"
-  },
-  "processes_1_sha1": {
-    "key": "process.binary_ref",
-    "object": "process1",
-    "references": "file1"
-  },
-  "processes_2_sha1": {
-    "key": "process.binary_ref",
-    "object": "process2",
-    "references": "file2"
-  },
-  "processes_3_sha1": {
-    "key": "process.binary_ref",
-    "object": "process3",
-    "references": "file3"
-  },
-  "processes_0_sha256": {
-    "key": "process.binary_ref",
-    "object": "process0",
-    "references": "file0"
-  },
-  "processes_1_sha256": {
-    "key": "process.binary_ref",
-    "object": "process1",
-    "references": "file1"
-  },
-  "processes_2_sha256": {
-    "key": "process.binary_ref",
-    "object": "process2",
-    "references": "file2"
-  },
-  "processes_3_sha256": {
-    "key": "process.binary_ref",
-    "object": "process3",
-    "references": "file3"
-  },
-  "processes_0_path": [
       {
-          "key": "directory.path",
-          "object": "directory0",
-          "transformer": "ToDirectoryPath"
+        "key": "first_observed",
+        "cybox": false
       },
       {
-          "key": "file.parent_directory_ref",
-          "object": "file0",
-          "references": "directory0"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process0",
-          "references": "file0"
+        "key": "last_observed",
+        "cybox": false
       }
-  ],
-  "processes_1_path": [
-      {
-          "key": "directory.path",
-          "object": "directory1",
-          "transformer": "ToDirectoryPath"
+    ],
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    "azureTenantId": {
+      "key": "x-msazure-sentinel.tenant_id",
+      "object": "sentinel"
+    },
+    "azureSubscriptionId": {
+      "key": "x-msazure-sentinel.subscription_id",
+      "object": "sentinel"
+    },
+    "activityGroupName": {
+      "key": "x-msazure-sentinel-alert.activityGroupName",
+      "object": "alert"
+    },
+    "assignedTo": {
+      "key": "x-msazure-sentinel-alert.assignedTo",
+      "object": "alert"
+    },
+    "category": {
+      "key": "x-msazure-sentinel-alert.category",
+      "object": "alert"
+    },
+    "closedDateTime": {
+      "key": "x-msazure-sentinel-alert.closedDateTime",
+      "object": "alert"
+    },
+    "cloudAppStates": {
+      "destinationServiceName": {
+        "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceName",
+        "object": "alert"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file1",
-          "references": "directory1"
+      "destinationServiceIp": {
+        "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceIp",
+        "object": "alert"
       },
-      {
-          "key": "process.binary_ref",
-          "object": "process1",
-          "references": "file1"
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.cloudAppStates.riskScore",
+        "object": "alert"
       }
-  ],
-  "processes_2_path": [
+    },
+    "comments": {
+      "key": "x-msazure-sentinel-alert.comments",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "confidence": {
+      "key": "x-msazure-sentinel-alert.confidence",
+      "object": "alert"
+    },
+    "createdDateTime": [
       {
-          "key": "directory.path",
-          "object": "directory2",
-          "transformer": "ToDirectoryPath"
+        "key": "created",
+        "cybox": false
       },
       {
-          "key": "file.parent_directory_ref",
-          "object": "file2",
-          "references": "directory2"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process2",
-          "references": "file2"
+        "key": "x-msazure-sentinel-alert.createddatetime",
+        "object": "alert"
       }
-  ],
-  "processes_3_path": [
-      {
-          "key": "directory.path",
-          "object": "directory3",
-          "transformer": "ToDirectoryPath"
+    ],
+    "description": {
+      "key": "x-msazure-sentinel-alert.description",
+      "object": "alert"
+    },
+    "detectionIds": {
+      "key": "x-msazure-sentinel-alert.detectionids",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "feedback": {
+      "key": "x-msazure-sentinel-alert.feedback",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "fileStates": {
+      "fileHash": {
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "file"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "file"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "file"
+        },
+        "authenticodeHash256": {
+          "key": "file.hashes.authenticodeHash256",
+          "object": "file"
+        },
+        "lsHash": {
+          "key": "file.hashes.lsHash",
+          "object": "file"
+        },
+        "ctph": {
+          "key": "file.hashes.ctph",
+          "object": "file"
+        },
+        "peSha1": {
+          "key": "file.hashes.peSha1",
+          "object": "file"
+        },
+        "peSha256": {
+          "key": "file.hashes.peSha256",
+          "object": "file"
+        },
+        "unknown": {
+          "key": "file.hashes.UNKNOWN",
+          "object": "file"
+        }
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file3",
-          "references": "directory3"
+      "name": {
+        "key": "file.name",
+        "object": "file"
       },
-      {
-          "key": "process.binary_ref",
-          "object": "process3",
-          "references": "file3"
+      "path": [
+        {
+            "key": "directory.path",
+            "object": "directory",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+        }
+      ],
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.fileStates.riskScore",
+        "object": "file"
       }
-  ],
-   "processes_0_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "process0"
-       }
-   ],
-  "processes_1_parentProcessName": [
-       {
+    },
+    "hostStates": {
+      "fqdn": {
+        "key": "domain-name.value",
+        "object": "host"
+      },
+      "isAzureAadJoined": {
+        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadJoined",
+        "object": "alert"
+      },
+      "isAzureAadRegistered": {
+        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadRegistered",
+        "object": "alert"
+      },
+      "isHybridAzureDomainJoined": {
+        "key": "x-msazure-sentinel-alert.hostStates.isHybridAzureDomainJoined",
+        "object": "alert"
+      },
+      "os": {
+        "key": "x-msazure-sentinel-alert.hostStates.os",
+        "object": "alert"
+      },
+      "privateIpAddress": {
+        "key": "ipv4-addr.value"
+      },
+      "publicIpAddress": {
+        "key": "ipv4-addr.value"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.hostStates.riskScore",
+        "object": "alert"
+      }
+    },
+    "id": {
+      "key": "x-msazure-sentinel-alert.providerid",
+      "object": "alert"
+    },
+    "incidentIds": {
+      "key": "x-msazure-sentinel-alert.incidentIds",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "lastModifiedDateTime": [
+      {
+        "key": "modified",
+        "cybox": false
+      },
+      {
+        "key": "x-msazure-sentinel-alert.lastmodifieddatetime",
+        "object": "alert"
+      }
+    ],
+    "malwareStates": {
+      "category": {
+        "key": "x-msazure-sentinel-alert.malwareStates.category",
+        "object": "alert"
+      },
+      "family": {
+        "key": "x-msazure-sentinel-alert.malwareStates.family",
+        "object": "alert"
+      },
+      "name": {
+        "key": "x-msazure-sentinel-alert.malwareStates.name",
+        "object": "alert"
+      },
+      "severity": {
+        "key": "x-msazure-sentinel-alert.malwareStates.severity",
+        "object": "alert"
+      },
+      "wasRunning": {
+        "key": "x-msazure-sentinel-alert.malwareStates.wasRunning",
+        "object": "alert"
+      }
+    },
+    "networkConnections": {
+      "applicationName": {
+        "key": "software.name"
+      },
+      "destinationAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        }
+      ],
+      "destinationLocation": {
+        "key": "x-msazure-sentinel-alert.networkConnections.destinationLocation",
+        "object": "alert"
+      },
+      "destinationDomain": {
+        "key": "domain-name.value",
+        "transformer": "ToDomainName"
+      },
+      "destinationPort": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "destinationUrl": {
+        "key": "url.value",
+        "object": "url"
+      },
+      "direction": {
+        "key": "x-msazure-sentinel-alert.networkConnections.direction",
+        "object": "alert"
+      },
+      "domainRegisteredDateTime": {
+        "key": "x-msazure-sentinel-alert.networkConnections.domainRegisteredDateTime",
+        "object": "alert"
+      },
+      "localDnsName": {
+        "key": "x-msazure-sentinel-alert.networkConnections.localDnsName",
+        "object": "alert"
+      },
+      "natDestinationAddress": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natDestinationAddress",
+        "object": "alert"
+      },
+      "natDestinationPort": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natDestinationPort",
+        "object": "alert"
+      },
+      "natSourceAddress": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natSourceAddress",
+        "object": "alert"
+      },
+      "natSourcePort": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natSourcePort",
+        "object": "alert"
+      },
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "group": "True",
+        "transformer": "ToLowercaseArray"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.networkConnections.riskScore",
+        "object": "alert"
+      },
+      "sourceAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "src_ip"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt",
+          "references": "src_ip"
+        }
+      ],
+      "sourceLocation": {
+        "key": "x-msazure-sentinel-alert.networkConnections.sourceLocation",
+        "object": "alert"
+      },
+      "sourcePort": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "status": {
+        "key": "x-msazure-sentinel-alert.networkConnections.status",
+        "object": "alert"
+      },
+      "urlParameters": {
+        "key": "x-msazure-sentinel-alert.networkConnections.urlParameters",
+        "object": "alert"
+      }
+    },
+    "processes": {
+      "accountName": [
+        {
+          "key": "user-account.user_id",
+          "object": "user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process",
+          "references": "user"
+        }
+      ],
+      "commandLine": {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      "createdDateTime": {
+        "key": "process.created",
+        "object": "process"
+      },
+      "fileHash": {
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "processType"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "processType"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "processType"
+        },
+        "authenticodeHash256": {
+          "key": "file.hashes.authenticodeHash256",
+          "object": "processType"
+        },
+        "lsHash": {
+          "key": "file.hashes.lsHash",
+          "object": "processType"
+        },
+        "ctph": {
+          "key": "file.hashes.ctph",
+          "object": "processType"
+        },
+        "peSha1": {
+          "key": "file.hashes.peSha1",
+          "object": "processType"
+        },
+        "peSha256": {
+          "key": "file.hashes.peSha256",
+          "object": "processType"
+        },
+        "unknown": {
+          "key": "file.hashes.UNKNOWN",
+          "object": "processType"
+        }
+      },
+      "integrityLevel": {
+        "key": "x-msazure-sentinel-alert.processes.integrityLevel",
+        "object": "alert"
+      },
+      "isElevated": {
+        "key": "x-msazure-sentinel-alert.processes.isElevated",
+        "object": "alert"
+      },
+      "name": {
+        "key": "process.name",
+        "object": "process"
+      },
+      "parentProcessCreatedDateTime": {
+        "key": "process.created",
+        "object": "process_parent"
+      },
+      "parentProcessId": [
+        {
+          "key": "process.pid",
+          "object": "parent_process"
+        },
+        {
           "key": "process.parent_ref",
-          "object": "process1",
-          "references": "process0"
-       }
-   ],
-  "processes_2_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "ppn2"
-       },
-       {
-          "key": "process.parent_ref",
-          "object": "process2",
-          "references": "ppn2"
-       }
-   ],
-  "processes_3_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "ppn3"
-       },
-       {
-          "key": "process.parent_ref",
-          "object": "process3",
-          "references": "ppn3"
-       }
-   ],
-  "fileStates_0_path": [
-      {
-          "key": "directory.path",
-          "object": "directory0",
-          "transformer": "ToDirectoryPath"
+          "object": "process",
+          "references": "parent_process"
+        }
+      ],
+      "parentProcessName": {
+        "key": "process.name",
+        "object": "process_parent"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file0",
-          "references": "directory0"
-      }
-  ],
-  "fileStates_1_path": [
-      {
-          "key": "directory.path",
-          "object": "directory1",
-          "transformer": "ToDirectoryPath"
+      "path": {
+        "key": "directory.path",
+        "object": "dir"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file1",
-          "references": "directory1"
+      "processId": {
+        "key": "process.pid",
+        "object": "process"
       }
-  ],
-  "fileStates_2_path": [
-      {
-          "key": "directory.path",
-          "object": "directory2",
-          "transformer": "ToDirectoryPath"
+    },
+    "recommendedActions": {
+      "key": "x-msazure-sentinel-alert.recommendedactions",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "registryKeyStates": {
+      "hive": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.hive",
+        "object": "alert",
+        "transformer": "ToString"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file2",
-          "references": "directory2"
-      }
-  ],
-  "fileStates_3_path": [
-      {
-          "key": "directory.path",
-          "object": "directory3",
-          "transformer": "ToDirectoryPath"
+      "key": {
+        "key": "windows-registry-key.key",
+        "object": "registry"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file3",
-          "references": "directory3"
+      "oldKey": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldKey",
+        "object": "alert"
+      },
+      "oldValueData": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueData",
+        "object": "alert"
+      },
+      "oldValueName": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueName",
+        "object": "alert"
+      },
+      "operation": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.operation",
+        "object": "alert",
+        "transformer": "ToString"
+      },
+      "processId": {
+        "key": "process.pid"
+      },
+      "valueData": {
+        "key": "extensions.windows-registry-value-type.valueData",
+        "object": "registry"
+      },
+      "valueName": {
+        "key": "extensions.windows-registry-value-type.name",
+        "object": "registry"
+      },
+      "valueType": {
+        "key": "extensions.windows-registry-value-type.valuetype",
+        "object": "registry",
+        "transformer": "ToString"
       }
-  ],
-  "userStates_0_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an0"
-  },
-  "userStates_1_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an1"
-  },
-  "userStates_2_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an2"
-  },
-  "userStates_3_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an3"
-  },
-  "userStates_0_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt0"
-  },
-  "userStates_1_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt1"
-  },
-  "userStates_2_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt2"
-  },
-  "userStates_3_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt3"
-  }
+    },
+    "securityResources": {
+      "resource": {
+        "key": "x-msazure-sentinel-alert.securityresources.resource",
+        "object": "alert"
+      },
+      "resourceType": {
+        "key": "x-msazure-sentinel-alert.securityresources.resourcetype",
+        "object": "alert",
+        "transformer": "ToString"
+      }
+    },
+    "severity": {
+      "key": "x-msazure-sentinel-alert.severity",
+      "object": "alert"
+    },
+    "sourceMaterials": {
+      "key": "x-msazure-sentinel-alert.sourcematerials",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "status": {
+      "key": "x-msazure-sentinel-alert.status",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "tags": {
+      "key": "x-msazure-sentinel-alert.tags",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "title": {
+      "key": "x-msazure-sentinel-alert.title",
+      "object": "alert"
+    },
+    "triggers": {
+      "name": {
+        "key": "x-msazure-sentinel-alert.triggers.name",
+        "object": "alert"
+      },
+      "type": {
+        "key": "x-msazure-sentinel-alert.triggers.type",
+        "object": "alert"
+      },
+      "value": {
+        "key": "x-msazure-sentinel-alert.triggers.value",
+        "object": "alert"
+      }
+    },
+    "userStates": {
+      "aadUserId": {
+        "key": "x-msazure-sentinel-alert.userStates.aaduserid",
+        "object": "alert"
+      },
+      "accountName": {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      "domainName": {
+        "key": "domain-name.value"
+      },
+      "emailRole": {
+        "key": "x-msazure-sentinel-alert.userStates.emailrole",
+        "object": "alert"
+      },
+      "isVpn": {
+        "key": "x-msazure-sentinel-alert.userStates.isvpn",
+        "object": "alert"
+      },
+      "logonDateTime": {
+        "key": "user-account.account_last_login",
+        "object": "user"
+      },
+      "logonId": {
+        "key": "user-account.account_login",
+        "object": "user"
+      },
+      "logonIp": {
+        "key": "ipv4-addr.value"
+      },
+      "logonLocation": {
+        "key": "x-msazure-sentinel-alert.userStates.logonLocation",
+        "object": "alert"
+      },
+      "logonType": {
+        "key": "x-msazure-sentinel-alert.userStates.logonType",
+        "object": "alert"
+      },
+      "onPremisesSecurityIdentifier": {
+        "key": "x-msazure-sentinel-alert.userStates.onpremisessecurityidentifier",
+        "object": "alert"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.userStates.riskScore",
+        "object": "alert"
+      },
+      "userAccountType": {
+        "key": "x-msazure-sentinel-alert.userStates.useraccounttype",
+        "object": "alert"
+      },
+      "userPrincipalName": {
+        "key": "x-msazure-sentinel-alert.userStates.userPrincipalName",
+        "object": "alert"
+      }
+    },
+    "vendorInformation": {
+      "provider": {
+        "key": "software.name",
+        "object": "application"
+      },
+      "vendor": {
+        "key": "software.vendor",
+        "object": "application"
+      },
+      "providerVersion": {
+        "key": "software.version",
+        "object": "application"
+      },
+      "subProvider": {
+        "key": "x-msazure-sentinel-alert.vendorinformation.subprovider",
+        "object": "alert"
+      }
+    },
+    "vulnerabilityStates": {
+      "cve": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.cve",
+        "object": "alert"
+      },
+      "severity": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.severity",
+        "object": "alert"
+      },
+      "wasRunning": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.wasRunning",
+        "object": "alert"
+      }
+    }
 }

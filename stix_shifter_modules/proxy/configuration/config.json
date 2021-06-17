@@ -5,7 +5,7 @@
         },
         "help": {
             "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-proxy.html"
+            "default": "data-sources.html"
         },
         "options": {
             "proxy_host": {
@@ -14,7 +14,14 @@
             },
             "proxy_port": {
                 "type": "number",
-                "default": 5000
+                "default": 5000,
+                "min": 1,
+                "max": 65535
+            },
+            "proxy_cert": {
+                "type": "password",
+                "optional": true,
+                "hidden": true
             },
             "destination": {
                 "type": "text"

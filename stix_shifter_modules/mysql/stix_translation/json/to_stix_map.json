@@ -1,0 +1,85 @@
+{
+  "source_ipaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "dest_ipaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "entry_time": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "url": {
+    "key": "url.value"
+  },
+  "source_port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "dest_port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "fl"
+    }
+  ],
+  "sha256hash": {
+    "key": "file.hashes.SHA-256",
+    "object": "fl"
+  },
+  "md5hash": {
+    "key": "file.hashes.MD5",
+    "object": "fl"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "file_path": [
+    {
+      "key": "directory.path",
+      "object": "file_directory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "file_directory"
+    }
+  ]
+}

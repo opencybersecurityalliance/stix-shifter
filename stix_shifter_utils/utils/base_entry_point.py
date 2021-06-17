@@ -15,6 +15,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector impor
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 OPTION_LANGUAGE = 'language'
 
@@ -55,7 +56,9 @@ class BaseEntryPoint:
             validation_obj = param_validator(self.__connector_module, validation_obj)
             connection.clear()
             configuration.clear()
+            options.clear()
             connection.update(validation_obj['connection'])
+            options.update(validation_obj['connection']['options'])
             configuration.update(validation_obj['configuration'])
 
     def translation(func):
@@ -169,7 +172,12 @@ class BaseEntryPoint:
     @translation
     def translate_results(self, data_source, data):
         translator = self.get_results_translator()
-        return translator.translate_results(data_source, data)
+        try:
+            return translator.translate_results(data_source, data)
+        except Exception as ex:
+            result = {}
+            ErrorResponder.fill_error(result, message_struct={'exception': ex})
+            return result
 
     @translation
     def get_dialects(self, include_hidden=False):
@@ -254,6 +262,10 @@ class BaseEntryPoint:
     @transmission
     def create_results_connection(self, search_id, offset, length):
         return self.__results_connector.create_results_connection(search_id, offset, length)
+
+    @transmission
+    def create_results_stix_connection(self, search_id, offset, length, data_source):
+        return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
 
     def set_delete_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):

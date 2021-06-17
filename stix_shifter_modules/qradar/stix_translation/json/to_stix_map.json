@@ -115,11 +115,11 @@
     },
     {
       "key": "x-ibm-finding.dst_ip_ref",
-      "object": "finding", 
-      "references": "dst_ip" 
+      "object": "finding",
+      "references": "dst_ip"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -135,7 +135,7 @@
       "references": "dst_ip"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -223,8 +223,8 @@
     },
     {
       "key": "x-ibm-finding.src_ip_ref",
-      "object": "finding", 
-      "references": "src_ip" 
+      "object": "finding",
+      "references": "src_ip"
     },
     {
       "key": "x-oca-asset.ip_refs",
@@ -233,7 +233,7 @@
       "group": true
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -249,7 +249,7 @@
       "references": "src_ip"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -324,7 +324,7 @@
       "references": "dns_domain"
     },
     {
-      "key": "x-oca-event.nt_ref",
+      "key": "x-oca-event.network_ref",
       "object": "event",
       "references": "nt"
     }
@@ -459,6 +459,21 @@
       "object": "x-qradar"
     }
   ],
+  "dnsdomainname": [
+    {
+      "key": "url.value",
+      "object": "url"
+    },
+    {
+      "key": "domain-name.value",
+      "object": "domain1",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-qradar.domain_name",
+      "object": "x-qradar"
+    }
+  ],
   "flowsource": [
     {
       "key": "x-qradar.flow_source",
@@ -542,6 +557,86 @@
     "object": "x-qradar",
     "transformer": "ToInteger"
   },
+  "flowtype": {
+    "key": "x-qradar.flow_type",
+    "object": "x-qradar"
+  },
+  "fileentropy": {
+    "key": "x-qradar.file_entropy",
+    "object": "x-qradar"
+  },
+  "httphost": [
+    {
+      "key": "url.value",
+      "object": "url"
+    },
+    {
+      "key": "network-traffic.extensions.http-request-ext.request_header.Host",
+      "object": "nt"
+    }
+  ],
+  "httpreferrer": {
+    "key": "network-traffic.extensions.http-request-ext.request_header.Referer",
+    "object": "nt"
+  },
+  "httpresponsecode": {
+    "key": "x-qradar.http_response_code",
+    "object": "x-qradar"
+  },
+  "httpserver": {
+    "key": "network-traffic.extensions.http-request-ext.request_header.Server",
+    "object": "nt"
+  },
+  "httpuseragent": {
+    "key": "network-traffic.extensions.http-request-ext.request_header.User-Agent",
+    "object": "nt"
+  },
+  "httpversion": {
+    "key": "network-traffic.extensions.http-request-ext.request_version",
+    "object": "nt"
+  },
+  "tlsja3hash": {
+    "key": "x-qradar.tls_ja3_hash",
+    "object": "x-qradar"
+  },
+  "tlsja3shash": {
+    "key": "x-qradar.tls_ja3s_hash",
+    "object": "x-qradar"
+  },
+  "suspectcontentdescriptions": {
+    "key": "x-qradar.suspect_content_descriptions",
+    "object": "x-qradar",
+    "transformer": "ToLowercaseArray"
+  },
+  "flowid": {
+    "key": "network-traffic.ipfix.flowId",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "contenttype": [
+    {
+      "key": "network-traffic.extensions.http-request-ext.request_header.Content-Type",
+      "object": "nt"
+    },
+    {
+      "key": "file.mime_type",
+      "object": "fl"
+    },
+    {
+      "key": "email-message.content_type",
+      "object": "email"
+    }
+  ],
+  "tlsservernameindication": [
+    {
+      "key": "url.value",
+      "object": "url"
+    },
+    {
+      "key": "x-qradar.tls_server_name_indication",
+      "object": "x-qradar"
+    }
+  ],
   "Image": [
     {
       "key": "file.name",
@@ -742,12 +837,12 @@
       "transformer": "ToBase64"
     },
     {
-      "key": "x-event.original_ref",
+      "key": "x-oca-event.original_ref",
       "object": "event",
       "references": "event_payload"
     },
     {
-      "key": "x-event.original",
+      "key": "x-oca-event.original",
       "object": "event"
     }
   ],
@@ -777,5 +872,9 @@
       "group": true,
       "references": ["service_file_name"]
     }
-  ]
+  ],
+  "hasoffense": {
+    "key": "x-qradar.has_offense",
+    "object": "x-qradar"
+  }
 }
