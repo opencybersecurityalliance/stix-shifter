@@ -51,13 +51,24 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         try:
             response = self.api_client.ping_box()
-            return self._handle_errors(response, return_obj)
+            response_code = response.code
+            response_txt = response.read().decode('utf-8')
+            if 199 < response_code < 300:
+                return_obj['success'] = True
+            elif isinstance(json.loads(response_txt), dict):
+                response_error_ping = json.loads(response_txt)
+                response_dict = response_error_ping['errors'][0]
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            else:
+                raise Exception(response_txt)
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
+        
+        return return_obj
             
     def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
@@ -130,7 +141,7 @@ class Connector(BaseSyncConnector):
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
-
+        result_limit = offset + length
         response_txt = None
         ids_obj = dict()
         return_obj = dict()
@@ -140,7 +151,7 @@ class Connector(BaseSyncConnector):
             if self.init_error:
                 raise self.init_error
 
-            response = self.api_client.get_detections_IDs(query, self.result_limit)
+            response = self.api_client.get_detections_IDs(query, result_limit)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')
