@@ -3,7 +3,6 @@ from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector impor
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import traceback
 
 
 class Connector(BaseSyncConnector):
