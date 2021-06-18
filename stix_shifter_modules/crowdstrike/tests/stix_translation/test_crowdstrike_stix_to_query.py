@@ -80,7 +80,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[file:name = 'some_file.exe' AND domain-name:value = 'example.com']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((behaviors.filename: 'some_file.exe' + device.machine_domain: 'example.com') + "
+        queries = ["((behaviors.filename: 'some_file.exe' + ioc_type.domain: 'example.com') + "
                    "behaviors.timestamp:> '2002-06-02T07:10:42.958765')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

@@ -12,24 +12,18 @@
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
-        },
-        "selfSignedCert": {
-            "label": "CB Response connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         }
     },
     "configuration": {
         "auth": {
             "type" : "fields",
             "client_id": {
-                "type": "password"
+                "label": "Client Id",
+                "description": "Unique identifier of CrowdStrike API. It can be found in the API client table in the Falcon console"
             },
             "client_secret": {
-                "type": "password"
+                "label": "Client Secret",
+                "description": "Secret code of CrowdStrike API client. It can be found while creating a API client in Falcon console"
             }
         }
     }
