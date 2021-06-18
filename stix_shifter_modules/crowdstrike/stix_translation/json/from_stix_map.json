@@ -48,7 +48,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["device.machine_domain"]
+      "value": ["ioc_type.domain"]
     }
   },
   "user-account": {
