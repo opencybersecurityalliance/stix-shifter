@@ -30,7 +30,12 @@
         "key": "x-oca-asset.ip_refs",
         "object": "host",
         "references": ["src_ip"],
-        "unwrap": true
+        "group": true
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "RemoteIP": [
@@ -67,9 +72,17 @@
       "object": "nt",
       "transformer": "FormatTCPProtocol"
     },
-    "RemoteUrl": {
-      "key": "url.value"
-    },
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "url"
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": "url"
+      }
+    ],
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",
@@ -116,6 +129,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessParentFileName": [
@@ -138,11 +156,18 @@
         "references": "nc_parent_process_file"
       }
     ],
-    "InitiatingProcessId": {
-      "key": "process.pid",
-      "object": "nc_process",
-      "transformer": "ToInteger"
-    },
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "nc_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
+      }
+    ],
     "InitiatingProcessParentId": [
       {
         "key": "process.pid",
@@ -240,7 +265,7 @@
         "key": "x-oca-asset.mac_refs",
         "object": "host",
         "references": ["mac"],
-        "unwrap": true
+        "group": true
       }
     ],
     "DeviceName": [
@@ -261,6 +286,22 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "ActionType": {
+      "key": "x-oca-event.action",
+      "object": "event"
     }
   },
   "DeviceProcessEvents": {
@@ -568,7 +609,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ]
   },
   "DeviceFileEvents": {
     "Timestamp": [
@@ -808,7 +861,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ]
   },
   "DeviceRegistryEvents": {
     "Timestamp": [
@@ -1017,42 +1082,56 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ]
   },
   "DeviceNetworkInfo": {
-    "IpAddresses": [
+    "DeviceId": {
+      "key": "x-msatp.machine_id"
+    },
+    "DeviceName": [
       {
-        "key": "ipv4-addr.value",
-        "object": "host_ip",
-        "unwrap": true,
-        "transformer": "MsatpIpTransformer"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "host_ipv6",
-        "unwrap": true,
-        "transformer": "MsatpIpTransformer"
-      },
-      {
-        "key": "x-oca-asset.ip_refs",
-        "object": "host",
-        "references": [
-          "host_ip",
-          "host_ipv6"
-        ],
-        "unwrap": true
+        "key": "x-oca-asset.hostname",
+        "object": "host"
       }
     ],
+    "IPAddresses": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "host_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "host_ip6"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "host",
+          "references": ["host_ip"]
+        }
+      ],
     "MacAddress": [
       {
         "key": "mac-addr.value",
-        "object": "host_mac"
+        "object": "host_mac",
+        "transformer": "FormatMac"
       },
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
         "references": ["host_mac"],
-        "unwrap": true
+        "group": true
       }
     ]
   }
