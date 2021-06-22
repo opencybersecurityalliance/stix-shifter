@@ -29,7 +29,9 @@
       {
         "key": "x-oca-asset.ip_refs",
         "object": "host",
-        "references": ["src_ip"],
+        "references": [
+          "src_ip"
+        ],
         "group": true
       },
       {
@@ -249,7 +251,9 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": ["mac"]
+        "references": [
+          "mac"
+        ]
       },
       {
         "key": "network-traffic.src_ref",
@@ -264,7 +268,9 @@
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
-        "references": ["mac"],
+        "references": [
+          "mac"
+        ],
         "group": true
       }
     ],
@@ -1107,20 +1113,37 @@
       }
     ],
     "IPAddresses": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "host_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "host_ip6"
-        },
-        {
-          "key": "x-oca-asset.ip_refs",
-          "object": "host",
-          "references": ["host_ip"]
-        }
-      ],
+      {
+        "key": "ipv4-addr.value",
+        "object": "host_ip4",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "host_ip6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "host_ip4",
+          "host_ip6"
+        ],
+        "unwrap": true
+      },
+      {
+        "key": "x-oca-event.ip_refs",
+        "object": "event",
+        "references": [
+          "resolved_ip",
+          "resolved_ipv6"
+        ],
+        "unwrap": true
+      }
+    ],
     "MacAddress": [
       {
         "key": "mac-addr.value",
@@ -1130,7 +1153,9 @@
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
-        "references": ["host_mac"],
+        "references": [
+          "host_mac"
+        ],
         "group": true
       }
     ]

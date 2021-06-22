@@ -6,6 +6,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import copy
 
+
 class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
@@ -14,7 +15,7 @@ class Connector(BaseSyncConnector):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        
+
         try:
             self.token = Connector.generate_token(connection, configuration)
             configuration['auth']['access_token'] = self.token
@@ -92,20 +93,42 @@ class Connector(BaseSyncConnector):
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
 
+                ##### JUST FOR TESTING ###########################
+                ip_addresses_lst = list()
+                # with open('C:\\Users\\AmitHaim\\Downloads\\IPAddresses.json', 'r') as f:
+                #     data = f.read()
+                #     arr = json.loads(data)
+                #     for obj in arr:
+                #         if 'ip_address' in obj:
+                #             ip_addresses_lst.append(obj['ip_address'])
+                # build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
+                #################################################
+
                 if lookup_table == "DeviceNetworkInfo":
-                    for k,v in build_data[lookup_table].items():
-                        if type(v) is str and v and v[0] == "[" and v[-1] == "]":
-                            try:
-                                #this is a woraround since unwrap doesnt work properly - if it is an ip address take only the first value
-                                arr = json.loads(v)
-                                if len(arr) > 0 and type(arr[0]) is dict and "IPAddress" in arr[0].keys():
-                                    build_data[lookup_table][k] = arr[0]["IPAddress"]
-                                #the next line will tranform the ip addressses array from containing objects to containing the ip addresses themselves
-                                #build_data[lookup_table][k] = [item["IPAddress"] if type(item) is dict and "IPAddress" in item.keys() else item for item in arr]
-                                #self.logger.info("ip", build_data[lookup_table][k])
-                            except Exception as ex:
-                                self.logger.error("error parsing json from value sorounded with []", ex)
-                elif lookup_table == "DeviceRegistryEvents":
+                    for k, v in build_data[lookup_table].items():
+                        if k == 'IPAddresses':
+                            ip_addresses_lst = list()
+                            arr = json.loads(v)
+                            for obj in arr:
+                                if 'IPAddress' in obj:
+                                    ip_addresses_lst.append(obj['IPAddress'])
+                            build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
+
+                # if lookup_table == "DeviceNetworkInfo":
+                #      for k, v in build_data[lookup_table].items():
+                #          if type(v) is str and v and v[0] == "[" and v[-1] == "]":
+                #              try:
+                #                 this is a woraround since unwrap doesnt work properly - if it is an ip address take only the first value
+                #                  arr = json.loads(v)
+                #                  if len(arr) > 0 and type(arr[0]) is dict and "IPAddress" in arr[0].keys():
+                #                     build_data[lookup_table][k] = arr[0]["IPAddress"]
+                #                 # the next line will tranform the ip addressses array from containing objects to containing the ip addresses themselves
+                #                 # build_data[lookup_table][k] = [item["IPAddress"] if type(item) is dict and "IPAddress" in item.keys() else item for item in arr]
+                #                 # self.logger.info("ip", build_data[lookup_table][k])
+                #             except Exception as ex:
+                #                 self.logger.error("error parsing json from value sorounded with []", ex)
+
+                if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
                     registry_build_data[lookup_table]["RegistryValues"] = []
                     registry_value_dict = {}
