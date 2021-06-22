@@ -93,17 +93,6 @@ class Connector(BaseSyncConnector):
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
 
-                ##### JUST FOR TESTING ###########################
-                ip_addresses_lst = list()
-                # with open('C:\\Users\\AmitHaim\\Downloads\\IPAddresses.json', 'r') as f:
-                #     data = f.read()
-                #     arr = json.loads(data)
-                #     for obj in arr:
-                #         if 'ip_address' in obj:
-                #             ip_addresses_lst.append(obj['ip_address'])
-                # build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
-                #################################################
-
                 if lookup_table == "DeviceNetworkInfo":
                     for k, v in build_data[lookup_table].items():
                         if k == 'IPAddresses':
