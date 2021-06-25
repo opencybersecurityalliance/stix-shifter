@@ -51,9 +51,8 @@ class APIClient:
         start = range_start if range_start else 0
         end = range_end if range_end else 0
         offset = start
-        fetch_count = 0
         max_fetch_count = 10
-        while True:
+        for i in range(0, max_fetch_count):
             code, response = self._fetch(endpoint, headers, payload, offset)
             resp_dict["code"] = code
             if code == 200:
@@ -77,10 +76,8 @@ class APIClient:
                 resp_dict["message"] = response["error"]["message"]
                 del resp_dict["data"]
                 break
-            fetch_count += 1
-            if fetch_count >= max_fetch_count:
+            if i == max_fetch_count - 1:
                 self.logger.warning("Reach max fetch count %s, stop loop", max_fetch_count)
-                break
         if resp_dict.get("code") == 200:
             self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
         return resp_dict
