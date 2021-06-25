@@ -9,7 +9,6 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
-
 from .visionone_util import remove_enclosed_quote
 
 REFERENCE_DATA_TYPES = {
@@ -47,12 +46,10 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-        # return '\'{}\''.format(value)
         return '\"{}\"'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
-        # value = "'%{value}%'".format(value=value)
         value = "{value}".format(value=value)
         return QueryStringPatternTranslator._escape_value(value)
 
