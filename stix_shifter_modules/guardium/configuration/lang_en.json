@@ -15,7 +15,7 @@
         },
         "selfSignedCert": {
             "label": "Guardium connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate or secure communication between web reports or REST API server and the authorized user"
+            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication between web reports or REST API server and the authorized user"
         },
         "sni": {
             "label": "Server Name Indicator",
