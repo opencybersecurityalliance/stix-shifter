@@ -1,9 +1,8 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
-            "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "label": "Trend Micro Vision One IP address or Hostname",
+            "description": "Specify the Trend Micro Vision One IP address or Hostname."
         },
         "port": {
             "label": "Host Port",
@@ -13,9 +12,9 @@
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
-        "cert": {
-            "label": "Synchronous Connection Certificate",
-            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
+        "selfSignedCert": {
+            "label": "ArcSight logger Connection Certificate",
+            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
         },
         "sni": {
             "label": "Server Name Indicator",

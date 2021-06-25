@@ -28,11 +28,6 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        },
-        "options": {
-            "timeout": {
-                "type": "number"
-            }
         }
     },
     "configuration": {
