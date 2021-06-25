@@ -64,7 +64,6 @@ class APIClient:
                     if len(logs) > range_start:
                         all_data += logs[range_start:range_end]
                     break
-                # pylint: disable=no-else-break
                 if not logs:
                     break
                 elif end and len(all_data) + len(logs) >= end - start:
