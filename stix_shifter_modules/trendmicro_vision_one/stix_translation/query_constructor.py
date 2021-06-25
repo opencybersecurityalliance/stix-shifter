@@ -53,7 +53,6 @@ class QueryStringPatternTranslator:
         value = "{value}".format(value=value)
         return QueryStringPatternTranslator._escape_value(value)
 
-    # pylint: disable=unused-argument
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -73,7 +72,6 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    # pylint: disable=unused-argument
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
