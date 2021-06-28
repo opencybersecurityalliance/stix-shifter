@@ -13,7 +13,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "ArcSight logger Connection Certificate",
+            "label": "Trend Micro Vision One Certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
         },
         "sni": {
