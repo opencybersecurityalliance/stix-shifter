@@ -39,6 +39,8 @@ class QueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
+        self.using_operators = set()
+        self.assigned_fields = set()
         self.qualified_queries = []
         self.translated = self.parse_expression(pattern, data_model_mapper.dialect)
         self.qualified_queries.append(self.translated)
@@ -107,9 +109,16 @@ class QueryStringPatternTranslator:
     def _is_reference_value(stix_field):
         return stix_field in ('src_ref.value', 'dst_ref.value')
 
-    def _lookup_comparison_operator(self, expression_operator):
+    def _lookup_comparison_operator(self, expression_operator, dialect):
         if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for VisionOne connector".format(expression_operator.name))
+        if dialect == 'messageActivityData':
+            if expression_operator in (ComparisonExpressionOperators.And, ComparisonExpressionOperators.Or):
+                self.using_operators.add(expression_operator)
+                if len(self.using_operators) > 1:
+                    raise NotImplementedError("Multiple operator is not support in MDL")
+            if expression_operator == ComparisonComparators.NotEqual:
+                raise NotImplementedError("NOT operator is not support in MDL")
         return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, dialect, qualifier=None) -> str:
@@ -118,8 +127,16 @@ class QueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+            if dialect == 'messageActivityData':
+                mapped_fields_set = set(mapped_fields_array)
+                intersection = self.assigned_fields.intersection(mapped_fields_set)
+                if intersection:
+                    logger.error(f"[{', '.join(intersection)}] mapped from {stix_field} has multiple criteria")
+                    raise NotImplementedError("Multiple criteria for one field is not support in MDL")
+                else:
+                    self.assigned_fields |= mapped_fields_set
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self._lookup_comparison_operator(expression.comparator)
+            comparator = self._lookup_comparison_operator(expression.comparator, dialect)
 
             if stix_field in ('start', 'end'):
                 transformer = TimestampToMilliseconds()
@@ -152,18 +169,14 @@ class QueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self._lookup_comparison_operator(expression.operator)
+            operator = self._lookup_comparison_operator(expression.operator, dialect)
             expression_01 = self._parse_expression(expression.expr1, dialect)
             expression_02 = self._parse_expression(expression.expr2, dialect)
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                if dialect == 'messageActivityData':
-                    raise NotImplementedError("Parenthesis is not supported in MDL")
                 expression_01 = "({})".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                if dialect == 'messageActivityData':
-                    raise NotImplementedError("Parenthesis is not supported in MDL")
                 expression_02 = "({})".format(expression_02)
             query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
@@ -174,7 +187,7 @@ class QueryStringPatternTranslator:
             return self._parse_expression(expression.comparison_expression, dialect, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparison_operator(expression.observation_expression.operator)
+                operator = self._lookup_comparison_operator(expression.observation_expression.operator, dialect)
                 expression_01 = self._parse_expression(expression.observation_expression.expr1, dialect)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 expression_02 = self._parse_expression(expression.observation_expression.expr2, dialect, expression.qualifier)
@@ -182,12 +195,10 @@ class QueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, dialect, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self._lookup_comparison_operator(expression.operator)
+            operator = self._lookup_comparison_operator(expression.operator, dialect)
             expression_01 = self._parse_expression(expression.expr1, dialect)
             expression_02 = self._parse_expression(expression.expr2, dialect)
             if expression_01 and expression_02:
-                if dialect == 'messageActivityData':
-                    raise NotImplementedError("Parenthesis is not support in MDL")
                 return "({}) {} ({})".format(expression_01, operator, expression_02)
             elif expression_01:
                 return "{}".format(expression_01)
