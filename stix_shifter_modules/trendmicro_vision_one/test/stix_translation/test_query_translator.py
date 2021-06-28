@@ -15,7 +15,8 @@ class TestStixParsingMixin:
 
     @staticmethod
     def _parse_query(stix_pattern, dialect):
-        return translation.translate(f'trendmicro_vision_one:{dialect}', 'query', '{}', stix_pattern)
+        query = translation.translate(f'trendmicro_vision_one:{dialect}', 'query', '{}', stix_pattern)
+        return query
 
     def retrieve_query(self, stix_pattern):
         queries: dict = self._parse_query(stix_pattern, self.get_dialect())
@@ -218,19 +219,31 @@ class TestStixParsingMessage(unittest.TestCase, TestStixParsingMixin):
 
     def test_operator_neq(self):
         pattern = "[domain-name:value != 'aaa.bbb.ccc']"
-        expectation = 'NOT (source_domain:"aaa.bbb.ccc")'
-        self._test_pattern(pattern, expectation)
-
-    def test_observation_and(self):
-        pattern = "[file:name = 'abc.txt'] AND [network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = '(spt:"443") AND (src : "127.0.0.1")'
+        # expectation = 'NOT (source_domain:"aaa.bbb.ccc")'
         result = self._parse_query(pattern, self.get_dialect())
         self.assertFalse(result['success'])
         self.assertEqual(result['code'], "not_implemented")
 
+    def test_observation_and(self):
+        pattern = "[file:name = 'abc.txt' AND network-traffic:src_ref.value = '127.0.0.1']"
+        expectation = 'source_ip : "127.0.0.1" AND file_name:"abc.txt"'
+        self._test_pattern(pattern, expectation)
+
     def test_observation_or(self):
-        pattern = "[file:name = 'abc.txt'] OR [network-traffic:src_ref.value = '127.0.0.1']"
+        pattern = "[file:name = 'abc.txt' OR network-traffic:src_ref.value = '127.0.0.1']"
+        expectation = 'source_ip : "127.0.0.1" OR file_name:"abc.txt"'
+        self._test_pattern(pattern, expectation)
+
+    def test_multiple_operator(self):
+        pattern = "[(email-message:to_refs[*].value = 'o365mc@aaa.bbb.ccc' OR email-message:subject = 'o365@aaa.bbb.ccc') AND network-traffic:src_ref.value = '127.0.0.1']"
         result = self._parse_query(pattern, self.get_dialect())
+        self.assertFalse(result['success'])
+        self.assertEqual(result['code'], "not_implemented")
+
+    def test_multiple_criteria(self):
+        pattern = "[network-traffic:src_ref.value = '127.0.0.1' OR network-traffic:src_ref.value = '1.1.1.1']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self._parse_query(pattern, self.get_dialect())
         self.assertFalse(result['success'])
         self.assertEqual(result['code'], "not_implemented")
 
