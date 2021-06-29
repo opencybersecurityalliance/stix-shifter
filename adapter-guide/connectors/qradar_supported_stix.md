@@ -186,4 +186,5 @@
 | x-qradar | suspect_content_descriptions | suspectcontentdescriptions |
 | x-qradar | tls_server_name_indication | tlsservernameindication |
 | x-qradar | registry_key | "Registry Key" |
+| x-qradar | has_offense | hasoffense |
 | <br> | | |

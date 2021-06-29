@@ -17,13 +17,13 @@ CONNECTORS = {
     "elastic_ecs": "Elasticsearch ECS", 
     "msatp": "Microsoft Defender for Endpoint",
     "security_advisor": "IBM Cloud Security Advisor",
-    "guardium": "IBM Guardium",
+    "guardium": "IBM Guardium Data Protection",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
     "azure_sentinel": "Microsoft Azure Sentinel",
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",
-    "crowdstrike": 'CrowdStrike'
+    "crowdstrike": 'CrowdStrike Falcon'
 }
 
 

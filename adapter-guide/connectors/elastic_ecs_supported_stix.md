@@ -92,6 +92,8 @@
 | windows-registry-key | key | registry |
 | windows-registry-key | values | registry |
 | <br> | | |
+| x-ecs | version | version |
+| <br> | | |
 | x-ecs-client | address | address |
 | x-ecs-client | domain | domain |
 | x-ecs-client | nat_ip | ip |
@@ -483,6 +485,4 @@
 | x509-certificate | validity_not_after | not_after |
 | x509-certificate | validity_not_before | not_before |
 | x509-certificate | subject | subject |
-| <br> | | |
-| x_ecs | version | version |
 | <br> | | |
