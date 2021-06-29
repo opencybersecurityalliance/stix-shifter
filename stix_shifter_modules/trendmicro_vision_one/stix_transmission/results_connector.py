@@ -10,10 +10,12 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         try:
-            min_range = offset
-            if length > 1000:
+            offset_i = int(offset)
+            len_i = int(length)
+            min_range = offset_i
+            if len_i > 1000:
                 self.logger.warning("The length exceeds length limit. Use default length: 1000")
-            max_range = offset + length if length <= 1000 else offset + 1000
+            max_range = offset_i + len_i if len_i <= 1000 else offset_i + 1000
             # Grab the response, extract the response code, and convert it to readable json
             response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
             response_code = response_dict["code"]
@@ -27,5 +29,5 @@ class ResultsConnector(BaseResultsConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
-            self.logger.error('error when getting search results: %s', err)
+            self.logger.error('error when getting search results: %s', err, exc_info=True)
             raise
