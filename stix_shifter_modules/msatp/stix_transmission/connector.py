@@ -11,6 +11,9 @@ class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
 
+    join_DeviceAlertEvents_query = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
+                                   'ReportId, $left.ReportId == $right.ReportId'
+
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
@@ -23,6 +26,19 @@ class Connector(BaseSyncConnector):
 
         except Exception as ex:
             self.init_error = ex
+
+    @staticmethod
+    def get_table_name(q):
+        ind_s = q.find('(', 1)
+        ind_e = q.find(')')
+        return q[ind_s + 1:ind_e]
+
+    @staticmethod
+    def join_query_with_alerts(query):
+        table = Connector.get_table_name(query)
+        join_query = Connector.join_DeviceAlertEvents_query.format(table)
+        query += join_query
+        return query
 
     @staticmethod
     def _handle_errors(response, return_obj):
@@ -70,68 +86,63 @@ class Connector(BaseSyncConnector):
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
-
         response_txt = None
         return_obj = dict()
 
         try:
             if self.init_error:
                 raise self.init_error
-            response = self.api_client.run_search(query, offset, length)
-            return_obj = self._handle_errors(response, return_obj)
-            response_json = json.loads(return_obj["data"])
-            return_obj['data'] = response_json['Results']
-            # Customizing the output json,
-            # Get 'TableName' attribute from each row of event data
-            # Create a dictionary with 'TableName' as key and other attributes in an event data as value
-            # Filter the "None" and empty values except for RegistryValueName, which support empty string
-            # Customizing of Registryvalues json
-            table_event_data = []
-            for event_data in return_obj['data']:
-                lookup_table = event_data['TableName']
-                event_data.pop('TableName')
-                build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+            # DEBUG
+            for q in query:
+                q_return_obj = dict()
+                joined_query = Connector.join_query_with_alerts(q)
+                response = self.api_client.run_search(joined_query, offset, 100)
+                q_return_obj = self._handle_errors(response, q_return_obj)
+                response_json = json.loads(q_return_obj["data"])
+                q_return_obj['data'] = response_json['Results']
+                # Customizing the output json,
+                # Get 'TableName' attribute from each row of event data
+                # Create a dictionary with 'TableName' as key and other attributes in an event data as value
+                # Filter the "None" and empty values except for RegistryValueName, which support empty string
+                # Customizing of Registryvalues json
+                table_event_data = []
+                for event_data in q_return_obj['data']:
+                    lookup_table = event_data['TableName']
+                    event_data.pop('TableName')
+                    build_data = dict()
+                    build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
 
-                if lookup_table == "DeviceNetworkInfo":
-                    for k, v in build_data[lookup_table].items():
-                        if k == 'IPAddresses':
-                            ip_addresses_lst = list()
-                            arr = json.loads(v)
-                            for obj in arr:
-                                if 'IPAddress' in obj:
-                                    ip_addresses_lst.append(obj['IPAddress'])
-                            build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
+                    if lookup_table == "DeviceNetworkInfo":
+                        for k, v in build_data[lookup_table].items():
+                            if k == 'IPAddresses':
+                                ip_addresses_lst = list()
+                                arr = json.loads(v)
+                                for obj in arr:
+                                    if 'IPAddress' in obj:
+                                        ip_addresses_lst.append(obj['IPAddress'])
+                                build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
 
-                # if lookup_table == "DeviceNetworkInfo":
-                #      for k, v in build_data[lookup_table].items():
-                #          if type(v) is str and v and v[0] == "[" and v[-1] == "]":
-                #              try:
-                #                 this is a woraround since unwrap doesnt work properly - if it is an ip address take only the first value
-                #                  arr = json.loads(v)
-                #                  if len(arr) > 0 and type(arr[0]) is dict and "IPAddress" in arr[0].keys():
-                #                     build_data[lookup_table][k] = arr[0]["IPAddress"]
-                #                 # the next line will tranform the ip addressses array from containing objects to containing the ip addresses themselves
-                #                 # build_data[lookup_table][k] = [item["IPAddress"] if type(item) is dict and "IPAddress" in item.keys() else item for item in arr]
-                #                 # self.logger.info("ip", build_data[lookup_table][k])
-                #             except Exception as ex:
-                #                 self.logger.error("error parsing json from value sorounded with []", ex)
+                    if lookup_table == "DeviceRegistryEvents":
+                        registry_build_data = copy.deepcopy(build_data)
+                        registry_build_data[lookup_table]["RegistryValues"] = []
+                        registry_value_dict = {}
+                        for k, v in build_data[lookup_table].items():
+                            if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
+                                registry_value_dict.update({k: v})
+                                registry_build_data[lookup_table].pop(k)
+                        registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
 
-                if lookup_table == "DeviceRegistryEvents":
-                    registry_build_data = copy.deepcopy(build_data)
-                    registry_build_data[lookup_table]["RegistryValues"] = []
-                    registry_value_dict = {}
-                    for k, v in build_data[lookup_table].items():
-                        if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
-                            registry_value_dict.update({k: v})
-                            registry_build_data[lookup_table].pop(k)
-                    registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
+                        build_data[lookup_table] = registry_build_data[lookup_table]
+                    build_data[lookup_table]['event_count'] = '1'
+                    build_data[lookup_table]['original_ref'] = json.dumps(event_data)
+                    table_event_data.append(build_data)
 
-                    build_data[lookup_table] = registry_build_data[lookup_table]
-                build_data[lookup_table]['event_count'] = '1'
-                build_data[lookup_table]['original_ref'] = json.dumps(event_data)
-                table_event_data.append(build_data)
-            return_obj['data'] = table_event_data
+                if 'data' in return_obj.keys():
+                    return_obj['data'].extend(table_event_data)
+                else:
+                    return_obj['data'] = table_event_data
+
+            return_obj['success'] = True
             return return_obj
 
         except Exception as ex:

@@ -12,6 +12,116 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId"
+    },
+    "Table": {
+      "key": "x-msatp.Table"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "ToNumericSeverity TO ADD !!!!!!!!!!!!!!!"
+    },
+    "category": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "kill-chain-phase.phase_name",
+        "object": "kill-chain-phase"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.kill_chain_phases",
+        "object": "ttp-tagging",
+        "group": true,
+        "references": [
+          "kill-chain-phase"
+        ]
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "RemoteIP1": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
     "LocalIP": [
       {
         "key": "ipv4-addr.value",
@@ -325,6 +435,116 @@
         "key": "last_observed",
         "cybox": false,
         "transformer": "MsatpToTimestamp"
+      }
+    ],
+    "AlertId": {
+      "key": "x-msatp.AlertId"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId"
+    },
+    "Table": {
+      "key": "x-msatp.Table"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "ToNumericSeverity TO ADD !!!!!!!!!!!!!!!"
+    },
+    "category": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "kill-chain-phase.phase_name",
+        "object": "kill-chain-phase"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.kill_chain_phases",
+        "object": "ttp-tagging",
+        "group": true,
+        "references": [
+          "kill-chain-phase"
+        ]
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "SHA11": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "FileName1": [
+      {
+        "key": "file.name",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
       }
     ],
     "ActionType": [
@@ -646,6 +866,116 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId"
+    },
+    "Table": {
+      "key": "x-msatp.Table"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "ToNumericSeverity TO ADD !!!!!!!!!!!!!!!"
+    },
+    "category": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "kill-chain-phase.phase_name",
+        "object": "kill-chain-phase"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.kill_chain_phases",
+        "object": "ttp-tagging",
+        "group": true,
+        "references": [
+          "kill-chain-phase"
+        ]
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "SHA11": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "FileName1": [
+      {
+        "key": "file.name",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
     "ActionType": [
       {
         "key": "x-oca-event.action",
@@ -898,6 +1228,116 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId"
+    },
+    "Table": {
+      "key": "x-msatp.Table"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "ToNumericSeverity TO ADD !!!!!!!!!!!!!!!"
+    },
+    "category": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "kill-chain-phase.phase_name",
+        "object": "kill-chain-phase"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.kill_chain_phases",
+        "object": "ttp-tagging",
+        "group": true,
+        "references": [
+          "kill-chain-phase"
+        ]
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
     "ActionType": [
       {
         "key": "x-oca-event.action",
@@ -1112,6 +1552,116 @@
         "object": "host"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId"
+    },
+    "Table": {
+      "key": "x-msatp.Table"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "ToNumericSeverity TO ADD !!!!!!!!!!!!!!!"
+    },
+    "category": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "kill-chain-phase.phase_name",
+        "object": "kill-chain-phase"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.kill_chain_phases",
+        "object": "ttp-tagging",
+        "group": true,
+        "references": [
+          "kill-chain-phase"
+        ]
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "ttp-tagging"
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "group": true,
+        "references": [
+          "ttp_tagging"
+        ]
+      }
+    ],
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "finding_file"
+      },
+      {
+        "key": "x-ibm-finding.file_ref",
+        "object": "finding",
+        "references": "finding_file"
+      }
+    ],
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
     "IPAddresses": [
       {
         "key": "ipv4-addr.value",
