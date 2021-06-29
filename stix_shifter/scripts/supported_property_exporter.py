@@ -23,7 +23,8 @@ CONNECTORS = {
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",
-    "crowdstrike": 'CrowdStrike Falcon'
+    "crowdstrike": 'CrowdStrike Falcon',
+    "trendmicro_vision_one": "Trend Micro Vision One"
 }
 
 
