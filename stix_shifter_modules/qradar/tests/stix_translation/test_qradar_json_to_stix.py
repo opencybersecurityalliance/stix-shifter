@@ -177,7 +177,6 @@ class TestTransform(object):
         assert(curr_obj is not None), 'domain-name object type not found'
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'test.com')
-        assert(objects.keys() == set(map(str, range(0, 20))))
 
     def test_x_ibm_event(self):
         payload = "utf payload"
