@@ -12,3 +12,5 @@ To run the script:
     ```bash
     python setup.py '{"host": "<host>", "database": "<database_name>", "user": "<user>", "password": "<password>"}' "<table_name>"
     ```
+
+For your populated table to be used with the [MySQL connector](https://github.com/opencybersecurityalliance/stix-shifter/tree/develop/stix_shifter_modules/mysql), the [STIX mappings](https://github.com/opencybersecurityalliance/stix-shifter/tree/develop/stix_shifter_modules/mysql/stix_translation/json) must match the table fields. See the stix-shifter [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-translation-module.md) for more information on STIX mappings.
