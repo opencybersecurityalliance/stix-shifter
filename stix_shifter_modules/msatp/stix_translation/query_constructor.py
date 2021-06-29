@@ -399,10 +399,4 @@ def translate_pattern(pattern: Pattern, data_model_mapper, options):
     time_range = options['time_range']
     translated_dictionary = QueryStringPatternTranslator(pattern, data_model_mapper, time_range)
     translated_query = translated_dictionary.qualified_queries
-    if len(translated_query) > 1:
-        # Query formation for multiple observation expression
-        final_query = ['union {}'.format(','.join(translated_query))]
-    else:
-        # Query formation for single observation expression
-        final_query = translated_query
-    return final_query
+    return translated_query
