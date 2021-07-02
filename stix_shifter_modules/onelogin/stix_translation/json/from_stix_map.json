@@ -1,0 +1,16 @@
+{
+  "user-account": {
+    "fields": {
+      "user_id": ["user_id","sample_id"]
+    }
+  },
+
+  "x-onelogin": {
+        "fields": {
+            "client_id": ["client_id"],
+            "directory_id": ["directory_id"],
+            "event_type_id": ["event_type_id"],
+            "id": ["id"]
+        }
+  }
+}

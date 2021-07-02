@@ -1,0 +1,26 @@
+{
+  "UserName": {
+    "object": "user-account",
+    "key": "user-account.user_id"
+  },
+  "client_id": {
+    "key": "x-onelogin.client_id",
+    "object": "x-onelogin",
+    "cybox": false
+  },
+  "directory_id": {
+    "key": "x-onelogin.directory_id",
+    "object": "x-onelogin",
+    "cybox": false
+  },
+  "event_type_id": {
+      "key": "x-onelogin.event_type_id",
+      "object": "x-onelogin",
+      "cybox": false
+  },
+    "id": {
+      "key": "x-onelogin.id",
+      "object": "x-onelogin",
+      "cybox": false
+    }
+}
