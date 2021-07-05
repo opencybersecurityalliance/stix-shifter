@@ -1,7 +1,7 @@
 {
   "user-account": {
     "fields": {
-      "user_id": ["user_id","sample_id"]
+      "user_id": ["user_id"]
     }
   },
 
