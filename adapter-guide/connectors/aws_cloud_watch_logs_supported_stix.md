@@ -53,27 +53,27 @@
 | user-account | user_id | detail_resource_accessKeyDetails_principalId |
 | user-account | account_login | detail_resource_accessKeyDetails_userName |
 | <br> | | |
-| x_aws | account_id | accountId |
-| x_aws | account_id | account |
-| x_aws | region | detail_region |
+| x-aws | account_id | accountId |
+| x-aws | account_id | account |
+| x-aws | region | detail_region |
+| x-aws | detail_id | detail_id |
 | <br> | | |
-| x_aws_api | access_key_id | detail_resource_accessKeyDetails_accessKeyId |
-| x_aws_api | api | detail_service_action_awsApiCallAction_api |
-| x_aws_api | service_name | detail_service_action_awsApiCallAction_serviceName |
+| x-aws-api | access_key_id | detail_resource_accessKeyDetails_accessKeyId |
+| x-aws-api | api | detail_service_action_awsApiCallAction_api |
+| x-aws-api | service_name | detail_service_action_awsApiCallAction_serviceName |
 | <br> | | |
-| x_aws_guardduty_finding | probe_port | detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port |
-| x_aws_guardduty_finding | timestamp | @timestamp |
-| x_aws_guardduty_finding | id | detail_id |
-| x_aws_guardduty_finding | severity | detail_severity |
-| x_aws_guardduty_finding | type | detail_type |
-| x_aws_guardduty_finding | title | detail_title |
+| x-aws-guardduty-finding | probe_port | detail_service_action_portProbeAction_portProbeDetails_0_localPortDetails_port |
 | <br> | | |
-| x_aws_instance | image_id | detail_resource_instanceDetails_imageId |
-| x_aws_instance | instance_id | detail_resource_instanceDetails_instanceId |
-| x_aws_instance | availability_zone | detail_resource_instanceDetails_availabilityZone |
+| x-aws-instance | image_id | detail_resource_instanceDetails_imageId |
+| x-aws-instance | instance_id | detail_resource_instanceDetails_instanceId |
+| x-aws-instance | availability_zone | detail_resource_instanceDetails_availabilityZone |
 | <br> | | |
-| x_aws_vpc | subnet_id | detail_resource_instanceDetails_networkInterfaces_0_subnetId |
-| x_aws_vpc | vpc_id | detail_resource_instanceDetails_networkInterfaces_0_vpcId |
-| x_aws_vpc | security_group_id | detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId |
-| x_aws_vpc | security_group_name | detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName |
+| x-aws-vpc | subnet_id | detail_resource_instanceDetails_networkInterfaces_0_subnetId |
+| x-aws-vpc | vpc_id | detail_resource_instanceDetails_networkInterfaces_0_vpcId |
+| x-aws-vpc | security_group_id | detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupId |
+| x-aws-vpc | security_group_name | detail_resource_instanceDetails_networkInterfaces_0_securityGroups_0_groupName |
+| <br> | | |
+| x-ibm-finding | severity | detail_severity |
+| x-ibm-finding | finding_type | detail_type |
+| x-ibm-finding | name | detail_title |
 | <br> | | |
