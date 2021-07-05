@@ -1,16 +1,24 @@
 {
   "user-account": {
     "fields": {
-      "user_id": ["user_id","sample_id"]
+      "user_id": ["user_id"],
+      "account_id": ["account_id"],
+      "actor_user_id": ["actor_user_id"],
+      "assuming_acting_user_id": ["assuming_acting_user_id"],
+      "actor_user_name": ["actor_user_name"],
+      "user_name": ["user_name"]
     }
   },
 
   "x-onelogin": {
         "fields": {
-            "client_id": ["client_id"],
-            "directory_id": ["directory_id"],
-            "event_type_id": ["event_type_id"],
-            "id": ["id"]
-        }
+          "client_id": ["client_id"],
+          "directory_id": ["directory_id"],
+          "event_type_id": ["event_type_id"],
+          "id": ["id"],
+          "resolution": ["resolution"],
+          "since": ["since"],
+          "until": ["until"]
+    }
   }
 }
