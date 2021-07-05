@@ -1,12 +1,16 @@
 {
   "user-account": {
     "fields": {
+<<<<<<< HEAD
       "user_id": ["user_id"],
       "account_id": ["account_id"],
       "actor_user_id": ["actor_user_id"],
       "assuming_acting_user_id": ["assuming_acting_user_id"],
       "actor_user_name": ["actor_user_name"],
       "user_name": ["user_name"]
+=======
+      "user_id": ["user_id"]
+>>>>>>> c9e6ef952d41bc155eac11443ebda30980c6419a
     }
   },
 

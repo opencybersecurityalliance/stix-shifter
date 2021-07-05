@@ -149,7 +149,7 @@ class QueryStringPatternTranslator:
                 value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
-                value = self._format_equality(expression.value)
+                value = self._escape_value(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
                 value = self._format_like(expression.value)
