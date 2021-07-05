@@ -1,4 +1,4 @@
-## Microsoft Defender Advanced Threat Protection
+## Microsoft Defender for Endpoint
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | InitiatingProcessFolderPath |
@@ -54,16 +54,13 @@
 | process | binary_ref | InitiatingProcessFolderPath |
 | process | name | FileName |
 | process | binary_ref | FileName |
+| process | child_refs | FileName |
 | process | pid | ProcessId |
+| process | child_refs | ProcessId |
 | process | command_line | ProcessCommandLine |
+| process | child_refs | ProcessCommandLine |
 | process | created | ProcessCreationTime |
-| process | parent_ref | InitiatingProcessSHA1 |
-| process | parent_ref | InitiatingProcessSHA256 |
-| process | parent_ref | InitiatingProcessMD5 |
-| process | parent_ref | InitiatingProcessFileName |
-| process | parent_ref | InitiatingProcessId |
-| process | parent_ref | InitiatingProcessCommandLine |
-| process | parent_ref | InitiatingProcessCreationTime |
+| process | child_refs | ProcessCreationTime |
 | process | creator_user_ref | AccountSid |
 | process | creator_user_ref | AccountName |
 | <br> | | |
@@ -77,22 +74,22 @@
 | windows-registry-key | key | RegistryKey |
 | windows-registry-key | values | RegistryValues |
 | <br> | | |
+| x-msatp | computer_name | DeviceName |
+| x-msatp | machine_id | DeviceId |
+| <br> | | |
 | x-oca-asset | device_id | DeviceId |
 | x-oca-asset | hostname | DeviceName |
 | x-oca-asset | ip_refs | IpAddresses |
 | x-oca-asset | mac_refs | MacAddress |
 | <br> | | |
-| x-oca-event | start | Timestamp |
-| x-oca-event | end | Timestamp |
+| x-oca-event | network_ref | MacAddress |
+| x-oca-event | created | Timestamp |
 | x-oca-event | action | ActionType |
 | x-oca-event | process_ref | FileName |
-| x-oca-event | file_ref | FileName |
 | x-oca-event | process_ref | ProcessId |
+| x-oca-event | file_ref | FileName |
 | x-oca-event | process_ref | InitiatingProcessId |
 | x-oca-event | parent_process_ref | InitiatingProcessParentId |
 | x-oca-event | user_ref | InitiatingProcessAccountSid |
 | x-oca-event | host_ref | DeviceName |
-| <br> | | |
-| x_msatp | computer_name | DeviceName |
-| x_msatp | machine_id | DeviceId |
 | <br> | | |
