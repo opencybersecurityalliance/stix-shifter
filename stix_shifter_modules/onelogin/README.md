@@ -4,14 +4,14 @@ This is a connector for searching Onelogin events.
 
 This example input pattern for TRANSLATE:
 
-`python main.py translate "onelogin" "query" '{}' "[user-account:user_id = 'admin']"`
+`python main.py translate "onelogin" "query" '{}' "[user-account:user_id= '123456']"`
 
 Returns the following search query:
 
 ```
 {
     "queries": [
-        "user_id=admin&limit=50"
+        "user_id=123456&limit=50"
     ]
 }
 ```
