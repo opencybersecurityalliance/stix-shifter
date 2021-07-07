@@ -19,3 +19,4 @@ This is a connector for querying a MySQL database. For demo purposes, the [mappi
 | system_name | varchar(100)
 | severity  |  int
 
+STIX-shifter provides a [script](stix_shifter/scripts/mysql_populate_script) to easily create and populate a table on a MySQL database.
