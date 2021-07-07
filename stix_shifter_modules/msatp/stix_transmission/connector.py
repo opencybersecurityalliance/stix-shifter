@@ -172,8 +172,8 @@ class Connector(BaseSyncConnector):
                     build_data[lookup_table]['event_count'] = '1'
                     build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
-                    k_tuple = (build_data[lookup_table]['DeviceName'], build_data[lookup_table]['ReportId'],
-                               build_data[lookup_table]['Timestamp'])
+                    k_tuple = (build_data[lookup_table].get('DeviceName', None), build_data[lookup_table].get('ReportId', None),
+                               build_data[lookup_table].get('Timestamp', None))
                     # if the same event already exists on the table_event_data, just update 'Alerts' field
                     if k_tuple in unify_events_dct:
                         ind = unify_events_dct[k_tuple]
