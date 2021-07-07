@@ -449,6 +449,36 @@
         "references": "host"
       }
     ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
     "DeviceId": {
       "key": "x-msatp.machine_id",
       "object": "x-msatp"
@@ -938,6 +968,36 @@
         "references": "host"
       }
     ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
     "DeviceId": {
       "key": "x-msatp.machine_id",
       "object": "x-msatp"
@@ -1344,6 +1404,36 @@
         "references": "fc_process_file"
       }
     ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
     "DeviceId": {
       "key": "x-msatp.machine_id",
       "object": "x-msatp"
@@ -1730,6 +1820,36 @@
         "references": "re_process_file"
       }
     ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
     "DeviceId": {
       "key": "x-msatp.machine_id",
       "object": "x-msatp"
@@ -1984,6 +2104,36 @@
         ],
         "group": true
       }
-    ]
+    ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    }
   }
 }

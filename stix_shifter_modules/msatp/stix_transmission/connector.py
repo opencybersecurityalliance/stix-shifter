@@ -69,6 +69,18 @@ class Connector(BaseSyncConnector):
         query += join_query
         return query
 
+    def collectDeviceData(self, DeviceId):
+        query = '(find withsource = TableName in (DeviceInfo) where (DeviceId =~ %s) | project PublicIP, OSPlatform , ' \
+                'OSArchitecture, OSVersion , DeviceType)' % DeviceId
+
+        # limit to 1 results
+        return_obj = dict()
+        response = self.api_client.run_search(query, length=1)
+        return_obj = self._handle_errors(response, return_obj)
+        response_json = json.loads(return_obj["data"])
+        return_obj['data'] = response_json['Results']
+        return return_obj['data'][0]
+
     @staticmethod
     def _handle_errors(response, return_obj):
         """Handling API error response
@@ -140,6 +152,11 @@ class Connector(BaseSyncConnector):
                     event_data.pop('TableName')
                     build_data = dict()
                     build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+
+                    DeviceId = build_data[lookup_table].get('DeviceId', None)
+                    if DeviceId:
+                        deviceInfo = self.collectDeviceData('"{}"'.format(DeviceId))
+                        build_data[lookup_table].update(deviceInfo)
 
                     # if there is an alarm ref, unify all the information about the alarm to custom fields
                     if 'AlertId' in build_data[lookup_table]:
