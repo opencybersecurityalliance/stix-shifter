@@ -14,6 +14,9 @@ class Connector(BaseSyncConnector):
     join_DeviceAlertEvents_query = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
                                    'ReportId, $left.ReportId == $right.ReportId'
 
+    ALERT_FIELDS = ['Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
+    ALERT_FIELDS_IGNORE = ['DeviceId', 'DeviceName', 'ReportId', 'Timestamp']
+
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
@@ -26,6 +29,32 @@ class Connector(BaseSyncConnector):
 
         except Exception as ex:
             self.init_error = ex
+
+    @staticmethod
+    def unify_alert_fields(event_data):
+        if 'AttackTechniques' in event_data:
+            AttackTechniques_lst = json.loads(event_data['AttackTechniques'])
+            event_data['AttackTechniques'] = AttackTechniques_lst
+
+        alert_dct = {}
+        for field in Connector.ALERT_FIELDS:
+            ffield = ''.join([field, '1'])
+            if ffield in event_data:
+                val = event_data[ffield]
+                event_data.pop(ffield)
+                alert_dct['alert_' + field] = val
+            elif field in event_data:
+                val = event_data[field]
+                event_data.pop(field)
+                alert_dct['alert_' + field] = val
+
+        for field in Connector.ALERT_FIELDS_IGNORE:
+            event_data.pop(''.join([field, '1']))
+
+        alert = [alert_dct]
+        event_data['Alerts'] = alert
+
+        return event_data
 
     @staticmethod
     def get_table_name(q):
@@ -92,7 +121,6 @@ class Connector(BaseSyncConnector):
         try:
             if self.init_error:
                 raise self.init_error
-            # DEBUG
             for q in query:
                 q_return_obj = dict()
                 joined_query = Connector.join_query_with_alerts(q)
@@ -106,11 +134,18 @@ class Connector(BaseSyncConnector):
                 # Filter the "None" and empty values except for RegistryValueName, which support empty string
                 # Customizing of Registryvalues json
                 table_event_data = []
+                unify_events_dct = {}
                 for event_data in q_return_obj['data']:
                     lookup_table = event_data['TableName']
                     event_data.pop('TableName')
                     build_data = dict()
                     build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+
+                    # if there is an alarm ref, unify all the information about the alarm to custom fields
+                    if 'AlertId' in build_data[lookup_table]:
+                        build_data[lookup_table] = Connector.unify_alert_fields(build_data[lookup_table])
+                    else:
+                        build_data[lookup_table]['Alerts'] = []
 
                     if lookup_table == "DeviceNetworkInfo":
                         for k, v in build_data[lookup_table].items():
@@ -133,9 +168,20 @@ class Connector(BaseSyncConnector):
                         registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
 
                         build_data[lookup_table] = registry_build_data[lookup_table]
+
                     build_data[lookup_table]['event_count'] = '1'
                     build_data[lookup_table]['original_ref'] = json.dumps(event_data)
-                    table_event_data.append(build_data)
+
+                    k_tuple = (build_data[lookup_table]['DeviceName'], build_data[lookup_table]['ReportId'],
+                               build_data[lookup_table]['Timestamp'])
+                    # if the same event already exists on the table_event_data, just update 'Alerts' field
+                    if k_tuple in unify_events_dct:
+                        ind = unify_events_dct[k_tuple]
+                        table_event_data[ind][lookup_table]['Alerts'].extend(build_data[lookup_table]['Alerts'])
+                    else:
+                        lst_len = len(table_event_data)
+                        table_event_data.insert(lst_len, build_data)
+                        unify_events_dct[k_tuple] = lst_len
 
                 if 'data' in return_obj.keys():
                     return_obj['data'].extend(table_event_data)

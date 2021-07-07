@@ -578,3 +578,57 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert asset_obj is not None, 'x-oca-asset object type not found'
         assert asset_obj.keys() == {'type', 'hostname'}
         assert asset_obj['hostname'] == 'desktop-536bt46'
+
+    def test_Alerts_info_json_to_stix(self):
+        """to test network stix object properties"""
+        data = {'DeviceNetworkInfo': {'Timestamp': '2019-09-26T09:47:52.7091342Z',
+                                      'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                      'DeviceName': 'desktop-536bt46',
+                                      'IPv4Dhcp': '198.51.100.2',
+                                      'NetworkAdapterName': 'adapter_name',
+                                      'MacAddress': 'd2fb49243718',
+                                      'NetworkAdapterType': 'AsymmetricDsl',
+                                      'NetworkAdapterStatus': 'Down',
+                                      'TunnelType': 'ISATAP',
+                                      'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
+                                      'Alerts': [{'alert_Severity': 'Medium', 'alert_FileName': 'reg.exe',
+                                                  'alert_Title': 'Registry queried for passwords',
+                                                  'alert_SHA1': 'c0db341defa8ef40c03ed769a9001d600e0f4dae',
+                                                  'alert_Category': 'CredentialAccess',
+                                                  'alert_AttackTechniques': ['OS Credential Dumping (T1003)',
+                                                                             'Query Registry (T1012)',
+                                                                             'Credentials in Registry (T1552.002)']}]
+                                      }}
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        finding_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert finding_obj is not None, 'x-ibm-finding object type not found'
+        assert finding_obj.keys() == {'type', 'severity', 'file_ref', 'name', 'ttp_tagging_refs'}
+        assert finding_obj['type'] == 'x-ibm-finding'
+        assert finding_obj['severity'] == 33
+        assert finding_obj['file_ref'] == '8'
+        assert finding_obj['name'] == 'Registry queried for passwords'
+
+        finding_file_ref_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'file')
+        assert finding_file_ref_obj is not None, 'file object type not found'
+        assert finding_file_ref_obj.keys() == {'type', 'name', 'hashes'}
+        assert finding_file_ref_obj['type'] == 'file'
+        assert finding_file_ref_obj['name'] == 'reg.exe'
+        assert finding_file_ref_obj['hashes'] == {'SHA-1': 'c0db341defa8ef40c03ed769a9001d600e0f4dae'}
+
+        ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
+        assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
+        assert ttp_tagging_obj.keys() == {'type', 'extensions'}
+        assert ttp_tagging_obj['type'] == 'x-ibm-ttp-tagging'
+        assert ttp_tagging_obj['extensions'] == {'mitre-attack-ext': {'tactic_name': 'CredentialAccess'}}
+
