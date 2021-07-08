@@ -97,6 +97,12 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = 'search (file_name = "some_file.exe") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol'
         _test_query_assertions(query, queries)
 
+    def test_risk_finding(self):
+        stix_pattern = "[x-ibm-finding:name = '*']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'index=_audit action=alert_fired | eval ttl=expiration-now() | search ttl>0 | convert ctime(trigger_time)'
+        _test_query_assertions(query, queries)
+
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)

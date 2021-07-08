@@ -10,7 +10,10 @@
     "domain-name": {
         "cim_type": "flow",
         "fields": {
-            "value": "url"
+            "value": [
+                "host",
+                "url"
+            ]
         }
     },
     "x-readable-payload": {
@@ -137,6 +140,28 @@
             "issuer": "ssl_issuer",
             "subject": "ssl_subject",
             "subject_public_key_algorithm": "ssl_publickey_algorithm"
+        }
+    },
+    "x-splunk": {
+        "fields": {
+            "log_source": ["source"],
+            "provider": ["_sourcetype"],
+            "device_type": ["DeviceType"],
+            "direction": ["Direction"],
+            "severity": ["severity"],
+            "EventID": ["EventID"],
+            "event_name": ["EventName"],
+            "Mitre_TacticId": ["TacticId"],
+            "Mitre_Tactic": ["Tactic"],
+            "Mitre_TechniqueId": ["TechniqueId"],
+            "Mitre_Technique": ["Technique"]
+        }
+    },
+    "x-ibm-finding": {
+        "cim_type": "endpoint",
+        "fields": {
+          "ss_name": ["ss_name"],
+          "severity": ["severity"]
         }
     }
 }

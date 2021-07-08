@@ -11,6 +11,18 @@
         "file_hash",
         "user",
         "url",
-        "protocol"
+        "protocol",
+        "host",
+        "source",
+        "DeviceType",
+        "Direction",
+        "severity",
+        "EventID",
+        "EventName",
+        "ss_name",
+        "TacticId",
+        "Tactic",
+        "TechniqueId",
+        "Technique"
     ]
 }

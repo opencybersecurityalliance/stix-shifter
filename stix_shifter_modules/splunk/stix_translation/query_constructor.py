@@ -151,7 +151,9 @@ class _ObservationExpressionTranslator:
 
             if stix_object == "x-readable-payload" and stix_path == "value":
                 return "_raw=*{}*".format(expression.value)
-
+            # Special case where we want the risk finding
+            if stix_object == 'x-ibm-finding' and stix_path == 'ss_name' and expression.value == "*":
+                return "index=_audit action=alert_fired | eval ttl=expiration-now() | search ttl>0 | convert ctime(trigger_time)"
             # Check if mapping has multiple fields
             if isinstance(field_mapping, list):
                 comparison_string = ""
