@@ -100,7 +100,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_risk_finding(self):
         stix_pattern = "[x-ibm-finding:name = '*']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'index=_audit action=alert_fired | eval ttl=expiration-now() | search ttl>0 | convert ctime(trigger_time)'
+        queries = 'index=_audit action=alert_fired '
         _test_query_assertions(query, queries)
 
     def test_port_queries(self):
