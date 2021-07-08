@@ -1,11 +1,27 @@
 from stix_shifter_modules.bigfix.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
+import pytest
 from stix_shifter.stix_transmission import stix_transmission
+import asyncio
+from asyncinit import asyncinit
+
 
 API_PATH = "stix_shifter_modules.bigfix.stix_transmission.api_client.APIClient"
 
 
+def run_async_func(callable, *args, **kwargs):
+    loop = None
+    try:
+        loop = asyncio.get_event_loop()
+    except:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    return loop.run_until_complete(callable(*args, **kwargs))
+
+
+@asyncinit
 class BigFixMockJsonResponse:
     def __init__(self, response_code, obj):
         self.code = response_code
@@ -23,6 +39,7 @@ class MockHttpResponse:
         return self.string
 
 
+@asyncinit
 class BigFixMockHttpXMLResponse:
     def __init__(self, response_code, obj):
         self.code = response_code
@@ -95,17 +112,17 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
     def test_ping_endpoint_exception(mock_ping_response):
-        mocked_return_value = MockHttpResponse('/exception')
-        mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('an error occured retriving ping information')
+        error_msg = 'an error occured retriving ping information'
+        mock_ping_response.side_effect = Exception(error_msg)
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            ping_response = transmission.ping()
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        ping_response = transmission.ping()
-
-        assert ping_response is not None
-        assert 'success' in ping_response
-        assert ping_response['success'] is False
-        assert ping_response['error'] is not None
+            assert ping_response is not None
+            assert 'success' in ping_response
+            assert ping_response['success'] is False
+            assert ping_response['error'] is not None
+            assert ping_response['error'] == error_msg
 
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
@@ -205,20 +222,20 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
     def test_query_response_exception(mock_query_response):
-        big_fix_return_value = 'big fix did not return proper value'
-        mocked_return_value = MockHttpResponse(big_fix_return_value)
-        mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-        mock_query_response.side_effect = Exception('an error occured creating search')
-
+        error_msg = 'an error occured creating search'
+        mock_query_response.side_effect = Exception(error_msg)
         query = 'bigfix query text'
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        query_response = transmission.query(query)
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            query_response = transmission.query(query)
 
-        assert query_response is not None
-        assert 'success' in query_response
-        assert query_response['success'] is False
-        assert 'error' in query_response
+            assert query_response is not None
+            assert 'success' in query_response
+            assert query_response['success'] is False
+            assert 'error' in query_response
+            assert query_response['error'] == error_msg
+
 
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
@@ -243,7 +260,7 @@ class TestBigfixConnection(unittest.TestCase):
         query = 'bigfix query text'
 
         entry_point = EntryPoint(connection, config)
-        query_response = entry_point.create_query_connection(query)
+        query_response = run_async_func(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -512,14 +529,15 @@ class TestBigfixConnection(unittest.TestCase):
 
         search_id = "104"
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        status_response = transmission.status(search_id)
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            status_response = transmission.status(search_id)
 
-        assert status_response is not None
-        assert 'success' in status_response
-        assert status_response['success'] is False
-        assert 'error' in status_response
-        assert 'progress' not in status_response
+            assert status_response is not None
+            assert 'success' in status_response
+            assert status_response['success'] is False
+            assert 'error' in status_response
+            assert 'progress' not in status_response
 
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
@@ -561,7 +579,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
 
         entry_point = EntryPoint(CONNECTION, CONFIG)
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_async_func(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -786,18 +804,23 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_exeception(mock_results_response):
-        mock_results_response.side_effect = Exception('an error getting data')
+        error_msg = 'an error getting data'
+        mock_results_response.side_effect = Exception(error_msg)
 
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        results_response = transmission.results(search_id, offset, length)
 
-        assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] is False
-        assert 'error' in results_response
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            results_response = transmission.results(search_id, offset, length)
+
+            assert results_response is not None
+            assert 'success' in results_response
+            assert results_response['success'] is False
+            assert 'error' in results_response
+            assert results_response['error'] == error_msg
+        
 
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))

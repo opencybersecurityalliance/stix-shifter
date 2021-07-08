@@ -4,7 +4,7 @@ import json
 
 class BaseResultsConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Creates a connection to the specified datasource to retrieve query results
 

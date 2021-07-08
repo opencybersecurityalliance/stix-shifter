@@ -10,8 +10,8 @@ class DeleteConnector(BaseDeleteConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def delete_query_connection(self, search_id):
-        response = self.api_client.delete_search(search_id)
+    async def delete_query_connection(self, search_id):
+        response = await self.api_client.delete_search(search_id)
         response_code = response.code
         response_text = response.read()
         error = None

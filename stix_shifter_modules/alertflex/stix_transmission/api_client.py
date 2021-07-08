@@ -18,17 +18,17 @@ class APIClient():
                                     url_modifier_function,
                                     cert_verify=connection.get('selfSignedCert', False))
 
-    def ping_data_source(self):
+    async def ping_data_source(self):
         endpoint = self.endpoint_start + '/status'
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_search_results(self, query_expression, offset=None, length=None):
+    async def get_search_results(self, query_expression, offset=None, length=None):
         endpoint = self.endpoint_start + '/search'
         data = {'query': query_expression}
-        result = self.client.call_api(endpoint, 'GET', urldata=data)
+        result = await self.client.call_api(endpoint, 'GET', urldata=data)
         return result
 
-    def delete_search(self, search_id):
+    async def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
         return {"code": 200, "success": True}

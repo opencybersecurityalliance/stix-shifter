@@ -23,7 +23,7 @@ class QueryConnector(BaseQueryConnector):
         self.client = client
         self.connection = connection
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Function to create query connection
         :param query: dict, Query

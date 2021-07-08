@@ -10,8 +10,8 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
-        response = self.api_client.get_search_results(search_id, offset, length)
+    async def create_results_connection(self, search_id, offset, length):
+        response = await self.api_client.get_search_results(search_id, offset, length)
         response_code = response.code
         response_text = response.read()
         error = None

@@ -71,11 +71,11 @@ class Connector(BaseSyncConnector):
                                 })
         return raw_events
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = {}
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
@@ -84,13 +84,13 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         response_txt = None
         return_obj = {}
         all_events = []
         try:
             processes_obj = {}
-            processes_search_response = self.api_client.run_processes_search(query, start=offset, rows=length)
+            processes_search_response = await self.api_client.run_processes_search(query, start=offset, rows=length)
             processes_search_parsed_response = self._handle_errors(processes_search_response, processes_obj)
             if not self.show_events or not processes_search_parsed_response.get('success', False):
                 return processes_search_parsed_response
@@ -100,7 +100,7 @@ class Connector(BaseSyncConnector):
                 for process in processes_search_parsed_response['data']:
                     try:
                         events_obj = {}
-                        events_response = self.api_client.run_events_search(process_id=process['id'],
+                        events_response = await self.api_client.run_events_search(process_id=process['id'],
                                                                             segment_id=process['segment_id'])
                         events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
                         if events_parsed_response.get('success', False):
