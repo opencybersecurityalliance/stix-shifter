@@ -1,67 +1,48 @@
 {
-  "UserName": [{
-    "object": "user-account",
-    "key": "user-account.user_id"
-  },
-  {
-    "object": "user-account",
-    "key": "user-account.account_id"
-  },
-  {
-    "object": "user-account",
-    "key": "user-account.actor_user_id"
-  },
-  {
-    "object": "user-account",
-    "key": "user-account.assuming_acting_user_id"
-  },
-  {
-    "object": "user-account",
-    "key": "user-account.actor_user_name"
-  },
-  {
-    "object": "user-account",
-    "key": "user-account.user_name"
-  }],
-  "proxy_ip": {
-    "key": "x-onelogin.proxy_ip",
-    "object": "x-onelogin",
-    "cybox": false
-  },
+  "user_id": [
+    {
+      "object": "user-account",
+      "key": "user-account.user_id"
+    },
+    {
+      "object": "user-account",
+      "key": "user-account.account_id"
+    },
+    {
+      "object": "user-account",
+      "key": "user-account.actor_user_id"
+    },
+    {
+      "object": "user-account",
+      "key": "user-account.assuming_acting_user_id"
+    },
+    {
+      "object": "user-account",
+      "key": "user-account.actor_user_name"
+    },
+    {
+      "object": "user-account",
+      "key": "user-account.user_name"
+    }
+  ],
   "client_id": {
     "key": "x-onelogin.client_id",
-    "object": "x-onelogin",
-    "cybox": false
+    "object": "x-onelogin"
   },
   "directory_id": {
     "key": "x-onelogin.directory_id",
-    "object": "x-onelogin",
-    "cybox": false
+    "object": "x-onelogin"
   },
   "event_type_id": {
-      "key": "x-onelogin.event_type_id",
-      "object": "x-onelogin",
-      "cybox": false
+    "key": "x-onelogin.event_type_id",
+    "object": "x-onelogin"
   },
   "id": {
-      "key": "x-onelogin.id",
-      "object": "x-onelogin",
-      "cybox": false
+    "key": "x-onelogin.id",
+    "object": "x-onelogin"
   },
   "resolution": {
-      "key": "x-onelogin.resolution",
-      "object": "x-onelogin",
-      "cybox": false
-  },
-  "since": {
-      "key": "x-onelogin.since",
-      "object": "x-onelogin",
-      "cybox": false
-  },
-  "until": {
-      "key": "x-onelogin.until",
-      "object": "x-onelogin",
-      "cybox": false
+    "key": "x-onelogin.resolution",
+    "object": "x-onelogin"
   }
-    
 }
