@@ -44,7 +44,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_ipv6_query(self):
         stix_pattern = "[ipv6-addr:value = 'fe80::8c3b:a720:dc5c:2abf%19']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search ((src_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19") OR (dest_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, , host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        queries = 'search ((src_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19") OR (dest_ipv6 = "fe80::8c3b:a720:dc5c:2abf%19")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_url_query(self):
@@ -74,21 +74,21 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_domain_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search (url = "example.com") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        queries = 'search ((host = "example.com") OR (url = "example.com")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_query_from_multiple_observation_expressions_joined_by_AND(self):
         stix_pattern = "[domain-name:value = 'example.com'] AND [mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         # Expect the STIX AND to convert to an SPL OR.
-        queries = 'search (url = "example.com") OR ((src_mac = "00-00-5E-00-53-00") OR (dest_mac = "00-00-5E-00-53-00")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        queries = 'search ((host = "example.com") OR (url = "example.com")) OR ((src_mac = "00-00-5E-00-53-00") OR (dest_mac = "00-00-5E-00-53-00")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
         stix_pattern = "[domain-name:value = 'example.com' AND mac-addr:value = '00-00-5E-00-53-00']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         # Expect the STIX AND to convert to an AQL AND.
-        queries = 'search (((src_mac = "00-00-5E-00-53-00") OR (dest_mac = "00-00-5E-00-53-00")) AND (url = "example.com")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        queries = 'search (((src_mac = "00-00-5E-00-53-00") OR (dest_mac = "00-00-5E-00-53-00")) AND ((host = "example.com") OR (url = "example.com"))) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_file_query(self):
@@ -100,7 +100,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_risk_finding(self):
         stix_pattern = "[x-ibm-finding:ss_name = '*']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'index=_audit action=alert_fired '
+        queries = 'search index=_audit action=alert_fired  earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_port_queries(self):
