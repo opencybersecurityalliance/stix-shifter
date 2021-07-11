@@ -251,5 +251,9 @@
   "md5": {
     "key": "file.hashes.MD5",
     "object": "binary_file"
+  },
+  "ds_link": {
+    "key": "x-cb-response.ds_link",
+    "object": "cb"
   }
 }

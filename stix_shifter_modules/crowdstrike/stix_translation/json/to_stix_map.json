@@ -389,5 +389,9 @@
   "modified_timestamp": {
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"
+  },
+  "ds_link":{
+    "key": "x-oca-event.ds_link",
+    "object": "event"
   }
 }

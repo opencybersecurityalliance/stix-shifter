@@ -19,9 +19,21 @@ class Connector(BaseSyncConnector):
         try:
             self.api_client = APIClient(connection, configuration)
             self.result_limit = Connector.get_result_limit(connection)
-
         except Exception as ex:
             self.init_error = ex
+
+    def get_ds_link(self, detection_id):
+        if not detection_id:
+            return detection_id
+        detection_arr = detection_id.split(':')
+        if len(detection_arr) < 3:
+            return None
+
+        detection = detection_arr[1]
+        pid = detection_arr[2]
+        if not detection or not pid:
+            return None
+        return 'https://falcon.crowdstrike.com/activity/detections/detail/%s/%s?processView=tree' % (detection, pid)
 
     @staticmethod
     def _handle_errors(response, return_obj):
@@ -67,9 +79,9 @@ class Connector(BaseSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
-        
+
         return return_obj
-            
+
     def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
         response = self.api_client.get_detections_info(ids_lst)
@@ -189,6 +201,11 @@ class Connector(BaseSyncConnector):
                         build_event_data.pop('device_id')
                         build_event_data['provider'] = Connector.PROVIDER
                         build_event_data = {k: v for k, v in build_event_data.items() if v != "N/A"}
+                        # add ds_link to each event
+                        detection_id = build_event_data.get('detection_id', None)
+                        ds_link = self.get_ds_link(detection_id)
+                        if ds_link:
+                            build_event_data['ds_link'] = ds_link
                         table_event_data.append(build_event_data)
 
             return_obj['data'] = table_event_data

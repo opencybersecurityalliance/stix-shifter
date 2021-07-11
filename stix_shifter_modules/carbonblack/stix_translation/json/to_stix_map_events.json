@@ -400,5 +400,9 @@
       "object": "event",
       "references": "process"
     }
-  ]
+  ],
+  "ds_link": {
+    "key": "x-oca-event.ds_link",
+    "object": "event"
+  }
 }

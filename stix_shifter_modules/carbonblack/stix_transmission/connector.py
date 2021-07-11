@@ -17,6 +17,16 @@ class Connector(BaseSyncConnector):
         self.show_events = Connector.get_show_events_mode(connection)
         self.result_limit = Connector.get_result_limit(connection)
         self.logger = logger.set_logger(__name__)
+        self.host = Connector.get_host(connection)
+
+    def get_ds_link(self, id, segment_id):
+        if not id or not segment_id or not self.host:
+            return None
+        return 'https://%s/#/analyze/%s/%s' % (self.host, id, segment_id)
+
+    @staticmethod
+    def get_host(connection):
+        return connection.get('host', None)
 
     @staticmethod
     def get_show_events_mode(connection):
@@ -92,10 +102,17 @@ class Connector(BaseSyncConnector):
             processes_obj = {}
             processes_search_response = self.api_client.run_processes_search(query, start=offset, rows=length)
             processes_search_parsed_response = self._handle_errors(processes_search_response, processes_obj)
+            # add link to process
+            for result in processes_search_parsed_response['data']:
+                ds_link = self.get_ds_link(result.get('id', None), result.get('segment_id', None))
+                if ds_link:
+                    result['ds_link'] = ds_link
+
             if not self.show_events or not processes_search_parsed_response.get('success', False):
                 return processes_search_parsed_response
             if processes_search_parsed_response.get('success', False):
-                time_window = extract_time_window(query)
+                # DEBUG - RETURN LATER !!!
+                # time_window = extract_time_window(query)
                 events_limit_reached = False
                 for process in processes_search_parsed_response['data']:
                     try:
@@ -104,7 +121,9 @@ class Connector(BaseSyncConnector):
                                                                             segment_id=process['segment_id'])
                         events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
                         if events_parsed_response.get('success', False):
-                            events = Connector._get_events(events_parsed_response['data'], time_window)
+                            # DEBUG
+                            # events = Connector._get_events(events_parsed_response['data'], time_window)
+                            events = Connector._get_events(events_parsed_response['data'], None)
                             for raw_event in events:
                                 event = create_event_obj(process, raw_event)
                                 if event:
@@ -112,7 +131,9 @@ class Connector(BaseSyncConnector):
                                     if 0 < self.result_limit <= len(all_events):
                                         events_limit_reached = True
                                         break
-                    except Exception:
+                    except Exception as e:
+                        # DEUG
+                        print(f'ERROR. REASON: {e}')
                         self.logger.warn('cannot fetch events for process: ' + str(process['process_id']))
                     if events_limit_reached:
                         break
