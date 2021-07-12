@@ -1,30 +1,28 @@
 {
-  "user_id": [
-    {
-      "object": "user-account",
-      "key": "user-account.user_id"
-    },
-    {
-      "object": "user-account",
-      "key": "user-account.account_id"
-    },
-    {
-      "object": "user-account",
-      "key": "user-account.actor_user_id"
-    },
-    {
-      "object": "user-account",
-      "key": "user-account.assuming_acting_user_id"
-    },
-    {
-      "object": "user-account",
-      "key": "user-account.actor_user_name"
-    },
-    {
-      "object": "user-account",
-      "key": "user-account.user_name"
-    }
-  ],
+  "user_id": {
+    "object": "user-account",
+    "key": "user-account.user_id"
+  },
+  "assuming_acting_user_id": {
+    "object": "user-account",
+    "key": "user-account.assuming_acting_user_id"
+  },
+  "actor_user_name": {
+    "object": "user-account",
+    "key": "user-account.actor_user_name"
+  },
+  "user-account": {
+    "object": "user-account",
+    "key": "user-account.actor_user_id"
+  },
+  "account_id": {
+    "object": "user-account",
+    "key": "user-account.account_id"
+  },
+  "user_name": {
+    "key": "user-account.display_name",
+    "object": "user-account"
+  },
   "client_id": {
     "key": "x-onelogin.client_id",
     "object": "x-onelogin"
@@ -44,5 +42,37 @@
   "resolution": {
     "key": "x-onelogin.resolution",
     "object": "x-onelogin"
+  },
+  "ipaddr": {
+    "key": "ipv4-addr.value",
+    "object": "ipv4-addr"
+  },
+  "proxy_ip": {
+    "key": "x-onelogin.proxy_ip",
+    "object": "x-onelogin"
+  },
+  "policy_id": {
+    "key": "x-onelogin.policy_id",
+    "object": "x-onelogin"
+  },
+  "policy_name": {
+    "key": "x-onelogin.policy_name",
+    "object": "x-onelogin"
+  },
+  "risk_score": {
+    "key": "x-onelogin-risk.risk_score",
+    "object": "x-onelogin-risk"
+  },
+  "risk_reasons": {
+    "key": "x-onelogin-risk.risk_reasons",
+    "object": "x-onelogin-risk"
+  },
+  "risk_cookie_id": {
+    "key": "x-onelogin-risk.risk_cookie_id",
+    "object": "x-onelogin-risk"
+  },
+  "error_description": {
+    "key": "x-onelogin-risk.error_description",
+    "object": "x-onelogin-risk"
   }
 }
