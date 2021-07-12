@@ -503,7 +503,35 @@
     "ActionType": {
       "key": "x-oca-event.action",
       "object": "event"
-    }
+    },
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ]
   },
   "DeviceProcessEvents": {
     "Timestamp": [
@@ -1018,6 +1046,34 @@
         "object": "event",
         "references": "original_ref"
       }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
     ]
   },
   "DeviceFileEvents": {
@@ -1465,6 +1521,34 @@
         "object": "event",
         "references": "original_ref"
       }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
     ]
   },
   "DeviceRegistryEvents": {
@@ -1881,6 +1965,34 @@
         "object": "event",
         "references": "original_ref"
       }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
     ]
   },
   "DeviceNetworkInfo": {
@@ -2134,6 +2246,34 @@
     "DeviceType": {
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
-    }
+    },
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ]
   }
 }
