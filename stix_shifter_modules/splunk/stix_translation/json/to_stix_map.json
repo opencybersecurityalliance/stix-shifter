@@ -282,10 +282,6 @@
   ],
   "severity": [
     {
-      "key": "x-splunk.severity",
-      "object": "x-splunk"
-    },
-    {
       "key": "x-ibm-finding.severity",
       "object": "x-ibm-finding"
     }
