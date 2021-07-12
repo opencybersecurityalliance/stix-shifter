@@ -7,30 +7,6 @@ from stix_shifter_utils.utils import logger
 import copy
 
 
-# def __init__(self, connection, configuration):
-#     self.api_client = APIClient(connection, configuration)
-#     self.show_events = Connector.get_show_events_mode(connection)
-#     self.result_limit = Connector.get_result_limit(connection)
-#     self.logger = logger.set_logger(__name__)
-#     self.host = Connector.get_host(connection)
-#
-#
-# def get_ds_link(self, id, segment_id):
-#     if not id or not segment_id or not self.host:
-#         return None
-#     return 'https://%s/#/analyze/%s/%s' % (self.host, id, segment_id)
-#
-#
-# @staticmethod
-# def get_host(connection):
-#     return connection.get('host', None)
-#
-#
-# for result in processes_search_parsed_response['data']:
-#     ds_link = self.get_ds_link(result.get('id', None), result.get('segment_id', None))
-#     if ds_link:
-#         result['ds_link'] = ds_link
-
 class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)

@@ -40,7 +40,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
-        self._time_range = 100000
+        self._time_range = time_range
         self.qualified_queries = []
         self.qualifier_string = ''
         self.lookup_table_object = None
