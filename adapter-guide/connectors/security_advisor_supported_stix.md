@@ -19,22 +19,22 @@
 | <br> | | |
 | user-account | user_id | author_id |
 | <br> | | |
-| x_security_advisor_finding | author_accountId | author_accountId |
-| x_security_advisor_finding | context_resourceName | context_resourceName |
-| x_security_advisor_finding | description | description |
-| x_security_advisor_finding | finding_severity | finding_severity |
-| x_security_advisor_finding | finding_certainty | finding_certainty |
-| x_security_advisor_finding | id | id |
-| x_security_advisor_finding | longDescription | longDescription |
-| x_security_advisor_finding | message | message |
-| x_security_advisor_finding | name | name |
-| x_security_advisor_finding | noteName | noteName |
-| x_security_advisor_finding | providerId | providerId |
-| x_security_advisor_finding | providerName | providerName |
-| x_security_advisor_finding | remediation | remediation |
-| x_security_advisor_finding | reportedBy_id | reportedBy_id |
-| x_security_advisor_finding | reportedBy_title | reportedBy_title |
-| x_security_advisor_finding | shortDescription | shortDescription |
-| x_security_advisor_finding | finding_next_steps_0_title | finding_next_steps_0_title |
-| x_security_advisor_finding | context_accountId | context_accountId |
+| x-security-advisor-finding | author_accountId | author_accountId |
+| x-security-advisor-finding | context_resourceName | context_resourceName |
+| x-security-advisor-finding | description | description |
+| x-security-advisor-finding | finding_severity | finding_severity |
+| x-security-advisor-finding | finding_certainty | finding_certainty |
+| x-security-advisor-finding | id | id |
+| x-security-advisor-finding | longDescription | longDescription |
+| x-security-advisor-finding | message | message |
+| x-security-advisor-finding | name | name |
+| x-security-advisor-finding | noteName | noteName |
+| x-security-advisor-finding | providerId | providerId |
+| x-security-advisor-finding | providerName | providerName |
+| x-security-advisor-finding | remediation | remediation |
+| x-security-advisor-finding | reportedBy_id | reportedBy_id |
+| x-security-advisor-finding | reportedBy_title | reportedBy_title |
+| x-security-advisor-finding | shortDescription | shortDescription |
+| x-security-advisor-finding | finding_next_steps_0_title | finding_next_steps_0_title |
+| x-security-advisor-finding | context_accountId | context_accountId |
 | <br> | | |
