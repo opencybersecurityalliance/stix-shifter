@@ -100,7 +100,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_risk_finding(self):
         stix_pattern = "[x-ibm-finding:ss_name = '*']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = 'search index=_audit action=alert_fired  earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        queries = 'search index=_audit action=alert_fired earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
 
     def test_port_queries(self):
