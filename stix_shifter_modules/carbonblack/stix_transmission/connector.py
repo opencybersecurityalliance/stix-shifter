@@ -112,7 +112,7 @@ class Connector(BaseSyncConnector):
                 return processes_search_parsed_response
             if processes_search_parsed_response.get('success', False):
                 # DEBUG - RETURN LATER !!!
-                # time_window = extract_time_window(query)
+                time_window = extract_time_window(query)
                 events_limit_reached = False
                 for process in processes_search_parsed_response['data']:
                     try:
@@ -122,8 +122,8 @@ class Connector(BaseSyncConnector):
                         events_parsed_response = self._handle_errors(events_response, events_obj, results_key='process')
                         if events_parsed_response.get('success', False):
                             # DEBUG
-                            # events = Connector._get_events(events_parsed_response['data'], time_window)
-                            events = Connector._get_events(events_parsed_response['data'], None)
+                            events = Connector._get_events(events_parsed_response['data'], time_window)
+                            #events = Connector._get_events(events_parsed_response['data'], None)
                             for raw_event in events:
                                 event = create_event_obj(process, raw_event)
                                 if event:

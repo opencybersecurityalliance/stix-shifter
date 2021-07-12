@@ -108,7 +108,9 @@
       "key": "process.extensions.windows-service-ext.service_dll_refs",
       "object": "process",
       "group": true,
-      "references": ["service_file"]
+      "references": [
+        "service_file"
+      ]
     },
     {
       "key": "x-oca-event.process_ref",
@@ -401,8 +403,18 @@
       "references": "process"
     }
   ],
-  "ds_link": {
-    "key": "x-oca-event.ds_link",
-    "object": "event"
-  }
+  "ds_link": [
+    {
+      "key": "external-reference.url",
+      "object": "device_external_ref"
+    },
+    {
+      "key": "x-oca-event.external_references",
+      "object": "event",
+      "references": [
+        "device_external_ref"
+      ],
+      "group": true
+    }
+  ]
 }
