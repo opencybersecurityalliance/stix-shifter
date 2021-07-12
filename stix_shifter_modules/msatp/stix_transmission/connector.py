@@ -199,7 +199,7 @@ class Connector(BaseSyncConnector):
                         try:
                             deviceInfo = self.collectDeviceData('"{}"'.format(DeviceId))
                             build_data[lookup_table].update(deviceInfo)
-                        except IndexError:
+                        except Exception:
                             # Cannot add information about device, move forward
                             pass
 
