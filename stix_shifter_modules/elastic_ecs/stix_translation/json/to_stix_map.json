@@ -170,12 +170,16 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": ["src_mac"]
+        "references": [
+          "src_mac"
+        ]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "src_ip",
-        "references": ["src_mac"]
+        "references": [
+          "src_mac"
+        ]
       }
     ],
     "as": {
@@ -187,11 +191,13 @@
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": [
+            "autonomous-system"
+          ]
         }
       ],
       "organization": {
-        "name" : {
+        "name": {
           "key": "autonomous-system.name",
           "object": "autonomous-system"
         }
@@ -287,12 +293,16 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": ["dst_mac"]
+        "references": [
+          "dst_mac"
+        ]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": ["dst_mac"]
+        "references": [
+          "dst_mac"
+        ]
       }
     ],
     "bytes": {
@@ -312,11 +322,13 @@
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": [
+            "autonomous-system"
+          ]
         }
       ],
       "organization": {
-        "name" : {
+        "name": {
           "key": "autonomous-system.name"
         }
       }
@@ -419,12 +431,16 @@
       {
         "key": "ipv4-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": ["dst_mac"]
+        "references": [
+          "dst_mac"
+        ]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
         "object": "dst_ip",
-        "references": ["dst_mac"]
+        "references": [
+          "dst_mac"
+        ]
       }
     ],
     "as": {
@@ -436,11 +452,13 @@
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "dst_ip",
-          "references": ["autonomous-system"]
+          "references": [
+            "autonomous-system"
+          ]
         }
       ],
       "organization": {
-        "name" : {
+        "name": {
           "key": "autonomous-system.name"
         }
       }
@@ -715,11 +733,13 @@
       {
         "key": "x-oca-event.url",
         "object": "event"
-      }, {
+      },
+      {
         "key": "domain-name.value",
         "object": "event_domain",
         "transformer": "ToDomainName"
-      }, {
+      },
+      {
         "key": "x-oca-event.domain_ref",
         "object": "event",
         "references": "event_domain"
@@ -1173,7 +1193,7 @@
       "object": "container"
     }
   },
-  "dll":{
+  "dll": {
     "name": {
       "key": "x-ecs-dll.name",
       "object": "dll"
@@ -1234,14 +1254,13 @@
     }
   },
   "dns": {
-    "answers":
-    {
+    "answers": {
       "key": "network-traffic.extensions.dns-ext.answers",
       "object": "nt"
     },
     "header_flags": {
-        "key": "network-traffic.extensions.dns-ext.header_flags",
-        "object": "nt"
+      "key": "network-traffic.extensions.dns-ext.header_flags",
+      "object": "nt"
     },
     "id": {
       "key": "network-traffic.extensions.dns-ext.dns_id",
@@ -1317,13 +1336,19 @@
       {
         "key": "x-oca-event.ip_refs",
         "object": "event",
-        "references": ["resolved_ip", "resolved_ipv6"],
+        "references": [
+          "resolved_ip",
+          "resolved_ipv6"
+        ],
         "unwrap": true
       },
       {
         "key": "network-traffic.extensions.dns-ext.resolved_ip_refs",
         "object": "nt",
-        "references": ["resolved_ip", "resolved_ipv6"],
+        "references": [
+          "resolved_ip",
+          "resolved_ipv6"
+        ],
         "unwrap": true
       }
     ],
@@ -1382,17 +1407,17 @@
     },
     "directory": [
       {
-          "key": "directory.path",
-          "object": "directory"
+        "key": "directory.path",
+        "object": "directory"
       },
       {
-          "key": "file.parent_directory_ref",
-          "object": "file",
-          "references": "directory"
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "directory"
       }
     ],
     "size": {
-      "key" : "file.size",
+      "key": "file.size",
       "object": "file",
       "transformer": "ToInteger"
     },
@@ -1569,7 +1594,10 @@
       {
         "key": "x-oca-asset.ip_refs",
         "object": "host",
-        "references": ["host_ip", "host_ipv6"],
+        "references": [
+          "host_ip",
+          "host_ipv6"
+        ],
         "unwrap": true
       }
     ],
@@ -2346,5 +2374,19 @@
         "object": "vulnerability"
       }
     }
-  }
+  },
+  "ds_link": [
+    {
+      "key": "external-reference.url",
+      "object": "device_external_ref"
+    },
+    {
+      "key": "x-oca-event.external_references",
+      "object": "event",
+      "references": [
+        "device_external_ref"
+      ],
+      "group": true
+    }
+  ]
 }
