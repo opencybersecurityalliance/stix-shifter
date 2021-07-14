@@ -406,38 +406,6 @@
         "references": "nc_process_file"
       }
     ],
-    "MacAddress": [
-      {
-        "key": "mac-addr.value",
-        "object": "mac",
-        "transformer": "FormatMac"
-      },
-      {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": [
-          "mac"
-        ]
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      },
-      {
-        "key": "x-oca-event.network_ref",
-        "object": "event",
-        "references": "nt"
-      },
-      {
-        "key": "x-oca-asset.mac_refs",
-        "object": "host",
-        "references": [
-          "mac"
-        ],
-        "group": true
-      }
-    ],
     "DeviceName": [
       {
         "key": "x-oca-asset.hostname",
@@ -528,6 +496,21 @@
         "object": "event",
         "references": [
           "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
         ],
         "group": true
       }
@@ -1074,6 +1057,21 @@
         ],
         "group": true
       }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
     ]
   },
   "DeviceFileEvents": {
@@ -1549,6 +1547,21 @@
         ],
         "group": true
       }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
     ]
   },
   "DeviceRegistryEvents": {
@@ -1990,6 +2003,21 @@
         "object": "event",
         "references": [
           "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
         ],
         "group": true
       }

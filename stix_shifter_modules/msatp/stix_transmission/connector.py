@@ -98,6 +98,17 @@ class Connector(BaseSyncConnector):
         return_obj['data'] = response_json['Results']
         return return_obj['data'][0]
 
+    def collectMacAddressData(self, DeviceId):
+        query = '(find withsource = TableName in (DeviceNetworkInfo) where (DeviceId =~ %s) | project MacAddress)' % DeviceId
+
+        # limit to 1 results
+        return_obj = dict()
+        response = self.api_client.run_search(query, length=1)
+        return_obj = self._handle_errors(response, return_obj)
+        response_json = json.loads(return_obj["data"])
+        return_obj['data'] = response_json['Results']
+        return return_obj['data'][0]
+
     @staticmethod
     def _handle_errors(response, return_obj):
         """Handling API error response
@@ -172,12 +183,21 @@ class Connector(BaseSyncConnector):
 
                     DeviceId = build_data[lookup_table].get('DeviceId', None)
                     if DeviceId:
+                        # get device data
                         try:
                             deviceInfo = self.collectDeviceData('"{}"'.format(DeviceId))
                             build_data[lookup_table].update(deviceInfo)
                         except Exception:
                             # Cannot add information about device, move forward
                             pass
+                        # get MACAddresses data
+                        if lookup_table != "DeviceNetworkInfo":
+                            try:
+                                deviceInfo = self.collectMacAddressData('"{}"'.format(DeviceId))
+                                build_data[lookup_table].update(deviceInfo)
+                            except Exception:
+                                # Cannot add information about device, move forward
+                                pass
 
                     SHA256 = build_data[lookup_table].get('DeviceId', None)
                     device_link, file_link = self.get_ds_links(DeviceId, SHA256)
