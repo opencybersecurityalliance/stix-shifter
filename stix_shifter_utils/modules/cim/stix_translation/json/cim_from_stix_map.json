@@ -10,10 +10,7 @@
     "domain-name": {
         "cim_type": "flow",
         "fields": {
-            "value": [
-                "host",
-                "url"
-            ]
+            "value": "url"
         }
     },
     "x-readable-payload": {
