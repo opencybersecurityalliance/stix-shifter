@@ -112,3 +112,27 @@ class TestStixToQuery(unittest.TestCase, object):
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'policy_name=Default&limit=50'
         _test_query_assertions(query, queries)
+
+    def test_risk_score_query(self):
+        stix_pattern = "[x-onelogin-risk:risk_score = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'risk_score=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_risk_reasons_query(self):
+        stix_pattern = "[x-onelogin-risk:risk_reasons = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'risk_reasons=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_risk_cookie_id_query(self):
+        stix_pattern = "[x-onelogin-risk:risk_cookie_id = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'risk_cookie_id=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_error_description_query(self):
+        stix_pattern = "[x-onelogin-risk:error_description = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'error_description=Default&limit=50'
+        _test_query_assertions(query, queries)
