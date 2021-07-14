@@ -16,25 +16,25 @@
   },
 
   "x-onelogin": {
-        "fields": {
-          "client_id": ["client_id"],
-          "directory_id": ["directory_id"],
-          "event_type_id": ["event_type_id"],
-          "id": ["id"],
-          "resolution": ["resolution"],
-          "since": ["since"],
-          "until": ["until"],
-          "proxy_ip": ["proxy_ip"],
-          "policy_id": ["policy_id"],
-          "policy_name": ["policy_name"]
+    "fields": {
+      "client_id": ["client_id"],
+      "directory_id": ["directory_id"],
+      "event_type_id": ["event_type_id"],
+      "id": ["id"],
+      "resolution": ["resolution"],
+      "since": ["since"],
+      "until": ["until"],
+      "proxy_ip": ["proxy_ip"],
+      "policy_id": ["policy_id"],
+      "policy_name": ["policy_name"]
     }
   },
-      "x-onelogin-risk": {
-        "fields": {
-          "risk_score": ["risk_score"],
-          "risk_reasons": ["risk_reasons"],
-          "risk_cookie_id": ["risk_cookie_id"],
-          "error_description": ["error_description"]
+  "x-onelogin-risk": {
+    "fields": {
+      "risk_score": ["risk_score"],
+      "risk_reasons": ["risk_reasons"],
+      "risk_cookie_id": ["risk_cookie_id"],
+      "error_description": ["error_description"]
     }
   }
 }
