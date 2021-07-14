@@ -114,9 +114,9 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_risk_score_query(self):
-        stix_pattern = "[x-onelogin-risk:risk_score = 'Default']"
+        stix_pattern = "[x-onelogin-risk:risk_score = '2']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
-        queries = 'risk_score=Default&limit=50'
+        queries = 'risk_score=2&limit=50'
         _test_query_assertions(query, queries)
 
     def test_risk_reasons_query(self):
@@ -126,9 +126,9 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_risk_cookie_id_query(self):
-        stix_pattern = "[x-onelogin-risk:risk_cookie_id = 'Default']"
+        stix_pattern = "[x-onelogin-risk:risk_cookie_id = '5']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
-        queries = 'risk_cookie_id=Default&limit=50'
+        queries = 'risk_cookie_id=5&limit=50'
         _test_query_assertions(query, queries)
 
     def test_error_description_query(self):
