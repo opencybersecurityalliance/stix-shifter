@@ -1,78 +1,79 @@
 {
   "user_id": {
     "object": "user-account",
-    "key": "user-account.user_id"
+    "key": "user-account.user_id",
+    "transformer": "ToString"
   },
   "assuming_acting_user_id": {
-    "object": "user-account",
-    "key": "user-account.assuming_acting_user_id"
+    "object": "x-onelogin-user-account",
+    "key": "x-onelogin-user-account.assuming_acting_user_id"
   },
   "actor_user_name": {
-    "object": "user-account",
-    "key": "user-account.actor_user_name"
+    "object": "x-onelogin-user-account",
+    "key": "x-onelogin-user-account.actor_user_name"
   },
-  "user-account": {
-    "object": "user-account",
-    "key": "user-account.actor_user_id"
+  "actor_user_id": {
+    "object": "x-onelogin-user-account",
+    "key": "x-onelogin-user-account.actor_user_id"
   },
   "account_id": {
-    "object": "user-account",
-    "key": "user-account.account_id"
+    "object": "x-onelogin-user-account",
+    "key": "x-onelogin-user-account.account_id"
   },
   "user_name": {
     "key": "user-account.display_name",
     "object": "user-account"
   },
   "client_id": {
-    "key": "x-onelogin.client_id",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.client_id",
+    "object": "x-onelogin-finding"
   },
   "directory_id": {
-    "key": "x-onelogin.directory_id",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.directory_id",
+    "object": "x-onelogin-finding"
   },
   "event_type_id": {
-    "key": "x-onelogin.event_type_id",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.event_type_id",
+    "object": "x-onelogin-finding"
   },
   "id": {
-    "key": "x-onelogin.id",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.unique_id",
+    "object": "x-onelogin-finding"
   },
   "resolution": {
-    "key": "x-onelogin.resolution",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.resolution",
+    "object": "x-onelogin-finding"
   },
   "ipaddr": {
     "key": "ipv4-addr.value",
     "object": "ipv4-addr"
   },
   "proxy_ip": {
-    "key": "x-onelogin.proxy_ip",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.proxy_ip",
+    "object": "x-onelogin-finding"
   },
   "policy_id": {
-    "key": "x-onelogin.policy_id",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.policy_id",
+    "object": "x-onelogin-finding"
   },
   "policy_name": {
-    "key": "x-onelogin.policy_name",
-    "object": "x-onelogin"
+    "key": "x-onelogin-finding.policy_name",
+    "object": "x-onelogin-finding"
   },
   "risk_score": {
-    "key": "x-onelogin-risk.risk_score",
-    "object": "x-onelogin-risk"
+    "key": "x-onelogin-finding-risk.risk_score",
+    "object": "x-onelogin-finding-risk"
   },
   "risk_reasons": {
-    "key": "x-onelogin-risk.risk_reasons",
-    "object": "x-onelogin-risk"
+    "key": "x-onelogin-finding-risk.risk_reasons",
+    "object": "x-onelogin-finding-risk"
   },
   "risk_cookie_id": {
-    "key": "x-onelogin-risk.risk_cookie_id",
-    "object": "x-onelogin-risk"
+    "key": "x-onelogin-finding-risk.risk_cookie_id",
+    "object": "x-onelogin-finding-risk"
   },
   "error_description": {
-    "key": "x-onelogin-risk.error_description",
-    "object": "x-onelogin-risk"
+    "key": "x-onelogin-finding-risk.error_description",
+    "object": "x-onelogin-finding-risk"
   }
 }
