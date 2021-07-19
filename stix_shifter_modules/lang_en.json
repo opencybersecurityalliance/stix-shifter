@@ -30,7 +30,7 @@
             },
             "dialects": {
                 "label": "Dialect",
-                "description": "If data source needs to search multiple schema or database tables"
+                "description": "The dialect to use if the data source needs to search multiple schema or database tables."
             },
             "validate_pattern": {
                 "label": "STIX Pattern Validator",
@@ -38,7 +38,7 @@
             },
             "stix_validator": {
                 "label": "STIX Object Validator",
-                "description": "Validate trasnlated STIX Objects"
+                "description": "Validate translated STIX Objects"
             },
             "mapping": {
                 "label": "Custom Mapping",
