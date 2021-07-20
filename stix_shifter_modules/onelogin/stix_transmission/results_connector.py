@@ -55,9 +55,9 @@ class ResultsConnector(BaseResultsConnector):
                                 filter_flag = False
                                 # filter data based on filter-attributes
                                 response_dict = ResultsConnector.filter_response(response_dict, filter_attr)
-                                return_obj['data'].extend(response_dict['data'])
+                            return_obj['data'].extend(response_dict['data'])
                         else:
-                            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
+                            ErrorResponder.fill_error(return_obj, response_dict, ['status', 'message', 'description'])
                     except KeyError:
                         break
                 # filter data if not filtered in above while loop
@@ -67,7 +67,7 @@ class ResultsConnector(BaseResultsConnector):
                 return_obj['data'] = return_obj['data'][offset:total_records]
 
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['status', 'message', 'description'])
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
@@ -116,3 +116,4 @@ class ResultsConnector(BaseResultsConnector):
         except KeyError as ex:
             raise KeyError(f"Invalid parameter {ex}")
         return response_dict
+
