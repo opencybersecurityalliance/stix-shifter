@@ -1,6 +1,7 @@
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import logging
+from os import path
 from . import query_constructor
 from stix_shifter_utils.utils.file_helper import read_json
 
@@ -9,11 +10,11 @@ logger = logging.getLogger(__name__)
 DEFAULT_SEARCH_KEYWORD = "search"
 DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
-class QueryTranslator(BaseQueryTranslator):
+class CimQueryTranslator(BaseQueryTranslator):
 
-    def __init__(self, options, dialect, basepath):
-        super().__init__(options, dialect, basepath)
-        self.select_fields = read_json(f"event_select_fields", options)
+    def __init__(self, options, dialect):
+        super().__init__(options, dialect, path.dirname(__file__))
+        self.select_fields = read_json(f"cim_select_fields", options)
 
     def transform_antlr(self, data, antlr_parsing_object):
         """

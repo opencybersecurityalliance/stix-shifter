@@ -258,26 +258,26 @@
   },
   "source": [
     {
-      "key": "x-splunk.log_source",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.log_source",
+      "object": "x-splunk-finding"
     }
   ],
   "_sourcetype": [
     {
-      "key": "x-splunk.provider",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.provider",
+      "object": "x-splunk-finding"
     }
   ],
   "DeviceType": [
     {
-      "key": "x-splunk.device_type",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.device_type",
+      "object": "x-splunk-finding"
     }
   ],
   "Direction": [
     {
-      "key": "x-splunk.direction",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.direction",
+      "object": "x-splunk-finding"
     }
   ],
   "severity": [
@@ -288,38 +288,38 @@
   ],
   "EventID": [
     {
-      "key": "x-splunk.EventID",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.EventID",
+      "object": "x-splunk-finding"
     }
   ],
   "TacticId": [
     {
-      "key": "x-splunk.Mitre_TacticId",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.Mitre_TacticId",
+      "object": "x-splunk-finding"
     }
   ],
   "Tactic": [
     {
-      "key": "x-splunk.Mitre_Tactic",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.Mitre_Tactic",
+      "object": "x-splunk-finding"
     }
   ],
   "TechniqueId": [
     {
-      "key": "x-splunk.Mitre_TechniqueId",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.Mitre_TechniqueId",
+      "object": "x-splunk-finding"
     }
   ],
   "Technique": [
     {
-      "key": "x-splunk.Mitre_Technique",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.Mitre_Technique",
+      "object": "x-splunk-finding"
     }
   ],
   "EventName": [
     {
-      "key": "x-splunk.event_name",
-      "object": "x-splunk"
+      "key": "x-splunk-finding.event_name",
+      "object": "x-splunk-finding"
     }
   ],
   "ss_name": {

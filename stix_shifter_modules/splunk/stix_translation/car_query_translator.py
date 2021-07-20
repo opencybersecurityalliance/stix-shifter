@@ -1,5 +1,7 @@
-from stix_shifter_utils.modules.car.stix_translation.query_translator import CarBaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import logging
+from os import path
 from . import query_constructor
 
 logger = logging.getLogger(__name__)
@@ -8,7 +10,15 @@ DEFAULT_SEARCH_KEYWORD = "search"
 DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
 
-class CarQueryTranslator(CarBaseQueryTranslator):
+class CarQueryTranslator(BaseQueryTranslator):
+    def __init__(self, options={}, dialect=None):
+        super().__init__(options, dialect, path.dirname(__file__))        
+
+    def map_object(self, stix_object_name):
+        if self.map_data.get(stix_object_name):
+            return self.map_data[stix_object_name]["car_type"]
+        else:
+            raise DataMappingException("Unable to map object `{}` into CAR".format(stix_object_name))
 
     def transform_antlr(self, data, antlr_parsing_object):
         """
