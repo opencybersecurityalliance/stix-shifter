@@ -5,7 +5,6 @@ from stix_shifter_modules.onelogin.entry_point import EntryPoint
 from stix_shifter_utils.utils.error_response import ErrorCode
 
 
-
 class OneloginMockResponse:
 
     def __init__(self, response_code, obj):
@@ -23,7 +22,7 @@ class TestOneloginConnection(unittest.TestCase, object):
     def connection(self):
         return {
             "host": "hostbla",
-            "port": 8080,
+            "port": 443,
         }
 
     def configuration(self):
@@ -58,7 +57,8 @@ class TestOneloginConnection(unittest.TestCase, object):
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = {"access_token": "abcd1234", "code": 200}
-        mocked_return_value = {"status": {"error": True, "code": 401, "type": "Unauthorized", "message": "Authentication Failure"}}
+        mocked_return_value = {
+            "status": {"error": True, "code": 401, "type": "Unauthorized", "message": "Authentication Failure"}}
         mock_ping_response.return_value = OneloginMockResponse(401, json.dumps(mocked_return_value))
 
         entry_point = EntryPoint(self.connection(), self.configuration())
@@ -68,11 +68,76 @@ class TestOneloginConnection(unittest.TestCase, object):
         assert ping_response['error'] == "Authentication Failure"
         assert ping_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
 
-    def test_dummy_sync_results(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection("some query", 1, 1)
-        response_code = results_response["success"]
-        query_results = results_response["data"]
+    @patch('stix_shifter_modules.onelogin.stix_transmission.api_client.APIClient.run_search',
+           autospec=True)
+    def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
+        mock_api_client.return_value = None
+        mock_generate_token.return_value = {"access_token": "abcd1234", "code": 200}
+        mocked_return_value = {
+            "status": {
+                "error": False,
+                "code": 200,
+                "type": "success",
+                "message": "Success"
+            },
+            "pagination": {
+                "before_cursor": None,
+                "after_cursor": "cGFnZV9udW1iZXI6Ojoy",
+                "previous_link": None,
+                "next_link": "https://gslab-stix-dev.onelogin.com/api/1/events?client_id=&directory_id=&created_at"
+                             "=&id=&until=&event_type_id=&limit=1&resolution=&user_id=&after_cursor"
+                             "=cGFnZV9udW1iZXI6Ojoy "
+            },
+            "data": [
+                {
+                    "id": 81004691744,
+                    "created_at": "2021-06-22T13:12:06.437Z",
+                    "account_id": 192204,
+                    "user_id": 138593517,
+                    "event_type_id": 149,
+                    "notes": None,
+                    "ipaddr": "52.34.255.228",
+                    "actor_user_id": 12345,
+                    "assuming_acting_user_id": 12345,
+                    "role_id": 441778,
+                    "app_id": None,
+                    "group_id": None,
+                    "otp_device_id": None,
+                    "policy_id": 123,
+                    "actor_system": "Mapping",
+                    "custom_message": None,
+                    "role_name": "Default",
+                    "app_name": None,
+                    "group_name": None,
+                    "actor_user_name": "Mapping",
+                    "user_name": "Akshay P",
+                    "policy_name": "policy_name",
+                    "otp_device_name": None,
+                    "operation_name": None,
+                    "directory_sync_run_id": None,
+                    "directory_id": 12345678,
+                    "resolution": "resolution",
+                    "client_id": 12345678,
+                    "resource_type_id": None,
+                    "error_description": "error_description",
+                    "proxy_ip": "127.0.0.1",
+                    "risk_score": 2,
+                    "risk_reasons": "risk_reasons",
+                    "risk_cookie_id": 123,
+                    "browser_fingerprint": None
+                }
+            ]
+        }
+        mock_results_response.return_value = OneloginMockResponse(200, json.dumps(mocked_return_value))
 
-        assert response_code is True
-        assert query_results == "Results from search"
+        query = "client_id=12345678&ipaddr=52.34.255.228&limit=50"
+
+        offset = 0
+        length = 1
+        entry_point = EntryPoint(self.connection(), self.configuration())
+        results_response = entry_point.create_results_connection(query, offset, length)
+
+        assert results_response is not None
+        assert results_response['success']
+        assert 'data' in results_response
+        assert results_response['data'] is not None
