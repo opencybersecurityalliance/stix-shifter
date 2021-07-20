@@ -8,6 +8,7 @@
 | directory | modified | file_modify_time |
 | <br> | | |
 | domain-name | value | url |
+| domain-name | value | host |
 | <br> | | |
 | email-addr | value | src_user |
 | <br> | | |
@@ -65,4 +66,19 @@
 | <br> | | |
 | x_splunk_spl | user | user |
 | x_splunk_spl | bytes | bytes |
+| <br> | | |
+| x-splunk | log_source | source |
+| x-splunk | provider | _sourcetype |
+| x-splunk | device_type | DeviceType |
+| x-splunk | direction | Direction |
+| x-splunk | severity | severity |
+| x-splunk | EventID | EventID |
+| x-splunk | event_name | EventName |
+| x-splunk | Mitre_TacticId | TacticId |
+| x-splunk | Mitre_Tactic | Tactic |
+| x-splunk | Mitre_TechniqueId | TechniqueId |
+| x-splunk | Mitre_Technique | Technique |
+| <br> | | |
+| x-ibm-finding | ss_name | ss_name |
+| x-ibm-finding | severity | severity |
 | <br> | | |
