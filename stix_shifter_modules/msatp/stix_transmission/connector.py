@@ -11,12 +11,11 @@ class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
 
-    join_DeviceAlertEvents = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
-                             'ReportId, $left.ReportId == $right.ReportId'
-
-    join_DeviceNetworkInfoAndDeviceInfo = "(DeviceNetworkInfo | where DeviceId =~ %s | project MacAddress, DeviceId) | join kind=leftouter (" \
-                                          "DeviceInfo| project PublicIP, OSPlatform ,OSArchitecture, OSVersion , DeviceType, DeviceId) on " \
-                                          "DeviceId, $left.DeviceId == $right.DeviceId"
+    join_query = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
+                 'ReportId, $left.ReportId == $right.ReportId | join kind=leftouter (DeviceNetworkInfo | ' \
+                 'distinct DeviceId, MacAddress) on DeviceId, $left.DeviceId == $right.DeviceId | join ' \
+                 'kind=leftouter (DeviceInfo | distinct PublicIP, OSPlatform ,OSArchitecture, OSVersion , ' \
+                 'DeviceType, DeviceId) on DeviceId, $left.DeviceId == $right.DeviceId'
 
     ALERT_FIELDS = ['Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
     ALERT_FIELDS_IGNORE = ['DeviceId', 'DeviceName', 'ReportId', 'Timestamp']
@@ -48,10 +47,10 @@ class Connector(BaseSyncConnector):
 
         alert_dct = {}
         for field in Connector.ALERT_FIELDS:
-            ffield = ''.join([field, '1'])
-            if ffield in event_data:
-                val = event_data[ffield]
-                event_data.pop(ffield)
+            re_field = ''.join([field, '1'])
+            if re_field in event_data:
+                val = event_data[re_field]
+                event_data.pop(re_field)
                 alert_dct['alert_' + field] = val
             elif field in event_data:
                 val = event_data[field]
@@ -75,23 +74,9 @@ class Connector(BaseSyncConnector):
     @staticmethod
     def join_query_with_alerts(query):
         table = Connector.get_table_name(query)
-        join_query = Connector.join_DeviceAlertEvents.format(table)
+        join_query = Connector.join_query.format(table)
         query += join_query
         return query
-
-    def collectDeviceAndMacData(self, DeviceId):
-        """
-        :param DeviceId:
-        :return: dict that holds information about device and MacAddress
-        """
-        query = self.join_DeviceNetworkInfoAndDeviceInfo % DeviceId
-
-        return_obj = dict()
-        response = self.api_client.run_search(query, length=1)
-        return_obj = self._handle_errors(response, return_obj)
-        response_json = json.loads(return_obj["data"])
-        return_obj['data'] = response_json['Results']
-        return return_obj['data'][0]
 
     @staticmethod
     def _handle_errors(response, return_obj):
@@ -156,7 +141,7 @@ class Connector(BaseSyncConnector):
                 # Get 'TableName' attribute from each row of event data
                 # Create a dictionary with 'TableName' as key and other attributes in an event data as value
                 # Filter the "None" and empty values except for RegistryValueName, which support empty string
-                # Customizing of Registryvalues json
+                # Customizing of Registry values json
                 table_event_data = []
                 unify_events_dct = {}
                 for event_data in q_return_obj['data']:
@@ -165,16 +150,6 @@ class Connector(BaseSyncConnector):
                     build_data = dict()
                     build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
                     DeviceId = build_data[lookup_table].get('DeviceId', None)
-
-                    if DeviceId:
-                        try:
-                            deviceAndMacInfo = self.collectDeviceAndMacData('"{}"'.format(DeviceId))
-                            build_data[lookup_table].update(deviceAndMacInfo)
-                            # DEBUG
-                            print('good')
-                        except Exception as e:
-                            print(f'Cannot collect: {e}')
-
                     SHA256 = build_data[lookup_table].get('InitiatingProcessSHA256', None)
                     device_link, file_link = self.get_ds_links(DeviceId, SHA256)
                     build_data[lookup_table]['device_link'] = device_link
@@ -212,8 +187,9 @@ class Connector(BaseSyncConnector):
                     build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
                     k_tuple = (
-                    build_data[lookup_table].get('DeviceName', None), build_data[lookup_table].get('ReportId', None),
-                    build_data[lookup_table].get('Timestamp', None))
+                        build_data[lookup_table].get('DeviceName', None),
+                        build_data[lookup_table].get('ReportId', None),
+                        build_data[lookup_table].get('Timestamp', None))
                     # if the same event already exists on the table_event_data, just update 'Alerts' field
                     if k_tuple in unify_events_dct:
                         ind = unify_events_dct[k_tuple]
