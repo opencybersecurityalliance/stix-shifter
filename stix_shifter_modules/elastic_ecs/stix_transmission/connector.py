@@ -13,6 +13,21 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
+        self.host = Connector.get_host(connection)
+        self.port = Connector.get_port(connection)
+
+    @staticmethod
+    def get_host(connection):
+        return connection.get('host', None)
+
+    @staticmethod
+    def get_port(connection):
+        return connection.get('port', None)
+
+    def get_ds_link(self, _index, _id):
+        if not self.host or not self.port:
+            return None
+        return 'https://%s:%d/%s/_all/%s' % (self.host, self.port, _index, _id)
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -56,8 +71,16 @@ class Connector(BaseSyncConnector):
                 if response_json['hits']:
                     # and (response_json['hits']['total']['value'] >= 0 or response_json['hits']['total'] >= 0):
                     self.logger.error("Total # of hits:" + str(response_json['hits']['total']))
-                    return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
+                    return_obj['data'] = [[record['_source'], record['_index'], record['_id']] for record in
+                                          response_json["hits"]["hits"]]
                     self.logger.error("Total # of records: " + str(len(return_obj['data'])))
+                    for event in return_obj['data']:
+                        ds_link = self.get_ds_link(event[1], event[2])
+                        event[0]['ds_link'] = ds_link
+
+                    return_obj['data'] = [record[0] for record in return_obj['data']]
+
+
 
             return return_obj
         except Exception as e:

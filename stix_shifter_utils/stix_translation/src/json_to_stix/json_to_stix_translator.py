@@ -176,9 +176,7 @@ class DataSourceObjToStixObj:
         return ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
-
         to_map = obj[ds_key]
-
         if ds_key not in ds_map:
             if self.options.get('unmapped_fallback'):
                 if ds_key not in self.ds_key_map:
