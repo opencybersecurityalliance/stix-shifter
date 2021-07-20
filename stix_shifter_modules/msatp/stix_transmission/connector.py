@@ -11,11 +11,16 @@ class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
 
-    join_DeviceAlertEvents_query = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
-                                   'ReportId, $left.ReportId == $right.ReportId'
+    join_DeviceAlertEvents = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
+                             'ReportId, $left.ReportId == $right.ReportId'
+
+    join_DeviceNetworkInfoAndDeviceInfo = "(DeviceNetworkInfo | where DeviceId =~ %s | project MacAddress, DeviceId) | join kind=leftouter (" \
+                                          "DeviceInfo| project PublicIP, OSPlatform ,OSArchitecture, OSVersion , DeviceType, DeviceId) on " \
+                                          "DeviceId, $left.DeviceId == $right.DeviceId"
 
     ALERT_FIELDS = ['Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
     ALERT_FIELDS_IGNORE = ['DeviceId', 'DeviceName', 'ReportId', 'Timestamp']
+    DEFENDER_HOST = 'security.microsoft.com'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -26,26 +31,14 @@ class Connector(BaseSyncConnector):
             self.token = Connector.generate_token(connection, configuration)
             configuration['auth']['access_token'] = self.token
             self.api_client = APIClient(connection, configuration)
-            self.host = Connector.get_host(connection)
 
         except Exception as ex:
             self.init_error = ex
 
     def get_ds_links(self, deviceId=None, fileUniqueId=None):
-        device_link = None
-        file_link = None
-        if not self.host:
-            return None
-        if deviceId:
-            device_link = 'https://%s/machines/%s/overview' % (self.host, deviceId)
-        if fileUniqueId:
-            file_link = 'https://%s/files/%s/overview' % (self.host, fileUniqueId)
-
+        device_link = 'https://%s/machines/%s/overview' % (self.DEFENDER_HOST, deviceId) if deviceId else None
+        file_link = 'https://%s/files/%s/overview' % (self.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
         return device_link, file_link
-
-    @staticmethod
-    def get_host(connection):
-        return connection.get('host', None)
 
     @staticmethod
     def unify_alert_fields(event_data):
@@ -82,26 +75,17 @@ class Connector(BaseSyncConnector):
     @staticmethod
     def join_query_with_alerts(query):
         table = Connector.get_table_name(query)
-        join_query = Connector.join_DeviceAlertEvents_query.format(table)
+        join_query = Connector.join_DeviceAlertEvents.format(table)
         query += join_query
         return query
 
-    def collectDeviceData(self, DeviceId):
-        query = '(find withsource = TableName in (DeviceInfo) where (DeviceId =~ %s) | project PublicIP, OSPlatform , ' \
-                'OSArchitecture, OSVersion , DeviceType)' % DeviceId
+    def collectDeviceAndMacData(self, DeviceId):
+        """
+        :param DeviceId:
+        :return: dict that holds information about device and MacAddress
+        """
+        query = self.join_DeviceNetworkInfoAndDeviceInfo % DeviceId
 
-        # limit to 1 results
-        return_obj = dict()
-        response = self.api_client.run_search(query, length=1)
-        return_obj = self._handle_errors(response, return_obj)
-        response_json = json.loads(return_obj["data"])
-        return_obj['data'] = response_json['Results']
-        return return_obj['data'][0]
-
-    def collectMacAddressData(self, DeviceId):
-        query = '(find withsource = TableName in (DeviceNetworkInfo) where (DeviceId =~ %s) | project MacAddress)' % DeviceId
-
-        # limit to 1 results
         return_obj = dict()
         response = self.api_client.run_search(query, length=1)
         return_obj = self._handle_errors(response, return_obj)
@@ -180,26 +164,18 @@ class Connector(BaseSyncConnector):
                     event_data.pop('TableName')
                     build_data = dict()
                     build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-
                     DeviceId = build_data[lookup_table].get('DeviceId', None)
-                    if DeviceId:
-                        # get device data
-                        try:
-                            deviceInfo = self.collectDeviceData('"{}"'.format(DeviceId))
-                            build_data[lookup_table].update(deviceInfo)
-                        except Exception:
-                            # Cannot add information about device, move forward
-                            pass
-                        # get MACAddresses data
-                        if lookup_table != "DeviceNetworkInfo":
-                            try:
-                                deviceInfo = self.collectMacAddressData('"{}"'.format(DeviceId))
-                                build_data[lookup_table].update(deviceInfo)
-                            except Exception:
-                                # Cannot add information about device, move forward
-                                pass
 
-                    SHA256 = build_data[lookup_table].get('DeviceId', None)
+                    if DeviceId:
+                        try:
+                            deviceAndMacInfo = self.collectDeviceAndMacData('"{}"'.format(DeviceId))
+                            build_data[lookup_table].update(deviceAndMacInfo)
+                            # DEBUG
+                            print('good')
+                        except Exception as e:
+                            print(f'Cannot collect: {e}')
+
+                    SHA256 = build_data[lookup_table].get('InitiatingProcessSHA256', None)
                     device_link, file_link = self.get_ds_links(DeviceId, SHA256)
                     build_data[lookup_table]['device_link'] = device_link
                     build_data[lookup_table]['file_link'] = file_link
@@ -235,8 +211,9 @@ class Connector(BaseSyncConnector):
                     build_data[lookup_table]['event_count'] = '1'
                     build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
-                    k_tuple = (build_data[lookup_table].get('DeviceName', None), build_data[lookup_table].get('ReportId', None),
-                               build_data[lookup_table].get('Timestamp', None))
+                    k_tuple = (
+                    build_data[lookup_table].get('DeviceName', None), build_data[lookup_table].get('ReportId', None),
+                    build_data[lookup_table].get('Timestamp', None))
                     # if the same event already exists on the table_event_data, just update 'Alerts' field
                     if k_tuple in unify_events_dct:
                         ind = unify_events_dct[k_tuple]
