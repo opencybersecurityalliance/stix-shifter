@@ -20,20 +20,7 @@ class QueryStringPatternTranslator:
     comparator_lookup = {
         ComparisonExpressionOperators.And: "&",
         ComparisonExpressionOperators.Or: "&",
-        # ComparisonComparators.GreaterThan: ">",
-        # ComparisonComparators.GreaterThanOrEqual: ">=",
-        # ComparisonComparators.LessThan: "<",
-        # ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.Equal: "=",
-        # ComparisonComparators.NotEqual: "!=",
-        # ComparisonComparators.Like: "LIKE",
-        # ComparisonComparators.In: "IN",
-        # ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        # ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        # ObservationOperators.And: 'OR'
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
@@ -87,7 +74,7 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    #TODO remove self reference from static methods
+    # TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
@@ -113,7 +100,7 @@ class QueryStringPatternTranslator:
             else:
                 comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
-            if (mapped_fields_count > 1):
+            if mapped_fields_count > 1:
                 comparison_string += "&"
                 mapped_fields_count -= 1
         return comparison_string
@@ -125,7 +112,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
+            raise NotImplementedError("Comparison operator {} unsupported for Onelogin connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
@@ -219,7 +206,9 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    result_limit = 50
+    result_limit = options['result_limit']
+    if not result_limit:
+        result_limit = 50
     # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers

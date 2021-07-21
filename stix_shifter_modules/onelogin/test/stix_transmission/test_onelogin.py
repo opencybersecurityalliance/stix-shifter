@@ -38,7 +38,7 @@ class TestOneloginConnection(unittest.TestCase, object):
         mocked_return_value = '{"access_token":"abcd1234",' \
                               '"created_at":"2021-07-19T04:11:28.293Z","expires_in":36000,' \
                               '"refresh_token":"efgh1234",' \
-                              '"token_type":"bearer","account_id":123456} '
+                              '"token_type":"bearer","account_id":123456}'
         mock_generate_token.return_value = OneloginMockResponse(200, str(mocked_return_value))
         entry_point = EntryPoint(self.connection(), self.configuration())
         check_async = entry_point.is_async()
@@ -48,7 +48,7 @@ class TestOneloginConnection(unittest.TestCase, object):
         mocked_return_value = '{"access_token":"abcd1234",' \
                               '"created_at":"2021-07-19T04:11:28.293Z","expires_in":36000,' \
                               '"refresh_token":"efgh1234",' \
-                              '"token_type":"bearer","account_id":123456} '
+                              '"token_type":"bearer","account_id":123456}'
         mock_generate_token.return_value = OneloginMockResponse(200, str(mocked_return_value))
         mock_api_client.return_value = None
         entry_point = EntryPoint(self.connection(), self.configuration())
@@ -160,12 +160,15 @@ class TestOneloginConnection(unittest.TestCase, object):
                 "error": True,
                 "code": 400,
                 "type": "bad request",
-                "message": "Authorization Information is incorrect"
+                "message": {
+                    "attribute": "user_id",
+                    "description": "user_id has incorrect data type. It should be -> integer"
+                }
             }
         }
         mock_results_response.return_value = OneloginMockResponse(400, json.dumps(mocked_return_value))
 
-        query = "user_id=12345678&limit=50"
+        query = "user_id=abc&limit=50"
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())
@@ -173,8 +176,8 @@ class TestOneloginConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert results_response['error'] == 'Authorization Information is incorrect'
-        assert results_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
+        assert results_response['error'] == 'user_id has incorrect data type. It should be -> integer'
+        assert results_response['code'] == ErrorCode.TRANSMISSION_INVALID_PARAMETER.value
 
 
     @patch('stix_shifter_modules.onelogin.stix_transmission.api_client.APIClient'

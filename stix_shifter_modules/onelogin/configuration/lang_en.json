@@ -1,13 +1,13 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
-            "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "label": "API Domain",
+            "placeholder": "api.us.onelogin.com",
+            "description": "Specify the domain for region that your OneLogin account resides in"
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "description": "Set the port number that is associated with the API Domain"
         },
         "help": {
             "label": "Need additional help?",
@@ -31,10 +31,6 @@
             "clientSecret": {
                 "label": "Client Secret",
                 "description": "Client Secret of onelogin"
-            },
-             "access_token": {
-                "label": "Access Token",
-                "description": "bearer access token"
             }
         }
     }

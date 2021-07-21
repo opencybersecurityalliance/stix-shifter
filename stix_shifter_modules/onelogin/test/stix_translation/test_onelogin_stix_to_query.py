@@ -13,13 +13,13 @@ class TestStixToQuery(unittest.TestCase, object):
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
-        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
-        queries = 'ipaddr=192.168.122.84&ipaddr=192.168.122.83&limit=50'
+        query = translation.translate('onelogin', 'query', 'onelogin', stix_pattern, options={"result_limit": 100})
+        queries = 'ipaddr=192.168.122.84&ipaddr=192.168.122.83&limit=100'
         _test_query_assertions(query, queries)
 
     def test_user_id_query(self):
         stix_pattern = "[user-account:user_id = '12345678']"
-        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        query = translation.translate('onelogin', 'query', 'onelogin', stix_pattern)
         queries = 'user_id=12345678&limit=50'
         _test_query_assertions(query, queries)
 
