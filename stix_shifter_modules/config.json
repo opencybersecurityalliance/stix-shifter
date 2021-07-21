@@ -13,7 +13,7 @@
             "result_limit": {
                 "default": 10000,
                 "min": 1,
-                "max": 60000,
+                "max": 500000,
                 "type": "number",
                 "previous": "connection.resultSizeLimit"
             },
@@ -60,7 +60,6 @@
             "mapping": {
                 "type": "json",
                 "optional": true,
-                "hidden": true,
                 "previous": "connection.mapping"
             },
             "unmapped_fallback": {

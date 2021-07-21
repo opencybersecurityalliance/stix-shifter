@@ -4,6 +4,7 @@ from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
+import re
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -60,9 +61,12 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     async def create_results_connection(self, search_id, offset, length):
-        # search_id is the pattern
         observations = []
         return_obj = dict()
+
+        if self.test_START_STOP_format(search_id):
+            # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
+            search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
 
         response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
@@ -111,3 +115,9 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
+
+    def test_START_STOP_format(self, query_string) -> bool:
+        # Matches START t'1234-56-78T00:00:00.123Z' STOP t'1234-56-78T00:00:00.123Z'
+        pattern = "START\s(t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')\sSTOP"
+        match = re.search(pattern, query_string)
+        return bool(match)

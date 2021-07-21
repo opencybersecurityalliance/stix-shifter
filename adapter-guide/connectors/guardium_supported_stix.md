@@ -1,4 +1,4 @@
-## IBM Guardium
+## IBM Guardium Data Protection
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | Payload |
