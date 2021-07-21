@@ -60,8 +60,6 @@ class TestMSATPConnection(unittest.TestCase):
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
-        print(str(self.connection))
-        print(str(self.config))
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
 

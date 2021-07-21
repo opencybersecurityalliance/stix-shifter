@@ -19,22 +19,42 @@ def run_async_func(callable, *args, **kwargs):
     return loop.run_until_complete(callable(*args, **kwargs))
 
 
+
+@asyncinit
+class QRadarMockResponse:
+    async def __init__(self, response_code, object):
+        self.code = response_code
+        self.object = object
+
+    def read(self):
+        return self.object
+
+class RequestsResponse():
+    def __init__(self, response_code, object):
+        self.code = response_code
+        self.object = object
+
+    def read(self):
+        return self.object    
+
+class MockResponseWrapper(QRadarMockResponse):
+    @property 
+    def code(self):
+        return self.code
+
+    @property
+    def content(self):
+        return self.object
+
+    def raise_for_status(self):
+        pass
+
 @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.__init__', autospec=True)
 class TestQRadarConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
         entry_point = EntryPoint()
 
-        config = {
-            "auth": {
-                "sec": "bla"
-            }
-        }
-        connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
-        }
         check_async = entry_point.is_async()
 
         assert check_async
@@ -215,31 +235,3 @@ class TestQRadarConnection(unittest.TestCase, object):
 
 
 
-@asyncinit
-class QRadarMockResponse:
-    async def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
-
-    def read(self):
-        return self.object
-
-class RequestsResponse():
-    def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
-
-    def read(self):
-        return self.object    
-
-class MockResponseWrapper(QRadarMockResponse):
-    @property 
-    def code(self):
-        return self.code
-
-    @property
-    def content(self):
-        return self.object
-
-    def raise_for_status(self):
-        pass

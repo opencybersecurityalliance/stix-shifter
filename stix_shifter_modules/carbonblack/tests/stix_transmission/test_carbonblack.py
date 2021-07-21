@@ -1,6 +1,6 @@
 import json
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, ANY
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
 import asyncio
 from asyncinit import asyncinit
@@ -291,15 +291,10 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'code' in results_response
         assert  results_response['code'] == 'invalid_query'
 
-    # @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
-    # @patch('aiohttp.ClientSession.get', autospec=True)
-    @patch('aiohttp_retry.RetryClient.get', new_callable=AsyncMock)
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
-        # mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
-        mock_requests_response.side_effect = [
-            RequestMockResponse(200, mocked_return_value.encode())
-        ]
+        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
@@ -308,5 +303,4 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
-        mock_requests_response.assert_called_with(ANY, 'https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=(2, 30), verify=True, auth=None)
-        # mock_requests_response.assert_called_with(query_expression, start=100, rows=2)
+        mock_requests_response.assert_called_with(query_expression, start=100, rows=2)

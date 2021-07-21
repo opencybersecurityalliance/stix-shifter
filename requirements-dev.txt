@@ -1,6 +1,8 @@
 -r requirements.txt
 aiohttp==3.7.4
+aiohttp-retry==2.4.0
 asyncio==3.4.3
+asyncinit==0.2.4
 asynctest==0.13.0
 astroid==1.6.2
 attrs==17.4.0
