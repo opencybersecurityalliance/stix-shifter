@@ -22,7 +22,23 @@
       "until": ["until"],
       "proxy_ip": ["proxy_ip"],
       "policy_id": ["policy_id"],
-      "policy_name": ["policy_name"]
+      "policy_name": ["policy_name"],
+      "role_id": ["role_id"],
+      "app_id": ["app_id"],
+      "group_id": ["group_id"],
+      "otp_device_id": ["otp_device_id"],
+      "actor_system": ["actor_system"],
+      "custom_message": ["custom_message"],
+      "role_name": ["role_name"],
+      "app_name": ["app_name"],
+      "group_name": ["group_name"],
+      "otp_device_name": ["otp_device_name"],
+      "operation_name": ["operation_name"],
+      "directory_sync_run_id": ["directory_sync_run_id"],
+      "resource_type_id": ["resource_type_id"],
+      "browser_fingerprint": ["browser_fingerprint"],
+      "notes": ["notes"],
+      "created_at": ["created_at"]
     }
   },
   "x-onelogin-risk": {

@@ -60,6 +60,58 @@
     "key": "x-onelogin-finding.policy_name",
     "object": "x-onelogin-finding"
   },
+  "role_id": {
+    "key": "x-onelogin-finding.role_id",
+    "object": "x-onelogin-finding"
+  },
+  "app_id": {
+    "key": "x-onelogin-finding.app_id",
+    "object": "x-onelogin-finding"
+  },
+  "custom_message": {
+    "key": "x-onelogin-finding.custom_message",
+    "object": "x-onelogin-finding"
+  },
+  "role_name": {
+    "key": "x-onelogin-finding.role_name",
+    "object": "x-onelogin-finding"
+  },
+  "app_name": {
+    "key": "x-onelogin-finding.app_name",
+    "object": "x-onelogin-finding"
+  },
+  "group_name": {
+    "key": "x-onelogin-finding.group_name",
+    "object": "x-onelogin-finding"
+  },
+  "otp_device_name": {
+    "key": "x-onelogin-finding.otp_device_name",
+    "object": "x-onelogin-finding"
+  },
+  "operation_name": {
+    "key": "x-onelogin-finding.operation_name",
+    "object": "x-onelogin-finding"
+  },
+  "directory_sync_run_id": {
+    "key": "x-onelogin-finding.directory_sync_run_id",
+    "object": "x-onelogin-finding"
+  },
+  "resource_type_id": {
+    "key": "x-onelogin-finding.resource_type_id",
+    "object": "x-onelogin-finding"
+  },
+  "browser_fingerprint": {
+    "key": "x-onelogin-finding.browser_fingerprint",
+    "object": "x-onelogin-finding"
+  },
+  "notes": {
+    "key": "x-onelogin-finding.notes",
+    "object": "x-onelogin-finding"
+  },
+  "created_at": {
+    "key": "x-onelogin-finding.created_at",
+    "object": "x-onelogin-finding"
+  },
   "risk_score": {
     "key": "x-onelogin-finding-risk.risk_score",
     "object": "x-onelogin-finding-risk"

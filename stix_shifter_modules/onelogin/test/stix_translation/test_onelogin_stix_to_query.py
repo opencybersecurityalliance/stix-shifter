@@ -113,6 +113,102 @@ class TestStixToQuery(unittest.TestCase, object):
         queries = 'policy_name=Default&limit=50'
         _test_query_assertions(query, queries)
 
+    def test_role_id_query(self):
+        stix_pattern = "[x-onelogin-finding:role_id = '123']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'role_id=123&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_app_id_query(self):
+        stix_pattern = "[x-onelogin-finding:app_id = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'app_id=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_group_id_query(self):
+        stix_pattern = "[x-onelogin-finding:group_id = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'group_id=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_otp_device_id_query(self):
+        stix_pattern = "[x-onelogin-finding:otp_device_id = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'otp_device_id=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_actor_system_query(self):
+        stix_pattern = "[x-onelogin-finding:actor_system = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'actor_system=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_custom_message_query(self):
+        stix_pattern = "[x-onelogin-finding:custom_message = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'custom_message=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_role_name_query(self):
+        stix_pattern = "[x-onelogin-finding:role_name = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'role_name=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_app_name_query(self):
+        stix_pattern = "[x-onelogin-finding:app_name = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'app_name=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_group_name_query(self):
+        stix_pattern = "[x-onelogin-finding:group_name = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'group_name=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_otp_device_name_query(self):
+        stix_pattern = "[x-onelogin-finding:otp_device_name = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'otp_device_name=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_operation_name_query(self):
+        stix_pattern = "[x-onelogin-finding:operation_name = 'Default']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'operation_name=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_directory_sync_run_id_query(self):
+        stix_pattern = "[x-onelogin-finding:directory_sync_run_id = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'directory_sync_run_id=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_resource_type_id_query(self):
+        stix_pattern = "[x-onelogin-finding:resource_type_id = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'resource_type_id=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_browser_fingerprint_query(self):
+        stix_pattern = "[x-onelogin-finding:browser_fingerprint = 'True']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'browser_fingerprint=True&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_notes_query(self):
+        stix_pattern = "[x-onelogin-finding:notes = '1234']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'notes=1234&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_created_at_query(self):
+        stix_pattern = "[x-onelogin-finding:created_at = '2021-06-22T13:12:06.437Z']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'created_at=2021-06-22T13:12:06.437Z&limit=50'
+        _test_query_assertions(query, queries)
+
     def test_risk_score_query(self):
         stix_pattern = "[x-onelogin-risk:risk_score = '2']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
