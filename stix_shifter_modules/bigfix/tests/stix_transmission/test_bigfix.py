@@ -501,9 +501,6 @@ class TestBigfixConnection(unittest.TestCase):
     def test_status_response_error_exception_status(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
         mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
-
-        mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
         mock_status_response.side_effect = Exception('an error getting status')
 
         search_id = "104"
@@ -521,23 +518,17 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_error_exception_result(mock_sync_query_results, mock_status_response):
-        mocked_sync_query_return_value = MockHttpResponse('bad answer')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
-        mock_sync_query_results.side_effect = Exception('an error occurred executing sync query')
-        mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_sync_query_results.side_effect = ConnectionError('an error occurred executing sync query')
 
         search_id = "104"
+        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+        status_response = transmission.status(search_id)
 
-        with pytest.raises(Exception):
-            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-            status_response = transmission.status(search_id)
-
-            assert status_response is not None
-            assert 'success' in status_response
-            assert status_response['success'] is False
-            assert 'error' in status_response
-            assert 'progress' not in status_response
+        assert status_response is not None
+        assert 'success' in status_response
+        assert status_response['success'] is False
+        assert 'error' in status_response
+        assert 'progress' not in status_response
 
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))

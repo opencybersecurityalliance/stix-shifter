@@ -1,4 +1,5 @@
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
+from stix_shifter_modules.elastic_ecs.stix_transmission.connector import UnexpectedResponseException
 from unittest.mock import patch
 import unittest
 import pytest
@@ -54,9 +55,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response):
-        mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('exception')
+        mock_ping_response.side_effect = UnexpectedResponseException('exception')
         config = {
             "auth": {
                 "username": "bla",
@@ -72,7 +71,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         ping_response = None
 
-        with pytest.raises(Exception):
+        with pytest.raises(UnexpectedResponseException):
             transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
             ping_response = transmission.ping()
 
