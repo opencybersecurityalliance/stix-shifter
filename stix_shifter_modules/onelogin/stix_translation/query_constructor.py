@@ -19,41 +19,13 @@ class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "&",
-        ComparisonExpressionOperators.Or: "&",
-        ComparisonComparators.Equal: "=",
+        ComparisonComparators.Equal: "="
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
-
-    @staticmethod
-    def _format_set(values) -> str:
-        gen = values.element_iterator()
-        return "({})".format(' OR '.join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
-
-    @staticmethod
-    def _format_match(value) -> str:
-        raw = QueryStringPatternTranslator._escape_value(value)
-        if raw[0] == "^":
-            raw = raw[1:]
-        else:
-            raw = ".*" + raw
-        if raw[-1] == "$":
-            raw = raw[0:-1]
-        else:
-            raw = raw + ".*"
-        return "\'{}\'".format(raw)
-
-    @staticmethod
-    def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
-
-    @staticmethod
-    def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -129,17 +101,9 @@ class QueryStringPatternTranslator:
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
+            if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._escape_value(expression.value)
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
-                value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
 
@@ -207,8 +171,6 @@ class QueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
     result_limit = options['result_limit']
-    if not result_limit:
-        result_limit = 50
     # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers

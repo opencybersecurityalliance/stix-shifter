@@ -113,19 +113,19 @@
     "object": "x-onelogin-finding"
   },
   "risk_score": {
-    "key": "x-onelogin-finding-risk.risk_score",
-    "object": "x-onelogin-finding-risk"
+    "key": "x-onelogin-risk.risk_score",
+    "object": "x-onelogin-risk"
   },
   "risk_reasons": {
-    "key": "x-onelogin-finding-risk.risk_reasons",
-    "object": "x-onelogin-finding-risk"
+    "key": "x-onelogin-risk.risk_reasons",
+    "object": "x-onelogin-risk"
   },
   "risk_cookie_id": {
-    "key": "x-onelogin-finding-risk.risk_cookie_id",
-    "object": "x-onelogin-finding-risk"
+    "key": "x-onelogin-risk.risk_cookie_id",
+    "object": "x-onelogin-risk"
   },
   "error_description": {
-    "key": "x-onelogin-finding-risk.error_description",
-    "object": "x-onelogin-finding-risk"
+    "key": "x-onelogin-risk.error_description",
+    "object": "x-onelogin-risk"
   }
 }

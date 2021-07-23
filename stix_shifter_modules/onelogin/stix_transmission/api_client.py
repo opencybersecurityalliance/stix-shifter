@@ -23,10 +23,6 @@ class APIClient():
         payload = '{"grant_type": "client_credentials"}'
         return self.client.call_api(endpoint, 'POST', data=payload)
 
-    def ping_data_source(self):
-        # Pings the data source
-        return {"code": 200, "success": True}
-
     def run_search(self, quary_expr, range_end=None, access_token=None):
         """get the response from onelogin endpoints
         :param quary_expr: str, search_id
@@ -52,11 +48,3 @@ class APIClient():
         endpoint = "api/1/events?" + url
         return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
 
-    def get_search_results(self, search_id, range_start=None, range_end=None):
-        # Return the search results. Results must be in JSON format before being translated into STIX
-        return {"code": 200, "data": "Results from search"}
-
-    def delete_search(self, search_id):
-        # Optional since this may not be supported by the data source API
-        # Delete the search
-        return {"code": 200, "success": True}
