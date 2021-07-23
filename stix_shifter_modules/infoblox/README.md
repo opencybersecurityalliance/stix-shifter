@@ -143,6 +143,9 @@ TBD
                 },
                 "4": {
                     "type": "network-traffic",
+                    "protocols": [
+                       "domain"
+                    ],
                     "src_ref": "2",
                     "extensions": {
                       "dns-ext": {
