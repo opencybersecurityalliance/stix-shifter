@@ -368,60 +368,17 @@ TBD
             "modified": "2021-06-28T08:58:29.505Z",
             "objects": {
                 "0": {
-                    "type": "user-account",
-                    "user_id": "user.service.03283b68-bceb-49c6-b706-2a4ec650067f@infoblox.invalid"
-                },
-                "1": {
                     "type": "domain-name",
                     "value": "vm1988182.11ssd.had.wf"
                 },
-                "2": {
+                "1": {
                     "type": "ipv4-addr",
                     "value": "185.203.242.211"
                 },
-                "3": {
-                    "type": "x-infoblox-dossier-event",
-                    "status": "success",
-                    "job_id": "37918a72-1588-4d25-b7e9-578419e5bb00",
-                    "job": {
-                        "id": "37918a72-1588-4d25-b7e9-578419e5bb00",
-                        "state": "completed",
-                        "status": "success",
-                        "create_ts": 1627170288716,
-                        "create_time": "2021-07-24T23:44:48.716Z",
-                        "request_ttl": 0,
-                        "result_ttl": 3600,
-                        "org": "BLOXINT00000000264",
-                        "user_ref": "0",
-                        "tasks_tbc": 0,
-                        "task_refs": ["4"]
-                    }
-                },
-                "4": {
-                    "type": "x-infoblox-dossier-event-task",
-                    "id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
-                    "state": "completed",
-                    "status": "success",
-                    "create_ts": 1627170288716,
-                    "create_time": "2021-07-24T23:44:48.716Z",
-                    "start_ts": 1627170289717,
-                    "start_time": "2021-07-24T23:44:49.717Z",
-                    "end_ts": 1627170290087,
-                    "end_time": "2021-07-24T23:44:50.087Z",
-                    "params": {
-                        "type": "host",
-                        "target": "vm1988182.11ssd.had.wf",
-                        "source": "pdns"
-                    },
-                    "options": {},
-                    "results": null,
-                    "rl": false,
-                    "results_refs": ["5"]
-                },
-                "5": {
+                "2": {
                     "type": "x-infoblox-dossier-event-result-pdns",
-                    "hostname_ref": "1",
-                    "src_ip_ref": "2",
+                    "hostname_ref": "0",
+                    "ip_ref": "1",
                     "last_seen": 1627160591,
                     "record_type": "A"
                 }

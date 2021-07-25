@@ -72,46 +72,15 @@
 ### Dossier
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
-| user-account | user_id | job.user |
-|--|--|--|
 | domain-name | value | results[0].data.items[0].Domain |
 | domain-name | value | results[0].data.items[0].Hostname |
 |--|--|--|
 | ipv4-addr | value | results[0].data.items[0].IP |
 | ipv6-addr | value | results[0].data.items[0].IP |
 |--|--|--|
-| x-infoblox-dossier-event | status | status |
-| x-infoblox-dossier-event | job_id | job_id |
-| x-infoblox-dossier-event | job.id | job.id |
-| x-infoblox-dossier-event | job.state | job.state |
-| x-infoblox-dossier-event | job.status | job.status |
-| x-infoblox-dossier-event | job.create_ts | job.create_ts |
-| x-infoblox-dossier-event | job.create_time | job.create_time |
-| x-infoblox-dossier-event | job.request_ttl | job.request_ttl |
-| x-infoblox-dossier-event | job.result_ttl | job.result_ttl |
-| x-infoblox-dossier-event | job.org | job.org |
-| x-infoblox-dossier-event | job.user_ref | job.user |
-| x-infoblox-dossier-event | job.tasks_tbc | job.tasks_tbc |
-| x-infoblox-dossier-event | job.task_refs | tasks |
-|--|--|--|
-| x-infoblox-dossier-event-task | id | tasks.id |
-| x-infoblox-dossier-event-task | state | tasks.state |
-| x-infoblox-dossier-event-task | status | tasks.status |
-| x-infoblox-dossier-event-task | create_ts | tasks.create_ts |
-| x-infoblox-dossier-event-task | create_time | tasks.create_time |
-| x-infoblox-dossier-event-task | start_ts | tasks.start_ts |
-| x-infoblox-dossier-event-task | start_time | tasks.start_time |
-| x-infoblox-dossier-event-task | end_ts | tasks.end_ts |
-| x-infoblox-dossier-event-task | end_time | tasks.end_time |
-| x-infoblox-dossier-event-task | params | tasks.params |
-| x-infoblox-dossier-event-task | options | tasks.options |
-| x-infoblox-dossier-event-task | results | tasks.results |
-| x-infoblox-dossier-event-task | rl | tasks.rl |
-| x-infoblox-dossier-event-task | results_refs | results |
-|--|--|--|
 | x-infoblox-dossier-event-result-pdns | domain_ref | results[0].data.items[0].Domain |
 | x-infoblox-dossier-event-result-pdns | hostname_ref | results[0].data.items[0].Hostname |
-| x-infoblox-dossier-event-result-pdns | src_ip_ref | results[0].data.items[0].IP |
+| x-infoblox-dossier-event-result-pdns | ip_ref | results[0].data.items[0].IP |
 | x-infoblox-dossier-event-result-pdns | last_seen | results[0].data.items[0].Last_Seen |
 | x-infoblox-dossier-event-result-pdns | name_server | results[0].data.items[0].NameServer |
 | x-infoblox-dossier-event-result-pdns | record_type | results[0].data.items[0].Record_Type |
