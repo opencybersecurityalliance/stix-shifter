@@ -12,6 +12,170 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId",
+      "object": "x-msatp"
+    },
+    "Alerts": {
+      "alert_Severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
+      },
+      "alert_AttackTechniques": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "ttp_tagging",
+          "unwrap": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "unwrap": true,
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Category": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp_tagging"
+        },
+        {
+          "key": "kill-chain-phase.phase_name",
+          "object": "kill-chain-phase"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.kill_chain_phases",
+          "object": "ttp_tagging",
+          "references": [
+            "kill-chain-phase"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_SHA1": [
+        {
+          "key": "file.hashes.SHA-1",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_FileName": [
+        {
+          "key": "file.name",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "dst_finding_url"
+        },
+        {
+          "key": "x-ibm-finding.dst_url_ref",
+          "object": "finding",
+          "references": "dst_finding_url"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Title": [
+        {
+          "key": "x-ibm-finding.name",
+          "object": "finding"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "finding_dst_ip"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ]
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
     "LocalIP": [
       {
         "key": "ipv4-addr.value",
@@ -25,6 +189,19 @@
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "RemoteIP": [
@@ -61,9 +238,17 @@
       "object": "nt",
       "transformer": "FormatTCPProtocol"
     },
-    "RemoteUrl": {
-      "key": "url.value"
-    },
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "url"
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": "url"
+      }
+    ],
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",
@@ -110,6 +295,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessParentFileName": [
@@ -132,11 +322,18 @@
         "references": "nc_parent_process_file"
       }
     ],
-    "InitiatingProcessId": {
-      "key": "process.pid",
-      "object": "nc_process",
-      "transformer": "ToInteger"
-    },
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "nc_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
+      }
+    ],
     "InitiatingProcessParentId": [
       {
         "key": "process.pid",
@@ -209,6 +406,100 @@
         "references": "nc_process_file"
       }
     ],
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
+    "DeviceId": {
+      "key": "x-msatp.machine_id",
+      "object": "x-msatp"
+    },
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "ActionType": {
+      "key": "x-oca-event.action",
+      "object": "event"
+    },
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
     "MacAddress": [
       {
         "key": "mac-addr.value",
@@ -216,32 +507,14 @@
         "transformer": "FormatMac"
       },
       {
-        "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": ["mac"]
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nt",
-        "references": "src_ip"
-      },
-      {
-        "key": "x-oca-event.network_ref",
-        "object": "event",
-        "references": "nt"
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
       }
-    ],
-    "DeviceName": {
-      "key": "x-msatp.computer_name"
-    },
-    "DeviceId": {
-      "key": "x-msatp.machine_id"
-    },
-    "event_count": {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "ToInteger"
-    }
+    ]
   },
   "DeviceProcessEvents": {
     "Timestamp": [
@@ -260,6 +533,171 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId",
+      "object": "x-msatp"
+    },
+    "Alerts": {
+      "alert_Severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
+      },
+      "alert_AttackTechniques": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "ttp_tagging",
+          "unwrap": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "unwrap": true,
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ],
+          "group": true
+        }
+      ],
+      "alert_Category": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp_tagging"
+        },
+        {
+          "key": "kill-chain-phase.phase_name",
+          "object": "kill-chain-phase"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.kill_chain_phases",
+          "object": "ttp_tagging",
+          "references": [
+            "kill-chain-phase"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_SHA1": [
+        {
+          "key": "file.hashes.SHA-1",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_FileName": [
+        {
+          "key": "file.name",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "dst_finding_url"
+        },
+        {
+          "key": "x-ibm-finding.dst_url_ref",
+          "object": "finding",
+          "references": "dst_finding_url"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Title": [
+        {
+          "key": "x-ibm-finding.name",
+          "object": "finding"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "finding_dst_ip"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ]
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
     "ActionType": [
       {
         "key": "x-oca-event.action",
@@ -530,17 +968,111 @@
         "references": "process_file"
       }
     ],
-    "DeviceName": {
-      "key": "x-msatp.computer_name"
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
     },
     "DeviceId": {
-      "key": "x-msatp.machine_id"
+      "key": "x-msatp.machine_id",
+      "object": "x-msatp"
     },
     "event_count": {
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
+    ]
   },
   "DeviceFileEvents": {
     "Timestamp": [
@@ -559,6 +1091,170 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId",
+      "object": "x-msatp"
+    },
+    "Alerts": {
+      "alert_Severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
+      },
+      "alert_AttackTechniques": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "ttp_tagging",
+          "unwrap": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "unwrap": true,
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Category": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp_tagging"
+        },
+        {
+          "key": "kill-chain-phase.phase_name",
+          "object": "kill-chain-phase"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.kill_chain_phases",
+          "object": "ttp_tagging",
+          "references": [
+            "kill-chain-phase"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_SHA1": [
+        {
+          "key": "file.hashes.SHA-1",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_FileName": [
+        {
+          "key": "file.name",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "dst_finding_url"
+        },
+        {
+          "key": "x-ibm-finding.dst_url_ref",
+          "object": "finding",
+          "references": "dst_finding_url"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Title": [
+        {
+          "key": "x-ibm-finding.name",
+          "object": "finding"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "finding_dst_ip"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ]
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
     "ActionType": [
       {
         "key": "x-oca-event.action",
@@ -762,9 +1458,39 @@
         "references": "fc_process_file"
       }
     ],
-    "DeviceId": {
-      "key": "x-oca-asset.device_id",
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
       "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
+    "DeviceId": {
+      "key": "x-msatp.machine_id",
+      "object": "x-msatp"
     },
     "DeviceName": [
       {
@@ -781,7 +1507,62 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
+    ]
   },
   "DeviceRegistryEvents": {
     "Timestamp": [
@@ -800,6 +1581,170 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
+    "AlertId": {
+      "key": "x-msatp.AlertId",
+      "object": "x-msatp"
+    },
+    "Alerts": {
+      "alert_Severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
+      },
+      "alert_AttackTechniques": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "ttp_tagging",
+          "unwrap": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "unwrap": true,
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Category": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp_tagging"
+        },
+        {
+          "key": "kill-chain-phase.phase_name",
+          "object": "kill-chain-phase"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.kill_chain_phases",
+          "object": "ttp_tagging",
+          "references": [
+            "kill-chain-phase"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_SHA1": [
+        {
+          "key": "file.hashes.SHA-1",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_FileName": [
+        {
+          "key": "file.name",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "dst_finding_url"
+        },
+        {
+          "key": "x-ibm-finding.dst_url_ref",
+          "object": "finding",
+          "references": "dst_finding_url"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Title": [
+        {
+          "key": "x-ibm-finding.name",
+          "object": "finding"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "finding_dst_ip"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ]
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
     "ActionType": [
       {
         "key": "x-oca-event.action",
@@ -972,9 +1917,39 @@
         "references": "re_process_file"
       }
     ],
-    "DeviceId": {
-      "key": "x-oca-asset.device_id",
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
       "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
+    "DeviceId": {
+      "key": "x-msatp.machine_id",
+      "object": "x-msatp"
     },
     "DeviceName": [
       {
@@ -991,28 +1966,266 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
-    }
+    },
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "MacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "transformer": "FormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
+    ]
   },
   "DeviceNetworkInfo": {
-    "IpAddresses": [
+    "DeviceId": {
+      "key": "x-msatp.machine_id",
+      "object": "x-msatp"
+    },
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      }
+    ],
+    "AlertId": {
+      "key": "x-msatp.AlertId",
+      "object": "x-msatp"
+    },
+    "Alerts": {
+      "alert_Severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
+      },
+      "alert_AttackTechniques": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "ttp_tagging",
+          "unwrap": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "unwrap": true,
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Category": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp_tagging"
+        },
+        {
+          "key": "kill-chain-phase.phase_name",
+          "object": "kill-chain-phase"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.kill_chain_phases",
+          "object": "ttp_tagging",
+          "references": [
+            "kill-chain-phase"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "finding",
+          "references": [
+            "ttp_tagging"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_SHA1": [
+        {
+          "key": "file.hashes.SHA-1",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_FileName": [
+        {
+          "key": "file.name",
+          "object": "finding_file"
+        },
+        {
+          "key": "x-ibm-finding.file_ref",
+          "object": "finding",
+          "references": "finding_file"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "dst_finding_url"
+        },
+        {
+          "key": "x-ibm-finding.dst_url_ref",
+          "object": "finding",
+          "references": "dst_finding_url"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_Title": [
+        {
+          "key": "x-ibm-finding.name",
+          "object": "finding"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ],
+      "alert_RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "finding_dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "finding_dst_ip"
+        },
+        {
+          "key": "x-oca-event.finding_refs",
+          "object": "event",
+          "references": [
+            "finding"
+          ]
+        }
+      ]
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "IPAddresses": [
       {
         "key": "ipv4-addr.value",
-        "object": "host_ip",
+        "object": "host_ip4",
         "unwrap": true,
-        "transformer": "MsatpIpTransformer"
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "host_ipv6",
+        "object": "host_ip6",
         "unwrap": true,
-        "transformer": "MsatpIpTransformer"
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "x-oca-asset.ip_refs",
         "object": "host",
         "references": [
-          "host_ip",
-          "host_ipv6"
+          "host_ip4",
+          "host_ip6"
+        ],
+        "unwrap": true
+      },
+      {
+        "key": "x-oca-event.ip_refs",
+        "object": "event",
+        "references": [
+          "resolved_ip",
+          "resolved_ipv6"
         ],
         "unwrap": true
       }
@@ -1020,12 +2233,74 @@
     "MacAddress": [
       {
         "key": "mac-addr.value",
-        "object": "host_mac"
+        "object": "host_mac",
+        "transformer": "FormatMac"
       },
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
-        "references": "host_mac"
+        "references": [
+          "host_mac"
+        ],
+        "group": true
+      }
+    ],
+    "PublicIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst-ipv4-addr"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst-ipv4-addr"
+        ],
+        "group": true
+      }
+    ],
+    "OSPlatform": {
+      "key": "x-oca-asset.os_platform",
+      "object": "host"
+    },
+    "OSArchitecture": {
+      "key": "x-oca-asset.architecture",
+      "object": "host"
+    },
+    "OSVersion": {
+      "key": "x-oca-asset.os_version",
+      "object": "host"
+    },
+    "DeviceType": {
+      "key": "x-msatp.DeviceType",
+      "object": "x-msatp"
+    },
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "file_link": [
+      {
+        "key": "external-reference.url",
+        "object": "file_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "file_external_ref"
+        ],
+        "group": true
       }
     ]
   }

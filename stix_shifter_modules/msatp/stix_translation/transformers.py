@@ -1,5 +1,9 @@
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
 
+HIGH_SEVERITY = 99
+MEDIUM_SEVERITY = 66
+LOW_SEVERITY = 33
+
 
 class MsatpToTimestamp(ValueTransformer):
     """A value transformer to truncate milliseconds"""
@@ -9,7 +13,6 @@ class MsatpToTimestamp(ValueTransformer):
         time_array = msatptime.split('.')
         converted_time = time_array[0] + '.' + time_array[1][:3] + 'Z' if len(time_array) > 1 else time_array[0] + 'Z'
         return converted_time
-
 
 
 class MsatpToRegistryValue(ValueTransformer):
@@ -36,3 +39,15 @@ class MsatpToRegistryValue(ValueTransformer):
         converted_value.append(registryvalue_dict)
         return converted_value
 
+
+class SeverityToNumericVal(ValueTransformer):
+    """A value transformer to convert MSATP Severity value (high/medium/low) to numeric value"""
+
+    @staticmethod
+    def transform(severity):
+        if severity == 'high':
+            return HIGH_SEVERITY
+        elif severity == 'medium':
+            return MEDIUM_SEVERITY
+        else:
+            return LOW_SEVERITY
