@@ -1,5 +1,35 @@
 ## Infoblox
 ### TIDE DB
+| STIX Object | STIX Property | Data Source Field |
+|--|--|--|
+| domain-name | value | domain |
+|--|--|--|
+| email-addr | value | email |
+|--|--|--|
+| ipv4-addr | value | ip |
+| ipv6-addr | value | ip |
+|--|--|--|
+| x-infoblox-threat | threat_class | class |
+| x-infoblox-threat | x_infoblox_confidence | confidence |
+| x-infoblox-threat | dga | dga |
+| x-infoblox-threat | domain_ref | domain |
+| x-infoblox-threat | email_ref | email |
+| x-infoblox-threat | ip_ref | ip |
+| x-infoblox-threat | expiration | expiration |
+| x-infoblox-threat | hash | hash |
+| x-infoblox-threat | host_name | host |
+| x-infoblox-threat | imported | imported |
+| x-infoblox-threat | origin | origin |
+| x-infoblox-threat | profile | profile |
+| x-infoblox-threat | property | property |
+| x-infoblox-threat | target | target |
+| x-infoblox-threat | threat_level | threat_level |
+| x-infoblox-threat | top_level_domain | tld |
+| x-infoblox-threat | threat_type | type |
+| x-infoblox-threat | active | up |
+| x-infoblox-threat | url | url |
+
+
 ### DNS Event
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

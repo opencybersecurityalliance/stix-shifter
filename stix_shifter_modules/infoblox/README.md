@@ -47,6 +47,42 @@ TBD
 ##### tideDbData
 
 ```json
+{
+  "threat": [
+    {
+      "id": "1af2936f-9d33-11eb-8943-6962d4bdf9de",
+      "type": "HOST",
+      "host": "1-lntesasanpaolo-portaleweb.xyz",
+      "domain": "1-lntesasanpaolo-portaleweb.xyz",
+      "tld": "xyz",
+      "profile": "IID",
+      "property": "Phishing_Generic",
+      "class": "Phishing",
+      "threat_level": 100,
+      "confidence": 100,
+      "detected": "2021-04-14T15:04:26.116Z",
+      "received": "2021-04-14T15:07:18.592Z",
+      "imported": "2021-04-14T15:07:18.592Z",
+      "expiration": "2022-04-14T15:04:26.116Z",
+      "dga": false,
+      "up": true,
+      "batch_id": "1af24549-9d33-11eb-8943-6962d4bdf9de",
+      "threat_score": 6,
+      "threat_score_rating": "Medium",
+      "threat_score_vector": "TSIS:1.0/AV:N/AC:L/PR:L/UI:R/EX:H/MOD:N/AVL:N/CI:N/ASN:N/TLD:H/DOP:N/P:F",
+      "confidence_score": 8.2,
+      "confidence_score_rating": "High",
+      "confidence_score_vector": "COSIS:1.0/SR:H/POP:N/TLD:H/CP:F",
+      "risk_score": 7.9,
+      "risk_score_rating": "High",
+      "risk_score_vector": "RSIS:1.0/TSS:M/TLD:H/CVSS:L/EX:H/MOD:N/AVL:N/T:M/DT:L",
+      "extended": {
+        "cyberint_guid": "dadbdde3eaf7fd97bae0bdec8c6ceb07"
+      }
+    }
+  ],
+  "record_count": 1
+}
 ```
 
 ##### dnsEventsData
@@ -165,6 +201,53 @@ TBD
 ##### tideDbData
 
 ```json
+{
+    "type": "bundle",
+    "id": "bundle--9a76f81f-f2d5-4d3e-92dd-5359cf77b957",
+    "spec_version": "2.0",
+    "objects": [
+        {
+            "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
+            "name": "Infoblox",
+            "type": "identity",
+            "identity_class": "individual",
+            "created": "2021-06-28T08:58:24.239Z",
+            "modified": "2021-06-28T08:58:24.239Z"
+        },
+        {
+            "id": "observed-data--ab261396-0c22-468b-8bfc-53becb3223fc",
+            "type": "observed-data",
+            "created_by_ref": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
+            "created": "2021-07-20T18:06:38.598Z",
+            "modified": "2021-07-20T18:06:38.598Z",
+            "objects": {
+                "0": {
+                    "type": "x-infoblox-threat",
+                    "threat_class": "Policy",
+                    "x_infoblox_confidence": 100,
+                    "dga": false,
+                    "domain_ref": "1",
+                    "expiration": "2022-04-14T15:04:26.116Z",
+                    "host_name": "1-lntesasanpaolo-portaleweb.xyz",
+                    "imported": "2021-04-14T15:07:18.592Z",
+                    "profile": "IID",
+                    "property": "Phishing_Generic",
+                    "threat_level": 100,
+                    "top_level_domain": "xyz",
+                    "threat_type": "HOST",
+                    "active": true
+                },
+                "1": {
+                    "type": "domain-name",
+                    "value": "1-lntesasanpaolo-portaleweb.xyz"
+                }
+            },
+            "first_observed": "2021-07-20T18:01:56.645Z",
+            "last_observed": "2021-07-20T18:01:56.645Z",
+            "number_observed": 1
+        }
+    ]
+}
 ```
 
 ##### dnsEventsData
@@ -177,7 +260,7 @@ TBD
     "objects": [
         {
             "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "name": "name",
+            "name": "Infoblox",
             "type": "identity",
             "identity_class": "individual",
             "created": "2021-06-28T08:58:24.239Z",
@@ -271,7 +354,7 @@ TBD
     "objects": [
         {
             "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "name": "name",
+            "name": "Infoblox",
             "type": "identity",
             "identity_class": "individual",
             "created": "2021-06-28T08:58:24.239Z",
