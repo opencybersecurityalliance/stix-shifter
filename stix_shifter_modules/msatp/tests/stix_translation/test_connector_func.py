@@ -1,15 +1,7 @@
 from stix_shifter_modules.msatp.stix_transmission import connector
 from stix_shifter_modules.msatp.stix_transmission.connector import Connector
 
-import json
 import unittest
-
-'''
-    def get_ds_links(self, deviceId=None, fileUniqueId=None):
-        device_link = 'https://%s/machines/%s/overview' % (self.DEFENDER_HOST, deviceId) if deviceId else None
-        file_link = 'https://%s/files/%s/overview' % (self.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
-        return device_link, file_link
-'''
 
 
 def get_conn_and_config():
@@ -50,13 +42,7 @@ class GetDSLinksTests(unittest.TestCase):
         expected_file_link = 'https://%s/files/%s/overview' % (
             connector.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
         expected_res = (expected_device_link, expected_file_link)
-
         self.assertTupleEqual(connector.get_ds_links(deviceId, fileUniqueId), expected_res, "incorrect result")
-
-        # OR
-        # device_link, file_link = connector.get_ds_links(deviceId, fileUniqueId)
-        # self.assertEqual(device_link, expected_device_link, "incorrect result")
-        # self.assertEqual(file_link, expected_file_link, "incorrect result")
 
     def test_get_ds_links_return_types(self):
         conn, config = get_conn_and_config()
@@ -89,7 +75,7 @@ class GetTableNameTests(unittest.TestCase):
 
 class JoinQueryWithAlertsTests(unittest.TestCase):
     def test_get_table_name_return_values(self):
-        q = ""
+        q = '(find withsource = TableName in (DeviceFileEvents) where (FileName =~ "powershell.exe"))'
         q = Connector.join_query_with_alerts(q)
         if 'DeviceAlertEvents' not in q or 'DeviceNetworkInfo' not in q or 'DeviceInfo' not in q:
             raise AssertionError("incorrect result")
