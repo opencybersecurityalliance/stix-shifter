@@ -432,7 +432,7 @@
       }
     ],
     "OSPlatform": {
-      "key": "x-oca-asset.os_platform",
+      "key": "x-oca-asset.os_name",
       "object": "host"
     },
     "OSArchitecture": {
@@ -994,7 +994,7 @@
       }
     ],
     "OSPlatform": {
-      "key": "x-oca-asset.os_platform",
+      "key": "x-oca-asset.os_name",
       "object": "host"
     },
     "OSArchitecture": {
@@ -1473,7 +1473,7 @@
       }
     ],
     "OSPlatform": {
-      "key": "x-oca-asset.os_platform",
+      "key": "x-oca-asset.os_name",
       "object": "host"
     },
     "OSArchitecture": {
@@ -1932,7 +1932,7 @@
       }
     ],
     "OSPlatform": {
-      "key": "x-oca-asset.os_platform",
+      "key": "x-oca-asset.os_name",
       "object": "host"
     },
     "OSArchitecture": {
@@ -2260,7 +2260,7 @@
       }
     ],
     "OSPlatform": {
-      "key": "x-oca-asset.os_platform",
+      "key": "x-oca-asset.os_name",
       "object": "host"
     },
     "OSArchitecture": {
