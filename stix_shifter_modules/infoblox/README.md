@@ -85,12 +85,80 @@ TBD
 }
 ```
 
-##### dossierData
+##### dossierData - pdns
 
 ```json
+{
+  "status": "success",
+  "job_id": "37918a72-1588-4d25-b7e9-578419e5bb00",
+  "job": {
+    "id": "37918a72-1588-4d25-b7e9-578419e5bb00",
+    "state": "completed",
+    "status": "success",
+    "create_ts": 1627170288716,
+    "create_time": "2021-07-24T23:44:48.716Z",
+    "request_ttl": 0,
+    "result_ttl": 3600,
+    "completed_tasks": [
+      "a5183e5d-788d-41d0-8fc0-6264fdb83d04"
+    ],
+    "org": "BLOXINT00000000264",
+    "user": "user.service.03283b68-bceb-49c6-b706-2a4ec650067f@infoblox.invalid",
+    "tasks_tbc": 0
+  },
+  "tasks": {
+    "a5183e5d-788d-41d0-8fc0-6264fdb83d04": {
+      "id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
+      "state": "completed",
+      "status": "success",
+      "create_ts": 1627170288716,
+      "create_time": "2021-07-24T23:44:48.716Z",
+      "start_ts": 1627170289717,
+      "start_time": "2021-07-24T23:44:49.717Z",
+      "end_ts": 1627170290087,
+      "end_time": "2021-07-24T23:44:50.087Z",
+      "params": {
+        "type": "host",
+        "target": "vm1988182.11ssd.had.wf",
+        "source": "pdns"
+      },
+      "options": {},
+      "results": null,
+      "rl": false
+    }
+  },
+  "results": [
+    {
+      "task_id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
+      "params": {
+        "type": "host",
+        "target": "vm1988182.11ssd.had.wf",
+        "source": "pdns"
+      },
+      "status": "success",
+      "time": 369,
+      "v": "3.0.0",
+      "data": {
+        "duration": 369905951,
+        "items": [
+          {
+            "Domain": "",
+            "Hostname": "vm1988182.11ssd.had.wf",
+            "IP": "185.203.242.211",
+            "Last_Seen": 1627160591,
+            "NameServer": "",
+            "Record_Type": "A"
+          }
+        ],
+        "status": 200,
+        "total_results": 1
+      }
+    }
+  ]
+}
 ```
 
-### Trend Micro Vision One response to STIX object (STIX attributes)
+### Infoblox response to STIX object (STIX attributes)
 
 #### STIX observable output
 
@@ -168,7 +236,7 @@ TBD
                     "type": "x-infoblox-dns-event",
                     "user_ref": "5",
                     "src_ip_ref": "0",
-                    "severity": "HIGH",
+                    "x-severity": "HIGH",
                     "tclass": "APT",
                     "threat_indicator": "total-update.com",
                     "tproperty": "MalwareC2",
@@ -176,7 +244,7 @@ TBD
                     "os_version": "Windows 10 Enterprise",
                     "network": "BloxOne Endpoint",
                     "category": "",
-                    "confidence": "HIGH",
+                    "x-confidence": "HIGH",
                     "country": "unknown",
                     "device": "DESKTOP-VT5P2QT",
                     "dhcp_fingerprint": "",
