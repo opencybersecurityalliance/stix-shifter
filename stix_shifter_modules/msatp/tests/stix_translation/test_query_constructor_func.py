@@ -1,6 +1,5 @@
 from stix_shifter_modules.msatp.stix_translation import query_constructor
 from stix_shifter_modules.msatp.stix_translation.query_constructor import QueryStringPatternTranslator
-
 import unittest
 
 
