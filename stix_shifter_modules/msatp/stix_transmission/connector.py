@@ -58,7 +58,8 @@ class Connector(BaseSyncConnector):
                 alert_dct['alert_' + field] = val
 
         for field in Connector.ALERT_FIELDS_IGNORE:
-            event_data.pop(''.join([field, '1']))
+            if ''.join([field, '1']) in event_data:
+                event_data.pop(''.join([field, '1']))
 
         alert = [alert_dct]
         event_data['Alerts'] = alert
