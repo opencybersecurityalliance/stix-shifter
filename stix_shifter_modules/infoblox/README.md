@@ -264,6 +264,91 @@ TBD
 ##### dossierData
 
 ```json
+{
+    "type": "bundle",
+    "id": "bundle--9a76f81f-f2d5-4d3e-92dd-5359cf77b957",
+    "spec_version": "2.0",
+    "objects": [
+        {
+            "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
+            "name": "name",
+            "type": "identity",
+            "identity_class": "individual",
+            "created": "2021-06-28T08:58:24.239Z",
+            "modified": "2021-06-28T08:58:24.239Z"
+        },
+        {
+            "id": "observed-data--ab261396-0c22-468b-8bfc-53becb3223fc",
+            "type": "observed-data",
+            "created_by_ref": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
+            "created": "2021-06-28T08:58:29.505Z",
+            "modified": "2021-06-28T08:58:29.505Z",
+            "objects": {
+                "0": {
+                    "type": "user-account",
+                    "user_id": "user.service.03283b68-bceb-49c6-b706-2a4ec650067f@infoblox.invalid"
+                },
+                "1": {
+                    "type": "domain-name",
+                    "value": "vm1988182.11ssd.had.wf"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "185.203.242.211"
+                },
+                "3": {
+                    "type": "x-infoblox-dossier-event",
+                    "status": "success",
+                    "job_id": "37918a72-1588-4d25-b7e9-578419e5bb00",
+                    "job": {
+                        "id": "37918a72-1588-4d25-b7e9-578419e5bb00",
+                        "state": "completed",
+                        "status": "success",
+                        "create_ts": 1627170288716,
+                        "create_time": "2021-07-24T23:44:48.716Z",
+                        "request_ttl": 0,
+                        "result_ttl": 3600,
+                        "org": "BLOXINT00000000264",
+                        "user_ref": "0",
+                        "tasks_tbc": 0,
+                        "task_refs": ["4"]
+                    }
+                },
+                "4": {
+                    "type": "x-infoblox-dossier-event-task",
+                    "id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
+                    "state": "completed",
+                    "status": "success",
+                    "create_ts": 1627170288716,
+                    "create_time": "2021-07-24T23:44:48.716Z",
+                    "start_ts": 1627170289717,
+                    "start_time": "2021-07-24T23:44:49.717Z",
+                    "end_ts": 1627170290087,
+                    "end_time": "2021-07-24T23:44:50.087Z",
+                    "params": {
+                        "type": "host",
+                        "target": "vm1988182.11ssd.had.wf",
+                        "source": "pdns"
+                    },
+                    "options": {},
+                    "results": null,
+                    "rl": false,
+                    "results_refs": ["5"]
+                },
+                "5": {
+                    "type": "x-infoblox-dossier-event-result-pdns",
+                    "hostname_ref": "1",
+                    "src_ip_ref": "2",
+                    "last_seen": 1627160591,
+                    "record_type": "A"
+                }
+            },
+            "first_observed": "2021-05-18T03:56:52.801Z",
+            "last_observed": "2021-05-18T03:56:52.801Z",
+            "number_observed": 1
+        }
+    ]
+}
 ```
 
 ### Limitations
