@@ -59,11 +59,3 @@ class ConstructIntersecMap(unittest.TestCase):
         test_mep_01 = {"DeviceProcessEvents": 'InitiatingProcessFileName =~ "WmiPrvSE.exe"'}
         test_map_02 = {"DeviceNetworkEvents": 'InitiatingProcessFileName =~ "demo-gthread-3.6.dll"'}
         self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {}, "incorrect result")
-
-
-
-
-
-
-
-
