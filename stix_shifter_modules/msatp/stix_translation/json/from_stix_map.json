@@ -53,8 +53,7 @@
         "DeviceInfo.DeviceName",
         "DeviceAlertEvents.DeviceName",
         "DeviceImageLoadEvents.DeviceName",
-        "DeviceLogonEvents.DeviceName",
-        "DeviceNetworkInfo.DeviceName"
+        "DeviceLogonEvents.DeviceName"
       ]
     }
   },

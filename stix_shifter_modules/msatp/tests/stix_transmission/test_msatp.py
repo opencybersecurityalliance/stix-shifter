@@ -105,7 +105,8 @@ class TestMSATPConnection(unittest.TestCase):
                                 "FileName": "runcit_tlm_hw.bat",
                                 "SHA1": "93b458752aea37a257a7dd2ed51e98ffffc35be8",
                                 "SHA256": "",
-                                "MD5": "26a2fe38dc6f42386659e611219c563c"
+                                "MD5": "26a2fe38dc6f42386659e611219c563c",
+                                "ReportId": 97827
                             }]
                             }"""
         mock_results_response.return_value = MSATPMockResponse(200, mocked_return_value)
@@ -190,7 +191,8 @@ class TestMSATPConnection(unittest.TestCase):
                                 "FileName": "runcit_tlm_hw.bat",
                                 "SHA1": "93b458752aea37a257a7dd2ed51e98ffffc35be8",
                                 "SHA256": "",
-                                "MD5": "26a2fe38dc6f42386659e611219c563c"
+                                "MD5": "26a2fe38dc6f42386659e611219c563c",
+                                "ReportId": 97827
                             }]
                             }"""
 

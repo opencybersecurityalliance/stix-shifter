@@ -1,5 +1,6 @@
 import re
 import uuid
+import copy
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
@@ -76,7 +77,6 @@ class DataSourceObjToStixObj:
         :param key: the key to add
         :param stix_value: the STIX value translated from the input object
         """
-
         split_key = key.split('.')
         child_obj = obj
         parent_props = split_key[0:-1]
@@ -89,6 +89,10 @@ class DataSourceObjToStixObj:
             child_obj[split_key[-1]] = stix_value
         elif group is True:  # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
             if (isinstance(child_obj[split_key[-1]], list)):
+                if isinstance(stix_value, list):
+                    for x in stix_value:
+                        if x in child_obj[split_key[-1]]:
+                            stix_value.remove(x)
                 child_obj[split_key[-1]].extend(stix_value)  # append to existing list
 
     @staticmethod
@@ -158,24 +162,39 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
-    
-    #update the object key of the mapping
+
+    # update the object key of the mapping
     @staticmethod
     def _update_object_key(ds_map, indx):
-        for key, value in ds_map.items():
+        new_ds_map = copy.deepcopy(ds_map)
+        for key, value in new_ds_map.items():
             if isinstance(value, dict):
                 if 'object' in value:
-                    value['object'] = str(value['object']) +'_' + str(indx)
+                    value['object'] = str(value['object']) + '_' + str(indx)
             if isinstance(value, list):
                 for item in value:
                     if 'object' in item:
-                        item['object'] = str(item['object']) +'_' + str(indx)
-                        if 'references' in item:
-                            item['references'] = str(item['references']) +'_' + str(indx)
+                        # only single event object for each observed data obj
+                        if item['object'] == 'event':
+                            item['object'] = str(item['object'])
+                        else:
+                            item['object'] = str(item['object']) + '_' + str(indx)
 
-        return ds_map
+                        if 'references' in item:
+                            references = item['references']
+                            if isinstance(references, list):
+                                updated_references = []
+                                for ref in references:
+                                    updated_references.append(str(ref) + '_' + str(indx))
+                            else:
+                                updated_references = str(item['references']) + '_' + str(indx)
+
+                            item['references'] = updated_references
+
+        return new_ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
+        # to_map is a dict or the value itself
         to_map = obj[ds_key]
         if ds_key not in ds_map:
             if self.options.get('unmapped_fallback'):
@@ -183,7 +202,7 @@ class DataSourceObjToStixObj:
                     self.logger.info(
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
                     cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
-                                "cust_object"}
+                        "cust_object"}
                     if to_map is None or to_map == '':
                         self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
                         return
@@ -208,10 +227,11 @@ class DataSourceObjToStixObj:
                     new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
-        
+
         generic_hash_key = ''
 
         # get the stix keys that are mapped
+        # ds_map is the mapping fields from ds to STIX
         ds_key_def_obj = ds_map[ds_key]
         if isinstance(ds_key_def_obj, list):
             ds_key_def_list = ds_key_def_obj
@@ -224,7 +244,6 @@ class DataSourceObjToStixObj:
                     return
 
             ds_key_def_list = [ds_key_def_obj]
-
 
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
@@ -256,6 +275,7 @@ class DataSourceObjToStixObj:
                                 pattern = re.compile("{}_[0-9]+".format(ref))
                                 for obj_name in object_map:
                                     if pattern.match(obj_name):
+                                        # val is the object index (the value of refernces)
                                         val = object_map.get(obj_name)
                                         stix_value.append(val)
                             else:

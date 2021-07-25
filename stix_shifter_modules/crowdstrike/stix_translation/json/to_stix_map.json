@@ -389,5 +389,19 @@
   "modified_timestamp": {
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"
-  }
+  },
+  "ds_link": [
+    {
+      "key": "external-reference.url",
+      "object": "device_external_ref"
+    },
+    {
+      "key": "x-oca-event.external_references",
+      "object": "event",
+      "references": [
+        "device_external_ref"
+      ],
+      "group": true
+    }
+  ]
 }

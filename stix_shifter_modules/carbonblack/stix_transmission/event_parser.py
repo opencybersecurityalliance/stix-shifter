@@ -219,4 +219,8 @@ def create_event_obj(process, event):
     except Exception as ex:
         logger.warning('Unsupported event {}, {}'.format(event_type, str(ex)))
         return None
+
+    ds_link = process.get('ds_link', None)
+    if ds_link:
+        event_obj['ds_link'] = ds_link
     return event_obj
