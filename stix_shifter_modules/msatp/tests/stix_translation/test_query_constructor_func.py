@@ -65,14 +65,13 @@ class ParseTimeRangeExc(unittest.TestCase):
     def test_parse_time_range_exception(self):
         with self.assertRaises(Exception) as context:
             QueryStringPatternTranslator._parse_time_range(None, None)
-            self.assertTrue('This is broken' in context.exception)
 
 
 class ParseExpressionExc(unittest.TestCase):
     def test_parse_expression_exception(self):
         with self.assertRaises(Exception) as context:
             QueryStringPatternTranslator._parse_expression(None)
-            self.assertTrue('This is broken' in context.exception)
+
 
 
 
