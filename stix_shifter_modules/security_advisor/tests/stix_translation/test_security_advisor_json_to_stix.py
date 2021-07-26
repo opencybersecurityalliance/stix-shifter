@@ -118,22 +118,22 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
 
         observed_data = result_bundle_objects[1]
 
-        custom_props = observed_data['x_security_advisor_finding']
-        assert(custom_props['author_accountId'] == data['author_accountId'])
+        objects = observed_data['objects']
+        sec_adv_obj = TestSecurityAdvisorResultsToStix.get_first_of_type(objects.values(), 'x-security-advisor-finding')
+        assert sec_adv_obj is not None, 'x-security-advisor-finding object type not found'
+        assert(sec_adv_obj['name'] == data['name'])
+        assert(sec_adv_obj['noteName'] == data['noteName'])
+        assert(sec_adv_obj['shortDescription'] == data['shortDescription'])
+        assert(sec_adv_obj['longDescription'] == data['longDescription'])
+        assert(sec_adv_obj['context_accountId'] == data['context_accountId'])
+        assert(sec_adv_obj['context_resourceName'] == data['context_resourceName'])
+        assert(sec_adv_obj['finding_severity'] == data['finding_severity'])
+        assert(sec_adv_obj['finding_certainty'] == data['finding_certainty'])
 
-        assert(custom_props['name'] == data['name'])
-        assert(custom_props['noteName'] == data['noteName'])
-        assert(custom_props['shortDescription'] == data['shortDescription'])
-        assert(custom_props['longDescription'] == data['longDescription'])
-        assert(custom_props['context_accountId'] == data['context_accountId'])
-        assert(custom_props['context_resourceName'] == data['context_resourceName'])
-        assert(custom_props['finding_severity'] == data['finding_severity'])
-        assert(custom_props['finding_certainty'] == data['finding_certainty'])
-
-        assert(custom_props['providerId'] == data['providerId'])
-        assert(custom_props['providerName'] == data['providerName'])
-        assert(custom_props['reportedBy_id'] == data['reportedBy_id'])
-        assert(custom_props['reportedBy_title'] == data['reportedBy_title'])
+        assert(sec_adv_obj['providerId'] == data['providerId'])
+        assert(sec_adv_obj['providerName'] == data['providerName'])
+        assert(sec_adv_obj['reportedBy_id'] == data['reportedBy_id'])
+        assert(sec_adv_obj['reportedBy_title'] == data['reportedBy_title'])
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(data_source)
@@ -183,7 +183,6 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
         objects = observed_data['objects']
-        assert (objects == {})
         curr_obj = TestSecurityAdvisorResultsToStix.get_first_of_type(objects.values(), 'author_accountId')
         assert (curr_obj is None), 'author_accountId object type not found'
 

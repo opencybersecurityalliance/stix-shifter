@@ -29,20 +29,20 @@
 | <br> | | |
 | user-account | user_id | process_username |
 | <br> | | |
-| x_cbcloud | device_name | device_name |
-| x_cbcloud | device_internal_ip | device_internal_ip |
-| x_cbcloud | device_external_ip | device_external_ip |
-| x_cbcloud | device_os | device_os |
-| x_cbcloud | device_id | device_id |
-| x_cbcloud | device_timestamp | device_timestamp |
-| x_cbcloud | org_id | org_id |
-| x_cbcloud | device_group_id | device_group_id |
-| x_cbcloud | process_terminated | process_terminated |
-| x_cbcloud | regmod_count | regmod_count |
-| x_cbcloud | netconn_count | netconn_count |
-| x_cbcloud | filemod_count | filemod_count |
-| x_cbcloud | modload_count | modload_count |
-| x_cbcloud | childproc_count | childproc_count |
-| x_cbcloud | crossproc_count | crossproc_count |
-| x_cbcloud | scriptload_count | scriptload_count |
+| x-cbcloud | device_name | device_name |
+| x-cbcloud | device_internal_ip | device_internal_ip |
+| x-cbcloud | device_external_ip | device_external_ip |
+| x-cbcloud | device_os | device_os |
+| x-cbcloud | device_id | device_id |
+| x-cbcloud | device_timestamp | device_timestamp |
+| x-cbcloud | org_id | org_id |
+| x-cbcloud | device_group_id | device_group_id |
+| x-cbcloud | process_terminated | process_terminated |
+| x-cbcloud | regmod_count | regmod_count |
+| x-cbcloud | netconn_count | netconn_count |
+| x-cbcloud | filemod_count | filemod_count |
+| x-cbcloud | modload_count | modload_count |
+| x-cbcloud | childproc_count | childproc_count |
+| x-cbcloud | crossproc_count | crossproc_count |
+| x-cbcloud | scriptload_count | scriptload_count |
 | <br> | | |

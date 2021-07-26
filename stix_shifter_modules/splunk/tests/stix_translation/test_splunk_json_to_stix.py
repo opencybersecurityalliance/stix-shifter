@@ -126,9 +126,7 @@ class TestTransform(object):
         assert(dir_obj['path'] == "C:\\Users\\someuser\\sample.dll")
         assert(dir_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert(dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
-        print(objects.keys())
-        print(result_bundle_objects)
-        assert(objects.keys() == set(map(str, range(0, 5))))
+        assert(objects.keys() == set(map(str, range(0, 4))))
 
     def test_certificate_cim_to_stix(self):
         count = 1

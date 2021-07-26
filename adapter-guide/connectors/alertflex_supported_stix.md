@@ -22,13 +22,13 @@
 | <br> | | |
 | user-account | user_id | user |
 | <br> | | |
-| x_org_alertflex | event | event |
-| x_org_alertflex | severity | severity |
-| x_org_alertflex | category | category |
-| x_org_alertflex | description | description |
-| x_org_alertflex | info | info |
-| x_org_alertflex | agent | agent |
-| x_org_alertflex | source | source |
-| x_org_alertflex | type | type |
-| x_org_alertflex | node | node |
+| x-org-alertflex | event | event |
+| x-org-alertflex | severity | severity |
+| x-org-alertflex | category | category |
+| x-org-alertflex | description | description |
+| x-org-alertflex | info | info |
+| x-org-alertflex | agent | agent |
+| x-org-alertflex | source | source |
+| x-org-alertflex | finding_type | type |
+| x-org-alertflex | node | node |
 | <br> | | |

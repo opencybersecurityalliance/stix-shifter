@@ -8,7 +8,4 @@ class QueryTranslator(EmptyQueryTranslator):
 
     def transform_query(self, data):
         # Data is a STIX pattern.
-        # stix2-matcher will break on START STOP qualifiers so remove before returning pattern.
-        # Remove this when ever stix2-matcher supports proper qualifier timestamps
-        data = re.sub(START_STOP_PATTERN, " ", data)
         return {'queries': [data]}
