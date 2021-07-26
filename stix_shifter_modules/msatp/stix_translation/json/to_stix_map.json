@@ -51,16 +51,9 @@
           "object": "ttp_tagging"
         },
         {
-          "key": "kill-chain-phase.phase_name",
-          "object": "kill-chain-phase"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
-          "references": [
-            "kill-chain-phase"
-          ],
-          "group": true
+          "transformer": "ToKillChainPhasesList"
         },
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
@@ -573,16 +566,9 @@
           "object": "ttp_tagging"
         },
         {
-          "key": "kill-chain-phase.phase_name",
-          "object": "kill-chain-phase"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
-          "references": [
-            "kill-chain-phase"
-          ],
-          "group": true
+          "transformer": "ToKillChainPhasesList"
         },
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
@@ -1130,16 +1116,9 @@
           "object": "ttp_tagging"
         },
         {
-          "key": "kill-chain-phase.phase_name",
-          "object": "kill-chain-phase"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
-          "references": [
-            "kill-chain-phase"
-          ],
-          "group": true
+          "transformer": "ToKillChainPhasesList"
         },
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
@@ -1620,16 +1599,9 @@
           "object": "ttp_tagging"
         },
         {
-          "key": "kill-chain-phase.phase_name",
-          "object": "kill-chain-phase"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
-          "references": [
-            "kill-chain-phase"
-          ],
-          "group": true
+          "transformer": "ToKillChainPhasesList"
         },
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
@@ -2073,16 +2045,9 @@
           "object": "ttp_tagging"
         },
         {
-          "key": "kill-chain-phase.phase_name",
-          "object": "kill-chain-phase"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
-          "references": [
-            "kill-chain-phase"
-          ],
-          "group": true
+          "transformer": "ToKillChainPhasesList"
         },
         {
           "key": "x-ibm-finding.ttp_tagging_refs",

@@ -1,8 +1,10 @@
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
+import json
 
 HIGH_SEVERITY = 99
 MEDIUM_SEVERITY = 66
 LOW_SEVERITY = 33
+KILL_CHAIN_NAME = 'mitre-attack'
 
 
 class MsatpToTimestamp(ValueTransformer):
@@ -51,3 +53,17 @@ class SeverityToNumericVal(ValueTransformer):
             return MEDIUM_SEVERITY
         else:
             return LOW_SEVERITY
+
+
+class ToKillChainPhasesList(ValueTransformer):
+    """A value transformer to convert category name to a list of kill-chain-phase objects"""
+
+    @staticmethod
+    def transform(value):
+        dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
+        json_obj = json.dumps(dct)
+        return [json_obj]
+
+
+
+
