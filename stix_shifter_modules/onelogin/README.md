@@ -21,11 +21,14 @@ Returns the following search query:
     ]
 }
 ```
-##Transmit
-###Transmit functions
+## Transmit
+
+### Transmit functions
+
 Transmit offers several functions: ping, query, results and is_async.
 
-###Ping
+### Ping
+
 Uses the data source API to ping the connection
 
 CLI command example:
@@ -38,7 +41,8 @@ If connection establish returns the following response:
     "success": true
 }
 ```
-###Results
+### Results
+
 Uses the data source API to fetch the query results based on the search ID, offset, and length.
 
 CLI Command example:
