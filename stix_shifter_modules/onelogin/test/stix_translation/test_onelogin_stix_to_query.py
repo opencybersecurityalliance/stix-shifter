@@ -18,9 +18,9 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_user_id_query(self):
-        stix_pattern = "[user-account:user_id = '12345678']"
+        stix_pattern = "[user-account:user_id = '12345678'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
         query = translation.translate('onelogin', 'query', 'onelogin', stix_pattern)
-        queries = 'user_id=12345678&limit=50'
+        queries = 'user_id=12345678&since=2021-01-28T12:24:01.009Z&until=2021-07-25T12:54:01.009Z&limit=50'
         _test_query_assertions(query, queries)
 
     def test_account_id_query(self):

@@ -87,6 +87,18 @@ class QueryStringPatternTranslator:
             raise NotImplementedError("Comparison operator {} unsupported for Onelogin connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
+    @classmethod
+    def _format_start_stop_qualifier(self, expression, qualifier) -> str:
+        """
+        Convert a STIX start stop qualifier into a query string.
+        """
+        transformer = TimestampToMilliseconds()
+        qualifier_split = qualifier.split("'")
+        start = qualifier_split[1]
+        stop = qualifier_split[3]
+        qualified_query = "%s&since=%s&until=%s" % (expression, start, stop)
+        return qualified_query
+
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
@@ -97,6 +109,7 @@ class QueryStringPatternTranslator:
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
             if stix_field == 'start' or stix_field == 'end':
+                transformer = TimestampToMilliseconds()
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
 
@@ -116,7 +129,7 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+                return self._format_start_stop_qualifier(comparison_string, qualifier)
             else:
                 return "{}".format(comparison_string)
 
@@ -132,7 +145,7 @@ class QueryStringPatternTranslator:
                 expression_02 = "{}".format(expression_02)
             query_string = "{}{}{}".format(expression_01, operator, expression_02)
             if qualifier is not None:
-                return "{} {}".format(query_string, qualifier)
+                return self._format_start_stop_qualifier(query_string, qualifier)
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -177,8 +190,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
 
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     return ["%s&limit=%s" % (query, result_limit)]

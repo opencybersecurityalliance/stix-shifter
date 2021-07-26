@@ -26,7 +26,7 @@ class ResultsConnector(BaseResultsConnector):
         total_records = offset + length
         try:
             if self.init_error:
-                self.logger.error("Token Generation Failed:")
+                self.logger.error(f"Token Generation Failed: {self.init_error}")
                 return self.init_error
             # Separate out api supported url params
             quary_expr, filter_attr = ResultsConnector.modify_query_expr(quary_expr)
@@ -82,13 +82,10 @@ class ResultsConnector(BaseResultsConnector):
             response_code = response_dict.code
             response_dict = json.loads(response_dict.read())
             return_obj["code"] = response_code
-            if response_code == 200:
-                return_obj["access_token"] = response_dict["access_token"]
-            else:
-                return_obj["message"] = response_dict["status"]["message"]
+            return_obj["access_token"] = response_dict["access_token"]
         except Exception as e:
-            ErrorResponder.fill_error(return_obj, message='unexpected exception')
-            self.logger.error('error while generating access token: {}'.format(e))
+            ErrorResponder.fill_error(return_obj, response_dict, ['status', 'message', 'description'])
+            self.logger.error('Error while generating access token: {}'.format(e))
         return return_obj
 
     @staticmethod
