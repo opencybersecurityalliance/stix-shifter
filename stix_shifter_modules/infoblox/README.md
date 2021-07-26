@@ -290,7 +290,7 @@ TBD
                 },
                 "3": {
                     "type": "domain-name",
-                    "value": "total-update.com."
+                    "value": "total-update.com"
                 },
                 "4": {
                     "type": "network-traffic",
@@ -301,9 +301,9 @@ TBD
                     "extensions": {
                       "dns-ext": {
                         "question": {
-                          "type": "A",
                           "domain_ref": "3"
                         },
+                        "type": "A",
                         "response_code": "PASSTHRU",
                         "answers": {
                           "data": "18.185.74.46"
@@ -319,19 +319,18 @@ TBD
                     "type": "x-infoblox-dns-event",
                     "user_ref": "5",
                     "src_ip_ref": "0",
-                    "x-severity": "HIGH",
-                    "tclass": "APT",
+                    "x_infoblox_severity": "HIGH",
+                    "threat_class": "APT",
                     "threat_indicator": "total-update.com",
-                    "tproperty": "MalwareC2",
+                    "threat_property": "MalwareC2",
                     "policy_name": "DFND",
                     "os_version": "Windows 10 Enterprise",
                     "network": "BloxOne Endpoint",
                     "category": "",
-                    "x-confidence": "HIGH",
+                    "x_infoblox_confidence": "HIGH",
                     "country": "unknown",
                     "device": "DESKTOP-VT5P2QT",
                     "dhcp_fingerprint": "",
-                    "event_time": "2021-06-05T10:11:05.000Z",
                     "feed_name": "Base",
                     "feed_type": "FQDN"
                 }

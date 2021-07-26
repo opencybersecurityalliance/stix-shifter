@@ -46,26 +46,25 @@
 | <br> | | |
 | network-traffic | src_ref | qip |
 | network-traffic | extensions.dns-ext.resolved_ip_refs | rip |
-| network-traffic | extensions.dns-ext.question.type | qtype |
+| network-traffic | extensions.dns-ext.type | qtype |
 | network-traffic | extensions.dns-ext.question.domain_ref | qname |
 | network-traffic | extensions.dns-ext.answers.data | rdata |
 | network-traffic | extensions.dns-ext.response_code | rcode |
 | <br> | | |
-| x-infoblox-dns-event | severity | severity |
-| x-infoblox-dns-event | tclass | tclass |
+| x-infoblox-dns-event | x_infoblox_severity | severity |
+| x-infoblox-dns-event | threat_class | tclass |
 | x-infoblox-dns-event | threat_indicator | threat_indicator |
-| x-infoblox-dns-event | tproperty | tproperty |
+| x-infoblox-dns-event | threat_property | tproperty |
 | x-infoblox-dns-event | policy_name | policy_name |
 | x-infoblox-dns-event | os_version | os_version |
 | x-infoblox-dns-event | network | network |
 | x-infoblox-dns-event | user_ref | user |
 | x-infoblox-dns-event | src_ip_ref | qip |
 | x-infoblox-dns-event | category | category |
-| x-infoblox-dns-event | confidence | confidence |
+| x-infoblox-dns-event | x_infoblox_confidence | confidence |
 | x-infoblox-dns-event | country | country |
 | x-infoblox-dns-event | device | device |
 | x-infoblox-dns-event | dhcp_fingerprint | dhcp_fingerprint |
-| x-infoblox-dns-event | event_time | event_time |
 | x-infoblox-dns-event | feed_name | feed_name |
 | x-infoblox-dns-event | feed_type | feed_type |
 
