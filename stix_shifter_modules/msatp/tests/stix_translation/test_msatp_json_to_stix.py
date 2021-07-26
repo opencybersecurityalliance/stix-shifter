@@ -632,7 +632,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
         assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
-        assert ttp_tagging_obj.keys() == {'type', 'extensions'}
+        assert ttp_tagging_obj.keys() == {'type', 'extensions', 'kill_chain_phases'}
         assert ttp_tagging_obj['type'] == 'x-ibm-ttp-tagging'
         assert ttp_tagging_obj['extensions'] == {'mitre-attack-ext': {'tactic_name': 'CredentialAccess'}}
 
