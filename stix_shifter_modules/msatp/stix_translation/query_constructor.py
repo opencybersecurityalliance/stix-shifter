@@ -118,6 +118,24 @@ class QueryStringPatternTranslator:
         return "not ({})".format(comparison_string)
 
     @staticmethod
+    def _check_value_type(value, expression):
+        """
+        Function returning value type 'mac'
+        :param value: str
+        :return: list
+        """
+        mac_objects = ['src_ref.value', 'mac-addr']
+        stix_object, stix_field = expression.object_path.split(':')
+        compile_mac_regex = re.compile(MAC)
+        value = list(map(str, value)) if isinstance(value, list) else [str(value)]
+        value_type = []
+        if stix_object in mac_objects or stix_field in mac_objects:
+            for each in value:
+                if compile_mac_regex.search(each):
+                    value_type.append('mac')
+        return value_type
+
+    @staticmethod
     def _parse_time_range(qualifier, time_range):
         """
         :param qualifier: str, input time range i.e START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-20T10:43:10.003Z'
