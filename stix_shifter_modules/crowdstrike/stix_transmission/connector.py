@@ -46,11 +46,11 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = {}
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             response_code = response.code
             response_txt = response.read().decode('utf-8')
             if 199 < response_code < 300:
@@ -70,9 +70,9 @@ class Connector(BaseSyncConnector):
         
         return return_obj
             
-    def send_info_request_and_handle_errors(self, ids_lst):
+    async def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
-        response = self.api_client.get_detections_info(ids_lst)
+        response = await self.api_client.get_detections_info(ids_lst)
         return_obj = self._handle_errors(response, return_obj)
         response_json = json.loads(return_obj["data"])
         return_obj['data'] = response_json['resources']
@@ -136,7 +136,7 @@ class Connector(BaseSyncConnector):
 
         return ioc_data
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -151,7 +151,7 @@ class Connector(BaseSyncConnector):
             if self.init_error:
                 raise self.init_error
 
-            response = self.api_client.get_detections_IDs(query, result_limit)
+            response = await self.api_client.get_detections_IDs(query, result_limit)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')

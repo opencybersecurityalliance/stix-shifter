@@ -34,7 +34,7 @@ class APIClient:
         self._token = None
         self._token_time = None
 
-    def get_detections_IDs(self, filter, limit, sort=None):
+    async def get_detections_IDs(self, filter, limit, sort=None):
         """get the response from MSatp endpoints
         :param filter: filter incidents by certain value
         :param sort: sort incidents according to sort value
@@ -49,16 +49,16 @@ class APIClient:
         data['limit'] = limit
         if sort:
             data['sort'] = sort
-        return self.client.call_api(endpoint, 'GET', headers=headers, urldata=data, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers=headers, urldata=data, timeout=self.timeout)
 
-    def ping_box(self):
+    async def ping_box(self):
         # Sends a GET request
         headers = dict()
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = 'detects/queries/detects/v1'  # Test if system alive
-        return self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
 
-    def get_detections_info(self, ids):
+    async def get_detections_info(self, ids):
         """get the response from crowdstrike endpoints
         :param ids: Provide one or more incident IDs
         :return: response, json object"""
@@ -68,7 +68,7 @@ class APIClient:
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = self.INCIDENTS_INFO_ENDPOINT
         ids_expression = json.dumps({'ids': ids}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, data=ids_expression, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', headers=headers, data=ids_expression, timeout=self.timeout)
 
     def get_token(self) -> str:
         """Request a new OAuth2 token.
