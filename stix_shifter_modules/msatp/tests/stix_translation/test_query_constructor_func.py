@@ -1,5 +1,4 @@
 from stix_shifter_modules.msatp.stix_translation import query_constructor
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ComparisonComparators
 from stix_shifter_modules.msatp.stix_translation.query_constructor import QueryStringPatternTranslator
 import unittest
 
@@ -40,8 +39,8 @@ class ConstructIntersecMap(unittest.TestCase):
     def test_with_empty_map(self):
         dict_01 = {1: 'a', 2: 'b'}
         dict_02 = {}
-        self.assertDictEqual(QueryStringPatternTranslator.construct_intesec_map(dict_01, dict_02), dict_02,
-                             "incorrect result")
+        self.assertDictEqual(QueryStringPatternTranslator.construct_intesec_map(dict_01, dict_02), dict_02, "incorrect result")
+
 
     def test_construct_and_op_map(self):
         test_mep_01 = {"DeviceNetworkEvents": 'DeviceName =~ "2.client-channel.google.com"',
@@ -49,20 +48,17 @@ class ConstructIntersecMap(unittest.TestCase):
         test_map_02 = {"DeviceNetworkEvents": 'InitiatingProcessFileName =~ "demo-gthread-3.6.dll"'}
         expected_res = {"DeviceNetworkEvents": '(InitiatingProcessFileName =~ "demo-gthread-3.6.dll") and (DeviceName '
                                                '=~ "2.client-channel.google.com")'}
-        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), expected_res,
-                             "incorrect result")
+        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), expected_res, "incorrect result")
 
     def test_construct_and_op_map_with_empty_map(self):
         test_mep_01 = {}
         test_map_02 = {"DeviceNetworkEvents": 'InitiatingProcessFileName =~ "demo-gthread-3.6.dll"'}
-        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {},
-                             "incorrect result")
+        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {}, "incorrect result")
 
     def test_construct_and_op_map_with_empty_intersec(self):
         test_mep_01 = {"DeviceProcessEvents": 'InitiatingProcessFileName =~ "WmiPrvSE.exe"'}
         test_map_02 = {"DeviceNetworkEvents": 'InitiatingProcessFileName =~ "demo-gthread-3.6.dll"'}
-        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {},
-                             "incorrect result")
+        self.assertDictEqual(QueryStringPatternTranslator.construct_and_op_map(test_mep_01, test_map_02), {}, "incorrect result")
 
 
 class ParseTimeRangeExc(unittest.TestCase):
