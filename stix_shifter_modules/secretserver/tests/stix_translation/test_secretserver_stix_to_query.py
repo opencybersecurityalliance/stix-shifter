@@ -4,7 +4,7 @@ from stix_shifter.stix_translation import stix_translation
 import unittest
 
 
-options_file = open('stix_shifter_modules/secretserver/stix_translation/json/aql_events_fields.json').read()
+options_file = open('stix_shifter_modules/secretserver/stix_translation/options.json').read()
 DEFAULT_SELECTIONS = json.loads(options_file)
 DEFAULT_LIMIT = 10000
 DEFAULT_time_range = 5
