@@ -3,6 +3,7 @@ import json
 import unittest
 from unittest.mock import patch
 from asyncinit import asyncinit
+import asyncio
 
 from stix_shifter.stix_transmission.stix_transmission import StixTransmission
 
@@ -26,7 +27,8 @@ class MockResponse:
         self.code = response_code
         self.object = obj
 
-    def read(self):
+    async def read(self):
+        await asyncio.Future()
         return bytearray(self.object, 'utf-8')
 
 class TestTransmission(unittest.TestCase):
