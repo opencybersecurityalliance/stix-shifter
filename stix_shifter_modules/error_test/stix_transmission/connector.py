@@ -116,13 +116,13 @@ class Connector(BaseSyncConnector):
                 ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
         return return_obj
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         return {"success": True, "search_id": query}
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         return {"success": True, "status": "COMPLETED", "progress": 100}
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
