@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 class BasePingConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Sends a basic request to the datasource to confirm we are connected and authenticated
 

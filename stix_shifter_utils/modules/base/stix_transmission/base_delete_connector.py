@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 class BaseDeleteConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Deletes a query from the specified datasource
 
