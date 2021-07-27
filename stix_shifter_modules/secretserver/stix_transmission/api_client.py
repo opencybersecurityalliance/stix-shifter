@@ -118,6 +118,8 @@ class APIClient():
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
         date = re.findall(r'\d{4}-\d{2}-\d{2}', self.query)
+         if date == []:
+            print("Please enter the date")
         return date
 
     def delete_search(self, search_id):
