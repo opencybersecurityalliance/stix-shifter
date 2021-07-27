@@ -67,11 +67,11 @@ class StixTransmission:
         return self.run_in_thread(self.results_async, search_id, offset, length)
 
     @respond_error
-    async def results_stix(self, search_id, offset, length, data_source):
+    async def results_stix_async(self, search_id, offset, length, data_source):
         return await self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
 
     def results_stix(self, search_id, offset, length, data_source):
-        return self.run_in_thread(self.results_stix, search_id, offset, length, data_source)
+        return self.run_in_thread(self.results_stix_async, search_id, offset, length, data_source)
 
     @respond_error
     async def delete_async(self, search_id):
