@@ -26,11 +26,11 @@
         "auth": {
             "clientId": {
                 "label": "Client Id",
-                "description": "Client ID of onelogin"
+                "description": "Client ID of OneLogin"
             },
             "clientSecret": {
                 "label": "Client Secret",
-                "description": "Client Secret of onelogin"
+                "description": "Client secret of OneLogin"
             }
         }
     }

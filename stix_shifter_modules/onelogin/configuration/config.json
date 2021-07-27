@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "onelogin"
+            "displayName": "OneLogin"
         },
         "host": {
             "type": "text",

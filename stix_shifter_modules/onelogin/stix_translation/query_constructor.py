@@ -19,7 +19,10 @@ class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "&",
-        ComparisonComparators.Equal: "="
+        ComparisonComparators.Equal: "=",
+        ObservationOperators.And: '&',
+        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        ObservationOperators.Or: '&'
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
@@ -108,11 +111,6 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
-            if stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
-
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
@@ -164,7 +162,7 @@ class QueryStringPatternTranslator:
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
+                return "{}{}{}".format(expression_01, operator, expression_02)
             elif expression_01:
                 return "{}".format(expression_01)
             elif expression_02:

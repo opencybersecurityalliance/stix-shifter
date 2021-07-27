@@ -156,14 +156,9 @@ class TestOneloginResultsToStix(unittest.TestCase):
 
         custom_object_1 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-finding')
         custom_object_2 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-risk')
-        custom_object_3 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-user-account')
 
         assert custom_object_1 is not None, 'Custom object type not found'
-        assert custom_object_1.keys() == {'type', 'unique_id', 'created_at', 'event_type_id', 'notes', 'role_id',
-                                          'app_id', 'policy_id','custom_message', 'role_name', 'app_name', 'group_name', 'policy_name',
-                                          'otp_device_name', 'operation_name', 'directory_sync_run_id', 'directory_id',
-                                          'resolution', 'client_id', 'resource_type_id', 'proxy_ip',
-                                          'browser_fingerprint'}
+        assert custom_object_1.keys() == {'type', 'unique_id', 'event_type_id', 'notes', 'role_id', 'app_id', 'custom_message', 'role_name', 'app_name', 'group_name', 'otp_device_name', 'operation_name', 'directory_sync_run_id', 'directory_id', 'resolution', 'client_id', 'resource_type_id', 'browser_fingerprint'}
         assert custom_object_1['unique_id'] == 81004691744
         assert custom_object_1['event_type_id'] == 149
 
@@ -172,7 +167,3 @@ class TestOneloginResultsToStix(unittest.TestCase):
         assert custom_object_2['error_description'] == 'error_description'
         assert custom_object_2['risk_reasons'] == 'risk_reasons'
 
-        assert custom_object_3 is not None, 'Custom object type not found'
-        assert custom_object_3.keys() == {'type', 'account_id', 'actor_user_id', 'assuming_acting_user_id', 'actor_user_name'}
-        assert custom_object_3['account_id'] == 192204
-        assert custom_object_3['actor_user_id'] == 12345

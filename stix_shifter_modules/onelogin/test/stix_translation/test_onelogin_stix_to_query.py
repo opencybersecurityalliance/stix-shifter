@@ -24,25 +24,25 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_account_id_query(self):
-        stix_pattern = "[x-onelogin-user-account:account_id = '12345678']"
+        stix_pattern = "[user-account:x_account_id = '12345678']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'account_id=12345678&limit=50'
         _test_query_assertions(query, queries)
 
     def test_actor_user_id_query(self):
-        stix_pattern = "[x-onelogin-user-account:actor_user_id = '12345678']"
+        stix_pattern = "[user-account:x_actor_user_id = '12345678']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'actor_user_id=12345678&limit=50'
         _test_query_assertions(query, queries)
 
     def test_assuming_acting_user_id_query(self):
-        stix_pattern = "[x-onelogin-user-account:assuming_acting_user_id = '12345678']"
+        stix_pattern = "[user-account:x_assuming_acting_user_id = '12345678']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'assuming_acting_user_id=12345678&limit=50'
         _test_query_assertions(query, queries)
 
     def test_actor_user_name_query(self):
-        stix_pattern = "[x-onelogin-user-account:actor_user_name = 'Jon']"
+        stix_pattern = "[user-account:x_actor_user_name = 'Jon']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'actor_user_name=Jon&limit=50'
         _test_query_assertions(query, queries)
@@ -84,31 +84,31 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_since_query(self):
-        stix_pattern = "[x-onelogin-finding:since = '2021-06-22T13:12:06.437Z']"
+        stix_pattern = "[x-ibm-finding:start = '2021-06-22T13:12:06.437Z']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'since=2021-06-22T13:12:06.437Z&limit=50'
         _test_query_assertions(query, queries)
 
     def test_until_query(self):
-        stix_pattern = "[x-onelogin-finding:until = '2021-06-22T13:12:06.437Z']"
+        stix_pattern = "[x-ibm-finding:end = '2021-06-22T13:12:06.437Z']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'until=2021-06-22T13:12:06.437Z&limit=50'
         _test_query_assertions(query, queries)
 
     def test_proxy_ip_query(self):
-        stix_pattern = "[x-onelogin-finding:proxy_ip = '127.0.0.1']"
+        stix_pattern = "[ipv4-addr:x_proxy_ip = '127.0.0.1']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'proxy_ip=127.0.0.1&limit=50'
         _test_query_assertions(query, queries)
 
     def test_policy_id_query(self):
-        stix_pattern = "[x-onelogin-finding:policy_id = '12345678']"
+        stix_pattern = "[x-ibm-finding:policy_id = '12345678']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'policy_id=12345678&limit=50'
         _test_query_assertions(query, queries)
 
     def test_policy_name_query(self):
-        stix_pattern = "[x-onelogin-finding:policy_name = 'Default']"
+        stix_pattern = "[x-ibm-finding:name = 'Default']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'policy_name=Default&limit=50'
         _test_query_assertions(query, queries)
@@ -204,7 +204,7 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_created_at_query(self):
-        stix_pattern = "[x-onelogin-finding:created_at = '2021-06-22T13:12:06.437Z']"
+        stix_pattern = "[x-ibm-finding:time_observed = '2021-06-22T13:12:06.437Z']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'created_at=2021-06-22T13:12:06.437Z&limit=50'
         _test_query_assertions(query, queries)
@@ -231,4 +231,10 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[x-onelogin-risk:error_description = 'Default']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'error_description=Default&limit=50'
+        _test_query_assertions(query, queries)
+
+    def test_query_from_multiple_observation_expressions_joined_by_AND(self):
+        stix_pattern = "[ipv4-addr:value='127.0.0.1'] AND [user-account:user_id = '12345678']"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'ipaddr=127.0.0.1&user_id=12345678&limit=50'
         _test_query_assertions(query, queries)

@@ -3,29 +3,30 @@
 |--|--|--|
 | user-account | user_id | user_id |
 | user-account | display_name | user_name |
+| user-account | x_account_id | account_id |
+| user-account | x_actor_user_id | actor_user_id |
+| user-account | x_assuming_acting_user_id | assuming_acting_user_id |
+| user-account | x_actor_user_name | actor_user_name |
 | <br> | | |
 | ipv4-addr | value | ipaddr |
-| <br> | | |
-| x-onelogin-user-account | account_id | account_id |
-| x-onelogin-user-account | actor_user_id | actor_user_id |
-| x-onelogin-user-account | assuming_acting_user_id | assuming_acting_user_id |
-| x-onelogin-user-account | actor_user_name | actor_user_name |
+| ipv4-addr | x_proxy_ip | proxy_ip |
 | <br> | | |
 | x-onelogin-risk | risk_score | risk_score |
 | x-onelogin-risk | risk_reasons | risk_reasons |
 | x-onelogin-risk | risk_cookie_id | risk_cookie_id |
 | x-onelogin-risk | error_description | error_description |
 | <br> | | |
+| x-ibm-finding | name | policy_name |
+| x-ibm-finding | policy_id | policy_id |
+| x-ibm-finding | start | since |
+| x-ibm-finding | end | until |
+| x-ibm-finding | time_observed | created_at |
+| <br> | | |
 | x-onelogin-finding | client_id | client_id |
 | x-onelogin-finding | directory_id | directory_id |
 | x-onelogin-finding | event_type_id | event_type_id |
 | x-onelogin-finding | unique_id | id |
 | x-onelogin-finding | resolution | resolution |
-| x-onelogin-finding | since | since |
-| x-onelogin-finding | until | until |
-| x-onelogin-finding | proxy_ip | proxy_ip |
-| x-onelogin-finding | policy_id | policy_id |
-| x-onelogin-finding | policy_name | policy_name |
 | x-onelogin-finding | role_id | role_id |
 | x-onelogin-finding | app_id | app_id |
 | x-onelogin-finding | group_id | group_id |
@@ -41,5 +42,4 @@
 | x-onelogin-finding | resource_type_id | resource_type_id |
 | x-onelogin-finding | browser_fingerprint | browser_fingerprint |
 | x-onelogin-finding | notes | notes |
-| x-onelogin-finding | created_at | created_at |
 | <br> | | |

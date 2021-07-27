@@ -2,15 +2,28 @@
   "user-account": {
     "fields": {
       "user_id": ["user_id"],
-      "display_name": ["user_name"]
+      "display_name": ["user_name"],
+      "x_account_id": ["account_id"],
+      "x_actor_user_id": ["actor_user_id"],
+      "x_assuming_acting_user_id": ["assuming_acting_user_id"],
+      "x_actor_user_name": ["actor_user_name"]
     }
   },
   "ipv4-addr": {
     "fields": {
-      "value": ["ipaddr"]
+      "value": ["ipaddr"],
+      "x_proxy_ip": ["proxy_ip"]
     }
   },
-
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["policy_name"],
+      "policy_id": ["policy_id"],
+      "start": ["since"],
+      "end": ["until"],
+      "time_observed": ["created_at"]
+    }
+  },
   "x-onelogin-finding": {
     "fields": {
       "client_id": ["client_id"],
@@ -18,11 +31,6 @@
       "event_type_id": ["event_type_id"],
       "unique_id": ["id"],
       "resolution": ["resolution"],
-      "since": ["since"],
-      "until": ["until"],
-      "proxy_ip": ["proxy_ip"],
-      "policy_id": ["policy_id"],
-      "policy_name": ["policy_name"],
       "role_id": ["role_id"],
       "app_id": ["app_id"],
       "group_id": ["group_id"],
@@ -37,8 +45,7 @@
       "directory_sync_run_id": ["directory_sync_run_id"],
       "resource_type_id": ["resource_type_id"],
       "browser_fingerprint": ["browser_fingerprint"],
-      "notes": ["notes"],
-      "created_at": ["created_at"]
+      "notes": ["notes"]
     }
   },
   "x-onelogin-risk": {
@@ -48,14 +55,5 @@
       "risk_cookie_id": ["risk_cookie_id"],
       "error_description": ["error_description"]
     }
-  },
-
-  "x-onelogin-user-account": {
-  "fields": {
-      "account_id": ["account_id"],
-      "actor_user_id": ["actor_user_id"],
-      "assuming_acting_user_id": ["assuming_acting_user_id"],
-      "actor_user_name": ["actor_user_name"]
-  }
   }
 }
