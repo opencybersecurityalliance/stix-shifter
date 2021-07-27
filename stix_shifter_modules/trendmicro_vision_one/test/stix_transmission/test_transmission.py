@@ -28,7 +28,7 @@ class MockResponse:
         self.object = obj
 
     async def read(self):
-        await asyncio.Future()
+        await asyncio.sleep(0)
         return bytearray(self.object, 'utf-8')
 
 class TestTransmission(unittest.TestCase):
