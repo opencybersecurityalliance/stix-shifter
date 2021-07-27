@@ -108,18 +108,11 @@ class RestApiClient:
             
             
             try:
+                # self.server_cert_content = False
 
-
-
-                self.server_cert_content = False
-
-
-                print('RESTAPIDEBUG 001')
                 client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout)
                 retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
-                print('RESTAPIDEBUG 002')
                 async with RetryClient(retry_options=retry_options) as client:
-                    print('RESTAPIDEBUG 003')
                     call = getattr(client, method.lower()) 
                         
                     if self.sni is not None:
@@ -127,23 +120,18 @@ class RestApiClient:
                         actual_headers["Host"] = self.sni
 
                     # TODO verify the verify_ssl
-                    print('RESTAPIDEBUG 004')
                     async with call(url, headers=actual_headers, params=urldata, data=data,
                                             verify_ssl=self.server_cert_content,
                                             timeout=client_timeout,
                                             auth=self.auth) as response:
-                        print('RESTAPIDEBUG 005')
 
                         respWrapper = ResponseWrapper(response)
-                        print('RESTAPIDEBUG 006')
                         await respWrapper.wait()
-                        print('RESTAPIDEBUG 007')
 
                         if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                             'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                             
                             self.logger.error("WARNING: " + response.headers['Content-Type'], file=sys.stderr)
-                        print('RESTAPIDEBUG 008')
                         return respWrapper
             except aiohttp.client_exceptions.ServerTimeoutError as e:
                 # TODO unhendled error error

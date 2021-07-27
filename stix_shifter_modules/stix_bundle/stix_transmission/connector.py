@@ -5,7 +5,6 @@ from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
 import re
-from asyncio import sleep
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -113,7 +112,6 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     async def delete_query_connection(self, search_id):
-        await sleep(0)
         return {'success': True}
 
     def test_START_STOP_format(self, query_string) -> bool:
