@@ -1,0 +1,57 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Secret Server"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535
+        },
+        "help": {
+            "default": "http://9.46.86.120/SecretServer/app/#/home/dashboard",
+            "type": "link"
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false,
+                "hidden": true,
+                "type": "boolean",
+                "optional": true,
+                "previous": "connection.validate_pattern"
+            },
+            "hash_options": {
+                "type": "json",
+                "optional": true,
+                "hidden": true
+            },
+            "unmapped_fallback": {
+                "default": true
+            }
+        }
+    },
+      "configuration": {
+        "auth": {
+          "type" : "fields",
+          "username": {
+              "type": "password"
+          },
+          "password": {
+              "type": "password"
+          }
+        }
+    }
+    }
