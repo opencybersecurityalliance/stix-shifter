@@ -192,7 +192,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
         to test network stix object properties
         """
         data = {'computer_identity': '541866979-suse01', 'subQueryID': 1, 'local_address': '192.168.36.110',
-                'mac': '0a-ab-41-e0-89-f8', 'type': 'Address', 'event_count': '1'}
+                'protocol': 'udp', 'mac': '0a-ab-41-e0-89-f8', 'type': 'Address', 'event_count': '1'}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -207,7 +207,7 @@ class TestBigFixResultsToStix(unittest.TestCase):
 
         network_obj = TestBigFixResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
         assert network_obj is not None, 'network-traffic object type not found'
-        assert network_obj.keys() == {'type', 'src_ref'}
+        assert network_obj.keys() == {'type', 'src_ref', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
         assert network_obj['src_ref'] == '1'
 

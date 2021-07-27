@@ -1,0 +1,30 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "client_id": {
+                "label": "Client Id",
+                "description": "Unique identifier of CrowdStrike API. It can be found in the API client table in the Falcon console"
+            },
+            "client_secret": {
+                "label": "Client Secret",
+                "description": "Secret code of CrowdStrike API client. It can be found while creating a API client in Falcon console"
+            }
+        }
+    }
+}
