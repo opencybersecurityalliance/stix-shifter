@@ -142,29 +142,25 @@
             "subject_public_key_algorithm": "ssl_publickey_algorithm"
         }
     },
-<<<<<<< HEAD
     "x-splunk": {
-=======
-    "x-splunk-finding": {
->>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
         "cim_type": "endpoint",
         "fields": {
             "log_source": ["source"],
-            "provider": ["_sourcetype"],
-            "device_type": ["DeviceType"],
+            "log_source_type": ["_sourcetype"],
             "direction": ["Direction"],
-            "EventID": ["EventID"],
+            "event_id": ["EventID"],
             "event_name": ["EventName"],
-            "Mitre_TacticId": ["TacticId"],
-            "Mitre_Tactic": ["Tactic"],
-            "Mitre_TechniqueId": ["TechniqueId"],
-            "Mitre_Technique": ["Technique"]
+            "mitre_tactic_id": ["TacticId"],
+            "mitre_tactic": ["Tactic"],
+            "mitre_technique_id": ["TechniqueId"],
+            "mitre_technique": ["Technique"]
         }
     },
     "x-ibm-finding": {
         "cim_type": "endpoint",
         "fields": {
-          "ss_name": ["ss_name"],
+          "name": ["ss_name"],
+          "src_device": ["DeviceType"],
           "severity": ["severity"]
         }
     }
