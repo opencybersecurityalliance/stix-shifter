@@ -13,6 +13,15 @@ STATUS = 'status'
 PING = 'ping'
 IS_ASYNC = 'is_async'
 
+def run_in_thread(callable, *args, **kwargs):
+        loop = None
+        try:
+            loop = asyncio.get_event_loop()
+        except:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        return loop.run_until_complete(callable(*args, **kwargs))
 
 class StixTransmission:
 
@@ -48,7 +57,7 @@ class StixTransmission:
         return await self.entry_point.create_query_connection(query)
     
     def query(self, query):
-        return self.run_in_thread(self.query_async, query)
+        return run_in_thread(self.query_async, query)
 
     @respond_error
     async def status_async(self, search_id):
@@ -56,7 +65,7 @@ class StixTransmission:
         return await self.entry_point.create_status_connection(search_id)
     
     def status(self, search_id):
-        return self.run_in_thread(self.status_async, search_id)
+        return run_in_thread(self.status_async, search_id)
 
     @respond_error
     async def results_async(self, search_id, offset, length):
@@ -64,14 +73,14 @@ class StixTransmission:
         return await self.entry_point.create_results_connection(search_id, offset, length)
   
     def results(self, search_id, offset, length):
-        return self.run_in_thread(self.results_async, search_id, offset, length)
+        return run_in_thread(self.results_async, search_id, offset, length)
 
     @respond_error
-    async def results_stix_async(self, search_id, offset, length, data_source):
+    async def results_stix(self, search_id, offset, length, data_source):
         return await self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
 
     def results_stix(self, search_id, offset, length, data_source):
-        return self.run_in_thread(self.results_stix_async, search_id, offset, length, data_source)
+        return run_in_thread(self.results_stix, search_id, offset, length, data_source)
 
     @respond_error
     async def delete_async(self, search_id):
@@ -79,7 +88,7 @@ class StixTransmission:
         return await self.entry_point.delete_query_connection(search_id)
         
     def delete(self, search_id):
-        return self.run_in_thread(self.delete_async, search_id)
+        return run_in_thread(self.delete_async, search_id)
 
     @respond_error
     async def ping_async(self):
@@ -87,7 +96,7 @@ class StixTransmission:
         return await self.entry_point.ping_connection()
 
     def ping(self):
-        return self.run_in_thread(self.ping_async)
+        return run_in_thread(self.ping_async)
 
     def is_async(self):
         # Check if the module is async/sync
@@ -99,13 +108,3 @@ class StixTransmission:
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
-
-    def run_in_thread(self, callable, *args, **kwargs):
-        loop = None
-        try:
-            loop = asyncio.get_event_loop()
-        except:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-
-        return loop.run_until_complete(callable(*args, **kwargs))

@@ -2,19 +2,10 @@ import json
 import unittest
 from unittest.mock import patch, MagicMock, ANY
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 import asyncio
 from asyncinit import asyncinit
 
-
-def run_async_func(callable, *args, **kwargs):
-    loop = None
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(callable(*args, **kwargs))
 
 
 config = {
@@ -94,7 +85,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         mock_requests_response.return_value = RequestMockResponse(200, ping_response.encode())
 
         entry_point = EntryPoint(connection, config)
-        ping_response = run_async_func(entry_point.ping_connection)
+        ping_response = run_in_thread(entry_point.ping_connection)
 
         assert ping_response is not None
         assert ping_response['success']
@@ -102,7 +93,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_status_endpoint(self):
         entry_point = EntryPoint(connection, config)
         search_id = self._create_query_list("process_name:notepad.exe")
-        results_response = run_async_func(entry_point.create_status_connection, search_id)
+        results_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -114,7 +105,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_create_query_connection(self):
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")
-        results_response = run_async_func(entry_point.create_query_connection, query_expression)
+        results_response = run_in_thread(entry_point.create_query_connection, query_expression)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -144,7 +135,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -223,7 +214,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -245,7 +236,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -263,7 +254,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -281,7 +272,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("(process_name:cmd.exe")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -298,7 +289,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = run_async_func(entry_point.create_results_connection, query_expression, 100, 2)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 100, 2)
 
         assert results_response is not None
         assert 'success' in results_response
