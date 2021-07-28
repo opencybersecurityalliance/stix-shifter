@@ -18,9 +18,9 @@
 | email-message | content_type | contenttype |
 | <br> | | |
 | file | name | Filename |
-| file | hashes.SHA-256 | sha256hash |
-| file | hashes.SHA-1 | sha1hash |
-| file | hashes.MD5 | md5hash |
+| file | hashes.SHA-256 | "SHA256 Hash" |
+| file | hashes.SHA-1 | "SHA1 Hash" |
+| file | hashes.MD5 | "MD5 Hash" |
 | file | hashes.UNKNOWN | "File Hash" |
 | file | size | filesize |
 | file | parent_directory_ref | "File Path" |
@@ -186,4 +186,5 @@
 | x-qradar | suspect_content_descriptions | suspectcontentdescriptions |
 | x-qradar | tls_server_name_indication | tlsservernameindication |
 | x-qradar | registry_key | "Registry Key" |
+| x-qradar | has_offense | hasoffense |
 | <br> | | |

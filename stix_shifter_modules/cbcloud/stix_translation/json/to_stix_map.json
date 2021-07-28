@@ -114,24 +114,24 @@
     }
   ],
   "device_name": {
-    "key": "x_cbcloud.device_name",
-    "cybox": false
+    "key": "x-cbcloud.device_name",
+    "object": "x_cbcloud"
   },
   "device_internal_ip": {
-    "key": "x_cbcloud.device_internal_ip",
-    "cybox": false
+    "key": "x-cbcloud.device_internal_ip",
+    "object": "x_cbcloud"
   },
   "device_external_ip": {
-    "key": "x_cbcloud.device_external_ip",
-    "cybox": false
+    "key": "x-cbcloud.device_external_ip",
+    "object": "x_cbcloud"
   },
   "device_os": {
-    "key": "x_cbcloud.device_os",
-    "cybox": false
+    "key": "x-cbcloud.device_os",
+    "object": "x_cbcloud"
   },
   "device_id": {
-    "key": "x_cbcloud.device_id",
-    "cybox": false
+    "key": "x-cbcloud.device_id",
+    "object": "x_cbcloud"
   },
   "device_timestamp": [
     {
@@ -143,48 +143,48 @@
       "cybox": false
     },
     {
-      "key": "x_cbcloud.device_timestamp",
-      "cybox": false
+      "key": "x-cbcloud.device_timestamp",
+      "object": "x_cbcloud"
     }
   ],
   "org_id": {
-    "key": "x_cbcloud.org_id",
-    "cybox": false
+    "key": "x-cbcloud.org_id",
+    "object": "x_cbcloud"
   },
   "device_group_id": {
-    "key": "x_cbcloud.device_group_id",
-    "cybox": false
+    "key": "x-cbcloud.device_group_id",
+    "object": "x_cbcloud"
   },
   "process_terminated": {
-    "key": "x_cbcloud.process_terminated",
-    "cybox": false
+    "key": "x-cbcloud.process_terminated",
+    "object": "x_cbcloud"
   },
   "regmod_count": {
-    "key": "x_cbcloud.regmod_count",
-    "cybox": false
+    "key": "x-cbcloud.regmod_count",
+    "object": "x_cbcloud"
   },
   "netconn_count": {
-    "key": "x_cbcloud.netconn_count",
-    "cybox": false
+    "key": "x-cbcloud.netconn_count",
+    "object": "x_cbcloud"
   },
   "filemod_count": {
-    "key": "x_cbcloud.filemod_count",
-    "cybox": false
+    "key": "x-cbcloud.filemod_count",
+    "object": "x_cbcloud"
   },
   "modload_count": {
-    "key": "x_cbcloud.modload_count",
-    "cybox": false
+    "key": "x-cbcloud.modload_count",
+    "object": "x_cbcloud"
   },
   "childproc_count": {
-    "key": "x_cbcloud.childproc_count",
-    "cybox": false
+    "key": "x-cbcloud.childproc_count",
+    "object": "x_cbcloud"
   },
   "crossproc_count": {
-    "key": "x_cbcloud.crossproc_count",
-    "cybox": false
+    "key": "x-cbcloud.crossproc_count",
+    "object": "x_cbcloud"
   },
   "scriptload_count": {
-    "key": "x_cbcloud.scriptload_count",
-    "cybox": false
+    "key": "x-cbcloud.scriptload_count",
+    "object": "x_cbcloud"
   }
 }

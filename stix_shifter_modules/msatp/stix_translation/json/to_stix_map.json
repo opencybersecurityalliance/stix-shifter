@@ -224,15 +224,18 @@
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "DeviceName": {
-      "key": "x_msatp.computer_name",
-      "cybox": false
+      "key": "x-msatp.computer_name"
     },
     "DeviceId": {
-      "key": "x_msatp.machine_id",
-      "cybox": false
+      "key": "x-msatp.machine_id"
     },
     "event_count": {
       "key": "number_observed",
@@ -243,11 +246,7 @@
   "DeviceProcessEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -270,7 +269,137 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "file"
+        "object": "child_file"
+      },
+      {
+        "key": "process.name",
+        "object": "child_process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "child_process",
+        "references": "child_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
+    "FolderPath": [
+      {
+        "key": "directory.path",
+        "object": "child_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "child_file",
+        "references": "child_file_dir"
+      }
+    ],
+    "SHA1": {
+      "key": "file.hashes.SHA-1",
+      "object": "child_file"
+    },
+    "SHA256": {
+      "key": "file.hashes.SHA-256",
+      "object": "child_file"
+    },
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "child_file"
+    },
+    "ProcessId": [
+      {
+        "key": "process.pid",
+        "object": "child_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
+    "ProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "child_process"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      }
+    ],
+    "ProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "child_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      }
+    ],
+    "InitiatingProcessSHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "process_file"
+      }
+    ],
+    "InitiatingProcessSHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "process_file"
+      }
+    ],
+    "InitiatingProcessMD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "process_file"
+      }
+    ],
+    "InitiatingProcessFileName": [
+      {
+        "key": "file.name",
+        "object": "process_file"
       },
       {
         "key": "process.name",
@@ -279,265 +408,22 @@
       {
         "key": "process.binary_ref",
         "object": "process",
-        "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
-      },
-      {
-        "key": "x-oca-event.file_ref",
-        "object": "event",
-        "references": "file"
-      }
-    ],
-    "FolderPath": [
-      {
-        "key": "directory.path",
-        "object": "file_dir",
-        "transformer": "ToDirectoryPath"
-      },
-      {
-        "key": "file.parent_directory_ref",
-        "object": "file",
-        "references": "file_dir"
-      }
-    ],
-    "SHA1": {
-      "key": "file.hashes.SHA-1",
-      "object": "file"
-    },
-    "SHA256": {
-      "key": "file.hashes.SHA-256",
-      "object": "file"
-    },
-    "MD5": {
-      "key": "file.hashes.MD5",
-      "object": "file"
-    },
-    "ProcessId": [
-      {
-        "key": "process.pid",
-        "object": "process",
-        "transformer": "ToInteger"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
-      }
-    ],
-    "ProcessCommandLine": {
-      "key": "process.command_line",
-      "object": "process"
-    },
-    "ProcessCreationTime": {
-      "key": "process.created",
-      "object": "process",
-      "transformer": "MsatpToTimestamp"
-    },
-    "InitiatingProcessSHA1": [
-      {
-        "key": "file.hashes.SHA-1",
-        "object": "parent_process_file"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "parent_process",
-        "references": "parent_process_file"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessSHA256": [
-      {
-        "key": "file.hashes.SHA-256",
-        "object": "parent_process_file"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "parent_process",
-        "references": "parent_process_file"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessMD5": [
-      {
-        "key": "file.hashes.MD5",
-        "object": "parent_process_file"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "parent_process",
-        "references": "parent_process_file"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessFileName": [
-      {
-        "key": "file.name",
-        "object": "parent_process_file"
-      },
-      {
-        "key": "process.name",
-        "object": "parent_process"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "parent_process",
-        "references": "parent_process_file"
+        "references": "process_file"
       }
     ],
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "parent_parent_process_file"
+        "object": "parent_process_file"
       },
       {
         "key": "process.name",
-        "object": "parent_parent_process"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "parent_process",
-        "references": "parent_parent_process"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "parent_parent_process",
-        "references": "parent_parent_process_file"
-      }
-    ],
-    "InitiatingProcessId": [
-      {
-        "key": "process.pid",
-        "object": "parent_process",
-        "transformer": "ToInteger"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessParentId": [
-      {
-        "key": "process.pid",
-        "object": "parent_parent_process",
-        "transformer": "ToInteger"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "parent_process",
-        "references": "parent_parent_process"
-      }
-    ],
-    "InitiatingProcessCommandLine": [
-      {
-        "key": "process.command_line",
         "object": "parent_process"
       },
       {
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessCreationTime": [
-      {
-        "key": "process.created",
-        "object": "parent_process",
-        "transformer": "MsatpToTimestamp"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
-    "InitiatingProcessParentCreationTime": [
-      {
-        "key": "process.created",
-        "object": "parent_parent_process",
-        "transformer": "MsatpToTimestamp"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "parent_process",
-        "references": "parent_parent_process"
-      }
-    ],
-    "AccountSid": [
-      {
-        "key": "user-account.user_id",
-        "object": "process_creator"
-      },
-      {
-        "key": "process.creator_user_ref",
-        "object": "process",
-        "references": "process_creator"
-      }
-    ],
-    "InitiatingProcessAccountSid": [
-      {
-        "key": "user-account.user_id",
-        "object": "parent_process_creator"
-      },
-      {
-        "key": "process.creator_user_ref",
-        "object": "parent_process",
-        "references": "parent_process_creator"
-      }
-    ],
-    "AccountName": [
-      {
-        "key": "user-account.account_login",
-        "object": "process_creator"
-      },
-      {
-        "key": "process.creator_user_ref",
-        "object": "process",
-        "references": "process_creator"
-      }
-    ],
-    "InitiatingProcessAccountName": [
-      {
-        "key": "user-account.account_login",
-        "object": "parent_process_creator"
-      },
-      {
-        "key": "process.creator_user_ref",
-        "object": "parent_process",
-        "references": "parent_process_creator"
-      }
-    ],
-    "InitiatingProcessFolderPath": [
-      {
-        "key": "directory.path",
-        "object": "parent_process_file_dir",
-        "transformer": "ToDirectoryPath"
-      },
-      {
-        "key": "file.parent_directory_ref",
-        "object": "parent_process_file",
-        "references": "parent_process_file_dir"
       },
       {
         "key": "process.binary_ref",
@@ -545,13 +431,110 @@
         "references": "parent_process_file"
       }
     ],
+    "InitiatingProcessId": {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    "InitiatingProcessParentId": [
+      {
+        "key": "process.pid",
+        "object": "parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "InitiatingProcessCommandLine": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "InitiatingProcessCreationTime": {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "MsatpToTimestamp"
+    },
+    "InitiatingProcessParentCreationTime": [
+      {
+        "key": "process.created",
+        "object": "parent_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "AccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "child_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "child_process",
+        "references": "child_process_creator"
+      }
+    ],
+    "InitiatingProcessAccountSid": [
+      {
+        "key": "user-account.user_id",
+        "object": "process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "process_creator"
+      }
+    ],
+    "AccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "child_process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "child_process",
+        "references": "child_process_creator"
+      }
+    ],
+    "InitiatingProcessAccountName": [
+      {
+        "key": "user-account.account_login",
+        "object": "process_creator"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "process_creator"
+      }
+    ],
+    "InitiatingProcessFolderPath": [
+      {
+        "key": "directory.path",
+        "object": "process_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "process_file",
+        "references": "process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "process_file"
+      }
+    ],
     "DeviceName": {
-      "key": "x_msatp.computer_name",
-      "cybox": false
+      "key": "x-msatp.computer_name"
     },
     "DeviceId": {
-      "key": "x_msatp.machine_id",
-      "cybox": false
+      "key": "x-msatp.machine_id"
     },
     "event_count": {
       "key": "number_observed",
@@ -562,11 +545,7 @@
   "DeviceFileEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -807,11 +786,7 @@
   "DeviceRegistryEvents": {
     "Timestamp": [
       {
-        "key": "x-oca-event.start",
-        "object": "event"
-      },
-      {
-        "key": "x-oca-event.end",
+        "key": "x-oca-event.created",
         "object": "event"
       },
       {
@@ -1035,7 +1010,10 @@
       {
         "key": "x-oca-asset.ip_refs",
         "object": "host",
-        "references": ["host_ip", "host_ipv6"],
+        "references": [
+          "host_ip",
+          "host_ipv6"
+        ],
         "unwrap": true
       }
     ],
