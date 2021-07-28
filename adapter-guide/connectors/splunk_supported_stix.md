@@ -67,6 +67,7 @@
 | x_splunk_spl | user | user |
 | x_splunk_spl | bytes | bytes |
 | <br> | | |
+<<<<<<< HEAD
 | x-splunk | log_source | source |
 | x-splunk | provider | _sourcetype |
 | x-splunk | device_type | DeviceType |
@@ -78,6 +79,19 @@
 | x-splunk | Mitre_Tactic | Tactic |
 | x-splunk | Mitre_TechniqueId | TechniqueId |
 | x-splunk | Mitre_Technique | Technique |
+=======
+| x-splunk-finding | log_source | source |
+| x-splunk-finding | provider | _sourcetype |
+| x-splunk-finding | device_type | DeviceType |
+| x-splunk-finding | direction | Direction |
+| x-splunk-finding | severity | severity |
+| x-splunk-finding | EventID | EventID |
+| x-splunk-finding | event_name | EventName |
+| x-splunk-finding | Mitre_TacticId | TacticId |
+| x-splunk-finding | Mitre_Tactic | Tactic |
+| x-splunk-finding | Mitre_TechniqueId | TechniqueId |
+| x-splunk-finding | Mitre_Technique | Technique |
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
 | <br> | | |
 | x-ibm-finding | ss_name | ss_name |
 | x-ibm-finding | severity | severity |

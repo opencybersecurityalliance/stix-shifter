@@ -258,26 +258,46 @@
   },
   "source": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.log_source",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.log_source",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "_sourcetype": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.provider",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.provider",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "DeviceType": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.device_type",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.device_type",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "Direction": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.direction",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.direction",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "severity": [
@@ -288,38 +308,68 @@
   ],
   "EventID": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.EventID",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.EventID",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "TacticId": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.Mitre_TacticId",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.Mitre_TacticId",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "Tactic": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.Mitre_Tactic",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.Mitre_Tactic",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "TechniqueId": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.Mitre_TechniqueId",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.Mitre_TechniqueId",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "Technique": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.Mitre_Technique",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.Mitre_Technique",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "EventName": [
     {
+<<<<<<< HEAD
       "key": "x-splunk.event_name",
       "object": "x-splunk"
+=======
+      "key": "x-splunk-finding.event_name",
+      "object": "x-splunk-finding"
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
     }
   ],
   "ss_name": {

@@ -142,7 +142,11 @@
             "subject_public_key_algorithm": "ssl_publickey_algorithm"
         }
     },
+<<<<<<< HEAD
     "x-splunk": {
+=======
+    "x-splunk-finding": {
+>>>>>>> c64025e163ca943bc6e32447ad5150254c1db7ef
         "cim_type": "endpoint",
         "fields": {
             "log_source": ["source"],
