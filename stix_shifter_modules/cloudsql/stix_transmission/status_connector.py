@@ -28,11 +28,11 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(cloudsql_status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         success = False
         try:
             # Grab the response, already in json
-            response = self.api_client.get_job(search_id)
+            response = await self.api_client.get_job(search_id)
             success = True
         except ValueError as e:
             response = {"message": repr(e)}

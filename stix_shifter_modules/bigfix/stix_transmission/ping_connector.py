@@ -15,11 +15,11 @@ class PingConnector(BasePingConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             response_code = response.code
             response_txt = response.read().decode('utf-8')
             

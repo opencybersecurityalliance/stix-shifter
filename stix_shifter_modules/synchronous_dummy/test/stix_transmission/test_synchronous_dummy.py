@@ -1,6 +1,17 @@
 from stix_shifter_modules.synchronous_dummy.entry_point import EntryPoint
 import unittest
+import asyncio
 
+
+def run_async_func(callable, *args, **kwargs):
+    loop = None
+    try:
+        loop = asyncio.get_event_loop()
+    except:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    return loop.run_until_complete(callable(*args, **kwargs))
 
 class TestSynchronousDummyConnection(unittest.TestCase, object):
 
@@ -25,12 +36,12 @@ class TestSynchronousDummyConnection(unittest.TestCase, object):
 
     def test_ping(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_result = entry_point.ping_connection()
+        ping_result = run_async_func(entry_point.ping_connection)
         assert ping_result["success"] is True
 
     def test_dummy_sync_results(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection("some query", 1, 1)
+        results_response = run_async_func(entry_point.create_results_connection, "some query", 1, 1)
         response_code = results_response["success"]
         query_results = results_response["data"]
 

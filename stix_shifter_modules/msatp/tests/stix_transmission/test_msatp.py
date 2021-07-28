@@ -1,10 +1,24 @@
 from stix_shifter_modules.msatp.entry_point import EntryPoint
 from unittest.mock import patch
+import pytest
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.error_response import ErrorCode
+import asyncio
+from asyncinit import asyncinit
 
 
+def run_async_func(callable, *args, **kwargs):
+    loop = None
+    try:
+        loop = asyncio.get_event_loop()
+    except:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    return loop.run_until_complete(callable(*args, **kwargs))
+
+@asyncinit
 class MSATPMockResponse:
     def __init__(self, response_code, obj):
         self.code = response_code
@@ -15,7 +29,6 @@ class MSATPMockResponse:
 
 
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.Connector.generate_token')
-@patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
         return {
@@ -33,8 +46,7 @@ class TestMSATPConnection(unittest.TestCase):
             "selfSignedCert": "cert"
             }
 
-    def test_is_async(self, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
+    def test_is_async(self, mock_generate_token):
         mock_generate_token.return_value = 'test'
         entry_point = EntryPoint(self.connection(), self.config())
         check_async = entry_point.is_async()
@@ -42,15 +54,12 @@ class TestMSATPConnection(unittest.TestCase):
         assert check_async is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
+    def test_ping_endpoint(self, mock_ping_response, mock_generate_token):
 
-        mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
-        print(str(self.connection))
-        print(str(self.config))
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -59,13 +68,13 @@ class TestMSATPConnection(unittest.TestCase):
 
     '''
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_exception(self, mock_ping_response, mock_generate_token):
         mock_generate_token.return_value = None
         mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('exception')
+        mock_ping_response.return_value = MSATPMockResponse(503, mocked_return_value)
+        # mock_ping_response.side_effect = Exception('exception')
 
+        # with pytest.raises(Exception) as exc_info:
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -74,9 +83,9 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
     '''
 
-    def test_query_connection(self, mock_api_client, mock_generate_token):
 
-        mock_api_client.return_value = None
+    def test_query_connection(self, mock_generate_token):
+
         mock_generate_token.return_value = None
 
         query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime(" \
@@ -92,10 +101,9 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_file_response(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_results_file_response(self, mock_results_response, mock_generate_token):
 
 
-        mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = """{
                             "Results": [{
@@ -126,10 +134,9 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_registry_response(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_results_registry_response(self, mock_results_response, mock_generate_token):
 
 
-        mock_api_client.return_value = None
         mock_generate_token.return_value = None
         mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","DeviceName": "testmachine1","ActionType": "RegistryValueSet",
@@ -153,13 +160,10 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    '''
+    
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
-
-
-        mock_api_client.return_value = None
+    def test_results_response_exception(self, mock_results_response, mock_generate_token):
         mock_generate_token.return_value = None
         mocked_return_value = """ {    } """
         mock_results_response.return_value = MSATPMockResponse(404, mocked_return_value)
@@ -169,18 +173,18 @@ class TestMSATPConnection(unittest.TestCase):
                 "| order by Timestamp desc | where LocalPort < 443) "
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
-        results_response = transmission.results(query, offset, length)
+        
+        with pytest.raises(Exception) as e:
+            transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
+            results_response = transmission.results(query, offset, length)
 
-        assert results_response['code'] == 'unknown'
-        assert results_response['success'] is False
-    '''
+            assert results_response['code'] == 'unknown'
+            assert results_response['success'] is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_query_flow(self, mock_results_response, mock_generate_token):
 
-        mock_api_client.return_value = None
         mock_generate_token.return_value = None
         results_mock = """{
                             "Results": [{
@@ -223,8 +227,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    def test_delete_query(self, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
+    def test_delete_query(self, mock_generate_token):
         mock_generate_token.return_value = None
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
@@ -233,15 +236,14 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_async_func(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    def test_status_query(self, mock_api_client, mock_generate_token):
+    def test_status_query(self, mock_generate_token):
 
 
-        mock_api_client.return_value = None
         mock_generate_token.return_value = None
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
@@ -250,7 +252,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_async_func(entry_point.create_status_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

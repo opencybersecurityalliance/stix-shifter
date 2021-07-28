@@ -6,8 +6,8 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
     
-    def ping_connection(self):
-        response = self.api_client.ping_box()
+    async def ping_connection(self):
+        response = await self.api_client.ping_box()
         response_code = response.code
 
         response_dict = json.loads(response.read())

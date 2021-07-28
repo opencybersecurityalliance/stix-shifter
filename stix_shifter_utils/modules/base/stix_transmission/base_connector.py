@@ -7,7 +7,7 @@ import json
 
 
 class BaseConnector:
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Creates a connection to the specified datasource to send a query
 
@@ -23,7 +23,7 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Creates a connection to the specified datasource to determine the status of a given query
 
@@ -40,7 +40,7 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Creates a connection to the specified datasource to retrieve query results
 
@@ -58,7 +58,7 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Deletes a query from the specified datasource
 
@@ -73,7 +73,7 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Sends a basic request to the datasource to confirm we are connected and authenticated
 
@@ -88,8 +88,8 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
-        result = entry_point.create_results_connection(search_id, offset, length)
+    async def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
+        result = await entry_point.create_results_connection(search_id, offset, length)
         if result.get('success'):
             data = result['data']
             data = data[:length]

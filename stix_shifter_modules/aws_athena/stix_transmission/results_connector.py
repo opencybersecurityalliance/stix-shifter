@@ -18,12 +18,11 @@ class AccessDeniedException(Exception):
 
 
 class ResultsConnector(BaseResultsConnector):
-    def __init__(self, client, s3_client):
+    def __init__(self, client):
         self.client = client
-        self.s3_client = s3_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -41,11 +40,9 @@ class ResultsConnector(BaseResultsConnector):
             if 'dummy' in search_id:
                 return_obj = {'success': True, 'data': []}
                 return return_obj
-            paginator = self.client.get_paginator('get_query_results')
-            get_query_response = paginator.paginate(QueryExecutionId=search_id)
-            result_response_list = []
-            for page in get_query_response:
-                result_response_list.extend(page['ResultSet']['Rows'])
+
+            result_response_list = await self.client.getPaginatedResult('athena', 'get_query_results', QueryExecutionId=search_id)
+            
             # Formatting the response from api
             schema_columns = result_response_list[0]['Data']
             schema_columns = [list(x.values()) for x in schema_columns]
@@ -64,8 +61,9 @@ class ResultsConnector(BaseResultsConnector):
             formatted_result = self.format_result(flatten_result_cleansed, service_type)
             return_obj['success'] = True
             return_obj['data'] = formatted_result
+
             # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
-            get_query_response = self.client.get_query_execution(QueryExecutionId=search_id)
+            get_query_response = await self.client.makeRequest('athena', 'get_query_execution', QueryExecutionId=search_id)
             s3_output_location = get_query_response['QueryExecution']['ResultConfiguration']['OutputLocation']
             s3_output_bucket_with_file = s3_output_location.split('//')[1]
             s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
@@ -74,7 +72,7 @@ class ResultsConnector(BaseResultsConnector):
             delete = dict()
             delete['Objects'] = [{'Key': s3_output_key}, {'Key': s3_output_key_metadata}]
             # Api call to delete s3 object
-            delete_object = self.s3_client.delete_objects(Bucket=s3_output_bucket, Delete=delete)
+            delete_object = await self.client.makeRequest('s3', 'delete_objects', Bucket=s3_output_bucket, Delete=delete)
             if delete_object.get('Errors'):
                 message = delete_object.get('Errors')[0].get('Message')
                 raise AccessDeniedException(message)

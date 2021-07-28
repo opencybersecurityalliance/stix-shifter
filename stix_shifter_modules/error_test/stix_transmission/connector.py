@@ -47,10 +47,10 @@ class Connector(BaseSyncConnector):
 
         return matching_sdos
 
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = dict()
 
-        response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
 
         if response.code == 200:
@@ -62,19 +62,19 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         observations = []
         return_obj = dict()
 
         response = None
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
             # httpstat.us/200?sleep=60000 for slow connection that is valid
-            response = self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)
+            response = await self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)
         elif self.connection['options'].get('error_type') == ERROR_TYPE_BAD_CONNECTION:
             # www.google.com:81 for a bad connection that will timeout
-            response = self.client.call_api('https://www.google.com:81', 'get', timeout=self.timeout)
+            response = await self.client.call_api('https://www.google.com:81', 'get', timeout=self.timeout)
         else:
-            response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
+            response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
         if response.code != 200:
             response_txt = response.raise_for_status()
             if ErrorResponder.is_plain_string(response_txt):
@@ -116,13 +116,13 @@ class Connector(BaseSyncConnector):
                 ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
         return return_obj
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         return {"success": True, "search_id": query}
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         return {"success": True, "status": "COMPLETED", "progress": 100}
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj

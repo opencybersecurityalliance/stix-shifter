@@ -4,7 +4,7 @@ import json
 
 class BaseResultsConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Creates a connection to the specified datasource to retrieve query results
 
@@ -22,8 +22,8 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
-    def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
-        result = entry_point.create_results_connection(search_id, offset, length)
+    async def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
+        result = await entry_point.create_results_connection(search_id, offset, length)
         if result.get('success'):
             data = result['data']
             data = data[:int(length)]

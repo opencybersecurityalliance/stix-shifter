@@ -14,9 +14,9 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
-        response = self.api_client.get_search(search_id)
+        response = await self.api_client.get_search(search_id)
         response_code = response.code
         response_dict = json.load(response)
         

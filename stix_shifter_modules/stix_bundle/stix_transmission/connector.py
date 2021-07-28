@@ -45,10 +45,10 @@ class Connector(BaseSyncConnector):
 
         return matching_sdos
 
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = dict()
 
-        response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
 
         if response.code == 200:
@@ -60,7 +60,7 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         observations = []
         return_obj = dict()
 
@@ -68,7 +68,7 @@ class Connector(BaseSyncConnector):
             # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
             search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
 
-        response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
         if response.code != 200:
             response_txt = response.raise_for_status()
@@ -111,10 +111,8 @@ class Connector(BaseSyncConnector):
                 ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
         return return_obj
 
-    def delete_query_connection(self, search_id):
-        return_obj = dict()
-        return_obj['success'] = True
-        return return_obj
+    async def delete_query_connection(self, search_id):
+        return {'success': True}
 
     def test_START_STOP_format(self, query_string) -> bool:
         # Matches START t'1234-56-78T00:00:00.123Z' STOP t'1234-56-78T00:00:00.123Z'

@@ -1,8 +1,10 @@
 from stix_shifter_modules.arcsight.entry_point import EntryPoint
+from stix_shifter.stix_transmission import stix_transmission
 from unittest.mock import patch
 import json
 import unittest
-from stix_shifter.stix_transmission import stix_transmission
+import asyncio
+from asyncinit import asyncinit
 
 CONFIG = {
     "auth": {
@@ -19,9 +21,9 @@ CONNECTION = {
 
 SEARCH_ID = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA."
 
-
+@asyncinit
 class ArcsightMockResponse:
-    def __init__(self, response_code, obj):
+    async def __init__(self, response_code, obj):
         self.code = response_code
         self.object = obj
 
@@ -39,12 +41,11 @@ class TestArcsightConnection(unittest.TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_ping(mock_ping):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
+    def test_ping(mock_session_id, mock_ping):
         """to check the ping status of connector"""
-        response = {'log.loginResponse': {'log.return': 'Sv-BbacDMIkoWLQeTEVeIyb0NsmPDQyX2zsVupHakfA.'}}
-        mock_session_id = ArcsightMockResponse(200, json.dumps(response))
-        mock_ping_response = ArcsightMockResponse(200, '{"sessionId":"2"}')
-        mock_ping.side_effect = [mock_session_id, mock_ping_response]
+        mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
+        mock_ping.return_value = ArcsightMockResponse(200, '{"sessionId":"2"}')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
@@ -54,15 +55,15 @@ class TestArcsightConnection(unittest.TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_ping_exception(mock_ping):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
+    def test_ping_exception(mock_session_id, mock_ping):
         """to check the ping exception of the connector"""
-        response = {'log.loginResponse': {'log.return': 'Sv-BbacDMIkoWLQeTEVeIyb0NsmPDQyX2zsVupHakfA.'}}
-        mock_session_id = ArcsightMockResponse(200, json.dumps(response))
-        mock_ping_response = ArcsightMockResponse(400, '{"errors": [{"code": 1009, "message": "Server session not '
+        mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
+        mock_ping.return_value = ArcsightMockResponse(400, '{"errors": [{"code": 1009, "message": "Server session not '
                                                        'found"}]}')
-        mock_ping.side_effect = [mock_session_id, mock_ping_response]
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
+        
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] is False
@@ -71,11 +72,14 @@ class TestArcsightConnection(unittest.TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_auth_exception(mock_auth_value):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
+    def test_auth_exception(mock_session_id, mock_ping):
         """to check auth token generation exception"""
-        mock_auth_value.return_value = ArcsightMockResponse(400, '')
+        mock_session_id.return_value = ''
+        mock_ping.return_value = ArcsightMockResponse(503, '{"error": "Unauthorized"}')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
+
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] is False
@@ -93,6 +97,7 @@ class TestArcsightConnection(unittest.TestCase):
                 "\"end_time\": \"2020-07-01T12:00:44.000-05:00\"}"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         query_response = transmission.query(query)
+
         assert query_response is not None
         assert 'success' in query_response
         assert query_response['success'] is True
@@ -437,11 +442,15 @@ class TestArcsightConnection(unittest.TestCase):
         assert status_response['code'] == 'authentication_fail'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_arcsight_logger_down(mock_logger_error):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.delete_search')
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_status')
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_results')
+    def test_arcsight_logger_down(mock_results, mock_status, mock_delete):
         """arcsight logger down error"""
         error = 'The application is currently unavailable. Please retry shortly.'
-        mock_logger_error.return_value = ArcsightMockResponse(503, error)
+        mock_results.return_value = ArcsightMockResponse(503, error)
+        mock_status.return_value = ArcsightMockResponse(503, error)
+        mock_delete.return_value = ArcsightMockResponse(503, error)
         search_id = "1594383044445:BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k.:20"
         offset = 0
         length = 10

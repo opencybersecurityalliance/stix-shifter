@@ -9,9 +9,9 @@ class QueryConnector(BaseQueryConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         # Grab the response, extract the response code, and convert it to readable json
-        response = self.api_client.create_search(query)
+        response = await self.api_client.create_search(query)
         response_code = response.code
         response_text = response.read()
         error = None
