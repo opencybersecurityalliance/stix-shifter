@@ -85,7 +85,7 @@ class ErrorResponder():
         if error is not None:
             str_error = str(error)
             logger.error("error occurred: " + str_error)
-            logger.debug(utils_logger.exception_to_string(error))
+            logger.error(utils_logger.exception_to_string(error))
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
                 error_msg = 'Wrong certificate: ' + str_error
