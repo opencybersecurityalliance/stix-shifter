@@ -1,0 +1,20 @@
+{
+    "ipv4-addr": {
+        "fields": {
+            "value": ["qip"]
+        }
+    },
+    "domain-name": {
+        "fields": {
+            "value": ["qname"]
+        }
+    },
+    "x-infoblox-dns-event": {
+        "fields": {
+            "policy_name": ["policy_name"],
+            "x_infoblox_severity": ["threat_level"],
+            "threat_class": ["threat_class"],
+            "network": ["network"]
+        }
+    }
+}
