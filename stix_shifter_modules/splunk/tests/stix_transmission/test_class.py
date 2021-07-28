@@ -5,20 +5,10 @@ import unittest
 import json
 import os
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorCode
 import asyncio
 from asyncinit import asyncinit
-
-
-def run_async_func(callable, *args, **kwargs):
-    loop = None
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(callable(*args, **kwargs))
 
 @asyncinit
 class SplunkMockResponse:
@@ -169,7 +159,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         search_id = "1536832140.4293"
         entry_point = EntryPoint(connection, config)
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -201,7 +191,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         search_id = "1536832140.4293"
         entry_point = EntryPoint(connection, config)
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -233,7 +223,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         search_id = "1536832140.4293"
         entry_point = EntryPoint(connection, config)
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -265,7 +255,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         search_id = "1536832140.4293"
         entry_point = EntryPoint(connection, config)
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -363,7 +353,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         offset = 0
         length = 1
         entry_point = EntryPoint(connection, config)
-        results_response = run_async_func(entry_point.create_results_connection, search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True
@@ -432,7 +422,7 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
         entry_point = EntryPoint(connection, config)
-        query_response = run_async_func(entry_point.create_query_connection, query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert query_response['success'] is True
@@ -440,7 +430,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "1536832140.4293"
 
         search_id = "1536832140.4293"
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -453,7 +443,7 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        results_response = run_async_func(entry_point.create_results_connection, search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True

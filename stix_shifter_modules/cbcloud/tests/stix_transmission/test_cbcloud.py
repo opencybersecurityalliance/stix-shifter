@@ -3,21 +3,11 @@ from unittest.mock import patch
 
 from stix_shifter_modules.cbcloud.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 
 import asyncio
 from asyncinit import asyncinit
-
-
-def run_async_func(callable, *args, **kwargs):
-    loop = None
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(callable(*args, **kwargs))
 
 @asyncinit
 class CBCloudMockResponse:
@@ -90,7 +80,7 @@ class TestCbCloudConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(self.connection, self.configuration)
         query = ["((process_name:test.exe) AND device_timestamp:[2021-01-15T19:17:12Z TO 2021-01-15T19:22:12Z]) AND -enriched:True"]
-        query_response = run_async_func(entry_point.create_query_connection, query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'search_id' in query_response

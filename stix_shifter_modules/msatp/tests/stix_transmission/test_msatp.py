@@ -3,20 +3,10 @@ from unittest.mock import patch
 import pytest
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorCode
 import asyncio
 from asyncinit import asyncinit
-
-
-def run_async_func(callable, *args, **kwargs):
-    loop = None
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(callable(*args, **kwargs))
 
 @asyncinit
 class MSATPMockResponse:
@@ -236,7 +226,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = run_async_func(entry_point.delete_query_connection, search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -252,7 +242,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = run_async_func(entry_point.create_status_connection, search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
