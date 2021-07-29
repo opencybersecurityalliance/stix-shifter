@@ -103,6 +103,8 @@ class QueryStringPatternTranslator:
             elif mapped_field == 'threat_level':
                 value = THREAT_LEVEL_MAPPING[value]
 
+
+
             if is_reference_value:
                 parsed_reference = self._parse_reference(stix_field, value_type, mapped_field, value, comparator)
 
@@ -134,9 +136,13 @@ class QueryStringPatternTranslator:
         return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, dialect, qualifier=None) -> str:
+        #print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        #print(expression)
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
+            #print(stix_object)
+            #print("------------------------------------------------------------------------------------- " + dialect)
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
 
@@ -147,6 +153,7 @@ class QueryStringPatternTranslator:
             #     if intersection:
             #         logger.error(f"[{', '.join(intersection)}] mapped from {stix_field} has multiple criteria")
             #         raise NotImplementedError("Multiple criteria for one field is not support in MDL")
+            # TODO:   ^^^^^
             #     else:
             #         self.assigned_fields |= mapped_fields_set
 
@@ -208,8 +215,10 @@ class QueryStringPatternTranslator:
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
+            # TODO: is this used?
             return self._parse_expression(expression.comparison_expression, dialect, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            # TODO: is this used?
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self._lookup_comparison_operator(expression.observation_expression.operator, dialect)
                 expression_01 = self._parse_expression(expression.observation_expression.expr1, dialect)
@@ -219,6 +228,7 @@ class QueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, dialect, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
+            # TODO: is this used?
             operator = self._lookup_comparison_operator(expression.operator, dialect)
             expression_01 = self._parse_expression(expression.expr1, dialect)
             expression_02 = self._parse_expression(expression.expr2, dialect)
@@ -231,6 +241,7 @@ class QueryStringPatternTranslator:
             else:
                 return ''
         elif isinstance(expression, Pattern):
+            # TODO: is this used?
             return "{expr}".format(expr=self._parse_expression(expression.expression, dialect))
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
@@ -288,6 +299,9 @@ def _format_translated_queries(query_array, subtype_map):
 
     # Transform from human-readable timestamp to 13-digit millisecond time
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
+    #print("------------------------------------------------------------------------------ subtype map")
+    #print(subtype_map)
+    #print(query_array)
     formatted_queries = []
     for query in query_array:
         if _test_START_STOP_format(query):
@@ -328,6 +342,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     queries = []
+    # print("**************************************************************************************************************8")
+    # print(trans_queries)
     for q in trans_queries:
         q['source'] = data_model_mapping.dialect
         if 'subtype' in trans_queries:
@@ -341,4 +357,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
             q['to'] = int(q['to'] / 1000)
             q['from'] = int(q['from'] / 1000)
         queries.append(json.dumps(q))
+    # print("************************** translate_pattern")
+    # print(queries)
     return queries
