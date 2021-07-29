@@ -8,9 +8,9 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         return_obj = dict()
-        response = self.api_client.run_search(query, start=offset, rows=length)
+        response = await self.api_client.run_search(query, start=offset, rows=length)
         response_code = response.get('code')
         response_txt = response.get('message')
         if response_code == 200:

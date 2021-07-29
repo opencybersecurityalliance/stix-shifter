@@ -8,8 +8,8 @@ class PingConnector(BasePingConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def ping_connection(self):
-        response = self.api_client.ping_data_source()
+    async def ping_connection(self):
+        response = await self.api_client.ping_data_source()
         response_code = response.get('code')
         response_txt = response.get('message')
         return_obj = dict()

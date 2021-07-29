@@ -3,22 +3,12 @@ from unittest.mock import patch
 import unittest
 import pytest
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 import asyncio
 from asyncinit import asyncinit
 
 
 API_PATH = "stix_shifter_modules.bigfix.stix_transmission.api_client.APIClient"
-
-
-def run_async_func(callable, *args, **kwargs):
-    loop = None
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    return loop.run_until_complete(callable(*args, **kwargs))
 
 
 @asyncinit
@@ -260,7 +250,7 @@ class TestBigfixConnection(unittest.TestCase):
         query = 'bigfix query text'
 
         entry_point = EntryPoint(connection, config)
-        query_response = run_async_func(entry_point.create_query_connection, query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -570,7 +560,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
 
         entry_point = EntryPoint(CONNECTION, CONFIG)
-        status_response = run_async_func(entry_point.delete_query_connection, search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
