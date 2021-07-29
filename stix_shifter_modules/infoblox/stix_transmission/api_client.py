@@ -52,6 +52,8 @@ class APIClient:
             return self._get_dnseventdata_results(search_id, range_start, range_end)
         elif payload['source'] == 'dossierData':
             return self._get_dossierdata_results(search_id, range_start, range_end)
+        elif payload['source'] == 'tideDbData':
+            return self._get_tidedbdata_results(search_id, range_start, range_end)
         resp_dict = dict()
         resp_dict["code"] = 200
         resp_dict['data'] = dict()
@@ -119,7 +121,7 @@ class APIClient:
         }
         for i in range(0, max_fetch_count):
             payload["offset"] = 0
-            resp = self.client.call_api(endpoint + "/" + payload['subtype'] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
+            resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
             payload_dict = json.loads(resp.read())
 
             code = resp.code
@@ -140,6 +142,45 @@ class APIClient:
             # TODO: check this
             self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
         return resp_dict
+
+    def _get_tidedbdata_results(self, search_id, range_start=None, range_end=None):
+        endpoint = 'tide/api/data/threats/state'
+        headers = dict()
+        headers['Content-Type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+        payload = json.loads(search_id)
+        resp_dict = dict()
+        all_data = list()
+        resp_dict["data"] = {"logs": all_data}
+        start = range_start if range_start else 0
+        end = range_end if range_end else 0
+        offset = start
+        max_fetch_count = 10
+        for i in range(0, max_fetch_count):
+            payload["offset"] = 0
+
+            #TODO remove hard-coded 'type'
+            #type must be one of type must be one of (host, ip, url, hash, email)
+            resp = self.client.call_api(endpoint + "/ip?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
+            response_string = resp.read()
+            payload_dict = json.loads(resp.read())
+
+            code = resp.code
+            response = payload_dict
+
+            # code, response = self._fetch(endpoint, headers, payload, offset)
+            resp_dict["code"] = code
+            if code != 200:
+                # TODO test this
+                resp_dict["message"] = response["status_detail"]
+                break
+            else:
+                all_data += response["threat"]
+                break
+        if resp_dict.get("code") == 200:
+            self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
+        return resp_dict
+
 
     # def _fetch(self, endpoint, headers, payload, offset):
     #     payload["offset"] = offset
