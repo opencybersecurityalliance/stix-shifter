@@ -2,38 +2,9 @@
 import json
 import unittest
 
-from stix_shifter.stix_translation.stix_translation import StixTranslation
+from . import utils
 
-translation = StixTranslation()
-
-
-class TestStixParsingMixin:
-
-    @staticmethod
-    def get_dialect():
-        raise NotImplementedError()
-
-    @staticmethod
-    def _parse_query(stix_pattern, dialect):
-        query = translation.translate(f'infoblox:{dialect}', 'query', '{}', stix_pattern)
-        return query
-
-    def retrieve_query(self, stix_pattern):
-        queries: dict = self._parse_query(stix_pattern, self.get_dialect())
-        self.assertIn("queries", queries)
-        query = json.loads(queries["queries"][0])
-        return query
-
-    def _test_time_range(self, stix_pattern, expectation):
-        query = self.retrieve_query(stix_pattern)
-        self.assertEqual(expectation, query["to"] - query["from"])
-
-    def _test_pattern(self, pattern, expectation):
-        query = self.retrieve_query(pattern)
-        self.assertEqual(expectation, query["query"])
-
-
-class TestStixParsingDnsEvent(unittest.TestCase, TestStixParsingMixin):
+class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
     def get_dialect(self):
         return "dnsEventData"
 
@@ -46,18 +17,18 @@ class TestStixParsingDnsEvent(unittest.TestCase, TestStixParsingMixin):
         pattern = "[x-infoblox-dns-event:network = 'BloxOne Endpoint']"
         expectation = 'network=BloxOne Endpoint'
         self._test_pattern(pattern, expectation)
-        pass 
-    
+        pass
+
     def test_ipv4(self):
         pattern = "[ipv4-addr:value = '127.0.0.1']"
         expectation = 'qip=127.0.0.1'
         self._test_pattern(pattern, expectation)
-    
+
     def test_domain_name(self):
         pattern = "[domain-name:value = 'example.com']"
         expectation = 'qname=example.com.'
         self._test_pattern(pattern, expectation)
-    
+
     def test_policy_name(self):
         pattern = "[x-infoblox-dns-event:policy_name = 'DFND']"
         expectation = 'policy_name=DFND'

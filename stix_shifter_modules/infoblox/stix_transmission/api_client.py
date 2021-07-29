@@ -32,7 +32,7 @@ class APIClient:
                                     )
 
     def ping_data_source(self):
-        # Pings the data source        
+        # Pings the data source
         endpoint = 'tide/api/data/threats/state?type=host&rlimit=1'
         # now = datetime.datetime.utcnow().isoformat(timespec="milliseconds") + "Z"
         # https://csp.infoblox.com:443/tide/api/data/threats/state?type=host&rlimit=1
@@ -44,6 +44,26 @@ class APIClient:
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         # endpoint = self.endpoint_start + '/api/dnsdata/v2/dns_event'
+
+        payload = json.loads(search_id)
+        print("--------------------------------------------- serach payload")
+        print(payload)
+        if payload['source'] == 'dnsEventData':
+            return self._get_dnseventdata_results(search_id, range_start, range_end)
+        elif payload['source'] == 'dossierData':
+            return self._get_dossierdata_results(search_id, range_start, range_end)
+        resp_dict = dict()
+        resp_dict["code"] = 200
+        resp_dict['data'] = dict()
+        resp_dict['data']['logs'] = []
+
+
+        print(resp_dict)
+        print("pppppppppppppppppppppppppppppppppppppppppppp")
+
+        return resp_dict
+
+    def _get_dnseventdata_results(self, search_id, range_start=None, range_end=None):
         endpoint = 'api/dnsdata/v2/dns_event'
         headers = dict()
         headers['Content-Type'] = 'application/json'
@@ -57,7 +77,14 @@ class APIClient:
         offset = start
         max_fetch_count = 10
         for i in range(0, max_fetch_count):
-            code, response = self._fetch(endpoint, headers, payload, offset)
+            payload["offset"] = 0
+            resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
+            payload_dict = json.loads(resp.read())
+
+            code = resp.code
+            response = payload_dict
+
+            # code, response = self._fetch(endpoint, headers, payload, offset)
             resp_dict["code"] = code
             if code != 200:
                 # TODO test this
@@ -70,8 +97,52 @@ class APIClient:
             self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
         return resp_dict
 
-    def _fetch(self, endpoint, headers, payload, offset):
-        payload["offset"] = offset
-        resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
-        payload_dict = json.loads(resp.read())
-        return resp.code, payload_dict
+    def _get_dossierdata_results(self, search_id, range_start=None, range_end=None):
+        # ip?value=45.14.13.25&wait=true&source=pdns
+        # TODO: async
+        endpoint = 'tide/api/services/intel/lookup/indicator'
+        headers = dict()
+        headers['Content-Type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+        payload = json.loads(search_id)
+        resp_dict = dict()
+        all_data = list()
+        resp_dict["data"] = {"logs": all_data}
+        start = range_start if range_start else 0
+        end = range_end if range_end else 0
+        offset = start
+        max_fetch_count = 10
+
+        params = {
+            'wait': 'true',
+            'source': 'pdns'
+        }
+        for i in range(0, max_fetch_count):
+            payload["offset"] = 0
+            resp = self.client.call_api(endpoint + "/" + payload['subtype'] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
+            payload_dict = json.loads(resp.read())
+
+            code = resp.code
+            response = payload_dict
+
+            # code, response = self._fetch(endpoint, headers, payload, offset)
+            resp_dict["code"] = code
+            if code != 200:
+                # TODO test this
+                resp_dict["message"] = response["status_detail"]
+                break
+            else:
+                print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+                print(response)
+                all_data += [response]
+                break
+        if resp_dict.get("code") == 200:
+            # TODO: check this
+            self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
+        return resp_dict
+
+    # def _fetch(self, endpoint, headers, payload, offset):
+    #     payload["offset"] = offset
+    #     resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
+    #     payload_dict = json.loads(resp.read())
+    #     return resp.code, payload_dict

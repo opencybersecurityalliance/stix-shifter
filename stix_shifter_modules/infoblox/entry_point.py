@@ -6,7 +6,9 @@ from .stix_transmission.ping_connector import PingConnector
 from .stix_transmission.query_connector import QueryConnector
 from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.status_connector import StatusConnector
-
+from .stix_translation.query_translator import QueryTranslator
+from .stix_translation.results_translator import ResultsTranslator
+import os
 
 class EntryPoint(BaseEntryPoint):
     def __init__(self, connection={}, configuration={}, options={}):
@@ -26,4 +28,18 @@ class EntryPoint(BaseEntryPoint):
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
 
-        self.setup_translation_simple(dialect_default="dnsEventData")
+        basepath = os.path.dirname(__file__)
+        filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
+
+        dialect = 'dnsEventData'
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = ResultsTranslator(options, dialect, filepath)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
+
+        dialect = 'dossierData'
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = ResultsTranslator(options, dialect, filepath)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
+
+
+        # self.setup_translation_simple(dialect_default="dnsEventData")

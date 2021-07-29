@@ -1,0 +1,12 @@
+{
+    "domain-name": {
+        "fields": {
+            "value": ["value"]
+        }
+    },
+    "ipv4-addr": {
+        "fields": {
+            "value": ["value"]
+        }
+    }
+}

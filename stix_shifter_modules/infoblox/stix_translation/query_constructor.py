@@ -49,9 +49,11 @@ class QueryStringPatternTranslator:
         self.using_operators = set()
         self.assigned_fields = set()
         self.qualified_queries = []
+        self.subtypes = dict()
         self.translated = self.parse_expression(pattern, data_model_mapper.dialect)
+
         self.qualified_queries.append(self.translated)
-        self.qualified_queries = _format_translated_queries(self.qualified_queries)
+        self.qualified_queries = _format_translated_queries(self.qualified_queries, self.subtypes)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -178,11 +180,19 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+                final_expression = "{} {}".format(comparison_string, qualifier)
             else:
-                return "{}".format(comparison_string)
+                final_expression = "{}".format(comparison_string)
+
+            if dialect == 'dossierData':
+                if stix_object == 'domain-name':
+                    self.subtypes[final_expression] = 'host'
+                elif stix_object == 'ipv4-addr' or stix_object == 'ipv6-addr':
+                    self.subtypes[final_expression] = 'ip'
+            return final_expression
 
         elif isinstance(expression, CombinedComparisonExpression):
+            # TODO: is this used?
             operator = self._lookup_comparison_operator(expression.operator, dialect)
             expression_01 = self._parse_expression(expression.expr1, dialect)
             expression_02 = self._parse_expression(expression.expr2, dialect)
@@ -272,7 +282,7 @@ def _convert_timestamps_to_milliseconds(query_parts):
     return payload
 
 
-def _format_translated_queries(query_array):
+def _format_translated_queries(query_array, subtype_map):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -296,6 +306,8 @@ def _format_translated_queries(query_array):
             payload = dict()
             payload['offset'] = 0
             payload['query'] = query
+            if query in subtype_map:
+                payload['subtype'] = subtype_map[query]
             formatted_queries.append(payload)
 
     return formatted_queries
@@ -318,6 +330,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     queries = []
     for q in trans_queries:
         q['source'] = data_model_mapping.dialect
+        if 'subtype' in trans_queries:
+            q['source_subtype'] = trans_queries['subtype'] # TODO: rename?
 
         # TODO: remove the below code if not used
         if 'to' not in q:
