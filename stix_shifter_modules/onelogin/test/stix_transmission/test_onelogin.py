@@ -1,3 +1,4 @@
+import datetime
 import unittest
 from unittest.mock import patch
 from stix_shifter_modules.onelogin.entry_point import EntryPoint
@@ -17,8 +18,7 @@ class TestOneloginConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "port": 443,
-            "region": "US"
+            "region": "us"
         }
 
     def configuration(self):
@@ -65,7 +65,7 @@ class TestOneloginConnection(unittest.TestCase, object):
         mocked_return_value = {"code": 200}
         mock_generate_token.return_value = mocked_return_value
         mocked_return_value = {"code": 200, "data": [
-            OneloginMockEvent(id=123, created_at="2021-06-22T13:12:06.437Z", account_id=123, ipaddr="12.22.33.44")]}
+            OneloginMockEvent(id=123, created_at=datetime.datetime.now(), account_id=123, ipaddr="12.22.33.44")]}
         mock_results_response.return_value = mocked_return_value
 
         query = "client_id=12345678&ipaddr=52.34.255.228&limit=100"

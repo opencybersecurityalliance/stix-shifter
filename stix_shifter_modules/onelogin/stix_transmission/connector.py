@@ -1,3 +1,4 @@
+import datetime
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
@@ -45,7 +46,7 @@ class Connector(BaseSyncConnector):
             # Construct a response object
             event_list = []
             for event in response.get("data", []):
-                event = json.dumps(event.__dict__, default=str)
+                event = json.dumps(event.__dict__, default=Connector.default)
                 event_list.append(json.loads(event))
             return_obj = dict()
             if response_code == 200:
@@ -88,3 +89,8 @@ class Connector(BaseSyncConnector):
         except KeyError as ex:
             raise KeyError(f"Invalid parameter {ex}")
         return response_dict
+
+    @staticmethod
+    def default(obj):
+        if isinstance(obj, (datetime.date, datetime.datetime)):
+            return obj.isoformat()
