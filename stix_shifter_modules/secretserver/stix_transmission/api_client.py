@@ -41,17 +41,11 @@ class APIClient():
         return self.accessToken
 
     def ping_data_source(self):
-        # Pings the data source
-        # return SecretServerApiClient.ping(self)
-        data = self.payload
         response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload)
         return response.status_code
 
     def create_search(self, query_expression):
         respObj = Response()
-        respObj.code = "401"
-        respObj.error_type = ""
-        respObj.status_code = 401
         if (self.get_token()):
             self.query = query_expression
             response = self.build_searchId()
