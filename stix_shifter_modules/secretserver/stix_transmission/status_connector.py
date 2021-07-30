@@ -12,39 +12,13 @@ class SecretServerStatus(Enum):
     COMPLETED = 'COMPLETED'
     CANCELED = 'CANCELED'
     ERROR = 'ERROR'
-
+#  It is a synchronous connector , so pass the status check
 
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
     def __getStatus(self, status):
-        switcher = {
-            SecretServerStatus.WAIT.value: Status.RUNNING,
-            SecretServerStatus.EXECUTE.value: Status.RUNNING,
-            SecretServerStatus.SORTING.value: Status.RUNNING,
-            SecretServerStatus.COMPLETED.value: Status.COMPLETED,
-            SecretServerStatus.CANCELED.value: Status.CANCELED,
-            SecretServerStatus.ERROR.value: Status.ERROR
-        }
-        return switcher.get(status).value
-
+        return
     def create_status_connection(self, search_id):
-        # Grab the response, extract the response code, and convert it to readable json
-        # Verify the input
-        response = self.api_client.get_status(search_id)
-        response_code = response.code
-        response_dict = json.loads(response.read())
-
-        # Construct a response object
-        return_obj = dict()
-        response_code = 200
-        if response_code == 200:
-            return_obj['success'] = True
-            return_obj['status'] = self.__getStatus(response_dict['status'])
-            return_obj['progress'] = response_dict.get('progress',"NA")
-            return_obj['data'] = response_dict.get('data',"NA")
-            return_obj["search_id"] = response_dict.get('search_id',"NA")
-        else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-        return return_obj
+        pass
