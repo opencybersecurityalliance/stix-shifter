@@ -59,33 +59,6 @@ class TestSecretServerConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsX25ldyBXSEVSRSBFdmVudFN1YmplY3QgTElLRSAnJSUlJyBTVEFSVCB0JzIwMTktMDEtMjhUMTI6MjQ6MDEuMDA5WicgU1RPUCB0JzIwMjEtMDctMTRUMTI6NTQ6MDEuMDA5WiciLCAidGFyZ2V0IiA6ICJodHRwOi8vOS40Ni44Ni4xMjAvU2VjcmV0U2VydmVyL29hdXRoMi90b2tlbiJ9"
 
     @patch('stix_shifter_modules.secretserver.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
-    def test_status_response(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
-        mocked_return_value = '{"search_id": "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsX25ldyBXSEVSRSBFdmVudFN1YmplY3QgTElLRSAnJSUlJyBTVEFSVCB0JzIwMTktMDEtMjhUMTI6MjQ6MDEuMDA5WicgU1RPUCB0JzIwMjEtMDctMTRUMTI6NTQ6MDEuMDA5WiciLCAidGFyZ2V0IiA6ICJodHRwOi8vOS40Ni44Ni4xMjAvU2VjcmV0U2VydmVyL29hdXRoMi90b2tlbiJ9", "status": "COMPLETED", "progress": "100"}'
-        mock_status_response.return_value = SecretServerMockResponse(200, mocked_return_value)
-
-        config = {
-            "auth": {
-                "username": "admin",
-                "password": "password123"
-            }
-        }
-        connection = {
-
-            "host": "secretserver.com",
-
-        }
-
-        search_id = "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsX25ldyBXSEVSRSBFdmVudFN1YmplY3QgTElLRSAnJSUlJyBTVEFSVCB0JzIwMTktMDEtMjhUMTI6MjQ6MDEuMDA5WicgU1RPUCB0JzIwMjEtMDctMTRUMTI6NTQ6MDEuMDA5WiciLCAidGFyZ2V0IiA6ICJodHRwOi8vOS40Ni44Ni4xMjAvU2VjcmV0U2VydmVyL29hdXRoMi90b2tlbiJ9"
-        transmission = stix_transmission.StixTransmission('secretserver', connection, config)
-        status_response = transmission.status(search_id)
-
-        assert status_response['success']
-        assert status_response is not None
-        assert 'status' in status_response
-        assert status_response['status'] == Status.COMPLETED.value
-
-    @patch('stix_shifter_modules.secretserver.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
         mocked_return_value = """{
