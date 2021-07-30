@@ -1,31 +1,37 @@
 import base64
 import json
 import re
-import datetime
+from datetime import date, timedelta
 import requests
+import os
 from requests import Response
+from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper
 from .secretserver_utils import SecretServerApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
+    CONNECT_TIMEOUT_DEFAULT
+
 import random
 
 class APIClient():
 
     def __init__(self, connection, configuration):
-         self.url = "http://"+connection["host"]
-         self.auth_token_url = "http://"+connection["host"]+"/SecretServer/oauth2/token"
-         self.event_url = "http://" + connection["host"]+"/SecretServer/api/v1/reports/execute"
-         self.user_detail = self.url + "/SecretServer/api/v1/secrets"
+         self.url = "https://"+connection["host"]
+         self.auth_token_url = "https://"+connection["host"]+"/SecretServer/oauth2/token"
+         self.event_url = "https://" + connection["host"]+"/SecretServer/api/v1/reports/execute"
+         self.secret_detail = "/SecretServer/api/v1/secrets"
          self.payload = 'username=%s&password=%s&grant_type=password' % (configuration["auth"]["username"], configuration["auth"]["password"])
          self.headers = {
              'Authorization': 'Basic YWRtaW46cGFzc3dvcmRAMTI=',
              'Content-Type': 'application/x-www-form-urlencoded'
          }
          self.data = self.payload
-         self.response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload)
+         self.response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload,verify=False)
          self.res = self.response.text
          self.json_obj = json.loads(self.res)
          self.token = self.json_obj.get('access_token')
          self.accessToken = 'Bearer' + " " + self.token
+         self.server_ip = connection["host"]
          self.client = SecretServerApiClient(self.url)
 
     def ping_data_source(self):
@@ -62,18 +68,6 @@ class APIClient():
             #
         return ResponseWrapper(respObj)
 
-    def get_status(self, search_id):
-        # It is a synchronous connector.
-        # return {"code": 200, "status": "COMPLETED"}
-        respObj = Response()
-        respObj.code = "200"
-        respObj.error_type = ""
-        respObj.status_code = 200
-        content = '{"search_id": "' + search_id + \
-                  '", "progress":100, "status":"COMPLETED", "data": {"message":"Completed for the search id provided."}}'
-        respObj._content = bytes(content, 'utf-8')
-        return ResponseWrapper(respObj)
-
     def build_searchId(self):
         # It should be called only ONCE when transmit query is called
         # Structure of the search id is
@@ -97,15 +91,23 @@ class APIClient():
         # This function calls secret server to get data
         if (self.token):
             self.search_id = search_id
-            date = self.decode_searchId()
-            if len(date) is not 0:
-                self.startDate = date[0]
-                self.endDate = date[1]
+            timestamp = self.decode_searchId()
+            if len(timestamp) is not 0:
+                self.startDate = timestamp[0]
+                self.endDate = timestamp[1]
             else:
-                lastupdate = (datetime.datetime.now() - datetime.timedelta(days=90)).replace(tzinfo=datetime.timezone.utc).timestamp()
-                self.startDate = datetime.datetime.date(datetime.fromtimestamp(lastupdate)).strftime("%s")
-                self.endDate =date.today()
-            resp = SecretServerApiClient.get_events(self)
+                self.startDate = date.today()
+                self.endDate = self.startDate - timedelta(days = 1)
+            self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
+            self.connect_timeout = int(self.connect_timeout)
+            self.server_cert_content = False
+            self.auth = None
+            self.sni = None
+            self.retry_max = 1
+            self.logger = logger.set_logger(__name__)
+            self.server_cert_file_content_exists = False
+            self.url_modifier_function = None
+            resp = SecretServerApiClient.get_response(self)
             return resp
 
     def decode_searchId(self):
@@ -117,10 +119,12 @@ class APIClient():
             raise IOError(
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
-        date = re.findall(r'\d{4}-\d{2}-\d{2}', self.query)
-        if date == []:
-           print("Please enter the date")
-        return date
+        try:
+            timestamp = re.findall(r'\d{4}-\d{2}-\d{2}', self.query)
+        except:
+            raise IOError(
+                " Could not extract date- " + self.search_id)
+        return timestamp
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
