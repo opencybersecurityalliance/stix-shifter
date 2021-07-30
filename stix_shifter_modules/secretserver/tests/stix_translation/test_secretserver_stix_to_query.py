@@ -32,8 +32,6 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE (IpAddress = \'192.168.122.83\' OR Server = \'192.168.122.83\')"
-        print(query['queries'])
-        print( selections +from_statement + where_statement)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_url_query(self):
