@@ -20,19 +20,25 @@ class APIClient():
          self.auth_token_url = "https://"+connection["host"]+"/SecretServer/oauth2/token"
          self.event_url = "https://" + connection["host"]+"/SecretServer/api/v1/reports/execute"
          self.secret_detail = "/SecretServer/api/v1/secrets"
-         self.payload = 'username=%s&password=%s&grant_type=password' % (configuration["auth"]["username"], configuration["auth"]["password"])
-         self.headers = {
-             'Authorization': 'Basic YWRtaW46cGFzc3dvcmRAMTI=',
-             'Content-Type': 'application/x-www-form-urlencoded'
-         }
-         self.data = self.payload
-         self.response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload,verify=False)
-         self.res = self.response.text
-         self.json_obj = json.loads(self.res)
-         self.token = self.json_obj.get('access_token')
-         self.accessToken = 'Bearer' + " " + self.token
+         self.payload = 'username=%s&password=%s&grant_type=password' % (
+             configuration["auth"]["username"], configuration["auth"]["password"])
          self.server_ip = connection["host"]
          self.client = SecretServerApiClient(self.url)
+
+    def get_token(self):
+
+        self.headers = {
+            'Authorization': 'Basic',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        self.data = self.payload
+        self.response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload,
+                                         verify=False)
+        self.res = self.response.text
+        self.json_obj = json.loads(self.res)
+        self.token = self.json_obj.get('access_token')
+        self.accessToken = 'Bearer' + " " + self.token
+        return self.accessToken
 
     def ping_data_source(self):
         # Pings the data source
@@ -46,7 +52,7 @@ class APIClient():
         respObj.code = "401"
         respObj.error_type = ""
         respObj.status_code = 401
-        if (self.token):
+        if (self.get_token()):
             self.query = query_expression
             response = self.build_searchId()
             if (response != None):
@@ -89,7 +95,7 @@ class APIClient():
     def get_search_results(self, search_id, index_from=None, fetch_size=None):
         # Sends a GET request from secret server
         # This function calls secret server to get data
-        if (self.token):
+        if (self.get_token()):
             self.search_id = search_id
             timestamp = self.decode_searchId()
             if len(timestamp) is not 0:
