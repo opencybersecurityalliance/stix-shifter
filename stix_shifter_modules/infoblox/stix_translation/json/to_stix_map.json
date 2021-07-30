@@ -261,5 +261,138 @@
                 ]
             }
         }
+    },
+    "tideDbData": {
+        "detected": [
+            {
+                "key": "first_observed",
+                "cybox": false
+            },
+            {
+                "key": "last_observed",
+                "cybox": false
+            }
+        ],
+        "received": [
+            {
+                "key": "created",
+                "cybox": false
+            },
+            {
+                "key": "modified",
+                "cybox": false
+            }
+        ],
+        "class": [
+            {
+                "key": "x-infoblox-threat.threat_class",
+                "object": "x_infoblox"
+            }
+        ],
+        "confidence": [
+            {
+                "key": "x-infoblox-threat.x_infoblox_confidence",
+                "object": "x_infoblox"
+            }
+        ],
+        "dga": [
+            {
+                "key": "x-infoblox-threat.dga",
+                "object": "x_infoblox"
+            }
+        ],
+        "expiration": [
+            {
+                "key": "x-infoblox-threat.expiration",
+                "object": "x_infoblox"
+            }
+        ],
+        "hash": [
+            {
+                "key": "x-infoblox-threat.hash",
+                "object": "x_infoblox"
+            }
+        ],
+        "host": [
+            {
+                "key": "x-infoblox-threat.host_name",
+                "object": "x_infoblox"
+            }
+        ],
+        "imported": [
+            {
+                "key": "x-infoblox-threat.imported",
+                "object": "x_infoblox"
+            }
+        ],
+        "ip": [
+            {
+                "key": "ipv4-addr.value"
+            }
+        ],
+        "domain": [
+            {
+                "key": "domain-name.value"
+            }
+        ],
+        "email": [
+            {
+                "key": "email-addr.value"
+            }
+        ],
+        "origin": [
+            {
+                "key": "x-infoblox-threat.origin",
+                "object": "x_infoblox"
+            }
+        ],
+        "profile": [
+            {
+                "key": "x-infoblox-threat.profile",
+                "object": "x_infoblox"
+            }
+        ],
+        "property": [
+            {
+                "key": "x-infoblox-threat.property",
+                "object": "x_infoblox"
+            }
+        ],
+        "target": [
+            {
+                "key": "x-infoblox-threat.target",
+                "object": "x_infoblox"
+            }
+        ],
+        "threat_level": [
+            {
+                "key": "x-infoblox-threat.threat_level",
+                "object": "x_infoblox"
+            }
+        ],
+        "tld": [
+            {
+                "key": "x-infoblox-threat.top_level_domain",
+                "object": "x_infoblox"
+            }
+        ],
+        "type": [
+            {
+                "key": "x-infoblox-threat.threat_type",
+                "object": "x_infoblox"
+            }
+        ],
+        "up": [
+            {
+                "key": "x-infoblox-threat.active",
+                "object": "x_infoblox"
+            }
+        ],
+        "url": [
+            {
+                "key": "x-infoblox-threat.url",
+                "object": "x_infoblox"
+            }
+        ]
     }
 }

@@ -1,0 +1,37 @@
+{
+    "ipv4-addr": {
+        "fields": {
+            "value": ["ip"]
+        }
+    },
+    "domain-name": {
+        "fields": {
+            "value": ["domain"]
+        }
+    },
+    "email-addr": {
+        "fields": {
+            "value": ["email"]
+        }
+    },
+    "x-infoblox-threat": {
+        "fields": {
+            "threat_class": ["class"],
+            "x-infoblox-confidence": ["confidence"],
+            "dga": ["dga"],
+            "expiration": ["expiration"],
+            "hash": ["hash"],
+            "host_name": ["host"],
+            "imported": ["imported"],
+            "origin": ["origin"],
+            "profile": ["profile"],
+            "property": ["property"],
+            "target": ["target"],
+            "threat_level": ["threat_level"],
+            "top_level_domain": ["tld"],
+            "threat_type": ["type"],
+            "active": ["up"],
+            "url": ["url"]
+        }
+    }
+}
