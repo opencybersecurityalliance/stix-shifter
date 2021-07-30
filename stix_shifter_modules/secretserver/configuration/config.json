@@ -14,7 +14,7 @@
             "max": 65535
         },
         "help": {
-            "default": "http://9.46.86.120/SecretServer/app/#/home/dashboard",
+            "default": "https://www.ibm.com/docs/en/svp/10.5?topic=overview-secret-server",
             "type": "link"
         },
         "sni": {
@@ -26,18 +26,6 @@
             "optional": true
         },
         "options": {
-            "validate_pattern": {
-                "default": false,
-                "hidden": true,
-                "type": "boolean",
-                "optional": true,
-                "previous": "connection.validate_pattern"
-            },
-            "hash_options": {
-                "type": "json",
-                "optional": true,
-                "hidden": true
-            },
             "unmapped_fallback": {
                 "default": true
             }
