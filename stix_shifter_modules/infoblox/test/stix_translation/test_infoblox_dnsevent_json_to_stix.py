@@ -149,14 +149,14 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
         observed_objects = self._get_observed_objects(data)
         _, nt = self._find_object_by_type(observed_objects, "network-traffic")
         self.assertEqual(nt, {
-            'type': 'network-traffic', 
+            'type': 'network-traffic',
             'extensions': {'dns-ext': {'type': 'A', 'response_code': 'PASSTHRU', 'answers': {'data': '1.1.1.1,2.2.2.2'}}}
         })
 
         _, dnsEvent = self._find_object_by_type(observed_objects, "x-infoblox-dns-event")
         self.assertEqual(dnsEvent, {
-            'type': 'x-infoblox-dns-event', 
-            'x_infoblox_confidence': 'HIGH', 'country': 'unknown', 'device': 'DESKTOP-VT5P2QT', 'feed_name': 'Base', 
-            'feed_type': 'FQDN', 'network': 'BloxOne Endpoint', 'os_version': 'Windows 10 Enterprise', 'policy_name': 'DFND', 
+            'type': 'x-infoblox-dns-event',
+            'x_infoblox_confidence': 'HIGH', 'country': 'unknown', 'device': 'DESKTOP-VT5P2QT', 'feed_name': 'Base',
+            'feed_type': 'FQDN', 'network': 'BloxOne Endpoint', 'os_version': 'Windows 10 Enterprise', 'policy_name': 'DFND',
             'x_infoblox_severity': 'HIGH', 'threat_class': 'APT', 'threat_indicator': 'total-update.com', 'threat_property': 'MalwareC2'
         })

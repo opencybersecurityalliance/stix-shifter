@@ -318,7 +318,7 @@ TBD
                 "6": {
                     "type": "x-infoblox-dns-event",
                     "user_ref": "5",
-                    "src_ip_ref": "0",
+                    "src_ip_ref": "2",
                     "x_infoblox_severity": "HIGH",
                     "threat_class": "APT",
                     "threat_indicator": "total-update.com",

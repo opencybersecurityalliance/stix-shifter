@@ -143,7 +143,7 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
         self.assertEqual(dossierData, {
             'type': 'x-infoblox-dossier-event-result-pdns', 'ip_ref': ipv6Key, 'record_type': 'A'
         })
-    
+
     def test_result_pdns(self):
         data = [{
             "results": [

@@ -8,17 +8,16 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
-from .transformers import InfobloxToDomainName
+from .transformers import InfobloxToDomainName, TimestampToSeconds
 
+# TODO: revisit the pattern for references, is this really needed?
 REFERENCE_DATA_TYPES = {
-    # TODO: figure out proper testing of references
-    "private_ip": ["ipv4", "ipv4_cidr"],
-    "mac_address": ["mac"],
+    "qip": ["ipv4", "ipv4_cidr"],
+    "value": ["ipv4", "ipv4_cidr", "domain_name"],
+    "qname": ["domain_name"]
 }
+REFERENCE_FIELDS = ('src_ref.value', 'hostname_ref.value', 'ip_ref.value', 'extensions.dns-ext.question.domain_ref.value')
 
-
-# TODO: are these needed?
 START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = r"\.\d+Z$"
@@ -34,13 +33,9 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND", # TODO remove
-        ComparisonExpressionOperators.Or: "OR", # TODO remove
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "=",
-        ComparisonComparators.Like: ":", # TODO remove
-        ObservationOperators.Or: 'OR', # TODO remove
-        ObservationOperators.And: 'AND' # TODO remove
+        ComparisonExpressionOperators.And: "&",
+        ObservationOperators.And: '&',
+        ComparisonComparators.Equal: "="
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
@@ -72,10 +67,6 @@ class QueryStringPatternTranslator:
             return value
 
     @staticmethod
-    def _negate_comparison(comparison_string):
-        return "NOT ({})".format(comparison_string)
-
-    @staticmethod
     def _check_value_type(value):
         value = str(value)
         for key, pattern in observable.REGEX.items():
@@ -87,8 +78,17 @@ class QueryStringPatternTranslator:
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
         else:
-            return "{mapped_field} {comparator} {value}".format(
+            return "{mapped_field}{comparator}{value}".format(
                 mapped_field=mapped_field, comparator=comparator, value=value)
+
+    def _sanatize_value(self, mapped_field, value):
+        # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
+        updated_value = value
+        if mapped_field == 'qname':
+            updated_value = InfobloxToDomainName.untransform(value)
+        elif mapped_field == 'threat_level':
+            updated_value = THREAT_LEVEL_MAPPING[value]
+        return updated_value
 
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
         comparison_string = ""
@@ -97,14 +97,7 @@ class QueryStringPatternTranslator:
         mapped_fields_count = len(mapped_fields_array)
 
         for mapped_field in mapped_fields_array:
-            ## TODO refactor and move outside of _parse_mapped_fields
-            if mapped_field == 'qname':
-                value = InfobloxToDomainName.untransform(value)
-            elif mapped_field == 'threat_level':
-                value = THREAT_LEVEL_MAPPING[value]
-
-
-
+            value = self._sanatize_value(mapped_field, value)
             if is_reference_value:
                 parsed_reference = self._parse_reference(stix_field, value_type, mapped_field, value, comparator)
 
@@ -114,88 +107,64 @@ class QueryStringPatternTranslator:
             else:
                 comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
-            if mapped_fields_count > 1:
-                comparison_string += " OR "
-                mapped_fields_count -= 1
         return comparison_string
 
     @staticmethod
     def _is_reference_value(stix_field):
-        return stix_field in ('src_ref.value', 'dst_ref.value')
+        return stix_field in REFERENCE_FIELDS
 
     def _lookup_comparison_operator(self, expression_operator, dialect):
         if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for VisionOne connector".format(expression_operator.name))
-        if dialect == 'messageActivityData':
-            if expression_operator in (ComparisonExpressionOperators.And, ComparisonExpressionOperators.Or):
-                self.using_operators.add(expression_operator)
-                if len(self.using_operators) > 1:
-                    raise NotImplementedError("Multiple operator is not support in MDL")
-            if expression_operator == ComparisonComparators.NotEqual:
-                raise NotImplementedError("NOT operator is not support in MDL")
+            raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
+    def _calculate_intersection(self, mapped_fields_array, stix_field):
+        mapped_fields_set = set(mapped_fields_array)
+        intersection = self.assigned_fields.intersection(mapped_fields_set)
+        if intersection:
+            logger.error(f"[{', '.join(intersection)}] mapped from {stix_field} has multiple criteria")
+            raise NotImplementedError("Multiple criteria for one field is not support in Infoblox connector")
+        else:
+            self.assigned_fields |= mapped_fields_set
+
+    def _set_subtype(self, dialect, stix_object, stix_field, final_expression):
+        # TODO: revisit how selection of type works
+        # NOTE: For the Dossier api, type must be determined to build the api.
+        if dialect == 'dossierData':
+            if stix_object in ('domain-name', 'x-infoblox-dossier-event-result-pdns') \
+                and stix_field in ('value', 'hostname_ref.value'):
+                self.subtypes[final_expression] = 'host'
+            elif stix_object in ('ipv4-addr', 'ipv6-addr', 'x-infoblox-dossier-event-result-pdns') \
+                and stix_field in ('value', 'ip_ref.value'):
+                self.subtypes[final_expression] = 'ip'
+
     def _parse_expression(self, expression, dialect, qualifier=None) -> str:
-        #print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        #print(expression)
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
-            #print(stix_object)
-            #print("------------------------------------------------------------------------------------- " + dialect)
+
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
 
-            # TODO: best place to handle dialect processing?
-            # if dialect == 'messageActivityData':
-            #     mapped_fields_set = set(mapped_fields_array)
-            #     intersection = self.assigned_fields.intersection(mapped_fields_set)
-            #     if intersection:
-            #         logger.error(f"[{', '.join(intersection)}] mapped from {stix_field} has multiple criteria")
-            #         raise NotImplementedError("Multiple criteria for one field is not support in MDL")
-            # TODO:   ^^^^^
-            #     else:
-            #         self.assigned_fields |= mapped_fields_set
+            self._calculate_intersection(mapped_fields_array, stix_field)
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(expression.comparator, dialect)
-
-            if stix_field in ('start', 'end'):
-                # TODO: remove?
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Equal:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
-            elif expression.comparator == ComparisonComparators.NotEqual:
-                value = self._format_equality(expression.value)
-                expression.negated = True
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
-                value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
 
             comparison_string = self._parse_mapped_fields(expression, value, comparator, stix_field, mapped_fields_array)
-            if len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field):
-                # More than one data source field maps to the STIX attribute, so group comparisons together.
-                grouped_comparison_string = "(" + comparison_string + ")"
-                comparison_string = grouped_comparison_string
-
-            if expression.negated:
-                comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                final_expression = "{} {}".format(comparison_string, qualifier)
+                final_expression = "{}{}".format(comparison_string, qualifier)
             else:
                 final_expression = "{}".format(comparison_string)
 
-            if dialect == 'dossierData':
-                if stix_object == 'domain-name':
-                    self.subtypes[final_expression] = 'host'
-                elif stix_object == 'ipv4-addr' or stix_object == 'ipv6-addr':
-                    self.subtypes[final_expression] = 'ip'
+            self._set_subtype(dialect, stix_object, stix_field, final_expression)
             return final_expression
 
         elif isinstance(expression, CombinedComparisonExpression):
@@ -205,20 +174,20 @@ class QueryStringPatternTranslator:
             expression_02 = self._parse_expression(expression.expr2, dialect)
             if not expression_01 or not expression_02:
                 return ''
+
+            # NOTE: for complex expressions, this adds () around them
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+                expression_02 = "{}".format(expression_02)
+            query_string = "{}{}{}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 return "{} {}".format(query_string, qualifier)
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
-            # TODO: is this used?
             return self._parse_expression(expression.comparison_expression, dialect, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            # TODO: is this used?
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self._lookup_comparison_operator(expression.observation_expression.operator, dialect)
                 expression_01 = self._parse_expression(expression.observation_expression.expr1, dialect)
@@ -228,7 +197,6 @@ class QueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, dialect, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            # TODO: is this used?
             operator = self._lookup_comparison_operator(expression.operator, dialect)
             expression_01 = self._parse_expression(expression.expr1, dialect)
             expression_02 = self._parse_expression(expression.expr2, dialect)
@@ -241,7 +209,6 @@ class QueryStringPatternTranslator:
             else:
                 return ''
         elif isinstance(expression, Pattern):
-            # TODO: is this used?
             return "{expr}".format(expr=self._parse_expression(expression.expression, dialect))
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
@@ -276,20 +243,14 @@ def _convert_timestamps_to_milliseconds(query_parts):
     # grab time stamps from array
     start_time = _test_or_add_milliseconds(query_parts[2])
     stop_time = _test_or_add_milliseconds(query_parts[4])
-    transformer = TimestampToMilliseconds()
+    transformer = TimestampToSeconds()
 
-    # TODO: create transformer like TimestampToMilliseconds that does not multiply by 1000
-    millisecond_start_time = int(transformer.transform(start_time) / 1000)
-    millisecond_stop_time = int(transformer.transform(stop_time) / 1000)
+    second_start_time = transformer.transform(start_time)
+    second_stop_time = transformer.transform(stop_time)
 
-    # TODO: how should pagination work?
     payload = dict()
     payload['offset'] = 0
-
-    # TODO: remove this code
-    # payload['from'] = millisecond_start_time
-    # payload['to'] = millisecond_stop_time
-    payload['query'] = 't0=' + str(millisecond_start_time) + '&t1=' + str(millisecond_stop_time) + '&' + query_parts[0]
+    payload['query'] = 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
     return payload
 
 
@@ -299,9 +260,6 @@ def _format_translated_queries(query_array, subtype_map):
 
     # Transform from human-readable timestamp to 13-digit millisecond time
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
-    #print("------------------------------------------------------------------------------ subtype map")
-    #print(subtype_map)
-    #print(query_array)
     formatted_queries = []
     for query in query_array:
         if _test_START_STOP_format(query):
@@ -342,8 +300,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     queries = []
-    # print("**************************************************************************************************************8")
-    # print(trans_queries)
     for q in trans_queries:
         q['source'] = data_model_mapping.dialect
         if 'subtype' in trans_queries:
@@ -357,6 +313,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
             q['to'] = int(q['to'] / 1000)
             q['from'] = int(q['from'] / 1000)
         queries.append(json.dumps(q))
-    # print("************************** translate_pattern")
-    # print(queries)
     return queries

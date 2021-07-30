@@ -69,16 +69,16 @@ class TestStixParsingMixin:
         query = translation.translate(f'infoblox:{dialect}', 'query', '{}', stix_pattern)
         return query
 
-    def retrieve_query(self, stix_pattern):
+    def _retrieve_query(self, stix_pattern):
         queries: dict = self._parse_query(stix_pattern, self.get_dialect())
         self.assertIn("queries", queries)
         query = json.loads(queries["queries"][0])
         return query
 
     def _test_time_range(self, stix_pattern, expectation):
-        query = self.retrieve_query(stix_pattern)
+        query = self._retrieve_query(stix_pattern)
         self.assertEqual(expectation, query["to"] - query["from"])
 
     def _test_pattern(self, pattern, expectation):
-        query = self.retrieve_query(pattern)
+        query = self._retrieve_query(pattern)
         self.assertEqual(expectation, query["query"])

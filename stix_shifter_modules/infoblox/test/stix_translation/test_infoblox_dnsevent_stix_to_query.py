@@ -44,10 +44,59 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
         expectation = 'threat_class=APT'
         self._test_pattern(pattern, expectation)
 
-    # TODO: test references
-    # TODO: test like operator
-    # TODO: test neq operator
-    # TODO: test observation and/or
-    # TODO: test multiple operators
-    # TODO: test multiple criteria (same op like ipv4-addr:value='127.0.0.1' OR  ipv4-addr:value='127.0.0.2')
-    # TODO: test and/or comparision
+    def test_network_domain_ref(self):
+        pattern = "[network-traffic:extensions.'dns-ext'.question.domain_ref.value = 'example1.com']"
+        expectation = 'qname=example1.com.'
+        self._test_pattern(pattern, expectation)
+
+    def test_network_src_ref(self):
+        pattern = "[network-traffic:src_ref.value = '203.0.113.33']"
+        expectation = 'qip=203.0.113.33'
+        self._test_pattern(pattern, expectation)
+
+    def test_operator_like(self):
+        pattern = "[domain-name:value LIKE 'microsoft*']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector'
+        })
+
+    def test_operator_neq(self):
+        pattern = "[domain-name:value != 'microsoft']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector'
+        })
+
+    def test_multiple_criteria(self):
+        pattern = "[network-traffic:src_ref.value = '127.0.0.1' AND network-traffic:src_ref.value = '1.1.1.1']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Multiple criteria for one field is not support in Infoblox connector'
+        })
+
+    def test_comparison_or(self):
+        pattern = "[domain-name:value = 'example.com' OR x-infoblox-dns-event:policy_name = 'DFND'"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector'
+        })
+
+    def test_comparison_and(self):
+        pattern = "[domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND']"
+        expectation = 'policy_name=DFND&qname=example.com.'
+        self._test_pattern(pattern, expectation)
+
+    def test_multiple_operators(self):
+        pattern = "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']"
+        expectation = 'qip=127.0.0.1&policy_name=DFND&qname=example.com.'
+        self._test_pattern(pattern, expectation)
