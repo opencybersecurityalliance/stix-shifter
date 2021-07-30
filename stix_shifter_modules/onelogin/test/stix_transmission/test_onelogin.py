@@ -68,10 +68,10 @@ class TestOneloginConnection(unittest.TestCase, object):
             OneloginMockEvent(id=123, created_at="2021-06-22T13:12:06.437Z", account_id=123, ipaddr="12.22.33.44")]}
         mock_results_response.return_value = mocked_return_value
 
-        query = "client_id=12345678&ipaddr=52.34.255.228&limit=50"
+        query = "client_id=12345678&ipaddr=52.34.255.228&limit=100"
 
         offset = 0
-        length = 1
+        length = 101
         entry_point = EntryPoint(self.connection(), self.configuration())
         results_response = entry_point.create_results_connection(query, offset, length)
 

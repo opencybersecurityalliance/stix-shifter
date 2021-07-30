@@ -26,16 +26,21 @@ class Connector(BaseSyncConnector):
             self.logger.error('error when pinging datasource {}:'.format(err))
             raise
 
-    def create_results_connection(self, quary_expr, offset, length):
+    def create_results_connection(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 
         try:
             # Separate out api supported url params
-            quary_expr, filter_attr = Connector.modify_query_expr(quary_expr)
+            query_expr, filter_attr = Connector.modify_query_expr(query_expr)
+            limit = int(query_expr.get('limit', 50))
+            if limit > 50:
+                if length > limit:
+                    length = limit
+                query_expr["limit"] = 50
             # Grab the response, extract the response code, and convert it to readable json
             # $(offset) param not included as data source not support this
-            response = self.api_client.run_search(quary_expr, length)
+            response = self.api_client.run_search(query_expr, length)
             response_code = response['code']
             # Construct a response object
             event_list = []
