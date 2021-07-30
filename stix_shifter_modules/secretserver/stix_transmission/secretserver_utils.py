@@ -1,5 +1,5 @@
 import json
-
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 import requests
 
 
@@ -17,41 +17,63 @@ class SecretServerApiClient(object):
             'Content-Type': 'application/json'
         }
         print("Fetching the event details")
-        response = requests.request("POST", self.event_url, headers=headers, data=payload)
-        if response.status_code == 403:
+        endpoint = "SecretServer/api/v1/reports/execute"
+        response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+                                          timeout=None)
+        if response.code == 403:
             print("Your password has expired. Please login to change it.")
             print("Unable to fetch the records")
             exit(0)
-        json_data = response.text
-        data = json.loads(json_data)
-        collection = []
-        updateResponse = {}
-        userCollection = {}
-        field = data['columns']
-        print("Fetching the user details")
-        for obj in data['rows']:
-            obj = dict(zip(field, obj))
-            updateResponse.update(obj)
-            id = obj['ItemId']
-            secret_server_user_urlr=self.user_detail+"/%s"%id
+        collection=[]
+        json_data = response.response.text
+        eventData = json.loads(json_data)
+        col = eventData['columns']
+        for obj in eventData['rows']:
+            obj = dict(zip(col, obj))
+            collection.append(obj)
+        return collection
+
+
+    def get_Secret(self):
+        eventDetail = SecretServerApiClient.get_events(self)
+        secretIdList = []
+        secretCollection = []
+        for obj in eventDetail:
+            item=(obj['ItemId'])
+            secretIdList.append(item)
+        unique=set(secretIdList)
+        for id in unique:
+            secret_server_user_url = self.secret_detail + "/%s" % id
+            headers = {
+                'Authorization': self.accessToken,
+                'Content-Type': 'application/json'
+            }
             payload = {}
-            response = requests.request("GET", secret_server_user_urlr, headers=headers, data=payload)
-            userDetails = json.loads(response.text)
-            userData = userDetails['items']
-            for item in userData:
-                if (item['fieldName'] == 'Server'):
-                    userCollection[str(item['fieldName'])] = str(item['itemValue'])
+            response = RestApiClient.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload, urldata=None,
+                                                  timeout=None)
 
-            updateResponse.update(userCollection)
-            collection.append(updateResponse)
+            secretCollection.append(response.response.text)
+        json_data = json.dumps(secretCollection)
+        collection = json.loads(json_data)
+        return collection
 
-        json_data = json.dumps(collection)
-        resp = json.loads(json_data)
-        return resp
-
-
-
-
-
-
+    def get_response(self):
+        eventDetail = SecretServerApiClient.get_events(self)
+        secretDetail = SecretServerApiClient.get_Secret(self)
+        newSecret = []
+        secretCollection = {}
+        updateCollection = []
+        for obji in secretDetail:
+            next = json.loads(obji)
+            newSecret.append(next)
+        for item in eventDetail:
+            for id in newSecret:
+                if (item['ItemId'] == id['id']):
+                    data1 = id['items']
+                    for secret in data1:
+                        if (secret['fieldName'] == 'Server'):
+                            secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
+                            item.update(secretCollection)
+                            updateCollection.append(item)
+        return updateCollection
 
