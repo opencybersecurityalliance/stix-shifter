@@ -7,15 +7,15 @@
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "placeholder": "443",
+            "description": "Specify the associated port number of the data source."
         },
         "help": {
-            "label": "Need additional help?",
-            "description": "More details on the data source setting can be found in the specified link"
+            "label": "Need additional help?"
         },
         "selfSignedCert": {
-            "label": "<Module> Connection Certificate",
-            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
+            "label": "Secret Server connection certificate",
+            "description": "Use self-signed Security Sockets Layer (SSL)"
         },
         "sni": {
             "label": "Server Name Indicator",
