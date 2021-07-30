@@ -1,8 +1,13 @@
 # Secret Server
+
+REST Web Service APIs: https://www.ibm.com/support/pages/node/1136272
+
 ### Format for making STIX translation calls via the CLI
+
 `python3 main.py <translator_module> <query or result> <STIX identity object> <data>`
 
 This example input pattern:
+
 'python3 main.py translate "secretserver" query '{}' "[x-ibm-finding:name LIKE '%'] START t'2019-01-28T12:24:01.009Z' STOP t'2021-07-14T12:54:01.009Z'"'
 
 will return
@@ -18,6 +23,7 @@ will return
 Secret Server data to STIX mapping is defined in `to_stix_map.json`
 
 This example Secret Server data:
+
 python3 main.py transmit secretserver '{"host":"<hostname>"}' '{"auth":{"username":"<username>","password":"<password>"}}' results "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsIFdIRVJFIEV2ZW50U3ViamVjdCBMSUtFICclJSUnIFNUQVJUIHQnMjAxOS0wMS0yOFQxMjoyNDowMS4wMDlaJyBTVE9QIHQnMjAyMS0wNy0xNFQxMjo1NDowMS4wMDlaJyIsICJ0YXJnZXQiIDogImh0dHA6Ly85LjQ2Ljg2LjEyMC9TZWNyZXRTZXJ2ZXIvb2F1dGgyL3Rva2VuIn0=" 1 2
 
 Will return the following STIX observable:
