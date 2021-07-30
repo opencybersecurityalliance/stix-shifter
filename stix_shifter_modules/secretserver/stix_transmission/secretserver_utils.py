@@ -60,20 +60,19 @@ class SecretServerApiClient(object):
     def get_response(self):
         eventDetail = SecretServerApiClient.get_events(self)
         secretDetail = SecretServerApiClient.get_Secret(self)
-        newSecret = []
+        updateSecret = []
         secretCollection = {}
         updateCollection = []
-        for obji in secretDetail:
-            next = json.loads(obji)
-            newSecret.append(next)
+        for obj in secretDetail:
+            next = json.loads(obj)
+            updateSecret.append(next)
         for item in eventDetail:
-            for id in newSecret:
-                if (item['ItemId'] == id['id']):
-                    data1 = id['items']
-                    for secret in data1:
+            for getId in updateSecret:
+                if (item['ItemId'] == getId['id']):
+                    data = getId['items']
+                    for secret in data:
                         if (secret['fieldName'] == 'Server'):
                             secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
                             item.update(secretCollection)
                             updateCollection.append(item)
         return updateCollection
-
