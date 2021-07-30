@@ -1,50 +1,36 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from onelogin.api.client import OneLoginClient
 
 
 class APIClient():
 
     def __init__(self, connection, configuration):
         auth = configuration.get('auth')
-        auth = f"client_id:{auth.get('clientId')},client_secret:{auth.get('clientSecret')}"
-        headers = dict()
-        headers['Authorization'] = auth
-        headers['Accept'] = 'application/json'
-        headers['Content-Type'] = 'application/json'
-        self.host = connection.get('host')
-        self.client = RestApiClient(self.host,
-                                    connection.get('port'),
-                                    headers,
-                                    cert_verify=connection.get('selfSignedCert', True)
-                                    )
+        self.client = OneLoginClient(auth.get('clientId'), auth.get('clientSecret'), connection['region'])
 
     def generate_token(self):
         """To generate the Token"""
-        endpoint = "auth/oauth2/v2/token"
-        payload = '{"grant_type": "client_credentials"}'
-        return self.client.call_api(endpoint, 'POST', data=payload)
+        self.client.get_access_token()
+        return self.response_handler()
 
-    def run_search(self, quary_expr, range_end=None, access_token=None):
+    def run_search(self, quary_expr, range_end=None):
         """get the response from onelogin endpoints
         :param quary_expr: str, search_id
         :param range_end: int,length value
-        :param access_token: str, access_token
         :return: response, json object"""
-        endpoint = "api/1/events?" + quary_expr
-        headers = dict()
-        headers['Accept'] = 'application/json'
-        headers['Authorization'] = "bearer:" + access_token
-        data = dict()
-        if range_end is not None:
-            data = {"limit": range_end}
-        return self.client.call_api(endpoint, 'GET', headers, urldata=data)
+        token = self.client.get_access_token()
+        if token and self.client.error is None:
+            events = self.client.get_events(quary_expr, max_results=range_end)
+        return self.response_handler(events)
 
-    def next_page_run_search(self, next_page_url):
-        """get the response from onelogin endpoints
-        :param next_page_url: str, search_id
-        :return: response, json object"""
-        headers = dict()
-        headers['Accept'] = 'application/json'
-        url = next_page_url.split('?', maxsplit=1)[1]
-        endpoint = "api/1/events?" + url
-        return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
-
+    def response_handler(self, data=None):
+        if data is None:
+            data = []
+        response = dict()
+        response["code"] = self.client.error
+        if self.client.error is None:
+            response.update({"code": 200, "data": data})
+        elif self.client.error == 500 and "local variable 'data' referenced before assignment" in self.client.error_description:
+            response.update({"code": 200, "data": []})
+        else:
+            response["message"] = self.client.error_description
+        return response

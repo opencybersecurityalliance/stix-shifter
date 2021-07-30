@@ -4,11 +4,11 @@ from stix_shifter_utils.utils import logger
 
 error_mapping = {
     # No Route Exists
-    "not found": ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
+    404: ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
     # Authentication Failure
-    "Unauthorized": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    401: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     # A request parameter is not valid
-    "bad request": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    400: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
 }
 
 
@@ -20,7 +20,7 @@ class ErrorMapper():
     def set_error_code(json_data, return_obj):
         code = None
         try:
-            code = json_data['status']['type']
+            code = json_data['code']
         except Exception:
             pass
 

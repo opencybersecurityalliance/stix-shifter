@@ -1,9 +1,9 @@
 {
     "connection": {
-        "host": {
-            "label": "API Domain",
-            "placeholder": "api.us.onelogin.com",
-            "description": "Specify the domain for region that your OneLogin account resides in"
+        "region": {
+            "label": "Region",
+            "placeholder": "US",
+            "description": "Specify the region that your OneLogin account resides in"
         },
         "port": {
             "label": "Host Port",
