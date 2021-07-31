@@ -36,9 +36,6 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
     def test_subtype_host(self):
         pattern = "[domain-name:value = 'example.com']"
         result = self._retrieve_query(pattern)
-
-        del result["to"]
-        del result["from"]
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=example.com',
@@ -49,9 +46,6 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
     def test_subtype_ip_ipv4(self):
         pattern = "[ipv4-addr:value = '1.2.3.4']"
         result = self._retrieve_query(pattern)
-
-        del result["to"]
-        del result["from"]
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=1.2.3.4',
@@ -62,9 +56,6 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
     def test_subtype_ip_ipv6(self):
         pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
         result = self._retrieve_query(pattern)
-
-        del result["to"]
-        del result["from"]
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=2001:db8:3333:4444:5555:6666:7777:8888',
@@ -75,9 +66,6 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
     def test_subtype_ip_ref(self):
         pattern = "[x-infoblox-dossier-event-result-pdns:ip_ref.value = '203.0.113.33']"
         result = self._retrieve_query(pattern)
-
-        del result["to"]
-        del result["from"]
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=203.0.113.33',

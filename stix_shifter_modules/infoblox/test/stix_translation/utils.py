@@ -82,3 +82,7 @@ class TestStixParsingMixin:
     def _test_pattern(self, pattern, expectation):
         query = self._retrieve_query(pattern)
         self.assertEqual(expectation, query["query"])
+
+    def _test_regex_timestamp(self, pattern, expectation):
+        query = self._retrieve_query(pattern)
+        self.assertRegex(query["query"], r'^t0=\d{10}&t1=\d{10}&' + expectation)

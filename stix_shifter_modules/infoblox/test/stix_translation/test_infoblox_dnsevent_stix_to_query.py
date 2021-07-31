@@ -16,43 +16,43 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
     def test_network(self):
         pattern = "[x-infoblox-dns-event:network = 'BloxOne Endpoint']"
         expectation = 'network=BloxOne Endpoint'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
         pass
 
     def test_ipv4(self):
         pattern = "[ipv4-addr:value = '127.0.0.1']"
         expectation = 'qip=127.0.0.1'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_domain_name(self):
         pattern = "[domain-name:value = 'example.com']"
         expectation = 'qname=example.com.'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_policy_name(self):
         pattern = "[x-infoblox-dns-event:policy_name = 'DFND']"
         expectation = 'policy_name=DFND'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_severity(self):
         pattern = "[x-infoblox-dns-event:x_infoblox_severity = 'HIGH']"
         expectation = 'threat_level=3'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_threat_class(self):
         pattern = "[x-infoblox-dns-event:threat_class = 'APT']"
         expectation = 'threat_class=APT'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_network_domain_ref(self):
         pattern = "[network-traffic:extensions.'dns-ext'.question.domain_ref.value = 'example1.com']"
         expectation = 'qname=example1.com.'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_network_src_ref(self):
         pattern = "[network-traffic:src_ref.value = '203.0.113.33']"
         expectation = 'qip=203.0.113.33'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_operator_like(self):
         pattern = "[domain-name:value LIKE 'microsoft*']"
@@ -94,9 +94,9 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
     def test_comparison_and(self):
         pattern = "[domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND']"
         expectation = 'policy_name=DFND&qname=example.com.'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)
 
     def test_multiple_operators(self):
         pattern = "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']"
         expectation = 'qip=127.0.0.1&policy_name=DFND&qname=example.com.'
-        self._test_pattern(pattern, expectation)
+        self._test_regex_timestamp(pattern, expectation)

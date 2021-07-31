@@ -38,17 +38,18 @@ class QueryStringPatternTranslator:
         ComparisonComparators.Equal: "="
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()
         self.qualified_queries = []
         self.subtypes = dict()
-        self.translated = self.parse_expression(pattern, data_model_mapper.dialect)
+        self.dialect = data_model_mapper.dialect
+        self.translated = self.parse_expression(pattern)
 
         self.qualified_queries.append(self.translated)
-        self.qualified_queries = _format_translated_queries(self.qualified_queries, self.subtypes)
+        self.qualified_queries = _format_translated_queries(self.dialect, self.qualified_queries, self.subtypes, time_range)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -113,7 +114,7 @@ class QueryStringPatternTranslator:
     def _is_reference_value(stix_field):
         return stix_field in REFERENCE_FIELDS
 
-    def _lookup_comparison_operator(self, expression_operator, dialect):
+    def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
@@ -127,10 +128,10 @@ class QueryStringPatternTranslator:
         else:
             self.assigned_fields |= mapped_fields_set
 
-    def _set_subtype(self, dialect, stix_object, stix_field, final_expression):
+    def _set_subtype(self, stix_object, stix_field, final_expression):
         # TODO: revisit how selection of type works
         # NOTE: For the Dossier api, type must be determined to build the api.
-        if dialect == 'dossierData':
+        if self.dialect == 'dossierData':
             if stix_object in ('domain-name', 'x-infoblox-dossier-event-result-pdns') \
                 and stix_field in ('value', 'hostname_ref.value'):
                 self.subtypes[final_expression] = 'host'
@@ -138,7 +139,7 @@ class QueryStringPatternTranslator:
                 and stix_field in ('value', 'ip_ref.value'):
                 self.subtypes[final_expression] = 'ip'
 
-    def _parse_expression(self, expression, dialect, qualifier=None) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -149,7 +150,7 @@ class QueryStringPatternTranslator:
             self._calculate_intersection(mapped_fields_array, stix_field)
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self._lookup_comparison_operator(expression.comparator, dialect)
+            comparator = self._lookup_comparison_operator(expression.comparator)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Equal:
@@ -164,14 +165,14 @@ class QueryStringPatternTranslator:
             else:
                 final_expression = "{}".format(comparison_string)
 
-            self._set_subtype(dialect, stix_object, stix_field, final_expression)
+            self._set_subtype(stix_object, stix_field, final_expression)
             return final_expression
 
         elif isinstance(expression, CombinedComparisonExpression):
             # TODO: is this used?
-            operator = self._lookup_comparison_operator(expression.operator, dialect)
-            expression_01 = self._parse_expression(expression.expr1, dialect)
-            expression_02 = self._parse_expression(expression.expr2, dialect)
+            operator = self._lookup_comparison_operator(expression.operator)
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
             if not expression_01 or not expression_02:
                 return ''
 
@@ -186,20 +187,20 @@ class QueryStringPatternTranslator:
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression, dialect, qualifier)
+            return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparison_operator(expression.observation_expression.operator, dialect)
-                expression_01 = self._parse_expression(expression.observation_expression.expr1, dialect)
+                operator = self._lookup_comparison_operator(expression.observation_expression.operator)
+                expression_01 = self._parse_expression(expression.observation_expression.expr1)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                expression_02 = self._parse_expression(expression.observation_expression.expr2, dialect, expression.qualifier)
+                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
                 return "{} {} {}".format(expression_01, operator, expression_02)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, dialect, expression.qualifier)
+                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self._lookup_comparison_operator(expression.operator, dialect)
-            expression_01 = self._parse_expression(expression.expr1, dialect)
-            expression_02 = self._parse_expression(expression.expr2, dialect)
+            operator = self._lookup_comparison_operator(expression.operator)
+            expression_01 = self._parse_expression(expression.expr1)
+            expression_02 = self._parse_expression(expression.expr2)
             if expression_01 and expression_02:
                 return "({}) {} ({})".format(expression_01, operator, expression_02)
             elif expression_01:
@@ -209,13 +210,13 @@ class QueryStringPatternTranslator:
             else:
                 return ''
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression, dialect))
+            return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
 
-    def parse_expression(self, pattern: Pattern, dialect):
-        return self._parse_expression(pattern, dialect)
+    def parse_expression(self, pattern: Pattern):
+        return self._parse_expression(pattern)
 
 
 def _test_or_add_milliseconds(timestamp) -> str:
@@ -239,48 +240,56 @@ def _test_timestamp(timestamp) -> bool:
     return bool(re.search(TIMESTAMP, timestamp))
 
 
-def _convert_timestamps_to_milliseconds(query_parts):
-    # grab time stamps from array
-    start_time = _test_or_add_milliseconds(query_parts[2])
-    stop_time = _test_or_add_milliseconds(query_parts[4])
-    transformer = TimestampToSeconds()
+def _format_timestamp(query: str, time_range) -> str:
+    if _test_START_STOP_format(query):
+        # Remove leading 't' before timestamps
+        query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
+        # Split individual query to isolate timestamps
+        query_parts = re.split("(START)|(STOP)", query)
+        # Remove None array entries
+        query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
+        if len(query_parts) != 5:
+            logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
+            return
 
-    second_start_time = transformer.transform(start_time)
-    second_stop_time = transformer.transform(stop_time)
+        # grab time stamps from array
+        start_time = _test_or_add_milliseconds(query_parts[2])
+        stop_time = _test_or_add_milliseconds(query_parts[4])
+        transformer = TimestampToSeconds()
 
-    payload = dict()
-    payload['offset'] = 0
-    payload['query'] = 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
-    return payload
+        second_start_time = transformer.transform(start_time)
+        second_stop_time = transformer.transform(stop_time)
+
+        return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
+    else:
+        totime = int(time.time())
+        fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
+        return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
+        # return query
 
 
-def _format_translated_queries(query_array, subtype_map):
+def _format_translated_queries(dialect, query_array, subtype_map, time_range):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
-    # Transform from human-readable timestamp to 13-digit millisecond time
-    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080000
+    # Transform from human-readable timestamp to 10-digit second time
+    # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080
     formatted_queries = []
     for query in query_array:
-        if _test_START_STOP_format(query):
-            # Remove leading 't' before timestamps
-            query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
-            # Split individual query to isolate timestamps
-            query_parts = re.split("(START)|(STOP)", query)
-            # Remove None array entries
-            query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
-            if len(query_parts) == 5:
-                formatted_queries.append(_convert_timestamps_to_milliseconds(query_parts))
-            else:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                continue
-        else:
-            payload = dict()
-            payload['offset'] = 0
-            payload['query'] = query
-            if query in subtype_map:
-                payload['subtype'] = subtype_map[query]
-            formatted_queries.append(payload)
+        if dialect == 'dnsEventData':
+            query = _format_timestamp(query, time_range)
+
+        if not query:
+            continue
+
+        payload = dict()
+        payload['offset'] = 0
+        payload['query'] = query
+
+        if query in subtype_map:
+            payload['subtype'] = subtype_map[query]
+
+        formatted_queries.append(payload)
 
     return formatted_queries
 
@@ -290,7 +299,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # result_limit = options['result_limit']
     # time_range = options['time_range']
 
-    trans_queries = QueryStringPatternTranslator(pattern, data_model_mapping).qualified_queries
+    trans_queries = QueryStringPatternTranslator(pattern, data_model_mapping, options['time_range']).qualified_queries
     # Add space around START STOP qualifiers
     # query = re.sub("START", "START ", query)
     # query = re.sub("STOP", " STOP ", query)
@@ -304,13 +313,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         q['source'] = data_model_mapping.dialect
         if 'subtype' in trans_queries:
             q['source_subtype'] = trans_queries['subtype'] # TODO: rename?
-
-        # TODO: remove the below code if not used
-        if 'to' not in q:
-            q['to'] = int(time.time())
-            q['from'] = int(q['to'] - datetime.timedelta(minutes=options['time_range']).total_seconds())
-        else:
-            q['to'] = int(q['to'] / 1000)
-            q['from'] = int(q['from'] / 1000)
         queries.append(json.dumps(q))
     return queries

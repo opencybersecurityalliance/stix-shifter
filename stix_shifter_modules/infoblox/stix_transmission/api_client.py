@@ -33,7 +33,7 @@ class APIClient:
 
     def ping_data_source(self):
         # Pings the data source
-        endpoint = 'tide/api/data/threats/state?type=host&rlimit=1'
+        endpoint = 'tide/api/data/threats/state'
         # now = datetime.datetime.utcnow().isoformat(timespec="milliseconds") + "Z"
         # https://csp.infoblox.com:443/tide/api/data/threats/state?type=host&rlimit=1
         # https://csp.infoblox.com    /tide/api/data/threats/state?type=host&rlimit=1
@@ -73,7 +73,7 @@ class APIClient:
         payload = json.loads(search_id)
         resp_dict = dict()
         all_data = list()
-        resp_dict["data"] = {"logs": all_data}
+        resp_dict["data"] = []
         start = range_start if range_start else 0
         end = range_end if range_end else 0
         offset = start
@@ -93,10 +93,11 @@ class APIClient:
                 resp_dict["message"] = response["status_detail"]
                 break
             else:
-                all_data += [response["result"][0]]
+                for i in response["result"]:
+                    resp_dict["data"].append({"dnsEventData": i})
                 break
         if resp_dict.get("code") == 200:
-            self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
+            self.logger.debug("The log count is %s", len(resp_dict["data"]))
         return resp_dict
 
     def _get_dossierdata_results(self, search_id, range_start=None, range_end=None):
@@ -109,7 +110,7 @@ class APIClient:
         payload = json.loads(search_id)
         resp_dict = dict()
         all_data = list()
-        resp_dict["data"] = {"logs": all_data}
+        resp_dict["data"] = []
         start = range_start if range_start else 0
         end = range_end if range_end else 0
         offset = start
@@ -121,7 +122,7 @@ class APIClient:
         }
         for i in range(0, max_fetch_count):
             payload["offset"] = 0
-            resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
+            resp = self.client.call_api(endpoint + "/" + payload["subtype"] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
             payload_dict = json.loads(resp.read())
 
             code = resp.code
@@ -134,13 +135,24 @@ class APIClient:
                 resp_dict["message"] = response["status_detail"]
                 break
             else:
-                print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
-                print(response)
-                all_data += [response]
+                for i in response["results"]:
+                    for j in i["data"]["items"]:
+                        restructure_payload = {
+                            'job': {
+                                'create_time': response['job']['create_time']
+                            },
+                            'results': [{
+                                'data': {
+                                    'items': [j]
+                                }
+                            }]
+                        }
+
+                        resp_dict["data"].append({"dossierData": restructure_payload})
                 break
         if resp_dict.get("code") == 200:
             # TODO: check this
-            self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
+            self.logger.debug("The log count is %s", len(resp_dict["data"]))
         return resp_dict
 
     def _get_tidedbdata_results(self, search_id, range_start=None, range_end=None):

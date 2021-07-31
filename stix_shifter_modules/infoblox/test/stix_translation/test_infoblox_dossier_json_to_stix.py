@@ -19,9 +19,13 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_create_time(self):
         data = [{
-            "job": {
-                "create_time": "2021-07-24T23:44:48.716Z"
-            }
+            "dossierData": [
+                {
+                    "job": {
+                        "create_time": "2021-07-24T23:44:48.716Z"
+                    }
+                }
+            ]
         }]
         objects = self._get_objects(data)
         ob_data = self._find_by_type(objects, "observed-data")
@@ -34,18 +38,20 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_domain(self):
         data = [{
-            "results": [
-                {
-                    "data": {
-                        "items": [
-                            {
-                                "Domain": "example1.com",
-                                "Record_Type": "A"
-                            }
-                        ]
+            "dossierData": [{
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "Domain": "example1.com",
+                                    "Record_Type": "A"
+                                }
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }]
         }]
         observed_objects = self._get_observed_objects(data)
         domainKey, domainData = self._find_object_by_type(observed_objects, "domain-name")
@@ -62,18 +68,20 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_hostname(self):
         data = [{
-            "results": [
-                {
-                    "data": {
-                        "items": [
-                            {
-                                "Hostname": "example1.com",
-                                "Record_Type": "A"
-                            }
-                        ]
+            "dossierData": [{
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "Hostname": "example1.com",
+                                    "Record_Type": "A"
+                                }
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }]
         }]
         observed_objects = self._get_observed_objects(data)
         domainKey, domainData = self._find_object_by_type(observed_objects, "domain-name")
@@ -90,18 +98,20 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_ipv4(self):
         data = [{
-            "results": [
-                {
-                    "data": {
-                        "items": [
-                            {
-                                "IP": "1.1.1.1",
-                                "Record_Type": "A"
-                            }
-                        ]
+            "dossierData": [{
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "IP": "1.1.1.1",
+                                    "Record_Type": "A"
+                                }
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }]
         }]
         observed_objects = self._get_observed_objects(data)
         ipv4Key, ipv4Data = self._find_object_by_type(observed_objects, "ipv4-addr")
@@ -118,18 +128,20 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_ipv6(self):
         data = [{
-            "results": [
-                {
-                    "data": {
-                        "items": [
-                            {
-                                "IP": "2001:db8:3333:4444:5555:6666:7777:8888",
-                                "Record_Type": "A"
-                            }
-                        ]
+            "dossierData": [{
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "IP": "2001:db8:3333:4444:5555:6666:7777:8888",
+                                    "Record_Type": "A"
+                                }
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }]
         }]
         observed_objects = self._get_observed_objects(data)
         ipv6Key, ipv6Data = self._find_object_by_type(observed_objects, "ipv6-addr")
@@ -146,18 +158,20 @@ class TestDossierResultTranslator(unittest.TestCase, utils.TestResultTranslatorM
 
     def test_result_pdns(self):
         data = [{
-            "results": [
-                {
-                    "data": {
-                        "items": [
-                            {
-                                "Last_Seen": 1627160591,
-                                "NameServer": "name_server"
-                            }
-                        ]
+            "dossierData": [{
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "Last_Seen": 1627160591,
+                                    "NameServer": "name_server"
+                                }
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }]
         }]
         observed_objects = self._get_observed_objects(data)
         _, dossierData = self._find_object_by_type(observed_objects, "x-infoblox-dossier-event-result-pdns")

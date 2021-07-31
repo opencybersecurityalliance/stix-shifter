@@ -19,7 +19,9 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_event_time(self):
         data = [{
-            "event_time": "2021-05-24T20:26:04.000Z",
+            "dnsEventData": {
+                "event_time": "2021-05-24T20:26:04.000Z",
+            }
         }]
         objects = self._get_objects(data)
         ob_data = self._find_by_type(objects, "observed-data")
@@ -32,7 +34,9 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_private_ip(self):
         data = [{
-            "private_ip": "1.1.1.1",
+            "dnsEventData": {
+                "private_ip": "1.1.1.1",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         _, dnsEvent = self._find_object_by_type(observed_objects, "ipv4-addr")
@@ -43,8 +47,10 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_mac_address(self):
         data = [{
-            "mac_address": "00:50:56:0b:06:58",
-            "private_ip": "1.1.1.1",
+            "dnsEventData": {
+                "mac_address": "00:50:56:0b:06:58",
+                "private_ip": "1.1.1.1",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         macKey, macData = self._find_object_by_type(observed_objects, "mac-addr")
@@ -58,7 +64,9 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_qip(self):
         data = [{
-            "qip": "1.1.1.2",
+            "dnsEventData": {
+                "qip": "1.1.1.2",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         ipv4Key, ipv4Data = self._find_object_by_type(observed_objects, "ipv4-addr")
@@ -75,7 +83,9 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_rip(self):
         data = [{
-            "rip": "1.1.1.3",
+            "dnsEventData": {
+                "rip": "1.1.1.3",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         ipv4Key, ipv4Data = self._find_object_by_type(observed_objects, "ipv4-addr")
@@ -92,7 +102,9 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_qname(self):
         data = [{
-            "qname": "example.com.",
+            "dnsEventData": {
+                "qname": "example.com.",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         ipv4Key, ipv4Data = self._find_object_by_type(observed_objects, "domain-name")
@@ -109,8 +121,10 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_user(self):
         data = [{
-            "user": "rdp",
-            "feed_name": "Base",
+            "dnsEventData": {
+                "user": "rdp",
+                "feed_name": "Base",
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         userKey, userData = self._find_object_by_type(observed_objects, "user-account")
@@ -127,24 +141,26 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
 
     def test_network_traffic(self):
         data = [{
-            "qtype": "A",
-            "category": "",
-            "confidence": "HIGH",
-            "country": "unknown",
-            "device": "DESKTOP-VT5P2QT",
-            "dhcp_fingerprint": "",
-            "feed_name": "Base",
-            "feed_type": "FQDN",
-            "network": "BloxOne Endpoint",
-            "os_version": "Windows 10 Enterprise",
-            "policy_name": "DFND",
-            "qtype": "A",
-            "rcode": "PASSTHRU",
-            "rdata": "1.1.1.1,2.2.2.2",
-            "severity": "HIGH",
-            "tclass": "APT",
-            "threat_indicator": "total-update.com",
-            "tproperty": "MalwareC2"
+            "dnsEventData": {
+                "qtype": "A",
+                "category": "",
+                "confidence": "HIGH",
+                "country": "unknown",
+                "device": "DESKTOP-VT5P2QT",
+                "dhcp_fingerprint": "",
+                "feed_name": "Base",
+                "feed_type": "FQDN",
+                "network": "BloxOne Endpoint",
+                "os_version": "Windows 10 Enterprise",
+                "policy_name": "DFND",
+                "qtype": "A",
+                "rcode": "PASSTHRU",
+                "rdata": "1.1.1.1,2.2.2.2",
+                "severity": "HIGH",
+                "tclass": "APT",
+                "threat_indicator": "total-update.com",
+                "tproperty": "MalwareC2"
+            }
         }]
         observed_objects = self._get_observed_objects(data)
         _, nt = self._find_object_by_type(observed_objects, "network-traffic")
