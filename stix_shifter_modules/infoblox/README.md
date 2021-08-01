@@ -230,6 +230,7 @@ TBD
                     "expiration": "2022-04-14T15:04:26.116Z",
                     "host_name": "1-lntesasanpaolo-portaleweb.xyz",
                     "imported": "2021-04-14T15:07:18.592Z",
+                    "received": "2021-04-14T15:07:18.592Z",
                     "profile": "IID",
                     "property": "Phishing_Generic",
                     "threat_level": 100,

@@ -279,12 +279,8 @@
         ],
         "received": [
             {
-                "key": "created",
-                "cybox": false
-            },
-            {
-                "key": "modified",
-                "cybox": false
+                "key": "x-infoblox-threat.received",
+                "object": "x_infoblox"
             }
         ],
         "class": [

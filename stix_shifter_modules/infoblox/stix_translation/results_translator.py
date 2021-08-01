@@ -19,8 +19,6 @@ class ResultsTranslator(JSONToStix):
             raise LoadJsonResultsException() from e
 
         try:
-            # NOTE: passing the correct to_stix_map json based on dialect
-            # mapped_data = self.map_data[self.dialect]
             mapped_data = self.map_data
             results = json_to_stix_translator.convert_to_stix(data_source, mapped_data, json_data, self.transformers, self.options, self.callback)
         except Exception as ex:
