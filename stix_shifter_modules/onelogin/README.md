@@ -1,23 +1,146 @@
 # OneLogin
 
-This is a connector for searching Onelogin events. 
+This is a connector for searching OneLogin events. 
 
 ### Format for making STIX translation calls via the CLI
 
 `python main.py <translator_module> <query or result> <STIX identity object> <data>`
 
-Note the identity object is only used when converting from AQL to STIX, but due to positional arguments, an empty hash will need to be passed in when converting from STIX patterns to AQL.
+Note the STIX identity object is only used when translating data source results into STIX, so it can be passed in as an empty object for query translation calls.
+
+### Converting from STIX patterns to OneLogin queries
 
 This example input pattern for TRANSLATE:
 
-`python main.py translate "onelogin" "query" '{}' "[user-account:user_id= '123456']"`
+`python main.py translate onelogin query '{}' "[user-account:user_id= '123456']"`
 
 Returns the following search query:
 
 ```
 {
     "queries": [
-        "user_id=123456&limit=50"
+        "user_id=123456&limit=1000"
+    ]
+}
+```
+
+### Converting from OneLogin events to STIX
+
+OneLogin data to STIX mapping is defined in `to_stix_map.json`
+
+This example OneLogin data:
+
+`python main.py translate onelogin results '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "Onelogin", "identity_class": "events"}' '[{
+            "id": 81004691744,
+            "created_at": "2021-06-22T13:12:06.437Z",
+            "account_id": 192204,
+            "user_id": 138593517,
+            "event_type_id": 149,
+            "notes": "Default",
+            "ipaddr": "121.0.0.1",
+            "actor_user_id": 12345,
+            "assuming_acting_user_id": 12345,
+            "role_id": 441778,
+            "app_id": "Default",
+            "group_id": "Default",
+            "otp_device_id": "Default",
+            "policy_id": 123,
+            "actor_system": "Mapping",
+            "custom_message": "Default",
+            "role_name": "Default",
+            "app_name": "Default",
+            "group_name": "Default",
+            "actor_user_name": "Mapping",
+            "user_name": "Firstname Lastname",
+            "policy_name": "policy_name",
+            "otp_device_name": "Default",
+            "operation_name": "Default",
+            "directory_sync_run_id": "Default",
+            "directory_id": 12345678,
+            "resolution": "resolution",
+            "client_id": 12345678,
+            "resource_type_id": "Default",
+            "error_description": "error_description",
+            "proxy_ip": "121.0.0.1",
+            "risk_score": 2,
+            "risk_reasons": "risk_reasons",
+            "risk_cookie_id": 123,
+            "browser_fingerprint": true
+        }]'`
+
+Will return the following STIX observable:
+
+```json
+{
+    "type": "bundle",
+    "id": "bundle--a7a80b78-c022-4ba5-9540-c4ba3f5d782b",
+    "spec_version": "2.0",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Onelogin",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--17c193b8-6b7e-48c8-837d-b699e874d392",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2021-08-02T06:06:52.127Z",
+            "modified": "2021-08-02T06:06:52.127Z",
+            "objects": {
+                "0": {
+                    "type": "x-onelogin-finding",
+                    "unique_id": 81004691744,
+                    "event_type_id": 149,
+                    "notes": "Default",
+                    "role_id": 441778,
+                    "app_id": "Default",
+                    "custom_message": "Default",
+                    "role_name": "Default",
+                    "app_name": "Default",
+                    "group_name": "Default",
+                    "otp_device_name": "Default",
+                    "operation_name": "Default",
+                    "directory_sync_run_id": "Default",
+                    "directory_id": 12345678,
+                    "resolution": "resolution",
+                    "client_id": 12345678,
+                    "resource_type_id": "Default",
+                    "browser_fingerprint": true
+                },
+                "1": {
+                    "type": "x-ibm-finding",
+                    "time_observed": "2021-06-22T13:12:06.437Z",
+                    "policy_id": 123,
+                    "name": "policy_name"
+                },
+                "2": {
+                    "type": "user-account",
+                    "x_account_id": 192204,
+                    "user_id": "138593517",
+                    "x_actor_user_id": 12345,
+                    "x_assuming_acting_user_id": 12345,
+                    "x_actor_user_name": "Mapping",
+                    "display_name": "Firstname Lastname"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "121.0.0.1",
+                    "x_proxy_ip": "121.0.0.1"
+                },
+                "4": {
+                    "type": "x-onelogin-risk",
+                    "error_description": "error_description",
+                    "risk_score": 2,
+                    "risk_reasons": "risk_reasons",
+                    "risk_cookie_id": 123
+                }
+            },
+            "first_observed": "2021-08-02T06:06:52.127Z",
+            "last_observed": "2021-08-02T06:06:52.127Z",
+            "number_observed": 1
+        }
     ]
 }
 ```
@@ -33,7 +156,7 @@ Uses the data source API to ping the connection
 
 CLI command example:
 ```
-python3 main.py transmit onelogin '{ "host": <Onelogin_host>, "port": 443, "selfSignedCert": false}' '{ "auth": { "clientId": <clientId>, "clientSecret": <clientSecret>}}' ping
+python main.py transmit onelogin '{ "region": <region> }' '{ "auth": { "clientId": <clientId>, "clientSecret": <clientSecret>}}' ping
 ```
 If connection establish returns the following response:
 ```
@@ -47,7 +170,7 @@ Uses the data source API to fetch the query results based on the search ID, offs
 
 CLI Command example:
 ```
-python3 main.py transmit onelogin '{ "host": <Onelogin_host>, "port": 443, "selfSignedCert": false}' '{ "auth": { "clientId": <clientId>, "clientSecret": <clientSecret>}}' results "user_id=12345678&limit=50" <OFFSET> <LENGTH> 
+python main.py transmit onelogin '{ "region": <region> }' '{ "auth": { "clientId": <clientId>, "clientSecret": <clientSecret>}}' results "user_id=12345678&limit=50" <OFFSET> <LENGTH> 
 ```
 Returns following result
 ```
