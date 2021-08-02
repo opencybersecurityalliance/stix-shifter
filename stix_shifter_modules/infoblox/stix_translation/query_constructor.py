@@ -238,18 +238,23 @@ def _test_start_stop_format(query_string) -> bool:
     return bool(re.search(START_STOP_STIX_QUALIFIER, query_string))
 
 
+def _get_parts_start_stop(query):
+    # Remove leading 't' before timestamps
+    query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
+    # Split individual query to isolate timestamps
+    query_parts = re.split("(START)|(STOP)", query)
+    # Remove None array entries
+    query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
+    return query_parts
+
+
 def _test_timestamp(timestamp) -> bool:
     return bool(re.search(TIMESTAMP, timestamp))
 
 
 def _format_timestamp(query: str, time_range) -> str:
     if _test_start_stop_format(query):
-        # Remove leading 't' before timestamps
-        query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
-        # Split individual query to isolate timestamps
-        query_parts = re.split("(START)|(STOP)", query)
-        # Remove None array entries
-        query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
+        query_parts = _get_parts_start_stop(query)
         if len(query_parts) != 5:
             logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
             return ''
@@ -264,6 +269,7 @@ def _format_timestamp(query: str, time_range) -> str:
 
         return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
 
+    # default to last X minutes
     totime = int(time.time())
     fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
     return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
@@ -279,6 +285,8 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
     for query in query_array:
         if dialect == 'dnsEventData':
             query = _format_timestamp(query, time_range)
+        else:
+            query = _get_parts_start_stop(query)[0]
 
         if not query:
             continue
