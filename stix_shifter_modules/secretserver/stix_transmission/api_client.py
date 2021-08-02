@@ -28,7 +28,6 @@ class APIClient():
     def get_token(self):
 
         self.headers = {
-            'Authorization': 'Basic',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         self.data = self.payload
