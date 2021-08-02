@@ -2,46 +2,50 @@ import base64
 import json
 import re
 from datetime import date, timedelta
-import requests
 import os
 from requests import Response
 from stix_shifter_utils.utils import logger
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper
-from .secretserver_utils import SecretServerApiClient
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
-
 import random
 
 class APIClient():
 
-    def __init__(self, connection, configuration):
+    def __init__(self, connection, configuration): 
          self.url = "https://"+connection["host"]
-         self.auth_token_url = "https://"+connection["host"]+"/SecretServer/oauth2/token"
-         self.event_url = "https://" + connection["host"]+"/SecretServer/api/v1/reports/execute"
+         self.auth_token_url = "/SecretServer/oauth2/token"
          self.secret_detail = "/SecretServer/api/v1/secrets"
+         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
+         self.connect_timeout = int(self.connect_timeout)
+         self.server_cert_content = False
+         self.auth = None
+         self.sni = None
+         self.retry_max = 1
+         self.logger = logger.set_logger(__name__)
+         self.server_cert_file_content_exists = False
+         self.url_modifier_function = None
+         self.headers = {
+             'Content-Type': 'application/x-www-form-urlencoded'
+         }
          self.payload = 'username=%s&password=%s&grant_type=password' % (
              configuration["auth"]["username"], configuration["auth"]["password"])
          self.server_ip = connection["host"]
-         self.client = SecretServerApiClient(self.url)
 
     def get_token(self):
-
-        self.headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-        self.data = self.payload
-        self.response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload,
-                                         verify=False)
-        self.res = self.response.text
-        self.json_obj = json.loads(self.res)
-        self.token = self.json_obj.get('access_token')
-        self.accessToken = 'Bearer' + " " + self.token
+        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
+                                                                            urldata=None,
+                                                                            timeout=None)
+        res = response.response.text
+        json_obj = json.loads(res)
+        token = json_obj.get('access_token')
+        self.accessToken = 'Bearer' + " " + token
         return self.accessToken
 
     def ping_data_source(self):
-        response = requests.request("POST", self.auth_token_url, headers=self.headers, data=self.payload)
-        return response.status_code
+        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
+                                          urldata=None,
+                                          timeout=None)
+        return response.code
 
     def create_search(self, query_expression):
         respObj = Response()
@@ -97,16 +101,7 @@ class APIClient():
             else:
                 self.startDate = date.today()
                 self.endDate = self.startDate - timedelta(days = 1)
-            self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
-            self.connect_timeout = int(self.connect_timeout)
-            self.server_cert_content = False
-            self.auth = None
-            self.sni = None
-            self.retry_max = 1
-            self.logger = logger.set_logger(__name__)
-            self.server_cert_file_content_exists = False
-            self.url_modifier_function = None
-            resp = SecretServerApiClient.get_response(self)
+            resp = self.get_response()
             return resp
 
     def decode_searchId(self):
@@ -125,8 +120,77 @@ class APIClient():
                 " Could not extract date- " + self.search_id)
         return timestamp
 
+    def get_events(self):
+        payload = "{\"name\": \"Secret Server Events Logs\", \"parameters\": [{\"name\": \"startDate\", \"value\": '%s'} , {\"name\":\"endDate\",\"value\": '%s'}]}" % (
+            self.startDate, self.endDate)
+        headers = {
+
+            'Authorization': self.accessToken,
+            'Content-Type': 'application/json'
+        }
+        endpoint = "SecretServer/api/v1/reports/execute"
+
+        response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+                                          timeout=None)
+        if response.code == 403:
+            logger.loggers("Your password has expired. Please login to change it.")
+            exit(0)
+        collection = []
+        json_data = response.response.text
+        eventData = json.loads(json_data)
+        col = eventData['columns']
+        for obj in eventData['rows']:
+            obj = dict(zip(col, obj))
+            collection.append(obj)
+        return collection
+
+    def get_Secret(self):
+        eventDetail = self.get_events()
+        secretIdList = []
+        secretCollection = []
+        for obj in eventDetail:
+            item = (obj['ItemId'])
+            secretIdList.append(item)
+        unique = set(secretIdList)
+        for id in unique:
+            secret_server_user_url = self.secret_detail + "/%s" % id
+            headers = {
+                'Authorization': self.accessToken,
+                'Content-Type': 'application/json'
+            }
+            payload = {}
+            response = RestApiClient.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
+                                              urldata=None,
+                                              timeout=None)
+
+            secretCollection.append(response.response.text)
+        json_data = json.dumps(secretCollection)
+        collection = json.loads(json_data)
+        return collection
+
+    def get_response(self):
+        eventDetail = self.get_events()
+        secretDetail = self.get_Secret()
+        # eventDetail = SecretServerApiClient.get_events(self)
+        # secretDetail = SecretServerApiClient.get_Secret(self)
+        updateSecret = []
+        secretCollection = {}
+        updateCollection = []
+        for obj in secretDetail:
+            next = json.loads(obj)
+            updateSecret.append(next)
+        for item in eventDetail:
+            for getId in updateSecret:
+                if (item['ItemId'] == getId['id']):
+                    data = getId['items']
+                    for secret in data:
+                        if (secret['fieldName'] == 'Server'):
+                            secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
+                            item.update(secretCollection)
+                            updateCollection.append(item)
+        return updateCollection
+
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
         return {"code": 200, "success": True}
-
