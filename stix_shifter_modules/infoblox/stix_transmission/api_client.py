@@ -128,7 +128,7 @@ class APIClient:
         }
 
         # NOTE: Dossier does not support pagination via multiple requests. All results returned in the response.
-        resp = self.client.call_api(endpoint + "/" + payload["subtype"] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
+        resp = self.client.call_api(endpoint + "/" + payload["threat_type"] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
         resp_dict["code"] = resp.code
         if resp.code != 200:
             if resp.code == 401:
