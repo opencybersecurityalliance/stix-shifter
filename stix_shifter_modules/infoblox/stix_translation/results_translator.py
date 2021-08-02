@@ -15,8 +15,8 @@ class ResultsTranslator(JSONToStix):
         try:
             json_data = json.loads(data)
             data_source = json.loads(data_source)
-        except Exception as e:
-            raise LoadJsonResultsException() from e
+        except Exception as exc:
+            raise LoadJsonResultsException() from exc
 
         try:
             mapped_data = self.map_data

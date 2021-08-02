@@ -33,44 +33,44 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
         expectation = 'value=203.0.113.33'
         self._test_pattern(pattern, expectation)
 
-    def test_subtype_host(self):
+    def test_threat_type_host(self):
         pattern = "[domain-name:value = 'example.com']"
         result = self._retrieve_query(pattern)
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=example.com',
             'source': 'dossierData',
-            'subtype': 'host'
+            'threat_type': 'host'
         })
 
-    def test_subtype_ip_ipv4(self):
+    def test_threat_type_ip_ipv4(self):
         pattern = "[ipv4-addr:value = '1.2.3.4']"
         result = self._retrieve_query(pattern)
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=1.2.3.4',
             'source': 'dossierData',
-            'subtype': 'ip'
+            'threat_type': 'ip'
         })
 
-    def test_subtype_ip_ipv6(self):
+    def test_threat_type_ip_ipv6(self):
         pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
         result = self._retrieve_query(pattern)
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=2001:db8:3333:4444:5555:6666:7777:8888',
             'source': 'dossierData',
-            'subtype': 'ip'
+            'threat_type': 'ip'
         })
 
-    def test_subtype_ip_ref(self):
+    def test_threat_type_ip_ref(self):
         pattern = "[x-infoblox-dossier-event-result-pdns:ip_ref.value = '203.0.113.33']"
         result = self._retrieve_query(pattern)
         self.assertEqual(result, {
             'offset': 0,
             'query': 'value=203.0.113.33',
             'source': 'dossierData',
-            'subtype': 'ip'
+            'threat_type': 'ip'
         })
 
     def test_operator_like(self):

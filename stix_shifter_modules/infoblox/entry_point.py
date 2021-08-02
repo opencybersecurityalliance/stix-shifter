@@ -1,3 +1,5 @@
+import os
+
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 
 from .stix_transmission.api_client import APIClient
@@ -8,7 +10,6 @@ from .stix_transmission.results_connector import ResultsConnector
 from .stix_transmission.status_connector import StatusConnector
 from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultsTranslator
-import os
 
 class EntryPoint(BaseEntryPoint):
     def __init__(self, connection={}, configuration={}, options={}):
@@ -45,6 +46,3 @@ class EntryPoint(BaseEntryPoint):
         query_translator = QueryTranslator(options, dialect, filepath)
         results_translator = ResultsTranslator(options, dialect, filepath)
         self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
-
-
-        # self.setup_translation_simple(dialect_default="dnsEventData")

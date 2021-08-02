@@ -5,9 +5,11 @@ import re
 import time
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import (
+    ObservationExpression, ComparisonExpression,
+    ComparisonExpressionOperators, ComparisonComparators, Pattern,
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+)
 from .transformers import InfobloxToDomainName, TimestampToSeconds
 
 # TODO: revisit the pattern for references, is this really needed?
@@ -16,7 +18,9 @@ REFERENCE_DATA_TYPES = {
     "value": ["ipv4", "ipv4_cidr", "domain_name"],
     "qname": ["domain_name"]
 }
-REFERENCE_FIELDS = ('src_ref.value', 'hostname_ref.value', 'ip_ref.value', 'extensions.dns-ext.question.domain_ref.value')
+REFERENCE_FIELDS = ('src_ref.value', 'hostname_ref.value',
+    'ip_ref.value', 'extensions.dns-ext.question.domain_ref.value'
+)
 
 START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
 TIMESTAMP = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
@@ -44,12 +48,12 @@ class QueryStringPatternTranslator:
         self.using_operators = set()
         self.assigned_fields = set()
         self.qualified_queries = []
-        self.subtypes = dict()
+        self.dossier_threat_type_map = dict()
         self.dialect = data_model_mapper.dialect
         self.translated = self.parse_expression(pattern)
 
         self.qualified_queries.append(self.translated)
-        self.qualified_queries = _format_translated_queries(self.dialect, self.qualified_queries, self.subtypes, time_range)
+        self.qualified_queries = _format_translated_queries(self.dialect, self.qualified_queries, self.dossier_threat_type_map, time_range)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -61,7 +65,7 @@ class QueryStringPatternTranslator:
         return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
-    def _escape_value(value, comparator=None) -> str:
+    def _escape_value(value) -> str:
         if isinstance(value, str):
             return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(':', '\\:'))
         else:
@@ -75,14 +79,16 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
+    @staticmethod
+    def _parse_reference(value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
         else:
             return "{mapped_field}{comparator}{value}".format(
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
-    def _sanatize_value(self, mapped_field, value):
+    @staticmethod
+    def _sanatize_value(mapped_field, value):
         # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
         updated_value = value
         if mapped_field == 'qname':
@@ -95,12 +101,10 @@ class QueryStringPatternTranslator:
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         value_type = self._check_value_type(expression.value) if is_reference_value else None
-        mapped_fields_count = len(mapped_fields_array)
-
         for mapped_field in mapped_fields_array:
             value = self._sanatize_value(mapped_field, value)
             if is_reference_value:
-                parsed_reference = self._parse_reference(stix_field, value_type, mapped_field, value, comparator)
+                parsed_reference = self._parse_reference(value_type, mapped_field, value, comparator)
 
                 if not parsed_reference:
                     continue
@@ -123,21 +127,20 @@ class QueryStringPatternTranslator:
         mapped_fields_set = set(mapped_fields_array)
         intersection = self.assigned_fields.intersection(mapped_fields_set)
         if intersection:
-            logger.error(f"[{', '.join(intersection)}] mapped from {stix_field} has multiple criteria")
+            logger.error("%s mapped from %s has multiple criteria", ', '.join(intersection), stix_field)
             raise NotImplementedError("Multiple criteria for one field is not support in Infoblox connector")
-        else:
-            self.assigned_fields |= mapped_fields_set
 
-    def _set_subtype(self, stix_object, stix_field, final_expression):
-        # TODO: revisit how selection of type works
+        self.assigned_fields |= mapped_fields_set
+
+    def _set_threat_type(self, stix_object, stix_field, final_expression):
         # NOTE: For the Dossier api, type must be determined to build the api.
         if self.dialect == 'dossierData':
             if stix_object in ('domain-name', 'x-infoblox-dossier-event-result-pdns') \
                 and stix_field in ('value', 'hostname_ref.value'):
-                self.subtypes[final_expression] = 'host'
+                self.dossier_threat_type_map[final_expression] = 'host'
             elif stix_object in ('ipv4-addr', 'ipv6-addr', 'x-infoblox-dossier-event-result-pdns') \
                 and stix_field in ('value', 'ip_ref.value'):
-                self.subtypes[final_expression] = 'ip'
+                self.dossier_threat_type_map[final_expression] = 'ip'
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -165,11 +168,10 @@ class QueryStringPatternTranslator:
             else:
                 final_expression = "{}".format(comparison_string)
 
-            self._set_subtype(stix_object, stix_field, final_expression)
+            self._set_threat_type(stix_object, stix_field, final_expression)
             return final_expression
 
         elif isinstance(expression, CombinedComparisonExpression):
-            # TODO: is this used?
             operator = self._lookup_comparison_operator(expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
@@ -230,7 +232,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
     return timestamp
 
 
-def _test_START_STOP_format(query_string) -> bool:
+def _test_start_stop_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
     # or START 1234567890123 STOP 1234567890123
     return bool(re.search(START_STOP_STIX_QUALIFIER, query_string))
@@ -241,7 +243,7 @@ def _test_timestamp(timestamp) -> bool:
 
 
 def _format_timestamp(query: str, time_range) -> str:
-    if _test_START_STOP_format(query):
+    if _test_start_stop_format(query):
         # Remove leading 't' before timestamps
         query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
         # Split individual query to isolate timestamps
@@ -250,7 +252,7 @@ def _format_timestamp(query: str, time_range) -> str:
         query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
         if len(query_parts) != 5:
             logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-            return
+            return ''
 
         # grab time stamps from array
         start_time = _test_or_add_milliseconds(query_parts[2])
@@ -261,14 +263,13 @@ def _format_timestamp(query: str, time_range) -> str:
         second_stop_time = transformer.transform(stop_time)
 
         return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
-    else:
-        totime = int(time.time())
-        fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
-        return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
-        # return query
+
+    totime = int(time.time())
+    fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
+    return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
 
 
-def _format_translated_queries(dialect, query_array, subtype_map, time_range):
+def _format_translated_queries(dialect, query_array, dossier_threat_type_map, time_range):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -286,8 +287,8 @@ def _format_translated_queries(dialect, query_array, subtype_map, time_range):
         payload['offset'] = 0
         payload['query'] = query
 
-        if query in subtype_map:
-            payload['subtype'] = subtype_map[query]
+        if query in dossier_threat_type_map:
+            payload['threat_type'] = dossier_threat_type_map[query]
 
         formatted_queries.append(payload)
 
@@ -309,9 +310,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     queries = []
-    for q in trans_queries:
-        q['source'] = data_model_mapping.dialect
-        if 'subtype' in trans_queries:
-            q['source_subtype'] = trans_queries['subtype'] # TODO: rename?
-        queries.append(json.dumps(q))
+    for trans_query in trans_queries:
+        trans_query['source'] = data_model_mapping.dialect
+        queries.append(json.dumps(trans_query))
     return queries
