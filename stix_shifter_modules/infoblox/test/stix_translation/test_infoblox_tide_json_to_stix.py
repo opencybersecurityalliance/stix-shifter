@@ -32,7 +32,7 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
             "last_observed": "2021-05-24T20:26:04.000Z"
         })
 
-    def test_ip(self):
+    def test_ipv4(self):
         data = [{
                 "tideDbData" : [{"ip": "1.1.1.1"}] 
             }]
@@ -42,6 +42,18 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
         self.assertEqual(result, {
             'type': 'ipv4-addr', 'value': '1.1.1.1'
         })
+
+    def test_ipv6(self):
+        data = [{
+                "tideDbData" : [{ "ip": "2001:db8:3333:4444:5555:6666:7777:8888"}] 
+            }]
+        observed_objects = self._get_observed_objects(data)
+        _, obj = self._find_object_by_type(observed_objects, "ipv6-addr")
+        result = { key: obj[key] for key in ["type", "value"] }
+        self.assertEqual(result, {
+            'type': 'ipv6-addr', 'value': '2001:db8:3333:4444:5555:6666:7777:8888'
+        })
+
 
     def test_domain(self):
         data = [{

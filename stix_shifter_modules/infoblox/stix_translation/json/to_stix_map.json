@@ -327,7 +327,12 @@
         ],
         "ip": [
             {
-                "key": "ipv4-addr.value"
+                "key": "ipv4-addr.value",
+                "object": "ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "ip"
             }
         ],
         "domain": [

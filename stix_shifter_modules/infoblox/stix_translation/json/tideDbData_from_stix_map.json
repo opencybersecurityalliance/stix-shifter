@@ -4,6 +4,11 @@
             "value": ["ip"]
         }
     },
+    "ipv6-addr": {
+        "fields": {
+            "value": ["ip"]
+        }
+    },
     "domain-name": {
         "fields": {
             "value": ["domain"]
@@ -23,6 +28,7 @@
             "hash": ["hash"],
             "host_name": ["host"],
             "imported": ["imported"],
+            "received": ["received"],
             "origin": ["origin"],
             "profile": ["profile"],
             "property": ["property"],

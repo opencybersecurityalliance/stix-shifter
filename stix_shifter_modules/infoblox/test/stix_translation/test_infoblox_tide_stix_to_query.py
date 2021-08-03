@@ -18,9 +18,14 @@ class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
         expectation = 'email=foo@example.com'
         self._test_pattern(pattern, expectation)
 
-    def test_ip(self):
+    def test_ipv4(self):
         pattern = "[ipv4-addr:value = '1.2.3.4']"
         expectation = 'ip=1.2.3.4'
+        self._test_pattern(pattern, expectation)
+
+    def test_ipv6(self):
+        pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
+        expectation = 'ip=2001:db8:3333:4444:5555:6666:7777:8888'
         self._test_pattern(pattern, expectation)
 
     # TODO: test references
