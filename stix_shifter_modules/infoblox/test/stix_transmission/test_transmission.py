@@ -125,7 +125,7 @@ class TestTransmission(unittest.TestCase):
     ## RESULTS
     ###############################
     @staticmethod
-    def _get_query(source="unknown_source", subtype=None):
+    def _get_query(source="unknown_source", threat_type=None):
         query = {
             "offset": 0,
             "fields": [],
@@ -135,8 +135,8 @@ class TestTransmission(unittest.TestCase):
             "query": "hostName:*"
         }
 
-        if subtype:
-            query["subtype"] = subtype
+        if threat_type:
+            query["threat_type"] = threat_type
 
         return json.dumps(query)
 
@@ -188,10 +188,10 @@ class TestTransmission(unittest.TestCase):
 
         return json.dumps(response)
 
-    def test_results_dossier_missing_subtype(self):
+    def test_results_dossier_missing_threat_type(self):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query("dossierData"), 0, 10)
-        self.assertEqual(results_response, {'code': 'unknown', 'error': "'subtype'", 'success': False})
+        self.assertEqual(results_response, {'code': 'unknown', 'error': "'threat_type'", 'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_dossier_invalid_param(self, mock_query):
@@ -201,7 +201,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(400, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="unknown_type"), 0, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {
             'code': 'invalid_parameter',
             'error': 'unknown target type',
@@ -213,7 +213,7 @@ class TestTransmission(unittest.TestCase):
         payload = '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>'
         mock_query.side_effect = [MockResponse(401, payload)]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="unknown_type"), 0, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {
             'code': 'authentication_fail',
             'error': payload,
@@ -231,7 +231,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
@@ -253,7 +253,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
@@ -284,7 +284,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 10)
         self.assertEqual(results_response, {
             "success": True,
             "data": [
@@ -327,7 +327,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 2)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 2)
         self.assertEqual(results_response, {
             "success": True,
             "data": [
@@ -371,7 +371,7 @@ class TestTransmission(unittest.TestCase):
         }
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 4, 10)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 4, 10)
         self.assertEqual(results_response, {
             "success": True,
             "data": [
@@ -391,57 +391,57 @@ class TestTransmission(unittest.TestCase):
         ]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 200)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 200)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 500)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 500)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 500)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 1200)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 1200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1000)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 99, 200)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 99, 200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 200)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 99, 500)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 99, 500)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 500)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 99, 1200)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 99, 1200)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 901)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 600, 100)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 600, 100)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 100)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 5000)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 5000)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1000)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 0, 10000)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 0, 10000)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1000)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 5000, 10000)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 5000, 10000)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 0)
 
         mock_results.side_effect = mocks
-        result_response = transmission.results(self._get_query("dossierData", subtype="host"), 999, 1)
+        result_response = transmission.results(self._get_query("dossierData", threat_type="host"), 999, 1)
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1)
 
@@ -449,7 +449,7 @@ class TestTransmission(unittest.TestCase):
     def test_results_dossier_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-        results_response = transmission.results(self._get_query("dossierData", subtype="host"), 4, 3)
+        results_response = transmission.results(self._get_query("dossierData", threat_type="host"), 4, 3)
         self.assertEqual(results_response, {
             "success": False,
             "error": "Failed to establish a new connection",

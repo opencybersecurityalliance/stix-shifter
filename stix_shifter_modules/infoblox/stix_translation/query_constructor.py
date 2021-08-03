@@ -283,6 +283,7 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080
     formatted_queries = []
     for query in query_array:
+        unaltered_query = query
         if dialect == 'dnsEventData':
             query = _format_timestamp(query, time_range)
         else:
@@ -295,8 +296,8 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
         payload['offset'] = 0
         payload['query'] = query
 
-        if query in dossier_threat_type_map:
-            payload['threat_type'] = dossier_threat_type_map[query]
+        if unaltered_query in dossier_threat_type_map:
+            payload['threat_type'] = dossier_threat_type_map[unaltered_query]
 
         formatted_queries.append(payload)
 
