@@ -20,32 +20,211 @@ python main.py `<translator_module>` `<query or result>` `<STIX identity object>
 
 ### Pattern expression with STIX attributes
 
-#### STIX patterns
+#### STIX translate query
+```shell
+python main.py translate infoblox query '{}' "[ipv4-addr:value = '127.0.0.1'] START t'2021-06-01T08:43:10Z' STOP t'2021-08-31T10:43:10Z'" ;
+```
+#### STIX translate query - output
+```json
+{
+    "queries": [
+        "{\"offset\": 0, \"query\": \"ip=127.0.0.1\", \"source\": \"tideDbData\"}",
+        "{\"offset\": 0, \"query\": \"t0=1622536990&t1=1630406590&qip=127.0.0.1\", \"source\": \"dnsEventData\"}",
+        "{\"offset\": 0, \"query\": \"value=127.0.0.1\", \"threat_type\": \"ip\", \"source\": \"dossierData\"}"
+    ]
+}
+```
+#### STIX transmit query
+```shell
+export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
+export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-TBD
+python main.py transmit infoblox:dnsEventData ${SS_CONNECTION} ${SS_AUTH} query '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}'
+```
 
-#### Translated query
+#### STIX transmit query - output
+```json
+{
+    "success": true,
+    "search_id": "{\"offset\": 0, \"query\": \"t0=1622536990&t1=1630406590&qip=127.0.0.1\", \"source\": \"dnsEventData\"}"
+}
+```
 
-TBD
+#### STIX transmit results
+```shell
+export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
+export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-#### Above translated query is passed as parameter to STIX transmission module
+python main.py transmit infoblox:dnsEventData ${SS_CONNECTION} ${SS_AUTH} results '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}' 0 5
+```
 
-##### Transmit Search Call
+#### STIX transmit results - output
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "dnsEventData": {
+                "category": "Streaming Media",
+                "confidence": "",
+                "country": "unknown",
+                "device": "Device Name",
+                "dhcp_fingerprint": "",
+                "event_time": "2021-08-03T04:43:51.000Z",
+                "feed_name": "CAT_Streaming Media",
+                "feed_type": "FQDN",
+                "mac_address": "00:00:00:00:00:00",
+                "network": "Network Name",
+                "os_version": "Windows 10 Enterprise",
+                "policy_name": "Sentinel-Security-Policy",
+                "private_ip": "1.1.1.1",
+                "qip": "127.0.0.1",
+                "qname": "example.com.",
+                "qtype": "A",
+                "rcode": "REDIRECT",
+                "rdata": "1.1.1.1",
+                "rip": "",
+                "severity": "",
+                "tclass": "",
+                "threat_indicator": "CAT",
+                "tproperty": "",
+                "user": "rdp"
+            }
+        }
+    ]
+}
+```
 
-TBD
+#### STIX execute
+```shell
+export SS_DATA_SOURCE='{"type": "identity", "id": "xxx", "name": "Infoblox", "identity_class": "events"}'
+export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
+export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-#### Transmit Search Output
+python3 main.py execute infoblox:dnsEventData infoblox:dnsEventData $SS_DATA_SOURCE $SS_CONNECTION $SS_AUTH "[ipv4-addr:value = '208.50.179.13'] START t'2021-06-27T09:00:10Z' STOP t'2021-06-29T10:43:10Z'"
+```
 
-TBD
+#### STIX execute - output
+```json
+{
+    "type": "bundle",
+    "id": "bundle--97b0f001-0022-4859-a6b6-06c748c02074",
+    "spec_version": "2.0",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Infoblox",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--312451ed-26ab-4cd8-9fa5-54d018b0c0f5",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2021-08-03T04:52:23.717Z",
+            "modified": "2021-08-03T04:52:23.717Z",
+            "objects": {
+                "0": {
+                    "type": "x-infoblox-dns-event",
+                    "category": "Internet Services",
+                    "country": "US",
+                    "device": "Device Name",
+                    "feed_name": "CAT_Internet Services",
+                    "feed_type": "FQDN",
+                    "network": "Network Name",
+                    "os_version": "Windows 10 Enterprise",
+                    "policy_name": "DFND",
+                    "src_ip_ref": "3",
+                    "threat_indicator": "CAT",
+                    "user_ref": "6"
+                },
+                "1": {
+                    "type": "mac-addr",
+                    "value": "00:00:00:00:00:00"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "resolves_to_refs": [
+                        "1"
+                    ],
+                    "value": "1.1.1.1"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1"
+                },
+                "4": {
+                    "type": "network-traffic",
+                    "src_ref": "3",
+                    "protocols": [
+                        "domain"
+                    ],
+                    "extensions": {
+                        "dns-ext": {
+                            "question": {
+                                "domain_ref": "5"
+                            },
+                            "type": "A",
+                            "response_code": "PASSTHRU",
+                            "answers": {
+                                "data": "1.1.1.1"
+                            }
+                        }
+                    }
+                },
+                "5": {
+                    "type": "domain-name",
+                    "value": "example.com"
+                },
+                "6": {
+                    "type": "user-account",
+                    "user_id": "rdp"
+                }
+            },
+            "first_observed": "2021-06-29T10:41:46.000Z",
+            "last_observed": "2021-06-29T10:41:46.000Z",
+            "number_observed": 1
+        }
+    ]
+}
 
-##### Transmit Results Call
+```
 
-TBD
+#### STIX ping
+```json
+export SS_AUTH='{"auth":{"token":"xxx"}}'
+python3 main.py transmit infoblox '{"host":"csp.infoblox.com"}' $SS_AUTH ping
+{
+    "success": true
+}
+```
 
+#### STIX additional translate queries
+```
+# translate
+python main.py translate infoblox query '{}' "[ipv4-addr:value = '127.0.0.1'] START t'2021-06-01T08:43:10Z' STOP t'2021-08-31T10:43:10Z'" ;
+
+# translate dnsEventData
+python main.py translate infoblox:dnsEventData query '{}' "[ipv4-addr:value = '127.0.0.1'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'" ;
+python main.py translate infoblox:dnsEventData query '{}' "[ipv4-addr:value = '127.0.0.1']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[x-infoblox-dns-event:network = 'Network Name']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[domain-name:value = 'example.com']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[x-infoblox-dns-event:policy_name = 'DFND']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[x-infoblox-dns-event:x_infoblox_severity = 'HIGH']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[x-infoblox-dns-event:threat_class = 'APT']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[network-traffic:extensions.'dns-ext'.question.domain_ref.value = 'example.com']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[network-traffic:src_ref.value = '127.0.0.1']" ;
+python main.py translate infoblox:dnsEventData query '{}' "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']" ;
+
+# translate dossierData
+python main.py translate infoblox:dossierData query '{}' "[domain-name:value = 'example.com']" ;
+python main.py translate infoblox:dossierData query '{}' "[ipv4-addr:value = '127.0.0.1']" ;
+python main.py translate infoblox:dossierData query '{}' "[ipv6-addr:value = '1111:222:3333:4444:5555:6666:7777:8888']" ;
+python main.py translate infoblox:dossierData query '{}' "[x-infoblox-dossier-event-result-pdns:ip_ref.value = '127.0.0.1']" ;
+python main.py translate infoblox:dossierData query '{}' "[x-infoblox-dossier-event-result-pdns:hostname_ref.value = 'example.com']" ;
+```
 #### Transmit Results Output
-
-##### tideDbData
-
+##### Dialect: tideDbData
 ```json
 {
   "threat": [
@@ -85,121 +264,79 @@ TBD
 }
 ```
 
-##### dnsEventsData
-
+##### Dialect: dnsEventData
 ```json
 {
-  "result": [
-    {
-      "category": "",
-      "confidence": "HIGH",
-      "country": "unknown",
-      "device": "DESKTOP-VT5P2QT",
-      "dhcp_fingerprint": "",
-      "event_time": "2021-06-05T10:11:05.000Z",
-      "feed_name": "Base",
-      "feed_type": "FQDN",
-      "mac_address": "00:50:56:0b:06:58",
-      "network": "BloxOne Endpoint",
-      "os_version": "Windows 10 Enterprise",
-      "policy_name": "DFND",
-      "private_ip": "192.168.24.198",
-      "qip": "208.50.179.13",
-      "qname": "total-update.com.",
-      "qtype": "A",
-      "rcode": "PASSTHRU",
-      "rdata": "18.185.74.46",
-      "rip": "",
-      "severity": "HIGH",
-      "tclass": "APT",
-      "threat_indicator": "total-update.com",
-      "tproperty": "MalwareC2",
-      "user": "rdp"
-    }
-  ],
-  "status_code": "200"
+    "success": true,
+    "data": [
+        {
+            "dnsEventData": {
+                "category": "Streaming Media",
+                "confidence": "",
+                "country": "unknown",
+                "device": "Device Name",
+                "dhcp_fingerprint": "",
+                "event_time": "2021-08-03T04:43:51.000Z",
+                "feed_name": "CAT_Streaming Media",
+                "feed_type": "FQDN",
+                "mac_address": "00:00:00:00:00:00",
+                "network": "Network Name",
+                "os_version": "Windows 10 Enterprise",
+                "policy_name": "Sentinel-Security-Policy",
+                "private_ip": "1.1.1.1",
+                "qip": "127.0.0.1",
+                "qname": "example.com.",
+                "qtype": "A",
+                "rcode": "REDIRECT",
+                "rdata": "1.1.1.1",
+                "rip": "",
+                "severity": "",
+                "tclass": "",
+                "threat_indicator": "CAT",
+                "tproperty": "",
+                "user": "rdp"
+            }
+        }
+    ]
+}
+```
+##### Dialect: dossierData
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "dossierData": {
+                "job": {
+                    "create_time": "2021-08-03T05:00:16.634Z"
+                },
+                "results": [
+                    {
+                        "data": {
+                            "items": [
+                                {
+                                    "Domain": "",
+                                    "Hostname": "example.com",
+                                    "IP": "127.0.0.1",
+                                    "Last_Seen": 1624531404,
+                                    "NameServer": "",
+                                    "Record_Type": "A"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
 }
 ```
 
-##### dossierData - pdns
+### Response to STIX object (STIX attributes)
 
-```json
-{
-  "status": "success",
-  "job_id": "37918a72-1588-4d25-b7e9-578419e5bb00",
-  "job": {
-    "id": "37918a72-1588-4d25-b7e9-578419e5bb00",
-    "state": "completed",
-    "status": "success",
-    "create_ts": 1627170288716,
-    "create_time": "2021-07-24T23:44:48.716Z",
-    "request_ttl": 0,
-    "result_ttl": 3600,
-    "completed_tasks": [
-      "a5183e5d-788d-41d0-8fc0-6264fdb83d04"
-    ],
-    "org": "BLOXINT00000000264",
-    "user": "user.service.03283b68-bceb-49c6-b706-2a4ec650067f@infoblox.invalid",
-    "tasks_tbc": 0
-  },
-  "tasks": {
-    "a5183e5d-788d-41d0-8fc0-6264fdb83d04": {
-      "id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
-      "state": "completed",
-      "status": "success",
-      "create_ts": 1627170288716,
-      "create_time": "2021-07-24T23:44:48.716Z",
-      "start_ts": 1627170289717,
-      "start_time": "2021-07-24T23:44:49.717Z",
-      "end_ts": 1627170290087,
-      "end_time": "2021-07-24T23:44:50.087Z",
-      "params": {
-        "type": "host",
-        "target": "vm1988182.11ssd.had.wf",
-        "source": "pdns"
-      },
-      "options": {},
-      "results": null,
-      "rl": false
-    }
-  },
-  "results": [
-    {
-      "task_id": "a5183e5d-788d-41d0-8fc0-6264fdb83d04",
-      "params": {
-        "type": "host",
-        "target": "vm1988182.11ssd.had.wf",
-        "source": "pdns"
-      },
-      "status": "success",
-      "time": 369,
-      "v": "3.0.0",
-      "data": {
-        "duration": 369905951,
-        "items": [
-          {
-            "Domain": "",
-            "Hostname": "vm1988182.11ssd.had.wf",
-            "IP": "185.203.242.211",
-            "Last_Seen": 1627160591,
-            "NameServer": "",
-            "Record_Type": "A"
-          }
-        ],
-        "status": 200,
-        "total_results": 1
-      }
-    }
-  ]
-}
-```
+#### STIX Observable Output
 
-### Infoblox response to STIX object (STIX attributes)
-
-#### STIX observable output
-
-##### tideDbData
-
+##### Dialect: tideDbData
 ```json
 {
     "type": "bundle",
@@ -251,144 +388,142 @@ TBD
 }
 ```
 
-##### dnsEventsData
-
+##### Dialect: dnsEventData
 ```json
 {
     "type": "bundle",
-    "id": "bundle--9a76f81f-f2d5-4d3e-92dd-5359cf77b957",
+    "id": "bundle--6366eadb-cd6c-442b-9563-b240dc216fd6",
     "spec_version": "2.0",
     "objects": [
         {
-            "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "name": "Infoblox",
             "type": "identity",
-            "identity_class": "individual",
-            "created": "2021-06-28T08:58:24.239Z",
-            "modified": "2021-06-28T08:58:24.239Z"
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Infoblox",
+            "identity_class": "events"
         },
         {
-            "id": "observed-data--ab261396-0c22-468b-8bfc-53becb3223fc",
+            "id": "observed-data--c9b86145-7359-48ca-add5-0dd0afc1eb93",
             "type": "observed-data",
-            "created_by_ref": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "created": "2021-06-28T08:58:29.505Z",
-            "modified": "2021-06-28T08:58:29.505Z",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2021-08-03T05:05:37.391Z",
+            "modified": "2021-08-03T05:05:37.391Z",
             "objects": {
                 "0": {
-                    "type": "ipv4-addr",
-                    "value": "192.168.24.198",
-                    "resolves_to_refs": [
-                      "1"
-                    ]
+                    "type": "x-infoblox-dns-event",
+                    "x_infoblox_confidence": "HIGH",
+                    "country": "unknown",
+                    "device": "Device Name",
+                    "feed_name": "Base",
+                    "feed_type": "FQDN",
+                    "network": "Network Name",
+                    "os_version": "Windows 10 Enterprise",
+                    "policy_name": "DFND",
+                    "src_ip_ref": "3",
+                    "x_infoblox_severity": "HIGH",
+                    "threat_class": "APT",
+                    "threat_indicator": "indicator",
+                    "threat_property": "MalwareDownload",
+                    "user_ref": "6",
+                    "category": "category",
+                    "dhcp_fingerprint": "fingerprint"
                 },
                 "1": {
                     "type": "mac-addr",
-                    "value": "00:50:56:0b:06:58"
+                    "value": "00:00:00:00:00:00"
                 },
                 "2": {
                     "type": "ipv4-addr",
-                    "value": "208.50.179.13"
+                    "resolves_to_refs": [
+                        "1"
+                    ],
+                    "value": "1.1.1.1"
                 },
                 "3": {
-                    "type": "domain-name",
-                    "value": "total-update.com"
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1"
                 },
                 "4": {
                     "type": "network-traffic",
+                    "src_ref": "3",
                     "protocols": [
-                       "domain"
+                        "domain"
                     ],
-                    "src_ref": "2",
                     "extensions": {
-                      "dns-ext": {
-                        "question": {
-                          "domain_ref": "3"
-                        },
-                        "type": "A",
-                        "response_code": "PASSTHRU",
-                        "answers": {
-                          "data": "18.185.74.46"
+                        "dns-ext": {
+                            "question": {
+                                "domain_ref": "5"
+                            },
+                            "type": "A",
+                            "response_code": "PASSTHRU",
+                            "answers": {
+                              "data": "1.1.1.1"
+                            }
                         }
-                      }
                     }
                 },
                 "5": {
-                    "type": "user-account",
-                    "user_id": "rdp"
+                    "type": "domain-name",
+                    "value": "example.com"
                 },
                 "6": {
-                    "type": "x-infoblox-dns-event",
-                    "user_ref": "5",
-                    "src_ip_ref": "2",
-                    "x_infoblox_severity": "HIGH",
-                    "threat_class": "APT",
-                    "threat_indicator": "total-update.com",
-                    "threat_property": "MalwareC2",
-                    "policy_name": "DFND",
-                    "os_version": "Windows 10 Enterprise",
-                    "network": "BloxOne Endpoint",
-                    "category": "",
-                    "x_infoblox_confidence": "HIGH",
-                    "country": "unknown",
-                    "device": "DESKTOP-VT5P2QT",
-                    "dhcp_fingerprint": "",
-                    "feed_name": "Base",
-                    "feed_type": "FQDN"
+                    "type": "user-account",
+                    "user_id": "rdp"
                 }
             },
-            "first_observed": "2021-05-18T03:56:52.801Z",
-            "last_observed": "2021-05-18T03:56:52.801Z",
+            "first_observed": "2021-06-29T10:41:02.000Z",
+            "last_observed": "2021-06-29T10:41:02.000Z",
             "number_observed": 1
         }
     ]
 }
 ```
 
-##### dossierData
-
+##### Dialect: dossierData
 ```json
 {
     "type": "bundle",
-    "id": "bundle--9a76f81f-f2d5-4d3e-92dd-5359cf77b957",
+    "id": "bundle--6a1e31f5-a5ee-40df-95ae-789e183f312e",
     "spec_version": "2.0",
     "objects": [
         {
-            "id": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "name": "Infoblox",
             "type": "identity",
-            "identity_class": "individual",
-            "created": "2021-06-28T08:58:24.239Z",
-            "modified": "2021-06-28T08:58:24.239Z"
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Infoblox",
+            "identity_class": "events"
         },
         {
-            "id": "observed-data--ab261396-0c22-468b-8bfc-53becb3223fc",
+            "id": "observed-data--1242a347-730a-4f93-96f1-2a7c1b8048b2",
             "type": "observed-data",
-            "created_by_ref": "identity--b1898903-f26b-43fb-982e-4b35cb35f060",
-            "created": "2021-06-28T08:58:29.505Z",
-            "modified": "2021-06-28T08:58:29.505Z",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2021-08-03T05:03:36.715Z",
+            "modified": "2021-08-03T05:03:36.715Z",
             "objects": {
                 "0": {
                     "type": "domain-name",
-                    "value": "vm1988182.11ssd.had.wf"
+                    "value": "example.com"
                 },
                 "1": {
-                    "type": "ipv4-addr",
-                    "value": "185.203.242.211"
-                },
-                "2": {
                     "type": "x-infoblox-dossier-event-result-pdns",
                     "hostname_ref": "0",
-                    "ip_ref": "1",
-                    "last_seen": 1627160591,
+                    "ip_ref": "2",
+                    "last_seen": 1624531404,
                     "record_type": "A"
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "127.0.0.1"
                 }
             },
-            "first_observed": "2021-05-18T03:56:52.801Z",
-            "last_observed": "2021-05-18T03:56:52.801Z",
+            "first_observed": "2021-08-03T05:03:35.548Z",
+            "last_observed": "2021-08-03T05:03:35.548Z",
             "number_observed": 1
         }
     ]
 }
 ```
 
+
+
 ### Limitations
+* Does not support `NOT`, `AND`, or `OR` operator.
+* Does not support using multiple criteria in one field.
