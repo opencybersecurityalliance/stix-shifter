@@ -15,8 +15,7 @@
   "network-traffic": {
     "fields": {
       "src_ref.value": ["IpAddress"],
-      "dst_ref.value": ["Server"],
-       "protocols[*]": ["protocolid"]
+      "dst_ref.value": ["Server"]
     }
   },
   "user-account": {
