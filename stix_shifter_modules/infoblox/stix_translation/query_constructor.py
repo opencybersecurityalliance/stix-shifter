@@ -49,11 +49,16 @@ class QueryStringPatternTranslator:
         self.assigned_fields = set()
         self.qualified_queries = []
         self.dossier_threat_type_map = dict()
+        self.tide_threat_type_map = dict()
         self.dialect = data_model_mapper.dialect
         self.translated = self.parse_expression(pattern)
 
         self.qualified_queries.append(self.translated)
-        self.qualified_queries = _format_translated_queries(self.dialect, self.qualified_queries, self.dossier_threat_type_map, time_range)
+        self.qualified_queries = _format_translated_queries(self.dialect, 
+                                                            self.qualified_queries, 
+                                                            self.dossier_threat_type_map, 
+                                                            self.tide_threat_type_map, 
+                                                            time_range)
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -142,6 +147,21 @@ class QueryStringPatternTranslator:
                 and stix_field in ('value', 'ip_ref.value'):
                 self.dossier_threat_type_map[final_expression] = 'ip'
 
+        # For Tide, type must be one of type must be one of (host, ip, url, hash, email)
+        elif self.dialect == 'tideDbData':
+            if stix_object in ('x-infoblox-threat') and stix_field in ('threat_type'):
+                self.tide_threat_type_map[final_expression] = 'threat_type'
+            if stix_object in ('x-infoblox-threat') and stix_field in ('host_name'):
+                self.tide_threat_type_map[final_expression] = 'host'
+            elif stix_object in ('ipv4-addr', 'ipv6-addr') and stix_field in ('value'):
+                self.tide_threat_type_map[final_expression] = 'ip'
+            elif stix_object in ('email-addr') and stix_field in ('value'):
+                self.tide_threat_type_map[final_expression] = 'email'
+            elif stix_object in ('x-infoblox-threat') and stix_field in ('url'):
+                self.tide_threat_type_map[final_expression] = 'url'
+            elif stix_object in ('x-infoblox-threat') and stix_field in ('hash'):
+                self.tide_threat_type_map[final_expression] = 'hash'
+            
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
@@ -254,7 +274,7 @@ def _test_timestamp(timestamp) -> bool:
 
 def _format_timestamp(query: str, time_range) -> str:
     if _test_start_stop_format(query):
-        query_parts = _get_parts_start_stop(query)
+        query_parts = _get_parts_start_stop(query)       
         if len(query_parts) != 5:
             logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
             return ''
@@ -275,7 +295,7 @@ def _format_timestamp(query: str, time_range) -> str:
     return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
 
 
-def _format_translated_queries(dialect, query_array, dossier_threat_type_map, time_range):
+def _format_translated_queries(dialect, query_array, dossier_threat_type_map, tide_threat_type_map, time_range):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -296,8 +316,13 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
         payload['offset'] = 0
         payload['query'] = query
 
-        if unaltered_query in dossier_threat_type_map:
-            payload['threat_type'] = dossier_threat_type_map[unaltered_query]
+        if dialect == 'dossierData':
+            if unaltered_query in dossier_threat_type_map:
+                payload['threat_type'] = dossier_threat_type_map[unaltered_query]
+
+        if dialect == 'tideDbData':
+            if unaltered_query in tide_threat_type_map:
+                payload['threat_type'] = tide_threat_type_map[unaltered_query]
 
         formatted_queries.append(payload)
 

@@ -140,7 +140,7 @@ class APIClient:
             return resp_dict
 
         response_payload = json.loads(resp.read())
-        for i in response_payload["results"]:
+        for i in response_payload["threat"]:
             for j in i["data"]["items"]:
                 restructure_payload = {
                     'job': {
@@ -153,7 +153,7 @@ class APIClient:
                     }]
                 }
 
-                resp_dict["data"].append({"dossierData": restructure_payload})
+        resp_dict["data"].append({"dossierData": response_payload["results"]})
 
         # Trim result set based on min/max range values
         end = end if end < len(resp_dict["data"]) else len(resp_dict["data"])
@@ -166,47 +166,46 @@ class APIClient:
             self.logger.debug("The Dossier count is %s", len(resp_dict["data"]))
         return resp_dict
 
-    def _get_tidedbdata_results(self, search_id, range_start=None, range_end=None):
+    def _get_tidedbdata_results(self, search_id, range_start=0, range_end=None):
         endpoint = 'tide/api/data/threats/state'
         headers = dict()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
         payload = json.loads(search_id)
         resp_dict = dict()
-        all_data = list()
-        resp_dict["data"] = {"logs": all_data}
+        resp_dict["data"] = []
+
         start = range_start if range_start else 0
         end = range_end if range_end else 0
-        offset = start
-        max_fetch_count = 10
-        # TODO: remove loop for TIDE, single request that accepts rlimit and period
-        for _ in range(0, max_fetch_count):
-            payload["offset"] = 0
 
-            #TODO remove hard-coded 'type'
-            #type must be one of type must be one of (host, ip, url, hash, email)
-            resp = self.client.call_api(endpoint + "/ip?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
-            payload_dict = json.loads(resp.read())
+        params = {'type': payload["threat_type"]}
 
-            code = resp.code
-            response = payload_dict
+        if payload["threat_type"] == "ip":
+            payload["include_ipv6"] = "true"
 
-            # code, response = self._fetch(endpoint, headers, payload, offset)
-            resp_dict["code"] = code
-            if code != 200:
-                # TODO test this
-                resp_dict["message"] = response["status_detail"]
-                break
+        # NOTE: Tide does not support pagination via multiple requests. All results returned in the response.
+        resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
+
+        resp_dict["code"] = resp.code
+        if resp.code != 200:
+            if resp.code == 401:
+                resp_dict["message"] = resp.read().decode("utf-8")
             else:
-                all_data += response["threat"]
-                break
+                response_payload = json.loads(resp.read())
+                resp_dict["message"] = response_payload["error"]
+            del resp_dict["data"]
+            return resp_dict
+
+        response_payload = json.loads(resp.read())
+        resp_dict["data"].append({"tideDbData": response_payload["threat"]})
+
+        # Trim result set based on min/max range values
+        end = end if end < len(resp_dict["data"]) else len(resp_dict["data"])
+        num_results = end - start
+
+        if len(resp_dict["data"]) > end - start:
+            resp_dict["data"] = resp_dict["data"][start:end]
+
         if resp_dict.get("code") == 200:
-            self.logger.debug("The log count is %s", len(resp_dict["data"]["logs"]))
+            self.logger.debug("The Dossier count is %s", len(resp_dict["data"]))
         return resp_dict
-
-
-    # def _fetch(self, endpoint, headers, payload, offset):
-    #     payload["offset"] = offset
-    #     resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', headers=headers, timeout=self.timeout)
-    #     payload_dict = json.loads(resp.read())
-    #     return resp.code, payload_dict

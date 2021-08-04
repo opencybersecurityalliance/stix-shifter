@@ -333,16 +333,31 @@
             {
                 "key": "ipv6-addr.value",
                 "object": "ip"
+            },
+            {
+                "key": "x-infoblox-threat.ip_ref",
+                "object": "x_infoblox",
+                "references": "ip"
             }
         ],
         "domain": [
             {
                 "key": "domain-name.value"
+            },
+            {
+                "key": "x-infoblox-threat.domain_ref",
+                "object": "x_infoblox",
+                "references": "domain"
             }
         ],
         "email": [
             {
                 "key": "email-addr.value"
+            },
+            {
+                "key": "x-infoblox-threat.email_ref",
+                "object": "x_infoblox",
+                "references": "email"
             }
         ],
         "origin": [
