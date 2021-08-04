@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d431dc4-787c-4009-9c96-f6680b743209" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stix_shifter_modules/secretserver/stix_transmission/api_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/secretserver/stix_transmission/api_client.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,6 +22,79 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
+  <component name="RunManager" selected="Python tests.Unittests for test_secretserver.TestSecretServerConnection.test_query_response">
+    <configuration name="Unittests for test_secretserver.TestSecretServerConnection" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/Documents/UDI/stix-shifter-develop/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stix_shifter_modules/secretserver/tests/stix_transmission" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_pattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_secretserver.TestSecretServerConnection&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_secretserver.TestSecretServerConnection.test_query_response" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stix_shifter_modules/secretserver/tests/stix_transmission" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_secretserver.TestSecretServerConnection.test_query_response&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_secretserver_stix_to_query.TestQueryTranslator" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stix_shifter_modules/secretserver/tests/stix_translation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_secretserver_stix_to_query.TestQueryTranslator&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_stix_parsing.TestStixParsing" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stix_shifter_modules/qradar/tests/stix_translation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_stix_parsing.TestStixParsing&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.Unittests for test_secretserver.TestSecretServerConnection" />
+      <item itemvalue="Python tests.Unittests for test_secretserver_stix_to_query.TestQueryTranslator" />
+      <item itemvalue="Python tests.Unittests for test_stix_parsing.TestStixParsing" />
+      <item itemvalue="Python tests.Unittests for test_secretserver.TestSecretServerConnection.test_query_response" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Unittests for test_secretserver.TestSecretServerConnection.test_query_response" />
+        <item itemvalue="Python tests.Unittests for test_secretserver_stix_to_query.TestQueryTranslator" />
+        <item itemvalue="Python tests.Unittests for test_secretserver.TestSecretServerConnection" />
+        <item itemvalue="Python tests.Unittests for test_stix_parsing.TestStixParsing" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -31,5 +105,35 @@
       <updated>1627900320548</updated>
     </task>
     <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="304" y="155" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1628084348619">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state x="304" y="155" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.974@0.25.1680.974" timestamp="1628084348619" />
+    <state width="1659" height="362" key="GridCell.Tab.0.bottom" timestamp="1628084499153">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state width="1659" height="362" key="GridCell.Tab.0.bottom/0.25.1680.974@0.25.1680.974" timestamp="1628084499153" />
+    <state width="1659" height="362" key="GridCell.Tab.0.bottom/0.25.1680.975@0.25.1680.975" timestamp="1628083551603" />
+    <state width="1659" height="250" key="GridCell.Tab.0.bottom/0.25.1680.976@0.25.1680.976" timestamp="1628083210911" />
+    <state width="1659" height="362" key="GridCell.Tab.0.center" timestamp="1628084499152">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state width="1659" height="362" key="GridCell.Tab.0.center/0.25.1680.974@0.25.1680.974" timestamp="1628084499152" />
+    <state width="1659" height="362" key="GridCell.Tab.0.center/0.25.1680.975@0.25.1680.975" timestamp="1628083551602" />
+    <state width="1659" height="250" key="GridCell.Tab.0.center/0.25.1680.976@0.25.1680.976" timestamp="1628083210911" />
+    <state width="1659" height="362" key="GridCell.Tab.0.left" timestamp="1628084499151">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state width="1659" height="362" key="GridCell.Tab.0.left/0.25.1680.974@0.25.1680.974" timestamp="1628084499151" />
+    <state width="1659" height="362" key="GridCell.Tab.0.left/0.25.1680.975@0.25.1680.975" timestamp="1628083551601" />
+    <state width="1659" height="250" key="GridCell.Tab.0.left/0.25.1680.976@0.25.1680.976" timestamp="1628083210910" />
+    <state width="1659" height="362" key="GridCell.Tab.0.right" timestamp="1628084499152">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state width="1659" height="362" key="GridCell.Tab.0.right/0.25.1680.974@0.25.1680.974" timestamp="1628084499152" />
+    <state width="1659" height="362" key="GridCell.Tab.0.right/0.25.1680.975@0.25.1680.975" timestamp="1628083551602" />
+    <state width="1659" height="250" key="GridCell.Tab.0.right/0.25.1680.976@0.25.1680.976" timestamp="1628083210911" />
   </component>
 </project>
