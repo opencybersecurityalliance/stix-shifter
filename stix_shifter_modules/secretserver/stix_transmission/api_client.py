@@ -171,6 +171,8 @@ class APIClient():
     def get_response(self):
         eventDetail = self.get_events()
         secretDetail = self.get_Secret()
+        # eventDetail = SecretServerApiClient.get_events(self)
+        # secretDetail = SecretServerApiClient.get_Secret(self)
         updateSecret = []
         secretCollection = {}
         updateCollection = []
