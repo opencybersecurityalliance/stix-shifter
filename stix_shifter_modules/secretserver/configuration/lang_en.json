@@ -1,0 +1,37 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "placeholder": "443",
+            "description": "Specify the associated port number of the data source."
+        },
+        "help": {
+            "label": "Need additional help?"
+        },
+        "selfSignedCert": {
+            "label": "Secret Server connection certificate",
+            "description": "Use self-signed Security Sockets Layer (SSL)"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
+            }
+        }
+    }
+}
