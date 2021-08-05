@@ -16,7 +16,8 @@ from .transformers import InfobloxToDomainName, TimestampToSeconds
 REFERENCE_DATA_TYPES = {
     "qip": ["ipv4", "ipv4_cidr"],
     "value": ["ipv4", "ipv4_cidr", "domain_name"],
-    "qname": ["domain_name"]
+    "qname": ["domain_name"],
+    "ip": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cidr"]
 }
 REFERENCE_FIELDS = ('src_ref.value', 'hostname_ref.value',
     'ip_ref.value', 'extensions.dns-ext.question.domain_ref.value'
@@ -54,10 +55,10 @@ class QueryStringPatternTranslator:
         self.translated = self.parse_expression(pattern)
 
         self.qualified_queries.append(self.translated)
-        self.qualified_queries = _format_translated_queries(self.dialect, 
-                                                            self.qualified_queries, 
-                                                            self.dossier_threat_type_map, 
-                                                            self.tide_threat_type_map, 
+        self.qualified_queries = _format_translated_queries(self.dialect,
+                                                            self.qualified_queries,
+                                                            self.dossier_threat_type_map,
+                                                            self.tide_threat_type_map,
                                                             time_range)
 
     @staticmethod
@@ -92,14 +93,17 @@ class QueryStringPatternTranslator:
             return "{mapped_field}{comparator}{value}".format(
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
-    @staticmethod
-    def _sanatize_value(mapped_field, value):
+    def _sanatize_value(self, mapped_field, value):
         # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
         updated_value = value
-        if mapped_field == 'qname':
-            updated_value = InfobloxToDomainName.untransform(value)
-        elif mapped_field == 'threat_level':
-            updated_value = THREAT_LEVEL_MAPPING[value]
+        if self.dialect == 'dnsEventData':
+            if mapped_field == 'qname':
+                updated_value = InfobloxToDomainName.untransform(value)
+            elif mapped_field == 'threat_level':
+                updated_value = THREAT_LEVEL_MAPPING[value]
+        elif self.dialect == 'tideDbData':
+            if mapped_field == 'type':
+                updated_value = value.lower()
         return updated_value
 
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
@@ -137,7 +141,7 @@ class QueryStringPatternTranslator:
 
         self.assigned_fields |= mapped_fields_set
 
-    def _set_threat_type(self, stix_object, stix_field, final_expression):
+    def _set_threat_type(self, stix_object, stix_field, final_expression, value):
         # NOTE: For the Dossier api, type must be determined to build the api.
         if self.dialect == 'dossierData':
             if stix_object in ('domain-name', 'x-infoblox-dossier-event-result-pdns') \
@@ -149,19 +153,14 @@ class QueryStringPatternTranslator:
 
         # For Tide, type must be one of type must be one of (host, ip, url, hash, email)
         elif self.dialect == 'tideDbData':
-            if stix_object in ('x-infoblox-threat') and stix_field in ('threat_type'):
-                self.tide_threat_type_map[final_expression] = 'threat_type'
             if stix_object in ('x-infoblox-threat') and stix_field in ('host_name'):
                 self.tide_threat_type_map[final_expression] = 'host'
-            elif stix_object in ('ipv4-addr', 'ipv6-addr') and stix_field in ('value'):
+            elif stix_object in ('ipv4-addr', 'ipv6-addr', 'x-infoblox-threat') \
+                and stix_field in ('value', 'ip_ref.value'):
                 self.tide_threat_type_map[final_expression] = 'ip'
-            elif stix_object in ('email-addr') and stix_field in ('value'):
-                self.tide_threat_type_map[final_expression] = 'email'
             elif stix_object in ('x-infoblox-threat') and stix_field in ('url'):
                 self.tide_threat_type_map[final_expression] = 'url'
-            elif stix_object in ('x-infoblox-threat') and stix_field in ('hash'):
-                self.tide_threat_type_map[final_expression] = 'hash'
-            
+
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
@@ -169,7 +168,6 @@ class QueryStringPatternTranslator:
 
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-
             self._calculate_intersection(mapped_fields_array, stix_field)
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
@@ -188,7 +186,7 @@ class QueryStringPatternTranslator:
             else:
                 final_expression = "{}".format(comparison_string)
 
-            self._set_threat_type(stix_object, stix_field, final_expression)
+            self._set_threat_type(stix_object, stix_field, final_expression, value)
             return final_expression
 
         elif isinstance(expression, CombinedComparisonExpression):
@@ -272,27 +270,42 @@ def _test_timestamp(timestamp) -> bool:
     return bool(re.search(TIMESTAMP, timestamp))
 
 
-def _format_timestamp(query: str, time_range) -> str:
-    if _test_start_stop_format(query):
-        query_parts = _get_parts_start_stop(query)       
-        if len(query_parts) != 5:
-            logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-            return ''
+def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
+    if dialect == 'dnsEventData':
+        if _test_start_stop_format(query):
+            query_parts = _get_parts_start_stop(query)
+            if len(query_parts) != 5:
+                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
+                return ''
 
-        # grab time stamps from array
-        start_time = _test_or_add_milliseconds(query_parts[2])
-        stop_time = _test_or_add_milliseconds(query_parts[4])
-        transformer = TimestampToSeconds()
+            # grab time stamps from array
+            start_time = _test_or_add_milliseconds(query_parts[2])
+            stop_time = _test_or_add_milliseconds(query_parts[4])
 
-        second_start_time = transformer.transform(start_time)
-        second_stop_time = transformer.transform(stop_time)
+            transformer = TimestampToSeconds()
+            second_start_time = transformer.transform(start_time)
+            second_stop_time = transformer.transform(stop_time)
 
-        return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
+            return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
 
-    # default to last X minutes
-    totime = int(time.time())
-    fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
-    return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
+        # default to last X minutes
+        totime = int(time.time())
+        fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
+        return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
+    if dialect == 'tideDbData':
+        if _test_start_stop_format(query):
+            query_parts = _get_parts_start_stop(query)
+            if len(query_parts) != 5:
+                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
+                return ''
+
+            # grab time stamps from array
+            start_time = _test_or_add_milliseconds(query_parts[2])
+            stop_time = _test_or_add_milliseconds(query_parts[4])
+            return 'from_date=' + start_time + '&to_date=' + stop_time + '&' + query_parts[0]
+
+    # remaining dialect (dossierEvent)
+    return _get_parts_start_stop(query)[0]
 
 
 def _format_translated_queries(dialect, query_array, dossier_threat_type_map, tide_threat_type_map, time_range):
@@ -304,10 +317,7 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
     formatted_queries = []
     for query in query_array:
         unaltered_query = query
-        if dialect == 'dnsEventData':
-            query = _format_timestamp(query, time_range)
-        else:
-            query = _get_parts_start_stop(query)[0]
+        query = _format_query_with_timestamp(dialect, query, time_range)
 
         if not query:
             continue

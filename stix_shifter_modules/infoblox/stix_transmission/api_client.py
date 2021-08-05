@@ -140,7 +140,7 @@ class APIClient:
             return resp_dict
 
         response_payload = json.loads(resp.read())
-        for i in response_payload["threat"]:
+        for i in response_payload["results"]:
             for j in i["data"]["items"]:
                 restructure_payload = {
                     'job': {
@@ -153,7 +153,7 @@ class APIClient:
                     }]
                 }
 
-        resp_dict["data"].append({"dossierData": response_payload["results"]})
+                resp_dict["data"].append({"dossierData": restructure_payload})
 
         # Trim result set based on min/max range values
         end = end if end < len(resp_dict["data"]) else len(resp_dict["data"])

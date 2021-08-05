@@ -34,35 +34,32 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
 
     def test_ipv4(self):
         data = [{
-                "tideDbData" : [{"ip": "1.1.1.1"}] 
+                "tideDbData" : [{"ip": "1.1.1.1"}]
             }]
         observed_objects = self._get_observed_objects(data)
         _, obj = self._find_object_by_type(observed_objects, "ipv4-addr")
-        result = { key: obj[key] for key in ["type", "value"] }
-        self.assertEqual(result, {
+        self.assertEqual(obj, {
             'type': 'ipv4-addr', 'value': '1.1.1.1'
         })
 
     def test_ipv6(self):
         data = [{
-                "tideDbData" : [{ "ip": "2001:db8:3333:4444:5555:6666:7777:8888"}] 
+                "tideDbData" : [{ "ip": "2001:db8:3333:4444:5555:6666:7777:8888"}]
             }]
         observed_objects = self._get_observed_objects(data)
         _, obj = self._find_object_by_type(observed_objects, "ipv6-addr")
-        result = { key: obj[key] for key in ["type", "value"] }
-        self.assertEqual(result, {
+        self.assertEqual(obj, {
             'type': 'ipv6-addr', 'value': '2001:db8:3333:4444:5555:6666:7777:8888'
         })
 
 
     def test_domain(self):
         data = [{
-                "tideDbData" : [{"domain": "example.com"}] 
+                "tideDbData" : [{"domain": "example.com"}]
             }]
         observed_objects = self._get_observed_objects(data)
         _, obj = self._find_object_by_type(observed_objects, "domain-name")
-        result = { key: obj[key] for key in ["type", "value"] }
-        self.assertEqual(result, {
+        self.assertEqual(obj, {
             'type': 'domain-name', 'value': 'example.com'
         })
 
@@ -73,8 +70,7 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
 
         observed_objects = self._get_observed_objects(data)
         _, obj = self._find_object_by_type(observed_objects, "email-addr")
-        result = { key: obj[key] for key in ["type", "value"] }
-        self.assertEqual(result, {
+        self.assertEqual(obj, {
             'type': 'email-addr', 'value': 'foo@example.com'
         })
 
@@ -91,9 +87,8 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
         self.assertEqual(2, len(observed_objects))
         for index in observed_objects:
             obj = observed_objects[index]
-            result = { key: obj[key] for key in ["threat_type"] }
-            self.assertEqual(result, {
-                'threat_type': 'IP'
+            self.assertEqual(obj, {
+                'threat_type': 'IP', 'type': 'x-infoblox-threat'
             })
 
 
@@ -129,26 +124,8 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
 
         observed_objects = self._get_observed_objects(data)
         _, xinfobloxThreat = self._find_object_by_type(observed_objects, "x-infoblox-threat")
-        result = { key: xinfobloxThreat[key] for key in ["type", 
-                                                         "threat_class",
-                                                         "x_infoblox_confidence",
-                                                         "dga",
-                                                         "expiration",
-                                                         "hash",
-                                                         "host_name",
-                                                         "imported",
-                                                         "received",
-                                                         "origin",
-                                                         "profile",
-                                                         "property",
-                                                         "target",
-                                                         "threat_level",
-                                                         "top_level_domain",
-                                                         "threat_type",
-                                                         "active",
-                                                         "url"] }
-
-        self.assertEqual(result, {
+        self.assertEqual(xinfobloxThreat, {
+            "id": "1d26606e-dfde-11eb-93d6-438342be5508",
             "type": "x-infoblox-threat",
             "threat_class": "Scanner",
             "x_infoblox_confidence": 80,
@@ -167,4 +144,4 @@ class TestTideResultTranslator(unittest.TestCase, utils.TestResultTranslatorMixi
 			"threat_type": "IP",
 			"active": True,
             "url": "https://example.com/example/path",
-            })
+        })

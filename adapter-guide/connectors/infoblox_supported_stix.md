@@ -9,6 +9,7 @@
 | ipv4-addr | value | ip |
 | ipv6-addr | value | ip |
 |--|--|--|
+| x-infoblox-threat | id | id |
 | x-infoblox-threat | threat_class | class |
 | x-infoblox-threat | x_infoblox_confidence | confidence |
 | x-infoblox-threat | dga | dga |

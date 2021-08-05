@@ -40,7 +40,6 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
         }]
         observed_objects = self._get_observed_objects(data)
         _, dnsEvent = self._find_object_by_type(observed_objects, "ipv4-addr")
-        result = { key: dnsEvent[key] for key in ["type", "value"] }
         self.assertEqual(dnsEvent, {
             'type': 'ipv4-addr', 'value': '1.1.1.1'
         })
@@ -76,7 +75,6 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
         })
 
         _, networkData = self._find_object_by_type(observed_objects, "network-traffic")
-        result = { key: networkData[key] for key in ["type", "src_ref", "protocols"] }
         self.assertEqual(networkData, {
             'type': 'network-traffic', 'src_ref': ipv4Key, "protocols": ['domain']
         })
@@ -95,7 +93,6 @@ class TestDNSEventResultTranslator(unittest.TestCase, utils.TestResultTranslator
         })
 
         _, networkData = self._find_object_by_type(observed_objects, "network-traffic")
-        result = { key: networkData[key] for key in ["type", "extensions"] }
         self.assertEqual(networkData, {
             'type': 'network-traffic', 'extensions': {'dns-ext': {'resolved_ip_refs': [ipv4Key]}}
         })

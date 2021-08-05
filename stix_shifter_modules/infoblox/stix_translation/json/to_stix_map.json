@@ -267,6 +267,12 @@
         }
     },
     "tideDbData": {
+        "id": [
+            {
+                "key": "x-infoblox-threat.id",
+                "object": "x_infoblox"
+            }
+        ],
         "detected": [
             {
                 "key": "first_observed",
