@@ -1,13 +1,7 @@
 {
-  "username": [
-    {
-      "key": "user-account.user_id"
-    },
-    {
-    "key": "x-ibm-finding.user_name",
-      "object": "finding"
-  }
-  ],
+  "UserName": {
+    "key": "user-account.user_id"
+  },
 
   "IpAddress": [
     {
@@ -70,6 +64,11 @@
       "object": "finding"
   },
 
+ "username":
+   {
+      "key": "x-ibm-finding.user_name",
+       "object": "finding"
+   },
   "SecretName":
    {
       "key": "x-ibm-finding.secret_name",
