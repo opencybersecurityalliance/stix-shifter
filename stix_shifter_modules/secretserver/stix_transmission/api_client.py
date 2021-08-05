@@ -95,7 +95,7 @@ class APIClient():
         if (self.get_token()):
             self.search_id = search_id
             timestamp = self.decode_searchId()
-            if len(timestamp) != 0:
+            if len(timestamp) is not 0:
                 self.startDate = timestamp[0]
                 self.endDate = timestamp[1]
             else:
