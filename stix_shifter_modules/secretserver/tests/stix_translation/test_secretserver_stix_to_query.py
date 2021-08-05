@@ -46,13 +46,14 @@ class TestQueryTranslator(unittest.TestCase, object):
         where_statement = "WHERE url LIKE '%example.com%'"
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-    def test_x_secretserver_search(self):
-        stix_pattern = "[x-secretserver-finding:name = 'abcd']"
+    def test_x_ibm_search(self):
+        stix_pattern = "[x-ibm-finding:name = 'abcd']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE EventSubject = 'abcd'"
         _test_query_assertions(query, selections, from_statement, where_statement)
 
-        stix_pattern = "[x-secretserver-finding:secret_name = 'xyz']"
+    def test_x_secret_search(self):
+        stix_pattern = "[x-secret:secret_name = 'xyz']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE SecretName = 'xyz'"
         _test_query_assertions(query, selections, from_statement, where_statement)

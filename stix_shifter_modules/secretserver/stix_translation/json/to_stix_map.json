@@ -4,8 +4,8 @@
     "key": "user-account.user_id"
   },
     {
-      "key": "x-secretserver-finding.user_name",
-       "object": "finding"
+      "key": "x-secret.user_name",
+       "object": "secret"
    }
   ],
 
@@ -15,8 +15,8 @@
       "object": "src_ip"
     },
     {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding",
       "references": "src_ip"
     }
   ],
@@ -25,13 +25,12 @@
       "key": "ipv4-addr.value",
       "object": "dst_ip"
     },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
+     {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding",
       "references": "dst_ip"
     }
-  ],
-
+   ],
 
   "StartTime": [
     {
@@ -51,28 +50,28 @@
 
   "EventSubject" :
     {
-      "key": "x-secretserver-finding.name",
+      "key": "x-ibm-finding.name",
       "object": "finding"
     },
   "EventNote":
   {
-     "key": "x-secretserver-finding.description",
+     "key": "x-ibm-finding.description",
       "object": "finding"
   },
   "EventDetails":
   {
-     "key": "x-secretserver-finding.finding_type",
+     "key": "x-ibm-finding.finding_type",
       "object": "finding"
   },
   "EventTime":
   {
-     "key": "x-secretserver-finding.time_observed",
+     "key": "x-ibm-finding.time_observed",
       "object": "finding"
   },
 
   "SecretName":
    {
-      "key": "x-secretserver-finding.secret_name",
-       "object": "finding"
+      "key": "x-secret.secret_name",
+       "object": "secret"
    }
 }
