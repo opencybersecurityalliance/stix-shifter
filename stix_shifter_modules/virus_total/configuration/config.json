@@ -1,0 +1,26 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "VirusTotal"
+        },
+        "host": {
+            "type": "text"
+        },
+        "port": {
+            "type": "number",
+            "default": 443
+        },
+        "help": {
+            "type": "link",
+            "default": "www.ibm.com"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "key": {
+                "type": "password"
+            }
+        }
+    }
+}

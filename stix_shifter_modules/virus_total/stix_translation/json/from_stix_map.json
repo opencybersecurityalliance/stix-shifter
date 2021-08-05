@@ -1,0 +1,29 @@
+{
+  "url": {
+    "fields": {
+        "value": ["Url"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value":["SourceIpV4", "DestinationIpV4"]
+    }
+  },
+  "ipv6-addr": {
+    "fields":{
+      "value":["SourceIpV6", "DestinationIpV6"]
+    }
+  },
+  "domain-name":{
+    "fields":{
+      "value":["Url"]
+    }
+  },
+  "file":{
+    "fields":{
+      "hashes.MD5":["MD5"],
+      "hashes.SHA-1":["SHA-1"],
+      "hashes.SHA-256":["SHA-256"]
+    }
+  }
+}
