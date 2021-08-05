@@ -23,12 +23,10 @@
   },
   "x-secret": {
     "fields": {
-      "secret_name": [
-        "SecretName"
-      ],
-      "user_name": [
-        "username"
-      ]
+      "secret_name": ["SecretName"],
+      "user_name": ["username"],
+      "secret_id": ["ItemId"],
+      "user_id": ["UserId"]
     }
   },
   "x-ibm-finding": {

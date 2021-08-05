@@ -1,12 +1,8 @@
 {
   "username": [
     {
-    "key": "user-account.user_id"
-  },
-    {
-      "key": "x-secret.user_name",
-       "object": "secret"
-   }
+    "key": "user-account.user_name"
+  }
   ],
 
   "IpAddress": [
@@ -72,6 +68,14 @@
   "SecretName":
    {
       "key": "x-secret.secret_name",
+       "object": "secret"
+   },
+  "ItemId": {
+      "key": "x-secret.secret_id",
+       "object": "secret"
+   },
+  "UserId": {
+      "key": "x-secret.user_id",
        "object": "secret"
    }
 }
