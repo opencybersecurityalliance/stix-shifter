@@ -11,8 +11,7 @@
   },
   "ipv4-addr": {
     "fields": {
-      "value": ["ipaddr"],
-      "x_proxy_ip": ["proxy_ip"]
+      "value": ["ipaddr"]
     }
   },
   "x-ibm-finding": {
@@ -45,7 +44,8 @@
       "directory_sync_run_id": ["directory_sync_run_id"],
       "resource_type_id": ["resource_type_id"],
       "browser_fingerprint": ["browser_fingerprint"],
-      "notes": ["notes"]
+      "notes": ["notes"],
+      "proxy_ip": ["proxy_ip"]
     }
   },
   "x-onelogin-risk": {

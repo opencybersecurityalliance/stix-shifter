@@ -73,7 +73,7 @@ Will return the following STIX observable:
 ```json
 {
     "type": "bundle",
-    "id": "bundle--a7a80b78-c022-4ba5-9540-c4ba3f5d782b",
+    "id": "bundle--7fd7d3ac-dbdc-4f31-804f-1f8726a86910",
     "spec_version": "2.0",
     "objects": [
         {
@@ -83,11 +83,11 @@ Will return the following STIX observable:
             "identity_class": "events"
         },
         {
-            "id": "observed-data--17c193b8-6b7e-48c8-837d-b699e874d392",
+            "id": "observed-data--83a85c38-b086-499a-b28f-ecaea0938695",
             "type": "observed-data",
             "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-            "created": "2021-08-02T06:06:52.127Z",
-            "modified": "2021-08-02T06:06:52.127Z",
+            "created": "2021-08-05T15:09:47.341Z",
+            "modified": "2021-08-05T15:09:47.341Z",
             "objects": {
                 "0": {
                     "type": "x-onelogin-finding",
@@ -107,6 +107,7 @@ Will return the following STIX observable:
                     "resolution": "resolution",
                     "client_id": 12345678,
                     "resource_type_id": "Default",
+                    "proxy_ip": "121.0.0.2",
                     "browser_fingerprint": true
                 },
                 "1": {
@@ -126,8 +127,7 @@ Will return the following STIX observable:
                 },
                 "3": {
                     "type": "ipv4-addr",
-                    "value": "121.0.0.1",
-                    "x_proxy_ip": "121.0.0.1"
+                    "value": "121.0.0.1"
                 },
                 "4": {
                     "type": "x-onelogin-risk",
@@ -137,8 +137,8 @@ Will return the following STIX observable:
                     "risk_cookie_id": 123
                 }
             },
-            "first_observed": "2021-08-02T06:06:52.127Z",
-            "last_observed": "2021-08-02T06:06:52.127Z",
+            "first_observed": "2021-08-05T15:09:47.341Z",
+            "last_observed": "2021-08-05T15:09:47.341Z",
             "number_observed": 1
         }
     ]

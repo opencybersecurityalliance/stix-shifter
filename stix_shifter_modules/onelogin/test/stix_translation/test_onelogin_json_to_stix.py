@@ -158,7 +158,7 @@ class TestOneloginResultsToStix(unittest.TestCase):
         custom_object_2 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-risk')
 
         assert custom_object_1 is not None, 'Custom object type not found'
-        assert custom_object_1.keys() == {'type', 'unique_id', 'event_type_id', 'notes', 'role_id', 'app_id', 'custom_message', 'role_name', 'app_name', 'group_name', 'otp_device_name', 'operation_name', 'directory_sync_run_id', 'directory_id', 'resolution', 'client_id', 'resource_type_id', 'browser_fingerprint'}
+        assert custom_object_1.keys() == {'type', 'unique_id', 'event_type_id', 'notes', 'role_id', 'app_id', 'custom_message', 'role_name', 'app_name', 'group_name', 'otp_device_name', 'operation_name', 'directory_sync_run_id', 'directory_id', 'resolution', 'client_id', 'resource_type_id', 'proxy_ip', 'browser_fingerprint'}
         assert custom_object_1['unique_id'] == 81004691744
         assert custom_object_1['event_type_id'] == 149
 

@@ -96,7 +96,7 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_proxy_ip_query(self):
-        stix_pattern = "[ipv4-addr:x_proxy_ip = '127.0.0.1']"
+        stix_pattern = "[x-onelogin-finding:proxy_ip = '127.0.0.1']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = 'proxy_ip=127.0.0.1&limit=1000'
         _test_query_assertions(query, queries)

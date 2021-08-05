@@ -9,7 +9,6 @@
 | user-account | x_actor_user_name | actor_user_name |
 | <br> | | |
 | ipv4-addr | value | ipaddr |
-| ipv4-addr | x_proxy_ip | proxy_ip |
 | <br> | | |
 | x-onelogin-risk | risk_score | risk_score |
 | x-onelogin-risk | risk_reasons | risk_reasons |
@@ -42,4 +41,5 @@
 | x-onelogin-finding | resource_type_id | resource_type_id |
 | x-onelogin-finding | browser_fingerprint | browser_fingerprint |
 | x-onelogin-finding | notes | notes |
+| x-onelogin-finding | proxy_ip | proxy_ip |
 | <br> | | |

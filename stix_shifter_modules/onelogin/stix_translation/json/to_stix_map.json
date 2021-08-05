@@ -49,8 +49,8 @@
     "object": "ipv4-addr"
   },
   "proxy_ip": {
-    "key": "ipv4-addr.x_proxy_ip",
-    "object": "ipv4-addr"
+    "key": "x-onelogin-finding.proxy_ip",
+    "object": "x-onelogin-finding"
   },
   "policy_id": {
     "key": "x-ibm-finding.policy_id",
