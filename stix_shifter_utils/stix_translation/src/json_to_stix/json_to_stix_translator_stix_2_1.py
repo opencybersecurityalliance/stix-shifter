@@ -111,6 +111,9 @@ class DataSourceObjToStixObj:
             # Todo: use deterministic ID
             cybox_obj = {"type": obj_type, "spec_version": "2.1", "id": "{}--{}".format(obj_type, str(uuid.uuid4()))}
             observation["cybox_objects"][cybox_obj["id"]] = cybox_obj
+            # resolves_to_refs lists have been deprecated in favor of relationship objects that have a relationship type of resolves-to. 
+            # See the Domain Name cybox object https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070687 for an example.
+            # Todo: need to update how resolves_to_refs mappings are handled
             observation["object_refs"].append(cybox_obj["id"])
             obj_name_map[obj_name] = cybox_obj["id"]
 
