@@ -115,7 +115,7 @@ class GuardApiClient(object):
         results = ""
         #context().logger.debug('-------------------  ' + report_name + ' ----------------------')
         params["fetchSize"] = int(fetch_size)
-        params["index_from"]=int(index_from)
+        params["indexFrom"]=int(index_from)
         params["inputTZ"]="UTC"
         rest_data = json.dumps(params)
         response = requests.post(self.url+self.report_target, data=rest_data, headers=self.headers, verify=False)
