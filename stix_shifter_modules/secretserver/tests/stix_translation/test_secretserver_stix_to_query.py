@@ -4,7 +4,6 @@ from stix_shifter.stix_translation import stix_translation
 import unittest
 
 
-options_file = open('./options.json').read()
 DEFAULT_LIMIT = 10000
 DEFAULT_time_range = 5
 MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
