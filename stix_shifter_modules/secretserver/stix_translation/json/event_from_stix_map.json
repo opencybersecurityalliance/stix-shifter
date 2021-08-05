@@ -23,12 +23,12 @@
       "user_id": ["UserId"]
     }
   },
-  "x-ibm-finding": {
+  "x-secretserver-finding": {
     "fields": {
       "name": ["EventSubject"],
       "description": ["EventNote"],
       "finding_type" : ["EventDetails"],
-      "event_occurrence" : ["EventTime"],
+      "time_observed" : ["EventTime"],
       "user_name" : ["username"],
       "secret_name" : ["SecretName"]
 
