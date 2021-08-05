@@ -1,7 +1,7 @@
+from typing import Union
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import logging
 import re
@@ -16,13 +16,14 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
+    QUERIES = []
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "&",
         ComparisonComparators.Equal: "=",
-        ObservationOperators.And: '&',
+        ObservationOperators.And: 'or',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.Or: '&'
+        ObservationOperators.Or: 'or'
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
@@ -95,14 +96,13 @@ class QueryStringPatternTranslator:
         """
         Convert a STIX start stop qualifier into a query string.
         """
-        transformer = TimestampToMilliseconds()
         qualifier_split = qualifier.split("'")
         start = qualifier_split[1]
         stop = qualifier_split[3]
         qualified_query = "%s&since=%s&until=%s" % (expression, start, stop)
         return qualified_query
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
+    def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -161,16 +161,13 @@ class QueryStringPatternTranslator:
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "{}{}{}".format(expression_01, operator, expression_02)
-            elif expression_01:
-                return "{}".format(expression_01)
-            elif expression_02:
-                return "{}".format(expression_02)
-            else:
-                return ''
+            if not isinstance(expression_01, list):
+                QueryStringPatternTranslator.QUERIES.extend([expression_01])
+            if not isinstance(expression_02, list):
+                QueryStringPatternTranslator.QUERIES.extend([expression_02])
+            return QueryStringPatternTranslator.QUERIES
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            return self._parse_expression(expression.expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
@@ -182,10 +179,12 @@ class QueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
     result_limit = options['result_limit']
+    list_final_query = []
     # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    # Add space around START STOP qualifiers
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
+    query = query if isinstance(query, list) else [query]
+    for each_query in query:
+        base_query = f"{each_query}&limit={result_limit}"
+        list_final_query.append(base_query)
 
-    return ["%s&limit=%s" % (query, result_limit)]
+    return list_final_query

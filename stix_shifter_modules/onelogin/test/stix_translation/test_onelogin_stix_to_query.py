@@ -236,5 +236,5 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_query_from_multiple_observation_expressions_joined_by_AND(self):
         stix_pattern = "[ipv4-addr:value='127.0.0.1'] AND [user-account:user_id = '12345678']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
-        queries = 'ipaddr=127.0.0.1&user_id=12345678&limit=1000'
-        _test_query_assertions(query, queries)
+        queries = ['ipaddr=127.0.0.1&limit=1000', 'user_id=12345678&limit=1000']
+        assert query['queries'] == queries
