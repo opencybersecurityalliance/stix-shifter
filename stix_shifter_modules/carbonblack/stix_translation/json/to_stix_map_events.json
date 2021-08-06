@@ -105,7 +105,7 @@
       "references": "service_directory"
     },
     {
-      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "key": "process.extensions.windows_service_ext.service_dll_refs",
       "object": "process",
       "group": true,
       "references": ["service_file"]

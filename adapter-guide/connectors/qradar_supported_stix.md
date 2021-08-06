@@ -63,13 +63,13 @@
 | network-traffic | src_packets | sourcepackets |
 | network-traffic | dst_packets | destinationpackets |
 | network-traffic | protocols | PROTOCOLNAME(protocolid) |
-| network-traffic | extensions.http-request-ext.request_header.Host | httphost |
-| network-traffic | extensions.http-request-ext.request_header.Referer | httpreferrer |
-| network-traffic | extensions.http-request-ext.request_header.Server | httpserver |
-| network-traffic | extensions.http-request-ext.request_header.User-Agent | httpuseragent |
-| network-traffic | extensions.http-request-ext.request_version | httpversion |
+| network-traffic | extensions.http_request_ext.request_header.Host | httphost |
+| network-traffic | extensions.http_request_ext.request_header.Referer | httpreferrer |
+| network-traffic | extensions.http_request_ext.request_header.Server | httpserver |
+| network-traffic | extensions.http_request_ext.request_header.User_Agent | httpuseragent |
+| network-traffic | extensions.http_request_ext.request_version | httpversion |
 | network-traffic | ipfix.flowId | flowid |
-| network-traffic | extensions.http-request-ext.request_header.Content-Type | contenttype |
+| network-traffic | extensions.http_request_ext.request_header.Content_Type | contenttype |
 | <br> | | |
 | process | creator_user_ref | username |
 | process | binary_ref | Image |
@@ -82,7 +82,7 @@
 | process | pid | "Process ID" |
 | process | pid | "Parent Process ID" |
 | process | parent_ref | "Parent Process ID" |
-| process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
+| process | extensions.windows_service_ext.service_dll_refs | ServiceFileName |
 | <br> | | |
 | software | name | applicationname |
 | <br> | | |

@@ -571,12 +571,12 @@
       "object": "url"
     },
     {
-      "key": "network-traffic.extensions.http-request-ext.request_header.Host",
+      "key": "network-traffic.extensions.http_request_ext.request_header.Host",
       "object": "nt"
     }
   ],
   "httpreferrer": {
-    "key": "network-traffic.extensions.http-request-ext.request_header.Referer",
+    "key": "network-traffic.extensions.http_request_ext.request_header.Referer",
     "object": "nt"
   },
   "httpresponsecode": {
@@ -584,15 +584,15 @@
     "object": "x-qradar"
   },
   "httpserver": {
-    "key": "network-traffic.extensions.http-request-ext.request_header.Server",
+    "key": "network-traffic.extensions.http_request_ext.request_header.Server",
     "object": "nt"
   },
   "httpuseragent": {
-    "key": "network-traffic.extensions.http-request-ext.request_header.User-Agent",
+    "key": "network-traffic.extensions.http_request_ext.request_header.User_Agent",
     "object": "nt"
   },
   "httpversion": {
-    "key": "network-traffic.extensions.http-request-ext.request_version",
+    "key": "network-traffic.extensions.http_request_ext.request_version",
     "object": "nt"
   },
   "tlsja3hash": {
@@ -615,7 +615,7 @@
   },
   "contenttype": [
     {
-      "key": "network-traffic.extensions.http-request-ext.request_header.Content-Type",
+      "key": "network-traffic.extensions.http_request_ext.request_header.Content_Type",
       "object": "nt"
     },
     {
@@ -867,7 +867,7 @@
       "references": "service_file_dir"
     },
     {
-      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "key": "process.extensions.windows_service_ext.service_dll_refs",
       "object": "process",
       "group": true,
       "references": ["service_file_name"]

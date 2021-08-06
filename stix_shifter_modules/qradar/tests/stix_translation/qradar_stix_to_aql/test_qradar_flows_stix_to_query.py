@@ -155,37 +155,37 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqhost_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Host = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.Host = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httphost = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqreferer_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Referer = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.Referer = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpreferrer = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqserver_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Server = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.Server = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpserver = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httprequseragent_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.'User-Agent' = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.User_Agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpuseragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqcontenttype_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.'Content-Type' = 'application/json' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.Content_Type = 'application/json' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE contenttype = 'application/json' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httprequestversion_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_version' = 'HTTP/1.1' ]"
+        stix_pattern = "[network-traffic:extensions.http_request_ext.request_version = 'HTTP/1.1' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpversion = 'HTTP/1.1' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

@@ -42,12 +42,12 @@
       "dst_byte_count": ["destinationbytes"],
       "src_packets": ["sourcepackets"],
       "dst_packets": ["destinationpackets"],
-      "extensions.http-request-ext.request_header.Host": [ "httphost" ],
-      "extensions.http-request-ext.request_header.Referer": [ "httpreferrer" ],
-      "extensions.http-request-ext.request_header.Server": [ "httpserver" ],
-      "extensions.http-request-ext.request_header.User-Agent": [ "httpuseragent" ],
-      "extensions.http-request-ext.request_header.Content-Type": [ "contenttype" ],
-      "extensions.http-request-ext.request_version": [ "httpversion" ],
+      "extensions.http_request_ext.request_header.Host": [ "httphost" ],
+      "extensions.http_request_ext.request_header.Referer": [ "httpreferrer" ],
+      "extensions.http_request_ext.request_header.Server": [ "httpserver" ],
+      "extensions.http_request_ext.request_header.User_Agent": [ "httpuseragent" ],
+      "extensions.http_request_ext.request_header.Content_Type": [ "contenttype" ],
+      "extensions.http_request_ext.request_version": [ "httpversion" ],
       "ipfix.flowId": [ "flowid" ]
     }
   },
