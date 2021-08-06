@@ -16,7 +16,7 @@
       "hashes.SHA-256": [ "sha256hash" ],
       "hashes.MD5": [ "md5hash" ],
       "hashes.SHA-1": [ "sha1hash" ],
-      "mime-type": [ "contenttype" ]
+      "mime_type": [ "contenttype" ]
     }
   },
   "domain-name": {

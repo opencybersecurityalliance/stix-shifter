@@ -137,7 +137,7 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_filetype_query(self):
-        stix_pattern = "[file:'mime-type' = 'application/json']"
+        stix_pattern = "[file:mime_type = 'application/json']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE contenttype = 'application/json' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
