@@ -14,8 +14,8 @@
             "max": 65535
         },
         "help": {
-            "default": "https://www.ibm.com/docs/en/svp/10.5?topic=overview-secret-server",
-            "type": "link"
+            "type": "link",
+            "default": "data-sources-secretserver.html"
         },
         "sni": {
             "type": "text",
