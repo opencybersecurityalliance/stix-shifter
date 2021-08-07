@@ -34,13 +34,14 @@ class TestTransmission(unittest.TestCase):
 
     @staticmethod
     def _get_response(count=1):
-        response = {"result": []}
+        response = {"threat": []}
         for i in range(0, count):
-            response["result"].append({
-                "qip": "1.1.1.1"
+            response["threat"].append({
+                "ip": "1.1.1.1"
             })
 
         return json.dumps(response)
+
     def test_results_missing_threat_type(self):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
@@ -81,7 +82,7 @@ class TestTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="host"), 0, 10)
-        self.assertEqual(results_response, {'data': [{'tideDbData': []}], 'success': True})
+        self.assertEqual(results_response, {'data': [], 'success': True})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_all_results(self, mock_query):
@@ -127,7 +128,7 @@ class TestTransmission(unittest.TestCase):
             "success": True,
             "data": [
                 {
-                    "tideDbData": [{
+                    "tideDbData": {
                         "id": "1af2936f-9d33-11eb-8943-6962d4bdf9de",
                         "type": "HOST",
                         "host": "1-lntesasanpaolo-portaleweb.xyz",
@@ -157,135 +158,118 @@ class TestTransmission(unittest.TestCase):
                         "extended": {
                             "cyberint_guid": "dadbdde3eaf7fd97bae0bdec8c6ceb07"
                         }
-                    }]
+                    }
                 }
             ]
         })
 
-    # @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    # def test_results_too_many_results(self, mock_query):
-    #     payload = {
-    #         "threat": [
-    #             {"ip": "1.1.1.1"},
-    #             {"ip": "1.1.1.2"},
-    #             {"ip": "1.1.1.3"},
-    #             {"ip": "1.1.1.4"},
-    #             {"ip": "1.1.1.5"}
-    #         ]
-    #     }
-    #     mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
-    #     transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-    #     results_response = transmission.results(self._get_query(threat_type="host"), 0, 2)
-    #     self.assertEqual(results_response, {
-    #         "success": True,
-    #         "data": [
-    #             {
-    #                 "tideDbData": {"ip": "1.1.1.1"}
-    #             },
-    #             {
-    #                 "tideDbData": {"ip": "1.1.1.2"}
-    #             }
-    #         ]
-    #     })
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_results_too_many_results(self, mock_query):
+        payload = {
+            "threat": [
+                {"ip": "1.1.1.1"},
+                {"ip": "1.1.1.2"},
+                {"ip": "1.1.1.3"},
+                {"ip": "1.1.1.4"},
+                {"ip": "1.1.1.5"}
+            ]
+        }
+        mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
+        transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
+        results_response = transmission.results(self._get_query(threat_type="host"), 0, 2)
 
-    # @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    # def test_results_min_range(self, mock_query):
-    #     payload = {
-    #         "status": "success",
-    #         "job": {
-    #             "create_time": "2021-08-01T20:55:48.542Z"
-    #         },
-    #         "results": [
-    #             {
-    #                 "status": "success",
-    #                 "data": {
-    #                     "duration": 243602755,
-    #                     "items": [
-    #                         {"Hostname": "example.com", "IP": "1.1.1.1"},
-    #                         {"Hostname": "example.com", "IP": "1.1.1.2"},
-    #                         {"Hostname": "example.com", "IP": "1.1.1.3"},
-    #                         {"Hostname": "example.com", "IP": "1.1.1.4"},
-    #                         {"Hostname": "example.com", "IP": "1.1.1.5"}
-    #                     ]
-    #                 }
-    #             }
-    #         ]
-    #     }
-    #     mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
-    #     transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-    #     results_response = transmission.results(self._get_query(threat_type="host"), 4, 10)
-    #     self.assertEqual(results_response, {
-    #         "success": True,
-    #         "data": [
-    #             {
-    #                 "dossierData": {
-    #                     "job": {"create_time": "2021-08-01T20:55:48.542Z"},
-    #                     "results": [{"data": {"items": [{"Hostname": "example.com", "IP": "1.1.1.5"}]}}]
-    #                 }
-    #             }
-    #         ]
-    #     })
+        print("\n\n\n\nresult")
+        print(results_response)
+        self.assertEqual(results_response, {
+            "success": True,
+            "data": [
+                {"tideDbData": {"ip": "1.1.1.1"}},
+                {"tideDbData": {"ip": "1.1.1.2"}}
+            ]
+        })
 
-    # @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    # def test_results_different_offsets(self, mock_results):
-    #     mocks = [
-    #         (MockResponse(200, self._get_response(1000))),
-    #     ]
-    #     transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 0, 200)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 200)
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_results_min_range(self, mock_query):
+        payload = {
+            "threat": [
+                {"ip": "1.1.1.1"},
+                {"ip": "1.1.1.2"},
+                {"ip": "1.1.1.3"},
+                {"ip": "1.1.1.4"},
+                {"ip": "1.1.1.5"}
+            ]
+        }
+        mock_query.side_effect = [MockResponse(200, json.dumps(payload))]
+        transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
+        results_response = transmission.results(self._get_query(threat_type="host"), 4, 10)
+        self.assertEqual(results_response, {
+            "success": True,
+            "data": [
+                {"tideDbData": {"ip": "1.1.1.5"}}
+            ]
+        })
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 0, 500)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 500)
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_results_different_offsets(self, mock_results):
+        mocks = [
+            (MockResponse(200, self._get_response(1000))),
+        ]
+        transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 0, 200)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 0, 1200)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 1000)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 200)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 99, 200)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 200)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 0, 500)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 500)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 99, 500)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 500)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 0, 1200)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 1000)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 99, 1200)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 901)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 99, 200)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 200)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 600, 100)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 100)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 99, 500)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 500)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 0, 5000)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 1000)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 99, 1200)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 901)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 0, 10000)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 1000)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 600, 100)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 100)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 5000, 10000)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 0)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 0, 5000)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 1000)
 
-    #     mock_results.side_effect = mocks
-    #     result_response = transmission.results(self._get_query(threat_type="host"), 999, 1)
-    #     self.assertTrue(result_response["success"])
-    #     self.assertEqual(len(result_response["data"]), 1)
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 0, 10000)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 1000)
+
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 5000, 10000)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 0)
+
+        mock_results.side_effect = mocks
+        result_response = transmission.results(self._get_query(threat_type="host"), 999, 1)
+        self.assertTrue(result_response["success"])
+        self.assertEqual(len(result_response["data"]), 1)
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_exception(self, mock_ping):

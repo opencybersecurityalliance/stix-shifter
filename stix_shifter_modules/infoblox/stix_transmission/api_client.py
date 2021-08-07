@@ -197,7 +197,8 @@ class APIClient:
             return resp_dict
 
         response_payload = json.loads(resp.read())
-        resp_dict["data"].append({"tideDbData": response_payload["threat"]})
+        for i in response_payload["threat"]:
+            resp_dict["data"].append({"tideDbData": i})
 
         # Trim result set based on min/max range values
         end = end if end < len(resp_dict["data"]) else len(resp_dict["data"])
@@ -207,5 +208,5 @@ class APIClient:
             resp_dict["data"] = resp_dict["data"][start:end]
 
         if resp_dict.get("code") == 200:
-            self.logger.debug("The Dossier count is %s", len(resp_dict["data"]))
+            self.logger.debug("The TIDE count is %s", len(resp_dict["data"]))
         return resp_dict
