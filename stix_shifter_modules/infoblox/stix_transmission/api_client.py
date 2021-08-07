@@ -178,10 +178,13 @@ class APIClient:
         start = range_start if range_start else 0
         end = range_end if range_end else 0
 
-        params = {'type': payload["threat_type"]}
+        params = {
+            "rlimit": self.result_limit,
+            'type': payload["threat_type"]
+        }
 
         if payload["threat_type"] == "ip":
-            payload["include_ipv6"] = "true"
+            params["include_ipv6"] = "true"
 
         # NOTE: Tide does not support pagination via multiple requests. All results returned in the response.
         resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)

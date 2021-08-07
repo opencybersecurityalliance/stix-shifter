@@ -60,7 +60,7 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector dnsEventData'
         })
 
     def test_operator_neq(self):
@@ -69,7 +69,7 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dnsEventData'
         })
 
     def test_multiple_criteria(self):
@@ -88,7 +88,7 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector dnsEventData'
         })
 
     def test_comparison_and(self):

@@ -38,9 +38,25 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     comparator_lookup = {
-        ComparisonExpressionOperators.And: "&",
-        ObservationOperators.And: '&',
-        ComparisonComparators.Equal: "="
+        'tideDbData': {
+            ComparisonExpressionOperators.And: "&",
+            ObservationOperators.And: '&',
+            ComparisonComparators.Equal: "=",
+            ComparisonComparators.GreaterThan: "=",
+            ComparisonComparators.GreaterThanOrEqual: "=",
+            ComparisonComparators.LessThan: "=",
+            ComparisonComparators.LessThanOrEqual: "="
+        },
+        'dnsEventData': {
+            ComparisonExpressionOperators.And: "&",
+            ObservationOperators.And: '&',
+            ComparisonComparators.Equal: "="
+        },
+        'dossierData': {
+            ComparisonExpressionOperators.And: "&",
+            ObservationOperators.And: '&',
+            ComparisonComparators.Equal: "="
+        }
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
@@ -49,16 +65,18 @@ class QueryStringPatternTranslator:
         self.using_operators = set()
         self.assigned_fields = set()
         self.qualified_queries = []
-        self.dossier_threat_type_map = dict()
-        self.tide_threat_type_map = dict()
+        self.threat_type_map = {
+            'tideDbData': '',
+            'dnsEventData': '',
+            'dossierData': ''
+        }
         self.dialect = data_model_mapper.dialect
         self.translated = self.parse_expression(pattern)
 
         self.qualified_queries.append(self.translated)
         self.qualified_queries = _format_translated_queries(self.dialect,
                                                             self.qualified_queries,
-                                                            self.dossier_threat_type_map,
-                                                            self.tide_threat_type_map,
+                                                            self.threat_type_map,
                                                             time_range)
 
     @staticmethod
@@ -93,6 +111,21 @@ class QueryStringPatternTranslator:
             return "{mapped_field}{comparator}{value}".format(
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
+    def _sanatize_field(self, mapped_field, comparator):
+        # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
+        comparator_suffix_map = {
+            ComparisonComparators.GreaterThan: '_from_date',
+            ComparisonComparators.GreaterThanOrEqual: '_from_date',
+            ComparisonComparators.LessThan: '_to_date',
+            ComparisonComparators.LessThanOrEqual: '_to_date',
+        }
+
+        updated_field = mapped_field
+        if self.dialect == 'tideDbData':
+            if mapped_field == 'imported':
+                updated_field = 'imported' + comparator_suffix_map[comparator]
+        return updated_field
+
     def _sanatize_value(self, mapped_field, value):
         # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
         updated_value = value
@@ -111,6 +144,7 @@ class QueryStringPatternTranslator:
         is_reference_value = self._is_reference_value(stix_field)
         value_type = self._check_value_type(expression.value) if is_reference_value else None
         for mapped_field in mapped_fields_array:
+            mapped_field = self._sanatize_field(mapped_field, expression.comparator)
             value = self._sanatize_value(mapped_field, value)
             if is_reference_value:
                 parsed_reference = self._parse_reference(value_type, mapped_field, value, comparator)
@@ -128,9 +162,10 @@ class QueryStringPatternTranslator:
         return stix_field in REFERENCE_FIELDS
 
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        if expression_operator not in self.comparator_lookup[self.dialect]:
+            raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector {}".format(expression_operator.name, self.dialect))
+
+        return self.comparator_lookup[self.dialect][expression_operator]
 
     def _calculate_intersection(self, mapped_fields_array, stix_field):
         mapped_fields_set = set(mapped_fields_array)
@@ -139,27 +174,55 @@ class QueryStringPatternTranslator:
             logger.error("%s mapped from %s has multiple criteria", ', '.join(intersection), stix_field)
             raise NotImplementedError("Multiple criteria for one field is not support in Infoblox connector")
 
+        if self.dialect == 'tideDbData' and stix_field == 'imported':
+            # for TIDE imported date field, allow multiple criteria
+            return
         self.assigned_fields |= mapped_fields_set
 
     def _set_threat_type(self, stix_object, stix_field, final_expression, value):
-        # NOTE: For the Dossier api, type must be determined to build the api.
-        if self.dialect == 'dossierData':
-            if stix_object in ('domain-name', 'x-infoblox-dossier-event-result-pdns') \
-                and stix_field in ('value', 'hostname_ref.value'):
-                self.dossier_threat_type_map[final_expression] = 'host'
-            elif stix_object in ('ipv4-addr', 'ipv6-addr', 'x-infoblox-dossier-event-result-pdns') \
-                and stix_field in ('value', 'ip_ref.value'):
-                self.dossier_threat_type_map[final_expression] = 'ip'
+        # NOTE: for the Dossier and TIDE apis, threat_type must be provided. Using the provided query, determine the appropriate type.
+        stix_map = {
+            'dossierData': [
+                {
+                    'stix_object': ['domain-name', 'x-infoblox-dossier-event-result-pdns'],
+                    'stix_field': ['value', 'hostname_ref.value'],
+                    'threat_type': 'host'
+                },
+                {
+                    'stix_object': ['ipv4-addr', 'ipv6-addr', 'x-infoblox-dossier-event-result-pdns'],
+                    'stix_field': ['value', 'ip_ref.value'],
+                    'threat_type': 'ip'
+                }
+            ],
+            'tideDbData': [
+                {
+                    'stix_object': ['domain-name', 'x-infoblox-threat'],
+                    'stix_field': ['value', 'host_name'],
+                    'threat_type': 'host'
+                },
+                {
+                    'stix_object': ['ipv4-addr', 'ipv6-addr', 'x-infoblox-threat'],
+                    'stix_field': ['value', 'ip_ref.value'],
+                    'threat_type': 'ip'
+                },
+                {
+                    'stix_object': ['x-infoblox-threat'],
+                    'stix_field': ['url'],
+                    'threat_type': 'url'
+                }
+            ]
+        }
 
-        # For Tide, type must be one of type must be one of (host, ip, url, hash, email)
-        elif self.dialect == 'tideDbData':
-            if stix_object in ('x-infoblox-threat') and stix_field in ('host_name'):
-                self.tide_threat_type_map[final_expression] = 'host'
-            elif stix_object in ('ipv4-addr', 'ipv6-addr', 'x-infoblox-threat') \
-                and stix_field in ('value', 'ip_ref.value'):
-                self.tide_threat_type_map[final_expression] = 'ip'
-            elif stix_object in ('x-infoblox-threat') and stix_field in ('url'):
-                self.tide_threat_type_map[final_expression] = 'url'
+        if self.dialect not in stix_map:
+            return
+
+        for mapping in stix_map[self.dialect]:
+            if stix_object in mapping['stix_object'] and stix_field in mapping['stix_field']:
+                threat_type = mapping['threat_type']
+                if self.threat_type_map[self.dialect] and self.threat_type_map[self.dialect] != threat_type:
+                    raise RuntimeError("Conflicting threat_type found, old={} new={}".format(self.threat_type_map[self.dialect], threat_type))
+                self.threat_type_map[self.dialect] = threat_type
+
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -174,12 +237,7 @@ class QueryStringPatternTranslator:
             comparator = self._lookup_comparison_operator(expression.comparator)
 
             # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Equal:
-                # Should be in single-quotes
-                value = self._format_equality(expression.value)
-            else:
-                value = self._escape_value(expression.value)
-
+            value = self._format_equality(expression.value)
             comparison_string = self._parse_mapped_fields(expression, value, comparator, stix_field, mapped_fields_array)
             if qualifier is not None:
                 final_expression = "{}{}".format(comparison_string, qualifier)
@@ -286,12 +344,13 @@ def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
             second_start_time = transformer.transform(start_time)
             second_stop_time = transformer.transform(stop_time)
 
-            return 't0=' + str(second_start_time) + '&t1=' + str(second_stop_time) + '&' + query_parts[0]
+            return 't0={}&t1={}&{}'.format(str(second_start_time), str(second_stop_time), query_parts[0])
 
         # default to last X minutes
         totime = int(time.time())
         fromtime = int(totime - datetime.timedelta(minutes=time_range).total_seconds())
-        return 't0=' + str(fromtime) + '&t1=' + str(totime) + '&' + query
+        return 't0={}&t1={}&{}'.format(str(fromtime), str(totime), query)
+
     if dialect == 'tideDbData':
         if _test_start_stop_format(query):
             query_parts = _get_parts_start_stop(query)
@@ -302,13 +361,18 @@ def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
             # grab time stamps from array
             start_time = _test_or_add_milliseconds(query_parts[2])
             stop_time = _test_or_add_milliseconds(query_parts[4])
-            return 'from_date=' + start_time + '&to_date=' + stop_time + '&' + query_parts[0]
+            return 'from_date={}&to_date={}&{}'.format(start_time, stop_time, query_parts[0])
+
+        if any(substring in query for substring in ['imported', 'expiration']):
+            # IMPROVEMENT: Collapse date formatting earilier in the process. Allowing fields that impact date to be filtered out earilier.
+            return query
+        return 'period={} minutes&{}'.format(time_range, query)
 
     # remaining dialect (dossierEvent)
     return _get_parts_start_stop(query)[0]
 
 
-def _format_translated_queries(dialect, query_array, dossier_threat_type_map, tide_threat_type_map, time_range):
+def _format_translated_queries(dialect, query_array, threat_type_map, time_range):
     # remove empty strings in the array
     query_array = list(map(lambda x: x.strip(), list(filter(None, query_array))))
 
@@ -326,14 +390,8 @@ def _format_translated_queries(dialect, query_array, dossier_threat_type_map, ti
         payload['offset'] = 0
         payload['query'] = query
 
-        if dialect == 'dossierData':
-            if unaltered_query in dossier_threat_type_map:
-                payload['threat_type'] = dossier_threat_type_map[unaltered_query]
-
-        if dialect == 'tideDbData':
-            if unaltered_query in tide_threat_type_map:
-                payload['threat_type'] = tide_threat_type_map[unaltered_query]
-
+        if dialect in threat_type_map and threat_type_map[dialect]:
+            payload['threat_type'] = threat_type_map[dialect]
         formatted_queries.append(payload)
 
     return formatted_queries

@@ -79,7 +79,7 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector dossierData'
         })
 
     def test_operator_neq(self):
@@ -88,7 +88,7 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dossierData'
         })
 
     def test_multiple_criteria(self):
@@ -107,7 +107,7 @@ class TestStixParsingDossier(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
-            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector'
+            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector dossierData'
         })
 
     def test_comparison_and(self):
