@@ -180,8 +180,10 @@ class APIClient:
 
         params = {
             "rlimit": self.result_limit,
-            'type': payload["threat_type"]
         }
+
+        if "type=" not in search_id:
+            params["type"] = payload["threat_type"]
 
         if payload["threat_type"] == "ip":
             params["include_ipv6"] = "true"

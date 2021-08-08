@@ -45,7 +45,8 @@ class QueryStringPatternTranslator:
             ComparisonComparators.GreaterThan: "=",
             ComparisonComparators.GreaterThanOrEqual: "=",
             ComparisonComparators.LessThan: "=",
-            ComparisonComparators.LessThanOrEqual: "="
+            ComparisonComparators.LessThanOrEqual: "=",
+            ComparisonComparators.Like: "="
         },
         'dnsEventData': {
             ComparisonExpressionOperators.And: "&",
@@ -85,15 +86,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "{value}".format(value=value)
-        return QueryStringPatternTranslator._escape_value(value)
-
-    @staticmethod
-    def _escape_value(value) -> str:
-        if isinstance(value, str):
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(':', '\\:'))
-        else:
-            return value
+        return "{}".format(value)
 
     @staticmethod
     def _check_value_type(value):
@@ -124,6 +117,10 @@ class QueryStringPatternTranslator:
         if self.dialect == 'tideDbData':
             if mapped_field == 'imported':
                 updated_field = 'imported' + comparator_suffix_map[comparator]
+            elif comparator == ComparisonComparators.Like:
+                if mapped_field not in ['profile', 'origin', 'host', 'ip', 'url', 'domain', 'property', 'class', 'target']:
+                    raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector {} field {}".format(comparator.name, self.dialect, mapped_field))
+                updated_field = 'text_search'
         return updated_field
 
     def _sanatize_value(self, mapped_field, value):
@@ -217,8 +214,14 @@ class QueryStringPatternTranslator:
             return
 
         for mapping in stix_map[self.dialect]:
+            threat_type = ''
             if stix_object in mapping['stix_object'] and stix_field in mapping['stix_field']:
                 threat_type = mapping['threat_type']
+
+            if stix_object == 'x-infoblox-threat' and stix_field == 'threat_type':
+                threat_type = value.lower()
+
+            if threat_type:
                 if self.threat_type_map[self.dialect] and self.threat_type_map[self.dialect] != threat_type:
                     raise RuntimeError("Conflicting threat_type found, old={} new={}".format(self.threat_type_map[self.dialect], threat_type))
                 self.threat_type_map[self.dialect] = threat_type
@@ -237,7 +240,11 @@ class QueryStringPatternTranslator:
             comparator = self._lookup_comparison_operator(expression.comparator)
 
             # Some values are formatted differently based on how they're being compared
-            value = self._format_equality(expression.value)
+            if expression.comparator == ComparisonComparators.Like:
+                value = self._format_like(expression.value)
+            else:
+                value = self._format_equality(expression.value)
+
             comparison_string = self._parse_mapped_fields(expression, value, comparator, stix_field, mapped_fields_array)
             if qualifier is not None:
                 final_expression = "{}{}".format(comparison_string, qualifier)
@@ -398,19 +405,7 @@ def _format_translated_queries(dialect, query_array, threat_type_map, time_range
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
-
     trans_queries = QueryStringPatternTranslator(pattern, data_model_mapping, options['time_range']).qualified_queries
-    # Add space around START STOP qualifiers
-    # query = re.sub("START", "START ", query)
-    # query = re.sub("STOP", " STOP ", query)
-
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     queries = []
     for trans_query in trans_queries:
         trans_query['source'] = data_model_mapping.dialect
