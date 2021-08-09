@@ -40,7 +40,7 @@ class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
 
     def test_ipv6(self):
         pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
-        expectation = 'period=5 minutes&ip=2001:db8:3333:4444:5555:6666:7777:8888'
+        expectation = 'period=5 minutes&ip=2001:db8:3333:4444:5555:6666:7777:8888&include_ipv6=true'
         self._test_pattern(pattern, expectation)
 
     def test_url(self):
@@ -264,7 +264,8 @@ class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
         self.assertEqual(result, {
             'offset': 0,
             'query': 'period=5 minutes&email=foo@example.com',
-            'source': 'tideDbData'
+            'source': 'tideDbData',
+            'threat_type': 'email'
         })
 
     def test_domain_ref(self):
@@ -277,12 +278,12 @@ class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
         })
 
     def test_comparison_different_threat_type(self):
-        pattern = "[domain-name:value = 'example1.com' AND ipv4-addr:value = '1.1.1.1'"
+        pattern = "[email-addr:value = 'example1.com' AND ipv4-addr:value = '1.1.1.1'"
         result = self._parse_query(pattern, self.get_dialect())
         self.assertEqual(result, {
             'success': False,
             'code': 'invalid_parameter',
-            'error': 'Error when converting STIX pattern to data source query: Conflicting threat_type found, old=ip new=host'
+            'error': 'Error when converting STIX pattern to data source query: Conflicting threat_type found, old=ip new=email'
         })
 
     def test_comparison_and_imported(self):

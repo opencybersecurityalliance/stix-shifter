@@ -193,8 +193,8 @@ class QueryStringPatternTranslator:
             ],
             'tideDbData': [
                 {
-                    'stix_object': ['domain-name', 'x-infoblox-threat'],
-                    'stix_field': ['value', 'host_name'],
+                    'stix_object': ['x-infoblox-threat'],
+                    'stix_field': ['host_name'],
                     'threat_type': 'host'
                 },
                 {
@@ -206,6 +206,11 @@ class QueryStringPatternTranslator:
                     'stix_object': ['x-infoblox-threat'],
                     'stix_field': ['url'],
                     'threat_type': 'url'
+                },
+                {
+                    'stix_object': ['email-addr', 'x-infoblox-threat'],
+                    'stix_field': ['value', 'email_ref.value'],
+                    'threat_type': 'email'
                 }
             ]
         }

@@ -5,14 +5,23 @@ TBD
 ### Dialects
 
 * tideDbData
-* dnsEventsData
+* dnsEventData
 * dossierData
 
-### Infoblox API Endpoints:
+### Infoblox API Endpoints
 
-TBD
+Ping Endpoint: `https://<hostname>:<port>/tide/api/data/threats/state`
 
-##### Reference - [Infoblox API Documentation](https://docs.infoblox.com/display/BloxOneThreatDefense/Infoblox+TIDE+and+Dossier+Guides+for+the+Cloud+Services+Portal)
+Result (tideDbData) Endpoint: `https://<hostname>:<port>/tide/api/data/threats/state`
+Result (dnsEventData) Endpoint: `https://<hostname>:<port>/api/dnsdata/v2/dns_event`
+Result (dossierData) Endpoint: `https://<hostname>:<port>/tide/api/services/intel/lookup/indicator`
+
+##### Reference
+
+[Infoblox API TIDE Documentation](https://docs.infoblox.com/display/BloxOneThreatDefense/Threat+API+Guide)
+[Infoblox API DNS Event Documentation](https://docs.infoblox.com/display/BloxOneThreatDefense/DNS+Event)
+[Infoblox API Dossier Documentation](https://docs.infoblox.com/display/BloxOneThreatDefense/Appendix+B%3A+Dossier+API+Reference)
+
 
 ### Format for calling stix-shifter from the command line:
 
@@ -28,11 +37,12 @@ python main.py translate infoblox query '{}' "[ipv4-addr:value = '127.0.0.1'] ST
 ```json
 {
     "queries": [
-        "{\"offset\": 0, \"query\": \"ip=127.0.0.1\", \"source\": \"tideDbData\"}",
+        "{\"offset\": 0, \"query\": \"from_date=2021-06-01T08:43:10.000Z&to_date=2021-08-31T10:43:10.000Z&ip=127.0.0.1\", \"threat_type\": \"ip\", \"source\": \"tideDbData\"}",
         "{\"offset\": 0, \"query\": \"t0=1622536990&t1=1630406590&qip=127.0.0.1\", \"source\": \"dnsEventData\"}",
         "{\"offset\": 0, \"query\": \"value=127.0.0.1\", \"threat_type\": \"ip\", \"source\": \"dossierData\"}"
     ]
 }
+
 ```
 #### STIX transmit query
 ```shell
@@ -204,6 +214,41 @@ python3 main.py transmit infoblox '{"host":"csp.infoblox.com"}' $SS_AUTH ping
 # translate
 python main.py translate infoblox query '{}' "[ipv4-addr:value = '127.0.0.1'] START t'2021-06-01T08:43:10Z' STOP t'2021-08-31T10:43:10Z'" ;
 
+# translate tideDbData
+python main.py translate infoblox:tideDbData query '{}' "[ipv4-addr:value = '1.1.1.1'] START t'2021-08-07T11:16:30.330Z' STOP t'2021-08-09T11:16:30.330Z'" ;
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:id = '00000000-1111-2222-3333-444444444444'] START t'2021-08-07T11:16:30.330Z' STOP t'2021-08-09T11:16:30.330Z'" ;
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:host_name = 'example.host.com']"
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:url = 'https://example.host.com/payload.tar' START t'2021-02-08T14:07:38.859Z' STOP t'2021-02-10T14:07:38.859Z'"
+python main.py translate infoblox:tideDbData query '{}' "[domain-name:value = 'example.host.com' AND x-infoblox-threat:threat_type = 'url'] START t'2021-02-08T14:07:38.859Z' STOP t'2021-02-10T14:07:38.859Z'";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:top_level_domain = 'host.com' AND x-infoblox-threat:threat_type = 'url'] START t'2021-02-08T14:07:38.859Z' STOP t'2021-02-10T14:07:38.859Z'";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:profile = 'IID' AND x-infoblox-threat:threat_type = 'url'] START t'2021-02-08T14:07:38.859Z' STOP t'2021-02-10T14:07:38.859Z'";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:property = 'Proxy_DNST' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:threat_class = 'MalwareC2' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:threat_level = '100' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:target = 'target' AND x-infoblox-threat:threat_type = 'host'] START t'2021-08-08T05:55:36.341Z' STOP t'2021-08-08T07:55:36.341Z'";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:expiration = '2021-08-22T06:55:36.989Z' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:derivative = 'false' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:dga = 'true' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:active = 'true' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:x_infoblox_confidence = '0' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:imported > '2021-08-08T08:08:06.00Z' AND x-infoblox-threat:imported < '2021-08-08T08:08:07.00Z' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:hash = 'abcdef' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:profile LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:origin LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:host_name LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:url LIKE 'searchText']";
+python main.py translate infoblox:tideDbData query '{}' "[ipv4-addr:value LIKE 'searchText']";
+python main.py translate infoblox:tideDbData query '{}' "[domain-name:value LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:property LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:threat_class LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:target LIKE 'searchText' AND x-infoblox-threat:threat_type = 'host']";
+python main.py translate infoblox:tideDbData query '{}' "[email-addr:value = 'name@email.com']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:domain_ref.value = 'example.host.com' AND x-infoblox-threat:threat_type = 'url'] START t'2021-02-08T14:07:38.859Z' STOP t'2021-02-10T14:07:38.859Z'";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:email_ref.value = 'name@email.com']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:ip_ref.value = '1.1.1.1']";
+python main.py translate infoblox:tideDbData query '{}' "[x-infoblox-threat:origin = 'origin' AND x-infoblox-threat:threat_type = 'host']";
+
+
 # translate dnsEventData
 python main.py translate infoblox:dnsEventData query '{}' "[ipv4-addr:value = '127.0.0.1'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'" ;
 python main.py translate infoblox:dnsEventData query '{}' "[ipv4-addr:value = '127.0.0.1']" ;
@@ -215,6 +260,7 @@ python main.py translate infoblox:dnsEventData query '{}' "[x-infoblox-dns-event
 python main.py translate infoblox:dnsEventData query '{}' "[network-traffic:extensions.'dns-ext'.question.domain_ref.value = 'example.com']" ;
 python main.py translate infoblox:dnsEventData query '{}' "[network-traffic:src_ref.value = '127.0.0.1']" ;
 python main.py translate infoblox:dnsEventData query '{}' "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']" ;
+
 
 # translate dossierData
 python main.py translate infoblox:dossierData query '{}' "[domain-name:value = 'example.com']" ;
