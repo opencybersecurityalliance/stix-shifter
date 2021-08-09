@@ -13,7 +13,7 @@ class MsatpToTimestamp(ValueTransformer):
 
 
 class MsatpToRegistryValue(ValueTransformer):
-    """A value transformer to convert MSATP Registry value protocol to windows-registry-value-type STIX"""
+    """A value transformer to convert MSATP Registry value protocol to windows_registry_value_type STIX"""
 
     @staticmethod
     def transform(registryvalues):

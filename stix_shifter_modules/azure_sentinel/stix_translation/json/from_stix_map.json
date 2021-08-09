@@ -77,9 +77,9 @@
   "windows-registry-key": {
     "fields": {
       "key": ["registryKeyStates.key"],
-      "extensions.windows-registry-value-type.valueData": [ "registryKeyStates.valueData" ],
-      "extensions.windows-registry-value-type.name": [ "registryKeyStates.valueName" ],
-      "extensions.windows-registry-value-type.valueType": [ "registryKeyStates.valueType" ]
+      "extensions.windows_registry_value_type.valueData": [ "registryKeyStates.valueData" ],
+      "extensions.windows_registry_value_type.name": [ "registryKeyStates.valueName" ],
+      "extensions.windows_registry_value_type.valueType": [ "registryKeyStates.valueType" ]
     }
   },
   "x-msazure-sentinel": {

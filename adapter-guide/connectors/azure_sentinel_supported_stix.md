@@ -7,9 +7,9 @@
 | domain-name | value | destinationDomain |
 | domain-name | value | domainName |
 | <br> | | |
-| extensions | windows-registry-value-type.valueData | registryKeyStates |
-| extensions | windows-registry-value-type.name | registryKeyStates |
-| extensions | windows-registry-value-type.valuetype | registryKeyStates |
+| extensions | windows_registry_value_type.valueData | registryKeyStates |
+| extensions | windows_registry_value_type.name | registryKeyStates |
+| extensions | windows_registry_value_type.valuetype | registryKeyStates |
 | <br> | | |
 | file | hashes.SHA-256 | sha256 |
 | file | hashes.SHA-1 | sha1 |

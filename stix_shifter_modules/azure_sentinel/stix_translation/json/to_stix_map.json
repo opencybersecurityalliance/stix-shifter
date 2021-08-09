@@ -451,15 +451,15 @@
         "key": "process.pid"
       },
       "valueData": {
-        "key": "extensions.windows-registry-value-type.valueData",
+        "key": "extensions.windows_registry_value_type.valueData",
         "object": "registry"
       },
       "valueName": {
-        "key": "extensions.windows-registry-value-type.name",
+        "key": "extensions.windows_registry_value_type.name",
         "object": "registry"
       },
       "valueType": {
-        "key": "extensions.windows-registry-value-type.valuetype",
+        "key": "extensions.windows_registry_value_type.valuetype",
         "object": "registry",
         "transformer": "ToString"
       }
