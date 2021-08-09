@@ -40,7 +40,7 @@ class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
 
     def test_ipv6(self):
         pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
-        expectation = 'period=5 minutes&ip=2001:db8:3333:4444:5555:6666:7777:8888&include_ipv6=true'
+        expectation = 'period=5 minutes&ip=2001:db8:3333:4444:5555:6666:7777:8888'
         self._test_pattern(pattern, expectation)
 
     def test_url(self):
