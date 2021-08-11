@@ -10,14 +10,16 @@ Pattern length refers to the number of comparison operations used in the STIX pa
     OS Version: 11.0.1
     Processor: 2.6 GHz 6-Core Intel Core i7
     Memory: 16 GB 2400 MHz DDR4
+    Python Recursion Limit: 10000
 
-|     Pattern Length (operators)            |   Python Recursion Limit    | Pattern Translation Time (seconds) |
-| :-----------------------------: | :------------------: | :-------------------------------: |
-|     500                         |   10000              |          45.61                    |
-|     1000                        |   10000              |          154.24                   |
-|     2000                        |   15000              |          859.97                   |
-|     2000 (Combined Observation)  |   20000              |          1078.52                  |
-|     4000                        |   25000              |          4090.36                  |
+|     Pattern Length (operators)  | Pattern Translation Time (seconds) |
+| :-----------------------------: | :-------------------------------: |
+|     500                         |          1.721                    |
+|     1000                        |          3.492                   |
+|     2000                        |          9.120                   |
+|     2000 (Combined Observation) |          12.002                  |
+|     4000                        |          22.838                  |
+
 
 
 

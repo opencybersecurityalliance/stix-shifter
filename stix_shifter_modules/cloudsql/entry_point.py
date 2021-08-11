@@ -1,5 +1,5 @@
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
-import json
+
 
 class EntryPoint(BaseEntryPoint):
 

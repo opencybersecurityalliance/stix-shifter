@@ -38,22 +38,21 @@ class EntryPoint(BaseEntryPoint):
             self.set_delete_connector(delete_connector)
             self.set_query_connector(query_connector)
             self.set_ping_connector(ping_connector)
-        else:
 
-            # Use default translation setup with default dialect otherwise...
-            # self.setup_translation_simple(dialect_default='default')
-            
-            # ...implement your own setup similar to the following:
-            
-            basepath = os.path.dirname(__file__)
-            filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
+        # Use default translation setup with default dialect otherwise...
+        # self.setup_translation_simple(dialect_default='default')
+        
+        # ...implement your own setup similar to the following:
+        
+        basepath = os.path.dirname(__file__)
+        filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
-            dialect = 'dialect1'
-            query_translator = QueryTranslator(options, dialect, filepath)
-            results_translator = JSONToStix(options, dialect, filepath)
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
+        dialect = 'dialect1'
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = JSONToStix(options, dialect, filepath)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
 
-            dialect = 'dialect2'
-            query_translator = QueryTranslator(options, dialect, filepath)
-            results_translator = JSONToStix(options, dialect, filepath)
-            self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)
+        dialect = 'dialect2'
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = JSONToStix(options, dialect, filepath)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=False)

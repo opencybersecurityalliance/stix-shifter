@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/opencybersecurityalliance/stix-shifter/branch/develop/graph/badge.svg?token=gQvl14peRj)](https://codecov.io/gh/opencybersecurityalliance/stix-shifter)
+
 ### Join us on Slack!
 
 [Click here](https://docs.google.com/forms/d/1vEAqg9SKBF3UMtmbJJ9qqLarrXN5zeVG3_obedA3DKs) and fill out the form to receive an invite to the Open Cybersecurity Alliance slack instance, then join the #stix-shifter channel, to meet and discuss usage with the team.
@@ -22,7 +24,7 @@ This stix-shifter has the following dependencies:
 - [antlr4-python3-runtime==4.8](https://pypi.org/project/antlr4-python3-runtime/)
 - [python-dateutil==2.8.1](https://pypi.org/project/python-dateutil/)
 
-Your development environment must use Python 3.6.x
+Your development environment must use Python 3
 
 ## Installation
 
@@ -52,7 +54,12 @@ Example:
 $ stix-shifter translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
 ```
 
-**Note:** In order to create python executable `stix-shifter` from source run the following command from stix-shifter parent directory in your python 3 environment: `python setup.py install`
+**Note:** In order to build `stix-shifter` packages from source follow the below prerequisite steps:
+   1. Go to the stix-shifter parent directory
+   2. Generate latest requirements.txt: `python3 generate_requirements.py`
+   3. Install the dependencies in your python 3 environment: `pip install -r requirements.txt` 
+   4. Alternatively you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && pip install -r requirements-dev.txt`
 
 ### As A Library
 

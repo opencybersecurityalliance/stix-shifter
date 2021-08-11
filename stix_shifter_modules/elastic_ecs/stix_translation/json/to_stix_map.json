@@ -982,7 +982,7 @@
         {
           "key": "x-oca-event.parent_process_ref",
           "object": "event",
-          "references": "process"
+          "references": "process_parent"
         }
       ]
     },
@@ -1338,7 +1338,7 @@
   },
   "ecs": {
     "version": {
-      "key": "x_ecs.version",
+      "key": "x-ecs.version",
       "object": "ecs"
     }
   },

@@ -9,5 +9,5 @@ class EntryPoint(BaseEntryPoint):
 
         if connection:
             self.setup_transmission_basic(connection, configuration)
-        else:
-            self.add_dialect('default', default=True)
+
+        self.add_dialect('default', default=True)

@@ -6,10 +6,10 @@ from .auth import Auth
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, host, auth ):
-        self.host = host
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = Auth(api_key)
+        self.host = self.auth_token.find_location(self.auth["accountID"], host)
         self.StixPatternProcessor = StixPatternProcessor()
 
     def create_results_connection(self, searchID , offset , length):
@@ -35,4 +35,3 @@ class ResultsConnector(BaseResultsConnector):
         except Exception as e:
             ErrorResponder.fill_error(return_obj, {'code':"query_failed"}, message= str(e))
             return return_obj
-        

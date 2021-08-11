@@ -1,0 +1,404 @@
+{
+  "event_timestamp": [
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    },
+    {
+      "key": "x-oca-event.created",
+      "object": "event"
+    }
+  ],
+  "event_type": [
+    {
+      "key": "x-oca-event.category",
+      "object": "event"
+    }
+  ],
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "process.name",
+      "object": "process"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "process_pid": [
+    {
+      "key": "process.pid",
+      "object": "process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "filemod_action": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "filemod_name": [
+    {
+      "key": "file.name",
+      "object": "file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file",
+      "references": "directory"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "filemod_md5": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    }
+  ],
+  "modload_name": [
+    {
+      "key": "file.name",
+      "object": "service_file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "service_directory",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "service_file",
+      "references": "service_directory"
+    },
+    {
+      "key": "process.extensions.windows-service-ext.service_dll_refs",
+      "object": "process",
+      "group": true,
+      "references": ["service_file"]
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "modload_md5": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "service_file"
+    }
+  ],
+  "domain": [
+    {
+      "key": "domain-name.value",
+      "object": "domain",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "event",
+      "references": "domain"
+    }
+  ],
+  "netconn_local_ipv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "netconn_local_port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "netconn_remote_ipv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "x-oca-event.nt_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "netconn_remote_port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "childproc_name": [
+    {
+      "key": "file.name",
+      "object": "child_file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "child_directory",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "child_process",
+      "references": "child_file"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "child_file",
+      "references": "child_directory"
+    },
+    {
+      "key": "process.name",
+      "object": "child_process",
+      "transformer": "ToFileName"
+    }
+  ],
+  "childproc_md5": {
+    "key": "file.hashes.MD5",
+    "object": "child_file"
+  },
+  "childproc_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "child_file"
+  },
+  "childproc_pid": [
+    {
+      "key": "process.pid",
+      "object": "child_process"
+    },
+    {
+      "key": "process.child_refs",
+      "object": "process",
+      "references": [
+        "child_process"
+      ]
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "childproc_username": {
+    "key": "user-account.user_id",
+    "object": "child_username"
+  },
+  "childproc_cmdline": {
+    "key": "process.command_line",
+    "object": "child_process"
+  },
+  "childproc_action": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "regmod_name": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "win_registry"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "win_registry"
+    }
+  ],
+  "crossproc_action": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "crossproc_name": [
+    {
+      "key": "file.name",
+      "object": "other_file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "other_directory",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "other_file",
+      "references": "other_directory"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "other_process",
+      "references": "other_file"
+    },
+    {
+      "key": "process.name",
+      "object": "other_process",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "x-oca-event.cross_process_target_ref",
+      "object": "event",
+      "references": "other_process"
+    }
+  ],
+  "crossproc_md5": {
+    "key": "file.hashes.MD5",
+    "object": "other_file"
+  },
+  "crossproc_pid": {
+    "key": "process.pid",
+    "object": "other_process"
+  },
+  "device_name": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "interface_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr",
+      "transformer": "ToIPv4"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "ipv4-addr"
+      ],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "device_external_ip": {
+    "key": "x-cb-response.comms_ip",
+    "object": "cb",
+    "transformer": "ToIPv4"
+  },
+  "host_type": [
+    {
+      "key": "x-oca-asset.host_type",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "device_os": [
+    {
+      "key": "x-oca-asset.os_name",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "provider": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "parent_pid": [
+    {
+      "key": "process.pid",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "parent_name": [
+    {
+      "key": "process.name",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "process_cmdline": [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ]
+}

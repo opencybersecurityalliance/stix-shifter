@@ -115,6 +115,12 @@ def main():
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
     results_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
+    resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
+    resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
+    resultsstix_operation_parser.add_argument('offset', help='offset of results')
+    resultsstix_operation_parser.add_argument('length', help='length of results')
+    resultsstix_operation_parser.add_argument('data_source', help='STIX identity object representing a datasource')
+    resultsstix_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
     status_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
@@ -167,8 +173,19 @@ def main():
         type=str,
         help='Proxy Host:Port'
     )
+    host_parser.add_argument(
+        'ssl_cert',
+        type=str,
+        help='SSL certificate filename'
+    )
+    host_parser.add_argument(
+        'ssl_key',
+        type=str,
+        help='SSL key filename'
+    )
+
     host_parser.add_argument('-d', '--debug', action='store_true',
-                                help='Print detail logs for debugging')
+                             help='Print detail logs for debugging')
 
     args = parent_parser.parse_args()
 
@@ -249,7 +266,7 @@ def main():
             return host.is_async()
 
         host_address = args.host_address.split(":")
-        app.run(debug=False, port=int(host_address[1]), host=host_address[0])
+        app.run(debug=True, port=int(host_address[1]), host=host_address[0], ssl_context=(args.ssl_cert, args.ssl_key))
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
@@ -279,7 +296,7 @@ def main():
                             status = transmission.status(search_id)
                         log.debug(status)
                     else:
-                        raise RuntimeError("Fetching status failed")
+                        raise RuntimeError("Fetching status failed")               
                 result = transmission.results(search_id, 0, 9)
                 if result["success"]:
                     log.debug("Search {} results is:\n{}".format(search_id, result["data"]))
@@ -337,6 +354,7 @@ def transmit(args):
         query <query string>,
         status <search id>,
         results <search id> <offset> <length>,
+        results_stix <search id> <offset> <length> <data_source>
         ping,
         is_async
     >
@@ -358,6 +376,12 @@ def transmit(args):
         offset = args.offset
         length = args.length
         result = transmission.results(search_id, offset, length)
+    elif operation_command == stix_transmission.RESULTS_STIX:
+        search_id = args.search_id
+        offset = args.offset
+        length = args.length
+        data_source = args.data_source
+        result = transmission.results_stix(search_id, offset, length, data_source)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)

@@ -14,14 +14,14 @@ class PingConnector(BasePingConnector):
         response = self.api_client.ping_box()
         response_code = response.code
 
-        response_txt = response.read()
+        response_text = response.read()
         error = None
         response_dict = dict()
         try:
-            response_dict = json.loads(response_txt)
+            response_dict = json.loads(response_text)
         except Exception as ex:
-            self.logger.debug(response_txt)
-            error = Exception('Can not parse response: ' + str(ex))
+            self.logger.debug(response_text)
+            error = Exception(f'Can not parse response: {ex} : {response_text}')
 
         return_obj = dict()
         return_obj['success'] = False
