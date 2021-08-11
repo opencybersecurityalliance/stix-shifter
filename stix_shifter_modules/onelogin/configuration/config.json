@@ -1,0 +1,35 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "OneLogin"
+        },
+        "region": {
+            "type": "text",
+            "default": "us"
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
+        "options": {
+            "result_limit": {
+                "default": 1000,
+                "min": 1,
+                "max": 60000,
+                "type": "number",
+                "previous": "connection.resultSizeLimit"
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "clientId": {
+                "type": "password"
+            },
+            "clientSecret": {
+                "type": "password"
+            }
+        }
+    }
+}

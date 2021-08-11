@@ -116,7 +116,7 @@ class APIClient():
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
                     if (self.client.get_token()):
-                        response = self.client.handle_report(self.query, index_from, fetch_size)
+                        response = self.client.handle_report(self.query, indx, fetch_size)
                         status_code = response.response.status_code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
