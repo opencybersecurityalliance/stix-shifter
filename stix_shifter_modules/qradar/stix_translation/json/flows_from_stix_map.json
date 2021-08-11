@@ -42,7 +42,7 @@
       "dst_byte_count": ["destinationbytes"],
       "src_packets": ["sourcepackets"],
       "dst_packets": ["destinationpackets"],
-      "extensions.http_request_ext.request_header.Host": [ "httphost" ],
+      "extensions.'http-request-ext'.request_header.Host": [ "httphost" ],
       "extensions.http_request_ext.request_header.Referer": [ "httpreferrer" ],
       "extensions.http_request_ext.request_header.Server": [ "httpserver" ],
       "extensions.http_request_ext.request_header.User_Agent": [ "httpuseragent" ],

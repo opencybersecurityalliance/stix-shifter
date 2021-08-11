@@ -155,7 +155,7 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqhost_query(self):
-        stix_pattern = "[network-traffic:extensions.http_request_ext.request_header.Host = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.Host = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httphost = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)

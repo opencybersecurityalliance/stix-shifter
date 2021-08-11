@@ -571,7 +571,7 @@
       "object": "url"
     },
     {
-      "key": "network-traffic.extensions.http_request_ext.request_header.Host",
+      "key": "network-traffic.extensions.'http-request-ext'.request_header.Host",
       "object": "nt"
     }
   ],
