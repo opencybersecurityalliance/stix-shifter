@@ -1,0 +1,48 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "IBM\u00ae QRadar PerformaceTest"
+        },
+        "url": {
+            "type": "text",
+            "previous": "connection.host"
+        },
+        "help": {
+            "default": "data-sources-qradar.html",
+            "type": "link"
+        },
+        "options": {
+            "result_limit": {
+                "hidden": true
+            },
+            "validate_pattern": {
+                "default": false,
+                "hidden": true,
+                "type": "boolean",
+                "optional": true,
+                "previous": "connection.validate_pattern"
+            },
+            "hash_options": {
+                "type": "json",
+                "optional": true,
+                "hidden": true
+            },
+            "unmapped_fallback": {
+                "default": true
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "type": "password",
+                "optional": true
+            },
+            "password": {
+                "type": "password",
+                "optional": true
+            }
+        }
+    }
+}
