@@ -1,0 +1,59 @@
+{
+  "user-account": {
+    "fields": {
+      "user_id": ["user_id"],
+      "display_name": ["user_name"],
+      "x_account_id": ["account_id"],
+      "x_actor_user_id": ["actor_user_id"],
+      "x_assuming_acting_user_id": ["assuming_acting_user_id"],
+      "x_actor_user_name": ["actor_user_name"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ipaddr"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["policy_name"],
+      "policy_id": ["policy_id"],
+      "start": ["since"],
+      "end": ["until"],
+      "time_observed": ["created_at"]
+    }
+  },
+  "x-onelogin-finding": {
+    "fields": {
+      "client_id": ["client_id"],
+      "directory_id": ["directory_id"],
+      "event_type_id": ["event_type_id"],
+      "unique_id": ["id"],
+      "resolution": ["resolution"],
+      "role_id": ["role_id"],
+      "app_id": ["app_id"],
+      "group_id": ["group_id"],
+      "otp_device_id": ["otp_device_id"],
+      "actor_system": ["actor_system"],
+      "custom_message": ["custom_message"],
+      "role_name": ["role_name"],
+      "app_name": ["app_name"],
+      "group_name": ["group_name"],
+      "otp_device_name": ["otp_device_name"],
+      "operation_name": ["operation_name"],
+      "directory_sync_run_id": ["directory_sync_run_id"],
+      "resource_type_id": ["resource_type_id"],
+      "browser_fingerprint": ["browser_fingerprint"],
+      "notes": ["notes"],
+      "proxy_ip": ["proxy_ip"]
+    }
+  },
+  "x-onelogin-risk": {
+    "fields": {
+      "risk_score": ["risk_score"],
+      "risk_reasons": ["risk_reasons"],
+      "risk_cookie_id": ["risk_cookie_id"],
+      "error_description": ["error_description"]
+    }
+  }
+}
