@@ -1,0 +1,73 @@
+{
+  "resource": {
+    "key": "url.value",
+    "object": "url_resource"
+  },
+  "host": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    {
+      "key": "domain-name.host",
+      "object": "domain-name"
+    }
+  ],
+  "url": {
+    "key": "url.value",
+    "object": "url"
+  },
+  "id": {
+  "key": "x-datadog-event.event_id",
+  "object": "x-datadog-event"
+  },
+  "priority": {
+  "key": "x-datadog-event.priority",
+  "object": "x-datadog-event"
+  },
+  "title": {
+  "key": "x-datadog-event.event_name",
+  "object": "x-datadog-event"
+  },
+  "text": {
+  "key": "x-datadog-event.event_description",
+  "object": "x-datadog-event"
+  },
+  "device_name": {
+  "key": "x-datadog-event.device_name",
+  "object": "x-datadog-event"
+  },
+  "event_source": {
+  "key": "x-datadog-event.source",
+  "object": "x-datadog-event"
+  },
+  "monitor_id": {
+  "key": "x-datadog-event.monitor_id",
+  "object": "x-datadog-event"
+  },
+  "tags": {
+  "key": "x-datadog-event.tags",
+  "object": "x-datadog-event"
+  },
+  "is_aggregate": {
+  "key": "x-datadog-event.is_aggregate",
+  "object": "x-datadog-event"
+  },
+  "alert_type": {
+  "key": "x-datadog-event.event_type",
+  "object": "x-datadog-event"
+  },
+  "start": {
+  "key": "x-ibm-finding.start",
+  "object": "x-ibm-finding"
+  },
+  "end": {
+  "key": "x-ibm-finding.end",
+  "object": "x-ibm-finding"
+  },
+  "date_happened": {
+  "key": "x-ibm-finding.time_observed",
+  "object": "x-ibm-finding",
+  "transformer": "EpochToTimestamp"
+  }
+}
