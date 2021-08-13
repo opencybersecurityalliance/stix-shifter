@@ -573,3 +573,9 @@ python main.py translate infoblox:dossierData query '{}' "[x-infoblox-dossier-ev
 ### Limitations
 * Does not support `NOT`, `AND`, or `OR` operator.
 * Does not support using multiple criteria in one field.
+
+### Recommendations
+* To resolve timeout issues with the cli or proxy, you can increase the timeout on the proxy and on the module:
+```bash
+export SS_CONFIG='{"options": {"proxy_host": "192.168.2.15", "proxy_port": 6700, "timeout": 59, "destination": {"connection": {"options": {"timeout": 59}, "host": "csp.infoblox.com", "type": "infoblox"}, "configuration": {"auth": { "token": "xxx"} } } }}'
+```
