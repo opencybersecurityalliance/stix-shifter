@@ -8,6 +8,15 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
     def get_dialect(self):
         return "dnsEventData"
 
+    def test_invalid_ipv4_format(self):
+        pattern = "[network-traffic:src_ref.value = '{203.0.113.33333333333333333']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'mapping_error',
+            'error': 'data mapping error : Unable to map the following STIX objects and properties to data source fields: []'
+        })
+
     def test_start_end_time(self):
         pattern = "[ipv4-addr:value = '127.0.0.1'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
         expectation = 't0=1591000990&t1=1598870590&qip=127.0.0.1'
@@ -75,7 +84,6 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
     def test_multiple_criteria(self):
         pattern = "[network-traffic:src_ref.value = '127.0.0.1' AND network-traffic:src_ref.value = '1.1.1.1']"
         result = self._parse_query(pattern, self.get_dialect())
-        self._parse_query(pattern, self.get_dialect())
         self.assertEqual(result, {
             'success': False,
             'code': 'not_implemented',
@@ -96,7 +104,27 @@ class TestStixParsingDnsEvent(unittest.TestCase, utils.TestStixParsingMixin):
         expectation = 'policy_name=DFND&qname=example.com.'
         self._test_regex_timestamp(pattern, expectation)
 
+    def test_combined_observation_expression(self):
+        pattern = "[domain-name:value = 'example.com'] AND [x-infoblox-dns-event:policy_name = 'DFND']"
+        expectation = 'qname=example.com.&policy_name=DFND'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_observation_expression_with_qualifier(self):
+        pattern = "[domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
+        expectation = 'policy_name=DFND&qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_combined_observation_expression_with_qualifier(self):
+        pattern = "([domain-name:value = 'example.com'] AND [x-infoblox-dns-event:policy_name = 'DFND']) START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
+        expectation = 'qname=example.com.&policy_name=DFND'
+        self._test_regex_timestamp(pattern, expectation)
+
     def test_multiple_operators(self):
         pattern = "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']"
         expectation = 'qip=127.0.0.1&policy_name=DFND&qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_multiple_operators_reverse(self):
+        pattern = "[network-traffic:src_ref.value = '127.0.0.1' AND (x-infoblox-dns-event:policy_name = 'DFND' AND domain-name:value = 'example.com')]"
+        expectation = 'qname=example.com.&policy_name=DFND&qip=127.0.0.1'
         self._test_regex_timestamp(pattern, expectation)

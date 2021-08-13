@@ -12,7 +12,6 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import (
 )
 from .transformers import InfobloxToDomainName, TimestampToSeconds
 
-# TODO: revisit the pattern for references, is this really needed?
 REFERENCE_DATA_TYPES = {
     "qip": ["ipv4", "ipv4_cidr"],
     "value": ["ipv4", "ipv4_cidr", "domain_name"],
@@ -24,7 +23,6 @@ REFERENCE_FIELDS = ('src_ref.value', 'hostname_ref.value',
 )
 
 START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-TIMESTAMP = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = r"\.\d+Z$"
 
 THREAT_LEVEL_MAPPING = {
@@ -259,7 +257,7 @@ class QueryStringPatternTranslator:
             self._set_threat_type(stix_object, stix_field, final_expression, value)
             return final_expression
 
-        elif isinstance(expression, CombinedComparisonExpression):
+        elif isinstance(expression, CombinedComparisonExpression) or isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
@@ -274,8 +272,7 @@ class QueryStringPatternTranslator:
             query_string = "{}{}{}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 return "{} {}".format(query_string, qualifier)
-            else:
-                return "{}".format(query_string)
+            return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
@@ -284,21 +281,9 @@ class QueryStringPatternTranslator:
                 expression_01 = self._parse_expression(expression.observation_expression.expr1)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
-                return "{} {} {}".format(expression_01, operator, expression_02)
+                return "{}{}{}".format(expression_01, operator, expression_02)
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
-        elif isinstance(expression, CombinedObservationExpression):
-            operator = self._lookup_comparison_operator(expression.operator)
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            elif expression_01:
-                return "{}".format(expression_01)
-            elif expression_02:
-                return "{}".format(expression_02)
-            else:
-                return ''
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
@@ -310,8 +295,6 @@ class QueryStringPatternTranslator:
 
 
 def _test_or_add_milliseconds(timestamp) -> str:
-    if not _test_timestamp(timestamp):
-        raise ValueError("Invalid timestamp")
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
@@ -336,17 +319,10 @@ def _get_parts_start_stop(query):
     return query_parts
 
 
-def _test_timestamp(timestamp) -> bool:
-    return bool(re.search(TIMESTAMP, timestamp))
-
-
 def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
     if dialect == 'dnsEventData':
         if _test_start_stop_format(query):
             query_parts = _get_parts_start_stop(query)
-            if len(query_parts) != 5:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                return ''
 
             # grab time stamps from array
             start_time = _test_or_add_milliseconds(query_parts[2])
@@ -366,9 +342,6 @@ def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
     if dialect == 'tideDbData':
         if _test_start_stop_format(query):
             query_parts = _get_parts_start_stop(query)
-            if len(query_parts) != 5:
-                logger.info("Omitting query due to bad format for START STOP qualifier timestamp")
-                return ''
 
             # grab time stamps from array
             start_time = _test_or_add_milliseconds(query_parts[2])
@@ -376,11 +349,9 @@ def _format_query_with_timestamp(dialect:str, query: str, time_range) -> str:
             return 'from_date={}&to_date={}&{}'.format(start_time, stop_time, query_parts[0])
 
         if any(substring in query for substring in ['imported', 'expiration']):
-            # IMPROVEMENT: Collapse date formatting earilier in the process. Allowing fields that impact date to be filtered out earilier.
             return query
         return 'period={} minutes&{}'.format(time_range, query)
 
-    # remaining dialect (dossierEvent)
     return _get_parts_start_stop(query)[0]
 
 
@@ -394,9 +365,6 @@ def _format_translated_queries(dialect, query_array, threat_type_map, time_range
     for query in query_array:
         unaltered_query = query
         query = _format_query_with_timestamp(dialect, query, time_range)
-
-        if not query:
-            continue
 
         payload = dict()
         payload['offset'] = 0

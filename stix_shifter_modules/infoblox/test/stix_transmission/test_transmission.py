@@ -6,6 +6,7 @@ from unittest.mock import patch
 from stix_shifter.stix_transmission.stix_transmission import StixTransmission
 
 from stix_shifter_modules.infoblox.entry_point import EntryPoint
+from stix_shifter_modules.infoblox.stix_transmission.api_client import APIClient
 
 from .utils import MockResponse, CONNECTION, CONFIG, MODULE
 
@@ -15,6 +16,16 @@ class TestTransmission(unittest.TestCase):
         entry_point = EntryPoint(CONNECTION, CONFIG)
         check_async = entry_point.is_async()
         self.assertFalse(check_async)
+
+    def test_result_limit_too_large(self):
+        connection = {
+            "host": "mock-host.test",
+            "port": 443,
+            "options": {"timeout": 60, "result_limit": 5000000}
+        }
+
+        api_client = APIClient(connection, CONFIG)
+        self.assertEqual(api_client.result_limit, 10000)
 
     ###############################
     ## PING

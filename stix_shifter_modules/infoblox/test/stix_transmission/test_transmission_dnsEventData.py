@@ -10,7 +10,7 @@ from stix_shifter_modules.infoblox.entry_point import EntryPoint
 from .utils import MockResponse, CONNECTION, CONFIG, MODULE
 
 
-class TestTransmission(unittest.TestCase):
+class TestDnsEventTransmission(unittest.TestCase):
     def get_dialect(self):
         return "dnsEventData"
 
