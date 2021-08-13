@@ -1,7 +1,5 @@
 # Infoblox Connector
 
-TBD
-
 ### Dialects
 
 * tideDbData
