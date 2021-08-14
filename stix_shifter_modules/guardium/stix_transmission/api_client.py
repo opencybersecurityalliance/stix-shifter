@@ -5,15 +5,38 @@ from requests.models import Response
 import json 
 import base64
 
+
 class APIClient():
 
     def __init__(self, connection, configuration):
 
         # Placeholder client to allow dummy transmission calls.
         # Remove when implementing data source API client.
-        url = "https://"+connection["host"]+":"+str(connection.get('port', ''))
-        self.client = GuardApiClient(connection["client_id"], url, connection["client_secret"],
-                                     configuration["auth"]["username"], configuration["auth"]["password"])
+        host = connection["host"]
+        port = connection.get('port', '')
+        headers = dict()
+        url_modifier_function = None
+        # TODO should it be like below? in guard_utils all verify's = False
+        # cert_verify=connection.get('selfSignedCert', True),
+        cert_verify = connection.get(False)
+        sni = connection.get('sni', None)
+        auth = connection.get('auth', None)
+        url = "https://" + host + ":" + str(port)
+        params = dict()
+        params["client_id"] = connection["client_id"]
+        params["url"] = url
+        params["client_secret"] = connection["client_secret"]
+        params["config_uname"] = configuration["auth"]["username"]
+        params["config_pass"] = configuration["auth"]["password"]
+        self.client = GuardApiClient(params,
+                                     host,
+                                     port,
+                                     headers,
+                                     url_modifier_function,
+                                     cert_verify,
+                                     sni,
+                                     auth
+                                     )
 
     def ping_data_source(self):
         # Pings the data source
@@ -106,7 +129,7 @@ class APIClient():
             if "category" in self.query:
                 # print("TADA")
                 response = self.client.handle_qs(self.query, indx, fsize)
-            status_code = response.status_code
+            status_code = response.code
 #           Though the connector gets the authorization token just before fetching the actual result
 #           there is a possibility that the token returned is only valid for a second and response_code = 401
 #           is returned.  Catch that situation (though remote) and process again.
