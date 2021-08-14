@@ -1,7 +1,8 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import json 
+import json
+
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
@@ -21,7 +22,8 @@ class ResultsConnector(BaseResultsConnector):
             if response_code == 200:
                 return_obj['success'] = True
                 data = json.loads(response.read())
-                if type(data) == dict and 'ID' in data.keys() and 'Message' in data.keys() and data['ID'] == 0 and 'The Query did not retrieve any records' == data['Message']:
+                if type(data) == dict and 'ID' in data.keys() and 'Message' in data.keys() and data['ID'] == 0 and\
+                        'The Query did not retrieve any records' == data['Message']:
                     data = []
                 return_obj['data'] = data
             else:

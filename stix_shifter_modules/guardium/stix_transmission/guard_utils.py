@@ -131,7 +131,7 @@ class GuardApiClient(RestApiClient):
         params["indexFrom"] = int(index_from)
         params["inputTZ"] = "UTC"
         # TODO should verify be in headers or data or urldata?
-        #params["verify"] = "false"
+        # params["verify"] = "false"
         rest_data = json.dumps(params)
         # urldata = dict()
         # urldata["verify"] = "false"
@@ -195,8 +195,8 @@ class GuardApiClient(RestApiClient):
                     response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
             except:
                 pass
-        # TODO check if this line was important
-        # response.read = self.translate_response(json.loads(self.fields), json.loads(response.read))
+        # TODO check if this line was important (compare with original, this one's changes)
+        response.content = self.translate_response(json.loads(self.fields), json.loads(response.read()))
         return response
 
     def get_field_titles(self):
