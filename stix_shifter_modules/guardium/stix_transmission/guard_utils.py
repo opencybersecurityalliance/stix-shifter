@@ -195,7 +195,6 @@ class GuardApiClient(RestApiClient):
                     response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
             except:
                 pass
-        # TODO check if this line was important (compare with original, this one's changes)
         response.content = self.translate_response(json.loads(self.fields), json.loads(response.read()))
         return response
 
