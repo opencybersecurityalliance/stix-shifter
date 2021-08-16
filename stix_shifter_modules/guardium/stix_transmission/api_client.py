@@ -16,7 +16,7 @@ class APIClient():
         port = connection.get('port', '')
         headers = dict()
         url_modifier_function = None
-        # TODO should it be like below? in guard_utils all verify's = False
+        # TODO switch on cert_verify
         # cert_verify = connection.get('selfSignedCert', True)
         cert_verify = connection.get(False)
         sni = connection.get('sni', None)

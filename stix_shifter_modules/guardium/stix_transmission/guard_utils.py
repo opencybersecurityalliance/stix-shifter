@@ -91,7 +91,6 @@ class GuardApiClient(RestApiClient):
         # print("user="+self.user)
         # print("password="+self.password)
         response = self.request_token()
-        # TODO check if possible to remove this (will throw the exception in case of it)
         # if self.validate_response(response, "token ", True):
         self.access_token = json.loads(response.read())['access_token']
         # print("token="+ self.access_token)
@@ -100,18 +99,7 @@ class GuardApiClient(RestApiClient):
     def request_token(self):
         self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(
             self.client_id, self.secret, self.user, self.password)
-        # TODO transfer to api_call or leave like this? assumed correct since crowdstrike did same for get token
         return self.client.call_api(self.token_target, 'POST', urldata=self.token_data)
-        # response = requests.post(self.url + self.token_target, params=self.token_data, verify=False)
-        # return response
-
-    def validate_response(self, p_response, prefix, abort=False):
-        status_code = p_response.status_code
-        if status_code != 200:
-            if abort:
-                raise Exception(prefix + "request failed " + str(status_code) + "-" + p_response.reason)
-            return False
-        return True
 
     def handle_report(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
@@ -125,17 +113,13 @@ class GuardApiClient(RestApiClient):
 
         rest_data = json.dumps(params)
 
-        # TODO should params be sent in headers or urldata?
         response = self.client.call_api(self.report_target, 'POST', headers=self.headers, data=rest_data)
-        # TODO check value received type
-        # was "response.json()"
-        # TODO remove all of snippet below - no more inputTZ thing happening
-        # TODO is it response.read()?
+
         results = response.read()
         if not isinstance(results, list):
             try:
                 # errorCode = results["ErrorCode"]
-                errorCode = results.code
+                errorCode = response.code
                 # For compatibility with Guardium -
                 # inputTZ parameter was added after v11.3
                 # so in case it does not exist execute the query without it
@@ -143,14 +127,10 @@ class GuardApiClient(RestApiClient):
                     params.pop("inputTZ")
                     rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
-                    # TODO rest_date sent in urldata or data?
                     response = self.client.call_api(self.report_target, 'POST', headers=self.headers,
                                                     data=rest_data)
-                    # response = requests.post(self.url + self.report_target, data=rest_data, headers=self.headers,
-                    #                          verify=False)
             except:
                 pass
-        print("TEST", response.read())
         return response
 
     def handle_qs(self, params, index_from, fetch_size):
@@ -167,14 +147,11 @@ class GuardApiClient(RestApiClient):
 
         rest_data = json.dumps(params)
         response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
-        # TODO is it response.read()?
         results = response.read()
-        # response = requests.post(self.url + self.qs_target, data=rest_data, headers=self.headers, verify=False)
-        # results = response.json()
+
         if not isinstance(results, list):
             try:
-                # errorCode = results["ErrorCode"]
-                errorCode = results.code
+                errorCode = response.code
                 # For compatibility with Guardium -
                 # inputTZ parameter was added after v11.3
                 # so in case it does not exist execute the query without it
@@ -182,8 +159,6 @@ class GuardApiClient(RestApiClient):
                     params.pop("inputTZ")
                     rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
-                    # response = requests.post(self.url + self.qs_target, data=rest_data, headers=self.headers,
-                    #                          verify=False)
                     response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
             except:
                 pass
