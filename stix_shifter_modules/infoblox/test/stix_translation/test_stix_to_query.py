@@ -2,9 +2,291 @@
 import json
 import unittest
 
-from . import utils
+from stix_shifter.stix_translation.stix_translation import StixTranslation
 
-class TestStixParsingTide(unittest.TestCase, utils.TestStixParsingMixin):
+translation = StixTranslation()
+
+
+class TestStixParsingMixin:
+
+    @staticmethod
+    def get_dialect():
+        raise NotImplementedError()
+
+    @staticmethod
+    def _parse_query(stix_pattern, dialect):
+        query = translation.translate(f'infoblox:{dialect}', 'query', '{}', stix_pattern)
+        return query
+
+    def _retrieve_query(self, stix_pattern):
+        queries: dict = self._parse_query(stix_pattern, self.get_dialect())
+        self.assertIn("queries", queries)
+        query = json.loads(queries["queries"][0])
+        return query
+
+    def _test_time_range(self, stix_pattern, expectation):
+        query = self._retrieve_query(stix_pattern)
+        self.assertEqual(expectation, query["to"] - query["from"])
+
+    def _test_pattern(self, pattern, expectation):
+        query = self._retrieve_query(pattern)
+        self.assertEqual(expectation, query["query"])
+
+    def _test_regex_timestamp(self, pattern, expectation):
+        query = self._retrieve_query(pattern)
+        self.assertRegex(query["query"], r'^t0=\d{10}&t1=\d{10}&' + expectation)
+
+
+class TestStixParsingDnsEvent(unittest.TestCase, TestStixParsingMixin):
+    def get_dialect(self):
+        return "dnsEventData"
+
+    def test_invalid_ipv4_format(self):
+        pattern = "[network-traffic:src_ref.value = '{203.0.113.33333333333333333']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'mapping_error',
+            'error': 'data mapping error : Unable to map the following STIX objects and properties to data source fields: []'
+        })
+
+    def test_start_end_time(self):
+        pattern = "[ipv4-addr:value = '127.0.0.1'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
+        expectation = 't0=1591000990&t1=1598870590&qip=127.0.0.1'
+        self._test_pattern(pattern, expectation)
+
+    def test_network(self):
+        pattern = "[x-infoblox-dns-event:network = 'BloxOne Endpoint']"
+        expectation = 'network=BloxOne Endpoint'
+        self._test_regex_timestamp(pattern, expectation)
+        pass
+
+    def test_ipv4(self):
+        pattern = "[ipv4-addr:value = '127.0.0.1']"
+        expectation = 'qip=127.0.0.1'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_domain_name(self):
+        pattern = "[domain-name:value = 'example.com']"
+        expectation = 'qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_policy_name(self):
+        pattern = "[x-infoblox-dns-event:policy_name = 'DFND']"
+        expectation = 'policy_name=DFND'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_severity(self):
+        pattern = "[x-infoblox-dns-event:x_infoblox_severity = 'HIGH']"
+        expectation = 'threat_level=3'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_threat_class(self):
+        pattern = "[x-infoblox-dns-event:threat_class = 'APT']"
+        expectation = 'threat_class=APT'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_network_domain_ref(self):
+        pattern = "[network-traffic:extensions.'dns-ext'.question.domain_ref.value = 'example1.com']"
+        expectation = 'qname=example1.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_network_src_ref(self):
+        pattern = "[network-traffic:src_ref.value = '203.0.113.33']"
+        expectation = 'qip=203.0.113.33'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_operator_like(self):
+        pattern = "[domain-name:value LIKE 'microsoft*']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector dnsEventData'
+        })
+
+    def test_operator_neq(self):
+        pattern = "[domain-name:value != 'microsoft']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dnsEventData'
+        })
+
+    def test_multiple_criteria(self):
+        pattern = "[network-traffic:src_ref.value = '127.0.0.1' AND network-traffic:src_ref.value = '1.1.1.1']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Multiple criteria for one field is not support in Infoblox connector'
+        })
+
+    def test_comparison_or(self):
+        pattern = "[domain-name:value = 'example.com' OR x-infoblox-dns-event:policy_name = 'DFND'"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector dnsEventData'
+        })
+
+    def test_comparison_and(self):
+        pattern = "[domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND']"
+        expectation = 'policy_name=DFND&qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_combined_observation_expression(self):
+        pattern = "[domain-name:value = 'example.com'] AND [x-infoblox-dns-event:policy_name = 'DFND']"
+        expectation = 'qname=example.com.&policy_name=DFND'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_observation_expression_with_qualifier(self):
+        pattern = "[domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND'] START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
+        expectation = 'policy_name=DFND&qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_combined_observation_expression_with_qualifier(self):
+        pattern = "([domain-name:value = 'example.com'] AND [x-infoblox-dns-event:policy_name = 'DFND']) START t'2020-06-01T08:43:10Z' STOP t'2020-08-31T10:43:10Z'"
+        expectation = 'qname=example.com.&policy_name=DFND'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_multiple_operators(self):
+        pattern = "[(domain-name:value = 'example.com' AND x-infoblox-dns-event:policy_name = 'DFND') AND network-traffic:src_ref.value = '127.0.0.1']"
+        expectation = 'qip=127.0.0.1&policy_name=DFND&qname=example.com.'
+        self._test_regex_timestamp(pattern, expectation)
+
+    def test_multiple_operators_reverse(self):
+        pattern = "[network-traffic:src_ref.value = '127.0.0.1' AND (x-infoblox-dns-event:policy_name = 'DFND' AND domain-name:value = 'example.com')]"
+        expectation = 'qname=example.com.&policy_name=DFND&qip=127.0.0.1'
+        self._test_regex_timestamp(pattern, expectation)
+
+class TestStixParsingDossier(unittest.TestCase, TestStixParsingMixin):
+    def get_dialect(self):
+        return "dossierData"
+
+    def test_hostname(self):
+        pattern = "[domain-name:value = 'example.com']"
+        expectation = 'value=example.com'
+        self._test_pattern(pattern, expectation)
+
+    def test_ipv4(self):
+        pattern = "[ipv4-addr:value = '1.2.3.4']"
+        expectation = 'value=1.2.3.4'
+        self._test_pattern(pattern, expectation)
+
+    def test_ipv6(self):
+        pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
+        expectation = 'value=2001:db8:3333:4444:5555:6666:7777:8888'
+        self._test_pattern(pattern, expectation)
+
+    def test_hostname_ref(self):
+        pattern = "[x-infoblox-dossier-event-result-pdns:hostname_ref.value = 'example1.com']"
+        expectation = 'value=example1.com'
+        self._test_pattern(pattern, expectation)
+
+    def test_ip_ref(self):
+        pattern = "[x-infoblox-dossier-event-result-pdns:ip_ref.value = '203.0.113.33']"
+        expectation = 'value=203.0.113.33'
+        self._test_pattern(pattern, expectation)
+
+    def test_threat_type_host(self):
+        pattern = "[domain-name:value = 'example.com']"
+        result = self._retrieve_query(pattern)
+        self.assertEqual(result, {
+            'offset': 0,
+            'query': 'value=example.com',
+            'source': 'dossierData',
+            'threat_type': 'host'
+        })
+
+    def test_threat_type_ip_ipv4(self):
+        pattern = "[ipv4-addr:value = '1.2.3.4']"
+        result = self._retrieve_query(pattern)
+        self.assertEqual(result, {
+            'offset': 0,
+            'query': 'value=1.2.3.4',
+            'source': 'dossierData',
+            'threat_type': 'ip'
+        })
+
+    def test_threat_type_ip_ipv6(self):
+        pattern = "[ipv6-addr:value = '2001:db8:3333:4444:5555:6666:7777:8888']"
+        result = self._retrieve_query(pattern)
+        self.assertEqual(result, {
+            'offset': 0,
+            'query': 'value=2001:db8:3333:4444:5555:6666:7777:8888',
+            'source': 'dossierData',
+            'threat_type': 'ip'
+        })
+
+    def test_threat_type_ip_ref(self):
+        pattern = "[x-infoblox-dossier-event-result-pdns:ip_ref.value = '203.0.113.33']"
+        result = self._retrieve_query(pattern)
+        self.assertEqual(result, {
+            'offset': 0,
+            'query': 'value=203.0.113.33',
+            'source': 'dossierData',
+            'threat_type': 'ip'
+        })
+
+    def test_operator_like(self):
+        pattern = "[domain-name:value LIKE 'microsoft*']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Like unsupported for Infoblox connector dossierData'
+        })
+
+    def test_operator_neq(self):
+        pattern = "[domain-name:value != 'microsoft']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dossierData'
+        })
+
+    def test_multiple_criteria(self):
+        pattern = "[domain-name:value = 'example2.com' AND domain-name:value = 'example3.com']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Multiple criteria for one field is not support in Infoblox connector'
+        })
+
+    def test_comparison_or(self):
+        pattern = "[domain-name:value = 'example1.com' OR ipv4-addr:value = '1.1.1.1'"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Comparison operator Or unsupported for Infoblox connector dossierData'
+        })
+
+    def test_comparison_and(self):
+        pattern = "[domain-name:value = 'example1.com' AND ipv4-addr:value = '1.1.1.1'"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Multiple criteria for one field is not support in Infoblox connector'
+        })
+
+    def test_multiple_operators(self):
+        pattern = "[(domain-name:value = 'example.com' AND x-infoblox-dossier-event-result-pdns:ip_ref.value = '1.1.1.1') AND x-infoblox-dossier-event-result-pdns:hostname_ref.value = 'example4.com']"
+        result = self._parse_query(pattern, self.get_dialect())
+        self.assertEqual(result, {
+            'success': False,
+            'code': 'not_implemented',
+            'error': 'wrong parameter : Multiple criteria for one field is not support in Infoblox connector'
+        })
+
+class TestStixParsingTide(unittest.TestCase, TestStixParsingMixin):
     def get_dialect(self):
         return "tideDbData"
 
