@@ -17,7 +17,7 @@ class APIClient():
         headers = dict()
         url_modifier_function = None
         # TODO should it be like below? in guard_utils all verify's = False
-        # cert_verify=connection.get('selfSignedCert', True),
+        # cert_verify = connection.get('selfSignedCert', True)
         cert_verify = connection.get(False)
         sni = connection.get('sni', None)
         auth = connection.get('auth', None)

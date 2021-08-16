@@ -3,10 +3,8 @@ import datetime
 import hashlib
 import json
 import re
-import requests
 import sys
 import traceback
-from requests.models import Response
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.utils import logger
 
@@ -22,7 +20,7 @@ class GuardApiClient(RestApiClient):
         self.user = params["config_uname"]
         self.password = params["config_pass"]
         self.client_id = params["client_id"]
-        self.token_target = '/oauth/token'
+        self.token_target = 'oauth/token'
         self.report_target = 'restAPI/online_report'
         self.qs_target = 'restAPI/quick_search'
         self.fields_target = 'restAPI/fieldsTitles'
@@ -94,30 +92,24 @@ class GuardApiClient(RestApiClient):
         # print("password="+self.password)
         response = self.request_token()
         # TODO check if possible to remove this (will throw the exception in case of it)
-        if self.validate_response(response, "token ", True):
-            self.access_token = response.json().get('access_token')
-            # print("token="+ self.access_token)
-            self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
+        # if self.validate_response(response, "token ", True):
+        self.access_token = json.loads(response.read())['access_token']
+        # print("token="+ self.access_token)
+        self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
 
     def request_token(self):
         self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(
             self.client_id, self.secret, self.user, self.password)
-        # headers = dict()
-        # headers['verify'] = "false"
-        # TODO which one of the headers below is correct?
-        # self.headers['verify'] = False
-        # headers = self.headers
-        # TODO is it only token_target? (sam Q for the rest of the calls)
-        # TODO should token_data be sent in headers or urldata?
-        # return self.client.call_api(self.url + self.token_target, 'POST', headers, urldata=self.token_data)
-        response = requests.post(self.url + self.token_target, params=self.token_data, verify=False)
-        return response
+        # TODO transfer to api_call or leave like this? assumed correct since crowdstrike did same for get token
+        return self.client.call_api(self.token_target, 'POST', urldata=self.token_data)
+        # response = requests.post(self.url + self.token_target, params=self.token_data, verify=False)
+        # return response
 
     def validate_response(self, p_response, prefix, abort=False):
         status_code = p_response.status_code
         if status_code != 200:
             if abort:
-                raise Exception(prefix + "request faild " + str(status_code) + "-" + p_response.reason)
+                raise Exception(prefix + "request failed " + str(status_code) + "-" + p_response.reason)
             return False
         return True
 
@@ -130,24 +122,22 @@ class GuardApiClient(RestApiClient):
         params["fetchSize"] = int(fetch_size)
         params["indexFrom"] = int(index_from)
         params["inputTZ"] = "UTC"
-        # TODO should verify be in headers or data or urldata?
-        # params["verify"] = "false"
+
         rest_data = json.dumps(params)
-        # urldata = dict()
-        # urldata["verify"] = "false"
-        # response = requests.post(self.url + self.report_target, data=rest_data, headers=self.headers, verify=False)
-        # results = response.json()
+
         # TODO should params be sent in headers or urldata?
         response = self.client.call_api(self.report_target, 'POST', headers=self.headers, data=rest_data)
         # TODO check value received type
         # was "response.json()"
-        results = response
+        # TODO remove all of snippet below - no more inputTZ thing happening
+        # TODO is it response.read()?
+        results = response.read()
         if not isinstance(results, list):
             try:
                 # errorCode = results["ErrorCode"]
                 errorCode = results.code
                 # For compatibility with Guardium -
-                # inputTZ parameter was aded after v11.3 
+                # inputTZ parameter was added after v11.3
                 # so in case it does not exist execute the query without it
                 if errorCode == "27":
                     params.pop("inputTZ")
@@ -160,6 +150,7 @@ class GuardApiClient(RestApiClient):
                     #                          verify=False)
             except:
                 pass
+        print("TEST", response.read())
         return response
 
     def handle_qs(self, params, index_from, fetch_size):
@@ -176,7 +167,8 @@ class GuardApiClient(RestApiClient):
 
         rest_data = json.dumps(params)
         response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
-        results = response
+        # TODO is it response.read()?
+        results = response.read()
         # response = requests.post(self.url + self.qs_target, data=rest_data, headers=self.headers, verify=False)
         # results = response.json()
         if not isinstance(results, list):
@@ -184,7 +176,7 @@ class GuardApiClient(RestApiClient):
                 # errorCode = results["ErrorCode"]
                 errorCode = results.code
                 # For compatibility with Guardium -
-                # inputTZ parameter was aded after v11.3 
+                # inputTZ parameter was added after v11.3
                 # so in case it does not exist execute the query without it
                 if errorCode == "27":
                     params.pop("inputTZ")
