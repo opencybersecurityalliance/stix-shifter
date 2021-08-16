@@ -108,6 +108,7 @@ class GuardApiClient(RestApiClient):
         results = ""
         # context().logger.debug('-------------------  ' + report_name + ' ----------------------')
         params["fetchSize"] = int(fetch_size)
+
         params["indexFrom"] = int(index_from)
         params["inputTZ"] = "UTC"
 

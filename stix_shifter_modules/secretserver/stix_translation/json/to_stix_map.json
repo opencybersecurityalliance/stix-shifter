@@ -1,0 +1,81 @@
+{
+  "username": [
+    {
+    "key": "user-account.user_name"
+  }
+  ],
+
+  "IpAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding",
+      "references": "src_ip"
+    }
+  ],
+   "Server": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+     {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding",
+      "references": "dst_ip"
+    }
+   ],
+
+  "StartTime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Url": {
+    "key": "url.value"
+  },
+
+  "EventSubject" :
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+  "EventNote":
+  {
+     "key": "x-ibm-finding.description",
+      "object": "finding"
+  },
+  "EventDetails":
+  {
+     "key": "x-ibm-finding.finding_type",
+      "object": "finding"
+  },
+  "EventTime":
+  {
+     "key": "x-ibm-finding.time_observed",
+      "object": "finding"
+  },
+
+  "SecretName":
+   {
+      "key": "x-secret.secret_name",
+       "object": "secret"
+   },
+  "ItemId": {
+      "key": "x-secret.secret_id",
+       "object": "secret"
+   },
+  "UserId": {
+      "key": "x-secret.user_id",
+       "object": "secret"
+   }
+}

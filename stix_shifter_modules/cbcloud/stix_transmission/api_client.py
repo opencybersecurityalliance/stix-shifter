@@ -9,6 +9,7 @@ DEFAULT_FIELDS = [
     "device_internal_ip",
     "device_external_ip",
     "parent_hash",
+    "parent_name",
     "device_os"
 ]
 
