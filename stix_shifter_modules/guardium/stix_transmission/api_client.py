@@ -28,19 +28,19 @@ class APIClient():
         params["client_secret"] = connection["client_secret"]
         params["config_uname"] = configuration["auth"]["username"]
         params["config_pass"] = configuration["auth"]["password"]
-        self.client = GuardApiClient(params,
-                                     host,
-                                     port,
-                                     headers,
-                                     url_modifier_function,
-                                     cert_verify,
-                                     sni,
-                                     auth
-                                     )
+        self.client_aux = GuardApiClient(params,
+                                         host,
+                                         port,
+                                         headers,
+                                         url_modifier_function,
+                                         cert_verify,
+                                         sni,
+                                         auth
+                                         )
 
     def ping_data_source(self):
         # Pings the data source
-        if self.client.validate_response(self.client.request_token(), "", False):
+        if self.client_aux.validate_response(self.client_aux.request_token(), "", False):
             return {"code": 200, "success": True}
         else:
             return {"success": False}
@@ -73,7 +73,7 @@ class APIClient():
         respObj.error_type = ""
         respObj.status_code = 401
         # print("query="+query_expression)
-        if self.client.access_token:
+        if self.client_aux.access_token:
             self.query = query_expression
             response = self.build_searchId()
             if response is not None:
@@ -108,7 +108,7 @@ class APIClient():
 
         else:
             id_str = '{"query": ' + json.dumps(
-                self.query) + ', "target" : "' + self.client.url + '", "user":"' + self.client.user + '"}'
+                self.query) + ', "target" : "' + self.client_aux.url + '", "user":"' + self.client_aux.user + '"}'
             # print(id_str)
             id_byt = id_str.encode('utf-8')
             s_id = base64.b64encode(id_byt).decode()
@@ -121,16 +121,16 @@ class APIClient():
         # Sends a GET request from guardium
         # This function calls Guardium to get data
 
-        if self.client.access_token:
+        if self.client_aux.access_token:
             self.search_id = search_id
             self.decode_searchId()
             indx = int(index_from) + 1
             fsize = int(fetch_size) + 1
             if "reportName" in self.query:
-                response = self.client.handle_report(self.query, indx, fsize)
+                response = self.client_aux.handle_report(self.query, indx, fsize)
             if "category" in self.query:
                 # print("TADA")
-                response = self.client.handle_qs(self.query, indx, fsize)
+                response = self.client_aux.handle_qs(self.query, indx, fsize)
             status_code = response.code
             # Though the connector gets the authorization token just before fetching the actual result there is a
             # possibility that the token returned is only valid for a second and response_code = 401 is returned.
@@ -140,8 +140,8 @@ class APIClient():
                 error_code = error_msg.get('error', None)
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
-                    if self.client.get_token():
-                        response = self.client.handle_report(self.query, indx, fetch_size)
+                    if self.client_aux.get_token():
+                        response = self.client_aux.handle_report(self.query, indx, fetch_size)
                         status_code = response.response.status_code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
