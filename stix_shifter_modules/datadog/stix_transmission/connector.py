@@ -16,7 +16,7 @@ class Connector(BaseSyncConnector):
             response = self.api_client.ping_data_source()
             # Construct a response object
             return_obj = dict()
-            if response.get("valid", False):
+            if response["code"] == 200:
                 return_obj['success'] = True
             else:
                 ErrorResponder.fill_error(return_obj, response, ['message'])
@@ -25,23 +25,67 @@ class Connector(BaseSyncConnector):
             self.logger.error('error when pinging datasource {}:'.format(err))
             raise
 
-    def create_results_connection(self, search_id, offset, length):
+    def create_results_connection(self, query_expr, offset, length):
+        length = int(length)
+        offset = int(offset)
+
+        # total records is the sum of the offset and length(limit) value
+        total_records = offset + length
         try:
-            final = []
-            min_range = offset
-            max_range = offset + length
+            # Separate out api supported url params
+            query_expr, filter_attr = Connector.modify_query_expr(json.loads(query_expr))
             # Grab the response, extract the response code, and convert it to readable json
-            response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
-            for event in response_dict["events"]:
-                json_string = json.dumps(event.__dict__, default=str)
-                final.append(json.loads(json_string))
-            # # Construct a response object
+            response_dict = self.api_client.get_search_results(query_expr)
+            event_list = []
             return_obj = dict()
-            return_obj['success'] = True
-            return_obj['data'] = final
+            if response_dict["code"] == 200:
+                response = response_dict["data"]["events"]
+                response_list = response
+                page = 1
+                while len(response) == 1000 and total_records < len(response_list):
+                    response = self.api_client.get_search_results(query_expr, page=page)
+                    response = response["data"]["events"]
+                    response_list.append(response)
+                    page = page + 1
+                # Construct a response object
+                for event in response_list:
+                    json_string = json.dumps(event.__dict__, default=str)
+                    event_list.append(json.loads(json_string)["_data_store"])
+                return_obj['success'] = True
+                return_obj['data'] = event_list
+                # filter data based on filter_attr
+                return_obj = Connector.filter_response(return_obj, filter_attr)
+                # slice the records as per the provided offset and length(limit)
+                return_obj['data'] = return_obj['data'][offset:total_records]
+            else:
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
             import traceback
             self.logger.error(traceback.print_stack())
             raise
+
+    @staticmethod
+    def filter_response(response_dict, filter_attr):
+        try:
+            for attr in filter_attr:
+                response_dict['data'] = list(
+                    filter(lambda person: person[attr] in filter_attr[attr] if isinstance(filter_attr[attr], list) else
+                    person[attr] == filter_attr[attr], response_dict['data']))
+        except KeyError as ex:
+            raise KeyError(f"Invalid parameter {ex}")
+        return response_dict
+
+    @staticmethod
+    def modify_query_expr(query_expr):
+        valid_filter_attributes = ["start", "end", "priority", "sources", "tags", "unaggregated", "page"]
+        filter_attr = dict()
+        api_query_attr = dict()
+        for attribute in query_expr:
+            if attribute in valid_filter_attributes:
+                api_query_attr.update({attribute: query_expr[attribute]})
+            else:
+                value = query_expr[attribute].split(",") if isinstance(query_expr[attribute], str) else query_expr[attribute]
+                filter_attr.update({attribute: value})
+        return api_query_attr, filter_attr

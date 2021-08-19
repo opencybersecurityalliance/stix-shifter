@@ -1,11 +1,11 @@
 {
     "connection": {
         "type": {
-            "displayName": "Sync Sample"
+            "displayName": "Datadog"
         },
-        "host": {
+        "site_url": {
             "type": "text",
-            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+            "default": "https://app.datadoghq.eu"
         },
         "help": {
             "type": "link",
@@ -18,7 +18,7 @@
             "api_key": {
                 "type": "password"
             },
-            "app_key": {
+            "application_key": {
                 "type": "password"
             }
         }
