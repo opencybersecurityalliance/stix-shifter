@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 import re
 from datetime import date, timedelta
 import os
@@ -10,8 +11,8 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClie
 import random
 
 class APIClient():
-
-    def __init__(self, connection, configuration): 
+    
+    def __init__(self, connection, configuration):
          self.url = "https://"+connection["host"]
          self.auth_token_url = "/SecretServer/oauth2/token"
          self.secret_detail = "/SecretServer/api/v1/secrets"
@@ -35,11 +36,15 @@ class APIClient():
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
                                                                             urldata=None,
                                                                             timeout=None)
-        res = response.response.text
-        json_obj = json.loads(res)
-        token = json_obj.get('access_token')
-        self.accessToken = 'Bearer' + " " + token
-        return self.accessToken
+        if(response.code !=200):
+            logging.error("Login failed",response.code )
+            exit(0)
+        else:
+            res = response.response.text
+            json_obj = json.loads(res)
+            token = json_obj.get('access_token')
+            self.accessToken = 'Bearer' + " " + token
+            return self.accessToken
 
     def ping_data_source(self):
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
@@ -68,7 +73,6 @@ class APIClient():
         else:
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
-            #
         return ResponseWrapper(respObj)
 
     def build_searchId(self):
@@ -89,7 +93,9 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from=None, fetch_size=None):
+    def get_search_results(self, search_id, index_from=0, fetch_size=1):
+        ind_from = index_from
+        fet_size = fetch_size
         # Sends a GET request from secret server
         # This function calls secret server to get data
         if (self.get_token()):
@@ -133,8 +139,7 @@ class APIClient():
         response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         if response.code == 403:
-            logger.loggers("Your password has expired. Please login to change it.")
-            exit(0)
+            logging.error("Your password has expired...... Please login to change it.")
         collection = []
         json_data = response.response.text
         eventData = json.loads(json_data)
