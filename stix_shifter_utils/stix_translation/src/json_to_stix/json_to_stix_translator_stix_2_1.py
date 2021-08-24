@@ -1,10 +1,15 @@
 import re
 import uuid
+import json
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
+
+# "ID Contributing Properties" taken from https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070594
+UUID5_NAMESPACE = "00abedb4-aa42-466c-9c01-fed23315a9b7"
+STIX_VERSION = "2.1"
 
 
 # convert JSON data to STIX object using map_data and transformers
@@ -19,11 +24,11 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
 
     # move observed-data cybox objects to top level of bundle objects
     for object in results:
-        cybox_objects = object.get("cybox_objects", {})
-        for key, value in cybox_objects.items():
-            ds2stix.bundle["objects"].append(value)
         del object["cybox_objects"]
         ds2stix.bundle["objects"].append(object)
+
+    for key, value in ds2stix.unique_cybox_objects.items():
+        ds2stix.bundle["objects"].append(value)
 
     return ds2stix.bundle
 
@@ -53,6 +58,7 @@ class DataSourceObjToStixObj:
             "id": "bundle--" + str(uuid.uuid4()),
             "objects": []
         }
+        self.unique_cybox_objects = {}
         self.bundle['objects'] += [data_source]
 
     @staticmethod
@@ -101,20 +107,20 @@ class DataSourceObjToStixObj:
         :param observation: the the STIX observation currently being worked on
         :param stix_value: the STIX value translated from the input object
         :param obj_name_map: the mapping of object name to actual object
-        :param obj_name: the object name derived from the mapping file
+        :param obj_name: the object name derived from the mapping file used for grouping properties to the same cybox object
         """
         obj_type, obj_prop = key_to_add.split('.', 1)
 
         if obj_name in obj_name_map:
+            # add property to existing cybox object
             cybox_obj = observation["cybox_objects"][obj_name_map[obj_name]]
         else:
-            # Todo: use deterministic ID
-            cybox_obj = {"type": obj_type, "spec_version": "2.1", "id": "{}--{}".format(obj_type, str(uuid.uuid4()))}
+            # create new cybox object
+            cybox_obj = {"type": obj_type, "id": "{}--{}".format(obj_type, str(uuid.uuid4()))}
             observation["cybox_objects"][cybox_obj["id"]] = cybox_obj
             # resolves_to_refs lists have been deprecated in favor of relationship objects that have a relationship type of resolves-to. 
             # See the Domain Name cybox object https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070687 for an example.
             # Todo: need to update how resolves_to_refs mappings are handled
-            observation["object_refs"].append(cybox_obj["id"])
             obj_name_map[obj_name] = cybox_obj["id"]
 
         self._add_property(cybox_obj, obj_prop, stix_value, group)
@@ -325,6 +331,36 @@ class DataSourceObjToStixObj:
                         continue
 
                     self._add_property(observation, key_to_add, stix_value, group)
+
+    def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
+        for key, cybox in cybox_objects.items():
+            cybox_type = ""
+            # set id mapping key to original id
+            object_id_map[key] = ""
+            cybox_properties = {}
+            for property, value in cybox.items():
+                if property == "type":
+                    cybox_type = value
+                if not (property == "id" or re.match(".*_ref$", property)):
+                    cybox_properties[property] = value
+            unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
+            # set id mapping value to new id
+            object_id_map[key] = unique_id
+            # replace old id with new
+            cybox["id"] = unique_id
+
+    def _replace_references(self, object_id_map, cybox_objects):
+        for key, cybox in cybox_objects.items():
+            # replace refs with new ids
+            for property, value in cybox.items():
+                if re.match(".*_ref$", property) and str(value) in object_id_map:
+                    cybox[property] = object_id_map[value]
+            cybox["spec_version"] = STIX_VERSION
+
+    def _collect_unique_cybox_objects(self, cybox_objects):
+        for key, cybox in cybox_objects.items():
+            if not cybox["id"] in self.unique_cybox_objects:
+                self.unique_cybox_objects[cybox["id"]] = cybox
     
     def transform(self, obj):
         """
@@ -339,16 +375,15 @@ class DataSourceObjToStixObj:
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
         now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+        object_id_map = {}
 
         observation = {
-            # Todo: use deterministic ID
             'id': stix_type + '--' + str(uuid.uuid4()),
             'type': stix_type,
             'created_by_ref': self.identity_id,
             'created': now,
             'modified': now,
-            'cybox_objects': {},
-            'object_refs': []
+            'cybox_objects': {}
         }
 
         # create normal type objects
@@ -365,6 +400,21 @@ class DataSourceObjToStixObj:
             observation[LAST_OBSERVED_KEY] = now
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
+
+        cybox_objects = observation["cybox_objects"]
+
+        self._generate_and_apply_deterministic_id(object_id_map, cybox_objects)
+
+        self._replace_references(object_id_map, cybox_objects)
+
+        object_refs = []
+        # add cybox references to observed-data object
+        for key, value in object_id_map.items():
+            object_refs.append(value)
+        observation["object_refs"] = object_refs
+        observation["spec_version"] = STIX_VERSION
+
+        self._collect_unique_cybox_objects(cybox_objects)
 
         # Validate each STIX object
         if self.stix_validator:
