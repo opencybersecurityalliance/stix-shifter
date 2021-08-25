@@ -40,8 +40,7 @@ class APIClient:
         # now = datetime.datetime.utcnow().isoformat(timespec="milliseconds") + "Z"
         # https://csp.infoblox.com:443/tide/api/data/threats/state?type=host&rlimit=1
 
-        resp = self.client.call_api(endpoint, 'GET', timeout=self.timeout, urldata={"type": "host", "rlimit": "1"})
-        return {"code": resp.code}
+        return self.client.call_api(endpoint, 'GET', timeout=self.timeout, urldata={"type": "host", "rlimit": "1"})
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX

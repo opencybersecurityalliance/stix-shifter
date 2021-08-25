@@ -10,14 +10,16 @@ class PingConnector(BasePingConnector):
 
     def ping_connection(self):
         try:
-            response_dict = self.api_client.ping_data_source()
-            response_code = response_dict["code"]
+            response = self.api_client.ping_data_source()
+            response_code = response.code
+            response_body = response.read().decode('utf-8')
 
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
                 return_obj['success'] = True
             else:
+                response_dict = {'code': response_code, 'message': response_body}
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:

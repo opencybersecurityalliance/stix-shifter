@@ -28,6 +28,11 @@ class MockResponse:
     def read(self):
         return bytearray(self.object, 'utf-8')
 
+    def __getitem__(cls, x):
+        return getattr(cls, x)
+
+    def __str__(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 class TestTransmission(unittest.TestCase):
     def test_is_async(self):
@@ -77,7 +82,10 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(400, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'invalid_parameter', 'error': "{'code': 400}", 'success': False})
+        self.assertEqual(ping_response, {'code': 'invalid_parameter',
+            'error': '{"error": [{"message": "Invalid type hst --- type must be one of (host, ip, url, email, hash)"}]}',
+            'success': False}
+        )
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_auth_failure(self, mock_ping):
@@ -85,7 +93,10 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(401, response)]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'authentication_fail', 'error': "{'code': 401}", 'success': False})
+        self.assertEqual(ping_response, {'code': 'authentication_fail',
+            'error': '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>',
+            'success': False}
+        )
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_unknown_failure(self, mock_ping):
@@ -97,7 +108,10 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(503, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown', 'error': "{'code': 503}", 'success': False})
+        self.assertEqual(ping_response, {'code': 'unknown',
+            'error': '{"error": {"code": "InternalError"}}',
+            'success': False}
+        )
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_unknown_code(self, mock_ping):
@@ -109,7 +123,10 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(None, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown', 'error': "{'code': None}", 'success': False})
+        self.assertEqual(ping_response, {'code': 'unknown',
+            'error': '{"error": {"code": "InternalError"}}',
+            'success': False}
+        )
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_exception(self, mock_ping):
