@@ -1,7 +1,5 @@
-import json
 from datadog_api_client.v1 import ApiClient, ApiException, Configuration
 from datadog_api_client.v1.api import events_api, authentication_api
-from datadog_api_client.v1.models import *
 
 
 class APIClient:

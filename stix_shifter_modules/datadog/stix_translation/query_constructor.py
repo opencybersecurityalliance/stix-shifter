@@ -1,3 +1,5 @@
+import json
+import time
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
@@ -5,6 +7,7 @@ from stix_shifter_utils.stix_translation.src.utils.transformers import Timestamp
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import logging
 import re
+from typing import Union
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
@@ -17,21 +20,14 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
+    QUERIES = []
     # Change comparator values to match with supported data source operators
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
         ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
+        ComparisonComparators.Equal: ":",
+        ComparisonComparators.NotEqual: "-",
         ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'OR'
@@ -112,9 +108,9 @@ class QueryStringPatternTranslator:
                     continue
                 comparison_string += parsed_reference
             else:
-                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+                comparison_string += "'{mapped_field}' {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
-            if (mapped_fields_count > 1):
+            if mapped_fields_count > 1:
                 comparison_string += " OR "
                 mapped_fields_count -= 1
         return comparison_string
@@ -129,7 +125,75 @@ class QueryStringPatternTranslator:
             raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
-    def _parse_expression(self, expression, qualifier=None) -> str:
+    @staticmethod
+    def join_duplicate_keys(ordered_pairs):
+        d = {}
+        for k, v in ordered_pairs:
+            if k in d:
+                if type(d[k]) == list:
+                    d[k].append(v)
+                else:
+                    newlist = [d[k], v]
+                    d[k] = newlist
+            else:
+                d[k] = v
+        return d
+
+    @staticmethod
+    def convert_to_json(expressions):
+        final_list = []
+        for expression in expressions:
+            newdict = json.loads(expression, object_pairs_hook=QueryStringPatternTranslator.join_duplicate_keys)
+            if "source" in newdict and isinstance(newdict["source"], list):
+                newdict["source"] = ",".join(map(str, newdict["source"]))
+            if "tags" in newdict and isinstance(newdict["tags"], list):
+                newdict["tags"] = ",".join(map(str, newdict["tags"]))
+            final_list.append(json.dumps(newdict))
+        return final_list
+
+    @staticmethod
+    def matched(queries):
+        final_list = []
+        end = int(time.time())
+        start = end - 2764800
+        for query in queries:
+            start_flag = re.search("start':(.+?)AND", query)
+            end_flag = re.search("end':(.+?)$", query)
+            if start_flag:
+                start = start_flag.group(1).strip()
+            if end_flag:
+                end = end_flag.group(1).strip()
+            if "OR" in query:
+                or_list = query.split("OR")
+                for expr in or_list:
+                    if "start" in expr:
+                        expr = '{%s}' % expr
+                    else:
+                        expr = '{%s AND "start" : %s AND "end" : %s}' % (expr, start, end)
+                    expr = expr.replace("'", '"').replace("AND", ",")
+                    final_list.append(expr)
+            else:
+                if "start" in query:
+                    expr = '{%s}' % query
+                else:
+                    expr = '{%s AND "start" : %s AND "end" : %s}' % (query, start, end)
+                expr = expr.replace("'", '"').replace("AND", ",")
+                final_list.append(expr)
+        return final_list
+
+    @classmethod
+    def _format_start_stop_qualifier(self, expression, qualifier) -> str:
+        """Convert a STIX start stop qualifier into a query string.
+        """
+        transformer = TimestampToMilliseconds()
+        qualifier_split = qualifier.split("'")
+        start = transformer.transform(qualifier_split[1])
+        stop = transformer.transform(qualifier_split[3])
+        qualified_query = "%s AND 'start' : %s AND 'end' : %s" % (expression, start, stop)
+        return qualified_query
+
+    def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
+        filters = []
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -166,7 +230,7 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+                return self._format_start_stop_qualifier(comparison_string, qualifier)
             else:
                 return "{}".format(comparison_string)
 
@@ -177,12 +241,12 @@ class QueryStringPatternTranslator:
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
+                expression_02 = "{}".format(expression_02)
             query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
-                return "{} {}".format(query_string, qualifier)
+                return self._format_start_stop_qualifier(query_string, qualifier)
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -200,16 +264,13 @@ class QueryStringPatternTranslator:
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
-            if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
-            elif expression_01:
-                return "{}".format(expression_01)
-            elif expression_02:
-                return "{}".format(expression_02)
-            else:
-                return ''
+            if not isinstance(expression_01, list):
+                QueryStringPatternTranslator.QUERIES.extend([expression_01])
+            if not isinstance(expression_02, list):
+                QueryStringPatternTranslator.QUERIES.extend([expression_02])
+            return QueryStringPatternTranslator.QUERIES
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            return self._parse_expression(expression.expression)
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
@@ -220,15 +281,11 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
+    result_limit = options['result_limit']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    # Add space around START STOP qualifiers
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
+    query = query if isinstance(query, list) else [query]
+    query = QueryStringPatternTranslator.matched(query)
 
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["SELECT * FROM tableName WHERE %s" % query]
+    query = QueryStringPatternTranslator.convert_to_json(query)
+
+    return query
