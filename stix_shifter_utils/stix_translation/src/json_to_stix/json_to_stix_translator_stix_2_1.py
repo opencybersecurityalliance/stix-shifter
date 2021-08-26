@@ -37,7 +37,7 @@ class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
 
     def __init__(self, data_source, ds_to_stix_map, transformers, options, callback=None):
-        data_source["spec_version"] = "2.1"
+        data_source["spec_version"] = STIX_VERSION
         self.identity_id = data_source['id']
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
@@ -333,6 +333,8 @@ class DataSourceObjToStixObj:
                     self._add_property(observation, key_to_add, stix_value, group)
 
     def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
+        # Generates ID based on common namespace and SCO properties (omitting id and spec_version)
+        # TODO: References may need to be include as part of the ID generation
         for key, cybox in cybox_objects.items():
             cybox_type = ""
             # set id mapping key to original id
