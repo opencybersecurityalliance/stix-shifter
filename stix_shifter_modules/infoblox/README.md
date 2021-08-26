@@ -11,7 +11,9 @@
 Ping Endpoint: `https://<hostname>:<port>/tide/api/data/threats/state`
 
 Result (tideDbData) Endpoint: `https://<hostname>:<port>/tide/api/data/threats/state`
+
 Result (dnsEventData) Endpoint: `https://<hostname>:<port>/api/dnsdata/v2/dns_event`
+
 Result (dossierData) Endpoint: `https://<hostname>:<port>/tide/api/services/intel/lookup/indicator`
 
 ##### Reference
