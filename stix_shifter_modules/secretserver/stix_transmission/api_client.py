@@ -1,6 +1,5 @@
 import base64
 import json
-import logging
 import re
 from datetime import date, timedelta
 import os
@@ -9,6 +8,8 @@ from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
+from stix_shifter_utils.utils.error_response import ErrorResponder
+
 
 class APIClient():
     
@@ -33,18 +34,24 @@ class APIClient():
          self.server_ip = connection["host"]
 
     def get_token(self):
-        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
-                                                                            urldata=None,
-                                                                            timeout=None)
-        if(response.code !=200):
-            logging.error("Login failed",response.code )
-            exit(0)
-        else:
-            res = response.response.text
-            json_obj = json.loads(res)
-            token = json_obj.get('access_token')
-            self.accessToken = 'Bearer' + " " + token
+        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
+                                          data=self.payload,
+                                          urldata=None,
+                                          timeout=None)
+
+        return_obj = {}
+
+        response_code = response.code
+        response_txt = response.response.text
+        json_obj = json.loads(response_txt)
+        token = json_obj.get('access_token')
+        self.accessToken = 'Bearer' + " " + token
+
+        if (response_code == 200):
             return self.accessToken
+        else:
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
 
     def ping_data_source(self):
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
@@ -138,8 +145,12 @@ class APIClient():
 
         response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
+        return_obj = {}
         if response.code == 403:
-            logging.error("Your password has expired...... Please login to change it.")
+            response_txt = response.response.text
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
+
         collection = []
         json_data = response.response.text
         eventData = json.loads(json_data)
