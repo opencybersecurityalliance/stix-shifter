@@ -40,14 +40,13 @@ class APIClient():
                                           timeout=None)
 
         return_obj = {}
-
         response_code = response.code
         response_txt = response.response.text
-        json_obj = json.loads(response_txt)
-        token = json_obj.get('access_token')
-        self.accessToken = 'Bearer' + " " + token
 
         if (response_code == 200):
+            json_obj = json.loads(response_txt)
+            token = json_obj.get('access_token')
+            self.accessToken = 'Bearer' + " " + token
             return self.accessToken
         else:
             ErrorResponder.fill_error(return_obj, message=response_txt)
