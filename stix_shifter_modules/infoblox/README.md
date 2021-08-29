@@ -571,8 +571,12 @@ python main.py translate infoblox:dossierData query '{}' "[x-infoblox-dossier-ev
 
 
 ### Limitations
-* Does not support `NOT`, `AND`, or `OR` operator.
-* Does not support using multiple criteria in one field.
+* Does not support `NOT` operator.
+* Multiple individual queries can be produced from a single STIX Pattern, following examples:
+- - Multiple Observation Expressions, ie [ipv4-addr:value = '1.1.1.1'] AND [domain-name:value = 'domain.com']
+- - Patterns using `OR` operator, ie [ipv4-addr:value = '1.1.1.1' OR domain-name:value = 'domain.com']
+- - Patterns with multiple criteria for the same field, ie [ipv4-addr:value = '1.1.1.1' AND ipv4-addr:value = '2.2.2.2']
+
 
 ### Recommendations
 * To resolve timeout issues with the cli or proxy, you can increase the timeout on the proxy and on the module:
