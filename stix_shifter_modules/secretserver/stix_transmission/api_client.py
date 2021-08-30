@@ -145,7 +145,7 @@ class APIClient():
         response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         return_obj = {}
-        if response.code == 403:
+        if response.code != 200:
             response_txt = response.response.text
             ErrorResponder.fill_error(return_obj, message=response_txt)
             raise Exception(return_obj)
