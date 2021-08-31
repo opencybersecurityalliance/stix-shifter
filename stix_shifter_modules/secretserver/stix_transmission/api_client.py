@@ -99,9 +99,7 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from=1, fetch_size=2):
-        ind_from = index_from
-        fet_size = fetch_size
+    def get_search_results(self, search_id, index_from=0, fetch_size=1):
         # Sends a GET request from secret server
         # This function calls secret server to get data
         if (self.get_token()):
