@@ -53,7 +53,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         queries = [
-            "(device.local_ip: '172.16.2.22') + (behaviors.timestamp:>= '2019-09-10T08:43:10' + "
+            "(device.external_ip: '172.16.2.22') + (behaviors.timestamp:>= '2019-09-10T08:43:10' + "
             "behaviors.timestamp:<= '2019-09-23T10:43:10')"]
         self._test_query_assertions(query, queries)
 
@@ -72,7 +72,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
 
-        queries = ["(behaviors.filepath: 'ProgramData' , device.local_ip: 'fe80::4161:ca84:4dc5:f5fc') + ("
+        queries = ["(behaviors.filepath: 'ProgramData' , device.external_ip: 'fe80::4161:ca84:4dc5:f5fc') + ("
                    "behaviors.timestamp:>= '2019-10-01T08:43:10' + behaviors.timestamp:<= '2019-10-30T10:43:10')"]
         self._test_query_assertions(query, queries)
 
@@ -140,7 +140,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[ipv4-addr:value = '198.51.100.5' OR unmapped:attribute = 'something']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((device.local_ip: '198.51.100.5') + behaviors.timestamp:> '2002-06-02T07:14:52.919437')"]
+        queries = ["((device.external_ip: '198.51.100.5') + behaviors.timestamp:> '2002-06-02T07:14:52.919437')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -149,7 +149,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "'powershell.exe' OR user-account:user_id = 'root']"
         query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["((((device.local_ip: '192.168.122.83' , device.local_ip: '100.100.122.90') + behaviors.filename: "
+        queries = ["((((device.external_ip: '192.168.122.83' , device.external_ip: '100.100.122.90') + behaviors.filename: "
                    "'powershell.exe') , behaviors.user_id: 'root') + behaviors.timestamp:> "
                    "'2002-06-02T07:15:35.411587')"]
         queries = _remove_timestamp_from_query(queries)
