@@ -71,10 +71,7 @@ class APIClient:
         offset = start
         max_fetch_count = 10
         for fetch_iteration in range(0, max_fetch_count):
-            params = {
-                "_limit": self.result_limit,
-                "_offset": offset
-            }
+            params = {"_limit": self.result_limit,"_offset": offset}
             resp = self.client.call_api(endpoint + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
             resp_dict["code"] = resp.code
             if resp.code != 200:
@@ -121,10 +118,7 @@ class APIClient:
         start = range_start if range_start else 0
         end = range_end if range_end else 0
 
-        params = {
-            'wait': 'true',
-            'source': 'pdns'
-        }
+        params = {'wait': 'true','source': 'pdns'}
 
         # NOTE: Dossier does not support pagination via multiple requests. All results returned in the response.
         resp = self.client.call_api(endpoint + "/" + payload["threat_type"] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
@@ -141,17 +135,7 @@ class APIClient:
         response_payload = json.loads(resp.read())
         for i in response_payload["results"]:
             for j in i["data"]["items"]:
-                restructure_payload = {
-                    'job': {
-                        'create_time': response_payload['job']['create_time']
-                    },
-                    'results': [{
-                        'data': {
-                            'items': [j]
-                        }
-                    }]
-                }
-
+                restructure_payload = {'job': {'create_time': response_payload['job']['create_time']},'results': [{'data': {'items': [j]}}]}
                 resp_dict["data"].append({"dossierData": restructure_payload})
 
         # Trim result set based on min/max range values
@@ -177,9 +161,7 @@ class APIClient:
         start = range_start if range_start else 0
         end = range_end if range_end else 0
 
-        params = {
-            "rlimit": self.result_limit,
-        }
+        params = {"rlimit": self.result_limit,}
 
         if "type=" not in search_id:
             params["type"] = payload["threat_type"]
