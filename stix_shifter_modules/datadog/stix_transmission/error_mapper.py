@@ -4,7 +4,7 @@ from stix_shifter_utils.utils import logger
 
 error_mapping = {
     # Authentication Failure
-    403: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    403: ErrorCode.TRANSMISSION_FORBIDDEN,
     # A request parameter is not valid
     400: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
 }

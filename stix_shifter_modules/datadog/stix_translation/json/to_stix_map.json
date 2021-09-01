@@ -26,18 +26,18 @@
   "object": "x-datadog-event"
   },
   "title": {
-  "key": "x-datadog-event.event_name",
+  "key": "x-datadog-event.title",
   "object": "x-datadog-event"
   },
   "text": {
-  "key": "x-datadog-event.event_description",
+  "key": "x-datadog-event.text",
   "object": "x-datadog-event"
   },
   "device_name": {
   "key": "x-datadog-event.device_name",
   "object": "x-datadog-event"
   },
-  "event_source": {
+  "source": {
   "key": "x-datadog-event.source",
   "object": "x-datadog-event"
   },
@@ -54,7 +54,7 @@
   "object": "x-datadog-event"
   },
   "alert_type": {
-  "key": "x-datadog-event.event_type",
+  "key": "x-datadog-event.alert_type",
   "object": "x-datadog-event"
   },
   "start": {

@@ -41,10 +41,10 @@ class Connector(BaseSyncConnector):
                 response = response_dict["data"]["events"]
                 response_list = response
                 page = 1
-                while len(response) == 1000 and total_records < len(response_list):
+                while len(response) == 1000 and total_records > len(response_list):
                     response = self.api_client.get_search_results(query_expr, page=page)
                     response = response["data"]["events"]
-                    response_list.append(response)
+                    response_list = response_list + response
                     page = page + 1
                 # Construct a response object
                 for event in response_list:
@@ -78,7 +78,7 @@ class Connector(BaseSyncConnector):
 
     @staticmethod
     def modify_query_expr(query_expr):
-        valid_filter_attributes = ["start", "end", "priority", "sources", "tags", "unaggregated", "page"]
+        valid_filter_attributes = ["start", "end", "priority", "source", "tags", "unaggregated", "page"]
         filter_attr = dict()
         api_query_attr = dict()
         for attribute in query_expr:

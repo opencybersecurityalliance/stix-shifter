@@ -1,7 +1,6 @@
-import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_modules.onelogin.entry_point import EntryPoint
+from stix_shifter_modules.datadog.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
 MODULE = "datadog"
@@ -10,13 +9,13 @@ map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-    "name": "onelogin",
+    "name": "datadog",
     "identity_class": "events"
 }
 options = {}
 
 
-class TestOneloginResultsToStix(unittest.TestCase):
+class TestDatadogResultsToStix(unittest.TestCase):
     """
     class to perform unit test case for onelogin translate results
     """
@@ -36,7 +35,7 @@ class TestOneloginResultsToStix(unittest.TestCase):
         """
         to check whether the object belongs to respective stix object
         """
-        return TestOneloginResultsToStix.get_first(itr, lambda o: isinstance(o, dict) and o.get('type') == typ)
+        return TestDatadogResultsToStix.get_first(itr, lambda o: isinstance(o, dict) and o.get('type') == typ)
 
     @staticmethod
     def test_common_prop():
@@ -44,41 +43,20 @@ class TestOneloginResultsToStix(unittest.TestCase):
         to test the common stix object properties
         """
         data = {
-            "id": 81004691744,
-            "created_at": "2021-06-22T13:12:06.437Z",
-            "account_id": 192204,
-            "user_id": 138593517,
-            "event_type_id": 149,
-            "notes": "Default",
-            "ipaddr": "52.34.255.228",
-            "actor_user_id": 12345,
-            "assuming_acting_user_id": 12345,
-            "role_id": 441778,
-            "app_id": "Default",
-            "group_id": "Default",
-            "otp_device_id": "Default",
-            "policy_id": 123,
-            "actor_system": "Mapping",
-            "custom_message": "Default",
-            "role_name": "Default",
-            "app_name": "Default",
-            "group_name": "Default",
-            "actor_user_name": "Mapping",
-            "user_name": "Akshay Pange",
-            "policy_name": "policy_name",
-            "otp_device_name": "Default",
-            "operation_name": "Default",
-            "directory_sync_run_id": "Default",
-            "directory_id": 12345678,
-            "resolution": "resolution",
-            "client_id": 12345678,
-            "resource_type_id": "Default",
-            "error_description": "error_description",
-            "proxy_ip": "127.0.0.1",
-            "risk_score": 2,
-            "risk_reasons": "risk_reasons",
-            "risk_cookie_id": 123,
-            "browser_fingerprint": True
+            "date_happened": 1628017283,
+            "alert_type": "info",
+            "title": "An API key has been created.",
+            "url": "/event/event?id=6102786433786642502",
+            "text": "API key getevents created by qradar10.34.38.141@gmail.com in org qradar",
+            "tags": [
+                "account",
+                "audit"
+            ],
+            "device_name": "windows-GS-2190",
+            "priority": "normal",
+            "host": "121.0.0.1",
+            "resource": "/api/event/6102786433786642502",
+            "id": 6102786433786642502
         }
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -108,41 +86,20 @@ class TestOneloginResultsToStix(unittest.TestCase):
         to test the custom stix object properties
         """
         data = {
-            "id": 81004691744,
-            "created_at": "2021-06-22T13:12:06.437Z",
-            "account_id": 192204,
-            "user_id": 138593517,
-            "event_type_id": 149,
-            "notes": "Default",
-            "ipaddr": "52.34.255.228",
-            "actor_user_id": 12345,
-            "assuming_acting_user_id": 12345,
-            "role_id": 441778,
-            "app_id": "Default",
-            "group_id": "Default",
-            "otp_device_id": "Default",
-            "policy_id": 123,
-            "actor_system": "Mapping",
-            "custom_message": "Default",
-            "role_name": "Default",
-            "app_name": "Default",
-            "group_name": "Default",
-            "actor_user_name": "Mapping",
-            "user_name": "Akshay Pange",
-            "policy_name": "policy_name",
-            "otp_device_name": "Default",
-            "operation_name": "Default",
-            "directory_sync_run_id": "Default",
-            "directory_id": 12345678,
-            "resolution": "resolution",
-            "client_id": 12345678,
-            "resource_type_id": "Default",
-            "error_description": "error_description",
-            "proxy_ip": "127.0.0.1",
-            "risk_score": 2,
-            "risk_reasons": "risk_reasons",
-            "risk_cookie_id": 123,
-            "browser_fingerprint": True
+            "date_happened": 1628017283,
+            "alert_type": "info",
+            "title": "An API key has been created.",
+            "url": "/event/event?id=6102786433786642502",
+            "text": "API key getevents created by qradar10.34.38.141@gmail.com in org qradar",
+            "tags": [
+                "account",
+                "audit"
+            ],
+            "device_name": "windows-2190",
+            "priority": "normal",
+            "host": "121.0.0.1",
+            "resource": "/api/event/6102786433786642502",
+            "id": 6102786433786642502
         }
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -154,16 +111,14 @@ class TestOneloginResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
 
-        custom_object_1 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-finding')
-        custom_object_2 = TestOneloginResultsToStix.get_first_of_type(objects.values(), 'x-onelogin-risk')
+        custom_object_1 = TestDatadogResultsToStix.get_first_of_type(objects.values(), 'domain-name')
+        custom_object_2 = TestDatadogResultsToStix.get_first_of_type(objects.values(), 'x-datadog-event')
 
         assert custom_object_1 is not None, 'Custom object type not found'
-        assert custom_object_1.keys() == {'type', 'unique_id', 'event_type_id', 'notes', 'role_id', 'app_id', 'custom_message', 'role_name', 'app_name', 'group_name', 'otp_device_name', 'operation_name', 'directory_sync_run_id', 'directory_id', 'resolution', 'client_id', 'resource_type_id', 'proxy_ip', 'browser_fingerprint'}
-        assert custom_object_1['unique_id'] == 81004691744
-        assert custom_object_1['event_type_id'] == 149
+        assert custom_object_1.keys() == {'type', "host"}
+        assert custom_object_1['host'] == "121.0.0.1"
 
         assert custom_object_2 is not None, 'Custom object type not found'
-        assert custom_object_2.keys() == {'type', 'error_description', 'risk_score', 'risk_cookie_id', 'risk_reasons'}
-        assert custom_object_2['error_description'] == 'error_description'
-        assert custom_object_2['risk_reasons'] == 'risk_reasons'
-
+        assert custom_object_2.keys() == {'type', 'alert_type', 'title', 'text', 'tags', 'device_name', 'priority', 'event_id'}
+        assert custom_object_2['title'] == 'An API key has been created.'
+        assert custom_object_2['alert_type'] == 'info'

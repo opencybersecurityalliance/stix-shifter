@@ -11,6 +11,7 @@ class APIClient:
         self.configuration.api_key["appKeyAuth"] = auth["application_key"]
 
     def ping_data_source(self):
+        """To Validate API key"""
         # Enter a context with an instance of the API client
         return_obj = {"code": 200}
         with ApiClient(self.configuration) as api_client:
@@ -24,9 +25,15 @@ class APIClient:
         return return_obj
 
     def get_search_results(self, search_id, page=None):
+        """get the response from Datadog endpoints
+        :param search_id: dict, filter parameters
+        :param page: int,length value
+        :return: response, json object"""
         return_obj = {"code": 200}
         if page:
             search_id.update({"exclude_aggregate": True, "page": page})
+        if "source" in search_id:
+            search_id["sources"] = search_id.pop("source")
         with ApiClient(self.configuration) as api_client:
             api_instance = events_api.EventsApi(api_client)
             try:
