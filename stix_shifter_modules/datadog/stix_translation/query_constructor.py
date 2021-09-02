@@ -12,8 +12,7 @@ from typing import Union
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
-REFERENCE_DATA_TYPES = {"host": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cidr"],
-                        }
+REFERENCE_DATA_TYPES = {}
 
 logger = logging.getLogger(__name__)
 
@@ -43,26 +42,8 @@ class QueryStringPatternTranslator:
         return [QueryStringPatternTranslator._escape_value(value) for value in gen]
 
     @staticmethod
-    def _format_match(value) -> str:
-        raw = QueryStringPatternTranslator._escape_value(value)
-        if raw[0] == "^":
-            raw = raw[1:]
-        else:
-            raw = ".*" + raw
-        if raw[-1] == "$":
-            raw = raw[0:-1]
-        else:
-            raw = raw + ".*"
-        return "\'{}\'".format(raw)
-
-    @staticmethod
     def _format_equality(value) -> str:
         return '\'{}\''.format(value)
-
-    @staticmethod
-    def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -141,6 +122,9 @@ class QueryStringPatternTranslator:
         return d
 
     def convert_to_json(self, expressions):
+        """Convert to json and modify some keys value
+        :param expressions: string, queries
+        :return: final_list, list"""
         final_list = []
         for expression in expressions:
             newdict = json.loads(expression, object_pairs_hook=QueryStringPatternTranslator.join_duplicate_keys)
@@ -148,10 +132,14 @@ class QueryStringPatternTranslator:
                 newdict["source"] = ",".join(map(str, newdict["source"]))
             if "tags" in newdict and isinstance(newdict["tags"], list):
                 newdict["tags"] = ",".join(map(str, newdict["tags"]))
-            keys = ["start", "end", "date_happened", "monitor_id"]
+            # Converting into integer
+            keys = ["start", "end", "date_happened", "monitor_id", "id"]
             for key in keys:
                 if isinstance(newdict.get(key, 1), str):
                     newdict[key] = int(newdict[key])
+            # in case of multiple priority taking only first value as datasource support only one
+            if "priority" in newdict and isinstance(newdict["priority"], list):
+                newdict["priority"] = newdict["priority"][0]
             final_list.append(json.dumps(newdict))
         return final_list
 
@@ -288,12 +276,12 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    result_limit = options['result_limit']
     datadog_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     expression = datadog_translator.translated
     expression = expression if isinstance(expression, list) else [expression]
     # To add default parameters (start,end) and divide query based on OR comparison operator
     query = datadog_translator.matched(expression)
+    # Convert to json and modify some keys value
     query = datadog_translator.convert_to_json(query)
 
     return query

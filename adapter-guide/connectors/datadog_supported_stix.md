@@ -2,8 +2,6 @@
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | <br> | | |
-| ipv4-addr | value | host |
-| <br> | | |
 | domain-name | value | host |
 | <br> | | |
 | url | value | url |

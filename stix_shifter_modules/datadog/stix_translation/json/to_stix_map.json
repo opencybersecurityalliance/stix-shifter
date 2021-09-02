@@ -5,10 +5,6 @@
   },
   "host": [
     {
-      "key": "ipv4-addr.value",
-      "object": "ipv4-addr"
-    },
-    {
       "key": "domain-name.value",
       "object": "domain-name"
     }

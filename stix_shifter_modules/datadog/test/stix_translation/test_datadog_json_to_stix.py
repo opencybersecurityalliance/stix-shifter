@@ -97,7 +97,7 @@ class TestDatadogResultsToStix(unittest.TestCase):
             ],
             "device_name": "windows-2190",
             "priority": "normal",
-            "host": "121.0.0.1",
+            "host": "i-deadbeef",
             "resource": "/api/event/6102786433786642502",
             "id": 6102786433786642502
         }
@@ -115,8 +115,8 @@ class TestDatadogResultsToStix(unittest.TestCase):
         custom_object_2 = TestDatadogResultsToStix.get_first_of_type(objects.values(), 'x-datadog-event')
 
         assert custom_object_1 is not None, 'Custom object type not found'
-        assert custom_object_1.keys() == {'type', "host"}
-        assert custom_object_1['host'] == "121.0.0.1"
+        assert custom_object_1.keys() == {'type', "value"}
+        assert custom_object_1['value'] == "i-deadbeef"
 
         assert custom_object_2 is not None, 'Custom object type not found'
         assert custom_object_2.keys() == {'type', 'alert_type', 'title', 'text', 'tags', 'device_name', 'priority', 'event_id'}

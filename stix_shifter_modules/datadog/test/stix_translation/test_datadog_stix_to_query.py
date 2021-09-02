@@ -14,10 +14,10 @@ class TestStixToQuery(unittest.TestCase, object):
 
     @patch('time.time', return_value=12345678)
     def test_ipv4_query(self, mock_time):
-        stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR domain-name:value = 'abc.com']"
+        stix_pattern = "[x-datadog-event:event_id = 12345678 OR domain-name:value = 'abc.com']"
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
         queries = ['{"host": "abc.com", "start": 9580878, "end": 12345678}',
-                   '{"host": "192.168.122.83", "start": 9580878, "end": 12345678}']
+                   '{"id": 12345678, "start": 9580878, "end": 12345678}']
         assert query['queries'] == queries
 
     def test_url_query(self):
@@ -38,7 +38,7 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_event_id_query(self, mock_time):
         stix_pattern = "[x-datadog-event:event_id = 12345678]"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"id": "12345678", "start": 9580878, "end": 12345678}'
+        queries = '{"id": 12345678, "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
@@ -71,9 +71,9 @@ class TestStixToQuery(unittest.TestCase, object):
 
     @patch('time.time', return_value=12345678)
     def test_source_query(self, mock_time):
-        stix_pattern = "[x-datadog-event:source = 'source']"
+        stix_pattern = "[x-datadog-event:source = 'source' AND x-datadog-event:source = 'default']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"source": "source", "start": 9580878, "end": 12345678}'
+        queries = '{"source": "default,source", "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
@@ -133,15 +133,15 @@ class TestStixToQuery(unittest.TestCase, object):
         assert query['queries'] == queries
 
     def test_query_comparator_operator_AND_with_same_field(self):
-        stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND domain-name:value = 'abc.com'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
+        stix_pattern = "[domain-name:value = 'abc.com'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
-        queries = '{"host": ["abc.com", "192.168.122.83"], "start": 1611836641009, "end": 1627217641009}'
+        queries = '{"host": "abc.com", "start": 1611836641009, "end": 1627217641009}'
         _test_query_assertions(query, queries)
 
     def test_query_comparator_operator_AND_with_different_field(self):
-        stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND x-datadog-event:alert_type = 'alert_type'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
+        stix_pattern = "[domain-name:value = 'abc.com' AND x-datadog-event:alert_type = 'alert_type'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
-        queries = '{"alert_type": "alert_type", "host": "192.168.122.83", "start": 1611836641009, "end": 1627217641009}'
+        queries = '{"alert_type": "alert_type", "host": "abc.com", "start": 1611836641009, "end": 1627217641009}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)

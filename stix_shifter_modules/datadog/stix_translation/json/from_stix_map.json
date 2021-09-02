@@ -1,9 +1,4 @@
 {
-  "ipv4-addr": {
-    "fields": {
-      "value": ["host"]
-    }
-  },
   "url": {
     "fields": {
       "value": ["url", "resource"]

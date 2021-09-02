@@ -42,7 +42,7 @@ This example Datadog data:
                 ],
                 "device_name": "windows-GS-2190",
                 "priority": "normal",
-                "host": "121.0.0.1",
+                "host": "i-deadbeef",
 				"resource": "/api/event/6102786433786642502",
                 "id": 6102786433786642502
             }]'`
@@ -90,14 +90,10 @@ Will return the following STIX observable:
                     "value": "/event/event?id=6102786433786642502"
                 },
                 "3": {
-                    "type": "ipv4-addr",
-                    "value": "121.0.0.1"
+                    "type": "domain-name",
+                    "value": "i-deadbeef"
                 },
                 "4": {
-                    "type": "domain-name",
-                    "host": "121.0.0.1"
-                },
-                "5": {
                     "type": "url",
                     "value": "/api/event/6102786433786642502"
                 }
@@ -154,7 +150,7 @@ Returns following result
             ],
             "device_name": null,
             "priority": "normal",
-            "host": null,
+            "host": "i-deadbeef",
             "id": 6102796743464967547
         }
     ]
