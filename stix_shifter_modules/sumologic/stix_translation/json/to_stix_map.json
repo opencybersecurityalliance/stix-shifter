@@ -1,0 +1,46 @@
+{
+  "_sourcehost": {
+    "key": "domain-name.value"
+  },
+  "_raw": {
+    "key": "artifact.payload_bin"
+  },
+  "_messagecount": {
+    "key": "x-ibm-finding.event_count",
+    "object": "x-ibm-finding",
+    "transformer": "ToInteger"
+  },
+  "_messagetime": {
+    "key": "x-ibm-finding.time_observed",
+    "transformer": "EpochToTimestamp",
+    "cybox": false
+  },
+  "_messageid": {
+    "key": "x-oca-event.code",
+    "object": "x-oca-event"
+  },
+  "_collector": {
+    "key": "x-sumologic.collector",
+    "object": "x-sumologic"
+  },
+  "_collectorid": {
+    "key": "x-sumologic.collectorid",
+    "object": "x-sumologic"
+  },
+  "_source": {
+    "key": "x-sumologic.source",
+    "object": "x-sumologic"
+  },
+  "_sourcecategory":{
+    "key": "x-sumologic.sourcecategory",
+    "object": "x-sumologic"
+  },
+  "_sourceid": {
+    "key": "x-sumologic.sourceid",
+    "object": "x-sumologic"
+  },
+  "_sourcename": {
+    "key": "x-sumologic.sourcename",
+    "object": "x-sumologic"
+  }
+}
