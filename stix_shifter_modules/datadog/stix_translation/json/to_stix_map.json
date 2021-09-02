@@ -9,7 +9,7 @@
       "object": "ipv4-addr"
     },
     {
-      "key": "domain-name.host",
+      "key": "domain-name.value",
       "object": "domain-name"
     }
   ],

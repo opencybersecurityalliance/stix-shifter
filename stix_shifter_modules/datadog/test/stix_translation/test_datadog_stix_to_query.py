@@ -80,7 +80,7 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_monitor_id_query(self, mock_time):
         stix_pattern = "[x-datadog-event:monitor_id = '12345678']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"monitor_id": "12345678", "start": 9580878, "end": 12345678}'
+        queries = '{"monitor_id": 12345678, "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
@@ -108,20 +108,20 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_start_query(self, mock_time):
         stix_pattern = "[x-ibm-finding:start = '2021-01-28T12:24:01.009Z']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"start": "1611836641009", "end": 12345678}'
+        queries = '{"start": 1611836641009, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     def test_end_query(self):
         stix_pattern = "[x-ibm-finding:end = '2021-01-28T12:24:01.009Z']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"end": "1611836641009", "start": 1611833876209}'
+        queries = '{"end": 1611836641009, "start": 1611833876209}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
     def test_time_observed_query(self, mock_time):
-        stix_pattern = "[x-ibm-finding:time_observed = 12345678]"
+        stix_pattern = "[x-ibm-finding:time_observed = '2021-01-28T12:24:01.009Z']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"date_happened": "12345678", "start": 9580878, "end": 12345678}'
+        queries = '{"date_happened": 1611836641009, "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)

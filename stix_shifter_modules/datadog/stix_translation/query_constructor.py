@@ -148,6 +148,10 @@ class QueryStringPatternTranslator:
                 newdict["source"] = ",".join(map(str, newdict["source"]))
             if "tags" in newdict and isinstance(newdict["tags"], list):
                 newdict["tags"] = ",".join(map(str, newdict["tags"]))
+            keys = ["start", "end", "date_happened", "monitor_id"]
+            for key in keys:
+                if isinstance(newdict.get(key, 1), str):
+                    newdict[key] = int(newdict[key])
             final_list.append(json.dumps(newdict))
         return final_list
 
@@ -201,7 +205,6 @@ class QueryStringPatternTranslator:
         return qualified_query
 
     def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
-        filters = []
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -210,7 +213,7 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
-            if stix_field == 'start' or stix_field == 'end':
+            if stix_field in ['start','end', "time_observed"]:
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
 
@@ -285,6 +288,7 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
+    result_limit = options['result_limit']
     datadog_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     expression = datadog_translator.translated
     expression = expression if isinstance(expression, list) else [expression]

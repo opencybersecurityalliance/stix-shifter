@@ -15,12 +15,12 @@
 | <br> | | |
 | x-datadog-event | event_id | id |
 | x-datadog-event | priority | priority |
-| x-datadog-event | event_name | title |
-| x-datadog-event | event_description | text |
+| x-datadog-event | title | title |
+| x-datadog-event | text | text |
 | x-datadog-event | device_name | device_name |
-| x-datadog-event | event_source | source |
+| x-datadog-event | source | source |
 | x-datadog-event | monitor_id | monitor_id |
 | x-datadog-event | tags | tags |
 | x-datadog-event | is_aggregate | is_aggregate |
-| x-datadog-event | event_type | alert_type |
+| x-datadog-event | alert_type | alert_type |
 | <br> | | |
