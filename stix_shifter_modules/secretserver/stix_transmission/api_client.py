@@ -8,10 +8,12 @@ from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
+from stix_shifter_utils.utils.error_response import ErrorResponder
+
 
 class APIClient():
-
-    def __init__(self, connection, configuration): 
+    
+    def __init__(self, connection, configuration):
          self.url = "https://"+connection["host"]
          self.auth_token_url = "/SecretServer/oauth2/token"
          self.secret_detail = "/SecretServer/api/v1/secrets"
@@ -32,14 +34,23 @@ class APIClient():
          self.server_ip = connection["host"]
 
     def get_token(self):
-        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
-                                                                            urldata=None,
-                                                                            timeout=None)
-        res = response.response.text
-        json_obj = json.loads(res)
-        token = json_obj.get('access_token')
-        self.accessToken = 'Bearer' + " " + token
-        return self.accessToken
+        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
+                                          data=self.payload,
+                                          urldata=None,
+                                          timeout=None)
+
+        return_obj = {}
+        response_code = response.code
+        response_txt = response.response.text
+
+        if (response_code == 200):
+            json_obj = json.loads(response_txt)
+            token = json_obj.get('access_token')
+            self.accessToken = 'Bearer' + " " + token
+            return self.accessToken
+        else:
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
 
     def ping_data_source(self):
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
@@ -68,7 +79,6 @@ class APIClient():
         else:
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
-            #
         return ResponseWrapper(respObj)
 
     def build_searchId(self):
@@ -89,7 +99,7 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from=None, fetch_size=None):
+    def get_search_results(self, search_id, index_from=0, fetch_size=1):
         # Sends a GET request from secret server
         # This function calls secret server to get data
         if (self.get_token()):
@@ -132,9 +142,12 @@ class APIClient():
 
         response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
-        if response.code == 403:
-            logger.loggers("Your password has expired. Please login to change it.")
-            exit(0)
+        return_obj = {}
+        if response.code != 200:
+            response_txt = response.response.text
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
+
         collection = []
         json_data = response.response.text
         eventData = json.loads(json_data)
