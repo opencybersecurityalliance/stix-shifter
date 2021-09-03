@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.utils.error_response import ErrorCode
 
 translation = stix_translation.StixTranslation()
 
@@ -94,7 +95,7 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_is_aggregate_query(self, mock_time):
         stix_pattern = "[x-datadog-event:is_aggregate = 'true']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = '{"is_aggregate": "true", "start": 9580878, "end": 12345678}'
+        queries = '{"unaggregated": "true", "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
@@ -150,3 +151,10 @@ class TestStixToQuery(unittest.TestCase, object):
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
         queries = '{"alert_type": ["alert_type", "default"], "start": 9580878, "end": 12345678}'
         _test_query_assertions(query, queries)
+
+    def test_invalid_stix_pattern(self):
+        stix_pattern = "[not_a_valid_pattern]"
+        result = translation.translate('datadog', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
+        assert False == result['success']
+        assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
+        assert stix_pattern[1:-1] in result['error']

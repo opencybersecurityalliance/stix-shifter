@@ -55,10 +55,10 @@ class TestOneloginConnection(unittest.TestCase, object):
     def test_results_all_response(self, mock_results_response, mock_generate_token):
         mocked_return_value = {"code": 200}
         mock_generate_token.return_value = mocked_return_value
-        mocked_return_value = {"code": 200, "data": {"events": [DatadogMockEvent(_data_store={"host":"192.168.122.83"}) for x in range(1000)]}}
+        mocked_return_value = {"code": 200, "data": {"events": [DatadogMockEvent(_data_store={"host":"192.168.122.83", "is_aggregate": False}) for x in range(1000)]}}
         mock_results_response.return_value = mocked_return_value
 
-        query = '{"host": "192.168.122.83", "start": 9580878, "end": 12345678}'
+        query = '{"host": "192.168.122.83", "unaggregated": "false", "start": 9580878, "end": 12345678}'
 
         offset = 0
         length = 1002

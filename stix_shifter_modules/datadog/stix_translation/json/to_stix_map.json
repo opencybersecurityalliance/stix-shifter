@@ -46,7 +46,7 @@
   "object": "x-datadog-event"
   },
   "is_aggregate": {
-  "key": "x-datadog-event.is_aggregate",
+  "key": "x-datadog-event.unaggregated",
   "object": "x-datadog-event"
   },
   "alert_type": {

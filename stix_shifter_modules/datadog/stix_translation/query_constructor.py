@@ -137,6 +137,8 @@ class QueryStringPatternTranslator:
             for key in keys:
                 if isinstance(newdict.get(key, 1), str):
                     newdict[key] = int(newdict[key])
+                elif isinstance(newdict.get(key, 1), list):
+                    newdict[key] = [int(i) for i in newdict[key]]
             # in case of multiple priority taking only first value as datasource support only one
             if "priority" in newdict and isinstance(newdict["priority"], list):
                 newdict["priority"] = newdict["priority"][0]

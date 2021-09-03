@@ -83,6 +83,8 @@ class Connector(BaseSyncConnector):
         api_query_attr = dict()
         for attribute in query_expr:
             if attribute in valid_filter_attributes:
+                if attribute == "unaggregated":
+                    query_expr[attribute] = True if query_expr[attribute].lower() == "true" else False
                 api_query_attr.update({attribute: query_expr[attribute]})
             else:
                 value = query_expr[attribute].split(",") if isinstance(query_expr[attribute], str) else query_expr[attribute]

@@ -19,6 +19,6 @@
 | x-datadog-event | source | source |
 | x-datadog-event | monitor_id | monitor_id |
 | x-datadog-event | tags | tags |
-| x-datadog-event | is_aggregate | is_aggregate |
+| x-datadog-event | is_aggregate | unaggregated |
 | x-datadog-event | alert_type | alert_type |
 | <br> | | |
