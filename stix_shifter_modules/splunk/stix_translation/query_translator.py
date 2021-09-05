@@ -13,7 +13,7 @@ class QueryTranslator(BaseQueryTranslator):
 
     def __init__(self, options, dialect, basepath):
         super().__init__(options, dialect, basepath)
-        self.select_fields = read_json(f"event_select_fields", options)
+        self.select_fields = read_json(f"select_fields", options)
 
     def transform_antlr(self, data, antlr_parsing_object):
         """

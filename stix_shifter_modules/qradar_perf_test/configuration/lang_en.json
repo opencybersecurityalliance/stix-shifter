@@ -1,0 +1,30 @@
+{
+    "connection": {
+        "url": {
+            "label": "Full URL of a raw response file",
+            "placeholder": "https://url.to.raw_events.json.file",
+            "description": "Specify the URL of the raw response JSON file so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "help": {
+            "label": "Need additional help?"
+        },
+        "options": {
+            "hash_options": {
+                "label": "Hash Options",
+                "description": "Hash Options"
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
+            }
+        }
+    }
+}
