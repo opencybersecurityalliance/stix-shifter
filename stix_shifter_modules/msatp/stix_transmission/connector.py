@@ -131,79 +131,78 @@ class Connector(BaseSyncConnector):
         try:
             if self.init_error:
                 raise self.init_error
-            for q in query:
-                q_return_obj = dict()
-                joined_query = Connector.join_query_with_alerts(q)
-                response = self.api_client.run_search(joined_query, offset, 100)
-                q_return_obj = self._handle_errors(response, q_return_obj)
-                response_json = json.loads(q_return_obj["data"])
-                q_return_obj['data'] = response_json['Results']
-                # Customizing the output json,
-                # Get 'TableName' attribute from each row of event data
-                # Create a dictionary with 'TableName' as key and other attributes in an event data as value
-                # Filter the "None" and empty values except for RegistryValueName, which support empty string
-                # Customizing of Registry values json
-                table_event_data = []
-                unify_events_dct = {}
-                for event_data in q_return_obj['data']:
-                    lookup_table = event_data['TableName']
-                    event_data.pop('TableName')
-                    build_data = dict()
-                    build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-                    DeviceId = build_data[lookup_table].get('DeviceId', None)
-                    SHA256 = build_data[lookup_table].get('InitiatingProcessSHA256', None)
-                    device_link, file_link = self.get_ds_links(DeviceId, SHA256)
-                    build_data[lookup_table]['device_link'] = device_link
-                    build_data[lookup_table]['file_link'] = file_link
+            q_return_obj = dict()
+            joined_query = Connector.join_query_with_alerts(query)
+            response = self.api_client.run_search(joined_query, offset, 100)
+            q_return_obj = self._handle_errors(response, q_return_obj)
+            response_json = json.loads(q_return_obj["data"])
+            q_return_obj['data'] = response_json['Results']
+            # Customizing the output json,
+            # Get 'TableName' attribute from each row of event data
+            # Create a dictionary with 'TableName' as key and other attributes in an event data as value
+            # Filter the "None" and empty values except for RegistryValueName, which support empty string
+            # Customizing of Registry values json
+            table_event_data = []
+            unify_events_dct = {}
+            for event_data in q_return_obj['data']:
+                lookup_table = event_data['TableName']
+                event_data.pop('TableName')
+                build_data = dict()
+                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+                DeviceId = build_data[lookup_table].get('DeviceId', None)
+                SHA256 = build_data[lookup_table].get('InitiatingProcessSHA256', None)
+                device_link, file_link = self.get_ds_links(DeviceId, SHA256)
+                build_data[lookup_table]['device_link'] = device_link
+                build_data[lookup_table]['file_link'] = file_link
 
-                    # if there is an alarm ref, unify all the information about the alarm to custom fields
-                    if 'AlertId' in build_data[lookup_table]:
-                        build_data[lookup_table] = Connector.unify_alert_fields(build_data[lookup_table])
-                    else:
-                        build_data[lookup_table]['Alerts'] = []
-
-                    if lookup_table == "DeviceNetworkInfo":
-                        for k, v in build_data[lookup_table].items():
-                            if k == 'IPAddresses':
-                                ip_addresses_lst = list()
-                                arr = json.loads(v)
-                                for obj in arr:
-                                    if 'IPAddress' in obj:
-                                        ip_addresses_lst.append(obj['IPAddress'])
-                                build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
-
-                    if lookup_table == "DeviceRegistryEvents":
-                        registry_build_data = copy.deepcopy(build_data)
-                        registry_build_data[lookup_table]["RegistryValues"] = []
-                        registry_value_dict = {}
-                        for k, v in build_data[lookup_table].items():
-                            if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
-                                registry_value_dict.update({k: v})
-                                registry_build_data[lookup_table].pop(k)
-                        registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
-
-                        build_data[lookup_table] = registry_build_data[lookup_table]
-
-                    build_data[lookup_table]['event_count'] = '1'
-                    build_data[lookup_table]['original_ref'] = json.dumps(event_data)
-
-                    k_tuple = (
-                        build_data[lookup_table].get('DeviceName', None),
-                        build_data[lookup_table].get('ReportId', None),
-                        build_data[lookup_table].get('Timestamp', None))
-                    # if the same event already exists on the table_event_data, just update 'Alerts' field
-                    if k_tuple in unify_events_dct:
-                        ind = unify_events_dct[k_tuple]
-                        table_event_data[ind][lookup_table]['Alerts'].extend(build_data[lookup_table]['Alerts'])
-                    else:
-                        lst_len = len(table_event_data)
-                        table_event_data.insert(lst_len, build_data)
-                        unify_events_dct[k_tuple] = lst_len
-
-                if 'data' in return_obj.keys():
-                    return_obj['data'].extend(table_event_data)
+                # if there is an alarm ref, unify all the information about the alarm to custom fields
+                if 'AlertId' in build_data[lookup_table]:
+                    build_data[lookup_table] = Connector.unify_alert_fields(build_data[lookup_table])
                 else:
-                    return_obj['data'] = table_event_data
+                    build_data[lookup_table]['Alerts'] = []
+
+                if lookup_table == "DeviceNetworkInfo":
+                    for k, v in build_data[lookup_table].items():
+                        if k == 'IPAddresses':
+                            ip_addresses_lst = list()
+                            arr = json.loads(v)
+                            for obj in arr:
+                                if 'IPAddress' in obj:
+                                    ip_addresses_lst.append(obj['IPAddress'])
+                            build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
+
+                if lookup_table == "DeviceRegistryEvents":
+                    registry_build_data = copy.deepcopy(build_data)
+                    registry_build_data[lookup_table]["RegistryValues"] = []
+                    registry_value_dict = {}
+                    for k, v in build_data[lookup_table].items():
+                        if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
+                            registry_value_dict.update({k: v})
+                            registry_build_data[lookup_table].pop(k)
+                    registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
+
+                    build_data[lookup_table] = registry_build_data[lookup_table]
+
+                build_data[lookup_table]['event_count'] = '1'
+                build_data[lookup_table]['original_ref'] = json.dumps(event_data)
+
+                k_tuple = (
+                    build_data[lookup_table].get('DeviceName', None),
+                    build_data[lookup_table].get('ReportId', None),
+                    build_data[lookup_table].get('Timestamp', None))
+                # if the same event already exists on the table_event_data, just update 'Alerts' field
+                if k_tuple in unify_events_dct:
+                    ind = unify_events_dct[k_tuple]
+                    table_event_data[ind][lookup_table]['Alerts'].extend(build_data[lookup_table]['Alerts'])
+                else:
+                    lst_len = len(table_event_data)
+                    table_event_data.insert(lst_len, build_data)
+                    unify_events_dct[k_tuple] = lst_len
+
+            if 'data' in return_obj.keys():
+                return_obj['data'].extend(table_event_data)
+            else:
+                return_obj['data'] = table_event_data
 
             return_obj['success'] = True
             return return_obj
