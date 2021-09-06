@@ -1,13 +1,16 @@
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
+    ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+import datetime
 import logging
 import re
 
 # Source and destination reference mapping for ip and mac addresses.
-# Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
+# Change the keys to match the data source fields. The value array indicates the possible data type that can come into
+# from field.
 REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
                         "SourceIpV6": ["ipv6"],
                         "DestinationIpV4": ["ipv4", "ipv4_cidr"],
@@ -89,7 +92,7 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    #TODO remove self reference from static methods
+    # TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
@@ -113,9 +116,10 @@ class QueryStringPatternTranslator:
                     continue
                 comparison_string += parsed_reference
             else:
-                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                  comparator=comparator, value=value)
 
-            if (mapped_fields_count > 1):
+            if mapped_fields_count > 1:
                 comparison_string += " OR "
                 mapped_fields_count -= 1
         return comparison_string
@@ -127,7 +131,8 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
+            raise NotImplementedError(
+                "Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
@@ -149,7 +154,8 @@ class QueryStringPatternTranslator:
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
+            elif expression.comparator == ComparisonComparators.Equal or \
+                    expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
@@ -158,8 +164,9 @@ class QueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
-            if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
+            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field,
+                                                          mapped_fields_array)
+            if len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
@@ -192,11 +199,13 @@ class QueryStringPatternTranslator:
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
                 expression_01 = self._parse_expression(expression.observation_expression.expr1)
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
+                # qualifier only needs to be passed into the parse expression once since it will be the same for both
+                # expressions
                 expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
                 return "{} {} {}".format(expression_01, operator, expression_02)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                return self._parse_expression(expression.observation_expression.comparison_expression,
+                                              expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
@@ -220,7 +229,8 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
+    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data
+    # source.
     # result_limit = options['result_limit']
     # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
@@ -229,7 +239,22 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("STOP", " STOP ", query)
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
+    # If supported by the query language, a limit on the number of results should be added to the query as defined by
+    # options['result_limit'].
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["{query: %s}" % query.replace("'", "\"")]
+    if ('START' and 'STOP') in query:
+        x = re.search('(.*)(?= START )(.*)(?<=STOP )(.*)', query)
+        query = x.group(1)
+        from_time = x.group(2).replace(' START ', "").replace(" STOP ", "")
+        to_time = x.group(3)
+        from_time = datetime.datetime.strptime(from_time, "t'%Y-%m-%dT%H:%M:%S.%fZ'").strftime("%Y%m%dT%H%M%S")
+        to_time = datetime.datetime.strptime(to_time, "t'%Y-%m-%dT%H:%M:%S.%fZ'").strftime("%Y%m%dT%H%M%S")
+    else:
+        to_time = datetime.datetime.utcnow()
+        from_time = (to_time - datetime.timedelta(minutes=15))
+        to_time = to_time.strftime("%Y%m%dT%H%M%S")
+        from_time = from_time.strftime("%Y%m%dT%H%M%S")
+
+    y = '{"query": "(%s)",\n"fromTime": "%s",\n"toTime": "%s"}' % (query.replace("\'", "\\\""), from_time, to_time)
+    return [y]
