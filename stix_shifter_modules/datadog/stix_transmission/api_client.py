@@ -1,5 +1,6 @@
+import time
 from datadog_api_client.v1 import ApiClient, ApiException, Configuration
-from datadog_api_client.v1.api import events_api, authentication_api
+from datadog_api_client.v1.api import events_api
 
 
 class APIClient:
@@ -16,10 +17,11 @@ class APIClient:
         return_obj = {"code": 200}
         with ApiClient(self.configuration) as api_client:
             # Create an instance of the API class
-            api_instance = authentication_api.AuthenticationApi(api_client)
+            api_instance = events_api.EventsApi(api_client)
+            current_time = int(time.time())
             try:
-                # Validate API key
-                api_instance.validate()
+                # There is no any specific Datadog endpoint which validate application key
+                api_instance.list_events(start=current_time, end=current_time)
             except ApiException as e:
                 return_obj.update({"code": e.status, "message": e.reason})
         return return_obj
