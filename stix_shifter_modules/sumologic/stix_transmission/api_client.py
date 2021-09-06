@@ -8,6 +8,7 @@ class APIClient():
         self.endpoint = "https://api.%s.sumologic.com/api" % (connection.get("region"))
         self.auth = configuration.get('auth')
         self.client = SumoLogic(self.auth.get("username"), self.auth.get("password"), endpoint=self.endpoint)
+        self.search_job = None
 
     def ping_data_source(self):
         # Pings the data source
@@ -16,7 +17,7 @@ class APIClient():
 
     def create_search(self, query_expression):
         # Queries the data source
-        self.search_job = None
+        self.search_job = 10  # Create search_job here
         return {"code": 200, "query_id": "uuid_1234567890"}
 
     def get_search_status(self, search_id):
@@ -37,4 +38,5 @@ class APIClient():
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
+        self.client.delete_search_job(self.search_job)
         return {"code": 200, "success": True}
