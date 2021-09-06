@@ -4,13 +4,14 @@ from enum import Enum
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
-class DatasourceStatus(Enum):
+
+class StatusSumologic(Enum):
     # WAIT, EXECUTE, SORTING, COMPLETED, CANCELED, ERROR
-    WAIT = 'WAIT'
-    EXECUTE = 'EXECUTE'
+    WAIT = 'FORCE PAUSED'
+    EXECUTE = 'GATHERING RESULTS'
     SORTING = 'SORTING'
-    COMPLETED = 'COMPLETED'
-    CANCELED = 'CANCELED'
+    COMPLETED = 'DONE GATHERING RESULTS'
+    CANCELED = 'CANCELLED'
     ERROR = 'ERROR'
 
 
@@ -22,12 +23,12 @@ class StatusConnector(BaseStatusConnector):
     # Map data source status to connector status
     def __getStatus(self, status):
         switcher = {
-            DatasourceStatus.WAIT.value: Status.RUNNING,
-            DatasourceStatus.EXECUTE.value: Status.RUNNING,
-            DatasourceStatus.SORTING.value: Status.RUNNING,
-            DatasourceStatus.COMPLETED.value: Status.COMPLETED,
-            DatasourceStatus.CANCELED.value: Status.CANCELED,
-            DatasourceStatus.ERROR.value: Status.ERROR
+            StatusSumologic.WAIT.value: Status.RUNNING,
+            StatusSumologic.EXECUTE.value: Status.RUNNING,
+            StatusSumologic.SORTING.value: Status.RUNNING,
+            StatusSumologic.COMPLETED.value: Status.COMPLETED,
+            StatusSumologic.CANCELED.value: Status.CANCELED,
+            StatusSumologic.ERROR.value: Status.ERROR
         }
         return switcher.get(status).value
 
@@ -46,6 +47,7 @@ class StatusConnector(BaseStatusConnector):
             if response_code == 200:
                 return_obj['success'] = True
                 return_obj['status'] = self.__getStatus(response_dict["status"])
+                return_obj['progress'] = 100
             else:
                 return_obj['success'] = False
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
