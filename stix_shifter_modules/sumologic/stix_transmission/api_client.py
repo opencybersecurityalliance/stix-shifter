@@ -1,3 +1,4 @@
+from datetime import datetime,timedelta
 import time
 from sumologic import SumoLogic
 
@@ -17,8 +18,12 @@ class APIClient():
 
     def create_search(self, query_expression):
         # Queries the data source
-        self.search_job = 10  # Create search_job here
-        return {"code": 200, "query_id": "uuid_1234567890"}
+        toTime = datetime.utcnow()
+        fromTime = (toTime- timedelta(minutes=15))
+        # self.search_job = self.client.search_job(query_expression, fromTime, toTime, timeZone, byReceiptTime)
+        self.search_job = self.client.search_job(query_expression,fromTime.strftime("%Y%m%dT%H%M%S"),
+                                                 toTime.strftime("%Y%m%dT%H%M%S"))
+        return {"code": 200, "query_id": self.search_job['id']}
 
     def get_search_status(self, search_id):
         # Check the current status of the search
