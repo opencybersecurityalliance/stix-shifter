@@ -1,26 +1,16 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from sumologic import SumoLogic
 
 
 class APIClient():
 
     def __init__(self, connection, configuration):
-         # Uncomment when implementing data source API client.
-        # auth = configuration.get('auth')
-        # headers = dict()
-        # headers['X-Auth-Token'] = auth.get('token')
-        # self.client = RestApiClient(connection.get('host'),
-        #                             connection.get('port'),
-        #                             connection.get('cert', None),
-        #                             headers,
-        #                             cert_verify=connection.get('cert_verify', 'True')
-        #                             )
-
-        # Placeholder client to allow dummy transmission calls.
-        # Remove when implementing data source API client.
-        self.client = "data source API client"
+       self.client = "https://api.%s.sumologic.com/api" % (connection.get("region"))
+       self.auth = configuration.get('auth')
 
     def ping_data_source(self):
         # Pings the data source
+        sumo = SumoLogic(self.auth.get("username"), self.auth.get("password"), endpoint=self.client)
+        sumo.collectors()
         return {"code": 200, "success": True}
 
     def create_search(self, query_expression):
