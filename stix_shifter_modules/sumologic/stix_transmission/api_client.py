@@ -31,9 +31,13 @@ class APIClient():
             status = self.client.search_job_status(self.search_job)
         return {"code": 200, "status": status['state']}
 
-    def get_search_results(self, search_id, range_start=None, range_end=None):
+    def get_search_results(self, search_id, offset, limit):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        return {"code": 200, "data": "Results from search"}
+        status = self.get_search_status(search_id)
+        if status['state'] == "DONE GATHERING RESULTS":
+            result = self.client.search_job_messages(self.search_job, offset, limit)
+        
+        return {"code": 200, "data": result}    
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
