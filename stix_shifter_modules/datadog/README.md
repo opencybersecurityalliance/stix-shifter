@@ -19,7 +19,7 @@ Returns the following search query:
 ```
 {
     "queries": [
-        "{\"host\": \"abc.com\", \"start\": 9580878, \"end\": 12345678}"
+        "{\"host\": \"abc.com\", \"start\": 12344778, \"end\": 12345678}"
     ]
 }
 ```
@@ -86,16 +86,8 @@ Will return the following STIX observable:
                     "event_id": 6102786433786642502
                 },
                 "2": {
-                    "type": "url",
-                    "value": "/event/event?id=6102786433786642502"
-                },
-                "3": {
                     "type": "domain-name",
                     "value": "i-deadbeef"
-                },
-                "4": {
-                    "type": "url",
-                    "value": "/api/event/6102786433786642502"
                 }
             },
             "first_observed": "2021-09-02T05:30:23.823Z",

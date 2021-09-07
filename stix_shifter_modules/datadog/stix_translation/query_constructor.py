@@ -151,7 +151,8 @@ class QueryStringPatternTranslator:
         :return: final_list, list"""
         final_list = []
         end = int(time.time())
-        start = end - 2764800
+        # default last 15 minutes (900 sec)
+        start = end - 900
         for query in queries:
             start_flag = re.search("start' :(.+?)AND", query)
             end_flag = re.search("end' :(.+?)$", query)
@@ -176,7 +177,7 @@ class QueryStringPatternTranslator:
         elif "start" in query:
             expr = '{%s AND "end" : %s}' % (query, end)
         elif "end" in query:
-            start = int(end.strip("'")) - 2764800
+            start = int(end.strip("'")) - 900
             expr = '{%s AND "start" : %s}' % (query, start)
         else:
             expr = '{%s AND "start" : %s AND "end" : %s}' % (query, start, end)
@@ -189,8 +190,8 @@ class QueryStringPatternTranslator:
         """
         transformer = TimestampToMilliseconds()
         qualifier_split = qualifier.split("'")
-        start = transformer.transform(qualifier_split[1])
-        stop = transformer.transform(qualifier_split[3])
+        start = transformer.transform(qualifier_split[1]) // 1000
+        stop = transformer.transform(qualifier_split[3]) // 1000
         qualified_query = "%s AND 'start' : %s AND 'end' : %s" % (expression, start, stop)
         return qualified_query
 
@@ -205,7 +206,7 @@ class QueryStringPatternTranslator:
 
             if stix_field in ['start','end', "time_observed"]:
                 transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
+                expression.value = transformer.transform(expression.value) // 1000
 
             # Some values are formatted differently based on how they're being compared
             # should be (x, y, z, ...)

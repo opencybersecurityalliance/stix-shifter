@@ -1,18 +1,10 @@
 {
-  "resource": {
-    "key": "url.value",
-    "object": "url_resource"
-  },
   "host": [
     {
       "key": "domain-name.value",
       "object": "domain-name"
     }
   ],
-  "url": {
-    "key": "url.value",
-    "object": "url"
-  },
   "id": {
   "key": "x-datadog-event.event_id",
   "object": "x-datadog-event"
