@@ -43,7 +43,8 @@ class APIClient:
             search_id = {"id": search_id}
             result = self.client.search_job_messages(search_id, limit, offset)
 
-        return {"code": 200, "data": result}
+        results = [r['map'] for r in result['messages']]
+        return {"code": 200, "data": results}
 
     def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
