@@ -145,14 +145,15 @@ class QueryStringPatternTranslator:
             final_list.append(json.dumps(newdict))
         return final_list
 
-    def matched(self, queries):
+    def matched(self, queries, time_range):
         """To add default parameters (start,end) and divide query based on OR
         :param queries: string, queries
+        :param time_range: int, minutes
         :return: final_list, list"""
         final_list = []
         end = int(time.time())
-        # default last 15 minutes (900 sec)
-        start = end - 900
+        # default last 5 minutes (300 sec)
+        start = end - (time_range * 60)
         for query in queries:
             start_flag = re.search("start' :(.+?)AND", query)
             end_flag = re.search("end' :(.+?)$", query)
@@ -163,21 +164,21 @@ class QueryStringPatternTranslator:
             if "OR" in query:
                 or_list = query.split("OR")
                 for expr in or_list:
-                    expr = self.query_builder(expr, start, end)
+                    expr = self.query_builder(expr, start, end, time_range)
                     final_list.append(expr)
             else:
-                expr = self.query_builder(query, start, end)
+                expr = self.query_builder(query, start, end, time_range)
                 final_list.append(expr)
         return final_list
 
     @staticmethod
-    def query_builder(query, start, end):
+    def query_builder(query, start, end, time_range):
         if all(x in query for x in ["start", "end"]):
             expr = '{%s}' % query
         elif "start" in query:
             expr = '{%s AND "end" : %s}' % (query, end)
         elif "end" in query:
-            start = int(end.strip("'")) - 900
+            start = int(end.strip("'")) - (time_range * 60)
             expr = '{%s AND "start" : %s}' % (query, start)
         else:
             expr = '{%s AND "start" : %s AND "end" : %s}' % (query, start, end)
@@ -279,11 +280,12 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
+    time_range = options['time_range']
     datadog_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     expression = datadog_translator.translated
     expression = expression if isinstance(expression, list) else [expression]
     # To add default parameters (start,end) and divide query based on OR comparison operator
-    query = datadog_translator.matched(expression)
+    query = datadog_translator.matched(expression, time_range)
     # Convert to json and modify some keys value
     query = datadog_translator.convert_to_json(query)
 
