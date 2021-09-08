@@ -1,0 +1,23 @@
+{
+    "domain-name": {
+        "fields": {
+            "value": ["value"]
+        }
+    },
+    "ipv4-addr": {
+        "fields": {
+            "value": ["value"]
+        }
+    },
+    "ipv6-addr": {
+        "fields": {
+            "value": ["value"]
+        }
+    },
+    "x-infoblox-dossier-event-result-pdns": {
+        "fields": {
+            "hostname_ref.value": ["value"],
+            "ip_ref.value": ["value"]
+        }
+    }
+}
