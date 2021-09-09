@@ -9,7 +9,7 @@ class DatadogMockEvent():
         self._data_store = _data_store
 
 
-class TestOneloginConnection(unittest.TestCase, object):
+class TestDatadogConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
