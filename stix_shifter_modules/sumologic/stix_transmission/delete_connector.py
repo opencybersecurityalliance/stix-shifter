@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector imp
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
+
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
@@ -15,7 +16,7 @@ class DeleteConnector(BaseDeleteConnector):
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
-                return_obj['success'] = response_code['success']
+                return_obj['success'] = response_dict['success']
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
