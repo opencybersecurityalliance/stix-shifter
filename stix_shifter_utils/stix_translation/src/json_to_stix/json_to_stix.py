@@ -21,16 +21,10 @@ class JSONToStix(BaseResultTranslator):
             raise LoadJsonResultsException()
 
         try:
-            if self.options.get("stix_2.1"):
-                json_to_stix_translator = importlib.import_module('stix_shifter_modules.%s.stix_translation.json_to_stix_translator_stix_2_1' % self.module_name)
-            else:
-                json_to_stix_translator = importlib.import_module('stix_shifter_modules.%s.stix_translation.json_to_stix_translator' % self.module_name)
+            json_to_stix_translator = importlib.import_module('stix_shifter_modules.%s.stix_translation.json_to_stix_translator' % self.module_name)
         except Exception as ex:
             # fall back to default
-            if self.options.get("stix_2.1"):
-                json_to_stix_translator = importlib.import_module('stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix_translator_stix_2_1')
-            else:
-                json_to_stix_translator = importlib.import_module('stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix_translator')
+            json_to_stix_translator = importlib.import_module('stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix_translator')
         try:
             results = json_to_stix_translator.convert_to_stix(data_source, self.map_data, json_data, self.transformers, self.options, self.callback)
         except Exception as ex:

@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator, json_to_stix_translator_stix_2_1
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.mysql.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
@@ -71,7 +71,7 @@ class TestTransform(object):
         DATA = {"entry_time": EPOCH_START, "entry_time": EPOCH_END, "eventcount": 1}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, OPTIONS)
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
 
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
@@ -97,9 +97,11 @@ class TestTransform(object):
     def test_STIX_2_0_cybox_observables(self):
         
         result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, OPTIONS)
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
 
         assert result_bundle['type'] == 'bundle'
+        assert "spec_version" in result_bundle
+        assert result_bundle['spec_version'] == '2.0'
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -161,10 +163,11 @@ class TestTransform(object):
 
     def test_STIX_2_1_cybox_observables(self):
         
-        result_bundle = json_to_stix_translator_stix_2_1.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, OPTIONS)
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
 
         assert result_bundle['type'] == 'bundle'
+        assert "spec_version" not in result_bundle
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
