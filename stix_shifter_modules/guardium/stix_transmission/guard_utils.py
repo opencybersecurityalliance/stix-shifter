@@ -101,6 +101,13 @@ class GuardApiClient(RestApiClient):
             self.client_id, self.secret, self.user, self.password)
         return self.client.call_api(self.token_target, 'POST', urldata=self.token_data)
 
+    def validate_response(self, p_response, prefix, abort=False):
+        if p_response.status_code != 200:
+            if abort:
+                raise Exception(prefix + "request faild " + str(p_response.status_code) + "-" + p_response.reason)
+            return False
+        return True
+
     def handle_report(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # REPORT
