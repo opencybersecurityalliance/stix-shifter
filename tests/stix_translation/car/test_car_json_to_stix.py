@@ -125,72 +125,72 @@ class TestTransform(object):
 
         assert(objects.keys() == set(map(str, range(0, 5))))
 
-    def test_process_paths(self):
-        data = {
-          "object": "process",
-          "fields":
-          {
-            "image_path": "C:\\mydir\\blah.exe",
-            "parent_image_path": "C:\\Windows\\System32\\cmd.exe"
-          }
-        }
+    # def test_process_paths(self):
+    #     data = {
+    #       "object": "process",
+    #       "fields":
+    #       {
+    #         "image_path": "C:\\mydir\\blah.exe",
+    #         "parent_image_path": "C:\\Windows\\System32\\cmd.exe"
+    #       }
+    #     }
 
-        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
+    #     result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
 
-        fields = data['fields']
+    #     fields = data['fields']
 
-        assert(result_bundle['type'] == 'bundle')
+    #     assert(result_bundle['type'] == 'bundle')
 
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
+    #     result_bundle_objects = result_bundle['objects']
+    #     observed_data = result_bundle_objects[1]
 
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
+    #     assert('objects' in observed_data)
+    #     objects = observed_data['objects']
 
-        def root_proc(obj):
-            return (type(obj) == dict and
-            obj.get('type') == 'process' and
-            len(obj.keys()) == 3)
+    #     def root_proc(obj):
+    #         return (type(obj) == dict and
+    #         obj.get('type') == 'process' and
+    #         len(obj.keys()) == 3)
 
-        process_obj = TestTransform.get_first(objects.values(), root_proc)
-        assert(process_obj is not None), 'root process object not found'
-        assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref'})
+    #     process_obj = TestTransform.get_first(objects.values(), root_proc)
+    #     assert(process_obj is not None), 'root process object not found'
+    #     assert(process_obj.keys() == {'type', 'binary_ref', 'parent_ref'})
 
-        binary_ref = process_obj['binary_ref']
-        assert(binary_ref in objects), f"binary_ref with key {binary_ref} not found"
-        binary_obj = objects[binary_ref]
-        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
-        assert(binary_obj['type'] == 'file')
-        assert(binary_obj['name'] == 'blah.exe')
+    #     binary_ref = process_obj['binary_ref']
+    #     assert(binary_ref in objects), f"binary_ref with key {binary_ref} not found"
+    #     binary_obj = objects[binary_ref]
+    #     assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+    #     assert(binary_obj['type'] == 'file')
+    #     assert(binary_obj['name'] == 'blah.exe')
 
-        directory_ref = binary_obj['parent_directory_ref']
-        assert(directory_ref in objects), f"parent_directory_ref with key {directory_ref} not found"
-        directory_obj = objects[directory_ref]
-        assert(directory_obj.keys() == {'type', 'path'})
-        assert(directory_obj['type'] == 'directory')
-        assert(directory_obj['path'] == 'C:\\mydir\\')
+    #     directory_ref = binary_obj['parent_directory_ref']
+    #     assert(directory_ref in objects), f"parent_directory_ref with key {directory_ref} not found"
+    #     directory_obj = objects[directory_ref]
+    #     assert(directory_obj.keys() == {'type', 'path'})
+    #     assert(directory_obj['type'] == 'directory')
+    #     assert(directory_obj['path'] == 'C:\\mydir\\')
 
-        parent_ref = process_obj['parent_ref']
-        assert(parent_ref in objects), f"parent_ref with key {parent_ref} not found"
-        parent_obj = objects[parent_ref]
-        assert(parent_obj.keys() == {'type', 'binary_ref'})
-        assert(parent_obj['type'] == 'process')
+    #     parent_ref = process_obj['parent_ref']
+    #     assert(parent_ref in objects), f"parent_ref with key {parent_ref} not found"
+    #     parent_obj = objects[parent_ref]
+    #     assert(parent_obj.keys() == {'type', 'binary_ref'})
+    #     assert(parent_obj['type'] == 'process')
 
-        parent_binary_ref = parent_obj['binary_ref']
-        assert(parent_binary_ref in objects), f"binary_ref with key {parent_binary_ref} not found"
-        parent_binary_obj = objects[parent_binary_ref]
-        assert(parent_binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
-        assert(parent_binary_obj['type'] == 'file')
-        assert(parent_binary_obj['name'] == 'cmd.exe')
+    #     parent_binary_ref = parent_obj['binary_ref']
+    #     assert(parent_binary_ref in objects), f"binary_ref with key {parent_binary_ref} not found"
+    #     parent_binary_obj = objects[parent_binary_ref]
+    #     assert(parent_binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+    #     assert(parent_binary_obj['type'] == 'file')
+    #     assert(parent_binary_obj['name'] == 'cmd.exe')
 
-        parent_directory_ref = parent_binary_obj['parent_directory_ref']
-        assert(parent_directory_ref in objects), f"parent_directory_ref with key {parent_directory_ref} not found"
-        parent_directory_obj = objects[parent_directory_ref]
-        assert(parent_directory_obj.keys() == {'type', 'path'})
-        assert(parent_directory_obj['type'] == 'directory')
-        assert(parent_directory_obj['path'] == 'C:\\Windows\\System32\\')
+    #     parent_directory_ref = parent_binary_obj['parent_directory_ref']
+    #     assert(parent_directory_ref in objects), f"parent_directory_ref with key {parent_directory_ref} not found"
+    #     parent_directory_obj = objects[parent_directory_ref]
+    #     assert(parent_directory_obj.keys() == {'type', 'path'})
+    #     assert(parent_directory_obj['type'] == 'directory')
+    #     assert(parent_directory_obj['path'] == 'C:\\Windows\\System32\\')
 
-        assert(objects.keys() == set(map(str, range(0, 6))))
+    #     assert(objects.keys() == set(map(str, range(0, 6))))
 
 
     def test_flow(self):

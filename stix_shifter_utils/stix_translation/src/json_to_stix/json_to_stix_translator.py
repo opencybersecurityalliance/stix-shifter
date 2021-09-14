@@ -408,6 +408,11 @@ class DataSourceObjToStixObj:
         else:
             self.logger.debug("Not a dict: {}".format(obj))
 
+        # special case:
+        # remove object if:
+        # a reference attribute object does not contain at least one property other than 'type'
+        self._cleanup_references(object_map, observation, ds_map)
+
         # Add required properties to the observation if it wasn't added from the mapping
         if FIRST_OBSERVED_KEY not in observation:
             observation[FIRST_OBSERVED_KEY] = now
@@ -434,3 +439,19 @@ class DataSourceObjToStixObj:
             print_results(validated_result)
 
         return observation
+
+    def _cleanup_references(self, object_map, observation, ds_map):
+        objects = observation.get('objects')
+        remove_keys = []
+        for obj, values in objects.items():
+            rm_keys = list(key for key in values if '_ref' in key)
+            rm_keys.append('type')
+
+            obj_keys = list(values.keys())
+
+            if sorted(rm_keys) == sorted(obj_keys):
+                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values) )
+                remove_keys.append(obj)
+
+        for k in remove_keys:
+            objects.pop(k)

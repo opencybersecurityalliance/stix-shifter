@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, SetValue
 
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,7 @@ class CbCloudQueryStringPatternTranslator:
         ComparisonComparators.GreaterThanOrEqual: ':',
         ComparisonComparators.LessThan: ':',
         ComparisonComparators.LessThanOrEqual: ':',
+        ComparisonComparators.In: ':',
         ObservationOperators.Or: 'OR',
         ObservationOperators.And: 'AND'
     }
@@ -120,18 +121,22 @@ class CbCloudQueryStringPatternTranslator:
         comparison_strings = []
         value_type = None
 
-        for key, pattern in observable.REGEX.items():
-            if bool(re.search(pattern, value)):
-                value_type = key
+        if isinstance(value, str):
+            value = [value]
 
-        for mapped_field in mapped_fields_array:
-            # Only use the ipv4 fields when the value is an actual ipv4 address or range
-            skip = ('ipv4' in mapped_field and value_type not in ['ipv4', 'ipv4_cidr'])
-            # Only use the ipv6 fields when the value is an actual ipv6 address or range
-            skip = skip or ('ipv6' in mapped_field and value_type not in ['ipv6', 'ipv6_cidr'])
+        for val in value:
+            for key, pattern in observable.REGEX.items():
+                if bool(re.search(pattern, val)):
+                    value_type = key
 
-            if not skip:
-                comparison_strings.append(f'{mapped_field}{comparator}{value}')
+            for mapped_field in mapped_fields_array:
+                # Only use the ipv4 fields when the value is an actual ipv4 address or range
+                skip = ('ipv4' in mapped_field and value_type not in ['ipv4', 'ipv4_cidr'])
+                # Only use the ipv6 fields when the value is an actual ipv6 address or range
+                skip = skip or ('ipv6' in mapped_field and value_type not in ['ipv6', 'ipv6_cidr'])
+
+                if not skip:
+                    comparison_strings.append(f'{mapped_field}{comparator}{val}')
 
         # Only wrap in () if there's more than one comparison string
         if len(comparison_strings) == 1:
@@ -165,6 +170,9 @@ class CbCloudQueryStringPatternTranslator:
                 value = self._format_lte(expression.value)
             elif expression.comparator == ComparisonComparators.GreaterThanOrEqual:
                 value = self._format_gte(expression.value)
+            elif (expression.comparator == ComparisonComparators.In and
+                    isinstance(expression.value, SetValue)):
+                value = list(map(self._escape_value, expression.value.element_iterator()))
             else:
                 value = self._escape_value(expression.value)
 

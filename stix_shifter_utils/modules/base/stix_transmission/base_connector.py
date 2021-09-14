@@ -4,6 +4,7 @@ from .base_status_connector import BaseStatusConnector
 from .base_delete_connector import BaseDeleteConnector
 from .base_results_connector import BaseResultsConnector
 import json
+import time
 
 
 class BaseConnector:
@@ -89,9 +90,13 @@ class BaseConnector:
         raise NotImplementedError()
 
     def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source):
+        stats = []
         result = entry_point.create_results_connection(search_id, offset, length)
+        stats.append({'action': 'transmission', 'time': int(time.time()*1000)})
         if result.get('success'):
             data = result['data']
             data = data[:length]
             result = entry_point.translate_results(data_source, json.dumps(data))
+            stats.append({'action': 'translation', 'time': int(time.time()*1000)})
+        result['stats'] = stats
         return result

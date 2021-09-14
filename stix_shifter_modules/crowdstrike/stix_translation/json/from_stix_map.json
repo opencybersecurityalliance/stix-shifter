@@ -1,12 +1,12 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["device.local_ip", "device.external_ip"]
+      "value": ["device.external_ip", "device.local_ip"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["device.local_ip", "device.external_ip"]
+      "value": ["device.external_ip", "device.local_ip"]
     }
   },
     "mac-addr": {
