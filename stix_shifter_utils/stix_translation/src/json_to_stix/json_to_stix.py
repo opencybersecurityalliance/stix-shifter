@@ -25,7 +25,7 @@ class JSONToStix(BaseResultTranslator):
         except Exception as ex:
             # fall back to default
             json_to_stix_translator = importlib.import_module('stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix_translator')
-        
+
         try:
             results = json_to_stix_translator.convert_to_stix(data_source, self.map_data, json_data, self.transformers, self.options, self.callback)
         except Exception as ex:
