@@ -23,10 +23,10 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     observation = ds2stix.transform
     results = list(map(observation, data))
 
-    for object in results:
+    for stix_object in results:
         if ds2stix.spec_version == "2.1":
-            del object["objects"]
-        ds2stix.bundle["objects"].append(object)
+            del stix_object["objects"]
+        ds2stix.bundle["objects"].append(stix_object)
 
     for key, value in ds2stix.unique_cybox_objects.items():
         ds2stix.bundle["objects"].append(value)
