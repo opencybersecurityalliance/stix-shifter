@@ -11,7 +11,6 @@ class TestTranslationDialecs(object):
         for module in modules:
             result = translation.translate(module, stix_translation.DIALECTS, None, None)
             for dialect, data in result.items():
-                # TODO: fix this test
                 assert len(data) == 2
                 assert 'language' in data
                 assert 'default' in data
