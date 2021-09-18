@@ -1,3 +1,4 @@
+import json
 import logging
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter.stix_translation import stix_translation
@@ -417,8 +418,10 @@ class TestTransform(object):
                 "_sourcetype": "fe_cef_syslog", "_time": "2019-01-08T15:18:04.000+00:00", "event_count": 1
                 }
 
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], get_module_transformers(MODULE), options, callback=hash_type_lookup)
+        # result_bundle = json_to_stix_translator.convert_to_stix(
+        #     data_source, map_data, [data], get_module_transformers(MODULE), options, callback=hash_type_lookup)
+
+        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -474,7 +477,7 @@ class TestTransform(object):
 
         payload_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert (payload_obj is not None), 'payload object type not found'
-        assert (payload_obj.keys() == {'type', 'payload_bin'})
+        assert (payload_obj.keys() == {'type', 'payload_bin', 'mime_type'})
         payload = 'SmFuIDA4IDIwMTkgMTU6MTg6MDQgMTkyLjE2OC4zMy4xMzEgZmVub3RpZnktMi5hbGVydDogQ0VGOjB8RmlyZUV5ZXxNQV' \
                   'N8Ni4yLjAuNzQyOTh8TU98bWFsd2FyZS1vYmplY3R8NHxydD1KYW4gMDggMjAxOSAxNToxODowNCBaIHNyYz0xNjkuMjUw' \
                   'LjAuMSBkcHQ9MTEyMCBkc3Q9MTI3LjAuMC4xIHNwdD0xMjIwIHNtYWM9QUE6QkI6Q0M6REQ6MTE6MjIgZG1hYz1FRTpERD' \
@@ -486,3 +489,4 @@ class TestTransform(object):
                   'bGx5LmZpcmVleWUuY29tL21hbHdhcmVfYW5hbHlzaXMvYW5hbHlzZXM/bWFpZD0xIGNzMkxhYmVsPWFub21hbHkgY3MyPW' \
                   '1pc2MtYW5vbWFseSBjczFMYWJlbD1zbmFtZSBjczE9RkVfVVBYO1Ryb2phbi5QV1MuT25saW5lR2FtZXM='
         assert (payload_obj['payload_bin'] == payload)
+        assert (payload_obj['mime_type'] == 'text/plain')
