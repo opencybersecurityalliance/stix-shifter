@@ -20,6 +20,11 @@
 | x-ibm-finding | end | end |
 | x-ibm-finding | time_observed | date_happened |
 | <br> | | |
+| x-oca-event | code | id |
+| x-oca-event | outcome | title |
+| x-oca-event | url_ref.value | url |
+| x-oca-event | original_ref.payload_bin | text |
+| <br> | | |
 | x-datadog-event | event_id | id |
 | x-datadog-event | priority | priority |
 | x-datadog-event | title | title |
