@@ -7,6 +7,15 @@
 | url | value | url |
 | url | value | resource |
 | <br> | | |
+| process | command_line | cmdline
+| process | pid | pid
+| process | creator_user_ref | user
+| process | created_time | timestamp
+| process | created_time | start
+| process | parent_ref | ppid
+| process | host | host
+| process | tags | tags
+| <br> | | |
 | x-ibm-finding | start | start |
 | x-ibm-finding | end | end |
 | x-ibm-finding | time_observed | date_happened |
