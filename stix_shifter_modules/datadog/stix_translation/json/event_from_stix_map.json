@@ -29,5 +29,13 @@
       "end": ["end"],
       "time_observed": ["date_happened"]
     }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": ["id", "id_str"],
+      "outcome": ["title"],
+      "url_ref": ["url"],
+      "original.payload_bin": ["text"]
+    }
   }
 }

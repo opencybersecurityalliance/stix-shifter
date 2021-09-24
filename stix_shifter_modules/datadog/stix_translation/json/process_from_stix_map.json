@@ -1,0 +1,52 @@
+{
+  "url": {
+    "fields": {
+      "value": ["url", "resource"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["host"]
+    }
+  },
+  "process": {
+    "fields":{
+      "command_line": ["cmdline"],
+      "pid": ["pid"],
+      "creator_user_ref": ["user"],
+      "created_time": ["timestamp", "start"],
+      "parent_ref": ["ppid"],
+      "host": ["host"],
+      "tags": ["tags"]
+    }
+  },
+  "x-datadog-event": {
+    "fields": {
+      "event_id": ["id"],
+      "priority": ["priority"],
+      "title": ["title"],
+      "text": ["text"],
+      "device_name": ["device_name"],
+      "source": ["source"],
+      "monitor_id": ["monitor_id"],
+      "tags": ["tags"],
+      "is_aggregate": ["unaggregated"],
+      "alert_type": ["alert_type"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "start": ["start"],
+      "end": ["end"],
+      "time_observed": ["date_happened"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": ["id", "id_str"],
+      "outcome": ["title"],
+      "url_ref.value": ["url"],
+      "original.payload_bin": ["text"]
+    }
+  }
+}
