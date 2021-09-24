@@ -82,6 +82,10 @@ class TestTransform(object):
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
+        filehash = "05503abea"
+        md5hash = "05503abea7b8ac0a01db3cb35179242c"
+        sha1hash = "05503abea7b8ac0a01db3cb35179242c0c1d43c7"
+        sha256hash = "05503abea7b8ac0a01db3cb35179242c0c1d43c7002c51e5982318244bdcaba9"
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
         process_image_dir = "C:\\example\\process\\image"
@@ -95,8 +99,9 @@ class TestTransform(object):
         process_loaded_image = "C:\\example\\some.dll"
         
         data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, 
-                "Image": process_image, "ParentImage": process_parent_image, "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
+                "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
+                "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
@@ -150,8 +155,12 @@ class TestTransform(object):
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'file')
         assert(curr_obj is not None), 'file object type not found'
-        assert(curr_obj.keys() == {'type', 'name'})
+        assert(curr_obj.keys() == {'type', 'name', 'hashes'})
         assert(curr_obj['name'] == file_name)
+        assert(curr_obj['hashes']['UNKNOWN'] == filehash)
+        assert(curr_obj['hashes']['MD5'] == md5hash)
+        assert(curr_obj['hashes']['SHA-1'] == sha1hash)
+        assert(curr_obj['hashes']['SHA-256'] == sha256hash)
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
 
@@ -479,172 +488,6 @@ class TestTransform(object):
         assert(hashes['SHA-256'] == 'someSHA-256hash')
         assert(hashes['SHA-1'] == 'someSHA-1hash')
         assert(hashes['MD5'] == 'someMD5hash')
-
-    def test_hashtype_lookup_with_matching_logsource_id(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-
-        data = [{
-            "sha256hash": "someSHA-256hash",
-            "filehash": "unknownTypeHash",
-            "logsourceid": 65
-        }]
-
-        data_string = json.dumps(data)
-
-        options = {
-            "hash_options": {
-                "generic_name": "filehash",
-                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
-            }
-        }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert(file_object is not None), 'file object not found'
-        assert('hashes' in file_object), 'file object did not contain hashes'
-        assert('type' in file_object), 'file object did not contain type'
-        assert(file_object['type'] == 'file'), 'file object had the wrong type'
-        hashes = file_object['hashes']
-        assert('SHA-256' in hashes), 'SHA-256 hash not included'
-        assert('MD5' in hashes), 'MD5 hash not included'
-        assert('SHA-1' not in hashes), 'SHA-1 hash included'
-        assert(hashes['SHA-256'] == 'someSHA-256hash')
-        assert(hashes['MD5'] == 'unknownTypeHash')
-        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
-
-    def test_hashtype_lookup_without_matching_logsource_id(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-
-        data = [{
-            "sha256hash": "someSHA-256hash",
-            "filehash": "unknownTypeHash",
-            "logsourceid": 123
-        }]
-
-        data_string = json.dumps(data)
-
-        options = {
-            "hash_options": {
-                "generic_name": "filehash",
-                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
-            }
-        }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert(file_object is not None), 'file object not found'
-        assert('hashes' in file_object), 'file object did not contain hashes'
-        assert('type' in file_object), 'file object did not contain type'
-        assert(file_object['type'] == 'file'), 'file object had the wrong type'
-        hashes = file_object['hashes']
-        assert('SHA-256' in hashes), 'SHA-256 hash not included'
-        assert('MD5' not in hashes), 'MD5 hash included'
-        assert('SHA-1' not in hashes), 'SHA-1 hash included'
-        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
-        assert(hashes['SHA-256'] == 'someSHA-256hash')
-        assert(hashes['UNKNOWN'] == 'unknownTypeHash')
-
-    def test_hashtype_lookup_without_matching_generic_hash_name(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-
-        data = [{
-            "filehash": "unknownTypeHash",
-            "sha256hash": "someSHA-256hash",
-            "logsourceid": 123,
-            "filename": "someFile.exe"
-        }]
-
-        data_string = json.dumps(data)
-        options = {
-            "hash_options": {
-                "generic_name": "someUnknownHashName",
-                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
-            }
-        }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert(file_object is not None), 'file object not found'
-        hashes = file_object['hashes']
-        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
-        assert(hashes['UNKNOWN'] == 'unknownTypeHash')
-
-    def test_hashtype_lookup_without_hash_options(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-
-        data = [{
-            "filehash": "unknownTypeHash",
-            "sha256hash": "someSHA-256hash",
-            "logsourceid": 123,
-            "filename": "someFile.exe",
-            "filepath": "C:/my/file/path/someFile.exe"
-        }]
-
-        data_string = json.dumps(data)
-        options = {}
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert(file_object is not None), 'file object not found'
-        hashes = file_object['hashes']
-        assert('UNKNOWN' in hashes), 'UNKNOWN hash not included'
-        directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
-        directory_object_path = directory_object.get('path', '')
-        assert directory_object_path == "C:/my/file/path"
-
-    def test_hashtype_lookup_by_length(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-        hashes = {'SHA-256': '05503abea7b8ac0a01db3cb35179242c0c1d43c7002c51e5982318244bdcaba9',
-                  'SHA-1': '05503abea7b8ac0a01db3cb35179242c0c1d43c7',
-                  'MD5': '05503abea7b8ac0a01db3cb35179242c',
-                  'UNKNOWN': '05503abea'}
-        for key, value in hashes.items():
-            data = [{'filehash': value}]
-            data_string = json.dumps(data)
-            options = {}
-            translation = stix_translation.StixTranslation()
-            result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-            result_bundle_objects = result_bundle['objects']
-            observed_data = result_bundle_objects[1]
-            objects = observed_data['objects']
-
-            file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-            hashes = file_object['hashes']
-            assert(key in hashes), "{} hash not included".format(key)
-            assert(hashes[key] == value)
 
     def test_none_empty_values_in_results(self):
         payload = "Payload"
