@@ -87,7 +87,6 @@ class APIClient():
         # It should be called only ONCE when transmit query is called
         # Structure of the search id is
         # '{"query": ' + json.dumps(self.query) + ', "url" : ' + secretserverurl '}'
-        # s_id = None
         num = str(random.randint(0, 50))
         if (self.query is None):
             raise IOError(3001,
@@ -137,7 +136,6 @@ class APIClient():
         except:
             raise IOError(
                 " Could not extract date- " + self.search_id)
-        # return timestamp
         return matches
 
     def get_events(self):
