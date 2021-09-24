@@ -93,6 +93,7 @@ class APIClient():
             raise IOError(3001,
                           "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
         else:
+            # id_str = '{"query": ' + json.dumps(self.query) + ', "target" : "' + self.url + '" + "random" : "' + str(random.randint(0,22)) + '"}'
             id_str = '{"query": ' + json.dumps(
                 self.query) + ', "target" : "' + self.url + '", "random":"' + num + '"}'
             id_byt = id_str.encode('utf-8')
@@ -115,7 +116,7 @@ class APIClient():
                 self.endDate = self.startDate - timedelta(days = 1)
             resp = self.get_response()
             page_size =100
-            resp = resp[(index_from * page_size):(fetch_size * page_size)]
+            resp=resp[(index_from * page_size):(fetch_size * page_size)]
             return resp
 
     def decode_searchId(self):
@@ -143,6 +144,7 @@ class APIClient():
     def get_events(self):
         payload = "{\"name\": \"Secret Server Events Logs\", \"parameters\": [{\"name\": \"startDate\", \"value\": '%s'} , {\"name\":\"endDate\",\"value\": '%s'}]}" % (
             self.startDate, self.endDate)
+        # payload = "{\n     \"name\":\"Secret Server Events Logs\" ,\n    \n     \"parameters\": [\n        {\n           \"name\": \"startDate\",\n            \"value\": \"2021-09-13 05:22:37.617\"\n        } ,\n        {\n            \"name\": \"endDate\",\n            \"value\": \"2021-09-13 19:50:49.293\"\n        }\n\n      \n    ]\n    \n}\n"
         headers = {
 
             'Authorization': self.accessToken,
