@@ -2,7 +2,9 @@ import base64
 import json
 import re
 from datetime import date, timedelta
+from dateutil import parser
 import os
+from datetime import datetime
 from requests import Response
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
@@ -85,13 +87,12 @@ class APIClient():
         # It should be called only ONCE when transmit query is called
         # Structure of the search id is
         # '{"query": ' + json.dumps(self.query) + ', "url" : ' + secretserverurl '}'
-        s_id = None
+        # s_id = None
         num = str(random.randint(0, 50))
         if (self.query is None):
             raise IOError(3001,
                           "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
         else:
-            # id_str = '{"query": ' + json.dumps(self.query) + ', "target" : "' + self.url + '" + "random" : "' + str(random.randint(0,22)) + '"}'
             id_str = '{"query": ' + json.dumps(
                 self.query) + ', "target" : "' + self.url + '", "random":"' + num + '"}'
             id_byt = id_str.encode('utf-8')
@@ -99,10 +100,11 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from=0, fetch_size=1):
+    def get_search_results(self, search_id, index_from, fetch_size):
         # Sends a GET request from secret server
         # This function calls secret server to get data
         if (self.get_token()):
+
             self.search_id = search_id
             timestamp = self.decode_searchId()
             if len(timestamp) != 0:
@@ -112,6 +114,8 @@ class APIClient():
                 self.startDate = date.today()
                 self.endDate = self.startDate - timedelta(days = 1)
             resp = self.get_response()
+            page_size =100
+            resp=resp[(index_from * page_size):(fetch_size * page_size)]
             return resp
 
     def decode_searchId(self):
@@ -124,17 +128,22 @@ class APIClient():
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
         try:
-            timestamp = re.findall(r'\d{4}-\d{2}-\d{2}', self.query)
+            pattern = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
+            matcher = pattern.findall(self.query)
+            matches = []
+            for match in matcher:
+                dt = parser.parse(match)
+                matches.append(dt.strftime("%Y-%m-%d %H:%M:%S"))
         except:
             raise IOError(
                 " Could not extract date- " + self.search_id)
-        return timestamp
+        # return timestamp
+        return matches
 
     def get_events(self):
         payload = "{\"name\": \"Secret Server Events Logs\", \"parameters\": [{\"name\": \"startDate\", \"value\": '%s'} , {\"name\":\"endDate\",\"value\": '%s'}]}" % (
             self.startDate, self.endDate)
         headers = {
-
             'Authorization': self.accessToken,
             'Content-Type': 'application/json'
         }
