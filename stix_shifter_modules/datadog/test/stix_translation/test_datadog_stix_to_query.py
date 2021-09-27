@@ -8,8 +8,7 @@ translation = stix_translation.StixTranslation()
 
 
 def _test_query_assertions(query, queries):
-    assert query['queries'] == [queries]
-
+    assert query['queries'][0] == queries
 
 class TestStixToQuery(unittest.TestCase, object):
 
@@ -19,14 +18,14 @@ class TestStixToQuery(unittest.TestCase, object):
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
         queries = ['{"host": "abc.com", "start": 12345378, "end": 12345678}',
                    '{"id": 12345678, "start": 12345378, "end": 12345678}']
-        assert query['queries'] == queries
+        assert query['queries'][0] == queries[0]
 
     def test_url_query(self):
         stix_pattern = "[url:value = '/event/url'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
         queries = ['{"url": "/event/url", "start": 1611836641, "end": 1627217641}',
                    '{"resource": "/event/url", "start": 1611836641, "end": 1627217641}']
-        assert query['queries'] == queries
+        assert query['queries'][0] == queries[0]
 
     @patch('time.time', return_value=12345678)
     def test_domain_name_query(self, mock_time):
@@ -131,7 +130,7 @@ class TestStixToQuery(unittest.TestCase, object):
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
         queries = ['{"alert_type": "alert_type", "start": 12345378, "end": 12345678}',
                    '{"tags": "tags", "start": 12345378, "end": 12345678}']
-        assert query['queries'] == queries
+        assert query['queries'][0] == queries[0]
 
     def test_query_comparator_operator_AND_with_same_field(self):
         stix_pattern = "[domain-name:value = 'abc.com'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"
