@@ -458,9 +458,10 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         artifact_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'artifact')
         assert (artifact_object is not None), 'artifact object type not found'
         assert (artifact_object.keys() ==
-                {'type', 'payload_bin'})
+                {'type', 'payload_bin', 'mime_type'})
         assert (artifact_object['type'] == 'artifact')
         assert (artifact_object['payload_bin'] == 'MTAuNDIuNDIuNDIgLSAtIFswNy9EZWMvMjAxODoxMTowNTowNyArMDEwMF0gIkdFVCAvYmxvZyBIVFRQLzEuMSIgMjAwIDI1NzEgIi0iICJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xNF8wKSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvNzAuMC4zNTM4LjEwMiBTYWZhcmkvNTM3LjM2Ig==')
+        assert (artifact_object['mime_type'] == 'text/plain')
 
     def test_url_prop(self):
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
