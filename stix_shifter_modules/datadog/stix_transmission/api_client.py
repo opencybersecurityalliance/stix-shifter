@@ -1,7 +1,8 @@
 import time
 from datadog_api_client.v1 import ApiClient, ApiException, Configuration
 from datadog_api_client.v1.api import events_api
-
+from datadog_api_client.v2 import ApiClient, ApiException, Configuration
+from datadog_api_client.v2.api import processes_api
 
 class APIClient:
 
@@ -45,3 +46,13 @@ class APIClient:
                 return_obj.update({"code": e.status, "message": e.reason})
         return return_obj
 
+    def get_processes_results(self):
+        return_obj = {"code": 200}
+        with APIClient(self.configuration) as api_client:
+            api_instance = processes_api.ProcessesApi(api_client)
+            try:
+                api_response = api_instance.list_processes()
+                return_obj.update({"data": api_response})
+            except ApiException as e:
+                return_obj.update({"code": e.status, "message": e.reason})
+        return return_obj

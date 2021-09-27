@@ -1,6 +1,4 @@
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
-from .stix_translation.query_translator import QueryTranslator
-from .stix_translation.results_translator import ResultsTranslator
 
 class EntryPoint(BaseEntryPoint):
 
@@ -11,8 +9,8 @@ class EntryPoint(BaseEntryPoint):
         if connection:
             self.setup_transmission_basic(connection, configuration)
 
-        dialeat = 'event'
+        dialeat = 'events'
         self.add_dialect(dialeat, default=True)
 
-        dialeat = 'process'
+        dialeat = 'processes'
         self.add_dialect(dialeat,default=True)
