@@ -9,8 +9,8 @@ class EntryPoint(BaseEntryPoint):
         if connection:
             self.setup_transmission_basic(connection, configuration)
 
-        dialeat = 'events'
-        self.add_dialect(dialeat, default=True)
+        dialect = 'events'
+        self.add_dialect(dialect, default=True)
 
-        dialeat = 'processes'
-        self.add_dialect(dialeat,default=True)
+        dialect = 'processes'
+        self.add_dialect(dialect,default=True)
