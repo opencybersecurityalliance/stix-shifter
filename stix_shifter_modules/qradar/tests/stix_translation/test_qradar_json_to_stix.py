@@ -46,10 +46,9 @@ class TestTransform(object):
                     yield id_val
 
     def test_common_prop(self):
-        data = {"starttime": EPOCH_START, "endtime": EPOCH_END, "eventcount": 5}
+        data = [{"starttime": EPOCH_START, "endtime": EPOCH_END, "eventcount": 5}]
 
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -98,13 +97,12 @@ class TestTransform(object):
         process_parent_command_line = "C:\\example\\parent.exe --example"
         process_loaded_image = "C:\\example\\some.dll"
         
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
+        data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
                 "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
-                "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }
+                "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -145,8 +143,9 @@ class TestTransform(object):
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'artifact')
         assert(curr_obj is not None), 'artifact object type not found'
-        assert(curr_obj.keys() == {'type', 'payload_bin'})
+        assert(curr_obj.keys() == {'type', 'payload_bin', 'mime_type'})
         assert(curr_obj['payload_bin'] == base64_payload)
+        assert(curr_obj['mime_type'] == 'text/plain')
 
         curr_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert(curr_obj is not None), 'user-account object type not found'
@@ -222,14 +221,15 @@ class TestTransform(object):
         registry_value_name = "val"
 
 
-        data = {"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
+        data = [{"qidname": qidname, "categoryname": categoryname, "identityip": identityip, "identityhostname": hostname, 
                 "devicetime": EPOCH_START, "logsourcetypename": logsourcetypename, "sourceip": sourceip, "sourcemac": sourcemac, 
                 "url": url, "filename": filename, "filepath": filepath + "\\" + filename, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, 
                 "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
-                "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+                "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }]
+
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
 
@@ -348,44 +348,45 @@ class TestTransform(object):
 
 
     def test_event_finding(self):
-        data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
+        data = [{"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 
                 "crename": "cre name", "credescription": "cre description", "identityip": "0.0.0.0", 
                 "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
-                "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+                "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}]
+
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
         finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(finding['type']) == "x-ibm-finding"
-        assert(finding['name'] == data['crename'])
-        assert(finding['description'] == data['credescription'])
-        assert(finding['severity'] == data['eventseverity'])
-        assert(finding['magnitude'] == data['magnitude'])
-        assert(finding['rule_names'] == data['rulenames'])
-        assert(finding['event_count'] == data['eventcount'])
+        assert(finding['name'] == data[0]['crename'])
+        assert(finding['description'] == data[0]['credescription'])
+        assert(finding['severity'] == data[0]['eventseverity'])
+        assert(finding['magnitude'] == data[0]['magnitude'])
+        assert(finding['rule_names'] == data[0]['rulenames'])
+        assert(finding['event_count'] == data[0]['eventcount'])
         assert(finding['finding_type'] == 'event')
         assert(finding['start'] == START_TIMESTAMP)
         assert(finding['end'] == END_TIMESTAMP)
 
         custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
         assert(custom_object is not None), 'domain-name object type not found'
-        assert(custom_object['device_type'] == data['devicetype'])
-        assert(custom_object['cre_event_list'] == data['creeventlist'])
+        assert(custom_object['device_type'] == data[0]['devicetype'])
+        assert(custom_object['cre_event_list'] == data[0]['creeventlist'])
 
     def test_custom_props(self):
-        data = {"logsourceid": 126, "qid": None,
-                "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}
+        data = [{"logsourceid": 126, "qid": None,
+                "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}]
 
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
 
         custom_object = TestTransform.get_first_of_type(objects.values(), 'x-qradar')
         assert(custom_object is not None), 'domain-name object type not found'
-        assert(custom_object['log_source_id'] == data['logsourceid'])
+        assert(custom_object['log_source_id'] == data[0]['logsourceid'])
         assert 'qid' not in custom_object.keys()
 
     def test_custom_mapping(self):
@@ -498,11 +499,10 @@ class TestTransform(object):
         file_name = ""
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
-        data = {"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}
+        data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
         
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
         
         assert(result_bundle['type'] == 'bundle')
 
