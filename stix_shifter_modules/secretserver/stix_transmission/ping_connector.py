@@ -13,10 +13,10 @@ class PingConnector(BasePingConnector):
             # Construct a response object
             return_obj = dict()
             if response_dict == 200            :
-                return_obj['success'] = True
+                return_obj['Success'] = True
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
-            self.logger.error('error when pinging datasource {}:'.format(err))
+            self.logger.error('Error when pinging datasource {}:'.format(err))
             raise
