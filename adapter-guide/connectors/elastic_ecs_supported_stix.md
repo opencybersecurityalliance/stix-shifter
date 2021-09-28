@@ -1,7 +1,9 @@
+##### Updated on 09/28/21
 ## Elasticsearch ECS
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | original |
+| artifact | mime_type | mime_type_event |
 | <br> | | |
 | autonomous-system | number | number |
 | autonomous-system | name | name |
