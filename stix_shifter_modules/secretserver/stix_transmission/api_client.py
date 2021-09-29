@@ -2,16 +2,20 @@ import base64
 import json
 import re
 from datetime import date, timedelta
+from dateutil import parser
 import os
+from datetime import datetime
 from requests import Response
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
+from stix_shifter_utils.utils.error_response import ErrorResponder
+
 
 class APIClient():
-
-    def __init__(self, connection, configuration): 
+    
+    def __init__(self, connection, configuration):
          self.url = "https://"+connection["host"]
          self.auth_token_url = "/SecretServer/oauth2/token"
          self.secret_detail = "/SecretServer/api/v1/secrets"
@@ -32,14 +36,23 @@ class APIClient():
          self.server_ip = connection["host"]
 
     def get_token(self):
-        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
-                                                                            urldata=None,
-                                                                            timeout=None)
-        res = response.response.text
-        json_obj = json.loads(res)
-        token = json_obj.get('access_token')
-        self.accessToken = 'Bearer' + " " + token
-        return self.accessToken
+        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
+                                          data=self.payload,
+                                          urldata=None,
+                                          timeout=None)
+
+        return_obj = {}
+        response_code = response.code
+        response_txt = response.response.text
+
+        if (response_code == 200):
+            json_obj = json.loads(response_txt)
+            token = json_obj.get('access_token')
+            self.accessToken = 'Bearer' + " " + token
+            return self.accessToken
+        else:
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
 
     def ping_data_source(self):
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
@@ -68,20 +81,17 @@ class APIClient():
         else:
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
-            #
         return ResponseWrapper(respObj)
 
     def build_searchId(self):
         # It should be called only ONCE when transmit query is called
         # Structure of the search id is
         # '{"query": ' + json.dumps(self.query) + ', "url" : ' + secretserverurl '}'
-        s_id = None
         num = str(random.randint(0, 50))
         if (self.query is None):
             raise IOError(3001,
                           "Could not generate search id because 'query' or 'authorization token' or 'credential info' is not available.")
         else:
-            # id_str = '{"query": ' + json.dumps(self.query) + ', "target" : "' + self.url + '" + "random" : "' + str(random.randint(0,22)) + '"}'
             id_str = '{"query": ' + json.dumps(
                 self.query) + ', "target" : "' + self.url + '", "random":"' + num + '"}'
             id_byt = id_str.encode('utf-8')
@@ -89,10 +99,11 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from=None, fetch_size=None):
+    def get_search_results(self, search_id, index_from, fetch_size):
         # Sends a GET request from secret server
         # This function calls secret server to get data
         if (self.get_token()):
+
             self.search_id = search_id
             timestamp = self.decode_searchId()
             if len(timestamp) != 0:
@@ -102,6 +113,8 @@ class APIClient():
                 self.startDate = date.today()
                 self.endDate = self.startDate - timedelta(days = 1)
             resp = self.get_response()
+            page_size =100
+            resp=resp[(index_from * page_size):(fetch_size * page_size)]
             return resp
 
     def decode_searchId(self):
@@ -114,17 +127,21 @@ class APIClient():
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
         try:
-            timestamp = re.findall(r'\d{4}-\d{2}-\d{2}', self.query)
+            pattern = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
+            matcher = pattern.findall(self.query)
+            matches = []
+            for match in matcher:
+                dt = parser.parse(match)
+                matches.append(dt.strftime("%Y-%m-%d %H:%M:%S"))
         except:
             raise IOError(
                 " Could not extract date- " + self.search_id)
-        return timestamp
+        return matches
 
     def get_events(self):
         payload = "{\"name\": \"Secret Server Events Logs\", \"parameters\": [{\"name\": \"startDate\", \"value\": '%s'} , {\"name\":\"endDate\",\"value\": '%s'}]}" % (
             self.startDate, self.endDate)
         headers = {
-
             'Authorization': self.accessToken,
             'Content-Type': 'application/json'
         }
@@ -132,9 +149,12 @@ class APIClient():
 
         response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
-        if response.code == 403:
-            logger.loggers("Your password has expired. Please login to change it.")
-            exit(0)
+        return_obj = {}
+        if response.code != 200:
+            response_txt = response.response.text
+            ErrorResponder.fill_error(return_obj, message=response_txt)
+            raise Exception(return_obj)
+
         collection = []
         json_data = response.response.text
         eventData = json.loads(json_data)

@@ -8,8 +8,6 @@ TRANSFORMERS = get_module_transformers(MODULE)
 epoch_to_timestamp_class = TRANSFORMERS.get('EpochToTimestamp')
 EPOCH_START = 1531169112
 EPOCH_END = 1531169254
-START_TIMESTAMP = epoch_to_timestamp_class.transform(EPOCH_START)
-END_TIMESTAMP = epoch_to_timestamp_class.transform(EPOCH_END)
 entry_point = EntryPoint()
 MAP_DATA = entry_point.get_results_translator().map_data
 DATA_SOURCE = {
@@ -49,6 +47,18 @@ class TestTransform(object):
         return TestTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     @staticmethod
+    def get_first_cybox_of_type_stix_2_1(itr, type):
+        for obj in itr:
+            if obj["type"] ==  type:
+                return obj
+
+    @staticmethod
+    def get_first_cybox_of_id_stix_2_1(itr, id):
+        for obj in itr:
+            if obj["id"] ==  id:
+                return obj
+
+    @staticmethod
     def get_object_keys(objects):
         for k, v in objects.items():
             if k == 'type':
@@ -61,7 +71,7 @@ class TestTransform(object):
         DATA = {"entry_time": EPOCH_START, "entry_time": EPOCH_END, "eventcount": 1}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, OPTIONS)
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
 
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
@@ -84,12 +94,14 @@ class TestTransform(object):
         assert observed_data['first_observed']
         assert observed_data['last_observed']
 
-    def test_cybox_observables(self):
+    def test_STIX_2_0_cybox_observables(self):
         
         result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, OPTIONS)
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
 
         assert result_bundle['type'] == 'bundle'
+        assert "spec_version" in result_bundle
+        assert result_bundle['spec_version'] == '2.0'
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -148,5 +160,62 @@ class TestTransform(object):
         stix_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         assert stix_object, 'directory object type not found'
         assert "path" in stix_object and stix_object["path"] == DATA["file_path"]
+
+    def test_STIX_2_1_cybox_observables(self):
+        
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
+
+        assert result_bundle['type'] == 'bundle'
+        assert "spec_version" not in result_bundle
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert 'objects' not in observed_data
+
+        # network-traffic
+        network_traffic_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'network-traffic')
+        assert network_traffic_object, 'network-traffic object type not found'
+        assert "src_ref" in network_traffic_object
+        assert "dst_ref" in network_traffic_object
+        assert "src_port" in network_traffic_object and network_traffic_object['src_port'] == 3000
+        assert "dst_port" in network_traffic_object and network_traffic_object['dst_port'] == 2000
+        assert "protocols" in network_traffic_object and network_traffic_object['protocols'] == ['tcp'] 
+        
+        # destination ipv4-addr
+        destination_ipv4_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, network_traffic_object["dst_ref"])
+        assert "type" in destination_ipv4_object and destination_ipv4_object['type'] == 'ipv4-addr'
+        assert "value" in destination_ipv4_object and destination_ipv4_object['value'] == DATA["dest_ipaddr"]
+
+        # source ipv4-addr
+        source_ipv4_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, network_traffic_object["src_ref"])
+        assert "type" in source_ipv4_object and source_ipv4_object['type'] == 'ipv4-addr'
+        assert "value" in source_ipv4_object and source_ipv4_object['value'] == DATA["source_ipaddr"]
+
+        # url
+        url_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'url')
+        assert url_object, 'url object type not found'
+        assert "value" in url_object and url_object['value'] == DATA['url']
+
+        # user-account
+        user_account_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'user-account')
+        assert  user_account_object, 'user-account object type not found'
+        assert  "user_id" in user_account_object and user_account_object['user_id'] == DATA['username']
+
+        # file
+        file_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'file')
+        assert file_object, 'file object type not found'
+        assert "name" in file_object and file_object['name'] == DATA['filename']
+        assert "hashes" in file_object 
+        hashes = file_object["hashes"]
+        assert "MD5" in hashes and hashes["MD5"] == DATA["md5hash"]
+        assert "SHA-256" in hashes and hashes["SHA-256"] == DATA["sha256hash"] 
+        assert "parent_directory_ref" in file_object
+
+        # directory
+        directory_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, file_object["parent_directory_ref"])
+        assert directory_object, 'directory object type not found'
+        assert "path" in directory_object and directory_object["path"] == DATA["file_path"]
 
         

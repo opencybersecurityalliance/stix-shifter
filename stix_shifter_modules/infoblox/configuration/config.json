@@ -1,21 +1,25 @@
 {
     "connection": {
         "type": {
-            "displayName": "Alertflex"
+            "displayName": "Infoblox"
         },
         "host": {
             "type": "text",
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
         },
         "port": {
-            "default": 8181,
             "type": "number",
+            "default": 443,
             "min": 1,
             "max": 65535
         },
         "help": {
-            "default": "https://alertflex.github.io/doc/pages/integration.html",
-            "type": "link"
+            "type": "link",
+            "default": "https://docs.infoblox.com/pages/viewpage.action?pageId=34510138"
+        },
+        "cert": {
+            "type": "password",
+            "optional": true
         },
         "sni": {
             "type": "text",
@@ -28,11 +32,8 @@
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
-            "username": {
-                "type": "password"
-            },
-            "password": {
+            "type": "fields",
+            "token": {
                 "type": "password"
             }
         }

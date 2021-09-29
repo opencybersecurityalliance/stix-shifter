@@ -1,0 +1,424 @@
+{
+    "dnsEventData": {
+        "event_time": [
+            {
+                "key": "first_observed",
+                "cybox": false
+            },
+            {
+                "key": "last_observed",
+                "cybox": false
+            }
+        ],
+        "private_ip": [
+            {
+                "key": "ipv4-addr.value",
+                "object": "private_ip"
+            }
+        ],
+        "mac_address": [
+            {
+                "key": "mac-addr.value",
+                "object": "mac_address"
+            },
+            {
+                "key": "ipv4-addr.resolves_to_refs",
+                "object": "private_ip",
+                "references": [
+                    "mac_address"
+                ]
+            }
+        ],
+        "user": [
+            {
+                "key": "user-account.user_id",
+                "object": "user"
+            },
+            {
+                "key": "x-infoblox-dns-event.user_ref",
+                "object": "x_infoblox",
+                "references": "user"
+            }
+        ],
+        "qip": [
+            {
+                "key": "ipv4-addr.value",
+                "object": "qip"
+            },
+            {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "qip"
+            },
+            {
+                "key": "network-traffic.protocols",
+                "object": "nt",
+                "value": [
+                    "domain"
+                ]
+            },
+            {
+                "key": "x-infoblox-dns-event.src_ip_ref",
+                "object": "x_infoblox",
+                "references": "qip"
+            }
+        ],
+        "rip": [
+            {
+                "key": "ipv4-addr.value",
+                "object": "rip"
+            },
+            {
+                "key": "network-traffic.extensions.dns-ext.resolved_ip_refs",
+                "object": "nt",
+                "references": [
+                    "rip"
+                ]
+            }
+        ],
+        "qname": [
+            {
+                "key": "domain-name.value",
+                "object": "qname",
+                "transformer": "InfobloxToDomainName"
+            },
+            {
+                "key": "network-traffic.extensions.dns-ext.question.domain_ref",
+                "object": "nt",
+                "references": "qname"
+            }
+        ],
+        "qtype": [
+            {
+                "key": "network-traffic.extensions.dns-ext.type",
+                "object": "nt"
+            }
+        ],
+        "rcode": [
+            {
+                "key": "network-traffic.extensions.dns-ext.response_code",
+                "object": "nt"
+            }
+        ],
+        "rdata": [
+            {
+                "key": "network-traffic.extensions.dns-ext.answers.data",
+                "object": "nt"
+            }
+        ],
+        "severity": [
+            {
+                "key": "x-infoblox-dns-event.x_infoblox_severity",
+                "object": "x_infoblox"
+            }
+        ],
+        "tclass": [
+            {
+                "key": "x-infoblox-dns-event.threat_class",
+                "object": "x_infoblox"
+            }
+        ],
+        "threat_indicator": [
+            {
+                "key": "x-infoblox-dns-event.threat_indicator",
+                "object": "x_infoblox"
+            }
+        ],
+        "tproperty": [
+            {
+                "key": "x-infoblox-dns-event.threat_property",
+                "object": "x_infoblox"
+            }
+        ],
+        "policy_name": [
+            {
+                "key": "x-infoblox-dns-event.policy_name",
+                "object": "x_infoblox"
+            }
+        ],
+        "os_version": [
+            {
+                "key": "x-infoblox-dns-event.os_version",
+                "object": "x_infoblox"
+            }
+        ],
+        "network": [
+            {
+                "key": "x-infoblox-dns-event.network",
+                "object": "x_infoblox"
+            }
+        ],
+        "category": [
+            {
+                "key": "x-infoblox-dns-event.category",
+                "object": "x_infoblox"
+            }
+        ],
+        "confidence": [
+            {
+                "key": "x-infoblox-dns-event.x_infoblox_confidence",
+                "object": "x_infoblox"
+            }
+        ],
+        "country": [
+            {
+                "key": "x-infoblox-dns-event.country",
+                "object": "x_infoblox"
+            }
+        ],
+        "device": [
+            {
+                "key": "x-infoblox-dns-event.device",
+                "object": "x_infoblox"
+            }
+        ],
+        "dhcp_fingerprint": [
+            {
+                "key": "x-infoblox-dns-event.dhcp_fingerprint",
+                "object": "x_infoblox"
+            }
+        ],
+        "feed_name": [
+            {
+                "key": "x-infoblox-dns-event.feed_name",
+                "object": "x_infoblox"
+            }
+        ],
+        "feed_type": [
+            {
+                "key": "x-infoblox-dns-event.feed_type",
+                "object": "x_infoblox"
+            }
+        ]
+    },
+    "dossierData": {
+        "job": {
+            "create_time": [
+                {
+                    "key": "first_observed",
+                    "cybox": false
+                },
+                {
+                    "key": "last_observed",
+                    "cybox": false
+                }
+            ]
+        },
+        "results": {
+            "data": {
+                "items": {
+                    "Domain": [
+                        {
+                            "key": "domain-name.value",
+                            "object": "domain"
+                        },
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.domain_ref",
+                            "object": "dossierpdns",
+                            "references": "domain"
+                        }
+                    ],
+                    "Hostname": [
+                        {
+                            "key": "domain-name.value",
+                            "object": "hostname"
+                        },
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.hostname_ref",
+                            "object": "dossierpdns",
+                            "references": "hostname"
+                        }
+                    ],
+                    "IP": [
+                        {
+                            "key": "ipv4-addr.value",
+                            "object": "ip"
+                        },
+                        {
+                            "key": "ipv6-addr.value",
+                            "object": "ip"
+                        },
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.ip_ref",
+                            "object": "dossierpdns",
+                            "references": "ip"
+                        }
+                    ],
+                    "Record_Type": [
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.record_type",
+                            "object": "dossierpdns"
+                        }
+                    ],
+                    "Last_Seen": [
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.last_seen",
+                            "object": "dossierpdns"
+                        }
+                    ],
+                    "NameServer": [
+                        {
+                            "key": "x-infoblox-dossier-event-result-pdns.name_server",
+                            "object": "dossierpdns"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "tideDbData": {
+        "id": [
+            {
+                "key": "x-infoblox-threat.id",
+                "object": "x_infoblox"
+            }
+        ],
+        "detected": [
+            {
+                "key": "first_observed",
+                "cybox": false
+            },
+            {
+                "key": "last_observed",
+                "cybox": false
+            }
+        ],
+        "received": [
+            {
+                "key": "x-infoblox-threat.received",
+                "object": "x_infoblox"
+            }
+        ],
+        "class": [
+            {
+                "key": "x-infoblox-threat.threat_class",
+                "object": "x_infoblox"
+            }
+        ],
+        "confidence": [
+            {
+                "key": "x-infoblox-threat.x_infoblox_confidence",
+                "object": "x_infoblox"
+            }
+        ],
+        "dga": [
+            {
+                "key": "x-infoblox-threat.dga",
+                "object": "x_infoblox"
+            }
+        ],
+        "expiration": [
+            {
+                "key": "x-infoblox-threat.expiration",
+                "object": "x_infoblox"
+            }
+        ],
+        "hash": [
+            {
+                "key": "x-infoblox-threat.hash",
+                "object": "x_infoblox"
+            }
+        ],
+        "host": [
+            {
+                "key": "x-infoblox-threat.host_name",
+                "object": "x_infoblox"
+            }
+        ],
+        "imported": [
+            {
+                "key": "x-infoblox-threat.imported",
+                "object": "x_infoblox"
+            }
+        ],
+        "ip": [
+            {
+                "key": "ipv4-addr.value",
+                "object": "ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "ip"
+            },
+            {
+                "key": "x-infoblox-threat.ip_ref",
+                "object": "x_infoblox",
+                "references": "ip"
+            }
+        ],
+        "domain": [
+            {
+                "key": "domain-name.value"
+            },
+            {
+                "key": "x-infoblox-threat.domain_ref",
+                "object": "x_infoblox",
+                "references": "domain"
+            }
+        ],
+        "email": [
+            {
+                "key": "email-addr.value"
+            },
+            {
+                "key": "x-infoblox-threat.email_ref",
+                "object": "x_infoblox",
+                "references": "email"
+            }
+        ],
+        "origin": [
+            {
+                "key": "x-infoblox-threat.origin",
+                "object": "x_infoblox"
+            }
+        ],
+        "profile": [
+            {
+                "key": "x-infoblox-threat.profile",
+                "object": "x_infoblox"
+            }
+        ],
+        "property": [
+            {
+                "key": "x-infoblox-threat.property",
+                "object": "x_infoblox"
+            }
+        ],
+        "target": [
+            {
+                "key": "x-infoblox-threat.target",
+                "object": "x_infoblox"
+            }
+        ],
+        "threat_level": [
+            {
+                "key": "x-infoblox-threat.threat_level",
+                "object": "x_infoblox"
+            }
+        ],
+        "tld": [
+            {
+                "key": "x-infoblox-threat.top_level_domain",
+                "object": "x_infoblox"
+            }
+        ],
+        "type": [
+            {
+                "key": "x-infoblox-threat.threat_type",
+                "object": "x_infoblox"
+            }
+        ],
+        "up": [
+            {
+                "key": "x-infoblox-threat.active",
+                "object": "x_infoblox"
+            }
+        ],
+        "url": [
+            {
+                "key": "x-infoblox-threat.url",
+                "object": "x_infoblox"
+            }
+        ]
+    }
+}
