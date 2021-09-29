@@ -61,10 +61,9 @@ class CSQueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
 
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-            mapped_field = mapped_fields_array[0]
+            mapped_fields_count = len(mapped_fields_array)
+            query_string = ""
             comparator = self.comparator_lookup[expression.comparator]
-
-            # Handle negate exp
             if expression.negated and expression.comparator == ComparisonComparators.Equal:
                 comparator = self._get_negate_comparator()
 
@@ -73,15 +72,23 @@ class CSQueryStringPatternTranslator:
 
             value = self._escape_value(expression.value)
 
-            comparison_string = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
-                                                                              comparator=comparator, value=value)
+            for mapped_field in mapped_fields_array:
+                # Handle negate exp
+                mapped_field_query_str = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
+                                                                                  comparator=comparator, value=value)
+                if mapped_fields_count > 1:
+                    mapped_field_query_str += self.comparator_lookup[ComparisonExpressionOperators.Or]
+                    mapped_fields_count -= 1
+
+                query_string += mapped_field_query_str
+
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
-                    return self._format_start_stop_qualifier(comparison_string, qualifier)
+                    query_string = self._format_start_stop_qualifier(query_string, qualifier)
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
-            else:
-                return "{}".format(comparison_string)
+
+            return '({})'.format(query_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             # Wrap nested combined comparison expressions in parentheses

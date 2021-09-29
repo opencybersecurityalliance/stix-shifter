@@ -26,3 +26,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Amazon Athena](connectors/aws_athena_supported_stix.md)
 - [CrowdStrike Falcon](connectors/crowdstrike_supported_stix.md)
 - [Trend Micro Vision One](connectors/trendmicro_vision_one_supported_stix.md)
+- [Infoblox](connectors/infoblox_supported_stix.md)

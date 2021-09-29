@@ -623,6 +623,10 @@
         "references": "artifact"
       }
     ],
+    "mime_type_event": {
+      "key": "artifact.mime_type",
+      "object": "artifact"
+    },
     "action": {
       "key": "x-oca-event.action",
       "object": "event"

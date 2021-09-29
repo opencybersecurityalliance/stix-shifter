@@ -181,8 +181,8 @@
   },
   "autonomous-system": {
     "fields": {
-      "value": ["client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name"],
-      "number": ["client.as.number, server.as.number, source.as.number, destination.as.number"]
+      "value": ["client.as.organization.name", "server.as.organization.name", "source.as.organization.name", "destination.as.organization.name"],
+      "number": ["client.as.number", "server.as.number", "source.as.number", "destination.as.number"]
     }
   },
   "email-addr": {
