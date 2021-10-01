@@ -25,6 +25,11 @@ class Connector(BaseSyncConnector):
             raise
 
     def create_results_connection(self, query_expr, offset, length):
+        if self.api_client.endpoint == 'events':
+            return self.get_events(query_expr, offset, length)
+        else:
+            return self.get_processes(query_expr, offset, length)
+    def get_events(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 
@@ -61,6 +66,46 @@ class Connector(BaseSyncConnector):
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
+            import traceback
+            self.logger.error(traceback.print_stack())
+            raise
+    def get_processes(self, query_expr, offset, length):
+        length = int(length)
+        offset = int(offset)
+
+        # total records is the sum of the offset and length(limit) value
+        total_records = offset + length
+        try:
+            # Separate out api supported url params
+            query_expr, filter_attr = Connector.modify_query_expr(json.loads(query_expr))
+            # Grab the response, extract the response code, and convert it to readable json
+            response_dict = self.api_client.get_processes_results()
+            process_list = []
+            return_obj = dict()
+            if response_dict["code"] == 200:
+                response = response_dict["data"]["data"]
+                response_list = response
+                page = 1
+                while len(response) == 1000 and total_records > len(response_list):
+                    response = self.api_client.get_processes_results()
+                    response = response["data"]["data"]
+                    response_list = response_list + response
+                    page = page + 1
+                # Construct a response object
+                for process in response_list:
+                    json_string = json.dumps(process.__dict__, default=str)
+                    process_list.append(json.loads(json_string)["_data_store"])
+                return_obj['success'] = True
+                return_obj['data'] = process_list
+                # filter data based on filter_attr
+                return_obj = Connector.filter_response(return_obj, filter_attr)
+                # slice the records as per the provided offset and length(limit)
+                return_obj['data'] = return_obj['data'][offset:total_records]
+            else:
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            return return_obj
+        except Exception as err:
+            self.logger.error('error when getting processes results: {}'.format(err))
             import traceback
             self.logger.error(traceback.print_stack())
             raise

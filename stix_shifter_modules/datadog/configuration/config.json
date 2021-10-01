@@ -7,9 +7,14 @@
             "type": "text",
             "default": "https://app.datadoghq.eu"
         },
+        "endpoint" : {
+            "type":"text",
+            "default": "events",
+            "optional": true
+        },
         "help": {
             "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.6.0/platform/docs/scp-core/data-sources.html"
+            "default": "data-sources.html"
         }
     },
     "configuration": {
