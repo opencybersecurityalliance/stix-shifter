@@ -29,6 +29,7 @@ class Connector(BaseSyncConnector):
             return self.get_events(query_expr, offset, length)
         else:
             return self.get_processes(query_expr, offset, length)
+
     def get_events(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
@@ -69,6 +70,7 @@ class Connector(BaseSyncConnector):
             import traceback
             self.logger.error(traceback.print_stack())
             raise
+
     def get_processes(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
@@ -93,7 +95,7 @@ class Connector(BaseSyncConnector):
                     page = page + 1
                 # Construct a response object
                 for process in response_list:
-                    json_string = json.dumps(process.__dict__, default=str)
+                    json_string = json.dumps(process['attributes'].__dict__, default=str)
                     process_list.append(json.loads(json_string)["_data_store"])
                 return_obj['success'] = True
                 return_obj['data'] = process_list
