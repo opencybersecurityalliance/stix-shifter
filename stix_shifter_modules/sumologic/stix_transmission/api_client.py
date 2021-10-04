@@ -43,7 +43,16 @@ class APIClient:
             search_id = {"id": search_id}
             result = self.client.search_job_messages(search_id, limit, offset)
 
+        response = (self.client.get("/users"))
+        user_details = response.json()["data"][0]
+
         results = [r['map'] for r in result['messages']]
+        for r in results:
+            r["_userid"] = user_details["id"]
+            r["_useremail"] = user_details["email"]
+            r["_userdisplayname"] = user_details["firstName"] + " " + user_details["lastName"]
+            r["_usercreatedat"] = user_details["createdAt"]
+            r["_userlastlogin"] = user_details["lastLoginTimestamp"]
         return {"code": 200, "data": results}
 
     def delete_search(self, search_id):

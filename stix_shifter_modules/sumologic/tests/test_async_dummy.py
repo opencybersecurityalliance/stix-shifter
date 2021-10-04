@@ -7,16 +7,15 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-                "host": "hostbla",
-                "port": 8080,
-                }
+            "region": "in"
+        }
 
     def configuration(self):
         return {
-                "auth": {
-                    "username": "u",
-                    "password": "p"
-                }
+            "auth": {
+                "username": "suc0YNr1ih6aLe",
+                "password": "7zngY5dqXzjuftHDNII6uxWarGw8V4q3BHvdhxaA9fWVt3DxFxH79jDLVx2CAA6J"
+            }
         }
 
     def test_dummy_async_query(self):

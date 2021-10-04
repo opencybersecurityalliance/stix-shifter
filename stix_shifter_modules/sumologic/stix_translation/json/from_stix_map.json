@@ -6,37 +6,39 @@
       "value": ["_sourcehost"]
     }
   },
-  "artifact":
-  {
-    "fields": {
-      "payload_bin": ["_raw"]
-    }
-  },
   "x-ibm-finding":
   {
     "fields":
     {
-      "event_count": ["_messagecount"],
-      "time_observed": ["_messagetime"]
+      "event_count": ["_messagecount"]
     }
   },
   "x-oca-event":
   {
     "fields":
     {
-      "code": ["_messageid"]
+      "code": ["_messageid"],
+      "created": ["_messagetime"],
+      "agent": ["_collector"],
+      "module": ["_source"],
+      "provider": ["_sourcecategory"],
+      "domain_ref.value": ["_sourcehost"]
     }
   },
   "x-sumologic":
   {
     "fields":
     {
-      "collector": ["_collector"],
       "collectorid": ["_collectorid"],
-      "source": ["_source"],
-      "sourcecategory": ["_sourcecategory"],
-      "sourceid": ["_sourceid"],
       "sourcename": ["_sourcename"]
     }
+  },
+  "user-account":
+  {
+    "user_id": ["_userid"],
+    "account_login": ["_useremail"],
+    "display_name": ["_userdisplayname"],
+    "account_created": ["_usercreatedat"],
+    "account_last_login": ["_userlastlogin"]
   }
 }

@@ -12,12 +12,12 @@
     "configuration": {
         "auth": {
             "username": {
-                "label": "Username",
+                "label": "Access ID",
                 "description": "Enter your Access ID"
             },
             "password": {
-                "label": "Password",
-                "description": "Enter your access key"
+                "label": "Access Key",
+                "description": "Enter your Access key"
             }
         }
     }

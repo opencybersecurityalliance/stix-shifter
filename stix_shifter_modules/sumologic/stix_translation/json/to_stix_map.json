@@ -1,46 +1,67 @@
 {
-  "_sourcehost": {
-    "key": "domain-name.value"
-  },
-  "_raw": {
-    "key": "artifact.payload_bin"
-  },
+  "_sourcehost": [
+    {
+    "key": "domain-name.value",
+    "object": "domain",
+    "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "event",
+      "references": "domain"
+    }],
   "_messagecount": {
     "key": "x-ibm-finding.event_count",
     "object": "x-ibm-finding",
     "transformer": "ToInteger"
   },
   "_messagetime": {
-    "key": "x-ibm-finding.time_observed",
-    "transformer": "EpochToTimestamp",
-    "cybox": false
+    "key": "x-oca-event.created",
+    "object": "x-oca-event",
+    "transformer": "EpochToTimestamp"
   },
   "_messageid": {
     "key": "x-oca-event.code",
     "object": "x-oca-event"
   },
   "_collector": {
-    "key": "x-sumologic.collector",
-    "object": "x-sumologic"
+    "key": "x-oca-event.agent",
+    "object": "x-oca-event"
   },
   "_collectorid": {
     "key": "x-sumologic.collectorid",
     "object": "x-sumologic"
   },
   "_source": {
-    "key": "x-sumologic.source",
-    "object": "x-sumologic"
+    "key": "x-oca-event.module",
+    "object": "x-oca-event"
   },
   "_sourcecategory":{
-    "key": "x-sumologic.sourcecategory",
-    "object": "x-sumologic"
-  },
-  "_sourceid": {
-    "key": "x-sumologic.sourceid",
-    "object": "x-sumologic"
+    "key": "x-oca-event.provider",
+    "object": "x-oca-event"
   },
   "_sourcename": {
     "key": "x-sumologic.sourcename",
     "object": "x-sumologic"
+  },
+  "_userid": {
+    "key": "user-account.user_id",
+    "object": "user-account"
+  },
+  "_useremail": {
+    "key": "user-account.account_login",
+    "object": "user-account"
+  },
+  "_userdisplayname": {
+    "key": "user-account.display_name",
+    "object": "user-account"
+  },
+  "_usercreatedat": {
+    "key": "user-account.account_created",
+    "object": "user-account"
+  },
+  "_userlastlogin": {
+    "key": "user-account.account_last_login",
+    "object": "user-account"
   }
 }
