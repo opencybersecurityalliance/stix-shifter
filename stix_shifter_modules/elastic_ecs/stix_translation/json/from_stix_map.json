@@ -50,7 +50,7 @@
       "size": ["file.size"],
       "hashes.MD5": ["file.hash.md5"],
       "hashes.SHA-1": ["file.hash.sha1"],
-      "hashes.SHA-256": ["file.hash.sha256"],
+      "hashes.'SHA-256'": ["file.hash.sha256"],
       "hashes.SHA-512": ["file.hash.sha512"],
       "parent_directory_ref.path": ["file.directory"]
     }

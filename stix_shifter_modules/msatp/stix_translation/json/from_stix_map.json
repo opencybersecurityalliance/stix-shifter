@@ -80,7 +80,7 @@
         "DeviceNetworkEvents.InitiatingProcessSHA1",
         "DeviceRegistryEvents.InitiatingProcessSHA1"
       ],
-      "hashes.SHA-256": [
+      "hashes.'SHA-256'": [
         "DeviceFileEvents.SHA256",
         "DeviceFileEvents.InitiatingProcessSHA256",
         "DeviceProcessEvents.SHA256",
