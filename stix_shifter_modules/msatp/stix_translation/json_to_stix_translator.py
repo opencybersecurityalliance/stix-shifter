@@ -88,12 +88,10 @@ class DataSourceObjToStixObj:
         if split_key[-1] not in child_obj.keys():
             child_obj[split_key[-1]] = stix_value
         elif group is True:  # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
-            if (isinstance(child_obj[split_key[-1]], list)):
-                if isinstance(stix_value, list):
-                    for x in stix_value:
-                        if x in child_obj[split_key[-1]]:
-                            stix_value.remove(x)
-                child_obj[split_key[-1]].extend(stix_value)  # append to existing list
+            child_obj_val = child_obj[split_key[-1]]
+            if (isinstance(child_obj_val, list)):
+                child_obj_val.extend(stix_value)  # append to existing list
+                child_obj[split_key[-1]] = list(set(child_obj_val))
 
     @staticmethod
     def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):

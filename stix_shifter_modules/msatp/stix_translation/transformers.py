@@ -61,8 +61,7 @@ class ToKillChainPhasesList(ValueTransformer):
     @staticmethod
     def transform(value):
         dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
-        json_obj = json.dumps(dct)
-        return [json_obj]
+        return [dct]
 
 
 

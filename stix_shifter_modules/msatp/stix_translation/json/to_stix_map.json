@@ -47,10 +47,6 @@
       ],
       "alert_Category": [
         {
-          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
-          "object": "ttp_tagging"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
           "transformer": "ToKillChainPhasesList"
@@ -86,7 +82,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_FileName": [
@@ -104,7 +101,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_RemoteUrl": [
@@ -122,7 +120,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_Title": [
@@ -135,7 +134,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_RemoteIP": [
@@ -157,7 +157,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ]
     },
@@ -562,10 +563,6 @@
       ],
       "alert_Category": [
         {
-          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
-          "object": "ttp_tagging"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
           "transformer": "ToKillChainPhasesList"
@@ -583,7 +580,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_SHA1": [
@@ -601,7 +599,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_FileName": [
@@ -619,7 +618,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_RemoteUrl": [
@@ -637,7 +637,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_Title": [
@@ -650,7 +651,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ],
       "alert_RemoteIP": [
@@ -672,7 +674,8 @@
           "object": "event",
           "references": [
             "finding"
-          ]
+          ],
+          "group": true
         }
       ]
     },
@@ -1111,10 +1114,6 @@
         }
       ],
       "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
-          "object": "ttp_tagging"
-        },
         {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
@@ -1595,10 +1594,6 @@
       ],
       "alert_Category": [
         {
-          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
-          "object": "ttp_tagging"
-        },
-        {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",
           "transformer": "ToKillChainPhasesList"
@@ -2040,10 +2035,6 @@
         }
       ],
       "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
-          "object": "ttp_tagging"
-        },
         {
           "key": "x-ibm-ttp-tagging.kill_chain_phases",
           "object": "ttp_tagging",

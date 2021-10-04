@@ -192,8 +192,11 @@ class Connector(BaseSyncConnector):
                     build_data[lookup_table].get('Timestamp', None))
                 # if the same event already exists on the table_event_data, just update 'Alerts' field
                 if k_tuple in unify_events_dct:
+                    alerts = build_data[lookup_table]['Alerts']
                     ind = unify_events_dct[k_tuple]
-                    table_event_data[ind][lookup_table]['Alerts'].extend(build_data[lookup_table]['Alerts'])
+                    for alert in alerts:
+                        if alert not in table_event_data[ind][lookup_table]['Alerts']:
+                            table_event_data[ind][lookup_table]['Alerts'].append(alert)
                 else:
                     lst_len = len(table_event_data)
                     table_event_data.insert(lst_len, build_data)
