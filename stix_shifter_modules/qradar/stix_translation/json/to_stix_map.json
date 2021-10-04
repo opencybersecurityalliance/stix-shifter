@@ -389,6 +389,10 @@
       "references": "artifact"
     }
   ],
+  "mime_type_eventpayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
@@ -401,6 +405,10 @@
       "references": "src_payload"
     }
   ],
+  "mime_type_flowsourcepayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "flowdestinationpayload": [
     {
       "key": "artifact.payload_bin",
@@ -413,6 +421,10 @@
       "references": "dst_payload"
     }
   ],
+  "mime_type_flowdestinationpayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "destinationport": {
     "key": "network-traffic.dst_port",
     "object": "nt",
@@ -846,6 +858,10 @@
       "object": "event"
     }
   ],
+  "mime_type_message": {
+      "key": "artifact.mime_type",
+      "object": "artifact"
+  },
   "IMPHash": {
     "key": "x-ibm-windows.imphash",
     "object": "xwin"

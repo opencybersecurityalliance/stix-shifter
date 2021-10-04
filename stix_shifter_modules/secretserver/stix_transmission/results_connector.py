@@ -11,8 +11,8 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         # try:
-            min_range = offset
-            max_range = offset + length
+            min_range = int(offset)
+            max_range = int(length)
             # Grab the response, extract the response code, and convert it to readable json
             # response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
             response = self.api_client.get_search_results(search_id, min_range, max_range)

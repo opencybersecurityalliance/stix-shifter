@@ -21,7 +21,11 @@ class ResultsConnector(BaseResultsConnector):
             return_obj = dict()
             if response_code == 200:
                 return_obj['success'] = True
-                data = json.loads(response.read())
+                if hasattr(response,'content'):
+                    data= json.loads(response.content)
+                else:    
+                    data = json.loads(response.read())
+                #print("+++++++++++++++++data ="+json.dumps(data))    
                 if type(data) == dict and 'ID' in data.keys() and 'Message' in data.keys() and data['ID'] == 0 and\
                         'The Query did not retrieve any records' == data['Message']:
                     data = []

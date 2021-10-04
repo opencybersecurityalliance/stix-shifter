@@ -17,10 +17,6 @@
             "type": "link",
             "default": "https://automation.trendmicro.com/xdr/api-v2#tag/Search/paths/~1v2.0~1xdr~1search~1data/post"
         },
-        "cert": {
-            "type": "password",
-            "optional": true
-        },
         "sni": {
             "type": "text",
             "optional": true
