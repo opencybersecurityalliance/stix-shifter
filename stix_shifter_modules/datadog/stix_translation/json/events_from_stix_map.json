@@ -1,9 +1,4 @@
 {
-  "url": {
-    "fields": {
-      "value": ["url", "resource"]
-    }
-  },
   "domain-name": {
     "fields": {
       "value": ["host"]
@@ -34,7 +29,6 @@
     "fields": {
       "code": ["id", "id_str"],
       "outcome": ["title"],
-      "url_ref": ["url"],
       "original.payload_bin": ["text"]
     }
   }

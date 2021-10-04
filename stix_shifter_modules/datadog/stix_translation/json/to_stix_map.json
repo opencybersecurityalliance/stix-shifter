@@ -49,16 +49,11 @@
   "key": "x-datadog-event.monitor_id",
   "object": "x-datadog-event"
   },
-  "tags": [
-    {
-      "key": "x-datadog-event.tags",
-      "object": "x-datadog-event"
-    },
-    {
-      "key": "process.tags",
-      "object": "process"
-    }
-  ],
+  "tags":
+  {
+    "key": "x-datadog-event.tags",
+    "object": "x-datadog-event"
+  },
   "is_aggregate": {
   "key": "x-datadog-event.unaggregated",
   "object": "x-datadog-event"
@@ -85,15 +80,6 @@
   "key": "x-ibm-finding.time_observed",
   "object": "x-ibm-finding",
   "transformer": "EpochToTimestamp"
-  },
-  "url":
-  {
-  "key": "url.value",
-  "object": "url"
-  },
-  "resource": {
-    "key": "url.value",
-    "object": "url"
   },
   "cmdline": {
     "key": "process.command_line",
