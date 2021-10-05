@@ -126,6 +126,7 @@ class QueryStringPatternTranslator:
         :param expressions: string, queries
         :return: final_list, list"""
         final_list = []
+        query_str = dict()
         for expression in expressions:
             newdict = json.loads(expression, object_pairs_hook=QueryStringPatternTranslator.join_duplicate_keys)
             if "source" in newdict and isinstance(newdict["source"], list):
@@ -142,7 +143,8 @@ class QueryStringPatternTranslator:
             # in case of multiple priority taking only first value as datasource support only one
             if "priority" in newdict and isinstance(newdict["priority"], list):
                 newdict["priority"] = newdict["priority"][0]
-            final_list.append(json.dumps(newdict))
+            query_str['query'] = newdict
+            final_list.append(json.dumps(query_str))
         return final_list
 
     def matched(self, queries, time_range):
@@ -281,6 +283,8 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     time_range = options['time_range']
+    payload = []
+    querys = dict()
     datadog_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     expression = datadog_translator.translated
     expression = expression if isinstance(expression, list) else [expression]
@@ -288,5 +292,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = datadog_translator.matched(expression, time_range)
     # Convert to json and modify some keys value
     query = datadog_translator.convert_to_json(query)
-
-    return query
+    for trans_query in query:
+        querys = json.loads(trans_query)
+        querys["source"] = data_model_mapping.dialect
+        payload.append(json.dumps(querys))
+    return payload

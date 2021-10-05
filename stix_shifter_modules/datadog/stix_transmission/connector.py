@@ -25,10 +25,11 @@ class Connector(BaseSyncConnector):
             raise
 
     def create_results_connection(self, query_expr, offset, length):
-        if self.api_client.endpoint == 'events':
-            return self.get_events(query_expr, offset, length)
+        payload = json.loads(query_expr)
+        if payload['source'] == 'events':
+            return self.get_events(payload, offset, length)
         else:
-            return self.get_processes(query_expr, offset, length)
+            return self.get_processes(payload, offset, length)
 
     def get_events(self, query_expr, offset, length):
         length = int(length)
@@ -38,7 +39,7 @@ class Connector(BaseSyncConnector):
         total_records = offset + length
         try:
             # Separate out api supported url params
-            query_expr, filter_attr = Connector.modify_query_expr(json.loads(query_expr))
+            query_expr, filter_attr = Connector.modify_query_expr(query_expr['query'])
             # Grab the response, extract the response code, and convert it to readable json
             response_dict = self.api_client.get_search_results(query_expr)
             event_list = []
@@ -79,7 +80,7 @@ class Connector(BaseSyncConnector):
         total_records = offset + length
         try:
             # Separate out api supported url params
-            query_expr, filter_attr = Connector.modify_query_expr(json.loads(query_expr))
+            query_expr, filter_attr = Connector.modify_query_expr(query_expr['query'])
             # Grab the response, extract the response code, and convert it to readable json
             response_dict = self.api_client.get_processes_results()
             process_list = []

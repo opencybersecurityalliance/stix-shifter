@@ -8,11 +8,12 @@ class APIClient:
 
     def __init__(self, connection, configuration):
         auth = configuration.get('auth')
-        if connection["endpoint"] == 'events':
-            self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
-        else :
-            self.configuration = datadog_api_client.v2.Configuration(host=connection["site_url"])
-        self.endpoint = connection["endpoint"]
+        # if connection["endpoint"] == 'events':
+        #     self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
+        # else :
+        #     self.configuration = datadog_api_client.v2.Configuration(host=connection["site_url"])
+        self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
+        # self.endpoint = connection["endpoint"]
         self.configuration.api_key["apiKeyAuth"] = auth["api_key"]
         self.configuration.api_key["appKeyAuth"] = auth["application_key"]
 

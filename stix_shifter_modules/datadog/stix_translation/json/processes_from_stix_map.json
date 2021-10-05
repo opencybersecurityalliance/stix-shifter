@@ -11,18 +11,14 @@
       "creator_user_ref": ["user"],
       "created_time": ["timestamp", "start"],
       "parent_ref": ["ppid"],
-      "host": ["host"],
-      "tags": ["tags"]
+      "host": ["host"]
     }
   },
   "x-datadog-event": {
     "fields": {
-      "event_id": ["id"],
       "priority": ["priority"],
-      "title": ["title"],
       "text": ["text"],
       "device_name": ["device_name"],
-      "source": ["source"],
       "monitor_id": ["monitor_id"],
       "tags": ["tags"],
       "is_aggregate": ["unaggregated"],
@@ -40,6 +36,7 @@
     "fields": {
       "code": ["id", "id_str"],
       "outcome": ["title"],
+      "module": ["source"],
       "original.payload_bin": ["text"]
     }
   }
