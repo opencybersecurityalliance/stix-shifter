@@ -1,0 +1,371 @@
+{
+
+    "GUID": [
+        {
+            "key": "x-proofpoint-msgevents.GUID",
+            "object": "msgevents"
+        }
+    ],
+    "Header": {
+
+        "ccAddresses": [
+            {
+              "key": "email-addr.value",
+              "object": "email-addr"
+            },
+            {
+              "key": "email-message.cc_refs",
+              "object": "email-message",
+              "references": "email-addr"
+            }
+        ],
+        "fromAddress": [
+            {
+              "key": "email-addr.value",
+              "object": "from_ref"
+            },
+            {
+              "key": "email-message.from_ref",
+              "object": "email-message",
+              "references": "from_ref"
+            }
+        ],
+        "headerFrom": [
+            {
+              "key": "email-addr.value",
+              "object": "email-addr"
+            },
+            {
+              "key": "email-message.from_ref",
+              "object": "email-message",
+              "references": "email-addr"
+            }
+        ],
+        "headerReplyTo": [
+            {
+              "key": "email-addr.value",
+              "object": "email-addr"
+            },
+            {
+              "key": "email-message.from_ref",
+              "object": "email-message",
+              "references": "email-addr"
+            }
+        ],
+        "replyToAddress": [
+            {
+              "key": "email-addr.value",
+              "object": "email-addr"
+            },
+            {
+              "key": "email-message.from_ref",
+              "object": "email-message",
+              "references": "email-addr"
+            }
+        ],
+        "toAddresses": [
+            {
+              "key": "email-addr.value",
+              "object": "to_refs"
+            },
+            {
+              "key": "email-message.to_refs",
+              "object": "email-message",
+              "references": "to_refs"
+            }
+        ],
+        "xmailer": [
+            {
+                "key": "x-proofpoint-msgevents.xmailer",
+                "object": "msgevents"
+            }
+        ]
+
+    },
+    "cluster": [
+        {
+            "key": "x-proofpoint-msgevents.cluster",
+            "object": "msgevents"
+        }
+    ],
+    "completelyRewritten": [
+        {
+            "key": "x-proofpoint-msgevents.Rewritten-Status",
+            "object": "msgevents"
+        }
+    ],
+    "id": [
+        {
+            "key": "x-proofpoint-msgevents.ID",
+            "object": "msgevents"
+        }
+    ],
+    "impostorScore": [
+        {
+            "key": "x-proofpoint-msgevents.impostorScore",
+            "transformer": "ToInteger",
+            "object": "msgevents"
+        }
+    ],
+    "malwareScore": [
+        {
+            "key": "x-proofpoint-msgevents.malwareScore",
+            "transformer": "ToInteger",
+            "object": "msgevents"
+        }
+    ],
+    "messageID": [
+        {
+            "key": "x-proofpoint-msgevents.messageID",
+            "object": "msgevents"
+        }
+    ],
+    "messageParts": {
+        "key": "email-message.body_multipart",
+        "object": "email-message",
+        
+        "is_multipart": true,
+        "filename": [
+            {
+              "key": "file.name",
+              "object": "fl"
+            }
+
+        ],
+        "md5": [
+            {
+              "key": "file.hashes.MD5",
+              "object": "fl"
+            }
+        ],
+        "sha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "fl"
+            }
+        ]
+    }
+    ,
+    "messageSize": [
+        {
+          "key": "x-proofpoint-msgevents.size",
+          "object": "msgevents",
+          "transformer": "ToInteger"
+        }
+    ],
+    "messageTime": [
+        {
+          "key": "email-message.date",
+          "transformer": "EpochToTimestamp",
+          "object": "email-message"
+        }
+    ],
+    "modulesRun": [
+        {
+            "key": "x-proofpoint-msgevents.modulesRun",
+            "object": "msgevents"
+        }
+    ],
+    "phishScore": [
+        {
+            "key": "x-proofpoint-msgevents.phishScore",
+            "transformer": "ToInteger",
+            "object": "msgevents"
+        }
+    ],
+    "policyRoutes": [
+        {
+            "key": "x-proofpoint-msgevents.policyRoutes",
+            "object": "msgevents"
+        }
+    ],
+    "quarantineFolder": [
+        {
+            "key": "x-proofpoint-msgevents.quarantineFolder",
+            "object": "msgevents"
+        }
+    ],
+    "quarantineRule": [
+        {
+            "key": "x-proofpoint-msgevents.quarantineRule",
+            "object": "msgevents"
+        }
+    ],
+    "recipient": [
+        {
+          "key": "email-addr.value",
+          "object": "to_refs"
+        },
+        {
+          "key": "email-message.to_refs",
+          "object": "email-message",
+          "references": "to_refs"
+        }
+    ],
+    "sender": [
+        {
+          "key": "email-addr.value",
+          "object": "sender_ref"
+        },
+        {
+          "key": "email-message.sender_ref",
+          "object": "email-message",
+          "references": "sender_ref"
+        }
+    ],
+    "senderIP": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "src_ip"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "src_ip"
+        },
+        {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "src_ip"
+        },
+        {
+            "key": "x-proofpoint-msgevents.senderIP",
+            "object": "msgevents",
+            "references": "src_ip"
+        }
+    ],
+    "spamScore": [
+        {
+            "key": "x-proofpoint-msgevents.spamScore",
+            "transformer": "ToInteger",
+            "object": "msgevents"
+        }
+    ],
+    "subject": [
+        {
+          "key": "email-message.subject",
+          "object": "email-message"
+        }
+    ],
+
+    "clickIP": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "dst_ip"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "dst_ip"
+        },
+        {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "dst_ip"
+        }
+    ],
+
+    "headerTo": [
+        {
+          "key": "email-addr.value",
+          "object": "to_refs"
+        },
+        {
+          "key": "email-message.to_refs",
+          "object": "email-message",
+          "references": "to_refs"
+        }
+    ],
+
+    "headerCC": [
+        {
+          "key": "email-addr.value",
+          "object": "email-addr"
+        },
+        {
+          "key": "email-message.cc_refs",
+          "object": "email-message",
+          "references": "email-addr"
+        }
+    ],
+    "threatsInfoMap": {
+        "campaignID": [
+            {
+                "key": "x-proofpoint-msgevents.campaignID",
+                "object": "msgevents"
+            }
+        ],
+        "classification": [
+            {
+                "key": "x-proofpoint-msgevents.classification",
+                "object": "msgevents"
+            }
+        ],
+        "threat": [
+        {
+            "key": "x-proofpoint-msgevents.threat",
+            "object": "msgevents"
+        }
+        ],
+        "threatID": [
+            {
+                "key": "x-proofpoint-msgevents.threatID",
+                "object": "msgevents"
+            }
+        ],
+        "threatStatus": [
+            {
+                "key": "x-proofpoint-msgevents.threatStatus",
+                "object": "msgevents"
+            }
+        ],
+        "threatTime": [
+            {
+                "key": "x-proofpoint-msgevents.threatTime",
+                "transformer": "EpochToTimestamp",
+                "object": "msgevents"
+            }
+        ],
+        "threatType": [
+            {
+                "key": "x-proofpoint-msgevents.threatType",
+                "object": "msgevents"
+            }
+        ],
+        "threatUrl": [
+            {
+                "key": "url.value",
+                "object": "url"
+            }
+        ]
+    },
+    "clickTime": [
+        {
+            "key": "x-proofpoint-msgevents.clickTime",
+            "transformer": "EpochToTimestamp",
+            "object": "msgevents"
+        }
+    ],
+    "QID": [
+        {
+            "key": "x-proofpoint-msgevents.ID",
+            "object": "msgevents"
+        }
+    ],
+    "clusterId": [
+        {
+            "key": "x-proofpoint-msgevents.clusterId",
+            "object": "msgevents"
+        }
+    ],
+    "url": [
+        {
+          "key": "url.value",
+          "object": "url"
+        }
+    ],
+    "userAgent": [
+        {
+            "key": "x-proofpoint-msgevents.userAgent",
+            "object": "msgevents"
+        }
+    ]
+}
