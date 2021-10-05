@@ -1,0 +1,32 @@
+{
+    "connection": {
+        "host": {
+            "label": "Trend Micro Vision One IP address or Hostname",
+            "description": "Specify the Trend Micro Vision One IP address or Hostname."
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "selfSignedCert": {
+            "label": "Trend Micro Vision One Certificate",
+            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "token": {
+                "label": "Authentication Token",
+                "description": "Set the authentication token of Trend Micro Vision One search API"
+            }
+        }
+    }
+}
