@@ -83,5 +83,16 @@
   "timestamp": {
     "key": "process.created_time",
     "object": "process"
-  }
+  },
+  "user": [
+   {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "useraccount"
+    }
+  ]
 }

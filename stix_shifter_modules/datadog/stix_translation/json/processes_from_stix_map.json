@@ -4,6 +4,11 @@
       "value": ["host"]
     }
   },
+  "user-account": {
+    "fields": {
+      "user_id": ["user"]
+    }
+  },
   "process": {
     "fields":{
       "command_line": ["cmdline"],
@@ -36,8 +41,7 @@
     "fields": {
       "code": ["id", "id_str"],
       "outcome": ["title"],
-      "module": ["source"],
-      "original.payload_bin": ["text"]
+      "module": ["source"]
     }
   }
 }
