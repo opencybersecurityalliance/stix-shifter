@@ -1,4 +1,16 @@
 {
+  "_raw": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "x-oca-event",
+      "references": "artifact"
+    }
+  ],
   "_sourcehost": [
     {
     "key": "domain-name.value",
@@ -7,7 +19,7 @@
     },
     {
       "key": "x-oca-event.domain_ref",
-      "object": "event",
+      "object": "x-oca-event",
       "references": "domain"
     }],
   "_messagecount": {
@@ -15,19 +27,32 @@
     "object": "x-ibm-finding",
     "transformer": "ToInteger"
   },
-  "_messagetime": {
-    "key": "x-oca-event.created",
-    "object": "x-oca-event",
-    "transformer": "EpochToTimestamp"
-  },
+  "_messagetime": [
+    {
+      "key": "x-oca-event.created",
+      "object": "x-oca-event",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "x-ibm-finding",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
   "_messageid": {
     "key": "x-oca-event.code",
     "object": "x-oca-event"
   },
-  "_collector": {
-    "key": "x-oca-event.agent",
-    "object": "x-oca-event"
-  },
+  "_collector": [
+    {
+      "key": "x-oca-event.agent",
+      "object": "x-oca-event"
+    },
+    {
+      "key": "x-ibm-finding.src_device",
+      "object": "x-ibm-finding"
+    }
+  ],
   "_collectorid": {
     "key": "x-sumologic.collectorid",
     "object": "x-sumologic"
@@ -48,10 +73,17 @@
     "key": "user-account.user_id",
     "object": "user-account"
   },
-  "_useremail": {
-    "key": "user-account.account_login",
-    "object": "user-account"
-  },
+  "_useremail": [
+    {
+      "key": "user-account.account_login",
+      "object": "user-account"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "x-oca-event",
+      "references": "user-account"
+    }
+  ],
   "_userdisplayname": {
     "key": "user-account.display_name",
     "object": "user-account"

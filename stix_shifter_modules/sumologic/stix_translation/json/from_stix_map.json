@@ -1,4 +1,7 @@
 {
+  "artifact": {
+    "payload_bin": ["_raw"]
+  },
   "domain-name":
   {
     "fields":
@@ -10,7 +13,9 @@
   {
     "fields":
     {
-      "event_count": ["_messagecount"]
+      "event_count": ["_messagecount"],
+      "time_observed": ["_messagetime"],
+      "src_device": ["_collector"]
     }
   },
   "x-oca-event":
@@ -22,7 +27,9 @@
       "agent": ["_collector"],
       "module": ["_source"],
       "provider": ["_sourcecategory"],
-      "domain_ref.value": ["_sourcehost"]
+      "original_ref.payload_bin": ["_raw"],
+      "domain_ref.value": ["_sourcehost"],
+      "user_ref.account_login": ["_useremail"]
     }
   },
   "x-sumologic":
