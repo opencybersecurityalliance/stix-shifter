@@ -173,11 +173,8 @@ class DataSourceObjToStixObj:
                 for item in value:
                     if 'object' in item:
                         # only single event object for each observed data obj
-                        if item['object'] == 'event':
-                            item['object'] = str(item['object'])
-                        else:
+                        if 'x-oca-event' not in item['key']:
                             item['object'] = str(item['object']) + '_' + str(indx)
-
                         if 'references' in item:
                             references = item['references']
                             if isinstance(references, list):
