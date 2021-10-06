@@ -58,7 +58,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         mocked_return_value = {"code": 200, "data": {"events": [DatadogMockEvent(_data_store={"host":"192.168.122.83", "is_aggregate": False}) for x in range(1000)]}}
         mock_results_response.return_value = mocked_return_value
 
-        query = '{"host": "192.168.122.83", "unaggregated": "false", "start": 9580878, "end": 12345678}'
+        query = '{"query": {"host": "192.168.122.83", "unaggregated": "false", "start": 9580878, "end": 12345678}, "source": "events"}'
 
         offset = 0
         length = 1002
@@ -82,7 +82,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         }
         mock_results_response.return_value = mocked_return_value
 
-        query = '{"host": "192.168.122.83", "start": 9580878, "end": 12345678}'
+        query = '{"query": {"host": "192.168.122.83", "start": 9580878, "end": 12345678}, "source": "events"}'
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())

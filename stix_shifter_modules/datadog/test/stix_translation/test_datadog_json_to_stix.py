@@ -88,7 +88,6 @@ class TestDatadogResultsToStix(unittest.TestCase):
         data = {
             "date_happened": 1628017283,
             "alert_type": "info",
-            "title": "An API key has been created.",
             "url": "/event/event?id=6102786433786642502",
             "text": "API key getevents created by qradar10.34.38.141@gmail.com in org qradar",
             "tags": [
@@ -119,6 +118,5 @@ class TestDatadogResultsToStix(unittest.TestCase):
         assert custom_object_1['value'] == "i-deadbeef"
 
         assert custom_object_2 is not None, 'Custom object type not found'
-        assert custom_object_2.keys() == {'type', 'alert_type', 'title', 'text', 'tags', 'device_name', 'priority', 'event_id'}
-        assert custom_object_2['title'] == 'An API key has been created.'
+        assert custom_object_2.keys() == {'type', 'alert_type', 'text', 'tags', 'device_name', 'priority'}
         assert custom_object_2['alert_type'] == 'info'

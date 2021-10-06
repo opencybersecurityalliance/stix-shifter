@@ -23,7 +23,6 @@
     "fields": {
       "priority": ["priority"],
       "text": ["text"],
-      "device_name": ["device_name"],
       "monitor_id": ["monitor_id"],
       "tags": ["tags"],
       "is_aggregate": ["unaggregated"],
@@ -41,7 +40,9 @@
     "fields": {
       "code": ["id", "id_str"],
       "outcome": ["title"],
-      "module": ["source"]
+      "module": ["source"],
+      "agent": ["device_name"],
+      "original.payload_bin": ["text"]
     }
   }
 }
