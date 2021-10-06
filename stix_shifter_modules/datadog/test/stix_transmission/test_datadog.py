@@ -59,7 +59,6 @@ class TestDatadogConnection(unittest.TestCase, object):
         mock_results_response.return_value = mocked_return_value
 
         query = '{"query": {"host": "192.168.122.83", "unaggregated": "false", "start": 9580878, "end": 12345678}, "source": "events"}'
-
         offset = 0
         length = 1002
         entry_point = EntryPoint(self.connection(), self.configuration())
@@ -83,6 +82,49 @@ class TestDatadogConnection(unittest.TestCase, object):
         mock_results_response.return_value = mocked_return_value
 
         query = '{"query": {"host": "192.168.122.83", "start": 9580878, "end": 12345678}, "source": "events"}'
+        offset = 0
+        length = 1
+        entry_point = EntryPoint(self.connection(), self.configuration())
+        results_response = entry_point.create_results_connection(query, offset, length)
+
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert results_response['error'] == 'Bad Request'
+        assert results_response['code'] == ErrorCode.TRANSMISSION_INVALID_PARAMETER.value
+
+    @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
+    @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.get_processes_results',
+           autospec=True)
+    def test_results_processes_response(self, mock_results_response, mock_generate_token):
+        mocked_return_value = {"code": 200}
+        mock_generate_token.return_value = mocked_return_value
+        mocked_return_value = {"code": 200, "data": {"data": [{"attributes": DatadogMockEvent(_data_store={"host": "192.168.122.83", "is_aggregate": False})} for x in range(1000)]}}
+        mock_results_response.return_value = mocked_return_value
+
+        query = '{"query": {"host": "192.168.122.83", "unaggregated": "false", "start": 9580878, "end": 12345678}, "source": "processes"}'
+        offset = 0
+        length = 1002
+        entry_point = EntryPoint(self.connection(), self.configuration())
+        results_response = entry_point.create_results_connection(query, offset, length)
+
+        assert results_response is not None
+        assert results_response['success']
+        assert 'data' in results_response
+        assert results_response['data'] is not None
+
+    @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
+    @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.get_processes_results',
+           autospec=True)
+    def test_results_processes_response_exception(self, mock_results_response, mock_generate_token):
+        mocked_return_value = {"code": 200}
+        mock_generate_token.return_value = mocked_return_value
+        mocked_return_value = {
+            "code": 400,
+            "message": "Bad Request"
+        }
+        mock_results_response.return_value = mocked_return_value
+
+        query = '{"query": {"host": "192.168.122.83", "start": 9580878, "end": 12345678}, "source": "processes"}'
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())
