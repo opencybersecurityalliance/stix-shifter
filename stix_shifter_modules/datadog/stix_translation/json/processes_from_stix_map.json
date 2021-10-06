@@ -4,6 +4,11 @@
       "value": ["host"]
     }
   },
+  "user-account": {
+    "fields": {
+      "user_id": ["user"]
+    }
+  },
   "process": {
     "fields":{
       "command_line": ["cmdline"],
