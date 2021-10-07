@@ -157,8 +157,7 @@
       "parent.code_signature.status": ["process.parent.code_signature.status"],
       "parent.code_signature.subject_name": ["process.parent.code_signature.subject_name"],
       "parent.code_signature.trusted": ["process.parent.code_signature.trusted"],
-      "parent.code_signature.valid": ["process.parent.code_signature.valid"],
-      "x_ttp_tags": ["tags"]
+      "parent.code_signature.valid": ["process.parent.code_signature.valid"]
     }
   },
   "url": {
