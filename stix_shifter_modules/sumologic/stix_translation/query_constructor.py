@@ -243,6 +243,14 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # options['result_limit'].
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
+
+    query, from_time, to_time = convert_timestamp(query)
+
+    y = '{"query": "(%s)",\n"fromTime": "%s",\n"toTime": "%s"}' % (query.replace("\'", "\\\""), from_time, to_time)
+    return [y]
+
+
+def convert_timestamp(query):
     if ('START' and 'STOP') in query:
         x = re.search('(.*)(?= START )(.*)(?<=STOP )(.*)', query)
         query = x.group(1)
@@ -256,5 +264,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         to_time = to_time.strftime("%Y%m%dT%H%M%S")
         from_time = from_time.strftime("%Y%m%dT%H%M%S")
 
-    y = '{"query": "(%s)",\n"fromTime": "%s",\n"toTime": "%s"}' % (query.replace("\'", "\\\""), from_time, to_time)
-    return [y]
+    return query, from_time, to_time
