@@ -10,7 +10,6 @@ class APIClient():
         # Uncomment when implementing data source API client.
         auth = configuration.get('auth')
         headers = dict()
-        cred = tuple()
         if auth:
             if 'username' in auth and 'password' in auth:
                 headers['Authorization'] = b"Basic " + base64.b64encode(

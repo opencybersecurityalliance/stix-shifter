@@ -21,6 +21,7 @@ class ResultsConnector(BaseResultsConnector):
             response_txt = response.read()
             # Construct a response object
             return_obj = dict()
+            error_obj = dict()
             if response_code == 200:
                 return_obj['success'] = True
                 try:
@@ -43,13 +44,28 @@ class ResultsConnector(BaseResultsConnector):
                 except json.decoder.JSONDecodeError as e:
                     return_obj['success'] = False
 
-            else:
-                return_obj['success'] = False
-                # ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            elif response_code > 200 and response_code <= 204:#empty results
+                error_obj['code'] = 2000
+            elif response_code == 400:#error from data source
+                error_obj['code'] = 4000
+            elif response_code == 401:#Authentication error
+                error_obj['code'] = 4010
+            elif response_code >= 402 and response_code <= 499:#All other client side errors
+                error_obj['code'] = 4020
+            else:#unknown errors
+                error_obj['code'] = 7000
+            if error_obj:
+                error_obj['message'] = str(response_txt.decode("utf-8"))
                 ErrorResponder.fill_error(return_obj,
-                                          str(response_code) + ":" + str(response_txt.decode("utf-8")),
+                                          error_obj,
                                           ['message'])
+                err = 'error when getting search results: {}:{}'.format(str(response_code),str(response_txt.decode("utf-8")))
+                self.logger.error(err)
+                # raise NoResultsFoundError(err)
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
             raise
+
+class NoResultsFoundError(Exception):
+    pass

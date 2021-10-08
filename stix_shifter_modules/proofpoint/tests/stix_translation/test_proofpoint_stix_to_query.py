@@ -78,9 +78,9 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
 class TestStixtoQuery(unittest.TestCase, object):
 
     def test_query(self):
-        stix_pattern = "[threatStatus:value = 'active' OR threatStatus:value = 'positive' OR threatStatus:value = 'falsepositive'] START t'2021-09-15T16:13:00.00Z' STOP t'2021-09-15T17:13:00.00Z'"
-        stix_pattern = "[threatStatus:value = 'active'] START t'2021-08-22T07:24:00.000Z' STOP t'2022-08-22T08:20:00.000Z'"
+        # stix_pattern = "[x-proofpoint:threatstatus = 'active' OR x-proofpoint:threatstatus = 'positive' OR x-proofpoint:threatstatuss = 'falsepositive'] START t'2021-09-15T16:13:00.00Z' STOP t'2021-09-15T17:13:00.00Z'"
+        stix_pattern = "[x-proofpoint:threatstatus = 'active'] START t'2021-08-22T07:24:00.000Z' STOP t'2022-08-22T08:20:00.000Z'"
         translated_query = translation.translate('proofpoint', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['hreatStatus=active&interval=2021-08-22T07:24:00.000Z/2022-08-22T08:20:00.000Z']
+        test_query = ['threatStatus=active&interval=2021-08-22T07:24:00.000Z/2022-08-22T08:20:00.000Z']
         _test_query_assertions(translated_query, test_query)
