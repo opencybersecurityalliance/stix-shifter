@@ -7,6 +7,23 @@
     {
       "key": "process.host",
       "object": "process"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "x-oca-event",
+      "references": "domain-name"
+    }
+  ],
+  "text": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "x-oca-event",
+      "references": "artifact"
     }
   ],
   "source": {
@@ -25,6 +42,22 @@
     "key": "x-oca-event.outcome",
     "object": "x-oca-event"
   },
+  "device_name": {
+    "key": "x-oca-event.agent",
+    "object": "x-oca-event"
+  },
+  "date_happened": [
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "x-ibm-finding",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "x-oca-event.created",
+      "object": "x-oca-event",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
   "start": [
     {
       "key": "x-ibm-finding.start",
@@ -39,21 +72,8 @@
     "key": "x-ibm-finding.end",
     "object": "x-ibm-finding"
   },
-  "date_happened": {
-    "key": "x-ibm-finding.time_observed",
-    "object": "x-ibm-finding",
-    "transformer": "EpochToTimestamp"
-  },
   "priority": {
     "key": "x-datadog-event.priority",
-    "object": "x-datadog-event"
-  },
-  "text": {
-    "key": "x-datadog-event.text",
-    "object": "x-datadog-event"
-  },
-  "device_name": {
-    "key": "x-datadog-event.device_name",
     "object": "x-datadog-event"
   },
   "monitor_id": {

@@ -7,15 +7,11 @@ from datadog_api_client.v2.api import processes_api
 class APIClient:
 
     def __init__(self, connection, configuration):
-        auth = configuration.get('auth')
-        # if connection["endpoint"] == 'events':
-        #     self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
-        # else :
-        #     self.configuration = datadog_api_client.v2.Configuration(host=connection["site_url"])
+        self.connection = connection
+        self.auth = configuration.get('auth')
         self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
-        # self.endpoint = connection["endpoint"]
-        self.configuration.api_key["apiKeyAuth"] = auth["api_key"]
-        self.configuration.api_key["appKeyAuth"] = auth["application_key"]
+        self.configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
+        self.configuration.api_key["appKeyAuth"] = self.auth["application_key"]
 
     def ping_data_source(self):
         """To Validate API key"""
@@ -53,7 +49,10 @@ class APIClient:
 
     def get_processes_results(self):
         return_obj = {"code": 200}
-        with datadog_api_client.v2.ApiClient(self.configuration) as api_client:
+        configuration = datadog_api_client.v2.Configuration(host=self.connection["site_url"])
+        configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
+        configuration.api_key["appKeyAuth"] = self.auth["application_key"]
+        with datadog_api_client.v2.ApiClient(configuration) as api_client:
             api_instance = processes_api.ProcessesApi(api_client)
             try:
                 api_response = api_instance.list_processes()

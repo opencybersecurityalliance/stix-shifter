@@ -61,7 +61,7 @@ class TestStixToQuery(unittest.TestCase, object):
 
     @patch('time.time', return_value=12345678)
     def test_text_query(self, mock_time):
-        stix_pattern = "[x-datadog-event:text = 'text']"
+        stix_pattern = "[artifact:payload_bin = 'text']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
         queries = ['{"query": {"text": "text", "start": 12345378, "end": 12345678}, "source": "events"}',
                    '{"query": {"text": "text", "start": 12345378, "end": 12345678}, "source": "processes"}']

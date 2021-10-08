@@ -4,10 +4,14 @@
       "value": ["host"]
     }
   },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["text"]
+    }
+  },
   "x-datadog-event": {
     "fields": {
       "priority": ["priority"],
-      "text": ["text"],
       "monitor_id": ["monitor_id"],
       "tags": ["tags"],
       "is_aggregate": ["unaggregated"],
@@ -27,7 +31,9 @@
       "outcome": ["title"],
       "module": ["source"],
       "agent": ["device_name"],
-      "original.payload_bin": ["text"]
+      "created": ["date_happened"],
+      "original_ref.payload_bin": ["text"],
+      "domain_ref.value": ["host"]
     }
   }
 }

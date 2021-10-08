@@ -7,11 +7,6 @@
             "type": "text",
             "default": "https://app.datadoghq.eu"
         },
-        "endpoint" : {
-            "type":"text",
-            "default": "events",
-            "optional": true
-        },
         "help": {
             "type": "link",
             "default": "data-sources.html"

@@ -118,5 +118,5 @@ class TestDatadogResultsToStix(unittest.TestCase):
         assert custom_object_1['value'] == "i-deadbeef"
 
         assert custom_object_2 is not None, 'Custom object type not found'
-        assert custom_object_2.keys() == {'type', 'alert_type', 'text', 'tags', 'device_name', 'priority'}
+        assert custom_object_2.keys() == {'type', 'alert_type', 'tags', 'priority'}
         assert custom_object_2['alert_type'] == 'info'
