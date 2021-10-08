@@ -41,12 +41,12 @@ class StatusConnector(BaseStatusConnector):
             # Status.RUNNING, Status.COMPLETED, Status.CANCELED, Status.ERROR
             # return_obj['progress'] = Some progress code if returned from the API
             # Construct a response object
-            response_code = response_dict["code"]
+            response_code = response_dict.code
             return_obj = dict()
 
             if response_code == 200:
                 return_obj['success'] = True
-                return_obj['status'] = self.__getStatus(response_dict["status"])
+                return_obj['status'] = self.__getStatus(response_dict.object)
                 return_obj['progress'] = 100
             else:
                 return_obj['success'] = False

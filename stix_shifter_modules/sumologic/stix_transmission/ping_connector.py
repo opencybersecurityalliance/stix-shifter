@@ -11,14 +11,14 @@ class PingConnector(BasePingConnector):
         try:
             response_dict = self.api_client.ping_data_source()
             # response_dict = {'code': 1010, 'message': 'remote system error message'} # <-- simulate error in response to test error mapping
-            response_code = response_dict["code"]
+            response_code = response_dict.code
 
             # Construct a response object
             return_obj = dict()
-            if response_code == 200            :
+            if response_code == 200:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict.object, ['message'])
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

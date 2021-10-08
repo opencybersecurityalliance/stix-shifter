@@ -11,12 +11,16 @@ class DeleteConnector(BaseDeleteConnector):
     def delete_query_connection(self, search_id):
         try:
             response_dict = self.api_client.delete_search(search_id)
-            response_code = response_dict["code"]
+            response_code = response_dict.code
 
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
-                return_obj['success'] = response_dict['success']
+                if 'id' in response_dict.object:
+                    return_obj['success'] = True
+                elif 'error' in response_dict.object:
+                    return_obj['success'] = False
+                    return_obj['code'] = 'no_results'
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
