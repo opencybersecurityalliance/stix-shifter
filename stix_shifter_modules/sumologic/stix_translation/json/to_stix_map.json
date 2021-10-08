@@ -57,6 +57,11 @@
     "key": "x-sumologic.collectorid",
     "object": "x-sumologic"
   },
+  "_receipttime": {
+    "key": "x-ibm-finding.start",
+    "transformer": "EpochToTimestamp",
+    "object": "x-ibm-finding"
+  },
   "_source": {
     "key": "x-oca-event.module",
     "object": "x-oca-event"
