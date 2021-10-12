@@ -30,18 +30,28 @@
       "key": "x-msazure-sentinel-alert.assignedTo",
       "object": "alert"
     },
-    "category": {
-      "key": "x-msazure-sentinel-alert.category",
-      "object": "alert"
-    },
+    "category": [
+      {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding"
+      },
+      {
+      "key": "x-oca-event.outcome",
+      "object": "event"
+      },
+      {
+      "key": "x-oca-event.category",
+      "object": "event"
+      }
+    ],
     "closedDateTime": {
-      "key": "x-msazure-sentinel-alert.closedDateTime",
-      "object": "alert"
+      "key": "x-ibm-finding.closedDateTime",
+      "object": "finding"
     },
     "cloudAppStates": {
       "destinationServiceName": {
-        "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceName",
-        "object": "alert"
+        "key": "x-ibm-finding.dst_application_ref.name",
+        "object": "finding"
       },
       "destinationServiceIp": {
         "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceIp",
@@ -67,13 +77,17 @@
         "cybox": false
       },
       {
-        "key": "x-msazure-sentinel-alert.createddatetime",
-        "object": "alert"
+        "key": "x-ibm-finding.createddatetime",
+        "object": "finding"
+      },
+      {
+        "key": "x-oca-eventg.created",
+        "object": "event"
       }
     ],
     "description": {
-      "key": "x-msazure-sentinel-alert.description",
-      "object": "alert"
+      "key": "x-ibm-finding.description",
+      "object": "finding"
     },
     "detectionIds": {
       "key": "x-msazure-sentinel-alert.detectionids",
@@ -163,8 +177,8 @@
         "object": "alert"
       },
       "os": {
-        "key": "x-msazure-sentinel-alert.hostStates.os",
-        "object": "alert"
+        "key": "x-ibm-finding.src_os_ref.name",
+        "object": "finding"
       },
       "privateIpAddress": {
         "key": "ipv4-addr.value"
@@ -178,8 +192,8 @@
       }
     },
     "id": {
-      "key": "x-msazure-sentinel-alert.providerid",
-      "object": "alert"
+      "key": "x-oca-event.code",
+      "object": "event"
     },
     "incidentIds": {
       "key": "x-msazure-sentinel-alert.incidentIds",
@@ -192,8 +206,8 @@
         "cybox": false
       },
       {
-        "key": "x-msazure-sentinel-alert.lastmodifieddatetime",
-        "object": "alert"
+        "key": "x-ibm-finding.time_observed",
+        "object": "finding"
       }
     ],
     "malwareStates": {
@@ -234,7 +248,7 @@
         }
       ],
       "destinationLocation": {
-        "key": "x-msazure-sentinel-alert.networkConnections.destinationLocation",
+        "key": "x-ibm-finding.dst_geolocation",
         "object": "alert"
       },
       "destinationDomain": {
@@ -263,16 +277,16 @@
         "object": "alert"
       },
       "natDestinationAddress": {
-        "key": "x-msazure-sentinel-alert.networkConnections.natDestinationAddress",
-        "object": "alert"
+        "key": "x-ibm-finding.dst_ip_ref.value",
+        "object": "finding"
       },
       "natDestinationPort": {
         "key": "x-msazure-sentinel-alert.networkConnections.natDestinationPort",
         "object": "alert"
       },
       "natSourceAddress": {
-        "key": "x-msazure-sentinel-alert.networkConnections.natSourceAddress",
-        "object": "alert"
+        "key": "x-ibm-finding.src_ip_ref.value",
+        "object": "finding"
       },
       "natSourcePort": {
         "key": "x-msazure-sentinel-alert.networkConnections.natSourcePort",
@@ -300,7 +314,7 @@
         }
       ],
       "sourceLocation": {
-        "key": "x-msazure-sentinel-alert.networkConnections.sourceLocation",
+        "key": "x-ibm-finding.src_geolocation",
         "object": "alert"
       },
       "sourcePort": {
@@ -312,10 +326,16 @@
         "key": "x-msazure-sentinel-alert.networkConnections.status",
         "object": "alert"
       },
-      "urlParameters": {
-        "key": "x-msazure-sentinel-alert.networkConnections.urlParameters",
-        "object": "alert"
-      }
+      "urlParameters": [
+        {
+        "key": "x-oca-event.domain_ref.value",
+        "object": "event"
+        },
+        {
+        "key": "x-oca-event.url_ref.value",
+        "object": "event"
+        }
+      ]
     },
     "processes": {
       "accountName": [
@@ -476,8 +496,8 @@
       }
     },
     "severity": {
-      "key": "x-msazure-sentinel-alert.severity",
-      "object": "alert"
+      "key": "x-ibm-finding.severity",
+      "object": "finding"
     },
     "sourceMaterials": {
       "key": "x-msazure-sentinel-alert.sourcematerials",
@@ -494,10 +514,16 @@
       "object": "alert",
       "transformer": "ToString"
     },
-    "title": {
-      "key": "x-msazure-sentinel-alert.title",
-      "object": "alert"
-    },
+    "title": [
+      {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+      },
+      {
+      "key": "x-oca-event.action",
+      "object": "event"
+      }
+    ],
     "triggers": {
       "name": {
         "key": "x-msazure-sentinel-alert.triggers.name",
@@ -514,8 +540,8 @@
     },
     "userStates": {
       "aadUserId": {
-        "key": "x-msazure-sentinel-alert.userStates.aaduserid",
-        "object": "alert"
+        "key": "x-ibm-finding.src_application_user_ref.user_id",
+        "object": "finding"
       },
       "accountName": {
         "key": "user-account.user_id",
@@ -548,8 +574,8 @@
         "object": "alert"
       },
       "logonType": {
-        "key": "x-msazure-sentinel-alert.userStates.logonType",
-        "object": "alert"
+        "key": "x-ibm-finding.src_application_user_ref.type",
+        "object": "finding"
       },
       "onPremisesSecurityIdentifier": {
         "key": "x-msazure-sentinel-alert.userStates.onpremisessecurityidentifier",
@@ -582,8 +608,8 @@
         "object": "application"
       },
       "subProvider": {
-        "key": "x-msazure-sentinel-alert.vendorinformation.subprovider",
-        "object": "alert"
+        "key": "x-oca-event.provider",
+        "object": "event"
       }
     },
     "vulnerabilityStates": {
