@@ -1,5 +1,6 @@
 import re
 import uuid
+import copy
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
@@ -161,20 +162,33 @@ class DataSourceObjToStixObj:
                             yield result
     
     #update the object key of the mapping
-    @staticmethod
-    def _update_object_key(ds_map, indx):
-        for key, value in ds_map.items():
+    # update the object key of the mapping
+    def _update_object_key(self, ds_map, indx):
+        singleton_stix_objects = self.options.get('singleton_stix_objects')
+        new_ds_map = copy.deepcopy(ds_map)
+        for key, value in new_ds_map.items():
             if isinstance(value, dict):
                 if 'object' in value:
-                    value['object'] = str(value['object']) +'_' + str(indx)
+                    value['object'] = str(value['object']) + '_' + str(indx)
             if isinstance(value, list):
                 for item in value:
                     if 'object' in item:
-                        item['object'] = str(item['object']) +'_' + str(indx)
+                        # only single event object for each observed data obj
+                        stix_obj, _ = tuple(item['key'].split('.', 1))
+                        if not stix_obj in singleton_stix_objects:
+                            item['object'] = str(item['object']) + '_' + str(indx)
                         if 'references' in item:
-                            item['references'] = str(item['references']) +'_' + str(indx)
+                            references = item['references']
+                            if isinstance(references, list):
+                                updated_references = []
+                                for ref in references:
+                                    updated_references.append(str(ref) + '_' + str(indx))
+                            else:
+                                updated_references = str(item['references']) + '_' + str(indx)
 
-        return ds_map
+                            item['references'] = updated_references
+
+        return new_ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
@@ -208,7 +222,7 @@ class DataSourceObjToStixObj:
             self.logger.debug('{} is a list; unwrapping.'.format(to_map))
             for item in to_map:
                 if isinstance(item, dict):
-                    new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
+                    new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
         
