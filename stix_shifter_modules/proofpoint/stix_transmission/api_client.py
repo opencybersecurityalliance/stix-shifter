@@ -1,8 +1,7 @@
 import base64
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
-ENDPOINT_SINCESEC = 'all?format=syslog&sinceSeconds=3600'
-ENDPOINT_ALL = 'all?format=json&'
+ENDPOINT_ALL = 'v2/siem/all'
 
 class APIClient():
 
@@ -11,9 +10,9 @@ class APIClient():
         auth = configuration.get('auth')
         headers = dict()
         if auth:
-            if 'username' in auth and 'password' in auth:
+            if 'principal' in auth and 'secret' in auth:
                 headers['Authorization'] = b"Basic " + base64.b64encode(
-                    (auth['username'] + ':' + auth['password']).encode('ascii'))
+                    (auth['principal'] + ':' + auth['secret']).encode('ascii'))
         self.client = RestApiClient(connection.get('host'),
                                     port=None,
                                     headers=headers, url_modifier_function=None, cert_verify=True, sni=None, auth=None
@@ -21,12 +20,13 @@ class APIClient():
 
     def ping_data_source(self):
         # Pings the data source
-        pingresult = self.client.call_api(endpoint=ENDPOINT_SINCESEC, method='GET')
+        endpoint = ENDPOINT_ALL + "?format=syslog&sinceSeconds=3600"
+        pingresult = self.client.call_api(endpoint=endpoint, method='GET')
         return pingresult
 
     def create_search(self, query_expression):
         # Queries the data source
-        return {"code": 200, "query_id": "uuid_1234567890"}
+        return {"code": 200, "query_id": query_expression}
 
     def get_search_status(self, search_id):
         # Check the current status of the search
@@ -34,7 +34,9 @@ class APIClient():
 
     def get_search_results(self, search_id):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        resultdata = self.client.call_api(endpoint=ENDPOINT_ALL+search_id, method='GET')
+        #resultdata = self.client.call_api(endpoint=ENDPOINT_ALL+search_id, method='GET')#working
+        endpoint = ENDPOINT_ALL+"?format=json&"
+        resultdata = self.client.call_api(endpoint=endpoint, method='GET', urldata=search_id)
         # Check the current status of the search
         return resultdata
 

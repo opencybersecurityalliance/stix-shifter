@@ -55,11 +55,16 @@ class ResultsConnector(BaseResultsConnector):
             else:#unknown errors
                 error_obj['code'] = 7000
             if error_obj:
-                error_obj['message'] = str(response_txt.decode("utf-8"))
+                error_msg = ""
+                try:
+                    error_msg = str(response_txt.decode("utf-8"))
+                except:
+                    pass
+                error_obj['message'] = error_msg
                 ErrorResponder.fill_error(return_obj,
                                           error_obj,
                                           ['message'])
-                err = 'error when getting search results: {}:{}'.format(str(response_code),str(response_txt.decode("utf-8")))
+                err = 'error when getting search results: {}:{}'.format(str(response_code),error_msg)
                 self.logger.error(err)
                 # raise NoResultsFoundError(err)
             return return_obj

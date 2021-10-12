@@ -28,10 +28,10 @@
     "configuration": {
         "type" : "fields",
         "auth": {
-            "username": {
+            "principal": {
                 "type": "password"
             },
-            "password": {
+            "secret": {
                 "type": "password"
             }
         }
