@@ -123,7 +123,7 @@ Each connector supports a set of STIX objects and properties as defined in the c
 
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
 
-List updated: December 11, 2020
+List updated: September 28, 2021
 
 |         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
 | :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
@@ -145,6 +145,12 @@ List updated: December 11, 2020
 |       [Micro Focus ArcSight](adapter-guide/connectors/arcsight_supported_stix.md)       |    arcsight    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [CrowdStrike Falcon](adapter-guide/connectors/crowdstrike_supported_stix.md)       |    crowdstrike    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Trend Micro Vision One](adapter-guide/connectors/trendmicro_vision_one_supported_stix.md)       |    trendmicro_vision_one    |  Default   | Trend Micro |     Yes     |     Yes      |   Released    |
+|       [Secret Server](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
+|       [One Login](adapter-guide/connectors/onelogin_supported_stix.md)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
+|       MySQL                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
+
+
+
 
 
 
