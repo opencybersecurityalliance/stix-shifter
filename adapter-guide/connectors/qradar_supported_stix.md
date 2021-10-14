@@ -1,10 +1,15 @@
+##### Updated on 09/28/21
 ## IBM QRadar
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | UTF8(payload) |
+| artifact | mime_type | mime_type_eventpayload |
 | artifact | payload_bin | flowsourcepayload |
+| artifact | mime_type | mime_type_flowsourcepayload |
 | artifact | payload_bin | flowdestinationpayload |
+| artifact | mime_type | mime_type_flowdestinationpayload |
 | artifact | payload_bin | Message |
+| artifact | mime_type | mime_type_message |
 | <br> | | |
 | directory | path | "File Path" |
 | directory | path | Image |

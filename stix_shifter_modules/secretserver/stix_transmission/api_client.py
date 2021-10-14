@@ -114,7 +114,7 @@ class APIClient():
                 self.endDate = self.startDate - timedelta(days = 1)
             response = self.get_response()
             return response
-
+  
     def decode_searchId(self):
         # These value (date, self.query) must be present.
         try:
