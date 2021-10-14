@@ -64,7 +64,7 @@
   },
   "software": {
     "fields": {
-      "name": ["vendorInformation.provider", "networkConnections.applicationName"],
+      "name": ["vendorInformation.provider", "networkConnections.applicationName", "hostStates.os"],
       "vendor": ["vendorInformation.vendor"],
       "version": ["vendorInformation.providerVersion"]
     }

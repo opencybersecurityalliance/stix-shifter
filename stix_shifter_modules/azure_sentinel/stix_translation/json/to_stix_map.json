@@ -36,10 +36,6 @@
       "object": "finding"
       },
       {
-      "key": "x-oca-event.outcome",
-      "object": "event"
-      },
-      {
       "key": "x-oca-event.category",
       "object": "event"
       }
@@ -49,10 +45,17 @@
       "object": "finding"
     },
     "cloudAppStates": {
-      "destinationServiceName": {
-        "key": "x-ibm-finding.dst_application_ref.name",
-        "object": "finding"
-      },
+      "destinationServiceName": [
+        {
+        "key":"software.name",
+        "object":"software"
+        },
+        {
+        "key":"x-ibm-finding.dst_application_ref",
+        "object":"finding",
+        "references":"software"
+        }
+      ],
       "destinationServiceIp": {
         "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceIp",
         "object": "alert"
