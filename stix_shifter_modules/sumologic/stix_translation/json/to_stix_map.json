@@ -54,8 +54,8 @@
     }
   ],
   "_collectorid": {
-    "key": "x-sumologic.collectorid",
-    "object": "x-sumologic"
+    "key": "x-sumologic-source.collectorid",
+    "object": "x-sumologic-source"
   },
   "_receipttime": {
     "key": "x-ibm-finding.start",
@@ -71,14 +71,14 @@
     "object": "x-oca-event"
   },
   "_sourcename": {
-    "key": "x-sumologic.sourcename",
-    "object": "x-sumologic"
+    "key": "x-sumologic-source.sourcename",
+    "object": "x-sumologic-source"
   },
-  "_userid": {
+  "id": {
     "key": "user-account.user_id",
     "object": "user-account"
   },
-  "_useremail": [
+  "email": [
     {
       "key": "user-account.account_login",
       "object": "user-account"
@@ -89,15 +89,15 @@
       "references": "user-account"
     }
   ],
-  "_userdisplayname": {
+  "displayName": {
     "key": "user-account.display_name",
     "object": "user-account"
   },
-  "_usercreatedat": {
+  "createdAt": {
     "key": "user-account.account_created",
     "object": "user-account"
   },
-  "_userlastlogin": {
+  "lastLoginTimestamp": {
     "key": "user-account.account_last_login",
     "object": "user-account"
   }

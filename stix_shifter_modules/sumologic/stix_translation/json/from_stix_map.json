@@ -57,7 +57,7 @@
       ]
     }
   },
-  "x-sumologic": {
+  "x-sumologic-source": {
     "fields": {
       "collectorid": [
         "_collectorid"
@@ -70,19 +70,19 @@
   "user-account": {
     "fields": {
       "user_id": [
-        "_userid"
+        "id"
       ],
       "account_login": [
-        "_useremail"
+        "email"
       ],
       "display_name": [
-        "_userdisplayname"
+        "displayName"
       ],
       "account_created": [
-        "_usercreatedat"
+        "createdAt"
       ],
       "account_last_login": [
-        "_userlastlogin"
+        "lastLoginTimestamp"
       ]
     }
   }
