@@ -166,12 +166,10 @@
       "time_observed": ["lastModifiedDateTime"]
     }
   },
-
   "x-oca-event": {
     "fields": {
       "action": ["title"],
       "code": ["id"],
-      "outcome": ["category"],
       "category": ["category"],
       "created": ["createdDateTime"],
       "provider": ["vendorInformation.subProvider"],

@@ -179,10 +179,16 @@
         "key": "x-msazure-sentinel-alert.hostStates.isHybridAzureDomainJoined",
         "object": "alert"
       },
-      "os": {
-        "key": "x-ibm-finding.src_os_ref.name",
-        "object": "finding"
-      },
+      "os": [
+        {
+          "key": "x-ibm-finding.src_os_ref.name",
+          "object": "finding"
+        },
+        {
+          "key": "software.name",
+          "object": "application"
+        }
+      ],
       "privateIpAddress": {
         "key": "ipv4-addr.value"
       },
@@ -237,7 +243,8 @@
     },
     "networkConnections": {
       "applicationName": {
-        "key": "software.name"
+        "key": "software.name",
+        "object": "application"
       },
       "destinationAddress": [
         {
