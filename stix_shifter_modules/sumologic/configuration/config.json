@@ -15,10 +15,10 @@
     "configuration": {
         "type" : "fields",
         "auth": {
-            "username": {
+            "access_id": {
                 "type": "password"
             },
-            "password": {
+            "access_key": {
                 "type": "password"
             }
         }
