@@ -2,17 +2,22 @@ import json
 from sumologic import SumoLogic
 
 
+protocol = "https://"
+url = "api.%s.sumologic.com/"
+endpoint = "api"
+
+
 class SumoLogicResponse:
-    def __init__(self, response_code, object):
+    def __init__(self, response_code, response_object):
         self.code = response_code
-        self.object = object
+        self.object = response_object
 
 
 class APIClient:
     def __init__(self, connection, configuration):
-        self.endpoint = "https://api.%s.sumologic.com/api" % (connection.get("region"))
+        self.endpoint = (protocol + url + endpoint) % (connection.get("region"))
         self.auth = configuration.get('auth')
-        self.client = SumoLogic(self.auth.get("username"), self.auth.get("password"), endpoint=self.endpoint)
+        self.client = SumoLogic(self.auth.get("access_id"), self.auth.get("access_key"), endpoint=self.endpoint)
 
     def ping_data_source(self):
         # Pings the data source
@@ -47,11 +52,9 @@ class APIClient:
 
         results = [r['map'] for r in result['messages']]
         for r in results:
-            r["_userid"] = user_details["id"]
-            r["_useremail"] = user_details["email"]
-            r["_userdisplayname"] = user_details["firstName"] + " " + user_details["lastName"]
-            r["_usercreatedat"] = user_details["createdAt"]
-            r["_userlastlogin"] = user_details["lastLoginTimestamp"]
+            r.update(user_details)
+            r["displayName"] = user_details["firstName"] + " " + user_details["lastName"]
+
         return SumoLogicResponse(200, results)
 
     def delete_search(self, search_id):
