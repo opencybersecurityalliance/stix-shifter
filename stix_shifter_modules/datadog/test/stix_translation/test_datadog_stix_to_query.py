@@ -139,6 +139,34 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
+    def test_process_cmdline_query(self, mock_time):
+        stix_pattern = "[process:command_line = 'System']"
+        query = translation.translate('datadog', 'query', '{}', stix_pattern)
+        queries = ['{"query": {"cmdline": "System", "start": 12345378, "end": 12345678}, "source": "processes"}']
+        _test_query_assertions(query, queries)
+
+    @patch('time.time', return_value=12345678)
+    def test_process_pid_query(self, mock_time):
+        stix_pattern = "[process:pid = '92']"
+        query = translation.translate('datadog', 'query', '{}', stix_pattern)
+        queries = ['{"query": {"pid": "92", "start": 12345378, "end": 12345678}, "source": "processes"}']
+        _test_query_assertions(query, queries)
+
+    @patch('time.time', return_value=12345678)
+    def test_process_creator_user_ref_query(self, mock_time):
+        stix_pattern = "[process:creator_user_ref = 2]"
+        query = translation.translate('datadog', 'query', '{}', stix_pattern)
+        queries = ['{"query": {"user": "2", "start": 12345378, "end": 12345678}, "source": "processes"}']
+        _test_query_assertions(query, queries)
+
+    @patch('time.time', return_value=12345678)
+    def test_process_host_query(self, mock_time):
+        stix_pattern = "[process:host = 'win10vm4']"
+        query = translation.translate('datadog', 'query', '{}', stix_pattern)
+        queries = ['{"query": {"host": "win10vm4", "start": 12345378, "end": 12345678}, "source": "processes"}']
+        _test_query_assertions(query, queries)
+
+    @patch('time.time', return_value=12345678)
     def test_query_from_multiple_observation_expressions_joined_by_AND(self, mock_time):
         stix_pattern = "[x-datadog-event:alert_type = 'alert_type'] AND [x-datadog-event:tags = 'tags']"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
