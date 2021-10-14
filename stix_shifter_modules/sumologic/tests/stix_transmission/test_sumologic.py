@@ -18,14 +18,14 @@ class TestSumoLogicConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "region": "us"
+            "region": "us1"
         }
 
     def configuration(self):
         return {
             "auth": {
-                "username": "u",
-                "password": "pqwer"
+                "access_id": "u",
+                "access_key": "pqwer"
             }
         }
 

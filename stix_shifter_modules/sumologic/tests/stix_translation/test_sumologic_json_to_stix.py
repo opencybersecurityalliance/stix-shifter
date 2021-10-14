@@ -64,11 +64,22 @@ class TestSumoLogicResultsToStix(unittest.TestCase):
             "_sourcecategory": "linux/system",
             "_format": "t:cache:o:0:l:15:p:MMM dd HH:mm:ss",
             "_source": "Linux System_3",
-            "_userdisplayname": "Ismail Memon",
-            "_useremail": "ismail.memon@gslab.com",
-            "_usercreatedat": "2021-09-23T11:34:07.255Z",
-            "_userid": "000000000001F46E",
-            "_userlastlogin": "2021-10-04T13:46:51.93Z"
+            "firstName": "Ismail",
+            "lastName": "Memon",
+            "email": "ismail.memon@gslab.com",
+            "roleIds": [
+                "000000000002E875"
+            ],
+            "createdAt": "2021-09-23T11:34:07.255Z",
+            "createdBy": "FFFFFFFFFFFFFD66",
+            "modifiedAt": "2021-10-08T10:14:34.911Z",
+            "modifiedBy": "000000000001F46E",
+            "id": "000000000001F46E",
+            "isActive": True,
+            "isLocked": False,
+            "isMfaEnabled": False,
+            "lastLoginTimestamp": "2021-10-08T10:14:34.902Z",
+            "displayName": "Ismail Memon"
         }
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -118,11 +129,22 @@ class TestSumoLogicResultsToStix(unittest.TestCase):
             "_sourcecategory": "linux/system",
             "_format": "t:cache:o:0:l:15:p:MMM dd HH:mm:ss",
             "_source": "Linux System_3",
-            "_userdisplayname": "Ismail Memon",
-            "_useremail": "ismail.memon@gslab.com",
-            "_usercreatedat": "2021-09-23T11:34:07.255Z",
-            "_userid": "000000000001F46E",
-            "_userlastlogin": "2021-10-04T13:46:51.93Z"
+            "firstName": "Ismail",
+            "lastName": "Memon",
+            "email": "ismail.memon@gslab.com",
+            "roleIds": [
+                "000000000002E875"
+            ],
+            "createdAt": "2021-09-23T11:34:07.255Z",
+            "createdBy": "FFFFFFFFFFFFFD66",
+            "modifiedAt": "2021-10-08T10:14:34.911Z",
+            "modifiedBy": "000000000001F46E",
+            "id": "000000000001F46E",
+            "isActive": True,
+            "isLocked": False,
+            "isMfaEnabled": False,
+            "lastLoginTimestamp": "2021-10-08T10:14:34.902Z",
+            "displayName": "Ismail Memon"
         }
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -134,7 +156,7 @@ class TestSumoLogicResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
 
-        custom_object_1 = TestSumoLogicResultsToStix.get_first_of_type(objects.values(), 'x-sumologic')
+        custom_object_1 = TestSumoLogicResultsToStix.get_first_of_type(objects.values(), 'x-sumologic-source')
 
         assert custom_object_1 is not None, 'Custom object type not found'
         assert custom_object_1.keys() == {'type', 'collectorid', 'sourcename'}

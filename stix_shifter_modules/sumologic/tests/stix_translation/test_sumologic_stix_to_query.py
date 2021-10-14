@@ -22,7 +22,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[domain-name:value = 'sumologic.domain_name.com' AND user-account:user_id = '12345678'] " \
                        "START t'2021-09-01T00:00:00.000Z' STOP t'2021-09-26T10:16:00.000Z'"
         query = translation.translate('sumologic', 'query', 'sumologic', stix_pattern, options={"result_limit": 100})
-        queries = "{\"query\": \"(_userid = \\\"12345678\\\" AND _sourcehost = \\\"sumologic.domain_name.com\\\")\"," \
+        queries = "{\"query\": \"(id = \\\"12345678\\\" AND _sourcehost = \\\"sumologic.domain_name.com\\\")\"," \
                   "\n\"fromTime\": \"20210901T000000\",\n\"toTime\": \"20210926T101600\"}"
         _test_query_assertions(query, queries)
 
@@ -30,7 +30,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[domain-name:value = 'sumologic.domain_name.com' AND user-account:user_id = '12345678']"
         query = translation.translate('sumologic', 'query', 'sumologic', stix_pattern, options={"result_limit": 100})
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_userid = \\\"12345678\\\" AND _sourcehost = \\\"sumologic.domain_name.com\\\")\"," \
+        queries = "{\"query\": \"(id = \\\"12345678\\\" AND _sourcehost = \\\"sumologic.domain_name.com\\\")\"," \
                   "\n\"fromTime\": \"%s\",\n\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
 
@@ -91,7 +91,7 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_custom_collector_id_query(self):
-        stix_pattern = "[x-sumologic:collectorid = '12345678']"
+        stix_pattern = "[x-sumologic-source:collectorid = '12345678']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
         queries = "{\"query\": \"(_collectorid = \\\"12345678\\\")\",\n\"fromTime\": \"%s\",\n\"toTime\": \"%s\"}" % (
@@ -99,7 +99,7 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_custom_sourcename_query(self):
-        stix_pattern = "[x-sumologic:sourcename = '/var/log/messages']"
+        stix_pattern = "[x-sumologic-source:sourcename = '/var/log/messages']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
         queries = "{\"query\": \"(_sourcename = \\\"/var/log/messages\\\")\",\n\"fromTime\": \"%s\"," \
@@ -110,7 +110,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:user_id = '12345678']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_userid = \\\"12345678\\\")\",\n\"fromTime\": \"%s\",\n\"toTime\": \"%s\"}" % (
+        queries = "{\"query\": \"(id = \\\"12345678\\\")\",\n\"fromTime\": \"%s\",\n\"toTime\": \"%s\"}" % (
             from_time, to_time)
         _test_query_assertions(query, queries)
 
@@ -118,7 +118,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:account_login = 'abc@domain.com']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_useremail = \\\"abc@domain.com\\\")\",\n\"fromTime\": \"%s\"," \
+        queries = "{\"query\": \"(email = \\\"abc@domain.com\\\")\",\n\"fromTime\": \"%s\"," \
                   "\n\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
 
@@ -126,7 +126,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:display_name = 'abc def']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_userdisplayname = \\\"abc def\\\")\",\n\"fromTime\": \"%s\"," \
+        queries = "{\"query\": \"(displayName = \\\"abc def\\\")\",\n\"fromTime\": \"%s\"," \
                   "\n\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
 
@@ -134,7 +134,7 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:account_created = '2021-09-23T11:34:07.255Z']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_usercreatedat = \\\"2021-09-23T11:34:07.255Z\\\")\",\n\"fromTime\": \"%s\"," \
+        queries = "{\"query\": \"(createdAt = \\\"2021-09-23T11:34:07.255Z\\\")\",\n\"fromTime\": \"%s\"," \
                   "\n\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
 
@@ -142,6 +142,6 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:account_last_login = '2021-10-04T13:51:09.958Z']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"(_userlastlogin = \\\"2021-10-04T13:51:09.958Z\\\")\",\n\"fromTime\": \"%s\"," \
+        queries = "{\"query\": \"(lastLoginTimestamp = \\\"2021-10-04T13:51:09.958Z\\\")\",\n\"fromTime\": \"%s\"," \
                   "\n\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
