@@ -24,13 +24,13 @@
             "description": "Max number of pages requested to TruSTAR"
         },
         "auth": {
-            "username": {
-                "label": "Username",
-                "description": "Username with access to the search API"
+            "clientId": {
+                "label": "Client ID ",
+                "description": "Client ID created in TruSTAR Portal"
             },
-            "password": {
-                "label": "Password",
-                "description": "Password of the user with access to the search API"
+            "clientSecret": {
+                "label": "Client Secret",
+                "description": "Client Secret created in TruSTAR Portal"
             }
         }
     }

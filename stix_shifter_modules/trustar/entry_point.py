@@ -47,7 +47,7 @@ class EntryPoint(BaseEntryPoint):
         basepath = os.path.dirname(__file__)
         filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
 
-        dialect = 'dialect1'
+        dialect = 'default'
         query_translator = QueryTranslator(options, dialect, filepath)
         results_translator = JSONToStix(options, dialect, filepath)
         self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default=True)
