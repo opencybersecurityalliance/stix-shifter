@@ -2,9 +2,9 @@ import json
 from sumologic import SumoLogic
 
 
-protocol = "https://"
-url = "api.%s.sumologic.com/"
-endpoint = "api"
+PROTOCOL = "https://"
+URL = "api.%s.sumologic.com/"
+ENDPOINT = "api"
 
 
 class SumoLogicResponse:
@@ -15,7 +15,7 @@ class SumoLogicResponse:
 
 class APIClient:
     def __init__(self, connection, configuration):
-        self.endpoint = (protocol + url + endpoint) % (connection.get("region"))
+        self.endpoint = (PROTOCOL + URL + ENDPOINT) % (connection.get("region"))
         self.auth = configuration.get('auth')
         self.client = SumoLogic(self.auth.get("access_id"), self.auth.get("access_key"), endpoint=self.endpoint)
 
@@ -39,13 +39,8 @@ class APIClient:
 
     def get_search_results(self, search_id, offset, limit):
         # Return the search results. Results must be in JSON format before being translated into STIX
-        status = self.get_search_status(search_id)
-        if status.object == "DONE GATHERING RESULTS":
-            search_id = {"id": search_id}
-            result = self.client.search_job_messages(search_id, limit, offset)
-        else:
-            search_id = {"id": search_id}
-            result = self.client.search_job_messages(search_id, limit, offset)
+        search_id = {"id": search_id}
+        result = self.client.search_job_messages(search_id, limit, offset)
 
         response = (self.client.get("/users"))
         user_details = response.json()["data"][0]
