@@ -96,6 +96,12 @@ class TestStixToSpl(unittest.TestCase, object):
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         queries = 'search (file_name = "some_file.exe") earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
+    
+    def test_file_hash_query(self):
+        stix_pattern = "[file:hashes.'SHA-1' = '5e5a7065f1b551eb3632fb189ce1baefd23158aa']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = 'search (file_hash = \"5e5a7065f1b551eb3632fb189ce1baefd23158aa\") earliest=\"-5minutes\" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
+        _test_query_assertions(query, queries)
 
     def test_risk_finding(self):
         stix_pattern = "[x-ibm-finding:name = 'sample_alert']"
@@ -140,7 +146,7 @@ class TestStixToSpl(unittest.TestCase, object):
         _test_query_assertions(query, queries)
 
     def test_network_traffic_start_stop(self):
-        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.000Z']"
+        stix_pattern = "[network-traffic:start = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.000Z']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         queries = 'search ((latest = "2018-06-14T08:36:24.000Z") OR (earliest = "2018-06-14T08:36:24.000Z")) earliest="-5minutes" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol, host, source, DeviceType, Direction, severity, EventID, EventName, ss_name, TacticId, Tactic, TechniqueId, Technique'
         _test_query_assertions(query, queries)
