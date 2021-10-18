@@ -160,16 +160,17 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
-    
-    #update the object key of the mapping
+
     # update the object key of the mapping
     def _update_object_key(self, ds_map, indx):
         singleton_stix_objects = self.options.get('singleton_stix_objects')
         new_ds_map = copy.deepcopy(ds_map)
         for key, value in new_ds_map.items():
             if isinstance(value, dict):
-                if 'object' in value:
-                    value['object'] = str(value['object']) + '_' + str(indx)
+                if 'object' in value and 'key' in value:
+                    stix_obj, _ = tuple(value['key'].split('.', 1))
+                    value['object'] = str(value['object']) + '_' + str(indx) if stix_obj not in singleton_stix_objects \
+                        else value['object']
             if isinstance(value, list):
                 for item in value:
                     if 'object' in item:
@@ -179,13 +180,21 @@ class DataSourceObjToStixObj:
                             item['object'] = str(item['object']) + '_' + str(indx)
                         if 'references' in item:
                             references = item['references']
-                            if isinstance(references, list):
-                                updated_references = []
-                                for ref in references:
-                                    updated_references.append(str(ref) + '_' + str(indx))
-                            else:
-                                updated_references = str(item['references']) + '_' + str(indx)
-
+                            is_a_list = True
+                            if not isinstance(references, list):
+                                references = [references]
+                                is_a_list = False
+                            updated_references = []
+                            for ref in references:
+                                ref_stix_obj = None
+                                for mapping in value:
+                                    if ref == mapping['object']:
+                                        ref_stix_obj, _ = tuple(mapping['key'].split('.', 1))
+                                        break
+                                ref_to_append = (str(ref) + '_' + str(indx)) if \
+                                    (ref_stix_obj not in singleton_stix_objects) else ref
+                                updated_references.append(ref_to_append)
+                            updated_references = updated_references if is_a_list else updated_references[0]
                             item['references'] = updated_references
 
         return new_ds_map
@@ -200,7 +209,7 @@ class DataSourceObjToStixObj:
                     self.logger.info(
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
                     cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
-                                "cust_object"}
+                        "cust_object"}
                     if to_map is None or to_map == '':
                         self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
                         return
@@ -225,7 +234,7 @@ class DataSourceObjToStixObj:
                     new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
-        
+
         generic_hash_key = ''
 
         # get the stix keys that are mapped
@@ -241,7 +250,6 @@ class DataSourceObjToStixObj:
                     return
 
             ds_key_def_list = [ds_key_def_obj]
-
 
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
@@ -399,7 +407,7 @@ class DataSourceObjToStixObj:
             obj_keys = list(values.keys())
 
             if sorted(rm_keys) == sorted(obj_keys):
-                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values) )
+                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values))
                 remove_keys.append(obj)
 
         for k in remove_keys:

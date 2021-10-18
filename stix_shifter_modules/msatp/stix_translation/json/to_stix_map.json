@@ -252,6 +252,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessSHA256": [
@@ -263,6 +268,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessMD5": [
@@ -274,6 +284,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessFileName": [
@@ -304,6 +319,11 @@
       {
         "key": "process.name",
         "object": "nc_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       },
       {
         "key": "process.parent_ref",
@@ -338,17 +358,36 @@
         "key": "process.parent_ref",
         "object": "nc_process",
         "references": "nc_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
-    "InitiatingProcessCommandLine": {
-      "key": "process.command_line",
-      "object": "nc_process"
-    },
-    "InitiatingProcessCreationTime": {
-      "key": "process.created",
-      "object": "nc_process",
-      "transformer": "MsatpToTimestamp"
-    },
+    "InitiatingProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "nc_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
+      }
+    ],
+    "InitiatingProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "nc_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
+      }
+    ],
     "InitiatingProcessParentCreationTime": [
       {
         "key": "process.created",
@@ -359,6 +398,11 @@
         "key": "process.parent_ref",
         "object": "nc_process",
         "references": "nc_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessAccountSid": [
@@ -370,6 +414,11 @@
         "key": "process.creator_user_ref",
         "object": "nc_process",
         "references": "nc_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessAccountName": [
@@ -381,6 +430,11 @@
         "key": "process.creator_user_ref",
         "object": "nc_process",
         "references": "nc_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "InitiatingProcessFolderPath": [
@@ -398,6 +452,11 @@
         "key": "process.binary_ref",
         "object": "nc_process",
         "references": "nc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "nc_process"
       }
     ],
     "DeviceName": [
@@ -507,7 +566,8 @@
           "mac"
         ],
         "group": true
-      }],
+      }
+    ],
     "IPAddresses": [
       {
         "key": "ipv4-addr.value",
@@ -727,7 +787,7 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "child_file"
+        "object": "child_process_file"
       },
       {
         "key": "process.name",
@@ -736,7 +796,7 @@
       {
         "key": "process.binary_ref",
         "object": "child_process",
-        "references": "child_file"
+        "references": "child_process_file"
       },
       {
         "key": "process.child_refs",
@@ -754,27 +814,101 @@
     "FolderPath": [
       {
         "key": "directory.path",
-        "object": "child_file_dir",
+        "object": "child_process_file_dir",
         "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
-        "object": "child_file",
-        "references": "child_file_dir"
+        "object": "child_process_file",
+        "references": "child_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "child_process",
+        "references": "child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
-    "SHA1": {
-      "key": "file.hashes.SHA-1",
-      "object": "child_file"
-    },
-    "SHA256": {
-      "key": "file.hashes.SHA-256",
-      "object": "child_file"
-    },
-    "MD5": {
-      "key": "file.hashes.MD5",
-      "object": "child_file"
-    },
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "child_process",
+        "references": "child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
+    "SHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "child_process",
+        "references": "child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
+    "MD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "child_process",
+        "references": "child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
     "ProcessId": [
       {
         "key": "process.pid",
@@ -805,6 +939,11 @@
         "references": [
           "child_process"
         ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "ProcessCreationTime": [
@@ -819,6 +958,11 @@
         "references": [
           "child_process"
         ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessSHA1": [
@@ -830,6 +974,11 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessSHA256": [
@@ -841,6 +990,11 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessMD5": [
@@ -852,6 +1006,11 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessFileName": [
@@ -867,6 +1026,11 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessParentFileName": [
@@ -879,6 +1043,11 @@
         "object": "parent_process"
       },
       {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      },
+      {
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
@@ -889,11 +1058,18 @@
         "references": "parent_process_file"
       }
     ],
-    "InitiatingProcessId": {
-      "key": "process.pid",
-      "object": "process",
-      "transformer": "ToInteger"
-    },
+    "InitiatingProcessId": [
+      {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
     "InitiatingProcessParentId": [
       {
         "key": "process.pid",
@@ -904,17 +1080,36 @@
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
-    "InitiatingProcessCommandLine": {
-      "key": "process.command_line",
-      "object": "process"
-    },
-    "InitiatingProcessCreationTime": {
-      "key": "process.created",
-      "object": "process",
-      "transformer": "MsatpToTimestamp"
-    },
+    "InitiatingProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
+    "InitiatingProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
+      }
+    ],
     "InitiatingProcessParentCreationTime": [
       {
         "key": "process.created",
@@ -925,6 +1120,11 @@
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "AccountSid": [
@@ -936,6 +1136,18 @@
         "key": "process.creator_user_ref",
         "object": "child_process",
         "references": "child_process_creator"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessAccountSid": [
@@ -947,6 +1159,11 @@
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "AccountName": [
@@ -958,6 +1175,18 @@
         "key": "process.creator_user_ref",
         "object": "child_process",
         "references": "child_process_creator"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process",
+        "references": [
+          "child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessAccountName": [
@@ -969,6 +1198,11 @@
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "InitiatingProcessFolderPath": [
@@ -986,6 +1220,11 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process"
       }
     ],
     "DeviceName": [
@@ -1305,26 +1544,95 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "file"
+        "object": "fc_child_process_file"
       },
       {
-        "key": "x-oca-event.file_ref",
+        "key": "process.binary_ref",
+        "object": "fc_child_process",
+        "references": "fc_child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "fc_process",
+        "references": [
+          "fc_child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "file"
+        "references": "fc_process"
       }
     ],
-    "SHA1": {
-      "key": "file.hashes.SHA-1",
-      "object": "file"
-    },
-    "SHA256": {
-      "key": "file.hashes.SHA-256",
-      "object": "file"
-    },
-    "MD5": {
-      "key": "file.hashes.MD5",
-      "object": "file"
-    },
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "fc_child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_child_process",
+        "references": "fc_child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "fc_process",
+        "references": [
+          "fc_child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
+    "SHA256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "fc_child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_child_process",
+        "references": "fc_child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "fc_process",
+        "references": [
+          "fc_child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
+    "MD5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "fc_child_process_file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_child_process",
+        "references": "fc_child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "fc_process",
+        "references": [
+          "fc_child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",
@@ -1334,6 +1642,11 @@
         "key": "process.binary_ref",
         "object": "fc_process",
         "references": "fc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessSHA256": [
@@ -1345,6 +1658,11 @@
         "key": "process.binary_ref",
         "object": "fc_process",
         "references": "fc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessMD5": [
@@ -1356,6 +1674,11 @@
         "key": "process.binary_ref",
         "object": "fc_process",
         "references": "fc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessFileName": [
@@ -1371,6 +1694,11 @@
         "key": "process.binary_ref",
         "object": "fc_process",
         "references": "fc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessParentFileName": [
@@ -1381,6 +1709,11 @@
       {
         "key": "process.name",
         "object": "fc_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       },
       {
         "key": "process.parent_ref",
@@ -1417,20 +1750,39 @@
         "references": "fc_parent_process"
       },
       {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      },
+      {
         "key": "x-oca-event.parent_process_ref",
         "object": "event",
         "references": "fc_parent_process"
       }
     ],
-    "InitiatingProcessCommandLine": {
-      "key": "process.command_line",
-      "object": "fc_process"
-    },
-    "InitiatingProcessCreationTime": {
-      "key": "process.created",
-      "object": "fc_process",
-      "transformer": "MsatpToTimestamp"
-    },
+    "InitiatingProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "fc_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
+    "InitiatingProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "fc_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
+      }
+    ],
     "InitiatingProcessParentCreationTime": [
       {
         "key": "process.created",
@@ -1441,6 +1793,11 @@
         "key": "process.parent_ref",
         "object": "fc_process",
         "references": "fc_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessAccountSid": [
@@ -1452,6 +1809,11 @@
         "key": "process.creator_user_ref",
         "object": "fc_process",
         "references": "fc_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       },
       {
         "key": "x-oca-event.user_ref",
@@ -1468,18 +1830,40 @@
         "key": "process.creator_user_ref",
         "object": "fc_process",
         "references": "fc_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "FolderPath": [
       {
         "key": "directory.path",
-        "object": "file_dir",
+        "object": "fc_child_process_file_dir",
         "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
-        "object": "file",
-        "references": "file_dir"
+        "object": "fc_child_process_file",
+        "references": "fc_child_process_file_dir"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "fc_child_process",
+        "references": "fc_child_process_file"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "fc_process",
+        "references": [
+          "fc_child_process"
+        ]
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "InitiatingProcessFolderPath": [
@@ -1497,6 +1881,11 @@
         "key": "process.binary_ref",
         "object": "fc_process",
         "references": "fc_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "fc_process"
       }
     ],
     "PublicIP": [
@@ -1813,15 +2202,29 @@
         "object": "event"
       }
     ],
-    "RegistryKey": {
-      "key": "windows-registry-key.key",
-      "object": "re_key"
-    },
-    "RegistryValues": {
-      "key": "windows-registry-key.values",
-      "object": "re_key",
-      "transformer": "MsatpToRegistryValue"
-    },
+    "RegistryKey": [
+      {
+        "key": "windows-registry-key.key",
+        "object": "re_key"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "re_key"
+      }
+    ],
+    "RegistryValues": [
+      {
+        "key": "windows-registry-key.values",
+        "object": "re_key",
+        "transformer": "MsatpToRegistryValue"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "re_key"
+      }
+    ],
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",
@@ -1831,6 +2234,11 @@
         "key": "process.binary_ref",
         "object": "re_process",
         "references": "re_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessSHA256": [
@@ -1842,6 +2250,11 @@
         "key": "process.binary_ref",
         "object": "re_process",
         "references": "re_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessMD5": [
@@ -1853,6 +2266,11 @@
         "key": "process.binary_ref",
         "object": "re_process",
         "references": "re_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessFileName": [
@@ -1868,6 +2286,11 @@
         "key": "process.binary_ref",
         "object": "re_process",
         "references": "re_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessParentFileName": [
@@ -1880,14 +2303,19 @@
         "object": "re_parent_process"
       },
       {
+        "key": "process.binary_ref",
+        "object": "re_parent_process",
+        "references": "re_parent_process_file"
+      },
+      {
         "key": "process.parent_ref",
         "object": "re_process",
         "references": "re_parent_process"
       },
       {
-        "key": "process.binary_ref",
-        "object": "re_parent_process",
-        "references": "re_parent_process_file"
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessId": [
@@ -1914,20 +2342,39 @@
         "references": "re_parent_process"
       },
       {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
+      },
+      {
         "key": "x-oca-event.parent_process_ref",
         "object": "event",
         "references": "re_parent_process"
       }
     ],
-    "InitiatingProcessCommandLine": {
-      "key": "process.command_line",
-      "object": "re_process"
-    },
-    "InitiatingProcessCreationTime": {
-      "key": "process.created",
-      "object": "re_process",
-      "transformer": "MsatpToTimestamp"
-    },
+    "InitiatingProcessCommandLine": [
+      {
+        "key": "process.command_line",
+        "object": "re_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
+      }
+    ],
+    "InitiatingProcessCreationTime": [
+      {
+        "key": "process.created",
+        "object": "re_process",
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
+      }
+    ],
     "InitiatingProcessParentCreationTime": [
       {
         "key": "process.created",
@@ -1938,6 +2385,11 @@
         "key": "process.parent_ref",
         "object": "re_process",
         "references": "re_parent_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessAccountSid": [
@@ -1949,6 +2401,11 @@
         "key": "process.creator_user_ref",
         "object": "re_process",
         "references": "re_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessAccountName": [
@@ -1960,6 +2417,11 @@
         "key": "process.creator_user_ref",
         "object": "re_process",
         "references": "re_process_creator"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "InitiatingProcessFolderPath": [
@@ -1977,6 +2439,11 @@
         "key": "process.binary_ref",
         "object": "re_process",
         "references": "re_process_file"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "re_process"
       }
     ],
     "PublicIP": [
