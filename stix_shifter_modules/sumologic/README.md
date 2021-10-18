@@ -30,7 +30,7 @@ python main.py translate sumologic query {} "[domain-name:value='sumologic.domai
 Returns the following AQL query:
 
 ```
-"{\"query\": \"(_sourcehost = \\\"sumologic.domain.com\\\")\",\n\"fromTime\": \"20210901T000000\",\n\"toTime\": \"20210908T190000\"}"
+"{\"query\": \"(_sourcehost = \\\"sumologic.domain.com\\\")\",\"fromTime\": \"20210901T000000\",\"toTime\": \"20210908T190000\"}"
 ```
 
 ## Transmit
