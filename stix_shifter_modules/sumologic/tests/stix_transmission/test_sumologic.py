@@ -1,5 +1,4 @@
 import os
-import datetime
 import unittest
 from unittest.mock import patch
 from stix_shifter_modules.sumologic.entry_point import EntryPoint
