@@ -46,7 +46,7 @@ Uses the data source API to ping the connection
 CLI command example:
 
 ```
-python main.py transmit sumologic '{"region": <region>}' '{"auth": {"access_id": <access_id, "access_key": <access_key>}}' ping
+python main.py transmit sumologic '{"region": <region>}' '{"auth": {"access_id": <access_id>, "access_key": <access_key>}}' ping
 ```
 
 If connection establish returns the following response:
