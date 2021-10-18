@@ -229,7 +229,7 @@ If successful, will return the following:
 ```
 
 ## Converting from SumoLogic events to STIX
-<hr style="border:0px solid gray"> </hr>
+
 SumoLogic data to STIX mapping is defined in `to_stix_map.json`
 
 This example SumoLogic data:
