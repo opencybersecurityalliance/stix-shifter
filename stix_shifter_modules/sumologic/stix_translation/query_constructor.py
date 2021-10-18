@@ -24,17 +24,7 @@ class QueryStringPatternTranslator:
     comparator_lookup = {
         ComparisonExpressionOperators.And: "AND",
         ComparisonExpressionOperators.Or: "OR",
-        # ComparisonComparators.GreaterThan: ">",
-        # ComparisonComparators.GreaterThanOrEqual: ">=",
-        # ComparisonComparators.LessThan: "<",
-        # ComparisonComparators.LessThanOrEqual: "<=",
         ComparisonComparators.Equal: "=",
-        # ComparisonComparators.NotEqual: "!=",
-        # ComparisonComparators.Like: "LIKE",
-        # ComparisonComparators.In: "IN",
-        # ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
         ObservationOperators.Or: 'OR',
         # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
         ObservationOperators.And: 'AND'
@@ -228,24 +218,11 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data
-    # source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
+def translate_pattern(pattern: Pattern, data_model_mapping):
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
-
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by
-    # options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-
     query, from_time, to_time = convert_timestamp(query)
-
     y = '{"query": "(%s)",\n"fromTime": "%s",\n"toTime": "%s"}' % (query.replace("\'", "\\\""), from_time, to_time)
     return [y]
 
