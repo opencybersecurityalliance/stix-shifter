@@ -24,7 +24,7 @@
       "file": {
         "fields": {
           "name": ["filename"],
-          "hashes.SHA-256": ["sha256hash", "filehash"],
+          "hashes.'SHA-256'": ["sha256hash", "filehash"],
           "hashes.MD5": ["md5hash", "filehash"],
           "hashes.SHA-1": ["sha1hash", "filehash"]
         }
