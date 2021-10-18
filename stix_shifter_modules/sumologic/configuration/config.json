@@ -4,8 +4,7 @@
             "displayName": "SumoLogic"
         },
         "region": {
-            "type": "text",
-            "default": "us1"
+            "type": "text"
         },
         "help": {
             "type": "link",
