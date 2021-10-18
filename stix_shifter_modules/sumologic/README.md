@@ -1,6 +1,17 @@
-# Sumologic
-<hr style="border:0px solid gray"> </hr>
+# Sumologic Connector
+
 Connector to load events from SumoLogic
+
+### SumoLogic API endpoints
+Ping Endpoint: `https://api.<region>.sumologic.com/api/collectors`
+
+Search Endpoint: `https://api.sumologic.com/api/v1/search/jobs`
+
+Result Endpoint: `https://api.sumologic.com/api/v1/search/jobs/<SEARCH_JOB_ID>/messages?offset=<OFFSET>&limit=<LIMIT>`
+
+##### Reference
+
+[SumoLogic Search Job API](https://help.sumologic.com/APIs/Search-Job-API/About-the-Search-Job-API)
 
 ### Format for making STIX translation calls via the CLI
 
@@ -9,7 +20,7 @@ Connector to load events from SumoLogic
 Note the STIX identity object is only used when translating data source results into STIX, so it can be passed in as an empty object for query translation calls.
 
 ## Translate
-<hr style="border:0px solid gray"> </hr>
+
 This example input pattern:
 
 ```
@@ -23,7 +34,6 @@ Returns the following AQL query:
 ```
 
 ## Transmit
-<hr style="border:0px solid gray"> </hr>
 
 ### Transmit functions
 
