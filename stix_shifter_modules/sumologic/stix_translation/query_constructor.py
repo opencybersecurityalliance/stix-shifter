@@ -218,7 +218,7 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping):
+def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
