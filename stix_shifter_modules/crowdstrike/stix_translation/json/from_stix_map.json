@@ -18,7 +18,7 @@
     "fields": {
       "name": ["behaviors.filename"],
       "hashes.MD5": ["behaviors.md5", "behaviors.parent_details.parent_md5"],
-      "hashes.SHA-256": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
+      "hashes.'SHA-256'": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
       "hashes.parent_MD5": ["behaviors.parent_details.parent_md5"],
       "hashes.parent_SHA-256": ["behaviors.parent_details.parent_sha256"],
       "hashes.child_MD5": ["behaviors.md5"],
