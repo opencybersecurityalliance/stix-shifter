@@ -132,7 +132,7 @@ If successful, will return the following response:
 
 ### Execute
 
-This command executes translation and transmission of the query to the data source and returns STIX Observables mappings defined in the `to_stix_map.json` file.
+This command executes translation and transmission of the query to the data source and returns STIX Observable mappings defined in the `to_stix_map.json` file.
 
 ```
 python main.py execute sumologic sumologic '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "sumologic","identity_class": "events"}' '{"region": <region> '{"auth": {"access_id": <access_id>, "access_key": <access_key> "[domain-name:value='sumologic.domain.com'] START t'2021-09-01T00:00:00.000Z' STOP t'2021-09-26T10:16:00.000Z'"
@@ -217,7 +217,7 @@ If successful, will return the following response
 This command deletes the results of a particular search id.
 
 ```
-python main.py transmit sumologic '{"region": "in"}' '{"auth": {"access_id": "suqvjXJ4tk5Chv", "access_key": "PB7yTCWoobcw5yp0wmN8id94IxFD43wtkHE7dKX0RyszH0ycDB8VQFCoG0TpfiFO"}}' delete <search_id>
+python main.py transmit sumologic '{"region": <region>}' '{"auth": {"access_id": <access_id>, "access_key": <access_key>}}' delete <search_id>
 ```
 
 If successful, will return the following:
