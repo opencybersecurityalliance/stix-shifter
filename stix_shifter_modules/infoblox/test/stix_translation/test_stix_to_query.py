@@ -74,6 +74,11 @@ class TestStixParsing(unittest.TestCase, TestStixParsingMixin):
             for dialect in ['tideDbData', 'dnsEventData', 'dossierData']:
                 with self.subTest(msg="query parser", dialect=dialect, pattern=case['pattern']):
                     result = self._parse_query(case['pattern'], dialect)
+                    if 'network-traffic:extensions' in case['pattern']:
+                        print('result>>>>>>>>>>> ' + json.dumps(result))
+                        print('case>>>>>>>>>>> ' + str(case['expected'][dialect]))
+                        print('>>>>>>>>>>> ' + str(dialect))
+                        print('result>>>>>>>>>>> ' + str(result))
                     self.assertEqual(result, case['expected'][dialect], "dialect={}, full result={}".format(dialect, result))
         with self.subTest(msg="unique pattern tester", total_patterns=len(patterns)):
             duplicates = set([x for x in patterns if patterns.count(x) > 1])
