@@ -20,8 +20,7 @@
       "pid": ["pid"],
       "creator_user_ref": ["user"],
       "created_time": ["timestamp", "start"],
-      "parent_ref": ["ppid"],
-      "host": ["host"]
+      "parent_ref": ["ppid"]
     }
   },
   "x-datadog-event": {
