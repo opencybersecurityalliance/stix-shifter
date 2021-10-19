@@ -2350,5 +2350,9 @@
         "object": "vulnerability"
       }
     }
+  },
+  "tags": {
+    "key": "process.x_ttp_tags",
+    "object": "process"
   }
 }

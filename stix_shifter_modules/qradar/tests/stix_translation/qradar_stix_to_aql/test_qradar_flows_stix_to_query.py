@@ -119,7 +119,7 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_md5hash_query(self):
-        stix_pattern = "[file:hashes.'MD5' = 'abc123']"
+        stix_pattern = "[file:hashes.MD5 = 'abc123']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE md5hash = 'abc123' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
@@ -143,91 +143,91 @@ class TestStixToAql(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_filesize_query(self):
-        stix_pattern = "[file:'size' > 1234]"
+        stix_pattern = "[file:size > 1234]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE filesize > 1234 {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_fileentropy_query(self):
-        stix_pattern = "[x-qradar:'file_entropy' < 6.5]"
+        stix_pattern = "[x-qradar:file_entropy < 6.5]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE fileentropy < 6.5 {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqhost_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Host = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.Host = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httphost = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqreferer_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Referer = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.Referer = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpreferrer = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqserver_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.Server = 'example.com' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.Server = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpserver = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httprequseragent_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.'User-Agent' = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.'User-Agent' = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpuseragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0)' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpreqcontenttype_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_header'.'Content-Type' = 'application/json' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_header.'Content-Type' = 'application/json' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE contenttype = 'application/json' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httprequestversion_query(self):
-        stix_pattern = "[network-traffic:extensions.'http-request-ext'.'request_version' = 'HTTP/1.1' ]"
+        stix_pattern = "[network-traffic:extensions.'http-request-ext'.request_version = 'HTTP/1.1' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpversion = 'HTTP/1.1' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_httpresponsecode_query(self):
-        stix_pattern = "[x-qradar:'http_response_code' = 200 ]"
+        stix_pattern = "[x-qradar:http_response_code = 200 ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE httpresponsecode = '200' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_flowtype_query(self):
-        stix_pattern = "[x-qradar:'flow_type' = 'Standard Flow' ]"
+        stix_pattern = "[x-qradar:flow_type = 'Standard Flow' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE flowtype = 'Standard Flow' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_flowid_query(self):
-        stix_pattern = "[network-traffic:'ipfix'.'flowId' = 1234 ]"
+        stix_pattern = "[network-traffic:ipfix.flowId = 1234 ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE flowid = '1234' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_ja3_query(self):
-        stix_pattern = "[x-qradar:'tls_ja3_hash' = 'abc123' ]"
+        stix_pattern = "[x-qradar:tls_ja3_hash = 'abc123' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE tlsja3hash = 'abc123' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_ja3s_query(self):
-        stix_pattern = "[x-qradar:'tls_ja3s_hash' = 'abc123' ]"
+        stix_pattern = "[x-qradar:tls_ja3s_hash = 'abc123' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE tlsja3shash = 'abc123' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_suspectcontent_query(self):
-        stix_pattern = "[x-qradar:'suspect_content_descriptions' = 'nonstandard port' ]"
+        stix_pattern = "[x-qradar:suspect_content_descriptions = 'nonstandard port' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE suspectcontentdescriptions = 'nonstandard port' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_tlssni_query(self):
-        stix_pattern = "[x-qradar:'tls_server_name_indication' = 'example.com' ]"
+        stix_pattern = "[x-qradar:tls_server_name_indication = 'example.com' ]"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE tlsservernameindication = 'example.com' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
