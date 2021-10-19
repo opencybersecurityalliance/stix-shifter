@@ -1,9 +1,9 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import logging
+from datetime import datetime, timedelta
 import re
 
 # Source and destination reference mapping for ip and mac addresses.
@@ -12,6 +12,8 @@ REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
                         "SourceIpV6": ["ipv6"],
                         "DestinationIpV4": ["ipv4", "ipv4_cidr"],
                         "DestinationIpV6": ["ipv6"]}
+
+START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.qualifier_string = ''
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -183,7 +186,9 @@ class QueryStringPatternTranslator:
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
+            self.qualifier_string = self._parse_time_range(qualifier)
             return self._parse_expression(expression.comparison_expression, qualifier)
+            # return "{}".format(self.qualifier_string)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
@@ -212,24 +217,38 @@ class QueryStringPatternTranslator:
                 expression, type(expression)))
 
     def parse_expression(self, pattern: Pattern):
-        return self._parse_expression(pattern)
+        query = self._parse_expression(pattern)
+        if self.qualifier_string:
+            query = "{query}{param_delimiter}{qualifier_string}".format(query=query, param_delimiter=param_delimiter, qualifier_string=self.qualifier_string)
+        return query
 
 
     @staticmethod
-    def _parse_time_range(time_range):
-        if time_range:
-            try:
-                startstr = "STARTt'"
-                stopstr = "'STOPt'"
-                indexstart = time_range.index(startstr)
-                time_range = time_range[indexstart+len(startstr):-1]
-                # remove stopstr
-                time_range = re.sub(stopstr, "/", time_range)
-                time_range = "interval="+time_range
+    def _parse_time_range(qualifier, time_range=1):
+        """
+        :param qualifier: str, input time range i.e START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-20T10:43:10.003Z'
+        :param time_range: int, value available from main.py in options variable
+        :return: str, format_string bound with time range provided
+        """
+        try:
+            compile_timestamp_regex = re.compile(START_STOP_PATTERN)
+            mapped_field = "interval"
+            if qualifier and compile_timestamp_regex.search(qualifier):
+                time_range_iterator = compile_timestamp_regex.finditer(qualifier)
+                time_range_list = [each.group() for each in time_range_iterator]
+            # Default time range Start time = Now - 1 hours and Stop time = Now
+            else:
+                stop_time = datetime.utcnow()
+                start_time = stop_time - timedelta(hours=time_range)
+                converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                time_range_list = [converted_starttime, converted_stoptime]
+            value = "{start_time}/{stop_time}".format(start_time=time_range_list[0], stop_time=time_range_list[1])
+            format_string = '{mapped_field}={value}'.format(mapped_field=mapped_field, value=value)
 
-            except:
-                pass
-        return time_range
+        except (KeyError, IndexError, TypeError) as e:
+            raise e
+        return format_string
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):

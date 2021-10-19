@@ -156,7 +156,6 @@
     "messageTime": [
         {
           "key": "email-message.date",
-          "transformer": "EpochToTimestamp",
           "object": "email-message"
         }
     ],
@@ -320,7 +319,6 @@
         "threatTime": [
             {
                 "key": "x-proofpoint-msgevents.threatTime",
-                "transformer": "EpochToTimestamp",
                 "object": "msgevents"
             }
         ],
@@ -340,7 +338,6 @@
     "clickTime": [
         {
             "key": "x-proofpoint-msgevents.clickTime",
-            "transformer": "EpochToTimestamp",
             "object": "msgevents"
         }
     ],

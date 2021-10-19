@@ -3,7 +3,6 @@ import json
 from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import ast
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
@@ -16,7 +15,6 @@ class ResultsConnector(BaseResultsConnector):
             max_range = offset + length
             # Grab the response, extract the response code, and convert it to readable json
             response = self.api_client.get_search_results(search_id)
-            #update response with is_multipart : True
             response_code = response.code
             response_txt = response.read()
             # Construct a response object
@@ -25,10 +23,7 @@ class ResultsConnector(BaseResultsConnector):
             if response_code == 200:
                 return_obj['success'] = True
                 try:
-                    try:
-                        response_txt = response.read().decode('utf-8')
-                    except:
-                        pass
+                    response_txt = response.read().decode('utf-8')
                     data= json.loads(response_txt)
                     newdata = list()
                     for key, value in data.items():
@@ -41,8 +36,11 @@ class ResultsConnector(BaseResultsConnector):
 
                     return_obj['data'] = newdata
 
-                except json.decoder.JSONDecodeError as e:
+                except json.decoder.JSONDecodeError as err:
                     return_obj['success'] = False
+                except Exception as err:
+                    return_obj['success'] = False
+                    self.logger.error('Response decode error: {}'.format(err))
 
             elif response_code > 200 and response_code <= 204:#empty results
                 error_obj['code'] = 2000
@@ -52,19 +50,20 @@ class ResultsConnector(BaseResultsConnector):
                 error_obj['code'] = 4010
             elif response_code >= 402 and response_code <= 499:#All other client side errors
                 error_obj['code'] = 4020
-            else:#unknown errors
+            else:
+                #unknown errors
                 error_obj['code'] = 7000
             if error_obj:
                 error_msg = ""
                 try:
                     error_msg = str(response_txt.decode("utf-8"))
-                except:
-                    pass
+                except Exception as err:
+                    self.logger.error('Response decode error: {}'.format(err))
                 error_obj['message'] = error_msg
                 ErrorResponder.fill_error(return_obj,
                                           error_obj,
                                           ['message'])
-                err = 'error when getting search results: {}:{}'.format(str(response_code),error_msg)
+                err = 'error when getting search results: {}:{}'.format(str(response_code), error_msg)
                 self.logger.error(err)
                 # raise NoResultsFoundError(err)
             return return_obj

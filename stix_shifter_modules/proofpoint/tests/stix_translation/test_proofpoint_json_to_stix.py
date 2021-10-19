@@ -16,7 +16,7 @@ data_source = {
 }
 options = {}
 
-event_data=[{
+event_data={"queryEndTime" : "2021-09-14T13:30:00Z", "clicksPermitted" : [], "clicksBlocked" : [], "messagesDelivered" :[{
             "is_multipart": True,
             "GUID": "Ggfsdfsdf",
 
@@ -103,7 +103,7 @@ event_data=[{
                     "threatUrl": "https://threatinsight.proofpoint.com"
                 }
             ]
-        }]
+        }]}
 class TestProofpointResultsToStix(unittest.TestCase):
     """
     class to perform unit test case for proofpoint translate results
