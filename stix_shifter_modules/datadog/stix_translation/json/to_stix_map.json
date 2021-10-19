@@ -5,10 +5,6 @@
       "object": "domain-name"
     },
     {
-      "key": "process.host",
-      "object": "process"
-    },
-    {
       "key": "x-oca-event.domain_ref",
       "object": "x-oca-event",
       "references": "domain-name"
@@ -56,6 +52,16 @@
       "key": "x-oca-event.created",
       "object": "x-oca-event",
       "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     }
   ],
   "start": [
