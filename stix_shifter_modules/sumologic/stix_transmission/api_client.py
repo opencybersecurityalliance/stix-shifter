@@ -26,7 +26,8 @@ class APIClient:
 
     def create_search(self, query_expression):
         # Queries the data source
-        query_expression = json.loads(query_expression)
+        query_exp = query_expression.replace("\"", "\\\"").replace("'", "\"")
+        query_expression = json.loads(query_exp)
         search_job = self.client.search_job(query_expression['query'], query_expression['fromTime'],
                                             query_expression['toTime'])
         return SumoLogicResponse(200, search_job['id'])

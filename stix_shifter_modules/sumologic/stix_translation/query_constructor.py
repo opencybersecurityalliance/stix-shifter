@@ -223,7 +223,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     query, from_time, to_time = convert_timestamp(query)
-    y = '{"query": "(%s)","fromTime": "%s","toTime": "%s"}' % (query.replace("\'", "\\\""), from_time, to_time)
+    y = "{'query': '(%s)','fromTime': '%s','toTime': '%s'}" % (query.replace("'", "\""), from_time, to_time)
     return [y]
 
 
