@@ -13,20 +13,28 @@
   ],
   "_sourcehost": [
     {
-    "key": "domain-name.value",
-    "object": "domain",
-    "transformer": "ToDomainName"
+      "key": "domain-name.value",
+      "object": "domain",
+      "transformer": "ToDomainName"
     },
     {
       "key": "x-oca-event.domain_ref",
       "object": "x-oca-event",
       "references": "domain"
-    }],
-  "_messagecount": {
-    "key": "x-ibm-finding.event_count",
-    "object": "x-ibm-finding",
-    "transformer": "ToInteger"
-  },
+    }
+  ],
+  "_messagecount": [
+    {
+      "key": "x-ibm-finding.event_count",
+      "object": "x-ibm-finding",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "number_observed",
+      "transformer": "ToInteger",
+      "cybox": false
+    }
+  ],
   "_messagetime": [
     {
       "key": "x-oca-event.created",
@@ -37,6 +45,16 @@
       "key": "x-ibm-finding.time_observed",
       "object": "x-ibm-finding",
       "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     }
   ],
   "_messageid": {
@@ -66,7 +84,7 @@
     "key": "x-oca-event.module",
     "object": "x-oca-event"
   },
-  "_sourcecategory":{
+  "_sourcecategory": {
     "key": "x-oca-event.provider",
     "object": "x-oca-event"
   },
