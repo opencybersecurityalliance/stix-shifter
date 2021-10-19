@@ -182,7 +182,7 @@ class QueryStringPatternTranslator:
             query_string = "{}{}{}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 qualifier = self._parse_time_range(qualifier)
-                return "{}{}".format(query_string, qualifier)
+                return "{}{}{}".format(query_string, param_delimiter, qualifier)
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):

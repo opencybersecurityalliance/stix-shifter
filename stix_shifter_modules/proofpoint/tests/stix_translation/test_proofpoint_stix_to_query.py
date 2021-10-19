@@ -7,6 +7,7 @@ import datetime
 import re
 
 
+MODULE = "proofpoint"
 translation = stix_translation.StixTranslation()
 
 def _test_query_assertions(translated_query, test_query):
@@ -77,10 +78,27 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
 
 class TestStixtoQuery(unittest.TestCase, object):
 
-    def test_query(self):
-        # stix_pattern = "[x-proofpoint:threatstatus = 'active' OR x-proofpoint:threatstatus = 'positive' OR x-proofpoint:threatstatuss = 'falsepositive'] START t'2021-09-15T16:13:00.00Z' STOP t'2021-09-15T17:13:00.00Z'"
-        stix_pattern = "[x-proofpoint:threatstatus = 'active'] START t'2021-08-22T07:24:00.000Z' STOP t'2022-08-22T08:20:00.000Z'"
-        translated_query = translation.translate('proofpoint', 'query', '{}', stix_pattern)
-        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['threatStatus=active&interval=2021-08-22T07:24:00.000Z/2022-08-22T08:20:00.000Z']
-        _test_query_assertions(translated_query, test_query)
+    def test_url_params_query(self):
+        stix_pattern = "[x-proofpoint:threatstatus = 'active'] START t'2021-09-29T06:00:00.00Z' STOP t'2021-09-29T06:30:00.00Z'"
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        queries = ["threatStatus=active&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
+        _test_query_assertions(query, queries)
+
+    def test_default_timerange_query(self):
+        stix_pattern = "[x-proofpoint:threatstatus = 'active']"
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        queries = ["threatStatus=active&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
+        _test_query_assertions(query, queries)
+
+    def test_query_from_multiple_comparison_expressions(self):
+        stix_pattern = "[x-proofpoint:threatstatus = 'active' AND x-proofpoint:threatstatus = 'cleared'] START t'2021-09-29T06:00:00.00Z' STOP t'2021-09-29T06:30:00.00Z'"
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        queries = ["threatStatus=cleared&threatStatus=active&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
+        _test_query_assertions(query, queries)
+
+    def test_query_unmapped_attribute(self):
+        stix_pattern = "[x-proofpoint:threatstatus = 'active' AND x-proofpoint:threatstatus = 'cleared' AND unmapped:attribute = 'something']"
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        assert query['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
+        assert 'Unable to map the following STIX objects and properties to data source fields' in query['error']

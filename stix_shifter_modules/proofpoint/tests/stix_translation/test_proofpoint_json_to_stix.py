@@ -2,8 +2,12 @@ import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.proofpoint.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter.stix_translation import stix_translation
 import json
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.utils.error_response import ErrorCode
+
+translation = stix_translation.StixTranslation()
 
 MODULE = "proofpoint"
 entry_point = EntryPoint()
@@ -104,17 +108,59 @@ event_data={"queryEndTime" : "2021-09-14T13:30:00Z", "clicksPermitted" : [], "cl
                 }
             ]
         }]}
+
+def _test_query_assertions(query, queries):
+    assert query['queries'] == [queries]
+
+
 class TestProofpointResultsToStix(unittest.TestCase):
     """
     class to perform unit test case for proofpoint translate results
     """
 
-    def test_custom_mapping(self):
-        # data_source_string = json.dumps(data_source)
-        # data_string = json.dumps(message_data)
-        # translation = stix_translation.StixTranslation()
-        # result_bundle = translation.translate('proofpoint', 'results', data_source_string, data_string, options)
+    @staticmethod
+    def get_first(itr, constraint):
+        return next(
+            (obj for obj in itr if constraint(obj)),
+            None
+        )
 
+    @staticmethod
+    def get_first_of_type(itr, typ):
+        return TestProofpointResultsToStix.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
+
+
+    def test_common_mapping(self):
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        assert (result_bundle['type'] == 'bundle')
+        result_bundle_objects = result_bundle['objects']
 
-        print('result_bundle :', result_bundle)
+        result_bundle_identity = result_bundle_objects[0]
+        assert (result_bundle_identity['type'] == data_source['type'])
+        assert (result_bundle_identity['id'] == data_source['id'])
+        assert (result_bundle_identity['name'] == data_source['name'])
+        assert (result_bundle_identity['identity_class']
+                == data_source['identity_class'])
+
+        observed_data = result_bundle_objects[1]
+
+        assert (observed_data['id'] is not None)
+        assert (observed_data['type'] == "observed-data")
+        assert (observed_data['created_by_ref'] == result_bundle_identity['id'])
+
+        assert (observed_data['number_observed'] == 5)
+        assert (observed_data['created'] is not None)
+        assert (observed_data['modified'] is not None)
+        assert (observed_data['first_observed'] is not None)
+        assert (observed_data['last_observed'] is not None)
+
+    def test_custom_mapping(self):
+        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert ('objects' in observed_data)
+        objects = observed_data['objects']
+        curr_obj = TestProofpointResultsToStix.get_first_of_type(objects.values(), 'ipv4-addr')
+        assert (curr_obj is not None), 'ipv4-addr object type not found'
+        assert (curr_obj.keys() == {'type', 'value'})
+        assert (curr_obj['value'] == "127.0.0.1")
