@@ -146,7 +146,7 @@ If successful, will return the following response
 ```
 {
   "queries": [
-    "{'query': '(_sourcehost = \"sumologic.gslab.com\")','fromTime': '20210901T000000','toTime': '20210926T101600'}"
+    "{'query': '(_sourcehost = \"sumologic.domain.com\")','fromTime': '20210901T000000','toTime': '20210926T101600'}"
   ]
 }
  2021-10-19 18:26:31,734 stix_shifter.scripts.stix_shifter INFO     STIX Results: 
