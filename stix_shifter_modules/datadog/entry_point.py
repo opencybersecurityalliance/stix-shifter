@@ -7,10 +7,8 @@ class EntryPoint(BaseEntryPoint):
         self.set_async(False)
 
         if connection:
-            self.setup_transmission_basic(connection, configuration)
+            self.setup_translation_simple(dialect_default='events')
 
         dialect = 'events'
         self.add_dialect(dialect, default=True)
-
-        dialect = 'processes'
-        self.add_dialect(dialect,default=True)
+        
