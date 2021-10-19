@@ -255,17 +255,43 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         sto = datetime.strptime(stop.group(1), "%Y-%m-%dT%H:%M:%S.%f")
         TO = int((sto - datetime(1970, 1, 1)).total_seconds()) * 1000
 
+    #elif start is None and stop:
+    #    sto = datetime.strptime(stop.group(1), "%Y-%m-%dT%H:%M:%S.%f")
+    #    TO = int((sto - datetime(1970, 1, 1)).total_seconds()) * 1000
+    #    FROM = TO - range_t
+    #    print("NS&STOP")
+    #elif stop is None and start:
+    #    sfrom = datetime.strptime(start.group(1), "%Y-%m-%dT%H:%M:%S.%f")
+    #    FROM = int((sfrom - datetime(1970, 1, 1)).total_seconds()) * 1000
+    #    stop = now
+    #    print("S&NSTOP")
 
     else:
         FROM = now - range_t
         TO = now
 
+    
+
+    #if  start:
+    #    sfrom = datetime.strptime(start.group(1), "%Y-%m-%dT%H:%M:%S.%f")
+    #    FROM = int((sfrom - datetime(1970, 1, 1)).total_seconds()) * 1000
+    #else:
+    #    FROM = int(datetime.utcnow().timestamp() - 300) * 1000
+
+    #if stop:
+    ##    sto = datetime.strptime(stop.group(1), "%Y-%m-%dT%H:%M:%S.%f")
+    #    TO = int((sto - datetime(1970, 1, 1)).total_seconds()) * 1000
+    #else:
+    #    TO = int(datetime.utcnow().timestamp()) * 1000
+
+
     trustar_query_translator.return_obj["from"] = FROM
     trustar_query_translator.return_obj["to"] = TO
 
     ret = json.dumps(trustar_query_translator.return_obj)
-    ret = ret.replace('%', ' ')
-
+    ret = ret.replace('%', '*')
+    #print(trustar_query_translator.return_obj)
+    #print(ret)
     
     
 

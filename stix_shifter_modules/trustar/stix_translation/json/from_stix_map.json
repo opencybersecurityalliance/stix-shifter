@@ -1,4 +1,5 @@
 {
+
   "x-trustar": {
     "fields": {
       "x_searchTerm": ["searchTerm"],
