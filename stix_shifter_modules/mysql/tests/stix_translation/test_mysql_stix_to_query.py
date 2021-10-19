@@ -6,6 +6,8 @@ import re
 
 FROM_STIX_MAPPING_FILE = open('stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json').read()
 FROM_STIX_MAPPINGS = json.loads(FROM_STIX_MAPPING_FILE)
+EPOCH = 1634657528000
+TIMESTAMP = "'2021-10-19T15:32:08.000Z'"
 
 TEST_VALUES = {
     "source_ipaddr": "'0.0.0.0'",
@@ -15,13 +17,23 @@ TEST_VALUES = {
     "sha256hash": "'sha256filehash'",
     "md5hash": "'md5filehash'",
     "file_path": "'C:/directory/'",
+    "directory_created_time": EPOCH,
+    "directory_modified_time": EPOCH,
+    "directory_accessed_time": EPOCH,
     "username": "'admin'",
     "source_port": 1234,
     "dest_port": 5678,
     "protocol": "'tcp'",
-    "entry_time": "'2019-01-28T12:24:01.009Z'",
+    "entry_time": TIMESTAMP,
     "system_name": "'computer'",
-    "severity": 5
+    "severity": 5,
+    "file_created_time": EPOCH,
+    "file_modified_time": EPOCH,
+    "file_accessed_time": EPOCH,
+    "process_id": 12345,
+    "process_name": "'hackingAllTheThings'",
+    "process_arguments": "'some args'",
+    "process_created_time": EPOCH
 }
 
 translation = stix_translation.StixTranslation()
@@ -32,7 +44,7 @@ def _test_query_assertions(field, queries):
         assert field in query
         value = TEST_VALUES[field]
         if field == "entry_time":
-            value = '1548678241009'
+            value = str(EPOCH)
         if not isinstance(value, str):
             value = str(value)
         assert value in query
