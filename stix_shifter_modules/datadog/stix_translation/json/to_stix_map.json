@@ -64,8 +64,8 @@
       "object": "x-ibm-finding"
     },
     {
-    "key": "process.created_time",
-    "object": "process"
+      "key": "process.created_time",
+      "object": "process"
     }
   ],
   "end": {

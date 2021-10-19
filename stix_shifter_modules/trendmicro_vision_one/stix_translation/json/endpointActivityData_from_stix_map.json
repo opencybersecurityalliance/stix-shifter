@@ -16,7 +16,7 @@
     },
     "file": {
         "fields": {
-            "hashes.SHA-1": ["srcFileHashSha1", "objectFileHashSha1", "parentFileHashSha1", "processFileHashSha1"]
+            "hashes.'SHA-1'": ["srcFileHashSha1", "objectFileHashSha1", "parentFileHashSha1", "processFileHashSha1"]
         }
     },
     "network-traffic": {
