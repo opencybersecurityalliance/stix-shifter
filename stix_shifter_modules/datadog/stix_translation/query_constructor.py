@@ -263,14 +263,15 @@ class QueryStringPatternTranslator:
                 return self._parse_expression(expression.observation_expression.comparison_expression,
                                               expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
+            queries = []
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not isinstance(expression_01, list):
-                QueryStringPatternTranslator.QUERIES.extend([expression_01])
+                queries.extend([expression_01])
             if not isinstance(expression_02, list):
-                QueryStringPatternTranslator.QUERIES.extend([expression_02])
-            return QueryStringPatternTranslator.QUERIES
+                queries.extend([expression_02])
+            return queries
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         else:
