@@ -32,8 +32,8 @@
     "fields": {
       "parent_directory_ref.path": ["filePath"],
       "name": ["fileName"],
-      "hashes.SHA-256": ["fulltextSearch"],
-      "hashes.SHA-1": ["fulltextSearch"],
+      "hashes.'SHA-256'": ["fulltextSearch"],
+      "hashes.'SHA-1'": ["fulltextSearch"],
       "hashes.MD5": ["fulltextSearch"]
     }
   },
