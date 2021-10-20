@@ -21,7 +21,8 @@ Returns the following search query:
 ```
 {
     "queries": [
-        "{\"host\": \"abc.com\", \"start\": 12344778, \"end\": 12345678}"
+        "{\"query\": {\"host\": \"abc.com\", \"start\": 12344778, \"end\": 12345678}, \"source\": \"events\"}",
+        "{\"query\": {\"host\": \"abc.com\", \"start\": 12344778, \"end\": 12345678}, \"source\": \"processes\"}"
     ]
 }
 ```
@@ -119,13 +120,31 @@ If connection establish returns the following response:
     "success": true
 }
 ```
+
+### Query
+
+Queries the data source API with the translated query and returns the search id
+
+CLI command example:
+```
+python3 main.py transmit datadog '{"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' query "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}"
+```
+
+If successful, will return the following response:
+```
+{
+    "success": true,
+    "search_id": <search_id>
+}
+```
+
 ### Results
 
 Uses the data source API to fetch the query results based on the search ID, offset, and length.
 
-CLI Command example:
+CLI Command example for events dialect:
 ```
-python3 main.py transmit datadog '{"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}" <OFFSET> <LENGTH>
+python3 main.py transmit datadog '{"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}" <OFFSET> <LENGTH>
 ```
 Returns following result
 ```json
@@ -148,5 +167,166 @@ Returns following result
             "id": 6102796743464967547
         }
     ]
+}
+```
+
+CLI Command example for processes dialect:
+```
+python3 main.py transmit datadog '{"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"pid\": 92, \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"processes\"}" <OFFSET> <LENGTH>
+```
+Returns following result
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "cmdline": "Registry",
+            "timestamp": "2021-10-20T05:56:21",
+            "start": "2021-04-11T02:35:44",
+            "user": "NT AUTHORITY\\SYSTEM",
+            "pid": 92,
+            "ppid": 4,
+            "host": "win10vm4",
+            "tags": [
+                "host:win10vm4",
+                "user:NT_AUTHORITY\\SYSTEM",
+                "command:Registry",
+                "state_zombie:false"
+            ]
+        }
+    ]
+}
+```
+
+### Execute
+
+This command executes translation and transmission of the query to the data source and returns STIX Observable mappings
+defined in the `to_stix_map.json` file.
+
+CLI Command example for events dialect:
+```
+python3 main.py execute datadog:events datadog:events '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[x-datadog-event:tags = 'account'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
+```
+
+If successful, will return the following response
+```
+{
+    "queries": [
+        "{\"query\": {\"tags\": \"account\", \"start\": 1632009600, \"end\": 1632441600}, \"source\": \"events\"}"
+    ]
+}
+STIX Results:
+{
+    "type": "bundle",
+    "id": "bundle--406fe952-7021-474e-942c-4d65d1d1cc8b",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "datadog",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--2cf24fcc-7fcb-4b73-a5ee-440dcfa9b1d7",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2021-10-20T06:16:46.411Z",
+            "modified": "2021-10-20T06:16:46.411Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "time_observed": "1970-01-19T21:23:43.438Z"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "created": "1970-01-19T21:23:43.438Z",
+                    "outcome": "A new application key has been created.",
+                    "original_ref": "3",
+                    "code": 6173353997162745223
+                },
+                "2": {
+                    "type": "x-datadog-event",
+                    "alert_type": "info",
+                    "tags": [
+                        "account",
+                        "audit"
+                    ],
+                    "priority": "normal"
+                },
+                "3": {
+                    "type": "artifact",
+                    "payload_bin": "QXBwbGljYXRpb24ga2V5IFdpbmRvd3MgY3JlYXRlZCBieSBxcmFkYXIxNDFAeWFob28uY29tIGluIG9yZyBRcmFkYXI="
+                }
+            },
+            "first_observed": "1970-01-19T21:23:43.438Z",
+            "last_observed": "1970-01-19T21:23:43.438Z",
+            "number_observed": 1
+        }
+}
+```
+
+CLI Command example for processes dialect:
+```
+python3 main.py execute datadog:processes datadog:processes '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[domain-name:value = 'win10vm4'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
+```
+
+If successful, will return the following response
+```
+{
+    "queries": [
+        "{\"query\": {\"host\": \"win10vm4\", \"start\": 1632009600, \"end\": 1632441600}, \"source\": \"processes\"}"
+    ]
+}
+STIX Results:
+{
+    "type": "bundle",
+    "id": "bundle--0549813e-69ea-4eac-94e8-af9bd87165db",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "datadog",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--db254f5d-6d9d-4b0e-a280-5f3835e006ba",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2021-10-20T06:30:29.372Z",
+            "modified": "2021-10-20T06:30:29.372Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "command_line": "Registry",
+                    "created_time": "2021-10-20T06:29:51",
+                    "creator_user_ref": "2",
+                    "pid": 92
+                },
+                "1": {
+                    "type": "x-ibm-finding",
+                    "start": "2021-04-11T02:35:44"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\SYSTEM"
+                },
+                "3": {
+                    "type": "domain-name",
+                    "value": "win10vm4"
+                },
+                "5": {
+                    "type": "x-datadog-event",
+                    "tags": [
+                        "host:win10vm4",
+                        "user:NT_AUTHORITY\\SYSTEM",
+                        "command:Registry",
+                        "state_zombie:false"
+                    ]
+                }
+            },
+            "first_observed": "2021-10-20T06:30:29.372Z",
+            "last_observed": "2021-10-20T06:30:29.372Z",
+            "number_observed": 1
+        }
 }
 ```

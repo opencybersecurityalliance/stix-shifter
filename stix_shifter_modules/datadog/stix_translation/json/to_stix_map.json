@@ -104,7 +104,8 @@
   },
   "pid": {
     "key": "process.pid",
-    "object": "process"
+    "object": "process",
+    "transformer": "ToInteger"
   },
   "timestamp": {
     "key": "process.created_time",
