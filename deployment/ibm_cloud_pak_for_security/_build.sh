@@ -11,6 +11,7 @@ validate_cmd () {
 }
 
 IMAGE_URL="$1"
+NAMESPACE="$2"
 
 validate_cmd openssl
 validate_cmd python3
@@ -28,10 +29,12 @@ validate_cmd kubectl
 validate_cmd oc
 
 FILE_PREFIX=stix_shifter_modules_
-NAMESPACE=cp4s
+if [ "X$NAMESPACE" == "X" ]; then 
+    NAMESPACE=`kubectl config view --minify --output 'jsonpath={..namespace}' | awk '{print $1}'`
+fi
 TIMESTAMP=`date '+%Y%m%d%H%M%S'`
 
-if [ ! -z "${IMAGE_URL}" ]; then
+if [[ ! -z "${IMAGE_URL}"  &&  "${IMAGE_URL}" != "no-repository" ]] ; then
   echo "IMAGE_URL found: ${IMAGE_URL}"
   FILENAME=${IMAGE_URL##*/}
   PROJECT_NAME=$FILENAME
