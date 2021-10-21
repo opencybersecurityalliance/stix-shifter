@@ -31,7 +31,11 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         :param basepath: path of data source translation module
         :type basepath: str
         """
-        from_stix_path = path.join(basepath, 'json', f'{dialect}_from_stix_map.json')
+        stix_2_1_mapping_directory_path = path.join(basepath, 'json/stix_2_1')
+        if options.get("stix_2.1") and path.isdir(stix_2_1_mapping_directory_path):
+            from_stix_path = path.join(stix_2_1_mapping_directory_path, f'{dialect}_from_stix_map.json')
+        else:
+            from_stix_path = path.join(basepath, 'json', f'{dialect}_from_stix_map.json')
         if path.isfile(from_stix_path):
             return self.read_json(from_stix_path, options)
         else:
