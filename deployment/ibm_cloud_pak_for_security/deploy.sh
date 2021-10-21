@@ -34,13 +34,6 @@ MODULE=$1
 BUILD_LOCATION=$2
 REPOSITORY=$3
 
-
-echo "MODULE - - - - - - $MODULE"
-echo "BUILD_LOCATION - - $BUILD_LOCATION"
-echo "REPOSITORY - - - - $REPOSITORY"
-echo "NAMESPACE - - - - -$NAMESPACE"
-
-
 if [ -z "$MODULE" ]; then
   printf 'Usage: %s module_name\n' "$(basename "$0")"
   exit 1
