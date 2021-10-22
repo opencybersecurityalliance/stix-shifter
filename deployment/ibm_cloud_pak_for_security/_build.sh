@@ -31,10 +31,13 @@ validate_cmd oc
 FILE_PREFIX=stix_shifter_modules_
 if [ "X$NAMESPACE" == "X" ]; then 
     NAMESPACE=`kubectl config view --minify --output 'jsonpath={..namespace}' | awk '{print $1}'`
+fi 
+if [ "${IMAGE_URL}" == "no-repository" ] ; then
+   IMAGE_URL=""
 fi
 TIMESTAMP=`date '+%Y%m%d%H%M%S'`
 
-if [[ ! -z "${IMAGE_URL}"  &&  "${IMAGE_URL}" != "no-repository" ]] ; then
+if [ ! -z "${IMAGE_URL}" ]; then
   echo "IMAGE_URL found: ${IMAGE_URL}"
   FILENAME=${IMAGE_URL##*/}
   PROJECT_NAME=$FILENAME

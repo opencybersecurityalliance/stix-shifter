@@ -54,5 +54,5 @@ Since the primary use-case for these scripts is to install a new or updated conn
     ``` 
     (Ex: `./deploy.sh elastic_ecs local`)
 
-When making a remote build, [-n < NAMESPACE >] flag is optional. If not supplied, the namespace will be obtained from the current namespace project of the cluster you are logged in.
+    When making a remote build, [-n < NAMESPACE >] flag is optional. If not supplied, the namespace will be obtained from the current namespace project of the cluster you are logged in.
 
