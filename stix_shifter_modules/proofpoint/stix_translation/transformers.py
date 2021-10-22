@@ -3,7 +3,7 @@ from stix_shifter_utils.utils import logger
 
 LOGGER = logger.set_logger(__name__)
 
-class prrofpoint_bodymultipart_transformer(ValueTransformer):
+class proofpoint_bodymultipart_transformer(ValueTransformer):
     @staticmethod
     def transform(multipart):
 
@@ -13,3 +13,14 @@ class prrofpoint_bodymultipart_transformer(ValueTransformer):
             part['content_disposition'] = part.pop('disposition')
 
         return multipart
+
+class proofpoint_emailid_transformer(ValueTransformer):
+    @staticmethod
+    def transform(emailid):
+        if isinstance(emailid, list): emailid = emailid[0]
+        if "<" in emailid and ">" in emailid:
+            startindex = emailid.index('<') + 1
+            endindex = emailid.index('>')
+            emailid = emailid[startindex: endindex]
+
+        return emailid
