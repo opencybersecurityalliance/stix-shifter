@@ -2,6 +2,7 @@ import re
 import uuid
 import json
 
+from stix_shifter_utils.utils.helpers import dict_merge
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
@@ -68,108 +69,6 @@ class DataSourceObjToStixObj:
         self.unique_cybox_objects = {}
         self.bundle['objects'] += [data_source]
 
-    @staticmethod
-    def _get_value(obj, ds_key, transformer):
-        """
-        Get value from source object, transforming if specified
-        :param obj: the input object we are translating to STIX
-        :param ds_key: the property from the input object
-        :param transformer: the transform to apply to the property value (can be None)
-        :return: the resulting STIX value
-        """
-        if ds_key not in obj:
-            DataSourceObjToStixObj.logger.debug('{} not found in object'.format(ds_key))
-            return None
-        ret_val = obj[ds_key]
-        if ret_val and transformer is not None:
-            return transformer.transform(ret_val)
-        return ret_val
-
-    @staticmethod
-    def _add_property(obj, key, stix_value, group=False):
-        """
-        Add stix_value to dictionary based on the input key, the key can be '.'-separated path to inner object
-        :param obj: the dictionary we are adding our key to
-        :param key: the key to add
-        :param stix_value: the STIX value translated from the input object
-        """
-        split_key = key.split('.')
-        child_obj = obj
-        parent_props = split_key[0:-1]
-        for prop in parent_props:
-            if prop not in child_obj:
-                child_obj[prop] = {}
-            child_obj = child_obj[prop]
-
-        if split_key[-1] not in child_obj.keys():
-            child_obj[split_key[-1]] = stix_value
-        elif group is True:  # Mapping of multiple data fields to single STIX object field. Ex: Network Protocols
-            if (isinstance(child_obj[split_key[-1]], list)):
-                child_obj[split_key[-1]].extend(stix_value)  # append to existing list
-
-    def _handle_cybox_key_def(self, key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
-        """
-        Handle the translation of the input property to its STIX CybOX property
-        :param key_to_add: STIX property key derived from the mapping file
-        :param observation: the the STIX observation currently being worked on
-        :param stix_value: the STIX value translated from the input object
-        :param obj_name_map: the mapping of object name to actual object
-        :param obj_name: the object name derived from the mapping file
-        """
-        obj_type, obj_prop = key_to_add.split('.', 1)
-        objs_dir = observation['objects']
-
-        if obj_name in obj_name_map:
-            # add property to existing cybox object
-            cybox_obj = objs_dir[obj_name_map[obj_name]]
-        else:
-            # create new cybox object
-            cybox_obj = {'type': obj_type}
-            if self.spec_version == "2.1":
-                # Todo: Move this elsewhere?
-                cybox_obj["id"] = "{}--{}".format(obj_type, str(uuid.uuid4()))
-                observation["objects"][cybox_obj["id"]] = cybox_obj
-                # resolves_to_refs lists have been deprecated in favor of relationship objects that have a relationship type of resolves-to. 
-                # See the Domain Name cybox object https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070687 for an example.
-                obj_name_map[obj_name] = cybox_obj["id"]
-            else:
-                obj_dir_key = str(len(objs_dir))
-                objs_dir[obj_dir_key] = cybox_obj
-                if obj_name is not None:
-                    obj_name_map[obj_name] = obj_dir_key
-
-        self._add_property(cybox_obj, obj_prop, stix_value, group)
-
-    @staticmethod
-    def _valid_stix_value(props_map, key, stix_value, unwrap=False):
-        """
-        Checks that the given STIX value is valid for this STIX property
-        :param props_map: the map of STIX properties which contains validation attributes
-        :param key: the STIX property name
-        :param stix_value: the STIX value translated from the input object
-        :param unwrap: unwrapping datasource field value of type list
-        :return: whether STIX value is valid for this STIX property
-        :rtype: bool
-        """
-
-        if stix_value is None or stix_value == '':
-            DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
-            return False
-        elif isinstance(stix_value, list):
-            if len(stix_value) == 0:
-                DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
-                return False
-        elif key in props_map and 'valid_regex' in props_map[key]:
-            pattern = re.compile(props_map[key]['valid_regex'])
-            if unwrap and isinstance(stix_value, list):
-                for val in stix_value:
-                    if not pattern.match(str(val)):
-                        return False
-            else:
-                if not pattern.match(str(stix_value)):
-                    return False
-        return True
-
     # get the nested ds_keys in the mapping
     def gen_dict_extract(self, key, var):
         if hasattr(var, 'items'):
@@ -183,169 +82,136 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
-    # update the object key of the mapping
-    @staticmethod
-    def _update_object_key(ds_map, indx):
-        for key, value in ds_map.items():
-            if isinstance(value, dict):
-                if 'object' in value:
-                    value['object'] = str(value['object']) +'_' + str(indx)
-            if isinstance(value, list):
-                for item in value:
-                    if 'object' in item:
-                        item['object'] = str(item['object']) +'_' + str(indx)
-                        if 'references' in item:
-                            item['references'] = str(item['references']) +'_' + str(indx)
 
-        return ds_map
-
-    def _transform(self, object_map, observation, ds_map, ds_key, obj):
-
-        to_map = obj[ds_key]
-
-        if ds_key not in ds_map:
-            if self.options.get('unmapped_fallback'):
-                if ds_key not in self.ds_key_map:
-                    self.logger.info(
-                        'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
-                    cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
-                                "cust_object"}
-                    if to_map is None or to_map == '':
-                        self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
-                        return
-                    self._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map, cust_obj["object"])
+    def _compose_value_object(self, value, key_list, object_tag_ref_map=None, transformer=None, references=None, unwrap=False, group=False):
+        try:
+            return_value = {}
+            for key in key_list:
+                return_value[key] = self._compose_value_object(value, key_list[1:], object_tag_ref_map, transformer, references, unwrap=unwrap, group=group)
+                break
             else:
-                self.logger.debug('{} is not found in map, skipping'.format(ds_key))
-            return
-
-        if isinstance(to_map, dict):
-            self.logger.debug('{} is complex; descending'.format(to_map))
-            # If the object is complex we must descend into the map on both sides
-            for key in to_map.keys():
-                self._transform(object_map, observation, ds_map[ds_key], key, to_map)
-            return
-
-        # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
-        if isinstance(to_map, list):
-            self.logger.debug('{} is a list; unwrapping.'.format(to_map))
-            for item in to_map:
-                if isinstance(item, dict):
-                    new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
-                    for field in item.keys():
-                        self._transform(object_map, observation, new_ds_map, field, item)
-        
-        generic_hash_key = ''
-
-        # get the stix keys that are mapped
-        ds_key_def_obj = ds_map[ds_key]
-        if isinstance(ds_key_def_obj, list):
-            ds_key_def_list = ds_key_def_obj
-        else:
-            # Use callback function to run module-specific logic to handle unknown filehash types
-            if self.callback:
-                try:
-                    generic_hash_key = self.callback(obj, ds_key, ds_key_def_obj['key'], self.options)
-                except(Exception):
-                    return
-
-            ds_key_def_list = [ds_key_def_obj]
-
-
-        for ds_key_def in ds_key_def_list:
-            if ds_key_def is None or 'key' not in ds_key_def:
-                self.logger.debug('{} is not valid (None, or missing key)'.format(ds_key_def))
-                continue
-
-            if generic_hash_key:
-                key_to_add = generic_hash_key
-            else:
-                key_to_add = ds_key_def['key']
-
-            transformer = self.transformers[ds_key_def['transformer']] if 'transformer' in ds_key_def else None
-
-            group = False
-            unwrap = False
-
-            # unwrap array of stix values to separate stix objects
-            if 'unwrap' in ds_key_def:
-                unwrap = True
-
-            if ds_key_def.get('cybox', self.cybox_default):
-                object_name = ds_key_def.get('object')
-                if 'references' in ds_key_def:
-                    references = ds_key_def['references']
+                if transformer:
+                    value = transformer.transform(value)
+                    if value is None:
+                        return None
+                
+                if references:
                     if isinstance(references, list):
-                        stix_value = []
+                        return_value = []
                         for ref in references:
-                            if unwrap:
-                                pattern = re.compile("{}_[0-9]+".format(ref))
-                                for obj_name in object_map:
-                                    if pattern.match(obj_name):
-                                        val = object_map.get(obj_name)
-                                        stix_value.append(val)
+                            if group and not isinstance(value, list):
+                                value = [value]
+                            for i, _ in enumerate(value):
+                                parent_key_ind = self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=i)
+                                if parent_key_ind:
+                                    return_value.append(parent_key_ind)
+                    else:
+                        return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
+                        if unwrap is not False and not isinstance(return_value, list):
+                            return_value = [return_value]
+                else:
+                    return_value = value
+
+            return return_value
+        except Exception as e:
+            raise Exception("Error in json_to_stix_translator._compose_value_object: %s" % e)
+
+
+    def _get_tag_ind(self, tag, object_tag_ref_map, create_on_absence=False, unwrap=False, property_key=None):
+        tag_ind = None
+        if unwrap:
+            tag = '%s_%s' % (tag, unwrap)
+
+        if tag in object_tag_ref_map['tags']:
+            tag_ind = object_tag_ref_map['tags'][tag]['i']
+            object_tag_ref_map['tags'][tag]['n'] += 1
+        elif create_on_absence:
+            tag_ind = object_tag_ref_map[UUID5_NAMESPACE]
+            object_tag_ref_map[UUID5_NAMESPACE] += 1
+            object_tag_ref_map['tags'][tag] = {'i': tag_ind, 'n': 0}
+            
+        if tag_ind is not None:
+            tag_ind = str(tag_ind)
+            if property_key and '_ref' not in property_key:
+                object_tag_ref_map['non_ref_props'][tag_ind] = True
+
+        return tag_ind
+
+    def _add_prperty(self, type_name, property_key, parent_key_ind, value, objects):
+        if not parent_key_ind in objects:
+            objects[parent_key_ind] = {
+                'type': type_name,
+                property_key: value
+            }
+        else:
+            if not property_key in objects[parent_key_ind]:
+                objects[parent_key_ind][property_key] = value
+            elif isinstance(value, dict):
+                objects[parent_key_ind][property_key] = dict_merge(objects[parent_key_ind][property_key], value)
+            else: #TODO: get rid of this weird 'else'
+                pass
+
+    def _process_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None):
+        try:
+            if isinstance(to_stix_config_prop, dict):
+                if True:
+                # if to_stix_config_prop.get('cybox', self.cybox_default):
+                    key = to_stix_config_prop.get('key', None)
+                    if not key or (isinstance(key, dict)):
+                        for ds_sub_key in data.keys():
+                            prop = to_stix_config_prop.get(ds_sub_key)
+                            if prop:
+                                self._process_properties(prop, data[ds_sub_key], objects, object_tag_ref_map, parent_data=data)
+                    else:
+                        if data is not None or data == '':
+                            transformer = self.transformers[to_stix_config_prop['transformer']] if 'transformer' in to_stix_config_prop else None
+                            references = references = to_stix_config_prop['references'] if 'references' in to_stix_config_prop else None
+                            unwrap = True if 'unwrap' in to_stix_config_prop and isinstance(data, list) else False
+                            group = to_stix_config_prop['group'] if 'group' in to_stix_config_prop else False
+
+                            config_keys = key.split('.')
+                            if len(config_keys) < 2:
+                                if False is to_stix_config_prop.get('cybox', self.cybox_default): 
+                                    object_tag_ref_map['out_cybox'][key] = self._compose_value_object(data, [], object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
+                                return
+
+                            type_name = config_keys[0]
+                            property_key = config_keys[1]
+                            parent_key = to_stix_config_prop['object'] if 'object' in to_stix_config_prop else type_name
+                            
+                            # use the hard-coded value in the mapping
+                            if 'value' in to_stix_config_prop:
+                                value = to_stix_config_prop['value']
                             else:
-                                val = object_map.get(ref)
-                                if not self._valid_stix_value(self.properties, key_to_add, val):
-                                    continue
-                                stix_value.append(val)
-                        if not stix_value:
-                            continue
-                    else:
-                        if unwrap:
-                            stix_value = []
-                            pattern = re.compile("{}_[0-9]+".format(references))
-                            for obj_name in object_map:
-                                if pattern.match(obj_name):
-                                    val = object_map.get(obj_name)
-                                    stix_value.append(val)
-                        else:
-                            stix_value = object_map.get(references)
-                            if not self._valid_stix_value(self.properties, key_to_add, stix_value):
-                                continue
-                else:
-                    # use the hard-coded value in the mapping
-                    if 'value' in ds_key_def:
-                        stix_value = ds_key_def['value']
-                    else:
-                        stix_value = self._get_value(obj, ds_key, transformer)
-                    if not self._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
-                        continue
+                                if 'ds_key' in to_stix_config_prop and parent_data:
+                                    ds_key = to_stix_config_prop['ds_key']
+                                    data = parent_data.get(ds_key)
+                                
+                                value = self._compose_value_object(data, config_keys[2:], object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
+                                
+                            if value is None or value == '':
+                                return None
 
-                # Group Values
-                if 'group' in ds_key_def:
-                    group = True
+                            if value == 'fd80:655e:171d:30d4:fd80:655e:171d:30d4':
+                                print(type_name, property_key, parent_key, value)
+                                
+                            if not references and unwrap and isinstance(value, list):
+                                for i, val_el in enumerate(value):
+                                    parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
+                                    self._add_prperty(type_name, property_key, parent_key_ind, val_el, objects)
+                            else:
+                                parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
+                                self._add_prperty(type_name, property_key, parent_key_ind, value, objects)
 
-                if unwrap and 'references' not in ds_key_def and isinstance(stix_value, list):
-                    self.logger.debug("Unwrapping {} of {}".format(stix_value, object_name))
-                    for i in range(len(stix_value)):
-                        obj_i_name = "{}_{}".format(object_name, i + 1)
-                        val = stix_value[i]
-                        self._handle_cybox_key_def(key_to_add, observation, val, object_map,
-                                                                     obj_i_name, group)
-                else:
-                    self._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
-                                                                 object_name, group)
+            elif isinstance(to_stix_config_prop, list):
+                for prop in to_stix_config_prop:
+                    self._process_properties(prop, data, objects, object_tag_ref_map, parent_data=parent_data)
+
             else:
-                # get the object name defined for custom attributes
-                if 'object' in ds_key_def:
-                    object_name = ds_key_def.get('object')
-                    # use the hard-coded value in the mapping
-                    if 'value' in ds_key_def:
-                        stix_value = ds_key_def['value']
-                    # get the value from mapped key
-                    elif 'ds_key' in ds_key_def:
-                        ds_key = ds_key_def['ds_key']
-                        stix_value = self._get_value(obj, ds_key, transformer)
-                    if not self._valid_stix_value(self.properties, key_to_add, stix_value):
-                        continue
-                    self._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
-                                                                 object_name, group)
-                else:
-                    stix_value = self._get_value(obj, ds_key, transformer)
-                    if not self._valid_stix_value(self.properties, key_to_add, stix_value):
-                        continue
-
-                    self._add_property(observation, key_to_add, stix_value, group)
+                self.logger.debug('to_stix_config_prop is neither dictionary nor list')
+                self.logger.debug(to_stix_config_prop)
+        except Exception as e:
+            raise Exception("Error in json_to_stix_translator._process_properties: %s" % e)
 
     # STIX 2.1 helper methods
     def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
@@ -403,15 +269,21 @@ class DataSourceObjToStixObj:
 
         # create normal type objects
         if isinstance(obj, dict):
-            for ds_key in obj.keys():
-                self._transform(object_map, observation, ds_map, ds_key, obj)
+            object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'non_ref_props': {}, 'out_cybox': {}}
+
+            self._process_properties(ds_map, obj, object_map, object_tag_ref_map)
+            # special case:
+            # remove object if:
+            # a reference attribute object does not contain at least one property other than 'type'
+            object_map = self._cleanup_references(object_map, object_tag_ref_map['non_ref_props'])
+            observation['objects'] = object_map
+
+
+            for k, v in object_tag_ref_map['out_cybox'].items():
+                observation[k] = v
+            
         else:
             self.logger.debug("Not a dict: {}".format(obj))
-
-        # special case:
-        # remove object if:
-        # a reference attribute object does not contain at least one property other than 'type'
-        self._cleanup_references(object_map, observation, ds_map)
 
         # Add required properties to the observation if it wasn't added from the mapping
         if FIRST_OBSERVED_KEY not in observation:
@@ -440,18 +312,13 @@ class DataSourceObjToStixObj:
 
         return observation
 
-    def _cleanup_references(self, object_map, observation, ds_map):
-        objects = observation.get('objects')
-        remove_keys = []
-        for obj, values in objects.items():
-            rm_keys = list(key for key in values if '_ref' in key)
-            rm_keys.append('type')
+    def _cleanup_references(self, objects, tags):
+        new_objects = {}
 
-            obj_keys = list(values.keys())
+        tag_keys = list(tags.keys())
+        tag_keys.sort(key=lambda x: int(x))
 
-            if sorted(rm_keys) == sorted(obj_keys):
-                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values) )
-                remove_keys.append(obj)
-
-        for k in remove_keys:
-            objects.pop(k)
+        for ind in tag_keys:
+            new_objects[ind] = objects[ind]
+            
+        return new_objects
