@@ -91,7 +91,7 @@ class DataSourceObjToStixObj:
             child_obj_val = child_obj[split_key[-1]]
             if (isinstance(child_obj_val, list)):
                 child_obj_val.extend(stix_value)  # append to existing list
-                child_obj[split_key[-1]] = list(set(child_obj_val))
+                child_obj[split_key[-1]] = child_obj_val
 
     @staticmethod
     def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
@@ -162,42 +162,24 @@ class DataSourceObjToStixObj:
                             yield result
 
     # update the object key of the mapping
-    def _update_object_key(self, ds_map, indx):
-        singleton_stix_objects = self.options.get('singleton_stix_objects')
-        new_ds_map = copy.deepcopy(ds_map)
-        for key, value in new_ds_map.items():
-            if isinstance(value, dict):
-                if 'object' in value and 'key' in value:
-                    stix_obj, _ = tuple(value['key'].split('.', 1))
-                    value['object'] = str(value['object']) + '_' + str(indx) if stix_obj not in singleton_stix_objects \
-                        else value['object']
-            if isinstance(value, list):
-                for item in value:
-                    if 'object' in item:
-                        # only single event object for each observed data obj
-                        stix_obj, _ = tuple(item['key'].split('.', 1))
-                        if not stix_obj in singleton_stix_objects:
+    @staticmethod
+    def _update_object_key(ds_map, indx):
+            new_ds_map = copy.deepcopy(ds_map)
+            for key, value in new_ds_map.items():
+                if isinstance(value, dict):
+                    if 'object' in value:
+                        value['object'] = str(value['object']) + '_' + str(indx)
+                if isinstance(value, list):
+                    for item in value:
+                        if 'object' in item:
                             item['object'] = str(item['object']) + '_' + str(indx)
-                        if 'references' in item:
-                            references = item['references']
-                            is_a_list = True
-                            if not isinstance(references, list):
-                                references = [references]
-                                is_a_list = False
-                            updated_references = []
-                            for ref in references:
-                                ref_stix_obj = None
-                                for mapping in value:
-                                    if ref == mapping['object']:
-                                        ref_stix_obj, _ = tuple(mapping['key'].split('.', 1))
-                                        break
-                                ref_to_append = (str(ref) + '_' + str(indx)) if \
-                                    (ref_stix_obj not in singleton_stix_objects) else ref
-                                updated_references.append(ref_to_append)
-                            updated_references = updated_references if is_a_list else updated_references[0]
-                            item['references'] = updated_references
-
-        return new_ds_map
+                            if 'references' in item:
+                                if isinstance(item['references'], list):
+                                    for ref_idx, reference in enumerate(item['references']):
+                                        item['references'][ref_idx] = str(reference) + '_' + str(indx)
+                                else:
+                                    item['references'] = str(item['references']) + '_' + str(indx)
+            return new_ds_map
 
     def _transform(self, object_map, observation, ds_map, ds_key, obj):
 
@@ -231,7 +213,7 @@ class DataSourceObjToStixObj:
             self.logger.debug('{} is a list; unwrapping.'.format(to_map))
             for item in to_map:
                 if isinstance(item, dict):
-                    new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
+                    new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
 

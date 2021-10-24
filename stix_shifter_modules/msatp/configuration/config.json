@@ -24,16 +24,6 @@
     "selfSignedCert": {
       "type": "password",
       "optional": true
-    },
-    "options": {
-      "singleton_stix_objects": {
-        "default": [
-          "x-oca-event"
-        ],
-        "type": "array",
-        "hidden": true,
-        "optional": true
-      }
     }
   },
   "configuration": {

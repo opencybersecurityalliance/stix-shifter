@@ -36,13 +36,6 @@
           ],
           "unwrap": true,
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_Category": [
@@ -58,13 +51,6 @@
             "ttp_tagging"
           ],
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_SHA1": [
@@ -76,14 +62,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_FileName": [
@@ -95,14 +73,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_RemoteUrl": [
@@ -114,30 +84,12 @@
           "key": "x-ibm-finding.dst_url_ref",
           "object": "finding",
           "references": "dst_finding_url"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
-      "alert_Title": [
-        {
-          "key": "x-ibm-finding.name",
-          "object": "finding"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Title": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
       "alert_RemoteIP": [
         {
           "key": "ipv4-addr.value",
@@ -151,14 +103,6 @@
           "key": "x-ibm-finding.dst_ip_ref",
           "object": "finding",
           "references": "finding_dst_ip"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ]
     },
@@ -519,6 +463,15 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "ActionType": {
@@ -642,14 +595,6 @@
           ],
           "unwrap": true,
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_Category": [
@@ -665,14 +610,6 @@
             "ttp_tagging"
           ],
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_SHA1": [
@@ -684,14 +621,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_FileName": [
@@ -703,14 +632,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
       "alert_RemoteUrl": [
@@ -722,30 +643,12 @@
           "key": "x-ibm-finding.dst_url_ref",
           "object": "finding",
           "references": "dst_finding_url"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ],
-      "alert_Title": [
-        {
-          "key": "x-ibm-finding.name",
-          "object": "finding"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Title": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
       "alert_RemoteIP": [
         {
           "key": "ipv4-addr.value",
@@ -759,14 +662,6 @@
           "key": "x-ibm-finding.dst_ip_ref",
           "object": "finding",
           "references": "finding_dst_ip"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ],
-          "group": true
         }
       ]
     },
@@ -1287,6 +1182,15 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -1406,13 +1310,6 @@
           ],
           "unwrap": true,
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_Category": [
@@ -1428,13 +1325,6 @@
             "ttp_tagging"
           ],
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_SHA1": [
@@ -1446,13 +1336,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_FileName": [
@@ -1464,13 +1347,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_RemoteUrl": [
@@ -1482,28 +1358,12 @@
           "key": "x-ibm-finding.dst_url_ref",
           "object": "finding",
           "references": "dst_finding_url"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
-      "alert_Title": [
-        {
-          "key": "x-ibm-finding.name",
-          "object": "finding"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
-        }
-      ],
+      "alert_Title": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
       "alert_RemoteIP": [
         {
           "key": "ipv4-addr.value",
@@ -1517,13 +1377,6 @@
           "key": "x-ibm-finding.dst_ip_ref",
           "object": "finding",
           "references": "finding_dst_ip"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ]
     },
@@ -1948,6 +1801,15 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -2067,13 +1929,6 @@
           ],
           "unwrap": true,
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_Category": [
@@ -2089,13 +1944,6 @@
             "ttp_tagging"
           ],
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_SHA1": [
@@ -2107,13 +1955,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_FileName": [
@@ -2125,13 +1966,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_RemoteUrl": [
@@ -2143,28 +1977,12 @@
           "key": "x-ibm-finding.dst_url_ref",
           "object": "finding",
           "references": "dst_finding_url"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
-      "alert_Title": [
-        {
-          "key": "x-ibm-finding.name",
-          "object": "finding"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
-        }
-      ],
+      "alert_Title": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
       "alert_RemoteIP": [
         {
           "key": "ipv4-addr.value",
@@ -2178,13 +1996,6 @@
           "key": "x-ibm-finding.dst_ip_ref",
           "object": "finding",
           "references": "finding_dst_ip"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ]
     },
@@ -2506,6 +2317,15 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -2619,13 +2439,6 @@
           ],
           "unwrap": true,
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_Category": [
@@ -2641,13 +2454,6 @@
             "ttp_tagging"
           ],
           "group": true
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_SHA1": [
@@ -2659,13 +2465,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_FileName": [
@@ -2677,13 +2476,6 @@
           "key": "x-ibm-finding.file_ref",
           "object": "finding",
           "references": "finding_file"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
       "alert_RemoteUrl": [
@@ -2695,28 +2487,12 @@
           "key": "x-ibm-finding.dst_url_ref",
           "object": "finding",
           "references": "dst_finding_url"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ],
-      "alert_Title": [
-        {
-          "key": "x-ibm-finding.name",
-          "object": "finding"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
-        }
-      ],
+      "alert_Title": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
       "alert_RemoteIP": [
         {
           "key": "ipv4-addr.value",
@@ -2730,13 +2506,6 @@
           "key": "x-ibm-finding.dst_ip_ref",
           "object": "finding",
           "references": "finding_dst_ip"
-        },
-        {
-          "key": "x-oca-event.finding_refs",
-          "object": "event",
-          "references": [
-            "finding"
-          ]
         }
       ]
     },
@@ -2777,6 +2546,27 @@
           "resolved_ip",
           "resolved_ipv6"
         ],
+        "unwrap": true
+      }
+    ],
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ],
+        "group": true,
         "unwrap": true
       }
     ],

@@ -10,11 +10,6 @@
         "hidden": true,
         "optional": true
       },
-      "singleton_stix_objects": {
-        "type": "array",
-        "hidden": true,
-        "optional": true
-      },
       "result_limit": {
         "default": 10000,
         "min": 1,
