@@ -14,12 +14,6 @@
             "min": 1,
             "max": 65535
         },
-        "help": {
-            "type": "link",
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.6.0/platform/docs/scp-core/data-sources.html"
-        }
-    },
-    "configuration": {
         "report_limit": {
             "type": "number",
             "optional": true,
@@ -30,6 +24,12 @@
             "optional": true,
             "default": 10
         },
+        "help": {
+            "type": "link",
+            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.6.0/platform/docs/scp-core/data-sources.html"
+        }
+    },
+    "configuration": {
         "auth": {
             "type" : "fields",
             "clientId": {

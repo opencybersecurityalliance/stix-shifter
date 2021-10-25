@@ -15,8 +15,11 @@ class APIClient():
         self.client = RestApiClient(connection['host'])
         self.search_query = ""
         self.headers["Content-Type"] = "application/json"
-        self.report_limit = configuration['report_limit']
-        self.max_number_pages = configuration['max_number_pages']
+        self.report_limit = connection['report_limit']
+        self.max_number_pages = connection['max_number_pages']
+        self.results_code = 200
+        self.success = True
+
 
     def ping_data_source(self):
         # Pings the data source
@@ -33,11 +36,17 @@ class APIClient():
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
+        response = {}
         try:
-            resp = self._get_results(search_id, range_start, range_end)
-            response = {'success':True, 'code': 200, 'data': resp}
+            query = json.loads(search_id)
+            if 'valid' in query and query['valid'] is False:
+                response = { "success": False, "code": 2000, "data": []}
+                ErrorResponder.fill_error(response, message="Query Not Supported",)
+            else:    
+                response = self._get_results(search_id, range_start, range_end)
         except Exception as e:
             response = {'success':False, 'code': 2000, 'data': []}
+
         return response
 
     def delete_search(self, search_id):
@@ -50,7 +59,8 @@ class APIClient():
 
     def _get_results(self, search_id, range_start, range_end):
 
-        response = []
+        response = dict()
+        response_data = []
         resp = self.get_token()
 
         if resp['code'] == 200:
@@ -63,10 +73,10 @@ class APIClient():
         json_query = json.loads(search_id)
 
         if "reportId" in json_query:
-            response.append(self.get_report_details(json_query['reportId']))
+            response_data.append(self.get_report_details(json_query['reportId']))
             del json_query['reportId']
         if "reportIds" in json_query:
-            response.extend(self.get_all_reports(json_query['reportIds']))
+            response_data.extend(self.get_all_reports(json_query['reportIds']))
             del json_query['reportIds']
         if "searchTerm" in json_query or "tags" in json_query or "excludeTags" in json_query or "entityTypes" in json_query:
             if "searchTerm" in json_query and (json_query['searchTerm'] is "" or json_query['searchTerm'] is "*"):
@@ -74,11 +84,14 @@ class APIClient():
                 
             query = json.dumps(json_query)
 
-            response.extend(self.search_indicators(query, range_start, range_end))
-            response.extend(self.search_reports(query))
+            response_data.extend(self.search_indicators(query, range_start, range_end))
+            response_data.extend(self.search_reports(query))
+
+        response['code'] = self.results_code
+        response['success'] = self.success
+        response['data'] = response_data
         
         return response
-
 
     def get_token(self):
 
@@ -191,8 +204,7 @@ class APIClient():
         return response['items']
         
     def get_all_reports(self, reportIds):
-
-        # check if ids  1 < ids < 400 
+        # check if ids  1 < ids < report_limit 
         # List structure "id, id2, id3, id4, ...."
         response = []
         try:
@@ -274,7 +286,6 @@ class APIClient():
             urlData = {"pageSize": maxPSize, "pageNumber": thisPageNumber, "from": From, "to": To}
 
             resp = self.client.call_api(endpoint, "POST", headers=self.headers, urldata=urlData, data=data)
-        
             response = self._handle_errors(resp, query)
 
             if response['code'] != 200:
@@ -368,7 +379,11 @@ class APIClient():
             ErrorResponder.fill_error(return_obj, message=return_obj['data'],error="Request Limit Exceeded")
         else:
             return_obj['code'] == 2000
+            return_obj['success'] = False
             return_obj['data'] == "Unknown Error"
             ErrorResponder.fill_error(return_obj, message=return_obj['data'], error="Unknown Error")
+
+        self.results_code = return_obj['code']
+        self.success = return_obj['success']
         
         return return_obj

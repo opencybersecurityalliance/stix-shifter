@@ -9,12 +9,6 @@
             "label": "Host Port",
             "description": "Set the port number that is associated with the Host name or IP"
         },
-        "help": {
-            "label": "Need additional help?",
-            "description": "More details on the data source setting can be found in the specified link"
-        }
-    },
-    "configuration": {
         "report_limit": {
             "label": "Report Limit",
             "description": "Number of detailed reports gathered from Trustar, if the number of reports is less than 'Report Limit'"
@@ -23,6 +17,12 @@
             "label": "Request Page Limit",
             "description": "Max number of pages requested to TruSTAR"
         },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
         "auth": {
             "clientId": {
                 "label": "Client ID ",

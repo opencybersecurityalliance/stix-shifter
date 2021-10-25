@@ -118,8 +118,7 @@ class QueryStringPatternTranslator:
             else:
                 # Test of input query has two of the same mapped fields, connector does not support complex queries 
                 if mapped_field in self.return_obj:
-                    self.return_obj["Code"] = 2000
-                    self.return_obj["Message"] = "Unsupported query - Cannot have multiple: {}".format(mapped_field)
+                    self.return_obj['valid'] = False
                 else:
                     self.return_obj[mapped_field] = value
 
@@ -230,22 +229,15 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
+
     trustar_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     query = trustar_query_translator.translated
-
-    #print(trustar_query_translator.return_obj)
-
+    
     start = re.search('STARTt\'(.+?)Z', query)
     stop = re.search('STOPt\'(.+?)Z', query)
 
-
-    
     now = int(datetime.utcnow().timestamp() * 1000)
     range_t = options['time_range'] * 60000
-
 
     if start and stop:
 
@@ -254,7 +246,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 
         sto = datetime.strptime(stop.group(1), "%Y-%m-%dT%H:%M:%S.%f")
         TO = int((sto - datetime(1970, 1, 1)).total_seconds()) * 1000
-
 
     else:
         FROM = now - range_t
@@ -265,17 +256,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 
     ret = json.dumps(trustar_query_translator.return_obj)
     ret = ret.replace('%', ' ')
-
-    
-    
-
-    # Sample Structure
-    #query = {
-    #    "searchTerm": "192.168.10.15",
-    #    "entityType": "MALWARE",
-    #    "from": "x",
-    #    "to": "y"
-    #}
 
     ret_list = list()
     ret_list.append(ret)

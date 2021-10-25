@@ -10,7 +10,6 @@ class PingConnector(BasePingConnector):
     def ping_connection(self):
         try:
             response = self.api_client.ping_data_source()
-            print("PING RESPONSE: {}".format(response))
             # Construct a response object
             return_obj = dict()
             if response['code'] == 200:

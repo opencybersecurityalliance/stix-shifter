@@ -126,6 +126,10 @@
     "attributes": {
       "key": "x-trustar-indicator.x_attributes",
       "object": "x-trustar"
+    },
+    "severityLevel": {
+      "key": "x-trustar-indicator.x_severitylevel",
+      "object": "x-trustar"
     }
   },
     "id": {
