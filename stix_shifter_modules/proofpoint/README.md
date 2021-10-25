@@ -68,10 +68,10 @@ Will return the following STIX observable:
                 "urldefense"
             ],
             "messageSize": 4305,
-            "headerFrom": "deepak das <ab90das@gmail.com>",
+            "headerFrom": "header <xxx@gmail.com>",
             "headerReplyTo": null,
             "fromAddress": [
-                "ab90das@gmail.com"
+                "from@gmail.com"
             ],
             "ccAddresses": [],
             "replyToAddress": [],
@@ -101,9 +101,9 @@ Will return the following STIX observable:
             "id": "5569b4b2-f0cc-eab7-bf8d-e54d5dcbcd01",
             "QID": "1969UFnu029601",
             "GUID": "ZNMbDB0FdlMIB8xRaL1ytpktHOGb9bb6",
-            "sender": "ab90das@gmail.com",
+            "sender": "xxx@gmail.com",
             "recipient": [
-                "deepak-sd@presentfortesting.com"
+                "xxx@presentfortesting.com"
             ],
             "senderIP": "209.85.208.46",
             "messageID": ""
@@ -166,7 +166,7 @@ python3 main.py execute proofpoint proofpoint '{"type": "identity", "id": "ident
                 },
                 "6": {
                     "type": "email-addr",
-                    "value": "subashuser@iscgalaxy.com"
+                    "value": "xxx@abc.com"
                 },
                 "7": {
                     "type": "ipv4-addr",

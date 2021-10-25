@@ -10,7 +10,7 @@ class proofpoint_bodymultipart_transformer(ValueTransformer):
         # print("transformer multipart :", multipart)
         for part in multipart:
             part['content_type']=part.pop('contentType')
-            part['content_disposition'] = part.pop('disposition')
+            # part['content_disposition'] = part.pop('disposition')
 
         return multipart
 

@@ -124,6 +124,7 @@
     "messageParts": {
         "key": "email-message.body_multipart",
         "object": "email-message",
+        "transformer": "proofpoint_bodymultipart_transformer",
         "filename": [
             {
               "key": "file.name",

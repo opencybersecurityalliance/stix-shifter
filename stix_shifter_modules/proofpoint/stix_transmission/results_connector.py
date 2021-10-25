@@ -9,6 +9,7 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
+
     def create_results_connection(self, search_id, offset, length):
         try:
             min_range = offset
