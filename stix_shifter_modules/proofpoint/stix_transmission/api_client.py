@@ -20,7 +20,7 @@ class APIClient():
 
     def ping_data_source(self):
         # Pings the data source
-        endpoint = ENDPOINT_ALL + "?format=syslog&sinceSeconds=3600"
+        endpoint = ENDPOINT_ALL + "?format=json&sinceSeconds=3600"
         pingresult = self.client.call_api(endpoint=endpoint, method='GET')
         return pingresult
 

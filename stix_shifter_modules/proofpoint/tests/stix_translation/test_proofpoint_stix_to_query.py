@@ -21,7 +21,7 @@ def _remove_timestamp_from_query(queries):
         return re.sub(pattern, "", queries)
 
 
-class TestAsyncDummyConnection(unittest.TestCase, object):
+class TestProofpointConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
@@ -37,14 +37,14 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
             }
         }
 
-    def test_dummy_async_query(self):
+    def test_proofpoint_query(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         query = "placeholder query text"
         query_response = entry_point.create_query_connection(query)
 
         assert query_response['search_id'] == "uuid_1234567890"
 
-    def test_dummy_async_status(self):
+    def test_proofpoint_status(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         query_id = "uuid_1234567890"
         status_response = entry_point.create_status_connection(query_id)
@@ -54,17 +54,13 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
         status = status_response["status"]
         assert status == Status.COMPLETED.value
 
-    def test_dummy_async_results(self):
+    def test_proofpoint_results(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        # query_id = "uuid_1234567890"
-        query_id = 'all?format=syslog&sinceSeconds=3600'
+        query_id = 'sinceSeconds=3600'
         results_response = entry_point.create_results_connection(query_id, 1, 1)
-        print('results_response :', results_response)
 
         success = results_response["success"]
         assert success
-        data = results_response["data"]
-        # assert data == "Results from search"
 
     def test_is_async(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
