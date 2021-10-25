@@ -35,6 +35,11 @@ class ResultsConnector(BaseResultsConnector):
                     if newdata and max_range > 0 and len(newdata) > max_range:
                         newdata = newdata[:max_range]
 
+                    for msg in newdata:
+                        if "messageParts" in msg:
+                            msg["is_multipart"] = True
+                        else: msg["is_multipart"] = False
+
                     return_obj['data'] = newdata
 
                 except json.decoder.JSONDecodeError as err:

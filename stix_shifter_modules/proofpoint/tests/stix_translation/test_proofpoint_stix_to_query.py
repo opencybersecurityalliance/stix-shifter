@@ -25,15 +25,15 @@ class TestProofpointConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "host": "hostbla",
+            "host": "tap-api-v2.proofpoint.com/v2/siem",
             "port": 8080,
         }
 
     def configuration(self):
         return {
             "auth": {
-                "username": "u",
-                "password": "p"
+                "principal": "96dbfb1e-e6bf-f298-3080-3cab5b1cfe19",
+                "secret": "1ee4776401dc372e608cb9ae4810cec5420c2689ff38befa1ac46bd17da20904"
             }
         }
 
@@ -42,11 +42,11 @@ class TestProofpointConnection(unittest.TestCase, object):
         query = "placeholder query text"
         query_response = entry_point.create_query_connection(query)
 
-        assert query_response['search_id'] == "uuid_1234567890"
+        assert query_response['search_id'] == query
 
     def test_proofpoint_status(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        query_id = "uuid_1234567890"
+        query_id = "placeholder query text"
         status_response = entry_point.create_status_connection(query_id)
 
         success = status_response["success"]
@@ -61,11 +61,6 @@ class TestProofpointConnection(unittest.TestCase, object):
 
         success = results_response["success"]
         assert success
-
-    def test_is_async(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        check_async = entry_point.is_async()
-        assert check_async
 
     def test_ping(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
@@ -84,7 +79,8 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[x-proofpoint:threatstatus = 'active']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         queries = ["threatStatus=active&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
-        _test_query_assertions(query, queries)
+        assert "threatStatus=active" in queries[0]
+        assert "interval" in queries[0]
 
     def test_query_from_multiple_comparison_expressions(self):
         stix_pattern = "[x-proofpoint:threatstatus = 'active' AND x-proofpoint:threatstatus = 'cleared'] START t'2021-09-29T06:00:00.00Z' STOP t'2021-09-29T06:30:00.00Z'"

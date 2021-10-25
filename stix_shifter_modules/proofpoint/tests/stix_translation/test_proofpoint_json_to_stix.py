@@ -20,7 +20,7 @@ data_source = {
 }
 options = {}
 
-event_data={"queryEndTime" : "2021-09-14T13:30:00Z", "clicksPermitted" : [], "clicksBlocked" : [], "messagesDelivered" :[{
+event_data={
             "is_multipart": True,
             "GUID": "Ggfsdfsdf",
 
@@ -107,7 +107,7 @@ event_data={"queryEndTime" : "2021-09-14T13:30:00Z", "clicksPermitted" : [], "cl
                     "threatUrl": "https://threatinsight.proofpoint.com"
                 }
             ]
-        }]}
+        }
 
 def _test_query_assertions(query, queries):
     assert query['queries'] == [queries]
@@ -131,7 +131,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
 
 
     def test_common_mapping(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(event_data))
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -148,7 +148,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
         assert (observed_data['type'] == "observed-data")
         assert (observed_data['created_by_ref'] == result_bundle_identity['id'])
 
-        assert (observed_data['number_observed'] == 5)
+        assert (observed_data['number_observed'] == 1)
         assert (observed_data['created'] is not None)
         assert (observed_data['modified'] is not None)
         assert (observed_data['first_observed'] is not None)
@@ -160,7 +160,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)
         objects = observed_data['objects']
-        curr_obj = TestProofpointResultsToStix.get_first_of_type(objects.values(), 'ipv4-addr')
-        assert (curr_obj is not None), 'ipv4-addr object type not found'
-        assert (curr_obj.keys() == {'type', 'value'})
-        assert (curr_obj['value'] == "127.0.0.1")
+        curr_obj = TestProofpointResultsToStix.get_first_of_type(objects.values(), 'email-message')
+        assert (curr_obj is not None), 'email-message object type not found'
+        assert ("type" in curr_obj.keys())
+        assert ("date" in curr_obj.keys())

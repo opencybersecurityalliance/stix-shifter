@@ -13,10 +13,17 @@ class PingConnector(BasePingConnector):
             response_code = response_dict.code
             # Construct a response object
             return_obj = dict()
+            error_obj = dict()
             if response_code >= 200 and response_code <= 204:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, str(response_code)+ ":"+str(response_dict.read().decode("utf-8")), ['message'])
+                error_msg = ""
+                try:
+                    error_msg = str(response_dict.read().decode("utf-8"))
+                except Exception as err:
+                    self.logger.error('Response decode error: {}'.format(err))
+                error_obj['message'] = error_msg
+                ErrorResponder.fill_error(return_obj,error_obj,['message'])
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))
