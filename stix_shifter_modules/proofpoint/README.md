@@ -175,8 +175,7 @@ python3 main.py execute proofpoint proofpoint '{"type": "identity", "id": "ident
             },
             "first_observed": "2021-10-04T06:39:15.034Z",
             "last_observed": "2021-10-04T06:39:15.034Z",
-            "number_observed": 1,
-            "num  ber_observed": 1
+            "number_observed": 1
         }
     ]
 }
