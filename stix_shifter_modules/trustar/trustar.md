@@ -26,7 +26,7 @@ will return
 
 ```
 
-python main.py transmit trustar '{"host": "api.trustar.co", "port": 443}' '{"auth": {"username":"07f66856-dd5b-4b3c-805e-6bba23c693be", "password": "8aDz4jrJ4GKnsl0oDW5IpiLU"}}' results '["{\"searchTerm\": \"9.30.116.81\", \"from\": 1631680282000, \"to\": 1631680582000}"]' 0 1
+python main.py transmit trustar '{"host": "api.trustar.co", "port": 443}' '{"auth": {"username":"", "password": ""}}' results '["{\"searchTerm\": \"9.30.116.81\", \"from\": 1631680282000, \"to\": 1631680582000}"]' 0 1
 
 
 ```
