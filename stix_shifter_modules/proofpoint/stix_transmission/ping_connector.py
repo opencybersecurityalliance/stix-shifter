@@ -1,6 +1,8 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
+import re
+import string
 
 class PingConnector(BasePingConnector):
     def __init__(self, api_client):
@@ -19,11 +21,14 @@ class PingConnector(BasePingConnector):
             else:
                 error_msg = ""
                 try:
-                    error_msg = str(response_dict.read().decode("utf-8"))
+                    valid_characters = string.printable
+                    error_msg = str(response_dict.read().decode("utf-8", errors='ignore'))
+                    error_msg = ''.join(i for i in error_msg if i in valid_characters)
+
                 except Exception as err:
                     self.logger.error('Response decode error: {}'.format(err))
                 error_obj['message'] = error_msg
-                ErrorResponder.fill_error(return_obj,error_obj,['message'])
+                ErrorResponder.fill_error(return_obj,error_obj,'message')
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))
