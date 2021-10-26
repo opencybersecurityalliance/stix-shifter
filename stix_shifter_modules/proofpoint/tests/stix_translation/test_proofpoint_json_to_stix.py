@@ -1,11 +1,7 @@
 import unittest
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.proofpoint.entry_point import EntryPoint
-from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
-from stix_shifter.stix_translation import stix_translation
 import json
 from stix_shifter.stix_translation import stix_translation
-from stix_shifter_utils.utils.error_response import ErrorCode
 
 translation = stix_translation.StixTranslation()
 
