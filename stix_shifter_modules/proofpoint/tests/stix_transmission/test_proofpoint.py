@@ -7,15 +7,15 @@ class TestProofpointConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "host": "tap-api-v2.proofpoint.com",
+            "host": "host",
             "port": 8080,
         }
 
     def configuration(self):
         return {
             "auth": {
-                "principal": "96dbfb1e-e6bf-f298-3080-3cab5b1cfe19",
-                "secret": "1ee4776401dc372e608cb9ae4810cec5420c2689ff38befa1ac46bd17da20904"
+                "principal": "principal",
+                "secret": "secret"
             }
         }
 
