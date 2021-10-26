@@ -1,6 +1,3 @@
-from typing import Collection
-
-
 def dict_merge(dct, merge_dct, add_keys=True):
     """ Recursive dict merge. Inspired by :meth:``dict.update()``, instead of
     updating only top-level keys, dict_merge recurses down into dicts nested
@@ -32,8 +29,7 @@ def dict_merge(dct, merge_dct, add_keys=True):
                 }
 
             for k, v in merge_dct.items():
-                if (k in dct and isinstance(dct[k], dict)
-                        and isinstance(merge_dct[k], Collection.Mapping)):
+                if (k in dct and isinstance(dct[k], dict) and isinstance(merge_dct[k], dict)):
                     dct[k] = dict_merge(dct[k], merge_dct[k], add_keys=add_keys)
                 else:
                     dct[k] = merge_dct[k]
@@ -41,7 +37,7 @@ def dict_merge(dct, merge_dct, add_keys=True):
         elif isinstance(dct, list): 
             return dct + list(set(merge_dct) - set(dct))
 
-    except Exception:
+    except Exception as e:
         pass
 
     return dct
