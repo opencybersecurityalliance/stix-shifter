@@ -3,6 +3,7 @@ import datadog_api_client.v1
 import datadog_api_client.v1.api 
 from datadog_api_client.v1.api import events_api
 from datadog_api_client.v2.api import processes_api
+from urllib3.exceptions import MaxRetryError
 
 class APIClient:
 
@@ -24,6 +25,9 @@ class APIClient:
             try:
                 # There is no any specific Datadog endpoint which validate application key
                 api_instance.list_events(start=current_time, end=current_time)
+            except MaxRetryError as e:
+                e.status = 1004
+                return_obj.update({"code": e.status, "message": e.reason})
             except datadog_api_client.v1.ApiException as e:
                 return_obj.update({"code": e.status, "message": e.reason})
         return return_obj

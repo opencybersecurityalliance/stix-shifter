@@ -7,6 +7,7 @@ error_mapping = {
     403: ErrorCode.TRANSMISSION_FORBIDDEN,
     # A request parameter is not valid
     400: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    1004: ErrorCode.TRANSMISSION_AUTH_SSL
 }
 
 
