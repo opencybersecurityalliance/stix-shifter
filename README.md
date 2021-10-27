@@ -1,8 +1,8 @@
 [![codecov](https://codecov.io/gh/opencybersecurityalliance/stix-shifter/branch/develop/graph/badge.svg?token=gQvl14peRj)](https://codecov.io/gh/opencybersecurityalliance/stix-shifter)
 
-### Join us on Slack!
+### Join us on the Slack!
 
-[Click here](https://docs.google.com/forms/d/1vEAqg9SKBF3UMtmbJJ9qqLarrXN5zeVG3_obedA3DKs) and fill out the form to receive an invite to the Open Cybersecurity Alliance slack instance, then join the #stix-shifter channel, to meet and discuss usage with the team.
+[Click here](https://docs.google.com/forms/d/1vEAqg9SKBF3UMtmbJJ9qqLarrXN5zeVG3_obedA3DKs) and fill out the form to receive an invite to the Open Cybersecurity Alliance slack instance, then join the #stix-shifter channel, to meet and discuss usage with the leading team.
 
 ### Introduction Webinar!
 
@@ -24,9 +24,9 @@ This stix-shifter has the following dependencies:
 - [antlr4-python3-runtime==4.8](https://pypi.org/project/antlr4-python3-runtime/)
 - [python-dateutil==2.8.1](https://pypi.org/project/python-dateutil/)
 
-Your development environment must use Python 3
+Your development environment must use Python 3.
 
-## Installation
+## Installation:
 
 The recommended method for installing the STIX-shifter is via pip. Two prerequisite packages needs to be installed inlcuding the package of stix-shifter connector module to complete a stix-shifter connector installation. Run below commands to install all the packages-
 
@@ -37,7 +37,7 @@ The recommended method for installing the STIX-shifter is via pip. Two prerequis
 3. Desired stix-shifter connector module package:  `pip install stix-shifter-modules-<module name> `
    Example:  `pip install stix-shifter-modules-qradar`
 
-## Usage
+## Usage:
 
 
 ### As A Script
@@ -97,3 +97,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+Thank You.
