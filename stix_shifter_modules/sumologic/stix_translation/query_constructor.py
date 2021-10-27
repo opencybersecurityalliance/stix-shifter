@@ -7,6 +7,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import datetime
 import logging
 import re
+import json
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into
@@ -223,8 +224,9 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     query, from_time, to_time = convert_timestamp(query)
-    y = "{'query': '(%s)','fromTime': '%s','toTime': '%s'}" % (query.replace("'", "\""), from_time, to_time)
-    return [y]
+    query_dict = {"query": query.replace("'", "\""), "fromTime": from_time, "toTime": to_time}
+    query_str = json.dumps(query_dict)
+    return [query_str]
 
 
 def convert_timestamp(query):
