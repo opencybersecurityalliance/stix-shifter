@@ -1,50 +1,183 @@
 from stix_shifter_modules.proofpoint.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 import unittest
+from unittest.mock import patch
+import json
+from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter_utils.utils.error_response import ErrorCode
+import os
 
 
+CONNECTION= {
+        "host": "host",
+        "port": 8080,
+    }
+
+
+CONFIG = {
+        "auth": {
+            "principal": "principal",
+            "secret": "secret"
+        }
+    }
+
+searchid = "sinceSeconds=3600"
+query_mock = "?format=json&interval=PT30M/2016-05-01T12:30:00Z&threatStatus=falsePositive&threatStatus=active&threatStatus=cleared"
+
+class ProofpointMockResponse:
+    def __init__(self, response_code, obj):
+        self.code = response_code
+        self.object = obj
+
+    def read(self):
+        return bytearray(self.object, 'utf-8')
+
+@patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.__init__')
 class TestProofpointConnection(unittest.TestCase, object):
 
-    def connection(self):
-        return {
-            "host": "host",
-            "port": 8080,
-        }
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.ping_data_source')
+    def test_ping_endpoint(self, mock_ping_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = '["mock", "placeholder"]'
+        mock_ping_response.return_value = ProofpointMockResponse(200, mocked_return_value)
 
-    def configuration(self):
-        return {
-            "auth": {
-                "principal": "principal",
-                "secret": "secret"
-            }
-        }
+        transmission = stix_transmission.StixTransmission('proofpoint', CONNECTION, CONFIG)
+        ping_response = transmission.ping()
 
-    def test_proofpoint_query(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        query = "placeholder query text"
-        query_response = entry_point.create_query_connection(query)
+        assert ping_response is not None
+        assert ping_response['success']
 
-        assert query_response['search_id'] == query
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.ping_data_source')
+    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = '["mock", "placeholder"]'
+        mock_ping_response.return_value = ProofpointMockResponse(200, mocked_return_value)
+        mock_ping_response.side_effect = Exception('exception')
 
-    def test_proofpoint_status(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        query_id = "placeholder query text"
-        status_response = entry_point.create_status_connection(query_id)
+        transmission = stix_transmission.StixTransmission('proofpoint', CONNECTION, CONFIG)
+        ping_response = transmission.ping()
 
-        success = status_response["success"]
-        assert success
-        status = status_response["status"]
-        assert status == Status.COMPLETED.value
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    def test_proofpoint_results(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        query_id = 'sinceSeconds=3600'
-        results_response = entry_point.create_results_connection(query_id, 1, 1)
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
+    def test_status_response(self, mock_status_response, mock_api_client):
+        mock_api_client.return_value = None
+        response = {"success": True, "status": "COMPLETED", "progress": 100}
+        mock_status_response.return_value = ProofpointMockResponse(200, json.dumps(response))
 
-        success = results_response["success"]
-        assert success
+        entry_point = EntryPoint(CONNECTION, CONFIG)
+        status_response = entry_point.create_status_connection(searchid)
 
-    def test_ping(self):
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_result = entry_point.ping_connection()
-        assert ping_result["success"] is True
+        assert status_response is not None
+        assert 'status' in status_response
+        assert status_response['status'] == 'COMPLETED'
+        assert 'progress' in status_response
+        assert status_response['progress'] == 100
+        assert 'success' in status_response
+        assert status_response['success'] is True
+
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
+    def test_results_response(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'proofpoint_results.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_results_response.return_value = ProofpointMockResponse(200, mocked_return_value)
+        offset = 0
+        length = 1
+
+        transmission = stix_transmission.StixTransmission('proofpoint', CONNECTION, CONFIG)
+        results_response = transmission.results(query_mock, offset, length)
+
+        assert 'success' in results_response
+        assert results_response['success'] is True
+        assert 'data' in results_response
+        assert len(results_response['data']) > 0
+
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
+    def test_results_response_empty(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'proofpoint_result_empty.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_results_response.return_value = ProofpointMockResponse(200, mocked_return_value)
+        offset = 0
+        length = 1
+
+        transmission = stix_transmission.StixTransmission('proofpoint', CONNECTION, CONFIG)
+        results_response = transmission.results(searchid, offset, length)
+
+        assert 'success' in results_response
+        assert results_response['success'] is True
+        assert 'data' in results_response
+        assert len(results_response['data']) == 0
+
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
+    def test_results_response_exception(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'proofpoint_results.json')
+        mocked_return_value = open(file_path, 'r').read()
+
+        mock_results_response.return_value = ProofpointMockResponse(200, mocked_return_value)
+        mock_results_response.side_effect = Exception('exception')
+        offset = 0
+        length = 1
+
+        transmission = stix_transmission.StixTransmission('proofpoint', CONNECTION, CONFIG)
+        results_response = transmission.results(searchid, offset, length)
+
+        assert 'success' in results_response
+        assert results_response['success'] is False
+        assert results_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.create_search', autospec=True)
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
+    @patch('stix_shifter_modules.proofpoint.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
+    def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response, mock_api_client):
+        mock_api_client.return_value = None
+
+        mock_query_response.return_value = ProofpointMockResponse(201, query_mock)
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(dir_path, 'api_response', 'proofpoint_results.json')
+        results_mock = open(file_path, 'r').read()
+        mock_results_response.return_value = ProofpointMockResponse(200, results_mock)
+
+        status_mock = {"success": True, "status": "COMPLETED", "progress": 100}
+        mock_status_response.return_value = ProofpointMockResponse(200, status_mock)
+
+        entry_point = EntryPoint(CONNECTION, CONFIG)
+        query_response = entry_point.create_query_connection(searchid)
+
+        assert query_response is not None
+        assert query_response['success'] is True
+        assert 'search_id' in query_response
+        assert query_response['search_id'] == searchid
+
+        status_response = entry_point.create_status_connection(query_mock)
+
+        assert status_response is not None
+        assert 'status' in status_response
+        assert status_response['status'] == 'COMPLETED'
+        assert 'progress' in status_response
+        assert status_response['progress'] == 100
+        assert 'success' in status_response
+        assert status_response['success'] is True
+
+
+        offset = 0
+        length = 1
+        results_response = entry_point.create_results_connection(searchid, offset, length)
+
+        assert 'success' in results_response
+        assert results_response['success'] is True
+        assert 'data' in results_response
+        assert len(results_response['data']) > 0
