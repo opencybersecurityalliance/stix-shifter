@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "fields": {
+      "payload_bin": [
+        "_raw"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "_sourcehost"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "event_count": [
+        "_messagecount"
+      ],
+      "time_observed": [
+        "_messagetime"
+      ],
+      "src_device": [
+        "_collector"
+      ],
+      "start": [
+        "_receipttime"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": [
+        "_messageid"
+      ],
+      "created": [
+        "_messagetime"
+      ],
+      "agent": [
+        "_collector"
+      ],
+      "module": [
+        "_source"
+      ],
+      "provider": [
+        "_sourcecategory"
+      ],
+      "original_ref.payload_bin": [
+        "_raw"
+      ],
+      "domain_ref.value": [
+        "_sourcehost"
+      ],
+      "user_ref.account_login": [
+        "_useremail"
+      ]
+    }
+  },
+  "x-sumologic-source": {
+    "fields": {
+      "collectorid": [
+        "_collectorid"
+      ],
+      "sourcename": [
+        "_sourcename"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "id"
+      ],
+      "account_login": [
+        "email"
+      ],
+      "display_name": [
+        "displayName"
+      ],
+      "account_created": [
+        "createdAt"
+      ],
+      "account_last_login": [
+        "lastLoginTimestamp"
+      ]
+    }
+  }
+}
