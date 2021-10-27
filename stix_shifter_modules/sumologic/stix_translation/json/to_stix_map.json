@@ -1,0 +1,122 @@
+{
+  "_raw": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "x-oca-event",
+      "references": "artifact"
+    }
+  ],
+  "_sourcehost": [
+    {
+      "key": "domain-name.value",
+      "object": "domain",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "x-oca-event",
+      "references": "domain"
+    }
+  ],
+  "_messagecount": [
+    {
+      "key": "x-ibm-finding.event_count",
+      "object": "x-ibm-finding",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "number_observed",
+      "transformer": "ToInteger",
+      "cybox": false
+    }
+  ],
+  "_messagetime": [
+    {
+      "key": "x-oca-event.created",
+      "object": "x-oca-event",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "x-ibm-finding",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "_messageid": {
+    "key": "x-oca-event.code",
+    "object": "x-oca-event"
+  },
+  "_collector": [
+    {
+      "key": "x-oca-event.agent",
+      "object": "x-oca-event"
+    },
+    {
+      "key": "x-ibm-finding.src_device",
+      "object": "x-ibm-finding"
+    }
+  ],
+  "_collectorid": {
+    "key": "x-sumologic-source.collectorid",
+    "object": "x-sumologic-source"
+  },
+  "_receipttime": {
+    "key": "x-ibm-finding.start",
+    "transformer": "EpochToTimestamp",
+    "object": "x-ibm-finding"
+  },
+  "_source": {
+    "key": "x-oca-event.module",
+    "object": "x-oca-event"
+  },
+  "_sourcecategory": {
+    "key": "x-oca-event.provider",
+    "object": "x-oca-event"
+  },
+  "_sourcename": {
+    "key": "x-sumologic-source.sourcename",
+    "object": "x-sumologic-source"
+  },
+  "id": {
+    "key": "user-account.user_id",
+    "object": "user-account"
+  },
+  "email": [
+    {
+      "key": "user-account.account_login",
+      "object": "user-account"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "x-oca-event",
+      "references": "user-account"
+    }
+  ],
+  "displayName": {
+    "key": "user-account.display_name",
+    "object": "user-account"
+  },
+  "createdAt": {
+    "key": "user-account.account_created",
+    "object": "user-account"
+  },
+  "lastLoginTimestamp": {
+    "key": "user-account.account_last_login",
+    "object": "user-account"
+  }
+}
