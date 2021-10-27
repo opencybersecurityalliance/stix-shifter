@@ -10,7 +10,13 @@ class proofpoint_bodymultipart_transformer(ValueTransformer):
         # print("transformer multipart :", multipart)
         for part in multipart:
             part['content_type']=part.pop('contentType')
-            # part['content_disposition'] = part.pop('disposition')
+            part['content_disposition'] = part.pop('disposition')
+            if part['content_type'] == 'text/plain':
+                part['body'] = part['filename'][:-4]
+            if 'filename' in part:
+                del part['filename']
+            if 'md5' in part: del part['md5']
+            if 'sha256' in part: del part['sha256']
 
         return multipart
 
