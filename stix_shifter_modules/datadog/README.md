@@ -33,6 +33,7 @@ Datadog data to STIX mapping is defined in `to_stix_map.json`
 
 This example Datadog data:
 
+Dialect: events
 `python3 main.py translate datadog results '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "datadog", "identity_class": "events"}' '[{
                 "date_happened": 1628017283,
                 "alert_type": "info",
@@ -55,7 +56,7 @@ Will return the following STIX observable:
 ```json
 {
     "type": "bundle",
-    "id": "bundle--261ea1e6-20b2-4191-b56d-04333e059964",
+    "id": "bundle--2cded6c0-e4be-4130-bafe-5fed3fd77cea",
     "spec_version": "2.0",
     "objects": [
         {
@@ -65,41 +66,120 @@ Will return the following STIX observable:
             "identity_class": "events"
         },
         {
-            "id": "observed-data--e3cf92ee-f838-4a32-a292-6f2d280c38fd",
+            "id": "observed-data--4d8d91fe-acec-4c3a-9933-a80ab987a490",
             "type": "observed-data",
             "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-            "created": "2021-09-02T05:30:23.823Z",
-            "modified": "2021-09-02T05:30:23.823Z",
+            "created": "2021-10-27T04:41:26.710Z",
+            "modified": "2021-10-27T04:41:26.710Z",
             "objects": {
                 "0": {
                     "type": "x-ibm-finding",
-                    "time_observed": "1970-01-19T20:13:37.283Z"
+                    "time_observed": "1970-01-19T21:23:43.438Z"
                 },
                 "1": {
+                    "type": "x-oca-event",
+                    "created": "1970-01-19T21:23:43.438Z",
+                    "outcome": "A new application key has been created.",
+                    "original_ref": "3",
+                    "code": 6173353997162745223
+                },
+                "2": {
                     "type": "x-datadog-event",
                     "alert_type": "info",
-                    "title": "An API key has been created.",
-                    "text": "API key getevents created by qradar10.34.38.141@gmail.com in org qradar",
                     "tags": [
                         "account",
                         "audit"
                     ],
-                    "device_name": "windows-GS-2190",
-                    "priority": "normal",
-                    "event_id": 6102786433786642502
+                    "priority": "normal"
                 },
-                "2": {
-                    "type": "domain-name",
-                    "value": "i-deadbeef"
+                "3": {
+                    "type": "artifact",
+                    "payload_bin": "QXBwbGljYXRpb24ga2V5IFdpbmRvd3MgY3JlYXRlZCBieSBxcmFkYXIxNDFAeWFob28uY29tIGluIG9yZyBRcmFkYXI="
                 }
             },
-            "first_observed": "2021-09-02T05:30:23.823Z",
-            "last_observed": "2021-09-02T05:30:23.823Z",
+            "first_observed": "1970-01-19T21:23:43.438Z",
+            "last_observed": "1970-01-19T21:23:43.438Z",
             "number_observed": 1
         }
     ]
 }
 ```
+
+Dialect: processes
+`python3 main.py translate datadog results '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "datadog", "identity_class": "events"}' '[{
+            "cmdline": "System",
+            "timestamp": "2021-10-27T04:56:31",
+            "start": "2021-04-11T02:35:56",
+            "user": "NT AUTHORITY\\SYSTEM",
+            "pid": 4,
+            "ppid": 0,
+            "host": "win10vm4",
+            "tags": [
+                "host:win10vm4",
+                "user:NT_AUTHORITY\\SYSTEM",
+                "command:System",
+                "state_zombie:false"
+            ]
+        }]'`
+
+Will return the following STIX observable:
+
+```json
+{
+    "type": "bundle",
+    "id": "bundle--f2a6f293-b84b-4544-b94c-8fc34424597e",
+    "spec_version": "2.0",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "datadog",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--af6f4917-7147-460d-8b93-e990e735ff82",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2021-10-27T05:01:14.803Z",
+            "modified": "2021-10-27T05:01:14.803Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "command_line": "System",
+                    "created_time": "2021-10-27T04:56:31",
+                    "creator_user_ref": "2",
+                    "pid": 4
+                },
+                "1": {
+                    "type": "x-ibm-finding",
+                    "start": "2021-04-11T02:35:56"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\SYSTEM"
+                },
+                "3": {
+                    "type": "domain-name",
+                    "value": "win10vm4"
+                },
+                "5": {
+                    "type": "x-datadog-event",
+                    "tags": [
+                        "host:win10vm4",
+                        "user:NT_AUTHORITY\\SYSTEM",
+                        "command:System",
+                        "state_zombie:false"
+                    ]
+                }
+            },
+            "first_observed": "2021-10-27T05:01:14.803Z",
+            "last_observed": "2021-10-27T05:01:14.803Z",
+            "number_observed": 1
+        }
+    ]
+}
+```
+
 ## Transmit
 
 ### Transmit functions
