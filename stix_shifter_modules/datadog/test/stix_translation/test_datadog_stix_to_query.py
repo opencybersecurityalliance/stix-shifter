@@ -17,12 +17,14 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_ipv4_query(self, mock_time):
         stix_pattern = "[x-oca-event:code = 12345678 OR domain-name:value = 'abc.com']"
         query = translation.translate('datadog', 'query', 'datadog', stix_pattern)
+        print(json.dumps(query['queries'], indent=4))
         queries = ['{"query": {"host": "abc.com", "start": 12345378, "end": 12345678}, "source": "events"}',
                    '{"query": {"id": 12345678, "start": 12345378, "end": 12345678}, "source": "events"}',
                    '{"query": {"id_str": "12345678", "start": 12345378, "end": 12345678}, "source": "events"}',
                    '{"query": {"host": "abc.com", "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"id": 12345678, "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"id_str": "12345678", "start": 12345378, "end": 12345678}, "source": "processes"}']
+        print(json.dumps(queries, indent=4))
         assert query['queries'] == queries
 
     @patch('time.time', return_value=12345678)
