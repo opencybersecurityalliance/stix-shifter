@@ -25,7 +25,7 @@ class TestStixToQuery(unittest.TestCase, object):
                    '{"query": {"id": 12345678, "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"id_str": "12345678", "start": 12345378, "end": 12345678}, "source": "processes"}']
         print(json.dumps(queries, indent=4))
-        assert query['queries'] == queries
+        assert set(query['queries']) == set(queries)
 
     @patch('time.time', return_value=12345678)
     def test_domain_name_query(self, mock_time):
@@ -189,8 +189,8 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_IN_query(self, mock_time):
         stix_pattern = "[x-datadog-event:alert_type IN ('alert_type', 'default')]"
         query = translation.translate('datadog', 'query', '{}', stix_pattern)
-        queries = ['{"query": {"alert_type": ["alert_type", "default"], "start": 12345378, "end": 12345678}, "source": "events"}',
-                   '{"query": {"alert_type": ["alert_type", "default"], "start": 12345378, "end": 12345678}, "source": "processes"}']
+        queries = ['{"query": {"alert_type": ["alert_type", "default"], "start": 12345378, "end": 12345678}, "source": "processes"}',
+                    '{"query": {"alert_type": ["alert_type", "default"], "start": 12345378, "end": 12345678}, "source": "events"}']
         _test_query_assertions(query, queries)
 
     def test_invalid_stix_pattern(self):
