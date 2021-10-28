@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_results_connector im
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
+import traceback
 
 
 class ResultsConnector(BaseResultsConnector):
@@ -26,12 +27,22 @@ class ResultsConnector(BaseResultsConnector):
             response_dict = json.loads(response_text)
         except ValueError as ex:
             self.logger.debug(response_text)
+            print('** STIX-SHIFTER QRADAR PARSE ERROR:')
+            print(response_text)
             error = Exception(f'Can not parse response: {ex} : {response_text}')
         
         if 200 <= response_code <= 299:
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:
+            print('** STIX-SHIFTER QRADAR ERROR:')
+            print(response_text)
+            print('** RESPONSE:')
+            print(response)
+            print('** ERROR:')
+            print(error)
+            print('** STACK TRACE:')
+            print(traceback.extract_stack())
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
 
         return return_obj
