@@ -169,7 +169,7 @@ class QueryStringPatternTranslator:
                     hash_string = 'fileHash/hashType'
                     hash_type = stix_field.split('.')[1] if mapped_field == 'fileStates.fileHash.hashValue' else \
                         stix_field.split('.')[2]
-                    comparison_string += "({collection_name}/any({fn}:{fn}/{hash_string} {comparator} '{value}')" \
+                    comparison_string += "({collection_name}/any({fn}:{fn}/{hash_string} {comparator} {value})" \
                         .format(collection_name=collection_name, fn=lambda_func, hash_string=hash_string,
                                 comparator='eq', value=hash_type.lower().replace('-', ''))
                     if comparator == 'contains':

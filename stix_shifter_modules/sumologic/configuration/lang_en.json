@@ -1,0 +1,25 @@
+{
+    "connection": {
+        "region": {
+            "label": "Enter Region",
+            "description": "Enter the region for your SumoLogic instance.",
+            "placeholder": "us1"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "access_id": {
+                "label": "Access ID",
+                "description": "Enter your Access ID"
+            },
+            "access_key": {
+                "label": "Access Key",
+                "description": "Enter your Access key"
+            }
+        }
+    }
+}

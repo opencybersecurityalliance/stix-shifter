@@ -93,4 +93,3 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_all_mappings_stix_2_1(self):
         _test_mappings(FROM_STIX_MAPPINGS_2_1, "2.1")
-
