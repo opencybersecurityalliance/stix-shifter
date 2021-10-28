@@ -22,6 +22,7 @@ class ResultsConnector(BaseResultsConnector):
         return_obj = dict()
         error = None
         response_text = response.read()
+        response_dict = None
 
         try:
             response_dict = json.loads(response_text)
@@ -31,7 +32,7 @@ class ResultsConnector(BaseResultsConnector):
             print(response_text)
             error = Exception(f'Can not parse response: {ex} : {response_text}')
         
-        if 200 <= response_code <= 299:
+        if 200 <= response_code <= 299 or error is not None:
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:
