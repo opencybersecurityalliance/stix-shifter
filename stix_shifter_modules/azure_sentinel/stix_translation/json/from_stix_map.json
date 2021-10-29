@@ -27,8 +27,8 @@
     "fields": {
       "parent_directory_ref.path": ["fileStates.path"],
       "name": ["fileStates.name"],
-      "hashes.SHA-256": ["fileStates.fileHash.hashValue"],
-      "hashes.SHA-1": ["fileStates.fileHash.hashValue"],
+      "hashes.'SHA-256'": ["fileStates.fileHash.hashValue"],
+      "hashes.'SHA-1'": ["fileStates.fileHash.hashValue"],
       "hashes.MD5": ["fileStates.fileHash.hashValue"],
       "hashes.authenticodeHash256": ["fileStates.fileHash.hashValue"],
       "hashes.lsHash": ["fileStates.fileHash.hashValue"],
