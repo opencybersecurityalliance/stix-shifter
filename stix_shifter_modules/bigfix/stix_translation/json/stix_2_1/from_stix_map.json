@@ -2,8 +2,8 @@
   "file": {
     "fields": {
       "name": ["file.name", "process.name"],
-      "hashes.SHA-256": ["file.sha256"],
-      "hashes.SHA-1": ["file.sha1"],
+      "hashes.'SHA-256'": ["file.sha256"],
+      "hashes.'SHA-1'": ["file.sha1"],
       "hashes.MD5": ["file.md5"],
       "parent_directory_ref.path": ["file.folder"],
       "size": ["file.size"]

@@ -56,16 +56,10 @@ def _translate_query(stix_pattern, options={}):
     return translation.translate('mysql', 'query', '{}', stix_pattern, options)
 
 
-def _add_single_quotes(stix_property):
-    stix_property = re.sub("SHA-256", "'SHA-256'", stix_property)
-    stix_property = re.sub("MD5", "'MD5'", stix_property)
-    return stix_property
 
 def _test_mappings(mappings, stix_spec='2.0'):
     for stix_object, value in mappings.items():
         for stix_property, field_list in value["fields"].items():
-            if stix_object == 'file':
-                stix_property = _add_single_quotes(stix_property)
             field_count = len(field_list)
             stix_pattern = "["
             for field in field_list:

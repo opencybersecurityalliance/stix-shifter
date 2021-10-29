@@ -35,8 +35,8 @@
         "cim_type": "email",
         "fields": {
             "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5": "file_hash",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.SHA-1": "file_hash",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.SHA-256": "file_hash",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-1'": "file_hash",
+            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-256'": "file_hash",
             "body_multipart.[*].'mime-part-type'.body_raw_ref.name": "file_name",
             "body_multipart.[*].'mime-part-type'.body_raw_ref.size": "file_size",
             "to_refs.[*].value": "recipient",
@@ -51,8 +51,8 @@
         "cim_type": "endpoint",
         "fields": {
             "hashes.MD5": "file_hash",
-            "hashes.SHA-1": "file_hash",
-            "hashes.SHA-256": "file_hash",
+            "hashes.'SHA-1'": "file_hash",
+            "hashes.'SHA-256'": "file_hash",
             "name": ["file_name", "process"],
             "ctime": "file_create_time",
             "mtime": "file_modify_time",
@@ -131,8 +131,8 @@
     "x509-certificate": {
         "cim_type": "certificate",
         "fields": {
-            "hashes.SHA-256": "ssl_hash",
-            "hashes.SHA-1": "ssl_hash",
+            "hashes.'SHA-256'": "ssl_hash",
+            "hashes.'SHA-1'": "ssl_hash",
             "version": "ssl_version",
             "serial_number": "ssl_serial",
             "signature_algorithm": "ssl_signature_algorithm",

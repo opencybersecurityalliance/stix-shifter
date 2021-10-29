@@ -72,15 +72,15 @@
         "DeviceRegistryEvents.InitiatingProcessFileName",
         "DeviceRegistryEvents.InitiatingProcessParentFileName"
       ],
-      "hashes.SHA-1": [
-        "DeviceFileEvents.SHA1",
+      "hashes.'SHA-1'": [
+        "DeviceFileEvents.'SHA1'",
         "DeviceFileEvents.InitiatingProcessSHA1",
         "DeviceProcessEvents.SHA1",
         "DeviceProcessEvents.InitiatingProcessSHA1",
         "DeviceNetworkEvents.InitiatingProcessSHA1",
         "DeviceRegistryEvents.InitiatingProcessSHA1"
       ],
-      "hashes.SHA-256": [
+      "hashes.'SHA-256'": [
         "DeviceFileEvents.SHA256",
         "DeviceFileEvents.InitiatingProcessSHA256",
         "DeviceProcessEvents.SHA256",
@@ -158,7 +158,7 @@
       ],
       "child_refs.creator_user_ref.account_login": ["DeviceProcessEvents.AccountName"],
       "creator_user_ref.account_login": ["DeviceProcessEvents.InitiatingProcessAccountName"],
-      "image_ref.hashes.SHA-1": [
+      "image_ref.hashes.'SHA-1'": [
         "DeviceFileEvents.SHA1",
         "DeviceFileEvents.InitiatingProcessSHA1",
         "DeviceProcessEvents.SHA1",
@@ -166,7 +166,7 @@
         "DeviceNetworkEvents.InitiatingProcessSHA1",
         "DeviceRegistryEvents.InitiatingProcessSHA1"
       ],
-      "image_ref.hashes.SHA-256": [
+      "image_ref.hashes.'SHA-256'": [
         "DeviceFileEvents.SHA256",
         "DeviceFileEvents.InitiatingProcessSHA256",
         "DeviceProcessEvents.SHA256",
@@ -177,10 +177,10 @@
       "child_refs.image_ref.hashes.MD5": [
         "DeviceProcessEvents.MD5"
       ],
-      "child_refs.image_ref.hashes.SHA-256": [
+      "child_refs.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.SHA256"
       ],
-      "child_refs.image_ref.hashes.SHA-1": [
+      "child_refs.image_ref.hashes.'SHA-1'": [
         "DeviceProcessEvents.SHA1"
       ],
       "image_ref.hashes.MD5": [
@@ -371,7 +371,7 @@
         "DeviceRegistryEvents.InitiatingProcessCommandLine",
         "DeviceFileEvents.InitiatingProcessCommandLine"
       ],
-      "process_ref.image_ref.hashes.SHA-256": [
+      "process_ref.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.InitiatingProcessSHA256",
         "DeviceNetworkEvents.InitiatingProcessSHA256",
         "DeviceRegistryEvents.InitiatingProcessSHA256",
@@ -398,7 +398,7 @@
         "DeviceRegistryEvents.InitiatingProcessMD5",
         "DeviceFileEvents.InitiatingProcessMD5"
       ],
-      "process_ref.image_ref.hashes.SHA-256": [
+      "process_ref.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.InitiatingProcessSHA256",
         "DeviceNetworkEvents.InitiatingProcessSHA256",
         "DeviceRegistryEvents.InitiatingProcessSHA256",
