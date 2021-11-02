@@ -22,7 +22,6 @@ class ResultsConnector(BaseResultsConnector):
                 return_obj['data'] = response_dict['data']
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-            #print("RETURNING STIX OBJECT: \n{}".format(return_obj))
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))

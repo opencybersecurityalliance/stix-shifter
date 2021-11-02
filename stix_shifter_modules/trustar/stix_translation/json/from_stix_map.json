@@ -1,5 +1,5 @@
 {
-  "x-trustar": {
+  "x-trustar-query": {
     "fields": {
       "x_searchTerm": ["searchTerm"],
       "x_type": ["entityTypes"],

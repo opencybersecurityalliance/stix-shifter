@@ -3,6 +3,7 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import Obs
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.utils.error_response import ErrorResponder
 from datetime import datetime
 import base64
 import json
@@ -118,7 +119,9 @@ class QueryStringPatternTranslator:
             else:
                 # Test of input query has two of the same mapped fields, connector does not support complex queries 
                 if mapped_field in self.return_obj:
-                    self.return_obj['valid'] = False
+                    #self.return_obj['valid'] = False
+                    #ErrorResponder.fill_error(response, message="Query Not Supported")
+                    raise Exception("Query Not Supported")
                 else:
                     self.return_obj[mapped_field] = value
 
@@ -225,6 +228,7 @@ class QueryStringPatternTranslator:
                 expression, type(expression)))
 
     def parse_expression(self, pattern: Pattern):
+        self.return_obj = dict()
         return self._parse_expression(pattern)
 
 

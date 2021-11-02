@@ -15,8 +15,8 @@ class APIClient():
         self.client = RestApiClient(connection['host'])
         self.search_query = ""
         self.headers["Content-Type"] = "application/json"
-        self.report_limit = connection['report_limit']
-        self.max_number_pages = connection['max_number_pages']
+        self.report_limit = configuration['report_limit']
+        self.max_number_pages = configuration['max_number_pages']
         self.results_code = 200
         self.success = True
 
@@ -24,26 +24,13 @@ class APIClient():
     def ping_data_source(self):
         # Pings the data source
         response = self.get_token()
-        if response['code'] == 200:
-            self.token = json.loads(response['data'])['access_token']
-        else:
-            return response
-        
-        self.headers["Authorization"] = "Bearer {}".format(self.token)
-
-        ping_result = self.ping_trustar() 
-        return ping_result 
+        return response
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         response = {}
         try:
-            query = json.loads(search_id)
-            if 'valid' in query and query['valid'] is False:
-                response = { "success": False, "code": 2000, "data": []}
-                ErrorResponder.fill_error(response, message="Query Not Supported",)
-            else:    
-                response = self._get_results(search_id, range_start, range_end)
+            response = self._get_results(search_id, range_start, range_end)
         except Exception as e:
             response = {'success':False, 'code': 2000, 'data': []}
 
@@ -103,7 +90,6 @@ class APIClient():
         headers = dict()
         headers['Authorization'] = "Basic %s" % en_auth.decode()
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
-        
         response = self.client.call_api("oauth/token", 'POST', headers=headers, data=data)
         resp = self._handle_errors(response)
         
@@ -307,6 +293,7 @@ class APIClient():
         resp = dict()
         response = self.client.call_api("api/1.3/ping","GET", headers=self.headers)
         resp = self._handle_errors(response)
+        
         return resp
 
     # Merge base Indicator object with each indicators metadata and summaries if provided 
