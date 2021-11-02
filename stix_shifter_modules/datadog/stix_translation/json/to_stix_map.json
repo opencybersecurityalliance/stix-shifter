@@ -1,0 +1,125 @@
+{
+  "host": [
+    {
+      "key": "domain-name.value",
+      "object": "domain-name"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "x-oca-event",
+      "references": "domain-name"
+    }
+  ],
+  "text": [
+    {
+      "key": "artifact.payload_bin",
+      "transformer": "ToBase64",
+      "object": "artifact"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "x-oca-event",
+      "references": "artifact"
+    }
+  ],
+  "source": {
+    "key": "x-oca-event.module",
+    "object": "x-oca-event"
+  },
+  "id": {
+    "key": "x-oca-event.code",
+    "object": "x-oca-event"
+  },
+  "id_str": {
+    "key": "x-oca-event.code",
+    "object": "x-oca-event"
+  },
+  "title":{
+    "key": "x-oca-event.outcome",
+    "object": "x-oca-event"
+  },
+  "device_name": {
+    "key": "x-oca-event.agent",
+    "object": "x-oca-event"
+  },
+  "date_happened": [
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "x-ibm-finding",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "x-oca-event.created",
+      "object": "x-oca-event",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "start": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "x-ibm-finding"
+    },
+    {
+      "key": "process.created_time",
+      "object": "process"
+    }
+  ],
+  "end": {
+    "key": "x-ibm-finding.end",
+    "object": "x-ibm-finding"
+  },
+  "priority": {
+    "key": "x-datadog-event.priority",
+    "object": "x-datadog-event"
+  },
+  "monitor_id": {
+    "key": "x-datadog-event.monitor_id",
+    "object": "x-datadog-event"
+  },
+  "tags": {
+    "key": "x-datadog-event.tags",
+    "object": "x-datadog-event"
+  },
+  "is_aggregate": {
+    "key": "x-datadog-event.unaggregated",
+    "object": "x-datadog-event"
+  },
+  "alert_type": {
+    "key": "x-datadog-event.alert_type",
+    "object": "x-datadog-event"
+  },
+  "cmdline": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "pid": {
+    "key": "process.pid",
+    "object": "process",
+    "transformer": "ToInteger"
+  },
+  "timestamp": {
+    "key": "process.created_time",
+    "object": "process"
+  },
+  "user": [
+   {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "useraccount"
+    }
+  ]
+}
