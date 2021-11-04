@@ -12,7 +12,7 @@ RUN microdnf update -y && rm -fr /var/cache/yum && \
 
 COPY ./bundle/ /opt/app/
 RUN chown -R 1001 /opt/app/
-RUN pip3 install 'cryptography==2.9.2'
+RUN pip3 install 'cryptography==35.0.0'
 RUN pip3 install 'pyopenssl==19.1.0'
 
 USER 1001
