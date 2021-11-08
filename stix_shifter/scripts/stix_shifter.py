@@ -161,6 +161,8 @@ def main():
     )
     execute_parser.add_argument('-d', '--debug', action='store_true',
                                 help='Print detail logs for debugging')
+    execute_parser.add_argument('-r', '--results', type=int, default=10,
+                                help='Maximum number of returned results (default 10)')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -297,7 +299,7 @@ def main():
                         log.debug(status)
                     else:
                         raise RuntimeError("Fetching status failed")               
-                result = transmission.results(search_id, 0, 9)
+                result = transmission.results(search_id, 0, args.results - 1)
                 if result["success"]:
                     log.debug("Search {} results is:\n{}".format(search_id, result["data"]))
 
