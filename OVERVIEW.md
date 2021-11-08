@@ -123,7 +123,7 @@ Each connector supports a set of STIX objects and properties as defined in the c
 
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
 
-List updated: September 28, 2021
+List updated: October 29, 2021
 
 |         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
 | :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
@@ -148,6 +148,10 @@ List updated: September 28, 2021
 |       [Secret Server](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
 |       [One Login](adapter-guide/connectors/onelogin_supported_stix.md)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
 |       MySQL                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
+|       [Sumo Logic](adapter-guide/connectors/sumologic_supported_stix.md)       |    sumologic    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
+|       [Datadog](adapter-guide/connectors/datadog_supported_stix.md)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
+|       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
+|       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 
 
 
