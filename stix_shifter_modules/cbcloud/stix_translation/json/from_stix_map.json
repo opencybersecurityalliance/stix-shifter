@@ -13,7 +13,7 @@
     "fields": {
       "name": ["process_name"],
       "hashes.MD5": ["process_hash"],
-      "hashes.SHA-256": ["process_hash", "process_sha256"]
+      "hashes.'SHA-256'": ["process_hash", "process_sha256"]
     }
   },
   "process": {

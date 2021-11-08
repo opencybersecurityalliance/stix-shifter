@@ -35,7 +35,12 @@ class STIXQueryBuilder(STIXPatternListener):
             logger.debug("{} {} {}".format("ObjectPath", ctx, ctx.getText()))
         # Single quotes are valid for any path but required for those with dashes.
         # They're not really relevant once they're parsed out, so just remove them
-        self.push(ctx.getText().replace("'", ""))
+        # self.push(ctx.getText().replace("'", ""))
+
+        # Update Oct 4, 2021
+        # Since we are spcifying single quotes in the mapping for the properties with dashes
+        # There's no need to remove the quotes any more
+        self.push(ctx.getText())
 
     def exitPropTestLike(self, ctx: STIXPatternParser.PropTestLikeContext) -> None:
         if DEBUG:

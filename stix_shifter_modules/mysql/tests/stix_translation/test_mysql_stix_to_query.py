@@ -53,8 +53,8 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_all_mappings(self):
         for stix_object, value in FROM_STIX_MAPPINGS.items():
             for stix_property, field_list in value["fields"].items():
-                if stix_object == 'file':
-                    stix_property = _add_single_quotes(stix_property)
+                # if stix_object == 'file':
+                #     stix_property = _add_single_quotes(stix_property)
                 field_count = len(field_list)
                 stix_pattern = "["
                 for field in field_list:
