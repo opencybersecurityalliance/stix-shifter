@@ -27,7 +27,11 @@ CONNECTORS = {
     "crowdstrike": 'CrowdStrike Falcon',
     "trendmicro_vision_one": "Trend Micro Vision One",
     "onelogin": "OneLogin",
-    "secretserver": "Secret Server"
+    "secretserver": "Secret Server",
+    "sumologic": "Sumo Logic",
+    "datadog": "Datadog",
+    "proofpoint": "Proofpoint (SIEM API)",
+    "infoblox": "Infoblox BloxOne Threat Defense"
 }
 
 now = datetime.now()
