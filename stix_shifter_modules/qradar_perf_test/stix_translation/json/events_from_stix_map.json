@@ -95,9 +95,9 @@
   "process": {
     "fields": {
       "pid": ["ProcessId"],
-      "name": ["ProcessName", "Image", "ParentImage"],
-      "binary_ref.name": ["Image"],
-      "binary_ref.parent_directory_ref.path": ["Image"],
+      "name": ["ProcessName", "Image", "ParentImage", "TargetImage"],
+      "binary_ref.name": ["Image", "TargetImage"],
+      "binary_ref.parent_directory_ref.path": ["Image", "TargetImage"],
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
@@ -114,7 +114,7 @@
       "agent": ["logsourcename"],
       "provider": ["logsourcetypename"],
       "process_ref.command_line": ["ProcessCommandLine"],
-      "process_ref.binary_ref.name": ["Image"],
+      "process_ref.binary_ref.name": ["Image", "TargetImage"],
       "process_ref.parent_ref.command_line": ["ParentCommandLine"],
       "process_ref.creator_user_ref.user_id": ["username"],
       "process_ref.name": ["ProcessName"],
@@ -142,15 +142,6 @@
     "fields": {
       "key": ["ObjectName", "RegistryKey"],
       "values[*].name": ["RegistryValueName"]
-    }
-  },
-  "x-ibm-windows": {
-    "fields": {
-      "targetimage": ["TargetImage"],
-      "grantedaccess": ["GrantedAccess"],
-      "calltrace": ["CallTrace"],
-      "sourceimage": ["Image"],
-      "pipename": ["PipeName"]
     }
   }
 }
