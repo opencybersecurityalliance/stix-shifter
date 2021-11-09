@@ -363,9 +363,7 @@ class DataSourceObjToStixObj:
 
             if contributing_properties:
                 for contr_prop in contributing_properties:
-                    print("looking at property {}".format(contr_prop))
                     if type(contr_prop) is list: # list of hash types
-                        print("dealing with hashes")
                         for hashtype in contr_prop:
                             hash_prop = "hashes.{}".format(hashtype)
                             if hash_prop in cybox:
