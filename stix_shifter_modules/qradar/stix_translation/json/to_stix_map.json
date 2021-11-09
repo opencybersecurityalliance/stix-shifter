@@ -491,8 +491,7 @@
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
     }
-  ]
-,
+  ],
   "flowinterface": {
     "key": "x-qradar.flow_interface",
     "object": "x-qradar"
