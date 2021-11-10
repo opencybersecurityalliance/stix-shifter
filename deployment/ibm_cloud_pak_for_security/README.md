@@ -34,6 +34,8 @@ Since the primary use-case for these scripts is to install a new or updated conn
 
     `cloudctl login -a <ICP CLUSTER URL> -u <USERNAME> -p <PASSWORD> -n <NAMESPACE>`
 
+    Note: there is a known issue when logged in as `kubeadmin` user via oc command, `oc login -u kubeadmin`
+
 9. Run the deployment script based on one of the following scenarios:
 
     ### A. Build the connector image and then deploy into your Kubernetes cluster
