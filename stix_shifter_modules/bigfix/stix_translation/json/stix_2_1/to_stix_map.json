@@ -1,0 +1,140 @@
+{
+    "file_name": {
+        "key": "file.name",
+        "object": "file"
+    },
+    "file_path": [
+        {
+            "key": "directory.path",
+            "object": "directory",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "process",
+            "references": "file"
+        }
+    ],
+    "sha256hash": {
+        "key": "file.hashes.SHA-256",
+        "object": "file"
+    },
+    "sha1hash": {
+        "key": "file.hashes.SHA-1",
+        "object": "file"
+    },
+    "md5hash": {
+        "key": "file.hashes.MD5",
+        "object": "file"
+    },
+    "file_size": {
+        "key" : "file.size",
+        "object": "file",
+        "transformer": "ToInteger"
+    },
+    "process_id": {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+    },
+   "process_ppid": [
+    {
+      "key": "process.pid",
+      "object": "parent_process",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+    ],
+    "process_user": [
+      {
+        "key":"user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "user"
+      }
+    ],
+    "timestamp": [
+        {
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp",
+            "cybox": false
+        }
+    ],
+    "computer_identity": {
+      "key": "x-bigfix-relevance.computer_identity"
+    },
+    "event_count": {
+        "key": "number_observed",
+        "cybox": false,
+        "transformer": "ToInteger"
+    },
+    "local_address":
+        [
+            {
+                "key": "ipv4-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "src_ip"
+            }
+        ],
+    "remote_address": [
+      {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "local_port": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+    },
+    "remote_port": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+    },
+    "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "transformer": "ToLowercaseArray"
+    },
+   "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "src_mac"
+      }
+    ]
+}

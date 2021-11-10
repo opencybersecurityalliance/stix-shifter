@@ -13,28 +13,6 @@ NUMBER_OBSERVED_KEY = 'number_observed'
 FIRST_OBSERVED_KEY = 'first_observed'
 LAST_OBSERVED_KEY = 'last_observed'
 
-STIX_2_1_PROPERTY_UPDATE_MAP = {
-    "directory": {
-        "created": "ctime",
-        "modified": "mtime",
-        "accessed": "atime"
-    },
-    "file": {
-        "created": "ctime",
-        "modified": "mtime",
-        "accessed": "atime"
-    },
-    "process": {
-        "created": "created_time",
-        "name": "", # removed from 2.1
-        "arguments": "", # removed from 2.1
-        "binary_ref": "image_ref"
-    },
-    "windows-registry-key": {
-        "modified": "modified_time"
-    }
-}
-
 
 # convert JSON data to STIX object using map_data and transformers
 def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
@@ -129,12 +107,6 @@ class DataSourceObjToStixObj:
             if (isinstance(child_obj[split_key[-1]], list)):
                 child_obj[split_key[-1]].extend(stix_value)  # append to existing list
 
-    @staticmethod
-    def _convert_stix_property_2_1(stix_object, stix_property):
-        if stix_object in STIX_2_1_PROPERTY_UPDATE_MAP:
-            if stix_property in STIX_2_1_PROPERTY_UPDATE_MAP[stix_object]:
-                stix_property = STIX_2_1_PROPERTY_UPDATE_MAP[stix_object][stix_property]
-        return stix_property
 
     def _handle_cybox_key_def(self, key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
         """
@@ -146,11 +118,6 @@ class DataSourceObjToStixObj:
         :param obj_name: the object name derived from the mapping file
         """
         obj_type, obj_prop = key_to_add.split('.', 1)
-        if self.spec_version == "2.1":
-            obj_prop = self._convert_stix_property_2_1(obj_type, obj_prop)
-        if not obj_prop:
-            # The property was removed from 2.1 so return early
-            return
         
         objs_dir = observation['objects']
 
