@@ -1,6 +1,7 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.mysql.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+import json
 
 MODULE = 'mysql'
 RESULTS = 'results'
@@ -195,9 +196,13 @@ class TestTransform(object):
         assert "image_ref" not in process_object
 
     def test_STIX_2_1_cybox_observables(self):
-        
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
+        options = {
+            "stix_2.1": True
+        }
+        entry_point = EntryPoint(options=options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        # result_bundle = json_to_stix_translator.convert_to_stix(
+        #     DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" not in result_bundle
@@ -269,8 +274,8 @@ class TestTransform(object):
         assert process_object, 'process object type not found'
         assert "name" not in process_object
         assert "pid" in process_object and process_object['pid'] == DATA['process_id']
-        assert "arguments" not in process_object
-        assert "created_time" in process_object and process_object['created_time'] ==  TIMESTAMP
+        assert "arguments" in process_object and process_object['pid'] == DATA['process_id']
+        assert "created_time" in process_object and process_object['arguments'] == DATA['process_arguments']
         assert "created" not in process_object
         assert "image_ref" in process_object
         assert "binary_ref" not in process_object
