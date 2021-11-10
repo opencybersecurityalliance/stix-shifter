@@ -162,8 +162,9 @@ if [ -z "${IMAGE_URL}" ]; then
   fi
 fi
 
-echo "Logging in into internal registry..."
-docker login -u `oc whoami` -p `oc whoami -t` $REPOSITORY
+DOCKER_USER=`oc whoami`
+echo "Logging in into internal registry $REPOSITORY as $DOCKER_USER ..."
+docker login -u $DOCKER_USER -p `oc whoami -t` $REPOSITORY
 
 if [ ! -z "${IMAGE_URL}" ]; then
   echo "Pulling ${IMAGE_URL}"
