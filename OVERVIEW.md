@@ -516,7 +516,7 @@ You can add the `--results` option with an integer value at the end of your CLI 
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --results 50`
 
-### Save the STIX output to a file
+### Save the STIX results to a file
 
 You can add the `--file` option with a filename at the end of your CLI command to save the STIX results to a file (default is to print all output to the screen).
 
