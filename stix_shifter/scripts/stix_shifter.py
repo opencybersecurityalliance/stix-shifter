@@ -49,6 +49,8 @@ def main():
 
     # process arguments
     parent_parser = argparse.ArgumentParser(description='stix_shifter')
+    parent_parser.add_argument('-d', '--debug', action='store_true',
+                                  help='Print detail logs for debugging')
     parent_subparsers = parent_parser.add_subparsers(dest='command')
 
     # translate parser
@@ -71,8 +73,6 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
-    translate_parser.add_argument('-d', '--debug', action='store_true',
-                                  help='Print detail logs for debugging')
     # modules parser
     parent_subparsers.add_parser(MODULES, help='Get modules list')
 
@@ -101,32 +101,25 @@ def main():
         type=str,
         help='Data source authentication'
     )
-    transmit_parser.add_argument('-d', '--debug', action='store_true',
-                                  help='Print detail logs for debugging')
 
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
     operation_subparser.add_parser(stix_transmission.PING, help="Pings the data source")
     query_operation_parser = operation_subparser.add_parser(stix_transmission.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
-    query_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     results_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
-    results_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
     resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
     resultsstix_operation_parser.add_argument('offset', help='offset of results')
     resultsstix_operation_parser.add_argument('length', help='length of results')
     resultsstix_operation_parser.add_argument('data_source', help='STIX identity object representing a datasource')
-    resultsstix_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
-    status_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     delete_operation_parser = operation_subparser.add_parser(stix_transmission.DELETE, help="Delete a running query on the data source")
     delete_operation_parser.add_argument('search_id', help='id of query to remove')
-    delete_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     operation_subparser.add_parser(stix_transmission.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
@@ -159,8 +152,6 @@ def main():
         type=str,
         help='Query String'
     )
-    execute_parser.add_argument('-d', '--debug', action='store_true',
-                                help='Print detail logs for debugging')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -183,9 +174,6 @@ def main():
         type=str,
         help='SSL key filename'
     )
-
-    host_parser.add_argument('-d', '--debug', action='store_true',
-                             help='Print detail logs for debugging')
 
     args = parent_parser.parse_args()
 
