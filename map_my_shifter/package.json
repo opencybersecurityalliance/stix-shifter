@@ -2,10 +2,13 @@
   "name": "map-my-shifter",
   "version": "0.1.0",
   "homepage": "http://barvhaim.github.io/map-my-shifter",
-  "private": true,
   "main": "dist/lib_index.js",
   "module": "dist/lib_index.js",
   "files": [ "dist", "README.md" ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opencybersecurityalliance/stix-shifter"
+  },
   "dependencies": {
     "@carbon/colors": "^10.14.0",
     "@carbon/ibm-security": "^1.45.0",
