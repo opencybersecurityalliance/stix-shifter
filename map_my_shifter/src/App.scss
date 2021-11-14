@@ -1,0 +1,25 @@
+@import "@carbon/layout/scss/layout";
+@import "@carbon/type/scss/styles";
+@import "@carbon/colors/scss/colors";
+
+body {
+  background-color: $carbon--gray-100;
+}
+
+.bx--content {
+  background-color: $carbon--gray-100;
+}
+
+.page-title {
+  @include carbon--type-style("productive-heading-04");
+  margin-bottom: $spacing-04;
+}
+
+.section-title {
+  @include carbon--type-style("productive-heading-01");
+  margin-bottom: $spacing-03;
+}
+
+.bx--file__selected-file {
+  margin-bottom: $spacing-04 !important;
+}

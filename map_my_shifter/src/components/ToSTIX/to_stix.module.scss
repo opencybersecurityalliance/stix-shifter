@@ -1,0 +1,126 @@
+@import "@carbon/layout/scss/layout";
+@import "@carbon/type/scss/styles";
+@import "@carbon/colors/scss/colors";
+
+.mapping__objects {
+  margin-top: carbon--mini-units($count: 7);
+  margin-bottom: carbon--mini-units($count: 60);
+}
+
+.object__item_box {
+  margin-top: $spacing-05;
+  padding: $spacing-03 $spacing-05;
+  &:first-of-type {
+    padding-top: $spacing-05;
+  }
+}
+
+.object__item_content {
+  background-color: $carbon--gray-90;
+  padding: $spacing-05 $spacing-05;
+
+  .object_item__btn {
+    cursor: pointer;
+  }
+
+  .object_item__btn_disable {
+    cursor: default;
+    fill: $carbon--gray-40;
+  }
+
+  .object_item__title {
+    @include carbon--type-style("productive-heading-03");
+    padding-bottom: $spacing-02;
+  }
+
+  .object_item__edit_title {
+    padding-left: $spacing-05;
+    padding-bottom: $spacing-03;
+    margin-bottom: $spacing-04;
+  }
+
+  .object_item__map {
+    background-color: $carbon--gray-90;
+    margin-bottom: $spacing-07;
+    padding: $spacing-05 $spacing-05;
+    border: $spacing-01 solid $carbon--gray-30;
+  }
+
+  .object_item__field {
+    margin-top: $spacing-05;
+    padding-left: $spacing-04;
+    padding-right: $spacing-04;
+  }
+
+  .object_item_field__header {
+    padding-top: $spacing-02;
+    padding-bottom: $spacing-02;
+    margin-bottom: $spacing-04;
+    border-bottom: $spacing-01 solid $carbon--gray-30;
+  }
+}
+
+.modal {
+  padding: {
+    top: $spacing-03;
+    bottom: $spacing-10;
+  }
+  margin-top: $spacing-03;
+  margin-bottom: $spacing-13;
+}
+
+.combo_box {
+  background-color: $carbon--gray-80;
+  margin-left: $spacing-10;
+}
+
+.statistics__col {
+  background-color: $carbon--gray-90;
+  padding: {
+    top: $spacing-05;
+    bottom: $spacing-05;
+  }
+  .title {
+    @include carbon--type-style("body-short-01");
+  }
+  .coverage_percent {
+    @include carbon--type-style("productive-heading-04");
+    margin-top: $spacing-03;
+    margin-bottom: $spacing-03;
+  }
+  .coverage_count {
+    @include carbon--type-style("label-01");
+  }
+}
+
+.sticky__box {
+  max-height: carbon--mini-units($count: 60);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.minimap {
+  width: 90%;
+  background-color: $carbon--gray-80;
+}
+
+.minimap__tile {
+  padding-top: $spacing-03;
+  padding-bottom: $spacing-03;
+  margin-bottom: $spacing-01;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  color: $carbon--white-0;
+  background-color: $carbon--gray-90;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    cursor: pointer;
+    background-color: $carbon--gray-80;
+  }
+}
+
+.minimap__activeTile {
+  background-color: $carbon--gray-70;
+}

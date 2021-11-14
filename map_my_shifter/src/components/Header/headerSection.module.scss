@@ -1,0 +1,19 @@
+@import "@carbon/colors/scss/colors";
+@import "@carbon/type/scss/styles";
+@import "@carbon/layout/scss/layout";
+
+.tile__btn {
+  @include carbon--type-style("productive-heading-01");
+  padding: $spacing-05 $spacing-05;
+  color: $carbon--gray-20;
+  &:hover {
+    cursor: pointer;
+    color: $carbon--gray-40;
+  }
+}
+
+.tile__separator {
+  @include carbon--type-style("productive-heading-01");
+  padding: $spacing-05 $spacing-02;
+  color: $carbon--gray-40;
+}

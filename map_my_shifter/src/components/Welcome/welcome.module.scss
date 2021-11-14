@@ -1,0 +1,15 @@
+@import "@carbon/colors/scss/colors";
+@import "@carbon/type/scss/styles";
+@import "@carbon/layout/scss/layout";
+
+p {
+  @include carbon--type-style("body-short-02");
+  margin-bottom: $spacing-06;
+}
+
+.tile__btn {
+  height: 8.5rem;
+  @include carbon--type-style("productive-heading-03");
+  background-color: $carbon--gray-90;
+  padding: $spacing-05 $spacing-05;
+}

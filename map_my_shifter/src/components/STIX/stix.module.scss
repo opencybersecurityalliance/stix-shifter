@@ -1,0 +1,33 @@
+@import "@carbon/layout/scss/layout";
+@import "@carbon/type/scss/styles";
+@import "@carbon/colors/scss/colors";
+
+.full_height__col {
+  height: calc(100vh - 12rem);
+  padding-top: $spacing-05;
+}
+
+.add_fields__col {
+  overflow-x: auto;
+
+  .field__title {
+    color: $carbon--red-60;
+  }
+
+  .field__item {
+    padding-top: $spacing-02;
+    padding-bottom: $spacing-02;
+    margin-bottom: $spacing-03;
+    padding-left: $spacing-04;
+    cursor: default;
+  }
+  .colored {
+    color: $carbon--gray-60;
+  }
+  .hover {
+    &:hover {
+      background-color: $carbon--gray-60;
+      cursor: pointer;
+    }
+  }
+}

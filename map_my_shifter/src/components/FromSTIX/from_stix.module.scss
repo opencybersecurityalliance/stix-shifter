@@ -1,0 +1,58 @@
+@import "@carbon/layout/scss/layout";
+@import "@carbon/type/scss/styles";
+@import "@carbon/colors/scss/colors";
+
+.full_height__col {
+  height: calc(100vh - 12rem);
+  padding-top: $spacing-05;
+}
+
+.mappings_clear__btn {
+  @include carbon--type-style("helper-text-01");
+  color: $carbon--blue-40;
+  text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.mapping__col {
+  .mapping__item {
+    padding: $spacing-05 $spacing-05;
+    background-color: $carbon--gray-90;
+    .mapping__item_empty {
+      @include carbon--type-style("helper-text-01");
+      color: $carbon--red-60;
+    }
+    .mapping_item__title {
+      @include carbon--type-style("code-01");
+    }
+    .mapping_item__btn {
+      cursor: pointer;
+    }
+    .mapping_item__btn_top {
+      text-align: right;
+      padding-right: $spacing-05;
+    }
+    margin-bottom: $spacing-05;
+  }
+}
+
+.statistics__col {
+  background-color: $carbon--gray-90;
+  padding: {
+    top: $spacing-05;
+    bottom: $spacing-05;
+  }
+  .title {
+    @include carbon--type-style("body-short-01");
+  }
+  .coverage_percent {
+    @include carbon--type-style("productive-heading-04");
+    margin-top: $spacing-03;
+    margin-bottom: $spacing-03;
+  }
+  .coverage_count {
+    @include carbon--type-style("label-01");
+  }
+}
