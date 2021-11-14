@@ -1,7 +1,6 @@
 {
   "name": "map-my-shifter",
   "version": "0.1.0",
-  "homepage": "http://barvhaim.github.io/map-my-shifter",
   "main": "dist/lib_index.js",
   "module": "dist/lib_index.js",
   "files": [ "dist", "README.md" ],
