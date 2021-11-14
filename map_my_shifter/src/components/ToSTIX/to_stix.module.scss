@@ -124,3 +124,9 @@
 .minimap__activeTile {
   background-color: $carbon--gray-70;
 }
+
+
+.section_title {
+  @include carbon--type-style("productive-heading-01");
+  margin-bottom: $spacing-03;
+}

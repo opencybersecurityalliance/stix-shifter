@@ -4,7 +4,7 @@
 
 .full_height__col {
   height: calc(100vh - 12rem);
-  padding-top: $spacing-05;
+  padding-top: $spacing-05; 
 }
 
 .mappings_clear__btn {
@@ -55,4 +55,9 @@
   .coverage_count {
     @include carbon--type-style("label-01");
   }
+}
+
+.section_title {
+  @include carbon--type-style("productive-heading-01");
+  margin-bottom: $spacing-03;
 }

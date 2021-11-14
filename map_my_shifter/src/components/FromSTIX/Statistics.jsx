@@ -15,7 +15,7 @@ const Statistics = ({ officialObjectsCount, requiredObjectsCount }) => {
     <>
       <div className="bx--row">
         <div className={"bx--col"}>
-          <h4 className="section-title">Coverage Statistics</h4>
+          <h4 className={`${styles.section_title}`}>Coverage Statistics</h4>
         </div>
       </div>
 

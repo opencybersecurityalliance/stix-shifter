@@ -1,9 +1,13 @@
 {
+  "type": "module",
   "name": "map-my-shifter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/lib_index.js",
   "module": "dist/lib_index.js",
-  "files": [ "dist", "README.md" ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/opencybersecurityalliance/stix-shifter"

@@ -23,7 +23,7 @@ const Statistics = ({ stixMapping }) => {
     <>
       <div className="bx--row">
         <div className={"bx--col"}>
-          <h4 className="section-title">Official VS Custom STIX fields</h4>
+          <h4 className={`${styles.section_title}`}>Official VS Custom STIX fields</h4>
         </div>
       </div>
 

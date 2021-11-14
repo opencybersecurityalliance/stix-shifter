@@ -17,7 +17,7 @@ const Mapping = () => {
     <>
       <div className="bx--row">
         <div className="bx--col">
-          <h4 className="section-title">
+          <h4 className={`${styles.section_title}`}>
             {Object.keys(stixMapping).length} Total Fields{" "}
             <span
               onClick={() => {
