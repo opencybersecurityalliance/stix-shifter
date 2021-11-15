@@ -375,8 +375,7 @@ class DataSourceObjToStixObj:
                     unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
                 else:
                     self.logger.error("STIX object '{}' needs at least one of the following properties to generate ID {}".format(cybox_type, contributing_properties))
-            else: # STIX process or custom object
-                print("USING UUID4 for {}".format(cybox_type))
+            else: # STIX process or custom object used UUID4 for identifier
                 unique_id = "{}--{}".format(cybox_type, str(uuid.uuid4()))
 
             # set id mapping value to new id
