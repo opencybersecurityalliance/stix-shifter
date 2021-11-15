@@ -1,4 +1,4 @@
-##### Updated on 09/28/21
+##### Updated on 10/29/21
 ## Elasticsearch ECS
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
@@ -80,6 +80,7 @@
 | process | parent_ref | pid |
 | process | creator_user_ref | name |
 | process | creator_user_ref | id |
+| process | x_ttp_tags | tags |
 | <br> | | |
 | software | name | name |
 | software | vendor | type |
