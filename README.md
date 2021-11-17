@@ -17,6 +17,7 @@ For more information about this project, see the [STIX-shifter Overview](https:/
 ### Map My Shifter
 
 The map-my-shifter project is a STIX-Shifter Connector's Mapping Builder, which provides a visual way for building mapping files for STIX-Shifter project.
+
 [Click here](map_my_shifter/README.md) to see the README file.
 
 ### Dependencies
