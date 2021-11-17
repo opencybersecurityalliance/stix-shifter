@@ -163,8 +163,6 @@ def main():
                                 help='Print detail logs for debugging')
     execute_parser.add_argument('-r', '--results', type=int, default=10,
                                 help='Maximum number of returned results (default 10)')
-    execute_parser.add_argument('-f', '--file', type=str,
-                                help='Save STIX results to file.')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -317,14 +315,8 @@ def main():
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
-
-        if args.file:
-            f = open(args.file, "w")
-            f.write(json.dumps(result, indent=4, sort_keys=False))
-            f.close()
-            log.info('STIX Results saved to: ' + args.file)
-        else:
-            log.info('STIX Results: \n' + json.dumps(result, indent=4, sort_keys=False))
+        log.info('Printing STIX Results:')
+        print(json.dumps(result, indent=4, sort_keys=False))
 
         exit(0)
 
