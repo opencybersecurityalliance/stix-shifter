@@ -152,13 +152,8 @@ def main():
         type=str,
         help='Query String'
     )
-<<<<<<< HEAD
-    execute_parser.add_argument('-d', '--debug', action='store_true',
-                                help='Print detail logs for debugging')
     execute_parser.add_argument('-r', '--results', type=int, default=10,
                                 help='Maximum number of returned results (default 10)')
-=======
->>>>>>> develop
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
