@@ -303,7 +303,7 @@ def main():
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
-        log.info('STIX Results (written to stdout):')
+        log.info('STIX Results (written to stdout):\n')
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
