@@ -152,6 +152,8 @@ def main():
         type=str,
         help='Query String'
     )
+    execute_parser.add_argument('-r', '--results', type=int, default=10,
+                                help='Maximum number of returned results (default 10)')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -285,7 +287,7 @@ def main():
                         log.debug(status)
                     else:
                         raise RuntimeError("Fetching status failed")               
-                result = transmission.results(search_id, 0, 9)
+                result = transmission.results(search_id, 0, args.results - 1)
                 if result["success"]:
                     log.debug("Search {} results is:\n{}".format(search_id, result["data"]))
 
@@ -301,7 +303,7 @@ def main():
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
-        log.info('STIX Results(written to stdout): \n')
+        log.info('STIX Results (written to stdout):\n')
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
