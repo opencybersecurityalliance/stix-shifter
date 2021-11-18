@@ -12,7 +12,7 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         try:
-            min_range = int(offset) - 1
+            min_range = int(offset)
             max_range = min_range + int(length)
 
             # Grab the response, extract the response code, and convert it to readable json
@@ -42,6 +42,7 @@ class ResultsConnector(BaseResultsConnector):
                             msg["is_multipart"] = True
                         else: msg["is_multipart"] = False
 
+                    print("newdata :", newdata)
                     return_obj['data'] = newdata
 
                 except json.decoder.JSONDecodeError as err:
