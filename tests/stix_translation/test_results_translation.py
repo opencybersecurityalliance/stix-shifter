@@ -9,8 +9,6 @@ TRANSFORMERS = get_module_transformers(MODULE)
 EPOCH = 1634657528000
 TIMESTAMP = "2021-10-19T15:32:08.000Z"
 
-entry_point = EntryPoint()
-MAP_DATA = entry_point.get_results_translator().map_data
 DATA_SOURCE = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -80,9 +78,8 @@ class TestTransform(object):
 
     def test_common_prop(self):
         DATA = {"entry_time": EPOCH, "entry_time": EPOCH, "eventcount": 1}
-
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
+        entry_point = EntryPoint()
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
@@ -106,9 +103,8 @@ class TestTransform(object):
         assert observed_data['last_observed']
 
     def test_STIX_2_0_cybox_observables(self):
-        
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
+        entry_point = EntryPoint()
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" in result_bundle
@@ -201,8 +197,6 @@ class TestTransform(object):
         }
         entry_point = EntryPoint(options=options)
         result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
-        # result_bundle = json_to_stix_translator.convert_to_stix(
-        #     DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" not in result_bundle
