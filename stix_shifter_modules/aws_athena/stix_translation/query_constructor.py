@@ -272,8 +272,14 @@ class QueryStringPatternTranslator:
                                        [start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z', stop_time.strftime(
                                            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z']]
             start_stop_list = [each for each in time_range_list]
+            
+            if self.service_type == 'guardduty':
+                startstopattr = 'updatedat'
+            elif self.service_type == 'vpcflow':
+                startstopattr = 'starttime'
+
             qualifier_string = "AND {datetime_field} BETWEEN {starttime} AND " \
-                               "{stoptime}".format(datetime_field=self.dmm.map_data['startstopattr'],
+                               "{stoptime}".format(datetime_field=startstopattr,
                                                    starttime=start_stop_list[0],
                                                    stoptime=start_stop_list[1])
             return qualifier_string

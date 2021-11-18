@@ -352,18 +352,34 @@ class DataSourceObjToStixObj:
     # STIX 2.1 helper methods
     def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
         # Generates ID based on common namespace and SCO properties (omitting id and spec_version)
-        # TODO: References may need to be include as part of the ID generation
+        # TODO: Handle references when part of ID contributing properties
+
+        with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
+            contributing_properties_definitions =  json.load(f)
+
         for key, cybox in cybox_objects.items():
-            cybox_type = ""
-            # set id mapping key to original id
             object_id_map[key] = ""
             cybox_properties = {}
-            for property, value in cybox.items():
-                if property == "type":
-                    cybox_type = value
-                if not (property == "id" or re.match(".*_ref$", property)):
-                    cybox_properties[property] = value
-            unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
+            cybox_type = cybox.get("type")
+            contributing_properties = contributing_properties_definitions.get(cybox_type)
+
+            if contributing_properties:
+                for contr_prop in contributing_properties:
+                    if type(contr_prop) is list: # list of hash types
+                        for hashtype in contr_prop:
+                            hash_prop = "hashes.{}".format(hashtype)
+                            if hash_prop in cybox:
+                                cybox_properties[hash_prop] = cybox[hash_prop]
+                                break
+                    elif contr_prop in cybox and not re.match(".*_ref$", contr_prop): # chicken and egg problem with refs
+                        cybox_properties[contr_prop] = cybox[contr_prop] 
+                if cybox_properties:
+                    unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
+                else:
+                    self.logger.error("STIX object '{}' needs at least one of the following properties to generate ID {}".format(cybox_type, contributing_properties))
+            else: # STIX process or custom object used UUID4 for identifier
+                unique_id = "{}--{}".format(cybox_type, str(uuid.uuid4()))
+
             # set id mapping value to new id
             object_id_map[key] = unique_id
             # replace old id with new

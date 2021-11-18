@@ -34,17 +34,19 @@ Since the primary use-case for these scripts is to install a new or updated conn
 
     `cloudctl login -a <ICP CLUSTER URL> -u <USERNAME> -p <PASSWORD> -n <NAMESPACE>`
 
+    Note: there is a known issue when logged in as `kubeadmin` user via oc command, `oc login -u kubeadmin`
+
 9. Run the deployment script based on one of the following scenarios:
 
     ### A. Build the connector image and then deploy into your Kubernetes cluster
     ```
-    ./deploy.sh <MODULE NAME> remote
+    ./deploy.sh <MODULE NAME> remote [-n <NAMESPACE>]
     ```  
-    (Ex: `./deploy.sh elastic_ecs remote`)
+    (Ex: `./deploy.sh elastic_ecs remote -n cp4s`)
 
     ### B. Deploy an existing connector image from a registry into your Kubernetes cluster
     ```
-    ./deploy.sh <MODULE NAME> remote <IMAGE PATH>
+    ./deploy.sh <MODULE NAME> remote <IMAGE PATH> [-n <NAMESPACE>]
     ```
     (Ex: `./deploy.sh elastic_ecs remote docker.io/<REPOSITORY>/stix_shifter_modules_CONNECTORNAME:tag`)
 
@@ -53,4 +55,6 @@ Since the primary use-case for these scripts is to install a new or updated conn
     ./deploy.sh <MODULE NAME> local
     ``` 
     (Ex: `./deploy.sh elastic_ecs local`)
+
+    When making a remote build, [-n < NAMESPACE >] flag is optional. If not supplied, the namespace will be obtained from the current namespace project of the cluster you are logged in.
 

@@ -1,0 +1,20 @@
+{
+    "artifact": [[ "MD5", "SHA-1", "SHA-256", "SHA-512" ], "payload_bin"],
+    "autonomous-system": ["number"],
+    "directory": ["path"],
+    "domain-name": ["value"],
+    "email-addr": ["value"],
+    "email-message": ["from_ref", "subject", "body"],
+    "file": [[ "MD5", "SHA-1", "SHA-256", "SHA-512" ], "name", "extensions"],
+    "ipv4-addr": ["value"],
+    "ipv6-addr": ["value"],
+    "mac-addr": ["value"],
+    "mutex": ["name"],
+    "network-traffic": ["start", "src_ref", "dst_ref", "src_port", "dst_port", "protocols"],
+    "process": [],
+    "software": ["name", "cpe", "vendor", "version"],
+    "url": ["value"],
+    "user-account": ["account_type", "user_id", "account_login"],
+    "windows-registry-key": ["key", "values"],
+    "x509-certificate": [[ "MD5", "SHA-1", "SHA-256", "SHA-512" ], "serial_number"]
+}
