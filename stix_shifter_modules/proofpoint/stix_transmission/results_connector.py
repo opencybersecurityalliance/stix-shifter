@@ -12,13 +12,15 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         try:
-            min_range = offset
-            max_range = offset + length
+            min_range = int(offset)
+            max_range = min_range + int(length)
+
             # Grab the response, extract the response code, and convert it to readable json
             response = self.api_client.get_search_results(search_id)
             response_code = response.code
             response_txt = response.read()
             # Construct a response object
+            # print("response code={}, text={}".format(response_code, response_txt))
             return_obj = dict()
             error_obj = dict()
             if response_code == 200:
@@ -31,15 +33,16 @@ class ResultsConnector(BaseResultsConnector):
                         if isinstance(value, list) and value:
                             newdata+=value
 
-                    # slice of the data count according to offset values
-                    if newdata and max_range > 0 and len(newdata) > max_range:
-                        newdata = newdata[:max_range]
+                    # slice off the data count according to offset values
+                    if newdata and min_range > 0 and max_range > 0 and len(newdata) > max_range:
+                        newdata = newdata[min_range:max_range]
 
                     for msg in newdata:
                         if "messageParts" in msg:
                             msg["is_multipart"] = True
                         else: msg["is_multipart"] = False
 
+                    print("newdata :", newdata)
                     return_obj['data'] = newdata
 
                 except json.decoder.JSONDecodeError as err:
