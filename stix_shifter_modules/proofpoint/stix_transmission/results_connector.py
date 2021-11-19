@@ -34,7 +34,7 @@ class ResultsConnector(BaseResultsConnector):
                             newdata+=value
 
                     # slice off the data count according to offset values
-                    if newdata and max_range > 0 and len(newdata) > max_range:
+                    if newdata and min_range > 0 and max_range > 0 and len(newdata) > max_range:
                         newdata = newdata[min_range:max_range]
 
                     for msg in newdata:
