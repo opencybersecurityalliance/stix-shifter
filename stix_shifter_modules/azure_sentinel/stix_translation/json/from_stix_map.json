@@ -1,7 +1,12 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress"]
+      "value": [
+        "networkConnections.sourceAddress",
+        "networkConnections.destinationAddress",
+        "networkConnections.natSourceAddress",
+        "networkConnections.natDestinationAddress"
+      ]
     }
   },
   "ipv6-addr": {
@@ -11,8 +16,8 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["networkConnections.sourcePort"],
-      "dst_port": ["networkConnections.destinationPort"],
+      "src_port": ["networkConnections.sourcePort", "networkConnections.natSourcePort"],
+      "dst_port": ["networkConnections.destinationPort", "networkConnections.natDestinationPort"],
       "protocols[*]": ["networkConnections.protocol"],
       "src_ref.value": ["networkConnections.sourceAddress"],
       "dst_ref.value": ["networkConnections.destinationAddress"]
@@ -56,7 +61,7 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["userStates.accountName", "processes.accountName"],
+      "user_id": ["userStates.accountName", "processes.accountName", "userStates.aadUserId"],
       "account_login": ["userStates.logonId"],
       "account_type": ["userStates.userAccountType"],
       "account_last_login": ["userStates.logonDateTime"]

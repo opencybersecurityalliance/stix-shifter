@@ -3,10 +3,6 @@
       {
         "key": "first_observed",
         "cybox": false
-      },
-      {
-        "key": "last_observed",
-        "cybox": false
       }
     ],
     "event_count": {
@@ -40,9 +36,9 @@
       "object": "event"
       }
     ],
-    "closedDateTime": {
-      "key": "x-ibm-finding.closedDateTime",
-      "object": "finding"
+    "closedDateTime":{
+        "key": "last_observed",
+        "cybox": false
     },
     "cloudAppStates": {
       "destinationServiceName": [
