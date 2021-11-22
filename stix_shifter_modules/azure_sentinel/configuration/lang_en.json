@@ -2,7 +2,6 @@
     "connection": {
         "host": {
             "label": "Management IP address or Hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "port": {
@@ -14,12 +13,12 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "IBM QRadar Certificate",
-            "description": "Use self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2. Not Required for QRadar on Cloud."
+            "label": "Microsoft Azure Sentinel Certificate",
+            "description": "Use SSL certificate for Microsoft Azure Sentinel."
         },
         "sni": {
             "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication. Not Required for QRadar on Cloud."
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
         }
     },
     "configuration": {

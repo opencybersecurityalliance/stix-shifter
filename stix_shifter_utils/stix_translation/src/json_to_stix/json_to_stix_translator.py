@@ -1,41 +1,44 @@
 import re
 import uuid
+import json
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
 
+# "ID Contributing Properties" taken from https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070594
+UUID5_NAMESPACE = "00abedb4-aa42-466c-9c01-fed23315a9b7"
+NUMBER_OBSERVED_KEY = 'number_observed'
+FIRST_OBSERVED_KEY = 'first_observed'
+LAST_OBSERVED_KEY = 'last_observed'
+
 
 # convert JSON data to STIX object using map_data and transformers
-
 def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
-    bundle = {
-        "type": "bundle",
-        "id": "bundle--" + str(uuid.uuid4()),
-        "spec_version": "2.0",
-        "objects": []
-    }
 
-    identity_id = data_source['id']
-    bundle['objects'] += [data_source]
-    data_source_name = data_source['name']
-
-    ds2stix = DataSourceObjToStixObj(identity_id, map_data, transformers, options, data_source_name, callback)
+    ds2stix = DataSourceObjToStixObj(data_source, map_data, transformers, options, callback)
 
     # map data list to list of transformed objects
-    results = list(map(ds2stix.transform, data))
+    observation = ds2stix.transform
+    results = list(map(observation, data))
 
-    bundle["objects"] += results
+    for stix_object in results:
+        if ds2stix.spec_version == "2.1":
+            del stix_object["objects"]
+        ds2stix.bundle["objects"].append(stix_object)
 
-    return bundle
+    for key, value in ds2stix.unique_cybox_objects.items():
+        ds2stix.bundle["objects"].append(value)
+
+    return ds2stix.bundle
 
 
 class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
 
-    def __init__(self, identity_id, ds_to_stix_map, transformers, options, data_source, callback=None):
-        self.identity_id = identity_id
+    def __init__(self, data_source, ds_to_stix_map, transformers, options, callback=None):
+        self.identity_id = data_source["id"]
         self.ds_to_stix_map = ds_to_stix_map
         self.transformers = transformers
         self.options = options
@@ -47,8 +50,23 @@ class DataSourceObjToStixObj:
 
         self.properties = observable.properties
 
-        self.data_source = data_source
+        self.data_source = data_source['name']
         self.ds_key_map = [val for val in self.gen_dict_extract('ds_key', ds_to_stix_map)]
+
+        self.bundle = {
+            "type": "bundle",
+            "id": "bundle--" + str(uuid.uuid4()),
+            "objects": []
+        }
+
+
+        if options.get("stix_2.1"):
+            self.spec_version = "2.1"
+        else:
+            self.spec_version = "2.0"
+            self.bundle["spec_version"] = "2.0"
+        self.unique_cybox_objects = {}
+        self.bundle['objects'] += [data_source]
 
     @staticmethod
     def _get_value(obj, ds_key, transformer):
@@ -63,7 +81,6 @@ class DataSourceObjToStixObj:
             DataSourceObjToStixObj.logger.debug('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
-        # Is this getting his with a none-type value?
         if ret_val and transformer is not None:
             return transformer.transform(ret_val)
         return ret_val
@@ -76,7 +93,6 @@ class DataSourceObjToStixObj:
         :param key: the key to add
         :param stix_value: the STIX value translated from the input object
         """
-
         split_key = key.split('.')
         child_obj = obj
         parent_props = split_key[0:-1]
@@ -91,8 +107,7 @@ class DataSourceObjToStixObj:
             if (isinstance(child_obj[split_key[-1]], list)):
                 child_obj[split_key[-1]].extend(stix_value)  # append to existing list
 
-    @staticmethod
-    def _handle_cybox_key_def(key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
+    def _handle_cybox_key_def(self, key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
         """
         Handle the translation of the input property to its STIX CybOX property
         :param key_to_add: STIX property key derived from the mapping file
@@ -105,14 +120,25 @@ class DataSourceObjToStixObj:
         objs_dir = observation['objects']
 
         if obj_name in obj_name_map:
-            obj = objs_dir[obj_name_map[obj_name]]
+            # add property to existing cybox object
+            cybox_obj = objs_dir[obj_name_map[obj_name]]
         else:
-            obj = {'type': obj_type}
-            obj_dir_key = str(len(objs_dir))
-            objs_dir[obj_dir_key] = obj
-            if obj_name is not None:
-                obj_name_map[obj_name] = obj_dir_key
-        DataSourceObjToStixObj._add_property(obj, obj_prop, stix_value, group)
+            # create new cybox object
+            cybox_obj = {'type': obj_type}
+            if self.spec_version == "2.1":
+                # Todo: Move this elsewhere?
+                cybox_obj["id"] = "{}--{}".format(obj_type, str(uuid.uuid4()))
+                observation["objects"][cybox_obj["id"]] = cybox_obj
+                # resolves_to_refs lists have been deprecated in favor of relationship objects that have a relationship type of resolves-to. 
+                # See the Domain Name cybox object https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070687 for an example.
+                obj_name_map[obj_name] = cybox_obj["id"]
+            else:
+                obj_dir_key = str(len(objs_dir))
+                objs_dir[obj_dir_key] = cybox_obj
+                if obj_name is not None:
+                    obj_name_map[obj_name] = obj_dir_key
+
+        self._add_property(cybox_obj, obj_prop, stix_value, group)
 
     @staticmethod
     def _valid_stix_value(props_map, key, stix_value, unwrap=False):
@@ -126,7 +152,6 @@ class DataSourceObjToStixObj:
         :rtype: bool
         """
 
-        #  Causing a couple of failing tests in MSATP
         if stix_value is None or stix_value == '':
             DataSourceObjToStixObj.logger.debug("Removing invalid value '{}' for {}".format(stix_value, key))
             return False
@@ -158,8 +183,7 @@ class DataSourceObjToStixObj:
                     for d in v:
                         for result in self.gen_dict_extract(key, d):
                             yield result
-    
-    #update the object key of the mapping
+    # update the object key of the mapping
     @staticmethod
     def _update_object_key(ds_map, indx):
         for key, value in ds_map.items():
@@ -189,8 +213,7 @@ class DataSourceObjToStixObj:
                     if to_map is None or to_map == '':
                         self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
                         return
-                    DataSourceObjToStixObj._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map,
-                                                                 cust_obj["object"])
+                    self._handle_cybox_key_def(cust_obj["key"], observation, to_map, object_map, cust_obj["object"])
             else:
                 self.logger.debug('{} is not found in map, skipping'.format(ds_key))
             return
@@ -207,7 +230,7 @@ class DataSourceObjToStixObj:
             self.logger.debug('{} is a list; unwrapping.'.format(to_map))
             for item in to_map:
                 if isinstance(item, dict):
-                    new_ds_map = DataSourceObjToStixObj._update_object_key(ds_map[ds_key], to_map.index(item))
+                    new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
         
@@ -262,7 +285,7 @@ class DataSourceObjToStixObj:
                                         stix_value.append(val)
                             else:
                                 val = object_map.get(ref)
-                                if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, val):
+                                if not self._valid_stix_value(self.properties, key_to_add, val):
                                     continue
                                 stix_value.append(val)
                         if not stix_value:
@@ -277,15 +300,15 @@ class DataSourceObjToStixObj:
                                     stix_value.append(val)
                         else:
                             stix_value = object_map.get(references)
-                            if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                            if not self._valid_stix_value(self.properties, key_to_add, stix_value):
                                 continue
                 else:
                     # use the hard-coded value in the mapping
                     if 'value' in ds_key_def:
                         stix_value = ds_key_def['value']
                     else:
-                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
+                        stix_value = self._get_value(obj, ds_key, transformer)
+                    if not self._valid_stix_value(self.properties, key_to_add, stix_value, unwrap):
                         continue
 
                 # Group Values
@@ -297,10 +320,10 @@ class DataSourceObjToStixObj:
                     for i in range(len(stix_value)):
                         obj_i_name = "{}_{}".format(object_name, i + 1)
                         val = stix_value[i]
-                        DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, val, object_map,
+                        self._handle_cybox_key_def(key_to_add, observation, val, object_map,
                                                                      obj_i_name, group)
                 else:
-                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
+                    self._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
                                                                  object_name, group)
             else:
                 # get the object name defined for custom attributes
@@ -312,17 +335,66 @@ class DataSourceObjToStixObj:
                     # get the value from mapped key
                     elif 'ds_key' in ds_key_def:
                         ds_key = ds_key_def['ds_key']
-                        stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                        stix_value = self._get_value(obj, ds_key, transformer)
+                    if not self._valid_stix_value(self.properties, key_to_add, stix_value):
                         continue
-                    DataSourceObjToStixObj._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
+                    self._handle_cybox_key_def(key_to_add, observation, stix_value, object_map,
                                                                  object_name, group)
                 else:
-                    stix_value = DataSourceObjToStixObj._get_value(obj, ds_key, transformer)
-                    if not DataSourceObjToStixObj._valid_stix_value(self.properties, key_to_add, stix_value):
+                    stix_value = self._get_value(obj, ds_key, transformer)
+                    if not self._valid_stix_value(self.properties, key_to_add, stix_value):
                         continue
 
-                    DataSourceObjToStixObj._add_property(observation, key_to_add, stix_value, group)
+                    self._add_property(observation, key_to_add, stix_value, group)
+
+    # STIX 2.1 helper methods
+    def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
+        # Generates ID based on common namespace and SCO properties (omitting id and spec_version)
+        # TODO: Handle references when part of ID contributing properties
+
+        with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
+            contributing_properties_definitions =  json.load(f)
+
+        for key, cybox in cybox_objects.items():
+            object_id_map[key] = ""
+            cybox_properties = {}
+            cybox_type = cybox.get("type")
+            contributing_properties = contributing_properties_definitions.get(cybox_type)
+
+            if contributing_properties:
+                for contr_prop in contributing_properties:
+                    if type(contr_prop) is list: # list of hash types
+                        for hashtype in contr_prop:
+                            hash_prop = "hashes.{}".format(hashtype)
+                            if hash_prop in cybox:
+                                cybox_properties[hash_prop] = cybox[hash_prop]
+                                break
+                    elif contr_prop in cybox and not re.match(".*_ref$", contr_prop): # chicken and egg problem with refs
+                        cybox_properties[contr_prop] = cybox[contr_prop] 
+                if cybox_properties:
+                    unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
+                else:
+                    self.logger.error("STIX object '{}' needs at least one of the following properties to generate ID {}".format(cybox_type, contributing_properties))
+            else: # STIX process or custom object used UUID4 for identifier
+                unique_id = "{}--{}".format(cybox_type, str(uuid.uuid4()))
+
+            # set id mapping value to new id
+            object_id_map[key] = unique_id
+            # replace old id with new
+            cybox["id"] = unique_id
+
+    def _replace_references(self, object_id_map, cybox_objects):
+        for key, cybox in cybox_objects.items():
+            # replace refs with new ids
+            for property, value in cybox.items():
+                if re.match(".*_ref$", property) and str(value) in object_id_map:
+                    cybox[property] = object_id_map[value]
+            cybox["spec_version"] = "2.1"
+
+    def _collect_unique_cybox_objects(self, cybox_objects):
+        for key, cybox in cybox_objects.items():
+            if not cybox["id"] in self.unique_cybox_objects:
+                self.unique_cybox_objects[cybox["id"]] = cybox
 
     def transform(self, obj):
         """
@@ -330,13 +402,11 @@ class DataSourceObjToStixObj:
         :param obj: the datasource object that is being converted to stix
         :return: the input object converted to stix valid json
         """
-        NUMBER_OBSERVED_KEY = 'number_observed'
-        FIRST_OBSERVED_KEY = 'first_observed'
-        LAST_OBSERVED_KEY = 'last_observed'
         object_map = {}
         stix_type = 'observed-data'
         ds_map = self.ds_to_stix_map
         now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+        object_id_map = {}
 
         observation = {
             'id': stix_type + '--' + str(uuid.uuid4()),
@@ -354,6 +424,11 @@ class DataSourceObjToStixObj:
         else:
             self.logger.debug("Not a dict: {}".format(obj))
 
+        # special case:
+        # remove object if:
+        # a reference attribute object does not contain at least one property other than 'type'
+        self._cleanup_references(object_map, observation, ds_map)
+
         # Add required properties to the observation if it wasn't added from the mapping
         if FIRST_OBSERVED_KEY not in observation:
             observation[FIRST_OBSERVED_KEY] = now
@@ -362,9 +437,37 @@ class DataSourceObjToStixObj:
         if NUMBER_OBSERVED_KEY not in observation:
             observation[NUMBER_OBSERVED_KEY] = 1
 
+        if self.spec_version == "2.1":
+            cybox_objects = observation["objects"]
+            self._generate_and_apply_deterministic_id(object_id_map, cybox_objects)
+            self._replace_references(object_id_map, cybox_objects)
+            object_refs = []
+            # add cybox references to observed-data object
+            for key, value in object_id_map.items():
+                object_refs.append(value)
+            observation["object_refs"] = object_refs
+            observation["spec_version"] = "2.1"
+            self._collect_unique_cybox_objects(cybox_objects)
+
         # Validate each STIX object
         if self.stix_validator:
             validated_result = validate_instance(observation)
             print_results(validated_result)
 
         return observation
+
+    def _cleanup_references(self, object_map, observation, ds_map):
+        objects = observation.get('objects')
+        remove_keys = []
+        for obj, values in objects.items():
+            rm_keys = list(key for key in values if '_ref' in key)
+            rm_keys.append('type')
+
+            obj_keys = list(values.keys())
+
+            if sorted(rm_keys) == sorted(obj_keys):
+                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values) )
+                remove_keys.append(obj)
+
+        for k in remove_keys:
+            objects.pop(k)

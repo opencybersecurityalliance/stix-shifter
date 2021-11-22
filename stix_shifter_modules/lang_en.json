@@ -11,6 +11,10 @@
             "label": "Data source description",
             "description": "Assign a description to indicate the purpose of the connection"
         },
+        "apphostId": {
+         "label": "Edge Gateway",
+          "description": "Specify an edge gateway host if the connection is to run on an edge gateway."
+        },
         "options": {
             "result_limit": {
                 "label": "Result Size Limit",
@@ -30,7 +34,7 @@
             },
             "dialects": {
                 "label": "Dialect",
-                "description": "If data source needs to search multiple schema or database tables"
+                "description": "The dialect to use if the data source needs to search multiple schema or database tables."
             },
             "validate_pattern": {
                 "label": "STIX Pattern Validator",
@@ -38,7 +42,7 @@
             },
             "stix_validator": {
                 "label": "STIX Object Validator",
-                "description": "Validate trasnlated STIX Objects"
+                "description": "Validate translated STIX Objects"
             },
             "mapping": {
                 "label": "Custom Mapping",

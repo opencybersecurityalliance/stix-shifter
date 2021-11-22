@@ -308,7 +308,7 @@
     }
   ],
   "UrlHost": [
-  {
+    {
       "key": "domain-name.value",
       "object": "dns_domain",
       "transformer": "ToDomainName"
@@ -389,6 +389,10 @@
       "references": "artifact"
     }
   ],
+  "mime_type_eventpayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "flowsourcepayload": [
     {
       "key": "artifact.payload_bin",
@@ -401,6 +405,10 @@
       "references": "src_payload"
     }
   ],
+  "mime_type_flowsourcepayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "flowdestinationpayload": [
     {
       "key": "artifact.payload_bin",
@@ -413,6 +421,10 @@
       "references": "dst_payload"
     }
   ],
+  "mime_type_flowdestinationpayload": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
   "destinationport": {
     "key": "network-traffic.dst_port",
     "object": "nt",
@@ -479,8 +491,7 @@
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
     }
-  ]
-  ,
+  ],
   "flowinterface": {
     "key": "x-qradar.flow_interface",
     "object": "x-qradar"
@@ -788,9 +799,9 @@
   ],
   "RegistryValueName": [
     {
-        "key": "windows-registry-key.values",
-        "object": "winregistry",
-        "transformer": "RegValueNameToStixRegistryValues"
+      "key": "windows-registry-key.values",
+      "object": "winregistry",
+      "transformer": "RegValueNameToStixRegistryValues"
     },
     {
       "key": "x-oca-event.registry_ref",
@@ -798,38 +809,55 @@
       "references": "winregistry"
     }
   ],
-  "TargetImage": {
-    "key": "x-ibm-windows.targetimage",
-    "object": "xwin"
-  },
-  "GrantedAccess": {
-    "key": "x-ibm-windows.granted_access",
-    "object": "xwin"
-  },
-  "CallTrace": {
-    "key": "x-ibm-windows.call_trace",
-    "object": "xwin"
-  },
-  "SourceImage": {
-    "key": "x-ibm-windows.source_image",
-    "object": "xwin"
-  },
-  "PipeName": {
-    "key": "x-ibm-windows.pipe_name",
-    "object": "xwin"
-  },
-  "StartModule": {
-    "key": "x-ibm-windows.start_module",
-    "object": "xwin"
-  },
-  "StartFunction": {
-    "key": "x-ibm-windows.start_function",
-    "object": "xwin"
-  },
-  "Signed": {
-    "key": "x-ibm-windows.signed",
-    "object": "xwin"
-  },
+  "TargetImage": [
+    {
+      "key": "file.name",
+      "object": "file_target_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_target_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "target_process",
+      "references": "file_target_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_target_image",
+      "references": "directory_target_image"
+    }
+  ],
+  "SourceImage": [
+    {
+      "key": "file.name",
+      "object": "file_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_image",
+      "references": "directory_image"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
   "Message": [
     {
       "key": "artifact.payload_bin",
@@ -846,9 +874,9 @@
       "object": "event"
     }
   ],
-  "IMPHash": {
-    "key": "x-ibm-windows.imphash",
-    "object": "xwin"
+  "mime_type_message": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
   },
   "ServiceFileName": [
     {

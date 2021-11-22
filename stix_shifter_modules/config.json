@@ -13,7 +13,7 @@
             "result_limit": {
                 "default": 10000,
                 "min": 1,
-                "max": 60000,
+                "max": 500000,
                 "type": "number",
                 "previous": "connection.resultSizeLimit"
             },
@@ -63,6 +63,12 @@
                 "previous": "connection.mapping"
             },
             "unmapped_fallback": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
+            },
+            "stix_2.1": {
                 "type": "boolean",
                 "default": false,
                 "optional": true,

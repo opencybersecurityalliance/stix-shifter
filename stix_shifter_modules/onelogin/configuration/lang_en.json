@@ -1,0 +1,25 @@
+{
+    "connection": {
+        "region": {
+            "label": "Region",
+            "placeholder": "US",
+            "description": "Specify the region that your OneLogin account resides in"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "clientId": {
+                "label": "Client Id",
+                "description": "Client ID of OneLogin"
+            },
+            "clientSecret": {
+                "label": "Client Secret",
+                "description": "Client secret of OneLogin"
+            }
+        }
+    }
+}

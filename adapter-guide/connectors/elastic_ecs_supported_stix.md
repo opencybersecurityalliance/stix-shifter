@@ -1,7 +1,9 @@
+##### Updated on 10/29/21
 ## Elasticsearch ECS
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | original |
+| artifact | mime_type | mime_type_event |
 | <br> | | |
 | autonomous-system | number | number |
 | autonomous-system | name | name |
@@ -78,6 +80,7 @@
 | process | parent_ref | pid |
 | process | creator_user_ref | name |
 | process | creator_user_ref | id |
+| process | x_ttp_tags | tags |
 | <br> | | |
 | software | name | name |
 | software | vendor | type |
@@ -91,6 +94,8 @@
 | <br> | | |
 | windows-registry-key | key | registry |
 | windows-registry-key | values | registry |
+| <br> | | |
+| x-ecs | version | version |
 | <br> | | |
 | x-ecs-client | address | address |
 | x-ecs-client | domain | domain |
@@ -483,6 +488,4 @@
 | x509-certificate | validity_not_after | not_after |
 | x509-certificate | validity_not_before | not_before |
 | x509-certificate | subject | subject |
-| <br> | | |
-| x_ecs | version | version |
 | <br> | | |
