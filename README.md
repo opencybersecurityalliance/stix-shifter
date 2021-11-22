@@ -78,11 +78,11 @@ print(response)
 
 We are thrilled you are considering contributing! We welcome all contributors.
 
-Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/CONTRIBUTING.md).
+Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
 
 ## Guide for creating new connectors
 
-If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md)
+If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
 
