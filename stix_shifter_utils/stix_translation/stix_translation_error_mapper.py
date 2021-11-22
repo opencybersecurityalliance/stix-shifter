@@ -35,10 +35,7 @@ class ErrorMapper():
             error_message += ': ' + exception_str
 
         if exception is not None:
-            print('** STIX SHIFTER BEFORE EXCEPTION TYPE:')
-            print(exception)
             exception_type = type(exception).__name__
-            print('** STIX SHIFTER AFTER EXCEPTION TYPE:')
             ErrorMapper.logger.error("received exception => {}: {}".format(exception_type, exception))
             ErrorMapper.logger.debug(logger.exception_to_string(exception))
             if exception_type in error_mapping:

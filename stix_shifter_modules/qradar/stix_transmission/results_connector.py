@@ -28,22 +28,12 @@ class ResultsConnector(BaseResultsConnector):
             response_dict = json.loads(response_text)
         except ValueError as ex:
             self.logger.debug(response_text)
-            print('** STIX-SHIFTER QRADAR PARSE ERROR:')
-            print(response_text)
             error = Exception(f'Can not parse response from Qradar server. The response is not a valid json: {response_text} : {ex}')
         
         if 200 <= response_code <= 299 and error is None:
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:
-            print('** STIX-SHIFTER QRADAR ERROR:')
-            print(response_text)
-            print('** RESPONSE:')
-            print(response)
-            print('** ERROR:')
-            print(error)
-            print('** STACK TRACE:')
-            print(traceback.extract_stack())
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
 
         return return_obj

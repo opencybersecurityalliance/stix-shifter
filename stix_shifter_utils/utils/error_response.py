@@ -43,10 +43,7 @@ class ErrorResponder():
         # '~result' means the current item is a list and new item will be a list containing specified field ('result') values
         # document it: '+' and '~'
         if message_struct is not None and message_path is not None:
-            print('** STIX SHIFTER GET STRUCT ITEM')
-            print(type(message_struct))
             if (isinstance(message_struct, collections.Mapping) or type(message_struct).__name__=='list'):
-                print('** AFTER IF CONDITION')
                 struct = message_struct.copy()
                 for i in message_path:
                     if (isinstance(struct, collections.Mapping) and i in struct) or (type(struct).__name__=='list' and isinstance(i, int) and i < len(struct)):
