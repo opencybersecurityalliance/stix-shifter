@@ -506,9 +506,9 @@ The `execute` command tests all steps of the translation-transmission flow:
 
 ### Debug
 
-You can add the `--debug` option at the end of your CLI command to see more logs. 
+You can add the `--debug` option to your CLI command to see more logs. 
 
-`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
+`stix-shifter --debug execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'` 
 
 ### Change max returned results
 
