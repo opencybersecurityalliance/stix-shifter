@@ -637,8 +637,7 @@
     },
     "category": {
       "key": "x-oca-event.category",
-      "object": "event",
-      "transformer": "ValueToList"
+      "object": "event"
     },
     "code": {
       "key": "x-oca-event.code",
@@ -757,7 +756,7 @@
   },
   "process": {
     "start": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process"
     },
     "pid": [
@@ -765,17 +764,6 @@
         "key": "process.pid",
         "object": "process",
         "transformer": "ToInteger"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
-      }
-    ],
-    "name": [
-      {
-        "key": "process.name",
-        "object": "process"
       },
       {
         "key": "x-oca-event.process_ref",
@@ -851,7 +839,7 @@
         "transformer": "ToDirectoryPath"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_executable"
       },
@@ -895,22 +883,6 @@
         "key": "x-ecs-process.parent_exit_code",
         "object": "x_process"
       },
-      "name": [
-        {
-          "key": "process.name",
-          "object": "process_parent"
-        },
-        {
-          "key": "process.parent_ref",
-          "object": "process",
-          "references": "process_parent"
-        },
-        {
-          "key": "x-oca-event.parent_process_ref",
-          "object": "event",
-          "references": "process_parent"
-        }
-      ],
       "pgid": {
         "key": "x-ecs-process.parent_pgid",
         "object": "x_process"
@@ -938,7 +910,7 @@
         "transformer": "ToInteger"
       },
       "start": {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "process_parent"
       },
       "thread": {
@@ -975,7 +947,7 @@
           "transformer": "ToDirectoryPath"
         },
         {
-          "key": "process.binary_ref",
+          "key": "process.image_ref",
           "object": "process_parent",
           "references": "process_parent_executable"
         },
@@ -1382,7 +1354,7 @@
       }
     ],
     "created": {
-      "key": "file.created",
+      "key": "file.ctime",
       "object": "file"
     },
     "directory": [

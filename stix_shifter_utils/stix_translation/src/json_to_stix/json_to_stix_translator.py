@@ -107,6 +107,7 @@ class DataSourceObjToStixObj:
             if (isinstance(child_obj[split_key[-1]], list)):
                 child_obj[split_key[-1]].extend(stix_value)  # append to existing list
 
+
     def _handle_cybox_key_def(self, key_to_add, observation, stix_value, obj_name_map, obj_name, group=False):
         """
         Handle the translation of the input property to its STIX CybOX property
@@ -117,6 +118,7 @@ class DataSourceObjToStixObj:
         :param obj_name: the object name derived from the mapping file
         """
         obj_type, obj_prop = key_to_add.split('.', 1)
+        
         objs_dir = observation['objects']
 
         if obj_name in obj_name_map:

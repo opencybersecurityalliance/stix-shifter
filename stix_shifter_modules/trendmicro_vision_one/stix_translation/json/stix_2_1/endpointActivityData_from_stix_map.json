@@ -1,0 +1,53 @@
+{
+    "ipv4-addr": {
+        "fields": {
+            "value": ["src", "dst", "objectIp", "objectIps"]
+        }
+    },
+    "ipv6-addr": {
+        "fields": {
+            "value": ["src", "dst", "objectIp", "objectIps"]
+        }
+    },
+    "url": {
+        "fields": {
+            "value": ["request"]
+        }
+    },
+    "file": {
+        "fields": {
+            "hashes.'SHA-1'": ["srcFileHashSha1", "objectFileHashSha1", "parentFileHashSha1", "processFileHashSha1"]
+        }
+    },
+    "network-traffic": {
+        "fields": {
+            "src_ref.value": ["src"],
+            "dst_ref.value": ["dst", "objectIp"],
+            "src_port": ["spt"],
+            "dst_port": ["dpt", "objectPort"]
+        }
+    },
+    "user-account": {
+        "fields": {
+            "account_login": ["logonUser"],
+            "user_id": ["objectUser"]
+        }
+    },
+    "process": {
+        "fields": {
+            "command_line": ["processCmd", "parentCmd", "objectCmd"]
+        }
+    },
+    "windows-registry-key": {
+        "fields": {
+            "key": ["objectRegistryKeyHandle"],
+            "values[*].name": ["objectRegistryValue"],
+            "values[*].data": ["objectRegistryData"]
+        }
+    },
+    "domain-name": {
+        "fields": {
+            "value": ["hostName"]
+        }
+    }
+}
