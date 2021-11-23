@@ -73,7 +73,7 @@
         "DeviceRegistryEvents.InitiatingProcessParentFileName"
       ],
       "hashes.'SHA-1'": [
-        "DeviceFileEvents.SHA1",
+        "DeviceFileEvents.'SHA1'",
         "DeviceFileEvents.InitiatingProcessSHA1",
         "DeviceProcessEvents.SHA1",
         "DeviceProcessEvents.InitiatingProcessSHA1",
@@ -108,15 +108,6 @@
   },
   "process": {
     "fields": {
-      "name": [
-        "DeviceProcessEvents.FileName",
-        "DeviceProcessEvents.InitiatingProcessFileName",
-        "DeviceProcessEvents.InitiatingProcessParentFileName",
-        "DeviceNetworkEvents.InitiatingProcessFileName",
-        "DeviceNetworkEvents.InitiatingProcessParentFileName",
-        "DeviceRegistryEvents.InitiatingProcessFileName",
-        "DeviceRegistryEvents.InitiatingProcessParentFileName"
-      ],
       "parent_ref.name": [
         "DeviceProcessEvents.InitiatingProcessFileName",
         "DeviceProcessEvents.InitiatingProcessFileName",
@@ -167,7 +158,7 @@
       ],
       "child_refs.creator_user_ref.account_login": ["DeviceProcessEvents.AccountName"],
       "creator_user_ref.account_login": ["DeviceProcessEvents.InitiatingProcessAccountName"],
-      "binary_ref.hashes.'SHA-1'": [
+      "image_ref.hashes.'SHA-1'": [
         "DeviceFileEvents.SHA1",
         "DeviceFileEvents.InitiatingProcessSHA1",
         "DeviceProcessEvents.SHA1",
@@ -175,7 +166,7 @@
         "DeviceNetworkEvents.InitiatingProcessSHA1",
         "DeviceRegistryEvents.InitiatingProcessSHA1"
       ],
-      "binary_ref.hashes.'SHA-256'": [
+      "image_ref.hashes.'SHA-256'": [
         "DeviceFileEvents.SHA256",
         "DeviceFileEvents.InitiatingProcessSHA256",
         "DeviceProcessEvents.SHA256",
@@ -183,16 +174,16 @@
         "DeviceNetworkEvents.InitiatingProcessSHA256",
         "DeviceRegistryEvents.InitiatingProcessSHA256"
       ],
-      "child_refs.binary_ref.hashes.MD5": [
+      "child_refs.image_ref.hashes.MD5": [
         "DeviceProcessEvents.MD5"
       ],
-      "child_refs.binary_ref.hashes.'SHA-256'": [
+      "child_refs.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.SHA256"
       ],
-      "child_refs.binary_ref.hashes.'SHA-1'": [
+      "child_refs.image_ref.hashes.'SHA-1'": [
         "DeviceProcessEvents.SHA1"
       ],
-      "binary_ref.hashes.MD5": [
+      "image_ref.hashes.MD5": [
         "DeviceFileEvents.MD5",
         "DeviceFileEvents.InitiatingProcessMD5",
         "DeviceProcessEvents.MD5",
@@ -200,7 +191,7 @@
         "DeviceNetworkEvents.InitiatingProcessMD5",
         "DeviceRegistryEvents.InitiatingProcessMD5"
       ],
-      "created": [
+      "created_time": [
         "DeviceProcessEvents.ProcessCreationTime",
         "DeviceProcessEvents.InitiatingProcessParentCreationTime",
         "DeviceNetworkEvents.InitiatingProcessCreationTime",
@@ -210,19 +201,19 @@
         "DeviceFileEvents.InitiatingProcessCreationTime",
         "DeviceFileEvents.InitiatingProcessParentCreationTime"
       ],
-      "parent_ref.created": [
+      "parent_ref.created_time": [
         "DeviceProcessEvents.InitiatingProcessParentCreationTime",
         "DeviceNetworkEvents.InitiatingProcessParentCreationTime",
         "DeviceRegistryEvents.InitiatingProcessParentCreationTime",
         "DeviceFileEvents.InitiatingProcessParentCreationTime"
       ],
-      "binary_ref.parent_directory_ref.path": [
+      "image_ref.parent_directory_ref.path": [
         "DeviceProcessEvents.InitiatingProcessFolderPath",
         "DeviceNetworkEvents.InitiatingProcessFolderPath",
         "DeviceRegistryEvents.InitiatingProcessFolderPath",
         "DeviceFileEvents.InitiatingProcessFolderPath"
       ],
-      "child_refs.binary_ref.parent_directory_ref.path": [
+      "child_refs.image_ref.parent_directory_ref.path": [
         "DeviceProcessEvents.FolderPath"
       ]
     }
@@ -353,7 +344,7 @@
       "process_ref.child_refs.name": [
         "DeviceProcessEvents.FileName"
       ],
-      "process_ref.binary_ref.name": [
+      "process_ref.image_ref.name": [
         "DeviceProcessEvents.InitiatingProcessFileName",
         "DeviceNetworkEvents.InitiatingProcessFileName",
         "DeviceRegistryEvents.InitiatingProcessFileName",
@@ -380,7 +371,7 @@
         "DeviceRegistryEvents.InitiatingProcessCommandLine",
         "DeviceFileEvents.InitiatingProcessCommandLine"
       ],
-      "process_ref.binary_ref.hashes.'SHA-256'": [
+      "process_ref.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.InitiatingProcessSHA256",
         "DeviceNetworkEvents.InitiatingProcessSHA256",
         "DeviceRegistryEvents.InitiatingProcessSHA256",
@@ -401,13 +392,13 @@
         "DeviceRegistryEvents.InitiatingProcessParentId",
         "DeviceFileEvents.InitiatingProcessParentId"
       ],
-      "process_ref.binary_ref.hashes.MD5": [
+      "process_ref.image_ref.hashes.MD5": [
         "DeviceProcessEvents.InitiatingProcessMD5",
         "DeviceNetworkEvents.InitiatingProcessMD5",
         "DeviceRegistryEvents.InitiatingProcessMD5",
         "DeviceFileEvents.InitiatingProcessMD5"
       ],
-      "process_ref.binary_ref.hashes.'SHA-256'": [
+      "process_ref.image_ref.hashes.'SHA-256'": [
         "DeviceProcessEvents.InitiatingProcessSHA256",
         "DeviceNetworkEvents.InitiatingProcessSHA256",
         "DeviceRegistryEvents.InitiatingProcessSHA256",

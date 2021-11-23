@@ -18,7 +18,7 @@
     "fields": {
       "name": ["behaviors.filename"],
       "hashes.MD5": ["behaviors.md5", "behaviors.parent_details.parent_md5"],
-      "hashes.'SHA-256'": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
+      "hashes.SHA-256": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
       "hashes.parent_MD5": ["behaviors.parent_details.parent_md5"],
       "hashes.parent_SHA-256": ["behaviors.parent_details.parent_sha256"],
       "hashes.child_MD5": ["behaviors.md5"],
@@ -29,16 +29,15 @@
   "process": {
     "fields": {
       "command_line": ["behaviors.cmdline"],
-      "created": ["behaviors.timestamp"], 
-      "name": ["behaviors.filename"],
+      "created_time": ["behaviors.timestamp"], 
       "creator_user_ref.user_id": ["behaviors.user_id"],
       "creator_user_ref.account_login": ["behaviors.user_name"],
-      "binary_ref.hashes.MD5": ["behaviors.md5"],
-      "binary_ref.hashes.'SHA-256'": ["behaviors.sha256"],
+      "image_ref.hashes.MD5": ["behaviors.md5"],
+      "image_ref.hashes.SHA-256": ["behaviors.sha256"],
       "parent_ref.name": ["behaviors.filename"],
       "parent_ref.command_line": ["behaviors.parent_cmdline"],
-      "parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"]
+      "parent_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "parent_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"]
     }
   },
   "url": {
@@ -66,17 +65,17 @@
     "fields": {
       "process_ref.name": ["behaviors.filename"],
       "process_ref.command_line": ["behaviors.cmdline"],
-      "process_ref.binary_ref.name": ["behaviors.filename"],
+      "process_ref.image_ref.name": ["behaviors.filename"],
       "process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
       "process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
       "process_ref.parent_ref.name": ["behaviors.filename"],
       "process_ref.parent_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
-      "process_ref.parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "process_ref.parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"],
+      "process_ref.parent_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "process_ref.parent_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
       "parent_process_ref.name": ["behaviors.filename"],
       "parent_process_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
-      "parent_process_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_process_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"],
+      "parent_process_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "parent_process_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
       "parent_process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
       "parent_process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
       "domain_ref.value": ["device.hostname"],

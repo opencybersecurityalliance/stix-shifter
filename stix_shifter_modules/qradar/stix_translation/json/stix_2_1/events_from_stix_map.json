@@ -95,10 +95,10 @@
   "process": {
     "fields": {
       "pid": ["ProcessId"],
-      "name": ["ProcessName", "Image", "ParentImage", "TargetImage"],
-      "binary_ref.name": ["Image", "TargetImage"],
-      "binary_ref.parent_directory_ref.path": ["Image", "TargetImage"],
-      "parent_ref.binary_ref.name": ["ParentImage"],
+      "name": ["ProcessName", "Image", "ParentImage"],
+      "image_ref.name": ["Image"],
+      "image_ref.parent_directory_ref.path": ["Image"],
+      "parent_ref.image_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
       "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
@@ -114,13 +114,13 @@
       "agent": ["logsourcename"],
       "provider": ["logsourcetypename"],
       "process_ref.command_line": ["ProcessCommandLine"],
-      "process_ref.binary_ref.name": ["Image", "TargetImage"],
+      "process_ref.image_ref.name": ["Image"],
       "process_ref.parent_ref.command_line": ["ParentCommandLine"],
       "process_ref.creator_user_ref.user_id": ["username"],
       "process_ref.name": ["ProcessName"],
       "process_ref.pid": ["ProcessId"],
       "parent_process_ref.command_line": ["ParentCommandLine"],
-      "parent_process_ref.binary_ref.name": ["ParentImage"],
+      "parent_process_ref.image_ref.name": ["ParentImage"],
       "domain_ref.value": ["domainname", "UrlHost"],
       "file_ref.name": ["filename"],
       "host_ref.hostname": ["identityhostname"],
@@ -142,6 +142,15 @@
     "fields": {
       "key": ["ObjectName", "RegistryKey"],
       "values[*].name": ["RegistryValueName"]
+    }
+  },
+  "x-ibm-windows": {
+    "fields": {
+      "targetimage": ["TargetImage"],
+      "grantedaccess": ["GrantedAccess"],
+      "calltrace": ["CallTrace"],
+      "sourceimage": ["Image"],
+      "pipename": ["PipeName"]
     }
   }
 }
