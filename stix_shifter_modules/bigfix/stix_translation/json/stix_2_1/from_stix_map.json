@@ -1,0 +1,48 @@
+{
+  "file": {
+    "fields": {
+      "name": ["file.name", "process.name"],
+      "hashes.'SHA-256'": ["file.sha256"],
+      "hashes.'SHA-1'": ["file.sha1"],
+      "hashes.MD5": ["file.md5"],
+      "parent_directory_ref.path": ["file.folder"],
+      "size": ["file.size"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["process.pid", "process.process id"],
+      "parent_ref.pid": ["process.ppid"],
+      "image_ref.name" : ["file.name", "process.name"],
+      "image_ref.hashes.SHA-256" : ["file.sha256"],
+      "image_ref.hashes.SHA-1": ["file.sha1"],
+      "image_ref.hashes.MD5": ["file.md5"],
+      "image_ref.parent_directory_ref.path": ["file.pathname"],
+      "image_ref.size": ["file.size"],
+      "creator_user_ref.user_id": ["process.user", "process.name of user"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["socket.local address","socket.remote address"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["socket.local address","socket.remote address"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["socket.local port"],
+      "dst_port": ["socket.remote port"],
+      "src_ref.value": ["socket.local address"],
+      "dst_ref.value": ["socket.remote address"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["adapter.mac address"]
+    }
+  }
+}

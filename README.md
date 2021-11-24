@@ -24,7 +24,7 @@ This stix-shifter has the following dependencies:
 - [antlr4-python3-runtime==4.8](https://pypi.org/project/antlr4-python3-runtime/)
 - [python-dateutil==2.8.1](https://pypi.org/project/python-dateutil/)
 
-Your development environment must use Python 3
+Your development environment must use Python version: 3.6, 3.7, 3.8 or 3.9
 
 ## Installation
 
@@ -78,11 +78,11 @@ print(response)
 
 We are thrilled you are considering contributing! We welcome all contributors.
 
-Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/CONTRIBUTING.md).
+Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
 
 ## Guide for creating new connectors
 
-If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md)
+If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
 
 ## Licensing
 
