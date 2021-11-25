@@ -12,6 +12,7 @@ class ResultsConnector(BaseResultsConnector):
 
     def create_results_connection(self, search_id, offset, length):
         try:
+            #calculate offsets
             min_range = int(offset)
             max_range = min_range + int(length)
 
@@ -20,7 +21,6 @@ class ResultsConnector(BaseResultsConnector):
             response_code = response.code
             response_txt = response.read()
             # Construct a response object
-            # print("response code={}, text={}".format(response_code, response_txt))
             return_obj = dict()
             error_obj = dict()
             if response_code == 200:
