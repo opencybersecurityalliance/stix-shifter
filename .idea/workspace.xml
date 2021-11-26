@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="acf3e6a0-b178-44de-a514-70879d0ced45" name="Changes" comment="Made changes in code for data type of offset and length">
+      <change afterPath="$PROJECT_DIR$/adapter-guide/connectors/proofpoint_supported_stix.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/adapter-guide/connectors/sumologic_supported_stix.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/bigfix/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/bigfix/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/carbonblack/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/carbonblack/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/carbonblack/stix_translation/json/stix_2_1/to_stix_map_events.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/cbcloud/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/cbcloud/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/crowdstrike/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/crowdstrike/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/msatp/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/msatp/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/stix_2_1/events_from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/stix_2_1/flows_from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/stix_2_1/events_from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/splunk/stix_translation/json/stix_2_1/from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/splunk/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/trendmicro_vision_one/stix_translation/json/stix_2_1/endpointActivityData_from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/trendmicro_vision_one/stix_translation/json/stix_2_1/messageActivityData_from_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_modules/trendmicro_vision_one/stix_translation/json/stix_2_1/to_stix_map.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/stix_translation/test_transformers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OVERVIEW.md" beforeDir="false" afterPath="$PROJECT_DIR$/OVERVIEW.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adapter-guide/connectors/datadog_supported_stix.md" beforeDir="false" afterPath="$PROJECT_DIR$/adapter-guide/connectors/datadog_supported_stix.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adapter-guide/connectors/elastic_ecs_supported_stix.md" beforeDir="false" afterPath="$PROJECT_DIR$/adapter-guide/connectors/elastic_ecs_supported_stix.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adapter-guide/connectors/qradar_supported_stix.md" beforeDir="false" afterPath="$PROJECT_DIR$/adapter-guide/connectors/qradar_supported_stix.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adapter-guide/develop-stix-adapter.md" beforeDir="false" afterPath="$PROJECT_DIR$/adapter-guide/develop-stix-adapter.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adapter-guide/supported-mappings.md" beforeDir="false" afterPath="$PROJECT_DIR$/adapter-guide/supported-mappings.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/_build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/_build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deployment/ibm_cloud_pak_for_security/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter/scripts/stix_shifter.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter/scripts/stix_shifter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter/scripts/supported_property_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter/scripts/supported_property_exporter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/json/guardduty_from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/json/guardduty_from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/json/vpcflow_from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/json/vpcflow_from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/query_constructor.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/aws_athena/stix_translation/query_constructor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/tests/stix_translation/test_azure_sentinel_stix_to_query.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/azure_sentinel/tests/stix_translation/test_azure_sentinel_stix_to_query.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/carbonblack/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/carbonblack/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/cbcloud/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/cbcloud/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/crowdstrike/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/crowdstrike/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/datadog/test/stix_translation/test_datadog_stix_to_query.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/datadog/test/stix_translation/test_datadog_stix_to_query.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/to_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/elastic_ecs/stix_translation/json/to_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/lang_en.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/lang_en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/msatp/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/msatp/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/query_constructor.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/stix_translation/query_constructor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/mysql/tests/stix_translation/test_mysql_stix_to_query.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/mysql/tests/stix_translation/test_mysql_stix_to_query.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/proofpoint/stix_transmission/results_connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/proofpoint/stix_transmission/results_connector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/aql_events_fields.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/aql_events_fields.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/events_from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/events_from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/to_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_translation/json/to_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_transmission/results_connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar/stix_transmission/results_connector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/aql_events_fields.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/aql_events_fields.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/events_from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/events_from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/to_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/qradar_perf_test/stix_translation/json/to_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_modules/trendmicro_vision_one/stix_translation/json/messageActivityData_from_stix_map.json" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_modules/trendmicro_vision_one/stix_translation/json/messageActivityData_from_stix_map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_utils/modules/base/stix_translation/base_query_translator.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_utils/modules/base/stix_translation/base_query_translator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_utils/modules/base/stix_translation/base_results_translator.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_utils/modules/base/stix_translation/base_results_translator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stix_shifter_utils/stix_translation/src/utils/transformers.py" beforeDir="false" afterPath="$PROJECT_DIR$/stix_shifter_utils/stix_translation/src/utils/transformers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/stix_translation/test_results_translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/stix_translation/test_results_translation.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="validation_change1" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="ProjectId" id="1z5MY3quDKg5adf3h2BsYSTO9b1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/stix_shifter_modules/proofpoint/tests/stix_transmission/api_response" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/stix_shifter_modules/proofpoint/tests/stix_transmission/api_response" />
+      <recent name="$PROJECT_DIR$/stix_shifter_modules/proofpoint" />
+      <recent name="$PROJECT_DIR$/stix_shifter_modules/proofpoint/stix_transmission" />
+      <recent name="$PROJECT_DIR$/stix_shifter_modules" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.pyenv/versions/3.6.13/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testJyoti" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="stix-shifter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.pyenv/versions/3.6.13/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stix_shifter_modules/proofpoint" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stix_shifter_modules/proofpoint/testJyoti.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.testJyoti" />
+        <item itemvalue="Python.testJyoti" />
+        <item itemvalue="Python.testJyoti" />
+        <item itemvalue="Python.testJyoti" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="acf3e6a0-b178-44de-a514-70879d0ced45" name="Changes" comment="" />
+      <created>1633433539700</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1633433539700</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Added connector code for Proofpoint&#10;i) Added translator code&#10;ii)Added transmission code&#10;iii)Added test folder&#10;iv)Added mapping files">
+      <created>1633436100542</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1633436100542</updated>
+    </task>
+    <task id="LOCAL-00002" summary="i) Updated code for first code review comments&#10;ii)Added code for error handling in results_connector">
+      <created>1633674880650</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1633674880651</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Updated code for second code review comments&#10;i)Added code for url and end point&#10;ii) Corrected configuration attributes in config file&#10;iii) Added a function to append default time range if not present in input STIX pattern">
+      <created>1634021028673</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1634021028673</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated code for code review comments - code optimization">
+      <created>1634618859315</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1634618859315</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated code for unit tests in tests folder">
+      <created>1634649832103</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634649832103</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added README.md for Proofpoint module">
+      <created>1634723635852</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1634723635852</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Updated changes for validator errors">
+      <created>1634894465227</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1634894465227</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated changes for validator errors and README">
+      <created>1635159453857</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1635159453857</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Updated changes for transmission module unit tests">
+      <created>1635160043136</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1635160043136</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Code changes after pytest run on unittests files">
+      <created>1635165788579</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1635165788579</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Line correction">
+      <created>1635166248747</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1635166248747</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Removed principal and secret from unittest file">
+      <created>1635166433818</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1635166433818</updated>
+    </task>
+    <task id="LOCAL-00013" summary="decode error resolved">
+      <created>1635233655540</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1635233655540</updated>
+    </task>
+    <task id="LOCAL-00014" summary="decode error resolved&#10;hostname added for pytest">
+      <created>1635233683219</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1635233683219</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Separated transmission test module">
+      <created>1635236963324</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1635236963324</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Removed credentials">
+      <created>1635257040425</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1635257040425</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added 'body' field">
+      <created>1635327579105</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1635327579105</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Added 'body' field&#10;Updated unittest transmission file">
+      <created>1635338419503</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1635338419503</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Updated code for data type of offset and length">
+      <created>1637226717777</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1637226717777</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Updated code for data type of offset and length">
+      <created>1637229485097</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1637229485097</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Updated code for data type of offset and length">
+      <created>1637294032908</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1637294032908</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Revert &quot;Updated code for data type of offset and length&quot;&#10;&#10;This reverts commit 3a440a19">
+      <created>1637338365309</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1637338365309</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Updated code for data type of offset and length">
+      <created>1637339560253</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1637339560253</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Updated code for data type of offset and length">
+      <created>1637832674207</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1637832674208</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Made changes in code for data type of offset and length">
+      <created>1637847209146</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1637847209146</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="develop" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added connector code for Proofpoint&#10;i) Added translator code&#10;ii)Added transmission code&#10;iii)Added test folder&#10;iv)Added mapping files" />
+    <MESSAGE value="i) Updated code for first code review comments&#10;ii)Added code for error handling in results_connector" />
+    <MESSAGE value="Updated code for second code review comments&#10;i)Added code for url and end point&#10;ii) Corrected configuration attributes in config file&#10;iii) Added a function to append default time range if not present in input STIX pattern" />
+    <MESSAGE value="Updated code for code review comments - code optimization" />
+    <MESSAGE value="Updated code for unit tests in tests folder" />
+    <MESSAGE value="Added README.md for Proofpoint module" />
+    <MESSAGE value="Updated changes for validator errors" />
+    <MESSAGE value="Updated changes for validator errors and README" />
+    <MESSAGE value="Updated changes for transmission module unit tests" />
+    <MESSAGE value="Code changes after pytest run on unittests files" />
+    <MESSAGE value="Line correction" />
+    <MESSAGE value="Removed principal and secret from unittest file" />
+    <MESSAGE value="decode error resolved" />
+    <MESSAGE value="decode error resolved&#10;hostname added for pytest" />
+    <MESSAGE value="Separated transmission test module" />
+    <MESSAGE value="Removed credentials" />
+    <MESSAGE value="Added 'body' field" />
+    <MESSAGE value="Added 'body' field&#10;Updated unittest transmission file" />
+    <MESSAGE value="Revert &quot;Updated code for data type of offset and length&quot;&#10;&#10;This reverts commit 3a440a19" />
+    <MESSAGE value="Updated code for data type of offset and length" />
+    <MESSAGE value="Made changes in code for data type of offset and length" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made changes in code for data type of offset and length" />
+  </component>
+</project>

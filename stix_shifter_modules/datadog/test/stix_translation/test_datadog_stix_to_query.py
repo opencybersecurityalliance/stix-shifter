@@ -9,7 +9,7 @@ translation = stix_translation.StixTranslation()
 
 
 def _test_query_assertions(query, queries):
-    assert query['queries'] == queries
+    assert set(query['queries']) == set(queries)
 
 class TestStixToQuery(unittest.TestCase, object):
 
@@ -23,7 +23,8 @@ class TestStixToQuery(unittest.TestCase, object):
                    '{"query": {"host": "abc.com", "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"id": 12345678, "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"id_str": "12345678", "start": 12345378, "end": 12345678}, "source": "processes"}']
-        assert query['queries'] == queries
+        
+        _test_query_assertions(query, queries)
 
     @patch('time.time', return_value=12345678)
     def test_domain_name_query(self, mock_time):
@@ -167,7 +168,8 @@ class TestStixToQuery(unittest.TestCase, object):
                    '{"query": {"tags": "tags", "start": 12345378, "end": 12345678}, "source": "events"}',
                    '{"query": {"alert_type": "alert_type", "start": 12345378, "end": 12345678}, "source": "processes"}',
                    '{"query": {"tags": "tags", "start": 12345378, "end": 12345678}, "source": "processes"}']
-        assert query['queries'][0] == queries[0]
+
+        _test_query_assertions(query, queries)
 
     def test_query_comparator_operator_AND_with_same_field(self):
         stix_pattern = "[domain-name:value = 'abc.com'] START t'2021-01-28T12:24:01.009Z' STOP t'2021-07-25T12:54:01.009Z'"

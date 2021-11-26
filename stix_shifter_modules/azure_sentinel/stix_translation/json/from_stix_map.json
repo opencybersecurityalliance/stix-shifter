@@ -1,7 +1,7 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress", "hostStates.publicIpAddress", "hostStates.privateIpAddress", "userStates.logonIp"]
+      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress"]
     }
   },
   "ipv6-addr": {
@@ -108,6 +108,7 @@
       "hostStates.isAzureAadRegistered": ["hostStates.isAzureAadRegistered"],
       "hostStates.isHybridAzureDomainJoined": ["hostStates.isHybridAzureDomainJoined"],
       "hostStates.os": ["hostStates.os"],
+      "hostStates.publicIpAddress": ["hostStates.publicIpAddress"],
       "hostStates.privateIpAddress": ["hostStates.privateIpAddress"],
       "hostStates.riskScore": ["hostStates.riskScore"],
       "id": ["id"],
@@ -143,6 +144,7 @@
       "triggers.name": ["triggers.name"],
       "triggers.type": ["triggers.type"],
       "triggers.value": ["triggers.value"],
+      "userStates.logonIp": ["userStates.logonIp"],
       "userStates.aadUserId": ["userStates.aadUserId"],
       "userStates.emailRole": ["userStates.emailRole"],
       "userStates.isVpn": ["userStates.isVpn"],

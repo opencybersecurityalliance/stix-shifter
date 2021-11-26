@@ -1,0 +1,134 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["netconn_ipv4", "netconn_local_ipv4"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["netconn_ipv6", "netconn_local_ipv6"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["process_name"],
+      "hashes.MD5": ["process_hash"],
+      "hashes.'SHA-256'": ["process_hash", "process_sha256"]
+    }
+  },
+  "process": {
+    "fields": {
+      "created_time": ["process_start_time"],
+      "creator_user_ref.account_login": ["process_username"],
+      "service_name":["process_service_name"],
+      "command_line": ["process_cmdline"],
+      "pid": ["process_pid"],
+      "image_ref.name": ["process_name"],
+      "image_ref.hashes.MD5": ["process_hash"],
+      "image_ref.hashes.'SHA-256'": ["process_hash", "process_sha256"],
+      "parent_ref.command_line": ["parent_cmdline"],
+      "parent_ref.pid": ["parent_pid"],
+      "parent_ref.name": ["parent_name"],
+      "parent_ref.image_ref.name": ["parent_name"],
+      "parent_ref.image_ref.hashes.MD5": ["parent_hash"],
+      "parent_ref.image_ref.hashes.'SHA-256'": ["parent_hash"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["process_file_description", "process_internal_name"],
+      "vendor": ["process_company_name", "process_publisher"],
+      "version": ["process_product_version"] 
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["netconn_port"],
+      "dst_port": ["netconn_port"],
+      "protocols[*]": ["netconn_protocol"],
+      "src_ref.value": ["netconn_local_ipv4", "netconn_local_ipv6"],
+      "dst_ref.value": ["netconn_ipv4", "netconn_ipv6"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["process_username"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["netconn_domain"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["netconn_domain"]
+    }
+  },
+  "x-cbcloud" : {
+    "fields": {
+      "device_name": ["device_name"],
+      "device_internal_ip": ["device_internal_ip"],
+      "device_external_ip": ["device_external_ip"],
+      "device_os": ["device_os"],
+      "device_os_version": ["device_os_version"],
+      "device_id": ["device_id"],
+      "device_group": ["device_group"],
+      "device_policy": ["device_policy"],
+      "device_timestamp": ["device_timestamp"],
+      "process_terminated": ["process_terminated"],
+      "regmod_count": ["regmod_count"],
+      "netconn_count": ["netconn_count"],
+      "filemod_count": ["filemod_count"],
+      "modload_count": ["modload_count"],
+      "childproc_count": ["childproc_count"],
+      "crossproc_count": ["crossproc_count"],
+      "scriptload_count": ["scriptload_count"],
+      "parent_cmdline_length": ["parent_cmdline_length"],
+      "process_cmdline_length": ["process_cmdline_length"],
+      "parent_publisher_state": ["parent_publisher_state"],
+      "process_publisher_state": ["process_publisher_state"],
+      "parent_reputation": ["parent_reputation"],
+      "process_reputation": ["process_reputation"],
+      "parent_effective_reputation": ["parent_effective_reputation"],
+      "process_effective_reputation": ["process_effective_reputation"],
+      "netconn_location": ["netconn_location"],
+      "netconn_inbound": ["netconn_inbound"],
+      "netconn_failed": ["netconn_failed"],
+      "regmod_name": ["regmod_name"],
+      "scriptload_name": ["scriptload_name"],
+      "scriptload_hash": ["scriptload_hash"],
+      "scriptload_publisher_state": ["scriptload_publisher_state"],
+      "fileless_scriptload_hash": ["fileless_scriptload_hash"],
+      "fileless_scriptload_cmdline": ["fileless_scriptload_cmdline"],
+      "fileless_scriptload_cmdline_length": ["fileless_scriptload_cmdline_length"],
+      "modload_name": ["modload_name"],
+      "modload_hash": ["modload_hash"],
+      "modload_publisher_state": ["modload_publisher_state"],
+      "filemod_name": ["filemod_name"],
+      "filemod_hash": ["filemod_hash"],
+      "filemod_publisher_state": ["filemod_publisher_state"],
+      "crossproc_action": ["crossproc_action"],
+      "crossproc_api": ["crossproc_api"],
+      "crossproc_hash": ["crossproc_hash"],
+      "crossproc_name": ["crossproc_name"],
+      "crossproc_target": ["crossproc_target"],
+      "childproc_cmdline": ["childproc_cmdline"],
+      "childproc_cmdline_length": ["childproc_cmdline_length"],
+      "childproc_effective_reputation": ["childproc_effective_reputation"],
+      "childproc_guid": ["childproc_guid"],
+      "childproc_hash": ["childproc_hash"],
+      "childproc_name": ["childproc_name"],
+      "childproc_publisher_state": ["childproc_publisher_state"],
+      "childproc_reputation": ["childproc_reputation"],
+      "hash": ["hash"],
+      "process_original_filename": ["process_original_filename"],
+      "process_product_name": ["process_product_name"],
+      "backend_timestamp": ["backend_timestamp"],
+      "process_duration": ["process_duration"],
+      "process_elevated": ["process_elevated"],
+      "process_integrity_level": ["process_integrity_level"],
+      "process_privileges": ["process_privileges"]
+    }
+  }
+}
