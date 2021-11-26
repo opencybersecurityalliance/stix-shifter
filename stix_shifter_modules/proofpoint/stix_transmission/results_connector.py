@@ -20,7 +20,7 @@ class ResultsConnector(BaseResultsConnector):
             response_code = response.code
             response_txt = response.read()
             # Construct a response object
-            # print("response code={}, text={}".format(response_code, response_txt))
+
             return_obj = dict()
             error_obj = dict()
             if response_code == 200:
@@ -42,7 +42,6 @@ class ResultsConnector(BaseResultsConnector):
                             msg["is_multipart"] = True
                         else: msg["is_multipart"] = False
 
-                    print("newdata :", newdata)
                     return_obj['data'] = newdata
 
                 except json.decoder.JSONDecodeError as err:
