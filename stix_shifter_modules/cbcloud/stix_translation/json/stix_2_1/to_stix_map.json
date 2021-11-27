@@ -1,0 +1,182 @@
+{
+  "process_username": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
+  "process_start_time": [
+    {
+      "key": "process.created_time",
+      "object": "process"
+    }
+  ],
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
+  },
+  "process_guid": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  },
+  "process_md5": {
+    "key": "file.hashes.MD5",
+    "object": "process_file"
+  },
+  "process_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "process_file"
+  },
+  "process_cmdline": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "process_path": [
+    {
+      "key": "directory.path",
+      "object": "process_dir"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "process_file",
+      "references": "process_dir"
+    }
+  ],
+  "parent_name": [
+    {
+      "key": "file.name",
+      "object": "parent_file"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "parent",
+      "references": "parent_file"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent"
+    }
+  ],
+  "parent_pid": {
+    "key": "process.pid",
+    "object": "parent"
+  },
+  "parent_guid": {
+    "key": "process.x_unique_id",
+    "object": "parent"
+  },
+  "parent_md5": {
+    "key": "file.hashes.MD5",
+    "object": "parent_file"
+  },
+  "parent_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "parent_file"
+  },
+  "parent_cmdline": {
+    "key": "process.command_line",
+    "object": "parent"
+  },
+  "parent_path": [
+    {
+      "key": "directory.path",
+      "object": "parent_dir"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "parent_file",
+      "references": "parent_dir"
+    }
+  ],
+  "device_name": {
+    "key": "x-cbcloud.device_name",
+    "object": "x_cbcloud"
+  },
+  "device_internal_ip": {
+    "key": "x-cbcloud.device_internal_ip",
+    "object": "x_cbcloud"
+  },
+  "device_external_ip": {
+    "key": "x-cbcloud.device_external_ip",
+    "object": "x_cbcloud"
+  },
+  "device_os": {
+    "key": "x-cbcloud.device_os",
+    "object": "x_cbcloud"
+  },
+  "device_id": {
+    "key": "x-cbcloud.device_id",
+    "object": "x_cbcloud"
+  },
+  "device_timestamp": [
+    {
+      "key": "first_observed",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "cybox": false
+    },
+    {
+      "key": "x-cbcloud.device_timestamp",
+      "object": "x_cbcloud"
+    }
+  ],
+  "org_id": {
+    "key": "x-cbcloud.org_id",
+    "object": "x_cbcloud"
+  },
+  "device_group_id": {
+    "key": "x-cbcloud.device_group_id",
+    "object": "x_cbcloud"
+  },
+  "process_terminated": {
+    "key": "x-cbcloud.process_terminated",
+    "object": "x_cbcloud"
+  },
+  "regmod_count": {
+    "key": "x-cbcloud.regmod_count",
+    "object": "x_cbcloud"
+  },
+  "netconn_count": {
+    "key": "x-cbcloud.netconn_count",
+    "object": "x_cbcloud"
+  },
+  "filemod_count": {
+    "key": "x-cbcloud.filemod_count",
+    "object": "x_cbcloud"
+  },
+  "modload_count": {
+    "key": "x-cbcloud.modload_count",
+    "object": "x_cbcloud"
+  },
+  "childproc_count": {
+    "key": "x-cbcloud.childproc_count",
+    "object": "x_cbcloud"
+  },
+  "crossproc_count": {
+    "key": "x-cbcloud.crossproc_count",
+    "object": "x_cbcloud"
+  },
+  "scriptload_count": {
+    "key": "x-cbcloud.scriptload_count",
+    "object": "x_cbcloud"
+  }
+}

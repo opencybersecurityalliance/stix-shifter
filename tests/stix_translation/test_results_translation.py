@@ -1,15 +1,14 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.mysql.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+import json
 
 MODULE = 'mysql'
 RESULTS = 'results'
 TRANSFORMERS = get_module_transformers(MODULE)
-epoch_to_timestamp_class = TRANSFORMERS.get('EpochToTimestamp')
-EPOCH_START = 1531169112
-EPOCH_END = 1531169254
-entry_point = EntryPoint()
-MAP_DATA = entry_point.get_results_translator().map_data
+EPOCH = 1634657528000
+TIMESTAMP = "2021-10-19T15:32:08.000Z"
+
 DATA_SOURCE = {
     "type": "identity",
     "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
@@ -28,7 +27,17 @@ DATA = {
             "filename": "somefile.exe", 
             "sha256hash": "sha256_hash", 
             "md5hash": "md5_hash", 
-            "file_path": "C:/some/path/"
+            "file_path": "C:/some/path/",
+            "file_created_time": EPOCH,
+            "file_modified_time": EPOCH,
+            "file_accessed_time": EPOCH,
+            "directory_created_time": EPOCH,
+            "directory_modified_time": EPOCH,
+            "directory_accessed_time": EPOCH,
+            "process_id": 12345, 
+            "process_name": "file executed", 
+            "process_arguments": "some args", 
+            "process_created_time": EPOCH
         }
 
 CYBOX_ID = {
@@ -78,10 +87,9 @@ class TestTransform(object):
                     yield id_val
 
     def test_common_prop(self):
-        DATA = {"entry_time": EPOCH_START, "entry_time": EPOCH_END, "eventcount": 1}
-
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
+        DATA = {"entry_time": EPOCH, "entry_time": EPOCH, "eventcount": 1}
+        entry_point = EntryPoint()
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
@@ -105,9 +113,8 @@ class TestTransform(object):
         assert observed_data['last_observed']
 
     def test_STIX_2_0_cybox_observables(self):
-        
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {})
+        entry_point = EntryPoint()
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" in result_bundle
@@ -155,26 +162,51 @@ class TestTransform(object):
         assert  "user_id" in stix_object and stix_object['user_id'] == DATA['username']
 
         # file
-        stix_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert stix_object, 'file object type not found'
-        assert "name" in stix_object and stix_object['name'] == DATA['filename']
-        assert "hashes" in stix_object 
-        hashes = stix_object["hashes"]
+        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
+        assert file_object, 'file object type not found'
+        assert "name" in file_object and file_object['name'] == DATA['filename']
+        assert "created" in file_object and file_object['created'] == TIMESTAMP
+        assert "ctime" not in file_object
+        assert "modified" in file_object and file_object['modified'] == TIMESTAMP
+        assert "mtime" not in file_object
+        assert "accessed" in file_object and file_object['accessed'] == TIMESTAMP
+        assert "atime" not in file_object
+        assert "parent_directory_ref" in file_object
+        assert "hashes" in file_object 
+        hashes = file_object["hashes"]
         assert "MD5" in hashes and hashes["MD5"] == DATA["md5hash"]
-        assert "SHA-256" in hashes and hashes["SHA-256"] == DATA["sha256hash"] 
+        assert "SHA-256" in hashes and hashes["SHA-256"] == DATA["sha256hash"]
 
-        directory_ref = stix_object['parent_directory_ref']
-        assert directory_ref in objects, f"dst_ref with key {stix_object['parent_directory_ref']} not found"
+        directory_ref = file_object['parent_directory_ref']
+        assert directory_ref in objects, f"dst_ref with key {file_object['parent_directory_ref']} not found"
 
         # directory
-        stix_object = TestTransform.get_first_of_type(objects.values(), 'directory')
-        assert stix_object, 'directory object type not found'
-        assert "path" in stix_object and stix_object["path"] == DATA["file_path"]
+        directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
+        assert directory_object, 'directory object type not found'
+        assert "path" in directory_object and directory_object["path"] == DATA["file_path"]
+        assert "created" in directory_object and directory_object['created'] == TIMESTAMP
+        assert "ctime" not in directory_object
+        assert "modified" in directory_object and directory_object['modified'] == TIMESTAMP
+        assert "mtime" not in directory_object
+        assert "accessed" in directory_object and directory_object['accessed'] == TIMESTAMP
+        assert "atime" not in directory_object
+
+        # process
+        process_object = TestTransform.get_first_of_type(objects.values(), 'process')
+        assert process_object, 'process object type not found'
+        assert "name" in process_object and process_object['name'] == DATA['process_name']
+        assert "pid" in process_object and process_object['pid'] == DATA['process_id']
+        assert "arguments" in process_object and process_object['arguments'] == DATA['process_arguments']
+        assert "created" in process_object and process_object['created'] ==  TIMESTAMP
+        assert "binary_ref" in process_object
+        assert "image_ref" not in process_object
 
     def test_STIX_2_1_cybox_observables(self):
-        
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            DATA_SOURCE, MAP_DATA, [DATA], TRANSFORMERS, {"stix_2.1": "true"})
+        options = {
+            "stix_2.1": True
+        }
+        entry_point = EntryPoint(options=options)
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" not in result_bundle
@@ -222,6 +254,13 @@ class TestTransform(object):
         file_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'file')
         assert file_object, 'file object type not found'
         assert "name" in file_object and file_object['name'] == DATA['filename']
+        assert "ctime" in file_object and file_object['ctime'] == TIMESTAMP
+        assert "created" not in file_object
+        assert "mtime" in file_object and file_object['mtime'] == TIMESTAMP
+        assert "modified" not in file_object
+        assert "atime" in file_object and file_object['atime'] == TIMESTAMP
+        assert "accessed" not in file_object
+        assert "parent_directory_ref" in file_object
         assert "hashes" in file_object 
         hashes = file_object["hashes"]
         assert "MD5" in hashes and hashes["MD5"] == DATA["md5hash"]
@@ -233,6 +272,23 @@ class TestTransform(object):
         directory_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, file_object["parent_directory_ref"])
         assert directory_object, 'directory object type not found'
         assert "path" in directory_object and directory_object["path"] == DATA["file_path"]
+        assert "ctime" in directory_object and directory_object['ctime'] == TIMESTAMP
+        assert "created" not in directory_object
+        assert "mtime" in directory_object and directory_object['mtime'] == TIMESTAMP
+        assert "modified" not in directory_object
+        assert "atime" in directory_object and directory_object['atime'] == TIMESTAMP
+        assert "accessed" not in directory_object
+
+        # process
+        process_object = TestTransform.get_first_of_type(result_bundle_objects, 'process')
+        assert process_object, 'process object type not found'
+        assert "name" not in process_object
+        assert "pid" in process_object and process_object['pid'] == DATA['process_id']
+        assert "arguments" in process_object and process_object['pid'] == DATA['process_id']
+        assert "created_time" in process_object and process_object['arguments'] == DATA['process_arguments']
+        assert "created" not in process_object
+        assert "image_ref" in process_object
+        assert "binary_ref" not in process_object
         assert "id" in directory_object and directory_object['id'] == CYBOX_ID["directory"]
 
         

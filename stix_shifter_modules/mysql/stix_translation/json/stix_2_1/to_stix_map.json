@@ -58,7 +58,7 @@
       "object": "fl"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "fl"
     }
@@ -89,42 +89,42 @@
   ],
   "file_created_time": [
     {
-      "key": "file.created",
+      "key": "file.ctime",
       "object": "fl",
       "transformer": "EpochToTimestamp"
     }
   ],
   "file_modified_time": [
     {
-      "key": "file.modified",
+      "key": "file.mtime",
       "object": "fl",
       "transformer": "EpochToTimestamp"
     }
   ],
   "file_accessed_time": [
     {
-      "key": "file.accessed",
+      "key": "file.atime",
       "object": "fl",
       "transformer": "EpochToTimestamp"
     }
   ],
   "directory_created_time": [
     {
-      "key": "directory.created",
+      "key": "directory.ctime",
       "object": "file_directory",
       "transformer": "EpochToTimestamp"
     }
   ],
   "directory_modified_time": [
     {
-      "key": "directory.modified",
+      "key": "directory.mtime",
       "object": "file_directory",
       "transformer": "EpochToTimestamp"
     }
   ],
   "directory_accessed_time": [
     {
-      "key": "directory.accessed",
+      "key": "directory.atime",
       "object": "file_directory",
       "transformer": "EpochToTimestamp"
     }
@@ -136,12 +136,6 @@
       "transformer": "ToInteger"
     }
   ],
-  "process_name": [
-    {
-      "key": "process.name",
-      "object": "process"
-    }
-  ],
   "process_arguments": [
     {
       "key": "process.arguments",
@@ -150,7 +144,7 @@
   ],
   "process_created_time": [
     {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process",
       "transformer": "EpochToTimestamp"
     }
