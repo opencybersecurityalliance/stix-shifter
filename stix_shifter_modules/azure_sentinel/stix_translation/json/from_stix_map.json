@@ -69,7 +69,7 @@
   },
   "software": {
     "fields": {
-      "name": ["vendorInformation.provider", "networkConnections.applicationName", "hostStates.os"],
+      "name": ["vendorInformation.provider"],
       "vendor": ["vendorInformation.vendor"],
       "version": ["vendorInformation.providerVersion"]
     }
@@ -122,6 +122,7 @@
       "malwareStates.name": ["malwareStates.family"],
       "malwareStates.severity": ["malwareStates.family"],
       "malwareStates.wasRunning": ["malwareStates.family"],
+      "networkConnections.applicationName": ["networkConnections.applicationName"],
       "networkConnections.direction": ["networkConnections.direction"],
       "networkConnections.domainRegisteredDateTime": ["networkConnections.domainRegisteredDateTime"],
       "networkConnections.localDnsName": ["networkConnections.localDnsName"],

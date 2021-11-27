@@ -26,16 +26,11 @@
       "key": "x-msazure-sentinel-alert.assignedTo",
       "object": "alert"
     },
-    "category": [
-      {
-      "key": "x-ibm-finding.finding_type",
-      "object": "finding"
-      },
-      {
+    "category": {
       "key": "x-oca-event.category",
       "object": "event"
       }
-    ],
+    ,
     "closedDateTime":{
         "key": "last_observed",
         "cybox": false
