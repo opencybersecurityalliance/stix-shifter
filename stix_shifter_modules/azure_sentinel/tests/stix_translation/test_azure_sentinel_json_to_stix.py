@@ -156,7 +156,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert custom_object_2 is not None, 'Custom object type not found'
 
         assert custom_object_2.keys() == {'type', 'recommendedactions', 'status'}
-        assert custom_object_3.keys() == {'type', 'finding_type', 'createddatetime', 'description', 'time_observed', 'severity', 'name'}
+        assert custom_object_3.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name'}
         assert custom_object_3['name'] == 'Rare SVCHOST service group executed'
         assert custom_object_4.keys() == {'type', 'code', 'category', 'created', 'action'}
         assert custom_object_4['category'] == 'SuspiciousSVCHOSTRareGroup'
