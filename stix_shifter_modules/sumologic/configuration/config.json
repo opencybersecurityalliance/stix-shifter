@@ -12,8 +12,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "access_id": {
                 "type": "password"
             },
