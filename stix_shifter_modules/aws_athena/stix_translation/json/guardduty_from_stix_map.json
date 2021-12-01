@@ -73,6 +73,5 @@
     "src_os_ref.value": ["platform"],
     "dst_geolocation": ["country_name"]
   }
-  },
-  "startstopattr": "updatedat"
+  }
 }

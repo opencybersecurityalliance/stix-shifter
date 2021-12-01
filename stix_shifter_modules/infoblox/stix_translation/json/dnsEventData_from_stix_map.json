@@ -12,7 +12,7 @@
     "network-traffic": {
         "fields": {
             "src_ref.value": ["qip"],
-            "extensions.dns-ext.question.domain_ref.value": ["qname"]
+            "extensions.'dns-ext'.question.domain_ref.value": ["qname"]
         }
     },
     "x-infoblox-dns-event": {

@@ -49,9 +49,9 @@
       "created": ["file.created"],
       "size": ["file.size"],
       "hashes.MD5": ["file.hash.md5"],
-      "hashes.SHA-1": ["file.hash.sha1"],
-      "hashes.SHA-256": ["file.hash.sha256"],
-      "hashes.SHA-512": ["file.hash.sha512"],
+      "hashes.'SHA-1'": ["file.hash.sha1"],
+      "hashes.'SHA-256'": ["file.hash.sha256"],
+      "hashes.'SHA-512'": ["file.hash.sha512"],
       "parent_directory_ref.path": ["file.directory"]
     }
   },
@@ -117,7 +117,8 @@
       "creator_user_ref.user_id": ["user.name"],
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name"],
-      "binary_ref.name": ["process.executable", "process.parent.executable"]
+      "binary_ref.name": ["process.executable", "process.parent.executable"],
+      "x_ttp_tags": ["tags"]
     }
   },
   "x-ecs-process": {
@@ -181,8 +182,8 @@
   },
   "autonomous-system": {
     "fields": {
-      "value": ["client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name"],
-      "number": ["client.as.number, server.as.number, source.as.number, destination.as.number"]
+      "value": ["client.as.organization.name", "server.as.organization.name", "source.as.organization.name", "destination.as.organization.name"],
+      "number": ["client.as.number", "server.as.number", "source.as.number", "destination.as.number"]
     }
   },
   "email-addr": {

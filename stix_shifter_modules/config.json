@@ -1,73 +1,80 @@
 {
-  "connection": {
-    "type": {
-      "type": "connectorType"
-    },
-    "options": {
-      "type": "fields",
-      "async_call": {
-        "type": "text",
-        "hidden": true,
-        "optional": true
-      },
-      "result_limit": {
-        "default": 10000,
-        "min": 1,
-        "max": 500000,
-        "type": "number",
-        "previous": "connection.resultSizeLimit"
-      },
-      "time_range": {
-        "default": 5,
-        "min": 1,
-        "max": 10000,
-        "type": "number",
-        "previous": "connection.timerange",
-        "nullable": true
-      },
-      "timeout": {
-        "default": 30,
-        "min": 1,
-        "max": 60,
-        "hidden": true,
-        "type": "number",
-        "previous": "connection.timeoutLimit"
-      },
-      "dialects": {
-        "type": "array",
-        "hidden": true,
-        "optional": true
-      },
-      "language": {
-        "type": "string",
-        "default": "stix",
-        "optional": true,
-        "hidden": true
-      },
-      "validate_pattern": {
-        "type": "boolean",
-        "optional": true,
-        "hidden": true,
-        "previous": "connection.validate_pattern"
-      },
-      "stix_validator": {
-        "type": "boolean",
-        "default": false,
-        "optional": true,
-        "hidden": true,
-        "previous": "connection.stix_validator"
-      },
-      "mapping": {
-        "type": "json",
-        "optional": true,
-        "previous": "connection.mapping"
-      },
-      "unmapped_fallback": {
-        "type": "boolean",
-        "default": false,
-        "optional": true,
-        "hidden": true
-      }
+    "connection": {
+        "type": {
+            "type": "connectorType"
+        },
+        "options": {
+            "type": "fields",
+            "async_call": {
+                "type": "text",
+                "hidden": true,
+                "optional": true
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "max": 500000,
+                "type": "number",
+                "previous": "connection.resultSizeLimit"
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "max": 10000,
+                "type": "number",
+                "previous": "connection.timerange",
+                "nullable": true
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "max": 60,
+                "hidden": true,
+                "type": "number",
+                "previous": "connection.timeoutLimit"
+            },
+            "dialects": {
+                "type": "array",
+                "hidden": true,
+                "optional": true
+            },
+            "language": {
+                "type": "string",
+                "default": "stix",
+                "optional": true,
+                "hidden": true
+            },
+            "validate_pattern": {
+                "type": "boolean",
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.validate_pattern"
+            },
+            "stix_validator": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.stix_validator"
+            },
+            "mapping": {
+                "type": "json",
+                "optional": true,
+                "previous": "connection.mapping"
+            },
+            "unmapped_fallback": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
+            },
+            "stix_2.1": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
+            }
+        }
     }
   }
 }

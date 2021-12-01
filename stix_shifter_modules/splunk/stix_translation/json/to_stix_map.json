@@ -6,7 +6,12 @@
   },
   "_raw": {
     "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
+    "transformer": "ToBase64",
+    "object": "artifact"
+  },
+  "mime_type_raw": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
   },
   "dest_ip": [
     {
