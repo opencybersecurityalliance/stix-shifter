@@ -89,6 +89,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert observed_data['last_observed'] is not None
         assert observed_data['number_observed'] is not None
 
+
     def test_custom_property(self):
         """
         to test the custom stix object properties
@@ -133,32 +134,32 @@ class TestMsatpResultsToStix(unittest.TestCase):
         to test file stix object properties
         """
         data = {'DeviceFileEvents': {'Timestamp': '2019-09-20T06:50:17.3764965Z',
-                                      'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                      'DeviceName': 'desktop-536bt46', 'ActionType': 'FileCreated',
-                                      'FileName': 'updater.exe', "ReportId": 97827,
-                                      'FolderPath': '<C:\\Program Files\\Mozilla Firefox\\updated\\updater.exe>',
-                                      'SHA1': 'cf864398950658185fad8207957b46c12f133ea5',
-                                      'MD5': '64c52647783e6b3c0964e41aa38fa5c1',
-                                      'InitiatingProcessAccountDomain': 'nt authority',
-                                      'InitiatingProcessAccountName': 'system',
-                                      'InitiatingProcessAccountSid': 'S-1-5-18',
-                                      'InitiatingProcessMD5': '620f00789f37c453710ebf758bf1772e',
-                                      'InitiatingProcessSHA1': '8bd812436b301dd30d55f76ae418a0e85f7dd020',
-                                      'InitiatingProcessFolderPath': 'c:\\program files (x86)\\mozilla maintenance '
-                                                                     'service\\update\\updater.exe',
-                                      'InitiatingProcessFileName': 'updater.exe', 'InitiatingProcessId': 13980,
-                                      'InitiatingProcessCommandLine': '"updater.exe" '
-                                                                      'C:\\ProgramData\\Mozilla\\updates\\3080'
-                                                                      '46B0AF4A39CB\\updates\\0 "<C:\\Program '
-                                                                      'Files\\Mozilla Firefox>" "<C:\\Program '
-                                                                      'Files\\Mozilla Firefox\\updated>" -1',
-                                      'InitiatingProcessCreationTime': '2019-09-20T06:50:08.1793244Z',
-                                      'InitiatingProcessIntegrityLevel': 'System',
-                                      'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
-                                      'InitiatingProcessParentId': 17088,
-                                      'InitiatingProcessParentFileName': 'maintenanceservice.exe',
-                                      'InitiatingProcessParentCreationTime': '2019-09-20T06:50:07.6324849Z',
-                                      'RequestProtocol': 'Unknown', 'ReportId': 11844, 'rn': 1, 'event_count': '1'}}
+                                       'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                       'DeviceName': 'desktop-536bt46', 'ActionType': 'FileCreated',
+                                       'FileName': 'updater.exe', "ReportId": 97827,
+                                       'FolderPath': '<C:\\Program Files\\Mozilla Firefox\\updated\\updater.exe>',
+                                       'SHA1': 'cf864398950658185fad8207957b46c12f133ea5',
+                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1',
+                                       'InitiatingProcessAccountDomain': 'nt authority',
+                                       'InitiatingProcessAccountName': 'system',
+                                       'InitiatingProcessAccountSid': 'S-1-5-18',
+                                       'InitiatingProcessMD5': '620f00789f37c453710ebf758bf1772e',
+                                       'InitiatingProcessSHA1': '8bd812436b301dd30d55f76ae418a0e85f7dd020',
+                                       'InitiatingProcessFolderPath': 'c:\\program files (x86)\\mozilla maintenance '
+                                                                      'service\\update\\updater.exe',
+                                       'InitiatingProcessFileName': 'updater.exe', 'InitiatingProcessId': 13980,
+                                       'InitiatingProcessCommandLine': '"updater.exe" '
+                                                                       'C:\\ProgramData\\Mozilla\\updates\\3080'
+                                                                       '46B0AF4A39CB\\updates\\0 "<C:\\Program '
+                                                                       'Files\\Mozilla Firefox>" "<C:\\Program '
+                                                                       'Files\\Mozilla Firefox\\updated>" -1',
+                                       'InitiatingProcessCreationTime': '2019-09-20T06:50:08.1793244Z',
+                                       'InitiatingProcessIntegrityLevel': 'System',
+                                       'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
+                                       'InitiatingProcessParentId': 17088,
+                                       'InitiatingProcessParentFileName': 'maintenanceservice.exe',
+                                       'InitiatingProcessParentCreationTime': '2019-09-20T06:50:07.6324849Z',
+                                       'RequestProtocol': 'Unknown', 'ReportId': 11844, 'rn': 1, 'event_count': '1'}}
  
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -348,38 +349,38 @@ class TestMsatpResultsToStix(unittest.TestCase):
     def test_mac_json_to_stix(self):
         """to test mac stix object properties"""
         data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-20T06:24:16.830101Z',
-                                        'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
-                                        'DeviceName': 'desktop-536bt46',
-                                        'LocalIP': '172.16.2.22',
-                                        'MacAddress': '484D7E9DBD97',
-                                        'RemoteIP': '168.159.213.203',
-                                        'LocalPort': 63043,
-                                        'RemotePort': 80,
-                                        "ReportId": 97827,
-                                        'Protocol': 'TcpV4',
-                                        'RemoteUrl': 'https://play.google.com',
-                                        'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
-                                        'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
-                                        'InitiatingProcessFileName': 'chrome.exe',
-                                        'InitiatingProcessParentFileName': 'chrome.exe',
-                                        'InitiatingProcessId': 10404, 'InitiatingProcessParentId': 9792,
-                                        'InitiatingProcessCommandLine': '"chrome.exe" --type=utility '
-                                                                        '--field-trial-handle=1632,'
-                                                                        '12328523307506075385,'
-                                                                        '13359799139346648205,'
-                                                                        '131072 --lang=en-US '
-                                                                        '--service-sandbox-type=network '
-                                                                        '--service-request-channel-token'
-                                                                        '=12003267709621771016 --mojo-platform-'
-                                                                        'channel-handle=2064 /prefetch:8',
-                                        'InitiatingProcessCreationTime': '2019-09-18T04:54:26.1863029Z',
-                                        'InitiatingProcessParentCreationTime': '2019-09-18T04:54:24.3181704Z',
-                                        'InitiatingProcessAccountSid':
-                                            'S-1-5-21-2603683697-4187888953-3873858-1001',
-                                        'InitiatingProcessAccountName': 'admin',
-                                        'InitiatingProcessFolderPath': 'c:\\program files ('
-                                                                       'x86)\\google\\chrome\\application\\chrome.exe',
-                                        'rn': 1, 'event_count': '1'}}
+                                               'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
+                                               'DeviceName': 'desktop-536bt46',
+                                               'LocalIP': '172.16.2.22',
+                                               'MacAddress': '484D7E9DBD97',
+                                               'RemoteIP': '168.159.213.203',
+                                               'LocalPort': 63043,
+                                               'RemotePort': 80,
+                                               "ReportId": 97827,
+                                               'Protocol': 'TcpV4',
+                                               'RemoteUrl': 'https://play.google.com',
+                                               'InitiatingProcessSHA1': 'f6af6cd298f660ff5bb4f89398d1d3edac020a7d',
+                                               'InitiatingProcessMD5': '94e4f3e52bae1a934889aaeb7238dccc',
+                                               'InitiatingProcessFileName': 'chrome.exe',
+                                               'InitiatingProcessParentFileName': 'chrome.exe',
+                                               'InitiatingProcessId': 10404, 'InitiatingProcessParentId': 9792,
+                                               'InitiatingProcessCommandLine': '"chrome.exe" --type=utility '
+                                                                               '--field-trial-handle=1632,'
+                                                                               '12328523307506075385,'
+                                                                               '13359799139346648205,'
+                                                                               '131072 --lang=en-US '
+                                                                               '--service-sandbox-type=network '
+                                                                               '--service-request-channel-token'
+                                                                               '=12003267709621771016 --mojo-platform-'
+                                                                               'channel-handle=2064 /prefetch:8',
+                                               'InitiatingProcessCreationTime': '2019-09-18T04:54:26.1863029Z',
+                                               'InitiatingProcessParentCreationTime': '2019-09-18T04:54:24.3181704Z',
+                                               'InitiatingProcessAccountSid':
+                                                   'S-1-5-21-2603683697-4187888953-3873858-1001',
+                                               'InitiatingProcessAccountName': 'admin',
+                                               'InitiatingProcessFolderPath': 'c:\\program files ('
+                                                                              'x86)\\google\\chrome\\application\\chrome.exe',
+                                               'rn': 1, 'event_count': '1'}}
 
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -402,30 +403,30 @@ class TestMsatpResultsToStix(unittest.TestCase):
     def test_registry_json_to_stix(self):
         """to test registry stix object properties"""
         data = {'DeviceRegistryEvents': {'Timestamp': '2019-10-10T10:41:43.0469296Z',
-                                    'DeviceId': 'db40e68dd7358aa450081343587941ce96ca4777',
-                                    'DeviceName': 'testmachine1', 'ActionType': 'RegistryValueSet',
-                                    'RegistryKey': 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced Threat '
-                                                   'Protection',
-                                    "ReportId": 97827,
-                                    'PreviousRegistryValueName': 'Configuration',
-                                    'InitiatingProcessAccountDomain': 'nt authority',
-                                    'InitiatingProcessAccountName': 'system',
-                                    'InitiatingProcessAccountSid': 'S-1-5-18',
-                                    'InitiatingProcessSHA1': '657cd516b52b861ae98670c2ab10dc4a467cfd80',
-                                    'InitiatingProcessMD5': 'b97799c4a1ed64e97c9fa83401e8d67c',
-                                    'InitiatingProcessFileName': 'mssense.exe', 'InitiatingProcessId': 1040,
-                                    'InitiatingProcessCommandLine': '"MsSense.exe"',
-                                    'InitiatingProcessCreationTime': '2019-10-10T10:41:29.2621221Z',
-                                    'InitiatingProcessFolderPath': 'c:\\program files\\windows defender advanced threat '
-                                                                   'protection\\mssense.exe',
-                                    'InitiatingProcessParentId': 776,
-                                    'InitiatingProcessParentFileName': 'services.exe',
-                                    'InitiatingProcessParentCreationTime': '2019-10-10T10:26:00.1611536Z',
-                                    'InitiatingProcessIntegrityLevel': 'System',
-                                    'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'ReportId': 89,
-                                    'rn': 1, 'RegistryValues':
-                                        [{'RegistryValueType': 'Binary', 'RegistryValueName': 'Configuration'}],
-                                    'event_count': '1'}}
+                                   'DeviceId': 'db40e68dd7358aa450081343587941ce96ca4777',
+                                   'DeviceName': 'testmachine1', 'ActionType': 'RegistryValueSet',
+                                   'RegistryKey': 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced Threat '
+                                                                      'Protection',
+                                   "ReportId": 97827,
+                                   'PreviousRegistryValueName': 'Configuration',
+                                   'InitiatingProcessAccountDomain': 'nt authority',
+                                   'InitiatingProcessAccountName': 'system',
+                                   'InitiatingProcessAccountSid': 'S-1-5-18',
+                                   'InitiatingProcessSHA1': '657cd516b52b861ae98670c2ab10dc4a467cfd80',
+                                   'InitiatingProcessMD5': 'b97799c4a1ed64e97c9fa83401e8d67c',
+                                   'InitiatingProcessFileName': 'mssense.exe', 'InitiatingProcessId': 1040,
+                                   'InitiatingProcessCommandLine': '"MsSense.exe"',
+                                   'InitiatingProcessCreationTime': '2019-10-10T10:41:29.2621221Z',
+                                   'InitiatingProcessFolderPath': 'c:\\program files\\windows defender advanced threat '
+                                                                      'protection\\mssense.exe',
+                                   'InitiatingProcessParentId': 776,
+                                   'InitiatingProcessParentFileName': 'services.exe',
+                                   'InitiatingProcessParentCreationTime': '2019-10-10T10:26:00.1611536Z',
+                                   'InitiatingProcessIntegrityLevel': 'System',
+                                   'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'ReportId': 89,
+                                   'rn': 1, 'RegistryValues':
+                                                                      [{'RegistryValueType': 'Binary', 'RegistryValueName': 'Configuration'}],
+                                   'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
