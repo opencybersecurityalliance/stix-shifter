@@ -15,7 +15,7 @@ PARSE = 'parse'
 MAPPING = 'mapping'
 DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
-MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
+MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
 DEFAULT_DIALECT = 'default'
 
 
@@ -85,6 +85,7 @@ class StixTranslation:
                     # The query constructor has some logic around which of the two are used.
                     queries = []
                     unmapped_stix_collection = []
+                    unmapped_operator_collection = []
                     dialects_used = 0
                     for dialect in dialects:
                         query_translator = entry_point.get_query_translator(dialect)
@@ -96,11 +97,12 @@ class StixTranslation:
                             else:
                                 queries.extend(transform_result.get('queries', []))
                             unmapped_stix_collection.extend(transform_result.get('unmapped_attributes', []))
+                            unmapped_operator_collection.extend(transform_result.get('unmapped_operator', []))
                     if not dialects_used:
                         raise UnsupportedLanguageException(language)
                     if not queries:
                         raise DataMappingException(
-                            "{} {}".format(MAPPING_ERROR, unmapped_stix_collection)
+                            "{} {} or Operators: {} to data source fields".format(MAPPING_ERROR, unmapped_stix_collection, unmapped_operator_collection)
                         )
                     return {'queries': queries}
                 else:
