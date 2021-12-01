@@ -160,7 +160,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                        'InitiatingProcessParentFileName': 'maintenanceservice.exe',
                                        'InitiatingProcessParentCreationTime': '2019-09-20T06:50:07.6324849Z',
                                        'RequestProtocol': 'Unknown', 'ReportId': 11844, 'rn': 1, 'event_count': '1'}}
- 
+
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
 
@@ -245,6 +245,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
         assert process_obj['creator_user_ref'] == '7'
+
 
     def test_network_json_to_stix(self):
         """to test network stix object properties"""
@@ -351,9 +352,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
         data = {'DeviceNetworkEvents': {'Timestamp': '2019-09-20T06:24:16.830101Z',
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'DeviceName': 'desktop-536bt46',
-                                               'LocalIP': '172.16.2.22',
+                                                'LocalIP': '172.16.2.22',
                                                'MacAddress': '484D7E9DBD97',
-                                               'RemoteIP': '168.159.213.203',
+                                                'RemoteIP': '168.159.213.203',
                                                'LocalPort': 63043,
                                                'RemotePort': 80,
                                                "ReportId": 97827,
