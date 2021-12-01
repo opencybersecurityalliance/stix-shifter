@@ -219,7 +219,7 @@ class DataSourceObjToStixObj:
                     self.logger.info(
                         'Unmapped fallback is enabled. Adding {} attribute to the custom object'.format(ds_key))
                     cust_obj = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_key, "object":
-                        "cust_object"}
+                                "cust_object"}
                     if to_map is None or to_map == '':
                         self.logger.debug("Removing invalid value '{}' for {}".format(to_map, ds_key))
                         return
@@ -243,7 +243,7 @@ class DataSourceObjToStixObj:
                     new_ds_map = self._update_object_key(ds_map[ds_key], to_map.index(item))
                     for field in item.keys():
                         self._transform(object_map, observation, new_ds_map, field, item)
-
+        
         generic_hash_key = ''
 
         # get the stix keys that are mapped
@@ -259,6 +259,7 @@ class DataSourceObjToStixObj:
                     return
 
             ds_key_def_list = [ds_key_def_obj]
+
 
         for ds_key_def in ds_key_def_list:
             if ds_key_def is None or 'key' not in ds_key_def:
@@ -475,7 +476,7 @@ class DataSourceObjToStixObj:
             obj_keys = list(values.keys())
 
             if sorted(rm_keys) == sorted(obj_keys):
-                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values))
+                self.logger.debug('Reference object does not contain required properties, removing: ' + str(values) )
                 remove_keys.append(obj)
 
         for k in remove_keys:
