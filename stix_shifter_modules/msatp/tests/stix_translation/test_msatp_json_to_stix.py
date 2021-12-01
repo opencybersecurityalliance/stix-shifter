@@ -425,7 +425,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                    'InitiatingProcessIntegrityLevel': 'System',
                                    'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault', 'ReportId': 89,
                                    'rn': 1, 'RegistryValues':
-                                                                      [{'RegistryValueType': 'Binary', 'RegistryValueName': 'Configuration'}],
+                                       [{'RegistryValueType': 'Binary', 'RegistryValueName': 'Configuration'}],
                                    'event_count': '1'}}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
