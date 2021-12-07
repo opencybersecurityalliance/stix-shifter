@@ -2024,18 +2024,11 @@
         "references": "re_key"
       }
     ],
-    "RegistryValues": [
-      {
-        "key": "windows-registry-key.values",
-        "object": "re_key",
-        "transformer": "MsatpToRegistryValue"
-      },
-      {
-        "key": "x-oca-event.registry_ref",
-        "object": "event",
-        "references": "re_key"
-      }
-    ],
+    "RegistryValues": {
+      "key": "windows-registry-key.values",
+      "object": "re_key",
+      "transformer": "MsatpToRegistryValue"
+    },
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",

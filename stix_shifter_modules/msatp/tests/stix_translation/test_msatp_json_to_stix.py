@@ -183,7 +183,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert file_obj['name'] == 'updater.exe'
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
-        assert file_obj['parent_directory_ref'] == '4'
+        assert file_obj['parent_directory_ref'] == '6'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
         file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['DeviceFileEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
@@ -632,7 +632,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
         assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
-        assert ttp_tagging_obj.keys() == {'type', 'extensions', 'kill_chain_phases'}
+        assert ttp_tagging_obj.keys() == {'type', 'kill_chain_phases'}
         assert ttp_tagging_obj['type'] == 'x-ibm-ttp-tagging'
-        assert ttp_tagging_obj['extensions'] == {'mitre-attack-ext': {'tactic_name': 'CredentialAccess'}}
+
 
