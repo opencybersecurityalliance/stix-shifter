@@ -31,12 +31,18 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         :param basepath: path of data source translation module
         :type basepath: str
         """
-        from_stix_path = path.join(basepath, 'json', f'{dialect}_from_stix_map.json')
-        if path.isfile(from_stix_path):
-            return self.read_json(from_stix_path, options)
+        stix_2_0_mapping_directory_path = path.join(basepath, 'json')
+        stix_2_1_mapping_directory_path = path.join(basepath, 'json/stix_2_1')
+        mapping_file = f'{dialect}_from_stix_map.json'
+        from_stix_path = path.join(basepath, 'json', mapping_file)
+        if not path.isfile(from_stix_path):
+            # use default mapping file since 'default_stix_map.json' isn't a real dialect
+            mapping_file = 'from_stix_map.json'
+        if options.get("stix_2.1") and path.isdir(stix_2_1_mapping_directory_path):
+            from_stix_path = path.join(stix_2_1_mapping_directory_path, mapping_file)
         else:
-            from_stix_path = path.join(basepath, 'json', 'from_stix_map.json')
-            return self.read_json(from_stix_path, options)
+            from_stix_path = path.join(stix_2_0_mapping_directory_path, mapping_file)
+        return self.read_json(from_stix_path, options)
 
     def map_field(self, stix_object_name, stix_property_name):
         """

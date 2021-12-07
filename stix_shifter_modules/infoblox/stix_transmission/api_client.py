@@ -1,3 +1,9 @@
+"""
+API Client, used for establishing HTTP connections to Infoblox APIs
+
+See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md
+See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-transmission-module.md
+"""
 import json
 
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
@@ -7,7 +13,20 @@ _USER_AGENT = 'IBV1StixShifter/1.0'
 _MAX_RESULT = 10000
 
 class APIClient:
+    """
+    Class that handles HTTP interactions with the Infoblox APIs.
 
+    :param connection: connection configuration details (eg host, post, etc)
+    :type connection: object
+    :param configuration: configuration settings (eg auth tokens)
+    :type configuration: object
+
+    Attributes:
+        logger (logger): internal logger
+        timeout (int): connection timeout
+        result_limit (int): max number of entries in response
+        client (RestApiClient): HTTP Infoblox client
+    """
     def __init__(self, connection, configuration):
         self.logger = logger.set_logger(__name__)
         self.endpoint_start = ''
@@ -35,6 +54,14 @@ class APIClient:
                                     )
 
     def ping_data_source(self):
+        """
+        Pings the data source, verifying it is up and available (used by PingConnector)
+
+        NOTE: Even with multiple dialects, PING uses a single one of them to check the status of all of the APIs.
+
+        :return: response object
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        """
         # Pings the data source
         endpoint = 'tide/api/data/threats/state'
         # now = datetime.datetime.utcnow().isoformat(timespec="milliseconds") + "Z"
@@ -43,8 +70,22 @@ class APIClient:
         return self.client.call_api(endpoint, 'GET', timeout=self.timeout, urldata={"type": "host", "rlimit": "1"})
 
     def get_search_results(self, search_id, range_start=None, range_end=None):
-        # Return the search results. Results must be in JSON format before being translated into STIX
-        # endpoint = self.endpoint_start + '/api/dnsdata/v2/dns_event'
+        """
+        Queries the data source (used by ResultsConnector). The results must be the original API response. The results will
+        be translated into STIX object later.
+
+        NOTE: Based on the dialect, a different Infoblox API will be invoked.
+
+        :param search_id: search query string
+        :type search_id: str
+        :param range_start: starting range index (used to limit results)
+        :type range_start: int
+        :param range_end: ending range index (used to limit results)
+        :type range_end: int
+        :return: response object
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :throw: RuntimeError if unknown dialect provided
+        """
 
         payload = json.loads(search_id)
         if payload['source'] == 'dnsEventData':
@@ -58,6 +99,21 @@ class APIClient:
         raise RuntimeError("Unknown source provided source={}".format(payload['source']))
 
     def _get_dnseventdata_results(self, search_id, range_start=None, range_end=None):
+        """
+        Helper method for querying the DNSEventData dialect. The method will loop through all pages of the results gathering them
+        all into one main list before returning the results. Results are manually trimmed based on the provided `range_start` and
+        `range_end`.
+
+        :param search_id: search query string
+        :type search_id: str
+        :param range_start: starting range index (used to limit results)
+        :type range_start: int
+        :param range_end: ending range index (used to limit results)
+        :type range_end: int
+        :return: response object
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        """
+
         endpoint = 'api/dnsdata/v2/dns_event'
         headers = dict()
         headers['Content-Type'] = 'application/json'
@@ -108,6 +164,20 @@ class APIClient:
         return resp_dict
 
     def _get_dossierdata_results(self, search_id, range_start=0, range_end=None):
+        """
+        Helper method for querying the DossierData dialect. Dossier does not support pagination, so a single API call will return
+        all of the required results. Results are manually trimmed based on the provided `range_start` and
+        `range_end`.
+
+        :param search_id: search query string
+        :type search_id: str
+        :param range_start: starting range index (used to limit results)
+        :type range_start: int
+        :param range_end: ending range index (used to limit results)
+        :type range_end: int
+        :return: response object
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        """
         endpoint = 'tide/api/services/intel/lookup/indicator'
         headers = dict()
         headers['Content-Type'] = 'application/json'
@@ -150,6 +220,23 @@ class APIClient:
         return resp_dict
 
     def _get_tidedbdata_results(self, search_id, range_start=0, range_end=None):
+        """
+        Helper method for querying the TideDbData dialect. TIDE does not support pagination, so a single API call will return
+        all of the required results. Results are manually trimmed based on the provided `range_start` and
+        `range_end`.
+
+        NOTE:
+        - By default, a threat_type of `ip` will enable the `include_ipv6` option.
+
+        :param search_id: search query string
+        :type search_id: str
+        :param range_start: starting range index (used to limit results)
+        :type range_start: int
+        :param range_end: ending range index (used to limit results)
+        :type range_end: int
+        :return: response object
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        """
         endpoint = 'tide/api/data/threats/state'
         headers = dict()
         headers['Content-Type'] = 'application/json'

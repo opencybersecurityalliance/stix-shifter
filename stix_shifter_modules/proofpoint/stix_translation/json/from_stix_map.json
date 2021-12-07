@@ -1,0 +1,8 @@
+{
+  "x-proofpoint": {
+    "fields": {
+        "threatstatus": ["threatStatus"],
+      "threattype": ["threatType"]
+      }
+  }
+}
