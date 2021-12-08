@@ -9,3 +9,8 @@ Participation is expected to be consistent with the [Code of Conduct](https://gi
 ## <a id="feedback">Feedback</a>
 
 Questions or comments about the OCA's activities may be composed as GitHub issues or comments or may be directed to the project's general email list at oca@lists.oasis-open-projects.org. General questions about OASIS Open Projects may be directed to OASIS staff at op-admin@lists.oasis-open-projects.org
+
+can more be said on the governance of the project?
+eg How are maintainers chosen?
+eg Are there meetings to discuss pull requests?
+This is draft pull request just to test process.
