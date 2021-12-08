@@ -100,6 +100,9 @@ class StixTranslation:
                             unmapped_operator_collection.extend(transform_result.get('unmapped_operator', []))
                     if not dialects_used:
                         raise UnsupportedLanguageException(language)
+
+                    unmapped_stix_collection = list(set(unmapped_stix_collection))
+                    unmapped_operator_collection = list(set(unmapped_operator_collection))
                     if not queries:
                         raise DataMappingException(
                             "{} {} or Operators: {} to data source fields".format(MAPPING_ERROR, unmapped_stix_collection, unmapped_operator_collection)

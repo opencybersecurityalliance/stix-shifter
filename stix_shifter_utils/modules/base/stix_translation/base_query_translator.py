@@ -112,9 +112,9 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         unmapped_stix = stripped_parsing.get('unmapped_stix')
         unmapped_operator = stripped_parsing.get('unmapped_operator')
         if unmapped_stix:
-            unmapped_stix_collection.append(unmapped_stix)
+            unmapped_stix_collection.extend(unmapped_stix)
         if unmapped_operator:
-            unmapped_operator_collection.append(unmapped_operator)
+            unmapped_operator_collection.extend(unmapped_operator)
         if antlr_parsing:
             translated_queries = self.transform_antlr(data, antlr_parsing)
             if isinstance(translated_queries, str):

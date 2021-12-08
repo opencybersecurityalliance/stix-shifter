@@ -38,34 +38,34 @@ class DuplicateFieldException(Exception):
     pass
 
 class QueryStringPatternTranslator:
-    comparator_lookup = {
-        'tideDbData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "=",
-            ComparisonComparators.GreaterThan: "=",
-            ComparisonComparators.GreaterThanOrEqual: "=",
-            ComparisonComparators.LessThan: "=",
-            ComparisonComparators.LessThanOrEqual: "=",
-            ComparisonComparators.Like: "="
-        },
-        'dnsEventData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        },
-        'dossierData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        }
-    }
+    # comparator_lookup = {
+    #     'tideDbData': {
+    #         ComparisonExpressionOperators.And: "&",
+    #         ObservationOperators.And: '&',
+    #         ComparisonExpressionOperators.Or: "&",
+    #         ObservationOperators.Or: '&',
+    #         ComparisonComparators.Equal: "=",
+    #         ComparisonComparators.GreaterThan: "=",
+    #         ComparisonComparators.GreaterThanOrEqual: "=",
+    #         ComparisonComparators.LessThan: "=",
+    #         ComparisonComparators.LessThanOrEqual: "=",
+    #         ComparisonComparators.Like: "="
+    #     },
+    #     'dnsEventData': {
+    #         ComparisonExpressionOperators.And: "&",
+    #         ObservationOperators.And: '&',
+    #         ComparisonExpressionOperators.Or: "&",
+    #         ObservationOperators.Or: '&',
+    #         ComparisonComparators.Equal: "="
+    #     },
+    #     'dossierData': {
+    #         ComparisonExpressionOperators.And: "&",
+    #         ObservationOperators.And: '&',
+    #         ComparisonExpressionOperators.Or: "&",
+    #         ObservationOperators.Or: '&',
+    #         ComparisonComparators.Equal: "="
+    #     }
+    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
@@ -160,10 +160,10 @@ class QueryStringPatternTranslator:
         return stix_field in REFERENCE_FIELDS
 
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup[self.dialect]:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector {}".format(expression_operator.name, self.dialect))
 
-        return self.comparator_lookup[self.dialect][expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _calculate_intersection(self, mapped_fields_array, stix_field, assigned_fields):
         mapped_fields_set = set(mapped_fields_array)
