@@ -95,6 +95,7 @@ class RelevanceQueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range, options):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self._time_range = time_range
         self.qualified_queries = []
@@ -171,10 +172,10 @@ class RelevanceQueryStringPatternTranslator:
         :param expression_operator: str
         :return: str
         """
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for BigFix adapter".format(expression_operator.name))
-        return self.comparator_lookup.get(expression_operator)
+        return self.comparator_lookup.get(str(expression_operator))
 
     @staticmethod
     def _html_encoding_escape_character(value) -> str:

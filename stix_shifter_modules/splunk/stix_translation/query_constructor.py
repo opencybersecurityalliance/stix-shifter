@@ -16,20 +16,26 @@ from . import object_scopers
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
 
-    implemented_operators = {
-        ObservationOperators.And: '{expr1} OR {expr2}',
-        ObservationOperators.Or: '{expr1} OR {expr2}',
+    # implemented_operators = {
+    #     ObservationOperators.And: '{expr1} OR {expr2}',
+    #     ObservationOperators.Or: '{expr1} OR {expr2}',
+    #     # FollowedBy could also be done with transactions, however the original event would not be returned, though a
+    #     # all the fields in the original event would be present in the transaction result.
+    #     # For [x FOLLOWEDBY y], first find the most recent y, get its timestamp, and look for x's that occur earlier.
+    #     # Use makeresults to inject a dummy event since a subsearch that yields no result will cause eval to error.
+    #     # Presumably, no one will be looking for results prior to epoch=0.
+    #     ObservationOperators.FollowedBy: "latest=[search {expr2} | append [makeresults 1 | eval _time=0]"
+    #                                      "| head 1 | return $_time] | where {expr1}"
+    # }
+
+    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range, object_scoper=object_scopers.default_object_scoper):
+        self.dmm = data_model_mapper
         # FollowedBy could also be done with transactions, however the original event would not be returned, though a
         # all the fields in the original event would be present in the transaction result.
         # For [x FOLLOWEDBY y], first find the most recent y, get its timestamp, and look for x's that occur earlier.
         # Use makeresults to inject a dummy event since a subsearch that yields no result will cause eval to error.
         # Presumably, no one will be looking for results prior to epoch=0.
-        ObservationOperators.FollowedBy: "latest=[search {expr2} | append [makeresults 1 | eval _time=0]"
-                                         "| head 1 | return $_time] | where {expr1}"
-    }
-
-    def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range, object_scoper=object_scopers.default_object_scoper):
-        self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.object_scoper = object_scoper
         self._pattern_prefix = ""  # How should the final SPL query string start.  By default, use ''
@@ -92,7 +98,7 @@ class SplunkSearchTranslator:
                 return '{query_string}'.format(query_string=translated_query_str)
 
         elif isinstance(expression, CombinedObservationExpression):
-            combined_expr_format_string = self.implemented_operators[expression.operator]
+            combined_expr_format_string = self.comparator_lookup[str(expression.operator)]
             if expression.operator == ObservationOperators.FollowedBy:
                 self._pattern_prefix = "|eval "
             return combined_expr_format_string.format(expr1=self.translate(expression.expr1),
@@ -100,7 +106,7 @@ class SplunkSearchTranslator:
 
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                expr_format_string = self.implemented_operators[expression.observation_expression.operator]
+                expr_format_string = self.comparator_lookup[str(expression.observation_expression.operator)]
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 return expr_format_string.format(expr1=self.translate(expression.observation_expression.expr1),
                                                  expr2=self.translate(expression.observation_expression.expr2, expression.qualifier))

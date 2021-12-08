@@ -44,4 +44,4 @@ class TestStixtoQuery(unittest.TestCase, object):
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         assert query['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
-        assert 'Unable to map the following STIX objects and properties to data source fields' in query['error']
+        assert "data mapping error : Unable to map the following STIX objects and properties: [['unmapped:attribute']] or Operators: [[Equal]] to data source fields" in query['error']

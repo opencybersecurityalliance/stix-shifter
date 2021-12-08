@@ -69,6 +69,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()

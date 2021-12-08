@@ -102,7 +102,9 @@ class TestQueryTranslator(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert MAPPING_ERROR in result['error']
+        assert "data mapping error : Unable to map the following STIX objects and properties: " \
+            "[['unmapped-object:some_invalid_attribute'], ['unmapped-object:some_invalid_attribute']] " \
+            "or Operators: [[Equal], [Equal]] to data source fields" in result['error']
 
     def test_pattern_with_two_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever'] AND [file:name = 'some_file.exe']"
@@ -115,7 +117,9 @@ class TestQueryTranslator(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert MAPPING_ERROR in result['error']
+        assert "data mapping error : Unable to map the following STIX objects and properties: " \
+            "[['network-traffic:some_invalid_attribute'], ['network-traffic:some_invalid_attribute']] or " \
+            "Operators: [[Equal], [Equal]] to data source fields" in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"

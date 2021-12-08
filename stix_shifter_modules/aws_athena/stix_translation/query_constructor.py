@@ -18,24 +18,25 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
 class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'REGEXP_LIKE',
-        ObservationOperators.Or: 'UNION',
-        ObservationOperators.And: 'INTERSECT'
-    }
+    # comparator_lookup = {
+    #     ComparisonExpressionOperators.And: "AND",
+    #     ComparisonExpressionOperators.Or: "OR",
+    #     ComparisonComparators.GreaterThan: ">",
+    #     ComparisonComparators.GreaterThanOrEqual: ">=",
+    #     ComparisonComparators.LessThan: "<",
+    #     ComparisonComparators.LessThanOrEqual: "<=",
+    #     ComparisonComparators.Equal: "=",
+    #     ComparisonComparators.NotEqual: "!=",
+    #     ComparisonComparators.Like: "LIKE",
+    #     ComparisonComparators.In: "IN",
+    #     ComparisonComparators.Matches: 'REGEXP_LIKE',
+    #     ObservationOperators.Or: 'UNION',
+    #     ObservationOperators.And: 'INTERSECT'
+    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.service_type = self.dmm.dialect
         self._protocol_lookup_needed = True if self.service_type in ['vpcflow'] else False
@@ -345,10 +346,10 @@ class QueryStringPatternTranslator:
         :param expression_operator: operator, ANTLR expression operator
         :return: operator, SQL operator
         """
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for AWS Athena connector".format
                                       (expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         """

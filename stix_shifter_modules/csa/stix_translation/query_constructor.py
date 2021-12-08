@@ -11,25 +11,26 @@ LOGGER = logger.set_logger(__name__)
 
 
 class SqlQueryStringPatternTranslator:
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'MATCHES',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
+    # comparator_lookup = {
+    #     ComparisonExpressionOperators.And: "AND",
+    #     ComparisonExpressionOperators.Or: "OR",
+    #     ComparisonComparators.GreaterThan: ">",
+    #     ComparisonComparators.GreaterThanOrEqual: ">=",
+    #     ComparisonComparators.LessThan: "<",
+    #     ComparisonComparators.LessThanOrEqual: "<=",
+    #     ComparisonComparators.Equal: "=",
+    #     ComparisonComparators.NotEqual: "!=",
+    #     ComparisonComparators.Like: "LIKE",
+    #     ComparisonComparators.In: "IN",
+    #     ComparisonComparators.Matches: 'MATCHES',
+    #     ObservationOperators.Or: 'OR',
+    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+    #     ObservationOperators.And: 'OR'
+    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
         self.mapping_network_protocol = read_json('network_protocol_map', options)
@@ -112,7 +113,7 @@ class SqlQueryStringPatternTranslator:
             # Multiple QRadar fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
             original_stix_value = expression.value
 
             if stix_field == 'protocols[*]':
@@ -169,7 +170,7 @@ class SqlQueryStringPatternTranslator:
 
         elif isinstance(expression, CombinedComparisonExpression):
             query_string = "{} {} {}".format(self._parse_expression(expression.expr1),
-                                             self.comparator_lookup[expression.operator],
+                                             self.comparator_lookup[str(expression.operator)],
                                              self._parse_expression(expression.expr2))
             if qualifier is not None:
                 return "{query_string} {qualifier} split".format(query_string=query_string, qualifier=qualifier)
@@ -179,7 +180,7 @@ class SqlQueryStringPatternTranslator:
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
+                operator = self.comparator_lookup[str(expression.observation_expression.operator)]
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
                                                            operator=operator,
@@ -187,7 +188,7 @@ class SqlQueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
             return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.expr1),
                                                        operator=operator,
                                                        expr2=self._parse_expression(expression.expr2))

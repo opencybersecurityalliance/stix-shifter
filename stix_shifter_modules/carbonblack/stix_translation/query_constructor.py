@@ -11,26 +11,27 @@ from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatur
 
 
 class CbQueryStringPatternTranslator:
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "and",
-        ComparisonExpressionOperators.Or: "or",
-        ComparisonComparators.Equal: ":",
-        ComparisonComparators.NotEqual: ":",
+    # comparator_lookup = {
+    #     ComparisonExpressionOperators.And: "and",
+    #     ComparisonExpressionOperators.Or: "or",
+    #     ComparisonComparators.Equal: ":",
+    #     ComparisonComparators.NotEqual: ":",
 
-        ComparisonComparators.GreaterThan: ":",
-        ComparisonComparators.GreaterThanOrEqual: ":",
-        ComparisonComparators.LessThan: ":",
-        ComparisonComparators.LessThanOrEqual: ":",
+    #     ComparisonComparators.GreaterThan: ":",
+    #     ComparisonComparators.GreaterThanOrEqual: ":",
+    #     ComparisonComparators.LessThan: ":",
+    #     ComparisonComparators.LessThanOrEqual: ":",
 
-        ObservationOperators.Or: 'or',
-        ObservationOperators.And: 'or',  # This is technically wrong. It should be converted to two separate queries, but
-        # current behavior of existing modules treat operator as an OR.
-        # observation operator AND - both sides MUST evaluate to true on different observations to be true
-    }
+    #     ObservationOperators.Or: 'or',
+    #     ObservationOperators.And: 'or',  # This is technically wrong. It should be converted to two separate queries, but
+    #     # current behavior of existing modules treat operator as an OR.
+    #     # observation operator AND - both sides MUST evaluate to true on different observations to be true
+    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
         self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.result_limit = result_limit
         self.time_range = time_range # filter results to last x minutes
@@ -97,7 +98,7 @@ class CbQueryStringPatternTranslator:
             mapped_field = mapped_fields_array[0]
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
             original_stix_value = expression.value
 
             # Some values are formatted differently based on how they're being compared
@@ -139,7 +140,7 @@ class CbQueryStringPatternTranslator:
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
             query_string = (f1 + " {} " + f2).format(self._parse_expression(expression.expr2),
-                                                     self.comparator_lookup[expression.operator],
+                                                     self.comparator_lookup[str(expression.operator)],
                                                      self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
@@ -152,7 +153,7 @@ class CbQueryStringPatternTranslator:
             query_string = self._parse_expression(expression.comparison_expression, qualifier=qualifier)
             return query_string
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
             return f'({expr1}) {operator} ({expr2})'

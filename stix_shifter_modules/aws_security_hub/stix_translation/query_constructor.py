@@ -37,6 +37,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -102,7 +103,7 @@ class QueryStringPatternTranslator:
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
 
             filterTypes = {
                 "NetworkSourceIpV4": self.ipFilter,
@@ -150,7 +151,7 @@ class QueryStringPatternTranslator:
 
         elif isinstance(expression, CombinedComparisonExpression) or isinstance(expression, CombinedObservationExpression):
             # [ a:foo = x AND b:foo = y ]
-            comparator = self.comparator_lookup[expression.operator]
+            comparator = self.comparator_lookup[str(expression.operator)]
             if comparator == ComparisonExpressionOperators.Or or comparator == ObservationOperators.Or:
                 raise RuntimeError("\"OR\" comparisons are not currently supported")
 
@@ -176,7 +177,7 @@ class QueryStringPatternTranslator:
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             # [ a:foo = x AND b:foo = y ] START X STOP Y
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                comparator = self.comparator_lookup[expression.observation_expression.operator]
+                comparator = self.comparator_lookup[str(expression.observation_expression.operator)]
                 if comparator == ObservationOperators.Or:
                     raise RuntimeError("\"OR\" comparisons are not currently supported")
 
