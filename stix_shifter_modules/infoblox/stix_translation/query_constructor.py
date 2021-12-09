@@ -65,11 +65,10 @@ class QueryStringPatternTranslator:
     :param time_range: Default time range to query over (in minutes).
     :type time_range: int
 
-
     Attributes:
         comparator_lookup (map): Mapping, per dialect, of the ANTLR comparison operators and their native equivalent. Used in the tranlation process.
         qualified_queries (list): List of Infoblox translated & formatted queries. Queries are simply the HTTP query parameters for the specific APIs.
-
+    """
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
