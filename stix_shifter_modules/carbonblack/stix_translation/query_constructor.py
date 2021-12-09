@@ -11,22 +11,6 @@ from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatur
 
 
 class CbQueryStringPatternTranslator:
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "and",
-    #     ComparisonExpressionOperators.Or: "or",
-    #     ComparisonComparators.Equal: ":",
-    #     ComparisonComparators.NotEqual: ":",
-
-    #     ComparisonComparators.GreaterThan: ":",
-    #     ComparisonComparators.GreaterThanOrEqual: ":",
-    #     ComparisonComparators.LessThan: ":",
-    #     ComparisonComparators.LessThanOrEqual: ":",
-
-    #     ObservationOperators.Or: 'or',
-    #     ObservationOperators.And: 'or',  # This is technically wrong. It should be converted to two separate queries, but
-    #     # current behavior of existing modules treat operator as an OR.
-    #     # observation operator AND - both sides MUST evaluate to true on different observations to be true
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range):
         self.logger = logger.set_logger(__name__)

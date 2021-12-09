@@ -24,23 +24,6 @@ TIMESTAMP_MILLISECONDS = "\.\d+Z$"
 
 
 class AqlQueryStringPatternTranslator:
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.Equal: "=",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "LIKE",
-    #     ComparisonComparators.In: "IN",
-    #     ComparisonComparators.Matches: 'MATCHES',
-    #     ComparisonComparators.IsSubSet: 'INCIDR',
-    #     ObservationOperators.Or: 'OR',
-    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-    #     ObservationOperators.And: 'OR'
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, options):
         self.options = options

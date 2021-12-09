@@ -26,15 +26,6 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.Equal: ":",
-        ComparisonComparators.NotEqual: ":",
-        ComparisonComparators.Like: ":",
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'AND'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper

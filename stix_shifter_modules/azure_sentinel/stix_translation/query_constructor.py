@@ -11,21 +11,6 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 class QueryStringPatternTranslator:
     COUNTER = 0
 
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "and",
-    #     ComparisonExpressionOperators.Or: "or",
-    #     ComparisonComparators.GreaterThan: "gt",
-    #     ComparisonComparators.GreaterThanOrEqual: "ge",
-    #     ComparisonComparators.LessThan: "lt",
-    #     ComparisonComparators.LessThanOrEqual: "le",
-    #     ComparisonComparators.Equal: "eq",
-    #     ComparisonComparators.NotEqual: "ne",
-    #     ComparisonComparators.Like: "contains",
-    #     ComparisonComparators.In: "eq",
-    #     ComparisonComparators.Matches: 'contains',
-    # }
-
     # comparator lookup for implementing negation operator
     negated_comparator_lookup = {
         ComparisonComparators.GreaterThan: "le",

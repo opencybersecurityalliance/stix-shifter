@@ -14,23 +14,7 @@ TIMESTAMP_PATTERN = r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.Equal: "=",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "LIKE",
-    #     ComparisonComparators.In: "IN",
-    #     ComparisonComparators.Matches: "LIKE",
-    #     ComparisonComparators.IsSubSet: '',
-    #     ObservationOperators.Or: 'OR',
-    #     ObservationOperators.And: 'OR'
-    # }
+
     aws_query = "fields {fields}{stix_filter} {parse_filter}{logtype_filter} | filter ({filter_query})"
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range, options):

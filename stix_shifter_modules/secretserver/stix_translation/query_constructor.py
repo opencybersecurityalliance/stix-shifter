@@ -11,24 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.Equal: "=",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "LIKE",
-    #     ComparisonComparators.In: "IN",
-    #     ComparisonComparators.Matches: 'LIKE',
-    #     # ComparisonComparators.IsSubSet: '',
-    #     # ComparisonComparators.IsSuperSet: '',
-    #     ObservationOperators.Or: 'OR',
-    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-    #     ObservationOperators.And: 'OR'
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper

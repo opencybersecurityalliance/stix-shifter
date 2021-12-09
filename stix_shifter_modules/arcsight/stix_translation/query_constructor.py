@@ -21,24 +21,6 @@ INTEGER_LOOKUP_FIELDS = ["sourcePort", "destinationPort", "priority", "startTime
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.Equal: "=",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "=",
-    #     ComparisonComparators.In: "IN",
-    #     # due to limited regex support "Matches" is treated as CONTAINS
-    #     ComparisonComparators.Matches: 'CONTAINS',
-    #     ComparisonComparators.IsSubSet: 'insubnet',
-    #     ObservationOperators.Or: 'OR',
-    #     ObservationOperators.And: 'AND'
-    # }
     arcsight_operator_lookup = {
         ComparisonComparators.Equal: "IS NULL",
         ComparisonComparators.NotEqual: "IS NOT NULL"

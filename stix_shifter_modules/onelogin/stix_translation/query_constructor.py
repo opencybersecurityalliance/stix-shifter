@@ -17,14 +17,6 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     QUERIES = []
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "&",
-    #     ComparisonComparators.Equal: "=",
-    #     ObservationOperators.And: 'or',
-    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-    #     ObservationOperators.Or: 'or'
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper

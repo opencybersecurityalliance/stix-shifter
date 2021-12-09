@@ -17,22 +17,6 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.Equal: "=",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "LIKE",
-    #     ComparisonComparators.In: "IN",
-    #     ComparisonComparators.Matches: 'REGEXP_LIKE',
-    #     ObservationOperators.Or: 'UNION',
-    #     ObservationOperators.And: 'INTERSECT'
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper

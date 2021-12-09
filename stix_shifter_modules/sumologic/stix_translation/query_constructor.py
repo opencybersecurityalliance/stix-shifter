@@ -21,15 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "AND",
-    #     ComparisonExpressionOperators.Or: "OR",
-    #     ComparisonComparators.Equal: "=",
-    #     ObservationOperators.Or: 'OR',
-    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-    #     ObservationOperators.And: 'AND'
-    # }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper

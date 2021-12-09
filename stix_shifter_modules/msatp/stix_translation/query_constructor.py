@@ -16,22 +16,6 @@ class QueryStringPatternTranslator:
     """
     Stix to kusto query translation
     """
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "and",
-    #     ComparisonExpressionOperators.Or: "or",
-    #     ComparisonComparators.Equal: "==",
-    #     ComparisonComparators.NotEqual: "!=",
-    #     ComparisonComparators.Like: "contains",
-    #     ComparisonComparators.Matches: "matches",
-    #     ComparisonComparators.GreaterThan: ">",
-    #     ComparisonComparators.GreaterThanOrEqual: ">=",
-    #     ComparisonComparators.LessThan: "<",
-    #     ComparisonComparators.LessThanOrEqual: "<=",
-    #     ComparisonComparators.In: "in~",
-    #     ObservationOperators.Or: 'or',
-    #     ObservationOperators.And: 'or'
-    # }
-
     # Join query to get MAC address value from DeviceNetworkInfo
     join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
                  'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \

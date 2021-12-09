@@ -14,21 +14,6 @@ logger = logging.getLogger(__name__)
 class CbCloudQueryStringPatternTranslator:
     """Carbon Black Cloud STIX to query string pattern translator."""
 
-    # # Change comparator values to match with supported data source operators
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: 'AND',
-    #     ComparisonExpressionOperators.Or: 'OR',
-    #     ComparisonComparators.Equal: ':',
-    #     ComparisonComparators.NotEqual: ':',
-    #     ComparisonComparators.GreaterThan: ':',
-    #     ComparisonComparators.GreaterThanOrEqual: ':',
-    #     ComparisonComparators.LessThan: ':',
-    #     ComparisonComparators.LessThanOrEqual: ':',
-    #     ComparisonComparators.In: ':',
-    #     ObservationOperators.Or: 'OR',
-    #     ObservationOperators.And: 'AND'
-    # }
-
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         """CbCloudQueryStringPatternTranslator constructor."""
         self.dmm = data_model_mapper

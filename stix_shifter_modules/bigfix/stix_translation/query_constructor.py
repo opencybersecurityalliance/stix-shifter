@@ -26,22 +26,6 @@ class RelevanceQueryStringPatternTranslator:
     """
     Stix to Native query translation
     """
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "contains",
-        ComparisonComparators.Matches: "matches",
-        ComparisonComparators.GreaterThan: "is greater than",
-        ComparisonComparators.GreaterThanOrEqual: "is greater than or equal to",
-        ComparisonComparators.LessThan: "is less than",
-        ComparisonComparators.LessThanOrEqual: "is less than or equal to",
-        ComparisonComparators.In: "=",
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
     _stix_object_format_string_lookup_dict = {
         FILE: '''("file", name of it | "n/a",
                     "sha256", sha256 of it | "n/a",

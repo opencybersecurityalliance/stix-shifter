@@ -10,17 +10,6 @@ class CSQueryStringPatternTranslator:
     """
     Stix to FQL query translation
     """
-    # comparator_lookup = {
-    #     ComparisonExpressionOperators.And: "+",
-    #     ComparisonExpressionOperators.Or: ",",
-    #     ComparisonComparators.Equal: ":",
-    #     ComparisonComparators.NotEqual: ":!",
-    #     ComparisonComparators.GreaterThan: ":>",
-    #     ComparisonComparators.GreaterThanOrEqual: ":>=",
-    #     ComparisonComparators.LessThan: ":<",
-    #     ComparisonComparators.LessThanOrEqual: ":<=",
-    # }
-
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         # self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper

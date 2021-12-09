@@ -16,18 +16,6 @@ from . import object_scopers
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
 
-    # implemented_operators = {
-    #     ObservationOperators.And: '{expr1} OR {expr2}',
-    #     ObservationOperators.Or: '{expr1} OR {expr2}',
-    #     # FollowedBy could also be done with transactions, however the original event would not be returned, though a
-    #     # all the fields in the original event would be present in the transaction result.
-    #     # For [x FOLLOWEDBY y], first find the most recent y, get its timestamp, and look for x's that occur earlier.
-    #     # Use makeresults to inject a dummy event since a subsearch that yields no result will cause eval to error.
-    #     # Presumably, no one will be looking for results prior to epoch=0.
-    #     ObservationOperators.FollowedBy: "latest=[search {expr2} | append [makeresults 1 | eval _time=0]"
-    #                                      "| head 1 | return $_time] | where {expr1}"
-    # }
-
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, time_range, object_scoper=object_scopers.default_object_scoper):
         self.dmm = data_model_mapper
         # FollowedBy could also be done with transactions, however the original event would not be returned, though a
@@ -51,7 +39,7 @@ class SplunkSearchTranslator:
             return '{prefix}{expr}'.format(prefix=self._pattern_prefix, expr=expr)
 
         elif isinstance(expression, ObservationExpression):
-            translator = _ObservationExpressionTranslator(expression, self.dmm, self.object_scoper)
+            translator = _ObservationExpressionTranslator(expression, self.dmm, self.comparator_lookup, self.object_scoper)
             translated_query_str = translator.translate(expression.comparison_expression)
 
             if qualifier:
@@ -118,32 +106,18 @@ class SplunkSearchTranslator:
 
 class _ObservationExpressionTranslator:
 
-    _comparators = {
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: encoders.like,
-        ComparisonComparators.In: encoders.set,
-        ComparisonComparators.Matches: encoders.matches,
-        ComparisonExpressionOperators.And: 'AND',
-        ComparisonExpressionOperators.Or: 'OR',
-        ComparisonComparators.IsSubSet: "="
-    }
-
-    def __init__(self, expression: ObservationExpression, dmm, object_scoper):
+    def __init__(self, expression: ObservationExpression, dmm, comparator_lookup, object_scoper):
         # Expression that we're converting
         self.expression = expression
         self.dmm = dmm
+        self.comparator_lookup = comparator_lookup
         self.object_scoper = object_scoper
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self._comparators:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Splunk connector".format(expression_operator.name))
-        return self._comparators[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def translate(self, expression):
         if isinstance(expression, ComparisonExpression):
@@ -183,7 +157,7 @@ class _ObservationExpressionTranslator:
         elif isinstance(expression, CombinedComparisonExpression):
             return "({} {} {})".format(
                 self.translate(expression.expr1),
-                self._comparators[expression.operator],
+                self.comparator_lookup[str(expression.operator)],
                 self.translate(expression.expr2)
             )
 
