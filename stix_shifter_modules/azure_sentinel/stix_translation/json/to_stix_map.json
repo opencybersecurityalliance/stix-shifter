@@ -75,7 +75,7 @@
         "object": "finding"
       },
       {
-        "key": "x-oca-eventg.created",
+        "key": "x-oca-event.created",
         "object": "event"
       }
     ],
