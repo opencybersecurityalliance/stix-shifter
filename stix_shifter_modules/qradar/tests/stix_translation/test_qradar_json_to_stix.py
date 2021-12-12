@@ -178,7 +178,7 @@ class TestTransform(object):
         assert(curr_obj.keys() == {'type', 'value'})
         assert(curr_obj['value'] == 'test.com')
 
-    def test_x_ibm_event(self):
+    def test_x_oca_event(self):
         payload = "utf payload"
         base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
@@ -337,6 +337,32 @@ class TestTransform(object):
         assert(registry_obj['values'][0].keys() == {'name'})
         assert(registry_obj['values'][0]['name'] == "val")
 
+    def test_computer_and_originatingcomputer(self):
+        hostname = "example host"
+        identityip = "1.2.3.4"
+
+        data = { "OriginatingComputer": identityip, "Computer": hostname }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
+        observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+
+        event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
+
+        assert(event['type']) == "x-oca-event"
+        
+        host_ref = event['host_ref']
+        assert(host_ref in objects), f"host_ref with key {event['host_ref']} not found"
+        host = objects[host_ref]
+        assert(host['type'] == "x-oca-asset")
+        assert(host['hostname'] == hostname)
+
+        ip_refs = host['ip_refs']
+        assert(ip_refs is not None), "host ip_refs not found"
+        assert(len(ip_refs) == 1)
+        hostip = objects[ip_refs[0]]
+        assert(hostip.keys() == {'type', 'value'})
+        assert(hostip['type'] == 'ipv4-addr' and hostip['value'] == identityip)
 
     def test_event_finding(self):
         data = {"logsourceid": 126, "qidname": "event name", "creeventlist": ["one", "two"], 

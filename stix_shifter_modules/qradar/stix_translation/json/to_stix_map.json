@@ -876,5 +876,43 @@
   "hasoffense": {
     "key": "x-qradar.has_offense",
     "object": "x-qradar"
-  }
+  },
+  "Computer": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "OriginatingComputer": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "host_ip_addr_v4"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "host_ip_addr_v6"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v4"],
+      "group": true
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["host_ip_addr_v6"],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ]
 }
