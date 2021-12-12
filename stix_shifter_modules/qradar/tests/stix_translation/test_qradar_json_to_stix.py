@@ -347,7 +347,6 @@ class TestTransform(object):
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
-        print("****", objects)
 
         event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
 
