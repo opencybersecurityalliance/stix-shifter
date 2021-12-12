@@ -340,12 +340,14 @@ class TestTransform(object):
     def test_computer_and_originatingcomputer(self):
         hostname = "example host"
         identityip = "1.2.3.4"
+        qidname = "Process Create"
 
-        data = { "OriginatingComputer": identityip, "Computer": hostname }
+        data = { "qidname": "Special privileges assigned to new logon", "OriginatingComputer": identityip, "Computer": hostname }
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
+        print("****", objects)
 
         event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
 
