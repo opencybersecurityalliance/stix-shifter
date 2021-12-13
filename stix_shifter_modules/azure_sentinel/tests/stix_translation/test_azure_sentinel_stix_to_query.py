@@ -55,10 +55,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["((networkConnections/any(query1:contains(tolower(query1/sourceAddress), '172.16.2.22')) or "
-                    "networkConnections/any(query1:contains(tolower(query1/destinationAddress), '172.16.2.22')) or "
-                    "hostStates/any(query1:tolower(query1/publicIpAddress) eq '172.16.2.22') or "
-                    "hostStates/any(query1:tolower(query1/privateIpAddress) eq '172.16.2.22') or "
-                    "userStates/any(query1:tolower(query1/logonIp) eq '172.16.2.22'))) "
+                    "networkConnections/any(query1:contains(tolower(query1/destinationAddress), '172.16.2.22')))) "
                    "and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"]
 
         queries = _remove_timestamp_from_query(queries)

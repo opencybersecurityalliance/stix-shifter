@@ -1,5 +1,28 @@
 #!/bin/bash
 
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    -n) 
+      NAMESPACE="$2"
+      shift
+      shift
+      ;;
+    -n=*) 
+      NAMESPACE="${1#*=}"
+      shift
+      ;;
+    *)    # unknown option
+      ARGG=$1
+      POSITIONAL+=("$ARGG") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
 cd "$(dirname "$0")"
 
 PYTHONIOENCODING='utf8'
@@ -57,8 +80,8 @@ if [ $BUILD_LOCATION == "local" ]; then
   ./_build_local.sh
 elif [ ! $REPOSITORY == "" ]; then
   echo "Deploying image from repository: ${REPOSITORY}"
-  ./_build.sh $REPOSITORY
+  ./_build.sh $REPOSITORY $NAMESPACE
 else
   echo "Building and deploying image"
-  ./_build.sh
+  ./_build.sh "no-repository" $NAMESPACE
 fi

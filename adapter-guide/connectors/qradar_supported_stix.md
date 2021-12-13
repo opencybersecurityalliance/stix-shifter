@@ -1,10 +1,15 @@
+##### Updated on 11/09/21
 ## IBM QRadar
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | UTF8(payload) |
+| artifact | mime_type | mime_type_eventpayload |
 | artifact | payload_bin | flowsourcepayload |
+| artifact | mime_type | mime_type_flowsourcepayload |
 | artifact | payload_bin | flowdestinationpayload |
+| artifact | mime_type | mime_type_flowdestinationpayload |
 | artifact | payload_bin | Message |
+| artifact | mime_type | mime_type_message |
 | <br> | | |
 | directory | path | "File Path" |
 | directory | path | Image |
@@ -31,6 +36,10 @@
 | file | parent_directory_ref | ParentImage |
 | file | name | ServiceFileName |
 | file | parent_directory_ref | ServiceFileName |
+| file | name | TargetImage |
+| file | parent_directory_ref | TargetImage |
+| file | name | SourceImage |
+| file | parent_directory_ref | SourceImage |
 | <br> | | |
 | ipv4-addr | value | identityip |
 | ipv4-addr | value | destinationaddress |
@@ -74,6 +83,7 @@
 | process | creator_user_ref | username |
 | process | binary_ref | Image |
 | process | binary_ref | ParentImage |
+| process | binary_ref | TargetImage |
 | process | parent_ref | ParentImage |
 | process | command_line | "Process CommandLine" |
 | process | command_line | ParentCommandLine |
@@ -110,16 +120,6 @@
 | x-ibm-finding | rule_names | rulename(creeventlist) |
 | x-ibm-finding | name | "CRE Name" |
 | x-ibm-finding | description | "CRE Description" |
-| <br> | | |
-| x-ibm-windows | targetimage | TargetImage |
-| x-ibm-windows | granted_access | "Granted Access" |
-| x-ibm-windows | call_trace | "Call Trace" |
-| x-ibm-windows | source_image | SourceImage |
-| x-ibm-windows | pipe_name | PipeName |
-| x-ibm-windows | start_module | StartModule |
-| x-ibm-windows | start_function | StartFunction |
-| x-ibm-windows | signed | Signed |
-| x-ibm-windows | imphash | "IMP Hash" |
 | <br> | | |
 | x-oca-asset | ip_refs | identityip |
 | x-oca-asset | hostname | identityhostname |

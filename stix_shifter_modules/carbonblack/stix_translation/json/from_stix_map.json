@@ -21,7 +21,7 @@
     "fields": {
       "name": ["process_name", "childproc_name"],
       "hashes.MD5": ["md5"],
-      "hashes.SHA-256": ["sha256"],
+      "hashes.'SHA-256'": ["sha256"],
       "hashes.parent_MD5": ["parent_md5"],
       "hashes.parent_SHA-256": ["parent_sha256"],
       "hashes.child_MD5": ["childproc_md5"],
