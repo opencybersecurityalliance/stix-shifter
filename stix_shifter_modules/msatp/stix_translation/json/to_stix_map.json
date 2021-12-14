@@ -1400,6 +1400,10 @@
         "object": "fc_child_process_file"
       },
       {
+        "key": "process.name",
+        "object": "fc_child_process"
+      },
+      {
         "key": "process.binary_ref",
         "object": "fc_child_process",
         "references": "fc_child_process_file"
