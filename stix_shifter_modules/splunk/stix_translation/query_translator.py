@@ -1,14 +1,19 @@
-from stix_shifter_utils.modules.cim.stix_translation.query_translator import CimBaseQueryTranslator
+from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
 import logging
 from . import query_constructor
+from stix_shifter_utils.utils.file_helper import read_json
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_SEARCH_KEYWORD = "search"
 DEFAULT_FIELDS = "src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
 
+class QueryTranslator(BaseQueryTranslator):
 
-class CimQueryTranslator(CimBaseQueryTranslator):
+    def __init__(self, options, dialect, basepath):
+        super().__init__(options, dialect, basepath)
+        self.select_fields = read_json(f"select_fields", options)
 
     def transform_antlr(self, data, antlr_parsing_object):
         """
@@ -33,3 +38,9 @@ class CimQueryTranslator(CimBaseQueryTranslator):
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self, DEFAULT_SEARCH_KEYWORD, translate_options)
         return query_string
+
+    def map_object(self, stix_object_name):
+        if stix_object_name in self.map_data and self.map_data[stix_object_name] != None:
+            return self.map_data[stix_object_name]["cim_type"]
+        else:
+            raise DataMappingException("Unable to map object `{}` into CIM".format(stix_object_name))

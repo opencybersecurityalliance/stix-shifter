@@ -1,509 +1,630 @@
 {
     "eventDateTime": [
-    {
-      "key": "first_observed",
-      "cybox": false
-    },
-    {
-      "key": "last_observed",
-      "cybox": false
-    }
-  ],
-  "event_count": {
-    "key": "number_observed",
-    "cybox": false,
-    "transformer": "ToInteger"
-  },
-  "azureTenantId": {
-    "key": "x_msazure_sentinel.tenant_id",
-    "cybox": false
-  },
-  "azureSubscriptionId": {
-    "key": "x_msazure_sentinel.subscription_id",
-    "cybox": false
-  },
-  "id": {
-    "key": "x_msazure_sentinel_alert.id",
-    "cybox": false
-  },
-  "title": {
-    "key": "x_msazure_sentinel_alert.title",
-    "cybox": false
-  },
-  "vendorInformation_provider": {
-    "key": "x_msazure_sentinel_alert.provider",
-    "cybox": false
-  },
-  "vendorInformation_vendor": {
-    "key": "x_msazure_sentinel_alert.vendor",
-    "cybox": false
-  },
-  "hostStates_0_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_0"
-  },
-  "hostStates_1_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_1"
-  },
-  "hostStates_2_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_2"
-  },
-  "hostStates_3_fqdn": {
-      "key": "domain-name.value",
-      "object": "fqdn_3"
-  },
-  "hostStates_0_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_0"
-  },
-  "hostStates_1_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_1"
-  },
-  "hostStates_2_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_2"
-  },
-  "hostStates_3_netBiosName": {
-      "key": "domain-name.value",
-      "object": "net_bios_name_3"
-  },
-  "networkConnections_0_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip0"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt0",
-      "references": "src_ip0"
-    }
-  ],
-  "networkConnections_1_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip1"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt1",
-      "references": "src_ip1"
-    }
-  ],
-  "networkConnections_2_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip2"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt2",
-      "references": "src_ip2"
-    }
-  ],
-  "networkConnections_3_sourceAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip3"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt3",
-      "references": "src_ip3"
-    }
-  ],
-  "networkConnections_0_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip0"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt0",
-      "references": "dst_ip0"
-    }
-  ],
-  "networkConnections_1_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip1"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt1",
-      "references": "dst_ip1"
-    }
-  ],
-  "networkConnections_2_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip2"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt2",
-      "references": "dst_ip2"
-    }
-  ],
-  "networkConnections_3_destinationAddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip3"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt3",
-      "references": "dst_ip3"
-    }
-  ],
-  "networkConnections_0_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt0",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_1_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt1",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_2_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt2",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_3_protocol":
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt3",
-      "transformer": "ToLowercaseArray"
-  },
-  "networkConnections_0_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt0",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_1_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt1",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_2_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt2",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_3_destinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt3",
-    "transformer": "ToInteger"
-  },
-  "networkConnections_0_sourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt0",
-    "transformer": "ToInteger"
-  },
-  "fileStates_0_name": {
-    "key": "file.name",
-    "object": "file0"
-  },
-    "fileStates_1_name": {
-    "key": "file.name",
-    "object": "file1"
-  },
-  "fileStates_2_name": {
-    "key": "file.name",
-    "object": "file2"
-  },
-  "fileStates_3_name": {
-    "key": "file.name",
-    "object": "file3"
-  },
-  "fileStates_0_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file0"
-  },
-  "fileStates_1_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file1"
-  },
-  "fileStates_2_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file2"
-  },
-  "fileStates_3_sha1": {
-    "key": "file.hashes.SHA-1",
-    "object": "file3"
-  },
-  "fileStates_0_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file0"
-  },
-  "fileStates_1_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file1"
-  },
-  "fileStates_2_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file2"
-  },
-  "fileStates_3_sha256": {
-    "key": "file.hashes.SHA-256",
-    "object": "file3"
-  },
-  "processes_0_name": [
-    {
-    "key": "file.name",
-    "object": "file0"
-    },
-    {
-    "key": "process.name",
-    "object": "process0"
-    }
-  ],
-  "processes_1_name": [
-    {
-    "key": "file.name",
-    "object": "file1"
-    },
-    {
-    "key": "process.name",
-    "object": "process1"
-   }
-  ],
-  "processes_2_name": {
-    "key": "process.name",
-    "object": "process2"
-  },
-  "processes_3_name": {
-    "key": "process.name",
-    "object": "process3"
-  },
-  "processes_0_sha1": {
-    "key": "process.binary_ref",
-    "object": "process0",
-    "references": "file0"
-  },
-  "processes_1_sha1": {
-    "key": "process.binary_ref",
-    "object": "process1",
-    "references": "file1"
-  },
-  "processes_2_sha1": {
-    "key": "process.binary_ref",
-    "object": "process2",
-    "references": "file2"
-  },
-  "processes_3_sha1": {
-    "key": "process.binary_ref",
-    "object": "process3",
-    "references": "file3"
-  },
-  "processes_0_sha256": {
-    "key": "process.binary_ref",
-    "object": "process0",
-    "references": "file0"
-  },
-  "processes_1_sha256": {
-    "key": "process.binary_ref",
-    "object": "process1",
-    "references": "file1"
-  },
-  "processes_2_sha256": {
-    "key": "process.binary_ref",
-    "object": "process2",
-    "references": "file2"
-  },
-  "processes_3_sha256": {
-    "key": "process.binary_ref",
-    "object": "process3",
-    "references": "file3"
-  },
-  "processes_0_path": [
       {
-          "key": "directory.path",
-          "object": "directory0",
-          "transformer": "ToDirectoryPath"
-      },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file0",
-          "references": "directory0"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process0",
-          "references": "file0"
+        "key": "first_observed",
+        "cybox": false
       }
-  ],
-  "processes_1_path": [
-      {
-          "key": "directory.path",
-          "object": "directory1",
-          "transformer": "ToDirectoryPath"
-      },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file1",
-          "references": "directory1"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process1",
-          "references": "file1"
+    ],
+    "event_count": {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    "azureTenantId": {
+      "key": "x-msazure-sentinel.tenant_id",
+      "object": "sentinel"
+    },
+    "azureSubscriptionId": {
+      "key": "x-msazure-sentinel.subscription_id",
+      "object": "sentinel"
+    },
+    "activityGroupName": {
+      "key": "x-msazure-sentinel-alert.activityGroupName",
+      "object": "alert"
+    },
+    "assignedTo": {
+      "key": "x-msazure-sentinel-alert.assignedTo",
+      "object": "alert"
+    },
+    "category": {
+      "key": "x-oca-event.category",
+      "object": "event"
       }
-  ],
-  "processes_2_path": [
-      {
-          "key": "directory.path",
-          "object": "directory2",
-          "transformer": "ToDirectoryPath"
+    ,
+    "closedDateTime":{
+        "key": "last_observed",
+        "cybox": false
+    },
+    "cloudAppStates": {
+      "destinationServiceName": [
+        {
+        "key":"software.name",
+        "object":"software"
+        },
+        {
+        "key":"x-ibm-finding.dst_application_ref",
+        "object":"finding",
+        "references":"software"
+        }
+      ],
+      "destinationServiceIp": {
+        "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceIp",
+        "object": "alert"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file2",
-          "references": "directory2"
-      },
-      {
-          "key": "process.binary_ref",
-          "object": "process2",
-          "references": "file2"
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.cloudAppStates.riskScore",
+        "object": "alert"
       }
-  ],
-  "processes_3_path": [
+    },
+    "comments": {
+      "key": "x-msazure-sentinel-alert.comments",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "confidence": {
+      "key": "x-msazure-sentinel-alert.confidence",
+      "object": "alert"
+    },
+    "createdDateTime": [
       {
-          "key": "directory.path",
-          "object": "directory3",
-          "transformer": "ToDirectoryPath"
+        "key": "created",
+        "cybox": false
       },
       {
-          "key": "file.parent_directory_ref",
-          "object": "file3",
-          "references": "directory3"
+        "key": "x-ibm-finding.createddatetime",
+        "object": "finding"
       },
       {
-          "key": "process.binary_ref",
-          "object": "process3",
-          "references": "file3"
+        "key": "x-oca-event.created",
+        "object": "event"
       }
-  ],
-   "processes_0_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "process0"
-       }
-   ],
-  "processes_1_parentProcessName": [
-       {
+    ],
+    "description": {
+      "key": "x-ibm-finding.description",
+      "object": "finding"
+    },
+    "detectionIds": {
+      "key": "x-msazure-sentinel-alert.detectionids",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "feedback": {
+      "key": "x-msazure-sentinel-alert.feedback",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "fileStates": {
+      "fileHash": {
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "file"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "file"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "file"
+        },
+        "authenticodeHash256": {
+          "key": "file.hashes.authenticodeHash256",
+          "object": "file"
+        },
+        "lsHash": {
+          "key": "file.hashes.lsHash",
+          "object": "file"
+        },
+        "ctph": {
+          "key": "file.hashes.ctph",
+          "object": "file"
+        },
+        "peSha1": {
+          "key": "file.hashes.peSha1",
+          "object": "file"
+        },
+        "peSha256": {
+          "key": "file.hashes.peSha256",
+          "object": "file"
+        },
+        "unknown": {
+          "key": "file.hashes.UNKNOWN",
+          "object": "file"
+        }
+      },
+      "name": {
+        "key": "file.name",
+        "object": "file"
+      },
+      "path": [
+        {
+            "key": "directory.path",
+            "object": "directory",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+        }
+      ],
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.fileStates.riskScore",
+        "object": "file"
+      }
+    },
+    "hostStates": {
+      "fqdn": {
+        "key": "domain-name.value",
+        "object": "host"
+      },
+      "isAzureAadJoined": {
+        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadJoined",
+        "object": "alert"
+      },
+      "isAzureAadRegistered": {
+        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadRegistered",
+        "object": "alert"
+      },
+      "isHybridAzureDomainJoined": {
+        "key": "x-msazure-sentinel-alert.hostStates.isHybridAzureDomainJoined",
+        "object": "alert"
+      },
+      "os": [
+        {
+          "key": "x-ibm-finding.src_os_ref.name",
+          "object": "finding"
+        },
+        {
+          "key": "software.name",
+          "object": "application"
+        }
+      ],
+      "privateIpAddress": {
+        "key": "ipv4-addr.value"
+      },
+      "publicIpAddress": {
+        "key": "ipv4-addr.value"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.hostStates.riskScore",
+        "object": "alert"
+      }
+    },
+    "id": {
+      "key": "x-oca-event.code",
+      "object": "event"
+    },
+    "incidentIds": {
+      "key": "x-msazure-sentinel-alert.incidentIds",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "lastModifiedDateTime": [
+      {
+        "key": "modified",
+        "cybox": false
+      },
+      {
+        "key": "x-ibm-finding.time_observed",
+        "object": "finding"
+      }
+    ],
+    "malwareStates": {
+      "category": {
+        "key": "x-msazure-sentinel-alert.malwareStates.category",
+        "object": "alert"
+      },
+      "family": {
+        "key": "x-msazure-sentinel-alert.malwareStates.family",
+        "object": "alert"
+      },
+      "name": {
+        "key": "x-msazure-sentinel-alert.malwareStates.name",
+        "object": "alert"
+      },
+      "severity": {
+        "key": "x-msazure-sentinel-alert.malwareStates.severity",
+        "object": "alert"
+      },
+      "wasRunning": {
+        "key": "x-msazure-sentinel-alert.malwareStates.wasRunning",
+        "object": "alert"
+      }
+    },
+    "networkConnections": {
+      "applicationName": {
+        "key": "software.name",
+        "object": "application"
+      },
+      "destinationAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        }
+      ],
+      "destinationLocation": {
+        "key": "x-ibm-finding.dst_geolocation",
+        "object": "alert"
+      },
+      "destinationDomain": {
+        "key": "domain-name.value",
+        "transformer": "ToDomainName"
+      },
+      "destinationPort": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "destinationUrl": {
+        "key": "url.value",
+        "object": "url"
+      },
+      "direction": {
+        "key": "x-msazure-sentinel-alert.networkConnections.direction",
+        "object": "alert"
+      },
+      "domainRegisteredDateTime": {
+        "key": "x-msazure-sentinel-alert.networkConnections.domainRegisteredDateTime",
+        "object": "alert"
+      },
+      "localDnsName": {
+        "key": "x-msazure-sentinel-alert.networkConnections.localDnsName",
+        "object": "alert"
+      },
+      "natDestinationAddress": {
+        "key": "x-ibm-finding.dst_ip_ref.value",
+        "object": "finding"
+      },
+      "natDestinationPort": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natDestinationPort",
+        "object": "alert"
+      },
+      "natSourceAddress": {
+        "key": "x-ibm-finding.src_ip_ref.value",
+        "object": "finding"
+      },
+      "natSourcePort": {
+        "key": "x-msazure-sentinel-alert.networkConnections.natSourcePort",
+        "object": "alert"
+      },
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "group": "True",
+        "transformer": "ToLowercaseArray"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.networkConnections.riskScore",
+        "object": "alert"
+      },
+      "sourceAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "src_ip"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt",
+          "references": "src_ip"
+        }
+      ],
+      "sourceLocation": {
+        "key": "x-ibm-finding.src_geolocation",
+        "object": "alert"
+      },
+      "sourcePort": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "status": {
+        "key": "x-msazure-sentinel-alert.networkConnections.status",
+        "object": "alert"
+      },
+      "urlParameters": [
+        {
+        "key": "x-oca-event.domain_ref.value",
+        "object": "event"
+        },
+        {
+        "key": "x-oca-event.url_ref.value",
+        "object": "event"
+        }
+      ]
+    },
+    "processes": {
+      "accountName": [
+        {
+          "key": "user-account.user_id",
+          "object": "user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process",
+          "references": "user"
+        }
+      ],
+      "commandLine": {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      "createdDateTime": {
+        "key": "process.created",
+        "object": "process"
+      },
+      "fileHash": {
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "processType"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "processType"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "processType"
+        },
+        "authenticodeHash256": {
+          "key": "file.hashes.authenticodeHash256",
+          "object": "processType"
+        },
+        "lsHash": {
+          "key": "file.hashes.lsHash",
+          "object": "processType"
+        },
+        "ctph": {
+          "key": "file.hashes.ctph",
+          "object": "processType"
+        },
+        "peSha1": {
+          "key": "file.hashes.peSha1",
+          "object": "processType"
+        },
+        "peSha256": {
+          "key": "file.hashes.peSha256",
+          "object": "processType"
+        },
+        "unknown": {
+          "key": "file.hashes.UNKNOWN",
+          "object": "processType"
+        }
+      },
+      "integrityLevel": {
+        "key": "x-msazure-sentinel-alert.processes.integrityLevel",
+        "object": "alert"
+      },
+      "isElevated": {
+        "key": "x-msazure-sentinel-alert.processes.isElevated",
+        "object": "alert"
+      },
+      "name": {
+        "key": "process.name",
+        "object": "process"
+      },
+      "parentProcessCreatedDateTime": {
+        "key": "process.created",
+        "object": "process_parent"
+      },
+      "parentProcessId": [
+        {
+          "key": "process.pid",
+          "object": "parent_process"
+        },
+        {
           "key": "process.parent_ref",
-          "object": "process1",
-          "references": "process0"
-       }
-   ],
-  "processes_2_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "ppn2"
-       },
-       {
-          "key": "process.parent_ref",
-          "object": "process2",
-          "references": "ppn2"
-       }
-   ],
-  "processes_3_parentProcessName": [
-       {
-          "key": "process.name",
-          "object": "ppn3"
-       },
-       {
-          "key": "process.parent_ref",
-          "object": "process3",
-          "references": "ppn3"
-       }
-   ],
-  "fileStates_0_path": [
+          "object": "process",
+          "references": "parent_process"
+        }
+      ],
+      "parentProcessName": {
+        "key": "process.name",
+        "object": "process_parent"
+      },
+      "path": {
+        "key": "directory.path",
+        "object": "dir"
+      },
+      "processId": {
+        "key": "process.pid",
+        "object": "process"
+      }
+    },
+    "recommendedActions": {
+      "key": "x-msazure-sentinel-alert.recommendedactions",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "registryKeyStates": {
+      "hive": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.hive",
+        "object": "alert",
+        "transformer": "ToString"
+      },
+      "key": {
+        "key": "windows-registry-key.key",
+        "object": "registry"
+      },
+      "oldKey": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldKey",
+        "object": "alert"
+      },
+      "oldValueData": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueData",
+        "object": "alert"
+      },
+      "oldValueName": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueName",
+        "object": "alert"
+      },
+      "operation": {
+        "key": "x-msazure-sentinel-alert.registryKeyStates.operation",
+        "object": "alert",
+        "transformer": "ToString"
+      },
+      "processId": {
+        "key": "process.pid"
+      },
+      "valueData": {
+        "key": "extensions.windows-registry-value-type.valueData",
+        "object": "registry"
+      },
+      "valueName": {
+        "key": "extensions.windows-registry-value-type.name",
+        "object": "registry"
+      },
+      "valueType": {
+        "key": "extensions.windows-registry-value-type.valuetype",
+        "object": "registry",
+        "transformer": "ToString"
+      }
+    },
+    "securityResources": {
+      "resource": {
+        "key": "x-msazure-sentinel-alert.securityresources.resource",
+        "object": "alert"
+      },
+      "resourceType": {
+        "key": "x-msazure-sentinel-alert.securityresources.resourcetype",
+        "object": "alert",
+        "transformer": "ToString"
+      }
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding"
+    },
+    "sourceMaterials": {
+      "key": "x-msazure-sentinel-alert.sourcematerials",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "status": {
+      "key": "x-msazure-sentinel-alert.status",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "tags": {
+      "key": "x-msazure-sentinel-alert.tags",
+      "object": "alert",
+      "transformer": "ToString"
+    },
+    "title": [
       {
-          "key": "directory.path",
-          "object": "directory0",
-          "transformer": "ToDirectoryPath"
+      "key": "x-ibm-finding.name",
+      "object": "finding"
       },
       {
-          "key": "file.parent_directory_ref",
-          "object": "file0",
-          "references": "directory0"
+      "key": "x-oca-event.action",
+      "object": "event"
       }
-  ],
-  "fileStates_1_path": [
-      {
-          "key": "directory.path",
-          "object": "directory1",
-          "transformer": "ToDirectoryPath"
+    ],
+    "triggers": {
+      "name": {
+        "key": "x-msazure-sentinel-alert.triggers.name",
+        "object": "alert"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file1",
-          "references": "directory1"
-      }
-  ],
-  "fileStates_2_path": [
-      {
-          "key": "directory.path",
-          "object": "directory2",
-          "transformer": "ToDirectoryPath"
+      "type": {
+        "key": "x-msazure-sentinel-alert.triggers.type",
+        "object": "alert"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file2",
-          "references": "directory2"
+      "value": {
+        "key": "x-msazure-sentinel-alert.triggers.value",
+        "object": "alert"
       }
-  ],
-  "fileStates_3_path": [
-      {
-          "key": "directory.path",
-          "object": "directory3",
-          "transformer": "ToDirectoryPath"
+    },
+    "userStates": {
+      "aadUserId": {
+        "key": "x-ibm-finding.src_application_user_ref.user_id",
+        "object": "finding"
       },
-      {
-          "key": "file.parent_directory_ref",
-          "object": "file3",
-          "references": "directory3"
+      "accountName": {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      "domainName": {
+        "key": "domain-name.value"
+      },
+      "emailRole": {
+        "key": "x-msazure-sentinel-alert.userStates.emailrole",
+        "object": "alert"
+      },
+      "isVpn": {
+        "key": "x-msazure-sentinel-alert.userStates.isvpn",
+        "object": "alert"
+      },
+      "logonDateTime": {
+        "key": "user-account.account_last_login",
+        "object": "user"
+      },
+      "logonId": {
+        "key": "user-account.account_login",
+        "object": "user"
+      },
+      "logonIp": {
+        "key": "ipv4-addr.value"
+      },
+      "logonLocation": {
+        "key": "x-msazure-sentinel-alert.userStates.logonLocation",
+        "object": "alert"
+      },
+      "logonType": {
+        "key": "x-ibm-finding.src_application_user_ref.type",
+        "object": "finding"
+      },
+      "onPremisesSecurityIdentifier": {
+        "key": "x-msazure-sentinel-alert.userStates.onpremisessecurityidentifier",
+        "object": "alert"
+      },
+      "riskScore": {
+        "key": "x-msazure-sentinel-alert.userStates.riskScore",
+        "object": "alert"
+      },
+      "userAccountType": {
+        "key": "x-msazure-sentinel-alert.userStates.useraccounttype",
+        "object": "alert"
+      },
+      "userPrincipalName": {
+        "key": "x-msazure-sentinel-alert.userStates.userPrincipalName",
+        "object": "alert"
       }
-  ],
-  "userStates_0_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an0"
-  },
-  "userStates_1_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an1"
-  },
-  "userStates_2_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an2"
-  },
-  "userStates_3_accountName": {
-          "key": "user-account.user_id",
-          "object": "ua_an3"
-  },
-  "userStates_0_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt0"
-  },
-  "userStates_1_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt1"
-  },
-  "userStates_2_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt2"
-  },
-  "userStates_3_logonDateTime": {
-          "key": "user-account.account_last_login",
-          "object": "ua_ldt3"
-  }
+    },
+    "vendorInformation": {
+      "provider": {
+        "key": "software.name",
+        "object": "application"
+      },
+      "vendor": {
+        "key": "software.vendor",
+        "object": "application"
+      },
+      "providerVersion": {
+        "key": "software.version",
+        "object": "application"
+      },
+      "subProvider": {
+        "key": "x-oca-event.provider",
+        "object": "event"
+      }
+    },
+    "vulnerabilityStates": {
+      "cve": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.cve",
+        "object": "alert"
+      },
+      "severity": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.severity",
+        "object": "alert"
+      },
+      "wasRunning": {
+        "key": "x-msazure-sentinel-alert.vulnerabilityStates.wasRunning",
+        "object": "alert"
+      }
+    }
 }

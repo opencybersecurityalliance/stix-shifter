@@ -14,7 +14,7 @@
         },
         "help": {
             "type": "link",
-            "default": "<Help URL>"
+            "default": "data-sources.html"
         },
         "sni": {
             "type": "text",

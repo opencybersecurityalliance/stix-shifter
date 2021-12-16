@@ -169,7 +169,7 @@ class QueryStringPatternTranslator:
                     hash_string = 'fileHash/hashType'
                     hash_type = stix_field.split('.')[1] if mapped_field == 'fileStates.fileHash.hashValue' else \
                         stix_field.split('.')[2]
-                    comparison_string += "({collection_name}/any({fn}:{fn}/{hash_string} {comparator} '{value}')" \
+                    comparison_string += "({collection_name}/any({fn}:{fn}/{hash_string} {comparator} {value})" \
                         .format(collection_name=collection_name, fn=lambda_func, hash_string=hash_string,
                                 comparator='eq', value=hash_type.lower().replace('-', ''))
                     if comparator == 'contains':
@@ -330,9 +330,6 @@ class QueryStringPatternTranslator:
                                                          .format(operator=expression.comparator.name.upper(),
                                                                  stix_field=stix_field))
                 value = self._format_value_without_quotes(value)
-
-            if stix_field not in ['provider', 'vendor']:
-                value = self._format_value_to_lower_case(value)
 
             # COUNTER is used to form sequential lambda function names for OData4 queries per comparison observation
             ''' eg. processes/any(query1:contains(tolower(query1/path), 'c:\\windows\\system32')) and 

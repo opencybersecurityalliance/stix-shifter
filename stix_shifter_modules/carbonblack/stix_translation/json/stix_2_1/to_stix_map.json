@@ -1,0 +1,251 @@
+{
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "process_creator"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "process_creator"
+    }
+  ],
+  "start": [
+    {
+      "key": "process.created_time",
+      "object": "process"
+    },
+    {
+      "key": "first_observed",
+      "cybox": false
+    }
+  ],
+  "process_name": [
+    {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "process_pid": {
+    "key": "process.pid",
+    "object": "process"
+  },
+  "id": {
+    "key": "process.x_id",
+    "object": "process"
+  },
+  "unique_id": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  },
+  "parent_name": [
+    {
+      "key": "file.name",
+      "object": "parent_file"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "parent_pid": [
+    {
+      "key": "process.pid",
+      "object": "parent_process"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    }
+  ],
+  "parent_id": {
+    "key": "process.x_id",
+    "object": "parent_process"
+  },
+  "parent_unique_id": {
+    "key": "process.x_unique_id",
+    "object": "parent_process"
+  },
+  "process_md5": {
+    "key": "file.hashes.MD5",
+    "object": "process_file"
+  },
+  "process_sha256": {
+    "key": "file.hashes.SHA-256",
+    "object": "process_file"
+  },
+  "cmdline": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "interface_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr",
+      "transformer": "ToIPv4"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "ipv4-addr"
+      ],
+      "group": true
+    }
+  ],
+  "path": [
+    {
+      "key": "directory.path",
+      "object": "dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "process_file",
+      "references": "dir"
+    }
+  ],
+  "hostname": [
+    {
+      "key": "x-cb-response.host_name",
+      "object": "cb"
+    },
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    }
+  ],
+  "host_type": [
+    {
+      "key": "x-cb-response.host_type",
+      "object": "cb"
+    },
+    {
+      "key": "x-oca-asset.host_type",
+      "object": "host"
+    }
+  ],
+  "comms_ip": {
+    "key": "x-cb-response.comms_ip",
+    "object": "cb",
+    "transformer": "ToIPv4"
+  },
+  "os_type": [
+    {
+      "key": "x-cb-response.os_type",
+      "object": "cb"
+    },
+    {
+      "key": "x-oca-asset.os_name",
+      "object": "host"
+    }
+  ],
+  "sensor_id": {
+    "key": "x-cb-response.sensor_id",
+    "object": "cb"
+  },
+  "group": {
+    "key": "x-cb-response.group",
+    "object": "cb"
+  },
+  "segment_id": {
+    "key": "x-cb-response.segment_id",
+    "object": "cb"
+  },
+  "terminated": {
+    "key": "x-cb-response.terminated",
+    "object": "cb"
+  },
+  "regmod_count": {
+    "key": "x-cb-response.regmod_count",
+    "object": "cb"
+  },
+  "netconn_count": {
+    "key": "x-cb-response.netconn_count",
+    "object": "cb"
+  },
+  "filemod_count": {
+    "key": "x-cb-response.filemod_count",
+    "object": "cb"
+  },
+  "modload_count": {
+    "key": "x-cb-response.modload_count",
+    "object": "cb"
+  },
+  "childproc_count": {
+    "key": "x-cb-response.childproc_count",
+    "object": "cb"
+  },
+  "crossproc_count": {
+    "key": "x-cb-response.crossproc_count",
+    "object": "cb"
+  },
+  "emet_count": {
+    "key": "x-cb-response.emet_count",
+    "object": "cb"
+  },
+  "emet_config": {
+    "key": "x-cb-response.emet_config",
+    "object": "cb"
+  },
+  "processblock_count": {
+    "key": "x-cb-response.processblock_count",
+    "object": "cb"
+  },
+  "filtering_known_dlls": {
+    "key": "x-cb-response.filtering_known_dlls",
+    "object": "cb"
+  },
+  "last_update": {
+    "key": "last_observed",
+    "cybox": false
+  },
+  "last_server_update": {
+    "key": "x-cb-response.last_server_update",
+    "object": "cb"
+  },
+  "logon_type": {
+    "key": "x-cb-response.logon_type",
+    "object": "cb"
+  },
+  "alliance_score_srstrust": {
+    "key": "x-cb-response.alliance_score_srstrust",
+    "object": "cb"
+  },
+  "alliance_link_srstrust": {
+    "key": "x-cb-response.alliance_link_srstrust",
+    "object": "cb"
+  },
+  "alliance_data_srstrust": {
+    "key": "x-cb-response.alliance_data_srstrust",
+    "object": "cb"
+  },
+  "alliance_updated_srstrust": {
+    "key": "x-cb-response.alliance_updated_srstrust",
+    "object": "cb"
+  },
+  "server_added_timestamp": 
+  {
+      "key": "file.ctime",
+      "object": "binary_file"
+  },
+  "original_filename": {
+    "key": "file.name",
+    "object": "binary_file"
+  },
+  "orig_mod_length": {
+    "key": "file.size",
+    "object": "binary_file"
+  },
+  "md5": {
+    "key": "file.hashes.MD5",
+    "object": "binary_file"
+  }
+}

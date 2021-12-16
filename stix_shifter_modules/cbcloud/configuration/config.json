@@ -15,7 +15,7 @@
         },
         "help": {
             "type": "link",
-            "default": "https://add.a.link.to.the.carbonblackcloud/connector/documentation.html"
+            "default": "data-sources.html"
         }
     },
     "configuration": {

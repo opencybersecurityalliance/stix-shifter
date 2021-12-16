@@ -49,6 +49,8 @@ def main():
 
     # process arguments
     parent_parser = argparse.ArgumentParser(description='stix_shifter')
+    parent_parser.add_argument('-d', '--debug', action='store_true',
+                                  help='Print detail logs for debugging')
     parent_subparsers = parent_parser.add_subparsers(dest='command')
 
     # translate parser
@@ -71,8 +73,6 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
-    translate_parser.add_argument('-d', '--debug', action='store_true',
-                                  help='Print detail logs for debugging')
     # modules parser
     parent_subparsers.add_parser(MODULES, help='Get modules list')
 
@@ -101,26 +101,25 @@ def main():
         type=str,
         help='Data source authentication'
     )
-    transmit_parser.add_argument('-d', '--debug', action='store_true',
-                                  help='Print detail logs for debugging')
 
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
     operation_subparser.add_parser(stix_transmission.PING, help="Pings the data source")
     query_operation_parser = operation_subparser.add_parser(stix_transmission.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
-    query_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     results_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
-    results_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
+    resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
+    resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
+    resultsstix_operation_parser.add_argument('offset', help='offset of results')
+    resultsstix_operation_parser.add_argument('length', help='length of results')
+    resultsstix_operation_parser.add_argument('data_source', help='STIX identity object representing a datasource')
     status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
-    status_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     delete_operation_parser = operation_subparser.add_parser(stix_transmission.DELETE, help="Delete a running query on the data source")
     delete_operation_parser.add_argument('search_id', help='id of query to remove')
-    delete_operation_parser.add_argument('-d', '--debug', action='store_true', help='Print detail logs for debugging')
     operation_subparser.add_parser(stix_transmission.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
@@ -153,8 +152,8 @@ def main():
         type=str,
         help='Query String'
     )
-    execute_parser.add_argument('-d', '--debug', action='store_true',
-                                help='Print detail logs for debugging')
+    execute_parser.add_argument('-r', '--results', type=int, default=10,
+                                help='Maximum number of returned results (default 10)')
 
     host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
     host_parser.add_argument(
@@ -167,8 +166,16 @@ def main():
         type=str,
         help='Proxy Host:Port'
     )
-    host_parser.add_argument('-d', '--debug', action='store_true',
-                                help='Print detail logs for debugging')
+    host_parser.add_argument(
+        'ssl_cert',
+        type=str,
+        help='SSL certificate filename'
+    )
+    host_parser.add_argument(
+        'ssl_key',
+        type=str,
+        help='SSL key filename'
+    )
 
     args = parent_parser.parse_args()
 
@@ -249,7 +256,7 @@ def main():
             return host.is_async()
 
         host_address = args.host_address.split(":")
-        app.run(debug=False, port=int(host_address[1]), host=host_address[0])
+        app.run(debug=True, port=int(host_address[1]), host=host_address[0], ssl_context=(args.ssl_cert, args.ssl_key))
 
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
@@ -279,8 +286,8 @@ def main():
                             status = transmission.status(search_id)
                         log.debug(status)
                     else:
-                        raise RuntimeError("Fetching status failed")
-                result = transmission.results(search_id, 0, 9)
+                        raise RuntimeError("Fetching status failed")               
+                result = transmission.results(search_id, 0, args.results - 1)
                 if result["success"]:
                     log.debug("Search {} results is:\n{}".format(search_id, result["data"]))
 
@@ -296,7 +303,8 @@ def main():
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
-        log.info('STIX Results: \n' + json.dumps(result, indent=4, sort_keys=False))
+        log.info('STIX Results (written to stdout):\n')
+        print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
     elif args.command == TRANSLATE:
@@ -337,6 +345,7 @@ def transmit(args):
         query <query string>,
         status <search id>,
         results <search id> <offset> <length>,
+        results_stix <search id> <offset> <length> <data_source>
         ping,
         is_async
     >
@@ -358,6 +367,12 @@ def transmit(args):
         offset = args.offset
         length = args.length
         result = transmission.results(search_id, offset, length)
+    elif operation_command == stix_transmission.RESULTS_STIX:
+        search_id = args.search_id
+        offset = args.offset
+        length = args.length
+        data_source = args.data_source
+        result = transmission.results_stix(search_id, offset, length, data_source)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)

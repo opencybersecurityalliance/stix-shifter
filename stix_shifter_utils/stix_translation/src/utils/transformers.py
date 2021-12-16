@@ -28,7 +28,7 @@ class StringToBool(ValueTransformer):
 
 
 class EpochToTimestamp(ValueTransformer):
-    """A value transformer for the timestamps"""
+    """A value transformer for the 13-digit timestamps"""
 
     @staticmethod
     def transform(epoch):
@@ -305,3 +305,10 @@ class ValueToList(ValueTransformer):
     def transform(obj):
         return [obj]
 
+class GraphIDToPID(ValueTransformer):
+    """A value transformer that converts a single value into a list container the value"""
+
+    @staticmethod
+    def transform(obj):
+        obj = obj.split(':')
+        return obj[2]

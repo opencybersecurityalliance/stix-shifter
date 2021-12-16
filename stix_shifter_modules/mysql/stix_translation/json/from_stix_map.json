@@ -1,0 +1,67 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["source_ipaddr", "dest_ipaddr"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["source_ipaddr", "dest_ipaddr"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"],
+      "hashes.'SHA-256'": ["sha256hash"],
+      "hashes.MD5": ["md5hash"],
+      "parent_directory_ref.path": ["file_path"],
+      "created": ["file_created_time"],
+      "modified": ["file_modified_time"],
+      "accessed": ["file_accessed_time"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["username"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["file_path"],
+      "created": ["directory_created_time"],
+      "modified": ["directory_modified_time"],
+      "accessed": ["directory_accessed_time"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref.value": ["source_ipaddr"],
+      "dst_ref.value": ["dest_ipaddr"],
+      "src_port": ["source_port"],
+      "dst_port": ["dest_port"],
+      "protocols[*]": ["protocol"],
+      "start": ["entry_time"],
+      "end": ["entry_time"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["process_id"],
+      "name": ["process_name"],
+      "arguments": ["process_arguments"],
+      "created": ["process_created_time"],
+      "binary_ref.name": ["filename"]
+    }
+  },
+  "x-mysql": {
+    "fields": {
+      "system_name": ["system_name"],
+      "severity": ["severity"]
+    }
+  }
+}

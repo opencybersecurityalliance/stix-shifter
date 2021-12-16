@@ -2,7 +2,9 @@
   "network-traffic": {
     "fields": {
       "src_port": ["ipport"],
-      "dst_port": ["ipport"]
+      "dst_port": ["ipport"],
+      "src_ref.value": ["ipaddr", "ipv6addr"],
+      "dst_ref.value": ["ipaddr", "ipv6addr"]
     }
   },
   "ipv4-addr": {
@@ -17,9 +19,9 @@
   },
   "file": {
     "fields": {
-      "name": ["process_name"],
+      "name": ["process_name", "childproc_name"],
       "hashes.MD5": ["md5"],
-      "hashes.SHA-256": ["sha256"],
+      "hashes.'SHA-256'": ["sha256"],
       "hashes.parent_MD5": ["parent_md5"],
       "hashes.parent_SHA-256": ["parent_sha256"],
       "hashes.child_MD5": ["childproc_md5"],
@@ -29,7 +31,8 @@
       "hashes.blocked_MD5": ["blocked_md5"],
       "hashes.blocked_SHA-256": ["blocked_sha256"],
       "hashes.crossproc_MD5": ["crossproc_md5"],
-      "hashes.crossproc_SHA-256": ["crossproc_sha256"]
+      "hashes.crossproc_SHA-256": ["crossproc_sha256"],
+      "parent_directory_ref.path": ["path", "modload"]
     }
   },
   "process": {
@@ -37,14 +40,26 @@
       "command_line": ["cmdline"],
       "created": ["start"],
       "pid": ["process_pid"],
-      "name": ["process_name"],
+      "name": ["process_name", "crossproc_name"],
+      "creator_user_ref.user_id": ["username"],
+      "creator_user_ref.account_login": ["username"],
+      "binary_ref.hashes.MD5": ["md5"],
+      "binary_ref.hashes.'SHA-256'": ["sha256"],
       "parent_ref.pid": ["parent_pid"],
-      "creator_user_ref.user_id": ["username"]
+      "parent_ref.name": ["parent_name"],
+      "parent_ref.command_line": ["cmdline"],
+      "parent_ref.binary_ref.hashes.MD5": ["parent_md5"],
+      "parent_ref.binary_ref.hashes.'SHA-256'": ["parent_sha256"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["domain"]
     }
   },
   "domain-name": {
     "fields": {
-      "value": ["domain"]
+      "value": ["domain", "hostname"]
     }
   },
   "user-account": {
@@ -57,7 +72,52 @@
       "path": ["path"]
     }
   },
-  "x-cb-response" : {
+  "windows-registry-key": {
+    "fields": {
+      "key": ["regmod"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "process_ref.pid": ["process_pid"],
+      "process_ref.name": ["process_name", "crossproc_name"],
+      "process_ref.command_line": ["cmdline"],
+      "process_ref.binary_ref.name": ["process_name", "childproc_name"],
+      "process_ref.creator_user_ref.user_id": ["username"],
+      "process_ref.creator_user_ref.account_login": ["username"],
+      "process_ref.parent_ref.name": ["parent_name"],
+      "process_ref.parent_ref.pid": ["parent_pid"],
+      "process_ref.parent_ref.command_line": ["cmdline"],
+      "process_ref.parent_ref.binary_ref.hashes.MD5": ["parent_md5"],
+      "process_ref.parent_ref.binary_ref.hashes.'SHA-256'": ["parent_sha256"],
+      "process_ref.process_ref.creator_user_ref.user_id": ["username"],
+      "process_ref.process_ref.creator_user_ref.account_login": ["username"],
+      "parent_process_ref.name": ["parent_name"],
+      "parent_process_ref.pid": ["parent_pid"],
+      "parent_process_ref.command_line": ["cmdline"],
+      "parent_process_ref.binary_ref.hashes.MD5": ["parent_md5"],
+      "parent_process_ref.binary_ref.hashes.'SHA-256'": ["parent_sha256"],
+      "parent_process_ref.creator_user_ref.user_id": ["username"],
+      "parent_process_ref.creator_user_ref.account_login": ["username"],
+      "domain_ref.value": ["domain", "hostname"],
+      "file_ref.name": ["process_name", "childproc_name"],
+      "host_ref.hostname": ["hostname"],
+      "host_ref.name": ["hostname"],
+      "registry_ref.key": ["regmod"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "domain": ["domain"],
+      "hostname": ["hostname"],
+      "ip": ["ipaddr", "ipv6addr"],
+      "name": ["hostname"],
+      "type": ["host_type"],
+      "os.name": ["os_type"],
+      "os.platform": ["os_type"]
+    }
+  },
+  "x-cb-response": {
     "fields": {
       "hostname": ["hostname"],
       "host_count": ["host_count"],

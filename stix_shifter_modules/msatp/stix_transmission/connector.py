@@ -15,14 +15,13 @@ class Connector(BaseSyncConnector):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        
-        try:
-            self.token = Connector.generate_token(connection, configuration)
-            configuration['auth']['access_token'] = self.token
-            self.api_client = APIClient(connection, configuration)
 
-        except Exception as ex:
-            self.init_error = ex
+        self.adal_response = Connector.generate_token(connection, configuration)
+        if self.adal_response['success']:
+            configuration['auth']['access_token'] = self.adal_response['access_token']
+            self.api_client = APIClient(connection, configuration)
+        else:
+            self.init_error = True
 
     @staticmethod
     def _handle_errors(response, return_obj):
@@ -50,8 +49,8 @@ class Connector(BaseSyncConnector):
     def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error is not None:
-            raise Exception(self.init_error)
+        if self.init_error:
+            return self.adal_response
         response = self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
@@ -75,8 +74,8 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
 
         try:
-            if self.init_error is not None:
-                raise Exception(self.init_error)
+            if self.init_error:
+                return self.adal_response
             response = self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
             response_json = json.loads(return_obj["data"])
@@ -92,7 +91,7 @@ class Connector(BaseSyncConnector):
                 event_data.pop('TableName')
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-                if lookup_table == "RegistryEvents":
+                if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
                     registry_build_data[lookup_table]["RegistryValues"] = []
                     registry_value_dict = {}
@@ -120,6 +119,7 @@ class Connector(BaseSyncConnector):
         """To generate the Token
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
+        return_obj = dict()
 
         authority_url = ('https://login.windows.net/' +
                          configuration['auth']['tenant'])
@@ -129,17 +129,19 @@ class Connector(BaseSyncConnector):
             context = adal.AuthenticationContext(
                 authority_url, validate_authority=configuration['auth']['tenant'] != 'adfs',
             )
-            token = context.acquire_token_with_client_credentials(
+            response_dict = context.acquire_token_with_client_credentials(
                 resource,
                 configuration['auth']['clientId'],
                 configuration['auth']['clientSecret'])
 
-            token_value = token['accessToken']
-            return token_value
-
+            return_obj['success'] = True
+            return_obj['access_token'] = response_dict['accessToken']
         except Exception as ex:
-            return_obj = dict()
-            if ex.error_response:
-                ErrorResponder.fill_error(return_obj, ex.error_response, ['reason'])
-                Connector.logger.error("Token generation Failed: " + return_obj)
-            raise ex
+            if ex.__class__.__name__ == 'AdalError':
+                response_dict = ex.error_response
+                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'])
+            else:
+                ErrorResponder.fill_error(return_obj, message=str(ex))
+            Connector.logger.error("Token generation Failed: " + str(ex.error_response))
+
+        return return_obj

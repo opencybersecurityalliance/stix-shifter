@@ -2,8 +2,8 @@
   "file": {
     "fields": {
       "name": ["file.name"],
-      "hashes.SHA-256": ["file.sha256"],
-      "hashes.SHA-1": ["file.sha1"],
+      "hashes.'SHA-256'": ["file.sha256"],
+      "hashes.'SHA-1'": ["file.sha1"],
       "hashes.MD5": ["file.md5"],
       "parent_directory_ref.path": ["file.folder"],
       "size": ["file.size"]
@@ -15,8 +15,8 @@
       "pid": ["process.pid", "process.process id"],
       "parent_ref.pid": ["process.ppid"],
       "binary_ref.name" : ["file.name"],
-      "binary_ref.hashes.SHA-256" : ["file.sha256"],
-      "binary_ref.hashes.SHA-1": ["file.sha1"],
+      "binary_ref.hashes.'SHA-256'" : ["file.sha256"],
+      "binary_ref.hashes.'SHA-1'": ["file.sha1"],
       "binary_ref.hashes.MD5": ["file.md5"],
       "binary_ref.parent_directory_ref.path": ["file.pathname"],
       "binary_ref.size": ["file.size"],

@@ -85,39 +85,39 @@
     "object": "file"
   },
   "event": {
-    "key": "x_org_alertflex.event",
-    "cybox": false
+    "key": "x-org-alertflex.event",
+    "object": "x_org_alertflex"
   },
   "severity": {
-    "key": "x_org_alertflex.severity",
-    "cybox": false
+    "key": "x-org-alertflex.severity",
+    "object": "x_org_alertflex"
   },
   "category": {
-    "key": "x_org_alertflex.category",
-    "cybox": false
+    "key": "x-org-alertflex.category",
+    "object": "x_org_alertflex"
   },
   "description": {
-    "key": "x_org_alertflex.description",
-    "cybox": false
+    "key": "x-org-alertflex.description",
+    "object": "x_org_alertflex"
   },
   "info": {
-    "key": "x_org_alertflex.info",
-    "cybox": false
+    "key": "x-org-alertflex.info",
+    "object": "x_org_alertflex"
   },
   "agent": {
-    "key": "x_org_alertflex.agent",
-    "cybox": false
+    "key": "x-org-alertflex.agent",
+    "object": "x_org_alertflex"
   },
   "source": {
-    "key": "x_org_alertflex.source",
-    "cybox": false
+    "key": "x-org-alertflex.source",
+    "object": "x_org_alertflex"
   },
   "type": {
-    "key": "x_org_alertflex.type",
-    "cybox": false
+    "key": "x-org-alertflex.finding_type",
+    "object": "x_org_alertflex"
   },
   "node": {
-    "key": "x_org_alertflex.node",
-    "cybox": false
+    "key": "x-org-alertflex.node",
+    "object": "x_org_alertflex"
   }
 }

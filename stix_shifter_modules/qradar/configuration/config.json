@@ -14,7 +14,7 @@
             "max": 65535
         },
         "help": {
-            "default": "https://www.ibm.com/support/knowledgecenter/SSTDPP_1.1.0/docs/scp-core/data-sources-qradar.html",
+            "default": "data-sources-qradar.html",
             "type": "link"
         },
         "sni": {
@@ -32,11 +32,6 @@
                 "type": "boolean",
                 "optional": true,
                 "previous": "connection.validate_pattern"
-            },
-            "hash_options": {
-                "type": "json",
-                "optional": true,
-                "hidden": true
             },
             "unmapped_fallback": {
                 "default": true

@@ -11,6 +11,7 @@ validate_cmd () {
 }
 
 IMAGE_URL="$1"
+NAMESPACE="$2"
 
 validate_cmd openssl
 validate_cmd python3
@@ -28,7 +29,12 @@ validate_cmd kubectl
 validate_cmd oc
 
 FILE_PREFIX=stix_shifter_modules_
-NAMESPACE=cp4s
+if [ "X$NAMESPACE" == "X" ]; then 
+    NAMESPACE=`kubectl config view --minify --output 'jsonpath={..namespace}' | awk '{print $1}'`
+fi 
+if [ "${IMAGE_URL}" == "no-repository" ] ; then
+   IMAGE_URL=""
+fi
 TIMESTAMP=`date '+%Y%m%d%H%M%S'`
 
 if [ ! -z "${IMAGE_URL}" ]; then
@@ -156,8 +162,9 @@ if [ -z "${IMAGE_URL}" ]; then
   fi
 fi
 
-echo "Logging in into internal registry..."
-docker login -u `oc whoami` -p `oc whoami -t` $REPOSITORY
+DOCKER_USER=`oc whoami`
+echo "Logging in into internal registry $REPOSITORY as $DOCKER_USER ..."
+docker login -u $DOCKER_USER -p `oc whoami -t` $REPOSITORY
 
 if [ ! -z "${IMAGE_URL}" ]; then
   echo "Pulling ${IMAGE_URL}"
