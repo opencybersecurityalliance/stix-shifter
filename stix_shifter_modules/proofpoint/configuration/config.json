@@ -18,8 +18,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "principal": {
                 "type": "password"
             },
