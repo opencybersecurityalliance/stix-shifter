@@ -38,21 +38,10 @@
           "group": true
         }
       ],
-      "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.kill_chain_phases",
-          "object": "ttp_tagging",
-          "transformer": "ToKillChainPhasesList"
-        },
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "finding",
-          "references": [
-            "ttp_tagging"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Category": {
+        "key": "x-msatp.alert_category",
+        "object": "x-msatp"
+      },
       "alert_SHA1": [
         {
           "key": "file.hashes.SHA-1",
@@ -597,21 +586,10 @@
           "group": true
         }
       ],
-      "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.kill_chain_phases",
-          "object": "ttp_tagging",
-          "transformer": "ToKillChainPhasesList"
-        },
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "finding",
-          "references": [
-            "ttp_tagging"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Category": {
+        "key": "x-msatp.alert_category",
+        "object": "x-msatp"
+      },
       "alert_SHA1": [
         {
           "key": "file.hashes.SHA-1",
@@ -1312,21 +1290,10 @@
           "group": true
         }
       ],
-      "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.kill_chain_phases",
-          "object": "ttp_tagging",
-          "transformer": "ToKillChainPhasesList"
-        },
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "finding",
-          "references": [
-            "ttp_tagging"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Category": {
+        "key": "x-msatp.alert_category",
+        "object": "x-msatp"
+      },
       "alert_SHA1": [
         {
           "key": "file.hashes.SHA-1",
@@ -1935,21 +1902,10 @@
           "group": true
         }
       ],
-      "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.kill_chain_phases",
-          "object": "ttp_tagging",
-          "transformer": "ToKillChainPhasesList"
-        },
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "finding",
-          "references": [
-            "ttp_tagging"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Category": {
+        "key": "x-msatp.alert_category",
+        "object": "x-msatp"
+      },
       "alert_SHA1": [
         {
           "key": "file.hashes.SHA-1",
@@ -2438,21 +2394,10 @@
           "group": true
         }
       ],
-      "alert_Category": [
-        {
-          "key": "x-ibm-ttp-tagging.kill_chain_phases",
-          "object": "ttp_tagging",
-          "transformer": "ToKillChainPhasesList"
-        },
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "finding",
-          "references": [
-            "ttp_tagging"
-          ],
-          "group": true
-        }
-      ],
+      "alert_Category": {
+        "key": "x-msatp.alert_category",
+        "object": "x-msatp"
+      },
       "alert_SHA1": [
         {
           "key": "file.hashes.SHA-1",
