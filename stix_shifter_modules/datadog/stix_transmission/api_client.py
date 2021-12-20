@@ -30,8 +30,7 @@ class APIClient:
             current_time = int(time.time())
             try:
                 # There is no any specific Datadog endpoint which validate application key
-                data = api_instance.list_events(start=current_time, end=current_time)
-                print(data)
+                api_instance.list_events(start=current_time, end=current_time)
             except MaxRetryError as e:
                 e.status = 1004
                 return_obj.update({"code": e.status, "message": e.reason})
