@@ -4,6 +4,7 @@ import datadog_api_client.v1.api
 from datadog_api_client.v1.api import events_api
 from datadog_api_client.v2.api import processes_api
 from urllib3.exceptions import MaxRetryError
+import urllib3
 
 class APIClient:
 
@@ -13,6 +14,8 @@ class APIClient:
         self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
         self.configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
         self.configuration.api_key["appKeyAuth"] = self.auth["application_key"]
+        self.configuration.verify_ssl = connection["selfSignedCert"]
+        urllib3.disable_warnings()
 
     def ping_data_source(self):
         """To Validate API key"""
