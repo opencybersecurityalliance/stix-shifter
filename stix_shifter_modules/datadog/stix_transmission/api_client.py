@@ -14,7 +14,10 @@ class APIClient:
         self.configuration = datadog_api_client.v1.Configuration(host=connection["site_url"])
         self.configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
         self.configuration.api_key["appKeyAuth"] = self.auth["application_key"]
-        self.configuration.verify_ssl = connection["selfSignedCert"]
+        if connection["selfSignedCert"]:
+            self.configuration.ssl_ca_cert = connection["selfSignedCert"]
+        else:
+            self.configuration.verify_ssl = connection["selfSignedCert"]
         urllib3.disable_warnings()
 
     def ping_data_source(self):
@@ -27,7 +30,8 @@ class APIClient:
             current_time = int(time.time())
             try:
                 # There is no any specific Datadog endpoint which validate application key
-                api_instance.list_events(start=current_time, end=current_time)
+                data = api_instance.list_events(start=current_time, end=current_time)
+                print(data)
             except MaxRetryError as e:
                 e.status = 1004
                 return_obj.update({"code": e.status, "message": e.reason})
@@ -59,6 +63,10 @@ class APIClient:
         configuration = datadog_api_client.v2.Configuration(host=self.connection["site_url"])
         configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
         configuration.api_key["appKeyAuth"] = self.auth["application_key"]
+        if self.connection["selfSignedCert"]:
+            configuration.ssl_ca_cert = self.connection["selfSignedCert"]
+        else:
+            configuration.verify_ssl = self.connection["selfSignedCert"]
         with datadog_api_client.v2.ApiClient(configuration) as api_client:
             api_instance = processes_api.ProcessesApi(api_client)
             try:
