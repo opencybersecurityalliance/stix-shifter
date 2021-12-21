@@ -35,6 +35,5 @@
     "start": ["starttime"],
     "end": ["endtime"]
   }
-  },
-  "startstopattr": "starttime"
+  }
 }

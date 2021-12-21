@@ -1,0 +1,92 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourcev6", "destinationv6"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [ "filename" ],
+      "size": [ "filesize" ],
+      "hashes.'SHA-256'": [ "sha256hash" ],
+      "hashes.MD5": [ "md5hash" ],
+      "hashes.'SHA-1'": [ "sha1hash" ],
+      "mime-type": [ "contenttype" ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [ "dnsdomainname" ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [ "dnsdomainname", "tlsservernameindication", "httphost" ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "src_ref.value": ["sourceip", "sourcev6"],
+      "dst_ref.value": ["destinationip", "destinationv6"],
+      "src_byte_count": ["sourcebytes"],
+      "dst_byte_count": ["destinationbytes"],
+      "src_packets": ["sourcepackets"],
+      "dst_packets": ["destinationpackets"],
+      "extensions.'http-request-ext'.request_header.Host": [ "httphost" ],
+      "extensions.'http-request-ext'.request_header.Referer": [ "httpreferrer" ],
+      "extensions.'http-request-ext'.request_header.Server": [ "httpserver" ],
+      "extensions.'http-request-ext'.request_header.User-Agent": [ "httpuseragent" ],
+      "extensions.'http-request-ext'.request_header.Content-Type": [ "contenttype" ],
+      "extensions.'http-request-ext'.request_version": [ "httpversion" ],
+      "ipfix.flowId": [ "flowid" ]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["applicationname"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["flowsourcepayload", "flowdestinationpayload"]
+    }
+  },
+  "x-qradar": {
+    "fields": {
+      "qid": ["qid"],
+      "qid_name": ["qidname"],
+      "flow_source": ["flowsource"],
+      "flow_interface_id": ["flowinterfaceid"],
+      "flow_interface": ["flowinterface"],
+      "geographic": ["geographic"],
+      "category_name": ["categoryname"],
+      "credibility": ["credibility"],
+      "severity": ["flowseverity"],
+      "direction": ["direction"],
+      "relevance": ["relevance"],
+      "first_packet_time": ["firstpackettime"],
+      "last_packet_time": ["lastpackettime"],
+      "application_id": ["applicationid"],
+      "application_name": ["applicationname"],
+      "flow_type": [ "flowtype" ],
+      "file_entropy": [ "fileentropy" ],
+      "http_response_code": [ "httpresponsecode" ],
+      "tls_server_name_indication": [ "tlsservernameindication" ],
+      "tls_ja3_hash": [ "tlsja3hash" ],
+      "tls_ja3s_hash": [ "tlsja3shash" ],
+      "suspect_content_descriptions": [ "suspectcontentdescriptions" ],
+      "has_offense": ["hasoffense"],
+      "INOFFENSE": ["INOFFENSE"]
+    }
+  }
+}

@@ -13,8 +13,15 @@ class MSATPMockResponse:
     def read(self):
         return bytearray(self.object, 'utf-8')
 
+class AdalMockResponse:
 
-@patch('stix_shifter_modules.msatp.stix_transmission.connector.Connector.generate_token')
+    @staticmethod
+    def acquire_token_with_client_credentials(resource, client_id, client_secret):
+        context_response = dict()
+        context_response['accessToken'] = 'abc12345'
+        return context_response
+
+@patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
@@ -35,7 +42,7 @@ class TestMSATPConnection(unittest.TestCase):
 
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = 'test'
+        mock_generate_token.return_value = AdalMockResponse
         entry_point = EntryPoint(self.connection(), self.config())
         check_async = entry_point.is_async()
 
@@ -45,7 +52,7 @@ class TestMSATPConnection(unittest.TestCase):
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
@@ -53,17 +60,16 @@ class TestMSATPConnection(unittest.TestCase):
         print(str(self.config))
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
-
+        
         assert ping_response is not None
         assert ping_response['success']
 
-    '''
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
         mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = MSATPMockResponse(400, mocked_return_value)
         mock_ping_response.side_effect = Exception('exception')
 
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
@@ -72,12 +78,11 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
-    '''
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
 
         query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime(" \
                 "2019-09-24T16:32:32.993821Z) and Timestamp < datetime(2019-09-24T16:37:32.993821Z) | order by " \
@@ -96,7 +101,7 @@ class TestMSATPConnection(unittest.TestCase):
 
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
         mocked_return_value = """{
                             "Results": [{
                                 "TableName": "DeviceFileEvents",
@@ -130,7 +135,7 @@ class TestMSATPConnection(unittest.TestCase):
 
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
         mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","DeviceName": "testmachine1","ActionType": "RegistryValueSet",
 "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
@@ -181,7 +186,7 @@ class TestMSATPConnection(unittest.TestCase):
     def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
         results_mock = """{
                             "Results": [{
                                 "TableName": "DeviceFileEvents",
@@ -225,7 +230,7 @@ class TestMSATPConnection(unittest.TestCase):
 
     def test_delete_query(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by ' \
@@ -242,7 +247,7 @@ class TestMSATPConnection(unittest.TestCase):
 
 
         mock_api_client.return_value = None
-        mock_generate_token.return_value = None
+        mock_generate_token.return_value = AdalMockResponse
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by ' \

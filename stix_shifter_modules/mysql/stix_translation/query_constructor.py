@@ -12,6 +12,8 @@ REFERENCE_DATA_TYPES = {"source_ipaddr": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cid
                         "dest_ipaddr": ["ipv4", "ipv4_cidr"],
                         }
 
+TIMESTAMP_STIX_PROPERTIES = ["created", "modified", "accessed", "ctime", "mtime", "atime", "created_time", "modifed_time"]
+
 logger = logging.getLogger(__name__)
 
 
@@ -82,6 +84,12 @@ class QueryStringPatternTranslator:
         qualified_query = "%s AND (entry_time >= %s OR entry_time <= %s)" % (expression, start, stop)
         return qualified_query
 
+    @classmethod
+    def _format_timestamp(self, value):
+        transformer = TimestampToMilliseconds()
+        value = re.sub("'", "", value)
+        return transformer.transform(value)
+
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -111,6 +119,8 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
+        if stix_field in TIMESTAMP_STIX_PROPERTIES:
+            value = self._format_timestamp(value)
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         # Need to use expression.value to match against regex since the passed-in value has already been formated.

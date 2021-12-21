@@ -1,0 +1,387 @@
+{
+    "eventTime": [
+        {
+            "key": "first_observed",
+            "transformer": "EpochToTimestamp",
+            "cybox": false
+        },
+        {
+            "key": "last_observed",
+            "transformer": "EpochToTimestamp",
+            "cybox": false
+        }
+    ],
+    "src": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "src"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "src"
+        },
+        {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "src"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "value": ["tcp"]
+        }
+    ],
+    "spt": [
+        {
+            "key": "network-traffic.src_port",
+            "object": "nt"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "value": ["tcp"]
+        }
+    ],
+    "dst": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "dst"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "dst"
+        },
+        {
+            "key": "network-traffic.dst_ref",
+            "object": "nt",
+            "references": "dst"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "value": ["tcp"]
+        }
+    ],
+    "dpt": [
+        {
+            "key": "network-traffic.dst_port",
+            "object": "nt"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "value": ["tcp"]
+        }
+    ],
+    "endpointIp": [
+        {
+            "key": "ipv4-addr.value",
+            "unwrap": true,
+            "transformer": "FilterIPv4List",
+            "object": "endpointIpV4"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "unwrap": true,
+            "transformer": "FilterIPv6List",
+            "object": "endpointIpV6"
+        }
+    ],
+    "hostName": {
+        "key": "domain-name.value"
+    },
+    "objectHostName": {
+        "key": "domain-name.value"
+    },
+    "logonUser": {
+        "key": "user-account.account_login",
+        "object": "userAccount"
+    },
+    "objectUser": {
+        "key": "user-account.user_id",
+        "object": "userAccount"
+    },
+    "objectIp": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "objectIp"
+        },
+        {
+            "key": "network-traffic.dst_ref",
+            "object": "object-nt",
+            "references": "objectIp"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "object-nt",
+            "value": ["tcp"]
+        }
+    ],
+    "objectPort": [
+        {
+            "key": "network-traffic.dst_port",
+            "object": "object-nt"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "object-nt",
+            "value": ["tcp"]
+        }
+    ],
+    "objectIps": [
+        {
+            "key": "ipv4-addr.value",
+            "unwrap": true,
+            "transformer": "FilterIPv4List",
+            "object": "objectIpsV4"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "unwrap": true,
+            "transformer": "FilterIPv6List",
+            "object": "objectIpsV6"
+        }
+    ],
+    "objectCmd": {
+        "key": "process.command_line",
+        "object": "objectCmd"
+    },
+    "objectFileHashSha1": [
+        {
+            "key": "file.hashes.SHA-1",
+            "object": "objectFile"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "objectCmd",
+            "references": "objectFile"
+        }
+    ],
+    "objectFilePath": [
+        {
+            "key": "file.name",
+            "object": "objectFile",
+            "transformer": "ToFileName"
+        },
+        {
+            "key": "directory.path",
+            "object": "objectFilePath",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "objectFile",
+            "references": "objectFilePath"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "objectCmd",
+            "references": "objectFile"
+        }
+    ],
+    "objectRegistryKeyHandle": {
+        "key": "windows-registry-key.key",
+        "object": "registry-key",
+        "transformer": "ConvertWindowsRegistry"
+    },
+    "objectRegistryValueType": {
+        "key": "windows-registry-key.values",
+        "object": "registry-key"
+    },
+    "processCmd": {
+        "key": "process.command_line",
+        "object": "processCmd"
+    },
+    "processFileHashSha1": [
+        {
+            "key": "file.hashes.SHA-1",
+            "object": "processFile"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "processCmd",
+            "references": "processFile"
+        }
+    ],
+    "processFilePath": [
+        {
+            "key": "file.name",
+            "object": "processFile",
+            "transformer": "ToFileName"
+        },
+        {
+            "key": "directory.path",
+            "object": "processFilePath",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "processFile",
+            "references": "processFilePath"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "processCmd",
+            "references": "processFile"
+        }
+    ],
+    "parentCmd": {
+        "key": "process.command_line",
+        "object": "parentCmd"
+    },
+    "parentFileHashSha1": [
+        {
+            "key": "file.hashes.SHA-1",
+            "object": "parentFile"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "parentCmd",
+            "references": "parentFile"
+        }
+    ],
+    "parentFilePath": [
+        {
+            "key": "file.name",
+            "object": "parentFile",
+            "transformer": "ToFileName"
+        },
+        {
+            "key": "directory.path",
+            "object": "parentFilePath",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "parentFile",
+            "references": "parentFilePath"
+        },
+        {
+            "key": "process.image_ref",
+            "object": "parentCmd",
+            "references": "parentFile"
+        }
+    ],
+    "request": {
+        "key": "url.value"
+    },
+    "srcFilePath": [
+        {
+            "key": "file.name",
+            "object": "srcFile",
+            "transformer": "ToFileName"
+        },
+        {
+            "key": "directory.path",
+            "object": "srcFilePath",
+            "transformer": "ToDirectoryPath"
+        },
+        {
+            "key": "file.parent_directory_ref",
+            "object": "srcFile",
+            "references": "srcFilePath"
+        }
+    ],
+    "srcFileHashSha1": [
+        {
+            "key": "file.hashes.SHA-1",
+            "object": "srcFile"
+        }
+    ],
+    "mail_message_sender": [
+        {
+            "key": "email-addr.value",
+            "object": "sender"
+        },
+        {
+            "key": "email-message.sender_ref",
+            "object": "mail",
+            "references": "sender"
+        },
+        {
+            "key": "email-message.is_multipart",
+            "object": "mail",
+            "value": true
+        }
+    ],
+    "mail_message_recipient": [
+        {
+            "key": "email-addr.value",
+            "object": "recipient",
+            "unwrap": true
+        },
+        {
+            "key": "email-message.to_refs",
+            "object": "mail",
+            "references": ["recipient"],
+            "unwrap": true
+        },
+        {
+            "key": "email-message.is_multipart",
+            "object": "mail",
+            "value": true
+        }
+    ],
+    "mail_message_subject": [
+        {
+            "key": "email-message.subject",
+            "object": "mail"
+        }, {
+            "key": "email-message.is_multipart",
+            "object": "mail",
+            "value": true
+        }
+    ],
+    "mail_urls": {
+        "key": "url.value",
+        "unwrap": true
+    },
+    "source_domain": {
+        "key": "domain-name.value"
+    },
+    "source_ip": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "source_ip"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "source_ip"
+        },
+        {
+            "key": "network-traffic.src_ref",
+            "object": "message-nt",
+            "references": "source_ip"
+        },
+        {
+            "key": "network-traffic.protocols",
+            "object": "message-nt",
+            "value": ["tcp"]
+        }
+    ],
+    "mail_message_delivery_time": [
+        {
+            "key": "email-message.date",
+            "object": "mail"
+        }, {
+            "key": "email-message.is_multipart",
+            "object": "mail",
+            "value": true
+        }
+    ],
+    "mail_attachments": {
+        "file_name": {
+            "key": "file.name",
+            "object": "attachment"
+        },
+        "file_sha1": {
+            "key": "file.hashes.SHA-1",
+            "object": "attachment"
+        }
+    },
+    "mail_internet_headers": {
+        "key": "email-message.additional_header_fields",
+        "object": "mail",
+        "transformer": "ConvertInternetHeaders"
+    }
+}

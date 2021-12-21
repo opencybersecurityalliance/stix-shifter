@@ -21,14 +21,15 @@ class ResultsConnector(BaseResultsConnector):
         return_obj = dict()
         error = None
         response_text = response.read()
+        response_dict = dict()
 
         try:
             response_dict = json.loads(response_text)
         except ValueError as ex:
             self.logger.debug(response_text)
-            error = Exception(f'Can not parse response: {ex} : {response_text}')
+            error = Exception(f'Can not parse response from Qradar server. The response is not a valid json: {response_text} : {ex}')
         
-        if 200 <= response_code <= 299:
+        if 200 <= response_code <= 299 and error is None:
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:

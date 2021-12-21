@@ -28,7 +28,7 @@ class StringToBool(ValueTransformer):
 
 
 class EpochToTimestamp(ValueTransformer):
-    """A value transformer for the timestamps"""
+    """A value transformer for the 13-digit timestamps"""
 
     @staticmethod
     def transform(epoch):
