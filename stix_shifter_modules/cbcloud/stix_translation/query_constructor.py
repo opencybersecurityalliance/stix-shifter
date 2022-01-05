@@ -116,18 +116,33 @@ class CbCloudQueryStringPatternTranslator:
         return timestamp[2:-1]
 
     @staticmethod
-    def _parse_mapped_fields(value, comparator, mapped_fields_array) -> str:
+    def _check_value_type(value):
+        """
+        Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
+        See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
+
+        :param value: query value
+        :type value: int/str
+        :return: type of value
+        :rtype: str
+        """
+        value = str(value)
+        for key, pattern in observable.REGEX.items():
+            if key != 'date' and bool(re.search(pattern, value)):
+                return key
+        return None
+
+    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
         """Convert a list of mapped fields into a query string."""
         comparison_strings = []
         value_type = None
+        str_ = None
 
         if isinstance(value, str):
             value = [value]
 
         for val in value:
-            for key, pattern in observable.REGEX.items():
-                if bool(re.search(pattern, val)):
-                    value_type = key
+            value_type = self._check_value_type(val)
 
             for mapped_field in mapped_fields_array:
                 # Only use the ipv4 fields when the value is an actual ipv4 address or range
@@ -143,6 +158,8 @@ class CbCloudQueryStringPatternTranslator:
             str_ = comparison_strings[0]
         elif len(comparison_strings) > 1:
             str_ = f"({' OR '.join(comparison_strings)})"
+        else:
+            raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
 
         return str_
 
