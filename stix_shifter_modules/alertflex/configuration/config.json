@@ -14,7 +14,7 @@
             "max": 65535
         },
         "help": {
-            "default": "https://github.com/olegzhr/cnode/blob/master/doc/integration.rst",
+            "default": "https://alertflex.github.io/doc/pages/integration.html",
             "type": "link"
         },
         "sni": {
@@ -27,8 +27,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "username": {
                 "type": "password"
             },

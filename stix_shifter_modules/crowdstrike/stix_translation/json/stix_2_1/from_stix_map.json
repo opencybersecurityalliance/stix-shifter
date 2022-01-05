@@ -1,0 +1,125 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["device.external_ip", "device.local_ip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["device.external_ip", "device.local_ip"]
+    }
+  },
+    "mac-addr": {
+      "fields": {
+        "value": ["device.mac_address"]
+      }
+    },
+  "file": {
+    "fields": {
+      "name": ["behaviors.filename"],
+      "hashes.MD5": ["behaviors.md5", "behaviors.parent_details.parent_md5"],
+      "hashes.SHA-256": ["behaviors.sha256", "behaviors.parent_details.parent_sha256"],
+      "hashes.parent_MD5": ["behaviors.parent_details.parent_md5"],
+      "hashes.parent_SHA-256": ["behaviors.parent_details.parent_sha256"],
+      "hashes.child_MD5": ["behaviors.md5"],
+      "hashes.child_SHA-256": ["behaviors.sha256"],
+      "parent_directory_ref.path": ["behaviors.filepath"]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": ["behaviors.cmdline"],
+      "created_time": ["behaviors.timestamp"], 
+      "creator_user_ref.user_id": ["behaviors.user_id"],
+      "creator_user_ref.account_login": ["behaviors.user_name"],
+      "image_ref.hashes.MD5": ["behaviors.md5"],
+      "image_ref.hashes.SHA-256": ["behaviors.sha256"],
+      "parent_ref.name": ["behaviors.filename"],
+      "parent_ref.command_line": ["behaviors.parent_cmdline"],
+      "parent_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "parent_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["device.hostinfo.domain"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["ioc_type.domain"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["behaviors.user_id"],
+      "account_login": ["behaviors.user_name"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["behaviors.filepath"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "process_ref.name": ["behaviors.filename"],
+      "process_ref.command_line": ["behaviors.cmdline"],
+      "process_ref.image_ref.name": ["behaviors.filename"],
+      "process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
+      "process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
+      "process_ref.parent_ref.name": ["behaviors.filename"],
+      "process_ref.parent_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
+      "process_ref.parent_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "process_ref.parent_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
+      "parent_process_ref.name": ["behaviors.filename"],
+      "parent_process_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
+      "parent_process_ref.image_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
+      "parent_process_ref.image_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
+      "parent_process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
+      "parent_process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
+      "domain_ref.value": ["device.hostname"],
+      "file_ref.name": ["behaviors.filename"],
+      "host_ref.hostname": ["device.hostname"],
+      "host_ref.name": ["device.machine_domain"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "name": ["device.machine_domain"],
+      "hostname": ["device.hostname"],
+      "ip_refs": ["device.external_ip", "device.local_ip"],
+      "os_name": ["device.platform_name"],
+      "os_platform": ["device.platform_name"]
+    }
+  },
+  "x-crowdstrike": {
+    "fields": {
+      "device_id": ["device.device_id"],
+      "detection_id": ["device.detection_id"],
+      "scenario": ["behaviors.scenario"],
+      "tactic_id": ["device.tactic_id"],
+      "severity": ["device.severity"],
+      "tactic": ["behaviors.tactic"],
+      "technique": ["behaviors.technique"],
+      "technique_id": ["device.technique_id"],
+      "agent_local_time": ["device.agent_local_time"],
+      "agent_version": ["device.agent_version"],
+      "first_seen": ["device.first_seen"],
+      "last_seen": ["device.last_seen"],
+      "confidence": ["device.confidence"],
+      "bios_manufacturer": ["device.bios_manufacturer"],
+      "bios_version": ["device.bios_version"],
+      "config_id_base": ["device.config_id_base"],
+      "config_id_build": ["device.config_id_build"],
+      "config_id_platform": ["device.config_id_platform"],
+      "platform_id": ["device.platform_id"],
+      "product_type": ["device.product_type"],
+      "product_type_desc": ["device.product_type_desc"],
+      "site_name": ["device.site_name"],
+      "system_manufacturer": ["device.system_manufacturer"],
+      "system_product_name": ["device.system_product_name"],
+      "modified_timestamp": ["device.modified_timestamp"]
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip", "identityip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourceip", "destinationip"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["sourcemac", "destinationmac"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["filename"],
+      "hashes.'SHA-256'": ["sha256hash"],
+      "hashes.MD5": ["md5hash"],
+      "hashes.'SHA-1'": ["sha1hash"],
+      "parent_directory_ref": ["filepath"],
+      "parent_directory_ref.path": ["filepath"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["filepath"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "protocols[*]": ["protocolid"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "src_ref.value": ["sourceip", "sourcemac"],
+      "dst_ref.value": ["destinationip", "destinationmac"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["username"],
+      "account_login":  ["username"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["eventpayload"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["domainname", "UrlHost"]
+    }
+  },
+  "x-qradar": {
+    "fields": {
+      "qid": ["qid"],
+      "magnitude": ["magnitude"],
+      "log_source_id": ["logsourceid"],
+      "device_type": ["devicetype"],
+      "category_id": ["categoryid"],
+      "high_level_category_id": ["high_level_category_id"],
+      "direction": ["direction"],
+      "severity": ["eventseverity"],
+      "credibility": ["credibility"],
+      "relevance": ["relevance"],
+      "domain_id": ["domainid"],
+      "has_offense": ["hasoffense"],
+      "INOFFENSE": ["INOFFENSE"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["crename"],
+      "description": ["credescription"],
+      "severity": ["eventseverity"],
+      "start": ["starttime"],
+      "end": ["endtime"],
+      "magnitude": ["magnitude"],
+      "event_count": ["eventcount"],
+      "src_geolocation": ["sourcegeographic"],
+      "dst_geolocation": ["destinationgeographic"],
+      "rule_names[*]": ["rulenames"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["ProcessId"],
+      "name": ["ProcessName", "Image", "ParentImage"],
+      "image_ref.name": ["Image"],
+      "image_ref.parent_directory_ref.path": ["Image"],
+      "parent_ref.image_ref.name": ["ParentImage"],
+      "command_line": ["ProcessCommandLine", "ParentCommandLine"],
+      "parent_ref.command_line": ["ParentCommandLine"],
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": ["qidname"],
+      "code": ["EventID"],
+      "outcome": ["categoryname"],
+      "category": ["high_level_category_name"],
+      "created": ["devicetime"],
+      "agent": ["logsourcename"],
+      "provider": ["logsourcetypename"],
+      "process_ref.command_line": ["ProcessCommandLine"],
+      "process_ref.image_ref.name": ["Image"],
+      "process_ref.parent_ref.command_line": ["ParentCommandLine"],
+      "process_ref.creator_user_ref.user_id": ["username"],
+      "process_ref.name": ["ProcessName"],
+      "process_ref.pid": ["ProcessId"],
+      "parent_process_ref.command_line": ["ParentCommandLine"],
+      "parent_process_ref.image_ref.name": ["ParentImage"],
+      "domain_ref.value": ["domainname", "UrlHost"],
+      "file_ref.name": ["filename"],
+      "host_ref.hostname": ["identityhostname"],
+      "host_ref.ip_refs[*].value": ["identityip"],
+      "registry_ref.key": ["ObjectName", "RegistryKey"],
+      "user_ref.user_id": ["username"],
+      "url_ref.value": ["url"],
+      "original_ref.payload_bin": ["eventpayload", "Message"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["identityhostname"],
+      "ip_refs[*].value": ["identityip", "sourceip"],
+      "mac_refs[*].value": ["sourcemac"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["ObjectName", "RegistryKey"],
+      "values[*].name": ["RegistryValueName"]
+    }
+  },
+  "x-ibm-windows": {
+    "fields": {
+      "targetimage": ["TargetImage"],
+      "grantedaccess": ["GrantedAccess"],
+      "calltrace": ["CallTrace"],
+      "sourceimage": ["Image"],
+      "pipename": ["PipeName"]
+    }
+  }
+}

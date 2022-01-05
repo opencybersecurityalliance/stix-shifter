@@ -623,6 +623,10 @@
         "references": "artifact"
       }
     ],
+    "mime_type_event": {
+      "key": "artifact.mime_type",
+      "object": "artifact"
+    },
     "action": {
       "key": "x-oca-event.action",
       "object": "event"
@@ -633,7 +637,8 @@
     },
     "category": {
       "key": "x-oca-event.category",
-      "object": "event"
+      "object": "event",
+      "transformer": "ValueToList"
     },
     "code": {
       "key": "x-oca-event.code",
@@ -2346,5 +2351,9 @@
         "object": "vulnerability"
       }
     }
+  },
+  "tags": {
+    "key": "process.x_ttp_tags",
+    "object": "process"
   }
 }

@@ -1,0 +1,41 @@
+{
+    "ipv4-addr": {
+        "fields": {
+            "value": ["source_ip"]
+        }
+    },
+    "ipv6-addr": {
+        "fields": {
+            "value": ["source_ip"]
+        }
+    },
+    "url": {
+        "fields": {
+            "value": ["url"]
+        }
+    },
+    "network-traffic": {
+        "fields": {
+            "src_ref.value": ["source_ip"]
+        }
+    },
+    "file": {
+        "fields": {
+            "hashes.'SHA-1'": ["file_sha1"],
+            "name": ["file_name"]
+        }
+    },
+    "email-message": {
+        "fields": {
+            "sender_ref.value": ["sender", "mailbox"],
+            "to_refs[*].value": ["recipient", "mailbox"],
+            "subject": ["subject"],
+            "message_id": ["message_id"]
+        }
+    },
+    "domain-name": {
+        "fields": {
+            "value": ["source_domain"]
+        }
+    }
+}

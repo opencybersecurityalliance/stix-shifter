@@ -67,6 +67,12 @@
                 "default": false,
                 "optional": true,
                 "hidden": true
+            },
+            "stix_2.1": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
             }
         }
     }

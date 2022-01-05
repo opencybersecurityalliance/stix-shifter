@@ -21,7 +21,7 @@
     },
     "file": {
         "fields": {
-            "hashes.SHA-1": ["file_sha1"],
+            "hashes.'SHA-1'": ["file_sha1"],
             "name": ["file_name"]
         }
     },

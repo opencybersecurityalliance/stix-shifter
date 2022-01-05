@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# ./_build_local.sh [REPO_PATH]
+
 set -e
 
 validate_cmd () {
@@ -74,7 +77,12 @@ if [ ! -d ${DIST_DIR}/meta ]; then
   fi
 fi
 
-IMAGE_LOCAL_URL=${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+if [ -z "$IMAGE_LOCAL_URL" ]
+then
+  IMAGE_LOCAL_URL=${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+else
+  IMAGE_LOCAL_URL=${IMAGE_URL}/${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+fi
 echo "Building image..."
 docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} .
 

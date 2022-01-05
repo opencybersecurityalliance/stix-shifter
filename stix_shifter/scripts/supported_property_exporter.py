@@ -1,6 +1,7 @@
 import json
 from os import path
 import re
+from datetime import datetime
 
 current_dir = path.abspath(path.dirname(__file__))
 
@@ -24,9 +25,17 @@ CONNECTORS = {
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",
     "crowdstrike": 'CrowdStrike Falcon',
-    "trendmicro_vision_one": "Trend Micro Vision One"
+    "trendmicro_vision_one": "Trend Micro Vision One",
+    "onelogin": "OneLogin",
+    "secretserver": "Secret Server",
+    "sumologic": "Sumo Logic",
+    "datadog": "Datadog",
+    "proofpoint": "Proofpoint (SIEM API)",
+    "infoblox": "Infoblox BloxOne Threat Defense"
 }
 
+now = datetime.now()
+UPDATED_AT = now.strftime("%D")
 
 def __main__():
 
@@ -70,6 +79,7 @@ def __main__():
         supported_stix_file = open(supported_stix_file_path, "w")
         
         output_string = ""
+        output_string += "##### Updated on " + UPDATED_AT + "\n"
         output_string += "## " + module + "\n"
         table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
         sorted_objects = json.dumps(stix_attribute_collection, sort_keys=True)

@@ -6,7 +6,12 @@
   },
   "_raw": {
     "key": "artifact.payload_bin",
-    "transformer": "ToBase64"
+    "transformer": "ToBase64",
+    "object": "artifact"
+  },
+  "mime_type_raw": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
   },
   "dest_ip": [
     {
@@ -264,13 +269,7 @@
   ],
   "_sourcetype": [
     {
-      "key": "x-splunk.provider",
-      "object": "x-splunk"
-    }
-  ],
-  "DeviceType": [
-    {
-      "key": "x-splunk.device_type",
+      "key": "x-splunk.log_source_type",
       "object": "x-splunk"
     }
   ],
@@ -280,39 +279,33 @@
       "object": "x-splunk"
     }
   ],
-  "severity": [
-    {
-      "key": "x-ibm-finding.severity",
-      "object": "x-ibm-finding"
-    }
-  ],
   "EventID": [
     {
-      "key": "x-splunk.EventID",
+      "key": "x-splunk.event_id",
       "object": "x-splunk"
     }
   ],
   "TacticId": [
     {
-      "key": "x-splunk.Mitre_TacticId",
+      "key": "x-splunk.mitre_tactic_id",
       "object": "x-splunk"
     }
   ],
   "Tactic": [
     {
-      "key": "x-splunk.Mitre_Tactic",
+      "key": "x-splunk.mitre_tactic",
       "object": "x-splunk"
     }
   ],
   "TechniqueId": [
     {
-      "key": "x-splunk.Mitre_TechniqueId",
+      "key": "x-splunk.mitre_technique_id",
       "object": "x-splunk"
     }
   ],
   "Technique": [
     {
-      "key": "x-splunk.Mitre_Technique",
+      "key": "x-splunk.mitre_technique",
       "object": "x-splunk"
     }
   ],
@@ -323,7 +316,19 @@
     }
   ],
   "ss_name": {
-    "key": "x-ibm-finding.ss_name",
+    "key": "x-ibm-finding.name",
     "object": "x-ibm-finding"
-  }
+  },
+  "DeviceType": [
+    {
+      "key": "x-ibm-finding.src_device",
+      "object": "x-ibm-finding"
+    }
+  ],
+  "severity": [
+    {
+      "key": "x-ibm-finding.severity",
+      "object": "x-ibm-finding"
+    }
+  ]
 }

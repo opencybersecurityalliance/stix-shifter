@@ -159,7 +159,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_network_traffic_start_stop(self):
-        stix_pattern = "[network-traffic:'start' = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.567Z']"
+        stix_pattern = "[network-traffic:start = '2018-06-14T08:36:24.000Z' OR network-traffic:end = '2018-06-14T08:36:24.567Z']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE endtime = '1528965384567' OR starttime = '1528965384000' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
@@ -252,6 +252,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_generic_filehash_query(self):
         stix_pattern = "[file:hashes.'SHA-256' = 'sha256hash']"
         query = _translate_query(stix_pattern)
+        print('??????' + str(query))
         where_statement = "WHERE sha256hash = 'sha256hash' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
