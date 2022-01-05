@@ -337,12 +337,12 @@ class TestTransform(object):
         assert(registry_obj['values'][0].keys() == {'name'})
         assert(registry_obj['values'][0]['name'] == "val")
 
-    def test_computer_and_originatingcomputer(self):
+    def test_machineid_hostname(self):
         hostname = "example host"
         identityip = "1.2.3.4"
         qidname = "Process Create"
 
-        data = { "qidname": "Special privileges assigned to new logon", "OriginatingComputer": identityip, "Computer": hostname }
+        data = { "qidname": "Special privileges assigned to new logon", "sourceip": identityip, "MachineId": hostname }
         result_bundle = json_to_stix_translator.convert_to_stix(
             DATA_SOURCE, MAP_DATA, [data], TRANSFORMERS, options)
         observed_data = result_bundle['objects'][1]
