@@ -5,6 +5,10 @@
             "placeholder": "https://app.datadoghq.com",
             "description": "Specify the Site URL of the Datadog so that IBM Cloud Pak for Security can communicate with it"
         },
+        "selfSignedCert": {
+            "label": "Datadog Certificate",
+            "placeholder": "Paste your certificate"
+        },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
