@@ -13,7 +13,8 @@ class TestDatadogConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "site_url": "https://app.datadoghq.eu"
+            "site_url": "https://app.datadoghq.eu",
+            "selfSignedCert": False
         }
 
     def configuration(self):
