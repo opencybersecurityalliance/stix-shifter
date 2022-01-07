@@ -3,7 +3,7 @@ antlr4-python3-runtime==4.8
 boto3==1.17.20
 flask==2.0.2
 pyOpenSSL==20.0.1
-flatten_json==0.1.7
+flatten_json==0.1.13
 python-dateutil==2.8.1
 requests_toolbelt==0.9.1
 stix2-patterns==1.3.2
