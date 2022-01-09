@@ -433,10 +433,17 @@
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
     },
-    "DeviceId": {
-      "key": "x-msatp.machine_id",
-      "object": "x-msatp"
-    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "event_count": {
       "key": "number_observed",
       "cybox": false,
@@ -1141,10 +1148,17 @@
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
     },
-    "DeviceId": {
-      "key": "x-msatp.machine_id",
-      "object": "x-msatp"
-    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "event_count": {
       "key": "number_observed",
       "cybox": false,
@@ -1742,10 +1756,17 @@
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
     },
-    "DeviceId": {
-      "key": "x-msatp.machine_id",
-      "object": "x-msatp"
-    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "DeviceName": [
       {
         "key": "x-oca-asset.hostname",
@@ -2240,10 +2261,17 @@
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
     },
-    "DeviceId": {
-      "key": "x-msatp.machine_id",
-      "object": "x-msatp"
-    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "DeviceName": [
       {
         "key": "x-oca-asset.hostname",
@@ -2358,14 +2386,26 @@
     ]
   },
   "DeviceNetworkInfo": {
-    "DeviceId": {
-      "key": "x-msatp.machine_id",
-      "object": "x-msatp"
-    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
     "DeviceName": [
       {
         "key": "x-oca-asset.hostname",
         "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
       }
     ],
     "AlertId": {
