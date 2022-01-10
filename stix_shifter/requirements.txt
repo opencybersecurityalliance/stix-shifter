@@ -1,4 +1,4 @@
-adal==1.2.2
+adal==1.2.7
 antlr4-python3-runtime==4.8
 boto3==1.20.30
 flask==2.0.2
