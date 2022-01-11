@@ -8,13 +8,19 @@ from stix_shifter.stix_transmission import stix_transmission
 class CybereasonMockResponse:
     """ class for cybereason mock response"""
 
-    def __init__(self, response_code, obj):
+    def __init__(self, response_code, obj, histobj):
         self.code = response_code
         self.object = obj
+        self.response = histobj
 
     def read(self):
         """ to read contents of results returned by api"""
         return bytearray(self.object, 'utf-8')
+
+
+class HistoryMockResponse:
+    def __init__(self):
+        self.history = []
 
 
 class CybereasonMockLogoutResponse:
@@ -32,7 +38,6 @@ class CybereasonMockError:
         self.response = obj
 
     def read(self):
-
         return self.response.read()
 
 
@@ -44,6 +49,40 @@ class ErrorText:
 
     def read(self):
         return bytearray(self.text, 'utf-8')
+
+
+class ErrorHostTextInvalid:
+    """ class for error text"""
+
+    def __init__(self, txt):
+        self.text = txt
+        self.history=[]
+        self.code = 0
+
+
+class ErrorTextInvalid:
+    """ class for error text"""
+
+    def __init__(self, txt, obj):
+        self.text = txt
+        self.history = [obj]
+        self.status_code = 302
+
+    def read(self):
+        return bytearray(self.text, 'utf-8')
+
+class ErrorHostInvalid:
+    """ class for error text"""
+
+    def __init__(self, txt,obj):
+        self.text = txt
+        self.response=obj
+        self.code = 0
+
+
+class ErrorTextA:
+    def __init__(self):
+        self.status_code = 302
 
 
 class PingResponse:
@@ -59,6 +98,7 @@ class InnerResponse:
     def __init__(self, st_code, txt):
         self.status_code = st_code
         self.text = txt
+        self.history = []
 
 
 @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
@@ -94,7 +134,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_source, mock_cookie,
@@ -113,7 +153,6 @@ class TestCybereasonConnection(unittest.TestCase):
                                                           self.connection(),
                                                           self.config())
         ping_response = transmission.ping()
-
         assert ping_response is not None
         assert ping_response['success'] is True
 
@@ -312,7 +351,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_process_result(self, mock_results_response, mock_session,
@@ -446,8 +485,8 @@ class TestCybereasonConnection(unittest.TestCase):
             "expectedResults": 1,
             "failures": 0
         }"""
-
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -714,7 +753,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_file_result(self, mock_results_response, mock_session,
@@ -848,7 +887,8 @@ class TestCybereasonConnection(unittest.TestCase):
             "expectedResults": 1,
             "failures": 0
         }"""
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -888,7 +928,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_machine_result(self, mock_results_response, mock_session,
@@ -1015,8 +1055,8 @@ class TestCybereasonConnection(unittest.TestCase):
             "expectedResults": 1,
             "failures": 0
         }"""
-
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -1308,7 +1348,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_multielement_result(self, mock_results_response, mock_session,
@@ -1453,8 +1493,8 @@ class TestCybereasonConnection(unittest.TestCase):
             "count":1543}],"guids":[]},"status":"SUCCESS",
             "hidePartialSuccess":false,
             "message":"","expectedResults":1,"failures":0}"""
-
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -1693,7 +1733,7 @@ class TestCybereasonConnection(unittest.TestCase):
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_cookies_id')
+           '.APIClient.session_log_in')
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_registry_events_result(self, mock_results_response, mock_session,
@@ -1819,7 +1859,8 @@ class TestCybereasonConnection(unittest.TestCase):
             },
             "status": "SUCCESS"
         }"""
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -2054,7 +2095,8 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_result_jsondecode_error(self, mock_results_response, mock_api_client):
         """ test for checking json decode error"""
         mocked_return_value = "abc"
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value)
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -2098,3 +2140,292 @@ class TestCybereasonConnection(unittest.TestCase):
         assert 'success' in results_response
         assert results_response['success'] is False
         assert 'error' in results_response
+
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.get_search_results')
+    def test_result_invalidauthenticationerror(self, mock_results_response, mock_api_client):
+        """ test for checking invalid request error"""
+        obj = ErrorTextA()
+        invalidtext = ErrorTextInvalid("AuthenticationError", obj)
+        mock_results_response.return_value = CybereasonMockError(302, invalidtext)
+        mock_api_client.return_value = None
+        query = json.dumps({
+            "queryPath": [{
+                "requestedType": "RegistryEvent",
+                "filters": [{
+                    "facetName": "registryProcess",
+                    "filterType": "ContainsIgnoreCase",
+                    "values": ["msiexec.exe"]
+                }],
+                "isResult": True
+            }],
+            "totalResultLimit": 1000,
+            "perGroupLimit": 100,
+            "templateContext": "DUMMY",
+            "customFields": ["elementDisplayName", "self", "registryDataType",
+                             "registryOperationType", "timestamp", "firstTime",
+                             "detectionTimesNumber", "registryProcess",
+                             "registryEntry", "data", "ownerMachine"
+                             ]
+        })
+
+        transmission = stix_transmission.StixTransmission('cybereason',
+                                                          self.connection(),
+                                                          self.config())
+        offset = 0
+        length = 1
+        results_response = transmission.results(query, offset, length)
+
+        assert results_response is not None
+        assert 'success' in results_response
+        assert results_response['success'] is False
+        assert 'error' in results_response
+
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.session_log_out')
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.session_log_in')
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.ping_box')
+    def test_ping_endpoint_invaliderror(self, mock_ping_source, mock_cookie,
+                                        mock_logout, mock_api_client):
+        """ test to check ping_data_source function"""
+        obj = ErrorTextA()
+        invalidtext = ErrorTextInvalid("""{"status":"authenticationerror"}""", obj)
+        pingresponse = CybereasonMockError(302, invalidtext)
+        mock_ping_source.return_value = pingresponse
+
+        mock_logout.return_value = """{"response_code":200}"""
+        mock_cookie.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
+
+        mock_api_client.return_value = None
+
+        transmission = stix_transmission.StixTransmission('cybereason',
+                                                          self.connection(),
+                                                          self.config())
+        ping_response = transmission.ping()
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert 'error' in ping_response
+
+    # @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+    #        '.APIClient.get_search_results')
+    # def test_result_invalidhosterror(self, mock_results_response, mock_api_client):
+    #     """ test for checking invalid request error"""
+    #     obj = ErrorTextA()
+    #     invalidtext = ErrorHostTextInvalid("ConnectionError")
+    #     mock_results_response.return_value = ErrorHostInvalid("Https",invalidtext)
+    #     mock_api_client.return_value = None
+    #     query = json.dumps({
+    #         "queryPath": [{
+    #             "requestedType": "RegistryEvent",
+    #             "filters": [{
+    #                 "facetName": "registryProcess",
+    #                 "filterType": "ContainsIgnoreCase",
+    #                 "values": ["msiexec.exe"]
+    #             }],
+    #             "isResult": True
+    #         }],
+    #         "totalResultLimit": 1000,
+    #         "perGroupLimit": 100,
+    #         "templateContext": "DUMMY",
+    #         "customFields": ["elementDisplayName", "self", "registryDataType",
+    #                          "registryOperationType", "timestamp", "firstTime",
+    #                          "detectionTimesNumber", "registryProcess",
+    #                          "registryEntry", "data", "ownerMachine"
+    #                          ]
+    #     })
+    #
+    #     transmission = stix_transmission.StixTransmission('cybereason',
+    #                                                       self.connection(),
+    #                                                       self.config())
+    #     offset = 0
+    #     length = 1
+    #     results_response = transmission.results(query, offset, length)
+    #
+    #     assert results_response is not None
+    #     assert 'success' in results_response
+    #     assert results_response['success'] is False
+    #     assert 'error' in results_response
+
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.session_log_out')
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.session_log_in')
+    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
+           '.APIClient.get_search_results')
+    def test_file_list_result(self, mock_results_response, mock_session,
+                         mock_session_logout, mock_api_client):
+        """ test to check result of file element"""
+        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
+        mocked_return_value = """{
+            "data": {
+                "resultIdToElementDataMap": {
+                    "-1837391212.1746789123229245971": {
+                        "simpleValues": {
+                            "applicablePid": {
+                                "totalValues": 1,
+                                "values": ["624"]
+                            },
+                            "commandLine": {
+                                "totalValues": 1,
+                                "values": ["C:\\\\WINDOWS\\\\System32\\\\svchost.exe \
+                                -k NetworkService -p"]
+                            },
+                            "imageFile.md5String": {
+                                "totalValues": 1,
+                                "values": ["9520a99e77d6196d0d09833146424113"]
+                            },
+                            "creationTime": {
+                                "totalValues": 1,
+                                "values": ["1596848617500"]
+                            },
+                            "endTime": {
+                                "totalValues": 1,
+                                "values": ["1597955913267"]
+                            },
+                            "imageFile.sha256String": {
+                                "totalValues": 1,
+                                "values": ["dd191a5b23df92e12a8852291f\
+                                9fb5ed594b76a28a5a464418442584afd1e048"]
+                            },
+                            "imageFile.sha1String": {
+                                "totalValues": 1,
+                                "values": ["75c5a97f521f760e32a4a9639a653eed862e9c61"]
+                            },
+                            "elementDisplayName": {
+                                "totalValues": 1,
+                                "values": ["svchost.exe"]
+                            }
+                        },
+                        "elementValues": {
+                            "parentProcess": {
+                                "totalValues": 2,
+                                "elementValues": [{
+                                    "elementType": "Process",
+                                    "guid": "-1837391212.4247194264269145540",
+                                    "name": "services.exe",
+                                    "hasSuspicions": false,
+                                    "hasMalops": false
+                                },
+                                {
+                                    "elementType": "Process",
+                                    "guid": "-1837391213.4247194264269145540",
+                                    "name": "svchost.exe",
+                                    "hasSuspicions": false,
+                                    "hasMalops": false
+                                }],
+                                "totalSuspicious": 0,
+                                "totalMalicious": 0,
+                                "guessedTotal": 0
+                            },
+                            "imageFile": {
+                                "totalValues": 1,
+                                "elementValues": [{
+                                    "elementType": "File",
+                                    "guid": "-1837391212.1251190729327068266",
+                                    "name": "svchost.exe",
+                                    "hasSuspicions": false,
+                                    "hasMalops": false
+                                }],
+                                "totalSuspicious": 0,
+                                "totalMalicious": 0,
+                                "guessedTotal": 0
+                            }
+                        },
+                        "suspicions": {
+                            "blackListModuleSuspicion": 1602172848998,
+                            "connectingToBlackListAddressSuspicion": 1611540009703
+                        },
+                        "filterData": {
+                            "sortInGroupValue": "-1837391212.1746789123229245971",
+                            "groupByValue": "svchost.exe"
+                        },
+                        "isMalicious": true,
+                        "suspicionCount": 2,
+                        "guidString": "-1837391212.1746789123229245971",
+                        "labelsIds": null,
+                        "malopPriority": null,
+                        "suspect": true,
+                        "malicious": true
+                    }
+                },
+                "suspicionsMap": {
+                    "blackListModuleSuspicion": {
+                        "potentialEvidence": ["blackListModuleEvidence"],
+                        "firstTimestamp": 1602172848998,
+                        "totalSuspicions": 1
+                    },
+                    "connectingToBlackListAddressSuspicion": {
+                        "potentialEvidence": ["hasBlackListConnectionEvidence"],
+                        "firstTimestamp": 1611540009703,
+                        "totalSuspicions": 1
+                    }
+                },
+                "evidenceMap": {},
+                "totalPossibleResults": 158260,
+                "guessedPossibleResults": 0,
+                "queryLimits": {
+                    "totalResultLimit": 1,
+                    "perGroupLimit": 1,
+                    "perFeatureLimit": 1,
+                    "groupingFeature": {
+                        "elementInstanceType": "Process",
+                        "featureName": "elementDisplayName"
+                    },
+                    "sortInGroupFeature": null
+                },
+                "queryTerminated": false,
+                "pathResultCounts": [{
+                    "featureDescriptor": {
+                        "elementInstanceType": "Process",
+                        "featureName": null
+                    },
+                    "count": 158260
+                }],
+                "guids": []
+            },
+            "status": "SUCCESS",
+            "hidePartialSuccess": false,
+            "message": "",
+            "expectedResults": 1,
+            "failures": 0
+        }"""
+        histobj = HistoryMockResponse()
+        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_api_client.return_value = None
+
+        query = json.dumps({
+            "queryPath": [{
+                "requestedType": "File",
+                "filters": [{
+                    "facetName": "elementDisplayName",
+                    "filterType": "ContainsIgnoreCase",
+                    "values": ["sbsimulation_sb_265540_bs_254977.exe"]
+                }],
+                "isResult": True
+            }],
+            "totalResultLimit": 1000,
+            "perGroupLimit": 100,
+            "templateContext": "SPECIFIC",
+            "customFields": ["elementDisplayName", "maliciousClassificationType",
+                             "ownerMachine", "avRemediationStatus",
+                             "signerInternalOrExternal", "signedInternalOrExternal",
+                             "signatureVerifiedInternalOrExternal", "sha1String",
+                             "createdTime", "modifiedTime", "size",
+                             "correctedPath", "productName"
+                             ]
+        })
+
+        transmission = stix_transmission.StixTransmission('cybereason',
+                                                          self.connection(),
+                                                          self.config())
+        offset = 0
+        length = 1
+        results_response = transmission.results(query, offset, length)
+
+        assert results_response is not None
+        assert results_response['success'] is True
+        assert 'data' in results_response
+        assert results_response['data'] is not None

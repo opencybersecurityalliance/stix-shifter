@@ -1,16 +1,17 @@
 # Cybereason Connector
 
-```
-I.    CYBEREASON API ENDPOINTS
-II.   PATTERN EXPRESSION WITH STIX ATTRIBUTES - SINGLE OBSERVATION
-III.  PATTERN EXPRESSION WITH STIX ATTRIBUTES - MULTIPLE OBSERVATION
-IV.   PATTERN EXPRESSION WITH STIX ATTRIBUTES - EXECUTE QUERY
-V.    PATTERN EXPRESSION WITH STIX ATTRIBUTES - PING QUERY
-VI.   LIMITATIONS
-VII.  OBSERVATIONS
-VIII. REFERENCES
-```
-### Cybereason API Endpoints:
+**Table of Contents**
+
+- [Cybereason API Endpoints](#Cybereason API Endpoints)
+- [Pattern expression with STIX attributes - Single Observation](#Single Observation)
+- [Pattern expression with STIX attributes - Multiple Observation](#Multiple Observation)
+- [Pattern expression with STIX attributes - Execute Query](#STIX Execute query)
+- [Pattern expression with STIX attributes - Ping Query](#STIX Ping query)
+- [Limitations](#Limitations)
+- [Observations](#Observations)
+
+
+### Cybereason API Endpoints
 
    |Connector Method|Cybereason API Endpoint| Method
    | ----           |   ------              | -----|
@@ -22,7 +23,9 @@ python main.py `<translator_module>` `<query or result>` `<STIX identity object>
 
 ### Pattern expression with STIX attributes
 
-#### Single Observation  : STIX Translate query
+### Single Observation
+
+####STIX Translate query
 ```shell
 translate cybereason query '{}' "[ipv4-addr:value = '1.1.0.0'] START t'2021-10-01T11:00:00.000Z' STOP t'2021-10-07T11:00:00.003Z'"
 ```
@@ -370,8 +373,9 @@ translate cybereason results
 }
 ```
 
-#### Multiple Observation : STIX Translate query
+### Multiple Observation  
 
+####STIX Translate query
 ```shell
 translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] AND [x-cybereason-file:product_type IN ('Adobe')] AND [process:command_line LIKE 'Adobe\\Acrobat Reader DC']) START t'2021-02-10T11:43:08.000Z' STOP t'2021-11-12T11:00:00.003Z'"
 ```
@@ -1312,12 +1316,10 @@ ping
 
 ### Limitations
 - Cybereason does not support “OR” operator between the elements and features. It supports only "AND" operator through "connectionFeature" and "Filters".
-For more details on connectionFeature kindly follow the link : [Use multiple elements using Connection Feature](https://nest.cybereason.com/documentation/api-documentation/all-versions/use-multiple-elements-query "Use multiple elements using Connection Feature")
 
 ### Observations
 - Cybereason doesnt support regex based search. It supports only substring based search . Hence wildcard characters cannot be used for searches using  LIKE or MATCHES operator
 
 
-###References
-https://nest.cybereason.com/
+
 

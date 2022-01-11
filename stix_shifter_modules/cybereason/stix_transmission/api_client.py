@@ -18,9 +18,7 @@ class APIClient:
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
-                                    url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    url_modifier_function=url_modifier_function
                                     )
         self.timeout = connection['options'].get('timeout')
 
@@ -33,7 +31,7 @@ class APIClient:
 
         query = '{"queryPath": [{"requestedType": "Connection", "filters": [], "isResult": true}],' \
                 '"totalResultLimit": 1, "perGroupLimit": 1,"templateContext": "SPECIFIC"}'
-        headers['Cookie'] = self.get_cookies_id()
+        headers['Cookie'] = self.session_log_in()
         return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
 
     def get_search_results(self, query):
@@ -42,13 +40,13 @@ class APIClient:
         :param query: Data Source Query
         :return: Response Object
         """
-        headers = {'Cookie': self.get_cookies_id()}
+        headers = {'Cookie': self.session_log_in()}
         self.logger.debug("query: %s", query)
         return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
 
-    def get_cookies_id(self):
+    def session_log_in(self):
         """
-        Get session cookie id
+        Create a login session and return the cookie id
         :return: str, cookie id
         """
         headers = {"Content-Type": "application/x-www-form-urlencoded"}

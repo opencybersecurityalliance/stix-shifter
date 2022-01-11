@@ -245,8 +245,8 @@ class QueryStringPatternTranslator:
                 }
             },
             "perFeatureLimit": 1,
-            "totalResultLimit": options["result_limit"] - 1,
-            "perGroupLimit": 1,
+            "totalResultLimit": options["result_limit"] - 1,  # Cybereason returns 1 more than totalResultLimit records along with
+            "perGroupLimit": 1,                               # the options perfeaturelimit=1 and perGroupLimit=1
             "templateContext": "CUSTOM",
             "customFields": add_custom_fields
 
