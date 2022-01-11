@@ -2,13 +2,13 @@
 
 **Table of Contents**
 
-- [Cybereason API Endpoints](#Cybereason API Endpoints)
-- [Pattern expression with STIX attributes - Single Observation](#Single Observation)
-- [Pattern expression with STIX attributes - Multiple Observation](#Multiple Observation)
-- [Pattern expression with STIX attributes - Execute Query](#STIX Execute query)
-- [Pattern expression with STIX attributes - Ping Query](#STIX Ping query)
-- [Limitations](#Limitations)
-- [Observations](#Observations)
+- [Cybereason API Endpoints](#cybereason-api-endpoints)
+- [Pattern expression with STIX attributes - Single Observation](#single-observation)
+- [Pattern expression with STIX attributes - Multiple Observation](#multiple-observation)
+- [Pattern expression with STIX attributes - Execute Query](#stix-execute-query)
+- [Pattern expression with STIX attributes - Ping Query](#stix-ping-query)
+- [Limitations](#limitations)
+- [Observations](#observations)
 
 
 ### Cybereason API Endpoints
