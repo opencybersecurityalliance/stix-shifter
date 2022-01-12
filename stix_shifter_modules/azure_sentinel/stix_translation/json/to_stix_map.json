@@ -58,8 +58,7 @@
     },
     "comments": {
       "key": "x-msazure-sentinel-alert.comments",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "confidence": {
       "key": "x-msazure-sentinel-alert.confidence",
@@ -85,8 +84,7 @@
     },
     "detectionIds": {
       "key": "x-msazure-sentinel-alert.detectionids",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "feedback": {
       "key": "x-msazure-sentinel-alert.feedback",
@@ -197,8 +195,7 @@
     },
     "incidentIds": {
       "key": "x-msazure-sentinel-alert.incidentIds",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "lastModifiedDateTime": [
       {
@@ -438,8 +435,7 @@
     },
     "recommendedActions": {
       "key": "x-msazure-sentinel-alert.recommendedactions",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "registryKeyStates": {
       "hive": {
@@ -502,8 +498,7 @@
     },
     "sourceMaterials": {
       "key": "x-msazure-sentinel-alert.sourcematerials",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "status": {
       "key": "x-msazure-sentinel-alert.status",
@@ -512,8 +507,7 @@
     },
     "tags": {
       "key": "x-msazure-sentinel-alert.tags",
-      "object": "alert",
-      "transformer": "ToString"
+      "object": "alert"
     },
     "title": [
       {

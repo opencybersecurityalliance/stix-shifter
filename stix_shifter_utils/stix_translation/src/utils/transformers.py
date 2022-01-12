@@ -110,6 +110,9 @@ class ToString(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
+            if isinstance(obj, list) or isinstance(obj, dict):
+                raise ValueError()
+            
             return str(obj)
         except ValueError:
             LOGGER.error("Cannot convert input to string")
