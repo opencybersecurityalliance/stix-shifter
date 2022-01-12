@@ -719,7 +719,7 @@
       "object": "process"
     },
     "unsignedWithSignedVersionModules": {
-      "key": "process.extensions.x-cybereason-process.unsigned_with_signed_version_modules",
+      "key": "process.extensions.x-cybereason-process.unsigned_signed_version_module",
       "object": "process"
     },
     "unwantedClassificationModules": {
@@ -911,7 +911,7 @@
       "object": "x_cyber_malops"
     },
     "highInternalOutgoingEmbryonicConnectionRateEvidence": {
-      "key": "process.extensions.x-cybereason-process.high_internal_outgoing_embryonic_connection_rate_evidence",
+      "key": "process.extensions.x-cybereason-process.high_internal_outgoing_evidence",
       "object": "process"
     },
     "highNumberOfInternalConnectionsEvidence": {
@@ -2007,8 +2007,8 @@
         "object": "machine_domain"
       },
       {
-        "key": "x-oca-asset.domain_ref",
-        "object": "machine_domain"
+        "key": "x-oca-asset.domain_name",
+        "object": "asset"
       }
     ],
     "ownerOrganization": {

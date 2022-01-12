@@ -51,13 +51,12 @@ class ErrorText:
         return bytearray(self.text, 'utf-8')
 
 
-class ErrorHostTextInvalid:
+class ErrorTextInvalidRequest:
     """ class for error text"""
 
     def __init__(self, txt):
         self.text = txt
-        self.history=[]
-        self.code = 0
+        self.history = []
 
 
 class ErrorTextInvalid:
@@ -70,14 +69,6 @@ class ErrorTextInvalid:
 
     def read(self):
         return bytearray(self.text, 'utf-8')
-
-class ErrorHostInvalid:
-    """ class for error text"""
-
-    def __init__(self, txt,obj):
-        self.text = txt
-        self.response=obj
-        self.code = 0
 
 
 class ErrorTextA:
@@ -1939,29 +1930,6 @@ class TestCybereasonConnection(unittest.TestCase):
         """ test to check ping box exception"""
 
         m_api_client.return_value = None
-
-        query = json.dumps({
-            "queryPath": [{
-                "requestedType": "File",
-                "filters": [{
-                    "facetName": "elementDisplayName",
-                    "filterType": "ContainsIgnoreCase",
-                    "values": ["sbsimulation_sb_265540_bs_254977.exe"]
-                }],
-                "isResult": True
-            }],
-            "totalResultLimit": 1000,
-            "perGroupLimit": 100,
-            "templateContext": "SPECIFIC",
-            "customFields": ["elementDisplayName", "maliciousClassificationType",
-                             "ownerMachine", "avRemediationStatus",
-                             "signerInternalOrExternal", "signedInternalOrExternal",
-                             "signatureVerifiedInternalOrExternal", "sha1String",
-                             "createdTime", "modifiedTime", "size",
-                             "correctedPath", "productName"
-                             ]
-        })
-
         transmission = stix_transmission.StixTransmission('cybereason',
                                                           self.connection(),
                                                           self.config()
@@ -2014,7 +1982,7 @@ class TestCybereasonConnection(unittest.TestCase):
            '.APIClient.get_search_results')
     def test_result_invalidrequesterror(self, mock_results_response, mock_api_client):
         """ test for checking invalid request error"""
-        invalidtext = ErrorText("InvalidRequest")
+        invalidtext =ErrorTextInvalidRequest("InvalidRequest")
         mock_results_response.return_value = CybereasonMockError(402, invalidtext)
         mock_api_client.return_value = None
 
@@ -2054,7 +2022,7 @@ class TestCybereasonConnection(unittest.TestCase):
            '.APIClient.get_search_results')
     def test_result_internalservererror(self, mock_results_response, mock_api_client):
         """ test for checking internal server error"""
-        errortext = ErrorText("InternalServerError")
+        errortext = ErrorTextInvalidRequest("InternalServerError")
         mock_results_response.return_value = CybereasonMockError(500, errortext)
         mock_api_client.return_value = None
 
@@ -2075,57 +2043,6 @@ class TestCybereasonConnection(unittest.TestCase):
                              "registryOperationType", "timestamp", "firstTime",
                              "detectionTimesNumber", "registryProcess",
                              "registryEntry", "data", "ownerMachine"
-                             ]
-        })
-
-        transmission = stix_transmission.StixTransmission('cybereason',
-                                                          self.connection(),
-                                                          self.config())
-        offset = 0
-        length = 1
-        results_response = transmission.results(query, offset, length)
-
-        assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] is False
-        assert 'error' in results_response
-
-    @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-           '.APIClient.get_search_results')
-    def test_result_jsondecode_error(self, mock_results_response, mock_api_client):
-        """ test for checking json decode error"""
-        mocked_return_value = "abc"
-        histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
-        mock_api_client.return_value = None
-
-        query = json.dumps({
-            "queryPath": [{
-                "requestedType": "Connection",
-                "filters": [{
-                    "facetName": "elementDisplayName",
-                    "filterType": "ContainsIgnoreCase",
-                    "values": ["192.168.87.72:53235"]
-                }],
-                "isResult": True
-            }],
-            "totalResultLimit": 1000,
-            "perGroupLimit": 100,
-            "templateContext": "SPECIFIC",
-            "customFields": ["elementDisplayName", "direction",
-                             "ownerMachine", "ownerProcess",
-                             "serverPort", "serverAddress",
-                             "portType", "aggregatedReceivedBytesCount",
-                             "aggregatedTransmittedBytesCount",
-                             "remoteAddressCountryName", "dnsQuery",
-                             "calculatedCreationTime", "domainName",
-                             "endTime", "localPort", "portDescription",
-                             "remotePort", "state", "isExternalConnection",
-                             "isIncoming", "remoteAddressInternalExternalLocal",
-                             "transportProtocol", "hasMalops", "hasSuspicions",
-                             "relatedToMalop", "isWellKnownPort",
-                             "isProcessLegit", "isProcessMalware", "localAddress",
-                             "remoteAddress", "urlDomains"
                              ]
         })
 
@@ -2207,46 +2124,6 @@ class TestCybereasonConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert 'error' in ping_response
-
-    # @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
-    #        '.APIClient.get_search_results')
-    # def test_result_invalidhosterror(self, mock_results_response, mock_api_client):
-    #     """ test for checking invalid request error"""
-    #     obj = ErrorTextA()
-    #     invalidtext = ErrorHostTextInvalid("ConnectionError")
-    #     mock_results_response.return_value = ErrorHostInvalid("Https",invalidtext)
-    #     mock_api_client.return_value = None
-    #     query = json.dumps({
-    #         "queryPath": [{
-    #             "requestedType": "RegistryEvent",
-    #             "filters": [{
-    #                 "facetName": "registryProcess",
-    #                 "filterType": "ContainsIgnoreCase",
-    #                 "values": ["msiexec.exe"]
-    #             }],
-    #             "isResult": True
-    #         }],
-    #         "totalResultLimit": 1000,
-    #         "perGroupLimit": 100,
-    #         "templateContext": "DUMMY",
-    #         "customFields": ["elementDisplayName", "self", "registryDataType",
-    #                          "registryOperationType", "timestamp", "firstTime",
-    #                          "detectionTimesNumber", "registryProcess",
-    #                          "registryEntry", "data", "ownerMachine"
-    #                          ]
-    #     })
-    #
-    #     transmission = stix_transmission.StixTransmission('cybereason',
-    #                                                       self.connection(),
-    #                                                       self.config())
-    #     offset = 0
-    #     length = 1
-    #     results_response = transmission.results(query, offset, length)
-    #
-    #     assert results_response is not None
-    #     assert 'success' in results_response
-    #     assert results_response['success'] is False
-    #     assert 'error' in results_response
 
     @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
            '.APIClient.session_log_out')
