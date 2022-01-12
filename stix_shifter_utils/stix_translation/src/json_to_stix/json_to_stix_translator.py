@@ -1,4 +1,5 @@
 import re
+from traceback import print_exception
 import uuid
 import json
 
@@ -93,17 +94,20 @@ class DataSourceObjToStixObj:
             return True
         except Exception as e:
             return False
-    
-    def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False, group=False):
+
+    def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False):
         try:
             return_value = {}
             for key in key_list:
-                return_value[key] = self._compose_value_object(value, key_list[1:], observable_key=observable_key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
+                return_value[key] = self._compose_value_object(value, key_list[1:], observable_key=observable_key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
                 break
             else:
                 if transformer:
-                    value = transformer.transform(value)
-                    if value is None:
+                    try: 
+                        value = transformer.transform(value)
+                        if value is None:
+                            return None
+                    except Exception:
                         return None
                 
                 if references:
@@ -174,88 +178,80 @@ class DataSourceObjToStixObj:
 
     def _process_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
         try:
+            if data is not None:
+                if isinstance(data, list):
+                    for d in data:
+                        if isinstance(d, list) or isinstance(d, dict):
+                            self._process_properties(to_stix_config_prop, d, objects, object_tag_ref_map, data, ds_sub_key, object_key_ind)
+                        else:
+                            # data variable is the final value, process in bulk
+                            self._process_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map)
+                            break
+
+                elif isinstance(data, dict):
+                    for k in data:
+                        if k in to_stix_config_prop:
+                            self._process_properties(to_stix_config_prop[k], data[k], objects, object_tag_ref_map, data, k, object_key_ind)
+                else:
+                    self._process_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map)
+        except Exception as e:
+            raise Exception("Error in json_to_stix_translator._process_properties: %s" % e)
+            
+    def _process_value(self, data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map):
+        try: 
             if isinstance(to_stix_config_prop, dict):
-                if True:
-                # if to_stix_config_prop.get('cybox', self.cybox_default):
-                    key = to_stix_config_prop.get('key', None)
-                    if not key or (isinstance(key, dict)):
-                        if not isinstance(data, list):
-                            data = [data]
-                        for i, d_el in enumerate(data):
-                            if isinstance(d_el, dict):
-                                for ds_sub_key in d_el.keys():
-                                    prop = to_stix_config_prop.get(ds_sub_key)
-                                    if prop:
-                                        self._process_properties(prop, d_el[ds_sub_key], objects, object_tag_ref_map, parent_data=d_el, ds_sub_key=ds_sub_key, object_key_ind=i)
-                                    else:
-                                        if self.options.get('unmapped_fallback') and ds_sub_key not in object_tag_ref_map['ds_key_cybox']:
-                                            cust_prop = {"key": "x-" + self.data_source.replace("_", "-") + "." + ds_sub_key, "object": "cust_object"}
-                                            self._process_properties(cust_prop, d_el[ds_sub_key], objects, object_tag_ref_map, parent_data=d_el, ds_sub_key=ds_sub_key, object_key_ind=i)
-                    else:
-                        if data is not None or data == '':
-                            transformer = self.transformers[to_stix_config_prop['transformer']] if 'transformer' in to_stix_config_prop else None
-                            references = references = to_stix_config_prop['references'] if 'references' in to_stix_config_prop else None
-                            unwrap = True if 'unwrap' in to_stix_config_prop and isinstance(data, list) else False
-                            group = to_stix_config_prop['group'] if 'group' in to_stix_config_prop else False
-                            cybox = to_stix_config_prop.get('cybox', self.cybox_default)
-                            substitute_key = to_stix_config_prop['ds_key'] if 'ds_key' in to_stix_config_prop else None
-
-                            if self.callback:
-                                try:
-                                    generic_hash_key = self.callback(parent_data, ds_sub_key, key, self.options)
-                                    if generic_hash_key:
-                                       key = generic_hash_key
-                                except Exception as e:
-                                    return
-
-                            config_keys = key.split('.')
-                            if len(config_keys) < 2:
-                                if False is cybox: 
-                                    object_tag_ref_map['out_cybox'][key] = self._compose_value_object(data, [], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
-                                return
-
-                            type_name = config_keys[0]
-                            property_key = config_keys[1]
-                            parent_key = to_stix_config_prop['object'] if 'object' in to_stix_config_prop else type_name
-                            
-                            if False is cybox and not substitute_key:
-                                value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
-                                self._add_prperty(type_name, property_key, type_name, value, object_tag_ref_map['out_cybox'], cybox=False)
-                            else:
-                                if object_key_ind:
-                                    parent_key = '%s_%s' % (parent_key, object_key_ind)
-                                
-                                # use the hard-coded value in the mapping
-                                if 'value' in to_stix_config_prop:
-                                    value = to_stix_config_prop['value']
-                                else:
-                                    if substitute_key and parent_data:
-                                        data = parent_data.get(substitute_key)
-
-                                        if False is cybox: 
-                                            object_tag_ref_map['ds_key_cybox'][substitute_key] = True
-                                    
-                                    value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group)
-                                    
-                                if value is None or value == '':
-                                    return None                                
-                                    
-                                if not references and unwrap and isinstance(value, list):
-                                    for i, val_el in enumerate(value):
-                                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
-                                        self._add_prperty(type_name, property_key, parent_key_ind, val_el, objects, group=group)
-                                else:
-                                    parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
-                                    self._add_prperty(type_name, property_key, parent_key_ind, value, objects, group=group)
-
-            elif isinstance(to_stix_config_prop, list):
-                for prop in to_stix_config_prop:
-                    self._process_properties(prop, data, objects, object_tag_ref_map, parent_data=parent_data, object_key_ind=object_key_ind)
-
+                props = [to_stix_config_prop]
             else:
-                # self.logger.debug('to_stix_config_prop is neither dictionary nor list')
-                # self.logger.debug(to_stix_config_prop)
-                pass
+                props = to_stix_config_prop
+            
+            for prop in props:
+                key = prop.get('key', None)
+                if key is None:
+                    continue
+
+                transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
+                references = references = prop['references'] if 'references' in prop else None
+                unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
+                cybox = prop.get('cybox', self.cybox_default)
+
+                config_keys = key.split('.')
+                if len(config_keys) < 2:
+                    if False is prop.get('cybox', self.cybox_default): 
+                        object_tag_ref_map['out_cybox'][key] = self._compose_value_object(data, [], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
+                    pass
+                else:
+                    type_name = config_keys[0]
+                    property_key = config_keys[1]
+                    parent_key = prop['object'] if 'object' in prop else type_name
+
+                    group = prop['group'] if 'group' in prop else False
+                    substitute_key = prop['ds_key'] if 'ds_key' in prop else None
+
+                    if False is cybox and not substitute_key:
+                        print("cybox - substitute_key")
+
+                    # use the hard-coded value in the mapping
+                    if 'value' in prop:
+                        value = prop['value']
+                    else:
+                        if substitute_key and parent_data:
+                            data = parent_data.get(substitute_key)
+
+                            if False is cybox:
+                                object_tag_ref_map['ds_key_cybox'][substitute_key] = True
+                        
+                        value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
+
+                    if value is None or value == '':
+                        continue
+
+                    if not references and unwrap and isinstance(value, list):
+                        for i, val_el in enumerate(value):
+                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
+                            self._add_prperty(type_name, property_key, parent_key_ind, val_el, objects, group=group)
+                    else:
+                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
+                        self._add_prperty(type_name, property_key, parent_key_ind, value, objects, group=group)
         except Exception as e:
             raise Exception("Error in json_to_stix_translator._process_properties: %s" % e)
 
