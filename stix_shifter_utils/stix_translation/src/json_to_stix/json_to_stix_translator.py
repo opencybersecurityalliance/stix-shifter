@@ -83,7 +83,11 @@ class DataSourceObjToStixObj:
         ret_val = obj[ds_key]
 
         if ret_val is not None and transformer is not None:
-            return transformer.transform(ret_val)
+            if isinstance(ret_val, list) or isinstance(ret_val, dict):
+                if ret_val:
+                    return transformer.transform(ret_val)
+            else:
+                return transformer.transform(ret_val)
         return ret_val
 
     @staticmethod
