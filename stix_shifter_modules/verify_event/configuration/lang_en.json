@@ -58,11 +58,11 @@
         "auth": {
             "clientId": {
                 "label": "Client Id",
-                "description": "Client ID of Verify"
+                "description": "Client ID for IBM Security Verify"
             },
             "clientSecret": {
                 "label": "Client Secret",
-                "description": "Client secret of OneLogin"
+                "description": "Client secret for IBM Security Verify"
             }
         },
         "name": {
