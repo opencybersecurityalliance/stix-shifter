@@ -259,7 +259,6 @@ class TestTransform(object):
                 "dest_ip": dest_ip, "dest_port": dest_port, "src_ip": src_ip,
                 "src_port": src_port, "protocol": transport
                 }
-        print(data)
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
 
