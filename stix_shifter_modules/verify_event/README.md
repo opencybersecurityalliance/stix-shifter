@@ -1,6 +1,7 @@
-# Verify
+# IBM Security Verify
 
-This is a connector for searching IBM Verify events. 
+This is a connector for searching IBM Security Verify events. 
+
 ### Prerequisite
 install IBMSecurity app mentioned in requirement.txt
 pip install -r requirements.txt
@@ -91,18 +92,18 @@ STIX Results:
                    "sourcetype": "clouddirectory",
                    "realm": "cloudIdentityRealm",
                    "devicetype": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36",
-                   "target": "https://third-party-risk-poc.dev.verify.ibmcloudsecurity.com/oidc/endpoint/default/authorize?qsId=2919eda7-e114-48b3-b18c-3ed58914b157&client_id=usc-client",
+                   "target": "https://<Host Name>/oidc/endpoint/default/authorize?qsId=2919eda7-e114-48b3-b18c-3ed58914b157&client_id=usc-client",
                    "username": "<username>",
                    "year": 2021,
                    "event_type": "authentication",
                    "month": 11,
                    "indexed_at": 1637515371578,
                    "@processing_time": 161,
-                   "tenantid": "f9429492-477f-42ff-9c8d-a4c9876163cb",
-                   "tenantname": "verify.ibmcloudsecurity.com",
+                   "tenantid": <uuid>,
+                   "tenantname": <tenantname>,
                    "correlationid": "",
                    "servicename": "authsvc",
-                   "id": "5cb5d84d-0cee-484f-8040-c5cadc04589b",
+                   "id": <uuid>,
                    "time": 1637515371417,
                    "day": 21
                }
