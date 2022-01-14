@@ -10,7 +10,6 @@
     "ComparisonComparators.Like": "LIKE",
     "ComparisonComparators.In": "IN",
     "ComparisonComparators.Matches": "LIKE",
-    "ComparisonComparators.IsSubSet": "",
     "ObservationOperators.Or": "OR",
     "ObservationOperators.And": "OR"
 }
