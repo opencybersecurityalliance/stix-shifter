@@ -439,3 +439,17 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE INOFFENSE('125') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_unmapped_operator_in_combined_comparison(self):
+        stix_pattern = "[ipv4-addr:value ISSUPERSET '127.0.0.1/24' OR ipv4-addr:value ISSUBSET '127.0.0.1/24']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE (INCIDR('127.0.0.1/24',sourceip) OR INCIDR('127.0.0.1/24',destinationip) OR INCIDR('127.0.0.1/24',identityip)) {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+    
+    def test_unmapped_operators_error(self):
+        stix_pattern = "[ipv4-addr:value ISSUPERSET '127.0.0.1/24']"
+        query = _translate_query(stix_pattern)
+        assert query['success'] == False
+        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
+        assert "data mapping error : Unable to map the following STIX objects and properties: " \
+            "['ipv4-addr:value'] or Operators: [IsSuperSet] to data source fields" in query['error']

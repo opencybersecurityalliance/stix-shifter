@@ -1,8 +1,5 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import StartStopQualifier, ObservationExpression, \
-    ComparisonExpression, Pattern, CombinedComparisonExpression, CombinedObservationExpression, \
-    ComparisonComparators,  ComparisonExpressionOperators, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
-import json
+    ComparisonExpression, Pattern, CombinedComparisonExpression, CombinedObservationExpression
 
 class UnmappedAttributeStripper:
 
