@@ -391,7 +391,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_x_ibm_host_search(self):
         stix_pattern = "[x-oca-asset:hostname = 'abcd']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE identityhostname = 'abcd' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (identityhostname = 'abcd' OR MachineId = 'abcd') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
         stix_pattern = "[x-oca-asset:ip_refs[*].value = '9.9.9.9']"
