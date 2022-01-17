@@ -40,13 +40,20 @@ def fill_connectors(projects, modules_path):
         if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
             projects['stix_shifter_modules_' + module] = ['stix_shifter_modules/' + module]
 
+def fill_connectors_mode3(projects, modules_path):
+    modules = [name for name in os.listdir(modules_path)
+               if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')))]
+    for module in modules:
+        if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
+            projects['stix_shifter_modules'].append('stix_shifter_modules/' + module)
+
 # The mode determines how the stix-shifter is packaged
 # 1 = Include everything in 1 whl package
 # 3 - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
 # N - stix-shifter, stix-shifter-utils, and each connector is packaged separately
 # <module name> - package only the specified connector
 
-mode = 'N'
+mode = '3'
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
 
@@ -67,8 +74,9 @@ elif mode == '3':
     projects = {
         "stix_shifter_utils": ["stix_shifter_utils"],
         "stix_shifter": ["stix_shifter"],
-        "stix_shifter_modules": ["stix_shifter_modules"],
+        "stix_shifter_modules": [],
     }
+    fill_connectors_mode3(projects, "stix_shifter_modules")
 elif mode == 'N':
     projects = {
         "stix_shifter_utils": ["stix_shifter_utils"],
@@ -88,7 +96,7 @@ else:
 
 for project_name in projects.keys():
     cleanup_file_list = []
-    temp_dir = None
+    temp_dir_list = []
     module_dir = None
 
     src_folders = projects[project_name]
@@ -210,6 +218,7 @@ for project_name in projects.keys():
             with open(os.path.join(conf_path, 'dialects.json'), 'w', encoding="utf-8") as f:
                 f.write(json.dumps(dialects_full, indent=4, sort_keys=False))
             temp_dir = tempfile.TemporaryDirectory()
+            temp_dir_list.append([temp_dir, module_dir])
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)
             cleanup_file_list.append(configuration_path)
@@ -248,8 +257,9 @@ for project_name in projects.keys():
                 shutil.rmtree(cleanup_file)
             else:
                 os.remove(cleanup_file)
-    if temp_dir is not None:
-        shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
-        temp_dir = None
+    for temp_dir, module_dir in temp_dir_list:
+        if temp_dir is not None:
+            shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
+            temp_dir.cleanup()
     print('---------------------------------')
 shutil.rmtree(TMP_MAPPING_DIR)
