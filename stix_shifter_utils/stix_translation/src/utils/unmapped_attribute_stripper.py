@@ -60,9 +60,12 @@ class UnmappedAttributeStripper:
         comparator_lookup = self.dmm.map_comparator()
         comparator = comparator_lookup.get(str(root.comparator))
         
-        if not mapped_fields_array or not comparator:
+        if not mapped_fields_array:
             self.unmapped_attributes.append(root.object_path)
+        if not comparator:
             self.unmapped_operator.append(root.comparator)
+        
+        if not mapped_fields_array or not comparator:
             return "delete"
         else:
             return root

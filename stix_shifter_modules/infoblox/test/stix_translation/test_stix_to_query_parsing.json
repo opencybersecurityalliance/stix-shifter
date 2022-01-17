@@ -455,17 +455,17 @@
             "tideDbData": {
                 "success": false,
                 "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['domain-name:value'] or Operators: [NotEqual] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
             },
             "dnsEventData": {
                 "success": false,
                 "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['domain-name:value'] or Operators: [NotEqual] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
             },
             "dossierData": {
                 "success": false,
                 "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['domain-name:value'] or Operators: [NotEqual] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
             }
         }
     },
@@ -557,11 +557,11 @@
             },
             "dnsEventData": {
                 "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['ipv4-addr:value'] or Operators: [Like] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
             },
             "dossierData": {
                 "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['ipv4-addr:value'] or Operators: [Like] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
             }
         }
     },
@@ -636,11 +636,11 @@
             },
             "dnsEventData": {
                 "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['domain-name:value'] or Operators: [Like] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
             },
             "dossierData": {
                 "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties: ['domain-name:value'] or Operators: [Like] to data source fields"
+                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
             }
         }
     },
@@ -1134,8 +1134,7 @@
                 "error": "data mapping error : Unable to map the following STIX objects and properties to data source fields: [['network-traffic:src_ref.value']]"
             },
             "dnsEventData": {
-                "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX objects and properties to data source fields: []"
+                "queries": []
             },
             "dossierData": {
                 "success": false, "code": "mapping_error",

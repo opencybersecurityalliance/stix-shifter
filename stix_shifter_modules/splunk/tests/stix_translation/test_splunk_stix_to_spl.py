@@ -127,7 +127,7 @@ class TestStixToSpl(unittest.TestCase, object):
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
         assert "data mapping error : Unable to map the following STIX objects and properties: " \
-            "['unmapped:attribute'] or Operators: [Equal] to data source fields" in result['error']
+            "['unmapped:attribute'] to data source fields" in result['error']
 
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"

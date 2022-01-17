@@ -16,6 +16,8 @@ MAPPING = 'mapping'
 DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
+OPERATOR_MAPPING_ERROR = "Unable to map the following STIX Operators:"
+ATTRIBUTE_MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
 DEFAULT_DIALECT = 'default'
 
 
@@ -104,9 +106,18 @@ class StixTranslation:
                     unmapped_stix_collection = list(set(unmapped_stix_collection))
                     unmapped_operator_collection = list(set(unmapped_operator_collection))
                     if not queries:
-                        raise DataMappingException(
-                            "{} {} or Operators: {} to data source fields".format(MAPPING_ERROR, unmapped_stix_collection, unmapped_operator_collection)
-                        )
+                        if unmapped_stix_collection and unmapped_operator_collection:
+                            raise DataMappingException(
+                                "{} {} and Operators: {} to data source fields".format(MAPPING_ERROR, unmapped_stix_collection, unmapped_operator_collection)
+                            )
+                        elif unmapped_stix_collection:
+                            raise DataMappingException(
+                                "{} {} to data source fields".format(ATTRIBUTE_MAPPING_ERROR, unmapped_stix_collection)
+                            )
+                        elif unmapped_operator_collection:
+                            raise DataMappingException(
+                                "{} {} to data source fields".format(OPERATOR_MAPPING_ERROR, unmapped_operator_collection)
+                            )
                     return {'queries': queries}
                 else:
                     return entry_point.parse_query(data)

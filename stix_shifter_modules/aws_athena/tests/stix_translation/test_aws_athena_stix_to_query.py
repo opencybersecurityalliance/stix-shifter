@@ -238,4 +238,4 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('aws_athena', 'query', '{}', stix_pattern)
         assert query['success'] is False
         assert query['code'] == 'mapping_error'
-        assert query['error'] == "data mapping error : Unable to map the following STIX objects and properties: ['ipv4-addr:value'] or Operators: [IsSuperSet] to data source fields"
+        assert query['error'] == "data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"

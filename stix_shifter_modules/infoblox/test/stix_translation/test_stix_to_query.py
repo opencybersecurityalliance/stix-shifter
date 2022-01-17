@@ -83,6 +83,8 @@ class TestStixParsing(unittest.TestCase, TestStixParsingMixin):
                     if 'success' in result:
                         self.assertEqual(result.get('code'), expected.get('code'), "dialect={}, full result={}".format(dialect, result))
                     else:
+                        print('>>>>>>' + str(expected))
+                        print('??????' + str(result))
                         self.assertEqual(result, expected, "dialect={}, full result={}".format(dialect, result))
         with self.subTest(msg="unique pattern tester", total_patterns=len(patterns)):
             duplicates = set([x for x in patterns if patterns.count(x) > 1])
