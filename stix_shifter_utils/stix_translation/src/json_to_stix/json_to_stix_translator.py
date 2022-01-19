@@ -137,7 +137,7 @@ class DataSourceObjToStixObj:
     def _get_tag_ind(self, tag, object_tag_ref_map, create_on_absence=False, unwrap=False, property_key=None):
         tag_ind = None
         if unwrap:
-            tag = tag + '_' + unwrap
+            tag = tag + '_' + str(unwrap)
 
         if tag in object_tag_ref_map['tags']:
             tag_ind = object_tag_ref_map['tags'][tag]['i']
@@ -251,7 +251,7 @@ class DataSourceObjToStixObj:
                         continue
 
                     if object_key_ind:
-                        parent_key = parent_key + '_' + object_key_ind
+                        parent_key = parent_key + '_' + str(object_key_ind)
 
                     # use the hard-coded value in the mapping
                     if 'value' in prop:
