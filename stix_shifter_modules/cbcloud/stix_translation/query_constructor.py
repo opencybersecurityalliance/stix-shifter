@@ -14,24 +14,10 @@ logger = logging.getLogger(__name__)
 class CbCloudQueryStringPatternTranslator:
     """Carbon Black Cloud STIX to query string pattern translator."""
 
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: 'AND',
-        ComparisonExpressionOperators.Or: 'OR',
-        ComparisonComparators.Equal: ':',
-        ComparisonComparators.NotEqual: ':',
-        ComparisonComparators.GreaterThan: ':',
-        ComparisonComparators.GreaterThanOrEqual: ':',
-        ComparisonComparators.LessThan: ':',
-        ComparisonComparators.LessThanOrEqual: ':',
-        ComparisonComparators.In: ':',
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'AND'
-    }
-
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         """CbCloudQueryStringPatternTranslator constructor."""
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.time_range = time_range  # filter results to the last x minutes
         self.queries = self.parse_expression(pattern)
@@ -173,7 +159,7 @@ class CbCloudQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
 
             # Some values are formatted differently based on how they're being compared
             if (expression.comparator == ComparisonComparators.Equal or
@@ -218,13 +204,13 @@ class CbCloudQueryStringPatternTranslator:
             # Wrap nested combined comparison expressions in parentheses
             fmt1 = "({})" if isinstance(expression.expr2, CombinedComparisonExpression) else "{}"
             fmt2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
 
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
             query_string = (fmt1 + " {} " + fmt2).format(
                 self._parse_expression(expression.expr2),
-                self.comparator_lookup[expression.operator],
+                self.comparator_lookup[str(expression.operator)],
                 self._parse_expression(expression.expr1)
             )
 
@@ -243,7 +229,7 @@ class CbCloudQueryStringPatternTranslator:
 
         elif isinstance(expression, CombinedObservationExpression):
             # A combined observation can consist of observations containing a qualifier
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
             return f'({expr1}) {operator} ({expr2})'

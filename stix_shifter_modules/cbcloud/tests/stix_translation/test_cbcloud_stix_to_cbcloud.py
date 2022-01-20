@@ -58,7 +58,7 @@ class TestQueryTranslator(unittest.TestCase):
 
         assert query['success'] == False
         assert query['code'] == "mapping_error"
-        assert query['error'] == "data mapping error : Unable to map the following STIX objects and properties to data source fields: [['obj_unmp:unmapped']]"
+        assert query['error'] == "data mapping error : Unable to map the following STIX objects and properties: ['obj_unmp:unmapped'] to data source fields"
 
     def test_unmapped_attribute_handling(self):
         test_options = {"time_range": None} 
