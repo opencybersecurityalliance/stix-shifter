@@ -1,0 +1,17 @@
+{
+    "ComparisonComparators.GreaterThan": ">",
+    "ComparisonComparators.GreaterThanOrEqual": ">=",
+    "ComparisonComparators.LessThan": "<",
+    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ComparisonComparators.Equal": "=",
+    "ComparisonComparators.NotEqual": "!=",
+    "ComparisonComparators.Like": "encoders.like",
+    "ComparisonComparators.In": "encoders.set",
+    "ComparisonComparators.Matches": "encoders.matches",
+    "ComparisonExpressionOperators.And": "AND",
+    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonComparators.IsSubSet": "=",
+    "ObservationOperators.And": "{expr1} OR {expr2}",
+    "ObservationOperators.Or": "{expr1} OR {expr2}",
+    "ObservationOperators.FollowedBy": "latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1}"
+}
