@@ -22,12 +22,6 @@
   "ip":[{
     "key": "ipv4-addr.value",
     "object": "ipdata"
-  },
-  {
-    "key": "x-oca-event.ip_ref",
-    "object": "ocaevent",
-    "references": ["ipdata"],
-    "group":true
   }
 ],
   "tenantname" :[
@@ -43,23 +37,30 @@
    
   }
 ],
-  "result": {
+  "result": [ 
+    {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.result"
-  },
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.result"
+    },
+    {
+      "object": "ocaevent",
+      "key": "x-oca-event.extensions.outcome"
+    } 
+  ], 
+  
   "subtype": 
     {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.subcategory"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.subcategory"
   },
   "subject": {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.subject"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.subject"
   },
  
   "cause": {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.cause"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.cause"
   },
 
   "action": [
@@ -70,28 +71,28 @@
 ],
   "realm": {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.realm"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.realm"
   },
   "devicetype": {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.browser_agent"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.browser_agent"
   },
   "applicationid" :{
     "object":"ocaevent",
-    "key":"x-oca-event.extenstions.iam-ext.application_id"
+    "key":"x-oca-event.extensions.x-ibm-iam-ext.application_id"
   },
   "applicationtype" :{
     "object":"ocaevent",
-    "key":"x-oca-event.extenstions.iam-ext.application_type"
+    "key":"x-oca-event.extensions.x-ibm-iam-ext.application_type"
   },
   "applicationname":{
     "object":"ocaevent",
-    "key":"x-oca-event.extenstions.iam-ext.applicationname"
+    "key":"x-oca-event.extensions.x-ibm-iam-ext.applicationname"
   },
 
   "target": {
     "object": "ocaevent",
-    "key": "x-oca-event.extenstions.iam-ext.target"
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.target"
   },
   "event_type" :[
   {
@@ -109,67 +110,73 @@
 ],
 "performedby_username" :
   {
-    "key": "x-oca-event.extenstions.iam-ext.username",
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.username",
     "object": "ocaevent"
   },
 "messageid" :{
-  "key":"x-oca-event.extenstions.iam-ext.messageid",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.messageid",
   "object":"ocaevent"
 },
 "deleted" :{
-  "key":"x-oca-event.extenstions.iam-ext.deleted",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.deleted",
   "object":"ocaevent"
 },
 "performedby_clientname" :{
-  "key":"x-oca-event.extenstions.iam-ext.performedby_clientname",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.performedby_clientname",
   "object":"ocaevent"
 },
 "performedby_realm" :{
-  "key":"x-oca-event.extenstions.iam-ext.performedby_realm",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.performedby_realm",
   "object" :"ocaevent"
 },
 "resource" :{
-  "key":"x-oca-event.extenstions.iam-ext.resource",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.resource",
   "object" :"ocaevent"
 },
 "targetid" :{
-  "key":"x-oca-event.extenstions.iam-ext.targetid",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.targetid",
   "object":"ocaevent"
 },
 "targetid_realm" :{
-  "key":"x-oca-event.extenstions.iam-ext.targetid_realm",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.targetid_realm",
   "object":"ocaevent"
 },
 "targetid_username" :{
-  "key":"x-oca-event.extenstions.iam-ext.taregetid_username",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.taregetid_username",
   "object":"ocaevent"
 },
 "userinfo_lookup" :{
-  "key" :"x-oca-event.extenstions.iam-ext.userinfo_lookup",
+  "key" :"x-oca-event.extensions.x-ibm-iam-ext.userinfo_lookup",
   "object":"ocaevent"
 },
-"userid" :{
-  "key":"x-oca-event.extenstions.iam-ext.user_id",
+"userid" :[
+  {
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.user_id",
   "object":"ocaevent"
 },
+ {
+  "key": "user-account.user_id",
+  "object": "useraccount"
+ }
+],
 "continent_name" : {
-    "key" :"x-oca-event.extenstions.iam-ext.continent_name",
+    "key" :"x-oca-event.extensions.x-ibm-iam-ext.continent_name",
     "object":"ocaevent"
   },
   "city_name" : {
-    "key" :"x-oca-event.extenstions.iam-ext.city_name",
+    "key" :"x-oca-event.extensions.x-ibm-iam-ext.city_name",
     "object":"ocaevent"
   },
   "country_iso_code" : {
-    "key" :"x-oca-event.extenstions.iam-ext.country_iso_code",
+    "key" :"x-oca-event.extensions.x-ibm-iam-ext.country_iso_code",
     "object":"ocaevent"
   },
   "country_name" : {
-    "key" :"x-oca-event.extenstions.iam-ext.country_name",
+    "key" :"x-oca-event.extensions.x-ibm-iam-ext.country_name",
     "object":"ocaevent"
   },
   "region_name" : {
-    "key" :"x-oca-event.extenstions.iam-ext.region_name",
+    "key" :"x-oca-event.extensions.x-ibm-iam-ext.region_name",
     "object":"ocaevent"
   },
   "provider" : {
@@ -177,11 +184,8 @@
     "object":"ocaevent"
   },
   "providerid" :{
-    "key":"x-oca-event.extenstions.iam-ext.provider_id",
+    "key":"x-oca-event.extensions.x-ibm-iam-ext.provider_id",
     "object":"ocaevent"
-  } ,
- "providerurl": {
-   "key":"x-oca-event.extenstions.iam-ext.providerurl",
-   "object":"ocaevent"
- }
+  } 
+ 
 }

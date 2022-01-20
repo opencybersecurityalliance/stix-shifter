@@ -23,12 +23,13 @@ class EntryPoint(BaseEntryPoint):
             auth = configuration.get("auth")
             host = connection.get("host")
             api_client = APIClient(connection, configuration)
+            base_sync_connector = BaseSyncConnector()
             ping_connector = PingConnector(api_client)
-            query_connector = QueryConnector(api_client)
+            query_connector = base_sync_connector
             status_connector = StatusConnector(api_client)
             results_connector = ResultsConnector(api_client)
             delete_connector = DeleteConnector(api_client)
-            base_sync_connector = BaseSyncConnector()
+            
 
 
             self.set_ping_connector(ping_connector)

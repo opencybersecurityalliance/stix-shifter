@@ -121,7 +121,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Onelogin connector".format(expression_operator.name))
+            raise NotImplementedError("Comparison operator {} unsupported for verify connector".format(expression_operator.name))
         return self.comparator_lookup[expression_operator]
 
     @classmethod
@@ -170,6 +170,7 @@ class QueryStringPatternTranslator:
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
+
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):

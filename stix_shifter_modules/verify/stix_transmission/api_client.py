@@ -1,4 +1,6 @@
 import json
+
+from requests.adapters import Response
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from datetime import datetime, timedelta
 import requests
@@ -100,7 +102,7 @@ class APIClient:
             response['search_after'] = response.get("data")['response']['events']['search_after']
 
             try:
-               response['data'] = self.parseJson(response.get("data")['response']['events']['events'])
+               response['event_data'] = self.parseJson(response.get("data")['response']['events']['events'])
             except KeyError:
                 self.logger.debug('events data not found in respose object',response)
                 response['event_data'] = []
@@ -160,7 +162,7 @@ class APIClient:
         # Sends a GET request to
         # https://<server_ip>//<search_id>
         # response object body should contain information pertaining to search.
-        
+        #https://isrras.ice.ibmcloud.com/v1.0/events?event_type="sso"&size=10&after="1640104162523","eeb40fd5-6b84-4dc9-9251-3f7a4cfd91c0"
         headers = dict()
         headers['Accept'] = response_type
         size = 1000
@@ -171,3 +173,12 @@ class APIClient:
         endpoint = self.endpoint_start+ request_param
 
         return self.run_search(search_id)   
+
+    def get_search(self, search_id):
+        # Sends a GET request to
+        # https://<server_ip>/api/ariel/searches/<search_id>
+        response = self.run_search(search_id)
+        return response
+        
+    def delete_search(self,search_id):
+        return self.run_search(search_id)

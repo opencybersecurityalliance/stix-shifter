@@ -1,7 +1,6 @@
-# IBM Security Verify
+# Verify
 
-This is a connector for searching IBM Security Verify events. 
-
+This is a connector for searching IBM Verify events. 
 ### Prerequisite
 install IBMSecurity app mentioned in requirement.txt
 pip install -r requirements.txt
@@ -16,15 +15,14 @@ Note the STIX identity object is only used when translating data source results 
 
 This example input pattern for TRANSLATE:
 
-'
-    python main.py translate verify_event query "{}" "[x-oca-event:category='sso']"
+'python main.py translate verify_event query '{}' "[event_type:value='authentication']" '{"validate_pattern": "true"}'
 '
 Returns the following search query:
 
 ```
 {
    "queries": [
-        "event_type=\"sso\"&limit=10000"
+        "event_type=authentication&limit=10000"
     ]
 }
 ```
@@ -55,7 +53,7 @@ If connection establish returns the following response:
 Uses the data source API to fetch the query results based on the search ID, offset, and length.
 
 CLI Command example:
-'{ "host": "<Host Name>" }' '{ "auth": { "clientId": "<client-Id", "clientSecret": "<token>"}}' results "event_type=\"sso\"&limit=10000" 0 10
+'{ "host": "<Host Name>" }' '{ "auth": { "clientId": "<client-Id", "clientSecret": "<token>"}}' results "event_type=\"authentication\"&limit=10000" 0 10
 ```
 Returns following result
 ```
@@ -81,29 +79,29 @@ STIX Results:
                    "type": "x-verify",
                    "continent_name": "Europe",
                    "country_iso_code": "PL",
-                   "ip": "<ipadd>",
+                   "ip": "78.8.181.53",
                    "country_name": "Poland",
                    "result": "success",
                    "subtype": "user_password",
                    "subject": "609000ALKP",
-                   "origin": "<ipadd>",
+                   "origin": "78.8.181.53",
                    "cause": "Authentication Successful",
                    "action": "login",
                    "sourcetype": "clouddirectory",
                    "realm": "cloudIdentityRealm",
                    "devicetype": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36",
-                   "target": "https://<Host Name>/oidc/endpoint/default/authorize?qsId=2919eda7-e114-48b3-b18c-3ed58914b157&client_id=usc-client",
-                   "username": "<username>",
+                   "target": "https://third-party-risk-poc.dev.verify.ibmcloudsecurity.com/oidc/endpoint/default/authorize?qsId=2919eda7-e114-48b3-b18c-3ed58914b157&client_id=usc-client",
+                   "username": "eugene.nicholson.naveen@ibm.com",
                    "year": 2021,
                    "event_type": "authentication",
                    "month": 11,
                    "indexed_at": 1637515371578,
                    "@processing_time": 161,
-                   "tenantid": <uuid>,
-                   "tenantname": <tenantname>,
-                   "correlationid": "",
+                   "tenantid": "f9429492-477f-42ff-9c8d-a4c9876163cb",
+                   "tenantname": "third-party-risk-poc.dev.verify.ibmcloudsecurity.com",
+                   "correlationid": "CORR_ID-bc9ef2fe-e505-4e38-9b8e-db7bf3a1f6c6",
                    "servicename": "authsvc",
-                   "id": <uuid>,
+                   "id": "5cb5d84d-0cee-484f-8040-c5cadc04589b",
                    "time": 1637515371417,
                    "day": 21
                }
