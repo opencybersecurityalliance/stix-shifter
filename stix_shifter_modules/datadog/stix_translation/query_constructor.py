@@ -16,23 +16,12 @@ REFERENCE_DATA_TYPES = {}
 
 logger = logging.getLogger(__name__)
 
-
 class QueryStringPatternTranslator:
     QUERIES = []
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.Equal: ":",
-        # ComparisonComparators.NotEqual: "-",
-        ComparisonComparators.In: ":",
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -102,10 +91,10 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     @staticmethod
     def join_duplicate_keys(ordered_pairs):
