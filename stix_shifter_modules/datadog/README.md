@@ -192,7 +192,7 @@ Uses the data source API to ping the connection
 
 CLI command example:
 ```
-python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' ping
+python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' ping
 ```
 If connection establish returns the following response:
 ```
@@ -207,7 +207,7 @@ Queries the data source API with the translated query and returns the search id
 
 CLI command example:
 ```
-python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' query "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}"
+python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' query "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}"
 ```
 
 If successful, will return the following response:
@@ -224,7 +224,7 @@ Uses the data source API to fetch the query results based on the search ID, offs
 
 CLI Command example for events dialect:
 ```
-python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}" <OFFSET> <LENGTH>
+python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"tags\": \"account\", \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"events\"}" <OFFSET> <LENGTH>
 ```
 Returns following result
 ```json
@@ -252,7 +252,7 @@ Returns following result
 
 CLI Command example for processes dialect:
 ```
-python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"pid\": 92, \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"processes\"}" <OFFSET> <LENGTH>
+python3 main.py transmit datadog '{"site_url": <site_url>, "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' results "{\"query\": {\"pid\": 92, \"start\": 1627207221, \"end\": 1629972021}, \"source\": \"processes\"}" <OFFSET> <LENGTH>
 ```
 Returns following result
 ```json
@@ -285,7 +285,7 @@ defined in the `to_stix_map.json` file.
 
 CLI Command example for events dialect:
 ```
-python3 main.py execute datadog:events datadog:events '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>,  "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[x-datadog-event:tags = 'account'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
+python3 main.py execute datadog:events datadog:events '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>,  "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[x-datadog-event:tags = 'account'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
 ```
 
 If successful, will return the following response
@@ -347,7 +347,7 @@ STIX Results:
 
 CLI Command example for processes dialect:
 ```
-python3 main.py execute datadog:processes datadog:processes '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>,  "selfSignedCert": False}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[domain-name:value = 'win10vm4'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
+python3 main.py execute datadog:processes datadog:processes '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "datadog","identity_class": "events"}' {"site_url": <site_url>,  "selfSignedCert": false}' '{ "auth": { "api_key": <api_key>, "application_key": <application_key>}}' "[domain-name:value = 'win10vm4'] START t'2021-09-19T00:00:00.000Z' STOP t'2021-09-24T00:00:00.000Z'"
 ```
 
 If successful, will return the following response
