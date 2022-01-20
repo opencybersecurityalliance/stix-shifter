@@ -186,6 +186,26 @@
   "providerid" :{
     "key":"x-oca-event.extensions.x-ibm-iam-ext.provider_id",
     "object":"ocaevent"
-  } 
+  },
+  "decision_decisionCode" :{
+    "object":"ocaevent",
+    "key":"x-oca-event.extensions.x-ibm-iam-ext.decision_decisionCode"
+  },
+  "rule_name" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-ibm-iam-ext.rule_name"
+    },
+  "policy_name" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-ibm-iam-ext.policy_name"
+    },
+  "decision_reason" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-ibm-iam-ext.decision_reason"
+    },
+  "policy_action" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-ibm-iam-ext.policy_action"
+    }
  
 }
