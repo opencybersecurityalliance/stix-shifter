@@ -1,12 +1,32 @@
+import os
+import subprocess
+import sys
+
+if sys.version_info.major == 3 and sys.version_info.minor > 5:
+    # good
+    print(sys.version)
+else:
+    print("Error: stix-shifter requires python version at least or greater than 3.6")
+    exit(1)
+
+
+from generate_requirements import generate_requirements
+generate_requirements()
+
+subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-dev.txt"])
+
+
+
+if os.getenv('INSTALL_REQUIREMENTS_ONLY', None) == '1':
+    exit(0)
+
+
 from setuptools import find_packages
 # To use a consistent encoding
 from codecs import open
-import sys
 import shutil
-import subprocess
 import json
 import io
-import os
 from jsonmerge import merge
 import tempfile
 import importlib
@@ -40,20 +60,13 @@ def fill_connectors(projects, modules_path):
         if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
             projects['stix_shifter_modules_' + module] = ['stix_shifter_modules/' + module]
 
-def fill_connectors_mode3(projects, modules_path):
-    modules = [name for name in os.listdir(modules_path)
-               if (os.path.isdir(os.path.join(modules_path, name)) and (not name.startswith('__')))]
-    for module in modules:
-        if not os.path.isfile(os.path.join(modules_path, module, SKIP_ME)):
-            projects['stix_shifter_modules'].append('stix_shifter_modules/' + module)
-
 # The mode determines how the stix-shifter is packaged
 # 1 = Include everything in 1 whl package
 # 3 - 3 whl packages respectively for stix-shifter, stix-shifter-utils and stix-shifter-modules
 # N - stix-shifter, stix-shifter-utils, and each connector is packaged separately
 # <module name> - package only the specified connector
 
-mode = '3'
+mode = 'N'
 if 'MODE' in os.environ:
     mode = os.environ['MODE']
 
@@ -70,13 +83,6 @@ if mode == '1':
             'stix_shifter_modules'
             ]
     }
-elif mode == '3':
-    projects = {
-        "stix_shifter_utils": ["stix_shifter_utils"],
-        "stix_shifter": ["stix_shifter"],
-        "stix_shifter_modules": [],
-    }
-    fill_connectors_mode3(projects, "stix_shifter_modules")
 elif mode == 'N':
     projects = {
         "stix_shifter_utils": ["stix_shifter_utils"],
@@ -224,11 +230,12 @@ for project_name in projects.keys():
             cleanup_file_list.append(configuration_path)
 
         # Inject util files 
-        for util_src, util_dest in utils_include_list.items():
-            util_dest = util_dest % module_dir
-            if not shutil.os.path.exists(util_dest):
-                shutil.copyfile(util_src, util_dest)
-                cleanup_file_list.append(util_dest)
+        if mode != "1":
+            for util_src, util_dest in utils_include_list.items():
+                util_dest = util_dest % module_dir
+                if not shutil.os.path.exists(util_dest):
+                    shutil.copyfile(util_src, util_dest)
+                    cleanup_file_list.append(util_dest)
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
