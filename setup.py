@@ -81,12 +81,13 @@ if mode == '1':
             'stix_shifter_utils',
             'stix_shifter',
             'stix_shifter_modules'
-            ]
+        ]
     }
 elif mode == 'N':
     projects = {
         "stix_shifter_utils": ["stix_shifter_utils"],
         "stix_shifter": ["stix_shifter"],
+        "stix_shifter_modules": ["stix_shifter_modules"],
     }
     fill_connectors(projects, "stix_shifter_modules")
 else:
@@ -233,9 +234,12 @@ for project_name in projects.keys():
         if mode != "1":
             for util_src, util_dest in utils_include_list.items():
                 util_dest = util_dest % module_dir
-                if not shutil.os.path.exists(util_dest):
-                    shutil.copyfile(util_src, util_dest)
-                    cleanup_file_list.append(util_dest)
+                if shutil.os.path.exists(util_src) and not shutil.os.path.exists(util_dest):
+                    try: 
+                        shutil.copyfile(util_src, util_dest)
+                        cleanup_file_list.append(util_dest)
+                    except Exception as e:
+                        pass
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
