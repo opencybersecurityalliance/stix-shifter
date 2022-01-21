@@ -1,103 +1,112 @@
 { 
-  "username": [
-    {
-    "key": "user-account.user_name",
-    "object": "useraccount"
-    },
-    {
-      "key": "x-oca-event.user_ref",
-      "object": "ocaevent",
-      "references": "useraccount"
-    }
+"username": [
+  {
+  "key": "user-account.user_id",
+  "object": "useraccount"
+  },
+  {
+    "key": "x-oca-event.user_ref",
+    "object": "ocaevent",
+    "references": "useraccount"
+  },
+  {
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.performedby_username",
+    "object": "ocaevent",
+    "references": "useraccount"
+  }
 ],
 "servicename" :{
   "key":"x-oca-event.module",
   "object":"ocaevent"
+},
+"sourcetype":{
+  "key": "x-oca-event.agent",
+  "object": "ocaevent"
+},
+"ip":[{
+  "key": "ipv4-addr.value",
+  "object": "ipdata"
+},
+{
+  "key": "x-oca-event.ip_refs",
+  "object": "ocaevent",
+  "references": "ipdata"
 }
-  ,
-  "sourcetype":{
-    "key": "x-oca-event.agent",
-    "object": "ocaevent"
-  },
-  "ip":[{
-    "key": "ipv4-addr.value",
-    "object": "ipdata"
-  }
 ],
-  "tenantname" :[
+"tenantname" :[
+{
+  "key": "domain-name.value",
+  "object": "domaindata",
+  "transformer":"ToDomainName"
+},
+{
+  "key": "x-oca-event.domain_ref",
+  "object": "ocaevent",
+  "references" :"domaindata"
+}
+],
+"result": [ 
   {
-    "key": "domain-name.value",
-    "object": "domaindata",
-    "transformer":"ToDomainName"
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.result"
   },
   {
-    "key": "x-oca-event.domain_ref",
     "object": "ocaevent",
-    "references" :"domaindata"
-  }
-],
-  "result": [ 
-    {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.result"
-    },
-    {
-      "object": "ocaevent",
-      "key": "x-oca-event.extensions.outcome"
-    } 
-  ], 
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.outcome"
+  } 
+], 
   
-  "subtype": 
-    {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.subcategory"
-  },
-  "subject": {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.subject"
-  },
- 
-  "cause": {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.cause"
-  },
-
-  "action": [
+"subtype": 
   {
-    "key" :"x-oca-event.action",
-    "object":"ocaevent"
-  }
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.subcategory"
+},
+"subject": {
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.subject"
+},
+
+"cause": {
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.cause"
+},
+
+"action": [
+{
+  "key" :"x-oca-event.action",
+  "object":"ocaevent"
+}
 ],
-  "realm": {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.realm"
-  },
-  "devicetype": {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.browser_agent"
-  },
-  "applicationid" :{
-    "object":"ocaevent",
-    "key":"x-oca-event.extensions.x-ibm-iam-ext.application_id"
-  },
-  "applicationtype" :{
-    "object":"ocaevent",
-    "key":"x-oca-event.extensions.x-ibm-iam-ext.application_type"
-  },
-  "applicationname":{
-    "object":"ocaevent",
-    "key":"x-oca-event.extensions.x-ibm-iam-ext.applicationname"
-  },
+"realm": {
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.realm"
+},
+"devicetype": {
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.browser_agent"
+},
+"applicationid" :{
+  "object":"ocaevent",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.application_id"
+},
+"applicationtype" :{
+  "object":"ocaevent",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.application_type"
+},
+"applicationname":{
+  "object":"ocaevent",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.applicationname"
+},
 
-  "target": {
-    "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.target"
-  },
-  "event_type" :[
-  {
-    "key":"x-oca-event.category",
-    "object":"ocaevent"
-  }
+"target": {
+  "object": "ocaevent",
+  "key": "x-oca-event.extensions.x-ibm-iam-ext.target"
+},
+"event_type" :[
+{
+  "key":"x-oca-event.category",
+  "object":"ocaevent"
+}
 ],
   
 "time" : [
@@ -109,11 +118,11 @@
 ],
 "performedby_username" :
   {
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.username",
+    "key": "x-oca-event.extensions.x-ibm-iam-ext.performedby_username",
     "object": "ocaevent"
   },
 "messageid" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.messageid",
+  "key":"x-oca-event.extensions.x-ibm-iam-ext.message_id",
   "object":"ocaevent"
 },
 "deleted" :{

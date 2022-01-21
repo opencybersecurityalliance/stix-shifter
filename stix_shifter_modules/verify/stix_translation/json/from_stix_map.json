@@ -1,13 +1,12 @@
 
 {
-
   "user-account":{
     "fields": {
-      "'user_id'": ["data.username"],
-      "account_type":["data.sourcetype"]
+      "user_id": ["data.username"],
+      "account_type":["data.sourcetype"],
+      "performedby_username":["data.performedby_username"]
     }
-  },
-  
+  },  
   "ipv4-addr":{
     "fields": {
       "value": ["data.origin"]
@@ -25,10 +24,9 @@
         "category":["event_type"],
         "module":["servicename"],
         "agent" :["data.sourcetype"],
-        "outcome":["data.result"],
         "ip_refs":["ip"],
         "domain_ref.value": ["tenantname"],
-        "user_ref.user_id": ["username"],
+        "user_ref": ["username"],
         "extensions.'x-ibm-iam-ext'.result":["data.result"],
         "extensions.'x-ibm-iam-ext'.subject":["data.subject"],
         "extensions.'x-ibm-iam-ext'.subcategory":["data.subtype"],
@@ -60,7 +58,8 @@
         "extensions.'x-ibm-iam-ext'.'rule_name'":["data.rule_name"],
         "extensions.'x-ibm-iam-ext'.'policy_name'":["data.policy_name"],
         "extensions.'x-ibm-iam-ext'.'decision_reason'":["data.decision_reason"],
-        "extensions.'x-ibm-iam-ext'.'policy_action'":["data.policy_action"]
+        "extensions.'x-ibm-iam-ext'.'policy_action'":["data.policy_action"],
+        "extensions.'x-ibm-iam-ext'.'outcome'":["data.result"]
         }  
       }
     }
