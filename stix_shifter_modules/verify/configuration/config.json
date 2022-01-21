@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security Verify-oca-event",
+            "displayName": "IBM Security Verify",
             "type": "connectorType"
         },
         "host": {
