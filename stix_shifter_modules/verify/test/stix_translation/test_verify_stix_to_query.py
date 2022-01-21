@@ -69,4 +69,4 @@ class TestStixToQuery(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         expected_queries = 'filter_key=tenantname&filter_value="isrras.ice.ibmcloud.com"&size=10000'
         _test_query_assertions(query,expected_queries)
-    
+  
