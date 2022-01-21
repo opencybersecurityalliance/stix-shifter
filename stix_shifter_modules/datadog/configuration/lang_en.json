@@ -7,7 +7,7 @@
         },
         "selfSignedCert": {
             "label": "Datadog Certificate",
-            "placeholder": "Paste your certificate else put 'false'"
+            "placeholder": "Paste your certificate"
         },
         "help": {
             "label": "Need additional help?",

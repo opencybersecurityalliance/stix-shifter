@@ -9,7 +9,7 @@
         },
         "selfSignedCert": {
             "type": "password",
-            "optional": false
+            "optional": true
         },
         "help": {
             "type": "link",
