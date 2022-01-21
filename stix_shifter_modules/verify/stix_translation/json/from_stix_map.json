@@ -52,7 +52,12 @@
         "extensions.'x-ibm-iam-ext'.country_iso_code": ["geoip.country_iso_code"],
         "extensions.'x-ibm-iam-ext'.country_name": ["geoip.country_name"],
         "extensions.'x-ibm-iam-ext'.region_name":["geoip.region_name"],
-        "extensions.'x-ibm-iam-ext'.provider_id":["data.providerid"]
+        "extensions.'x-ibm-iam-ext'.provider_id":["data.providerid"],
+        "extensions.'x-ibm-iam-ext'.'decision_decisionCode'":["data.decision_decisionCode"],
+        "extensions.'x-ibm-iam-ext'.'rule_name'":["data.rule_name"],
+        "extensions.'x-ibm-iam-ext'.'policy_name'":["data.policy_name"],
+        "extensions.'x-ibm-iam-ext'.'decision_reason'":["data.decision_reason"],
+        "extensions.'x-ibm-iam-ext'.'policy_action'":["data.policy_action"]
         }  
       }
     }
