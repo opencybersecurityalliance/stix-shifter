@@ -62,7 +62,7 @@
             },
             "clientSecret": {
                 "label": "Client Secret",
-                "description": "Client secret of OneLogin"
+                "description": "Client secret of Verify"
             }
         },
         "name": {
