@@ -34,7 +34,6 @@
     "key": "x-oca-event.domain_ref",
     "object": "ocaevent",
     "references" :"domaindata"
-   
   }
 ],
   "result": [ 

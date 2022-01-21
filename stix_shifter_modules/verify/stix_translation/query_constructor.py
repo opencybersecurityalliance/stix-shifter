@@ -1,8 +1,10 @@
+from os import stat
 from typing import Union
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 import logging
 import re
 
@@ -129,10 +131,15 @@ class QueryStringPatternTranslator:
         """
         Convert a STIX start stop qualifier into a query string.
         """
+        transformer = TimestampToMilliseconds()
         qualifier_split = qualifier.split("'")
         start = qualifier_split[1]
         stop = qualifier_split[3]
-        qualified_query = "%s&since=%s&until=%s" % (expression, start, stop)
+        # convert timepestamp to millisecond which will be passed to rest service
+        start_epoach = transformer.transform(start);
+        stop_epoach = transformer.transform(stop)
+
+        qualified_query = "%s&from=%s&to=%s" % (expression, start_epoach, stop_epoach)
         return qualified_query
 
     def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
@@ -177,6 +184,7 @@ class QueryStringPatternTranslator:
                 expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "{}".format(expression_02)
+
             query_string = "{}{}{}".format(expression_01, operator, expression_02)
             if qualifier is not None:
                 return self._format_start_stop_qualifier(query_string, qualifier)
@@ -220,8 +228,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     query = query if isinstance(query, list) else [query]
     for each_query in query:
-        base_query = f"{each_query}&limit={result_limit}"
+        base_query = f"{each_query}&size={result_limit}"
         list_final_query.append(base_query)
 
     return list_final_query
-

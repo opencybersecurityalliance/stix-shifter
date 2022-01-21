@@ -43,30 +43,30 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_event_type(self):
         stix_pattern = "[x-oca-event:category='authentication']"
         query = _translate_query(stix_pattern)
-        queries = "event_type=\"authentication\"&limit=10000"
+        queries = "event_type=\"authentication\"&size=10000"
         _test_query_assertions(query, queries)
 
     def test_IPV4_query(self):
         stix_pattern = "[ipv4-addr:value='27.58.174.31']"
         query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=data.origin&filter_value="27.58.174.31"&limit=10000'
+        expected_queries = 'filter_key=data.origin&filter_value="27.58.174.31"&size=10000'
         _test_query_assertions(query, expected_queries)
 
     def test_oca_event_extension(self):
         stix_pattern = "[x-oca-event:extensions.'x-ibm-iam-ext'.user_id='652001LT0R']"
         query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=data.result&filter_value="success"&limit=10000'
+        expected_queries = 'filter_key=data.userid&filter_value="652001LT0R"&size=10000'
         _test_query_assertions(query,expected_queries)
 
-    def test_IPV4_querywith_or_option(self):
-        stix_pattern = "[ipv4-addr:value='27.58.174.31' or ip4-addr:value='18.206.129.95']"
+    def test_event_type_and_fiter(self):
+        stix_pattern = "[x-oca-event:category = 'sso' AND x-oca-event:domain_ref.value = '77.169.74.152']START t'2022-01-17T18:24:00.000Z' STOP t'2022-01-20T18:24:00.000Z' "
         query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=data.origin&filter_value="27.58.174.31"&limit=10000'
+        expected_queries = 'filter_key=tenantname&filter_value="77.169.74.152"&event_type="sso"&from=1642443840000&to=1642703040000&size=10000'
         _test_query_assertions(query, expected_queries)
 
     def test_domain_name_query(self):
         stix_pattern ="[domain-name:value = 'isrras.ice.ibmcloud.com']"
         query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=data.tenantname& filter_value="isrras.ice.ibmcloud.com"'
+        expected_queries = 'filter_key=tenantname&filter_value="isrras.ice.ibmcloud.com"&size=10000'
         _test_query_assertions(query,expected_queries)
     

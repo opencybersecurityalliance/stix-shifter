@@ -78,3 +78,4 @@ virtualenv/
 *.sqlite
 deployment/ibm_cloud_pak_for_security/backup_*
 deployment/ibm_cloud_pak_for_security/bundle
+stix_shifter_modules/verify/stix_translation/json/from_to_stix_1.8.json
