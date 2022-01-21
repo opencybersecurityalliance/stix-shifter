@@ -62,7 +62,7 @@ class APIClient:
         configuration = datadog_api_client.v2.Configuration(host=self.connection["site_url"])
         configuration.api_key["apiKeyAuth"] = self.auth["api_key"]
         configuration.api_key["appKeyAuth"] = self.auth["application_key"]
-        if "selfSignedCert" in connection:
+        if "selfSignedCert" in self.connection:
             configuration.ssl_ca_cert = self.connection["selfSignedCert"]
         else:
             configuration.verify_ssl = False
