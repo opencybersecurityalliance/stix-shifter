@@ -10,7 +10,6 @@
 - [Limitations](#limitations)
 - [Observations](#observations)
 
-
 ### Cybereason API Endpoints
 
    |Connector Method|Cybereason API Endpoint| Method
@@ -1319,7 +1318,5 @@ ping
 
 ### Observations
 - Cybereason doesnt support regex based search. It supports only substring based search . Hence wildcard characters cannot be used for searches using  LIKE or MATCHES operator
-
-
 
 

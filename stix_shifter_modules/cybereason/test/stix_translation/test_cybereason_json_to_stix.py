@@ -915,7 +915,7 @@ class TestCybereasonResultsToStix(unittest.TestCase):
         assert service_obj['type'] == 'x-cybereason-service'
         assert service_obj['machine'] == 'wb-qa-test-sw'
         assert service_obj['start_type'] == 'SERVICE_START_TYPE_DEMAND_START'
-        assert service_obj['file_path'] == 'c:\\windows\\system32\\svchost.exe'
+
 
     def test_macaddress_json_to_stix(self):
         """

@@ -45,20 +45,8 @@
     "fields": {
       "value": [
         "User.emailAddress",
-        "User.adMail"
-      ]
-    }
-  },
-  "autonomous-system": {
-    "fields": {
-      "name": [
-        "Machine.adCompany",
-        "Machine.adOrganization",
-        "Machine.adDepartment",
-        "Machine.adOU"
-      ],
-      "number": [
-        "User.numberOfMachines"
+        "User.adMail",
+        "User.adLogonName"
       ]
     }
   },
@@ -66,7 +54,9 @@
     "fields": {
       "value": [
         "Connection.domainName",
-        "Connection.urlDomains"
+        "Connection.urlDomains",
+        "Machine.domainFqdn",
+        "Machine.adDNSHostName"
       ]
     }
   },
@@ -99,7 +89,8 @@
       ],
       "name": [
 	    "Process.elementDisplayName",
-        "Process.parentProcess"
+        "Process.parentProcess",
+        "Process.execedBy"
       ],
       "creator_user_ref.user_id": [
         "Process.user"
@@ -124,7 +115,6 @@
         "User.elementDisplayName"
       ],
       "account_login": [
-        "User.adLogonName",
         "LogonSession.user",
         "LogonSession.winLogonDetails"
       ],
@@ -163,6 +153,7 @@
         "File.sha256String"
       ],
       "parent_directory_ref.path": [
+        "File.canonizedPath",
         "File.correctedPath",
         "File.path",
         "FileAccessEvent.path",
@@ -173,6 +164,7 @@
   "directory": {
     "fields": {
       "path": [
+        "File.canonizedPath",
         "File.correctedPath",
         "File.path",
         "FileAccessEvent.path",
@@ -192,9 +184,6 @@
   },
   "x-cybereason-file": {
     "fields": {
-      "name": [
-           "File.elementDisplayName"
-         ],
          "company_name": [
            "File.companyName"
          ],
@@ -210,9 +199,6 @@
          ],
          "internal_name": [
            "File.internalName"
-         ],
-         "original_name": [
-           "File.originalFileName"
          ],
          "product_name": [
            "File.productName"
@@ -250,11 +236,6 @@
          "registry_key": [
            "File.autorun"
          ],
-         "path": [
-           "File.canonizedPath",
-           "File.path",
-           "File.correctedPath"
-         ],
          "quarantined_file_version": [
            "File.fileIsQuarantinedVersion"
          ],
@@ -267,26 +248,14 @@
          "owner_machine": [
            "File.ownerMachine"
          ],
-         "hashes.MD5": [
-           "File.md5String"
-         ],
          "mount_point": [
            "File.mount"
          ],
          "mounted_as": [
            "File.mountedAs"
          ],
-         "hashes.SHA1": [
-           "File.sha1String"
-         ],
-         "hashes.SHA256": [
-           "File.sha256String"
-         ],
          "quarantined_action[*]": [
            "File.fileIsQuarantined"
-         ],
-         "size": [
-           "File.size"
          ]
       }
     },
@@ -319,14 +288,8 @@
       "proxies[*]": [
         "LogonSession.proxies"
       ],
-      "user": [
-        "LogonSession.user"
-      ],
       "ip_address": [
         "LogonSession.sourceIp"
-      ],
-      "account_login": [
-        "LogonSession.winLogonDetails"
       ]
     }
   },
@@ -334,7 +297,8 @@
     "fields": {
       "name": [
         "Machine.elementDisplayName",
-        "Machine.adDisplayName"
+        "Machine.adDisplayName",
+        "Machine.adCanonicalName"
       ],
       "os_version": [
         "Machine.osVersionType"
@@ -351,13 +315,6 @@
       "mbr_hash": [
         "Machine.mbrHashString"
       ],
-      "domain_name": [
-        "Machine.domainFqdn",
-        "Machine.adDNSHostName"
-      ],
-      "canonical_name": [
-        "Machine.adCanonicalName"
-      ],
       "hosts_file": [
         "Machine.hostsFile"
       ],
@@ -369,9 +326,6 @@
       ],
       "removable_devices[*]":[
       "Machine.removableDevices"
-      ],
-      "user_id": [
-        "Machine.adSid"
       ],
       "last_communication_with_server": [
         "Machine.timeStampSinceLastConnectionTime"
@@ -394,10 +348,6 @@
     "fields": {
       "execution[*]": [
         "Service.automaticExecution"
-      ],
-      "file": [
-        "Service.binaryFile",
-        "Service.oldBinaryFile"
       ],
       "arguments": [
         "Service.commandLineArguments"
@@ -430,9 +380,6 @@
       ],
       "machine": [
         "Service.ownerMachine"
-      ],
-      "file_path": [
-        "Service.unitFilePath"
       ]
     }
   },
@@ -456,16 +403,6 @@
       "state": [
         "Connection.state"
       ],
-      "address": [
-        "Connection.serverAddress",
-        "Connection.localAddress",
-        "Connection.remoteAddress"
-      ],
-      "port": [
-        "Connection.serverPort",
-        "Connection.localPort",
-        "Connection.remotePort"
-      ],
       "remote_address_type": [
         "Connection.remoteAddressInternalExternalLocal"
       ],
@@ -475,10 +412,6 @@
     "classification_type":[
       "Connection.remoteAddressMaliciousClassificationType"
     ],
-    "domain_name":[
-      "Connection.domainName",
-      "Connection.urlDomains"
-    ],
     "machine": [
       "Connection.ownerMachine",
       "Connection.remoteMachine"
@@ -486,14 +419,6 @@
     "owner_process": [
       "Connection.ownerProcess",
       "Connection.processName"
-    ],
-    "bytes_count":[
-      "Connection.aggregatedReceivedBytesCount",
-      "Connection.receivedBytesCount",
-      "Connection.aggregatedTransmittedBytesCount"
-    ],
-    "protocol": [
-      "Connection.transportProtocol"
     ]
     }
   },
@@ -501,11 +426,6 @@
     "fields": {
       "architecture": [
         "Process.architecture"
-      ],
-      "name":[
-        "Process.elementDisplayName",
-        "Process.execedBy",
-        "Process.parentProcess"
       ],
       "block_listed_domain": [
         "Process.unresolvedQueryFromBlackListDomain"
@@ -518,9 +438,6 @@
       ],
       "thread_id": [
         "Process.tid"
-      ],
-      "process_id": [
-        "Process.applicablePid"
       ],
       "openedFiles[*]": [
         "Process.openedFiles"
@@ -616,9 +533,6 @@
       "unsigned_with_signed_version_modules[*]": [
         "Process.unsignedWithSignedVersionModules"
       ],
-      "user": [
-        "Process.user"
-      ],
       "well_known_port_connection": [
         "Process.wellKnownPortConnections"
       ],
@@ -633,14 +547,6 @@
           "User.domain",
           "User.adAssociatedDomain"
         ],
-        "display_name": [
-          "User.elementDisplayName",
-          "User.adCanonicalName",
-          "User.adDisplayName"
-        ],
-        "logon_name": [
-          "User.adLogonName"
-        ],
         "total_machines": [
           "User.numberOfMachines"
         ],
@@ -650,13 +556,6 @@
         "security_id": [
           "User.sid",
           "User.adSid"
-        ],
-        "email_address": [
-          "User.emailAddress",
-          "User.adMail"
-        ],
-        "is_admin": [
-          "User.isAdmin"
         ],
         "company": [
           "User.adCompany"
@@ -695,9 +594,6 @@
     "fields": {
       "name": [
         "Driver.elementDisplayName"
-      ],
-      "file": [
-        "Driver.file"
       ],
       "service":[
         "Driver.service"
@@ -746,9 +642,6 @@
         "RegistryEvent.registryProcess",
         "FileAccessEvent.ownerProcess"
       ],
-      "file[*]": [
-        "DetectionEvents.file"
-      ],
       "collection_of_machines[*]": [
         "DetectionEvents.machine"
       ],
@@ -767,7 +660,6 @@
         "RegistryEvent.detectionTimesNumber"
       ],
       "time": [
-        "DetectionEvents.firstSeen",
         "RegistryEvent.firstTime",
         "RegistryEvent.timestamp",
         "FileAccessEvent.firstAccessTime"
@@ -783,21 +675,6 @@
       ],
       "operation_type": [
         "RegistryEvent.registryOperationType"
-      ],
-      "path": [
-        "FileAccessEvent.path"
-      ],
-      "process_ref": [
-        "Process.elementDisplayName"
-      ],
-      "created": [
-        "Process.creationTime"
-      ],
-      "parent_process_ref": [
-        "Process.parentProcess"
-      ],
-      "user_ref": [
-        "Process.calculatedUser"
       ]
     }
   }

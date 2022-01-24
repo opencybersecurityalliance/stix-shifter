@@ -216,11 +216,11 @@
       }
     ],
     "imageFile.sha1String": {
-      "key": "file.hashes.SHA-1",
+      "key": "file.hashes.'SHA-1'",
       "object": "file"
     },
     "imageFile.sha256String": {
-      "key": "file.hashes.SHA-256",
+      "key": "file.hashes.'SHA-256'",
       "object": "file"
     },
     "imageFile.md5String": {
@@ -579,7 +579,7 @@
       "object": "process"
     },
     "execedBy": {
-      "key": "process.extensions.x-cybereason-process.execed_by",
+      "key": "process.name",
       "object": "process"
     },
     "connectionsToMaliciousDomain": {
@@ -1057,7 +1057,7 @@
       }
     ],
     "sha1String": {
-      "key": "file.hashes.SHA-1",
+      "key": "file.hashes.'SHA-1'",
       "object": "file"
     },
     "md5String": {
@@ -1065,7 +1065,7 @@
       "object": "file"
     },
     "sha256String": {
-      "key": "file.hashes.SHA-256",
+      "key": "file.hashes.'SHA-256'",
       "object": "file"
     },
     "createdTime": [
@@ -1109,6 +1109,30 @@
         "references": "file_dir"
       }
     ],
+    "canonizedPath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "path": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
     "maliciousClassificationType": {
       "key": "x-cybereason-malops.classification_type",
       "object": "x_cyber_malops"
@@ -1125,12 +1149,10 @@
       "key": "file.extensions.x-cybereason-file-product.product_name",
       "object": "file"
     },
-    "originalFileName": [
-      {
-        "key": "file.extensions.x-cybereason-file.original_name",
-        "object": "file"
-      }
-    ],
+    "originalFileName": {
+      "key": "file.name",
+      "object": "file"
+    },
     "productVersion": {
       "key": "file.extensions.x-cybereason-file-product.product_version",
       "object": "file"
@@ -1330,19 +1352,12 @@
         "references": "user"
       }
     ],
-    "adLogonName": [
-      {
-        "key": "email-addr.value",
-        "object": "user_email"
-      },
-      {
-        "key": "email-addr.belongs_to_ref",
-        "object": "user_email",
-        "references": "user"
-      }
-    ],
+    "adLogonName": {
+      "key": "email-addr.value",
+      "object": "user_email"
+    },
     "isAdmin": {
-      "key": "user-account.extensions.x-cybereason-user.is_admin",
+      "key": "user-account.is_privileged",
       "object": "user"
     },
     "adCreated": [
@@ -1405,27 +1420,14 @@
         "references": "user_domain"
       }
     ],
-    "emailAddress": [
-      {
-        "key": "user-account.extensions.x-cybereason-user.email_address",
-        "object": "user"
-      },
-      {
+    "emailAddress": {
         "key": "email-addr.value",
         "object": "user_email"
-      }
-    ],
-    "numberOfMachines": [
-      {
+      },
+    "numberOfMachines": {
       "key": "user-account.extensions.x-cybereason-user.total_machines",
       "object": "user"
-      },
-      {
-        "key": "autonomous-system.number",
-        "object": "user-as",
-        "references": "ToInteger"
-      }
-    ],
+    },
     "passwordAgeDays": {
       "key": "user-account.extensions.x-cybereason-user.password_age_days",
       "object": "user"
@@ -1442,16 +1444,10 @@
       "key": "x-oca-asset.host_name",
       "object": "asset"
     },
-    "adMail": [
-      {
-        "key": "user-account.extensions.x-cybereason-user.mail",
-        "object": "user"
-      },
-      {
-        "key": "email-addr.value",
-        "object": "user_email"
-      }
-    ],
+    "adMail": {
+      "key": "email-addr.value",
+      "object": "user_email"
+    },
     "adMemberOf": {
       "key": "user-account.extensions.x-cybereason-user.member_of",
       "object": "user"
@@ -1639,6 +1635,10 @@
         "references": "user"
       }
     ],
+    "file": {
+      "key": "file.name",
+      "object": "file"
+    },
     "process.creationTime": {
       "key": "process.created",
       "object": "process",
@@ -1657,8 +1657,9 @@
       "object": "event"
     },
     "firstSeen": {
-      "key": "x-oca-event.first_seen",
-      "object": "event"
+      "key": "process.created",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
     },
     "ownerMachine": {
       "key": "x-oca-asset.name",
@@ -1813,6 +1814,17 @@
         "references": "file"
       }
     ],
+    "oldBinaryFile": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-cybereason-service.file_ref",
+        "object": "x_cyber_service",
+        "references": "file"
+      }
+    ],
     "ownerMachine": {
       "key": "x-cybereason-service.machine",
       "object": "x_cyber_service"
@@ -1848,8 +1860,9 @@
     },
     "unitFilePath": [
       {
-        "key": "x-cybereason-service.file_path",
-        "object": "x_cyber_service"
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
       },
       {
         "key": "file.parent_directory_ref",
@@ -2001,16 +2014,10 @@
       "key": "x-oca-asset.os_type",
       "object": "asset"
     },
-    "domainFqdn": [
-      {
-        "key": "domain-name.value",
-        "object": "machine_domain"
-      },
-      {
-        "key": "x-oca-asset.domain_name",
-        "object": "asset"
-      }
-    ],
+    "domainFqdn": {
+      "key": "domain-name.value",
+      "object": "machine_domain"
+    },
     "ownerOrganization": {
       "key": "x-oca-asset.owner_organization",
       "object": "asset"
@@ -2019,60 +2026,36 @@
       "key": "x-oca-asset.pylum_id",
       "object": "asset"
     },
-    "adSid": [
-      {
+    "adSid": {
         "key": "user-account.user_id",
         "object": "user-machine"
-      },
-      {
-        "key": "x-oca-asset.ad_sid",
-        "object": "asset"
-      }
-    ],
-    "adOU": [
-      {
-        "key": "autonomous-system.name",
-        "object": "machine_as"
-      },
-      {
-        "key": "x-oca-asset.ad_ou",
-        "object": "asset"
-      }
-    ],
-    "adOrganization": [
-      {
-        "key": "autonomous-system.name",
-        "object": "machine_as"
-      },
-      {
-        "key": "x-oca-asset.ad_organization",
-        "object": "asset"
-      }
-    ],
-    "adCanonicalName": {
-      "key": "x-oca-asset.canonical_name",
+    },
+    "adOU": {
+      "key": "x-oca-asset.ad_ou",
       "object": "asset"
     },
-    "adCompany": [
-      {
+    "adOrganization": {
+      "key": "x-oca-asset.ad_organization",
+      "object": "asset"
+    },
+    "adCanonicalName": {
+      "key": "x-oca-asset.name",
+      "object": "asset"
+    },
+    "adCompany": {
         "key": "x-oca-asset.ad_company",
         "object": "asset"
-      },
-      {
-        "key": "autonomous-system.name",
-        "object": "machine_as"
-      }
-    ],
+    },
     "adDNSHostName": {
-      "key": "x-oca-asset.domain_name",
-      "object": "asset"
+      "key": "domain-name.value",
+      "object": "machine_domain"
     },
     "adDepartment": {
       "key": "x-oca-asset.department",
       "object": "asset"
     },
     "adDisplayName": {
-      "key": "x-oca-asset.display_name",
+      "key": "x-oca-asset.name",
       "object": "asset"
     },
     "adLocation": {
@@ -2127,11 +2110,6 @@
       "key": "x-cybereason-malops.is_isolated",
       "object": "x_cyber_malops"
     },
-    "lastSeenTimeStamp": {
-      "key": "x-oca-asset.last_seen_time_stamp",
-      "object": "asset",
-      "transformer": "EpochToTimestamp"
-    },
     "timeStampSinceLastConnectionTime": {
       "key": "x-oca-asset.last_communication_with_server",
       "object": "asset"
@@ -2177,9 +2155,9 @@
         "references": "src_ip"
       }
     ],
-    "user": [
+    "user":[
       {
-        "key": "user-account.user_id",
+        "key": "user-account.account_login",
         "object": "user"
       },
       {
