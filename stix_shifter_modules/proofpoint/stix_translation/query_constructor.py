@@ -143,11 +143,11 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                qualifier = self._parse_time_range(qualifier)
+                self.qualifier_string = self._parse_time_range(qualifier)
                 if comparison_string:
-                    return "{}{}{}".format(comparison_string, param_delimiter ,qualifier)
+                    return "{}".format(comparison_string)
                 else:
-                    return "{}".format(qualifier)
+                    return ''
             else:
                 return "{}".format(comparison_string)
 
@@ -166,9 +166,9 @@ class QueryStringPatternTranslator:
             else:
                 query_string = ''
             if qualifier is not None:
-                qualifier = self._parse_time_range(qualifier)
+                self.qualifier_string = self._parse_time_range(qualifier)
                 if query_string:
-                    return "{}{}{}".format(query_string, param_delimiter, qualifier)
+                    return "{}".format(query_string)
                 else:
                     self.qualifier_string = qualifier
                     return ''
@@ -209,10 +209,7 @@ class QueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         query = self._parse_expression(pattern)
         if query and self.qualifier_string:
-            if 'interval' in query:
-                query = "{query}".format(query=query)
-            else:
-                query = "{query}{param_delimiter}{qualifier_string}".format(query=query, param_delimiter=param_delimiter, qualifier_string=self.qualifier_string)
+            query = "{query}{param_delimiter}{qualifier_string}".format(query=query, param_delimiter=param_delimiter, qualifier_string=self.qualifier_string)
         elif query and not self.qualifier_string:
             query = "{query}".format(query=query)
         else:
