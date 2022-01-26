@@ -38,8 +38,14 @@ class TestStixtoQuery(unittest.TestCase, object):
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         queries = ["threatStatus=cleared&threatStatus=active&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
         _test_query_assertions(query, queries)
+    
+    def test_query_from_multiple_observation_expressions(self):
+        stix_pattern = "[x-proofpoint:threatstatus = 'active'] AND [x-proofpoint:threatstatus = 'cleared'] START t'2021-09-29T06:00:00.00Z' STOP t'2021-09-29T06:30:00.00Z'"
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        queries = ["threatStatus=active&threatStatus=cleared&interval=2021-09-29T06:00:00.00Z/2021-09-29T06:30:00.00Z"]
+        _test_query_assertions(query, queries)
 
-    def test_query_unmapped_attribute(self):
+    def test_query_unmapped_attribute_combined_comparison(self):
         stix_pattern = "[x-proofpoint:threatstatus = 'active' AND x-proofpoint:threatstatus = 'cleared' AND unmapped:attribute = 'something']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         assert query['success'] == False
