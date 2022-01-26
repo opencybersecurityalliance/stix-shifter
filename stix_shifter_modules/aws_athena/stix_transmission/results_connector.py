@@ -6,11 +6,7 @@ from flatten_json import flatten
 from os import path
 import os
 import six
-try:
-    # 3.8 and up
-    from collections.abc import Iterable
-except ImportError:
-    from collections import Iterable
+from collections.abc import Iterable
 
 
 class AccessDeniedException(Exception):

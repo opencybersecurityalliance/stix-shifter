@@ -4,7 +4,7 @@ import importlib
 import traceback
 from stix_shifter_utils.utils.error_mapper_base import ErrorMapperBase
 from stix_shifter_utils.utils import logger as utils_logger
-import collections
+from collections.abc import Mapping
 import json
 
 
@@ -43,10 +43,10 @@ class ErrorResponder():
         # '~result' means the current item is a list and new item will be a list containing specified field ('result') values
         # document it: '+' and '~'
         if message_struct is not None and message_path is not None:
-            if (isinstance(message_struct, collections.Mapping) or type(message_struct).__name__=='list'):
+            if (isinstance(message_struct, Mapping) or type(message_struct).__name__=='list'):
                 struct = message_struct.copy()
                 for i in message_path:
-                    if (isinstance(struct, collections.Mapping) and i in struct) or (type(struct).__name__=='list' and isinstance(i, int) and i < len(struct)):
+                    if (isinstance(struct, Mapping) and i in struct) or (type(struct).__name__=='list' and isinstance(i, int) and i < len(struct)):
                         struct = struct[i]
                         if struct is None:
                             break

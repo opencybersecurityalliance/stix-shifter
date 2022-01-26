@@ -3,7 +3,7 @@ from requests_toolbelt.adapters import host_header_ssl
 from requests.packages.urllib3.util.retry import Retry
 from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys
-import collections
+from collections.abc import Mapping
 import os
 import errno
 import uuid
@@ -125,7 +125,7 @@ class RestApiClient:
                 response = it.result
                 if isinstance(response, Exception):
                     raise response
-                if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
+                if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
                                       response.headers['Content-Type'], file=sys.stderr)

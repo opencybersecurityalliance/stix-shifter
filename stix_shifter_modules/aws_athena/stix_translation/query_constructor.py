@@ -5,11 +5,7 @@ import re
 import json
 import os.path as path
 from datetime import datetime, timedelta
-try:
-    # 3.8 and up
-    from collections.abc import Iterable
-except ImportError:
-    from collections import Iterable
+from collections.abc import Iterable
 
 TIMESTAMP_PATTERN = r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"
 PROTOCOL_LOOKUP_JSON_FILE = 'json/network_protocol_map.json'
