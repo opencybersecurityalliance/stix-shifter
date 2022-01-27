@@ -546,39 +546,6 @@ class TestCybereasonResultsToStix(unittest.TestCase):
         assert file_obj['name'] == 'sbsimulation_sb_265540_bs_254977.exe'
         assert file_obj['size'] == 14346778
 
-    def test_local_network_json_to_stix(self):
-        """to test x-cybereason-localnetwork object properties"""
-
-        data = {'LocalNetwork': {'elementDisplayName': 'Unknown Name',
-                                 'ipRange.subnet': '192.168.20.70',
-                                 'ipRange.mask': '192.168.20.70',
-                                 'searchDomain': 'hsd1.ca.comcast.net',
-                                 'wifiSsid': 'HOTBOX-G15',
-                                 'dnsServer': '127.0.0.53',
-                                 'dhcpServer': '192.168.0.1',
-                                 'networkInterfaces': 'wlx00e02d93287e'
-                                 }}
-
-        result_bundle = json_to_stix_translator.convert_to_stix(
-            data_source, map_data, [data], get_module_transformers(MODULE), options)
-        result_bundle_objects = result_bundle['objects']
-
-        result_bundle_identity = result_bundle_objects[0]
-        assert result_bundle_identity['type'] == data_source['type']
-
-        observed_data = result_bundle_objects[1]
-
-        assert 'objects' in observed_data
-        objects = observed_data['objects']
-
-        localnetwork_obj = TestCybereasonResultsToStix.get_first_of_type(
-            objects.values(), 'x-cybereason-localnetwork')
-        assert localnetwork_obj is not None
-        assert localnetwork_obj['subnet'] == '192.168.20.70'
-        assert localnetwork_obj['dns_server'] == '127.0.0.53'
-        assert localnetwork_obj['wifi_ssid'] == 'HOTBOX-G15'
-        assert localnetwork_obj['mask'] == '192.168.20.70'
-
     def test_registry_event_json_to_stix(self):
         """to test x-windows-registry-value-type custom object properties"""
 
@@ -686,9 +653,10 @@ class TestCybereasonResultsToStix(unittest.TestCase):
         driver_obj = TestCybereasonResultsToStix.get_first_of_type(objects.values(),
                                                                    'x-cybereason-driver')
         assert driver_obj is not None
+
         assert driver_obj['type'] == 'x-cybereason-driver'
         assert driver_obj['name'] == 'tcpipreg.sys'
-        assert driver_obj['owner_machine'] == 'w10unprovisioned'
+        assert driver_obj['machine'] == 'w10unprovisioned'
 
     def test_machine_json_to_stix(self):
         """
@@ -790,9 +758,8 @@ class TestCybereasonResultsToStix(unittest.TestCase):
         logon_session = TestCybereasonResultsToStix.get_first_of_type(objects.values(),
                                                                       'x-cybereason-logonsession')
         assert logon_session is not None
-        assert logon_session.keys() == {'type', 'processes', 'owner_machine', 'remote_machine', 'logon_type',
+        assert logon_session.keys() == {'type', 'name', 'processes', 'owner_machine', 'remote_machine', 'logon_type',
                                         'creation_time', 'last_seen', 'application', 'end_time'}
-
         assert logon_session['type'] == 'x-cybereason-logonsession'
         assert logon_session['owner_machine'] == 'w10-cbr-se2'
         assert logon_session['remote_machine'] == 'w10-cbr-se2'

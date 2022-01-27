@@ -95,8 +95,8 @@
       "object": "connection_domain"
     },
     "ownerMachine": {
-      "key": "x-oca-event.machine",
-      "object": "event"
+      "key": "network-traffic.extensions.x-cybereason-connection.machine",
+      "object": "nt"
     },
     "ownerProcess": [
       {
@@ -111,11 +111,6 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
       }
     ],
     "portType": {
@@ -134,17 +129,12 @@
       {
         "key": "domain-name.value",
         "object": "connection_domain"
-      },
-      {
-        "key": "network-traffic.extensions.x-cybereason-connection.url_domain",
-        "object": "nt"
-      },
-      {
-        "key": "x-oca-event.domain_ref",
-        "object": "event",
-        "references": "connection_domain"
       }
     ],
+    "elementDisplayName": {
+      "key": "network-traffic.extensions.x-cybereason-connection.name",
+      "object": "nt"
+    },
     "state": {
       "key": "network-traffic.extensions.x-cybereason-connection.state",
       "object": "nt"
@@ -208,19 +198,14 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
       }
     ],
     "imageFile.sha1String": {
-      "key": "file.hashes.'SHA-1'",
+      "key": "file.hashes.SHA-1",
       "object": "file"
     },
     "imageFile.sha256String": {
-      "key": "file.hashes.'SHA-256'",
+      "key": "file.hashes.SHA-256",
       "object": "file"
     },
     "imageFile.md5String": {
@@ -242,11 +227,6 @@
       {
         "key": "process.created",
         "object": "process",
-        "transformer": "EpochToTimestamp"
-      },
-      {
-        "key": "x-oca-event.created",
-        "object": "event",
         "transformer": "EpochToTimestamp"
       },
       {
@@ -277,11 +257,6 @@
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
-      },
-      {
-        "key": "x-oca-event.parent_process_ref",
-        "object": "event",
-        "references": "parent_process"
       }
     ],
     "calculatedUser": [
@@ -293,11 +268,6 @@
         "key": "process.creator_user_ref",
         "object": "process",
         "references": "user-process"
-      },
-      {
-        "key": "x-oca-event.user_ref",
-        "object": "event",
-        "references": "user-process"
       }
     ],
     "imageFile.companyName": {
@@ -306,6 +276,10 @@
     },
     "imageFile.productName": {
       "key": "process.extensions.x-cybereason-process.product_name",
+      "object": "process"
+    },
+    "ownerMachine": {
+      "key": "process.extensions.x-cybereason-process.machine",
       "object": "process"
     },
     "imageFileExtensionType": {
@@ -548,10 +522,6 @@
       {
         "key": "user-account.user_id",
         "object": "user-process"
-      },
-      {
-        "key": "process.extensions.x-cybereason-process.host_user",
-        "object": "process"
       }
     ],
     "hostedChildren": {
@@ -578,10 +548,16 @@
       "key": "process.extensions.x-cybereason-process.service",
       "object": "process"
     },
-    "execedBy": {
+    "execedBy": [
+      {
+        "key": "file.name",
+        "object": "exec_file"
+      },
+      {
       "key": "process.name",
-      "object": "process"
-    },
+      "object": "exec_process"
+      }
+    ],
     "connectionsToMaliciousDomain": {
       "key": "x-cybereason-malops.connections_to_malicious_domain",
       "object": "x_cyber_malops"
@@ -1057,7 +1033,7 @@
       }
     ],
     "sha1String": {
-      "key": "file.hashes.'SHA-1'",
+      "key": "file.hashes.SHA-1",
       "object": "file"
     },
     "md5String": {
@@ -1065,7 +1041,7 @@
       "object": "file"
     },
     "sha256String": {
-      "key": "file.hashes.'SHA-256'",
+      "key": "file.hashes.SHA-256",
       "object": "file"
     },
     "createdTime": [
@@ -1151,7 +1127,7 @@
     },
     "originalFileName": {
       "key": "file.name",
-      "object": "file"
+      "object": "original_file"
     },
     "productVersion": {
       "key": "file.extensions.x-cybereason-file-product.product_version",
@@ -1341,6 +1317,16 @@
     }
   },
   "User": {
+    "elementDisplayName": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "user-account.display_name",
+        "object": "user"
+      }
+    ],
     "username": [
       {
         "key": "user-account.user_id",
@@ -1398,28 +1384,20 @@
       "object": "user"
     },
     "adCountry": {
-      "key": "user-account.extensions.x-cybereason-user.company",
+      "key": "user-account.extensions.x-cybereason-user.country",
       "object": "user"
     },
     "adCompany": {
       "key": "user-account.extensions.x-cybereason-user.company",
       "object": "user"
     },
-    "adAssociatedDomain": [
+    "adAssociatedDomain":
       {
         "key": "domain-name.value",
         "object": "user_domain"
       },
-      {
-        "key": "user-account.extensions.x-cybereason-user.associated_domain",
-        "object": "user"
-      },
-      {
-        "key": "user-account.extensions.x-cybereason-user.associated_domain",
-        "object": "user",
-        "references": "user_domain"
-      }
-    ],
+
+
     "emailAddress": {
         "key": "email-addr.value",
         "object": "user_email"
@@ -1441,8 +1419,12 @@
       "object": "user"
     },
     "adCanonicalName": {
-      "key": "x-oca-asset.host_name",
-      "object": "asset"
+      "key": "user-account.extensions.x-cybereason-user.canonical_name",
+      "object": "user"
+    },
+    "adDisplayName": {
+      "key": "user-account.display_name",
+      "object": "user"
     },
     "adMail": {
       "key": "email-addr.value",
@@ -1497,41 +1479,11 @@
       "object": "user"
     }
   },
-  "LocalNetwork": {
-    "elementDisplayName": {
-      "key": "x-cybereason-localnetwork.lan_name",
-      "object": "x_cyber_localnetwork"
-    },
-    "ipRange.subnet": {
-      "key": "x-cybereason-localnetwork.subnet",
-      "object": "x_cyber_localnetwork"
-    },
-    "ipRange.mask": {
-      "key": "x-cybereason-localnetwork.mask",
-      "object": "x_cyber_localnetwork"
-    },
-    "searchDomain": {
-      "key": "x-cybereason-localnetwork.search_domain",
-      "object": "x_cyber_localnetwork"
-    },
-    "wifiSsid": {
-      "key": "x-cybereason-localnetwork.wifi_ssid",
-      "object": "x_cyber_localnetwork"
-    },
-    "dnsServer": {
-      "key": "x-cybereason-localnetwork.dns_server",
-      "object": "x_cyber_localnetwork"
-    },
-    "dhcpServer": {
-      "key": "x-cybereason-localnetwork.dhcp_server",
-      "object": "x_cyber_localnetwork"
-    },
-    "networkInterfaces": {
-      "key": "x-cybereason-localnetwork.network_interfaces",
-      "object": "x_cyber_localnetwork"
-    }
-  },
   "RegistryEvent": {
+    "elementDisplayName": {
+      "key": "windows-registry-key.extensions.x-cybereason-registry-event.name",
+      "object": "registry_key"
+    },
     "registryDataType": {
       "key": "x-windows-registry-value-type.data_type",
       "object": "registry_value"
@@ -1582,11 +1534,6 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
       }
     ],
     "registryEntry": {
@@ -1604,6 +1551,10 @@
     }
   },
   "DetectionEvents": {
+    "elementDisplayName": {
+      "key": "x-oca-event.name",
+      "object": "event"
+    },
     "process": [
       {
         "key": "file.name",
@@ -1617,11 +1568,6 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
       }
     ],
     "user": [
@@ -1637,7 +1583,7 @@
     ],
     "file": {
       "key": "file.name",
-      "object": "file"
+      "object": "detection_file"
     },
     "process.creationTime": {
       "key": "process.created",
@@ -1649,21 +1595,28 @@
       "object": "event"
     },
     "decisionStatus": {
-      "key": "x-oca-event.decision_status",
+      "key": "x-oca-event.status",
       "object": "event"
     },
     "detectionValue": {
       "key": "x-oca-event.detection_value",
       "object": "event"
     },
-    "firstSeen": {
+    "firstSeen": [
+      {
       "key": "process.created",
       "object": "process",
       "transformer": "EpochToTimestamp"
-    },
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
     "ownerMachine": {
-      "key": "x-oca-asset.name",
-      "object": "asset"
+      "key": "x-oca-event.machine",
+      "object": "machine"
     },
     "detectionValueType": {
       "key": "x-oca-event.detection_value_type",
@@ -1717,7 +1670,7 @@
       "object": "x_cyber_driver"
     },
     "ownerMachine": {
-      "key": "x-cybereason-driver.owner_machine",
+      "key": "x-cybereason-driver.machine",
       "object": "x_cyber_driver"
     },
     "service": {
@@ -1752,11 +1705,6 @@
         "key": "process.binary_ref",
         "object": "process",
         "references": "file"
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
       }
     ],
     "path": [
@@ -1793,7 +1741,7 @@
       "object": "event"
     },
     "newPath": {
-      "key": "file.extensions.x-cybereason-file-event.file_event_type",
+      "key": "file.extensions.x-cybereason-file-event.new_path",
       "object": "file",
       "transformer": "ToDirectoryPath"
     },
@@ -1803,6 +1751,10 @@
     }
   },
   "Service": {
+    "elementDisplayName": {
+      "key": "x-cybereason-service.name",
+      "object": "x_cyber_service"
+    },
     "binaryFile": [
       {
         "key": "file.name",
@@ -1842,8 +1794,8 @@
       "object": "x_cyber_service"
     },
     "displayName": {
-      "key": "x-oca-event.service_name",
-      "object": "event"
+      "key": "x-cybereason-service.display_name",
+      "object": "x_cyber_service"
     },
     "endTime": {
       "key": "x-cybereason-service.end_time",
@@ -1851,8 +1803,8 @@
       "transformer": "EpochToTimestamp"
     },
     "isActive": {
-      "key": "x-oca-event.is_active",
-      "object": "event"
+      "key": "x-cybereason-service.is_active",
+      "object": "x_cyber_service"
     },
     "startType": {
       "key": "x-cybereason-service.start_type",
@@ -1916,24 +1868,9 @@
       "key": "ipv4-addr.extensions.x-cybereason-networkinterface.owner_machine",
       "object": "src_ip"
     },
-    "gateway": [
-      {
-        "key": "ipv4-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "ipv6-addr.value",
-        "object": "src_ip"
-      },
-      {
-        "key": "x-oca-event.src_ref",
-        "object": "event",
-        "references": "src_ip"
-      }
-    ],
     "dnsServer": {
       "key": "ipv4-addr.extensions.x-cybereason-networkinterface.dns_server",
-      "object": "src_ip"
+      "object": "dst_ip"
     },
     "dhcpServer": [
       {
@@ -1959,7 +1896,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-event.interface_id",
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.interface_id",
       "object": "event"
     },
     "proxies": {
@@ -2031,7 +1968,7 @@
         "object": "user-machine"
     },
     "adOU": {
-      "key": "x-oca-asset.ad_ou",
+      "key": "x-oca-asset.department_or_unit",
       "object": "asset"
     },
     "adOrganization": {
@@ -2139,7 +2076,7 @@
       "object": "x_cyber_malops"
     }
   },
-  "LogonSession": {
+   "LogonSession": {
     "sourceIp": [
       {
         "key": "ipv4-addr.value",
@@ -2167,8 +2104,8 @@
       }
     ],
     "elementDisplayName": {
-      "key": "x-oca-event.session_name",
-      "object": "event"
+      "key": "x-cybereason-logonsession.name",
+      "object": "x_cyber_session"
     },
     "processes": {
       "key": "x-cybereason-logonsession.processes",

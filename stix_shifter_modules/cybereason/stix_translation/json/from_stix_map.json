@@ -56,7 +56,9 @@
         "Connection.domainName",
         "Connection.urlDomains",
         "Machine.domainFqdn",
-        "Machine.adDNSHostName"
+        "Machine.adDNSHostName",
+        "User.domain",
+        "User.adAssociatedDomain"
       ]
     }
   },
@@ -543,10 +545,6 @@
   },
   "x-cybereason-user": {
       "fields": {
-        "domain": [
-          "User.domain",
-          "User.adAssociatedDomain"
-        ],
         "total_machines": [
           "User.numberOfMachines"
         ],
