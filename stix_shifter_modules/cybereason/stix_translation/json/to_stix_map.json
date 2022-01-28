@@ -1,0 +1,2214 @@
+{
+  "Connection": {
+    "localAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      }
+    ],
+    "transportProtocol": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "transformer": "ToLowercaseArray"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
+      }
+    ],
+    "remoteAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      }
+    ],
+    "remotePort": {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "localPort": {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "aggregatedTransmittedBytesCount": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "aggregatedReceivedBytesCount": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "calculatedCreationTime": [
+      {
+        "key": "network-traffic.start",
+        "object": "nt",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "endTime": [
+      {
+        "key": "network-traffic.end",
+        "object": "nt",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "direction": {
+      "key": "network-traffic.extensions.x-cybereason-connection.direction",
+      "object": "nt"
+    },
+    "domainName": {
+      "key": "domain-name.value",
+      "object": "connection_domain"
+    },
+    "ownerMachine": {
+      "key": "network-traffic.extensions.x-cybereason-connection.machine",
+      "object": "nt"
+    },
+    "ownerProcess": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "file"
+      }
+    ],
+    "portType": {
+      "key": "network-traffic.extensions.x-cybereason-connection.port_type",
+      "object": "nt"
+    },
+    "dnsQuery": {
+      "key": "network-traffic.extensions.x-cybereason-connection.dns_query",
+      "object": "nt"
+    },
+    "portDescription": {
+      "key": "network-traffic.extensions.x-cybereason-connection.port_description",
+      "object": "nt"
+    },
+    "urlDomains": [
+      {
+        "key": "domain-name.value",
+        "object": "connection_domain"
+      }
+    ],
+    "elementDisplayName": {
+      "key": "network-traffic.extensions.x-cybereason-connection.name",
+      "object": "nt"
+    },
+    "state": {
+      "key": "network-traffic.extensions.x-cybereason-connection.state",
+      "object": "nt"
+    },
+    "remoteAddressCountryName": {
+      "key": "network-traffic.extensions.x-cybereason-connection.location",
+      "object": "nt"
+    },
+    "remoteAddressInternalExternalLocal": {
+      "key": "network-traffic.extensions.x-cybereason-connection.remote_address_type",
+      "object": "nt"
+    },
+    "parent": {
+      "key": "network-traffic.extensions.x-cybereason-connection.parent_listening_socket",
+      "object": "nt"
+    },
+    "isExternalConnection": {
+      "key": "network-traffic.extensions.x-cybereason-connection.external_connection",
+      "object": "nt"
+    },
+    "isIncoming": {
+      "key": "network-traffic.extensions.x-cybereason-connection.incoming",
+      "object": "nt"
+    },
+    "hasMalops": {
+      "key": "x-cybereason-malops.malops",
+      "object": "x_cyber_malops"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.suspicions",
+      "object": "x_cyber_malops"
+    },
+    "relatedToMalop": {
+      "key": "x-cybereason-malops.related_to_malop",
+      "object": "x_cyber_malops"
+    },
+    "isWellKnownPort": {
+      "key": "network-traffic.extensions.x-cybereason-connection.well_known_port",
+      "object": "nt"
+    },
+    "isProcessLegit": {
+      "key": "network-traffic.extensions.x-cybereason-connection.legit_process",
+      "object": "nt"
+    },
+    "isProcessMalware": {
+      "key": "x-cybereason-malops.malware_process",
+      "object": "x_cyber_malops"
+    }
+  },
+  "Process": {
+    "elementDisplayName": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "file"
+      }
+    ],
+    "imageFile.sha1String": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "imageFile.sha256String": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "imageFile.md5String": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "applicablePid": [
+      {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+      }
+    ],
+    "commandLine": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "creationTime": [
+      {
+        "key": "process.created",
+        "object": "process",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "endTime": {
+      "key": "last_observed",
+      "cybox": false,
+      "transformer": "EpochToTimestamp"
+    },
+    "imageFile": {
+      "key": "file.name",
+      "object": "process_file"
+    },
+    "parentProcess": [
+      {
+        "key": "file.name",
+        "object": "parent_process_file"
+      },
+      {
+        "key": "process.name",
+        "object": "parent_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "calculatedUser": [
+      {
+        "key": "user-account.user_id",
+        "object": "user-process"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "user-process"
+      }
+    ],
+    "imageFile.companyName": {
+      "key": "process.extensions.x-cybereason-process.company_name",
+      "object": "process"
+    },
+    "imageFile.productName": {
+      "key": "process.extensions.x-cybereason-process.product_name",
+      "object": "process"
+    },
+    "ownerMachine": {
+      "key": "process.extensions.x-cybereason-process.machine",
+      "object": "process"
+    },
+    "imageFileExtensionType": {
+      "key": "process.extensions.x-cybereason-process.extension_type",
+      "object": "process"
+    },
+    "integrity": {
+      "key": "process.extensions.x-cybereason-process.integrity",
+      "object": "process"
+    },
+    "tid": {
+      "key": "process.extensions.x-cybereason-process.tid",
+      "object": "process"
+    },
+    "isAggregate": {
+      "key": "process.extensions.x-cybereason-process.is_aggregate",
+      "object": "process"
+    },
+    "isDotNetProtected": {
+      "key": "process.extensions.x-cybereason-process.is_dot_net_protected",
+      "object": "process"
+    },
+    "hasMalops": {
+      "key": "x-cybereason-malops.has_malops",
+      "object": "x_cyber_malops"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    },
+    "relatedToMalop": {
+      "key": "x-cybereason-malops.related_to_malop",
+      "object": "x_cyber_malops"
+    },
+    "multipleSizeForHashEvidence": {
+      "key": "process.extensions.x-cybereason-process.multiple_size_for_hash_evidence",
+      "object": "process"
+    },
+    "isImageFileVerified": {
+      "key": "process.extensions.x-cybereason-process.is_verified",
+      "object": "process"
+    },
+    "knownMaliciousToolSuspicion": {
+      "key": "x-cybereason-malops.malicious_tool_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "knownMalwareSuspicion": {
+      "key": "x-cybereason-malops.malware_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "knownUnwantedSuspicion": {
+      "key": "x-cybereason-malops.unwanted_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "isMaliciousByHashEvidence": {
+      "key": "x-cybereason-malops.malicious_hash_evidence",
+      "object": "x_cyber_malops"
+    },
+    "imageFileMultipleCompanyNamesEvidence": {
+      "key": "process.extensions.x-cybereason-process.multiple_company_evidence",
+      "object": "process"
+    },
+    "multipleHashForUnsignedPeInfoEvidence": {
+      "key": "process.extensions.x-cybereason-process.multiple_hash_unsigned_pe_evidence",
+      "object": "process"
+    },
+    "multipleNameForHashEvidence": {
+      "key": "process.extensions.x-cybereason-process.multiple_name_hash_evidence",
+      "object": "process"
+    },
+    "unknownEvidence": {
+      "key": "process.extensions.x-cybereason-process.unknown_evidence",
+      "object": "process"
+    },
+    "rareHasPeMismatchEvidence": {
+      "key": "process.extensions.x-cybereason-process.rare_pe_mismatch_evidence",
+      "object": "process"
+    },
+    "imageFile.signedInternalOrExternal": {
+      "key": "process.extensions.x-cybereason-process.signed_internal_or_external",
+      "object": "process"
+    },
+    "unknownUnsignedBySigningCompany": {
+      "key": "process.extensions.x-cybereason-process.unknown_unsigned_sign_company",
+      "object": "process"
+    },
+    "imageFileUnsignedEvidence": {
+      "key": "process.extensions.x-cybereason-process.unsigned_evidence",
+      "object": "process"
+    },
+    "imageFileUnsignedHasSignedVersionEvidence": {
+      "key": "process.extensions.x-cybereason-process.unsigned_has_signed_version",
+      "object": "process"
+    },
+    "unwantedModuleSuspicion": {
+      "key": "x-cybereason-malops.unwanted_module_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "imageFile.signerInternalOrExternal": {
+      "key": "process.extensions.x-cybereason-process.signer_internal_or_external",
+      "object": "process"
+    },
+    "architecture": {
+      "key": "process.extensions.x-cybereason-process.architecture",
+      "object": "process"
+    },
+    "commandLineContainsTempEvidence": {
+      "key": "process.extensions.x-cybereason-process.command_line_contains_temp",
+      "object": "process"
+    },
+    "hasChildren": {
+      "key": "process.extensions.x-cybereason-process.has_children",
+      "object": "process"
+    },
+    "hasClassification": {
+      "key": "x-cybereason-malops.has_classification",
+      "object": "x_cyber_malops"
+    },
+    "hasVisibleWindows": {
+      "key": "process.extensions.x-cybereason-process.has_visible_windows",
+      "object": "process"
+    },
+    "hasWindows": {
+      "key": "process.extensions.x-cybereason-process.has_windows",
+      "object": "process"
+    },
+    "isInstaller": {
+      "key": "process.extensions.x-cybereason-process.is_installer",
+      "object": "process"
+    },
+    "isIdentifiedProduct": {
+      "key": "process.extensions.x-cybereason-process.is_identified_product",
+      "object": "process"
+    },
+    "hasModuleFromTempEvidence": {
+      "key": "process.extensions.x-cybereason-process.has_module_temp_evidence",
+      "object": "process"
+    },
+    "nonExecutableExtensionEvidence": {
+      "key": "process.extensions.x-cybereason-process.non_executable_extension",
+      "object": "process"
+    },
+    "isNotShellRunner": {
+      "key": "process.extensions.x-cybereason-process.is_not_shell_runner",
+      "object": "process"
+    },
+    "runningFromTempEvidence": {
+      "key": "process.extensions.x-cybereason-process.running_from_temp",
+      "object": "process"
+    },
+    "shellOfNonShellRunnerSuspicion": {
+      "key": "x-cybereason-malops.non_shell_runner_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "shellWithElevatedPrivilegesEvidence": {
+      "key": "process.extensions.x-cybereason-process.shell_elevated_privileges",
+      "object": "process"
+    },
+    "systemUserEvidence": {
+      "key": "process.extensions.x-cybereason-process.system_user_evidence",
+      "object": "process"
+    },
+    "hasExternalConnection": {
+      "key": "x-cybereason-connection.has_external_connection",
+      "object": "x_cyber_connection"
+    },
+    "hasExternalConnectionToWellKnownPortEvidence": {
+      "key": "x-cybereason-connection.external_connection_known_port",
+      "object": "x_cyber_connection"
+    },
+    "hasIncomingConnection": {
+      "key": "x-cybereason-connection.has_incoming_connection",
+      "object": "x_cyber_connection"
+    },
+    "hasInternalConnection": {
+      "key": "x-cybereason-connection.has_internal_connection",
+      "object": "x_cyber_connection"
+    },
+    "hasMailConnectionForNonMailProcessEvidence": {
+      "key": "x-cybereason-connection.mail_connection_for_non_mail_process",
+      "object": "x_cyber_connection"
+    },
+    "hasListeningConnection": {
+      "key": "x-cybereason-connection.has_listening_connection",
+      "object": "x_cyber_connection"
+    },
+    "hasOutgoingConnection": {
+      "key": "x-cybereason-connection.has_outgoing_connection",
+      "object": "x_cyber_connection"
+    },
+    "hasUnresolvedDnsQueriesFromDomain": {
+      "key": "x-cybereason-connection.has_unresolved_dns_query",
+      "object": "x_cyber_connection"
+    },
+    "multipleUnresolvedRecordNotExistsEvidence": {
+      "key": "process.extensions.x-cybereason-process.unresolved_record_not_exists",
+      "object": "process"
+    },
+    "hasNonDefaultResolverEvidence": {
+      "key": "process.extensions.x-cybereason-process.non_default_resolver",
+      "object": "process"
+    },
+    "parentProcessNotMatchHierarchySuspicion": {
+      "key": "x-cybereason-malops.parent_process_not_hierarchy_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "parentProcessNotAdminUserEvidence": {
+      "key": "process.extensions.x-cybereason-process.parent_process_not_admin",
+      "object": "process"
+    },
+    "parentProcessFromRemovableDeviceEvidence": {
+      "key": "process.extensions.x-cybereason-process.parent_process_removable_device",
+      "object": "process"
+    },
+    "autorun": {
+      "key": "process.extensions.x-cybereason-process.autorun",
+      "object": "process"
+    },
+    "childrenCreatedByThread": {
+      "key": "process.extensions.x-cybereason-process.children_created_thread",
+      "object": "process"
+    },
+    "connections": {
+      "key": "x-cybereason-connection.connections",
+      "object": "x_cyber_connection"
+    },
+    "elevatedPrivilegeChildren": {
+      "key": "process.extensions.x-cybereason-process.elevated_privilege_children",
+      "object": "process"
+    },
+    "hackerToolChildren": {
+      "key": "process.extensions.x-cybereason-process.hacker_tool_children",
+      "object": "process"
+    },
+    "hostProcess": {
+      "key": "process.extensions.x-cybereason-process.host_process",
+      "object": "process"
+    },
+    "hostUser": [
+      {
+        "key": "user-account.user_id",
+        "object": "user-process"
+      }
+    ],
+    "hostedChildren": {
+      "key": "process.extensions.x-cybereason-process.hosted_children",
+      "object": "process"
+    },
+    "injectedChildren": {
+      "key": "process.extensions.x-cybereason-process.injected_children",
+      "object": "process"
+    },
+    "loadedModules": {
+      "key": "process.extensions.x-cybereason-process.loaded_modules",
+      "object": "process"
+    },
+    "logonSession": {
+      "key": "process.extensions.x-cybereason-process.logon_session",
+      "object": "process"
+    },
+    "remoteSession": {
+      "key": "process.extensions.x-cybereason-process.remote_session",
+      "object": "process"
+    },
+    "service": {
+      "key": "process.extensions.x-cybereason-process.service",
+      "object": "process"
+    },
+    "execedBy": [
+      {
+        "key": "file.name",
+        "object": "exec_file"
+      },
+      {
+      "key": "process.name",
+      "object": "exec_process"
+      }
+    ],
+    "connectionsToMaliciousDomain": {
+      "key": "x-cybereason-malops.connections_to_malicious_domain",
+      "object": "x_cyber_malops"
+    },
+    "connectionsToMalwareAddresses": {
+      "key": "x-cybereason-malops.connections_to_malware_addresses",
+      "object": "x_cyber_malops"
+    },
+    "externalConnections": {
+      "key": "x-cybereason-connection.external_connections",
+      "object": "x_cyber_connection"
+    },
+    "absoluteHighVolumeMaliciousAddressConnections": {
+      "key": "x-cybereason-malops.absolute_high_vol_malicious_address_connections",
+      "object": "x_cyber_malops"
+    },
+    "absoluteHighVolumeExternalConnections": {
+      "key": "x-cybereason-connection.absolute_high_vol_external_connections",
+      "object": "x_cyber_connection"
+    },
+    "incomingConnections": {
+      "key": "x-cybereason-connection.incoming_connections",
+      "object": "x_cyber_connection"
+    },
+    "incomingExternalConnections": {
+      "key": "x-cybereason-connection.incoming_external_connections",
+      "object": "x_cyber_connection"
+    },
+    "incomingInternalConnections": {
+      "key": "x-cybereason-connection.incoming_internal_connections",
+      "object": "x_cyber_connection"
+    },
+    "internalConnections": {
+      "key": "x-cybereason-connection.internal_connections",
+      "object": "x_cyber_connection"
+    },
+    "listeningConnections": {
+      "key": "x-cybereason-connection.listening_connections",
+      "object": "x_cyber_connection"
+    },
+    "localConnections": {
+      "key": "x-cybereason-connection.local_connections",
+      "object": "x_cyber_connection"
+    },
+    "mailConnections": {
+      "key": "x-cybereason-connection.mail_connections",
+      "object": "x_cyber_connection"
+    },
+    "outgoingConnections": {
+      "key": "x-cybereason-connection.outgoing_connections",
+      "object": "x_cyber_connection"
+    },
+    "outgoingExternalConnections": {
+      "key": "x-cybereason-connection.outgoing_external_connections",
+      "object": "x_cyber_connection"
+    },
+    "outgoingInternalConnections": {
+      "key": "x-cybereason-connection.outgoing_internal_connections",
+      "object": "x_cyber_connection"
+    },
+    "suspiciousExternalConnections": {
+      "key": "x-cybereason-malops.suspicious_external_connections",
+      "object": "x_cyber_malops"
+    },
+    "suspiciousInternalConnections": {
+      "key": "x-cybereason-malops.suspicious_internal_connections",
+      "object": "x_cyber_malops"
+    },
+    "wellKnownPortConnections": {
+      "key": "x-cybereason-connection.well_known_port_connections",
+      "object": "x_cyber_connection"
+    },
+    "lowTtlDnsQueries": {
+      "key": "process.extensions.x-cybereason-process.low_ttl_dns_queries",
+      "object": "process"
+    },
+    "nonDefaultResolverQueries": {
+      "key": "process.extensions.x-cybereason-process.non_default_resolver_queries",
+      "object": "process"
+    },
+    "resolvedDnsQueriesDomainToDomain": {
+      "key": "process.extensions.x-cybereason-process.resolved_dns_domain_to_domain",
+      "object": "process"
+    },
+    "resolvedDnsQueriesDomainToIp": {
+      "key": "process.extensions.x-cybereason-process.resolved_dns_domain_to_ip",
+      "object": "process"
+    },
+    "resolvedDnsQueriesIpToDomain": {
+      "key": "process.extensions.x-cybereason-process.resolved_dns_ip_to_domain",
+      "object": "process"
+    },
+    "suspiciousDnsQueryDomainToDomain": {
+      "key": "x-cybereason-malops.suspicious_domain_to_domain",
+      "object": "x_cyber_malops"
+    },
+    "unresolvedQueryFromSuspiciousDomain": {
+      "key": "x-cybereason-malops.suspicious_unresolved_dns",
+      "object": "x_cyber_malops"
+    },
+    "dnsQueryFromSuspiciousDomain": {
+      "key": "x-cybereason-malops.dns_query_from_suspicious_domain",
+      "object": "x_cyber_malops"
+    },
+    "dnsQueryToSuspiciousDomain": {
+      "key": "x-cybereason-malops.dns_query_to_suspicious_domain",
+      "object": "x_cyber_malops"
+    },
+    "unresolvedRecordNotExist": {
+      "key": "process.extensions.x-cybereason-process.unresolved_record_not_exist",
+      "object": "process"
+    },
+    "unresolvedDnsQueriesFromDomain": {
+      "key": "process.extensions.x-cybereason-process.unresolved_domain_lookups",
+      "object": "process"
+    },
+    "unresolvedDnsQueriesFromIp": {
+      "key": "process.extensions.x-cybereason-process.unresolved_ip_lookups",
+      "object": "process"
+    },
+    "maliciousToolClassificationModules": {
+      "key": "x-cybereason-malops.malicious_tool_classification_modules",
+      "object": "x_cyber_malops"
+    },
+    "malwareClassificationModules": {
+      "key": "x-cybereason-malops.malware_classification_modules",
+      "object": "x_cyber_malops"
+    },
+    "modulesNotInLoaderDbList": {
+      "key": "process.extensions.x-cybereason-process.modules_not_db_list",
+      "object": "process"
+    },
+    "modulesFromTemp": {
+      "key": "process.extensions.x-cybereason-process.modules_from_temp",
+      "object": "process"
+    },
+    "unsignedWithSignedVersionModules": {
+      "key": "process.extensions.x-cybereason-process.unsigned_signed_version_module",
+      "object": "process"
+    },
+    "unwantedClassificationModules": {
+      "key": "process.extensions.x-cybereason-process.unwanted_classification_modules",
+      "object": "process"
+    },
+    "accessToMalwareAddressInfectedProcess": {
+      "key": "x-cybereason-malops.access_to_malware_address_infected_process",
+      "object": "x_cyber_malops"
+    },
+    "connectingToBadReputationAddressSuspicion": {
+      "key": "x-cybereason-malops.connecting_to_bad_reputation_address_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "hasMaliciousConnectionEvidence": {
+      "key": "x-cybereason-malops.has_malicious_connection_evidence",
+      "object": "x_cyber_malops"
+    },
+    "hasSuspiciousExternalConnectionSuspicion": {
+      "key": "x-cybereason-malops.has_suspicious_external_connection_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "highNumberOfExternalConnectionsSuspicion": {
+      "key": "x-cybereason-malops.high_number_of_external_connections_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "nonDefaultResolverSuspicion": {
+      "key": "x-cybereason-malops.non_default_resolver_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "hasRareExternalConnectionEvidence": {
+      "key": "process.extensions.x-cybereason-process.external_connection_evidence",
+      "object": "process"
+    },
+    "hasRareRemoteAddressEvidence": {
+      "key": "process.extensions.x-cybereason-process.remote_address_evidence",
+      "object": "process"
+    },
+    "suspiciousMailConnections": {
+      "key": "x-cybereason-malops.suspicious_mail_connections",
+      "object": "x_cyber_malops"
+    },
+    "accessToMalwareAddressByUnknownProcess": {
+      "key": "x-cybereason-malops.access_to_malware_address",
+      "object": "x_cyber_malops"
+    },
+    "hasAbsoluteHighVolumeConnectionToMaliciousAddressEvidence": {
+      "key": "x-cybereason-malops.high_volume_connection_to_malicious_address",
+      "object": "x_cyber_malops"
+    },
+    "hasAbsoluteHighVolumeExternalOutgoingConnectionEvidence": {
+      "key": "process.extensions.x-cybereason-process.high_volume_external_outgoing_connection",
+      "object": "process"
+    },
+    "highDataTransmittedSuspicion": {
+      "key": "x-cybereason-malops.high_data_transmitted_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "highDataVolumeTransmittedToMaliciousAddressSuspicion": {
+      "key": "x-cybereason-malops.high_data_volume_transmitted_to_malicious_address_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "highDataVolumeTransmittedByUnknownProcess": {
+      "key": "process.extensions.x-cybereason-process.high_data_volume_transmitted_by_unknown_process",
+      "object": "process"
+    },
+    "absoluteHighNumberOfInternalOutgoingEmbryonicConnectionsEvidence": {
+      "key": "process.extensions.x-cybereason-process.high_number_internal_outgoing_embryonic_connections_evidence",
+      "object": "process"
+    },
+    "dgaSuspicion": {
+      "key": "x-cybereason-malops.dga_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "hasLowTtlDnsQueryEvidence": {
+      "key": "process.extensions.x-cybereason-process.low_ttl_dns_query_evidence",
+      "object": "process"
+    },
+    "highUnresolvedToResolvedRateEvidence": {
+      "key": "process.extensions.x-cybereason-process.high_unresolved_to_resolved_rate_evidence",
+      "object": "process"
+    },
+    "manyUnresolvedRecordNotExistsEvidence": {
+      "key": "process.extensions.x-cybereason-process.many_unresolved_record_not_exists_evidence",
+      "object": "process"
+    },
+    "hasChildKnownHackerToolEvidence": {
+      "key": "process.extensions.x-cybereason-process.child_known_hacker_tool_evidence",
+      "object": "process"
+    },
+    "hackingToolOfNonToolRunnerEvidence": {
+      "key": "process.extensions.x-cybereason-process.hacking_tool_non_tool_runner_evidence",
+      "object": "process"
+    },
+    "hackingToolOfNonToolRunnerSuspicion": {
+      "key": "x-cybereason-malops.hacking_tool_non_tool_runner_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "hasRareChildProcessKnownHackerToolEvidence": {
+      "key": "process.extensions.x-cybereason-process.rare_child_process_known_hacker_tool_evidence",
+      "object": "process"
+    },
+    "maliciousToolModuleSuspicion": {
+      "key": "x-cybereason-malops.malicious_tool_module_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "deletedParentProcessEvidence": {
+      "key": "process.extensions.x-cybereason-process.deleted_parent_process_evidence",
+      "object": "process"
+    },
+    "malwareModuleSuspicion": {
+      "key": "x-cybereason-malops.malware_module_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "dualExtensionNameEvidence": {
+      "key": "process.extensions.x-cybereason-process.dual_extension_name_evidence",
+      "object": "process"
+    },
+    "hiddenFileExtensionEvidence": {
+      "key": "process.extensions.x-cybereason-process.hidden_file_extension_evidence",
+      "object": "process"
+    },
+    "rightToLeftFileExtensionEvidence": {
+      "key": "process.extensions.x-cybereason-process.right_to_left_file_extension_evidence",
+      "object": "process"
+    },
+    "screenSaverWithChildrenEvidence": {
+      "key": "process.extensions.x-cybereason-process.screen_saver_with_children_evidence",
+      "object": "process"
+    },
+    "suspicionsScreenSaverEvidence": {
+      "key": "x-cybereason-malops.suspicions_screen_saver_evidence",
+      "object": "x_cyber_malops"
+    },
+    "hasPeFloatingCodeEvidence": {
+      "key": "process.extensions.x-cybereason-process.has_pe_floating_code_evidence",
+      "object": "process"
+    },
+    "hasSectionMismatchEvidence": {
+      "key": "process.extensions.x-cybereason-process.has_section_mismatch_evidence",
+      "object": "process"
+    },
+    "detectedInjectedEvidence": {
+      "key": "process.extensions.x-cybereason-process.detected_injected_evidence",
+      "object": "process"
+    },
+    "detectedInjectingEvidence": {
+      "key": "process.extensions.x-cybereason-process.detected_injecting_evidence",
+      "object": "process"
+    },
+    "detectedInjectingToProtectedProcessEvidence": {
+      "key": "process.extensions.x-cybereason-process.detected_injecting_to_protected_process_evidence",
+      "object": "process"
+    },
+    "hasInjectedChildren": {
+      "key": "process.extensions.x-cybereason-process.has_injected_children",
+      "object": "process"
+    },
+    "hostingInjectedThreadEvidence": {
+      "key": "process.extensions.x-cybereason-process.hosting_injected_thread_evidence",
+      "object": "process"
+    },
+    "injectedProtectedProcessEvidence": {
+      "key": "process.extensions.x-cybereason-process.injected_protected_process_evidence",
+      "object": "process"
+    },
+    "maliciousInjectingCodeSuspicion": {
+      "key": "x-cybereason-malops.malicious_injecting_code_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "injectionMethod": {
+      "key": "process.extensions.x-cybereason-process.injection_method",
+      "object": "process"
+    },
+    "isHostingInjectedThread": {
+      "key": "process.extensions.x-cybereason-process.is_hosting_injected_thread",
+      "object": "process"
+    },
+    "maliciousInjectedCodeSuspicion": {
+      "key": "x-cybereason-malops.injected_code_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "maliciousPeExecutionSuspicion": {
+      "key": "x-cybereason-malops.pe_execution_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "hasSuspiciousInternalConnectionEvidence": {
+      "key": "x-cybereason-malops.suspicious_internal_connection",
+      "object": "x_cyber_malops"
+    },
+    "highInternalOutgoingEmbryonicConnectionRateEvidence": {
+      "key": "process.extensions.x-cybereason-process.high_internal_outgoing_evidence",
+      "object": "process"
+    },
+    "highNumberOfInternalConnectionsEvidence": {
+      "key": "process.extensions.x-cybereason-process.high_number_of_internal_connections_evidence",
+      "object": "process"
+    },
+    "newProcessesAboveThresholdEvidence": {
+      "key": "process.extensions.x-cybereason-process.new_processes_above_threshold_evidence",
+      "object": "process"
+    },
+    "hasRareInternalConnectionEvidence": {
+      "key": "process.extensions.x-cybereason-process.has_rare_internal_connection_evidence",
+      "object": "process"
+    },
+    "elevatingPrivilegesToChildEvidence": {
+      "key": "process.extensions.x-cybereason-process.elevating_privileges_to_child_evidence",
+      "object": "process"
+    },
+    "parentProcessNotSystemUserEvidence": {
+      "key": "process.extensions.x-cybereason-process.parent_process_not_system_user_evidence",
+      "object": "process"
+    },
+    "privilegeEscalationEvidence": {
+      "key": "process.extensions.x-cybereason-process.privilege_escalation_evidence",
+      "object": "process"
+    },
+    "firstExecutionOfDownloadedProcessEvidence": {
+      "key": "process.extensions.x-cybereason-process.first_execution_of_downloaded_process_evidence",
+      "object": "process"
+    },
+    "hasAutorun": {
+      "key": "process.extensions.x-cybereason-process.has_autorun",
+      "object": "process"
+    },
+    "newProcessEvidence": {
+      "key": "process.extensions.x-cybereason-process.new_process_evidence",
+      "object": "process"
+    },
+    "markedForPrevention": {
+      "key": "x-cybereason-malops.marked_for_prevention",
+      "object": "x_cyber_malops"
+    },
+    "ransomwareAutoRemediationSuspended": {
+      "key": "process.extensions.x-cybereason-process.ransomware_auto_remediation_suspended",
+      "object": "process"
+    },
+    "totalNumOfInstances": {
+      "key": "process.extensions.x-cybereason-process.total_num_of_instances",
+      "object": "process"
+    },
+    "lastMinuteNumOfInstances": {
+      "key": "process.extensions.x-cybereason-process.last_minute_num_of_instances",
+      "object": "process"
+    },
+    "lastSeenTimeStamp": {
+      "key": "process.extensions.x-cybereason-process.last_seen_time_stamp",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+    },
+    "wmiQueryStrings": {
+      "key": "process.extensions.x-cybereason-process.wmi_query_strings",
+      "object": "process"
+    },
+    "isExectuedByWmi": {
+      "key": "process.extensions.x-cybereason-process.is_executed_by_wmi",
+      "object": "process"
+    },
+    "absoluteHighNumberOfInternalConnectionsEvidence": {
+      "key": "process.extensions.x-cybereason-process.absolute_high_number_of_internal_connections",
+      "object": "process"
+    },
+    "scanningProcessSuspicion": {
+      "key": "x-cybereason-malops.scanning_process_suspicion",
+      "object": "x_cyber_malops"
+    },
+    "imageFile.maliciousClassificationType": {
+      "key": "x-cybereason-malops.malicious_classification_type",
+      "object": "x_cyber_malops"
+    },
+    "imageFile.isDownloadedFromInternet": {
+      "key": "process.extensions.x-cybereason-process.is_downloaded_from_internet",
+      "object": "process"
+    },
+    "imageFile.downloadedFromDomain": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_domain",
+      "object": "process"
+    },
+    "imageFile.downloadedFromIpAddress": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_ip_address",
+      "object": "process"
+    },
+    "imageFile.downloadedFromUrl": {
+      "key": "process.extensions.x-cybereason-process.user_id",
+      "object": "process"
+    },
+    "imageFile.downloadedFromUrlReferrer": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_url_referrer",
+      "object": "process"
+    },
+    "imageFile.downloadedFromEmailFrom": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_email_from",
+      "object": "process"
+    },
+    "imageFile.downloadedFromEmailMessageId": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_email_message_id",
+      "object": "process"
+    },
+    "imageFile.downloadedFromEmailSubject": {
+      "key": "process.extensions.x-cybereason-process.downloaded_from_email_subject",
+      "object": "process"
+    },
+    "rpcRequests": {
+      "key": "process.extensions.x-cybereason-process.rpc_requests",
+      "object": "process"
+    },
+    "iconBase64": {
+      "key": "process.extensions.x-cybereason-process.icon_base64",
+      "object": "process"
+    },
+    "executionPrevented": {
+      "key": "x-cybereason-malops.execution_prevented",
+      "object": "x_cyber_malops"
+    },
+    "isWhiteListClassification": {
+      "key": "x-cybereason-malops.is_white_list_classification",
+      "object": "x_cyber_malops"
+    },
+    "matchedWhiteListRuleIds": {
+      "key": "process.extensions.x-cybereason-process.matched_white_list_rule_ids",
+      "object": "process"
+    }
+  },
+  "File": {
+    "elementDisplayName": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
+    "sha1String": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "md5String": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "sha256String": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "createdTime": [
+      {
+        "key": "file.created",
+        "object": "file",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "modifiedTime": [
+      {
+        "key": "file.modified",
+        "object": "file",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "size": {
+      "key": "file.size",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "correctedPath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "canonizedPath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "path": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "maliciousClassificationType": {
+      "key": "x-cybereason-malops.classification_type",
+      "object": "x_cyber_malops"
+    },
+    "fileDescription": {
+      "key": "file.extensions.x-cybereason-file.description",
+      "object": "file"
+    },
+    "fileVersion": {
+      "key": "file.extensions.x-cybereason-file.version",
+      "object": "file"
+    },
+    "productName": {
+      "key": "file.extensions.x-cybereason-file-product.product_name",
+      "object": "file"
+    },
+    "originalFileName": {
+      "key": "file.name",
+      "object": "original_file"
+    },
+    "productVersion": {
+      "key": "file.extensions.x-cybereason-file-product.product_version",
+      "object": "file"
+    },
+    "signedInternalOrExternal": {
+      "key": "file.extensions.x-cybereason-file.is_file_signed",
+      "object": "file"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    },
+    "hasMalops": {
+      "key": "x-cybereason-malops.has_malops",
+      "object": "x_cyber_malops"
+    },
+    "extensionType": {
+      "key": "file.extensions.x-cybereason-file.extension_type",
+      "object": "file"
+    },
+    "isPEFile": {
+      "key": "file.extensions.x-cybereason-file.is_pefile",
+      "object": "file"
+    },
+    "legalCopyright": {
+      "key": "file.extensions.x-cybereason-file-product.copyright",
+      "object": "file"
+    },
+    "signatureVerifiedInternalOrExternal": {
+      "key": "file.extensions.x-cybereason-file.is_sign_verified",
+      "object": "file"
+    },
+    "companyName": {
+      "key": "file.extensions.x-cybereason-file.company_name",
+      "object": "file"
+    },
+    "avRemediationStatus": {
+      "key": "file.extensions.x-cybereason-file.av_remediation_status",
+      "object": "file"
+    },
+    "signerInternalOrExternal": {
+      "key": "file.extensions.x-cybereason-file.signer",
+      "object": "file"
+    },
+    "autoruns": {
+      "key": "file.extensions.x-cybereason-file.autoruns",
+      "object": "file"
+    },
+    "ownerMachine": [
+      {
+        "key": "file.extensions.x-cybereason-file.owner_machine",
+        "object": "file"
+      }
+    ],
+    "mount": {
+      "key": "file.extensions.x-cybereason-file.mount",
+      "object": "file"
+    },
+    "autorun": {
+      "key": "file.extensions.x-cybereason-file.registry_key",
+      "object": "file"
+    },
+    "dualExtensionEvidence": {
+      "key": "file.extensions.x-cybereason-file.dual_extension_evidence",
+      "object": "file"
+    },
+    "hiddenFileExtensionEvidence": {
+      "key": "file.extensions.x-cybereason-file.hidden_file_extension_evidence",
+      "object": "file"
+    },
+    "rightToLeftFileExtensionEvidence": {
+      "key": "file.extensions.x-cybereason-file.right_to_left_file_extension_evidence",
+      "object": "file"
+    },
+    "hackingToolClassificationEvidence": {
+      "key": "file.extensions.x-cybereason-file.hacking_tool_classification_evidence",
+      "object": "file"
+    },
+    "classificationLink": {
+      "key": "file.extensions.x-cybereason-file.classification_link",
+      "object": "file"
+    },
+    "executedByProcessEvidence": {
+      "key": "file.extensions.x-cybereason-file.executed_by_process_evidence",
+      "object": "file"
+    },
+    "hasAutorun": {
+      "key": "file.extensions.x-cybereason-file.has_autorun",
+      "object": "file"
+    },
+    "isInstallerProperties": {
+      "key": "file.extensions.x-cybereason-file.is_installer_properties",
+      "object": "file"
+    },
+    "isFromRemovableDevice": {
+      "key": "file.extensions.x-cybereason-file.is_from_removable_device",
+      "object": "file"
+    },
+    "productType": {
+      "key": "file.extensions.x-cybereason-file-product.product_type",
+      "object": "file"
+    },
+    "secondExtensionType": {
+      "key": "file.extensions.x-cybereason-file.second_extension_type",
+      "object": "file"
+    },
+    "temporaryFolderEvidence": {
+      "key": "file.extensions.x-cybereason-file.temporary_folder_evidence",
+      "object": "file"
+    },
+    "multipleCompanyNamesEvidence": {
+      "key": "file.extensions.x-cybereason-file.multiple_company_names_evidence",
+      "object": "file"
+    },
+    "multipleHashForUnsignedPeInfoEvidence": {
+      "key": "file.extensions.x-cybereason-file.multiple_hash_for_unsigned_pe_info_evidence",
+      "object": "file"
+    },
+    "unsignedHasSignedVersionEvidence": {
+      "key": "file.extensions.x-cybereason-file.unsigned_has_signed_version_evidence",
+      "object": "file"
+    },
+    "classificationComment": {
+      "key": "file.extensions.x-cybereason-file.classification_comment",
+      "object": "file"
+    },
+    "classificationBlocking": {
+      "key": "x-cybereason-malops.classification_blocking",
+      "object": "x_cyber_malops"
+    },
+    "isDownloadedFromInternet": {
+      "key": "file.extensions.x-cybereason-file.is_downloaded_from_internet",
+      "object": "file"
+    },
+    "downloadedFromDomain": {
+      "key": "file.extensions.x-cybereason-file.downloaded_domain",
+      "object": "file"
+    },
+    "downloadedFromIpAddress": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_ip_address",
+      "object": "file"
+    },
+    "downloadedFromUrl": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_url",
+      "object": "file"
+    },
+    "downloadedFromUrlReferrer": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_url_referrer",
+      "object": "file"
+    },
+    "downloadedFromEmailFrom": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_email_from",
+      "object": "file"
+    },
+    "downloadedFromEmailMessageId": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_email_message_id",
+      "object": "file"
+    },
+    "downloadedFromEmailSubject": {
+      "key": "file.extensions.x-cybereason-file.downloaded_from_email_subject",
+      "object": "file"
+    },
+    "legalTrademarks": {
+      "key": "file.extensions.x-cybereason-file.legal_trademarks",
+      "object": "file"
+    },
+    "privateBuild": {
+      "key": "file.extensions.x-cybereason-file.private_build",
+      "object": "file"
+    },
+    "specialBuild": {
+      "key": "file.extensions.x-cybereason-file.special_build",
+      "object": "file"
+    },
+    "internalName": {
+      "key": "file.extensions.x-cybereason-file.internal_name",
+      "object": "file"
+    },
+    "comments": {
+      "key": "file.extensions.x-cybereason-file.comments",
+      "object": "file"
+    },
+    "applicationIdentifier": {
+      "key": "file.extensions.x-cybereason-file.application_identifier",
+      "object": "file"
+    }
+  },
+  "User": {
+    "elementDisplayName": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "user-account.display_name",
+        "object": "user"
+      }
+    ],
+    "username": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "x-oca-asset.user_ref",
+        "object": "asset",
+        "references": "user"
+      }
+    ],
+    "adLogonName": {
+      "key": "email-addr.value",
+      "object": "user_email"
+    },
+    "isAdmin": {
+      "key": "user-account.is_privileged",
+      "object": "user"
+    },
+    "adCreated": [
+      {
+        "key": "user-account.account_created",
+        "object": "user",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "domain": {
+      "key": "user-account.extensions.x-cybereason-user.domain",
+      "object": "user"
+    },
+    "ownerOrganization.name": {
+      "key": "user-account.extensions.x-cybereason-user.organizational_unit",
+      "object": "user"
+    },
+    "ownerMachine": {
+      "key": "user-account.extensions.x-cybereason-user.last_logged_machine",
+      "object": "user"
+    },
+    "isLocalSystem": {
+      "key": "user-account.extensions.x-cybereason-user.is_local_system",
+      "object": "user"
+    },
+    "adDepartment": {
+      "key": "user-account.extensions.x-cybereason-user.department",
+      "object": "user"
+    },
+    "adCountry": {
+      "key": "user-account.extensions.x-cybereason-user.country",
+      "object": "user"
+    },
+    "adCompany": {
+      "key": "user-account.extensions.x-cybereason-user.company",
+      "object": "user"
+    },
+    "adAssociatedDomain":
+      {
+        "key": "domain-name.value",
+        "object": "user_domain"
+      },
+
+
+    "emailAddress": {
+        "key": "email-addr.value",
+        "object": "user_email"
+      },
+    "numberOfMachines": {
+      "key": "user-account.extensions.x-cybereason-user.total_machines",
+      "object": "user"
+    },
+    "passwordAgeDays": {
+      "key": "user-account.extensions.x-cybereason-user.password_age_days",
+      "object": "user"
+    },
+    "privileges": {
+      "key": "user-account.extensions.x-cybereason-user.privileges",
+      "object": "user"
+    },
+    "comment": {
+      "key": "user-account.extensions.x-cybereason-user.comment",
+      "object": "user"
+    },
+    "adCanonicalName": {
+      "key": "user-account.extensions.x-cybereason-user.canonical_name",
+      "object": "user"
+    },
+    "adDisplayName": {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+    "adMail": {
+      "key": "email-addr.value",
+      "object": "user_email"
+    },
+    "adMemberOf": {
+      "key": "user-account.extensions.x-cybereason-user.member_of",
+      "object": "user"
+    },
+    "adOU": {
+      "key": "user-account.extensions.x-cybereason-user.organization",
+      "object": "user"
+    },
+    "adPrimaryGroupID": {
+      "key": "user-account.extensions.x-cybereason-user.group_id",
+      "object": "user"
+    },
+    "adSamAccountName": {
+      "key": "user-account.extensions.x-cybereason-user.sam_account_name",
+      "object": "user"
+    },
+    "adTitle": {
+      "key": "user-account.extensions.x-cybereason-user.title",
+      "object": "user"
+    },
+    "sid": {
+      "key": "user-account.extensions.x-cybereason-user.sid",
+      "object": "user"
+    },
+    "hasPowerTool": {
+      "key": "user-account.extensions.x-cybereason-user.has_power_tool",
+      "object": "user"
+    },
+    "hasMaliciousProcess": {
+      "key": "x-cybereason-malops.has_malicious_process",
+      "object": "x_cyber_user_malops"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_user_malops"
+    },
+    "hasSuspiciousProcess": {
+      "key": "x-cybereason-malops.has_suspicious_process",
+      "object": "x_cyber_user_malops"
+    },
+    "runningMaliciousProcessEvidence": {
+      "key": "x-cybereason-malops.running_malicious_process_evidence",
+      "object": "x_cyber_user_malops"
+    },
+    "hasRareProcessWithExternalConnections": {
+      "key": "user-account.extensions.x-cybereason-user.unusual_process_ext_connection",
+      "object": "user"
+    }
+  },
+  "RegistryEvent": {
+    "elementDisplayName": {
+      "key": "windows-registry-key.extensions.x-cybereason-registry-event.name",
+      "object": "registry_key"
+    },
+    "registryDataType": {
+      "key": "x-windows-registry-value-type.data_type",
+      "object": "registry_value"
+    },
+    "registryOperationType": {
+      "key": "windows-registry-key.extensions.x-cybereason-registry-event.registry_operation_type",
+      "object": "registry_key"
+    },
+    "firstTime": [
+      {
+        "key": "windows-registry-key.extensions.x-cybereason-registry-event.first_seen",
+        "object": "registry_key",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "windows-registry-key.extensions.x-cybereason-registry-event.last_seen",
+        "object": "registry_key",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "detectionTimesNumber": {
+      "key": "windows-registry-key.extensions.x-cybereason-registry-event.detection_time_number",
+      "object": "registry_key",
+      "transformer": "ToInteger"
+    },
+    "registryProcess": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "file"
+      }
+    ],
+    "registryEntry": {
+      "key": "windows-registry-key.key",
+      "object": "registry_key",
+      "transformer": "PathToStixRegistryKey"
+    },
+    "data": {
+      "key": "x-windows-registry-value-type.data",
+      "object": "registry_value"
+    },
+    "ownerMachine": {
+      "key": "windows-registry-key.extensions.x-cybereason-registry-event.owner_machine",
+      "object": "registry_key"
+    }
+  },
+  "DetectionEvents": {
+    "elementDisplayName": {
+      "key": "x-oca-event.name",
+      "object": "event"
+    },
+    "process": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "file"
+      }
+    ],
+    "user": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "x-oca-event.user_ref",
+        "object": "event",
+        "references": "user"
+      }
+    ],
+    "file": {
+      "key": "file.name",
+      "object": "detection_file"
+    },
+    "process.creationTime": {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+    },
+    "detectionEngine": {
+      "key": "x-oca-event.engine",
+      "object": "event"
+    },
+    "decisionStatus": {
+      "key": "x-oca-event.status",
+      "object": "event"
+    },
+    "detectionValue": {
+      "key": "x-oca-event.detection_value",
+      "object": "event"
+    },
+    "firstSeen": [
+      {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "ownerMachine": {
+      "key": "x-oca-event.machine",
+      "object": "machine"
+    },
+    "detectionValueType": {
+      "key": "x-oca-event.detection_value_type",
+      "object": "event"
+    },
+    "ownerMachine.isActiveProbeConnected": {
+      "key": "x-oca-asset.active_probe_connected",
+      "object": "asset"
+    },
+    "ownerMachine.osVersionType": {
+      "key": "x-oca-asset.os_version",
+      "object": "asset"
+    },
+    "process.calculatedName": {
+      "key": "x-cybereason-detectionevent.process_name",
+      "object": "x_cyber_detectionevent"
+    },
+    "process.calculatedUser": {
+      "key": "x-cybereason-detectionevent.user",
+      "object": "x_cyber_detectionevent"
+    },
+    "process.endTime": {
+      "key": "x-cybereason-detectionevent.end_time",
+      "object": "x_cyber_detectionevent",
+      "transformer": "EpochToTimestamp"
+    },
+    "process.imageFile.maliciousClassificationType": {
+      "key": "x-cybereason-detectionevent.classification_type",
+      "object": "x_cyber_detectionevent"
+    }
+  },
+  "Driver": {
+    "file": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-cybereason-driver.file_ref",
+        "object": "x_cyber_driver",
+        "references": "file"
+      }
+    ],
+    "creationTime": {
+      "key": "file.created",
+      "object": "file",
+      "transformer": "EpochToTimestamp"
+    },
+    "elementDisplayName": {
+      "key": "x-cybereason-driver.name",
+      "object": "x_cyber_driver"
+    },
+    "ownerMachine": {
+      "key": "x-cybereason-driver.machine",
+      "object": "x_cyber_driver"
+    },
+    "service": {
+      "key": "x-cybereason-driver.service",
+      "object": "x_cyber_driver"
+    },
+    "endTime": {
+      "key": "x-cybereason-driver.end_time",
+      "object": "x_cyber_driver",
+      "transformer": "EpochToTimestamp"
+    },
+    "newDriverEvidence": {
+      "key": "x-cybereason-driver.new_driver_evidence",
+      "object": "x_cyber_driver"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    }
+  },
+  "FileAccessEvent": {
+    "ownerProcess": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.name",
+        "object": "process"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "process",
+        "references": "file"
+      }
+    ],
+    "path": [
+      {
+        "key": "directory.path",
+        "object": "event_directory",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "event_directory"
+      }
+    ],
+    "firstAccessTime": {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+    },
+    "elementDisplayName": {
+      "key": "file.extensions.x-cybereason-file-event.name",
+      "object": "file"
+    },
+    "ownerMachine": {
+      "key": "file.extensions.x-cybereason-file-event.machine",
+      "object": "file"
+    },
+    "fileInfo": {
+      "key": "file.extensions.x-cybereason-file-event.file_info",
+      "object": "file"
+    },
+    "fileEventType": {
+      "key": "x-oca-event.file_event_type",
+      "object": "event"
+    },
+    "newPath": {
+      "key": "file.extensions.x-cybereason-file-event.new_path",
+      "object": "file",
+      "transformer": "ToDirectoryPath"
+    },
+    "isHidden": {
+      "key": "file.extensions.x-cybereason-file-event.is_hidden",
+      "object": "file"
+    }
+  },
+  "Service": {
+    "elementDisplayName": {
+      "key": "x-cybereason-service.name",
+      "object": "x_cyber_service"
+    },
+    "binaryFile": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-cybereason-service.file_ref",
+        "object": "x_cyber_service",
+        "references": "file"
+      }
+    ],
+    "oldBinaryFile": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-cybereason-service.file_ref",
+        "object": "x_cyber_service",
+        "references": "file"
+      }
+    ],
+    "ownerMachine": {
+      "key": "x-cybereason-service.machine",
+      "object": "x_cyber_service"
+    },
+    "serviceStartName": {
+      "key": "x-cybereason-service.start_name",
+      "object": "x_cyber_service"
+    },
+    "commandLineArguments": {
+      "key": "x-cybereason-service.arguments",
+      "object": "x_cyber_service"
+    },
+    "description": {
+      "key": "x-cybereason-service.description",
+      "object": "x_cyber_service"
+    },
+    "displayName": {
+      "key": "x-cybereason-service.display_name",
+      "object": "x_cyber_service"
+    },
+    "endTime": {
+      "key": "x-cybereason-service.end_time",
+      "object": "x_cyber_service",
+      "transformer": "EpochToTimestamp"
+    },
+    "isActive": {
+      "key": "x-cybereason-service.is_active",
+      "object": "x_cyber_service"
+    },
+    "startType": {
+      "key": "x-cybereason-service.start_type",
+      "object": "x_cyber_service"
+    },
+    "unitFilePath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "event_directory"
+      }
+    ],
+    "serviceState": {
+      "key": "x-cybereason-service.state",
+      "object": "x_cyber_service"
+    },
+    "serviceSubState": {
+      "key": "x-cybereason-service.sub_state",
+      "object": "x_cyber_service"
+    },
+    "isAutoRestartService": {
+      "key": "x-cybereason-service.auto_restart_service",
+      "object": "x_cyber_service"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    },
+    "newServiceEvidence": {
+      "key": "x-cybereason-service.new_service_evidence",
+      "object": "x_cyber_service"
+    },
+    "rareServiceEvidence": {
+      "key": "x-cybereason-service.rare_service_evidence",
+      "object": "x_cyber_service"
+    },
+    "serviceType": {
+      "key": "x-cybereason-service.type",
+      "object": "x_cyber_service"
+    },
+    "driver": {
+      "key": "x-cybereason-service.driver",
+      "object": "x_cyber_service"
+    }
+  },
+  "NetworkInterface": {
+    "elementDisplayName": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.name",
+      "object": "src_ip"
+    },
+    "ipAddress": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.ip_address",
+      "object": "src_ip"
+    },
+    "ownerMachine": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.owner_machine",
+      "object": "src_ip"
+    },
+    "dnsServer": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.dns_server",
+      "object": "dst_ip"
+    },
+    "dhcpServer": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      }
+    ],
+    "macAddressFormat": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "src_ip",
+        "references": [
+          "mac"
+        ]
+      }
+    ],
+    "id": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.interface_id",
+      "object": "event"
+    },
+    "proxies": {
+      "key": "ipv4-addr.extensions.x-cybereason-networkinterface.proxies",
+      "object": "src_ip"
+    }
+  },
+  "Machine": {
+    "elementDisplayName": [
+      {
+        "key": "x-oca-asset.name",
+        "object": "asset"
+      }
+    ],
+    "mountPoints": {
+      "key": "x-oca-asset.mount_points",
+      "object": "asset"
+    },
+    "processes": {
+      "key": "x-oca-asset.processes",
+      "object": "asset"
+    },
+    "services": {
+      "key": "x-oca-asset.services",
+      "object": "asset"
+    },
+    "logonSessions": {
+      "key": "x-oca-asset.logon_sessions",
+      "object": "asset"
+    },
+    "hasRemovableDevice": {
+      "key": "x-oca-asset.has_removable_device",
+      "object": "asset"
+    },
+    "timezoneUTCOffsetMinutes": {
+      "key": "x-oca-asset.timezone",
+      "object": "asset"
+    },
+    "osVersionType": {
+      "key": "x-oca-asset.version_type",
+      "object": "asset"
+    },
+    "platformArchitecture": {
+      "key": "x-oca-asset.platform",
+      "object": "asset"
+    },
+    "mbrHashString": {
+      "key": "x-oca-asset.mbr_hash",
+      "object": "asset"
+    },
+    "osType": {
+      "key": "x-oca-asset.os_type",
+      "object": "asset"
+    },
+    "domainFqdn": {
+      "key": "domain-name.value",
+      "object": "machine_domain"
+    },
+    "ownerOrganization": {
+      "key": "x-oca-asset.owner_organization",
+      "object": "asset"
+    },
+    "pylumId": {
+      "key": "x-oca-asset.pylum_id",
+      "object": "asset"
+    },
+    "adSid": {
+        "key": "user-account.user_id",
+        "object": "user-machine"
+    },
+    "adOU": {
+      "key": "x-oca-asset.department_or_unit",
+      "object": "asset"
+    },
+    "adOrganization": {
+      "key": "x-oca-asset.ad_organization",
+      "object": "asset"
+    },
+    "adCanonicalName": {
+      "key": "x-oca-asset.name",
+      "object": "asset"
+    },
+    "adCompany": {
+        "key": "x-oca-asset.ad_company",
+        "object": "asset"
+    },
+    "adDNSHostName": {
+      "key": "domain-name.value",
+      "object": "machine_domain"
+    },
+    "adDepartment": {
+      "key": "x-oca-asset.department",
+      "object": "asset"
+    },
+    "adDisplayName": {
+      "key": "x-oca-asset.name",
+      "object": "asset"
+    },
+    "adLocation": {
+      "key": "x-oca-asset.location",
+      "object": "asset"
+    },
+    "adMachineRole": {
+      "key": "x-oca-asset.machine_role",
+      "object": "asset"
+    },
+    "adDescription": {
+      "key": "x-oca-asset.description",
+      "object": "asset"
+    },
+    "freeDiskSpace": {
+      "key": "x-oca-asset.free_disk_space",
+      "object": "asset"
+    },
+    "totalDiskSpace": {
+      "key": "x-oca-asset.total_disk_space",
+      "object": "asset"
+    },
+    "freeMemory": {
+      "key": "x-oca-asset.free_memory",
+      "object": "asset"
+    },
+    "totalMemory": {
+      "key": "x-oca-asset.total_memory",
+      "object": "asset"
+    },
+    "cpuCount": {
+      "key": "x-oca-asset.cpu_count",
+      "object": "asset"
+    },
+    "isLaptop": {
+      "key": "x-oca-asset.is_laptop",
+      "object": "asset"
+    },
+    "deviceModel": {
+      "key": "x-oca-asset.model",
+      "object": "asset"
+    },
+    "isActiveProbeConnected": {
+      "key": "x-oca-asset.is_active_probe_connected",
+      "object": "asset"
+    },
+    "uptime": {
+      "key": "x-oca-asset.activity_time",
+      "object": "asset"
+    },
+    "isIsolated": {
+      "key": "x-cybereason-malops.is_isolated",
+      "object": "x_cyber_malops"
+    },
+    "timeStampSinceLastConnectionTime": {
+      "key": "x-oca-asset.last_communication_with_server",
+      "object": "asset"
+    },
+    "hasMalops": {
+      "key": "x-cybereason-malops.has_malops",
+      "object": "x_cyber_malops"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    },
+    "isSuspiciousOrHasSuspiciousProcessOrFile": {
+      "key": "x-cybereason-malops.suspicious_process_or_file",
+      "object": "x_cyber_malops"
+    },
+    "maliciousTools": {
+      "key": "x-cybereason-malops.malicious_tools",
+      "object": "x_cyber_malops"
+    },
+    "maliciousProcesses": {
+      "key": "x-cybereason-malops.malicious_processes",
+      "object": "x_cyber_malops"
+    },
+    "suspiciousProcesses": {
+      "key": "x-cybereason-malops.suspicious_processes",
+      "object": "x_cyber_malops"
+    }
+  },
+   "LogonSession": {
+    "sourceIp": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "x-oca-event.src_ref",
+        "object": "event",
+        "references": "src_ip"
+      }
+    ],
+    "user":[
+      {
+        "key": "user-account.account_login",
+        "object": "user"
+      },
+      {
+        "key": "x-oca-event.user_ref",
+        "object": "event",
+        "references": "user"
+      }
+    ],
+    "elementDisplayName": {
+      "key": "x-cybereason-logonsession.name",
+      "object": "x_cyber_session"
+    },
+    "processes": {
+      "key": "x-cybereason-logonsession.processes",
+      "object": "x_cyber_session"
+    },
+    "ownerMachine": {
+      "key": "x-cybereason-logonsession.owner_machine",
+      "object": "x_cyber_session"
+    },
+    "remoteMachine": {
+      "key": "x-cybereason-logonsession.remote_machine",
+      "object": "x_cyber_session"
+    },
+    "logonType": {
+      "key": "x-cybereason-logonsession.logon_type",
+      "object": "x_cyber_session"
+    },
+    "creationTime": {
+      "key": "x-cybereason-logonsession.creation_time",
+      "object": "x_cyber_session",
+      "transformer": "EpochToTimestamp"
+    },
+    "lastSeenTime": {
+      "key": "x-cybereason-logonsession.last_seen",
+      "object": "x_cyber_session",
+      "transformer": "EpochToTimestamp"
+    },
+    "logonApplication": {
+      "key": "x-cybereason-logonsession.application",
+      "object": "x_cyber_session"
+    },
+    "hasSuspicions": {
+      "key": "x-cybereason-malops.has_suspicions",
+      "object": "x_cyber_malops"
+    },
+    "endTime": {
+      "key": "x-cybereason-logonsession.end_time",
+      "object": "x_cyber_session",
+      "transformer": "EpochToTimestamp"
+    }
+  },
+  "Autorun": {
+    "elementDisplayName": {
+      "key": "windows-registry-key.key",
+      "object": "registry_key",
+      "transformer": "PathToStixRegistryKey"
+    },
+    "value": {
+        "key": "windows-registry-key.extensions.x-cybereason-registryentry.value",
+        "object": "registry_key"
+    },
+    "dependInFile": {
+      "key": "windows-registry-key.extensions.x-cybereason-registryentry.depend_in_file",
+      "object": "registry_key"
+    },
+    "ownerMachine": {
+      "key": "windows-registry-key.extensions.x-cybereason-registryentry.owner_machine",
+      "object": "registry_key"
+    },
+    "isPointingToTemp": {
+      "key": "windows-registry-key.extensions.x-cybereason-registryentry.is_pointing_to_tmp",
+      "object": "registry_key"
+    },
+    "registryEntry": {
+      "key": "windows-registry-key.extensions.x-cybereason-registryentry.registry_entry",
+      "object": "registry_key"
+    },
+    "endTime": {
+      "key": "windows-registry-key.extensions.x-cybereason-registryentry.end_time",
+      "object": "registry_key",
+      "transformer": "EpochToTimestamp"
+    }
+  },
+  "Proxy": {
+    "elementDisplayName": {
+      "key": "x-cybereason-proxy.name",
+      "object": "x_cyber_proxy"
+    },
+    "discoveryType": {
+      "key": "x-cybereason-proxy.discovery_type",
+      "object": "x_cyber_proxy"
+    },
+    "host": {
+      "key": "x-cybereason-proxy.host",
+      "object": "x_cyber_proxy"
+    },
+    "ipAddress": {
+      "key": "x-cybereason-proxy.ip_address",
+      "object": "x_cyber_proxy"
+    },
+    "pacUrl": [
+      {
+        "key": "url.value",
+        "object": "proxy_url"
+      },
+      {
+        "key": "x-cybereason-proxy.pac_url",
+        "object": "x_cyber_proxy"
+      }
+    ],
+    "port": {
+      "key": "x-cybereason-proxy.port",
+      "object": "x_cyber_proxy"
+    }
+  }
+}
