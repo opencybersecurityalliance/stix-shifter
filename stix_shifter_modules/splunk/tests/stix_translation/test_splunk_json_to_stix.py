@@ -161,6 +161,8 @@ class TestTransform(unittest.TestCase, object):
         assert(dir_obj is not None), 'directory object type not found'
         assert(dir_obj.keys() == {'type', 'path', 'created', 'modified'})
         assert(dir_obj['path'] == "C:\\Users\\someuser\\sample.dll")
+        assert (dir_obj['created'] == "2018-08-15T15:11:55.676Z")
+        assert (dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
 
         assert(objects.keys() == set(map(str, range(0, 5))))
 
