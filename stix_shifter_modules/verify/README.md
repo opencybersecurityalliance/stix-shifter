@@ -1,9 +1,6 @@
 # Verify
 
 This is a connector for searching IBM Verify events. 
-### Prerequisite
-install IBMSecurity app mentioned in requirement.txt
-pip install -r requirements.txt
 
 ### Format for making STIX translation calls via the CLI
 

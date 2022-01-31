@@ -10,7 +10,7 @@
     "references": "useraccount"
   },
   {
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.performedby_username",
+    "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
     "object": "ocaevent",
     "references": "useraccount"
   }
@@ -48,27 +48,27 @@
 "result": [ 
   {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.result"
+  "key": "x-oca-event.extensions.x-iam-ext.result"
   },
   {
     "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.outcome"
+    "key": "x-oca-event.extensions.x-iam-ext.outcome"
   } 
 ], 
   
 "subtype": 
   {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.subcategory"
+  "key": "x-oca-event.extensions.x-iam-ext.subcategory"
 },
 "subject": {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.subject"
+  "key": "x-oca-event.extensions.x-iam-ext.subject"
 },
 
 "cause": {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.cause"
+  "key": "x-oca-event.extensions.x-iam-ext.cause"
 },
 
 "action": [
@@ -79,28 +79,28 @@
 ],
 "realm": {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.realm"
+  "key": "x-oca-event.extensions.x-iam-ext.realm"
 },
 "devicetype": {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.browser_agent"
+  "key": "x-oca-event.extensions.x-iam-ext.browser_agent"
 },
 "applicationid" :{
   "object":"ocaevent",
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.application_id"
+  "key":"x-oca-event.extensions.x-iam-ext.application_id"
 },
 "applicationtype" :{
   "object":"ocaevent",
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.application_type"
+  "key":"x-oca-event.extensions.x-iam-ext.application_type"
 },
 "applicationname":{
   "object":"ocaevent",
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.applicationname"
+  "key":"x-oca-event.extensions.x-iam-ext.applicationname"
 },
 
 "target": {
   "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-ibm-iam-ext.target"
+  "key": "x-oca-event.extensions.x-iam-ext.target"
 },
 "event_type" :[
 {
@@ -118,48 +118,48 @@
 ],
 "performedby_username" :
   {
-    "key": "x-oca-event.extensions.x-ibm-iam-ext.performedby_username",
+    "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
     "object": "ocaevent"
   },
 "messageid" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.message_id",
+  "key":"x-oca-event.extensions.x-iam-ext.message_id",
   "object":"ocaevent"
 },
 "deleted" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.deleted",
+  "key":"x-oca-event.extensions.x-iam-ext.deleted",
   "object":"ocaevent"
 },
 "performedby_clientname" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.performedby_clientname",
+  "key":"x-oca-event.extensions.x-iam-ext.performedby_clientname",
   "object":"ocaevent"
 },
 "performedby_realm" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.performedby_realm",
+  "key":"x-oca-event.extensions.x-iam-ext.performedby_realm",
   "object" :"ocaevent"
 },
 "resource" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.resource",
+  "key":"x-oca-event.extensions.x-iam-ext.resource",
   "object" :"ocaevent"
 },
 "targetid" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.targetid",
+  "key":"x-oca-event.extensions.x-iam-ext.targetid",
   "object":"ocaevent"
 },
 "targetid_realm" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.targetid_realm",
+  "key":"x-oca-event.extensions.x-iam-ext.targetid_realm",
   "object":"ocaevent"
 },
 "targetid_username" :{
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.taregetid_username",
+  "key":"x-oca-event.extensions.x-iam-ext.taregetid_username",
   "object":"ocaevent"
 },
 "userinfo_lookup" :{
-  "key" :"x-oca-event.extensions.x-ibm-iam-ext.userinfo_lookup",
+  "key" :"x-oca-event.extensions.x-iam-ext.userinfo_lookup",
   "object":"ocaevent"
 },
 "userid" :[
   {
-  "key":"x-oca-event.extensions.x-ibm-iam-ext.user_id",
+  "key":"x-oca-event.extensions.x-iam-ext.user_id",
   "object":"ocaevent"
 },
  {
@@ -168,23 +168,23 @@
  }
 ],
 "continent_name" : {
-    "key" :"x-oca-event.extensions.x-ibm-iam-ext.continent_name",
+    "key" :"x-oca-event.extensions.x-iam-ext.continent_name",
     "object":"ocaevent"
   },
   "city_name" : {
-    "key" :"x-oca-event.extensions.x-ibm-iam-ext.city_name",
+    "key" :"x-oca-event.extensions.x-iam-ext.city_name",
     "object":"ocaevent"
   },
   "country_iso_code" : {
-    "key" :"x-oca-event.extensions.x-ibm-iam-ext.country_iso_code",
+    "key" :"x-oca-event.extensions.x-iam-ext.country_iso_code",
     "object":"ocaevent"
   },
   "country_name" : {
-    "key" :"x-oca-event.extensions.x-ibm-iam-ext.country_name",
+    "key" :"x-oca-event.extensions.x-iam-ext.country_name",
     "object":"ocaevent"
   },
   "region_name" : {
-    "key" :"x-oca-event.extensions.x-ibm-iam-ext.region_name",
+    "key" :"x-oca-event.extensions.x-iam-ext.region_name",
     "object":"ocaevent"
   },
   "provider" : {
@@ -192,28 +192,28 @@
     "object":"ocaevent"
   },
   "providerid" :{
-    "key":"x-oca-event.extensions.x-ibm-iam-ext.provider_id",
+    "key":"x-oca-event.extensions.x-iam-ext.provider_id",
     "object":"ocaevent"
   },
   "decision_decisionCode" :{
     "object":"ocaevent",
-    "key":"x-oca-event.extensions.x-ibm-iam-ext.decision_decisionCode"
+    "key":"x-oca-event.extensions.x-iam-ext.decision_decisionCode"
   },
   "rule_name" :{
       "object":"ocaevent",
-      "key":"x-oca-event.extensions.x-ibm-iam-ext.rule_name"
+      "key":"x-oca-event.extensions.x-iam-ext.rule_name"
     },
   "policy_name" :{
       "object":"ocaevent",
-      "key":"x-oca-event.extensions.x-ibm-iam-ext.policy_name"
+      "key":"x-oca-event.extensions.x-iam-ext.policy_name"
     },
   "decision_reason" :{
       "object":"ocaevent",
-      "key":"x-oca-event.extensions.x-ibm-iam-ext.decision_reason"
+      "key":"x-oca-event.extensions.x-iam-ext.decision_reason"
     },
   "policy_action" :{
       "object":"ocaevent",
-      "key":"x-oca-event.extensions.x-ibm-iam-ext.policy_action"
+      "key":"x-oca-event.extensions.x-iam-ext.policy_action"
     }
  
 }
