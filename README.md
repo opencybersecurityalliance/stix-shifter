@@ -32,7 +32,7 @@ The recommended method for installing the STIX-shifter is via pip. Two prerequis
 
 1. Main stix-shifter package:  `pip install stix-shifter`
 
-2. stix-shifter-utility package:  `pip install stix-shifter-utils`
+2. Stix-shifter Utility package:  `pip install stix-shifter-utils`
 
 3. Desired stix-shifter connector module package:  `pip install stix-shifter-modules-<module name> `
    Example:  `pip install stix-shifter-modules-qradar`
@@ -40,7 +40,7 @@ The recommended method for installing the STIX-shifter is via pip. Two prerequis
 ## Usage
 
 
-### As A Script
+### As A Command Line Utility
 
 The STIX-Shifter comes with a bundled script which you can use to translate STIX Pattern to a native datasource query. It can also be used to translate a JSON data source query result to a STIX bundle of observable objects. You can also send query to a datasource by using a transmission option. 
 
@@ -56,10 +56,26 @@ $ stix-shifter translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
 
 **Note:** In order to build `stix-shifter` packages from source follow the below prerequisite steps:
    1. Go to the stix-shifter parent directory
-   2. Generate latest requirements.txt: `python3 generate_requirements.py`
-   3. Install the dependencies in your python 3 environment: `pip install -r requirements.txt` 
-   4. Alternatively you can create a Python 3 virtual environemnt:
-       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && pip install -r requirements-dev.txt`
+   2. Run setup: `python3 setup.py install`
+   3. Alternatively you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && python3 setup.py install`
+
+
+### Running From the Source
+
+You may also use `python3 main.py` local script. All the options are the same as for the *"As A Command Line Utility"* usage above.
+
+Example:
+
+```
+python3 main.py translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
+```
+
+In order to run `python3 main.py` from the source follow the below prerequisite steps:
+   1. Go to the stix-shifter parent directory
+   2. Run setup to install dependancies: `python3 generate_requirements.py && pip install -r requirements.txt`, or alternatively `INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`. 
+   3. Alternatively you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`
 
 ### As A Library
 
