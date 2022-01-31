@@ -13,16 +13,17 @@
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         }
+
     },
     "configuration": {
         "auth": {
-            "principal": {
-                "label": "Principal",
-                "description": "Principal with access to the SIEM API"
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
             },
-            "secret": {
-                "label": "Secret",
-                "description": "Secret with access to the SIEM API"
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
             }
         }
     }

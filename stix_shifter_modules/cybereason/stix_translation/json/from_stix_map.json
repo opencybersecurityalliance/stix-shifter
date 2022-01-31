@@ -1,0 +1,679 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "Connection.localAddress",
+        "Connection.remoteAddress"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "Connection.localAddress",
+        "Connection.remoteAddress"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "Connection.localPort"
+      ],
+      "dst_port": [
+        "Connection.remotePort"
+      ],
+      "protocols[*]": [
+        "Connection.transportProtocol"
+      ],
+      "src_ref.value": [
+        "Connection.localAddress"
+      ],
+      "dst_ref.value": [
+         "Connection.remoteAddress"
+      ],
+      "src_byte_count": [
+         "Connection.aggregatedTransmittedBytesCount"
+      ],
+      "dst_byte_count": [
+        "Connection.aggregatedReceivedBytesCount",
+        "Connection.receivedBytesCount"
+      ]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "User.emailAddress",
+        "User.adMail",
+        "User.adLogonName"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "Connection.domainName",
+        "Connection.urlDomains",
+        "Machine.domainFqdn",
+        "Machine.adDNSHostName",
+        "User.domain",
+        "User.adAssociatedDomain"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "Proxy.pacUrl"
+      ]
+    }
+  },
+   "mac-addr": {
+    "fields": {
+      "value": [
+        "NetworkInterface.macAddressFormat"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": [
+        "Process.commandLine",
+        "Process.decodedCommandLine"
+      ],
+      "created": [
+        "Process.creationTime",
+        "DetectionEvents.firstSeen"
+      ],
+      "pid": [
+        "Process.applicablePid"
+      ],
+      "name": [
+	    "Process.elementDisplayName",
+        "Process.parentProcess",
+        "Process.execedBy"
+      ],
+      "creator_user_ref.user_id": [
+        "Process.user"
+      ],
+      "parent_ref.pid": [
+        "Process.applicablePid"
+      ],
+      "parent_ref.name": [
+        "Process.parentProcess"
+      ],
+      "binary_ref.name": [
+        "Process.elementDisplayName"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "Machine.adSid",
+        "Process.user",
+        "Process.hostUser",
+        "User.elementDisplayName"
+      ],
+      "account_login": [
+        "LogonSession.user",
+        "LogonSession.winLogonDetails"
+      ],
+      "is_privileged": [
+        "User.isAdmin"
+      ],
+      "display_name": [
+        "User.elementDisplayName",
+        "User.adDisplayName",
+        "User.adCanonicalName"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "File.elementDisplayName",
+        "File.originalFileName",
+        "DetectionEvents.file",
+        "Driver.file",
+        "Service.binaryFile",
+        "Service.oldBinaryFile"
+      ],
+      "size": [
+        "File.size"
+      ],
+      "hashes.MD5": [
+        "File.md5String"
+
+      ],
+      "hashes.'SHA-1'": [
+        "File.sha1String"
+
+      ],
+      "hashes.'SHA-256'": [
+        "File.sha256String"
+      ],
+      "parent_directory_ref.path": [
+        "File.canonizedPath",
+        "File.correctedPath",
+        "File.path",
+        "FileAccessEvent.path",
+        "Service.unitFilePath"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "File.canonizedPath",
+        "File.correctedPath",
+        "File.path",
+        "FileAccessEvent.path",
+        "Service.unitFilePath"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": [
+        "Autorun.elementDisplayName"
+      ],
+      "values[*]": [
+        "Autorun.value"
+      ]
+    }
+  },
+  "x-cybereason-file": {
+    "fields": {
+         "company_name": [
+           "File.companyName"
+         ],
+         "extension_type": [
+           "File.extensionType",
+           "File.secondExtensionType"
+         ],
+         "classification_type": [
+           "File.maliciousClassificationType"
+         ],
+         "description": [
+           "File.fileDescription"
+         ],
+         "internal_name": [
+           "File.internalName"
+         ],
+         "product_name": [
+           "File.productName"
+         ],
+         "product_type": [
+           "File.productType"
+         ],
+         "product_version": [
+           "File.productVersion"
+         ],
+         "version": [
+           "File.fileVersion",
+           "File.originalVersion"
+         ],
+         "copyright": [
+           "File.legalCopyright"
+         ],
+         "build": [
+           "File.privateBuild",
+           "File.specialBuild"
+         ],
+         "classification_link": [
+           "File.classificationLink"
+         ],
+         "is_sign_verified": [
+           "File.signatureVerifiedInternalOrExternal"
+         ],
+         "signer": [
+           "File.signerInternalOrExternal",
+           "File.signer"
+         ],
+        "is_file_signed": [
+          "File.signedInternalOrExternal"
+        ],
+         "registry_key": [
+           "File.autorun"
+         ],
+         "quarantined_file_version": [
+           "File.fileIsQuarantinedVersion"
+         ],
+         "event": [
+           "File.fileAccessEvents"
+         ],
+         "downloaded_domain": [
+           "File.downloadedFromDomain"
+         ],
+         "owner_machine": [
+           "File.ownerMachine"
+         ],
+         "mount_point": [
+           "File.mount"
+         ],
+         "mounted_as": [
+           "File.mountedAs"
+         ],
+         "quarantined_action[*]": [
+           "File.fileIsQuarantined"
+         ]
+      }
+    },
+    "x-cybereason-logonsession": {
+    "fields": {
+      "session[*]": [
+        "LogonSession.clientRemoteSession",
+        "LogonSession.serverRemoteSession"
+      ],
+      "user_id": [
+        "LogonSession.LUID"
+      ],
+      "type": [
+        "LogonSession.logonType"
+      ],
+      "application":[
+        "LogonSession.logonApplication"
+      ],
+      "name": [
+        "LogonSession.elementDisplayName"
+      ],
+      "machine": [
+        "LogonSession.ownerMachine",
+        "LogonSession.remoteMachine",
+        "LogonSession.remoteNetworkMachine"
+      ],
+      "processes": [
+        "LogonSession.processes"
+      ],
+      "proxies[*]": [
+        "LogonSession.proxies"
+      ],
+      "ip_address": [
+        "LogonSession.sourceIp"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "name": [
+        "Machine.elementDisplayName",
+        "Machine.adDisplayName",
+        "Machine.adCanonicalName"
+      ],
+      "os_version": [
+        "Machine.osVersionType"
+      ],
+      "platform": [
+        "Machine.platformArchitecture"
+      ],
+      "os_type": [
+        "Machine.osType"
+      ],
+      "timezone": [
+        "Machine.timezoneUTCOffsetMinutes"
+      ],
+      "mbr_hash": [
+        "Machine.mbrHashString"
+      ],
+      "hosts_file": [
+        "Machine.hostsFile"
+      ],
+      "company": [
+        "Machine.ownerOrganization"
+      ],
+      "department_or_unit": [
+        "Machine.adOU"
+      ],
+      "removable_devices[*]":[
+      "Machine.removableDevices"
+      ],
+      "last_communication_with_server": [
+        "Machine.timeStampSinceLastConnectionTime"
+      ],
+       "activity_time": [
+        "Machine.uptime"
+      ],
+      "model": [
+        "Machine.deviceModel"
+      ],
+      "location": [
+        "Machine.adLocation"
+      ],
+      "network_interface[*]": [
+        "Machine.networkInterfaces"
+      ]
+    }
+  },
+  "x-cybereason-service": {
+    "fields": {
+      "execution[*]": [
+        "Service.automaticExecution"
+      ],
+      "arguments": [
+        "Service.commandLineArguments"
+      ],
+      "description": [
+        "Service.description"
+      ],
+      "name": [
+        "Service.displayName",
+        "Service.oldServiceStartName",
+        "Service.elementDisplayName",
+        "Service.serviceStartName",
+        "Driver.service",
+        "Process.service"
+      ],
+      "driver": [
+        "Service.driver"
+      ],
+      "state": [
+        "Service.serviceState"
+      ],
+      "sub_state": [
+        "Service.serviceSubState"
+      ],
+      "type": [
+        "Service.serviceType"
+      ],
+      "start_type": [
+        "Service.startType"
+      ],
+      "machine": [
+        "Service.ownerMachine"
+      ]
+    }
+  },
+  "x-cybereason-connection": {
+    "fields": {
+      "name": [
+        "Connection.elementDisplayName"
+      ],
+      "location": [
+        "Connection.remoteAddressCountryName"
+      ],
+      "dns_query[*]": [
+        "Connection.dnsQuery"
+      ],
+      "direction": [
+        "Connection.direction"
+      ],
+      "port_type": [
+        "Connection.portType"
+      ],
+      "state": [
+        "Connection.state"
+      ],
+      "remote_address_type": [
+        "Connection.remoteAddressInternalExternalLocal"
+      ],
+    "parent_listening_socket":[
+      "Connection.parent"
+    ],
+    "classification_type":[
+      "Connection.remoteAddressMaliciousClassificationType"
+    ],
+    "machine": [
+      "Connection.ownerMachine",
+      "Connection.remoteMachine"
+    ],
+    "owner_process": [
+      "Connection.ownerProcess",
+      "Connection.processName"
+    ]
+    }
+  },
+   "x-cybereason-process": {
+    "fields": {
+      "architecture": [
+        "Process.architecture"
+      ],
+      "block_listed_domain": [
+        "Process.unresolvedQueryFromBlackListDomain"
+      ],
+       "extension_type": [
+        "Process.imageFileExtensionType"
+      ],
+      "integrity": [
+        "Process.integrity"
+      ],
+      "thread_id": [
+        "Process.tid"
+      ],
+      "openedFiles[*]": [
+        "Process.openedFiles"
+      ],
+      "injection_method": [
+        "Process.injectionMethod"
+      ],
+      "executed_a_file_with_malicious_hash": [
+        "Process.maliciousOpenedFiles"
+      ],
+      "machine": [
+        "Process.ownerMachine"
+      ],
+      "connections[*]": [
+        "Process.connectionsToMaliciousDomain",
+        "Process.connectionsToBlackListDomain",
+        "Process.internalConnections",
+        "Process.connectionsToMalwareAddresses",
+        "Process.connections",
+        "Process.outgoingConnections",
+        "Process.outgoingConnectionsOfHostProcess",
+        "Process.connectionsOfHostProcess",
+        "Process.outgoingExternalConnections",
+        "Process.outgoingInternalConnections"
+      ],
+      "total_connections": [
+        "Process.totalNumberOfConnections"
+      ],
+      "powershell_modules[*]": [
+        "Process.powerShellModules"
+      ],
+      "loaded_modules[*]": [
+        "Process.modulesFromTemp",
+        "Process.loadedModules"
+      ],
+       "product_type": [
+        "Process.productType"
+      ],
+      "registry_events[*]": [
+        "Process.registryEvents"
+      ],
+      "ransomware_classification_modules[*]": [
+        "Process.ransomwareClassificationModules"
+      ],
+      "remote_session[*]": [
+        "Process.remoteSession"
+      ],
+      "resolved_dns_domain_to_domain": [
+        "Process.resolvedDnsQueriesDomainToDomain"
+      ],
+      "resolved_dns_domain_to_ip[*]": [
+        "Process.resolvedDnsQueriesDomainToIp"
+      ],
+      "resolved_dns_ip_to_domain[*]": [
+        "Process.resolvedDnsQueriesIpToDomain"
+      ],
+      "suspicious_domain_to_domain[*]": [
+        "Process.suspiciousDnsQueryDomainToDomain"
+      ],
+      "suspicious_unresolved_dns[*]": [
+        "Process.unresolvedQueryFromSuspiciousDomain"
+      ],
+      "suspicious_external_connections[*]": [
+        "Process.suspiciousExternalConnections"
+      ],
+      "suspicious_internal_connections[*]": [
+        "Process.suspiciousInternalConnections"
+      ],
+      "scheduled_task": [
+        "Process.scheduledTask"
+      ],
+      "service": [
+        "Process.service"
+      ],
+      "received_bytes": [
+        "Process.totalReceivedBytes"
+      ],
+      "transmitted_bytes": [
+        "Process.totalTransmittedBytes"
+      ],
+      "unresolved_domain_lookups[*]": [
+        "Process.unresolvedDnsQueriesFromDomain"
+      ],
+      "unresolved_ip_lookups[*]": [
+        "Process.unresolvedDnsQueriesFromIp"
+      ],
+      "unresolved_record_not_exist": [
+        "Process.unresolvedRecordNotExist"
+      ],
+      "unwanted_classification_modules[*]": [
+        "Process.unwantedClassificationModules"
+      ],
+      "unsigned_with_signed_version_modules[*]": [
+        "Process.unsignedWithSignedVersionModules"
+      ],
+      "well_known_port_connection": [
+        "Process.wellKnownPortConnections"
+      ],
+      "wmi_activities[*]": [
+        "Process.wmiActivities"
+      ]
+    }
+  },
+  "x-cybereason-user": {
+      "fields": {
+        "total_machines": [
+          "User.numberOfMachines"
+        ],
+        "privileges[*]": [
+          "User.privileges"
+        ],
+        "security_id": [
+          "User.sid",
+          "User.adSid"
+        ],
+        "company": [
+          "User.adCompany"
+        ],
+        "country": [
+          "User.adCountry",
+          "User.adTextCountry"
+        ],
+        "department": [
+          "User.adDepartment"
+        ],
+        "member": [
+          "User.adMemberOf"
+        ],
+        "organization": [
+          "User.adOU"
+        ],
+        "organizational_unit":[
+          "User.ownerOrganization"
+        ],
+        "group_id": [
+          "User.adPrimaryGroupID"
+        ],
+        "sam_account_name": [
+          "User.adSamAccountName"
+        ],
+        "logged_last_machine": [
+          "User.ownerMachine"
+        ],
+        "process_count": [
+          "User.newProcessesCount"
+        ]
+      }
+    },
+  "x-cybereason-driver":{
+    "fields": {
+      "name": [
+        "Driver.elementDisplayName"
+      ],
+      "service":[
+        "Driver.service"
+      ],
+      "machine": [
+        "Driver.ownerMachine"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+       "name": [
+         "DetectionEvents.elementDisplayName",
+         "RegistryEvent.elementDisplayName",
+         "FileAccessEvent.elementDisplayName"
+       ],
+      "detection_event_user[*]": [
+        "DetectionEvents.user"
+      ],
+      "file_event_user": [
+        "FileAccessEvent.ownerUser"
+      ],
+      "connection[*]": [
+        "DetectionEvents.connection"
+      ],
+      "detection_value": [
+        "DetectionEvents.detectionValue"
+      ],
+      "detection_value_type": [
+        "DetectionEvents.detectionValueType"
+      ],
+      "status": [
+        "DetectionEvents.decisionStatus"
+      ],
+      "engine": [
+        "DetectionEvents.detectionEngine"
+      ],
+      "script_engine": [
+        "DetectionEvents.scriptEngine"
+      ],
+      "domain[*]": [
+        "DetectionEvents.domain"
+      ],
+      "process": [
+        "DetectionEvents.process",
+        "RegistryEvent.registryProcess",
+        "FileAccessEvent.ownerProcess"
+      ],
+      "collection_of_machines[*]": [
+        "DetectionEvents.machine"
+      ],
+      "machine": [
+        "DetectionEvents.ownerMachine",
+        "RegistryEvent.ownerMachine",
+        "FileAccessEvent.ownerMachine"
+      ],
+      "file_event_type": [
+        "FileAccessEvent.fileEventType"
+      ],
+      "data": [
+        "RegistryEvent.data"
+      ],
+      "detection_time": [
+        "RegistryEvent.detectionTimesNumber"
+      ],
+      "time": [
+        "RegistryEvent.firstTime",
+        "RegistryEvent.timestamp",
+        "FileAccessEvent.firstAccessTime"
+      ],
+      "registry_entry": [
+        "RegistryEvent.registryEntry"
+      ],
+      "data_type": [
+        "RegistryEvent.registryDataType"
+      ],
+      "registry_entry_type": [
+        "RegistryEvent.registryEntryType"
+      ],
+      "operation_type": [
+        "RegistryEvent.registryOperationType"
+      ]
+    }
+  }
+}
