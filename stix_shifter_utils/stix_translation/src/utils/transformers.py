@@ -304,7 +304,7 @@ class FilterIPv6List(ValueTransformer):
 
 
 class CheckIPv6(ValueTransformer):
-    """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
+    """A value transformer for validating IPv6 value"""
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv6List.transform([obj])
@@ -315,7 +315,7 @@ class CheckIPv6(ValueTransformer):
 
 
 class CheckIPv4(ValueTransformer):
-    """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
+    """A value transformer for validating IPv4 value"""
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv4List.transform([obj])

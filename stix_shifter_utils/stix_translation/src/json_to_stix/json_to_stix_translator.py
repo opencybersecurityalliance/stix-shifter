@@ -84,18 +84,28 @@ class DataSourceObjToStixObj:
                             yield result
 
 
-    def _check_stix_value_pattern(self, observable_key, return_value):
+    def _valid_stix_value(self, observable_key, stix_value):
+        """
+        Checks that the given STIX value is valid for this STIX property
+        :param observable_key: the STIX property name
+        :param stix_value: the STIX value translated from the input object
+        :return: whether STIX value is valid for this STIX property
+        :rtype: bool
+        """
         try: 
             if observable_key in self.properties and 'valid_regex' in self.properties[observable_key]:
                 pattern = re.compile(self.properties[observable_key]['valid_regex'])
                 match = pattern.match
-                if not match(str(return_value)):
+                if not match(str(stix_value)):
                     return False
             return True
         except Exception as e:
             return False
 
     def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False):
+        """
+        Converts the value of the data to STIX valid value
+        """
         try:
             return_value = {}
             for key in key_list:
@@ -125,7 +135,7 @@ class DataSourceObjToStixObj:
                         if unwrap is not False and not isinstance(return_value, list):
                             return_value = [return_value]
                 else:
-                    if unwrap is False and observable_key and not self._check_stix_value_pattern(observable_key, value):
+                    if unwrap is False and observable_key and not self._valid_stix_value(observable_key, value):
                         return None
                     return_value = value
 
@@ -135,6 +145,10 @@ class DataSourceObjToStixObj:
 
 
     def _get_tag_ind(self, tag, object_tag_ref_map, create_on_absence=False, unwrap=False, property_key=None):
+        """
+        Gets the stringified index of the observable object from the `object_tag_ref_map` cached dictionary if it exists
+        or creates otherwise.
+        """
         tag_ind = None
         if unwrap:
             tag = tag + '_' + str(unwrap)
@@ -154,7 +168,10 @@ class DataSourceObjToStixObj:
 
         return tag_ind
 
-    def _add_prperty(self, type_name, property_key, parent_key_ind, value, objects, group=False, cybox=True):
+    def _add_property(self, type_name, property_key, parent_key_ind, value, objects, group=False, cybox=True):
+        """
+        Add observable object property and its STIX valid value to the cached `objects` dictionary
+        """
         if not parent_key_ind in objects:
             if cybox:
                 objects[parent_key_ind] = {
@@ -176,20 +193,24 @@ class DataSourceObjToStixObj:
                 # print({'old': objects[parent_key_ind][property_key], 'new': value})
                 pass
 
-    def _process_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
+    def _handle_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
+        """ 
+        Walks through data object, matches the property names of the data elements with the to_stix_map property names and 
+        send the values to process if the data is the final value 
+        """
         try:
             if data is not None:
                 if isinstance(to_stix_config_prop, dict) and to_stix_config_prop.get('key') is not None and not isinstance(to_stix_config_prop.get('key'), dict):
                     # data variable is the final value, process in bulk
-                    self._process_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
+                    self._handle_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
 
                 elif isinstance(data, list):
                     for i, d in enumerate(data):
                         if isinstance(d, list) or isinstance(d, dict):
-                            self._process_properties(to_stix_config_prop, d, objects, object_tag_ref_map, data, ds_sub_key, i)
+                            self._handle_properties(to_stix_config_prop, d, objects, object_tag_ref_map, data, ds_sub_key, i)
                         else:
                             # data variable is the final value, process in bulk
-                            self._process_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
+                            self._handle_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
                             break
 
                 elif isinstance(data, dict):
@@ -201,13 +222,16 @@ class DataSourceObjToStixObj:
                             cust_prop = {"key": "x-" + self.data_source.replace("_", "-") + "." + k, "object": "cust_object"}
                             
                         if cust_prop:
-                            self._process_properties(cust_prop, data[k], objects, object_tag_ref_map, data, k, object_key_ind)
+                            self._handle_properties(cust_prop, data[k], objects, object_tag_ref_map, data, k, object_key_ind)
                 else:
-                    self._process_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
+                    self._handle_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
         except Exception as e:
-            raise Exception("Error in json_to_stix_translator._process_properties: %s" % e)
+            raise Exception("Error in json_to_stix_translator._handle_properties: %s" % e)
             
-    def _process_value(self, data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind=None):
+    def _handle_value(self, data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind=None):
+        """
+        Receives the raw value of a data property, converts to a STIX valid value and adds to the cached observable `objects` dictionary
+        """
         try: 
             if isinstance(to_stix_config_prop, dict):
                 props = [to_stix_config_prop]
@@ -247,7 +271,7 @@ class DataSourceObjToStixObj:
 
                     if False is cybox and not substitute_key:
                         value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
-                        self._add_prperty(type_name, property_key, type_name, value, object_tag_ref_map['out_cybox'], cybox=False)
+                        self._add_property(type_name, property_key, type_name, value, object_tag_ref_map['out_cybox'], cybox=False)
                         continue
 
                     if object_key_ind:
@@ -271,12 +295,12 @@ class DataSourceObjToStixObj:
                     if not references and unwrap and isinstance(value, list):
                         for i, val_el in enumerate(value):
                             parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
-                            self._add_prperty(type_name, property_key, parent_key_ind, val_el, objects, group=group)
+                            self._add_property(type_name, property_key, parent_key_ind, val_el, objects, group=group)
                     else:
                         parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
-                        self._add_prperty(type_name, property_key, parent_key_ind, value, objects, group=group)
+                        self._add_property(type_name, property_key, parent_key_ind, value, objects, group=group)
         except Exception as e:
-            raise Exception("Error in json_to_stix_translator._process_value: %s" % e)
+            raise Exception("Error in json_to_stix_translator._handle_value: %s" % e)
 
     # STIX 2.1 helper methods
     def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
@@ -352,7 +376,7 @@ class DataSourceObjToStixObj:
         if isinstance(obj, dict):
             object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'non_ref_props': {}, 'out_cybox': {}, 'ds_key_cybox': {}}
 
-            self._process_properties(ds_map, obj, object_map, object_tag_ref_map)
+            self._handle_properties(ds_map, obj, object_map, object_tag_ref_map)
             # special case:
             # remove object if:
             # a reference attribute object does not contain at least one property other than 'type'
