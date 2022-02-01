@@ -233,9 +233,9 @@ class TestQueryTranslator(unittest.TestCase):
         """
         Test Unsupportted operator
         """
-        stix_pattern = "([ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2020-10-01T08:43:10.003Z' STOP " \
-                       "t'2020-10-30T10:43:10.003Z')"
+        stix_pattern = "[ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2020-10-01T08:43:10.003Z' STOP " \
+                       "t'2020-10-30T10:43:10.003Z'"
         query = translation.translate('aws_athena', 'query', '{}', stix_pattern)
         assert query['success'] is False
-        assert query['code'] == 'not_implemented'
-        assert query['error'] == 'wrong parameter : Comparison operator IsSuperSet unsupported for AWS Athena connector'
+        assert query['code'] == 'mapping_error'
+        assert query['error'] == "data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"
