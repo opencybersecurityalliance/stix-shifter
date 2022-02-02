@@ -31,7 +31,8 @@ CONNECTORS = {
     "sumologic": "Sumo Logic",
     "datadog": "Datadog",
     "proofpoint": "Proofpoint (SIEM API)",
-    "infoblox": "Infoblox BloxOne Threat Defense"
+    "infoblox": "Infoblox BloxOne Threat Defense",
+    "cybereason": "Cybereason"
 }
 
 now = datetime.now()
