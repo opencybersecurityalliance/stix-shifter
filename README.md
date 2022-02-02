@@ -54,11 +54,11 @@ Example:
 $ stix-shifter translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
 ```
 
-**Note:** In order to build `stix-shifter` packages from source follow the below prerequisite steps:
+In order to build `stix-shifter` packages from source follow the below prerequisite steps:
    1. Go to the stix-shifter parent directory
-   2. Run setup: `python3 setup.py install`
-   3. Alternatively you can create a Python 3 virtual environemnt:
-       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && python3 setup.py install`
+   2. Optionally, you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate`
+   3. Run setup: `python3 setup.py install`
 
 
 ### Running From the Source
@@ -73,9 +73,11 @@ python3 main.py translate qradar query {} "[ipv4-addr:value = '127.0.0.1']" {}
 
 In order to run `python3 main.py` from the source follow the below prerequisite steps:
    1. Go to the stix-shifter parent directory
-   2. Run setup to install dependancies: `python3 generate_requirements.py && pip install -r requirements.txt`, or alternatively `INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`. 
-   3. Alternatively you can create a Python 3 virtual environemnt:
-       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate && INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`
+   2. Optionally, you can create a Python 3 virtual environemnt:
+       `virtualenv -p python3 virtualenv && source virtualenv/bin/activate`
+   3. Run setup to install dependancies: `INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`. 
+
+**Note:** INSTALL_REQUIREMENTS_ONLY=1 is an directive to forse the setup to stop after it installs the pip dependances. This oprtion is similar to `python3 generate_requirements.py && pip install -r requirements.txt`
 
 ### As A Library
 
