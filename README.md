@@ -63,7 +63,7 @@ In order to build `stix-shifter` packages from source follow the below prerequis
 
 ### Running From the Source
 
-You may also use `python3 main.py` local script. All the options are the same as for the *"As A Command Line Utility"* usage above.
+You may also use `python3 main.py` script. All the options are the same as "As a command line utility" usage above.
 
 Example:
 
@@ -77,7 +77,7 @@ In order to run `python3 main.py` from the source follow the below prerequisite 
        `virtualenv -p python3 virtualenv && source virtualenv/bin/activate`
    3. Run setup to install dependancies: `INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`. 
 
-**Note:** INSTALL_REQUIREMENTS_ONLY=1 is an directive to forse the setup to stop after it installs the pip dependances. This oprtion is similar to `python3 generate_requirements.py && pip install -r requirements.txt`
+**Note:** setup.py only installs dependencies when INSTALL_REQUIREMENTS_ONLY=1 directive is used. This option is similar to `python3 generate_requirements.py && pip install -r requirements.txt`
 
 ### As A Library
 
