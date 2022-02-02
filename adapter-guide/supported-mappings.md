@@ -6,8 +6,10 @@ Each connector supports a set of STIX objects and properties as defined in the c
 - first_observed
 - last_observed
 - number_observed
+
 ## Supported data sources
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.
+
 - [IBM QRadar](connectors/qradar_supported_stix.md)
 - [Splunk Enterprise Security](connectors/splunk_supported_stix.md)
 - [HCL BigFix](connectors/bigfix_supported_stix.md)
