@@ -214,6 +214,14 @@
   "policy_action" :{
       "object":"ocaevent",
       "key":"x-oca-event.extensions.x-iam-ext.policy_action"
+    },
+    "risk_level" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-iam-ext.data.risk_level"
+    },
+    "risk_score" :{
+      "object":"ocaevent",
+      "key":"x-oca-event.extensions.x-iam-ext.data.risk_score"
     }
- 
+  
 }

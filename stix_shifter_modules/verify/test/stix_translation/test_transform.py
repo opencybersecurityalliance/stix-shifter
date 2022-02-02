@@ -84,7 +84,7 @@ class TestTransformQuery(unittest.TestCase,object):
         assert(event['domain_ref'] == domain_ref)
         assert(event['module'] == module)
         assert(event['category'] == category)
-        assert(event['extensions']['x-ibm-iam-ext']['user_id']== extensions_user_id)
+        assert(event['extensions']['x-iam-ext']['user_id']== extensions_user_id)
         assert(event['created'] == '2022-01-17T09:52:21.894Z')
         
         

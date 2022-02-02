@@ -53,7 +53,7 @@ class TestStixToQuery(unittest.TestCase, object):
         _test_query_assertions(query, expected_queries)
 
     def test_oca_event_extension(self):
-        stix_pattern = "[x-oca-event:extensions.'x-ibm-iam-ext'.user_id='652001LT0R']"
+        stix_pattern = "[x-oca-event:extensions.'x-iam-ext'.user_id='652001LT0R']"
         query = _translate_query(stix_pattern)
         expected_queries = 'filter_key=data.userid&filter_value="652001LT0R"&size=10000'
         _test_query_assertions(query,expected_queries)
