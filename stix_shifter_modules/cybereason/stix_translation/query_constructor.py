@@ -1,6 +1,6 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression
+    CombinedComparisonExpression, CombinedObservationExpression, ComparisonExpressionOperators, ObservationOperators
 import re
 import json
 from datetime import datetime, timedelta
@@ -26,12 +26,24 @@ class QueryStringPatternTranslator:
     """
     comparator values to match with supported data source operators
     """
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonComparators.GreaterThan: "GreaterThan",
+        ComparisonComparators.GreaterThanOrEqual: "GreaterOrEqualsTo",
+        ComparisonComparators.LessThan: "LessThan",
+        ComparisonComparators.LessThanOrEqual: "LessOrEqualsTo",
+        ComparisonComparators.Equal: "Equals",
+        ComparisonComparators.NotEqual: "NotEquals",
+        ComparisonComparators.Like: "ContainsIgnoreCase",
+        ComparisonComparators.In: "Equals",
+        ComparisonComparators.Matches: "ContainsIgnoreCase",
+        ObservationOperators.And: "AND"
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options):
 
         logger.info("Cybereason Connector")
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.options = options
         self.config_map = self.load_json(CONFIG_MAP_PATH)
@@ -407,7 +419,7 @@ class QueryStringPatternTranslator:
         if isinstance(expression, ComparisonExpression):  # Base Case
             stix_object, stix_field = expression.object_path.split(':')
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-            comparator = self.comparator_lookup[str(expression.comparator)]
+            comparator = self.comparator_lookup[expression.comparator]
             if expression.negated:
                 comparator = QueryStringPatternTranslator._format_negate(comparator)
             value = self.__eval_comparison_value(expression, mapped_fields_array)
