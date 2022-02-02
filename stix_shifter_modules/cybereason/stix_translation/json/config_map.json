@@ -1,0 +1,473 @@
+{
+  "linked_fields":{
+  "Process": {
+    "Connection": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "connections",
+        "isreversed": false
+      }
+    ],
+    "Machine": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+    ],
+    "User": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "calculatedUser",
+        "isreversed": false
+      },
+      {
+        "elementInstanceType": "Process",
+        "feature": "hostUser",
+        "isreversed": false
+      }
+    ],
+    "File": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "imageFile",
+        "isreversed": false
+      }
+    ],
+    "Autorun": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "autorun",
+        "isreversed": false
+      }
+      ],
+    "Service": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "service",
+        "isreversed": false
+      }
+    ],
+    "LogonSession": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "logonSession",
+        "isreversed": false
+      }
+    ],
+    "FileAccessEvent": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "fileAccessEvents",
+        "isreversed": false
+      }
+    ],
+    "RegistryEvent":[
+      {
+        "elementInstanceType": "Process",
+        "feature": "registryEvents",
+        "isreversed": false
+      }
+    ]
+  },
+  "Connection": {
+    "Machine": [
+      {
+        "elementInstanceType": "Connection",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+    ],
+
+    "Process": [
+      {
+        "elementInstanceType": "Process",
+        "feature": "connections",
+        "isreversed": true
+      }
+    ]
+  },
+    "DetectionEvents": {
+      "File": [
+        {
+          "elementInstanceType": "DetectionEvents",
+          "feature": "file",
+          "isreversed": false
+        }
+      ],
+      "Machine": [
+        {
+          "elementInstanceType": "DetectionEvents",
+          "feature": "ownerMachine",
+          "isreversed": false
+		}
+      ],
+      "Process": [
+        {
+          "elementInstanceType": "DetectionEvents",
+          "feature": "process",
+          "isreversed": false
+        }
+      ],
+    "User": [
+      {
+        "elementInstanceType": "DetectionEvents",
+        "feature": "user",
+        "isreversed": false
+      }
+    ]
+    },
+  "Machine": {
+    "User": [
+      {
+        "elementInstanceType": "Machine",
+        "feature": "users",
+        "isreversed": false
+      }
+    ],
+    "LogonSession": [
+      {
+        "elementInstanceType": "Machine",
+        "feature": "logonSessions",
+        "isreversed": false
+      }
+    ],
+    "Process": [
+      {
+        "elementInstanceType": "Machine",
+        "feature": "processes",
+        "isreversed": false
+      }
+    ],
+    "Service": [
+      {
+        "elementInstanceType": "Machine",
+        "feature": "services",
+        "isreversed": false
+      }
+    ],
+    "Driver": [
+      {
+        "elementInstanceType": "Machine",
+        "feature": "drivers",
+        "isreversed": false
+      }
+    ]
+  },
+    "FileAccessEvent": {
+      "Process": [
+        {
+          "elementInstanceType": "FileAccessEvent",
+          "feature": "ownerProcess",
+          "isreversed": false
+        }
+      ],
+      "Machine":[
+        {
+          "elementInstanceType": "FileAccessEvent",
+			"feature": "ownerMachine",
+            "isreversed": false
+        }
+      ],
+      "User": [
+        {
+          "elementInstanceType": "FileAccessEvent",
+          "feature": "ownerUser",
+          "isreversed": false
+        }
+      ],
+      "File":[
+        {
+          "elementInstanceType": "FileAccessEvent",
+          "feature": "fileInfo",
+          "isreversed": false
+        }
+      ]
+    },
+    "User": {
+      "Process": [
+        {
+        "elementInstanceType": "User",
+        "feature": "processes",
+        "isreversed": false
+      }
+      ],
+      "LogonSession": [
+        {
+        "elementInstanceType": "LogonSession",
+        "feature": "user",
+        "isreversed": true
+      }
+      ],
+      "Machine": [
+        {
+        "elementInstanceType": "User",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+      ]
+    },
+
+    "File": {
+      "Machine": [
+        {
+        "elementInstanceType": "File",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+      ],
+      "Autorun": [
+        {
+          "elementInstanceType": "File",
+        "feature": "autorun",
+        "isreversed": false
+        }
+      ],
+      "Process": [
+        {
+        "elementInstanceType": "Process",
+        "feature": "imageFile",
+        "isreversed": true
+      }
+      ],
+      "Driver": [
+        {
+        "elementInstanceType": "Driver",
+        "feature": "file",
+        "isreversed": true
+      }
+      ],
+      "Service": [
+        {
+        "elementInstanceType": "Service",
+        "feature": "binaryFile",
+        "isreversed": true
+      }
+      ],
+      "FileAccessEvent":[
+        {
+          "elementInstanceType": "File",
+          "feature": "fileAccessEvents",
+          "isreversed": false
+        }
+      ]
+    }
+
+,
+  "Driver": {
+    "Machine": [
+      {
+      "elementInstanceType": "Driver",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+    ],
+    "Service": [
+      {
+       "elementInstanceType": "Driver",
+        "feature": "service",
+        "isreversed": false
+      }
+    ],
+    "File": [
+      {
+        "elementInstanceType": "Driver",
+        "feature": "file",
+        "isreversed": false
+      }
+    ]
+  },
+
+  "LogonSession": {
+    "Machine": [
+      {
+        "elementInstanceType": "LogonSession",
+        "feature": "ownerMachine",
+        "isreversed": false
+      },
+      {
+        "elementInstanceType": "LogonSession",
+        "feature": "remoteMachine",
+        "isreversed": false
+      }
+    ],
+    "User": [
+      {
+        "elementInstanceType": "LogonSession",
+        "feature": "user",
+        "isreversed": false
+      }
+    ],
+    "Process": [
+      {
+        "elementInstanceType": "LogonSession",
+        "feature": "processes",
+        "isreversed": false
+      }
+    ]
+  },
+  "NetworkInterface": {
+
+    "Machine": [
+      {
+        "elementInstanceType": "NetworkInterface",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+    ],
+      "Proxy":[
+        {
+          "elementInstanceType": "NetworkInterface",
+        "feature": "proxies",
+        "isreversed": false
+        }
+      ]
+  },
+  "Proxy": {
+    "NetworkInterface": [
+      {
+        "elementInstanceType": "NetworkInterface",
+        "feature": "proxies",
+        "isreversed": true
+      }
+    ]
+  },
+  "Autorun": {
+    "File": [
+      {
+        "elementInstanceType": "Autorun",
+        "feature": "dependInFile",
+        "isreversed": false
+      }
+    ],
+    "RegistryEvent": [
+            {
+        "elementInstanceType": "Autorun",
+        "feature": "registryEvents",
+        "isreversed": false
+      }
+    ]
+  },
+
+  "Service": {
+    "Driver": [
+      {
+        "elementInstanceType": "Service",
+        "feature": "driver",
+        "isreversed": false
+      }
+    ],
+    "Machine": [
+      {
+        "elementInstanceType": "Service",
+        "feature": "ownerMachine",
+        "isreversed": false
+      }
+    ],
+    "Process": [
+      {
+        "elementInstanceType": "Service",
+        "feature": "process",
+        "isreversed": false
+      }
+    ],
+    "File": [
+      {
+        "elementInstanceType": "Service",
+        "feature": "binaryFile",
+        "isreversed": false
+      }
+    ]
+  },
+  "RegistryEvent": {
+  "Process": [
+    {
+      "elementInstanceType": "RegistryEvent",
+      "feature": "registryProcess",
+      "isreversed": false
+    }
+  ],
+  "Autorun": [
+    {
+      "elementInstanceType": "RegistryEvent",
+      "feature": "registryEntry",
+      "isreversed": false
+    }
+  ],
+  "Machine": [
+            {
+      "elementInstanceType": "RegistryEvent",
+      "feature": "ownerMachine",
+      "isreversed": false
+      }
+      ]
+    }
+  },
+
+  "int_supported_element" : [
+    "localPort", "remotePort", "aggregatedTransmittedBytesCount",
+    "receivedBytesCount", "aggregatedReceivedBytesCount", "numberOfMachines", "size",
+    "applicablePid", "LUID", "timeStampSinceLastConnectionTime", "tid", "uptime", "totalReceivedBytes",
+    "totalTransmittedBytes", "detectionTimesNumber",
+    "newProcessesCount", "totalNumberOfConnections",
+    "timezoneUTCOffsetMinutes", "serverPort"
+ ],
+  "boolean_supported_element" : ["signatureVerifiedInternalOrExternal", "signedInternalOrExternal", "isAdmin",
+                             "unsignedWithSignedVersionModules", "unwantedClassificationModules"],
+  "timestamp_filter_names" : ["firstSeen", "firstTime", "timestamp", "firstAccessTime", "creationTime"],
+
+
+  "email_filter_names" : ["emailAddress", "adMail"],
+  "mac_address_filter_name": ["macAddressFormat"],
+
+  "timestamp_supported_element": {
+    "User": "adCreated",
+    "File" : "createdTime",
+    "Connection": "creationTime",
+    "Process": "creationTime",
+    "Machine": "lastSeenTimeStamp",
+    "DetectionEvents" : "firstSeen",
+    "Service" : "endTime",
+    "Driver" : "endTime",
+    "FileAccessEvent": "firstAccessTime",
+    "LogonSession": "creationTime",
+    "RegistryEvent": "firstTime",
+    "Autorun":  "endTime"
+  },
+
+  "custom_fields": {
+    "Connection": ["elementDisplayName", "direction", "ownerMachine", "ownerProcess", "serverPort", "serverAddress", "portType", "aggregatedReceivedBytesCount", "aggregatedTransmittedBytesCount", "remoteAddressCountryName", "dnsQuery", "calculatedCreationTime", "domainName", "endTime", "localPort", "portDescription", "remotePort", "state", "isExternalConnection", "isIncoming", "remoteAddressInternalExternalLocal", "transportProtocol", "hasMalops", "hasSuspicions", "relatedToMalop", "isWellKnownPort", "isProcessLegit", "isProcessMalware", "localAddress", "remoteAddress", "urlDomains"],
+    "Process": ["elementDisplayName", "creationTime", "endTime", "commandLine", "imageFile.maliciousClassificationType", "productType", "children", "parentProcess", "ownerMachine", "calculatedUser", "imageFile", "imageFile.sha1String", "imageFile.md5String", "imageFile.sha256String", "imageFile.companyName", "imageFile.productName", "applicablePid", "imageFileExtensionType", "integrity", "tid", "isAggregate", "isDotNetProtected", "hasMalops", "hasSuspicions", "relatedToMalop", "multipleSizeForHashEvidence", "isImageFileVerified", "knownMaliciousToolSuspicion", "knownMalwareSuspicion", "knownUnwantedSuspicion", "isMaliciousByHashEvidence", "imageFileMultipleCompanyNamesEvidence", "multipleHashForUnsignedPeInfoEvidence", "multipleNameForHashEvidence", "unknownEvidence", "rareHasPeMismatchEvidence", "imageFile.signedInternalOrExternal", "unknownUnsignedBySigningCompany", "imageFileUnsignedEvidence", "imageFileUnsignedHasSignedVersionEvidence", "unwantedModuleSuspicion", "imageFile.signerInternalOrExternal", "architecture", "commandLineContainsTempEvidence", "hasChildren", "hasClassification", "hasVisibleWindows", "hasWindows", "isInstaller", "isIdentifiedProduct", "hasModuleFromTempEvidence", "nonExecutableExtensionEvidence", "isNotShellRunner", "runningFromTempEvidence", "shellOfNonShellRunnerSuspicion", "shellWithElevatedPrivilegesEvidence", "systemUserEvidence", "hasExternalConnection", "hasExternalConnectionToWellKnownPortEvidence", "hasIncomingConnection", "hasInternalConnection", "hasMailConnectionForNonMailProcessEvidence", "hasListeningConnection", "hasOutgoingConnection", "hasUnresolvedDnsQueriesFromDomain", "multipleUnresolvedRecordNotExistsEvidence", "hasNonDefaultResolverEvidence", "parentProcessNotMatchHierarchySuspicion", "parentProcessNotAdminUserEvidence", "parentProcessFromRemovableDeviceEvidence", "autorun", "childrenCreatedByThread", "connections", "elevatedPrivilegeChildren", "hackerToolChildren", "hostProcess", "hostUser", "hostedChildren", "injectedChildren", "loadedModules", "logonSession", "remoteSession", "service", "execedBy", "connectionsToMaliciousDomain", "connectionsToMalwareAddresses", "externalConnections", "absoluteHighVolumeMaliciousAddressConnections", "absoluteHighVolumeExternalConnections", "incomingConnections", "incomingExternalConnections", "incomingInternalConnections", "internalConnections", "listeningConnections", "localConnections", "mailConnections", "outgoingConnections", "outgoingExternalConnections", "outgoingInternalConnections", "suspiciousExternalConnections", "suspiciousInternalConnections", "wellKnownPortConnections", "lowTtlDnsQueries", "nonDefaultResolverQueries", "resolvedDnsQueriesDomainToDomain", "resolvedDnsQueriesDomainToIp", "resolvedDnsQueriesIpToDomain", "suspiciousDnsQueryDomainToDomain", "unresolvedQueryFromSuspiciousDomain", "dnsQueryFromSuspiciousDomain", "dnsQueryToSuspiciousDomain", "unresolvedRecordNotExist", "unresolvedDnsQueriesFromDomain", "unresolvedDnsQueriesFromIp", "maliciousToolClassificationModules", "malwareClassificationModules", "modulesNotInLoaderDbList", "modulesFromTemp", "unsignedWithSignedVersionModules", "unwantedClassificationModules", "accessToMalwareAddressInfectedProcess", "connectingToBadReputationAddressSuspicion", "hasMaliciousConnectionEvidence", "hasSuspiciousExternalConnectionSuspicion", "highNumberOfExternalConnectionsSuspicion", "nonDefaultResolverSuspicion", "hasRareExternalConnectionEvidence", "hasRareRemoteAddressEvidence", "suspiciousMailConnections", "accessToMalwareAddressByUnknownProcess", "hasAbsoluteHighVolumeConnectionToMaliciousAddressEvidence", "hasAbsoluteHighVolumeExternalOutgoingConnectionEvidence", "highDataTransmittedSuspicion", "highDataVolumeTransmittedToMaliciousAddressSuspicion", "highDataVolumeTransmittedByUnknownProcess", "absoluteHighNumberOfInternalOutgoingEmbryonicConnectionsEvidence", "dgaSuspicion", "hasLowTtlDnsQueryEvidence", "highUnresolvedToResolvedRateEvidence", "manyUnresolvedRecordNotExistsEvidence", "hasChildKnownHackerToolEvidence", "hackingToolOfNonToolRunnerEvidence", "hackingToolOfNonToolRunnerSuspicion", "hasRareChildProcessKnownHackerToolEvidence", "maliciousToolModuleSuspicion", "deletedParentProcessEvidence", "malwareModuleSuspicion", "dualExtensionNameEvidence", "hiddenFileExtensionEvidence", "rightToLeftFileExtensionEvidence", "screenSaverWithChildrenEvidence", "suspicionsScreenSaverEvidence", "hasPeFloatingCodeEvidence", "hasSectionMismatchEvidence", "detectedInjectedEvidence", "detectedInjectingEvidence", "detectedInjectingToProtectedProcessEvidence", "hasInjectedChildren", "hostingInjectedThreadEvidence", "injectedProtectedProcessEvidence", "maliciousInjectingCodeSuspicion", "injectionMethod", "isHostingInjectedThread", "maliciousInjectedCodeSuspicion", "maliciousPeExecutionSuspicion", "hasSuspiciousInternalConnectionEvidence", "highInternalOutgoingEmbryonicConnectionRateEvidence", "highNumberOfInternalConnectionsEvidence", "newProcessesAboveThresholdEvidence", "hasRareInternalConnectionEvidence", "elevatingPrivilegesToChildEvidence", "parentProcessNotSystemUserEvidence", "privilegeEscalationEvidence", "firstExecutionOfDownloadedProcessEvidence", "hasAutorun", "newProcessEvidence", "markedForPrevention", "ransomwareAutoRemediationSuspended", "totalNumOfInstances", "lastMinuteNumOfInstances", "lastSeenTimeStamp", "wmiQueryStrings", "isExectuedByWmi", "absoluteHighNumberOfInternalConnectionsEvidence", "scanningProcessSuspicion", "imageFile.isDownloadedFromInternet", "imageFile.downloadedFromDomain", "imageFile.downloadedFromIpAddress", "imageFile.downloadedFromUrl", "imageFile.downloadedFromUrlReferrer", "imageFile.downloadedFromEmailFrom", "imageFile.downloadedFromEmailMessageId", "imageFile.downloadedFromEmailSubject", "rpcRequests", "iconBase64", "executionPrevented", "isWhiteListClassification", "matchedWhiteListRuleIds"],
+    "User": ["elementDisplayName", "domain", "ownerOrganization.name", "ownerMachine", "isLocalSystem", "isAdmin", "username", "emailAddress", "numberOfMachines", "passwordAgeDays", "privileges", "comment", "adCanonicalName", "adCreated", "adDisplayName", "adLogonName", "adMail", "adMemberOf", "adOU", "adPrimaryGroupID", "adSamAccountName", "adTitle", "hasPowerTool", "hasMaliciousProcess", "hasSuspicions", "hasSuspiciousProcess", "runningMaliciousProcessEvidence", "hasRareProcessWithExternalConnections"],
+    "DetectionEvents": ["elementDisplayName", "detectionEngine", "decisionStatus", "detectionValue", "firstSeen", "process", "user", "ownerMachine", "detectionValueType", "ownerMachine.isActiveProbeConnected", "ownerMachine.osVersionType", "process.calculatedName", "process.calculatedUser", "process.creationTime", "process.endTime", "process.imageFile.maliciousClassificationType"],
+    "Driver": ["elementDisplayName", "creationTime", "file", "ownerMachine", "service", "endTime", "newDriverEvidence", "hasSuspicions"],
+    "File": ["elementDisplayName", "avRemediationStatus", "signerInternalOrExternal", "fileHash", "autoruns", "ownerMachine", "mount", "autorun", "dualExtensionEvidence", "hiddenFileExtensionEvidence", "rightToLeftFileExtensionEvidence", "hasMalops", "hasSuspicions", "maliciousClassificationType", "hackingToolClassificationEvidence", "classificationLink", "isPEFile", "executedByProcessEvidence", "hasAutorun", "isInstallerProperties", "isFromRemovableDevice", "productType", "secondExtensionType", "temporaryFolderEvidence", "multipleCompanyNamesEvidence", "multipleHashForUnsignedPeInfoEvidence", "unsignedHasSignedVersionEvidence", "classificationComment", "signedInternalOrExternal", "signatureVerifiedInternalOrExternal", "classificationBlocking", "isDownloadedFromInternet", "downloadedFromDomain", "downloadedFromIpAddress", "downloadedFromUrl", "downloadedFromUrlReferrer", "downloadedFromEmailFrom", "downloadedFromEmailMessageId", "downloadedFromEmailSubject", "legalCopyright", "legalTrademarks", "privateBuild", "specialBuild", "companyName", "createdTime", "extensionType", "fileDescription", "internalName", "md5String", "modifiedTime", "originalFileName", "correctedPath", "productName", "productVersion", "sha1String", "size", "comments", "fileVersion", "applicationIdentifier", "sha256String"],
+    "FileAccessEvent": ["elementDisplayName", "ownerProcess", "ownerMachine", "fileInfo", "path", "fileEventType", "firstAccessTime", "newPath", "isHidden"],
+    "LogonSession": ["elementDisplayName", "processes", "ownerMachine", "user", "remoteMachine", "logonType", "creationTime", "lastSeenTime", "logonApplication", "hasSuspicions", "sourceIp", "endTime"],
+    "Machine": ["elementDisplayName", "mountPoints", "processes", "services", "logonSessions", "hasRemovableDevice", "timezoneUTCOffsetMinutes", "osVersionType", "platformArchitecture", "mbrHashString", "osType", "domainFqdn", "ownerOrganization", "pylumId", "adSid", "adOU", "adOrganization", "adCanonicalName", "adCompany", "adDNSHostName", "adDepartment", "adDisplayName", "adLocation", "adMachineRole", "adDescription", "freeDiskSpace", "totalDiskSpace", "freeMemory", "totalMemory", "cpuCount", "isLaptop", "deviceModel", "isActiveProbeConnected", "uptime", "isIsolated", "lastSeenTimeStamp", "timeStampSinceLastConnectionTime", "hasMalops", "hasSuspicions", "isSuspiciousOrHasSuspiciousProcessOrFile", "maliciousTools", "maliciousProcesses", "suspiciousProcesses"],
+    "NetworkInterface": ["elementDisplayName", "ipAddress", "ownerMachine", "gateway", "dnsServer", "dhcpServer", "macAddressFormat", "id", "proxies"],
+    "Service": ["elementDisplayName", "binaryFile", "ownerMachine", "process", "serviceStartName", "commandLineArguments", "description", "displayName", "endTime", "isActive", "startType", "unitFilePath", "serviceState", "serviceSubState", "isAutoRestartService", "hasSuspicions", "newServiceEvidence", "rareServiceEvidence", "serviceType", "driver"],
+    "RegistryEvent": ["elementDisplayName", "self", "registryDataType", "registryOperationType", "timestamp", "firstTime", "detectionTimesNumber", "registryProcess", "registryEntry", "data", "ownerMachine"],
+    "Autorun": ["elementDisplayName", "value", "dependInFile", "ownerMachine", "isPointingToTemp", "registryEntry", "endTime"],
+    "Proxy": ["elementDisplayName", "discoveryType", "host", "ipAddress", "pacUrl", "port"]
+  },
+  "include_filter_type" :
+  [
+    "urlDomains", "winLogonDetails", "fileAccessEvents",
+    "clientRemoteSession", "serverRemoteSession","processes",
+    "proxies","removableDevices",
+    "networkInterfaces","unresolvedQueryFromBlackListDomain",
+    "openedFiles","maliciousOpenedFiles","connectionsToMaliciousDomain",
+    "connectionsToBlackListDomain","internalConnections",
+    "connectionsToMalwareAddresses","connections","outgoingConnections",
+    "outgoingConnectionsOfHostProcess","connectionsOfHostProcess","outgoingExternalConnections",
+    "outgoingInternalConnections","powerShellModules","modulesFromTemp","loadedModules",
+    "registryEvents","ransomwareClassificationModules","resolvedDnsQueriesDomainToDomain",
+    "resolvedDnsQueriesDomainToIp","resolvedDnsQueriesIpToDomain",
+    "suspiciousDnsQueryDomainToDomain","unresolvedQueryFromSuspiciousDomain",
+    "suspiciousExternalConnections","suspiciousInternalConnections",
+    "unresolvedDnsQueriesFromDomain","unresolvedDnsQueriesFromIp",
+    "unresolvedRecordNotExist","unwantedClassificationModules",
+    "wellKnownPortConnections","wmiActivities"
+  ]
+}
