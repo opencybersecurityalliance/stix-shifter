@@ -152,6 +152,7 @@ List updated: October 29, 2021
 |       [Datadog](adapter-guide/connectors/datadog_supported_stix.md)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
 |       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
 |       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 
