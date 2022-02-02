@@ -55,14 +55,13 @@ class TestVerifyConnection(unittest.TestCase, object):
         mock_status_response.return_value = VerifyMockResponse(200, mocked_return_value)
 
         config = {
-            "auth": {
-                "sec": "bla"
-            }
+                 "host": "connection.com"
         }
         connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
+           "auth" :{
+                 "clientId": "clientId", 
+                 "clientSecret": "clientscred"
+             }
         }
         
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
@@ -80,14 +79,13 @@ class TestVerifyConnection(unittest.TestCase, object):
         mock_query_response.return_value = {"success":200}
 
         config = {
-            "auth": {
-                "sec": "bla"
-            }
+                 "host": "cloudsecurity.com"
         }
         connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
+           "auth" :{
+                 "clientId": "clientid", 
+                 "clientSecret": "secret"
+             }
         }
 
         query = '{"query":"event_type=\"sso\""}'        
@@ -103,14 +101,13 @@ class TestVerifyConnection(unittest.TestCase, object):
     def test_ping(self, mock_generate_token, mock_api_client):
 
         config = {
-            "auth": {
-                "sec": "bla"
-            }
+                 "host": "cloudsecurity.com"
         }
         connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
+           "auth" :{
+                 "clientId": "clientid", 
+                 "clientSecret": "secret"
+             }
         }
         mocked_return_value = VerifyMockPingResponse(200,200)
         mock_generate_token.return_value = mocked_return_value
@@ -128,14 +125,13 @@ class TestVerifyConnection(unittest.TestCase, object):
         mocked_return_value = {"code": 200}
         mock_generate_token.return_value = mocked_return_value
         config = {
-            "auth": {
-                "sec": "bla"
-            }
+                 "host": "ibmcloud.com"
         }
         connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
+           "auth" :{
+                 "clientId": "clientId", 
+                 "clientSecret": "secret"
+             }
         }
 
         mocked_return_value = {
