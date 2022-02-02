@@ -1,5 +1,4 @@
 import re
-from traceback import print_exception
 import uuid
 import json
 
@@ -132,6 +131,7 @@ class DataSourceObjToStixObj:
                                     return_value.append(parent_key_ind)
                     else:
                         return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
+                        # if the property has unwrap true and is not a list, convert to list
                         if unwrap is not False and not isinstance(return_value, list):
                             return_value = [return_value]
                 else:
@@ -150,6 +150,7 @@ class DataSourceObjToStixObj:
         or creates otherwise.
         """
         tag_ind = None
+        # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
         if unwrap:
             tag = tag + '_' + str(unwrap)
 
@@ -189,10 +190,7 @@ class DataSourceObjToStixObj:
                 objects[parent_key_ind][property_key] = dict_merge(objects[parent_key_ind][property_key], value)
             elif isinstance(objects[parent_key_ind][property_key], list) and group:
                 objects[parent_key_ind][property_key].extend(value)
-            else: #TODO: get rid of this weird 'else'
-                # print({'old': objects[parent_key_ind][property_key], 'new': value})
-                pass
-
+            
     def _handle_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
         """ 
         Walks through data object, matches the property names of the data elements with the to_stix_map property names and 
@@ -245,6 +243,7 @@ class DataSourceObjToStixObj:
 
                 transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
                 references = references = prop['references'] if 'references' in prop else None
+                # unwrap array of stix values to separate stix objects
                 unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
                 cybox = prop.get('cybox', self.cybox_default)
 
