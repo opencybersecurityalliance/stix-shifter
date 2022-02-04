@@ -1,5 +1,21 @@
-##### Updated on 10/29/21
+##### Updated on 02/04/22
 ## Proofpoint (SIEM API)
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+| AND | OR |
+| OR | OR |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | LIKE |
+| IN | IN |
+| MATCHES | LIKE |
+| <br> | | |
+### Supported STIX Objects and Properties
+**Note that these objects are only supported for data translating into STIX, Proofpoint can only query on time range due to API limitations.\n**
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | email-addr | value | ccAddresses |
