@@ -110,9 +110,10 @@ def __main__():
         table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
         output_string += "### Supported STIX Operators\n"
         output_string += "| STIX Operator | Data Source Operator |\n"
+        output_string += "|--|--|\n"
         for stix_operator, ds_operator in stix_operator_collection.items():
             output_string += "| {} | {} |\n".format(stix_operator, ds_operator)
-        output_string += "| <br> | | |\n"
+        output_string += "| <br> | |\n"
         operators_json_file.close()
         sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
         sorted_attribute_objects = json.loads(sorted_attribute_objects)

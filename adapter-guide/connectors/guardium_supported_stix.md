@@ -2,10 +2,11 @@
 ## IBM Guardium Data Protection
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | OR |
 | OR | OR |
 | = | = |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

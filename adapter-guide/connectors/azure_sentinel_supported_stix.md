@@ -2,6 +2,7 @@
 ## Microsoft Azure Sentinel
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | and |
 | OR | or |
 | > | gt |
@@ -13,7 +14,7 @@
 | LIKE | contains |
 | IN | eq |
 | MATCHES | contains |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

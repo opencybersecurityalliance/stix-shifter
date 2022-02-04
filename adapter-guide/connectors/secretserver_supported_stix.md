@@ -2,6 +2,7 @@
 ## Secret Server
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | OR |
 | OR | OR |
 | > | > |
@@ -13,7 +14,7 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | LIKE |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

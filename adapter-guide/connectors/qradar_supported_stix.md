@@ -2,6 +2,7 @@
 ## IBM QRadar
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | OR |
 | OR | OR |
 | > | > |
@@ -14,7 +15,7 @@
 | IN | IN |
 | MATCHES | MATCHES |
 | ISSUBSET | INCIDR |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

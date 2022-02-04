@@ -2,6 +2,7 @@
 ## Splunk Enterprise Security
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | > | > |
 | >= | >= |
 | < | < |
@@ -15,7 +16,7 @@
 | OR | {expr1} OR {expr2} |
 | ISSUBSET | = |
 | FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

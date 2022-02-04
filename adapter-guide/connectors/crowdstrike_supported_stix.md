@@ -2,6 +2,7 @@
 ## CrowdStrike Falcon
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | + |
 | OR | , |
 | = | : |
@@ -10,7 +11,7 @@
 | >= | :>= |
 | < | :< |
 | <= | :<= |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

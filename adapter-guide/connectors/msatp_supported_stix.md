@@ -2,6 +2,7 @@
 ## Microsoft Defender for Endpoint
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | or |
 | OR | or |
 | = | == |
@@ -13,7 +14,7 @@
 | < | < |
 | <= | <= |
 | IN | in~ |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

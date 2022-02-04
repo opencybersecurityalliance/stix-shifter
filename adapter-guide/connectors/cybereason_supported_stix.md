@@ -2,6 +2,7 @@
 ## Cybereason
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | AND |
 | > | GreaterThan |
 | >= | GreaterOrEqualsTo |
@@ -12,7 +13,7 @@
 | LIKE | ContainsIgnoreCase |
 | IN | Equals |
 | MATCHES | ContainsIgnoreCase |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|

@@ -2,6 +2,7 @@
 ## Amazon Athena
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
+|--|--|
 | AND | INTERSECT |
 | OR | UNION |
 | > | > |
@@ -13,7 +14,7 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | REGEXP_LIKE |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
