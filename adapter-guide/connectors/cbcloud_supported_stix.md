@@ -1,4 +1,19 @@
+##### Updated on 02/04/22
 ## Carbon Black Cloud
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | AND |
+| OR | OR |
+| = | : |
+| != | : |
+| > | : |
+| >= | : |
+| < | : |
+| <= | : |
+| IN | : |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | process_path |

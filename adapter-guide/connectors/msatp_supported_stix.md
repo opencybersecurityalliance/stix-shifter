@@ -1,4 +1,21 @@
+##### Updated on 02/04/22
 ## Microsoft Defender for Endpoint
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | or |
+| OR | or |
+| = | == |
+| != | != |
+| LIKE | contains |
+| MATCHES | matches |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| IN | in~ |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | InitiatingProcessFolderPath |
