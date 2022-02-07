@@ -22,12 +22,12 @@ class QueryTranslator(BaseQueryTranslator):
         logger.info(f"Converting STIX2 Pattern {data} to data source query")
 
         """
-        Due to API limitation Proofpoint connector cannot query any standard stix object.
-        We have added mapping in from_stix object to avoid throwing mapping error by the connector.
-        Connector can only translate stix pattern that includes x-proofpoint custom object.
+        Due to Proofpoint SIEM API limitation, the connector cannot query any standard stix object.
+        We have added mapping in the from_stix_map.json to avoid throwing mapping error by the connector.
+        Connector can only translate stix pattern that includes 'x-proofpoint' custom object.
         
-        Below condition is to verify if pattern contains x-proofpoint object if not
-        it simply removes all other objects from the mapping except x-proofpoint and print a debug message
+        Below condition is to verify if pattern contains 'x-proofpoint' object if not
+        it simply removes all other objects from the mapping except 'x-proofpoint' and print a debug message
         """
         if data not in self.map_data['x-proofpoint']["fields"]:
             logger.debug(f'Proofpoint connector cannot query any STIX objects except only x-proofpoint custom STIX Object' )
