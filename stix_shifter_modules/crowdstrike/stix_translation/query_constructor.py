@@ -10,20 +10,10 @@ class CSQueryStringPatternTranslator:
     """
     Stix to FQL query translation
     """
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "+",
-        ComparisonExpressionOperators.Or: ",",
-        ComparisonComparators.Equal: ":",
-        ComparisonComparators.NotEqual: ":!",
-        ComparisonComparators.GreaterThan: ":>",
-        ComparisonComparators.GreaterThanOrEqual: ":>=",
-        ComparisonComparators.LessThan: ":<",
-        ComparisonComparators.LessThanOrEqual: ":<=",
-    }
-
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         # self.logger = logger.set_logger(__name__)
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.time_range = time_range  # filter results to last x minutes
         self.translated = self.parse_expression(pattern)
@@ -63,7 +53,7 @@ class CSQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             mapped_fields_count = len(mapped_fields_array)
             query_string = ""
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
             if expression.negated and expression.comparator == ComparisonComparators.Equal:
                 comparator = self._get_negate_comparator()
 
@@ -77,7 +67,7 @@ class CSQueryStringPatternTranslator:
                 mapped_field_query_str = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
                                                                                   comparator=comparator, value=value)
                 if mapped_fields_count > 1:
-                    mapped_field_query_str += self.comparator_lookup[ComparisonExpressionOperators.Or]
+                    mapped_field_query_str += self.comparator_lookup["ComparisonExpressionOperators.Or"]
                     mapped_fields_count -= 1
 
                 query_string += mapped_field_query_str
@@ -96,7 +86,7 @@ class CSQueryStringPatternTranslator:
             f2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
 
             query_string = (f1 + " {} " + f2).format(self._parse_expression(expression.expr2),
-                                                     self.comparator_lookup[expression.operator],
+                                                     self.comparator_lookup[str(expression.operator)],
                                                      self._parse_expression(expression.expr1))
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
@@ -125,7 +115,7 @@ class CSQueryStringPatternTranslator:
                 expression, type(expression)))
 
     def _get_negate_comparator(self):
-        return self.comparator_lookup[ComparisonComparators.NotEqual]
+        return self.comparator_lookup["ComparisonComparators.NotEqual"]
 
     def _add_default_timerange(self, query):
         if self.time_range and 'behaviors.timestamp' not in query:

@@ -21,30 +21,10 @@ param_delimiter="&"
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
-
-
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.qualifier_string = ''
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
@@ -132,9 +112,9 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -163,8 +143,11 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                qualifier = self._parse_time_range(qualifier)
-                return "{}{}{}".format(comparison_string, param_delimiter ,qualifier)
+                self.qualifier_string = self._parse_time_range(qualifier)
+                if comparison_string:
+                    return "{}".format(comparison_string)
+                else:
+                    return ''
             else:
                 return "{}".format(comparison_string)
 
@@ -172,17 +155,23 @@ class QueryStringPatternTranslator:
             operator = param_delimiter
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
-            if not expression_01 or not expression_02:
+            if (not expression_01 or not expression_02) and not qualifier:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
                 expression_01 = "({})".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "{}{}".format(expression_02, operator)
-
-            query_string = "{}{}{}".format(expression_01, operator, expression_02)
+            if expression_01 and expression_02:
+                query_string = "{}{}{}".format(expression_01, operator, expression_02)
+            else:
+                query_string = ''
             if qualifier is not None:
-                qualifier = self._parse_time_range(qualifier)
-                return "{}{}{}".format(query_string, param_delimiter, qualifier)
+                self.qualifier_string = self._parse_time_range(qualifier)
+                if query_string:
+                    return "{}".format(query_string)
+                else:
+                    self.qualifier_string = qualifier
+                    return ''
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -199,11 +188,12 @@ class QueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self._lookup_comparison_operator(self, expression.operator)
+            if self._lookup_comparison_operator(self, expression.operator):
+                operator = param_delimiter
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
+                return "{}{}{}".format(expression_01, operator, expression_02)
             elif expression_01:
                 return "{}".format(expression_01)
             elif expression_02:
@@ -218,8 +208,12 @@ class QueryStringPatternTranslator:
 
     def parse_expression(self, pattern: Pattern):
         query = self._parse_expression(pattern)
-        if self.qualifier_string:
+        if query and self.qualifier_string:
             query = "{query}{param_delimiter}{qualifier_string}".format(query=query, param_delimiter=param_delimiter, qualifier_string=self.qualifier_string)
+        elif query and not self.qualifier_string:
+            query = "{query}".format(query=query)
+        else:
+            query = "{qualifier_string}".format(qualifier_string=self.qualifier_string)
         return query
 
 

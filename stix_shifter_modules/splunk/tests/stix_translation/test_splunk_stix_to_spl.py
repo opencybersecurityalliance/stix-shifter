@@ -169,7 +169,8 @@ class TestStixToSpl(unittest.TestCase, object):
         result = translation.translate('splunk', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert 'Unable to map the following STIX objects and properties to data source fields' in result['error']
+        assert "data mapping error : Unable to map the following STIX objects and properties: " \
+            "['unmapped:attribute'] to data source fields" in result['error']
 
     def test_invalid_stix_pattern(self):
         stix_pattern = "[not_a_valid_pattern]"

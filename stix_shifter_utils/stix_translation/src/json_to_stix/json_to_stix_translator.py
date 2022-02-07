@@ -74,15 +74,20 @@ class DataSourceObjToStixObj:
         Get value from source object, transforming if specified
         :param obj: the input object we are translating to STIX
         :param ds_key: the property from the input object
-        :param transformer: the transform to apply to the property value (can be None)
+        :param transformer: the transformer to apply to the property value (can be None)
         :return: the resulting STIX value
         """
         if ds_key not in obj:
             DataSourceObjToStixObj.logger.debug('{} not found in object'.format(ds_key))
             return None
         ret_val = obj[ds_key]
-        if ret_val and transformer is not None:
-            return transformer.transform(ret_val)
+
+        if ret_val is not None and transformer is not None:
+            if isinstance(ret_val, list) or isinstance(ret_val, dict):
+                if ret_val:
+                    return transformer.transform(ret_val)
+            else:
+                return transformer.transform(ret_val)
         return ret_val
 
     @staticmethod
