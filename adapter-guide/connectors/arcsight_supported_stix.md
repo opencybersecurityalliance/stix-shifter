@@ -1,4 +1,22 @@
+##### Updated on 02/04/22
 ## Micro Focus ArcSight
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | AND |
+| OR | OR |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | = |
+| IN | IN |
+| MATCHES | CONTAINS |
+| ISSUBSET | insubnet |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | filePath |
