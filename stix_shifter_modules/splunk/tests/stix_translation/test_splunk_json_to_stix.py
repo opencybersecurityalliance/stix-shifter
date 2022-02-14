@@ -220,7 +220,8 @@ class TestTransform(unittest.TestCase, object):
         filePath = "C:\\Users\\someuser\\sample.dll"
         create_time = "2018-08-15T15:11:55.676+00:00"
         modify_time = "2018-08-15T18:10:30.456+00:00"
-        file_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
+        #file_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
+        file_hash = "MD5=5A0B0E6F407C89916515328F318842A1,SHA256=8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91,IMPHASH=406DD24835F1447987FB607C78597252"
         file_name = "sample.dll"
         file_size = 25536
 
@@ -268,7 +269,9 @@ class TestTransform(unittest.TestCase, object):
         assert (file_obj is not None), 'file object type not found'
         assert (file_obj.keys() == {'type', 'parent_directory_ref', 'name', 'hashes'})
         assert (file_obj['name'] == "sample.dll")
-        assert (file_obj['hashes'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
+        assert (file_obj['hashes']['MD5'] == '5A0B0E6F407C89916515328F318842A1')
+        assert (file_obj['hashes']['SHA256'] == '8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91')
+        assert (file_obj['hashes']['IMPHASH'] == '406DD24835F1447987FB607C78597252')
         dir_ref = file_obj['parent_directory_ref']
         assert (dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
         dir_obj = objects[dir_ref]
