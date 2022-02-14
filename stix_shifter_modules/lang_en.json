@@ -13,7 +13,7 @@
         },
         "apphostId": {
          "label": "Edge Gateway",
-          "description": "Specify an edge gateway host if the connection is to run on an edge gateway."
+          "description": "Add or manage edge gateways."
         },
         "options": {
             "result_limit": {
