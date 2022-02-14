@@ -12,11 +12,11 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
-    "AlertId": {
-      "key": "x-msatp.AlertId",
-      "object": "x-msatp"
-    },
     "Alerts": {
+      "alert_AlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
       "alert_Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
@@ -567,11 +567,11 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
-    "AlertId": {
-      "key": "x-msatp.AlertId",
-      "object": "x-msatp"
-    },
     "Alerts": {
+      "alert_AlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
       "alert_Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
@@ -1278,15 +1278,14 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
-    "AlertId": {
-      "key": "x-msatp.AlertId",
-      "object": "x-msatp"
-    },
     "Alerts": {
+      "alert_AlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
       "alert_Severity": {
-        "key": "x-ibm-finding.severity",
-        "object": "finding",
-        "transformer": "SeverityToNumericVal"
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
       },
       "alert_AttackTechniques": [
         {
@@ -1897,11 +1896,11 @@
         "transformer": "MsatpToTimestamp"
       }
     ],
-    "AlertId": {
-      "key": "x-msatp.AlertId",
-      "object": "x-msatp"
-    },
     "Alerts": {
+      "alert_AlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
       "alert_Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
@@ -2408,11 +2407,11 @@
         "references": "host"
       }
     ],
-    "AlertId": {
-      "key": "x-msatp.AlertId",
-      "object": "x-msatp"
-    },
     "Alerts": {
+      "alert_AlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
       "alert_Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",

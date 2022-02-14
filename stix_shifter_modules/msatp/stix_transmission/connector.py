@@ -17,7 +17,7 @@ class Connector(BaseSyncConnector):
                  'kind=leftouter (DeviceInfo | distinct PublicIP, OSPlatform ,OSArchitecture, OSVersion , ' \
                  'DeviceType, DeviceId) on DeviceId, $left.DeviceId == $right.DeviceId'
 
-    ALERT_FIELDS = ['Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
+    ALERT_FIELDS = ['AlertId', 'Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
     ALERT_FIELDS_IGNORE = ['DeviceId', 'DeviceName', 'ReportId', 'Timestamp']
     DEFENDER_HOST = 'security.microsoft.com'
 
