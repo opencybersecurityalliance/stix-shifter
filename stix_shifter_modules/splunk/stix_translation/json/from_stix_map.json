@@ -1,4 +1,37 @@
 {
+    "x-oca-event": {
+      "cim_type": "alert",
+      "fields": {
+        "code": ["signature_id"],
+        "action": ["signature"],
+        "outcome": ["result"],
+        "module": ["source"],
+        "created": ["_time"],
+        "process_ref.command_line": ["process"],
+        "process_ref.binary_ref.name": ["process_exec"],
+        "process_ref.parent_ref.command_line": ["parent_process"],
+        "process_ref.creator_user_ref.user_id": ["process_user"],
+        "process_ref.name": ["process_name"],
+        "process_ref.pid": ["process_id"],
+        "parent_process_ref.command_line": ["parent_process"],
+        "parent_process_ref.binary_ref.name": ["parent_process_exec"],
+        "parent_process_ref.pid": ["parent_process_id"],
+        "parent_process_ref.name": ["parent_process_name"],
+        "domain_ref.value": ["url", "url_domain"],
+        "file_ref.name": ["file_name"],
+        "host_ref.hostname": ["host"],
+        "host_ref.ip_refs[*].value": ["src_ip"],
+        "registry_ref.key": ["ObjectName", "RegistryKey"],
+        "user_ref.user_id": ["user"],
+        "url_ref.value": ["url"]
+      }
+    },
+    "x-oca-asset": {
+      "cim_type": "host",
+      "fields": {
+        "hostname": "host"
+      }
+    },
     "directory": {
         "cim_type": "endpoint",
         "fields": {
