@@ -17,7 +17,7 @@ CONNECTORS = {
     "cbcloud": "Carbon Black Cloud", 
     "elastic_ecs": "Elasticsearch ECS", 
     "msatp": "Microsoft Defender for Endpoint",
-    "security_advisor": "IBM Cloud Security Advisor",
+    # "security_advisor": "IBM Cloud Security Advisor",
     "guardium": "IBM Guardium Data Protection",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
     "azure_sentinel": "Microsoft Azure Sentinel",
@@ -31,8 +31,28 @@ CONNECTORS = {
     "sumologic": "Sumo Logic",
     "datadog": "Datadog",
     "proofpoint": "Proofpoint (SIEM API)",
-    "infoblox": "Infoblox BloxOne Threat Defense",
+    # "infoblox": "Infoblox BloxOne Threat Defense",
     "cybereason": "Cybereason"
+}
+
+STIX_OPERATORS ={
+    "ComparisonExpressionOperators.And": "AND",
+    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonComparators.GreaterThan": ">",
+    "ComparisonComparators.GreaterThanOrEqual": ">=",
+    "ComparisonComparators.LessThan": "<",
+    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ComparisonComparators.Equal": "=",
+    "ComparisonComparators.NotEqual": "!=",
+    "ComparisonComparators.Like": "LIKE",
+    "ComparisonComparators.In": "IN",
+    "ComparisonComparators.Matches": "MATCHES",
+    "ComparisonComparators.IsSubSet": "ISSUBSET",
+    "ComparisonComparators.IsSuperSet": "ISSUPERSET",
+    "ComparisonComparators.Exists": "EXISTS",
+    "ObservationOperators.Or": "OR",
+    "ObservationOperators.And": "AND",
+    "ObservationOperators.FollowedBy": "FOLLOWEDBY"
 }
 
 now = datetime.now()
@@ -57,8 +77,12 @@ def __main__():
     for index, (key, module) in enumerate(CONNECTORS.items()):
         try:
             filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
-            json_file = open(filepath)
-            loaded_json = json.loads(json_file.read())
+            to_stix_json_file = open(filepath)
+            loaded_to_stix_json = json.loads(to_stix_json_file.read())
+            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "operators.json")) 
+            operators_json_file = open(filepath)   
+            loaded_operators_json = json.loads(operators_json_file.read())
+
         except(Exception):
             print("Error for {} module".format(key))
             continue
@@ -70,12 +94,13 @@ def __main__():
                 fields_json_file = open(fields_filepath)
                 loaded_fields_json = json.loads(fields_json_file.read())
                 aliased_data_fields = loaded_fields_json.get('default') # array of fields
+                fields_json_file.close()
             except(Exception):
                 print("Error for {} module".format(key))
                 continue
         
-        stix_attribute_collection = _parse_attributes(loaded_json, key, {})
-        json_file.close()
+        stix_attribute_collection = _parse_attributes(loaded_to_stix_json, key, {})
+        stix_operator_collection = _parse_operators(loaded_operators_json, {})
         supported_stix_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "connectors", "{}_supported_stix.md".format(key)))
         supported_stix_file = open(supported_stix_file_path, "w")
         
@@ -83,18 +108,26 @@ def __main__():
         output_string += "##### Updated on " + UPDATED_AT + "\n"
         output_string += "## " + module + "\n"
         table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
-        sorted_objects = json.dumps(stix_attribute_collection, sort_keys=True)
-        sorted_objects = json.loads(sorted_objects)
+        output_string += "### Supported STIX Operators\n"
+        output_string += "| STIX Operator | Data Source Operator |\n"
+        output_string += "|--|--|\n"
+        for stix_operator, ds_operator in stix_operator_collection.items():
+            output_string += "| {} | {} |\n".format(stix_operator, ds_operator)
+        output_string += "| <br> | |\n"
+        operators_json_file.close()
+        sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
+        sorted_attribute_objects = json.loads(sorted_attribute_objects)
+        output_string += "### Supported STIX Objects and Properties\n"
         output_string += "| STIX Object | STIX Property | Data Source Field |\n"
         output_string += "|--|--|--|\n"
-        for stix_object, property_list in sorted_objects.items():
+        for stix_object, property_list in sorted_attribute_objects.items():
             for index, prop in enumerate(property_list):
                 stix_property, data_field = prop.split(":")
                 if aliased_data_fields:
                     data_field = _get_data_field(data_field, aliased_data_fields)
                 output_string += "| {} | {} | {} |\n".format(stix_object, stix_property, data_field)
             output_string += "| <br> | | |\n"
-
+        to_stix_json_file.close()
         supported_stix_file.write(output_string)
         supported_stix_file.close()
     table_of_contents_file.write(table_of_contents)
@@ -140,6 +173,11 @@ def _parse_attributes(element, module, stix_attribute_collection, data_source_fi
                 stix_attribute_collection[stix_object] = [stix_property]
     # print("COLLECTION {}".format(stix_attribute_collection))
     return stix_attribute_collection
+
+def _parse_operators(element, operator_collection):
+    for key, value in element.items():
+        operator_collection[STIX_OPERATORS[key]] = value
+    return operator_collection
 
 
 
