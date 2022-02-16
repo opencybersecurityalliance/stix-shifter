@@ -26,8 +26,7 @@
 {
   "key": "x-oca-event.ip_refs",
   "object": "ocaevent",
-  "references": ["ipdata"],
-  "group":true
+  "references": "ipdata"
 }
 ],
 "tenantname" :[
@@ -143,10 +142,6 @@
   "object":"ocaevent"
 },
 "userid" :[
-  {
-  "key":"x-oca-event.extensions.x-iam-ext.user_id",
-  "object":"ocaevent"
-},
  {
   "key": "user-account.user_id",
   "object": "useraccount"
