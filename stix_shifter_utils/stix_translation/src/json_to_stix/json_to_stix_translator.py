@@ -13,6 +13,8 @@ UUID5_NAMESPACE = "00abedb4-aa42-466c-9c01-fed23315a9b7"
 NUMBER_OBSERVED_KEY = 'number_observed'
 FIRST_OBSERVED_KEY = 'first_observed'
 LAST_OBSERVED_KEY = 'last_observed'
+USE_STIX_OBJECT_DETERMINISTIC_ID = False
+
 
 # convert JSON data to STIX object using map_data and transformers
 def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
@@ -28,10 +30,21 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
             del stix_object["objects"]
         ds2stix.bundle["objects"].append(stix_object)
 
-    for key, value in ds2stix.unique_cybox_objects.items():
+    for _, value in ds2stix.unique_cybox_objects.items():
         ds2stix.bundle["objects"].append(value)
 
     return ds2stix.bundle
+
+
+class StixObjectId(str):
+
+    object_id = None
+
+    def __init__(self, object_id):
+        self.object_id = object_id
+
+    def update(self, object_id):
+        self.object_id = object_id
 
 
 class DataSourceObjToStixObj:
@@ -62,6 +75,9 @@ class DataSourceObjToStixObj:
 
         if options.get("stix_2.1"):
             self.spec_version = "2.1"
+            if USE_STIX_OBJECT_DETERMINISTIC_ID:
+                with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
+                    self.contributing_properties_definitions =  json.load(f)
         else:
             self.spec_version = "2.0"
             self.bundle["spec_version"] = "2.0"
@@ -151,22 +167,28 @@ class DataSourceObjToStixObj:
         """
         tag_ind = None
         # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
-        if unwrap:
-            tag = tag + '_' + str(unwrap)
+        try:
+            if unwrap:
+                tag = tag + '_' + str(unwrap)
 
-        if tag in object_tag_ref_map['tags']:
-            tag_ind = object_tag_ref_map['tags'][tag]['i']
-            object_tag_ref_map['tags'][tag]['n'] += 1
-        elif create_on_absence:
-            tag_ind = object_tag_ref_map[UUID5_NAMESPACE]
-            object_tag_ref_map[UUID5_NAMESPACE] += 1
-            object_tag_ref_map['tags'][tag] = {'i': tag_ind, 'n': 0}
-            
-        if tag_ind is not None:
-            tag_ind = str(tag_ind)
-            if property_key and '_ref' not in property_key:
-                object_tag_ref_map['non_ref_props'][tag_ind] = True
+            if tag in object_tag_ref_map['tags']:
+                tag_ind = str(object_tag_ref_map['tags'][tag]['i'])
+                object_tag_ref_map['tags'][tag]['n'] += 1
+            elif create_on_absence:
+                if self.spec_version == "2.1":
+                    tag_ind = StixObjectId(create_on_absence + "--" + str(uuid.uuid4()))
+                else:
+                    tag_ind = str(object_tag_ref_map[UUID5_NAMESPACE])
 
+                object_tag_ref_map[UUID5_NAMESPACE] += 1
+                object_tag_ref_map['tags'][tag] = {'i': tag_ind, 'n': 0}
+                
+            if tag_ind is not None:
+                # tag_ind = str(tag_ind)
+                if property_key and '_ref' not in property_key:
+                    object_tag_ref_map['non_ref_props'][tag_ind] = True
+        except Exception as e:
+            raise Exception("Error in json_to_stix_translator._get_tag_ind: %s : %s" % (e, e.__traceback__.tb_lineno))
         return tag_ind
 
     def _add_property(self, type_name, property_key, parent_key_ind, value, objects, group=False, cybox=True):
@@ -179,6 +201,9 @@ class DataSourceObjToStixObj:
                     'type': type_name,
                     property_key: value
                 }
+                if self.spec_version == "2.1":
+                    objects[parent_key_ind]["id"] = parent_key_ind
+                    objects[parent_key_ind]["spec_version"] = "2.1"
             else:
                 objects[parent_key_ind] = {
                 property_key: value
@@ -293,27 +318,24 @@ class DataSourceObjToStixObj:
 
                     if not references and unwrap and isinstance(value, list):
                         for i, val_el in enumerate(value):
-                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
+                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=type_name, unwrap=i, property_key=property_key)
                             self._add_property(type_name, property_key, parent_key_ind, val_el, objects, group=group)
                     else:
-                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
+                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=type_name, property_key=property_key)
                         self._add_property(type_name, property_key, parent_key_ind, value, objects, group=group)
         except Exception as e:
-            raise Exception("Error in json_to_stix_translator._handle_value: %s" % e)
+            raise Exception("Error in json_to_stix_translator._handle_value: %s : %s" % (e, e.__traceback__.tb_lineno))
 
     # STIX 2.1 helper methods
     def _generate_and_apply_deterministic_id(self, object_id_map, cybox_objects):
         # Generates ID based on common namespace and SCO properties (omitting id and spec_version)
         # TODO: Handle references when part of ID contributing properties
 
-        with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
-            contributing_properties_definitions =  json.load(f)
-
         for key, cybox in cybox_objects.items():
             object_id_map[key] = ""
             cybox_properties = {}
             cybox_type = cybox.get("type")
-            contributing_properties = contributing_properties_definitions.get(cybox_type)
+            contributing_properties = self.contributing_properties_definitions.get(cybox_type)
 
             if contributing_properties:
                 for contr_prop in contributing_properties:
@@ -351,67 +373,77 @@ class DataSourceObjToStixObj:
                 self.unique_cybox_objects[cybox["id"]] = cybox
 
     def transform(self, obj):
-        """
-        Transforms the given object in to a STIX observation based on the mapping file and transform functions
-        :param obj: the datasource object that is being converted to stix
-        :return: the input object converted to stix valid json
-        """
-        object_map = {}
-        stix_type = 'observed-data'
-        ds_map = self.ds_to_stix_map
-        now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
-        object_id_map = {}
+        try:
+            """
+            Transforms the given object in to a STIX observation based on the mapping file and transform functions
+            :param obj: the datasource object that is being converted to stix
+            :return: the input object converted to stix valid json
+            """
+            object_map = {}
+            stix_type = 'observed-data'
+            ds_map = self.ds_to_stix_map
+            now = "{}Z".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3])
+            object_id_map = {}
 
-        observation = {
-            'id': stix_type + '--' + str(uuid.uuid4()),
-            'type': stix_type,
-            'created_by_ref': self.identity_id,
-            'created': now,
-            'modified': now,
-            'objects': {}
-        }
+            observation = {
+                'id': stix_type + '--' + str(uuid.uuid4()),
+                'type': stix_type,
+                'created_by_ref': self.identity_id,
+                'created': now,
+                'modified': now,
+                'objects': {}
+            }
 
-        # create normal type objects
-        if isinstance(obj, dict):
-            object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'non_ref_props': {}, 'out_cybox': {}, 'ds_key_cybox': {}}
+            # create normal type objects
+            if isinstance(obj, dict):
+                object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'non_ref_props': {}, 'out_cybox': {}, 'ds_key_cybox': {}}
 
-            self._handle_properties(ds_map, obj, object_map, object_tag_ref_map)
-            # special case:
-            # remove object if:
-            # a reference attribute object does not contain at least one property other than 'type'
-            object_map = self._cleanup_references(object_map, object_tag_ref_map['non_ref_props'])
-            observation['objects'] = object_map
+                self._handle_properties(ds_map, obj, object_map, object_tag_ref_map)
+                # special case:
+                # remove object if:
+                # a reference attribute object does not contain at least one property other than 'type'
+                object_map = self._cleanup_references(object_map, object_tag_ref_map['non_ref_props'])
+                observation['objects'] = object_map
 
-            for k, v in object_tag_ref_map['out_cybox'].items():
-                observation[k] = v
+                for k, v in object_tag_ref_map['out_cybox'].items():
+                    observation[k] = v
             
-        else:
-            self.logger.debug("Not a dict: {}".format(obj))
+            else:
+                self.logger.debug("Not a dict: {}".format(obj))
 
-        # Add required properties to the observation if it wasn't added from the mapping
-        if FIRST_OBSERVED_KEY not in observation:
-            observation[FIRST_OBSERVED_KEY] = now
-        if LAST_OBSERVED_KEY not in observation:
-            observation[LAST_OBSERVED_KEY] = now
-        if NUMBER_OBSERVED_KEY not in observation:
-            observation[NUMBER_OBSERVED_KEY] = 1
+            # Add required properties to the observation if it wasn't added from the mapping
+            if FIRST_OBSERVED_KEY not in observation:
+                observation[FIRST_OBSERVED_KEY] = now
+            if LAST_OBSERVED_KEY not in observation:
+                observation[LAST_OBSERVED_KEY] = now
+            if NUMBER_OBSERVED_KEY not in observation:
+                observation[NUMBER_OBSERVED_KEY] = 1
 
-        if self.spec_version == "2.1":
-            cybox_objects = observation["objects"]
-            self._generate_and_apply_deterministic_id(object_id_map, cybox_objects)
-            self._replace_references(object_id_map, cybox_objects)
-            object_refs = []
-            # add cybox references to observed-data object
-            for key, value in object_id_map.items():
-                object_refs.append(value)
-            observation["object_refs"] = object_refs
-            observation["spec_version"] = "2.1"
-            self._collect_unique_cybox_objects(cybox_objects)
+            if self.spec_version == "2.1":
+                object_refs = []
+                if USE_STIX_OBJECT_DETERMINISTIC_ID:
+                    cybox_objects = observation["objects"]
+                    self._generate_and_apply_deterministic_id(object_id_map, cybox_objects)
+                    self._replace_references(object_id_map, cybox_objects)
+                    # add cybox references to observed-data object
+                    for key, value in object_id_map.items():
+                        object_refs.append(value)
+                    self._collect_unique_cybox_objects(cybox_objects)
+                else:
+                    self.unique_cybox_objects = observation["objects"]
+                    # add cybox references to observed-data object
+                    for key, value in object_tag_ref_map['tags'].items():
+                        object_refs.append(value['i'])
 
-        # Validate each STIX object
-        if self.stix_validator:
-            validated_result = validate_instance(observation)
-            print_results(validated_result)
+                observation["object_refs"] = object_refs
+                observation["spec_version"] = "2.1"
+
+            # Validate each STIX object
+            if self.stix_validator:
+                validated_result = validate_instance(observation)
+                print_results(validated_result)
+        except Exception as e:
+            raise Exception("Error in json_to_stix_translator.transform: %s" % e)
 
         return observation
 
@@ -419,7 +451,10 @@ class DataSourceObjToStixObj:
         new_objects = {}
 
         tag_keys = list(tags.keys())
-        tag_keys.sort(key=lambda x: int(x))
+        try: 
+            tag_keys.sort(key=lambda x: int(x))
+        except Exception:
+            pass
 
         for ind in tag_keys:
             new_objects[ind] = objects[ind]
