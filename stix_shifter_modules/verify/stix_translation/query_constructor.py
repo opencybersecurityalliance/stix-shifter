@@ -1,4 +1,5 @@
 from os import stat
+from sre_constants import IN
 from typing import Union
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
@@ -7,6 +8,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 import logging
 import re
+import json
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
@@ -39,9 +41,19 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
-            return '{}'.format(value.replace("\'","'").replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)').replace("$","\"").replace('&','%26'))
+            return '{}'.format(value.replace("\'","'").replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)').replace("$","\"").replace('&','%26')
+            .replace('""','"'))
         else:
             return value
+    @staticmethod
+    def _convert_list_string_in_condition(value)->str:
+        if isinstance(value,list):
+           contcated_string =  ''.join(f'"{str}",'.format(str) for str in value ).removesuffix(',')
+           contcated_string=  contcated_string[1:-1]
+           return contcated_string
+
+
+
 
     @staticmethod
     def _negate_comparison(comparison_string):
@@ -54,7 +66,7 @@ class QueryStringPatternTranslator:
             if key != 'date' and bool(re.search(pattern, value)):
                 return key
         return None
-
+  
     # TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
@@ -112,16 +124,6 @@ class QueryStringPatternTranslator:
                 return '"{}"'.format(value)
             else:
                 return  value
- 
-
-    @staticmethod
-    def _check_value_type(value):
-        value = str(value)
-        for key, pattern in observable.REGEX.items():
-            if key != 'date' and bool(re.search(pattern, value)):
-                return key
-        return None
-
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
@@ -159,7 +161,13 @@ class QueryStringPatternTranslator:
                 value = self._escape_value(expression.value)
                 #check if belongs to event object type. This require sepecial treatment.
                 value = self._check_filter_value_type(value,stix_object)
-            else:
+            elif expression.comparator == ComparisonComparators.In:
+                in_string = expression.value.values if hasattr(expression.value, 'values') else expression.value
+                values = self._convert_list_string_in_condition(in_string)
+                #apply escape value to remove unwanted char in string.
+                value = self._escape_value(values)
+
+            else :
                 value = self._escape_value(expression.value)
 
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array,stix_object)
