@@ -1,5 +1,7 @@
 {
     "ComparisonExpressionOperators.And": "&",
     "ComparisonComparators.Equal": "=",
-    "ObservationOperators.And": "or"
+    "ObservationOperators.And": "or",
+    "ComparisonComparators.In": "="
+
 }

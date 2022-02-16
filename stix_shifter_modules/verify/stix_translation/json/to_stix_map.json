@@ -8,12 +8,8 @@
     "key": "x-oca-event.user_ref",
     "object": "ocaevent",
     "references": "useraccount"
-  },
-  {
-    "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
-    "object": "ocaevent",
-    "references": "useraccount"
   }
+ 
 ],
 "servicename" :{
   "key":"x-oca-event.module",
@@ -30,7 +26,8 @@
 {
   "key": "x-oca-event.ip_refs",
   "object": "ocaevent",
-  "references": "ipdata"
+  "references": ["ipdata"],
+  "group":true
 }
 ],
 "tenantname" :[
@@ -49,7 +46,7 @@
   
   {
     "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-iam-ext.outcome"
+    "key": "x-oca-event.outcome"
   } 
 ], 
   
@@ -58,10 +55,7 @@
   "object": "ocaevent",
   "key": "x-oca-event.extensions.x-iam-ext.subcategory"
 },
-"subject": {
-  "object": "ocaevent",
-  "key": "x-oca-event.extensions.x-iam-ext.subject"
-},
+
 
 "cause": {
   "object": "ocaevent",
@@ -103,6 +97,10 @@
 {
   "key":"x-oca-event.category",
   "object":"ocaevent"
+},{
+  "key": "x-oca-event.provider",
+  "object": "ocaevent",
+  "transformer": "VerifyStaticTransformer"
 }
 ],
   
@@ -118,10 +116,7 @@
     "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
     "object": "ocaevent"
   },
-"messageid" :{
-  "key":"x-oca-event.extensions.x-iam-ext.message_id",
-  "object":"ocaevent"
-},
+
 "deleted" :{
   "key":"x-oca-event.extensions.x-iam-ext.deleted",
   "object":"ocaevent"
@@ -134,10 +129,7 @@
   "key":"x-oca-event.extensions.x-iam-ext.performedby_realm",
   "object" :"ocaevent"
 },
-"resource" :{
-  "key":"x-oca-event.extensions.x-iam-ext.resource",
-  "object" :"ocaevent"
-},
+
 "targetid" :{
   "key":"x-oca-event.extensions.x-iam-ext.targetid",
   "object":"ocaevent"
@@ -148,10 +140,6 @@
 },
 "targetid_username" :{
   "key":"x-oca-event.extensions.x-iam-ext.taregetid_username",
-  "object":"ocaevent"
-},
-"userinfo_lookup" :{
-  "key" :"x-oca-event.extensions.x-iam-ext.userinfo_lookup",
   "object":"ocaevent"
 },
 "userid" :[
@@ -180,21 +168,9 @@
     "key" :"x-oca-event.extensions.x-iam-ext.country_name",
     "object":"ocaevent"
   },
-  "region_name" : {
-    "key" :"x-oca-event.extensions.x-iam-ext.region_name",
-    "object":"ocaevent"
-  },
-  "provider" : {
-    "key" :"x-oca-event.provider",
-    "object":"ocaevent"
-  },
   "providerid" :{
     "key":"x-oca-event.extensions.x-iam-ext.provider_id",
     "object":"ocaevent"
-  },
-  "decision_decisionCode" :{
-    "object":"ocaevent",
-    "key":"x-oca-event.extensions.x-iam-ext.decision_decisionCode"
   },
   "rule_name" :{
       "object":"ocaevent",
