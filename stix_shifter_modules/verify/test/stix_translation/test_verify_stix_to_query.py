@@ -69,5 +69,9 @@ class TestStixToQuery(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         expected_queries = 'filter_key=tenantname&filter_value="isrras.ice.ibmcloud.com"&size=10000'
         _test_query_assertions(query,expected_queries)
-  
-  
+    
+    def test_applicationname_with_special_char_query(self):
+        stix_pattern ="[x-oca-event:extensions.'x-iam-ext'.application_name='Bane & Ox VPN']"
+        query = _translate_query(stix_pattern)
+        expected_query = 'filter_key=data.applicationname&filter_value="Bane %26 Ox VPN"&size=10000'
+        _test_query_assertions(query,expected_query)
