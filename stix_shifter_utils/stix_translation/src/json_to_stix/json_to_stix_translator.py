@@ -115,6 +115,7 @@ class DataSourceObjToStixObj:
                     return False
             return True
         except Exception as e:
+            self.logger.debug("Failed to validate STIX property '{}' with value '{}'. Exception: {}".format(observable_key, stix_value, e))
             return False
 
     def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False):
