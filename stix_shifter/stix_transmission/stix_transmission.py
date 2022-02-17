@@ -48,12 +48,12 @@ class StixTransmission:
             ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
-    def results(self, search_id, offset, length):
+    def results(self, search_id, offset, length, metadata=None):
         # Creates and sends a query to the correct datasource asking for results of the specific query
         try:
             if self.init_error:
                 raise self.init_error
-            return self.entry_point.create_results_connection(search_id, offset, length)
+            return self.entry_point.create_results_connection(search_id, offset, length, metadata)
         except Exception as ex:
             return_obj = dict()
             ErrorResponder.fill_error(return_obj, error=ex)

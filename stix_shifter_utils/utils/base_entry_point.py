@@ -260,7 +260,9 @@ class BaseEntryPoint:
         self.__results_connector = connector
 
     @transmission
-    def create_results_connection(self, search_id, offset, length):
+    def create_results_connection(self, search_id, offset, length, metadata=None):
+        if metadata:
+            return self.__results_connector.create_results_connection(search_id, offset, length, metadata)
         return self.__results_connector.create_results_connection(search_id, offset, length)
 
     @transmission
