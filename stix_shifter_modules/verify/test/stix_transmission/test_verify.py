@@ -43,10 +43,9 @@ class TestVerifyConnection(unittest.TestCase, object):
         connection = {
             "host": "hostbla",
             "port": 8080,
-            "selfSignedCert": "cert"
         }
         check_async = entry_point.is_async()
-        assert check_async is not True
+        assert check_async is True
 
     @patch('stix_shifter_modules.verify.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response, mock_api_client):

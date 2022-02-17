@@ -1,11 +1,9 @@
-
 {
   "user-account":{
     "fields": {
       "user_id": ["data.username"],
       "account_login": ["data.username"],
       "account_type":["data.realm"]
-    
     }
   },  
   "ipv4-addr":{
@@ -26,7 +24,7 @@
         "module":["servicename"],
         "outcome":["data.result"],
         "agent" :["data.sourcetype"],
-        "ip_refs.value":["ip"],
+        "ip_refs[*].value":["ip"],
         "domain_ref.value": ["tenantname"],
         "user_ref": ["username"],
         "provider":"'IBM Security Verify Event'",
@@ -58,7 +56,6 @@
         "extensions.'x-iam-ext'.'decision_reason'":["data.decision_reason"],
         "extensions.'x-iam-ext'.'risk_level'":["data.risk_level"],
         "extensions.'x-iam-ext'.'risk_score'":["data.risk_score"]
-      
         }  
       }
     }
