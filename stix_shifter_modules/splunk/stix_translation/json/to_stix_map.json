@@ -183,18 +183,11 @@
       "references": "authentication"
     }
   ],
-  "process_user": [
-    {
-      "key": "windows-registry-key.creator_user_ref",
-      "object": "windows-registry-key",
-      "references": "authentication"
-    },
-    {
-      "key": "process.creator_user_ref",
-      "object": "process",
-      "references": "authentication"
-    }
-  ],
+  "process_user": {
+    "key": "process.creator_user_ref",
+    "object": "process",
+    "references": "authentication"
+  },
   "bytes": {
     "key": "x_splunk_spl.bytes",
     "cybox": false
