@@ -10,21 +10,4 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
 
     def create_query_connection(self, query):
-        
-        error = None
-        try :
-            api_response = self.api_client.run_search(query)
-            response_code = api_response['success']
-        except ValueError as ex:
-            self.logger.debug(ex)
-            error = Exception(f'Can not parse response: {ex} ')
-
-
-        return_obj = dict()
-        if 200 <= response_code <= 299 and error is None:
-            return_obj['success'] = True
-            return_obj['search_id'] = query
-        else:
-            ErrorResponder.fill_error(return_obj, api_response, ['message'], error=error)
-        
-        return return_obj
+       return {"success": True, "search_id": query}

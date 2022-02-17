@@ -26,12 +26,9 @@ class QueryStringPatternTranslator:
     comparator_lookup = {
     "ComparisonExpressionOperators.And": "&",
     "ComparisonComparators.Equal": "=",
-    "ObservationOperators.And": "or",
+    "ObservationOperators.And": "=",
     "ComparisonComparators.In": "="
-
     }
-    
-
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         #self.comparator_lookup = self.dmm.map_comparator() #Not sure its not workig with kestral
@@ -51,9 +48,6 @@ class QueryStringPatternTranslator:
            contcated_string =  ''.join(f'"{str}",'.format(str) for str in value ).removesuffix(',')
            contcated_string=  contcated_string[1:-1]
            return contcated_string
-
-
-
 
     @staticmethod
     def _negate_comparison(comparison_string):

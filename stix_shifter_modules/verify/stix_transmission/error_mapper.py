@@ -11,11 +11,9 @@ error_mapping = {
     400: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
 }
 
-
 class ErrorMapper():
     logger = logger.set_logger(__name__)
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
-
 
     @staticmethod
     def set_error_code(json_data, return_obj):

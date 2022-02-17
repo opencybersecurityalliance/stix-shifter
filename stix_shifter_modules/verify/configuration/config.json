@@ -13,28 +13,6 @@
             "default": 443,
             "min": 1,
             "max": 65535
-        },
-      
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
-        "selfSignedCert": {
-            "type": "password",
-            "optional": true
-        },
-        "region": {
-            "type": "text",
-            "default": "us"
-        },
-        "help": {
-            "type": "link",
-            "default": "data-sources.html"
-        },
-        "options": {
-            "unmapped_fallback": {
-                "default": false
-            }
         }
     },
     "configuration": {
