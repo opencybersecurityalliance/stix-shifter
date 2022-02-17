@@ -89,7 +89,7 @@ class TestStixToQuery(unittest.TestCase, object):
     def test_in_statement_with_start_stop(self):
         stix_pattern = "[ ipv4-addr:value IN ('192.168.1.1', '192.168.1.2', '192.168.1.3') ] START t'2022-02-06T07:19:00.000Z' STOP t'2022-02-08T07:19:00.000Z' "
         query = _translate_query(stix_pattern)
-        expected_query = 'filter_key=data.origin&filter_value="192.168.1.1", "192.168.1.2", "192.168.1.3"&from=1644131940000&to=1644304740000&size=10000'
+        expected_query = 'filter_key=data.origin&filter_value="192.168.1.1","192.168.1.2","192.168.1.3"&from=1644131940000&to=1644304740000&size=10000'
         _test_query_assertions(query, expected_query)
 
     def test_in_statement_with_event_type_start_stop(self):
