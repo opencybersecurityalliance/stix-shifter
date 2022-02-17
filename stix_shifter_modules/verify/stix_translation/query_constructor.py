@@ -45,8 +45,8 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _convert_list_string_in_condition(value)->str:
         if isinstance(value,list):
-           contcated_string =  ''.join(f'"{str}",'.format(str) for str in value ).removesuffix(',')
-           contcated_string=  contcated_string[1:-1]
+           contcated_string =  ''.join(f'"{str}",'.format(str) for str in value )
+           contcated_string=  contcated_string[1:-2]
            return contcated_string
 
     @staticmethod
