@@ -44,17 +44,17 @@ def _translate_query(stix_pattern):
 
 class TestStixToQuery(unittest.TestCase, object):
 
-    def test_event_type(self):
-        stix_pattern = "[x-oca-event:category='authentication']"
-        query = _translate_query(stix_pattern)
-        queries = "event_type=\"authentication\"&size=10000"
-        _test_query_assertions(query, queries)
+    # def test_event_type(self):
+    #     stix_pattern = "[x-oca-event:category='authentication']"
+    #     query = _translate_query(stix_pattern)
+    #     queries = "event_type=\"authentication\"&size=10000"
+    #     _test_query_assertions(query, queries)
 
-    def test_IPV4_query(self):
-        stix_pattern = "[ipv4-addr:value='192.168.1.1']"
-        query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=data.origin&filter_value="192.168.1.1"&size=10000'
-        _test_query_assertions(query, expected_queries)
+    # def test_IPV4_query(self):
+    #     stix_pattern = "[ipv4-addr:value='192.168.1.1']"
+    #     query = _translate_query(stix_pattern)
+    #     expected_queries = 'filter_key=data.origin&filter_value="192.168.1.1"&size=10000'
+    #     _test_query_assertions(query, expected_queries)
 
     # def test_oca_event_extension(self):
     #     stix_pattern = "[x-oca-event:extensions.'x-iam-ext'.user_id='652001LT0R']"
@@ -62,23 +62,23 @@ class TestStixToQuery(unittest.TestCase, object):
     #     expected_queries = 'filter_key=data.userid&filter_value="652001LT0R"&size=10000'
     #     _test_query_assertions(query,expected_queries)
 
-    def test_event_type_and_fiter(self):
-        stix_pattern = "[x-oca-event:category = 'sso' AND x-oca-event:domain_ref.value = '192.168.1.1']START t'2022-01-17T18:24:00.000Z' STOP t'2022-01-20T18:24:00.000Z' "
-        query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=tenantname&filter_value="192.168.1.1"&event_type="sso"&from=1642443840000&to=1642703040000&size=10000'
-        _test_query_assertions(query, expected_queries)
+    # def test_event_type_and_fiter(self):
+    #     stix_pattern = "[x-oca-event:category = 'sso' AND x-oca-event:domain_ref.value = '192.168.1.1']START t'2022-01-17T18:24:00.000Z' STOP t'2022-01-20T18:24:00.000Z' "
+    #     query = _translate_query(stix_pattern)
+    #     expected_queries = 'filter_key=tenantname&filter_value="192.168.1.1"&event_type="sso"&from=1642443840000&to=1642703040000&size=10000'
+    #     _test_query_assertions(query, expected_queries)
 
-    def test_domain_name_query(self):
-        stix_pattern = "[domain-name:value = 'ibmcloud.com']"
-        query = _translate_query(stix_pattern)
-        expected_queries = 'filter_key=tenantname&filter_value="ibmcloud.com"&size=10000'
-        _test_query_assertions(query, expected_queries)
+    # def test_domain_name_query(self):
+    #     stix_pattern = "[domain-name:value = 'ibmcloud.com']"
+    #     query = _translate_query(stix_pattern)
+    #     expected_queries = 'filter_key=tenantname&filter_value="ibmcloud.com"&size=10000'
+    #     _test_query_assertions(query, expected_queries)
 
-    def test_applicationname_with_special_char_query(self):
-        stix_pattern = "[x-oca-event:extensions.'x-iam-ext'.application_name='Bane & Ox VPN']"
-        query = _translate_query(stix_pattern)
-        expected_query = 'filter_key=data.applicationname&filter_value="Bane %26 Ox VPN"&size=10000'
-        _test_query_assertions(query, expected_query)
+    # def test_applicationname_with_special_char_query(self):
+    #     stix_pattern = "[x-oca-event:extensions.'x-iam-ext'.application_name='Bane & Ox VPN']"
+    #     query = _translate_query(stix_pattern)
+    #     expected_query = 'filter_key=data.applicationname&filter_value="Bane %26 Ox VPN"&size=10000'
+    #     _test_query_assertions(query, expected_query)
 
     def test_in_statement(self):
         stix_pattern = "[ ipv4-addr:value IN ('192.168.1.1', '192.168.1.2', '192.168.1.3') ]"

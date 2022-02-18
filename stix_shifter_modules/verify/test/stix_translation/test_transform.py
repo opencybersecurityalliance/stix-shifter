@@ -1,10 +1,13 @@
-from unicodedata import category
-import unittest
 import json
 import logging
+import unittest
+from unicodedata import category
+
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_modules.verify.entry_point import EntryPoint
-from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
+    get_module_transformers
+
 translation = stix_translation.StixTranslation()
 # config_file = open('stix_shifter_modules/verify_event/configuration/config.json').read()
 # from_stix_file = open('stix_shifter_modules/verify_event/stix_translation/json/from_stix_map.json').read()
@@ -61,11 +64,12 @@ class TestTransformQuery(unittest.TestCase,object):
         "userid": "652001LT0R", "applicationtype": "Custom Application", "devicetype": 
         "PAN GlobalProtect/5.2.4-21 (Microsoft Windows 10 Enterprise , 64-bit) Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko", 
         "username": "dinepal1@in.ibm.com", "applicationname": "Bane & Ox VPN", "year": 2022, 
+        "billingid":"12345","mdmismanaged":"true","mdmiscompliant": "true","deviceid":"abc_device",
         "@metadata": {"group_id": "event-transform-prod-eu01a-prod-eu01a-01", "source_dc": "prod-eu01a"}, 
         "event_type": "sso", "month": 1, "indexed_at": 1642413142906, "@processing_time": 1012, 
         "tenantid": "c92ce528-293f-4e84-8307-c4fe188b9461", "tenantname": "isrras.ice.ibmcloud.com", 
         "correlationid": "CORR_ID-a134f569-8d73-45ac-8d44-2457448c9101", "servicename": "saml_runtime", 
-        "id": "dc4523e6-6260-4349-83f8-3320365a5f25", "time": 1642413141894, "day": 17}, ]
+        "id": "dc4523e6-6260-4349-83f8-3320365a5f25", "time": 1642413141894, "day": 17} ]
 
         user_ref ="2"
         category ="sso"
@@ -84,7 +88,10 @@ class TestTransformQuery(unittest.TestCase,object):
         assert(event['domain_ref'] == domain_ref)
         assert(event['module'] == module)
         assert(event['category'] == category)
-        assert(event['extensions'])
-        assert(event['created'] == '2022-01-17T09:52:21.894Z')
+        assert(event["extensions"]['x-iam-ext']['is_device_managed']=="true")
+        assert(event["extensions"]['x-iam-ext']['is_device_managed']=="true")
+        assert(event["extensions"]['x-iam-ext']['mdm_customerid']=="true")
+        assert(event["extensions"]['x-iam-ext']['is_device_compliant']=="true")
+        assert(event["extensions"]['x-iam-ext']['deviceid']=="true")
         
         

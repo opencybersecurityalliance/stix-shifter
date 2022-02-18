@@ -5,6 +5,14 @@
       "object": "useraccount"
     },
     {
+      "key": "user-account.account_login",
+      "object": "useraccount"
+    },
+    {
+      "key": "user-account.account_type",
+      "object": "useraccount"
+    },
+    {
       "key": "x-oca-event.user_ref",
       "object": "ocaevent",
       "references": "useraccount"
@@ -178,10 +186,26 @@
   },
   "risk_level": {
     "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-iam-ext.data.risk_level"
+    "key": "x-oca-event.extensions.x-iam-ext.risk_level"
   },
   "risk_score": {
     "object": "ocaevent",
-    "key": "x-oca-event.extensions.x-iam-ext.data.risk_score"
+    "key": "x-oca-event.extensions.x-iam-ext.risk_score"
+  },
+  "deviceid": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.deviceid"
+  },
+  "mdmiscompliant": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.is_device_compliant"
+  },
+  "mdmismanaged": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.is_device_managed"
+  },
+  "billingid": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.mdm_customerid"
   }
 }
