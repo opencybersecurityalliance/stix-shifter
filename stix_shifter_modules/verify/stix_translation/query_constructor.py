@@ -15,7 +15,8 @@ import json
 REFERENCE_DATA_TYPES = {"ipaddr": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cidr"],
                         "proxy_ip": ["ipv4", "ipv4_cidr"],
                         }
-REFERENCE_FILTER_TYPE = ["user-account","ipv4-addr","domain-name","x-oca-event"]
+REFERENCE_FILTER_TYPE = ["user-account",
+                         "ipv4-addr", "domain-name", "x-oca-event"]
 REFERENCE_EXCLUDE_FILTER_TYPE = ["category"]
 logger = logging.getLogger(__name__)
 
@@ -24,30 +25,33 @@ class QueryStringPatternTranslator:
     QUERIES = []
     # # Change comparator values to match with supported data source operators
     comparator_lookup = {
-    "ComparisonExpressionOperators.And": "&",
-    "ComparisonComparators.Equal": "=",
-    "ObservationOperators.And": "=",
-    "ComparisonComparators.In": "="
+        "ComparisonExpressionOperators.And": "&",
+        "ComparisonComparators.Equal": "=",
+        "ObservationOperators.And": "=",
+        "ComparisonComparators.In": "="
     }
+
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
-        #self.comparator_lookup = self.dmm.map_comparator() #Not sure its not workig with kestral
+        # self.comparator_lookup = self.dmm.map_comparator() #Not sure its not workig with kestral
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
-            return '{}'.format(value.replace("\'","'").replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)').replace("$","\"").replace('&','%26')
-            .replace('""','"'))
+            return '{}'.format(value.replace("\'", "'").replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)').replace("$", "\"").replace('&', '%26')
+                               .replace('""', '"'))
         else:
             return value
+
     @staticmethod
     def _convert_list_string_in_condition(value)->str:
-        if isinstance(value,list):
-           contcated_string =  ''.join(f'"{str}",'.format(str) for str in value )
-           contcated_string=  contcated_string[1:-2]
-           return contcated_string
+        if isinstance(value, list):
+            contcated_string = ''.join(
+                f'"{str}",'.format(str) for str in value)
+            contcated_string = contcated_string[1:-2]
+            return contcated_string
 
     @staticmethod
     def _negate_comparison(comparison_string):
@@ -60,7 +64,7 @@ class QueryStringPatternTranslator:
             if key != 'date' and bool(re.search(pattern, value)):
                 return key
         return None
-  
+
     # TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
@@ -71,24 +75,30 @@ class QueryStringPatternTranslator:
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
     @staticmethod
-    def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array,stix_object):
+    def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array, stix_object):
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
-        is_object_filter_typeValue = self._is_object_filterType(stix_object,stix_field)
+        is_object_filter_typeValue = self._is_object_filterType(
+            stix_object, stix_field)
         # Need to use expression.value to match against regex since the passed-in value has already been formated.
-        value_type = self._check_value_type(expression.value) if is_reference_value else None
-        mapped_fields_count = 1 if is_reference_value else len(mapped_fields_array)
+        value_type = self._check_value_type(
+            expression.value) if is_reference_value else None
+        mapped_fields_count = 1 if is_reference_value else len(
+            mapped_fields_array)
 
         for mapped_field in mapped_fields_array:
             if is_reference_value:
-                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
+                parsed_reference = self._parse_reference(
+                    self, stix_field, value_type, mapped_field, value, comparator)
                 if not parsed_reference:
                     continue
                 comparison_string += parsed_reference
-            elif is_object_filter_typeValue :
-                comparison_string += 'filter_key={mapped_field}&filter_value="{value}"'.format(mapped_field=mapped_field, comparator=comparator, value=value)
+            elif is_object_filter_typeValue:
+                comparison_string += 'filter_key={mapped_field}&filter_value="{value}"'.format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
             else:
-                comparison_string += '{mapped_field}{comparator}"{value}"'.format(mapped_field=mapped_field, comparator=comparator, value=value)
+                comparison_string += '{mapped_field}{comparator}"{value}"'.format(
+                    mapped_field=mapped_field, comparator=comparator, value=value)
 
             if mapped_fields_count > 1:
                 comparison_string += "&"
@@ -98,30 +108,32 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _is_reference_value(stix_field):
         return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
-   
+
     @staticmethod
-    def _is_object_filterType(stix_object,stix_field):
-        if (stix_object in REFERENCE_FILTER_TYPE) and  (stix_field not in REFERENCE_EXCLUDE_FILTER_TYPE ):
+    def _is_object_filterType(stix_object, stix_field):
+        if (stix_object in REFERENCE_FILTER_TYPE) and (stix_field not in REFERENCE_EXCLUDE_FILTER_TYPE):
             return True
-        else :
+        else:
             return False
 
     @staticmethod
     def _check_filter_value_type(value, stix_object):
-            """
-            Function returning value type of event type object in double quotes
-            :param value: str
-            :return: string
-            """
-            event_object = ['event_type']
-            if stix_object in event_object:
-                return '"{}"'.format(value)
-            else:
-                return  value
+        """
+        Function returning value type of event type object in double quotes
+        :param value: str
+        :return: string
+        """
+        event_object = ['event_type']
+        if stix_object in event_object:
+            return '"{}"'.format(value)
+        else:
+            return value
+
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for verify connector".format(expression_operator.name))
+            raise NotImplementedError(
+                "Comparison operator {} unsupported for verify connector".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
     @classmethod
@@ -134,10 +146,11 @@ class QueryStringPatternTranslator:
         start = qualifier_split[1]
         stop = qualifier_split[3]
         # convert timepestamp to millisecond which will be passed to rest service
-        start_epoach = transformer.transform(start);
+        start_epoach = transformer.transform(start)
         stop_epoach = transformer.transform(stop)
 
-        qualified_query = "%s&from=%s&to=%s" % (expression, start_epoach, stop_epoach)
+        qualified_query = "%s&from=%s&to=%s" % (
+            expression, start_epoach, stop_epoach)
         return qualified_query
 
     def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
@@ -147,24 +160,27 @@ class QueryStringPatternTranslator:
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self._lookup_comparison_operator(self, expression.comparator)
+            comparator = self._lookup_comparison_operator(
+                self, expression.comparator)
 
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._escape_value(expression.value)
-                #check if belongs to event object type. This require sepecial treatment.
-                value = self._check_filter_value_type(value,stix_object)
+                # check if belongs to event object type. This require sepecial treatment.
+                value = self._check_filter_value_type(value, stix_object)
             elif expression.comparator == ComparisonComparators.In:
-                in_string = expression.value.values if hasattr(expression.value, 'values') else expression.value
+                in_string = expression.value.values if hasattr(
+                    expression.value, 'values') else expression.value
                 values = self._convert_list_string_in_condition(in_string)
-                #apply escape value to remove unwanted char in string.
+                # apply escape value to remove unwanted char in string.
                 value = self._escape_value(values)
 
-            else :
+            else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array,stix_object)
+            comparison_string = self._parse_mapped_fields(
+                self, expression, value, comparator, stix_field, mapped_fields_array, stix_object)
             if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = comparison_string
@@ -178,7 +194,8 @@ class QueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self._lookup_comparison_operator(self, expression.operator)
+            operator = self._lookup_comparison_operator(
+                self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
 
@@ -189,7 +206,8 @@ class QueryStringPatternTranslator:
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "{}".format(expression_02)
 
-            query_string = "{}{}{}".format(expression_01, operator, expression_02)
+            query_string = "{}{}{}".format(
+                expression_01, operator, expression_02)
             if qualifier is not None:
                 return self._format_start_stop_qualifier(query_string, qualifier)
             else:
@@ -198,15 +216,19 @@ class QueryStringPatternTranslator:
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
-                expression_01 = self._parse_expression(expression.observation_expression.expr1)
+                operator = self._lookup_comparison_operator(
+                    self, expression.observation_expression.operator)
+                expression_01 = self._parse_expression(
+                    expression.observation_expression.expr1)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
+                expression_02 = self._parse_expression(
+                    expression.observation_expression.expr2, expression.qualifier)
                 return "{} {} {}".format(expression_01, operator, expression_02)
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self._lookup_comparison_operator(self, expression.operator)
+            operator = self._lookup_comparison_operator(
+                self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not isinstance(expression_01, list):
@@ -229,7 +251,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options['result_limit']
     list_final_query = []
     # time_range = options['time_range']
-    query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
+    query = QueryStringPatternTranslator(
+        pattern, data_model_mapping).translated
     query = query if isinstance(query, list) else [query]
     for each_query in query:
         base_query = f"{each_query}&size={result_limit}"

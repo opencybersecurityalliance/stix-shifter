@@ -89,9 +89,8 @@ class TestTransformQuery(unittest.TestCase,object):
         assert(event['module'] == module)
         assert(event['category'] == category)
         assert(event["extensions"]['x-iam-ext']['is_device_managed']=="true")
-        assert(event["extensions"]['x-iam-ext']['is_device_managed']=="true")
-        assert(event["extensions"]['x-iam-ext']['mdm_customerid']=="true")
+        assert(event["extensions"]['x-iam-ext']['mdm_customerid']=="12345")
         assert(event["extensions"]['x-iam-ext']['is_device_compliant']=="true")
-        assert(event["extensions"]['x-iam-ext']['deviceid']=="true")
+        assert(event["extensions"]['x-iam-ext']['deviceid']=="abc_device")
         
         
