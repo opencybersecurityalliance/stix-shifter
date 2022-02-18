@@ -1,14 +1,4 @@
 {
-    "connection": {
-        "help": {
-            "label": "Need additional help?",
-            "description": "More details on the data source setting can be found in the specified link"
-        },
-        "name": {
-            "label": "Data source name",
-            "description": "Assign a name to identify the connection (minimum of 5 characters)"
-        }
-    },
     "configuration": {
         "auth": {
             "clientId": {
@@ -19,14 +9,6 @@
                 "label": "Client Secret",
                 "description": "Client secret of Verify"
             }
-        },
-        "name": {
-            "label": "Configuration Name",
-            "placeholder": "Add a configuration name"
-        },
-        "description": {
-            "label": "Configuration Description",
-            "placeholder": "Add a configuration description"
         }
-    }   
+    }
 }
