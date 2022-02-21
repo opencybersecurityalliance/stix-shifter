@@ -110,6 +110,15 @@
       "extensions.'x-iam-ext'.country_name": [
         "geoip.country_name"
       ],
+<<<<<<< HEAD
+=======
+      "extensions.'x-iam-ext'.lon": [
+        "geoip.lon"
+      ],
+      "extensions.'x-iam-ext'.location_lat": [
+        "geoip.lat"
+      ],
+>>>>>>> fa399a6 (fixed mapping for lan and lat geo location)
       "extensions.'x-iam-ext'.city_name": [
         "geoip.city_name"
       ],
