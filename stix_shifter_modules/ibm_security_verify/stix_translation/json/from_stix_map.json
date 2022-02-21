@@ -111,8 +111,12 @@
         "geoip.country_name"
       ],
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       "extensions.'x-iam-ext'.lon": [
+=======
+      "extensions.x-iam-ext.location_lon": [
+>>>>>>> c3f9e9d (mapping correction for geoloaction)
         "geoip.lon"
       ],
       "extensions.'x-iam-ext'.location_lat": [
