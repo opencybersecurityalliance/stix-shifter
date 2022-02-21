@@ -113,11 +113,11 @@
       "extensions.'x-iam-ext'.country_name": [
         "geoip.country_name"
       ],
-      "extensions.'x-iam-ext'.location_lon": [
-        "geoip.location.lon"
+      "extensions.'x-iam-ext'.lon": [
+        "geoip.lon"
       ],
       "extensions.'x-iam-ext'.location_lat": [
-        "geoip.location_lat"
+        "geoip.lat"
       ],
       "extensions.'x-iam-ext'.city_name": [
         "geoip.city_name"

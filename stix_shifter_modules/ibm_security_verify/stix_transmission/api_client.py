@@ -1,10 +1,11 @@
 import json
-
-from requests.adapters import Response
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from datetime import datetime, timedelta
-import requests
 from urllib.parse import urlencode
+
+import requests
+from requests.adapters import Response
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import \
+    RestApiClient
 from stix_shifter_utils.utils import logger
 
 
@@ -128,8 +129,10 @@ class APIClient:
                 dictA= json.loads(json.dumps(obj["geoip"]))  
                 del dictC["geoip"]          
                 dictB= json.loads(json.dumps(obj["data"]))          
-                del dictC["data"]                    
-                finalJson = {**dictA,**dictB}
+                del dictC["data"]     
+                dict_geo_location = json.loads(json.dumps(dictA.get('location')))     
+                del dictA['location']
+                finalJson = {**dictA,**dictB,**dict_geo_location}
             else:
                 dictB= json.loads(json.dumps(obj["data"]))          
                 del dictC["data"]                    
