@@ -1,8 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security Verify",
-            "type": "connectorType"
+            "displayName": "IBM Security Verify"
         },
         "host": {
             "type": "text",
@@ -21,6 +20,10 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
         }
     },
     "configuration": {
