@@ -1,7 +1,10 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
-from stix_shifter_utils.utils.error_response import ErrorResponder
-from stix_shifter_utils.utils import logger
 import json
+import traceback
+
+from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import \
+    BaseResultsConnector
+from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class ResultsConnector(BaseResultsConnector):
@@ -32,7 +35,6 @@ class ResultsConnector(BaseResultsConnector):
         except Exception as err:
             self.logger.error(
                 'error when getting search results: {}'.format(err))
-            import traceback
             self.logger.error(traceback.print_stack())
             raise
         return return_obj

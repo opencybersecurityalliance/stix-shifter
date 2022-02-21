@@ -26,7 +26,7 @@ CLI example of stix input pattern for TRANSLATE
 
 
 `
- python main.py translate verify query "{}" "[x-oca-event:category='sso']" 
+ python main.py translate ibm_security_verify query "{}" "[x-oca-event:category='sso']" 
 `
 
 Returns the following search query:
@@ -47,7 +47,7 @@ Uses the data source API to ping the connection.
 
 
 `
-python main.py transmit verify  '{ "host": "<Host Name>","port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' ping
+python main.py transmit ibm_security_verify  '{ "host": "<Host Name>","port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' ping
 `
 
 If connection is established, Connector will return the following response: 
@@ -64,7 +64,7 @@ Uses the data source API to fetch the query results based on the search ID, offs
 CLI Command 
 
 `
-python main.py transmit verify '{ "host": "<Host Name>" ,"port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' 
+python main.py transmit ibm_security_verify '{ "host": "<Host Name>" ,"port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' 
 `
 
 Response
@@ -79,7 +79,7 @@ Response
 ### Execute 
 
 ```
-python main.py execute verify verify '{"type": "identity","id": "<identity Id>","name":"verify","identity_class":"events"}' '{ }' '{ "host": "<Host Name>" ,"port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' "[x-oca-event:category = 'sso']"
+python main.py execute ibm_security_verify ibm_security_verify '{"type": "identity","id": "<identity Id>","name":"verify","identity_class":"events"}' '{ }' '{ "host": "<Host Name>" ,"port" :<port>}' '{ "auth": { "clientId": "<client-Id>, "clientSecret": "<token>"}}' "[x-oca-event:category = 'sso']"
 ```
 
 Response object
