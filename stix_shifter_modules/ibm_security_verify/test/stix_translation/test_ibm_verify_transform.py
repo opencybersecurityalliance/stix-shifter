@@ -5,8 +5,14 @@ from unicodedata import category
 
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_modules.ibm_security_verify.entry_point import EntryPoint
+<<<<<<< HEAD
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
     get_module_transformers
+=======
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import (
+    get_module_transformers,
+)
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
 
 translation = stix_translation.StixTranslation()
 # config_file = open('stix_shifter_modules/verify_event/configuration/config.json').read()
@@ -27,7 +33,11 @@ MAP_DATA = entry_point.get_results_translator().map_data
 DATA_SOURCE = {
     "type": "identity",
     "id": "32a23267-52fb-4e82-859b-0a15d6a2d334",
+<<<<<<< HEAD
     "name": "ibm_securit_verify",
+=======
+    "name": "verify",
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
     "identity_class": "events",
 }
 OPTION = json.dumps(DATA_SOURCE)
@@ -59,12 +69,17 @@ class TestTransformQuery(unittest.TestCase, object):
                 "continent_name": "Asia",
                 "city_name": "Kolkata",
                 "country_iso_code": "IN",
+<<<<<<< HEAD
                 "ip": "192.168.1.1",
+=======
+                "ip": "47.15.98.56",
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
                 "country_name": "India",
                 "region_name": "West Bengal",
                 "location": {"lon": "88.3697", "lat": "22.5697"},
                 "result": "success",
                 "subtype": "saml",
+<<<<<<< HEAD
                 "providerid": "https://portal.banea.org:443/SAML20/SP",
                 "origin": "47.15.98.56",
                 "realm": "www.ibm.com",
@@ -74,6 +89,17 @@ class TestTransformQuery(unittest.TestCase, object):
                 "devicetype": "PAN GlobalProtect/5.2.4-21 (Microsoft Windows 10 Enterprise , 64-bit) Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko",
                 "username": "abc@in.ibm.com",
                 "applicationname": "Bane",
+=======
+                "providerid": "https://portal.baneandox.org:443/SAML20/SP",
+                "origin": "47.15.98.56",
+                "realm": "www.ibm.com",
+                "applicationid": "6773634223410562472",
+                "userid": "652001LT0R",
+                "applicationtype": "Custom Application",
+                "devicetype": "PAN GlobalProtect/5.2.4-21 (Microsoft Windows 10 Enterprise , 64-bit) Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko",
+                "username": "dinepal1@in.ibm.com",
+                "applicationname": "Bane & Ox VPN",
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
                 "year": 2022,
                 "billingid": "12345",
                 "mdmismanaged": "true",
@@ -88,13 +114,20 @@ class TestTransformQuery(unittest.TestCase, object):
                 "indexed_at": 1642413142906,
                 "@processing_time": 1012,
                 "tenantid": "c92ce528-293f-4e84-8307-c4fe188b9461",
+<<<<<<< HEAD
                 "tenantname": "is.ice.ibmcloud.com",
+=======
+                "tenantname": "isrras.ice.ibmcloud.com",
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
                 "correlationid": "CORR_ID-a134f569-8d73-45ac-8d44-2457448c9101",
                 "servicename": "saml_runtime",
                 "id": "dc4523e6-6260-4349-83f8-3320365a5f25",
                 "time": 1642413141894,
                 "day": 17,
+<<<<<<< HEAD
                 "sourcetype" : "oidc"
+=======
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
             }
         ]
 
@@ -121,9 +154,12 @@ class TestTransformQuery(unittest.TestCase, object):
         assert event["extensions"]["x-iam-ext"]["mdm_customerid"] == "12345"
         assert event["extensions"]["x-iam-ext"]["is_device_compliant"] == "true"
         assert event["extensions"]["x-iam-ext"]["deviceid"] == "abc_device"
+<<<<<<< HEAD
        
         user_account = TestTransformQuery.get_first_of_type(objects.values(), "user-account")
         assert user_account["type"] == "user-account"
         assert user_account["user_id"] == "652001L"
         assert user_account["account_login"] == 'abc@in.ibm.com'
         assert user_account["account_type"] == 'oidc'
+=======
+>>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
