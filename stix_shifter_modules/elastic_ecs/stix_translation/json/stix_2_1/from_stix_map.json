@@ -29,7 +29,7 @@
   },
   "x-ecs-network": {
     "fields": {
-      "inner.vlan.id": ["network.inner.vlan.id"],
+      "inner.vlan.vlan_id": ["network.inner.vlan.id"],
       "inner.vlan.name": ["network.inner.vlan.name"],
       "name": ["network.name"],
       "application": ["network.application"],
@@ -102,7 +102,7 @@
       "domain": ["user.domain"],
       "full_name": ["user.full_name"],
       "hash": ["user.hash"],
-      "id": ["user.id"],
+      "user_id": ["user.id"],
       "group_domain": ["user.group.domain"],
       "group_id": ["user.group.id"],
       "group_name": ["user.group.name"]
@@ -127,7 +127,7 @@
       "executable": ["process.executable"],
       "entity_id": ["process.entity_id"],
       "exit_code": ["process.exit_code"],
-      "thread.id": ["process.thread.id"],
+      "thread.thread_id": ["process.thread.id"],
       "thread.name": ["process.thread.name"],
       "title": ["process.title"],
       "uptime": ["process.uptime"],
@@ -137,7 +137,7 @@
       "parent.entity_id": ["process.parent.entity_id"],
       "parent.exit_code": ["process.parent.exit_code"],
       "parent.pgid": ["process.parent.pgid"],
-      "parent.thread.id": ["process.parent.thread.id"],
+      "parent.thread.thread_id": ["process.parent.thread.id"],
       "parent.thread.name": ["process.parent.thread.name"],
       "parent.title": ["process.parent.title"],
       "parent.uptime": ["process.parent.uptime"],
@@ -193,7 +193,7 @@
   "x-oca-event": {
     "fields": {
       "action": ["event.action"],
-      "id": ["event.id"],
+      "event_id": ["event.id"],
       "category": ["event.category"],
       "code": ["event.code"],
       "created": ["event.created"],
@@ -233,9 +233,9 @@
   },
   "x-ecs-cloud": {
     "fields": {
-      "account.id": ["cloud.account.id"],
+      "account.account_id": ["cloud.account.id"],
       "availability_zone": ["cloud.availability_zone"],
-      "instance.id": ["cloud.instance.id"],
+      "instance.instance_id": ["cloud.instance.id"],
       "instance.name": ["cloud.instance.name"],
       "machine.type": ["cloud.machine.type"],
       "provider": ["cloud.provider"],
@@ -244,7 +244,7 @@
   },
   "x-ecs-container": {
     "fields": {
-      "id": ["container.id"],
+      "container_id": ["container.id"],
       "image.name": ["container.image.name"],
       "image.tag": ["container.image.tag"],
       "labels": ["container.labels"],
@@ -276,7 +276,7 @@
       "answers_ttl": ["dns.answers.ttl"],
       "answers_type": ["dns.answers.type"],
       "header_flags": ["dns.header_flags"],
-      "id": ["dns.id"],
+      "dns_id": ["dns.id"],
       "op_code": ["dns.op_code"],
       "question_class": ["dns.question.class"],
       "question_name": ["dns.question.name"],
@@ -297,7 +297,7 @@
   "x-ecs-error": {
     "fields": {
       "code": ["error.code"],
-      "id": ["error.id"],
+      "error_id": ["error.id"],
       "message": ["error.message"],
       "stack_trace": ["error.stack_trace"],
       "type": ["error.type"]
@@ -306,7 +306,7 @@
   "x-ecs-group": {
     "fields": {
       "domain": ["group.domain"],
-      "id": ["group.id"],
+      "group_id": ["group.id"],
       "name": ["group.name"]
     }
   },
@@ -315,7 +315,7 @@
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
       "hostname": ["host.hostname"],
-      "id": ["host.id"],
+      "asset_id": ["host.id"],
       "ip": ["host.ip"],
       "mac": ["host.mac"],
       "name": ["host.name"],
@@ -381,7 +381,7 @@
   },
   "x-ecs-organization": {
     "fields": {
-      "id": ["organization.id"],
+      "organization_id": ["organization.id"],
       "name": ["organization.name"]
     }
   },
@@ -406,7 +406,7 @@
       "author": ["rule.author"],
       "category": ["rule.category"],
       "description": ["rule.description"],
-      "id": ["rule.id"],
+      "rule_id": ["rule.id"],
       "license": ["rule.license"],
       "name": ["rule.name"],
       "reference": ["rule.reference"],
@@ -417,7 +417,7 @@
   },
   "x-ecs-service": {
     "fields": {
-      "id": ["service.id"],
+      "service_id": ["service.id"],
       "name": ["service.name"],
       "state": ["service.state"],
       "type": ["service.type"],
@@ -437,12 +437,12 @@
   },
   "x-ecs-trace": {
     "fields": {
-      "id": ["trace.id"]
+      "trace_id": ["trace.id"]
     }
   },
   "x-ecs-transaction": {
     "fields": {
-      "id": ["transaction.id"]
+      "transaction_id": ["transaction.id"]
     }
   },
   "x-ecs-user-agent": {
@@ -459,7 +459,7 @@
       "classification": ["vulnerability.classification"],
       "description": ["vulnerability.description"],
       "enumeration": ["vulnerability.enumeration"],
-      "id": ["vulnerability.id"],
+      "vulnerability_id": ["vulnerability.id"],
       "reference": ["vulnerability.reference"],
       "report_id": ["vulnerability.report_id"],
       "severity": ["vulnerability.severity"],
