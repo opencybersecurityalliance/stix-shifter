@@ -143,9 +143,9 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
 
         assert x_msazure_sentinel_alert is not None, 'Custom object type not found'
 
-        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status'}
+        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status', 'userStates'}
         assert type(x_msazure_sentinel_alert['recommendedactions']) is list
-        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name'}
+        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
         assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
