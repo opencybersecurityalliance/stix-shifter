@@ -1,4 +1,21 @@
+##### Updated on 02/04/22
 ## HCL BigFix
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| = | = |
+| != | != |
+| LIKE | contains |
+| MATCHES | matches |
+| > | is greater than |
+| >= | is greater than or equal to |
+| < | is less than |
+| <= | is less than or equal to |
+| IN | = |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | file_path |

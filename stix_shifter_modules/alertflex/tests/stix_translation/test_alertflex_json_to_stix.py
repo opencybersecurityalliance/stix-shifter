@@ -121,7 +121,6 @@ class TestAlertflexResultsToStix(unittest.TestCase):
         observed_data = result_bundle_objects[1]
         objects_data = observed_data['objects']
 
-        print(objects_data)
         ipv4_addr_data = objects_data['1']
         assert ipv4_addr_data['type'] == "ipv4-addr"
         assert ipv4_addr_data['value'] == "0.0.0.0"
@@ -130,24 +129,21 @@ class TestAlertflexResultsToStix(unittest.TestCase):
         assert ipv4_addr_data['type'] == "network-traffic"
         assert ipv4_addr_data['src_ref'] == '1'
         assert ipv4_addr_data['src_port'] == 0
-        assert ipv4_addr_data['dst_ref'] == '5'
+        assert ipv4_addr_data['dst_ref'] == '4'
         assert ipv4_addr_data['dst_port'] == 0
 
         file_data = objects_data['3']
         assert file_data['type'] == "file"
+        assert file_data['name'] == "/etc/altprobe/altprobe.yaml"
         hashes_data = file_data['hashes']
         assert hashes_data['SHA-1'] == '6232e4a0f37b583182aad75d18b3a4147a54f85b'
         assert hashes_data['MD5'] == '7d351ff6fea9e9dc100b7deb0e03fd35'
 
-        file_data = objects_data['4']
-        assert file_data['type'] == "file"
-        assert file_data['name'] == "/etc/altprobe/altprobe.yaml"
-
-        ipv4_addr_data = objects_data['5']
+        ipv4_addr_data = objects_data['4']
         assert ipv4_addr_data['type'] == "ipv4-addr"
         assert ipv4_addr_data['value'] == "0.0.0.0"
 
-        user_data = objects_data['6']
+        user_data = objects_data['5']
         assert user_data['type'] == "user-account"
         assert user_data['user_id'] == "indef"
 

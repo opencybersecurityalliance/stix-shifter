@@ -174,12 +174,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
-        print(json.dumps(objects, sort_keys=True, indent=4))
 
         file_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'file')
-        print('FILE OBJ: {}'.format(json.dumps(file_obj)))
         assert file_obj is not None, 'file object type not found'
-        print('FILE KEYS: {}'.format(file_obj.keys()))
         assert file_obj.keys() == {'type', 'hashes', 'parent_directory_ref', 'name'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'updater.exe'
@@ -233,7 +230,6 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
-        print(json.dumps(objects, sort_keys=True, indent=4))
 
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
@@ -241,11 +237,11 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'creator_user_ref'}
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '3'
+        assert process_obj['binary_ref'] == '2'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
-        assert process_obj['creator_user_ref'] == '7'
+        assert process_obj['creator_user_ref'] == '6'
 
 
     def test_network_json_to_stix(self):
@@ -294,9 +290,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert network_obj is not None, 'network-traffic object type not found'
         assert network_obj.keys() == {'type', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'protocols'}
         assert network_obj['type'] == 'network-traffic'
-        assert network_obj['dst_ref'] == '2'
+        assert network_obj['dst_ref'] == '1'
         assert network_obj['dst_port'] == 80
-        assert network_obj['src_ref'] == '4'
+        assert network_obj['src_ref'] == '3'
         assert network_obj['src_port'] == 52240
         assert network_obj['protocols'] == ['tcp']
 

@@ -1,5 +1,22 @@
-##### Updated on 11/09/21
+##### Updated on 02/04/22
 ## IBM QRadar
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | LIKE |
+| IN | IN |
+| MATCHES | MATCHES |
+| ISSUBSET | INCIDR |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | UTF8(payload) |
@@ -14,6 +31,8 @@
 | directory | path | "File Path" |
 | directory | path | Image |
 | directory | path | ParentImage |
+| directory | path | TargetImage |
+| directory | path | SourceImage |
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
@@ -34,12 +53,12 @@
 | file | parent_directory_ref | Image |
 | file | name | ParentImage |
 | file | parent_directory_ref | ParentImage |
-| file | name | ServiceFileName |
-| file | parent_directory_ref | ServiceFileName |
 | file | name | TargetImage |
 | file | parent_directory_ref | TargetImage |
 | file | name | SourceImage |
 | file | parent_directory_ref | SourceImage |
+| file | name | ServiceFileName |
+| file | parent_directory_ref | ServiceFileName |
 | <br> | | |
 | ipv4-addr | value | identityip |
 | ipv4-addr | value | destinationaddress |
@@ -83,7 +102,6 @@
 | process | creator_user_ref | username |
 | process | binary_ref | Image |
 | process | binary_ref | ParentImage |
-| process | binary_ref | TargetImage |
 | process | parent_ref | ParentImage |
 | process | command_line | "Process CommandLine" |
 | process | command_line | ParentCommandLine |
@@ -92,6 +110,8 @@
 | process | pid | "Process ID" |
 | process | pid | "Parent Process ID" |
 | process | parent_ref | "Parent Process ID" |
+| process | binary_ref | TargetImage |
+| process | binary_ref | SourceImage |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
 | <br> | | |
 | software | name | applicationname |
@@ -125,6 +145,7 @@
 | x-oca-asset | hostname | identityhostname |
 | x-oca-asset | ip_refs | sourceaddress |
 | x-oca-asset | mac_refs | sourcemac |
+| x-oca-asset | hostname | "Machine ID" |
 | <br> | | |
 | x-oca-event | user_ref | username |
 | x-oca-event | outcome | CATEGORYNAME(category) |
@@ -155,8 +176,10 @@
 | x-oca-event | parent_process_ref | "Parent Process ID" |
 | x-oca-event | registry_ref | ObjectName |
 | x-oca-event | registry_ref | "Registry Value Name" |
+| x-oca-event | process_ref | SourceImage |
 | x-oca-event | original_ref | Message |
 | x-oca-event | original | Message |
+| x-oca-event | host_ref | "Machine ID" |
 | <br> | | |
 | x-qradar | category_id | category |
 | x-qradar | high_level_category_id | highlevelcategory |
