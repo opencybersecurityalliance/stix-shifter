@@ -58,16 +58,16 @@
     "object": "process"
   },
   "control_graph_id": {
-    "key" : "process.control_graph_id",
-    "object":"process"
+    "key" : "x-crowdstrike.control_graph_id",
+    "object":"x-crowdstrike"
   },
   "display_name_1": {
-  "key" : "process.display_name_1",
-  "object":"process"
+  "key" : "x-crowdstrike.display_name_1",
+  "object":"x-crowdstrike"
    },
   "objective": {
-  "key" : "process.objective",
-  "object":"process"
+  "key" : "x-crowdstrike.objective",
+  "object":"x-crowdstrike"
   },
   "display_name": {
     "key": "x-oca-event.action",

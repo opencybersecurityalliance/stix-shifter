@@ -38,10 +38,7 @@
       "parent_ref.name": ["behaviors.filename"],
       "parent_ref.command_line": ["behaviors.parent_cmdline"],
       "parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"],
-      "control_graph_id":["behaviors.control_graph_i"],
-      "display_name_1":["behaviors.display_name"],
-      "objective":["behaviors.objective"]
+      "parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"]
     }
   },
   "url": {
@@ -128,7 +125,10 @@
       "service_provider": ["device.service_provider"],
       "status": ["device.status"],
       "event_status": ["behaviors.status"],
-      "max_severity_displayname": ["behaviors.max_severity_displayname"]
+      "max_severity_displayname": ["behaviors.max_severity_displayname"],
+      "control_graph_id":["behaviors.control_graph_i"],
+      "display_name_1":["behaviors.display_name"],
+      "objective":["behaviors.objective"]
     }
   }
 }
