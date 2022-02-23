@@ -46,22 +46,28 @@
   "identityip": [
     {
       "key": "ipv4-addr.value",
-      "object": "host_ip_addr_v4"
+      "object": "host_ip_addr_v4",
+      "transformer": "CheckIPv4"
     },
     {
       "key": "ipv6-addr.value",
-      "object": "host_ip_addr_v6"
+      "object": "host_ip_addr_v6",
+      "transformer": "CheckIPv6"
     },
     {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
-      "references": ["host_ip_addr_v4"],
+      "references": [
+        "host_ip_addr_v4"
+      ],
       "group": true
     },
     {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
-      "references": ["host_ip_addr_v6"],
+      "references": [
+        "host_ip_addr_v6"
+      ],
       "group": true
     },
     {
@@ -210,11 +216,13 @@
   "sourceip": [
     {
       "key": "ipv4-addr.value",
-      "object": "src_ip"
+      "object": "src_ip",
+      "transformer": "CheckIPv4"
     },
     {
       "key": "ipv6-addr.value",
-      "object": "src_ip"
+      "object": "src_ip",
+      "transformer": "CheckIPv6"
     },
     {
       "key": "network-traffic.src_ref",
@@ -229,7 +237,9 @@
     {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
-      "references": ["src_ip"],
+      "references": [
+        "src_ip"
+      ],
       "group": true
     },
     {
@@ -262,17 +272,23 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": ["src_mac"]
+      "references": [
+        "src_mac"
+      ]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
-      "references": ["src_mac"]
+      "references": [
+        "src_mac"
+      ]
     },
     {
       "key": "x-oca-asset.mac_refs",
       "object": "host",
-      "references": ["src_mac"]
+      "references": [
+        "src_mac"
+      ]
     }
   ],
   "destinationmac": [
@@ -283,12 +299,16 @@
     {
       "key": "ipv4-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": ["dst_mac"]
+      "references": [
+        "dst_mac"
+      ]
     },
     {
       "key": "ipv6-addr.resolves_to_refs",
       "object": "dst_ip",
-      "references": ["dst_mac"]
+      "references": [
+        "dst_mac"
+      ]
     }
   ],
   "qid": {
@@ -308,7 +328,7 @@
     }
   ],
   "UrlHost": [
-  {
+    {
       "key": "domain-name.value",
       "object": "dns_domain",
       "transformer": "ToDomainName"
@@ -479,8 +499,7 @@
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
     }
-  ]
-  ,
+  ],
   "flowinterface": {
     "key": "x-qradar.flow_interface",
     "object": "x-qradar"
@@ -788,9 +807,9 @@
   ],
   "RegistryValueName": [
     {
-        "key": "windows-registry-key.values",
-        "object": "winregistry",
-        "transformer": "RegValueNameToStixRegistryValues"
+      "key": "windows-registry-key.values",
+      "object": "winregistry",
+      "transformer": "RegValueNameToStixRegistryValues"
     },
     {
       "key": "x-oca-event.registry_ref",
@@ -883,7 +902,9 @@
       "key": "process.extensions.windows-service-ext.service_dll_refs",
       "object": "process",
       "group": true,
-      "references": ["service_file_name"]
+      "references": [
+        "service_file_name"
+      ]
     }
   ],
   "hasoffense": {

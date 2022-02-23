@@ -302,6 +302,29 @@ class FilterIPv6List(ValueTransformer):
             return result
         return obj
 
+
+class CheckIPv6(ValueTransformer):
+    """A value transformer for validating IPv6 value"""
+    @staticmethod
+    def transform(obj):
+        obj_list = FilterIPv6List.transform([obj])
+        if obj_list:
+            return obj
+        else:
+            None
+
+
+class CheckIPv4(ValueTransformer):
+    """A value transformer for validating IPv4 value"""
+    @staticmethod
+    def transform(obj):
+        obj_list = FilterIPv4List.transform([obj])
+        if obj_list:
+            return obj
+        else:
+            None
+
+
 class ValueToList(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
     @staticmethod
