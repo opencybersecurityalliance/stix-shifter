@@ -32,12 +32,6 @@ class QueryStringPatternTranslator:
         ObservationOperators.And: 'or'
     }
 
-    # Join query to get MAC address value from DeviceNetworkInfo
-    join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
-                 'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
-                 'FormattedTimeKey) on DeviceId, $left.FormattedTimeKey ' \
-                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by Timestamp desc'
-
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
         self._time_range = time_range

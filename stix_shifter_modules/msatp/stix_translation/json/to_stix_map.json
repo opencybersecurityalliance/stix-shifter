@@ -1242,8 +1242,9 @@
         "object": "finding"
       },
       "Severity": {
-        "key": "x-ibm-finding.alert_id",
-        "object": "finding"
+        "key": "x-ibm-finding.severity",
+        "object": "finding",
+        "transformer": "SeverityToNumericVal"
       },
       "AttackTechniques": [
         {
