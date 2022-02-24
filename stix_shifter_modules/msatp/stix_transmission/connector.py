@@ -11,14 +11,23 @@ class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
 
-    join_query = '| join kind=leftouter (DeviceAlertEvents | where Table =~ "{}") on ' \
-                 'ReportId, $left.ReportId == $right.ReportId | join kind=leftouter (DeviceNetworkInfo | ' \
-                 'distinct DeviceId, MacAddress) on DeviceId, $left.DeviceId == $right.DeviceId | join ' \
-                 'kind=leftouter (DeviceInfo | distinct PublicIP, OSPlatform ,OSArchitecture, OSVersion , ' \
-                 'DeviceType, DeviceId) on DeviceId, $left.DeviceId == $right.DeviceId'
+    join_query = '| join kind=leftouter (DeviceAlertEvents | project ReportId, Timestamp, DeviceName, AlertId, ' \
+                 'Severity, Title, Category, RemoteUrl, RemoteIP, AttackTechniques, Table | where ' \
+                 'Table =~ "{}" | summarize AlertId=make_set(AlertId), Severity=make_set(Severity), ' \
+                 'Title=make_set(Title), Category=make_set(' \
+                 'Category), RemoteUrl=make_set(RemoteUrl), RemoteIP=make_set(RemoteIP),  AttackTechniques=make_set(' \
+                 'AttackTechniques) by DeviceName, ReportId, Timestamp, ' \
+                 'Table) on ' \
+                 'ReportId, DeviceName, Timestamp | join kind=leftouter (DeviceNetworkInfo| project DeviceName, ' \
+                 'MacAddress, IPAddresses, ReportId, Timestamp | summarize MacAddresses=make_set(MacAddress), ' \
+                 'IPAddresses=make_set(IPAddresses) by DeviceName, ReportId, Timestamp) on ' \
+                 'ReportId, DeviceName, Timestamp | join kind=leftouter (DeviceInfo| project DeviceName, ' \
+                 'ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, DeviceType, DeviceId | ' \
+                 'summarize by DeviceName, ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, ' \
+                 'DeviceType, DeviceId) on ' \
+                 'ReportId, DeviceName, Timestamp'
 
-    ALERT_FIELDS = ['AlertId', 'Severity', 'FileName', 'Title', 'SHA1', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
-    ALERT_FIELDS_IGNORE = ['DeviceId', 'DeviceName', 'ReportId', 'Timestamp']
+    ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
 
     def __init__(self, connection, configuration):
@@ -40,29 +49,25 @@ class Connector(BaseSyncConnector):
         return device_link, file_link
 
     @staticmethod
+    def remove_duplicate_fields(event_data):
+        event = copy.deepcopy(event_data)
+        for k in event_data.keys():
+            if any(char.isdigit() for char in k) and 'SHA' not in k and 'MD' not in k:
+                event.pop(k)
+        return event
+
+    @staticmethod
     def unify_alert_fields(event_data):
-        if 'AttackTechniques' in event_data:
-            AttackTechniques_lst = json.loads(event_data['AttackTechniques'])
-            event_data['AttackTechniques'] = AttackTechniques_lst
+        alerts = []
+        alerts_count = len(event_data['AlertId'])
+        for i in range(alerts_count):
+            alert_dct = {k: (event_data[k][i] if len(event_data[k]) > i else '')
+                         for k in Connector.ALERT_FIELDS}
+            alerts.append(alert_dct)
+        event_data['Alerts'] = alerts
 
-        alert_dct = {}
-        for field in Connector.ALERT_FIELDS:
-            re_field = ''.join([field, '1'])
-            if re_field in event_data:
-                val = event_data[re_field]
-                event_data.pop(re_field)
-                alert_dct['alert_' + field] = val
-            elif field in event_data:
-                val = event_data[field]
-                event_data.pop(field)
-                alert_dct['alert_' + field] = val
-
-        for field in Connector.ALERT_FIELDS_IGNORE:
-            if ''.join([field, '1']) in event_data:
-                event_data.pop(''.join([field, '1']))
-
-        alert = [alert_dct]
-        event_data['Alerts'] = alert
+        for f in Connector.ALERT_FIELDS:
+            event_data.pop(f)
 
         return event_data
 
@@ -143,33 +148,33 @@ class Connector(BaseSyncConnector):
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registry values json
             table_event_data = []
-            unify_events_dct = {}
             for event_data in q_return_obj['data']:
+                event_data = Connector.remove_duplicate_fields(event_data)
                 lookup_table = event_data['TableName']
                 event_data.pop('TableName')
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+                build_data[lookup_table]['provider'] = "Microsoft Windows Security Event Log"
                 DeviceId = build_data[lookup_table].get('DeviceId', None)
                 SHA256 = build_data[lookup_table].get('InitiatingProcessSHA256', None)
                 device_link, file_link = self.get_ds_links(DeviceId, SHA256)
-                build_data[lookup_table]['device_link'] = device_link
-                build_data[lookup_table]['file_link'] = file_link
+                if device_link:
+                    build_data[lookup_table]['device_link'] = device_link
+                if file_link:
+                    build_data[lookup_table]['file_link'] = file_link
 
-                # if there is an alarm ref, unify all the information about the alarm to custom fields
-                if 'AlertId' in build_data[lookup_table]:
+                if 'AlertId' in build_data[lookup_table] and "Alert" not in lookup_table:
                     build_data[lookup_table] = Connector.unify_alert_fields(build_data[lookup_table])
-                else:
-                    build_data[lookup_table]['Alerts'] = []
 
-                if lookup_table == "DeviceNetworkInfo":
-                    for k, v in build_data[lookup_table].items():
-                        if k == 'IPAddresses':
-                            ip_addresses_lst = list()
-                            arr = json.loads(v)
-                            for obj in arr:
-                                if 'IPAddress' in obj:
-                                    ip_addresses_lst.append(obj['IPAddress'])
-                            build_data[lookup_table]['IPAddresses'] = ip_addresses_lst
+                if 'IPAddresses' in build_data[lookup_table]:
+                    flat_lst = list()
+                    ips_comp_lst = build_data[lookup_table]['IPAddresses']
+                    for ip_lst in ips_comp_lst:
+                        arr = json.loads(ip_lst)
+                        for ip_obj in arr:
+                            if 'IPAddress' in ip_obj:
+                                flat_lst.append(ip_obj['IPAddress'])
+                    build_data[lookup_table]['IPAddresses'] = flat_lst
 
                 if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
@@ -186,21 +191,8 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
-                k_tuple = (
-                    build_data[lookup_table].get('DeviceName', None),
-                    build_data[lookup_table].get('ReportId', None),
-                    build_data[lookup_table].get('Timestamp', None))
-                # if the same event already exists on the table_event_data, just update 'Alerts' field
-                if k_tuple in unify_events_dct:
-                    alerts = build_data[lookup_table]['Alerts']
-                    ind = unify_events_dct[k_tuple]
-                    for alert in alerts:
-                        if alert not in table_event_data[ind][lookup_table]['Alerts']:
-                            table_event_data[ind][lookup_table]['Alerts'].append(alert)
-                else:
-                    lst_len = len(table_event_data)
-                    table_event_data.insert(lst_len, build_data)
-                    unify_events_dct[k_tuple] = lst_len
+                lst_len = len(table_event_data)
+                table_event_data.insert(lst_len, build_data)
 
             if 'data' in return_obj.keys():
                 return_obj['data'].extend(table_event_data)
@@ -208,6 +200,7 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = table_event_data
 
             return_obj['success'] = True
+
             return return_obj
 
         except Exception as ex:

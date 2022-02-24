@@ -42,10 +42,12 @@ class FormatMac(ValueTransformer):
     """A value transformer to convert Mac address to STIX Mac address format"""
 
     @staticmethod
-    def transform(mac):
-        value = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)])
-        return value.lower()
-
+    def transform(mac_lst):
+        addresses = []
+        for mac in mac_lst:
+            val = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)]).lower()
+            addresses.append(val)
+        return addresses
 
 class FormatTCPProtocol(ValueTransformer):
     """A value transformer to convert TCP protocol to IANA format"""

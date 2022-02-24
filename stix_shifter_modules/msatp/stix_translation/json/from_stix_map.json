@@ -287,6 +287,19 @@
       ]
     }
   },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": [
+        "DeviceAlertEvents.AlertId"
+      ],
+      "name": [
+        "DeviceAlertEvents.Title"
+      ],
+      "time_observed": [
+        "DeviceAlertEvents.Timestamp"
+      ]
+    }
+  },
   "x-oca-asset": {
     "fields": {
       "domain": [

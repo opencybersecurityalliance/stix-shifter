@@ -13,16 +13,16 @@
       }
     ],
     "Alerts": {
-      "alert_AlertId": {
+      "AlertId": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_Severity": {
+      "Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
         "transformer": "SeverityToNumericVal"
       },
-      "alert_AttackTechniques": [
+      "AttackTechniques": [
         {
           "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
           "object": "ttp_tagging",
@@ -38,33 +38,11 @@
           "group": true
         }
       ],
-      "alert_Category": {
+      "Category": {
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "alert_SHA1": [
-        {
-          "key": "file.hashes.SHA-1",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_FileName": [
-        {
-          "key": "file.name",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_RemoteUrl": [
+      "RemoteUrl": [
         {
           "key": "url.value",
           "object": "dst_finding_url"
@@ -75,11 +53,11 @@
           "references": "dst_finding_url"
         }
       ],
-      "alert_Title": {
+      "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "alert_RemoteIP": [
+      "RemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -502,11 +480,12 @@
         "group": true
       }
     ],
-    "MacAddress": [
+    "MacAddresses": [
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac"
+        "transformer": "FormatMac",
+        "unwrap": true
       },
       {
         "key": "x-oca-asset.mac_refs",
@@ -514,6 +493,7 @@
         "references": [
           "mac"
         ],
+        "unwrap": true,
         "group": true
       }
     ],
@@ -543,8 +523,8 @@
         "key": "x-oca-event.ip_refs",
         "object": "event",
         "references": [
-          "resolved_ip",
-          "resolved_ipv6"
+          "host_ip4",
+          "host_ip6"
         ],
         "unwrap": true
       }
@@ -568,16 +548,16 @@
       }
     ],
     "Alerts": {
-      "alert_AlertId": {
+      "AlertId": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_Severity": {
+      "Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
         "transformer": "SeverityToNumericVal"
       },
-      "alert_AttackTechniques": [
+      "AttackTechniques": [
         {
           "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
           "object": "ttp_tagging",
@@ -593,33 +573,11 @@
           "group": true
         }
       ],
-      "alert_Category": {
+      "Category": {
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "alert_SHA1": [
-        {
-          "key": "file.hashes.SHA-1",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_FileName": [
-        {
-          "key": "file.name",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_RemoteUrl": [
+      "RemoteUrl": [
         {
           "key": "url.value",
           "object": "dst_finding_url"
@@ -630,11 +588,11 @@
           "references": "dst_finding_url"
         }
       ],
-      "alert_Title": {
+      "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "alert_RemoteIP": [
+      "RemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -1213,7 +1171,7 @@
         "group": true
       }
     ],
-    "MacAddress": [
+    "MacAddresses": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -1254,8 +1212,8 @@
         "key": "x-oca-event.ip_refs",
         "object": "event",
         "references": [
-          "resolved_ip",
-          "resolved_ipv6"
+          "host_ip4",
+          "host_ip6"
         ],
         "unwrap": true
       }
@@ -1279,15 +1237,15 @@
       }
     ],
     "Alerts": {
-      "alert_AlertId": {
+      "AlertId": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_Severity": {
+      "Severity": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_AttackTechniques": [
+      "AttackTechniques": [
         {
           "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
           "object": "ttp_tagging",
@@ -1303,33 +1261,11 @@
           "group": true
         }
       ],
-      "alert_Category": {
+      "Category": {
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "alert_SHA1": [
-        {
-          "key": "file.hashes.SHA-1",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_FileName": [
-        {
-          "key": "file.name",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_RemoteUrl": [
+      "RemoteUrl": [
         {
           "key": "url.value",
           "object": "dst_finding_url"
@@ -1340,11 +1276,11 @@
           "references": "dst_finding_url"
         }
       ],
-      "alert_Title": {
+      "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "alert_RemoteIP": [
+      "RemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -1831,11 +1767,12 @@
         "group": true
       }
     ],
-    "MacAddress": [
+    "MacAddresses": [
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac"
+        "transformer": "FormatMac",
+        "unwrap": true
       },
       {
         "key": "x-oca-asset.mac_refs",
@@ -1843,6 +1780,7 @@
         "references": [
           "mac"
         ],
+        "unwrap": true,
         "group": true
       }
     ],
@@ -1872,8 +1810,8 @@
         "key": "x-oca-event.ip_refs",
         "object": "event",
         "references": [
-          "resolved_ip",
-          "resolved_ipv6"
+          "host_ip4",
+          "host_ip6"
         ],
         "unwrap": true
       }
@@ -1897,16 +1835,16 @@
       }
     ],
     "Alerts": {
-      "alert_AlertId": {
+      "AlertId": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_Severity": {
+      "Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
         "transformer": "SeverityToNumericVal"
       },
-      "alert_AttackTechniques": [
+      "AttackTechniques": [
         {
           "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
           "object": "ttp_tagging",
@@ -1922,33 +1860,11 @@
           "group": true
         }
       ],
-      "alert_Category": {
+      "Category": {
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "alert_SHA1": [
-        {
-          "key": "file.hashes.SHA-1",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_FileName": [
-        {
-          "key": "file.name",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_RemoteUrl": [
+      "RemoteUrl": [
         {
           "key": "url.value",
           "object": "dst_finding_url"
@@ -1959,11 +1875,11 @@
           "references": "dst_finding_url"
         }
       ],
-      "alert_Title": {
+      "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "alert_RemoteIP": [
+      "RemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -2336,11 +2252,12 @@
         "group": true
       }
     ],
-    "MacAddress": [
+    "MacAddresses": [
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac"
+        "transformer": "FormatMac",
+        "unwrap": true
       },
       {
         "key": "x-oca-asset.mac_refs",
@@ -2348,6 +2265,7 @@
         "references": [
           "mac"
         ],
+        "unwrap": true,
         "group": true
       }
     ],
@@ -2377,8 +2295,8 @@
         "key": "x-oca-event.ip_refs",
         "object": "event",
         "references": [
-          "resolved_ip",
-          "resolved_ipv6"
+          "host_ip4",
+          "host_ip6"
         ],
         "unwrap": true
       }
@@ -2408,16 +2326,16 @@
       }
     ],
     "Alerts": {
-      "alert_AlertId": {
+      "AlertId": {
         "key": "x-ibm-finding.alert_id",
         "object": "finding"
       },
-      "alert_Severity": {
+      "Severity": {
         "key": "x-ibm-finding.severity",
         "object": "finding",
         "transformer": "SeverityToNumericVal"
       },
-      "alert_AttackTechniques": [
+      "AttackTechniques": [
         {
           "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
           "object": "ttp_tagging",
@@ -2433,33 +2351,11 @@
           "group": true
         }
       ],
-      "alert_Category": {
+      "Category": {
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "alert_SHA1": [
-        {
-          "key": "file.hashes.SHA-1",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_FileName": [
-        {
-          "key": "file.name",
-          "object": "finding_file"
-        },
-        {
-          "key": "x-ibm-finding.file_ref",
-          "object": "finding",
-          "references": "finding_file"
-        }
-      ],
-      "alert_RemoteUrl": [
+      "RemoteUrl": [
         {
           "key": "url.value",
           "object": "dst_finding_url"
@@ -2470,11 +2366,11 @@
           "references": "dst_finding_url"
         }
       ],
-      "alert_Title": {
+      "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "alert_RemoteIP": [
+      "RemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -2524,8 +2420,8 @@
         "key": "x-oca-event.ip_refs",
         "object": "event",
         "references": [
-          "resolved_ip",
-          "resolved_ipv6"
+          "host_ip4",
+          "host_ip6"
         ],
         "unwrap": true
       }
@@ -2551,18 +2447,20 @@
         "unwrap": true
       }
     ],
-    "MacAddress": [
+    "MacAddresses": [
       {
         "key": "mac-addr.value",
-        "object": "host_mac",
-        "transformer": "FormatMac"
+        "object": "mac",
+        "transformer": "FormatMac",
+        "unwrap": true
       },
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
         "references": [
-          "host_mac"
+          "mac"
         ],
+        "unwrap": true,
         "group": true
       }
     ],
@@ -2624,5 +2522,135 @@
         "group": true
       }
     ]
+  },
+  "DeviceAlertEvents": {
+    "AlertId": [
+      {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+      },
+      {
+        "key": "x-oca-event.finding_refs",
+        "object": "event",
+        "references": [
+          "finding"
+        ]
+      }
+    ],
+    "Severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "finding",
+      "transformer": "SeverityToNumericVal"
+    },
+    "AttackTechniques": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp_tagging",
+        "unwrap": true
+      },
+      {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "references": [
+          "ttp_tagging"
+        ],
+        "unwrap": true,
+        "group": true
+      }
+    ],
+    "Category": {
+      "key": "x-msatp.alert_category",
+      "object": "x-msatp"
+    },
+    "RemoteUrl": [
+      {
+        "key": "url.value",
+        "object": "dst_finding_url"
+      },
+      {
+        "key": "x-ibm-finding.dst_url_ref",
+        "object": "finding",
+        "references": "dst_finding_url"
+      }
+    ],
+    "Title": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    "RemoteIP": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "finding_dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "finding_dst_ip"
+      }
+    ],
+    "original_ref": [
+      {
+        "key": "artifact.payload_bin",
+        "object": "original_ref",
+        "transformer": "ToBase64"
+      },
+      {
+        "key": "x-oca-event.original_ref",
+        "object": "event",
+        "references": "original_ref"
+      }
+    ],
+    "device_link": [
+      {
+        "key": "external-reference.url",
+        "object": "device_external_ref"
+      },
+      {
+        "key": "x-oca-event.external_references",
+        "object": "event",
+        "references": [
+          "device_external_ref"
+        ],
+        "group": true
+      }
+    ],
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "FileName": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
+    "SHA1": [
+      {
+        "key": "file.hashes.SHA-1",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event"
+    }
   }
 }
