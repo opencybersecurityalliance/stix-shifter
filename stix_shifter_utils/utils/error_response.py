@@ -67,8 +67,9 @@ class ErrorResponder():
                 return message_struct
 
     @staticmethod
-    def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
+    def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None, connector=None):
         return_object['success'] = False
+        return_object['connector'] = connector
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
 
         if message is None:
@@ -108,6 +109,7 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
                 elif 'Forbidden' in message or 'forbidden' in message:
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
+            message = '{} connector error => {}'.format(connector, str(message))
             return_object['error'] = str(message)
         ErrorMapperBase.set_error_code(return_object, error_code.value)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
