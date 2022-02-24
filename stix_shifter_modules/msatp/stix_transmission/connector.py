@@ -179,8 +179,6 @@ class Connector(BaseSyncConnector):
                     events_return_obj['data'] = response_json['Results']
                     # replace the lookup_table with 'table' alert's field, so the to_stix mapping will be
                     # according to 'table' mapping
-                    #debug
-                    events_return_obj['data'] = []
                     if len(events_return_obj['data']):
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
