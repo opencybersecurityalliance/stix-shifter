@@ -1,6 +1,5 @@
 import importlib
 
-from pyparsing import cpp_style_comment
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import json
 
