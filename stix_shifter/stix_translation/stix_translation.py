@@ -140,5 +140,5 @@ class StixTranslation:
             self.logger.error('Caught exception: ' + str(ex) + " " + str(type(ex)))
             self.logger.debug(exception_to_string(ex))
             response = dict()
-            ErrorResponder.fill_error(response, message_struct={'exception': ex})
+            ErrorResponder.fill_error(response, message_struct={'exception': ex}, connector=module)
             return response
