@@ -69,7 +69,8 @@ class ErrorResponder():
     @staticmethod
     def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None, connector=None):
         return_object['success'] = False
-        return_object['connector'] = connector
+        if connector:
+            return_object['connector'] = connector
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
 
         if message is None:
