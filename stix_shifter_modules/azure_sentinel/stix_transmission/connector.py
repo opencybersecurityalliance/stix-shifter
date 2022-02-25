@@ -89,27 +89,6 @@ class Connector(BaseSyncConnector):
                 # slice the cumulative records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:total_records]
 
-                update_node = []
-
-                # customize results for fileHashes
-                for node in return_obj['data']:
-                    if 'fileStates' in node:
-                        for file in node["fileStates"]:
-                            if file["fileHash"] is not None:
-                                file["fileHash"][file["fileHash"]['hashType']] = file["fileHash"]['hashValue']
-                                file["fileHash"].pop('hashType')
-                                file["fileHash"].pop('hashValue')
-
-                    if 'processes' in node:
-                        for process in node["processes"]:
-                            if process["fileHash"] is not None:
-                                process["fileHash"][process["fileHash"]['hashType']] = process["fileHash"]['hashValue']
-                                process["fileHash"].pop('hashType')
-                                process["fileHash"].pop('hashValue')
-
-                    update_node.append(node)
-
-                return_obj['data'] = update_node
 
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])

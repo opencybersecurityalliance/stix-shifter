@@ -1,624 +1,392 @@
 {
-    "eventDateTime": [
-      {
-        "key": "first_observed",
-        "cybox": false
-      }
-    ],
-    "event_count": {
-      "key": "number_observed",
-      "cybox": false,
-      "transformer": "ToInteger"
+"eventID": {
+     "key": "x-oca-event.code",
+     "object": "event"
+   },
+"AlertName": {
+     "key": "x-ibm-finding.name",
+     "object": "finding"
+   },
+ "TenantId": {
+   "key": "x-msazure-sentinel-alert.tenant_id",
+   "object": "alert"
+ },
+ "_SubscriptionId": {
+   "key": "x-msazure-sentinel-alert.subscription_id",
+   "object": "alert"
+ },
+ "_ResourceId": {
+   "key": "x-msazure-sentinel-alert.resourceId",
+   "object": "alert"
+ },
+ "AlertSeverity": {
+   "key": "x-msazure-sentinel-alert.alert_severity",
+   "object": "alert"
+ },
+ "Description": {
+   "key": "x-msazure-sentinel-alert.description",
+   "object": "alert"
+ },
+ "ProductName": {
+   "key": "x-msazure-sentinel-alert.product_name",
+   "object": "alert"
+ },
+ "VendorName": {
+     "key": "x-msazure-sentinel-alert.vendor_name",
+     "object": "alert"
+   },
+ "SystemAlertId": {
+     "key": "x-msazure-sentinel-alert.cloudAppStates.system_alertid",
+     "object": "alert"
+   },
+ "Status": {
+     "key": "x-msazure-sentinel-alert.status",
+     "object": "alert"
+ },
+ "ExtentedProperties": {
+   "key": "x-msazure-sentinel-alert.extented_properties",
+   "object": "alert"
+ },
+ "ConfidenceLevel": {
+   "key": "x-msazure-sentinel-alert.confidence_level",
+   "object": "alert"
+ },
+ "Entities": {
+   "key": "x-msazure-sentinel-alert.entities",
+   "object": "alert"
+ },
+ "DisplayName": {
+   "key": "x-msazure-sentinel-alert.display_name",
+   "object": "alert"
+ },
+ "WorkspaceResourceGroup": {
+   "key": "x-msazure-sentinel-alert.workspace_resource_group",
+   "object": "alert"
+ },
+ "CompromisedEntity": {
+   "key": "x-msazure-sentinel-alert.compromised_entity",
+   "object": "alert"
+ },
+ "refStatus": {
+  "FileHash": {
+     "key": "x-oca-event.file_ref.hash",
+     "object": "event"
+   },
+   "FilePath": {
+    "key": "x-oca-event.file_ref.path",
+    "object": "event"
+   },
+   "ServiceFileName": {
+    "key": "x-oca-event.file_ref.service",
+    "object": "event"
+  },
+  "ProcessName": {
+    "key": "x-oca-event.process_ref",
+    "object": "event"
+  },
+  "ParentProcessName": {
+    "key": "x-oca-event.parent_process_ref",
+    "object": "event"
+  }
+  },
+ "fileStates": {
+   "FileHash": {
+      "key": "file.hashes",
+      "object": "file"
     },
-    "azureTenantId": {
-      "key": "x-msazure-sentinel.tenant_id",
-      "object": "sentinel"
+    "FilePath": {
+      "key": "file.path",
+      "object": "file"
     },
-    "azureSubscriptionId": {
-      "key": "x-msazure-sentinel.subscription_id",
-      "object": "sentinel"
+    "HomeDirectory": {
+      "key": "directory.path",
+      "object": "file"
     },
-    "activityGroupName": {
-      "key": "x-msazure-sentinel-alert.activityGroupName",
-      "object": "alert"
-    },
-    "assignedTo": {
-      "key": "x-msazure-sentinel-alert.assignedTo",
-      "object": "alert"
-    },
-    "category": {
-      "key": "x-oca-event.category",
-      "object": "event"
-      }
-    ,
-    "closedDateTime":{
-        "key": "last_observed",
-        "cybox": false
-    },
-    "cloudAppStates": {
-      "destinationServiceName": [
-        {
-        "key":"software.name",
-        "object":"software"
-        },
-        {
-        "key":"x-ibm-finding.dst_application_ref",
-        "object":"finding",
-        "references":"software"
-        }
-      ],
-      "destinationServiceIp": {
-        "key": "x-msazure-sentinel-alert.cloudAppStates.destinationServiceIp",
-        "object": "alert"
+    "HomePath": {
+      "key": "directory.path",
+      "object": "file"
+    }
+  },
+  "processes": {
+      "ProcessName": {
+        "key": "process.name",
+        "object": "process"
       },
-      "riskScore": {
-        "key": "x-msazure-sentinel-alert.cloudAppStates.riskScore",
-        "object": "alert"
-      }
-    },
-    "comments": {
-      "key": "x-msazure-sentinel-alert.comments",
-      "object": "alert"
-    },
-    "confidence": {
-      "key": "x-msazure-sentinel-alert.confidence",
-      "object": "alert"
-    },
-    "createdDateTime": [
-      {
-        "key": "created",
-        "cybox": false
-      },
-      {
-        "key": "x-ibm-finding.createddatetime",
-        "object": "finding"
-      },
-      {
-        "key": "x-oca-event.created",
-        "object": "event"
-      }
-    ],
-    "description": {
-      "key": "x-ibm-finding.description",
-      "object": "finding"
-    },
-    "detectionIds": {
-      "key": "x-msazure-sentinel-alert.detectionids",
-      "object": "alert"
-    },
-    "feedback": {
-      "key": "x-msazure-sentinel-alert.feedback",
-      "object": "alert",
-      "transformer": "ToString"
-    },
-    "fileStates": {
-      "fileHash": {
-        "sha256": {
-          "key": "file.hashes.SHA-256",
-          "object": "file"
-        },
-        "sha1": {
-          "key": "file.hashes.SHA-1",
-          "object": "file"
-        },
-        "md5": {
-          "key": "file.hashes.MD5",
-          "object": "file"
-        },
-        "authenticodeHash256": {
-          "key": "file.hashes.authenticodeHash256",
-          "object": "file"
-        },
-        "lsHash": {
-          "key": "file.hashes.lsHash",
-          "object": "file"
-        },
-        "ctph": {
-          "key": "file.hashes.ctph",
-          "object": "file"
-        },
-        "peSha1": {
-          "key": "file.hashes.peSha1",
-          "object": "file"
-        },
-        "peSha256": {
-          "key": "file.hashes.peSha256",
-          "object": "file"
-        },
-        "unknown": {
-          "key": "file.hashes.UNKNOWN",
-          "object": "file"
-        }
-      },
-      "name": {
-        "key": "file.name",
-        "object": "file"
-      },
-      "path": [
-        {
-            "key": "directory.path",
-            "object": "directory",
-            "transformer": "ToDirectoryPath"
-        },
-        {
-            "key": "file.parent_directory_ref",
-            "object": "file",
-            "references": "directory"
-        }
-      ],
-      "riskScore": {
-        "key": "x-msazure-sentinel-alert.fileStates.riskScore",
-        "object": "file"
-      }
-    },
-    "hostStates": {
-      "fqdn": {
-        "key": "domain-name.value",
-        "object": "host"
-      },
-      "isAzureAadJoined": {
-        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadJoined",
-        "object": "alert"
-      },
-      "isAzureAadRegistered": {
-        "key": "x-msazure-sentinel-alert.hostStates.isAzureAadRegistered",
-        "object": "alert"
-      },
-      "isHybridAzureDomainJoined": {
-        "key": "x-msazure-sentinel-alert.hostStates.isHybridAzureDomainJoined",
-        "object": "alert"
-      },
-      "os": [
-        {
-          "key": "x-ibm-finding.src_os_ref.name",
-          "object": "finding"
-        },
-        {
-          "key": "software.name",
-          "object": "application"
-        }
-      ],
-      "privateIpAddress": {
-        "key": "ipv4-addr.value"
-      },
-      "publicIpAddress": {
-        "key": "ipv4-addr.value"
-      },
-      "riskScore": {
-        "key": "x-msazure-sentinel-alert.hostStates.riskScore",
-        "object": "alert"
-      }
-    },
-    "id": {
-      "key": "x-oca-event.code",
-      "object": "event"
-    },
-    "incidentIds": {
-      "key": "x-msazure-sentinel-alert.incidentIds",
-      "object": "alert"
-    },
-    "lastModifiedDateTime": [
-      {
-        "key": "modified",
-        "cybox": false
-      },
-      {
-        "key": "x-ibm-finding.time_observed",
-        "object": "finding"
-      }
-    ],
-    "malwareStates": {
-      "category": {
-        "key": "x-msazure-sentinel-alert.malwareStates.category",
-        "object": "alert"
-      },
-      "family": {
-        "key": "x-msazure-sentinel-alert.malwareStates.family",
-        "object": "alert"
-      },
-      "name": {
-        "key": "x-msazure-sentinel-alert.malwareStates.name",
-        "object": "alert"
-      },
-      "severity": {
-        "key": "x-msazure-sentinel-alert.malwareStates.severity",
-        "object": "alert"
-      },
-      "wasRunning": {
-        "key": "x-msazure-sentinel-alert.malwareStates.wasRunning",
-        "object": "alert"
-      }
-    },
-    "networkConnections": {
-      "applicationName": {
-        "key": "software.name",
-        "object": "application"
-      },
-      "destinationAddress": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "dst_ip"
-        },
-        {
-          "key": "network-traffic.dst_ref",
-          "object": "nt",
-          "references": "dst_ip"
-        }
-      ],
-      "destinationLocation": {
-        "key": "x-ibm-finding.dst_geolocation",
-        "object": "alert"
-      },
-      "destinationDomain": {
-        "key": "domain-name.value",
-        "transformer": "ToDomainName"
-      },
-      "destinationPort": {
-        "key": "network-traffic.dst_port",
-        "object": "nt",
-        "transformer": "ToInteger"
-      },
-      "destinationUrl": {
-        "key": "url.value",
-        "object": "url"
-      },
-      "direction": {
-        "key": "x-msazure-sentinel-alert.networkConnections.direction",
-        "object": "alert"
-      },
-      "domainRegisteredDateTime": {
-        "key": "x-msazure-sentinel-alert.networkConnections.domainRegisteredDateTime",
-        "object": "alert"
-      },
-      "localDnsName": {
-        "key": "x-msazure-sentinel-alert.networkConnections.localDnsName",
-        "object": "alert"
-      },
-      "natDestinationAddress": {
-        "key": "x-ibm-finding.dst_ip_ref.value",
-        "object": "finding"
-      },
-      "natDestinationPort": {
-        "key": "x-msazure-sentinel-alert.networkConnections.natDestinationPort",
-        "object": "alert"
-      },
-      "natSourceAddress": {
-        "key": "x-ibm-finding.src_ip_ref.value",
-        "object": "finding"
-      },
-      "natSourcePort": {
-        "key": "x-msazure-sentinel-alert.networkConnections.natSourcePort",
-        "object": "alert"
-      },
-      "protocol": {
-        "key": "network-traffic.protocols",
-        "object": "nt",
-        "group": "True",
-        "transformer": "ToLowercaseArray"
-      },
-      "riskScore": {
-        "key": "x-msazure-sentinel-alert.networkConnections.riskScore",
-        "object": "alert"
-      },
-      "sourceAddress": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "src_ip"
-        },
-        {
-          "key": "network-traffic.src_ref",
-          "object": "nt",
-          "references": "src_ip"
-        }
-      ],
-      "sourceLocation": {
-        "key": "x-ibm-finding.src_geolocation",
-        "object": "alert"
-      },
-      "sourcePort": {
-        "key": "network-traffic.src_port",
-        "object": "nt",
-        "transformer": "ToInteger"
-      },
-      "status": {
-        "key": "x-msazure-sentinel-alert.networkConnections.status",
-        "object": "alert"
-      },
-      "urlParameters": [
-        {
-        "key": "x-oca-event.domain_ref.value",
-        "object": "event"
-        },
-        {
-        "key": "x-oca-event.url_ref.value",
-        "object": "event"
-        }
-      ]
-    },
-    "processes": {
-      "accountName": [
-        {
-          "key": "user-account.user_id",
-          "object": "user"
-        },
-        {
-          "key": "process.creator_user_ref",
-          "object": "process",
-          "references": "user"
-        }
-      ],
-      "commandLine": {
+      "CommandLine": {
         "key": "process.command_line",
         "object": "process"
       },
-      "createdDateTime": {
-        "key": "process.created",
-        "object": "process"
-      },
-      "fileHash": {
-        "sha256": {
-          "key": "file.hashes.SHA-256",
-          "object": "processType"
-        },
-        "sha1": {
-          "key": "file.hashes.SHA-1",
-          "object": "processType"
-        },
-        "md5": {
-          "key": "file.hashes.MD5",
-          "object": "processType"
-        },
-        "authenticodeHash256": {
-          "key": "file.hashes.authenticodeHash256",
-          "object": "processType"
-        },
-        "lsHash": {
-          "key": "file.hashes.lsHash",
-          "object": "processType"
-        },
-        "ctph": {
-          "key": "file.hashes.ctph",
-          "object": "processType"
-        },
-        "peSha1": {
-          "key": "file.hashes.peSha1",
-          "object": "processType"
-        },
-        "peSha256": {
-          "key": "file.hashes.peSha256",
-          "object": "processType"
-        },
-        "unknown": {
-          "key": "file.hashes.UNKNOWN",
-          "object": "processType"
-        }
-      },
-      "integrityLevel": {
-        "key": "x-msazure-sentinel-alert.processes.integrityLevel",
-        "object": "alert"
-      },
-      "isElevated": {
-        "key": "x-msazure-sentinel-alert.processes.isElevated",
-        "object": "alert"
-      },
-      "name": {
-        "key": "process.name",
-        "object": "process"
-      },
-      "parentProcessCreatedDateTime": {
-        "key": "process.created",
-        "object": "process_parent"
-      },
-      "parentProcessId": [
+      "LogonProcessName":
         {
+          "key": "process.name",
+          "object": "process"
+        },
+      "ParentProcessName": 
+        {
+          "key": "process.parent_ref.name",
+          "object": "process"
+        },
+      "pid": {
           "key": "process.pid",
-          "object": "parent_process"
-        },
-        {
-          "key": "process.parent_ref",
-          "object": "process",
-          "references": "parent_process"
-        }
-      ],
-      "parentProcessName": {
-        "key": "process.name",
-        "object": "process_parent"
-      },
-      "path": {
-        "key": "directory.path",
-        "object": "dir"
-      },
-      "processId": {
-        "key": "process.pid",
-        "object": "process"
+          "object": "process"
       }
+},
+"timeStates": {
+  "FirstActivityTime": {
+    "key": "x-ibm-finding.start",
+    "object": "time"
+  },
+  "FirstModifiedTime": {
+    "key": "x-ibm-finding.start",
+    "object": "time"
+  },
+  "StartTime": {
+    "key": "x-ibm-finding.start",
+    "object": "time"
+  },
+  "CreatedTime": {
+    "key": "x-oca-event.created",
+    "object": "time"
+  },
+  "ClosedTime": {
+    "key": "x-ibm-finding.end",
+    "object": "time"
+  },
+  "LastActivityTime": {
+    "key": "x-ibm-finding.end",
+    "object": "time"
+  },
+  "LastModifiedTime": {
+    "key": "x-ibm-finding.end",
+    "object": "time"
+  },
+  "EndTime": {
+    "key": "x-ibm-finding.end",
+    "object": "time"
+  },
+  "TimeGenerated": {
+    "key": "x-ibm-finding.time_observed",
+    "object": "time"
+  },
+  "EventTime": {
+    "key": "x-ibm-finding.time_observed",
+    "object": "time"
+  }
+},
+"hostStates": {
+  "AccountDomain": {
+    "key": "domain-name.value",
+    "object": "host"
+  },
+  "DomainName": {
+    "key": "domain-name.value",
+    "object": "host"
+  },
+  "SubjectDomainName": {
+    "key": "domain-name.value",
+    "object": "host"
+  },
+  "TargetDomainName": {
+    "key": "domain-name.value",
+    "object": "host"
+  },
+  "IpAddress": {
+    "key": "x-ibm-finding.src_ip_ref",
+    "object": "finding"
+  },
+  "ClientIPAddress": {
+    "key": "x-ibm-finding.dst_ip_ref",
+    "object": "finding"
+  },
+  "IncidentUrl": {
+    "key": "x-oca-event.url_ref",
+    "object": "event"
+  },
+  "ProviderName": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  }
+},
+"IpAddress":
+ {
+    "key": "x-oca-event.ip_refs.ip",
+    "object": "event"
+ },
+ "ClientIPAddress":
+ {
+    "key": "x-oca-event.ip_refs.clientIp",
+    "object": "event"
+ },
+ "DomainName":
+ {
+    "key": "x-oca-event.ip_refs.omain_ref",
+    "object": "event"
+ },
+ "IncidentName":
+ {
+    "key": "x-msazure-sentinel-incident.incident_name",
+    "object": "incident"
+ },
+ "Severity":
+ {
+    "key": "x-msazure-sentinel-incident.severity",
+    "object": "incident"
+ },
+ "Owner":
+ {
+    "key": "x-msazure-sentinel-incident.owner",
+    "object": "incident"
+ },
+
+ "AdditionalData":
+ {
+    "key": "x-msazure-sentinel-incident.additional_data",
+    "object": "incident"
+ },
+ "AlertIds":
+ {
+    "key": "x-msazure-sentinel-incident.alertids",
+    "object": "incident"
+ },
+ "Comments":
+ {
+    "key": "x-msazure-sentinel-incident.comments",
+    "object": "incident"
+ },
+ "Description__incident":
+ {
+    "key": "x-msazure-sentinel-incident.description",
+    "object": "incident"
+ },
+ "Labels":
+ {
+    "key": "x-msazure-sentinel-incident.labels",
+    "object": "incident"
+ },
+ "ModifiedBy":
+ {
+    "key": "x-msazure-sentinel-incident.modified_by",
+    "object": "incident"
+ },
+ "Classification":
+ {
+    "key": "x-msazure-sentinel-incident.classification",
+    "object": "incident"
+ },
+ "sentinelEvent": {
+  "eventId": {
+      "key": "x-msazure-sentinel-event.event_id",
+      "object": "msevent"
     },
-    "recommendedActions": {
-      "key": "x-msazure-sentinel-alert.recommendedactions",
-      "object": "alert"
+    "Title": {
+      "key": "x-msazure-sentinel-event.title",
+      "object": "msevent"
     },
-    "registryKeyStates": {
-      "hive": {
-        "key": "x-msazure-sentinel-alert.registryKeyStates.hive",
-        "object": "alert",
-        "transformer": "ToString"
-      },
-      "key": {
-        "key": "windows-registry-key.key",
-        "object": "registry"
-      },
-      "oldKey": {
-        "key": "x-msazure-sentinel-alert.registryKeyStates.oldKey",
-        "object": "alert"
-      },
-      "oldValueData": {
-        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueData",
-        "object": "alert"
-      },
-      "oldValueName": {
-        "key": "x-msazure-sentinel-alert.registryKeyStates.oldValueName",
-        "object": "alert"
-      },
-      "operation": {
-        "key": "x-msazure-sentinel-alert.registryKeyStates.operation",
-        "object": "alert",
-        "transformer": "ToString"
-      },
-      "processId": {
-        "key": "process.pid"
-      },
-      "valueData": {
-        "key": "extensions.windows-registry-value-type.valueData",
-        "object": "registry"
-      },
-      "valueName": {
-        "key": "extensions.windows-registry-value-type.name",
-        "object": "registry"
-      },
-      "valueType": {
-        "key": "extensions.windows-registry-value-type.valuetype",
-        "object": "registry",
-        "transformer": "ToString"
-      }
+    "Description": {
+      "key": "x-msazure-sentinel-event.text",
+      "object": "msevent"
     },
-    "securityResources": {
-      "resource": {
-        "key": "x-msazure-sentinel-alert.securityresources.resource",
-        "object": "alert"
-      },
-      "resourceType": {
-        "key": "x-msazure-sentinel-alert.securityresources.resourcetype",
-        "object": "alert",
-        "transformer": "ToString"
-      }
+    "DeviceDescription": {
+      "key": "x-msazure-sentinel-event.text",
+      "object": "msevent"
     },
-    "severity": {
-      "key": "x-ibm-finding.severity",
-      "object": "finding"
+    "DeviceId": {
+      "key": "x-msazure-sentinel-event.device_name",
+      "object": "msevent"
     },
-    "sourceMaterials": {
-      "key": "x-msazure-sentinel-alert.sourcematerials",
-      "object": "alert"
+    "SourceSystem": {
+      "key": "x-msazure-sentinel-event.source",
+      "object": "msevent"
     },
-    "status": {
-      "key": "x-msazure-sentinel-alert.status",
-      "object": "alert",
-      "transformer": "ToString"
+    "EventSourceName": {
+      "key": "x-msazure-sentinel-event.source",
+      "object": "msevent"
     },
-    "tags": {
-      "key": "x-msazure-sentinel-alert.tags",
-      "object": "alert"
+    "AlertName": {
+      "key": "x-msazure-sentinel-event.alert_type",
+      "object": "msevent"
     },
-    "title": [
-      {
-      "key": "x-ibm-finding.name",
-      "object": "finding"
-      },
-      {
-      "key": "x-oca-event.action",
-      "object": "event"
-      }
-    ],
-    "triggers": {
-      "name": {
-        "key": "x-msazure-sentinel-alert.triggers.name",
-        "object": "alert"
-      },
-      "type": {
-        "key": "x-msazure-sentinel-alert.triggers.type",
-        "object": "alert"
-      },
-      "value": {
-        "key": "x-msazure-sentinel-alert.triggers.value",
-        "object": "alert"
-      }
+    "Account": {
+      "key": "x-msazure-sentinel-event.account",
+      "object": "msevent"
     },
-    "userStates": {
-      "aadUserId": {
-        "key": "x-ibm-finding.src_application_user_ref.user_id",
-        "object": "finding"
-      },
-      "accountName": {
-        "key": "user-account.user_id",
-        "object": "user"
-      },
-      "domainName": {
-        "key": "domain-name.value"
-      },
-      "emailRole": {
-        "key": "x-msazure-sentinel-alert.userStates.emailrole",
-        "object": "alert"
-      },
-      "isVpn": {
-        "key": "x-msazure-sentinel-alert.userStates.isvpn",
-        "object": "alert"
-      },
-      "logonDateTime": {
-        "key": "user-account.account_last_login",
-        "object": "user"
-      },
-      "logonId": {
-        "key": "user-account.account_login",
-        "object": "user"
-      },
-      "logonIp": {
-        "key": "ipv4-addr.value"
-      },
-      "logonLocation": {
-        "key": "x-msazure-sentinel-alert.userStates.logonLocation",
-        "object": "alert"
-      },
-      "logonType": {
-        "key": "x-ibm-finding.src_application_user_ref.type",
-        "object": "finding"
-      },
-      "onPremisesSecurityIdentifier": {
-        "key": "x-msazure-sentinel-alert.userStates.onpremisessecurityidentifier",
-        "object": "alert"
-      },
-      "riskScore": {
-        "key": "x-msazure-sentinel-alert.userStates.riskScore",
-        "object": "alert"
-      },
-      "userAccountType": {
-        "key": "x-msazure-sentinel-alert.userStates.useraccounttype",
-        "object": "alert"
-      },
-      "userPrincipalName": {
-        "key": "x-msazure-sentinel-alert.userStates.userPrincipalName",
-        "object": "alert"
-      }
+    "Activity": {
+      "key": "x-msazure-sentinel-event.activity",
+      "object": "msevent"
     },
-    "vendorInformation": {
-      "provider": {
-        "key": "software.name",
-        "object": "application"
-      },
-      "vendor": {
-        "key": "software.vendor",
-        "object": "application"
-      },
-      "providerVersion": {
-        "key": "software.version",
-        "object": "application"
-      },
-      "subProvider": {
-        "key": "x-oca-event.provider",
-        "object": "event"
-      }
+    "Computer": {
+      "key": "x-msazure-sentinel-event.computer",
+      "object": "msevent"
     },
-    "vulnerabilityStates": {
-      "cve": {
-        "key": "x-msazure-sentinel-alert.vulnerabilityStates.cve",
-        "object": "alert"
+    "LogonProcessName": {
+      "key": "x-msazure-sentinel-event.logon_processname",
+      "object": "msevent"
+    },
+    "EventData": {
+      "key": "x-msazure-sentinel-event.event_data",
+      "object": "msevent"
+    },
+    "ServiceName": {
+      "key": "x-msazure-sentinel-event.service_name",
+      "object": "msevent"
+    },
+    "Task": {
+      "key": "x-msazure-sentinel-event.task",
+      "object": "msevent"
+    },
+    "UserParameter": {
+      "key": "x-msazure-sentinel-event.user_parameter",
+      "object": "msevent"
+    },
+    "MemberName": {
+      "key": "x-msazure-sentinel-event.member_name",
+      "object": "msevent"
+    },
+    "Requester": {
+      "key": "x-msazure-sentinel-event.requester",
+      "object": "msevent"
+    }
+  },
+  "sentinelIncident": {
+    "IncidentName": {
+        "key": "x-msazure-sentinel-incident.incident_name",
+        "object": "msincident"
       },
-      "severity": {
-        "key": "x-msazure-sentinel-alert.vulnerabilityStates.severity",
-        "object": "alert"
+    "Severity": {
+        "key": "x-msazure-sentinel-incident.severity",
+        "object": "msincident"
       },
-      "wasRunning": {
-        "key": "x-msazure-sentinel-alert.vulnerabilityStates.wasRunning",
-        "object": "alert"
+    "Owner": {
+        "key": "x-msazure-sentinel-incident.owner",
+        "object": "msincident"
+      },
+    "AdditionalData": {
+        "key": "x-msazure-sentinel-incident.additional_data",
+        "object": "msincident"
+      },
+    "AlertIds": {
+        "key": "x-msazure-sentinel-incident.alertids",
+        "object": "msincident"
+      },
+    "Comments": {
+        "key": "x-msazure-sentinel-incident.comments",
+        "object": "msincident"
+      },
+    "Description": {
+        "key": "x-msazure-sentinel-incident.description",
+        "object": "msincident"
+      },
+    "Labels": {
+        "key": "x-msazure-sentinel-incident.labels",
+        "object": "msincident"
+      },
+    "ModifiedBy": {
+        "key": "x-msazure-sentinel-incident.modified_by",
+        "object": "msincident"
+      },
+    "Classification": {
+        "key": "x-msazure-sentinel-incident.classification",
+        "object": "msincident"
       }
     }
-}
+  }

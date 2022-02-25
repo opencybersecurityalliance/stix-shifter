@@ -11,9 +11,9 @@ class APIClient:
 
         headers = dict()
         url_modifier_function = None
-        default_api_version = 'v1.0'
         auth = configuration.get('auth')
-        self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
+        workspace_id= connection.get('workspaceId')
+        self.endpoint = 'v1/workspaces/{workspace_id}/query'.format(workspace_id=workspace_id)
         self.host = connection.get('host')
         self.timeout = connection['options'].get('timeout')
 

@@ -1,3 +1,4 @@
+from csv import Dialect
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression
@@ -13,19 +14,14 @@ class QueryStringPatternTranslator:
 
     # comparator lookup for implementing negation operator
     negated_comparator_lookup = {
-        ComparisonComparators.GreaterThan: "le",
-        ComparisonComparators.GreaterThanOrEqual: "lt",
-        ComparisonComparators.LessThan: "ge",
-        ComparisonComparators.LessThanOrEqual: "gt",
         ComparisonComparators.Equal: "ne",
         ComparisonComparators.NotEqual: "eq",
         ComparisonComparators.In: "ne"
     }
 
-    def __init__(self, pattern: Pattern, data_model_mapper, time_range):
+    def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
-        self._time_range = time_range
         self.pattern = pattern
 
         # List of queries for each observation
@@ -64,16 +60,7 @@ class QueryStringPatternTranslator:
           :return: str
           """
         return '\'{}\''.format(value)
-
-    @staticmethod
-    def _format_like(value) -> str:
-        """
-        Formatting value in the event of LIKE operation
-        :param value: str
-        :return: str
-        """
-        return '\'{}\''.format(value)
-
+        
     @staticmethod
     def _escape_value(value) -> str:
         """
@@ -140,18 +127,17 @@ class QueryStringPatternTranslator:
                 collection_name = collection_attribute_array[0]
                 attribute_nested_level = '/'.join(collection_attribute_array[1:])
 
-                if stix_field in ['pid', 'parent_ref.pid', 'account_last_login', 'provider', 'vendor', 'protocols[*]']:
+                if stix_field in [ 'process.pid']:
                     attribute_expression = '{fn}/'.format(fn=lambda_func) + attribute_nested_level
                 else:
-                    attribute_expression = 'tolower({fn}/'.format(fn=lambda_func) + attribute_nested_level + ')'
+                    attribute_expression = '({fn}/'.format(fn=lambda_func) + attribute_nested_level + ')'
                 # ip address in data source is like "sourceAddress": "IP: 92.63.194.101 [2]\r"
                 # to get ip address from data source using contains keyword ODATA query
-                if mapped_field in ['networkConnections.sourceAddress', 'networkConnections.destinationAddress',
-                                    'fileStates.path', 'processes.path']:
+                if mapped_field in ['fileStates.FilePath']:
                     comparison_string += "{collection_name}/any({fn}:contains({attribute_expression}, {value}))".format(
                         collection_name=collection_name, fn=lambda_func, attribute_expression=attribute_expression,
                         value=value)
-                elif mapped_field in ['fileStates.fileHash.hashValue', 'processes.fileHash.hashValue']:
+                elif mapped_field in ['fileStates.fileHash', 'processes']:
                     hash_string = 'fileHash/hashType'
                     hash_type = stix_field.split('.')[1] if mapped_field == 'fileStates.fileHash.hashValue' else \
                         stix_field.split('.')[2]
@@ -196,10 +182,10 @@ class QueryStringPatternTranslator:
             else:
                 # check for mapped field that does not have '.' character -> example [azureTenantId,title]
                 if comparator == 'contains':
-                    comparison_string += "{comparator}(tolower({mapped_field}), {value})".format(
+                    comparison_string += "{comparator}{mapped_field}, {value}".format(
                         mapped_field=mapped_field, comparator=comparator, value=value)
                 else:
-                    comparison_string += "tolower({mapped_field}) {comparator} {value}".format(
+                    comparison_string += "{mapped_field} {comparator} {value}".format(
                         mapped_field=mapped_field, comparator=comparator, value=value)
             return comparison_string
 
@@ -238,7 +224,7 @@ class QueryStringPatternTranslator:
         return self.comparator_lookup[str(expression_operator)]
 
     @staticmethod
-    def _parse_time_range(qualifier, time_range):
+    def _parse_time_range(qualifier):
         """
         :param qualifier: str, input time range i.e START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-20T10:43:10.003Z'
         :param time_range: int, value available from main.py in options variable
@@ -246,25 +232,18 @@ class QueryStringPatternTranslator:
         """
         try:
             compile_timestamp_regex = re.compile(START_STOP_PATTERN)
-            mapped_field = "eventDateTime"
+            mapped_field = "TimeGenerated"
             if qualifier and compile_timestamp_regex.search(qualifier):
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                 time_range_list = [each.group() for each in time_range_iterator]
-            # Default time range Start time = Now - 5 minutes and Stop time = Now
-            else:
-                stop_time = datetime.utcnow()
-                start_time = stop_time - timedelta(minutes=time_range)
-                converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-                converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-                time_range_list = [converted_starttime, converted_stoptime]
-
-            value = ('{mapped_field} ge {start_time} and {mapped_field} le {stop_time}'
-                     ).format(mapped_field=mapped_field, start_time=time_range_list[0], stop_time=time_range_list[1])
-            format_string = '{value}'.format(value=value)
-
+                value = ('{mapped_field} between (datetime({start_time}) .. datetime({stop_time}))'
+                        ).format(mapped_field=mapped_field, start_time=time_range_list[0], stop_time=time_range_list[1])
+                format_string = '{value}'.format(value=value)
+                return format_string
         except (KeyError, IndexError, TypeError) as e:
             raise e
-        return format_string
+                
+        
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         """
@@ -275,7 +254,7 @@ class QueryStringPatternTranslator:
            """
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
-            stix_object, stix_field = expression.object_path.split(':')
+            stix_object, stix_field = expression.object_path.split(':') 
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
@@ -288,11 +267,7 @@ class QueryStringPatternTranslator:
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal \
-                    or expression.comparator == ComparisonComparators.NotEqual \
-                    or expression.comparator == ComparisonComparators.GreaterThan \
-                    or expression.comparator == ComparisonComparators.LessThan \
-                    or expression.comparator == ComparisonComparators.GreaterThanOrEqual \
-                    or expression.comparator == ComparisonComparators.LessThanOrEqual:
+                    or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
@@ -327,7 +302,7 @@ class QueryStringPatternTranslator:
 
             if len(mapped_fields_array) > 1:
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
-                grouped_comparison_string = "(" + comparison_string + ")"
+                grouped_comparison_string =  comparison_string 
                 comparison_string = grouped_comparison_string
 
             return "{}".format(comparison_string)
@@ -339,16 +314,20 @@ class QueryStringPatternTranslator:
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
+                expression_02 = "{}".format(expression_02)
             query_string = "{} {} {}".format(expression_01, operator, expression_02)
             return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
             parse_string = self._parse_expression(expression.comparison_expression)
-            time_string = self._parse_time_range(qualifier, self._time_range)
-            sentinel_query = "({}) and ({})".format(parse_string, time_string)
-            self.final_query_list.append(sentinel_query)
+            time_string = self._parse_time_range(qualifier)
+            if qualifier:
+                sentinel_query = "{} and {}".format(parse_string, time_string)
+                self.final_query_list.append(sentinel_query)
+            else:
+                sentinel_query = "{}".format(parse_string)
+                self.final_query_list.append(sentinel_query)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 self._parse_expression(expression.observation_expression.expr1, expression.qualifier)
@@ -356,8 +335,8 @@ class QueryStringPatternTranslator:
             else:
                 parse_string = self._parse_expression(expression.observation_expression.comparison_expression,
                                                       expression.qualifier)
-                time_string = self._parse_time_range(expression.qualifier, self._time_range)
-                sentinel_query = "({}) and ({})".format(parse_string, time_string)
+                time_string = self._parse_time_range(expression.qualifier)
+                sentinel_query = "{} and {}".format(parse_string, time_string)
                 self.final_query_list.append(sentinel_query)
         elif isinstance(expression, CombinedObservationExpression):
             self._parse_expression(expression.expr1, qualifier)
@@ -385,9 +364,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     :param options: dict, contains 2 keys result_limit defaults to 10000, time_range defaults to 5
     :return: str, translated query
     """
+    Dialect_name = data_model_mapping.dialect
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
-    time_range = options['time_range']
-    query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
-
-    translated_query = query.final_query_list
+    query = QueryStringPatternTranslator( pattern, data_model_mapping)
+    translated_query = Dialect_name  + ' |' + " where "+','.join (query.final_query_list)
     return translated_query

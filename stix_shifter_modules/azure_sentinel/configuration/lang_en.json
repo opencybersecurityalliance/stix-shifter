@@ -19,6 +19,10 @@
         "sni": {
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
+        },
+        "workpaceId": {
+            "label": "Loganalytics Workspace",
+            "description": "The workspace Id of the loganaytics "
         }
     },
     "configuration": {
