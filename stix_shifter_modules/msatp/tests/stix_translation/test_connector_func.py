@@ -21,13 +21,12 @@ def get_conn_and_config():
 
 
 raw_data = {
-    "Severity": "low",
-    "FileName": "powershell.exe",
-    "Title": "blah",
-    "SHA1": "blah",
-    "Category": "blah",
-    "RemoteUrl": "blah",
-    "RemoteIP": 8080
+    "AlertId": ["alert_id_0123456789"],
+    "Severity": ["low"],
+    "Title": ["blah"],
+    "Category": ["blah"],
+    "RemoteUrl": ["blah"],
+    "RemoteIP": [8080]
 }
 
 
@@ -54,14 +53,11 @@ class GetDSLinksTests(unittest.TestCase):
 
 class UnifyAlertFieldsTests(unittest.TestCase):
     def test_unify_alert_fields_return_values(self):
-        ret_data = Connector.unify_alert_fields(raw_data)
+        conn, config = get_conn_and_config()
+        connector = Connector(conn, config)
+        ret_data = connector.unify_alert_fields(raw_data)
         if 'Alerts' not in ret_data:
             raise AssertionError("incorrect result")
-        else:
-            for x in ret_data['Alerts']:
-                for k in x:
-                    if 'alert_' not in k:
-                        raise AssertionError("incorrect result")
 
 
 class GetTableNameTests(unittest.TestCase):
@@ -75,11 +71,15 @@ class GetTableNameTests(unittest.TestCase):
 
 class JoinQueryWithAlertsTests(unittest.TestCase):
     def test_get_table_name_return_values(self):
+        conn, config = get_conn_and_config()
+        connector = Connector(conn, config)
         q = '(find withsource = TableName in (DeviceFileEvents) where (FileName =~ "powershell.exe"))'
-        q = Connector.join_query_with_alerts(q)
+        q = connector.join_query_with_alerts(q)
         if 'DeviceAlertEvents' not in q or 'DeviceNetworkInfo' not in q or 'DeviceInfo' not in q:
             raise AssertionError("incorrect result")
 
     def test_get_table_name_return_types(self):
-        q = ""
-        self.assertIsInstance(Connector.join_query_with_alerts(q), str, "incorrect result type")
+        conn, config = get_conn_and_config()
+        connector = Connector(conn, config)
+        q=""
+        self.assertIsInstance(connector.join_query_with_alerts(q), str, "incorrect result type")

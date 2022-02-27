@@ -353,7 +353,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'DeviceName': 'desktop-536bt46',
                                                 'LocalIP': '172.16.2.22',
-                                               'MacAddress': '484D7E9DBD97',
+                                               'MacAddresses': ['484D7E9DBD97'],
                                                 'RemoteIP': '168.159.213.203',
                                                'LocalPort': 63043,
                                                'RemotePort': 80,
@@ -471,11 +471,10 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         host_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
         assert host_obj is not None, 'x-oca-asset object type not found'
-        assert host_obj.keys() == {'type', 'device_id', 'hostname', 'mac_refs', 'ip_refs'}
+        assert host_obj.keys() == {'type', 'device_id', 'hostname', 'ip_refs'}
         assert host_obj['type'] == 'x-oca-asset'
         assert host_obj['hostname'] == 'desktop-536bt46'
-        assert host_obj['mac_refs'] == ['3']
-        assert host_obj['ip_refs'] == ['4', '5', '6', '7']
+        assert host_obj['ip_refs'] == [ '3', '4', '5', '6']
 
     def test_x_oca_event(self):
         """
@@ -594,11 +593,10 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'NetworkAdapterStatus': 'Down',
                                       'TunnelType': 'ISATAP',
                                       'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
-                                      'Alerts': [{'alert_AlertId': '123123123','alert_Severity': 'Medium', 'alert_FileName': 'reg.exe',
-                                                  'alert_Title': 'Registry queried for passwords',
-                                                  'alert_SHA1': 'c0db341defa8ef40c03ed769a9001d600e0f4dae',
-                                                  'alert_Category': 'CredentialAccess',
-                                                  'alert_AttackTechniques': ['OS Credential Dumping (T1003)',
+                                      'Alerts': [{'AlertId': '123123123','Severity': 'Medium',
+                                                  'Title': 'Registry queried for passwords',
+                                                  'Category': 'CredentialAccess',
+                                                  'AttackTechniques': ['OS Credential Dumping (T1003)',
                                                                              'Query Registry (T1012)',
                                                                              'Credentials in Registry (T1552.002)']}]
                                       }}
@@ -616,7 +614,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         finding_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         assert finding_obj is not None, 'x-ibm-finding object type not found'
-        assert finding_obj.keys() == {'type', 'alert_id', 'severity', 'file_ref', 'name', 'ttp_tagging_refs'}
+        assert finding_obj.keys() == {'type', 'alert_id', 'severity', 'name', 'ttp_tagging_refs'}
         assert finding_obj['type'] == 'x-ibm-finding'
         assert finding_obj['severity'] == 33
         assert finding_obj['file_ref'] == '9'

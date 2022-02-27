@@ -8,28 +8,29 @@ import copy
 
 
 class Connector(BaseSyncConnector):
+    make_alert_as_list = True
     init_error = None
     logger = logger.set_logger(__name__)
 
-    alerts_join_query = ('| join kind=leftouter (DeviceAlertEvents | project ReportId, Timestamp, DeviceName, AlertId, ' 
-                 'Severity, Title, Category, RemoteUrl, RemoteIP, AttackTechniques, Table | where ' 
-                 'Table =~ "{}" | summarize AlertId=make_set(AlertId), Severity=make_set(Severity), ' 
-                 'Title=make_set(Title), Category=make_set(' 
-                 'Category), RemoteUrl=make_set(RemoteUrl), RemoteIP=make_set(RemoteIP),  AttackTechniques=make_set(' 
-                 'AttackTechniques) by DeviceName, ReportId, Timestamp, ' 
-                 'Table) on ReportId, DeviceName, Timestamp')
+    alerts_join_query = ('| join kind=leftouter (DeviceAlertEvents | project ReportId, Timestamp, DeviceName, AlertId, '
+                         'Severity, Title, Category, RemoteUrl, RemoteIP, AttackTechniques, Table | where '
+                         'Table =~ "{}" | summarize AlertId=make_set(AlertId), Severity=make_set(Severity), '
+                         'Title=make_set(Title), Category=make_set('
+                         'Category), RemoteUrl=make_set(RemoteUrl), RemoteIP=make_set(RemoteIP),  AttackTechniques=make_set('
+                         'AttackTechniques) by DeviceName, ReportId, Timestamp, '
+                         'Table) on ReportId, DeviceName, Timestamp')
 
-    device_join_query = ('| join kind=leftouter (DeviceNetworkInfo| project DeviceName, ' 
-                        'MacAddress, IPAddresses, ReportId, Timestamp | summarize MacAddresses=make_set(MacAddress), ' 
-                        'IPAddresses=make_set(IPAddresses) by DeviceName, ReportId, Timestamp) on ' 
-                        'ReportId, DeviceName, Timestamp | join kind=leftouter (DeviceInfo| project DeviceName, ' 
-                        'ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, DeviceType, DeviceId | ' 
-                        'summarize by DeviceName, ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, ' 
-                        'DeviceType, DeviceId) on ' 
-                        'ReportId, DeviceName, Timestamp')
+    device_join_query = ('| join kind=leftouter (DeviceNetworkInfo| project DeviceName, '
+                         'MacAddress, IPAddresses, ReportId, Timestamp | summarize MacAddresses=make_set(MacAddress), '
+                         'IPAddresses=make_set(IPAddresses) by DeviceName, ReportId, Timestamp) on '
+                         'ReportId, DeviceName, Timestamp | join kind=leftouter (DeviceInfo| project DeviceName, '
+                         'ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, DeviceType, DeviceId | '
+                         'summarize by DeviceName, ReportId, Timestamp, PublicIP, OSPlatform ,OSArchitecture, OSVersion, '
+                         'DeviceType, DeviceId) on '
+                         'ReportId, DeviceName, Timestamp')
 
-    events_query = ('(find withsource = TableName in ({})  where (DeviceName =~ "{}") and ' 
-                   '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}")))')
+    events_query = ('(find withsource = TableName in ({})  where (DeviceName =~ "{}") and '
+                    '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}")))')
 
     ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
@@ -73,6 +74,13 @@ class Connector(BaseSyncConnector):
         return event
 
     def unify_alert_fields(self, event_data):
+        techniques_lists = []
+        if 'AttackTechniques' in event_data:
+            for techniques_lst in event_data['AttackTechniques']:
+                attackTechniques = json.loads(techniques_lst)
+                techniques_lists.append(attackTechniques)
+            event_data['AttackTechniques'] = techniques_lists
+
         alerts = []
         alerts_count = len(event_data['AlertId']) if not self.alert_mode else 1
         for i in range(alerts_count):
@@ -157,11 +165,12 @@ class Connector(BaseSyncConnector):
             # Customizing of Registry values json
             table_event_data = []
             for event_data in q_return_obj['data']:
+                Connector.make_alert_as_list = True
                 event_data = Connector.remove_duplicate_fields(event_data)
                 lookup_table = event_data['TableName']
                 event_data.pop('TableName')
                 build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+                build_data[lookup_table] = {k: v for k, v in event_data.items() if ((v and v != ['']) or k == "RegistryValueName")}
 
                 # values for query
                 table = build_data[lookup_table].get('Table', None)
@@ -179,39 +188,51 @@ class Connector(BaseSyncConnector):
                     events_return_obj['data'] = response_json['Results']
                     # replace the lookup_table with 'table' alert's field, so the to_stix mapping will be
                     # according to 'table' mapping
-                    if len(events_return_obj['data']):
+                    if not events_return_obj['data']:
+                        Connector.make_alert_as_list = False
+                        if 'AttackTechniques' in build_data[lookup_table]:
+                            AttackTechniques_lst = json.loads(build_data[lookup_table]['AttackTechniques'])
+                            build_data[lookup_table]['AttackTechniques'] = AttackTechniques_lst
+                    else:
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
                         build_data[table] = val
                         lookup_table = table
                         event_build_data = dict()
-                        events_return_obj['data'][0] = (Connector.remove_duplicate_fields
-                                                                        (events_return_obj['data'][0]))
-                        events_return_obj['data'][0].pop('TableName')
+                        event_obj = events_return_obj['data'][0]
+                        event_obj = (Connector.remove_duplicate_fields
+                                                        (event_obj))
+                        event_obj.pop('TableName')
                         merged_alert_event = copy.deepcopy(build_data[table])
-                        merged_alert_event.update(events_return_obj['data'][0])
-                        merged_alert_event = {k:v for k, v in merged_alert_event.items() if v}
+                        event_obj = {k:v for k, v in event_obj.items() if v}
+                        merged_alert_event.update(event_obj)
+                        merged_alert_event = {k: v for k, v in merged_alert_event.items() if v}
                         event_build_data[table] = merged_alert_event
                         build_data = event_build_data
 
-                build_data[lookup_table]['provider'] = 'Microsoft Defender Antivirus'
+                build_data[lookup_table]['category'] = ''
+                build_data[lookup_table]['provider'] = ''
                 event_data = copy.deepcopy(build_data[lookup_table])
                 device_link, file_link = self.get_ds_links(build_data[lookup_table].get
-                                ('DeviceId', None), build_data[lookup_table].get('InitiatingProcessSHA256', None))
+                                                           ('DeviceId', None),
+                                                           build_data[lookup_table].get('InitiatingProcessSHA256',
+                                                                                        None))
                 if device_link:
                     build_data[lookup_table]['device_link'] = device_link
 
                 if file_link:
                     build_data[lookup_table]['file_link'] = file_link
 
-                if 'AlertId' in build_data[lookup_table]:
+                if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
-                                                self.alert_mode else v) for k, v in build_data[lookup_table].items()})
+                                                            self.alert_mode else v) for k, v in
+                                                 build_data[lookup_table].items()})
                     build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddresses' in build_data[lookup_table]:
                     ips_comp_lst = build_data[lookup_table]['IPAddresses']
-                    flat_lst = [ip_obj['IPAddress'] for ip_lst in ips_comp_lst for ip_obj in json.loads(ip_lst) if 'IPAddress' in ip_obj]
+                    flat_lst = [ip_obj['IPAddress'] for ip_lst in ips_comp_lst for ip_obj in json.loads(ip_lst) if
+                                'IPAddress' in ip_obj]
                     build_data[lookup_table]['IPAddresses'] = flat_lst
 
                 if lookup_table == "DeviceRegistryEvents":

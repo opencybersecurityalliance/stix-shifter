@@ -122,6 +122,11 @@
         "key": "network-traffic.dst_ref",
         "object": "nt",
         "references": "dst_ip"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "LocalPort": [
@@ -129,6 +134,11 @@
         "key": "network-traffic.src_port",
         "object": "nt",
         "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "RemotePort": [
@@ -136,6 +146,11 @@
         "key": "network-traffic.dst_port",
         "object": "nt",
         "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
       }
     ],
     "Protocol": {
@@ -143,17 +158,6 @@
       "object": "nt",
       "transformer": "FormatTCPProtocol"
     },
-    "RemoteUrl": [
-      {
-        "key": "url.value",
-        "object": "url"
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": "url"
-      }
-    ],
     "InitiatingProcessSHA1": [
       {
         "key": "file.hashes.SHA-1",
@@ -446,6 +450,15 @@
         ],
         "group": true,
         "unwrap": true
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": [
+          "dst_finding_url"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "ActionType": {
@@ -528,7 +541,12 @@
         ],
         "unwrap": true
       }
-    ]
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
+    }
   },
   "DeviceProcessEvents": {
     "Timestamp": [
@@ -625,126 +643,62 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.name",
-        "object": "child_process"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "child_process",
-        "references": "child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "process",
-        "references": [
-          "child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "process"
-      }
-    ],
-    "FolderPath": [
-      {
-        "key": "directory.path",
-        "object": "child_process_file_dir",
-        "transformer": "ToDirectoryPath"
-      },
-      {
-        "key": "file.parent_directory_ref",
-        "object": "child_process_file",
-        "references": "child_process_file_dir"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "child_process",
-        "references": "child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "process",
-        "references": [
-          "child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "process"
+        "references": "event_file"
       }
     ],
     "SHA1": [
       {
         "key": "file.hashes.SHA-1",
-        "object": "child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "child_process",
-        "references": "child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "process",
-        "references": [
-          "child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "process"
+        "references": "event_file"
       }
     ],
     "SHA256": [
       {
         "key": "file.hashes.SHA-256",
-        "object": "child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "child_process",
-        "references": "child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "process",
-        "references": [
-          "child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "process"
+        "references": "event_file"
       }
     ],
     "MD5": [
       {
         "key": "file.hashes.MD5",
-        "object": "child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "child_process",
-        "references": "child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "process",
-        "references": [
-          "child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "process"
+        "references": "event_file"
+      }
+    ],
+    "FolderPath": [
+      {
+        "key": "directory.path",
+        "object": "event_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "event_file",
+        "references": "event_file_dir"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "event_file"
       }
     ],
     "ProcessId": [
@@ -1141,6 +1095,15 @@
         ],
         "group": true,
         "unwrap": true
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": [
+          "dst_finding_url"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -1217,7 +1180,12 @@
         ],
         "unwrap": true
       }
-    ]
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
+    }
   },
   "DeviceFileEvents": {
     "Timestamp": [
@@ -1314,97 +1282,62 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "fc_child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.name",
-        "object": "fc_child_process"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "fc_child_process",
-        "references": "fc_child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "fc_process",
-        "references": [
-          "fc_child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "fc_process"
+        "references": "event_file"
       }
     ],
     "SHA1": [
       {
         "key": "file.hashes.SHA-1",
-        "object": "fc_child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "fc_child_process",
-        "references": "fc_child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "fc_process",
-        "references": [
-          "fc_child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "fc_process"
+        "references": "event_file"
       }
     ],
     "SHA256": [
       {
         "key": "file.hashes.SHA-256",
-        "object": "fc_child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "fc_child_process",
-        "references": "fc_child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "fc_process",
-        "references": [
-          "fc_child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "fc_process"
+        "references": "event_file"
       }
     ],
     "MD5": [
       {
         "key": "file.hashes.MD5",
-        "object": "fc_child_process_file"
+        "object": "event_file"
       },
       {
-        "key": "process.binary_ref",
-        "object": "fc_child_process",
-        "references": "fc_child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "fc_process",
-        "references": [
-          "fc_child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
+        "key": "x-oca-event.file_ref",
         "object": "event",
-        "references": "fc_process"
+        "references": "event_file"
+      }
+    ],
+    "FolderPath": [
+      {
+        "key": "directory.path",
+        "object": "event_file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "event_file",
+        "references": "event_file_dir"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "event_file"
       }
     ],
     "InitiatingProcessSHA1": [
@@ -1611,35 +1544,6 @@
         "references": "fc_process"
       }
     ],
-    "FolderPath": [
-      {
-        "key": "directory.path",
-        "object": "fc_child_process_file_dir",
-        "transformer": "ToDirectoryPath"
-      },
-      {
-        "key": "file.parent_directory_ref",
-        "object": "fc_child_process_file",
-        "references": "fc_child_process_file_dir"
-      },
-      {
-        "key": "process.binary_ref",
-        "object": "fc_child_process",
-        "references": "fc_child_process_file"
-      },
-      {
-        "key": "process.child_refs",
-        "object": "fc_process",
-        "references": [
-          "fc_child_process"
-        ]
-      },
-      {
-        "key": "x-oca-event.process_ref",
-        "object": "event",
-        "references": "fc_process"
-      }
-    ],
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
@@ -1738,6 +1642,15 @@
         ],
         "group": true,
         "unwrap": true
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": [
+          "dst_finding_url"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -1816,7 +1729,12 @@
         ],
         "unwrap": true
       }
-    ]
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
+    }
   },
   "DeviceRegistryEvents": {
     "Timestamp": [
@@ -2223,6 +2141,15 @@
         ],
         "group": true,
         "unwrap": true
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": [
+          "dst_finding_url"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "device_link": [
@@ -2301,7 +2228,12 @@
         ],
         "unwrap": true
       }
-    ]
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
+    }
   },
   "DeviceNetworkInfo": {
     "DeviceId": [
@@ -2446,6 +2378,15 @@
         ],
         "group": true,
         "unwrap": true
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": [
+          "dst_finding_url"
+        ],
+        "group": true,
+        "unwrap": true
       }
     ],
     "MacAddresses": [
@@ -2522,9 +2463,30 @@
         ],
         "group": true
       }
-    ]
+    ],
+    "provider": {
+      "key": "x-oca-event.provider",
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
+    }
   },
   "DeviceAlertEvents": {
+    "Timestamp": [
+      {
+        "key": "x-oca-event.created",
+        "object": "event"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "MsatpToTimestamp"
+      }
+    ],
     "AlertId": [
       {
         "key": "x-ibm-finding.alert_id",
@@ -2572,12 +2534,23 @@
         "key": "x-ibm-finding.dst_url_ref",
         "object": "finding",
         "references": "dst_finding_url"
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": "dst_finding_url"
       }
     ],
-    "Title": {
-      "key": "x-ibm-finding.name",
-      "object": "finding"
-    },
+    "Title": [
+      {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
+      {
+        "key": "x-oca-event.action",
+        "object": "event"
+      }
+    ],
     "RemoteIP": [
       {
         "key": "ipv4-addr.value",
@@ -2649,9 +2622,15 @@
         "references": "file"
       }
     ],
+    "category": {
+      "key": "x-oca-event.category",
+      "object": "event",
+      "value": "alert"
+    },
     "provider": {
       "key": "x-oca-event.provider",
-      "object": "event"
+      "object": "event",
+      "value": "Microsoft Defender Antivirus"
     }
   }
 }

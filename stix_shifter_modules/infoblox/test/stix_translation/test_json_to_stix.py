@@ -259,7 +259,7 @@ class TestTideResultTranslator(unittest.TestCase, TestResultTranslatorMixin):
         data = [{"tideDbData" : [{"type": "IP"},{"type": "IP"}]}]
 
         observed_objects = self._get_observed_objects(data)
-        self.assertEqual(2, len(observed_objects))
+        self.assertEqual(1, len(observed_objects))
         for index in observed_objects:
             obj = observed_objects[index]
             self.assertEqual(obj, {'threat_type': 'IP', 'type': 'x-infoblox-threat'})
