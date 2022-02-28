@@ -1,12 +1,9 @@
 from abc import ABCMeta, abstractmethod
 from cmath import inf
-import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json as helper_read_json
-from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix_translator import DataSourceObjToStixObj
 from datetime import datetime
 from stix2validator import validate_instance, print_results, ValidationOptions
-import re
 import uuid
 
 
