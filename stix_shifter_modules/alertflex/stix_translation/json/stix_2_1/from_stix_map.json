@@ -1,0 +1,44 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["a.dstIp", "a.srcIp"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["a.srcPort"],
+      "dst_port": ["a.dstPort"],
+      "src_ref": ["a.srcIp"],
+      "dst_ref": ["a.dstIp"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["a.fileName"],
+      "hashes.'SHA-256'": ["a.hashSha256"],
+      "hashes.'SHA-1'": ["a.hashSha1"],
+      "hashes.MD5": ["a.hashMd5"]
+    }
+  },
+  "process": {
+    "fields": {
+      "name": ["a.processName"],
+      "pid": ["a.processId"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["a.userName"]
+    }
+  },
+  "x_org_alertflex" : {
+    "fields": {
+      "agent": ["a.agentName"],
+      "node": ["a.nodeId"],
+      "source": ["a.alertSource"],
+      "type": ["a.alertType"],
+      "event_id": ["a.eventId"],
+      "severity": ["a.alertSeverity"]
+    }
+  }
+}

@@ -66,8 +66,7 @@
     "key": "user-account.user_id"
   },
   "file": {
-    "key": "file.name",
-    "object": "file"
+    "key": "file.name"
   },
   "process": {
     "key": "process.name",
