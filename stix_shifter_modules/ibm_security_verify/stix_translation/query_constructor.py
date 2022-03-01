@@ -1,14 +1,17 @@
+import json
+import logging
+import re
 from os import stat
 from sre_constants import IN
 from typing import Union
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
-import logging
-import re
-import json
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import (
+    CombinedComparisonExpression, CombinedObservationExpression,
+    ComparisonComparators, ComparisonExpression, ComparisonExpressionOperators,
+    ObservationExpression, ObservationOperators, Pattern)
+from stix_shifter_utils.stix_translation.src.utils.transformers import \
+    TimestampToMilliseconds
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
@@ -23,17 +26,10 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     QUERIES = []
-    # # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        "ComparisonExpressionOperators.And": "&",
-        "ComparisonComparators.Equal": "=",
-        "ObservationOperators.And": "=",
-        "ComparisonComparators.In": "="
-    }
-
+ 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
-        # self.comparator_lookup = self.dmm.map_comparator() #Not sure its not workig with kestral
+        self.comparator_lookup = self.dmm.map_comparator() 
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
