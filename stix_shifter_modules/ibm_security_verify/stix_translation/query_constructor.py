@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 import logging
 import re
+=======
+import json
+import logging
+import re
+from os import stat
+from sre_constants import IN
+>>>>>>> 667f0e2 (removed operator_lookup from queryConstructor class and now refering to json file.)
 from typing import Union
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
@@ -23,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     QUERIES = []
+<<<<<<< HEAD
     comparator_lookup = {
         "ComparisonExpressionOperators.And": "&",
         "ComparisonComparators.Equal": "=",
@@ -33,6 +42,12 @@ class QueryStringPatternTranslator:
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
        # self.comparator_lookup = self.dmm.map_comparator() 
+=======
+ 
+    def __init__(self, pattern: Pattern, data_model_mapper):
+        self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator() 
+>>>>>>> 667f0e2 (removed operator_lookup from queryConstructor class and now refering to json file.)
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
