@@ -2,13 +2,13 @@
 
 We have started this changelogs from version 4.0.0. So, changes on previously released versions can be found in tag branches. Please follow the below format to update add changelogs for new tag version.
 
-## <Tag Version> (Date)
+## <Tag_Version> (Date)
 ### Backward-incompatible changes:
 ### Deprecations:
 ### Changes:
 ### Fixes:
 ### Dependency update:
-
+-------------------------------------
 
 ## 4.0.1 (2022-03-01)
 ### Backward-incompatible changes:
@@ -19,6 +19,9 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Fixes:
 ### Dependency update:
 * Downgrade pyopenssl from 22.0.0 to 21.0.0
+
+--------------------------------------
+
 ## 4.0.0 (2022-02-23)
 ### Backward-incompatible changes:
 
