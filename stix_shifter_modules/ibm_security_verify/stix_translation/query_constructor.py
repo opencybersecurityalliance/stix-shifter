@@ -5,9 +5,12 @@ import re
 import json
 import logging
 import re
+<<<<<<< HEAD
 from os import stat
 from sre_constants import IN
 >>>>>>> 667f0e2 (removed operator_lookup from queryConstructor class and now refering to json file.)
+=======
+>>>>>>> d3fe306 ( removed unused import in queryConstructor.py)
 from typing import Union
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
