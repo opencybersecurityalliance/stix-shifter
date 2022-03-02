@@ -1,8 +1,6 @@
 import json
 import logging
 import re
-from os import stat
-from sre_constants import IN
 from typing import Union
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
