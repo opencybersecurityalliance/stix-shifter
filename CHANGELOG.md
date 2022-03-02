@@ -3,9 +3,7 @@
 We have started this changelogs from version 4.0.0. So, changes on previously released versions can be found in tag branches. Please follow the below format to update add changelogs for new tag version.
 
 
-## [4.0.0] (2022-01-29)
--------------------------
-
+## 4.0.0 (2022-01-29)
 ### Backward-incompatible changes:
 
 * Handling unmapped operators in stix pattern
@@ -30,23 +28,22 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 
 ### Fixes
-* Datadog ssl cert fix in https://github.com/opencybersecurityalliance/stix-shifter/pull/758
-* cbcloud: fix ipv4 stix pattern translation in https://github.com/opencybersecurityalliance/stix-shifter/pull/761
-* fix configuration in proofpoint and sumologic in https://github.com/opencybersecurityalliance/stix-shifter/pull/745
-* Crowdstrike unittest fix in https://github.com/opencybersecurityalliance/stix-shifter/pull/775
-* Fix error reponse of ms defender connector in https://github.com/opencybersecurityalliance/stix-shifter/pull/747
-* fix: handling zero and non-zero values for the transformers in https://github.com/opencybersecurityalliance/stix-shifter/pull/774
-* Fix Proofpoint: avoid mapping error for standard STIX Pattern translation in https://github.com/opencybersecurityalliance/stix-shifter/pull/786
-* Proofpoint results connection fix in https://github.com/opencybersecurityalliance/stix-shifter/pull/739
-* Fix local build and install in https://github.com/opencybersecurityalliance/stix-shifter/pull/779
-* fix collections.abc warning in https://github.com/opencybersecurityalliance/stix-shifter/pull/793
-* fix instances of reserved STIX 2.1 id property in https://github.com/opencybersecurityalliance/stix-shifter/pull/819
-* Fix category in ecs to be list type in https://github.com/opencybersecurityalliance/stix-shifter/pull/734
-* fix debug cli param in https://github.com/opencybersecurityalliance/stix-shifter/pull/735
-* fix azure sentinel: Incorrect string conversion of datasource values in https://github.com/opencybersecurityalliance/stix-shifter/pull/771
+* Datadog ssl cert fix.[#758](https://github.com/opencybersecurityalliance/stix-shifter/pull/758)
+* cbcloud: fix ipv4 stix pattern translation [#761](https://github.com/opencybersecurityalliance/stix-shifter/pull/761)
+* fix configuration in proofpoint and sumologic [#745](https://github.com/opencybersecurityalliance/stix-shifter/pull/745)
+* Crowdstrike unittest fix [#775](https://github.com/opencybersecurityalliance/stix-shifter/pull/775)
+* Fix error reponse of ms defender connector [#747](https://github.com/opencybersecurityalliance/stix-shifter/pull/747)
+* fix: handling zero and non-zero values for the transformers [#774](https://github.com/opencybersecurityalliance/stix-shifter/pull/774)
+* Fix Proofpoint: avoid mapping error for standard STIX Pattern translation [#786](https://github.com/opencybersecurityalliance/stix-shifter/pull/786)
+* Proofpoint results connection fix [#739](https://github.com/opencybersecurityalliance/stix-shifter/pull/739)
+* Fix local build and install [#779](https://github.com/opencybersecurityalliance/stix-shifter/pull/779)
+* fix collections.abc warning [#793](https://github.com/opencybersecurityalliance/stix-shifter/pull/793)
+* fix instances of reserved STIX 2.1 id property [#819](https://github.com/opencybersecurityalliance/stix-shifter/pull/819)
+* Fix category in ecs to be list type [#734](https://github.com/opencybersecurityalliance/stix-shifter/pull/734)
+* fix debug cli param [#735](https://github.com/opencybersecurityalliance/stix-shifter/pull/735)
+* fix azure sentinel: Incorrect string conversion of datasource values [#771](https://github.com/opencybersecurityalliance/stix-shifter/pull/771)
 
-
-## Dependency update
+### Dependency update
 * Bump stix2-patterns from 1.3.0 to 1.3.2 
 * Bump flatten-json from 0.1.7 to 0.1.13
 * Bump flask from 1.1.2 to 2.0.3
