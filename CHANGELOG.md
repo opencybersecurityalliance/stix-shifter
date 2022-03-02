@@ -2,8 +2,24 @@
 
 We have started this changelogs from version 4.0.0. So, changes on previously released versions can be found in tag branches. Please follow the below format to update add changelogs for new tag version.
 
+## <Tag Version> (Date)
+### Backward-incompatible changes:
+### Deprecations:
+### Changes:
+### Fixes:
+### Dependency update:
 
-## 4.0.0 (2022-01-29)
+
+## 4.0.1 (2022-03-01)
+### Backward-incompatible changes:
+### Deprecations:
+### Changes:
+* CrowdStrike connector mapping update [#823](https://github.com/opencybersecurityalliance/stix-shifter/pull/823)
+
+### Fixes:
+### Dependency update:
+* Downgrade pyopenssl from 22.0.0 to 21.0.0
+## 4.0.0 (2022-02-23)
 ### Backward-incompatible changes:
 
 * Handling unmapped operators in stix pattern
