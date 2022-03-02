@@ -16,7 +16,7 @@ class Connector(BaseSyncConnector):
                          'Severity, Title, Category, RemoteUrl, RemoteIP, AttackTechniques, Table | where '
                          'Table =~ "{}" | summarize AlertId=make_set(AlertId), Severity=make_set(Severity), '
                          'Title=make_set(Title), Category=make_set('
-                         'Category), RemoteUrl=make_set(RemoteUrl), RemoteIP=make_set(RemoteIP),  AttackTechniques=make_set('
+                         'Category), RemoteUrl=make_set(RemoteUrl), AlertRemoteIP=make_set(RemoteIP),  AttackTechniques=make_set('
                          'AttackTechniques) by DeviceName, ReportId, Timestamp, '
                          'Table) on ReportId, DeviceName, Timestamp')
 
@@ -32,7 +32,7 @@ class Connector(BaseSyncConnector):
     events_query = ('(find withsource = TableName in ({})  where (DeviceName =~ "{}") and '
                     '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}")))')
 
-    ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'RemoteUrl', 'RemoteIP', 'AttackTechniques']
+    ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'RemoteUrl', 'AlertRemoteIP', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
 
     def __init__(self, connection, configuration):
@@ -154,6 +154,14 @@ class Connector(BaseSyncConnector):
                 raise self.init_error
             q_return_obj = dict()
             joined_query = self.join_query_with_alerts(query)
+            ## debug
+            #joined_query = '(find withsource = TableName in (DeviceNetworkInfo) where Timestamp <= datetime(2022-02-11T18:11:00.8677927Z) and Timestamp > datetime(2022-02-10T18:11:39.8677927Z)| where (DeviceId =~ "620483462809405761dc8b3006b101ef09939c8c") | top 20 by Timestamp desc)'
+            #joined_query += Connector.test_query
+            # joined_query = '(find withsource = TableName in (DeviceInfo) where Timestamp <= datetime(' \
+            #                '2022-02-11T18:11:39.8677927Z) | where (DeviceId =~ ' \
+            #                '"620483462809405761dc8b3006b101ef09939c8c") | arg_max(Timestamp, *' \
+            #                ') by DeviceId)'
+            #joined_query = '(find withsource = TableName in (DeviceInfo) where Timestamp >= datetime(2022-02-22T12:57:03.936Z) and Timestamp < datetime(2022-02-24T13:02:03.936Z)  | where (DeviceName =~ "hcimpf21jc1rl10.am.mds.honda.com") and (tostring(ReportId) == "464556") and (Timestamp == todatetime("2022-02-23T20:00:39.8677927Z")))'
             response = self.api_client.run_search(joined_query, offset, length)
             q_return_obj = self._handle_errors(response, q_return_obj)
             response_json = json.loads(q_return_obj["data"])
@@ -170,8 +178,12 @@ class Connector(BaseSyncConnector):
                 lookup_table = event_data['TableName']
                 event_data.pop('TableName')
                 build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if ((v and v != ['']) or k == "RegistryValueName")}
-
+                build_data[lookup_table] = {k: v for k, v in event_data.items() if
+                                            ((v and v != ['']) or k == "RegistryValueName")}
+                '''Rename 'RemoteIP' key in order to prevent collision with
+                    the 'RemoteIP' field on 'DeviceNetworkEvents' table'''
+                if self.alert_mode and 'RemoteIP' in build_data[lookup_table]:
+                    build_data[lookup_table]['AlertRemoteIP'] = build_data[lookup_table].pop('RemoteIP')
                 # values for query
                 table = build_data[lookup_table].get('Table', None)
                 deviceName = build_data[lookup_table].get('DeviceName', None)
@@ -191,8 +203,8 @@ class Connector(BaseSyncConnector):
                     if not events_return_obj['data']:
                         Connector.make_alert_as_list = False
                         if 'AttackTechniques' in build_data[lookup_table]:
-                            AttackTechniques_lst = json.loads(build_data[lookup_table]['AttackTechniques'])
-                            build_data[lookup_table]['AttackTechniques'] = AttackTechniques_lst
+                            attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
+                            build_data[lookup_table]['AttackTechniques'] = attackTechniques
                     else:
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
@@ -201,12 +213,12 @@ class Connector(BaseSyncConnector):
                         event_build_data = dict()
                         event_obj = events_return_obj['data'][0]
                         event_obj = (Connector.remove_duplicate_fields
-                                                        (event_obj))
+                                     (event_obj))
                         event_obj.pop('TableName')
                         merged_alert_event = copy.deepcopy(build_data[table])
-                        event_obj = {k:v for k, v in event_obj.items() if v}
+                        event_obj = {k: v for k, v in event_obj.items() if v}
                         merged_alert_event.update(event_obj)
-                        merged_alert_event = {k: v for k, v in merged_alert_event.items() if v}
+                        merged_alert_event = {k: v for k, v in merged_alert_event.items() if v and v != ['']}
                         event_build_data[table] = merged_alert_event
                         build_data = event_build_data
 

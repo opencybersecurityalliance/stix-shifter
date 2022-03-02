@@ -57,7 +57,7 @@
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "RemoteIP": [
+      "AlertRemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -610,7 +610,7 @@
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "RemoteIP": [
+      "AlertRemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -1249,7 +1249,7 @@
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "RemoteIP": [
+      "AlertRemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -1798,7 +1798,7 @@
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "RemoteIP": [
+      "AlertRemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -2303,7 +2303,7 @@
         "key": "x-ibm-finding.name",
         "object": "finding"
       },
-      "RemoteIP": [
+      "AlertRemoteIP": [
         {
           "key": "ipv4-addr.value",
           "object": "finding_dst_ip"
@@ -2551,7 +2551,7 @@
         "object": "event"
       }
     ],
-    "RemoteIP": [
+    "AlertRemoteIP": [
       {
         "key": "ipv4-addr.value",
         "object": "finding_dst_ip"
