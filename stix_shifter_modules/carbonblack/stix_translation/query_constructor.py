@@ -49,6 +49,10 @@ class CbQueryStringPatternTranslator:
         return CbQueryStringPatternTranslator._format_gte(value)
 
     @staticmethod
+    def _format_in(value, mapped_field) -> str:
+        return mapped_field + ':' + value
+    
+    @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
             return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(' ', '\\ '))
@@ -74,6 +78,7 @@ class CbQueryStringPatternTranslator:
 
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
+            comparison_string = ""
             # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -99,7 +104,14 @@ class CbQueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+            if expression.comparator == ComparisonComparators.In:
+                values = expression.value.values
+                for value in values[:-1]:
+                    comparison_string += self._format_in(value, mapped_field) + ' or '
+                
+                comparison_string += self._format_in(str(values[-1]), mapped_field)
+            else:
+                comparison_string = "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
             # translate != to NOT equals
             if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:

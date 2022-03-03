@@ -191,3 +191,10 @@ class TestQueryTranslator(unittest.TestCase, object):
             result = translation.translate("carbonblack", 'query', '{}', stix_pattern, options={"time_range": 5})
             print(result)
             assert result['queries'] == queries
+
+    def test_in_operator(self):
+        test_options = {"time_range": None} 
+        stix_pattern = "[ipv4-addr:value IN ('10.0.0.1', '10.0.0.2')]"
+        query = translation.translate(module, 'query', '{}', stix_pattern, options=test_options)
+        queries = ["ipaddr:10.0.0.1 or ipaddr:10.0.0.2"]
+        _test_query_assertions(query, queries)
