@@ -327,6 +327,10 @@ python main.py translate qradar results \
 '[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' '{"stix_2.1": true, "stix_validator: true}'
 ```
 
+### Validating STIX 2.0 and 2.1 bundles with the validator script
+
+Refer to the [STIX validator](bundle_validator/README.md)
+
 ### Results translation using an input file
 
 Create a JSON file with the results you wish to translate. The file can be used in the results translation call using standard input.
