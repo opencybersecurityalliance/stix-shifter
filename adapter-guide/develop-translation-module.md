@@ -439,7 +439,7 @@ python main.py translate abc_security_monitor results '{"type": "identity","id":
 6a4751cae5ff", "name": "abc_security_monitor", "identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
 ```
 
-Adding the `stix_validator` option at the end will ensure the observed-data objects conform to the STIX 2 standard.
+Adding the `stix_validator` option at the end will test if the translated STIX bundle conforms to the STIX 2.1 standard.
 
 2. Visually verify that all expected data is in the returned STIX bundle. If a data source field in your sample results is mapped in `to_stix_map.json`, the value must be in the STIX bundle under the mapped STIX property.
 

@@ -1,5 +1,7 @@
 # Validate STIX bundle
 
+<!-- TODO: update to reflect validator changes for STIX 2.1 support -->
+
 You can easily validate your stix bundle file by following the below steps:
 
 ## Prerequisites:
