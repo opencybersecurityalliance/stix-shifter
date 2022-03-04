@@ -8,6 +8,7 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         min_range = offset
@@ -33,6 +34,6 @@ class ResultsConnector(BaseResultsConnector):
             return_obj['success'] = True
             return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
 
         return return_obj

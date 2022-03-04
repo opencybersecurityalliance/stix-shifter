@@ -7,6 +7,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         # Grab the response, extract the response code, and convert it to readable json
@@ -24,5 +25,5 @@ class ResultsConnector(BaseResultsConnector):
             return_obj['success'] = True
             return_obj['data'] = results
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
         return return_obj
