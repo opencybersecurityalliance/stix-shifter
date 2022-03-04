@@ -48,10 +48,6 @@ class CbQueryStringPatternTranslator:
         if isinstance(value, int):
             value = value + 1
         return CbQueryStringPatternTranslator._format_gte(value)
-
-    @staticmethod
-    def _format_in(value, mapped_field) -> str:
-        return mapped_field + ':' + value
     
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
