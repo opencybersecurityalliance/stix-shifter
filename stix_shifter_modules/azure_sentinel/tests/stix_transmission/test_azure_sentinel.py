@@ -84,9 +84,8 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
         ping_response = transmission.ping()
-
         assert ping_response['success'] is False
-        assert ping_response['error'] == "Resource not found for the segment \'alert\'."
+        assert ping_response['error'] == "azure_sentinel connector error => Resource not found for the segment \'alert\'."
         assert ping_response['code'] == "invalid_parameter"
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
@@ -285,7 +284,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         results_response = transmission.results(query, offset, length)
 
         assert results_response['success'] is False
-        assert results_response['error'] == "Invalid filter clause"
+        assert results_response['error'] == "azure_sentinel connector error => Invalid filter clause"
         assert results_response['code'] == "invalid_parameter"
 
     def test_delete_query(self, mock_api_client, mock_generate_token):

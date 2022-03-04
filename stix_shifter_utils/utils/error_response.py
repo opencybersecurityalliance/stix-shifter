@@ -67,8 +67,10 @@ class ErrorResponder():
                 return message_struct
 
     @staticmethod
-    def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None):
+    def fill_error(return_object, message_struct=None, message_path=None, message=None, error=None, connector=None):
         return_object['success'] = False
+        if connector:
+            return_object['connector'] = connector
         error_code = ErrorCode.TRANSMISSION_UNKNOWN
 
         if message is None:
@@ -108,13 +110,14 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
                 elif 'Forbidden' in message or 'forbidden' in message:
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
+            message = '{} connector error => {}'.format(connector, str(message))
             return_object['error'] = str(message)
-        ErrorMapperBase.set_error_code(return_object, error_code.value)
+        ErrorMapperBase.set_error_code(return_object, error_code.value, connector=connector)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
-            ErrorResponder.call_module_error_mapper(message_struct, return_object)
+            ErrorResponder.call_module_error_mapper(message_struct, return_object, connector)
 
     @staticmethod
-    def call_module_error_mapper(json_data, return_object):
+    def call_module_error_mapper(json_data, return_object, connector ):
         caller_path_list = traceback.extract_stack()[-3].filename.split('/')
 
         if 'stix_translation.py' == caller_path_list[-1] or 'base_entry_point.py' == caller_path_list[-1]:
@@ -130,7 +133,7 @@ class ErrorResponder():
             if json_data is not None:
                 module.ErrorMapper.set_error_code(json_data, return_object)
             else:
-                ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR)
+                ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR, connector=connector)
         except ModuleNotFoundError:
             pass
 

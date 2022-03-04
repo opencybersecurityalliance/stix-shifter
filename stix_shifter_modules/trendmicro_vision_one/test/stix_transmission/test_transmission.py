@@ -139,7 +139,7 @@ class TestTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], "invalid_parameter")
-        self.assertEqual(results_response["error"], payload["error"]["message"])
+        self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_auth_failure(self, mock_query):
@@ -161,7 +161,7 @@ class TestTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], 'authentication_fail')
-        self.assertEqual(results_response["error"], payload["error"]["message"])
+        self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_timeout(self, mock_query):
@@ -176,7 +176,7 @@ class TestTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], "unknown")
-        self.assertEqual(results_response["error"], payload["error"]["message"])
+        self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
     @staticmethod
     def _get_query():
