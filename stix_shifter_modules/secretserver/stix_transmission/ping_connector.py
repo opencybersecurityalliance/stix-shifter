@@ -13,7 +13,7 @@ class PingConnector(BasePingConnector):
             # Construct a response object
             return_obj = dict()
             if response_dict == 200            :
-                return_obj['Success'] = True
+                return_obj['success'] = True
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
