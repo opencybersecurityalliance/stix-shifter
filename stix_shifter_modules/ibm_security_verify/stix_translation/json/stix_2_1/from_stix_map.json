@@ -2,7 +2,11 @@
   "user-account": {
     "fields": {
       "user_id": [
+<<<<<<< HEAD
         "data.userid"
+=======
+        "data.user_id"
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
       ],
       "account_login": [
         "data.username"
@@ -83,6 +87,12 @@
       "extensions.'x-iam-ext'.target": [
         "data.target"
       ],
+<<<<<<< HEAD
+=======
+      "extensions.'x-iam-ext'.deleted": [
+        "data.deleted"
+      ],
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
       "extensions.'x-iam-ext'.performedby_clientname": [
         "data.performedby_clientname"
       ],
@@ -110,6 +120,15 @@
       "extensions.'x-iam-ext'.country_name": [
         "geoip.country_name"
       ],
+<<<<<<< HEAD
+=======
+      "extensions.x-iam-ext.location_lon": [
+        "geoip.lon"
+      ],
+      "extensions.'x-iam-ext'.location_lat": [
+        "geoip.lat"
+      ],
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
       "extensions.'x-iam-ext'.city_name": [
         "geoip.city_name"
       ],

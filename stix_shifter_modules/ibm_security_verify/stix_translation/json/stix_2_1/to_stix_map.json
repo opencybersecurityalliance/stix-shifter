@@ -1,6 +1,7 @@
 {
   "username": [
     {
+<<<<<<< HEAD
       "key": "user-account.account_login",
       "object": "useraccount"
     },
@@ -20,16 +21,39 @@
     {
       "key": "x-oca-event.agent",
       "object": "ocaevent"
+=======
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    },
+    {
+      "key": "user-account.account_login",
+      "object": "useraccount"
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
     },
     {
       "key": "user-account.account_type",
       "object": "useraccount"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "ocaevent",
+      "references": "useraccount"
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
     }
   ],
   "servicename": {
     "key": "x-oca-event.module",
     "object": "ocaevent"
   },
+<<<<<<< HEAD
+=======
+  "sourcetype": {
+    "key": "x-oca-event.agent",
+    "object": "ocaevent"
+  },
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
   "ip": [
     {
       "key": "ipv4-addr.value",
@@ -146,6 +170,15 @@
     "key": "x-oca-event.extensions.x-iam-ext.taregetid_username",
     "object": "ocaevent"
   },
+<<<<<<< HEAD
+=======
+  "userid": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
   "continent_name": {
     "key": "x-oca-event.extensions.x-iam-ext.continent_name",
     "object": "ocaevent"
@@ -213,9 +246,12 @@
   "lon": {
     "key": "x-oca-event.extensions.x-iam-ext.location_lon",
     "object": "ocaevent"
+<<<<<<< HEAD
   },
   "add": {
     "key": "x-oca-event.extensions.x-iam-ext.add",
     "object": "ocaevent"
+=======
+>>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
   }
 }
