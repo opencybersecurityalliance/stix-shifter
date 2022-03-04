@@ -3,10 +3,11 @@ import datetime
 import json
 import re
 from stix_shifter_utils.utils import logger
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, SetValue
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 
 
@@ -76,6 +77,54 @@ class CbQueryStringPatternTranslator:
 
         return "({}) and last_update:[{} TO {}]".format(expression, start, stop)
 
+    @staticmethod
+    def _check_value_type(value):
+        """
+        Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
+        See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
+
+        :param value: query value
+        :type value: int/str
+        :return: type of value
+        :rtype: str
+        """
+        value = str(value)
+        for key, pattern in observable.REGEX.items():
+            if bool(re.search(pattern, value)):
+                return key
+        return None
+
+    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
+        """Convert a list of mapped fields into a query string."""
+        comparison_strings = []
+        value_type = None
+        str_ = None
+
+        if isinstance(value, str):
+            value = [value]
+
+        for val in value:
+            value_type = self._check_value_type(val)
+
+            for mapped_field in mapped_fields_array:
+                # Only use the ipv4 fields when the value is an actual ipv4 address or range
+                skip = ('ipv4' in mapped_field and value_type not in ['ipv4', 'ipv4_cidr'])
+                # Only use the ipv6 fields when the value is an actual ipv6 address or range
+                skip = skip or ('ipv6' in mapped_field and value_type not in ['ipv6', 'ipv6_cidr'])
+
+                if not skip:
+                    comparison_strings.append(f'{mapped_field}{comparator}{val}')
+
+        # Only wrap in () if there's more than one comparison string
+        if len(comparison_strings) == 1:
+            str_ = comparison_strings[0]
+        elif len(comparison_strings) > 1:
+            str_ = f"{' or '.join(comparison_strings)}"
+        else:
+            raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
+
+        return str_
+    
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
             comparison_string = ""
@@ -101,17 +150,17 @@ class CbQueryStringPatternTranslator:
                 value = self._format_lte(expression.value)
             elif expression.comparator == ComparisonComparators.GreaterThan:
                 value = self._format_gt(expression.value)
+            elif (expression.comparator == ComparisonComparators.In and
+                    isinstance(expression.value, SetValue)):
+                value = list(map(self._escape_value, expression.value.element_iterator()))
             else:
                 value = self._escape_value(expression.value)
 
-            if expression.comparator == ComparisonComparators.In:
-                values = expression.value.values
-                for value in values[:-1]:
-                    comparison_string += self._format_in(value, mapped_field) + ' or '
-                
-                comparison_string += self._format_in(str(values[-1]), mapped_field)
-            else:
-                comparison_string = "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+            comparison_string = self._parse_mapped_fields(
+                value=value,
+                comparator=comparator,
+                mapped_fields_array=mapped_fields_array
+            )
 
             # translate != to NOT equals
             if expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
@@ -126,7 +175,7 @@ class CbQueryStringPatternTranslator:
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
-                return "{}".format(comparison_string)
+                return "({})".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             # Wrap nested combined comparison expressions in parentheses
@@ -152,7 +201,7 @@ class CbQueryStringPatternTranslator:
             operator = self.comparator_lookup[str(expression.operator)]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
-            return f'({expr1}) {operator} ({expr2})'
+            return f'{expr1} {operator} {expr2}'
         elif isinstance(expression, Pattern):
             return self._parse_expression(expression.expression)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
@@ -163,7 +212,7 @@ class CbQueryStringPatternTranslator:
 
     def _add_default_timerange(self, query):
         if self.time_range and 'last_update' not in query:
-            query = "(({}) and last_update:-{}m)".format(query, self.time_range)
+            query = "{} and last_update:-{}m".format(query, self.time_range)
 
         return query
 
