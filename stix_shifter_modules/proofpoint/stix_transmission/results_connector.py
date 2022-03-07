@@ -8,6 +8,7 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
 
     def create_results_connection(self, search_id, offset, length):
@@ -70,7 +71,8 @@ class ResultsConnector(BaseResultsConnector):
                 error_obj['message'] = error_msg
                 ErrorResponder.fill_error(return_obj,
                                           error_obj,
-                                          ['message'])
+                                          ['message'], 
+                                          connector=self.connector)
                 err = 'error when getting search results: {}:{}'.format(str(response_code), error_msg)
                 self.logger.error(err)
                 # raise NoResultsFoundError(err)

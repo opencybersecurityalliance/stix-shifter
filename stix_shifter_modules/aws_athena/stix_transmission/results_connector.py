@@ -18,6 +18,7 @@ class ResultsConnector(BaseResultsConnector):
         self.client = client
         self.s3_client = s3_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -78,7 +79,7 @@ class ResultsConnector(BaseResultsConnector):
             return_obj = dict()
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         self.logger.debug('Return Object: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj
 

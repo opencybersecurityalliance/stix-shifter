@@ -9,6 +9,7 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def ping_connection(self):
         try:
@@ -18,7 +19,7 @@ class Connector(BaseSyncConnector):
             if response["code"] == 200:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response, ['message'])
+                ErrorResponder.fill_error(return_obj, response, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))
@@ -64,7 +65,7 @@ class Connector(BaseSyncConnector):
                 # slice the records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:total_records]
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
@@ -105,7 +106,7 @@ class Connector(BaseSyncConnector):
                 # slice the records as per the provided offset and length(limit)
                 return_obj['data'] = return_obj['data'][offset:total_records]
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when getting processes results: {}'.format(err))

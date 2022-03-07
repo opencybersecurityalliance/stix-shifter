@@ -237,5 +237,6 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2020-10-30T10:43:10.003Z'"
         query = translation.translate('aws_athena', 'query', '{}', stix_pattern)
         assert query['success'] is False
+        assert query['connector'] == 'aws_athena'
         assert query['code'] == 'mapping_error'
-        assert query['error'] == "data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"
+        assert query['error'] == "aws_athena connector error => data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"

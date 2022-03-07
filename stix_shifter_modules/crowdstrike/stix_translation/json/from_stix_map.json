@@ -120,7 +120,15 @@
       "site_name": ["device.site_name"],
       "system_manufacturer": ["device.system_manufacturer"],
       "system_product_name": ["device.system_product_name"],
-      "modified_timestamp": ["device.modified_timestamp"]
+      "modified_timestamp": ["device.modified_timestamp"],
+      "instance_id": ["device.instance_id"],
+      "service_provider": ["device.service_provider"],
+      "status": ["device.status"],
+      "event_status": ["behaviors.status"],
+      "max_severity_displayname": ["behaviors.max_severity_displayname"],
+      "control_graph_id":["behaviors.control_graph_i"],
+      "display_name_1":["behaviors.display_name"],
+      "objective":["behaviors.objective"]
     }
   }
 }
