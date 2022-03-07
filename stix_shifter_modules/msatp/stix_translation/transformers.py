@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
 import json
+import urllib.parse
 
 HIGH_SEVERITY = 99
 MEDIUM_SEVERITY = 66
@@ -62,6 +63,15 @@ class ToKillChainPhasesList(ValueTransformer):
     def transform(value):
         dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
         return [dct]
+
+class GetDomainName(ValueTransformer):
+    """A value transformer to convert category name to a list of kill-chain-phase objects"""
+
+    @staticmethod
+    def transform(value):
+        parsed_url = urllib.parse.urlparse(value)
+        return parsed_url.netloc
+
 
 
 

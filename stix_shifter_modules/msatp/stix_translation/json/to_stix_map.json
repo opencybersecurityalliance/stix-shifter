@@ -42,36 +42,10 @@
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "RemoteUrl": [
-        {
-          "key": "url.value",
-          "object": "dst_finding_url"
-        },
-        {
-          "key": "x-ibm-finding.dst_url_ref",
-          "object": "finding",
-          "references": "dst_finding_url"
-        }
-      ],
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      },
-      "AlertRemoteIP": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
-          "references": "finding_dst_ip"
-        }
-      ]
+      }
     },
     "ReportId": {
       "key": "x-msatp.ReportId",
@@ -94,14 +68,6 @@
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
-      },
-      {
-        "key": "x-oca-asset.ip_refs",
-        "object": "host",
-        "references": [
-          "src_ip"
-        ],
-        "group": true
       },
       {
         "key": "x-oca-event.network_ref",
@@ -127,6 +93,18 @@
         "key": "x-oca-event.network_ref",
         "object": "event",
         "references": "nt"
+      }
+    ],
+    "RemoteUrl": [
+      {
+        "key": "domain-name.value",
+        "object": "domain-name",
+        "transformer": "GetDomainName"
+      },
+      {
+        "key": "x-oca-event.domain_ref",
+        "object": "event",
+        "references": "domain-name"
       }
     ],
     "LocalPort": [
@@ -388,15 +366,13 @@
     "PublicIP": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst-ipv4-addr"
+        "object": "public-ip"
       },
       {
-        "key": "x-oca-asset.ip_refs",
+        "key": "x-oca-asset.public_ip",
         "object": "host",
-        "references": [
-          "dst-ipv4-addr"
-        ],
-        "group": true
+        "references": "public-ip"
+
       }
     ],
     "OSPlatform": {
@@ -450,15 +426,6 @@
         ],
         "group": true,
         "unwrap": true
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": [
-          "dst_finding_url"
-        ],
-        "group": true,
-        "unwrap": true
       }
     ],
     "ActionType": {
@@ -493,7 +460,7 @@
         "group": true
       }
     ],
-    "MacAddresses": [
+    "MacAddressSet": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -595,36 +562,10 @@
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "RemoteUrl": [
-        {
-          "key": "url.value",
-          "object": "dst_finding_url"
-        },
-        {
-          "key": "x-ibm-finding.dst_url_ref",
-          "object": "finding",
-          "references": "dst_finding_url"
-        }
-      ],
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      },
-      "AlertRemoteIP": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
-          "references": "finding_dst_ip"
-        }
-      ]
+      }
     },
     "ReportId": {
       "key": "x-msatp.ReportId",
@@ -1033,15 +974,13 @@
     "PublicIP": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst-ipv4-addr"
+        "object": "public-ip"
       },
       {
-        "key": "x-oca-asset.ip_refs",
+        "key": "x-oca-asset.public_ip",
         "object": "host",
-        "references": [
-          "dst-ipv4-addr"
-        ],
-        "group": true
+        "references": "public-ip"
+
       }
     ],
     "OSPlatform": {
@@ -1095,15 +1034,6 @@
         ],
         "group": true,
         "unwrap": true
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": [
-          "dst_finding_url"
-        ],
-        "group": true,
-        "unwrap": true
       }
     ],
     "device_link": [
@@ -1134,7 +1064,7 @@
         "group": true
       }
     ],
-    "MacAddresses": [
+    "MacAddressSet": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -1234,36 +1164,10 @@
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "RemoteUrl": [
-        {
-          "key": "url.value",
-          "object": "dst_finding_url"
-        },
-        {
-          "key": "x-ibm-finding.dst_url_ref",
-          "object": "finding",
-          "references": "dst_finding_url"
-        }
-      ],
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      },
-      "AlertRemoteIP": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
-          "references": "finding_dst_ip"
-        }
-      ]
+      }
     },
     "ReportId": {
       "key": "x-msatp.ReportId",
@@ -1569,15 +1473,13 @@
     "PublicIP": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst-ipv4-addr"
+        "object": "public-ip"
       },
       {
-        "key": "x-oca-asset.ip_refs",
+        "key": "x-oca-asset.public_ip",
         "object": "host",
-        "references": [
-          "dst-ipv4-addr"
-        ],
-        "group": true
+        "references": "public-ip"
+
       }
     ],
     "OSPlatform": {
@@ -1642,15 +1544,6 @@
         ],
         "group": true,
         "unwrap": true
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": [
-          "dst_finding_url"
-        ],
-        "group": true,
-        "unwrap": true
       }
     ],
     "device_link": [
@@ -1681,7 +1574,7 @@
         "group": true
       }
     ],
-    "MacAddresses": [
+    "MacAddressSet": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -1783,36 +1676,10 @@
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "RemoteUrl": [
-        {
-          "key": "url.value",
-          "object": "dst_finding_url"
-        },
-        {
-          "key": "x-ibm-finding.dst_url_ref",
-          "object": "finding",
-          "references": "dst_finding_url"
-        }
-      ],
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      },
-      "AlertRemoteIP": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
-          "references": "finding_dst_ip"
-        }
-      ]
+      }
     },
     "ReportId": {
       "key": "x-msatp.ReportId",
@@ -2068,15 +1935,13 @@
     "PublicIP": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst-ipv4-addr"
+        "object": "public-ip"
       },
       {
-        "key": "x-oca-asset.ip_refs",
+        "key": "x-oca-asset.public_ip",
         "object": "host",
-        "references": [
-          "dst-ipv4-addr"
-        ],
-        "group": true
+        "references": "public-ip"
+
       }
     ],
     "OSPlatform": {
@@ -2141,15 +2006,6 @@
         ],
         "group": true,
         "unwrap": true
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": [
-          "dst_finding_url"
-        ],
-        "group": true,
-        "unwrap": true
       }
     ],
     "device_link": [
@@ -2180,7 +2036,7 @@
         "group": true
       }
     ],
-    "MacAddresses": [
+    "MacAddressSet": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -2288,36 +2144,10 @@
         "key": "x-msatp.alert_category",
         "object": "x-msatp"
       },
-      "RemoteUrl": [
-        {
-          "key": "url.value",
-          "object": "dst_finding_url"
-        },
-        {
-          "key": "x-ibm-finding.dst_url_ref",
-          "object": "finding",
-          "references": "dst_finding_url"
-        }
-      ],
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      },
-      "AlertRemoteIP": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "finding_dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
-          "references": "finding_dst_ip"
-        }
-      ]
+      }
     },
     "ReportId": {
       "key": "x-msatp.ReportId",
@@ -2378,18 +2208,9 @@
         ],
         "group": true,
         "unwrap": true
-      },
-      {
-        "key": "x-oca-event.url_ref",
-        "object": "event",
-        "references": [
-          "dst_finding_url"
-        ],
-        "group": true,
-        "unwrap": true
       }
     ],
-    "MacAddresses": [
+    "MacAddressSet": [
       {
         "key": "mac-addr.value",
         "object": "mac",
@@ -2409,15 +2230,13 @@
     "PublicIP": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst-ipv4-addr"
+        "object": "public-ip"
       },
       {
-        "key": "x-oca-asset.ip_refs",
+        "key": "x-oca-asset.public_ip",
         "object": "host",
-        "references": [
-          "dst-ipv4-addr"
-        ],
-        "group": true
+        "references": "public-ip"
+
       }
     ],
     "OSPlatform": {
