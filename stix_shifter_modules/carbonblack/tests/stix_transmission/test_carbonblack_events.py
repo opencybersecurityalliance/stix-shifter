@@ -242,6 +242,6 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == False
         assert 'error' in results_response
-        assert results_response['error'] == mocked_return_value
+        assert results_response['error'] == 'carbonblack connector error => ' + mocked_return_value
         assert 'code' in results_response
         assert  results_response['code'] == 'authentication_fail'

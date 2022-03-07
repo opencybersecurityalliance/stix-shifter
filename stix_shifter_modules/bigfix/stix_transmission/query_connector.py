@@ -17,6 +17,7 @@ class QueryConnector(BaseQueryConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_query_connection(self, query):
         response_txt = None
@@ -35,15 +36,15 @@ class QueryConnector(BaseQueryConnector):
             if 199 < response_code < 300 and search_id != self.DEFAULT_ID:
                 return_obj['success'] = True
             elif ErrorResponder.is_plain_string(response_txt):
-                ErrorResponder.fill_error(return_obj, message=response_txt)
+                ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
             elif ErrorResponder.is_json_string(response_txt):
                 response_json = json.loads(response_txt)
-                ErrorResponder.fill_error(return_obj, response_json, ['arguments'])
+                ErrorResponder.fill_error(return_obj, response_json, ['arguments'], connector=self.connector)
             else:
                 raise UnexpectedResponseException
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
