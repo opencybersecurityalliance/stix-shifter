@@ -84,6 +84,10 @@ class QueryStringPatternTranslator:
             raise NotImplementedError("Comparison operator {} unsupported for Onelogin connector".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
+    @staticmethod
+    def _format_in(value, mapped_field) -> str:
+        return mapped_field + '=' + value
+
     @classmethod
     def _format_start_stop_qualifier(self, expression, qualifier) -> str:
         """
@@ -97,10 +101,12 @@ class QueryStringPatternTranslator:
 
     def _parse_expression(self, expression, qualifier=None) -> Union[str, list]:
         if isinstance(expression, ComparisonExpression):  # Base Case
+            comparison_string = ""
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+            mapped_field = mapped_fields_array[0]
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
@@ -111,7 +117,14 @@ class QueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
+            if expression.comparator == ComparisonComparators.In:
+                values = expression.value.values
+                for value in values[:-1]:
+                    comparison_string += self._format_in(value, mapped_field) + ' or '
+
+                comparison_string += self._format_in(str(values[-1]), mapped_field) + ' '
+            else:
+                comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
             if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = comparison_string

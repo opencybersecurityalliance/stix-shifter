@@ -227,6 +227,12 @@ class TestStixToQuery(unittest.TestCase, object):
         queries = 'risk_cookie_id=5&limit=1000'
         _test_query_assertions(query, queries)
 
+    def test_in_operator(self):
+        stix_pattern = "[x-onelogin-finding:operation_name IN ('Default', 'notDefault') ]"
+        query = translation.translate('onelogin', 'query', '{}', stix_pattern)
+        queries = 'operation_name=Default or operation_name=notDefault &limit=1000'
+        _test_query_assertions(query, queries)
+
     def test_error_description_query(self):
         stix_pattern = "[x-onelogin-risk:error_description = 'Default']"
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
@@ -238,3 +244,4 @@ class TestStixToQuery(unittest.TestCase, object):
         query = translation.translate('onelogin', 'query', '{}', stix_pattern)
         queries = ['ipaddr=127.0.0.1&limit=1000', 'user_id=12345678&limit=1000']
         assert query['queries'] == queries
+
