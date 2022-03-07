@@ -58,7 +58,7 @@ class CbQueryStringPatternTranslator:
 
     @staticmethod
     def _negate_comparison(comparison_string) -> str:
-        return "-({})".format(comparison_string)
+        return "-{}".format(comparison_string)
 
     @staticmethod
     def _to_cb_timestamp(ts: str) -> str:
@@ -71,7 +71,7 @@ class CbQueryStringPatternTranslator:
         start = self._to_cb_timestamp(qualifier.start)
         stop = self._to_cb_timestamp(qualifier.stop)
 
-        return "({}) and last_update:[{} TO {}]".format(expression, start, stop)
+        return "{} and last_update:[{} TO {}]".format(expression, start, stop)
 
     @staticmethod
     def _check_value_type(value):
@@ -115,7 +115,7 @@ class CbQueryStringPatternTranslator:
         if len(comparison_strings) == 1:
             str_ = comparison_strings[0]
         elif len(comparison_strings) > 1:
-            str_ = f"{' or '.join(comparison_strings)}"
+            str_ = f"({' or '.join(comparison_strings)})"
         else:
             raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
 
@@ -171,7 +171,7 @@ class CbQueryStringPatternTranslator:
                 else:
                     raise RuntimeError("Unknown Qualifier: {}".format(qualifier))
             else:
-                return "({})".format(comparison_string)
+                return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
             # Wrap nested combined comparison expressions in parentheses
@@ -180,9 +180,10 @@ class CbQueryStringPatternTranslator:
 
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
-            query_string = (f1 + " {} " + f2).format(self._parse_expression(expression.expr2),
+            query_string = "({} {} {})".format(self._parse_expression(expression.expr2),
                                                      self.comparator_lookup[str(expression.operator)],
                                                      self._parse_expression(expression.expr1))
+
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
                     return self._format_start_stop_qualifier(query_string, qualifier)
