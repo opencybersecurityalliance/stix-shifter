@@ -14,6 +14,7 @@ class UnexpectedResponseException(Exception):
 
 class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
+        self.connector = __name__.split('.')[1]
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
@@ -57,7 +58,7 @@ class Connector(BaseSyncConnector):
             self.bundle_url = response.headers.get('Location')
             return self.ping_connection()
         else:
-            ErrorResponder.fill_error(return_obj, response_txt, ['message'])
+            ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
 
     def create_results_connection(self, search_id, offset, length):
@@ -73,10 +74,10 @@ class Connector(BaseSyncConnector):
         if response.code != 200:
             response_txt = response.raise_for_status()
             if ErrorResponder.is_plain_string(response_txt):
-                ErrorResponder.fill_error(return_obj, message=response_txt)
+                ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
             elif ErrorResponder.is_json_string(response_txt):
                 response_json = json.loads(response_txt)
-                ErrorResponder.fill_error(return_obj, response_json, ['reason'])
+                ErrorResponder.fill_error(return_obj, response_json, ['reason'], connector=self.connector)
             else:
                 raise UnexpectedResponseException
         else:
@@ -88,7 +89,7 @@ class Connector(BaseSyncConnector):
                     results = validate_instance(bundle)
 
                     if results.is_valid is not True:
-                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.')
+                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.', connector=self.connector)
                         return return_obj
 
                 for obj in bundle["objects"]:
@@ -106,9 +107,9 @@ class Connector(BaseSyncConnector):
                         return_obj['success'] = True
                         return_obj['data'] = []
                 except Exception as ex:
-                    ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex))
+                    ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex), connector=self.connector)
             except Exception as ex:
-                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
+                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex), connector=self.connector)
         return return_obj
 
     def delete_query_connection(self, search_id):

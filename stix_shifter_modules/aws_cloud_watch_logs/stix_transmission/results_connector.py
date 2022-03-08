@@ -11,6 +11,7 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, client, options):
         self.client = client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
         self.mapping_protocol = read_json('network_protocol_map', options)
         self.mapping_common_attr = read_json('common_attributes', options)
 
@@ -40,7 +41,7 @@ class ResultsConnector(BaseResultsConnector):
         except Exception as ex:
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         self.logger.debug('Return Object: {}'.format(json.dumps(return_obj, indent=4)))
         return return_obj

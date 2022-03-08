@@ -18,6 +18,7 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     # Map data source status to connector status
     def __getStatus(self, status):
@@ -48,7 +49,7 @@ class StatusConnector(BaseStatusConnector):
                 return_obj['status'] = self.__getStatus(response_dict["status"])
             else:
                 return_obj['success'] = False
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search status: {}'.format(err))

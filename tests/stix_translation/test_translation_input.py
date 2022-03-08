@@ -19,8 +19,8 @@ class TestTranslation(object):
 
     def test_unsupported_datasource_for_results(self):
         result = translation.translate('unsupportedDataSource', 'results', data_source_string, data_string)
-        assert result == {'code': 'not_implemented', 'error': 'unsupported datasource : unsupportedDataSource is an unsupported data source.', 'success': False}
+        assert result == {'code': 'not_implemented', 'connector': 'unsupportedDataSource', 'error': 'unsupportedDataSource connector error => unsupported datasource : unsupportedDataSource is an unsupported data source.', 'success': False}
 
     def test_unsupported_datasource_for_query(self):
         result = translation.translate('unsupportedDataSource', 'query', '{}', "[ipv4-addr:value = '333.333.333.0']")
-        assert result == {'code': 'not_implemented', 'error': 'unsupported datasource : unsupportedDataSource is an unsupported data source.', 'success': False}
+        assert result == {'code': 'not_implemented', 'connector': 'unsupportedDataSource', 'error': 'unsupportedDataSource connector error => unsupported datasource : unsupportedDataSource is an unsupported data source.', 'success': False}

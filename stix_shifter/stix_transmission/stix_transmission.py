@@ -1,4 +1,5 @@
 import importlib
+
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import json
 
@@ -18,6 +19,7 @@ class StixTransmission:
 
     def __init__(self, module, connection, configuration):
         module = module.split(':')[0]
+        self.connector = module
         if connection.get('options', {}).get('proxy_host'):
             module = 'proxy'
         try:
@@ -34,7 +36,7 @@ class StixTransmission:
             return self.entry_point.create_query_connection(query)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def status(self, search_id):
@@ -45,7 +47,7 @@ class StixTransmission:
             return self.entry_point.create_status_connection(search_id)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def results(self, search_id, offset, length):
@@ -56,7 +58,7 @@ class StixTransmission:
             return self.entry_point.create_results_connection(search_id, offset, length)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def results_stix(self, search_id, offset, length, data_source):
@@ -66,7 +68,7 @@ class StixTransmission:
             return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def delete(self, search_id):
@@ -77,7 +79,7 @@ class StixTransmission:
             return self.entry_point.delete_query_connection(search_id)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def ping(self):
@@ -88,7 +90,7 @@ class StixTransmission:
             return self.entry_point.ping_connection()
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     def is_async(self):
@@ -99,5 +101,5 @@ class StixTransmission:
             return self.entry_point.is_async()
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj

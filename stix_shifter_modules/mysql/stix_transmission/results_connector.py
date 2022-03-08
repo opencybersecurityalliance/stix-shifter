@@ -7,6 +7,7 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, query, offset, length):
         return_obj = dict()
@@ -17,5 +18,5 @@ class ResultsConnector(BaseResultsConnector):
             return_obj['success'] = True
             return_obj['data'] = response.get('result')
         else:
-            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt)
+            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
         return return_obj
