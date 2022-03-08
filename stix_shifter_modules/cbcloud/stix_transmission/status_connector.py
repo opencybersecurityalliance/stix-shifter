@@ -19,6 +19,7 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     # Map data source status to connector status
     def __getStatus(self, status):
@@ -68,6 +69,6 @@ class StatusConnector(BaseStatusConnector):
                 return_obj['status'] = self.__getStatus('COMPLETED')
                 return_obj['progress'] = 100
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
 
         return return_obj
