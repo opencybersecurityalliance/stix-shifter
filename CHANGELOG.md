@@ -3,15 +3,21 @@
 We have started this changelogs from version 4.0.0. So, changes on previously released versions can be found in tag branches. Please follow the below format to update add changelogs for new tag version.
 
 ## <Tag_Version> (Date)
-### Backward-incompatible changes:
+### Breaking changes:
+*List the breaking changes in this section. Breaking changes is anything that either changes the input or output of stix-shifter, or a change that breaks the compatibility between a connector and the core stix-shifter functions.*
 ### Deprecations:
+*List the Deprecated functions, input and output.*
 ### Changes:
+*List the newly added functions, input and output.*
 ### Fixes:
+*List the bug fixes.*
 ### Dependency update:
+*List the dependecy upgrade or downgrade.*
+
 -------------------------------------
 
 ## 4.0.1 (2022-03-01)
-### Backward-incompatible changes:
+### Breaking changes:
 ### Deprecations:
 ### Changes:
 * CrowdStrike connector mapping update [#823](https://github.com/opencybersecurityalliance/stix-shifter/pull/823)
@@ -23,7 +29,7 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 --------------------------------------
 
 ## 4.0.0 (2022-02-23)
-### Backward-incompatible changes:
+### Breaking changes:
 
 * Handling unmapped operators in stix pattern
 * Optimization of results translation 
