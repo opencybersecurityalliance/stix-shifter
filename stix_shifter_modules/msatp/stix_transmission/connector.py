@@ -45,6 +45,7 @@ class Connector(BaseSyncConnector):
 
     device_info_query = '(DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion)'
 
+    EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents', 'DeviceNetworkInfo']
     ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
 
@@ -209,7 +210,14 @@ class Connector(BaseSyncConnector):
                 deviceName = build_data[lookup_table].get('DeviceName', None)
                 reportId = build_data[lookup_table].get('ReportId', None)
                 timestamp = build_data[lookup_table].get('Timestamp', None)
-                if self.alert_mode and all([table, deviceName, reportId, timestamp]):
+
+                if self.alert_mode and table not in Connector.EVENTS_TABLES:
+                    Connector.make_alert_as_list = False
+                    if 'AttackTechniques' in build_data[lookup_table]:
+                        attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
+                        build_data[lookup_table]['AttackTechniques'] = attackTechniques
+
+                elif self.alert_mode and all([table, deviceName, reportId, timestamp]):
                     # query events table according to alert fields
                     found_events = True
                     events_query = Connector.events_query.format(table, deviceName, reportId, timestamp)
