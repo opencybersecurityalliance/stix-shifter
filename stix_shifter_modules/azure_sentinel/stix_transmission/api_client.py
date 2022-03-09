@@ -46,13 +46,3 @@ class APIClient:
         params['$filter'] = query_expression
         params['$top'] = length
         return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
-
-    def next_page_run_search(self, next_page_url):
-        """get the response from azure_sentinel endpoints
-        :param next_page_url: str, search_id
-        :return: response, json object"""
-        headers = dict()
-        headers['Accept'] = 'application/json'
-        url = next_page_url.split('?', maxsplit=1)[1]
-        endpoint = self.endpoint + '?' + url
-        return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
