@@ -56,6 +56,11 @@
     {
       "key": "file.name",
       "object": "fl"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "fl"
     }
   ],
   "sha256hash": {
@@ -81,5 +86,74 @@
       "object": "fl",
       "references": "file_directory"
     }
+  ],
+  "file_created_time": [
+    {
+      "key": "file.created",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "file_modified_time": [
+    {
+      "key": "file.modified",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "file_accessed_time": [
+    {
+      "key": "file.accessed",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_created_time": [
+    {
+      "key": "directory.created",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_modified_time": [
+    {
+      "key": "directory.modified",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_accessed_time": [
+    {
+      "key": "directory.accessed",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "process_id": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    }
+  ],
+  "process_name": [
+    {
+      "key": "process.name",
+      "object": "process"
+    }
+  ],
+  "process_arguments": [
+    {
+      "key": "process.arguments",
+      "object": "process"
+    }
+  ],
+  "process_created_time": [
+    {
+      "key": "process.created",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+    }
   ]
+
 }

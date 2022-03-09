@@ -123,7 +123,7 @@ Each connector supports a set of STIX objects and properties as defined in the c
 
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
 
-List updated: September 28, 2021
+List updated: October 29, 2021
 
 |         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
 | :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
@@ -148,6 +148,11 @@ List updated: September 28, 2021
 |       [Secret Server](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
 |       [One Login](adapter-guide/connectors/onelogin_supported_stix.md)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
 |       MySQL                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
+|       [Sumo Logic](adapter-guide/connectors/sumologic_supported_stix.md)       |    sumologic    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
+|       [Datadog](adapter-guide/connectors/datadog_supported_stix.md)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
+|       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
+|       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 
@@ -502,9 +507,21 @@ The `execute` command tests all steps of the translation-transmission flow:
 
 ### Debug
 
-You can add `--debug` option at the end of your CLI command to see more logs. 
+You can add the `--debug` option to your CLI command to see more logs. 
 
-`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
+`stix-shifter --debug execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'` 
+
+### Change max returned results
+
+You can add the `--results` option with an integer value at the end of your CLI command to limit the maximum number of returned search results (default 10).
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --results 50`
+
+### Save the STIX results to a file
+
+You can redirect the output of your CLI command to a file to save the STIX results.
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' > results.json`
 
 ## Modules
 

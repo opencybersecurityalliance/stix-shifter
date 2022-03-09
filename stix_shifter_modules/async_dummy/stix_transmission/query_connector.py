@@ -6,6 +6,7 @@ class QueryConnector(BaseQueryConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_query_connection(self, query):
         try:
@@ -17,7 +18,7 @@ class QueryConnector(BaseQueryConnector):
             if response_code == 200:
                 return_obj['search_id'] = response_dict['query_id']
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when creating search: {}'.format(err))

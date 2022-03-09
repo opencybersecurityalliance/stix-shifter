@@ -1,0 +1,38 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.1",
+            "description": "Specify the IBM Security verify IP address or Hostname."
+        },
+        "port": {
+            "label": "Host Port",
+            "placeholder": "443",
+            "description": "Specify the associated port number of the data source."
+        },
+        "help": {
+            "label": "Need additional help?"
+        },
+        "selfSignedCert": {
+            "label": "IBM Security Verify Certificate",
+            "placeholder": "Paste your certificate"
+        },
+        "sni": {
+            "label": "Server name indicator",
+            "placeholder": "Add a server name indicator",
+            "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection."
+        }
+    },
+    "configuration": {
+        "auth": {
+            "clientId": {
+                "label": "Client Id",
+                "description": "Client ID of IBM Seurity Verify"
+            },
+            "clientSecret": {
+                "label": "Client Secret",
+                "description": "Client secret of Client ID of IBM Seurity Verify"
+            }
+        }
+    }
+}

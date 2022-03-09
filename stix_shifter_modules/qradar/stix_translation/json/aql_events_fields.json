@@ -51,13 +51,7 @@
     "\"Process CommandLine\" as ProcessCommandLine",
     "ParentCommandLine",
     "TargetImage",
-    "\"Granted Access\" as GrantedAccess",
-    "\"Call Trace\" as CallTrace",
     "SourceImage",
-    "PipeName",
-    "StartModule",
-    "StartFunction",
-    "Signed",
     "Message",
     "\"Registry Value Name\" as RegistryValueName",
     "\"IMP Hash\" as IMPHash",
@@ -68,6 +62,7 @@
     "\"Process Name\" as ProcessName",
     "\"Process ID\" as ProcessId",
     "\"Parent Process ID\" as ParentProcessId",
-    "hasoffense"
+    "hasoffense",
+    "\"Machine ID\" as MachineId"
   ]
 }

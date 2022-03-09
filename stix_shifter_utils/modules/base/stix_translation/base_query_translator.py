@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from os import path
 import re
+import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json as helper_read_json
 from stix_shifter_utils.stix_translation.src.patterns.parser import generate_query
@@ -18,12 +19,28 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         self.options = options
         self.dialect = dialect
         self.map_data = {}
+        self.map_operator = {}
         self.select_fields = {}
         self.logger = logger.set_logger(__name__)
         self.map_data = self.fetch_mapping(basepath, dialect, options)
+        self.map_operator = self.fetch_operators(basepath, dialect, options)
 
     def read_json(self, filepath, options):
         return helper_read_json(filepath, options)
+    
+    def fetch_operators(self, basepath, dialect, options):
+        operator_directory_path = path.join(basepath, 'json')
+        operator_file = f'{dialect}_operators.json'
+        operator_file_path = path.join(basepath, 'json', operator_file)
+        if not path.isfile(operator_file_path):
+            # use default operator file since 'default__operators.json' isn't a real dialect
+            operator_file = 'operators.json'
+        operator_file_path = path.join(operator_directory_path, operator_file)
+
+        return self.read_json(operator_file_path, options)
+
+    def map_comparator(self):
+        return self.map_operator
 
     def fetch_mapping(self, basepath, dialect, options):
         """
@@ -31,12 +48,18 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         :param basepath: path of data source translation module
         :type basepath: str
         """
-        from_stix_path = path.join(basepath, 'json', f'{dialect}_from_stix_map.json')
-        if path.isfile(from_stix_path):
-            return self.read_json(from_stix_path, options)
+        stix_2_0_mapping_directory_path = path.join(basepath, 'json')
+        stix_2_1_mapping_directory_path = path.join(basepath, 'json/stix_2_1')
+        mapping_file = f'{dialect}_from_stix_map.json'
+        from_stix_path = path.join(basepath, 'json', mapping_file)
+        if not path.isfile(from_stix_path):
+            # use default mapping file since 'default_stix_map.json' isn't a real dialect
+            mapping_file = 'from_stix_map.json'
+        if options.get("stix_2.1") and path.isdir(stix_2_1_mapping_directory_path):
+            from_stix_path = path.join(stix_2_1_mapping_directory_path, mapping_file)
         else:
-            from_stix_path = path.join(basepath, 'json', 'from_stix_map.json')
-            return self.read_json(from_stix_path, options)
+            from_stix_path = path.join(stix_2_0_mapping_directory_path, mapping_file)
+        return self.read_json(from_stix_path, options)
 
     def map_field(self, stix_object_name, stix_property_name):
         """
@@ -78,6 +101,7 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
     def transform_query(self, data):
         antlr_parsing = None
         unmapped_stix_collection = []
+        unmapped_operator_collection = []
         translated_queries = []
         # if query_translator.get_language() == 'stix':
         if self.options.get('validate_pattern'):
@@ -86,13 +110,17 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         stripped_parsing = strip_unmapped_attributes(antlr_parsing, self)
         antlr_parsing = stripped_parsing.get('parsing')
         unmapped_stix = stripped_parsing.get('unmapped_stix')
+        unmapped_operator = stripped_parsing.get('unmapped_operator')
         if unmapped_stix:
-            unmapped_stix_collection.append(unmapped_stix)
+            unmapped_stix_collection.extend(unmapped_stix)
+        if unmapped_operator:
+            unmapped_operator_collection.extend(unmapped_operator)
         if antlr_parsing:
             translated_queries = self.transform_antlr(data, antlr_parsing)
             if isinstance(translated_queries, str):
                 translated_queries = [translated_queries]
-        return {'queries': translated_queries, 'unmapped_attributes': unmapped_stix_collection}
+        return {'queries': translated_queries, 'unmapped_attributes': unmapped_stix_collection, 
+                "unmapped_operator": unmapped_operator_collection}
 
     def transform_antlr(self, data, antlr_parsing_object):
         """

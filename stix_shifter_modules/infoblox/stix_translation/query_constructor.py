@@ -1,3 +1,15 @@
+"""
+Translates ANTLR parsing of STIX pattern into native (Infoblox API) query.
+
+See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-translation-module.md#step-3-edit-the-query-constructor-file
+See: OASIS Specification
+    Part 1: https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part1-stix-core.html
+    Part 2: https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part2-stix-objects.html
+    Part 3: https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part3-cyber-observable-core.html
+    Part 4: https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html
+    Part 5: https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part5-stix-patterning.html
+"""
+
 import datetime
 import json
 import logging
@@ -35,40 +47,32 @@ THREAT_LEVEL_MAPPING = {
 logger = logging.getLogger(__name__)
 
 class DuplicateFieldException(Exception):
+    """
+    Exception thrown when multiple query fields of the same type (ie host or ip) are provided. Infoblox APIs currently
+    do not support this type of qerying.
+    """
     pass
 
 class QueryStringPatternTranslator:
-    comparator_lookup = {
-        'tideDbData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "=",
-            ComparisonComparators.GreaterThan: "=",
-            ComparisonComparators.GreaterThanOrEqual: "=",
-            ComparisonComparators.LessThan: "=",
-            ComparisonComparators.LessThanOrEqual: "=",
-            ComparisonComparators.Like: "="
-        },
-        'dnsEventData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        },
-        'dossierData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        }
-    }
+    """
+    Class that handles the translations of the ANTLR parsing to native query.
+
+    :param pattern: ANTRL parsing Pattern
+    :param data_model_mapper: Data model mapper used to aid the translation of the ANTRL parsing pattern to native.
+                            See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/supported-mappings.md
+                            See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-translation-module.md#step-2-edit-the-from_stix_map-json-files
+    :type data_model_mapper: QueryTranslator
+    :param time_range: Default time range to query over (in minutes).
+    :type time_range: int
+
+    Attributes:
+        comparator_lookup (map): Mapping, per dialect, of the ANTLR comparison operators and their native equivalent. Used in the tranlation process.
+        qualified_queries (list): List of Infoblox translated & formatted queries. Queries are simply the HTTP query parameters for the specific APIs.
+    """
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()
@@ -83,14 +87,41 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
+        """
+        Given a value taken from ANTLR parsing, formats it in preparation for insertion into an equality expression.
+        NOTE: For Infoblox, this simply stringifies the value.
+
+        :param value: query value
+        :type value: int/str
+        :return: equality equation
+        :rtype: str
+        """
         return '{}'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
+        """
+        Given a value taken from ANTLR parsing, formats it in preparation for insertion into a like expression.
+        NOTE: For Infoblox, this simply stringifies the value.
+
+        :param value: query value
+        :type value: int/str
+        :return: equality equation
+        :rtype: str
+        """
         return "{}".format(value)
 
     @staticmethod
     def _check_value_type(value):
+        """
+        Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
+        See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
+
+        :param value: query value
+        :type value: int/str
+        :return: type of value
+        :rtype: str
+        """
         value = str(value)
         for key, pattern in observable.REGEX.items():
             if key != 'date' and bool(re.search(pattern, value)):
@@ -99,6 +130,20 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_reference(value_type, mapped_field, value, comparator):
+        """
+        Translate reference ANTRL parsing to query (eg src_ref.value => qip).
+
+        :param value_type: type of value (eg ipv4)
+        :type value_type: str
+        :param mapped_field: native field pointed to by the reference (eg qip for src_ref.value)
+        :type mapped_field: str
+        :param value: value (127.0.0.1)
+        :type value: int/str
+        :param comparator: comparison operator (eg =)
+        :type comparator: str
+        :return: native query segment
+        :rtype: str
+        """
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
             return None
         else:
@@ -106,6 +151,21 @@ class QueryStringPatternTranslator:
                 mapped_field=mapped_field, comparator=comparator, value=value)
 
     def _sanatize_field(self, mapped_field, comparator):
+        """
+        Special handling/sanitation of fields after translation to yield the desired results for the native query.
+        Currently this includes:
+        - Special handling for the imported_from_date & imported_to_date query parameters
+        - Excluding fields that do not support LIKE. The stix_map specification does not allow the granularity (on a field by field basis) of
+            defining which comparison operators are supported by which fields. For some of Infoxblox APIs, some fields support LIKE while others do not.
+        - Translate LIKE comparison operations to use the `text_search` query param for the `tideDbData` dialect.
+
+        :param mapped_field: native field pointed to by the reference (eg qip for src_ref.value)
+        :type mapped_field: str
+        :param comparator: comparison operator (eg Eq)
+        :type comparator: ComparisonComparators
+        :return: updated field name for native query
+        :rtype: str
+        """
         # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
         comparator_suffix_map = {
             ComparisonComparators.GreaterThan: '_from_date',
@@ -125,6 +185,20 @@ class QueryStringPatternTranslator:
         return updated_field
 
     def _sanatize_value(self, mapped_field, value):
+        """
+        Special handling/sanitation of values after translation to yield the desired results for the native query.
+        Currently this includes:
+        - Transforming any values of Domain/Hostname type to match expected Infoblox format (example.com.)
+        - Translating threat level (eg HIGH) to its numerical representation (eg 3)
+        - Lower-casing values for the `type` field for the `tideDbData` dialect
+
+        :param mapped_field: native field pointed to by the reference (eg qip for src_ref.value)
+        :type mapped_field: str
+        :param value: value (127.0.0.1)
+        :type value: int/str
+        :return: updated value for native query
+        :rtype: str
+        """
         # NOTE: performs the necessary un-transformation/conversion to Infoblox compatible query.
         updated_value = value
         if self.dialect == 'dnsEventData':
@@ -138,6 +212,25 @@ class QueryStringPatternTranslator:
         return updated_value
 
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
+        """
+        Parse ANTLR parsing expression into native query (HTTP API quary params).
+
+        Expression is separated from the field name, comparator operator, and value. Fields and values are sanatized and mapped
+        to the native equivalent. Reference expressions are translated into their native equivalent.
+
+        :param expression: STIX ANTLR expression
+        :type expression: ObservationExpression or ComparisonExpression
+        :param value: value (eg 127.0.0.1)
+        :type value: int/str
+        :param comparator: comparison operator (eg =)
+        :type comparator: str
+        :param stix_field: ANTLR STIX field
+        :type stix_field: str
+        :param mapped_fields_array: list of native fields related to `stix_field`, this is based on the data_model_mapper/dmm
+        :type mapped_fields_array: list<str>
+        :return: translated native query expression
+        :rtype: str
+        """
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         value_type = self._check_value_type(expression.value) if is_reference_value else None
@@ -156,15 +249,49 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _is_reference_value(stix_field):
+        """
+        Determine if the provided ANTLR STIX field is a reference (eg src_ref.value)
+
+        :param stix_field: ANTLR STIX field
+        :type stix_field: str
+        :return: True if the provided field is a reference; False otherwise.
+        :rtype: bool
+        """
         return stix_field in REFERENCE_FIELDS
 
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup[self.dialect]:
+        """
+        Translate STIX expression operator (eg ObservationOperators & ComparisonComparators) to their native query equivalent.
+
+        NOTE: Since all queries are fundamentally HTTP query params (field1 = value1 & field2 = value2). The translated operator
+        will always be either one of `&` or `=`.
+
+        :param expression_operator: STIX operator
+        :type expression_operator: ObservationOperators & ComparisonComparators
+        :return: native conparison operator
+        :rtype: str
+        :throw: NotImplementedError if expression_operator not found in comparator_lookup
+        """
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector {}".format(expression_operator.name, self.dialect))
 
-        return self.comparator_lookup[self.dialect][expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _calculate_intersection(self, mapped_fields_array, stix_field, assigned_fields):
+        """
+        Calculates whether multiple query criteria apply to the same native field.
+
+        NOTE: In some scenarios, like with `tideDbData` dialect `imported` field, duplicates are allowed. In those cases, `assigned_fields`
+        is not updated to signify the field was processed.
+
+        :param mapped_fields_array: list of native fields related to `stix_field`, this is based on the data_model_mapper/dmm
+        :type mapped_fields_array: list<str>
+        :param stix_field: ANTLR STIX field
+        :type stix_field: str
+        :param assigned_fields: map of currently processed fields. Newly processed field `stix_field` is checked against it to determine if it has previously been processed
+        :type assigned_fields: map
+        :throw: DuplicateFieldException if multiple criteria found for the same field
+        """
         mapped_fields_set = set(mapped_fields_array)
         assigned_fields_set = set(assigned_fields.keys())
         intersection = assigned_fields_set.intersection(mapped_fields_set)
@@ -179,6 +306,23 @@ class QueryStringPatternTranslator:
             assigned_fields[field] = 1
 
     def _set_threat_type(self, stix_object, stix_field, final_expression, value):
+        """
+        Determine Infoblox threat type based on stix_object and stix_field.
+
+        NOTE: This is used to select the particular URL path. For example, domainName queries for Dossier will use a path <hostname>/host.
+        While ipv4 queries for Dossier will use a path of <hostname>/ip.
+
+        :param stix_object: STIX object
+        :type stix_object: str
+        :param stix_field: STIX field
+        :type stix_field: str
+        :param final_expression: native query expression
+        :type final_expression: str
+        :param value: value (eg 127.0.0.1)
+        :type value: int/str
+        :return: threat type (host, url, email, ip)
+        :rtype: str
+        """
         # NOTE: for the Dossier and TIDE apis, threat_type must be provided. Using the provided query, determine the appropriate type.
         stix_map = {
             'dossierData': [
@@ -233,6 +377,25 @@ class QueryStringPatternTranslator:
         return
 
     def _merge_queries_in_expression(self, expression_01, expression_02, operator):
+        """
+        Merge two query expressions into a single expression.
+
+        NOTE: For complex queries, this parser class recursively traverses the ANTLR expressions until it reaches a simple comparison
+        operations. After translating the expression, a list of queries is generated. This method helps stitch the potentially multiple
+        lists of queries into a single list of native queries to transmit. During the merge operation, the threat type of the individual
+        components are compared. This module currently does not support queries that translate to multiple different threat types (eg ip and host).
+
+        :param expression_01: LH query expression
+        :type expression_01: list
+        :param expression_02: RH query expression
+        :type expression_02: list
+        :param operator: comparison operator for the two expressions, determines how they should be joined (AND or OR)
+        :type operator: str
+        :return: query expression
+        :rtype: list
+        :throw: RuntimeError if multiple different threat type queries provided
+        :throw: assertError if both expressions have more than one query, in that situation the queries are too large.
+        """
         assert not (len(expression_01) > 1 and len(expression_02) > 1), "Failed to merge queries, expressions too complex"
 
         expression_small = expression_01 if len(expression_01) == 1 else expression_02
@@ -252,6 +415,28 @@ class QueryStringPatternTranslator:
         return expression_large
 
     def _parse_expression(self, expression, qualifier=None, intersection_fields=None) -> str:
+        """
+        Recursively called method for parsing an ANTLR expression. For complex expressions, like ObservationExpression, LH & RH expressions
+        are separated and processed independently before being merged back together.
+
+        Merge two query expressions into a single expression.
+
+        NOTE: For complex queries, this parser class recursively traverses the ANTLR expressions until it reaches a simple comparison
+        operations. After translating the expression, a list of queries is generated. This method helps stitch the potentially multiple
+        lists of queries into a single list of native queries to transmit. During the merge operation, the threat type of the individual
+        components are compared. This module currently does not support queries that translate to multiple different threat types (eg ip and host).
+
+        :param expression: STIX expression to parse
+        :type expression: stix_shifter_utils.stix_translation.src.patterns.pattern_object.*
+        :param qualifier: STIX qualifier, propagates START/STOP qualifier (on complex expressions) to the necessary basic comparison expression
+        :type qualifier: stix_shifter_utils.stix_translation.src.patterns.pattern_objects import StartStopQualifier
+        :param intersection_fields: map maintaining already processed field, used by _calculate_intersection to determine multiple criteria
+                                    of a single field.
+        :type intersection_fields: map
+        :return: native query expression
+        :rtype: str
+        :throw: RuntimeError if unknown expression type provided
+        """
         if isinstance(expression, ComparisonExpression):
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -333,10 +518,26 @@ class QueryStringPatternTranslator:
                 expression, type(expression)))
 
     def parse_expression(self, pattern: Pattern):
+        """
+        Entry point for parsing an ANTLR pattern.
+
+        :param pattern: STIX expression to parse
+        :type pattern: Pattern
+        :return: native query expression
+        :rtype: str
+        """
         return self._parse_expression(pattern)
 
 
 def _test_or_add_milliseconds(timestamp) -> str:
+    """
+    Validates and reformats (if necessary) timestamp from the START/STOP qualifier
+
+    :param timestamp: timestamp string (eg 1234-56-78T00:00:00.123Z)
+    :type timestamp: str
+    :return: sanatized timestamp string
+    :rtype: str
+    """
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
@@ -346,12 +547,28 @@ def _test_or_add_milliseconds(timestamp) -> str:
 
 
 def _test_start_stop_format(query_string) -> bool:
+    """
+    Checks if query_string contains START/STOP qualifier.
+
+    :param query_string: query string
+    :type query_string: str
+    :return: True if provided query_string contains START/STOP qualifier.
+    :rtype: bool
+    """
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
     # or START 1234567890123 STOP 1234567890123
     return bool(re.search(START_STOP_STIX_QUALIFIER, query_string))
 
 
 def _get_parts_start_stop(query):
+    """
+    Checks if query_string contains START/STOP qualifier.
+
+    :param query_string: query string
+    :type query_string: str
+    :return: True if provided query_string contains START/STOP qualifier.
+    :rtype: bool
+    """
     # Remove leading 't' before timestamps
     query = re.sub("(?<=START)t|(?<=STOP)t", "", query)
     # Split individual query to isolate timestamps
@@ -362,6 +579,25 @@ def _get_parts_start_stop(query):
 
 
 def _format_query_with_timestamp(dialect:str, query: str, time_range, start_stop_time) -> str:
+    """
+    Based on dialect, format time range for the query.
+
+    NOTE:
+    - If START/STOP qualifier not provided, default configuration `time_range` is used.
+    - If START/STOP qualifier is provided, the timestamps are parsed out and formatted.
+    - Each dialect has a different way to represent a time range in the native query (DnsEvent uses t0/t1 while TideDB uses from_date/to_date)
+
+    :param dialect: dialect for the query (eg dnsEventData, tideDbData, etc)
+    :type dialect: str
+    :param query: original query string
+    :type query: str
+    :param time_range: default time range to query over (in minutes).
+    :type time_range: int
+    :param start_stop_time: qualifier start/stop time (eg STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z')
+    :type start_stop_time: str
+    :return: query with start/stop time query parameters added
+    :rtype: str
+    """
     if dialect == 'dnsEventData':
         if start_stop_time and _test_start_stop_format(start_stop_time):
             query_parts = _get_parts_start_stop(start_stop_time)
@@ -403,6 +639,23 @@ def _format_query_with_timestamp(dialect:str, query: str, time_range, start_stop
 
 
 def _format_translated_queries(dialect, entry_array, time_range):
+    """
+    Performs final formatting for queries. See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-translation-module.md#step-2-edit-the-from_stix_map-json-files
+
+
+    Operations include:
+    - Parsing START/STOP qualifier and adding the appropriate native time fields to the query
+    - Format queries into a list of maps with sufficient data (offset, query, threat_type, etc) for transmission to process.
+
+    :param dialect: dialect for the query (eg dnsEventData, tideDbData, etc)
+    :type dialect: str
+    :param entry_array: list of queries to finalize
+    :type entry_array: list
+    :param time_range: default time range to query over (in minutes).
+    :type time_range: int
+    :return: list of queries
+    :rtype list
+    """
     # Transform from human-readable timestamp to 10-digit second time
     # Ex. START t'2014-04-25T15:51:20.000Z' to START 1398441080
     formatted_queries = []
@@ -426,6 +679,18 @@ def _format_translated_queries(dialect, entry_array, time_range):
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
+    """
+    Entry point for query_constructor. Initializes QueryStringPatternTranslator, parses the provided pattern, and returns a formatted query.
+
+    :param pattern: STIX pattern to parse
+    :type pattern: Pattern
+    :param data_model_mapping: data model mapping, see: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-translation-module.md
+    :type data_model_mapping: QueryTranslator
+    :param options: configuration options, see: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-configuration-json.md
+    :type options: object
+    :return: list of queries
+    :rtype list
+    """
     trans_queries = QueryStringPatternTranslator(pattern, data_model_mapping, options['time_range']).qualified_queries
     queries = []
     for trans_query in trans_queries:

@@ -34,11 +34,11 @@
       "creator_user_ref.user_id": ["behaviors.user_id"],
       "creator_user_ref.account_login": ["behaviors.user_name"],
       "binary_ref.hashes.MD5": ["behaviors.md5"],
-      "binary_ref.hashes.SHA-256": ["behaviors.sha256"],
+      "binary_ref.hashes.'SHA-256'": ["behaviors.sha256"],
       "parent_ref.name": ["behaviors.filename"],
       "parent_ref.command_line": ["behaviors.parent_cmdline"],
       "parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"]
+      "parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"]
     }
   },
   "url": {
@@ -72,11 +72,11 @@
       "process_ref.parent_ref.name": ["behaviors.filename"],
       "process_ref.parent_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
       "process_ref.parent_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "process_ref.parent_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
+      "process_ref.parent_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"],
       "parent_process_ref.name": ["behaviors.filename"],
       "parent_process_ref.command_line": ["behaviors.parent_details.parent_cmdline"],
       "parent_process_ref.binary_ref.hashes.MD5": ["behaviors.parent_details.parent_md5"],
-      "parent_process_ref.binary_ref.hashes.SHA-256": ["behaviors.parent_details.parent_sha256"],
+      "parent_process_ref.binary_ref.hashes.'SHA-256'": ["behaviors.parent_details.parent_sha256"],
       "parent_process_ref.creator_user_ref.user_id": ["behaviors.user_id"],
       "parent_process_ref.creator_user_ref.account_login": ["behaviors.user_name"],
       "domain_ref.value": ["device.hostname"],
@@ -120,7 +120,15 @@
       "site_name": ["device.site_name"],
       "system_manufacturer": ["device.system_manufacturer"],
       "system_product_name": ["device.system_product_name"],
-      "modified_timestamp": ["device.modified_timestamp"]
+      "modified_timestamp": ["device.modified_timestamp"],
+      "instance_id": ["device.instance_id"],
+      "service_provider": ["device.service_provider"],
+      "status": ["device.status"],
+      "event_status": ["behaviors.status"],
+      "max_severity_displayname": ["behaviors.max_severity_displayname"],
+      "control_graph_id":["behaviors.control_graph_i"],
+      "display_name_1":["behaviors.display_name"],
+      "objective":["behaviors.objective"]
     }
   }
 }
