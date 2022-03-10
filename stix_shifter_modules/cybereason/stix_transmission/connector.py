@@ -23,6 +23,7 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, query, offset, length):
         """
@@ -62,16 +63,16 @@ class Connector(BaseSyncConnector):
         except InvalidAuthenticationException:
             response_dict['type'] = "AuthenticationError"
             response_dict['message'] = "Invalid Authentication"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
     def get_results_data(self, response_dict):
@@ -124,16 +125,16 @@ class Connector(BaseSyncConnector):
         except InvalidAuthenticationException:
             response_dict['type'] = "AuthenticationError"
             response_dict['message'] = "Invalid Authentication"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error while pinging: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
     def delete_query_connection(self, query):

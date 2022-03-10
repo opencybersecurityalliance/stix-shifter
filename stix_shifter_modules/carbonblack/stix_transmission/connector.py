@@ -17,6 +17,7 @@ class Connector(BaseSyncConnector):
         self.show_events = Connector.get_show_events_mode(connection)
         self.result_limit = Connector.get_result_limit(connection)
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     @staticmethod
     def get_show_events_mode(connection):
@@ -32,8 +33,7 @@ class Connector(BaseSyncConnector):
             return connection['options'].get('result_limit', default_result_limit)
         return default_result_limit
 
-    @staticmethod
-    def _handle_errors(response, return_obj, results_key='results'):
+    def _handle_errors(self, response, return_obj, results_key='results'):
         response_code = response.code
         response_txt = response.read().decode('utf-8')
 
@@ -44,10 +44,10 @@ class Connector(BaseSyncConnector):
                 if results_key in response_json:
                     return_obj['data'] = response_json[results_key]
         elif ErrorResponder.is_plain_string(response_txt):
-            ErrorResponder.fill_error(return_obj, message=response_txt)
+            ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
         elif ErrorResponder.is_json_string(response_txt):
             response_json = json.loads(response_txt)
-            ErrorResponder.fill_error(return_obj, response_json, ['reason'])
+            ErrorResponder.fill_error(return_obj, response_json, ['reason'], connector=self.connector)
         else:
             raise UnexpectedResponseException
         return return_obj
@@ -79,7 +79,7 @@ class Connector(BaseSyncConnector):
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
@@ -120,7 +120,7 @@ class Connector(BaseSyncConnector):
 
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e

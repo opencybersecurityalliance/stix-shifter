@@ -373,4 +373,5 @@ class TestStixToRelevance(unittest.TestCase):
         query = translation.translate('bigfix', 'query', '{}', stix_pattern)
         assert query['success'] is False
         assert query['code'] == 'mapping_error'
-        assert query['error'] == "data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"
+        assert query['connector'] == 'bigfix'
+        assert query['error'] == "bigfix connector error => data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"
