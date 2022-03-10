@@ -60,7 +60,6 @@ class DataSourceObjToStixObj:
 
         self.properties = observable.properties
 
-        self.data_source = data_source['name']
         self.ds_key_map = [val for val in self.gen_dict_extract('ds_key', ds_to_stix_map)]
 
         self.bundle = {
