@@ -14,9 +14,9 @@ import uuid
 """
 class BaseNormalization(object,metaclass=ABCMeta):
 
-    def __init__(self, options):
+    def __init__(self):
         self.logger = logger.set_logger(__name__)
-        self.stix_validator = options.get('stix_validator')
+        self.stix_validator = False
 
 
     def create_stix_bundle(self, version="2.1"):
@@ -195,8 +195,8 @@ class BaseNormalization(object,metaclass=ABCMeta):
                 if(matchKeyword is not None):
                     matched_words_in_target_list.append(matchKeyword)
                 else:
-                     matchedMapping = self.normalize_malware_type_mapping(sourceListOrStr)
-                     if(matchedMapping is not None and matchedMapping not in matched_words_in_target_list):
+                    matchedMapping = self.normalize_malware_type_mapping(sourceListOrStr)
+                    if(matchedMapping is not None and matchedMapping not in matched_words_in_target_list):
                         matched_words_in_target_list.append(matchedMapping)
 
                 if len(matched_words_in_target_list) == 0:
@@ -221,7 +221,7 @@ class BaseNormalization(object,metaclass=ABCMeta):
                 else:                    
                     matchedMapping = self.normalize_infra_type_mapping(sourceWord)
                     if (matchedMapping is not None and matchedMapping not in matched_words_in_target_list):
-                         matched_words_in_target_list.append(matchedMapping)
+                        matched_words_in_target_list.append(matchedMapping)
             
             if len(matched_words_in_target_list) == 0:
                 matched_words_in_target_list.append('unknown') 

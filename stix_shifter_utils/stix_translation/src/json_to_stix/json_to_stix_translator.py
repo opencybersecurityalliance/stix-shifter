@@ -7,6 +7,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix2validator import validate_instance, print_results
 from datetime import datetime
 from stix_shifter_utils.utils import logger
+from stix_shifter_utils.normalization.BaseNormalization import BaseNormalization
 
 # "ID Contributing Properties" taken from https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070594
 UUID5_NAMESPACE = "00abedb4-aa42-466c-9c01-fed23315a9b7"
@@ -49,12 +50,19 @@ class StixObjectId(str):
 
 class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
+    # this Base class is used to create infrastructure, malware, sighting etc.
+    baseNormalization = BaseNormalization()    
 
-    def __init__(self, data_source, ds_to_stix_map, transformers, options, callback=None):
-        self.identity_id = data_source["id"]
-        self.ds_to_stix_map = ds_to_stix_map
-        self.transformers = transformers
-        self.options = options
+    def __init__(self, data_source=None, ds_to_stix_map=None, transformers=None, options=None, callback=None):
+        if data_source is not None and data_source.get("id") is not None:
+            self.identity_id = data_source["id"]
+            self.data_source = data_source['name']        
+        if ds_to_stix_map is not None:
+            self.ds_to_stix_map = ds_to_stix_map
+        if transformers is not None:
+            self.transformers = transformers
+        if options is not None:
+            self.options = options      
         self.callback = callback
 
         # parse through options
@@ -83,6 +91,7 @@ class DataSourceObjToStixObj:
             self.bundle["spec_version"] = "2.0"
         self.unique_cybox_objects = {}
         self.bundle['objects'] += [data_source]
+        self.baseNormalization.stix_validator = self.stix_validator
 
     # get the nested ds_keys in the mapping
     def gen_dict_extract(self, key, var):
