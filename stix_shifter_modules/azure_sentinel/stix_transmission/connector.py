@@ -1,16 +1,12 @@
 import json
-from lib2to3.pgen2.tokenize import generate_tokens
-import re
-from typing import final
 import adal
-from flatten_json import flatten
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import pandas as pd
 from datetime import datetime, timezone
-from azure.monitor.query import LogsQueryClient
+from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from azure.identity import ClientSecretCredential
 
 
@@ -29,7 +25,6 @@ class Connector(BaseSyncConnector):
             self.api_client = APIClient(connection, configuration)
         else:
             self.init_error = True
-
 
     def ping_connection(self):
         """Ping the endpoint."""
@@ -51,7 +46,6 @@ class Connector(BaseSyncConnector):
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-
     def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
@@ -65,32 +59,30 @@ class Connector(BaseSyncConnector):
         final_result = []
         try:
             total_records = offset + length
-            credential = ClientSecretCredential(tenant_id="924f8a12-f6bd-4b8d-93bf-9fa6e26cbf8b", client_id="15566bc1-0098-4e79-80a1-6390b97440ee", client_secret="AFv7Q~j3nXESOzqkzppQi86G0nhSckF6pw44G")
+            credential = ClientSecretCredential(tenant_id="924f8a12-f6bd-4b8d-93bf-9fa6e26cbf8b",
+                                                client_id="15566bc1-0098-4e79-80a1-6390b97440ee",
+                                                client_secret="AFv7Q~j3nXESOzqkzppQi86G0nhSckF6pw44G")
             client = LogsQueryClient(credential)
             query = """{query}""".format(query=query)
-            start_time=datetime(2022, 2, 25, tzinfo=timezone.utc)
-            end_time=datetime(2022, 3, 3, tzinfo=timezone.utc)
+            start_time = datetime(2022, 2, 25, tzinfo=timezone.utc)
+            end_time = datetime(2022, 3, 3, tzinfo=timezone.utc)
             response = client.query_workspace(
-                workspace_id= 'e00daaf8-d6a4-4410-b50b-f5ef61c9cb45',
+                workspace_id='e00daaf8-d6a4-4410-b50b-f5ef61c9cb45',
                 query=query,
                 timespan=(start_time, end_time)
-                )
-            if response.status == "LogsQueryStatus.PARTIAL":
+            )
+            if response.status == LogsQueryStatus.PARTIAL:
                 error = response.partial_error
                 data = response.partial_data
                 print(error.message)
-            else:
-                return_obj['success'] = True
-                for column_header in response.tables[0].columns:
-                    column_names.append(column_header)
-                row_data = response.tables[0].rows
-                for row in row_data:
-                    data = dict(zip(column_names, row))
-                    final_result.append(data)
+            elif response.status == LogsQueryStatus.SUCCESS:
+                data = response.tables
+            for table in data:
+                df = pd.DataFrame(data=table.rows, columns=table.columns)
+                return df.astype(str).to_dict(orient='records')
         except Exception as err:
             print("something fatal happened")
-            print (err)
-        #return (final_result)
+            print(err)
 
     @staticmethod
     def generate_token(connection, configuration):
@@ -113,7 +105,7 @@ class Connector(BaseSyncConnector):
 
             return_obj['success'] = True
             return_obj['access_token'] = response_dict['accessToken']
-            
+
         except Exception as ex:
             if ex.__class__.__name__ == 'AdalError':
                 response_dict = ex.error_response
