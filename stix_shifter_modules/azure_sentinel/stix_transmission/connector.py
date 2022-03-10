@@ -79,7 +79,7 @@ class Connector(BaseSyncConnector):
                 data = response.tables
             for table in data:
                 df = pd.DataFrame(data=table.rows, columns=table.columns)
-                return df.astype(str).to_dict(orient='records')
+                return {"success": True, "data": df.astype(str).to_dict(orient='records')}
         except Exception as err:
             print("something fatal happened")
             print(err)
