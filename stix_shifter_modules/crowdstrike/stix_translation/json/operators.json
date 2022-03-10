@@ -6,5 +6,6 @@
     "ComparisonComparators.GreaterThan": ":>",
     "ComparisonComparators.GreaterThanOrEqual": ":>=",
     "ComparisonComparators.LessThan": ":<",
-    "ComparisonComparators.LessThanOrEqual": ":<="
+    "ComparisonComparators.LessThanOrEqual": ":<=",
+    "ComparisonComparators.In": ":"
 }
