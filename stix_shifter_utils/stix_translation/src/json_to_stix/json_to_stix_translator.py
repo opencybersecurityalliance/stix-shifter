@@ -34,6 +34,10 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     for _, value in ds2stix.unique_cybox_objects.items():
         ds2stix.bundle["objects"].append(value)
 
+    if options.get('stix_validator'):
+        validated_result = validate_instance(ds2stix.bundle)
+        print_results(validated_result)
+
     return ds2stix.bundle
 
 
@@ -56,8 +60,6 @@ class DataSourceObjToStixObj:
 
         # parse through options
         self.stix_validator = options.get('stix_validator')
-        if self.stix_validator:
-            self.base_normalization.stix_validator = self.stix_validator
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
@@ -79,6 +81,8 @@ class DataSourceObjToStixObj:
             self.bundle["spec_version"] = "2.0"
         self.unique_cybox_objects = {}
         self.bundle['objects'] += [data_source]
+        if self.stix_validator:
+            self.base_normalization.stix_validator = self.stix_validator
 
 
     # get the nested ds_keys in the mapping
@@ -423,10 +427,6 @@ class DataSourceObjToStixObj:
                 observation["object_refs"] = object_refs
                 observation["spec_version"] = "2.1"
 
-            # Validate each STIX object
-            if self.stix_validator:
-                validated_result = validate_instance(observation)
-                print_results(validated_result)
         except Exception as e:
             raise Exception("Error in json_to_stix_translator.transform %s : %s" % (e, e.__traceback__.tb_lineno))
 
