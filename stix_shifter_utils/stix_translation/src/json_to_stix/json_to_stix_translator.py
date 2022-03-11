@@ -56,6 +56,8 @@ class DataSourceObjToStixObj:
 
         # parse through options
         self.stix_validator = options.get('stix_validator')
+        if self.stix_validator:
+            self.base_normalization.stix_validator = self.stix_validator
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
@@ -77,7 +79,6 @@ class DataSourceObjToStixObj:
             self.bundle["spec_version"] = "2.0"
         self.unique_cybox_objects = {}
         self.bundle['objects'] += [data_source]
-        self.base_normalization.stix_validator = self.stix_validator
 
 
     # get the nested ds_keys in the mapping

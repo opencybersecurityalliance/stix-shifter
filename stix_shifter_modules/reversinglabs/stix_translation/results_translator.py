@@ -316,9 +316,7 @@ class ResultsTranslator(BaseResultTranslator):
 
 
     # Create STIX Bundle and add SDOs
-    print('Test')
     sdo_translator_object = sdo_translator.SdoTranslator(options=self.options)
-    print('Test')
     stix_bundle = sdo_translator_object.create_stix_bundle()
 
     # Add Indentity SDO
