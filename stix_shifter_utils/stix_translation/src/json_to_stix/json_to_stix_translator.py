@@ -46,10 +46,13 @@ class DataSourceObjToStixObj:
     # this Base class is used to create infrastructure, malware, sighting etc.
     base_normalization = BaseNormalization()    
 
-    def __init__(self, data_source=None, ds_to_stix_map=None, transformers=None, options=None, callback=None):
+    # Don't write any test cases that makes the following parameters mandatory:
+    # ds_to_stix_map, transformers, options since it would break base_normalization functionality
+    # because those parameters are not mandatory to create the stix bundle
+    def __init__(self, data_source, ds_to_stix_map=None, transformers=None, options=None, callback=None):
         if data_source is not None and data_source.get("id") is not None:
             self.identity_id = data_source["id"]
-            self.data_source = data_source['name']        
+            self.data_source = data_source['name']
         if ds_to_stix_map is not None:
             self.ds_to_stix_map = ds_to_stix_map
         if transformers is not None:
@@ -63,7 +66,7 @@ class DataSourceObjToStixObj:
         self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
-
+        self.data_source = data_source['name']
         self.ds_key_map = [val for val in self.gen_dict_extract('ds_key', ds_to_stix_map)]
 
         self.bundle = {
