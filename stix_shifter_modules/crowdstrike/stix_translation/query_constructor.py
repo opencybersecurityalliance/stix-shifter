@@ -1,7 +1,7 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier, SetValue
 from datetime import datetime, timedelta
 
 
@@ -44,6 +44,26 @@ class CSQueryStringPatternTranslator:
 
         return "({}) + {}".format(expression, start_stop_query)
 
+    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
+        """Convert a list of mapped fields into a query string."""
+        comp_str = ""
+        comparison_strings = []
+
+        if isinstance(value, str):
+                value = [value]
+        for val in value:
+            for mapped_field in mapped_fields_array:
+                comparison_strings.append(f"{mapped_field}{comparator} '{val}'")
+
+        if len(comparison_strings) == 1:
+            comp_str = comparison_strings[0]
+        elif len(comparison_strings) > 1:
+            comp_str = f"{','.join(comparison_strings)}"
+        else:
+            raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
+        
+        return comp_str
+
     def _parse_expression(self, expression, qualifier=None):
         if isinstance(expression, ComparisonExpression):
             # Base Case
@@ -51,26 +71,25 @@ class CSQueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
 
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-            mapped_fields_count = len(mapped_fields_array)
             query_string = ""
             comparator = self.comparator_lookup[str(expression.comparator)]
             if expression.negated and expression.comparator == ComparisonComparators.Equal:
                 comparator = self._get_negate_comparator()
-
+                value = self._escape_value(expression.value)
             elif expression.comparator == ComparisonComparators.NotEqual and not expression.negated:
                 comparator = self._get_negate_comparator()
+                value = self._escape_value(expression.value)
+            elif (expression.comparator == ComparisonComparators.In and
+                    isinstance(expression.value, SetValue)):
+                value = list(map(self._escape_value, expression.value.element_iterator()))
+            else:
+                value = self._escape_value(expression.value)
 
-            value = self._escape_value(expression.value)
-
-            for mapped_field in mapped_fields_array:
-                # Handle negate exp
-                mapped_field_query_str = "{mapped_field}{comparator} '{value}'".format(mapped_field=mapped_field,
-                                                                                  comparator=comparator, value=value)
-                if mapped_fields_count > 1:
-                    mapped_field_query_str += self.comparator_lookup["ComparisonExpressionOperators.Or"]
-                    mapped_fields_count -= 1
-
-                query_string += mapped_field_query_str
+            query_string = self._parse_mapped_fields(
+                value=value,
+                comparator=comparator,
+                mapped_fields_array=mapped_fields_array
+            )
 
             if qualifier is not None:
                 if isinstance(qualifier, StartStopQualifier):
