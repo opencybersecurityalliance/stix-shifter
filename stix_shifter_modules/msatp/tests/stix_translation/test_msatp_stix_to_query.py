@@ -158,6 +158,19 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [_remove_timestamp_from_query(q) for q in queries]
         self._test_query_assertions(query, queries)
 
+    def test_alert_comp_exp(self):
+        stix_pattern = "[x-ibm-finding:alert_id = '1234567890_1234567890']" \
+                       "START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
+        query = translation.translate('msatp', 'query', '{}', stix_pattern)
+        query['queries'] = [_remove_timestamp_from_query(q) for q in query['queries']]
+
+        queries = ['(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= '
+                   'datetime(2022-03-08T00:16:00.000Z) and Timestamp < datetime(2022-03-09T00:16:00.000Z)  | '
+                   'order by Timestamp desc | where AlertId =~ "1234567890_1234567890")']
+
+        queries = [_remove_timestamp_from_query(q) for q in queries]
+        self._test_query_assertions(query, queries)
+
     def test_gt_eq_datetime_comp_exp(self):
         stix_pattern = "[process:created >= '2019-09-04T09:29:29.0882Z']"
         query = translation.translate('msatp', 'query', '{}', stix_pattern)
