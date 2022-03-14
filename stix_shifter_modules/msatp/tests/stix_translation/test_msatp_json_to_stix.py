@@ -184,7 +184,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert file_obj['name'] == 'updater.exe'
         assert file_obj['hashes'] == {'SHA-1': 'cf864398950658185fad8207957b46c12f133ea5',
                                       'MD5': '64c52647783e6b3c0964e41aa38fa5c1'}
-        assert file_obj['parent_directory_ref'] == '6'
+        assert file_obj['parent_directory_ref'] == '4'
         directory_object = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'directory')
         file_path = get_module_transformers(MODULE)['ToDirectoryPath'].transform(data['DeviceFileEvents']['FolderPath'])
         assert directory_object.get('path') == file_path
@@ -236,11 +236,9 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
-        assert process_obj.keys() == {'type', 'name', 'binary_ref', 'pid', 'command_line', 'created',
+        assert process_obj.keys() == {'type', 'pid', 'command_line', 'created',
                                       'creator_user_ref'}
         assert process_obj['type'] == 'process'
-        assert process_obj['name'] == 'consent.exe'
-        assert process_obj['binary_ref'] == '2'
         assert process_obj['pid'] == 20948
         assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
         assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
@@ -353,7 +351,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                                'DeviceId': '8330ed311f1b21b861d63448984eb2632cc9c07c',
                                                'DeviceName': 'desktop-536bt46',
                                                 'LocalIP': '172.16.2.22',
-                                               'MacAddresses': ['484D7E9DBD97'],
+                                               'MacAddressSet': ['484D7E9DBD97'],
                                                 'RemoteIP': '168.159.213.203',
                                                'LocalPort': 63043,
                                                'RemotePort': 80,
@@ -395,11 +393,21 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
 
-        network_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'mac-addr')
-        assert network_obj is not None, 'mac-addr object type not found'
-        assert network_obj.keys() == {'type', 'value'}
-        assert network_obj['type'] == 'mac-addr'
-        assert network_obj['value'] == '48:4d:7e:9d:bd:97'
+        mac_adder_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'mac-addr')
+        assert mac_adder_obj is not None, 'mac-addr object type not found'
+        assert mac_adder_obj.keys() == {'type', 'value'}
+        assert mac_adder_obj['type'] == 'mac-addr'
+        assert mac_adder_obj['value'] == '48:4d:7e:9d:bd:97'
+
+        network_traffic_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
+        assert network_traffic_obj is not None, 'network-traffic object type not found'
+        assert network_traffic_obj.keys() == {'type', 'src_ref', 'dst_ref', 'src_port', 'dst_port', 'protocols'}
+        assert network_traffic_obj['type'] == 'network-traffic'
+        assert network_traffic_obj['src_ref'] == '2'
+        assert network_traffic_obj['dst_ref'] == '5'
+        assert network_traffic_obj['src_port'] == 63043
+        assert network_traffic_obj['dst_port'] == 80
+        assert network_traffic_obj['protocols'] == ['tcp']
 
     def test_registry_json_to_stix(self):
         """to test registry stix object properties"""
@@ -452,11 +460,13 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'IPv4Dhcp': '198.51.100.2',
                                       "ReportId": 97827,
                                       'NetworkAdapterName': 'adapter_name',
-                                      'MacAddress': 'd2fb49243718',
+                                      'MacAddressSet': ['d2fb49243718'],
                                       'NetworkAdapterType': 'AsymmetricDsl',
                                       'NetworkAdapterStatus': 'Down',
                                       'TunnelType': 'ISATAP',
-                                      'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4']}}
+                                      'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4']
+                                      }
+                }
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -471,10 +481,10 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         host_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
         assert host_obj is not None, 'x-oca-asset object type not found'
-        assert host_obj.keys() == {'type', 'device_id', 'hostname', 'ip_refs'}
+        assert host_obj.keys() == {'type', 'device_id', 'hostname', 'ip_refs', 'mac_refs'}
         assert host_obj['type'] == 'x-oca-asset'
         assert host_obj['hostname'] == 'desktop-536bt46'
-        assert host_obj['ip_refs'] == [ '3', '4', '5', '6']
+        assert host_obj['ip_refs'] == ['4', '5', '6', '7']
 
     def test_x_oca_event(self):
         """
@@ -523,12 +533,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         event_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert event_obj is not None, 'x-oca-event object type not found'
-        assert event_obj.keys() == {'type', 'created', 'host_ref', 'action', 'process_ref'}
+        assert event_obj.keys() == {'type', 'created', 'host_ref', 'action', 'process_ref', 'file_ref'}
         assert event_obj['type'] == 'x-oca-event'
         assert event_obj['created'] == '2019-09-20T06:57:11.8218304Z'
         assert event_obj['host_ref'] == '1'
         assert event_obj['action'] == 'ProcessCreated'
-        assert event_obj['process_ref'] == '4'
+        assert event_obj['process_ref'] == '6'
 
     def test_x_oca_asset(self):
         """
@@ -588,11 +598,11 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'IPv4Dhcp': '198.51.100.2',
                                       "ReportId": 97827,
                                       'NetworkAdapterName': 'adapter_name',
-                                      'MacAddress': 'd2fb49243718',
+                                      'MacAddressSet': ['d2fb49243718'],
                                       'NetworkAdapterType': 'AsymmetricDsl',
                                       'NetworkAdapterStatus': 'Down',
                                       'TunnelType': 'ISATAP',
-                                      'IPAddresses': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
+                                      'IPAddressesSet': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
                                       'Alerts': [{'AlertId': '123123123','Severity': 'Medium',
                                                   'Title': 'Registry queried for passwords',
                                                   'Category': 'CredentialAccess',
@@ -617,15 +627,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert finding_obj.keys() == {'type', 'alert_id', 'severity', 'name', 'ttp_tagging_refs'}
         assert finding_obj['type'] == 'x-ibm-finding'
         assert finding_obj['severity'] == 33
-        assert finding_obj['file_ref'] == '9'
         assert finding_obj['name'] == 'Registry queried for passwords'
-
-        finding_file_ref_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'file')
-        assert finding_file_ref_obj is not None, 'file object type not found'
-        assert finding_file_ref_obj.keys() == {'type', 'name', 'hashes'}
-        assert finding_file_ref_obj['type'] == 'file'
-        assert finding_file_ref_obj['name'] == 'reg.exe'
-        assert finding_file_ref_obj['hashes'] == {'SHA-1': 'c0db341defa8ef40c03ed769a9001d600e0f4dae'}
 
         ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
         assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
