@@ -34,6 +34,15 @@ class QueryStringPatternTranslator:
         return "({})".format(' OR '.join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
+    def _format_in(mapped_fields_array, values) -> str:
+        gen = values.element_iterator()
+        res = []
+        for field in mapped_fields_array:
+            for value in gen:
+                res.append(field + ' = ' + QueryStringPatternTranslator._escape_value(value))
+        return "{}".format(' OR '.join(res))
+
+    @staticmethod
     def _format_match(value) -> str:
         raw = QueryStringPatternTranslator._escape_value(value)
         if raw[0] == "^":
@@ -123,6 +132,7 @@ class QueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
@@ -133,9 +143,6 @@ class QueryStringPatternTranslator:
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or \
                     expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
@@ -148,6 +155,11 @@ class QueryStringPatternTranslator:
 
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field,
                                                           mapped_fields_array)
+
+            # IN operator logic
+            if expression.comparator == ComparisonComparators.In:
+                comparison_string = self._format_in(mapped_fields_array, expression.value)
+
             if len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"
