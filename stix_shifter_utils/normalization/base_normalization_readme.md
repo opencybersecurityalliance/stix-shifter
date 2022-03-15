@@ -1,4 +1,10 @@
-In this STIX Shifter Connector, instead of returning a STIX Observation, we are returning a STIX 2.1 Bundle.
+In this STIX Shifter Utility, we are creating and returning a STIX Bundle with the following STIX Domain Objects (SDO's):
+  1. Identity
+  2. Extension-Definition
+  3. Indicator
+  4. Malware
+  5. Infrastructure
+  6. Sighting
 
 We are going to be using `stix_shifter_utils/normalization/BaseNormalization.py` in our `results_translator.py` file, by creating a `sdo_translator.py` file which calls the BaseNormalization , and depending on your use case, you can modify the returned bundle fields further
 
@@ -15,7 +21,7 @@ from . import sdo_translator
 
 class ResultsTranslator(BaseResultTranslator):
   def translate_results(self, data_source, data):
-    sdo_translator_object = sdo_translator.SdoTranslator(self.options)
+    sdo_translator_object = sdo_translator.SdoTranslator(data_source, self.options)
     stix_bundle = sdo_translator_object.create_stix_bundle()
 
 ```
