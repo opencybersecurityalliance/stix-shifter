@@ -2,6 +2,7 @@
     "ComparisonExpressionOperators.And": "and",
     "ComparisonExpressionOperators.Or": "or",
     "ComparisonComparators.Equal": ":",
+    "ComparisonComparators.In": ":",
     "ComparisonComparators.NotEqual": ":",
     "ComparisonComparators.GreaterThan": ":",
     "ComparisonComparators.GreaterThanOrEqual": ":",
