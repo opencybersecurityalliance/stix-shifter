@@ -145,7 +145,8 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[user-account:display_name IN ('abc', 'def')]"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)
         _, from_time, to_time = query_constructor.convert_timestamp(query)
-        queries = "{\"query\": \"displayName = abc OR displayName = def\", \"fromTime\": \"%s\", \"toTime\": \"%s\"}" \
+        queries = "{\"query\": \"displayName = \\\"abc\\\" OR displayName = \\\"def\\\"\", " \
+                  "\"fromTime\": \"%s\", \"toTime\": \"%s\"}" \
                   % (from_time, to_time)
         _test_query_assertions(query, queries)
 
