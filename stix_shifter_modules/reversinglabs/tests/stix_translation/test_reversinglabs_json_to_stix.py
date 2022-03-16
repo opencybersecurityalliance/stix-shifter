@@ -14,7 +14,7 @@ extension_types = ['toplevel-property-extension']
 extension_properties = ['x_ibm_original_threat_feed_data','threat_score']
 domain_query_pattern = "[domain-name:value='"+domain_name+"']"
 hash_value = '16cda323189d8eba4248c0a2f5ad0d8f'
-hash_query_pattern = "[file:hashes.'MD5'='"+hash_value+"']"
+hash_query_pattern = "[file:hashes.MD5='"+hash_value+"']"
 url_value = "https://cnn.com"
 url_query_pattern = "[url:value='"+url_value+"']"
 transmitQueryDataForDomain = {
