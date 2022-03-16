@@ -34,6 +34,14 @@ class QueryStringPatternTranslator:
         return "({})".format(' OR '.join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
+    def _format_in(field, values) -> str:
+        gen = values.element_iterator()
+        res = []
+        for value in gen:
+            res.append(field + ' = ' + '"' + QueryStringPatternTranslator._escape_value(value) + '"')
+        return "{}".format(' OR '.join(res))
+
+    @staticmethod
     def _format_match(value) -> str:
         raw = QueryStringPatternTranslator._escape_value(value)
         if raw[0] == "^":
@@ -92,18 +100,23 @@ class QueryStringPatternTranslator:
         mapped_fields_count = 1 if is_reference_value else len(mapped_fields_array)
 
         for mapped_field in mapped_fields_array:
-            if is_reference_value:
-                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
-                if not parsed_reference:
-                    continue
-                comparison_string += parsed_reference
+            if expression.comparator == ComparisonComparators.In:
+                # IN operator logic
+                comparison_string += self._format_in(mapped_field, expression.value)
             else:
-                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                  comparator=comparator, value=value)
+                if is_reference_value:
+                    parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
+                    if not parsed_reference:
+                        continue
+                    comparison_string += parsed_reference
+                else:
+                    comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                      comparator=comparator, value=value)
 
             if mapped_fields_count > 1:
                 comparison_string += " OR "
                 mapped_fields_count -= 1
+
         return comparison_string
 
     @staticmethod
@@ -123,6 +136,7 @@ class QueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
+
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
@@ -133,9 +147,6 @@ class QueryStringPatternTranslator:
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or \
                     expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
@@ -148,6 +159,7 @@ class QueryStringPatternTranslator:
 
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field,
                                                           mapped_fields_array)
+
             if len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"

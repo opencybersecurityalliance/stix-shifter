@@ -436,10 +436,17 @@ If the translation module uses multiple from-STIX mapping files, you can append 
 
 ```
 python main.py translate abc_security_monitor results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
-6a4751cae5ff", "name": "abc_security_monitor", "identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{ "stix_validator": true }'
+6a4751cae5ff", "name": "abc_security_monitor", "identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]'
 ```
 
-Adding the `stix_validator` option at the end will ensure the observed-data objects conform to the STIX 2 standard.
+By default, STIX 2.0 results will be returned. Adding the `{"stix_2.1": true}` option to the end of the CLI command will return STIX 2.1 objects. STIX 2.1 results can be validated against the 2.1 standard by including the `{"stix_validator": true }` option at the end. Only STIX 2.1 can be validated this way. For example:
+
+```
+python main.py translate abc_security_monitor results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-
+6a4751cae5ff", "name": "abc_security_monitor", "identity_class": "events"}' '[{"Url": "www.example.com", "SourcePort": 3000, "DestinationPort": 1000, "SourceIpV4": "192.0.2.0", "DestinationIpV4": "198.51.100.0", "NetworkProtocol": "TCP"}]' '{"stix_2.1": true, "stix_validator": true }'
+```
+
+An alternative way to validate both STIX 2.0 and 2.1 results is to use the [Bundle validator](../bundle_validator/README.md).
 
 2. Visually verify that all expected data is in the returned STIX bundle. If a data source field in your sample results is mapped in `to_stix_map.json`, the value must be in the STIX bundle under the mapped STIX property.
 

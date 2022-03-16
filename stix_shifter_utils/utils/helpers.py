@@ -1,3 +1,43 @@
+import json
+
+class StixObjectIdEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, StixObjectId):
+            return obj.object_id
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
+
+
+class StixObjectId(str):
+    object_id:str = None
+    def __init__(self, object_id):
+        self.object_id = object_id
+
+    def __str__(self):
+        return self.object_id
+    
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, another):
+        return hasattr(another, 'object_id') and self.object_id == another.object_id
+
+    def __hash__(self):
+        return hash(self.object_id)
+
+    def __add__(self, other):
+        return str(self.object_id) + other
+
+    def __radd__(self, other):
+        return other + str(self.object_id)
+
+    def split(self, sep=None):
+        return self.object_id.split(sep=sep)
+
+    def update(self, object_id):
+        self.object_id = object_id
+
+
 def dict_merge(dct, merge_dct, add_keys=True):
     """ 
     https://gist.github.com/angstwad/bf22d1822c38a92ec0a9?permalink_comment_id=2622319#gistcomment-2622319

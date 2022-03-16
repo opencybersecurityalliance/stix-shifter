@@ -12,6 +12,7 @@ from stix_shifter_utils.utils.proxy_host import ProxyHost
 from stix_shifter_utils.utils.module_discovery import process_dialects, modules_list
 from stix_shifter_utils.utils import logger as utils_logger
 from stix_shifter_utils.utils.logger import exception_to_string
+from stix_shifter_utils.utils.helpers import StixObjectIdEncoder
 
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
@@ -304,7 +305,7 @@ def main():
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
         log.info('STIX Results (written to stdout):\n')
-        print(json.dumps(result, indent=4, sort_keys=False))
+        print(json.dumps(result, indent=4, sort_keys=False, cls=StixObjectIdEncoder))
         exit(0)
 
     elif args.command == TRANSLATE:
@@ -332,7 +333,7 @@ def main():
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
-    print(json.dumps(result, indent=4, sort_keys=False))
+    print(json.dumps(result, indent=4, sort_keys=False, cls=StixObjectIdEncoder))
     exit(0)
 
 

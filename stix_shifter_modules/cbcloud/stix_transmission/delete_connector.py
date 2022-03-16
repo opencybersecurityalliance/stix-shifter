@@ -9,6 +9,7 @@ class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def delete_query_connection(self, search_id):
         response = self.api_client.delete_search(search_id)
@@ -33,6 +34,6 @@ class DeleteConnector(BaseDeleteConnector):
         if response_code == 204:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
 
         return return_obj

@@ -185,11 +185,6 @@
   ],
   "process_user": [
     {
-      "key": "windows-registry-key.creator_user_ref",
-      "object": "windows-registry-key",
-      "references": "authentication"
-    },
-    {
       "key": "process.creator_user_ref",
       "object": "process",
       "references": "authentication"

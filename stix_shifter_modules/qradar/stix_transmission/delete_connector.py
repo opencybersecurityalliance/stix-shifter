@@ -6,6 +6,7 @@ import json
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.connector = __name__.split('.')[1]
 
     def delete_query_connection(self, search_id):
         response = self.api_client.delete_search(search_id)
@@ -16,6 +17,6 @@ class DeleteConnector(BaseDeleteConnector):
         if response_code == 202:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, response_json, ['message'])
+            ErrorResponder.fill_error(return_obj, response_json, ['message'], connector=self.connector)
 
         return return_obj

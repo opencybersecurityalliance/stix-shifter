@@ -17,7 +17,8 @@ class Connector(BaseSyncConnector):
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
-        self.adal_response = Connector.generate_token(connection, configuration)
+        self.connector = __name__.split('.')[1]
+        self.adal_response = Connector.generate_token(self, connection, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']
             self.api_client = APIClient(connection, configuration)
@@ -37,7 +38,7 @@ class Connector(BaseSyncConnector):
         if 200 <= response_code < 300:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
 
     def delete_query_connection(self, search_id):
@@ -112,18 +113,18 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = update_node
 
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
 
         except Exception as ex:
             if response_dict is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_dict))
             else:
                 raise ex
         return return_obj
 
     @staticmethod
-    def generate_token(connection, configuration):
+    def generate_token(self, connection, configuration):
         """To generate the Token
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
@@ -148,8 +149,8 @@ class Connector(BaseSyncConnector):
         except Exception as ex:
             if ex.__class__.__name__ == 'AdalError':
                 response_dict = ex.error_response
-                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'],  connector=self.connector)
             else:
-                ErrorResponder.fill_error(return_obj, message=str(ex))
+                ErrorResponder.fill_error(return_obj, message=str(ex), connector=self.connector)
 
         return return_obj
