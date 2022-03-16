@@ -4,7 +4,7 @@ import json
 
 from stix_shifter_utils.utils.helpers import dict_merge
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
-from stix2validator import validate_instance, print_results
+from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.helpers import StixObjectId
@@ -34,7 +34,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
         ds2stix.bundle["objects"].append(value)
 
     if options.get('stix_validator'):
-        validated_result = validate_instance(ds2stix.bundle)
+        validated_result = validate_instance(ds2stix.bundle, ValidationOptions(version=ds2stix.spec_version))
         print_results(validated_result)
 
     return ds2stix.bundle
