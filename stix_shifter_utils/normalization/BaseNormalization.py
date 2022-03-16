@@ -14,9 +14,9 @@ import uuid
 """
 class BaseNormalization(object,metaclass=ABCMeta):
 
-    def __init__(self):
+    def __init__(self, options):
         self.logger = logger.set_logger(__name__)
-        self.stix_validator = False
+        self.stix_validator = options.get('stix_validator')
 
 
     def create_stix_bundle(self, version="2.1"):

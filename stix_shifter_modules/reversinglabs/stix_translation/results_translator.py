@@ -25,10 +25,10 @@ class ResultsTranslator(BaseResultTranslator):
   def find_hash_type_by_length(self, value):
     HASH_LENGTH = {'40': 'sha-1', '64': 'sha-256', '32': 'md5'}
     hash_type = HASH_LENGTH.get(str(len(value)), '')
-    if hash_type:
-      return "file:hashes.'{}'".format(hash_type.upper())
+    if hash_type in ['sha-1', 'sha-256']:
+        return "file:hashes.'{}'".format(hash_type.upper())
     else:
-      return ''
+        return "file:hashes.{}".format(hash_type.upper())
 
   def get_ip_address(self, ip):
     return 'ipv4' if isinstance(ip_network(ip), IPv4Network) else 'ipv6'
@@ -136,7 +136,7 @@ class ResultsTranslator(BaseResultTranslator):
   def get_malware_object(self, data):
     try:
     # Malware SDO only present in RL hash dataType
-      if data["dataType"] == 'hash' and data['rl'][0].get('malware_presence'):
+      if data["dataType"] == 'hash' and data['rl'][0].get('malware_presence') and data['rl'][0]['malware_presence'].get('classification'):
         classification = data['rl'][0]['malware_presence'].get('classification')
         malware = []
         malware_type = classification.get('type')
@@ -153,6 +153,7 @@ class ResultsTranslator(BaseResultTranslator):
 
     except ValueError:
       raise ValueError("Exception occurred to parse report data for malware SDO")
+
 
   def create_indicator_object(self, *properties):
     indicator_object = {}
@@ -313,7 +314,7 @@ class ResultsTranslator(BaseResultTranslator):
 
 
     # Create STIX Bundle and add SDOs
-    sdo_translator_object = sdo_translator.SdoTranslator(data_source, options=self.options)
+    sdo_translator_object = sdo_translator.SdoTranslator(self.options)
     stix_bundle = sdo_translator_object.create_stix_bundle()
 
     # Add Indentity SDO
