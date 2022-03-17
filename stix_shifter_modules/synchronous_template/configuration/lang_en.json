@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "cert": {
-            "label": "Synchronous dummy Connection Certificate",
+            "label": "Synchronous Connection Certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         },
         "sni": {

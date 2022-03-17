@@ -1,6 +1,6 @@
 # STIX Translation
 
-The steps below assume you have renamed the `async_dummy` module directory to our example connector name, `abc_security_monitor`.
+The steps below assume you have renamed the `async_template` module directory to our example connector name, `abc_security_monitor`.
 
 
 1. [Exploring the stix_translation directory](#step-1-exploring-the-stix_translation-directory)
@@ -203,7 +203,7 @@ Depending on your data source, edit this section to:
 - Append result limits and time windows.
 - Return a list of one or more queries. A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
 
-The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `<DIALECT>_from_stix_map.json`).
+The example provided in the template connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `<DIALECT>_from_stix_map.json`).
 
 [Back to top](#stix-translation)
 

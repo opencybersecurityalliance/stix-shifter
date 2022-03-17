@@ -163,4 +163,4 @@ Below example json is the language translation file of the above QRadar config j
 }
 ```
 
-For easier implementation, you can copy the json files from dummy modules (async_dummy or synchornous_dummy) and modify according the module requirements. You can also review the configuration json files of existing modules for reference. 
+For easier implementation, you can copy the json files from template modules (async_template or synchronous_template) and modify according the module requirements. You can also review the configuration json files of existing modules for reference. 
