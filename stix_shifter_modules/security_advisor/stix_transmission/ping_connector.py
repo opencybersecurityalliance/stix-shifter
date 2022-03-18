@@ -6,6 +6,7 @@ from .auth import Auth
 
 class PingConnector(BasePingConnector):
     def __init__(self, host, auth):
+        self.connector = __name__.split('.')[1]
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = Auth(api_key)
@@ -26,7 +27,7 @@ class PingConnector(BasePingConnector):
             header["Authorization"] = authorization
             
         except Exception as e:
-            ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message=str(e))
+            ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message=str(e), connector=self.connector)
             return return_obj
 
         try:
@@ -36,9 +37,9 @@ class PingConnector(BasePingConnector):
             if (response_code == 200):
                 return_obj["success"] = True
             else:
-                ErrorResponder.fill_error(return_obj, {'code':"service_not_availiable"}, message= "Status Code is " + str(response_code))
+                ErrorResponder.fill_error(return_obj, {'code':"service_not_availiable"}, message= "Status Code is " + str(response_code), connector=self.connector)
             return return_obj
 
         except Exception as e:
-            ErrorResponder.fill_error(return_obj, {'code':"service_not_availiable"}, message= str(e))
+            ErrorResponder.fill_error(return_obj, {'code':"service_not_availiable"}, message= str(e), connector=self.connector)
         return return_obj

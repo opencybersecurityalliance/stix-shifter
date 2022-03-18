@@ -26,18 +26,10 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.Equal: ":",
-        ComparisonComparators.NotEqual: ":",
-        ComparisonComparators.Like: ":",
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'AND'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()
@@ -110,7 +102,7 @@ class QueryStringPatternTranslator:
         return stix_field in ('src_ref.value', 'dst_ref.value')
 
     def _lookup_comparison_operator(self, expression_operator, dialect):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for VisionOne connector".format(expression_operator.name))
         if dialect == 'messageActivityData':
             if expression_operator in (ComparisonExpressionOperators.And, ComparisonExpressionOperators.Or):
@@ -119,7 +111,7 @@ class QueryStringPatternTranslator:
                     raise NotImplementedError("Multiple operator is not support in MDL")
             if expression_operator == ComparisonComparators.NotEqual:
                 raise NotImplementedError("NOT operator is not support in MDL")
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, dialect, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case

@@ -57,6 +57,9 @@ class AqlQueryTranslator(BaseQueryTranslator):
     def fetch_mapping(self, basepath, dialect, options):
         pass
 
+    def fetch_operators(self, basepath, dialect, options):
+        pass
+
     def __search_for_pattern(self, data, time_pattens, label):
         time_value = None
         for key, value in time_pattens.items():

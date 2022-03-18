@@ -8,6 +8,7 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def ping_connection(self):
         try:
@@ -28,7 +29,7 @@ class PingConnector(BasePingConnector):
                 except Exception as err:
                     self.logger.error('Response decode error: {}'.format(err))
                 error_obj['message'] = error_msg
-                ErrorResponder.fill_error(return_obj,error_obj,'message')
+                ErrorResponder.fill_error(return_obj,error_obj,'message', connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

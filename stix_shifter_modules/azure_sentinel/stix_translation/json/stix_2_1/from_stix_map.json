@@ -110,7 +110,7 @@
       "hostStates.os": ["hostStates.os"],
       "hostStates.privateIpAddress": ["hostStates.privateIpAddress"],
       "hostStates.riskScore": ["hostStates.riskScore"],
-      "id": ["id"],
+      "alert_id": ["id"],
       "incidentIds": ["incidentIds"],
       "lastModifiedDateTime": ["lastModifiedDateTime"],
       "malwareStates.category": ["malwareStates.category"],

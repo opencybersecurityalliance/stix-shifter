@@ -2,7 +2,7 @@ import unittest
 import logging
 from uuid import uuid4
 import types
-from collections import OrderedDict
+from collections.abc import OrderedDict
 
 from stix_shifter_modules.splunk.tests.stix_translation.patterns.translator import translate, SearchPlatforms, DataModels
 from .helpers.input_file_helpers import input_files, collect_targets

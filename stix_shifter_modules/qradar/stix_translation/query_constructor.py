@@ -24,27 +24,11 @@ TIMESTAMP_MILLISECONDS = "\.\d+Z$"
 
 
 class AqlQueryStringPatternTranslator:
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'MATCHES',
-        ComparisonComparators.IsSubSet: 'INCIDR',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, result_limit, options):
         self.options = options
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.result_limit = result_limit
         # List for any queries that are split due to START STOP qualifier
@@ -109,7 +93,7 @@ class AqlQueryStringPatternTranslator:
             return None
         if value_type == 'ipv4_cidr' or value_type == 'ipv6_cidr':
             # Comparator originally came in as '=' so it must be changed to INCIDR
-            comparator = self.comparator_lookup[ComparisonComparators.IsSubSet]
+            comparator = self.comparator_lookup["ComparisonComparators.IsSubSet"]
             return comparator + "(" + value + "," + mapped_field + ")"
         else:
             return "{mapped_field} {comparator} {value}".format(
@@ -148,7 +132,7 @@ class AqlQueryStringPatternTranslator:
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
                 if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
-                    comparator = self.comparator_lookup[ComparisonComparators.Like]
+                    comparator = self.comparator_lookup["ComparisonComparators.Like"]
                     value = self._format_like(expression.value)
 
                 comparison_string += "{mapped_field} {comparator} {value}".format(
@@ -165,9 +149,9 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for QRadar connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     @staticmethod
     def _parse_combined_observation_expression(self, expression):
