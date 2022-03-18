@@ -1,0 +1,65 @@
+{
+	"int_supported_fields": [
+      "action_local_port",
+      "action_remote_port",
+      "action_pkts_sent",
+      "action_pkts_received",
+      "action_file_size",
+      "action_module_process_os_pid",
+      "action_process_os_pid",
+      "actor_process_os_pid",
+      "causality_actor_process_os_pid",
+      "os_actor_process_os_pid",
+      "action_process_requested_parent_pid",
+      "action_thread_parent_pid",
+      "action_thread_child_pid"
+    ],
+    "timestamp_supported_fields": [
+      "action_file_access_time",
+      "actor_process_file_access_time",
+      "os_actor_process_file_access_time",
+      "action_file_mod_time",
+      "actor_process_file_mod_time",
+      "os_actor_process_file_mod_time",
+      "action_file_create_time",
+      "action_process_file_create_time",
+      "actor_process_file_create_time",
+      "causality_actor_process_file_create_time",
+      "os_actor_process_file_create_time",
+      "action_process_instance_execution_time",
+      "actor_process_execution_time",
+      "action_network_creation_time"
+    ],
+    "mac_supported_fields": [
+      "mac",
+      "associated_mac",
+      "dst_associated_mac",
+      "dst_mac"
+    ],
+    "enum_supported_fields": [
+      "action_network_protocol",
+      "agent_os_type",
+      "event_type"
+    ],
+	"enum_supported_values": {
+		  "action_network_protocol": ["TCP", "UDP"],
+		  "agent_os_type": ["AGENT_OS_LINUX", "AGENT_OS_MAC", "AGENT_OS_WINDOWS"],
+		   "event_type": [
+			  "AGENT_STATUS","CLOUD_AUDIT_LOGS","DEVICE","EVENT_LOG","FILE","GAP","HOST_FIREWALL",
+              "HOST_METADATA","HOST_STATUS","INJECTION","LOAD_IMAGE","LOGIN_EVENT","MOUNT","NAMESPACE",
+			  "NETWORK","PROCESS","PROCESS_HANDLE","REGISTRY","RPC_CALL","STORY","SYSTEM_CALL",
+			  "THREAD","USER_STATUS_CHANGE","VPN_EVENT"]
+	},
+	"timestamp_supported_dataset": {
+		"xdr_data": "_time"
+	},
+	"mandatory_properties_to_stix": {
+		"user": ["actor_primary_user_sid","action_process_user_sid"],
+		"file": ["action_file_name"],
+		"file_action_process" : ["action_process_image_name"],
+		"file_actor_process": ["actor_process_image_name"],
+		"file_causality_process": ["causality_actor_process_image_name"],
+		"file_os_actor": ["os_actor_process_image_name"],
+		"nt": [["action_local_ip","action_remote_ip"],"action_network_protocol"]
+	}
+}
