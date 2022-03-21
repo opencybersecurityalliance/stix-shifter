@@ -251,7 +251,9 @@ class BaseEntryPoint:
         self.__status_connector = connector
 
     @transmission
-    def create_status_connection(self, search_id):
+    def create_status_connection(self, search_id, metadata=None):
+        if metadata:
+            return self.__status_connector.create_status_connection(search_id, metadata)
         return self.__status_connector.create_status_connection(search_id)
 
     def set_results_connector(self, connector):
@@ -266,7 +268,9 @@ class BaseEntryPoint:
         return self.__results_connector.create_results_connection(search_id, offset, length)
 
     @transmission
-    def create_results_stix_connection(self, search_id, offset, length, data_source):
+    def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
+        if metadata:
+            return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
         return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
 
     def set_delete_connector(self, connector):
