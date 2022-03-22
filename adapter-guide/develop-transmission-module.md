@@ -1,13 +1,13 @@
 # STIX Transmission
 
-The steps below assume you have renamed the `async_dummy` module directory to our example connector name, `abc_security_monitor`.
+The steps below assume you have renamed the `async_template` module directory to our example connector name, `abc_security_monitor`.
 
 {: #transmission-mod}
 
 1. [Exploring the stix_transmission directory](#step-1-exploring-the-stix_transmission-directory)
 1. [Edit the apiclient.py file](#step-2-edit-the-apiclient-file)
-1. [Edit the dummy_connector.py file](#step-3-edit-the-dummy-connector-file)
-1. [Edit the dummy_error_mapper.py file](#step-4-edit-the-dummy-error-mapper-file)
+1. [Edit the template_connector.py file](#step-3-edit-the-template-connector-file)
+1. [Edit the template_error_mapper.py file](#step-4-edit-the-template-error-mapper-file)
 1. [Verify the implementation of each transmission method](#step-5-verify-each-transmission-method)
 
 ## Step 1. Exploring the stix_transmission directory
@@ -42,7 +42,7 @@ Edit the `api_client.py` APIClient class methods to make the relevant API calls 
   - Checking the status of a search
   - Retrieving the search results
 
-If supported by the data source, edit the `delete_search` method, otherwise leave it as it appears in the async_dummy connector.
+If supported by the data source, edit the `delete_search` method, otherwise leave it as it appears in the async_template connector.
 
 [Back to top](#create-a-transmission-module)
 

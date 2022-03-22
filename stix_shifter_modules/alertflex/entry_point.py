@@ -10,9 +10,6 @@ import os
 
 class EntryPoint(BaseEntryPoint):
 
-    # python main.py translate synchronous_dummy query '{}' "[ipv4-addr:value = '127.0.0.1']"
-    # python main.py translate synchronous_dummy:dialect1 query '{}' "[ipv4-addr:value = '127.0.0.1']"
-    # python main.py translate synchronous_dummy:dialect2 query '{}' "[ipv4-addr:value = '127.0.0.1']"
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(connection, configuration, options)

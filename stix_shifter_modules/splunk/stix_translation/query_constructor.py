@@ -21,7 +21,7 @@ class SplunkSearchTranslator:
         # FollowedBy could also be done with transactions, however the original event would not be returned, though a
         # all the fields in the original event would be present in the transaction result.
         # For [x FOLLOWEDBY y], first find the most recent y, get its timestamp, and look for x's that occur earlier.
-        # Use makeresults to inject a dummy event since a subsearch that yields no result will cause eval to error.
+        # Use makeresults to inject a placeholder event since a subsearch that yields no result will cause eval to error.
         # Presumably, no one will be looking for results prior to epoch=0.
         self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
