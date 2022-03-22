@@ -141,6 +141,15 @@ class TestStixToQuery(unittest.TestCase, object):
                   "\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
 
+    def test_in_operator(self):
+        stix_pattern = "[user-account:display_name IN ('abc', 'def')]"
+        query = translation.translate('sumologic', 'query', '{}', stix_pattern)
+        _, from_time, to_time = query_constructor.convert_timestamp(query)
+        queries = "{\"query\": \"displayName = \\\"abc\\\" OR displayName = \\\"def\\\"\", " \
+                  "\"fromTime\": \"%s\", \"toTime\": \"%s\"}" \
+                  % (from_time, to_time)
+        _test_query_assertions(query, queries)
+
     def test_user_account_last_login_query(self):
         stix_pattern = "[user-account:account_last_login = '2021-10-04T13:51:09.958Z']"
         query = translation.translate('sumologic', 'query', '{}', stix_pattern)

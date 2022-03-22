@@ -1,26 +1,30 @@
 # STIX Translation
 
-The steps below assume you have renamed the `async_dummy` module directory to our example connector name, `abc_security_monitor`.
+The steps below assume you have renamed the `async_template` module directory to our example connector name, `abc_security_monitor`.
 
 
 1. [Exploring the stix_translation directory](#step-1-exploring-the-stix_translation-directory)
 1. [Edit the from_stix_map.json file](#step-2-edit-the-from_stix_map-json-file)
-1. [Edit the query_constructor.py file](#step-3-edit-the-query-constructor-file)
-1. [Edit the to_stix_map.json file](#step-4-edit-the-to_stix_map-json-file)
-1. [If required by your data source, update the transformers.py file](#step-5-if-required-by-your-data-source-update-the-transformers-file)
-1. [Verify that the translation module was created successfully](#step-6-verify-that-the-translation-module-was-created-successfully)
+1. [Edit the operators.json file](#step-3-edit-the-operators-json-file)
+1. [Edit the query_constructor.py file](#step-4-edit-the-query-constructor-file)
+1. [Edit the to_stix_map.json file](#step-5-edit-the-to_stix_map-json-file)
+1. [Add custom data transformers (optional)](#step-6-add-custom-data-transformers-(optional))
+1. [Verify that the translation module was created successfully](#step-7-verify-that-the-translation-module-was-created-successfully)
 
 ## Step 1. Exploring the stix_translation directory
 
 Verify that your `stix_translation` directory contains the following folders and files.
 
-| Folder/file             | Why is it important? Where is it used?                                                                                                                                                                                                                                                                     |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| json/\<DIALECT\>_from_stix_map.json | These mapping files are used to translate a STIX pattern to a data source query result.                                                                                                                                                                                                                       |
-| json/to_stix_map.json   | This mapping file is used to translate a data source query result into STIX objects.                                                                                                                                                                                                                       |
-| \_\_init\_\_.py             | This file is required by Python to properly handle library directories.                                                                                                                                                                                                                                    |
-| query_constructor.py    | This file contains the QueryStringPatternTranslator class, which translates the ANTLR parsing of the STIX pattern to the native data source query.                                                                                                                                                         |
-| query_translator.py        | This file contains the QueryTranslator class, which inherits the BaseQueryTranslator class. <br><br>QueryTranslator calls out to the ANTLR parser, which returns a parsing of the STIX pattern. The parsing is then passed onto the query_constructor.py where it is translated into the native data source query. |
+| Folder/file             | Why is it important? Where is it used?                                                                                                                                                                                                                                                                     
+| ----------------------- | ------------------------------------------------------------------------------- |
+| json/\<DIALECT\>_from_stix_map.json | These mapping files are used to translate a STIX pattern to a data source query result.                                                        
+| json/to_stix_map.json   | This mapping file is used to translate a data source query result into STIX objects.
+| operators.json   | This file maps the STIX comparison and observation operators with the associated data source operators.
+| \_\_init\_\_.py         | This file is required by Python to properly handle library directories.
+| query_constructor.py    | This file contains the QueryStringPatternTranslator class, which translates the ANTLR parsing of the STIX pattern to the native data source query.
+| query_translator.py     | This file contains the QueryTranslator class, which inherits the BaseQueryTranslator class. <br><br>QueryTranslator calls out to the ANTLR parser, which returns a parsing of the STIX pattern. The parsing is then passed onto the query_constructor.py where it is translated into the native data source query. 
+| results_translator.py   | This file contains the ResultsTranslator class, which inherits the JSON ToStix class. 
+| transformers.py (optional)  | This optional file will contain any connector-specific data transformers that are not included in the shared `stix_shifter_utils/stix_translation/src/utils/transformers.py` file. 
 
 [Back to top](#stix-translation)
 
@@ -91,7 +95,48 @@ If your data source uses multiple dialects, rename the `<DIALECT>_from_stix_map.
 
 As shown below in [Step 4](#step-4-edit-the-to_stix_map-json-file), custom objects and properties are supported by the STIX standard and can be used when defining mappings. However, services using stix-shifter may be unaware of any custom elements and so only rely on standard STIX objects when constructing queries. Therefore it is recommended to stick to standard objects and attributes (as outlined in the STIX [documentation](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)) when constructing the `from_stix_map`.
 
-## Step 3. Edit the query constructor file
+## Step 3. Edit the operators.json file
+
+The `operators.json` file maps the STIX pattern operators to the data source query operators. Change the comparator values to match the operators supported in your data source.
+
+The default data source operators are ones used in an SQL query.
+
+Example:
+```
+{
+    "ComparisonExpressionOperators.And": "AND",
+    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonComparators.GreaterThan": ">",
+    "ComparisonComparators.GreaterThanOrEqual": ">=",
+    "ComparisonComparators.LessThan": "<",
+    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ComparisonComparators.Equal": "=",
+    "ComparisonComparators.NotEqual": "!=",
+    "ComparisonComparators.Like": "LIKE",
+    "ComparisonComparators.In": "IN",
+    "ComparisonComparators.Matches": "LIKE",
+    "ComparisonComparators.IsSubSet": "SUBSET",
+    "ComparisonComparators.IsSuperSet": "SUPERSET",
+    "ObservationOperators.Or": "OR",
+    "ObservationOperators.And": "OR"
+}
+```
+
+| STIX pattern operators                           | Data source query operators |
+| ------------------------------------------------ | --------------------------- |
+| ComparisonExpressionOperators.And                | And                         |
+| ComparisonExpressionOperators.Or                 | OR                          |
+| ComparisonExpressionOperators.GreaterThan        | >                           |
+| ComparisonExpressionOperators.GreaterThanOrEqual | >=                          |
+| ComparisonExpressionOperators.LessThan           | <                           |
+| ComparisonComparators.LessThanOrEqual            | <=                          |
+| ComparisonComparators.Equal                      | =                           |
+| ComparisonComparators.NotEqual                   | !=                          |
+| ComparisonComparators.Like                       | LIKE                        |
+| ComparisonComparators.In                         | IN                          |
+| ComparisonComparators.Matches                    | LIKE                        |
+
+## Step 4. Edit the query constructor file
 
 When a STIX pattern is translated by STIX-shifter, it is first parsed with ANTLR 4 into nested expression objects. The native data source query is constructed from these nested objects.
 
@@ -128,9 +173,9 @@ The `query_constructor.py` file is where the native query is built from the ANTL
 
 ---
 
-### How STIX-shifter handles unmapped STIX properties
+### How STIX-shifter handles unmapped STIX properties and operators
 
-If a STIX pattern contains an unmapped property, and any joining operators allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
+If a STIX pattern contains an unmapped property or operator, and any joining operators logically allow for it, that portion of the parsing is removed from the ANTLR objects. The modified ANTLR parsing is then transformed into one or more native queries by the query constructor. Looking at the following examples:
 
 `[stix_object:unmapped_property OR stix_object:mapped_property]`
 
@@ -154,29 +199,7 @@ _The pattern only contains one observation with one unmapped property; nothing w
 
 Edit the `query_constructor.py` file in the translation directory. Update the following sections based on the requirements of your data source.
 
-### 1. Define the comparator_lookup mapping
-
-The comparator_lookup maps the STIX pattern operators to the data source query operators. Change the comparator values to match the operators supported in your data source.
-
-The default operators that are defined in your translation module are the ones that are used in an SQL query.
-
-![Comparator lookup mapping](./images/comparator-lookup-mapping.png)
-
-| STIX pattern operators                           | Data source query operators |
-| ------------------------------------------------ | --------------------------- |
-| ComparisonExpressionOperators.And                | And                         |
-| ComparisonExpressionOperators.Or                 | OR                          |
-| ComparisonExpressionOperators.GreaterThan        | >                           |
-| ComparisonExpressionOperators.GreaterThanOrEqual | >=                          |
-| ComparisonExpressionOperators.LessThan           | <                           |
-| ComparisonComparators.LessThanOrEqual            | <=                          |
-| ComparisonComparators.Equal                      | =                           |
-| ComparisonComparators.NotEqual                   | !=                          |
-| ComparisonComparators.Like                       | LIKE                        |
-| ComparisonComparators.In                         | IN                          |
-| ComparisonComparators.Matches                    | LIKE                        |
-
-### 2. Define the \_parse_expression method
+### 1. Define the \_parse_expression method
 
 The ANTLR parsing is recursively run through the \_parse_expression method. The type of expression is determined on each iteration. When the expression is a ComparisonExpression, a query string is added to the final data source query.
 
@@ -195,7 +218,7 @@ ComparisonExpression(
 Would add the following string to the native query:
 `"SourcePort = 37020"`
 
-### 3. Define the final query that gets returned in the translate_pattern method
+### 2. Define the final query that gets returned in the translate_pattern method
 
 Depending on your data source, edit this section to:
 
@@ -203,11 +226,11 @@ Depending on your data source, edit this section to:
 - Append result limits and time windows.
 - Return a list of one or more queries. A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
 
-The example provided in the dummy connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `<DIALECT>_from_stix_map.json`).
+The example provided in the template connector is based on an SQL language. This should to be changed to fit with the native data source query language. Each string in the return list is a query that will be passed to the data source's API via the STIX transmission `<module>_connector.py`. If the data source does not use a query language, API end points and parameters could be defined here instead (in conjunction with `<DIALECT>_from_stix_map.json`).
 
 [Back to top](#stix-translation)
 
-## Step 4. Edit the to_stix_map JSON file
+## Step 5. Edit the to_stix_map JSON file
 
 The `to_stix_map.json` file is where you define HOW to translate data source query results into a bundle of STIX objects. Query results must be in JSON format; otherwise, the data source cannot be supported.
 
@@ -310,7 +333,7 @@ Using the same data source as in step 3, the following example shows a to-STIX m
 - Url is a simple mapping.
 - SourcePort and DestinationPort
   - Have matching "object" values, which cause the src_port and dst_port to be added to the same object (in this case, network-traffic).
-  - Uses the ToInteger transformer. Transformers are optional mapping attributes that apply a transformation method to the data before it is written to the STIX object. The existing transform methods are in `stix_shifter_utils/stix_translation/src/utils/transformers.py`. Any new transformers must be added to this file.
+  - Uses the ToInteger transformer. Transformers are optional mapping attributes that apply a transformation method to the data before it is written to the STIX object. The shared transform methods are in `stix_shifter_utils/stix_translation/src/utils/transformers.py`. Any new transformer classes must be added to the module's own `stix_shifter_modules/<module>/stix_translation/transformers.py` file.
 - SourceIpV4 and DestinationIpV4 contain two objects.
   - The first object creates an ipv4-addr object for each of the values. Given the field, the "object" property is set to either src_ip or dst_ip.
   - The second object in the mapping adds references in the network-traffic object to the ipv4-addr objects. Since the second part of the mappings has the object set to "nt", the references are added to the same network-traffic object that contains the source and destination ports.
@@ -392,17 +415,21 @@ The code for translating data source results to STIX is found in `stix_shifter_u
 
 [Back to top](#stix-translation)
 
-## Step 5. If required by your data source, update the transformers file
+## Step 6. Add custom data transformers (optional)
 
-The `transformers.py` file is located in `stix_shifter_utils/stix_translation/src/utils/transformers.py`. It contains classes that transform data formats. Each class has a method that takes in data and transforms it into the preferred format. For example, an integer value is transformed into a string. These classes can be used in cases such as:
+Sometimes data returned in the native results needs to be reformatted before getting added to a STIX object. For example, STIX may require a different timestamp format from what is returned by the data source. Transformer classes are used in these cases. The main `transformers.py` file is located in `stix_shifter_utils/stix_translation/src/utils/transformers.py`. It contains the shared classes that transform data formats. Each class has a method that takes in data and transforms it into the preferred format.  
 
-- When converting from STIX, the data source query language requires specific data formats. For example, time stamps. In this case, the format of a value in the STIX pattern must be transformed during pattern translation if the STIX and query language data formats are different.
+These classes can be used in cases such as:
+
+- When converting from STIX, the data source query language requires specific data formats.
 - When converting to STIX, the STIX object requires specific data formats. In this case, the format of a value that is returned in the data source results must be transformed during translation into a bundle of STIX objects. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for STIX data formats.
+
+If a connector requires a new transformer specific to the target data source, the class must be added to the `transformers.py` file within the module's `stix_translation` folder. If a transformers.py file doesn't exist in this folder, create a new one.
 
 [Back to top](#stix-translation)
 
 
-## Step 6. Verify that the translation module was created successfully
+## Step 7. Verify that the translation module was created successfully
 
 You must have access to the data source either through a UI or CLI so that you can run the translated query and confirm that it works.
 The translation module can be tested by calling the `main.py file` from the command line and passing in the required arguments. The order of arguments is as follows:
