@@ -1,9 +1,9 @@
-from stix_shifter_modules.async_dummy.entry_point import EntryPoint
+from stix_shifter_modules.async_template.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 import unittest
 
 
-class TestAsyncDummyConnection(unittest.TestCase, object):
+class TestAsyncTemplateConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
@@ -19,14 +19,14 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
                 }
         }
 
-    def test_dummy_async_query(self):
+    def test_template_async_query(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         query = "placeholder query text"
         query_response = entry_point.create_query_connection(query)
 
         assert query_response['search_id'] == "uuid_1234567890"
 
-    def test_dummy_async_status(self):
+    def test_template_async_status(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         query_id = "uuid_1234567890"
         status_response = entry_point.create_status_connection(query_id)
@@ -36,7 +36,7 @@ class TestAsyncDummyConnection(unittest.TestCase, object):
         status = status_response["status"]
         assert status == Status.COMPLETED.value
 
-    def test_dummy_async_results(self):
+    def test_template_async_results(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         query_id = "uuid_1234567890"
         results_response = entry_point.create_results_connection(query_id, 1, 1)
