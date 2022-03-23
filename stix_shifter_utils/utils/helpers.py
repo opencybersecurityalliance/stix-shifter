@@ -8,7 +8,7 @@ class StixObjectIdEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-class StixObjectId(str):
+class StixObjectId(object):
     object_id:str = None
     def __init__(self, object_id):
         self.object_id = object_id
