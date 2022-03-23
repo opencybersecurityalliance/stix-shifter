@@ -46,21 +46,6 @@ class Connector(BaseSyncConnector):
 
         return matching_sdos
 
-    
-    #METADATA_SAMPLE def create_status_connection(self, search_id, metadata=None):
-    #METADATA_SAMPLE     metadata_status_id = 0
-    #METADATA_SAMPLE     if metadata:
-    #METADATA_SAMPLE         metadata_status_id = int(metadata.get('metadata_status_id', 1))
-    #METADATA_SAMPLE     else:
-    #METADATA_SAMPLE         metadata = {}
-    #METADATA_SAMPLE     metadata_status_id += 1
-    #METADATA_SAMPLE     metadata['metadata_status_id'] = metadata_status_id
-    #METADATA_SAMPLE     status = "COMPLETED"
-    #METADATA_SAMPLE     if metadata_status_id < 3:
-    #METADATA_SAMPLE         status = "RUNNING"
-    #METADATA_SAMPLE     return {"success": True, "status": status, "progress": 100, 'metadata': metadata}
-
-
     def ping_connection(self):
         return_obj = dict()
 
@@ -76,16 +61,7 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
 
-    def create_results_connection(self, search_id, offset, length, metadata=None):
-
-        #METADATA_SAMPLE metadata_result_id = 0
-        #METADATA_SAMPLE if metadata:
-        #METADATA_SAMPLE     metadata_result_id = int(metadata.get('metadata_result_id', 0))
-        #METADATA_SAMPLE else:
-        #METADATA_SAMPLE     metadata = {}
-        #METADATA_SAMPLE metadata_result_id += 1
-        #METADATA_SAMPLE metadata['metadata_result_id'] = metadata_result_id
-            
+    def create_results_connection(self, search_id, offset, length):
         observations = []
         return_obj = dict()
 
@@ -134,8 +110,6 @@ class Connector(BaseSyncConnector):
                     ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex), connector=self.connector)
             except Exception as ex:
                 ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex), connector=self.connector)
-        if metadata:
-            return_obj['metadata'] = metadata
         return return_obj
 
     def delete_query_connection(self, search_id):
