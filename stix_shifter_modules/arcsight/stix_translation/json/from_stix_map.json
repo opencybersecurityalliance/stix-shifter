@@ -149,5 +149,11 @@
       "src_ip_ref.value": ["sourceAddress"],
       "dst_ip_ref.value": ["destinationAddress"]
     }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["deviceHostName", "deviceAssetName"],
+      "host_id": ["deviceAssetId"]
+    }
   }
 }
