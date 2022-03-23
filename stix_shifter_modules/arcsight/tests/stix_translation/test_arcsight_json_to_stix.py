@@ -1,7 +1,6 @@
 from textwrap import indent
 import unittest
 
-from itsdangerous import json
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.arcsight.entry_point import EntryPoint
