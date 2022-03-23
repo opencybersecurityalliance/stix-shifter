@@ -15,7 +15,7 @@ class APIClient():
         #                             cert_verify=connection.get('cert_verify', 'True')
         #                             )
 
-        # Placeholder client to allow dummy transmission calls.
+        # Placeholder client to allow transmission calls.
         # Remove when implementing data source API client.
         self.client = "data source API client"
 
