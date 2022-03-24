@@ -12,7 +12,7 @@ class APIClient():
         self.result_limit = connection['options'].get('result_limit')
         self.host = connection.get("host")
         self.database = connection.get("database")
-        self.table = connection.get("table")
+        self.table = connection['options'].get("table")
         self.port = connection.get("port")
         self.auth_plugin = 'mysql_native_password'
 
