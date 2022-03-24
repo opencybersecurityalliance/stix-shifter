@@ -236,8 +236,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     table = options.get('table')
-    if not table:
-        table = 'demo_siem'
 
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.
