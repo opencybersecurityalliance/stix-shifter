@@ -60,14 +60,17 @@ class StatusConnector(BaseStatusConnector):
 
             if response_code == 200:
                 if 'status' in response_text['reply'].keys():
+                    # Since PaloAlto API doesnt return the numerical value of progress, the value for Pending
+                    # status is set to 50. If the status is completed, it is set to 100.
                     if response_text['reply']['status'] == "PENDING":
                         return_obj['success'] = True
                         return_obj['status'] = StatusConnector.get_status('PENDING')
-                        return_obj['progress'] = 100
+                        return_obj['progress'] = 50
                     elif response_text['reply']['status'] == "SUCCESS":
                         if 'number_of_results' in response_text['reply'].keys():
                             return_obj['success'] = True
                             return_obj['status'] = StatusConnector.get_status('COMPLETED')
+                            return_obj['progress'] = 100
                         else:
                             raise InvalidResponseException
                     else:

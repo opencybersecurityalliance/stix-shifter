@@ -483,7 +483,7 @@
       "object": "user"
     },
     "action_process_user_sid": {
-      "key": "user-account.extensions.x-paloalto-user.process_user_id",
+      "key": "user-account.extensions.x-paloalto-user-ext.process_user_id",
       "object": "user"
     },
     "actor_primary_username": {
@@ -492,7 +492,7 @@
     },
     "action_process_username": [
       {
-        "key": "user-account.extensions.x-paloalto-user.process_user_name",
+        "key": "user-account.extensions.x-paloalto-user-ext.process_user_name",
         "object": "user"
       },
       {
@@ -506,166 +506,166 @@
       "object": "user"
     },
     "action_file_info_company": {
-      "key": "file.extensions.x-paloalto-file.company",
+      "key": "file.extensions.x-paloalto-file-ext.company",
       "object": "file"
     },
     "action_file_extension": {
-      "key": "file.extensions.x-paloalto-file.extension",
+      "key": "file.extensions.x-paloalto-file-ext.extension",
       "object": "file"
     },
     "action_file_attributes": {
-      "key": "file.extensions.x-paloalto-file.attributes",
+      "key": "file.extensions.x-paloalto-file-ext.attributes",
       "object": "file",
       "transformer": "ToInteger"
     },
     "action_file_internal_zipped_files": {
-      "key": "file.extensions.x-paloalto-file.zipped_files",
+      "key": "file.extensions.x-paloalto-file-ext.zipped_files",
       "object": "file"
     },
     "action_file_last_writer_actor": {
-      "key": "file.extensions.x-paloalto-file.writer",
+      "key": "file.extensions.x-paloalto-file-ext.writer",
       "object": "file"
     },
     "action_file_mode": {
-      "key": "file.extensions.x-paloalto-file.mode",
+      "key": "file.extensions.x-paloalto-file-ext.mode",
       "object": "file"
     },
     "action_file_signature_status": {
-      "key": "file.extensions.x-paloalto-file.signature_status",
+      "key": "file.extensions.x-paloalto-file-ext.signature_status",
       "object": "file",
       "transformer": "ToInteger"
     },
     "action_file_signature_vendor": {
-      "key": "file.extensions.x-paloalto-file.signature_vendor",
+      "key": "file.extensions.x-paloalto-file-ext.signature_vendor",
       "object": "file"
     },
     "action_file_signature_product": {
-      "key": "file.extensions.x-paloalto-file.signature_product",
+      "key": "file.extensions.x-paloalto-file-ext.signature_product",
       "object": "file"
     },
     "action_file_info_description": {
-      "key": "file.extensions.x-paloalto-file.file_description",
+      "key": "file.extensions.x-paloalto-file-ext.file_description",
       "object": "file"
     },
     "action_file_group": {
-      "key": "file.extensions.x-paloalto-file.group",
+      "key": "file.extensions.x-paloalto-file-ext.group",
       "object": "file"
     },
     "action_file_group_name": {
-      "key": "file.extensions.x-paloalto-file.group_name",
+      "key": "file.extensions.x-paloalto-file-ext.group_name",
       "object": "file"
     },
     "action_file_type": {
-      "key": "file.extensions.x-paloalto-file.type",
+      "key": "file.extensions.x-paloalto-file-ext.type",
       "object": "file",
       "transformer": "ToInteger"
     },
     "action_file_info_file_version": {
-      "key": "file.extensions.x-paloalto-file.version",
+      "key": "file.extensions.x-paloalto-file-ext.version",
       "object": "file"
     },
     "manifest_file_version": {
-      "key": "file.extensions.x-paloalto-file.manifest_version",
+      "key": "file.extensions.x-paloalto-file-ext.manifest_version",
       "object": "file",
       "transformer": "ToInteger"
     },
     "action_file_info_product_version": {
-      "key": "file.extensions.x-paloalto-file.product_version",
+      "key": "file.extensions.x-paloalto-file-ext.product_version",
       "object": "file"
     },
     "action_file_owner": {
-      "key": "file.extensions.x-paloalto-file.owner",
+      "key": "file.extensions.x-paloalto-file-ext.owner",
       "object": "file"
     },
     "action_file_owner_name": {
-      "key": "file.extensions.x-paloalto-file.owner_name",
+      "key": "file.extensions.x-paloalto-file-ext.owner_name",
       "object": "file"
     },
     "action_file_info_product_name": {
-      "key": "file.extensions.x-paloalto-file.product_name",
+      "key": "file.extensions.x-paloalto-file-ext.product_name",
       "object": "file"
     },
     "action_file_id": {
-      "key": "file.extensions.x-paloalto-file.id",
+      "key": "file.extensions.x-paloalto-file-ext.id",
       "object": "file"
     },
     "action_file_wildfire_verdict": {
-      "key": "file.extensions.x-paloalto-file.wildfire_verdict",
+      "key": "file.extensions.x-paloalto-file-ext.wildfire_verdict",
       "object": "file"
     },
     "action_file_hash_control_verdict": {
-      "key": "file.extensions.x-paloalto-process.control_verdict",
+      "key": "file.extensions.x-paloalto-process-ext.control_verdict",
       "object": "file"
     },
     "actor_process_instance_id": {
-      "key": "process.extensions.x-paloalto-process.instance_id",
+      "key": "process.extensions.x-paloalto-process-ext.instance_id",
       "object": "process_actor"
     },
     "actor_process_causality_id": {
-      "key": "process.extensions.x-paloalto-process.causality_id",
+      "key": "process.extensions.x-paloalto-process-ext.causality_id",
       "object": "process_actor"
     },
     "actor_process_auth_id": {
-      "key": "process.extensions.x-paloalto-process.auth_id",
+      "key": "process.extensions.x-paloalto-process-ext.auth_id",
       "object": "process_actor"
     },
     "actor_process_container_id": {
-      "key": "process.extensions.x-paloalto-process.container_id",
+      "key": "process.extensions.x-paloalto-process-ext.container_id",
       "object": "process_actor"
     },
     "actor_process_signature_vendor": {
-      "key": "process.extensions.x-paloalto-process.signature_vendor",
+      "key": "process.extensions.x-paloalto-process-ext.signature_vendor",
       "object": "process_actor"
     },
     "actor_process_signature_status": {
-      "key": "process.extensions.x-paloalto-process.signature_status",
+      "key": "process.extensions.x-paloalto-process-ext.signature_status",
       "object": "process_actor"
     },
     "actor_process_signature_product": {
-      "key": "process.extensions.x-paloalto-process.signature_product",
+      "key": "process.extensions.x-paloalto-process-ext.signature_product",
       "object": "process_actor"
     },
     "actor_process_image_extension": {
-      "key": "process.extensions.x-paloalto-process.extension",
+      "key": "process.extensions.x-paloalto-process-ext.extension",
       "object": "process_actor"
     },
     "action_process_termination_code": {
-      "key": "process.extensions.x-paloalto-process.termination_code",
+      "key": "process.extensions.x-paloalto-process-ext.termination_code",
       "object": "process_action",
       "transformer": "ToInteger"
     },
     "action_process_termination_date": {
-      "key": "process.extensions.x-paloalto-process.termination_date",
+      "key": "process.extensions.x-paloalto-process-ext.termination_date",
       "object": "process_action",
       "transformer": "EpochToTimestamp"
     },
     "action_remote_process_thread_id": {
-      "key": "process.extensions.x-paloalto-process.tid",
+      "key": "process.extensions.x-paloalto-process-ext.tid",
       "object": "process_action",
       "transformer": "ToInteger"
     },
     "action_process_instance_execution_time": {
-      "key": "process.extensions.x-paloalto-process.instance_exec_time",
+      "key": "process.extensions.x-paloalto-process-ext.instance_exec_time",
       "object": "process_action",
       "transformer": "EpochToTimestamp"
     },
     "actor_process_execution_time": {
-      "key": "process.extensions.x-paloalto-process.execution_time",
+      "key": "process.extensions.x-paloalto-process-ext.execution_time",
       "object": "process_actor",
       "transformer": "EpochToTimestamp"
     },
     "action_process_handle_is_kernel": {
-      "key": "process.extensions.x-paloalto-process.is_kernel",
+      "key": "process.extensions.x-paloalto-process-ext.is_kernel",
       "object": "process_action",
       "transformer": "StringToBool"
     },
     "action_process_is_container_root": {
-      "key": "process.extensions.x-paloalto-process.is_root",
+      "key": "process.extensions.x-paloalto-process-ext.is_root",
       "object": "process_action",
       "transformer": "StringToBool"
     },
     "actor_process_is_native": {
-      "key": "process.extensions.x-paloalto-process.is_native",
+      "key": "process.extensions.x-paloalto-process-ext.is_native",
       "object": "process_actor",
       "transformer": "StringToBool"
     },
@@ -791,29 +791,29 @@
       "object": "event"
     },
     "action_network_creation_time": {
-      "key": "network-traffic.extensions.x-paloalto-network.creation_time",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.creation_time",
       "object": "nt",
       "transformer": "EpochToTimestamp"
     },
     "action_network_connection_id": {
-      "key": "network-traffic.extensions.x-paloalto-network.connection_id",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.connection_id",
       "object": "nt"
     },
     "action_network_packet_data": {
-      "key": "network-traffic.extensions.x-paloalto-network.packet_data",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.packet_data",
       "object": "nt"
     },
     "action_proxy": {
-      "key": "network-traffic.extensions.x-paloalto-network.is_proxy",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.is_proxy",
       "object": "nt",
       "transformer": "StringToBool"
     },
     "host_metadata_hostname": {
-      "key": "network-traffic.extensions.x-paloalto-network.metadata_hostname",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.metadata_hostname",
       "object": "nt"
     },
     "action_external_hostname": {
-      "key": "network-traffic.extensions.x-paloalto-network.external_hostname",
+      "key": "network-traffic.extensions.x-paloalto-network-ext.external_hostname",
       "object": "nt"
     }
   }

@@ -4,18 +4,18 @@
             "label": "Management IP address or Hostname",
             "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
+        "quota_threshold": {
+            "label": "The quota limit for the API",
+            "description": "Prevents the connector from exceeding the quota threshold limit. The threshold range is from 1 to 4 units"
+        },
+        "additional_unit_quota_threshold": {
+            "label": "The quota limit for the API for the additionally purchased units",
+            "description": "Prevents the connector from exceeding the quota threshold limit of the additional units along with the standard license quota. The Threshold range is from 6 to 12 units"
+        },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
-        },
-        "result_limit": {
-            "label": "The Result limit for the connector",
-            "description": "The total number of results returned from the connector"
-        },
-        "quota_threshold": {
-            "label": "The quota limit for the API",
-            "description": "Prevents the connector from exceeding the quota threshold limit"
-}
+        }
     },
     "configuration": {
         "auth": {

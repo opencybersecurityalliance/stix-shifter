@@ -12,9 +12,7 @@ error_mapping = {
     "InvalidLicense": ErrorCode.TRANSMISSION_CONNECT,
     "InvalidJsonException": ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
     "MaxDailyQuotaException": ErrorCode.TRANSMISSION_CONNECT,
-    "TimeoutError": ErrorCode.TRANSMISSION_CONNECT,
-    "GeneralQuotaException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
-    "StreamNotImplemented": ErrorCode.TRANSMISSION_INVALID_PARAMETER
+    "TimeoutError": ErrorCode.TRANSMISSION_CONNECT
 }
 
 

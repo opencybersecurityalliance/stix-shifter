@@ -20,10 +20,15 @@ class StartStopQualifierValueException(Exception):
     pass
 
 
+class FileNotFoundException(Exception):
+    pass
+
+
 class QueryStringPatternTranslator:
     """
     translate stix pattern to native data source query language
     """
+
     def __init__(self, pattern: Pattern, data_model_mapper, options):
         logger.info("Palo Alto Cortex XDR Connector")
         self.dmm = data_model_mapper
@@ -43,11 +48,15 @@ class QueryStringPatternTranslator:
         :param rel_path_of_file: str
         :return: dict
         """
+
         _json_path = path.dirname(path.realpath(__file__)) + "/" + rel_path_of_file
-        if path.exists(_json_path):
-            with open(_json_path, encoding='utf-8') as f_obj:
-                return json.load(f_obj)
-        raise FileNotFoundError
+        try:
+            if path.exists(_json_path):
+                with open(_json_path, encoding='utf-8') as f_obj:
+                    return json.load(f_obj)
+            raise FileNotFoundException
+        except FileNotFoundException as e:
+            raise FileNotFoundError(f'{rel_path_of_file} not found') from e
 
     @staticmethod
     def _create_formatted_query(dmm, translated_query, timeframe, all_fields_map, options):
@@ -60,8 +69,7 @@ class QueryStringPatternTranslator:
         :param options:dict
         :return: formatted_query :list
         """
-        limit = options["result_limit"]  # The default result_limit is changed to 1000,
-        # since stream data feature is not supported
+        limit = options["result_limit"]
         dataset_name = dmm.dialect
         all_fields = all_fields_map["all_fields"]  # all_fields included in to_stix_mapping
         fields = ','.join(all_fields)

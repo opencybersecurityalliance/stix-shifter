@@ -6,22 +6,21 @@
         "host": {
             "type": "text"
         },
+        "quota_threshold": {
+            "default": 3,
+            "min": 1,
+            "max": 4,
+            "type": "number"
+        },
+        "additional_unit_quota_threshold": {
+            "default": 12,
+            "min": 6,
+            "max": 12,
+            "type": "number"
+        },
         "help": {
             "type": "link",
             "default": "data-sources.html"
-        },
-        "options": {
-            "type": "fields",
-            "result_limit": {
-                "default": 1000,
-                "min": 1,
-                "max": 1000,
-                "type": "number"
-            }
-        },
-        "quota_threshold": {
-            "default": 3.00,
-            "type": "float"
         }
     },
     "configuration": {

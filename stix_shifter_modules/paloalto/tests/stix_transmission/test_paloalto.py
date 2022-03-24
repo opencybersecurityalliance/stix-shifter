@@ -458,7 +458,31 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "The provided API Key does not have the required RBAC permissions to run this API" in \
                status_response['error']
 
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_max_quota_exception(self, mock_ping):
+        """test maximum quota threshold exception"""
+        response = {
+            'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 4, 'eval_quota': 0.0}}
+        mock_ping.side_effect = [MockResponse(MockStatusObj(200), json.dumps(response))]
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        query_response = transmission.query({})
+        assert query_response is not None
+        assert query_response['success'] is False
+        assert query_response['code'] == "service_unavailable"
+        assert "query usage exceeded max daily quota" in query_response['error']
 
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_max_additional_quota_exception(self, mock_ping):
+        """test maximum additional quota threshold exception"""
+        response = {
+            'reply': {'license_quota': 5, 'additional_purchased_quota': 10.0, 'used_quota': 12, 'eval_quota': 0.0}}
+        mock_ping.side_effect = [MockResponse(MockStatusObj(200), json.dumps(response))]
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        query_response = transmission.query({})
+        assert query_response is not None
+        assert query_response['success'] is False
+        assert query_response['code'] == "service_unavailable"
+        assert "query usage exceeded max daily quota" in query_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_quota_invalid_json_exception(self, mock_ping):
@@ -484,6 +508,28 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert ping_response['code'] == "service_unavailable"
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_invalid_host_for_status(self, mock_query):
+        """Test Invalid host for Status API"""
+        mock_query.side_effect = ConnectionError("Invalid Host")
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        status_response = transmission.status("123_inv")
+        assert status_response is not None
+        assert status_response['success'] is False
+        assert "Invalid Host" in status_response['error']
+        assert status_response['code'] == "service_unavailable"
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_invalid_host_for_results(self, mock_query):
+        """Test Invalid host for Results API"""
+        mock_query.side_effect = ConnectionError("Invalid Host")
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        results_response = transmission.results("123_inv", 0, 2)
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert "Invalid Host" in results_response['error']
+        assert results_response['code'] == "service_unavailable"
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_timeout_error(self, mock_ping):
         """Test Timeout Error"""
         mock_ping.side_effect = TimeoutError("timeout_error (30 sec)")
@@ -493,3 +539,51 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert ping_response['success'] is False
         assert "timeout_error (30 sec)" in ping_response['error']
         assert ping_response['code'] == "service_unavailable"
+
+    @patch('stix_shifter_modules.paloalto.stix_transmission.api_client.APIClient.get_stream_results')
+    @patch('stix_shifter_modules.paloalto.stix_transmission.api_client.APIClient.get_search_results')
+    def test_format_stream_data(self, mock_search_response, mock_stream_response):
+        stream_id = "123"
+        mocked_return_value = json.dumps({"reply": {"status": "SUCCESS",
+                                                    "number_of_results": 10001,
+                                                    "results": {"stream_id": stream_id}}})
+        mock_search_response.return_value = StatusResponse(200, mocked_return_value)
+        search_id = "e1d1b56ca81845_15180_inv"
+        stream_return_value = '{"dataset_name":"xdr_data","action_local_ip":"65.0.202.35","action_remote_ip":' \
+                              '"172.31.90.48","action_local_port":"50893","action_remote_port":"3389",' \
+                              '"action_network_protocol":"TCP"}'
+        mock_stream_response.return_value = StatusResponse(200, stream_return_value)
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        offset = 0
+        length = 3
+        result_response = transmission.results(search_id, offset, length)
+        assert result_response is not None
+        assert result_response['success'] is True
+        assert 'data' in result_response
+        assert result_response['data'] == [{'xdr_data': {'action_local_ip': '65.0.202.35',
+                                                         'action_network_protocol': 'TCP',
+                                                         'action_remote_ip': '172.31.90.48',
+                                                         'action_local_port': '50893',
+                                                         'action_remote_port': '3389'}}]
+
+    @patch('stix_shifter_modules.paloalto.stix_transmission.api_client.APIClient.get_search_results')
+    def test_result_with_empty_user_response(self, mock_result_response):
+        """test for valid result response"""
+        mocked_return_value = json.dumps({"reply": {"status": "SUCCESS",
+                                                    "number_of_results": 1,
+                                                    "results": {"data": [{"dataset_name": "xdr_data",
+                                                                          "actor_primary_user_sid": "S123",
+                                                                          "actor_primary_username": "username",
+                                                                          "actor_process_logon_id": "id12"}]}}})
+        mock_result_response.return_value = StatusResponse(200, mocked_return_value)
+        search_id = "62428d95420f47_24655_inv"
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
+        offset = 0
+        length = 3
+        result_response = transmission.results(search_id, offset, length)
+        assert result_response is not None
+        assert result_response['success'] is True
+        assert 'data' in result_response
+        assert result_response['data'] == [{'xdr_data': {'actor_primary_user_sid': 'S123',
+                                                         'actor_primary_username': 'username',
+                                                         'actor_process_logon_id': 'id12'}}]

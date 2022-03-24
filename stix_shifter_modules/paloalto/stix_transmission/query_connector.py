@@ -31,7 +31,6 @@ class QueryConnector(BaseQueryConnector):
                 return_obj['search_id'] = response_text['reply']
             else:
                 return_obj = ResponseMapper().status_code_mapping(response_code, response_text)
-
         except ValueError as ex:
             if response_wrapper is not None and not isinstance(response_wrapper, dict):
                 self.logger.debug(response_wrapper.read())

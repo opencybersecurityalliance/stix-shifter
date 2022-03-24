@@ -14,8 +14,9 @@
    |Connector Method|PaloAlto Cortex XDR API Endpoint| Method
    | ----           |   ------              | -----|
    |Query Endpoint  |https://<api-{fqdn}>/public_api/v1/xql/start_xql_query/|POST
-   |Result Endpoint|https://<api-{fqdn}>/public_api/v1/xql/get_query_results/|POST
-   |Quota Endpoint|https://<api-{fqdn}>/public_api/v1/xql/get_quota/|POST
+   |Result Endpoint |https://<api-{fqdn}>/public_api/v1/xql/get_query_results/|POST
+   |Stream Endpoint |https://<api-{fqdn}>/public_api/v1/xql/get_query_results_stream/|POST
+   |Quota Endpoint  |https://<api-{fqdn}>/public_api/v1/xql/get_quota/|POST
 
 ### Format for calling stix-shifter from the command line
 ```
@@ -978,7 +979,8 @@ paloalto
 - Queries called without enough quota will fail.
 
 ### Observations
-- The Maximum result limit of the connector is 1000, as the connector doesnt support the stream data feature which returns more than 1000 results.
+- The quota limit range for the API call would be from 1 to 4 units for the Standard license, and it will be from 6 to 12  
+  if additional units are purchased.
 
 ### References
 - [Cortex XDR](https://docs.paloaltonetworks.com/cortex/cortex-xdr.html)

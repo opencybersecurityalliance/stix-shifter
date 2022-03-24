@@ -10,11 +10,11 @@ TO_STIX_PATH = "../stix_translation/json/to_stix_map.json"
 CONFIG_MAP_PATH = "../stix_translation/json/config_map.json"
 
 
-class InvalidQueryException(Exception):
+class FileNotFoundException(Exception):
     pass
 
 
-class StreamNotImplementedException(Exception):
+class InvalidQueryException(Exception):
     pass
 
 
@@ -32,10 +32,13 @@ class ResultsConnector(BaseResultsConnector):
         :return: dict
         """
         _json_path = path.dirname(path.realpath(__file__)) + "/" + rel_path_of_file
-        if path.exists(_json_path):
-            with open(_json_path, encoding='utf-8') as f_obj:
-                return json.load(f_obj)
-        raise FileNotFoundError
+        try:
+            if path.exists(_json_path):
+                with open(_json_path, encoding='utf-8') as f_obj:
+                    return json.load(f_obj)
+            raise FileNotFoundException
+        except FileNotFoundException as e:
+            raise FileNotFoundError(f'{rel_path_of_file} not found') from e
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -45,33 +48,36 @@ class ResultsConnector(BaseResultsConnector):
         :param length: str, length value
         :return: dict
         """
-
         response_dict = {}
         return_obj = {}
         results = []
         response_wrapper = None
+        to_stix_mapping = ResultsConnector.load_json(TO_STIX_PATH)
+        mandatory_map = ResultsConnector.load_json(CONFIG_MAP_PATH)["mandatory_properties_to_stix"]
         try:
             min_range = int(offset)
             max_range = int(offset) + int(length)
-
             # Grab the response, extract the response code, and convert it to readable json
             response_wrapper = self.api_client.get_search_results(search_id)
-            response_code = response_wrapper.code
             response_text = json.loads(response_wrapper.read().decode('utf-8'))
-            if response_code != 200:
-                return_obj = ResponseMapper().status_code_mapping(response_code, response_text)
+            if response_wrapper.code != 200:
+                return_obj = ResponseMapper().status_code_mapping(response_wrapper.code, response_text)
             else:
                 if 'status' in response_text['reply'].keys() and response_text['reply']['status'] \
                         in ('SUCCESS', 'PARTIAL_SUCCESS'):
                     if 'data' in response_text['reply']['results'].keys() and \
                             response_text['reply']['number_of_results'] > 0:
-                        results = ResultsConnector.format_results_data(response_text['reply']['results']['data'])
+                        results = ResultsConnector.format_results_data(
+                            response_text['reply']['results']['data'], to_stix_mapping, mandatory_map)
                     elif 'stream_id' in response_text['reply']['results'].keys():
-                        raise StreamNotImplementedException
-                    # *** The stream data feature is not used currently. It may be implemented in future ***
-                    #    stream_wrapper = self.api_client.get_stream_results(response_text['reply']['results']
-                    #    ['stream_id'])
-                    #    results = ResultsConnector.format_stream_data(stream_wrapper.read().decode('utf-8'))
+                        stream_wrapper = self.api_client.get_stream_results(
+                            response_text['reply']['results']['stream_id'])
+                        if stream_wrapper.code != 200:
+                            return_obj = ResponseMapper().status_code_mapping(stream_wrapper.code,
+                                                                              stream_wrapper.read().decode('utf-8'))
+                        else:
+                            results = ResultsConnector.format_stream_data(stream_wrapper.read().decode('utf-8'),
+                                                                          to_stix_mapping, mandatory_map)
                     return_obj['success'] = True
                     return_obj['data'] = results[min_range:max_range] if results else []
 
@@ -90,10 +96,6 @@ class ResultsConnector(BaseResultsConnector):
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
-        except StreamNotImplementedException:
-            response_dict['type'] = "StreamNotImplemented"
-            response_dict['message'] = "Getting results from Stream Id is not implemented"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
         except Exception as ex:
             if 'timeout_error' in str(ex):
                 response_dict['type'] = 'TimeoutError'
@@ -105,15 +107,15 @@ class ResultsConnector(BaseResultsConnector):
         return return_obj
 
     @staticmethod
-    def format_results_data(result_data):
+    def format_results_data(result_data, to_stix_mapping, mandatory_map):
         """
         Format the results in json format
         :param result_data: list of dictionary items
+        :param to_stix_mapping: to stix mapping dictionary
+        :param mandatory_map: dictionary
         :return: list
         """
         results = []
-        to_stix_mapping = ResultsConnector.load_json(TO_STIX_PATH)
-        mandatory_map = ResultsConnector.load_json(CONFIG_MAP_PATH)["mandatory_properties_to_stix"]
         dataset_map = result_data[0]['dataset_name']
         try:
             for log in result_data:
@@ -131,6 +133,39 @@ class ResultsConnector(BaseResultsConnector):
 
                 results_dict[dataset] = data
                 results.append(results_dict)
+        except (KeyError, IndexError, TypeError) as e:
+            raise e
+        return results
+
+    @staticmethod
+    def format_stream_data(stream_data, to_stix_mapping, mandatory_map):
+        """
+        Format the stream data into json format
+        :param stream_data: string
+        :param to_stix_mapping: to stix mapping dictionary
+        :param mandatory_map: dictionary
+        :return: list
+        """
+        results = []
+        try:
+            temp_data = stream_data.split("\n")
+            dataset_map = json.loads(temp_data[0])['dataset_name']
+            for log in temp_data:
+                if log > " ":
+                    data = {}
+                    results_dict = {}
+                    dataset = ""
+                    log_dict = json.loads(log)
+                    for field, value in log_dict.items():
+                        if value is not None and value != "NULL" and value != '' and field != 'dataset_name' \
+                                and (field in to_stix_mapping[dataset_map].keys()):
+                            stix_data_map = to_stix_mapping[dataset_map][field]
+                            data = ResultsConnector.check_object(stix_data_map, mandatory_map,
+                                                                 data, log_dict, field, value)
+                        elif field == 'dataset_name':
+                            dataset = value
+                    results_dict[dataset] = data
+                    results.append(results_dict)
         except (KeyError, IndexError, TypeError) as e:
             raise e
         return results
@@ -180,14 +215,15 @@ class ResultsConnector(BaseResultsConnector):
         """
         try:
             if "file" in obj:
-                if log[mandatory_map[obj][0]] != "NULL" and log[mandatory_map[obj][0]] != '' and \
+                if mandatory_map[obj][0] in log.keys() and log[mandatory_map[obj][0]] != "NULL" and \
+                        log[mandatory_map[obj][0]] != '' and \
                         log[mandatory_map[obj][0]] is not None:
                     data[field] = value
             elif obj in ["user", "nt"]:
                 if obj == "nt":
                     data = ResultsConnector.process_nt_obj(mandatory_map, obj, data, log, value, field)
                 else:
-                    if any((log[item] != "NULL" and log[item] != '' and log[item] is not None)
+                    if any((item in log.keys() and log[item] != "NULL" and log[item] != '' and log[item] is not None)
                            for item in mandatory_map[obj]):
                         data[field] = value
         except (KeyError, IndexError, TypeError) as e:
@@ -209,7 +245,7 @@ class ResultsConnector(BaseResultsConnector):
         try:
             for i in mandatory_map[obj]:
                 if isinstance(i, list):
-                    if any((log[item] != "NULL" and log[item] != '' and log[item] is not None)
+                    if any((item in log.keys() and log[item] != "NULL" and log[item] != '' and log[item] is not None)
                             for item in i):
                         nt_obj = True
                 else:
@@ -220,29 +256,3 @@ class ResultsConnector(BaseResultsConnector):
         except (KeyError, IndexError, TypeError) as e:
             raise e
         return data
-
-    # *** The stream data feature is not used currently. It may be implemented in future ***
-    # @staticmethod
-    # def format_stream_data(stream_data):
-    #     """
-    #     Format the stream data into json format
-    #     :param stream_data: string
-    #     :return: list
-    #     """
-    #     results = []
-    #
-    #     temp_data = stream_data.split("\n")
-    #     for log in temp_data:
-    #         if log > " ":
-    #             data = {}
-    #             results_dict = {}
-    #             dataset = ""
-    #             for field, value in json.loads(log).items():
-    #                 if value is not None and (isinstance(value, str) and value.lower() != "null") \
-    #                         and field != 'dataset_name':
-    #                     data[field] = value
-    #                 elif field == 'dataset_name':
-    #                     dataset = value
-    #             results_dict[dataset] = data
-    #             results.append(results_dict)
-    #     return results

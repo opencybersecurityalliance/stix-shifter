@@ -82,7 +82,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter ((action_local_ip = \"172.31.90.48\" or "
                    "action_remote_ip = \"172.31.90.48\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645615464114 and to_epoch(_time,\"millis\") <= 1645615764114)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', 'timeframe': {"
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', 'timeframe': {"
                                                                                   "'from': 1645615464114, 'to': "
                                                                                   "1645615764114}}}"]
 
@@ -96,7 +96,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port = 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645615637334 and to_epoch(_time,\"millis\") <= 1645615937334))"
                    " | alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', 'timeframe': {"
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', 'timeframe': {"
                                                                           "'from': 1645615637334, 'to': "
                                                                           "1645615937334}}}"]
 
@@ -110,7 +110,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port > 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645615637334 and to_epoch(_time,\"millis\") <= 1645615937334))"
                    " | alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', 'timeframe': {"
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', 'timeframe': {"
                                                                           "'from': 1645615637334, 'to': "
                                                                           "1645615937334}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -123,7 +123,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port != 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645615637334 and to_epoch(_time,\"millis\") <= 1645615937334))"
                    " | alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', 'timeframe': {"
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', 'timeframe': {"
                                                                           "'from': 1645615637334, 'to': "
                                                                           "1645615937334}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -136,7 +136,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_network_protocol in (ENUM.TCP,"
                    "ENUM.UDP)  and "
                    "(to_epoch(_time,\"millis\") >= 1645635857746 and to_epoch(_time,\"millis\") <= 1645636157746)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645635857746, "
                                                                                   "'to': 1645636157746}}}"]
@@ -150,7 +150,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port <= 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645636616556 and to_epoch(_time,\"millis\") <= 1645636916556)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645636616556, 'to': "
                                                                           "1645636916556}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -163,7 +163,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port < 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645636370847 and to_epoch(_time,\"millis\") <= 1645636670847)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645636370847, 'to': "
                                                                           "1645636670847}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -176,7 +176,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port <= 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645636370847 and to_epoch(_time,\"millis\") <= 1645636670847)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645636370847, 'to': "
                                                                           "1645636670847}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -189,7 +189,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_remote_port >= 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645636370847 and to_epoch(_time,\"millis\") <= 1645636670847)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645636370847, 'to': "
                                                                           "1645636670847}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -207,7 +207,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "\"edr-2022-02-09_08-56-58-474-checksum.txt\" or os_actor_process_image_name contains "
                    "\"edr-2022-02-09_08-56-58-474-checksum.txt\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645635327346 and to_epoch(_time,\"millis\") <= 1645635627346)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645635327346, "
                                                                                   "'to': 1645635627346}}}"]
@@ -229,7 +229,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "\"SentinelOne_1.binlog\",\"edr-2022-02-09_08-56-58-47-checksum.txt\"))  and "
                    "(to_epoch(_time,\"millis\") >= 1645635327346 and to_epoch(_time,\"millis\") <= 1645635627346)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645635327346, 'to': "
                                                                           "1645635627346}}}"]
 
@@ -245,7 +245,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "causality_actor_process_image_name ~= \"^g.{2}.exe\" or os_actor_process_image_name ~= \"^g.{"
                    "2}.exe\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645635327346 and to_epoch(_time,\"millis\") <= 1645635627346)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645635327346, "
                                                                                   "'to': 1645635627346}}}"]
@@ -261,7 +261,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "associated_mac = \"12:83:0e:be:f3:1d\" or dst_associated_mac = \"12:83:0e:be:f3:1d\" or dst_mac "
                    "= \"12:83:0e:be:f3:1d\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645635857746 and to_epoch(_time,\"millis\") <= 1645636157746)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645635857746, "
                                                                                   "'to': 1645636157746}}}"]
@@ -277,7 +277,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "causality_actor_process_image_name !~= \"^g.{2}.exe\" or os_actor_process_image_name !~= \"^g.{"
                    "2}.exe\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645636692740 and to_epoch(_time,\"millis\") <= 1645636992740)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645636692740, "
                                                                                   "'to': 1645636992740}}}"]
@@ -294,7 +294,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "or os_actor_process_image_name not in (\"conhost.exe\",\"AtBroker.exe\"))  and "
                    "(to_epoch(_time,\"millis\") >= 1645636692740 and to_epoch(_time,\"millis\") <= 1645636992740)) "
                    "| alter "
-                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                           "'timeframe': {'from': 1645636692740, 'to': "
                                                                           "1645636992740}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -307,7 +307,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter (action_registry_value_name not contains "
                    "\"DeltaUpdateFailure\"  and "
                    "(to_epoch(_time,\"millis\") >= 1645638324427 and to_epoch(_time,\"millis\") <= 1645638624427)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645638324427, "
                                                                                   "'to': 1645638624427}}}"]
@@ -324,7 +324,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "causality_actor_process_image_name contains \"arp_cache.py\" or os_actor_process_image_name "
                    "contains \"arp_cache.py\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645638324427 and to_epoch(_time,\"millis\") <= 1645638624427)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645638324427, "
                                                                                   "'to': 1645638624427}}}"]
@@ -341,7 +341,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "\"^G.{5}U.{5}.exe\") or action_remote_port != 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645635761271 and to_epoch(_time,\"millis\") <= 1645636061271)) "
                    "| alter dataset_name = "
-                   "\"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "\"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                            "'timeframe': {'from': 1645635761271,"
                                                            " 'to': 1645636061271}}}"]
 
@@ -360,7 +360,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "actor_process_image_name not contains \"arp_cache.py\" or causality_actor_process_image_name not "
                    "contains \"arp_cache.py\" or os_actor_process_image_name not contains \"arp_cache.py\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645636692740 and to_epoch(_time,\"millis\") <= 1645636992740)) | "
-                   "alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                 "'timeframe': {'from': 1645636692740, "
                                                                                 "'to': 1645636992740}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -379,7 +379,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "5}U.{5}.exe\" or os_actor_process_image_name !~= \"^G.{5}U.{5}.exe\") or action_remote_port != "
                    "53996  and "
                    "(to_epoch(_time,\"millis\") >= 1645636966650 and to_epoch(_time,\"millis\") <= 1645637266650)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645636966650, "
                                                                                   "'to': 1645637266650}}}"]
@@ -403,7 +403,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "action_registry_value_name not contains \"SlotPerRow\"  and "
                    "(to_epoch(_time,\"millis\") >= 1645635857746 and to_epoch(_time,\"millis\") <= 1645636157746)) "
                    "| alter dataset_name = "
-                   "\"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "\"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                            "'timeframe': {'from': 1640995200030, "
                                                            "'to': 1645636157746}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -448,7 +448,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "= \"172.31.31.67\") and action_remote_port = 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1642590000000 and to_epoch(_time,\"millis\") <= 1644231600003)) "
                    "| alter dataset_name = "
-                   "\"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "\"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                            "'timeframe': {'from': 1642590000000, "
                                                            "'to': 1644231600003}}}"]
         queries = _remove_timestamp_from_query(queries)
@@ -472,7 +472,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "\"12:83:0e:be:f3:1d\" or dst_associated_mac = \"12:83:0e:be:f3:1d\" or dst_mac = "
                    "\"12:83:0e:be:f3:1d\")  and "
                    "(to_epoch(_time,\"millis\") >= 1641812400000 and to_epoch(_time,\"millis\") <= 1644058800003)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1641812400000, "
                                                                                   "'to': 1644058800003}}}"]
@@ -552,7 +552,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "causality_actor_process_file_create_time = 1643704990003 or os_actor_process_file_create_time = "
                    "1643704990003)  and "
                    "(to_epoch(_time,\"millis\") >= 1645635857746 and to_epoch(_time,\"millis\") <= 1645636157746)) "
-                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 1000 ', "
+                   "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', "
                                                                                   "'timeframe': {'from': "
                                                                                   "1645635857746, "
                                                                                   "'to': 1645636157746}}}"]
