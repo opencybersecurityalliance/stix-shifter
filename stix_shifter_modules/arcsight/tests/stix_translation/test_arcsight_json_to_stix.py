@@ -1,4 +1,3 @@
-from textwrap import indent
 import unittest
 
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
