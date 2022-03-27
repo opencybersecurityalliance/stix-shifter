@@ -6,6 +6,7 @@ from unicodedata import category
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_modules.ibm_security_verify.entry_point import EntryPoint
 <<<<<<< HEAD
+<<<<<<< HEAD
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
     get_module_transformers
 from stix_shifter_utils.utils.error_response import ErrorCode
@@ -14,6 +15,11 @@ from stix_shifter_utils.stix_translation.src.utils.transformer_utils import (
     get_module_transformers,
 )
 >>>>>>> a42fe57 (Rename test_stix_to_query.py to test_ibm_verify_stix_to_query.py)
+=======
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
+    get_module_transformers
+from stix_shifter_utils.utils.error_response import ErrorCode
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
 
 translation = stix_translation.StixTranslation()
 # config_file = open('stix_shifter_modules/verify_event/configuration/config.json').read()
@@ -111,6 +117,9 @@ class TestStixToQuery(unittest.TestCase, object):
         expected_query = 'event_type="sso","authentication"&from=1644131940000&to=1644304740000&size=10000'
         _test_query_assertions(query, expected_query)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
 
     def test_user_account_query(self):
         stix_pattern = "[user-account:user_id='ritkuma9@in.ibm.com'AND user-account:account_type='oidc']"
@@ -124,6 +133,7 @@ class TestStixToQuery(unittest.TestCase, object):
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value== result['code']
         assert 'wrong parameter : Comparison operator Or unsupported for ibm_security_verify connector' in result["error"]
+<<<<<<< HEAD
     
     def test_multipleFilter_query(self):
         stix_pattern = "[user-account:user_id='ritkuma9@in.ibm.com'OR user-account:account_type='oidc']"
@@ -134,3 +144,6 @@ class TestStixToQuery(unittest.TestCase, object):
         
 =======
 >>>>>>> a42fe57 (Rename test_stix_to_query.py to test_ibm_verify_stix_to_query.py)
+=======
+        
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)

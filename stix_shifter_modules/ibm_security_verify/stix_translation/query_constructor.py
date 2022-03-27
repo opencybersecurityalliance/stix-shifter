@@ -1,8 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import logging
 import re
 =======
 import json
+=======
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
 import logging
 import re
 <<<<<<< HEAD
@@ -35,6 +38,7 @@ logger = logging.getLogger(__name__)
 class QueryStringPatternTranslator:
     QUERIES = []
 <<<<<<< HEAD
+<<<<<<< HEAD
     comparator_lookup = {
         "ComparisonExpressionOperators.And": "&",
         "ComparisonComparators.Equal": "=",
@@ -51,6 +55,12 @@ class QueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator() 
 >>>>>>> 667f0e2 (removed operator_lookup from queryConstructor class and now refering to json file.)
+=======
+
+    def __init__(self, pattern: Pattern, data_model_mapper):
+        self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 

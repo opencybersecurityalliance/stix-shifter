@@ -6,6 +6,7 @@ from unicodedata import category
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_modules.ibm_security_verify.entry_point import EntryPoint
 <<<<<<< HEAD
+<<<<<<< HEAD
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
     get_module_transformers
 =======
@@ -13,6 +14,10 @@ from stix_shifter_utils.stix_translation.src.utils.transformer_utils import (
     get_module_transformers,
 )
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+from stix_shifter_utils.stix_translation.src.utils.transformer_utils import \
+    get_module_transformers
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
 
 translation = stix_translation.StixTranslation()
 # config_file = open('stix_shifter_modules/verify_event/configuration/config.json').read()
@@ -34,10 +39,14 @@ DATA_SOURCE = {
     "type": "identity",
     "id": "32a23267-52fb-4e82-859b-0a15d6a2d334",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "name": "ibm_securit_verify",
 =======
     "name": "verify",
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+    "name": "ibm_securit_verify",
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
     "identity_class": "events",
 }
 OPTION = json.dumps(DATA_SOURCE)
@@ -70,15 +79,20 @@ class TestTransformQuery(unittest.TestCase, object):
                 "city_name": "Kolkata",
                 "country_iso_code": "IN",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "ip": "192.168.1.1",
 =======
                 "ip": "47.15.98.56",
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+                "ip": "192.168.1.1",
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
                 "country_name": "India",
                 "region_name": "West Bengal",
                 "location": {"lon": "88.3697", "lat": "22.5697"},
                 "result": "success",
                 "subtype": "saml",
+<<<<<<< HEAD
 <<<<<<< HEAD
                 "providerid": "https://portal.banea.org:443/SAML20/SP",
                 "origin": "47.15.98.56",
@@ -91,15 +105,23 @@ class TestTransformQuery(unittest.TestCase, object):
                 "applicationname": "Bane",
 =======
                 "providerid": "https://portal.baneandox.org:443/SAML20/SP",
+=======
+                "providerid": "https://portal.banea.org:443/SAML20/SP",
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
                 "origin": "47.15.98.56",
                 "realm": "www.ibm.com",
-                "applicationid": "6773634223410562472",
-                "userid": "652001LT0R",
+                "applicationid": "67736342234105",
+                "userid": "652001L",
                 "applicationtype": "Custom Application",
                 "devicetype": "PAN GlobalProtect/5.2.4-21 (Microsoft Windows 10 Enterprise , 64-bit) Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko",
+<<<<<<< HEAD
                 "username": "dinepal1@in.ibm.com",
                 "applicationname": "Bane & Ox VPN",
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+                "username": "abc@in.ibm.com",
+                "applicationname": "Bane",
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
                 "year": 2022,
                 "billingid": "12345",
                 "mdmismanaged": "true",
@@ -115,19 +137,27 @@ class TestTransformQuery(unittest.TestCase, object):
                 "@processing_time": 1012,
                 "tenantid": "c92ce528-293f-4e84-8307-c4fe188b9461",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "tenantname": "is.ice.ibmcloud.com",
 =======
                 "tenantname": "isrras.ice.ibmcloud.com",
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+                "tenantname": "is.ice.ibmcloud.com",
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
                 "correlationid": "CORR_ID-a134f569-8d73-45ac-8d44-2457448c9101",
                 "servicename": "saml_runtime",
                 "id": "dc4523e6-6260-4349-83f8-3320365a5f25",
                 "time": 1642413141894,
                 "day": 17,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "sourcetype" : "oidc"
 =======
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+                "sourcetype" : "oidc"
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
             }
         ]
 
@@ -155,11 +185,17 @@ class TestTransformQuery(unittest.TestCase, object):
         assert event["extensions"]["x-iam-ext"]["is_device_compliant"] == "true"
         assert event["extensions"]["x-iam-ext"]["deviceid"] == "abc_device"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
        
         user_account = TestTransformQuery.get_first_of_type(objects.values(), "user-account")
         assert user_account["type"] == "user-account"
         assert user_account["user_id"] == "652001L"
         assert user_account["account_login"] == 'abc@in.ibm.com'
         assert user_account["account_type"] == 'oidc'
+<<<<<<< HEAD
 =======
 >>>>>>> e91c221 (Rename test_transform.py to test_ibm_verify_transform.py)
+=======
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)

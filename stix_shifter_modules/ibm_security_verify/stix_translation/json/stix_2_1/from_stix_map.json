@@ -3,10 +3,14 @@
     "fields": {
       "user_id": [
 <<<<<<< HEAD
+<<<<<<< HEAD
         "data.userid"
 =======
         "data.user_id"
 >>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
+=======
+        "data.userid"
+>>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
       ],
       "account_login": [
         "data.username"
