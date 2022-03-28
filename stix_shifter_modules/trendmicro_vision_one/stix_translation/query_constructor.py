@@ -60,21 +60,6 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _check_value_type(value):
-        value = str(value)
-        for key, pattern in observable.REGEX.items():
-            if key != 'date' and bool(re.search(pattern, value)):
-                return key
-        return None
-
-    def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
-        if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
-            return None
-        else:
-            return "{mapped_field} {comparator} {value}".format(
-                mapped_field=remove_enclosed_quote(mapped_field), comparator=comparator, value=value)
-
-    @staticmethod
-    def _check_value_type(value):
         """
         Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
         See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
@@ -89,6 +74,15 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
+    def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
+        if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
+            return None
+        else:
+            return "{mapped_field} {comparator} {value}".format(
+                mapped_field=remove_enclosed_quote(mapped_field), comparator=comparator, value=value)
+
+    
+
     def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
         """Convert a list of mapped fields into a query string."""
         comparison_strings = []
@@ -102,13 +96,7 @@ class QueryStringPatternTranslator:
             value_type = self._check_value_type(val)
 
             for mapped_field in mapped_fields_array:
-                # Only use the ipv4 fields when the value is an actual ipv4 address or range
-                skip = ('ipv4' in mapped_field and value_type not in ['ipv4', 'ipv4_cidr'])
-                # Only use the ipv6 fields when the value is an actual ipv6 address or range
-                skip = skip or ('ipv6' in mapped_field and value_type not in ['ipv6', 'ipv6_cidr'])
-
-                if not skip:
-                    comparison_strings.append(f'{mapped_field}{comparator}{val}')
+                comparison_strings.append(f'{mapped_field}{comparator}{val}')
 
         # Only wrap in () if there's more than one comparison string
         if len(comparison_strings) == 1:
