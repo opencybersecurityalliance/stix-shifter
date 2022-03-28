@@ -70,7 +70,7 @@ class QueryStringPatternTranslator:
         """
         value = str(value)
         for key, pattern in observable.REGEX.items():
-            if bool(re.search(pattern, value)):
+            if key != 'date' and bool(re.search(pattern, value)):
                 return key
         return None
 
