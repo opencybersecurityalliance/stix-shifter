@@ -9,7 +9,7 @@ class StixObjectIdEncoder(json.JSONEncoder):
 
 
 class StixObjectId(object):
-    object_id = None
+    object_id:str = None
     def __init__(self, object_id):
         self.object_id = object_id
 
@@ -24,6 +24,15 @@ class StixObjectId(object):
 
     def __hash__(self):
         return hash(self.object_id)
+
+    def __add__(self, other):
+        return str(self.object_id) + other
+
+    def __radd__(self, other):
+        return other + str(self.object_id)
+
+    def split(self, sep=None):
+        return self.object_id.split(sep=sep)
 
     def update(self, object_id):
         self.object_id = object_id
