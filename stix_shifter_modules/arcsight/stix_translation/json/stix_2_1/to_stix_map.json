@@ -135,20 +135,13 @@
       }
     ],
     "destinationProcessName": {
-      "key": "process.name",
-      "object": "process"
+      "key": "x-arcsight-event-destination.destination_process_name",
+      "object": "destination"
     },
-    "sourceProcessName": [
-      {
-        "key": "process.name",
-        "object": "parent_process"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
+    "sourceProcessName":  {
+      "key": "x-arcsight-event-source.source_process_name",
+      "object": "source"
+    },
     "destinationServiceName": {
       "key": "process.command_line",
       "object": "process"
@@ -676,20 +669,13 @@
       }
     ],
     "destinationProcessName": {
-      "key": "process.name",
-      "object": "process"
+      "key": "x-arcsight-event-destination.destination_process_name",
+      "object": "destination"
     },
-    "sourceProcessName": [
-      {
-        "key": "process.name",
-        "object": "parent_process"
-      },
-      {
-        "key": "process.parent_ref",
-        "object": "process",
-        "references": "parent_process"
-      }
-    ],
+    "sourceProcessName":  {
+      "key": "x-arcsight-event-source.source_process_name",
+      "object": "source"
+    },
     "destinationServiceName": {
       "key": "process.command_line",
       "object": "process"
@@ -896,7 +882,7 @@
     },
     "deviceSeverity": {
       "key": "x-oca-asset.extensions.x-device-ext.device_severity",
-      "object": "asset"
+      "object": "device"
     },
     "deviceEventCategory": {
       "key": "x-oca-event.category",
