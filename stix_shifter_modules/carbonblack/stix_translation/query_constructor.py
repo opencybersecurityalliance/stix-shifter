@@ -195,7 +195,7 @@ class CbQueryStringPatternTranslator:
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
             query_string = "({} {} {})".format(self._parse_expression(expression.expr2),
-                                                     self.comparator_lookup[str(expression.operator)],
+                                                     self.comparator_lookup[expression.operator],
                                                      self._parse_expression(expression.expr1))
 
             if qualifier is not None:
