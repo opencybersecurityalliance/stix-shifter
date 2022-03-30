@@ -13,16 +13,22 @@ class ResultsConnector(BaseResultsConnector):
             max_range = offset + length
             # Grab the response, extract the response code, and convert it to readable json
             response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
-            response_code = response_dict["code"]
+            if("code" in response_dict):
+                response_code = response_dict["code"]
+                self.logger.info(response_code)
+                print(response_code)
 
-            # # Construct a response object
-            return_obj = dict()
-            if response_code == 200:
-                return_obj['success'] = True
-                return_obj['data'] = response_dict['data']
+                # # Construct a response object
+                return_obj = dict()
+                if response_code == 200:
+                    return_obj['success'] = True
+                    return_obj['data'] = response_dict['data']
+                else:
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                return return_obj
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-            return return_obj
+                response = response_dict
+                self.logger.error('error when getting search results: {}'.format(response))
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
             import traceback
