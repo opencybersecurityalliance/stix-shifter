@@ -134,6 +134,9 @@ class TestStixToQuery(unittest.TestCase, object):
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value== result['code']
         assert 'wrong parameter : Comparison operator Or unsupported for ibm_security_verify connector' in result["error"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4b79f07 (fixed geo location attribute)
     
     def test_multipleFilter_query(self):
         stix_pattern = "[user-account:user_id='ritkuma9@in.ibm.com'OR user-account:account_type='oidc']"
@@ -141,9 +144,13 @@ class TestStixToQuery(unittest.TestCase, object):
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value== result['code']
         assert 'wrong parameter : Comparison operator Or unsupported for ibm_security_verify connector' in result["error"]
+<<<<<<< HEAD
         
 =======
 >>>>>>> a42fe57 (Rename test_stix_to_query.py to test_ibm_verify_stix_to_query.py)
 =======
         
 >>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
+=======
+        
+>>>>>>> 4b79f07 (fixed geo location attribute)

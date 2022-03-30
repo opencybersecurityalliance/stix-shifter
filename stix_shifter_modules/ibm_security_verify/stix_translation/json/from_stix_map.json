@@ -112,11 +112,15 @@
       ],
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       "extensions.'x-iam-ext'.lon": [
 =======
       "extensions.x-iam-ext.location_lon": [
 >>>>>>> c3f9e9d (mapping correction for geoloaction)
+=======
+      "extensions.'x-iam-ext'.location_lon": [
+>>>>>>> 4b79f07 (fixed geo location attribute)
         "geoip.lon"
       ],
       "extensions.'x-iam-ext'.location_lat": [
