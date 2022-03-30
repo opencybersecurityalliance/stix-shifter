@@ -22,28 +22,29 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        #ComparisonExpressionOperators.Or: "OR",
-        #ComparisonComparators.GreaterThan: ">",
-        #ComparisonComparators.GreaterThanOrEqual: ">=",
-        #ComparisonComparators.LessThan: "<",
-        #ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        #ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        #ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        #ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'AND'
-    }
+    # comparator_lookup = {
+    #     ComparisonExpressionOperators.And: "AND",
+    #     #ComparisonExpressionOperators.Or: "OR",
+    #     #ComparisonComparators.GreaterThan: ">",
+    #     #ComparisonComparators.GreaterThanOrEqual: ">=",
+    #     #ComparisonComparators.LessThan: "<",
+    #     #ComparisonComparators.LessThanOrEqual: "<=",
+    #     ComparisonComparators.Equal: "=",
+    #     #ComparisonComparators.NotEqual: "!=",
+    #     ComparisonComparators.Like: "LIKE",
+    #     #ComparisonComparators.In: "IN",
+    #     ComparisonComparators.Matches: 'LIKE',
+    #     # ComparisonComparators.IsSubSet: '',
+    #     # ComparisonComparators.IsSuperSet: '',
+    #     #ObservationOperators.Or: 'OR',
+    #     # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+    #     ObservationOperators.And: 'AND'
+    # }
     return_obj = dict()
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -86,7 +87,7 @@ class QueryStringPatternTranslator:
         return "NOT ({})".format(comparison_string)
 
     @staticmethod
-    def _check_value_type(value):  
+    def _check_value_type(value):
         value = str(value)
         for key, pattern in observable.REGEX.items():
             if key != 'date' and bool(re.search(pattern, value)):
@@ -117,7 +118,7 @@ class QueryStringPatternTranslator:
                     continue
                 comparison_string += parsed_reference
             else:
-                # Test of input query has two of the same mapped fields, connector does not support complex queries 
+                # Test of input query has two of the same mapped fields, connector does not support complex queries
                 if mapped_field in self.return_obj:
                     #self.return_obj['valid'] = False
                     #ErrorResponder.fill_error(response, message="Query Not Supported")
@@ -138,9 +139,11 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        # if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        # return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -169,7 +172,7 @@ class QueryStringPatternTranslator:
                 value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
-            
+
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
             if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
@@ -236,7 +239,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
 
     trustar_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     query = trustar_query_translator.translated
-    
+
     start = re.search('STARTt\'(.+?)Z', query)
     stop = re.search('STOPt\'(.+?)Z', query)
 
