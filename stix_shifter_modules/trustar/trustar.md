@@ -8,6 +8,7 @@ REST Web Service APIs: https://docs.trustar.co/api/v13/
 ​
 This example input pattern:
 ​
+
 python main.py translate trustar query '{}' "[x-trustar-report:searchTerm LIKE '%'] START t'2022-01-04T07:34:00.000Z' STOP t'2022-01-04T08:34:00.000Z'"
 
 will return
