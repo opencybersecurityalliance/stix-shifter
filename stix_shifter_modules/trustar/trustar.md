@@ -26,7 +26,7 @@ will return
 
 ```
 
- python main.py execute trustar trustar '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "events"}' '{"host": "", "port": }' '{"auth": {"clientId":"", "clientSecret": ""}}' "[x-trustar-report:searchTerm LIKE '%'] START t'2022-01-04T07:34:00.000Z' STOP t'2022-01-04T08:34:00.000Z'"
+ python main.py execute trustar trustar '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "trustar","identity_class": "events"}' '{"host": "", "port": }' '{"auth": {"clientId":"", "clientSecret": ""}}' "[x-trustar-report:searchTerm LIKE '%'] START t'2022-01-04T07:34:00.000Z' STOP t'2022-01-04T08:34:00.000Z'"
 
 ```
 Returns:
