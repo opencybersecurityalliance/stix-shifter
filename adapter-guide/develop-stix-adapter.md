@@ -24,7 +24,7 @@ By implementing a new connector, _Developer A_ allows _Product A_ to fit into th
 
 ## Prerequisites
 
-- Your development environment must use Python 3.6.
+- Your development environment must use any of the follow Python versions: 3.6, 3.7, 3.8 and 3.9.
 - You must have access to the target data source. In the sample scenario, you must have access to Product A data source.
 - You must be familiar with Product A's query language and APIs.
 - You must be familiar or understand the following concepts:
@@ -45,7 +45,7 @@ To develop a STIX-shifter connector for a data source:
 
 ### Create a module folder
 
-Connector modules are stored under the `stix_shifter_modules` directory. To help you get started with creating a new connector, two module templates are available. If your data source executes queries synchronously (there is no API call to check the status of the query), make a copy of the `synchronous_dummy` folder in the `stix_shifter_modules` directory. If your data source executes queries asynchronously, make a copy of the `async_dummy` folder. The instructions that follow use the async template as an example.
+Connector modules are stored under the `stix_shifter_modules` directory. To help you get started with creating a new connector, two module templates are available. If your data source executes queries synchronously (there is no API call to check the status of the query), make a copy of the `synchronous_template` folder in the `stix_shifter_modules` directory. If your data source executes queries asynchronously, make a copy of the `async_template` folder. The instructions that follow use the async template as an example.
 
 Rename the copied folder to match the data source your new connector is being developed for. For example, `abc_security_monitor`.
 

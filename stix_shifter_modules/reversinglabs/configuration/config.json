@@ -1,0 +1,32 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "ReversingLabs"
+        },
+        "host": {
+            "type": "text"
+        },
+        "port": {
+            "type": "number",
+            "default": 443
+        },
+        "help": {
+            "type": "link",
+            "default": "www.ibm.com"
+        },
+        "namespace":{
+            "type": "text"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username" : {
+                "type": "text"
+            },
+            "password": {
+                "type": "password"
+            }
+        }
+    }
+}

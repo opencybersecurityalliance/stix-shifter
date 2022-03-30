@@ -1,0 +1,53 @@
+{
+  "domain-name": {
+    "fields": {
+      "value": ["host"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["text"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["user"]
+    }
+  },
+  "process": {
+    "fields":{
+      "command_line": ["cmdline"],
+      "pid": ["pid"],
+      "creator_user_ref": ["user"],
+      "created_time": ["timestamp", "start"],
+      "parent_ref": ["ppid"]
+    }
+  },
+  "x-datadog-event": {
+    "fields": {
+      "priority": ["priority"],
+      "monitor_id": ["monitor_id"],
+      "tags": ["tags"],
+      "is_aggregate": ["unaggregated"],
+      "alert_type": ["alert_type"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "start": ["start"],
+      "end": ["end"],
+      "time_observed": ["date_happened"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": ["id", "id_str"],
+      "outcome": ["title"],
+      "module": ["source"],
+      "agent": ["device_name"],
+      "created": ["date_happened"],
+      "original_ref.payload_bin": ["text"],
+      "domain_ref.value": ["host"]
+    }
+  }
+}

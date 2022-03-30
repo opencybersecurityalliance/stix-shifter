@@ -317,8 +317,8 @@
       "object": "logger_finding"
     },
     "assetCriticality": {
-      "key": "x-arcsight-event.asset_criticality",
-      "object": "event"
+      "key": "x-oca-asset.extensions.x-device-ext.asset_criticality",
+      "object": "asset"
     },
     "modelConfidence": {
       "key": "x-arcsight-event.model_confidence",
@@ -354,12 +354,12 @@
       "transformer": "EpochToTimestamp"
     },
     "deviceSeverity": {
-      "key": "x-arcsight-event-device.device_severity",
-      "object": "device"
+      "key": "x-oca-asset.extensions.x-device-ext.device_severity",
+      "object": "asset"
     },
     "deviceEventCategory": {
-      "key": "x-arcsight-event-device.device_event_category",
-      "object": "device"
+      "key": "x-oca-event.category",
+      "object": "oca_event"
     },
     "deviceVersion": {
       "key": "x-arcsight-event-device.device_version",
@@ -367,13 +367,8 @@
     },
     "deviceHostName": [
       {
-        "key": "domain-name.value",
-        "object": "device_domain_name"
-      },
-      {
-        "key": "x-arcsight-event-device.device_domain_name_ref",
-        "object": "device",
-        "references": "device_domain_name"
+        "key": "x-oca-asset.hostname",
+        "object": "asset"
       }
     ],
     "deviceAddress": [
@@ -382,18 +377,18 @@
         "object": "device_ip"
       },
       {
-        "key": "x-arcsight-event-device.device_address_ref",
-        "object": "device",
-        "references": "device_ip"
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": ["device_ip"]
       }
     ],
 	"deviceAssetId": {
-      "key": "x-arcsight-event-device.device_asset_id",
-      "object": "device"
+      "key": "x-oca-asset.host_id",
+      "object": "asset"
     },
 	"deviceAssetName": {
-      "key": "x-arcsight-event-device.device_asset_name",
-      "object": "device"
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
     },
 	"deviceDnsDomain": {
       "key": "x-arcsight-event-device.device_dns_domain",
@@ -417,8 +412,8 @@
     },
     "destinationAssetId": [
       {
-      "key": "x-arcsight-event-destination.destination_asset_id",
-      "object": "destination"
+      "key": "x-oca-asset.extensions.x-destination-ext.destination_asset_id",
+      "object": "asset"
       },
       {
       "key": "x-ibm-finding.dst_device",
@@ -426,8 +421,8 @@
       }
     ],
     "destinationAssetName": {
-      "key": "x-arcsight-event-destination.destination_asset_name",
-      "object": "destination"
+      "key": "x-oca-asset.extensions.x-destination-ext.destination_asset_name",
+      "object": "asset"
     },
     "destinationDnsDomain": {
       "key": "x-arcsight-event-destination.destination_dns_domain",
@@ -473,8 +468,8 @@
     },
     "sourceAssetId": [
       {
-      "key": "x-arcsight-event-source.source_asset_id",
-      "object": "source"
+      "key": "x-oca-asset.extensions.x-source-ext.source_asset_id",
+      "object": "asset"
       },
       {
       "key": "x-ibm-finding.src_device",
@@ -482,8 +477,8 @@
       }
     ],
     "sourceAssetName": {
-      "key": "x-arcsight-event-source.source_asset_name",
-      "object": "source"
+      "key": "x-oca-asset.extensions.x-source-ext.source_asset_name",
+      "object": "asset"
     },
     "sourceDnsDomain": {
       "key": "x-arcsight-event-source.source_dns_domain",
@@ -863,8 +858,8 @@
       "object": "logger_finding"
     },
     "assetCriticality": {
-      "key": "x-arcsight-event.asset_criticality",
-      "object": "event"
+      "key": "x-oca-asset.extensions.x-device-ext.asset_criticality",
+      "object": "asset"
     },
     "modelConfidence": {
       "key": "x-arcsight-event.model_confidence",
@@ -900,12 +895,12 @@
       "transformer": "EpochToTimestamp"
     },
     "deviceSeverity": {
-      "key": "x-arcsight-event-device.device_severity",
-      "object": "device"
+      "key": "x-oca-asset.extensions.x-device-ext.device_severity",
+      "object": "asset"
     },
     "deviceEventCategory": {
-      "key": "x-arcsight-event-device.device_event_category",
-      "object": "device"
+      "key": "x-oca-event.category",
+      "object": "oca_event"
     },
     "deviceVersion": {
       "key": "x-arcsight-event-device.device_version",
@@ -928,18 +923,18 @@
         "object": "device_ip"
       },
       {
-        "key": "x-arcsight-event-device.device_address_ref",
-        "object": "device",
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
         "references": "device_ip"
       }
     ],
 	"deviceAssetId": {
-      "key": "x-arcsight-event-device.device_asset_id",
-      "object": "device"
+      "key": "x-oca-asset.host_id",
+      "object": "asset"
     },
 	"deviceAssetName": {
-      "key": "x-arcsight-event-device.device_asset_name",
-      "object": "device"
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
     },
 	"deviceDnsDomain": {
       "key": "x-arcsight-event-device.device_dns_domain",
@@ -963,8 +958,8 @@
     },
     "destinationAssetId": [
       {
-      "key": "x-arcsight-event-destination.destination_asset_id",
-      "object": "destination"
+      "key": "x-oca-asset.destination_asset_id",
+      "object": "asset"
       },
       {
       "key": "x-ibm-finding.dst_device",
@@ -972,8 +967,8 @@
       }
     ],
     "destinationAssetName": {
-      "key": "x-arcsight-event-destination.destination_asset_name",
-      "object": "destination"
+      "key": "x-oca-asset.destination_asset_name",
+      "object": "asset"
     },
     "destinationDnsDomain": {
       "key": "x-arcsight-event-destination.destination_dns_domain",
@@ -1019,8 +1014,8 @@
       },
     "sourceAssetId": [
       {
-      "key": "x-arcsight-event-source.source_asset_id",
-      "object": "source"
+      "key": "x-oca-asset.source_asset_id",
+      "object": "asset"
       },
       {
       "key": "x-ibm-finding.src_device",
@@ -1028,8 +1023,8 @@
       }
     ],
     "sourceAssetName": {
-      "key": "x-arcsight-event-source.source_asset_name",
-      "object": "source"
+      "key": "x-oca-asset.source_asset_name",
+      "object": "asset"
     },
     "sourceDnsDomain": {
       "key": "x-arcsight-event-source.source_dns_domain",

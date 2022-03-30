@@ -1,0 +1,110 @@
+{
+  "x-proofpoint": {
+    "fields": {
+        "threatstatus": ["threatStatus"],
+        "threattype": ["threatType"]
+      }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "ccAddresses", 
+        "fromAddress", 
+        "headerFrom", 
+        "headerReplyTo",
+        "replyToAddress",
+        "toAddresses",
+        "recipient",
+        "sender",
+        "headerTo",
+        "headerCC"
+      ]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "cc_refs": [
+        "ccAddresses",
+        "headerCC"
+      ],
+      "from_ref": [
+        "fromAddress",
+        "headerFrom",
+        "headerReplyTo",
+        "replyToAddress"
+      ],
+      "to_refs": [
+        "toAddresses", 
+        "recipient", 
+        "headerTo"
+      ],
+      "body_multipart": ["messageParts"],
+      "date": ["messageTime"],
+      "sender_ref": ["sender"],
+      "subject": ["subject"],
+      "is_multipart": ["is_multipart"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "senderIP",
+        "clickIP"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "senderIP",
+        "clickIP"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref": [
+        "senderIP",
+        "clickIP"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "threatUrl",
+        "url"
+      ]
+    }
+  },
+  "x-proofpoint-msgevents": {
+    "fields": {
+        "guid": ["GUID"],
+        "xmailer": ["xmailer"],
+        "cluster": ["cluster"],
+        "rewrittenstatus": ["completelyRewritten"],
+        "impostorscore": ["impostorScore"],
+        "malwareScore": ["malwareScore"],
+        "messageid": ["messageID"],
+        "size": ["messageSize"],
+        "modulesrun": ["modulesRun"],
+        "phishscore": ["phishScore"],
+        "policyroutes": ["policyRoutes"],
+        "quarantinefolder": ["quarantineFolder"],
+        "quarantinerule": ["quarantineRule"],
+        "senderip": ["senderIP"],
+        "spamscore": ["spamScore"],
+        "campaignid": ["campaignID"],
+        "classification": ["classification"],
+        "threat": ["threat"],
+        "threatid": ["threatID"],
+        "threatstatus": ["threatStatus"],
+        "threattime": ["threatTime"],
+        "threattype": ["threatType"],
+        "clicktime": ["clickTime"],
+        "qid": ["QID"],
+        "clusterid": ["clusterId"],
+        "useragent": ["userAgent"]
+      }
+  }
+}

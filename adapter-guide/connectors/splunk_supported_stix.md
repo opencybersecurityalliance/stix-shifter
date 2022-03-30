@@ -1,14 +1,33 @@
+##### Updated on 02/04/22
 ## Splunk Enterprise Security
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | encoders.like |
+| IN | encoders.set |
+| MATCHES | encoders.matches |
+| AND | {expr1} OR {expr2} |
+| OR | {expr1} OR {expr2} |
+| ISSUBSET | = |
+| FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | _raw |
+| artifact | mime_type | mime_type_raw |
 | <br> | | |
 | directory | path | file_path |
 | directory | created | file_create_time |
 | directory | modified | file_modify_time |
 | <br> | | |
 | domain-name | value | url |
-| domain-name | value | host |
 | <br> | | |
 | email-addr | value | src_user |
 | <br> | | |
@@ -56,6 +75,20 @@
 | windows-registry-key | creator_user_ref | process_user |
 | windows-registry-key | key | object_path |
 | <br> | | |
+| x-ibm-finding | name | ss_name |
+| x-ibm-finding | src_device | DeviceType |
+| x-ibm-finding | severity | severity |
+| <br> | | |
+| x-splunk | log_source | source |
+| x-splunk | log_source_type | _sourcetype |
+| x-splunk | direction | Direction |
+| x-splunk | event_id | EventID |
+| x-splunk | mitre_tactic_id | TacticId |
+| x-splunk | mitre_tactic | Tactic |
+| x-splunk | mitre_technique_id | TechniqueId |
+| x-splunk | mitre_technique | Technique |
+| x-splunk | event_name | EventName |
+| <br> | | |
 | x509-certificate | hashes.SHA-256 | ssl_hash |
 | x509-certificate | version | ssl_version |
 | x509-certificate | serial_number | ssl_serial |
@@ -66,18 +99,4 @@
 | <br> | | |
 | x_splunk_spl | user | user |
 | x_splunk_spl | bytes | bytes |
-| <br> | | |
-| x-splunk | log_source | source |
-| x-splunk | log_source_type | _sourcetype |
-| x-splunk | direction | Direction |
-| x-splunk | event_id | EventID |
-| x-splunk | event_name | EventName |
-| x-splunk | mitre_tactic_id | TacticId |
-| x-splunk | mitre_tactic | Tactic |
-| x-splunk | mitre_technique_id | TechniqueId |
-| x-splunk | mitre_technique | Technique |
-| <br> | | |
-| x-ibm-finding | name | ss_name |
-| x-ibm-finding | src_device | DeviceType |
-| x-ibm-finding | severity | severity |
 | <br> | | |

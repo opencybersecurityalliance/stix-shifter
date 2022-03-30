@@ -1,14 +1,38 @@
+##### Updated on 02/04/22
 ## IBM QRadar
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | LIKE |
+| IN | IN |
+| MATCHES | MATCHES |
+| ISSUBSET | INCIDR |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | UTF8(payload) |
+| artifact | mime_type | mime_type_eventpayload |
 | artifact | payload_bin | flowsourcepayload |
+| artifact | mime_type | mime_type_flowsourcepayload |
 | artifact | payload_bin | flowdestinationpayload |
+| artifact | mime_type | mime_type_flowdestinationpayload |
 | artifact | payload_bin | Message |
+| artifact | mime_type | mime_type_message |
 | <br> | | |
 | directory | path | "File Path" |
 | directory | path | Image |
 | directory | path | ParentImage |
+| directory | path | TargetImage |
+| directory | path | SourceImage |
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
@@ -29,6 +53,10 @@
 | file | parent_directory_ref | Image |
 | file | name | ParentImage |
 | file | parent_directory_ref | ParentImage |
+| file | name | TargetImage |
+| file | parent_directory_ref | TargetImage |
+| file | name | SourceImage |
+| file | parent_directory_ref | SourceImage |
 | file | name | ServiceFileName |
 | file | parent_directory_ref | ServiceFileName |
 | <br> | | |
@@ -82,6 +110,8 @@
 | process | pid | "Process ID" |
 | process | pid | "Parent Process ID" |
 | process | parent_ref | "Parent Process ID" |
+| process | binary_ref | TargetImage |
+| process | binary_ref | SourceImage |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
 | <br> | | |
 | software | name | applicationname |
@@ -111,20 +141,11 @@
 | x-ibm-finding | name | "CRE Name" |
 | x-ibm-finding | description | "CRE Description" |
 | <br> | | |
-| x-ibm-windows | targetimage | TargetImage |
-| x-ibm-windows | granted_access | "Granted Access" |
-| x-ibm-windows | call_trace | "Call Trace" |
-| x-ibm-windows | source_image | SourceImage |
-| x-ibm-windows | pipe_name | PipeName |
-| x-ibm-windows | start_module | StartModule |
-| x-ibm-windows | start_function | StartFunction |
-| x-ibm-windows | signed | Signed |
-| x-ibm-windows | imphash | "IMP Hash" |
-| <br> | | |
 | x-oca-asset | ip_refs | identityip |
 | x-oca-asset | hostname | identityhostname |
 | x-oca-asset | ip_refs | sourceaddress |
 | x-oca-asset | mac_refs | sourcemac |
+| x-oca-asset | hostname | "Machine ID" |
 | <br> | | |
 | x-oca-event | user_ref | username |
 | x-oca-event | outcome | CATEGORYNAME(category) |
@@ -155,8 +176,10 @@
 | x-oca-event | parent_process_ref | "Parent Process ID" |
 | x-oca-event | registry_ref | ObjectName |
 | x-oca-event | registry_ref | "Registry Value Name" |
+| x-oca-event | process_ref | SourceImage |
 | x-oca-event | original_ref | Message |
 | x-oca-event | original | Message |
+| x-oca-event | host_ref | "Machine ID" |
 | <br> | | |
 | x-qradar | category_id | category |
 | x-qradar | high_level_category_id | highlevelcategory |

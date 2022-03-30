@@ -1,0 +1,545 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["source.ip", "destination.ip", "client.ip", "server.ip", "host.ip", "dns.resolved_ip"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["source.mac", "destination.mac", "client.mac", "server.mac", "host.mac"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["source.port", "client.port"],
+      "dst_port": ["destination.port", "server.port"],
+      "protocols[*]": ["network.transport", "network.type", "network.protocol"],
+      "src_ref.value": ["source.ip", "client.ip"],
+      "dst_ref.value": ["destination.ip", "server.ip"],
+      "src_byte_count": ["source.bytes", "client.bytes"],
+      "dst_byte_count": ["destination.bytes", "server.bytes"],
+      "src_packets": ["source.packets", "client.packets"],
+      "dst_packets": ["destination.packets", "server.packets"]
+    }
+  },
+  "x-ecs-network": {
+    "fields": {
+      "inner.vlan.vlan_id": ["network.inner.vlan.id"],
+      "inner.vlan.name": ["network.inner.vlan.name"],
+      "name": ["network.name"],
+      "application": ["network.application"],
+      "direction": ["network.direction"],
+      "forwarded_ip": ["network.forwarded_ip"],
+      "community_id": ["network.community_id"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["event.original"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["file.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable"],
+      "ctime": ["file.created"],
+      "size": ["file.size"],
+      "hashes.MD5": ["file.hash.md5"],
+      "hashes.'SHA-1'": ["file.hash.sha1"],
+      "hashes.'SHA-256'": ["file.hash.sha256"],
+      "hashes.'SHA-512'": ["file.hash.sha512"],
+      "parent_directory_ref.path": ["file.directory"]
+    }
+  },
+  "x-ecs-file": {
+    "fields": {
+      "accessed": ["file.accessed"],
+      "attributes": ["file.attributes"],
+      "ctime": ["file.ctime"],
+      "device": ["file.device"],
+      "drive_letter": ["file.drive_letter"],
+      "extension": ["file.extension"],
+      "gid": ["file.gid"],
+      "group": ["file.group"],
+      "inode": ["file.inode"],
+      "mime_type": ["file.mime_type"],
+      "mode": ["file.mode"],
+      "mtime": ["file.mtime"],
+      "owner": ["file.owner"],
+      "path": ["file.path"],
+      "target_path": ["file.target_path"],
+      "type": ["file.type"],
+      "uid": ["file.uid"],
+      "pe.company": ["file.pe.company"],
+      "pe.description": ["file.pe.description"],
+      "pe.file_version": ["file.pe.file_version"],
+      "pe.original_file_name": ["file.pe.original_file_name"],
+      "pe.product": ["file.pe.product"],
+      "code_signature.exists": ["file.code_signature.exists"],
+      "code_signature.status": ["file.code_signature.status"],
+      "code_signature.subject_name": ["file.code_signature.subject_name"],
+      "code_signature.trusted": ["file.code_signature.trusted"],
+      "code_signature.valid": ["file.code_signature.valid"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["file.directory", "file.path"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["user.name", "user.id"],
+      "account_login": ["user.name"]
+    }
+  },
+  "x-ecs-user": {
+    "fields": {
+      "domain": ["user.domain"],
+      "full_name": ["user.full_name"],
+      "hash": ["user.hash"],
+      "user_id": ["user.id"],
+      "group_domain": ["user.group.domain"],
+      "group_id": ["user.group.id"],
+      "group_name": ["user.group.name"]
+    }
+  },
+  "process" : {
+    "fields": {
+      "command_line": ["process.command_line", "powershell.command.value"],
+      "created_time": ["process.start"],
+      "pid": ["process.pid", "process.ppid", "process.parent.pid", "process.parent.ppid"],
+      "creator_user_ref.user_id": ["user.name"],
+      "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "parent_ref.name": ["process.parent.name"],
+      "image_ref.name": ["process.executable", "process.parent.executable"],
+      "x_ttp_tags": ["tags"]
+    }
+  },
+  "x-ecs-process": {
+    "fields": {
+      "args": ["process.args"],
+      "args_count": ["process.args_count"],
+      "executable": ["process.executable"],
+      "entity_id": ["process.entity_id"],
+      "exit_code": ["process.exit_code"],
+      "thread.thread_id": ["process.thread.id"],
+      "thread.name": ["process.thread.name"],
+      "title": ["process.title"],
+      "uptime": ["process.uptime"],
+      "working_directory": ["process.working_directory"],
+      "parent.args": ["process.parent.args"],
+      "parent.args_count": ["process.parent.args_count"],
+      "parent.entity_id": ["process.parent.entity_id"],
+      "parent.exit_code": ["process.parent.exit_code"],
+      "parent.pgid": ["process.parent.pgid"],
+      "parent.thread.thread_id": ["process.parent.thread.id"],
+      "parent.thread.name": ["process.parent.thread.name"],
+      "parent.title": ["process.parent.title"],
+      "parent.uptime": ["process.parent.uptime"],
+      "parent.working_directory": ["process.parent.working_directory"],
+      "pe.company": ["process.pe.company"],
+      "pe.description": ["process.pe.description"],
+      "pe.file_version": ["process.pe.file_version"],
+      "pe.original_file_name": ["process.pe.original_file_name"],
+      "pe.product": ["process.pe.product"],
+      "code_signature.exists": ["process.code_signature.exists"],
+      "code_signature.status": ["process.code_signature.status"],
+      "code_signature.subject_name": ["process.code_signature.subject_name"],
+      "code_signature.trusted": ["process.code_signature.trusted"],
+      "code_signature.valid": ["process.code_signature.valid"],
+      "parent.code_signature.exists": ["process.parent.code_signature.exists"],
+      "parent.code_signature.status": ["process.parent.code_signature.status"],
+      "parent.code_signature.subject_name": ["process.parent.code_signature.subject_name"],
+      "parent.code_signature.trusted": ["process.parent.code_signature.trusted"],
+      "parent.code_signature.valid": ["process.parent.code_signature.valid"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url.original"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["registry.key"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["agent.name"]
+    }
+  },
+  "autonomous-system": {
+    "fields": {
+      "value": ["client.as.organization.name", "server.as.organization.name", "source.as.organization.name", "destination.as.organization.name"],
+      "number": ["client.as.number", "server.as.number", "source.as.number", "destination.as.number"]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "name": ["user.email"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": ["event.action"],
+      "event_id": ["event.id"],
+      "category": ["event.category"],
+      "code": ["event.code"],
+      "created": ["event.created"],
+      "dataset": ["event.dataset"],
+      "duration": ["event.duration"],
+      "end": ["event.end"],
+      "hash": ["event.hash"],
+      "ingested": ["event.ingested"],
+      "kind": ["event.kind"],
+      "module": ["event.module"],
+      "outcome": ["event.outcome"],
+      "provider": ["event.provider"],
+      "risk_score": ["event.risk_score"],
+      "risk_score_norm": ["event.risk_score_norm"],
+      "sequence": ["event.sequence"],
+      "severity": ["event.severity"],
+      "start": ["event.start"],
+      "timezone": ["event.timezone"],
+      "type": ["event.type"],
+      "url": ["event.url"],
+      "original": ["message", "powershell.file.script_block_text"],
+      "process_ref.pid": ["process.pid"],
+      "process_ref.name": ["process.name"],
+      "process_ref.command_line": ["process.command_line", "powershell.command.value"],
+      "process_ref.image_ref.name": ["file.name", "process.executable"],
+      "process_ref.parent_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "process_ref.parent_ref.command_line": ["process.parent.command_line"],
+      "process_ref.creator_user_ref.user_id": ["user.name"],
+      "parent_process_ref.pid": ["process.ppid", "process.parent.ppid"],
+      "parent_process_ref.command_line": ["process.parent.command_line"],
+      "domain_ref.value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname"],
+      "file_ref.name": ["file.name"],
+      "host_ref.hostname": ["host.hostname"],
+      "host_ref.name": ["host.name"],
+      "registry_ref.key": ["registry.key", "registry.path"]
+    }
+  },
+  "x-ecs-cloud": {
+    "fields": {
+      "account.account_id": ["cloud.account.id"],
+      "availability_zone": ["cloud.availability_zone"],
+      "instance.instance_id": ["cloud.instance.id"],
+      "instance.name": ["cloud.instance.name"],
+      "machine.type": ["cloud.machine.type"],
+      "provider": ["cloud.provider"],
+      "region": ["cloud.region"]
+    }
+  },
+  "x-ecs-container": {
+    "fields": {
+      "container_id": ["container.id"],
+      "image.name": ["container.image.name"],
+      "image.tag": ["container.image.tag"],
+      "labels": ["container.labels"],
+      "name": ["container.name"],
+      "runtime": ["container.runtime"]
+    }
+  },
+  "x-ecs-dll": {
+    "fields": {
+      "name": ["dll.name"],
+      "path": ["dll.path"],
+      "pe.company": ["dll.pe.company"],
+      "pe.description": ["dll.pe.description"],
+      "pe.file_version": ["dll.pe.file_version"],
+      "pe.original_file_name": ["dll.pe.original_file_name"],
+      "pe.product": ["dll.pe.product"],
+      "code_signature.exists": ["dll.code_signature.exists"],
+      "code_signature.status": ["dll.code_signature.status"],
+      "code_signature.subject_name": ["dll.code_signature.subject_name"],
+      "code_signature.trusted": ["dll.code_signature.trusted"],
+      "code_signature.valid": ["dll.code_signature.valid"]
+    }
+  },
+  "x-ecs-dns": {
+    "fields": {
+      "answers_class": ["dns.answers.class"],
+      "answers_data": ["dns.answers.data"],
+      "answers_name": ["dns.answers.name"],
+      "answers_ttl": ["dns.answers.ttl"],
+      "answers_type": ["dns.answers.type"],
+      "header_flags": ["dns.header_flags"],
+      "dns_id": ["dns.id"],
+      "op_code": ["dns.op_code"],
+      "question_class": ["dns.question.class"],
+      "question_name": ["dns.question.name"],
+      "question_registered_domain": ["dns.question.registered_domain"],
+      "question_subdomain": ["dns.question.subdomain"],
+      "question_top_level_domain": ["dns.question.top_level_domain"],
+      "question_type": ["dns.question.type"],
+      "resolved_ip": ["dns.resolved_ip"],
+      "response_code": ["dns.response_code"],
+      "type": ["dns.type"]
+    }
+  },
+  "x-ecs": {
+    "fields": {
+      "version": ["ecs.version"]
+    }
+  },
+  "x-ecs-error": {
+    "fields": {
+      "code": ["error.code"],
+      "error_id": ["error.id"],
+      "message": ["error.message"],
+      "stack_trace": ["error.stack_trace"],
+      "type": ["error.type"]
+    }
+  },
+  "x-ecs-group": {
+    "fields": {
+      "domain": ["group.domain"],
+      "group_id": ["group.id"],
+      "name": ["group.name"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "architecture": ["host.architecture"],
+      "domain": ["host.domain"],
+      "hostname": ["host.hostname"],
+      "asset_id": ["host.id"],
+      "ip": ["host.ip"],
+      "mac": ["host.mac"],
+      "name": ["host.name"],
+      "type": ["host.type"],
+      "uptime": ["host.uptime"],
+      "os.name": ["host.os.name"],
+      "os.platform": ["host.os.platform"],
+      "os.version": ["host.os.version"]
+    }
+  },
+  "x-ecs-http": {
+    "fields": {
+      "request_body_bytes": ["http.request.body.bytes"],
+      "request_body_content": ["http.request.body.content"],
+      "request_bytes": ["http.request.bytes"],
+      "request_method": ["http.request.method"],
+      "request_referrer": ["http.request.referrer"],
+      "response_body_bytes": ["http.response.body.bytes"],
+      "response_body_content": ["http.response.body.content"],
+      "response_bytes": ["http.response.bytes"],
+      "response_status_code": ["http.response.method"],
+      "version": ["http.version"]
+    }
+  },
+  "x-ecs-log": {
+    "fields": {
+      "level": ["log.level"],
+      "logger": ["log.logger"],
+      "origin_file_line": ["log.origin.file.line"],
+      "origin_file_name": ["log.origin.file.name"],
+      "origin_function": ["log.origin.function"],
+      "original": ["log.original"],
+      "syslog_facility_code": ["log.syslog.facility.code"],
+      "syslog_facility_name": ["log.syslog.facility.name"],
+      "syslog_priority": ["log.syslog.priority"],
+      "severity_syslog_code": ["log.syslog.severity.code"],
+      "severity_syslog_name": ["log.syslog.severity.name"]
+    }
+  },
+  "x-ecs-observer": {
+    "fields": {
+      "egress.zone": ["observer.egress.zone"],
+      "egress.interface.alias": ["observer.egress.interface.alias"],
+      "egress.interface.id": ["observer.egress.interface.id"],
+      "egress.interface.name": ["observer.egress.interface.name"],
+      "hostname": ["observer.hostname"],
+      "ingress.zone": ["observer.ingress.zone"],
+      "ingress.interface.alias": ["observer.ingress.interface.alias"],
+      "ingress.interface.id": ["observer.ingress.interface.id"],
+      "ingress.interface.name": ["observer.ingress.interface.name"],
+      "ip": ["observer.ip"],
+      "mac": ["observer.mac"],
+      "name": ["observer.name"],
+      "product": ["observer.product"],
+      "serial_number": ["observer.serial_number"],
+      "type": ["observer.type"],
+      "vendor": ["observer.vendor"],
+      "version": ["observer.version"],
+      "os.name": ["observer.os.name"],
+      "os.platform": ["observer.os.platform"],
+      "os.version": ["observer.os.version"]
+    }
+  },
+  "x-ecs-organization": {
+    "fields": {
+      "organization_id": ["organization.id"],
+      "name": ["organization.name"]
+    }
+  },
+  "x-ecs-pe": {
+    "fields": {
+      "company": ["dll.pe.company", "process.pe.company", "file.pe.company"],
+      "description": ["dll.pe.description", "process.pe.description", "file.pe.description"],
+      "file_version": ["dll.pe.file_version", "process.pe.file_version", "file.pe.file_version"],
+      "original_file_name": ["dll.pe.original_file_name", "process.pe.original_file_name", "file.pe.original_file_name"],
+      "product": ["dll.pe.product", "process.pe.product", "file.pe.product"]
+    }
+  },
+  "x-ecs-related": {
+    "fields": {
+      "hash": ["related.hash"],
+      "ip": ["related.ip"],
+      "user": ["related.user"]
+    }
+  },
+  "x-ecs-rule": {
+    "fields": {
+      "author": ["rule.author"],
+      "category": ["rule.category"],
+      "description": ["rule.description"],
+      "rule_id": ["rule.id"],
+      "license": ["rule.license"],
+      "name": ["rule.name"],
+      "reference": ["rule.reference"],
+      "ruleset": ["rule.ruleset"],
+      "uuid": ["rule.uuid"],
+      "version": ["rule.version"]
+    }
+  },
+  "x-ecs-service": {
+    "fields": {
+      "service_id": ["service.id"],
+      "name": ["service.name"],
+      "state": ["service.state"],
+      "type": ["service.type"],
+      "version": ["service.version"]
+    }
+  },
+  "x-ecs-threat": {
+    "fields": {
+      "framework": ["threat.framework"],
+      "tactic_id": ["threat.tactic.id"],
+      "tactic_name": ["threat.tactic.name"],
+      "tactic_reference": ["threat.tactic.reference"],
+      "technique_id": ["threat.technique.id"],
+      "technique_name": ["threat.technique.name"],
+      "technique_reference": ["threat.technique.reference"]
+    }
+  },
+  "x-ecs-trace": {
+    "fields": {
+      "trace_id": ["trace.id"]
+    }
+  },
+  "x-ecs-transaction": {
+    "fields": {
+      "transaction_id": ["transaction.id"]
+    }
+  },
+  "x-ecs-user-agent": {
+    "fields": {
+      "name": ["user_agent.name"],
+      "original": ["user_agent.original"],
+      "version": ["user_agent.version"],
+      "device_name": ["user_agent.device.name"]
+    }
+  },
+  "x-ecs-vulnerability": {
+    "fields": {
+      "category": ["vulnerability.category"],
+      "classification": ["vulnerability.classification"],
+      "description": ["vulnerability.description"],
+      "enumeration": ["vulnerability.enumeration"],
+      "vulnerability_id": ["vulnerability.id"],
+      "reference": ["vulnerability.reference"],
+      "report_id": ["vulnerability.report_id"],
+      "severity": ["vulnerability.severity"],
+      "scanner_vendor": ["vulnerability.scanner.vendor"],
+      "score_base": ["vulnerability.score.base"],
+      "score_environmental": ["vulnerability.score.environmental"],
+      "score_temporal": ["vulnerability.score.temporal"],
+      "score_version": ["vulnerability.score.version"]
+    }
+  },
+  "x-ecs-source": {
+    "fields": {
+      "address": ["source.address"],
+      "domain": ["source.domain"],
+      "nat.ip": ["source.nat.ip"],
+      "nat.port": ["source.nat.port"],
+      "registered_domain": ["source.registered_domain"],
+      "top_level_domain": ["source.top_level_domain"],
+      "geo.city_name": ["source.geo.city_name"],
+      "geo.continent_name": ["source.geo.continent_name"],
+      "geo.country_iso_code": ["source.geo.country_iso_code"],
+      "geo.country_name": ["source.geo.country_name"],
+      "geo.location": ["source.geo.location"],
+      "geo.name": ["source.geo.name"],
+      "geo.region_iso_code": ["source.geo.region_iso_code"],
+      "geo.region_name": ["source.geo.region_name"] 
+    }
+  },
+  "x-ecs-destination": {
+    "fields": {
+      "address": ["destination.address"],
+      "domain": ["destination.domain"],
+      "nat.ip": ["destination.nat.ip"],
+      "nat.port": ["destination.nat.port"],
+      "registered_domain": ["destination.registered_domain"],
+      "top_level_domain": ["destination.top_level_domain"],
+      "geo.city_name": ["destination.geo.city_name"],
+      "geo.continent_name": ["destination.geo.continent_name"],
+      "geo.country_iso_code": ["destination.geo.country_iso_code"],
+      "geo.country_name": ["destination.geo.country_name"],
+      "geo.location": ["destination.geo.location"],
+      "geo.name": ["destination.geo.name"],
+      "geo.region_iso_code": ["destination.geo.region_iso_code"],
+      "geo.region_name": ["destination.geo.region_name"] 
+    }
+  },
+  "x-ecs-client": {
+    "fields": {
+      "address": ["client.address"],
+      "domain": ["client.domain"],
+      "nat.ip": ["client.nat.ip"],
+      "nat.port": ["client.nat.port"],
+      "registered_domain": ["client.registered_domain"],
+      "top_level_domain": ["client.top_level_domain"],
+      "geo.city_name": ["client.geo.city_name"],
+      "geo.continent_name": ["client.geo.continent_name"],
+      "geo.country_iso_code": ["client.geo.country_iso_code"],
+      "geo.country_name": ["client.geo.country_name"],
+      "geo.location": ["client.geo.location"],
+      "geo.name": ["client.geo.name"],
+      "geo.region_iso_code": ["client.geo.region_iso_code"],
+      "geo.region_name": ["client.geo.region_name"] 
+    }
+  },
+  "x-ecs-server": {
+    "fields": {
+      "address": ["server.address"],
+      "domain": ["server.domain"],
+      "nat.ip": ["server.nat.ip"],
+      "nat.port": ["server.nat.port"],
+      "registered_domain": ["server.registered_domain"],
+      "top_level_domain": ["server.top_level_domain"],
+      "geo.city_name": ["server.geo.city_name"],
+      "geo.continent_name": ["server.geo.continent_name"],
+      "geo.country_iso_code": ["server.geo.country_iso_code"],
+      "geo.country_name": ["server.geo.country_name"],
+      "geo.location": ["server.geo.location"],
+      "geo.name": ["server.geo.name"],
+      "geo.region_iso_code": ["server.geo.region_iso_code"],
+      "geo.region_name": ["server.geo.region_name"] 
+    }
+  }
+}

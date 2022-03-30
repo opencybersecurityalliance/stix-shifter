@@ -5,11 +5,7 @@ import re
 import json
 import os.path as path
 from datetime import datetime, timedelta
-try:
-    # 3.8 and up
-    from collections.abc import Iterable
-except ImportError:
-    from collections import Iterable
+from collections.abc import Iterable
 
 TIMESTAMP_PATTERN = r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"
 PROTOCOL_LOOKUP_JSON_FILE = 'json/network_protocol_map.json'
@@ -17,25 +13,10 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'REGEXP_LIKE',
-        ObservationOperators.Or: 'UNION',
-        ObservationOperators.And: 'INTERSECT'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.service_type = self.dmm.dialect
         self._protocol_lookup_needed = True if self.service_type in ['vpcflow'] else False
@@ -272,8 +253,14 @@ class QueryStringPatternTranslator:
                                        [start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z', stop_time.strftime(
                                            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z']]
             start_stop_list = [each for each in time_range_list]
+            
+            if self.service_type == 'guardduty':
+                startstopattr = 'updatedat'
+            elif self.service_type == 'vpcflow':
+                startstopattr = 'starttime'
+
             qualifier_string = "AND {datetime_field} BETWEEN {starttime} AND " \
-                               "{stoptime}".format(datetime_field=self.dmm.map_data['startstopattr'],
+                               "{stoptime}".format(datetime_field=startstopattr,
                                                    starttime=start_stop_list[0],
                                                    stoptime=start_stop_list[1])
             return qualifier_string
@@ -339,10 +326,10 @@ class QueryStringPatternTranslator:
         :param expression_operator: operator, ANTLR expression operator
         :return: operator, SQL operator
         """
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for AWS Athena connector".format
                                       (expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         """

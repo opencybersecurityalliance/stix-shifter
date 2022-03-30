@@ -368,9 +368,10 @@ class TestStixToRelevance(unittest.TestCase):
         """
         to test single observation with an un-supported operator
         """
-        stix_pattern = "([ipv4-addr:value ISSUPERSET '172.217.0.0/24'] " \
-                       "START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-23T10:43:10.003Z')"
+        stix_pattern = "[ipv4-addr:value ISSUPERSET '172.217.0.0/24'] " \
+                       "START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-23T10:43:10.003Z'"
         query = translation.translate('bigfix', 'query', '{}', stix_pattern)
         assert query['success'] is False
-        assert query['code'] == 'not_implemented'
-        assert query['error'] == 'wrong parameter : Comparison operator IsSuperSet unsupported for BigFix adapter'
+        assert query['code'] == 'mapping_error'
+        assert query['connector'] == 'bigfix'
+        assert query['error'] == "bigfix connector error => data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"

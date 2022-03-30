@@ -6,6 +6,7 @@ from .auth import Auth
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, host, auth ):
+        self.connector = __name__.split('.')[1]
         self.auth = auth
         api_key = auth.get("apiKey")
         self.auth_token = Auth(api_key)
@@ -23,7 +24,7 @@ class ResultsConnector(BaseResultsConnector):
             params["accessToken"] = self.auth_token.obtainAccessToken()
             
         except Exception as e:
-            ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message= str(e))
+            ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message= str(e), connector=self.connector)
             return return_obj
 
         try:
@@ -33,5 +34,5 @@ class ResultsConnector(BaseResultsConnector):
             return return_obj
 
         except Exception as e:
-            ErrorResponder.fill_error(return_obj, {'code':"query_failed"}, message= str(e))
+            ErrorResponder.fill_error(return_obj, {'code':"query_failed"}, message= str(e), connector=self.connector)
             return return_obj

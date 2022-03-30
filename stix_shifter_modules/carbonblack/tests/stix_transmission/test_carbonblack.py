@@ -233,7 +233,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == False
         assert 'error' in results_response
-        assert results_response['error'] == mocked_return_value
+        assert results_response['error'] == 'carbonblack connector error => ' + mocked_return_value
         assert 'code' in results_response
         assert  results_response['code'] == 'authentication_fail'
 
@@ -250,7 +250,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == False
         assert 'error' in results_response
-        assert  results_response['error'] == mocked_return_value
+        assert  results_response['error'] == 'carbonblack connector error => ' + mocked_return_value
         assert 'code' in results_response
         assert  results_response['code'] == 'unknown'  # we may be able to return a better error code
 
@@ -267,7 +267,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'success' in results_response
         assert results_response['success'] == False
         assert 'error' in results_response
-        assert  results_response['error'] == "query_syntax_error"
+        assert  results_response['error'] == "carbonblack connector error => query_syntax_error"
         assert 'code' in results_response
         assert  results_response['code'] == 'invalid_query'
 

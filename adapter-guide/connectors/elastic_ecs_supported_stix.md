@@ -1,7 +1,27 @@
+##### Updated on 02/04/22
 ## Elasticsearch ECS
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| > | :> |
+| >= | :>= |
+| < | :< |
+| <= | :<= |
+| = | : |
+| != | NOT |
+| LIKE | : |
+| IN | : |
+| MATCHES | : |
+| ISSUBSET | : |
+| ISSUPERSET | : |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | original |
+| artifact | mime_type | mime_type_event |
 | <br> | | |
 | autonomous-system | number | number |
 | autonomous-system | name | name |
@@ -78,6 +98,7 @@
 | process | parent_ref | pid |
 | process | creator_user_ref | name |
 | process | creator_user_ref | id |
+| process | x_ttp_tags | tags |
 | <br> | | |
 | software | name | name |
 | software | vendor | type |

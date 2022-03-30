@@ -32,8 +32,8 @@
     "fields": {
       "parent_directory_ref.path": ["filePath"],
       "name": ["fileName"],
-      "hashes.SHA-256": ["fulltextSearch"],
-      "hashes.SHA-1": ["fulltextSearch"],
+      "hashes.'SHA-256'": ["fulltextSearch"],
+      "hashes.'SHA-1'": ["fulltextSearch"],
       "hashes.MD5": ["fulltextSearch"]
     }
   },
@@ -96,7 +96,6 @@
       "device_severity": ["deviceSeverity"],
       "device_version": ["deviceVersion"],
       "device_address": ["deviceAddress"],
-      "device_hostname": ["deviceHostName"],
       "device_external_id": ["deviceExternalId"],
       "device_asset_id": ["fulltextSearch"],
       "device_asset_name": ["fulltextSearch"],
@@ -148,6 +147,12 @@
       "dst_geolocation": ["fulltextSearch"],
       "src_ip_ref.value": ["sourceAddress"],
       "dst_ip_ref.value": ["destinationAddress"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["deviceHostName", "deviceAssetName"],
+      "host_id": ["deviceAssetId"]
     }
   }
 }

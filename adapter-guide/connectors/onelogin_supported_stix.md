@@ -1,24 +1,26 @@
-## Onelogin
+##### Updated on 02/04/22
+## OneLogin
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | or |
+| = | = |
+| OR | or |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
-| user-account | user_id | user_id |
-| user-account | display_name | user_name |
-| user-account | x_account_id | account_id |
-| user-account | x_actor_user_id | actor_user_id |
-| user-account | x_assuming_acting_user_id | assuming_acting_user_id |
-| user-account | x_actor_user_name | actor_user_name |
-| <br> | | |
 | ipv4-addr | value | ipaddr |
 | <br> | | |
-| x-onelogin-risk | risk_score | risk_score |
-| x-onelogin-risk | risk_reasons | risk_reasons |
-| x-onelogin-risk | risk_cookie_id | risk_cookie_id |
-| x-onelogin-risk | error_description | error_description |
+| user-account | user_id | user_id |
+| user-account | x_assuming_acting_user_id | assuming_acting_user_id |
+| user-account | x_actor_user_name | actor_user_name |
+| user-account | x_actor_user_id | actor_user_id |
+| user-account | x_account_id | account_id |
+| user-account | display_name | user_name |
 | <br> | | |
-| x-ibm-finding | name | policy_name |
 | x-ibm-finding | policy_id | policy_id |
-| x-ibm-finding | start | since |
-| x-ibm-finding | end | until |
+| x-ibm-finding | name | policy_name |
 | x-ibm-finding | time_observed | created_at |
 | <br> | | |
 | x-onelogin-finding | client_id | client_id |
@@ -26,11 +28,9 @@
 | x-onelogin-finding | event_type_id | event_type_id |
 | x-onelogin-finding | unique_id | id |
 | x-onelogin-finding | resolution | resolution |
+| x-onelogin-finding | proxy_ip | proxy_ip |
 | x-onelogin-finding | role_id | role_id |
 | x-onelogin-finding | app_id | app_id |
-| x-onelogin-finding | group_id | group_id |
-| x-onelogin-finding | otp_device_id | otp_device_id |
-| x-onelogin-finding | actor_system | actor_system |
 | x-onelogin-finding | custom_message | custom_message |
 | x-onelogin-finding | role_name | role_name |
 | x-onelogin-finding | app_name | app_name |
@@ -41,5 +41,9 @@
 | x-onelogin-finding | resource_type_id | resource_type_id |
 | x-onelogin-finding | browser_fingerprint | browser_fingerprint |
 | x-onelogin-finding | notes | notes |
-| x-onelogin-finding | proxy_ip | proxy_ip |
+| <br> | | |
+| x-onelogin-risk | risk_score | risk_score |
+| x-onelogin-risk | risk_reasons | risk_reasons |
+| x-onelogin-risk | risk_cookie_id | risk_cookie_id |
+| x-onelogin-risk | error_description | error_description |
 | <br> | | |
