@@ -1,5 +1,8 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
+# from .error_mapper import ErrorMapper
+# import requests
+# import requests.auth
 import json
 import base64
 from stix_shifter_utils.utils import logger
@@ -22,13 +25,18 @@ class APIClient():
 
     def ping_data_source(self):
         # Pings the data source
-        response = self.generate_token
+        response = self.get_token()
         return response
-
+  
     def get_search_results(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         response = {}
         try:
+            # query = json.loads(search_id)
+            # if 'valid' in query and query['valid'] is False:
+            #    response = { "success": False, "code": 2000, "data": []}
+            #    ErrorResponder.fill_error(response, message="Query Not Supported")
+            # else:
             response = self._get_results(search_id, range_start, range_end)
         except Exception as e:
             logger.error("Error while converting query", e)
@@ -46,7 +54,7 @@ class APIClient():
 
         response = dict()
         response_data = []
-        resp = self.generate_token
+        resp = self.get_token()
 
         if resp['code'] == 200:
             self.token = json.loads(resp['data'])['access_token']
