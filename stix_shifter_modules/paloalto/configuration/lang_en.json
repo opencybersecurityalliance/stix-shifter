@@ -6,11 +6,7 @@
         },
         "quota_threshold": {
             "label": "The quota limit for the API",
-            "description": "Prevents the connector from exceeding the entire daily units(5) allocated for the Standard License. The threshold range is from 1 to 4 units"
-        },
-        "additional_unit_quota_threshold": {
-            "label": "The quota limit for the API for the additionally purchased units",
-            "description": "Prevents the connector from exceeding the quota threshold limit of the 15 units ( 5 unit for standard license and additional 10 units ). The Threshold range is from 6 to 12 units"
+            "description": "Prevents the connector from exceeding the entire daily units allocated for the License. The Daily units for Standard license alone is 5 and it will be 15 if additional 10 units are purchased."
         },
         "help": {
             "label": "Need additional help?",

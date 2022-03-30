@@ -462,7 +462,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_max_quota_exception(self, mock_ping):
         """test maximum quota threshold exception"""
         response = {
-            'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 4, 'eval_quota': 0.0}}
+            'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 5.01, 'eval_quota': 0.0}}
         mock_ping.side_effect = [MockResponse(MockStatusObj(200), json.dumps(response))]
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.query({})

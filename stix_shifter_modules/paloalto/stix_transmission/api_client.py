@@ -43,7 +43,6 @@ class APIClient:
         self.result_limit = connection['options'].get('result_limit')
         self.timeout = connection['options']['timeout']
         self.quota_threshold = connection['quota_threshold']
-        self.additional_quota_threshold = connection['additional_unit_quota_threshold']
         self.connector = __name__.split('.')[1]
 
     def ping_data_source(self):
@@ -80,10 +79,13 @@ class APIClient:
                     # The daily quota unit for standard license is 5. additional units up to 10 can be added.
                     if quota_response_text['reply']['license_quota'] == 5 and \
                             quota_response_text['reply']['additional_purchased_quota'] == 0.0:
+                        # For a Standard license,if the configured quota threshold is greater than 5,
+                        # the threshold quota value is reset to 5.
+                        self.quota_threshold = 5 if self.quota_threshold > 5 else self.quota_threshold
                         if quota_response_text['reply']['used_quota'] >= self.quota_threshold:
                             raise MaxDailyQuotaException
                     else:
-                        if quota_response_text['reply']['used_quota'] >= self.additional_quota_threshold:
+                        if quota_response_text['reply']['used_quota'] >= self.quota_threshold:
                             raise MaxDailyQuotaException
                     return_obj['success'] = True
             else:

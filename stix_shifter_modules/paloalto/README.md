@@ -979,8 +979,11 @@ paloalto
 - Queries called without enough quota will fail.
 
 ### Observations
-- The quota limit range for the API call would be from 1 to 4 units for the Standard license, and it will be from 6 to 12  
-  if additional units are purchased.
+- The quota limit range for the API call would be from 1 to 15 (Standard 5 + 10 Additional ) units. 
+  The default value of quota thershold limit in CP4S UI is 5. 
+- If the user purchases standard license only(5 units), and configures the threshold value more than 5, 
+  the usage limit will be checked only for 5 units. Otherwise, usage will be checked for the configured value.
+- If the user purchases Additional 10 units along with standard license, the usage limit will be checked for configured value.   
 
 ### References
 - [Cortex XDR](https://docs.paloaltonetworks.com/cortex/cortex-xdr.html)
