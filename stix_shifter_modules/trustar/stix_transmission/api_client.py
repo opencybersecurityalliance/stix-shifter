@@ -41,11 +41,6 @@ class APIClient():
         # Return the search results. Results must be in JSON format before being translated into STIX
         response = {}
         try:
-            # query = json.loads(search_id)
-            # if 'valid' in query and query['valid'] is False:
-            #    response = { "success": False, "code": 2000, "data": []}
-            #    ErrorResponder.fill_error(response, message="Query Not Supported")
-            # else:
             response = self._get_results(search_id, range_start, range_end)
         except Exception as e:
             logger.error("Error while converting query", e)
