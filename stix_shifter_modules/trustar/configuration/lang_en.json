@@ -1,0 +1,38 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "report_limit": {
+            "label": "Report Limit",
+            "description": "Number of detailed reports gathered from Trustar, if the number of reports is less than 'Report Limit'"
+        },
+        "max_number_pages": {
+            "label": "Request Page Limit",
+            "description": "Max number of pages requested to TruSTAR"
+        },
+        "auth": {
+            "clientId": {
+                "label": "Client ID ",
+                "description": "Client ID created in TruSTAR Portal"
+            },
+            "clientSecret": {
+                "label": "Client Secret",
+                "description": "Client Secret created in TruSTAR Portal"
+            }
+        }
+    }
+}
