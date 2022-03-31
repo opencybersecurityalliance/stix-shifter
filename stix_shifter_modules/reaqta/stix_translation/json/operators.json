@@ -1,17 +1,13 @@
 {
     "ComparisonExpressionOperators.And": "AND",
     "ComparisonExpressionOperators.Or": "OR",
-    "ComparisonComparators.GreaterThan": ">",
-    "ComparisonComparators.GreaterThanOrEqual": ">=",
-    "ComparisonComparators.LessThan": "<",
-    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ComparisonComparators.GreaterThanOrEqual": ".gte",
+    "ComparisonComparators.LessThanOrEqual": ".lte",
     "ComparisonComparators.Equal": "=",
     "ComparisonComparators.NotEqual": "!=",
-    "ComparisonComparators.Like": "LIKE",
+    "ComparisonComparators.Like": "=",
     "ComparisonComparators.In": "IN",
-    "ComparisonComparators.Matches": "LIKE",
-    "ComparisonComparators.IsSubSet": "SUBSET",
-    "ComparisonComparators.IsSuperSet": "SUPERSET",
+    "ComparisonComparators.Matches": "=",
     "ObservationOperators.Or": "OR",
-    "ObservationOperators.And": "OR"
+    "ObservationOperators.And": "AND"
 }

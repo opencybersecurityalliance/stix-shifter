@@ -19,7 +19,7 @@ class QueryTranslator(BaseQueryTranslator):
         :rtype: str
         """
 
-        logger.info("Converting STIX2 Pattern to data source query")
+        # logger.info("Converting STIX2 Pattern to data source query")
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self, self.options)

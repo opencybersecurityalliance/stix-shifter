@@ -1,17 +1,11 @@
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
+    ComparisonExpression, ComparisonComparators, Pattern, \
+    CombinedComparisonExpression, CombinedObservationExpression, StartStopQualifier
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import logging
 import re
 
-# Source and destination reference mapping for ip and mac addresses.
-# Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
-REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
-                        "SourceIpV6": ["ipv6"],
-                        "DestinationIpV4": ["ipv4", "ipv4_cidr"],
-                        "DestinationIpV6": ["ipv6"]}
+UNIVERSAL_FIELDS = ["filename", "ip", "md5", "path", "sha1", "sha256"]
 
 logger = logging.getLogger(__name__)
 
@@ -27,30 +21,12 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _format_set(values) -> str:
         gen = values.element_iterator()
-        return "({})".format(' OR '.join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
-
-    @staticmethod
-    def _format_match(value) -> str:
-        raw = QueryStringPatternTranslator._escape_value(value)
-        if raw[0] == "^":
-            raw = raw[1:]
-        else:
-            raw = ".*" + raw
-        if raw[-1] == "$":
-            raw = raw[0:-1]
-        else:
-            raw = raw + ".*"
-        return "\'{}\'".format(raw)
+        return "({})".format(" OR ".join([QueryStringPatternTranslator._escape_value(value) for value in gen]))
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
-
-    @staticmethod
-    def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
-        return QueryStringPatternTranslator._escape_value(value)
-
+        return '"{}"'.format(value)
+        
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -63,6 +39,19 @@ class QueryStringPatternTranslator:
         return "NOT ({})".format(comparison_string)
 
     @staticmethod
+    def _format_universal_field(field) -> str:
+        if field in UNIVERSAL_FIELDS:
+            return '${}'.format(field)
+        return field
+
+    @staticmethod
+    def _format_qualifier(qualifier) -> str:
+        if isinstance(qualifier, StartStopQualifier):
+            time_interval = 'AND happenedAfter = "' + qualifier.start_iso + '" AND happenedBefore = "' + qualifier.stop_iso + '"'
+            return time_interval
+        return ''
+
+    @staticmethod
     def _check_value_type(value):
         value = str(value)
         for key, pattern in observable.REGEX.items():
@@ -70,32 +59,16 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    #TODO remove self reference from static methods
-    @staticmethod
-    def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
-        if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
-            return None
-        else:
-            return "{mapped_field} {comparator} {value}".format(
-                mapped_field=mapped_field, comparator=comparator, value=value)
-
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         # Need to use expression.value to match against regex since the passed-in value has already been formated.
-        value_type = self._check_value_type(expression.value) if is_reference_value else None
         mapped_fields_count = 1 if is_reference_value else len(mapped_fields_array)
 
         for mapped_field in mapped_fields_array:
-            if is_reference_value:
-                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
-                if not parsed_reference:
-                    continue
-                comparison_string += parsed_reference
-            else:
-                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
-
+            mapped_field = self._format_universal_field(mapped_field)
+            comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
             if (mapped_fields_count > 1):
                 comparison_string += " OR "
                 mapped_fields_count -= 1
@@ -120,22 +93,12 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
 
-            if stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
-
             # Some values are formatted differently based on how they're being compared
-            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                value = self._format_match(expression.value)
-            # should be (x, y, z, ...)
-            elif expression.comparator == ComparisonComparators.In:
+            if expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
-            # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
-                value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
 
@@ -148,7 +111,7 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+                return "{} {}".format(comparison_string, self._format_qualifier(qualifier))
             else:
                 return "{}".format(comparison_string)
 
@@ -164,7 +127,7 @@ class QueryStringPatternTranslator:
                 expression_02 = "({})".format(expression_02)
             query_string = "{} {} {}".format(expression_01, operator, expression_02)
             if qualifier is not None:
-                return "{} {}".format(query_string, qualifier)
+                return "{} {}".format(query_string, self._format_qualifier(qualifier))
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -174,10 +137,10 @@ class QueryStringPatternTranslator:
                 operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
                 expression_01 = self._parse_expression(expression.observation_expression.expr1)
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
+                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression)
                 return "{} {} {}".format(expression_01, operator, expression_02)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                return self._parse_expression(expression.observation_expression.comparison_expression, expression)
         elif isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
@@ -201,16 +164,5 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    # Add space around START STOP qualifiers
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
-
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["SELECT * FROM tableName WHERE %s" % query]
+    return query

@@ -193,6 +193,20 @@ class StartStopQualifier(Qualifier):
     def __repr__(self) -> str:
         return "{observation_expression} StartStopQualifier({qualifier}, start={start}, stop={stop})".format(observation_expression=self.observation_expression, qualifier=self.qualifier, start=self.start, stop=self.stop)
 
+    @property
+    def start_iso(self):
+        if self.start:
+            return self.start.replace("t'","").replace("'", "")
+        else:
+            return self.start
+
+    @property
+    def stop_iso(self):
+        if self.stop:
+            return self.stop.replace("t'","").replace("'", "")
+        else:
+            return self.stop
+
 class Pattern:
     def __init__(self, expression: BaseObservationExpression, qualifier=None) -> None:
         self.expression = expression
