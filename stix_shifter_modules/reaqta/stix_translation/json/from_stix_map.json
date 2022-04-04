@@ -23,12 +23,60 @@
       "parent_directory_ref.path": ["path"]
     }
   },
+  "directory": {
+    "fields": {
+      "path": ["path"]
+    }
+  },
   "network-traffic": {
     "fields": {
       "src_port": ["eventdata.localPort"],
       "dst_port": ["eventdata.remotePort"],
       "src_ref.value": ["eventdata.localIp"],
       "dst_ref.value": ["eventdata.remoteIp"]
+    }
+  },
+  "process": {
+    "fields": {
+      "is_hidden": [], 
+      "pid": [], 
+      "name": [], 
+      "created": [], 
+      "cwd": [], 
+      "arguments": [], 
+      "command_line": [], 
+      "environment_variables": [], 
+      "opened_connection_refs": [], 
+      "creator_user_ref": [], 
+      "binary_ref": [], 
+      "parent_ref": [], 
+      "child_refs": []
+    }
+  },
+  "software": {
+    "fields": {
+      "name": [], 
+      "cpe": [], 
+      "languages": [], 
+      "vendor": [], 
+      "version": []
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [], 
+      "account_login": [], 
+      "account_type": [], 
+      "display_name": [], 
+      "is_service_account": [], 
+      "is_privileged": [], 
+      "can_escalate_privs": [], 
+      "is_disabled": [], 
+      "account_created": [], 
+      "account_expires": [], 
+      "password_last_changed": [], 
+      "account_first_login": [], 
+      "account_last_login": []
     }
   }
 }

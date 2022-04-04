@@ -6,7 +6,7 @@
     "ComparisonComparators.Equal": "=",
     "ComparisonComparators.NotEqual": "!=",
     "ComparisonComparators.Like": "=",
-    "ComparisonComparators.In": "IN",
+    "ComparisonComparators.In": "=",
     "ComparisonComparators.Matches": "=",
     "ObservationOperators.Or": "OR",
     "ObservationOperators.And": "AND"
