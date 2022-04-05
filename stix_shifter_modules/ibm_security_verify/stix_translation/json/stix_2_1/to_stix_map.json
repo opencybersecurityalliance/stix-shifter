@@ -276,11 +276,17 @@
     "key": "x-oca-event.extensions.x-iam-ext.location_lon",
     "object": "ocaevent"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 25db4f6 (change queryConstructor.py and config.json file to work with cp4s 1.9 and other json file for stix mapping)
   },
   "add": {
     "key": "x-oca-event.extensions.x-iam-ext.add",
     "object": "ocaevent"
+<<<<<<< HEAD
 =======
 >>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
+=======
+>>>>>>> 25db4f6 (change queryConstructor.py and config.json file to work with cp4s 1.9 and other json file for stix mapping)
   }
 }
