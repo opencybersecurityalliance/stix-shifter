@@ -15,6 +15,17 @@ class TestQueryTranslator(unittest.TestCase):
 
         self.assertEqual(query, test_string)
 
+    # TODO: 
+    #  (($ip = "172.16.60.184" AND happenedAfter = Mar 24, 2020 5:21 PM AND happenedBefore = Mar 24, 2020 5:21 PM) OR ($ip = "172.16.60.185" AND happenedAfter = Mar 24, 2020 5:21 PM AND happenedBefore = Mar 24, 2020 5:21 PM)) 
+    # def test_source_no_timeinterval(self):
+    #     stix_pattern = "[ipv4-addr:value = '172.16.60.184']"
+    #     queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+    #     query = queries['queries']
+
+    #     test_string = ['$ip = "172.16.60.184" AND happenedAfter = "2022-03-24T20:21:35.519Z" AND happenedBefore = "2022-03-24T20:21:35.619Z"']
+
+    #     self.assertEqual(query, test_string)
+
     def test_not_operator(self):
         stix_pattern = "[ipv4-addr:value NOT = '172.31.60.104' OR network-traffic:src_ref.value != '172.31.60.104']" \
                         "START t'2022-03-24T20:21:35.519Z' STOP t'2022-03-24T20:21:35.619Z'"
@@ -147,7 +158,7 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertEqual(query, test_string)
 
 
-        
+
 
     def test_combined(self):
         stix_pattern = "([network-traffic:src_ref.value = '127.0.0.1' AND file:hashes.'MD5' != '23db6982caef9e9152f1a5b2589e6ca3' OR file:hashes.'SHA-256'= 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad']  " \

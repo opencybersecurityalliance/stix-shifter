@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
 
-    def __init__(self, pattern: Pattern, data_model_mapper):
+    def __init__(self, pattern: Pattern, data_model_mapper, options:dict):
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
@@ -200,7 +200,7 @@ class QueryStringPatternTranslator:
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
-    query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
+    query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
     query = query_translator.translated
 
     if query_translator.formated_qualifier:
