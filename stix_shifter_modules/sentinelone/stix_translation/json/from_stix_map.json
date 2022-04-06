@@ -1,0 +1,270 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "srcIp",
+        "dstIp"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "srcIp",
+        "dstIp"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "srcPort"
+      ],
+      "dst_port": [
+        "dstPort"
+      ],
+      "protocols[*]": [
+        "netProtocolName"
+      ],
+      "src_ref.value": [
+        "srcIp"
+      ],
+      "dst_ref.value": [
+        "dstIp"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "dnsRequest",
+        "dnsResponse"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "url"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": [
+        "srcProcCmdLine",
+        "tgtProcCmdLine"
+      ],
+      "created": [
+        "srcProcStartTime",
+        "tgtProcStartTime"
+      ],
+      "pid": [
+        "srcProcPid",
+        "tgtProcPid",
+        "srcProcParentPid"
+      ],
+      "name": [
+        "srcProcName",
+        "srcProcParentName",
+        "tgtProcName"
+      ],
+      "parent_ref.name": [
+        "srcProcParentName"
+      ],
+      "creator_user_ref.user_id": [
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "parent_ref.pid": [
+        "srcProcParentPid"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "fileFullName"
+      ],
+      "size": [
+        "tgtFileSize"
+      ],
+      "hashes.MD5": [
+        "tgtFileMd5",
+        "tgtFileOldMd5"
+      ],
+      "hashes.'SHA-1'": [
+        "tgtFileSha1",
+        "tgtFileOldSha1"
+      ],
+      "hashes.'SHA-256'": [
+        "tgtFileSha256",
+        "tgtFileOldSha256"
+      ],
+      "parent_directory_ref.path": [
+        "tgtFilePath",
+        "tgtFileOldPath"
+      ],
+      "created": [
+        "tgtFileCreatedAt"
+      ],
+      "modified": [
+        "tgtFileModifiedAt"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "tgtFilePath",
+        "tgtFileOldPath"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "loginAccountSid",
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "account_login": [
+        "loginsUserName"
+      ],
+      "is_privileged": [
+        "loginIsAdministratorEquivalent"
+      ],
+      "display_name": [
+        "loginAccountName"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": [
+        "registryKeyPath"
+      ],
+      "values[*]": [
+        "registryValue"
+      ]
+    }
+  },
+  "x-sentinelone-process": {
+    "fields": {
+      "image_path": [
+        "srcProcImagePath",
+        "tgtProcImagePath"
+      ],
+      "integrity_level": [
+        "srcProcIntegrityLevel",
+        "tgtProcIntegrityLevel"
+      ],
+      "publisher": [
+        "srcProcPublisher",
+        "tgtProcPublisher"
+      ],
+      "parent_process_start_time": [
+        "srcProcParentStartTime"
+      ],
+      "parent_image_path": [
+        "srcProcParentImagePath"
+      ]
+    }
+  },
+  "x-sentinelone-network-action": {
+    "fields": {
+      "connection_status": [
+        "netConnStatus"
+      ]
+    }
+  },
+  "x-sentinelone-login": {
+    "fields": {
+      "machine_ip": [
+        "srcMachineIP"
+      ],
+      "login_type": [
+        "loginType"
+      ],
+      "account_domain": [
+        "loginAccountDomain"
+      ]
+    }
+  },
+  "x-sentinelone-file": {
+    "fields": {
+      "file_type": [
+        "tgtFileType"
+      ],
+      "extention": [
+        "tgtFileExtension"
+      ],
+      "description": [
+        "tgtFileDescription"
+      ],
+      "location": [
+        "tgtFileLocation"
+      ]
+    }
+  },
+  "x-sentinelone-registry": {
+    "fields": {
+      "path": [
+        "registryPath"
+      ],
+      "full_size": [
+        "registryValueFullSize"
+      ]
+    }
+  },
+  "x-sentinelone-indicator": {
+    "fields": {
+      "indicator_name": [
+        "indicatorName"
+      ],
+      "indicator_category": [
+        "indicatorCategory"
+      ],
+      "indicator_description": [
+        "indicatorDescription"
+      ],
+      "indicator_metadata": [
+        "indicatorMetadata"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["endpointName"],
+      "ip_refs[*].value": ["srcIp", "dstIp"]
+    }
+  },
+  "x-oca-endpoint": {
+     "fields": {
+       "endpoint_os": [
+         "endpointOs"
+       ],
+       "agent_version": [
+         "agentVersion"
+       ],
+       "machine_type": [
+         "endpointMachineType"
+       ]
+     }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": ["eventType"],
+      "created": ["eventTime"],
+      "host_ref": ["endpointName"],
+      "url_ref": ["url"],
+      "file_ref": ["fileFullName"],
+      "process_ref": ["srcProcPid","tgtProcPid","srcProcParentPid"],
+      "parent_process_ref": ["srcProcParentPid"],
+      "agent": ["agentName"],
+      "user_ref": ["srcProcUser","tgtProcUser"],
+      "domain_ref": ["dnsRequest", "dnsResponse"],
+      "registry_ref": ["registryKeyPath"]
+    }
+  }
+}
