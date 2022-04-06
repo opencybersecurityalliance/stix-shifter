@@ -1,0 +1,35 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Palo Alto Cortex XDR"
+        },
+        "host": {
+            "type": "text"
+        },
+        "quota_threshold": {
+            "default": 5,
+            "min": 1,
+            "max": 15,
+            "type": "number",
+            "optional" : true
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "tenant": {
+                "type": "password"
+            },
+            "api_key": {
+                "type": "password"
+            },
+            "api_key_id": {
+                "type": "password"
+            }
+        }
+    }
+}
