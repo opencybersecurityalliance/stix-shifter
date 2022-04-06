@@ -2548,7 +2548,7 @@ class TestSentineloneResultsToStix(unittest.TestCase):
                                                                    'x-oca-asset')
         assert asset_obj is not None
         assert asset_obj['type'] == 'x-oca-asset'
-        assert asset_obj['ip_refs'] == '2'
+        assert asset_obj['ip_refs'] == ['2', '4']
         assert asset_obj['hostname'] == 'EC2AMAZ-IQFSLIL'
         assert asset_obj['extensions']['x-oca-endpoint']['agent_uuid'] == 'f5875d2abd9f4198824885126b4f4d07'
 
