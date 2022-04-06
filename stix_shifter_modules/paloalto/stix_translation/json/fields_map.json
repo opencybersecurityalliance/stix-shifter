@@ -1,6 +1,6 @@
 {
         "all_fields": [
-                "action_local_ip","action_remote_ip","agent_ip_addresses_v6","dst_agent_ip_addresses_v6",
+                "action_local_ip","action_remote_ip","agent_ip_addresses","agent_ip_addresses_v6","dst_agent_ip_addresses_v6",
                 "action_local_port","action_remote_port","action_network_protocol","action_pkts_sent",
                 "action_pkts_received","action_file_name","action_process_image_name","actor_process_image_name",
                 "causality_actor_process_image_name","os_actor_process_image_name","action_file_size","action_file_md5",

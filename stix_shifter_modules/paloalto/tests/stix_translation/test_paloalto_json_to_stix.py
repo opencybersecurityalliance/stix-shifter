@@ -146,10 +146,10 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert network_obj is not None
         assert network_obj["type"] == 'network-traffic'
         assert network_obj["src_port"] == 54083
-        assert network_obj['src_ref'] == '1'
+        assert network_obj['src_ref'] == '2'
         assert 'tcp' in network_obj["protocols"]
         assert network_obj["dst_port"] == 80
-        assert network_obj['dst_ref'] == '2'
+        assert network_obj['dst_ref'] == '4'
 
     def test_mac_addr_json_to_stix(self):
         """
@@ -251,7 +251,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert windows_obj is not None
         assert windows_obj['type'] == 'windows-registry-key'
         assert windows_obj['key'] == 'HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Services\\terminpt\\Enum'
-        assert windows_obj['values'] == 'Start'
+        assert windows_obj['values'] == [{'name':'Start'}]
 
     def test_url_json_to_stix(self):
         """to test url stix object properties"""
@@ -355,12 +355,12 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         asset_obj = TestPaloaltoResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
         assert asset_obj is not None
         assert asset_obj['type'] == 'x-oca-asset'
-        assert asset_obj['agent_version'] == "7.6.1.46600"
+        assert asset_obj['extensions']['x-paloalto-agent']['agent_version'] == "7.6.1.46600"
         assert asset_obj['hostname'] == "EC2AMAZ-IQFSLIL"
-        assert asset_obj['content_version'] == "350-80787"
-        assert asset_obj['start_time'] == "2022-01-20T07:04:01.933Z"
-        assert asset_obj['os_sub_type'] == "Windows Server 2016"
-        assert asset_obj['is_vdi'] == False
+        assert asset_obj['extensions']['x-paloalto-agent']['content_version'] == "350-80787"
+        assert asset_obj['extensions']['x-paloalto-agent']['start_time'] == "2022-01-20T07:04:01.933Z"
+        assert asset_obj['extensions']['x-paloalto-agent']['os_sub_type'] == "Windows Server 2016"
+        assert asset_obj['extensions']['x-paloalto-agent']['is_vdi'] == False
 
     def test_evtlog_json_to_stix(self):
         """to test custom evtlog stix object properties"""
@@ -411,11 +411,11 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         event_obj = TestPaloaltoResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert event_obj is not None
-        assert event_obj['event_id'] == "OTE0MTk5MTg2MDI1NzUyODc0NQ=="
-        assert event_obj['time'] == '1975-03-21T11:12:13.729Z'
-        assert event_obj['version'] == 25
-        assert event_obj['uuid'] == '{00000136-0000-0000-C000-000000000046}'
-        assert event_obj['event_type'] == "EVENT_LOG"
+        assert event_obj['code'] == "OTE0MTk5MTg2MDI1NzUyODc0NQ=="
+        assert event_obj['created'] == '1975-03-21T11:12:13.729Z'
+        assert event_obj['entensions']['x-paloalto-event']['version'] == 25
+        assert event_obj['entensions']['x-paloalto-event']['uuid'] == '{00000136-0000-0000-C000-000000000046}'
+        assert event_obj['category'] == ["event_log"]
 
     def test_custom_network_json_to_stix(self):
         """to test custom network stix object properties"""

@@ -21,7 +21,8 @@ def _remove_timestamp_from_query(queries):
         return re.sub(pattern2, '{}', replace_pat1)
 
 
-all_fields = "dataset_name,action_local_ip,action_remote_ip,agent_ip_addresses_v6,dst_agent_ip_addresses_v6," \
+all_fields = "dataset_name,action_local_ip,action_remote_ip,agent_ip_addresses,agent_ip_addresses_v6," \
+             "dst_agent_ip_addresses_v6," \
              "action_local_port,action_remote_port,action_network_protocol,action_pkts_sent,action_pkts_received," \
              "action_file_name,action_process_image_name,actor_process_image_name,causality_actor_process_image_name," \
              "os_actor_process_image_name,action_file_size,action_file_md5,action_module_md5," \
@@ -80,7 +81,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('paloalto', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["{'xdr_data': {'query': 'dataset = xdr_data | filter ((action_local_ip = \"172.31.90.48\" or "
-                   "action_remote_ip = \"172.31.90.48\")  and "
+                   "action_remote_ip = \"172.31.90.48\" or agent_ip_addresses = \"172.31.90.48\")  and "
                    "(to_epoch(_time,\"millis\") >= 1645615464114 and to_epoch(_time,\"millis\") <= 1645615764114)) "
                    "| alter dataset_name = \"xdr_data\" | fields " + all_fields + " | limit 10000 ', 'timeframe': {"
                                                                                   "'from': 1645615464114, 'to': "
@@ -445,7 +446,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "action_thread_child_pid = 868)  and "
                    "(to_epoch(_time,\"millis\") >= 1642590000000 and to_epoch(_time,\"millis\") <= 1644231600003)) "
                    "or ((action_local_ip = \"172.31.31.67\" or action_remote_ip "
-                   "= \"172.31.31.67\") and action_remote_port = 53996  and "
+                   "= \"172.31.31.67\" or agent_ip_addresses = \"172.31.31.67\") and action_remote_port = 53996  and "
                    "(to_epoch(_time,\"millis\") >= 1642590000000 and to_epoch(_time,\"millis\") <= 1644231600003)) "
                    "| alter dataset_name = "
                    "\"xdr_data\" | fields " + all_fields + " | limit 10000 ', "

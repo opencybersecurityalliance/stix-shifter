@@ -3,7 +3,8 @@
     "fields": {
       "value": [
         "action_local_ip",
-        "action_remote_ip"
+        "action_remote_ip",
+        "agent_ip_addresses"
       ]
     }
   },
@@ -27,7 +28,8 @@
         "action_network_protocol"
       ],
       "src_ref.value": [
-        "action_local_ip"
+        "action_local_ip",
+        "agent_ip_addresses"
       ],
       "dst_ref.value": [
         "action_remote_ip"
@@ -242,14 +244,18 @@
       "hostname": [
         "agent_hostname"
       ],
-      "asset_id": [
-        "agent_id"
+      "ip_refs[*].value": [
+        "action_local_ip",
+        "action_remote_ip",
+        "agent_ip_addresses_v6",
+        "agent_ip_addresses",
+        "dst_agent_ip_addresses_v6"
       ],
-      "os_type": [
-        "agent_os_type"
-      ],
-      "user_agent": [
-        "action_user_agent"
+      "mac_refs[*].value": [
+        "mac",
+        "associated_mac",
+        "dst_associated_mac",
+        "dst_mac"
       ]
     }
   },
@@ -265,17 +271,89 @@
   },
   "x-oca-event": {
     "fields": {
-      "event_id": [
+      "code": [
         "event_id"
       ],
-      "event_description": [
-        "vpn_event_description"
-      ],
-      "path": [
-        "event_address_mapped_image_path"
-      ],
-      "event_type": [
+      "category[*]": [
         "event_type"
+      ],
+      "action": [
+        "event_sub_type"
+      ],
+      "created": [
+        "event_timestamp"
+      ],
+      "agent": [
+        "agent_hostname"
+      ],
+      "url_ref.value": [
+        "dst_action_url_category"
+      ],
+      "file_ref.name": [
+        "action_file_name"
+      ],
+      "process_ref.pid": [
+        "action_module_process_os_pid",
+        "action_process_os_pid",
+        "actor_process_os_pid",
+        "causality_actor_process_os_pid",
+        "os_actor_process_os_pid"
+      ],
+      "process_ref.name": [
+        "action_process_image_name",
+        "actor_process_image_name"
+      ],
+      "process_ref.command_line": [
+        "action_process_image_command_line",
+        "actor_process_command_line"
+      ],
+      "process_ref.binary_ref.name": [
+        "action_process_image_name",
+        "actor_process_image_name"
+      ],
+      "process_ref.parent_ref.name": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "process_ref.parent_ref.pid": [
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid"
+      ],
+      "process_ref.parent_ref.command_line": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "parent_process_ref.name": [
+        "causality_actor_process_image_name",
+        "os_actor_process_image_name"
+      ],
+      "parent_process_ref.pid": [
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid"
+      ],
+      "parent_process_ref.command_line": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "process_ref.creator_user_ref.user_id": [
+        "action_process_username"
+      ],
+      "process_ref.binary_ref.hashes.MD5": [
+        "action_process_image_md5"
+      ],
+      "process_ref.binary_ref.hashes.'SHA-256'": [
+        "action_process_image_sha256"
+      ],
+      "domain_ref.value": [
+        "auth_domain",
+        "dst_host_metadata_domain",
+        "host_metadata_domain"
+      ],
+      "registry_ref.key": [
+        "action_registry_key_name"
+      ],
+      "registry_ref.values[*]": [
+        "action_registry_value_name"
       ]
     }
   },

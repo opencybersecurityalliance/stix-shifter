@@ -190,13 +190,19 @@ class ResultsConnector(BaseResultsConnector):
                     if obj in mandatory_map.keys():
                         data = ResultsConnector.check_mandatory_map(mandatory_map, obj, log, data, field, value)
                     else:
-                        data[field] = value
+                        # Since these ip addresses may receive a single ip or list of ips, they are sent as list value
+                        # for the to_stix conversion
+                        data[field] = value.split(",") if field in ["agent_ip_addresses", "agent_ip_addresses_v6",
+                                                                    "dst_agent_ip_addresses_v6"] else value
+
             elif isinstance(stix_data_map, dict):
                 if stix_data_map["object"] in mandatory_map.keys():
                     data = ResultsConnector.check_mandatory_map(mandatory_map, stix_data_map["object"],
                                                                 log, data, field, value)
                 else:
+
                     data[field] = value
+
         except (KeyError, IndexError, TypeError) as e:
             raise e
         return data
