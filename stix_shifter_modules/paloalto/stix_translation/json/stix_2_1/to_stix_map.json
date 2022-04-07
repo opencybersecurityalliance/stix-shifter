@@ -831,7 +831,7 @@
       "object": "file"
     },
     "action_file_hash_control_verdict": {
-      "key": "file.extensions.x-paloalto-process-ext.control_verdict",
+      "key": "file.extensions.x-paloalto-file-ext.control_verdict",
       "object": "file"
     },
     "actor_process_instance_id": {
@@ -1004,7 +1004,7 @@
       "object": "event"
     },
     "vpn_event_description": {
-      "key": "x-oca-event.entensions.x-paloalto-event-ext.event_description",
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.event_description",
       "object": "event"
     },
     "event_timestamp": {
@@ -1013,16 +1013,16 @@
       "transformer": "EpochToTimestamp"
     },
     "event_version": {
-      "key": "x-oca-event.entensions.x-paloalto-event-ext.version",
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.version",
       "object": "event",
       "transformer": "ToInteger"
     },
     "event_rpc_interface_uuid": {
-      "key": "x-oca-event.entensions.x-paloalto-event-ext.uuid",
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.uuid",
       "object": "event"
     },
     "event_address_mapped_image_path": {
-      "key": "x-oca-event.entensions.x-paloalto-event-ext.path",
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.path",
       "object": "event"
     },
     "event_type": {

@@ -413,8 +413,8 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert event_obj is not None
         assert event_obj['code'] == "OTE0MTk5MTg2MDI1NzUyODc0NQ=="
         assert event_obj['created'] == '1975-03-21T11:12:13.729Z'
-        assert event_obj['entensions']['x-paloalto-event']['version'] == 25
-        assert event_obj['entensions']['x-paloalto-event']['uuid'] == '{00000136-0000-0000-C000-000000000046}'
+        assert event_obj['extensions']['x-paloalto-event']['version'] == 25
+        assert event_obj['extensions']['x-paloalto-event']['uuid'] == '{00000136-0000-0000-C000-000000000046}'
         assert event_obj['category'] == ["event_log"]
 
     def test_custom_network_json_to_stix(self):
