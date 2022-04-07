@@ -1,3 +1,4 @@
+import datetime
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, StartStopQualifier
@@ -17,8 +18,8 @@ class QueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
+        self.options = options
         self.is_combined_expression = False
-        self.formated_qualifier = None
         self.translated = self.parse_expression(pattern)
 
     @staticmethod
@@ -31,7 +32,7 @@ class QueryStringPatternTranslator:
         return '"{}"'.format(value)
         
     @staticmethod
-    def _escape_value(value, comparator=None) -> str:
+    def _escape_value(value) -> str:
         if isinstance(value, str):
             return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
         else:
@@ -74,12 +75,18 @@ class QueryStringPatternTranslator:
             raise NotImplementedError("Comparison operator {} unsupported for connector".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
-    def _set_is_combined_expression(self):
-        self.is_combined_expression = True
-
-    def _format_qualifier(self, qualifier) -> str:
+    def _format_qualifier(self, qualifier, time_range) -> str:
+        str_qualifier_pattern = 'AND happenedAfter = "{start_iso}" AND happenedBefore = "{stop_iso}"'
         if qualifier and isinstance(qualifier, StartStopQualifier):
-            self.formated_qualifier = 'AND happenedAfter = "' + qualifier.start_iso + '" AND happenedBefore = "' + qualifier.stop_iso + '"'
+            formated_qualifier = str_qualifier_pattern.format(start_iso=qualifier.start_iso, stop_iso=qualifier.stop_iso)
+        else:
+            stop_time = datetime.datetime.utcnow()
+            start_time = stop_time - datetime.timedelta(minutes=time_range)
+            converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+            converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+            formated_qualifier = str_qualifier_pattern.format(start_iso=converted_starttime, stop_iso=converted_stoptime)
+
+        return formated_qualifier
 
     def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
         """Convert a list of mapped fields into a query string."""
@@ -137,18 +144,14 @@ class QueryStringPatternTranslator:
 
             if(mapped_fields_array_len > 1):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
-                grouped_comparison_string = "(" + comparison_string + ")"
-                comparison_string = grouped_comparison_string
+                comparison_string = "({})".format(comparison_string)
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
             
-            self._format_qualifier(qualifier)
-
             return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            self._set_is_combined_expression()
             operator = self._lookup_comparison_operator(self, expression.operator)
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
@@ -159,28 +162,29 @@ class QueryStringPatternTranslator:
             if isinstance(expression.expr2, CombinedComparisonExpression):
                 expression_02 = "({})".format(expression_02)
 
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
+            expression_string = "{} {} {}".format(expression_01, operator, expression_02)
             
-            self._format_qualifier(qualifier)
-            
-            return "{}".format(query_string)
+            return "{}".format(expression_string)
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression, qualifier)
+            formated_qualifier = self._format_qualifier(qualifier, self.options['time_range'])
+            expression_string = self._parse_expression(expression.comparison_expression)
+            expression_string = "({}) {}".format(expression_string, formated_qualifier)
+
+            return expression_string
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
+            formated_qualifier = self._format_qualifier(expression, self.options['time_range'])
+
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                self._set_is_combined_expression()
-                operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
-                expression_01 = self._parse_expression(expression.observation_expression.expr1)
-                # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression)
-                return "{} {} {}".format(expression_01, operator, expression_02)
+                expression_string = self._parse_expression(expression.observation_expression, expression)
+                return "({})".format(expression_string)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression)
+                expression_string = self._parse_expression(expression.observation_expression.comparison_expression, expression)
+                return "({}) {}".format(expression_string, formated_qualifier)
+
         elif isinstance(expression, CombinedObservationExpression):
-            self._set_is_combined_expression()
             operator = self._lookup_comparison_operator(self, expression.operator)
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
+            expression_01 = self._parse_expression(expression.expr1, qualifier)
+            expression_02 = self._parse_expression(expression.expr2, qualifier)
             if expression_01 and expression_02:
                 return "({}) {} ({})".format(expression_01, operator, expression_02)
             elif expression_01:
@@ -202,11 +206,4 @@ class QueryStringPatternTranslator:
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options)
     query = query_translator.translated
-
-    if query_translator.formated_qualifier:
-        if query_translator.is_combined_expression:
-            query = "({}) {}".format(query, query_translator.formated_qualifier)
-        else:
-            query = "{} {}".format(query, query_translator.formated_qualifier)
-
     return query

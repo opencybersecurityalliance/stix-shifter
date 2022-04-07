@@ -191,7 +191,7 @@ class StartStopQualifier(Qualifier):
             raise RuntimeError("Invalid STIX timestamp {}".format(stop))
 
     def __repr__(self) -> str:
-        return "{observation_expression} StartStopQualifier({qualifier}, start={start}, stop={stop})".format(observation_expression=self.observation_expression, qualifier=self.qualifier, start=self.start, stop=self.stop)
+        return "StartStopQualifier({qualifier}, start={start}, stop={stop}, observation_expression={observation_expression})".format(qualifier=self.qualifier, start=self.start, stop=self.stop, observation_expression=self.observation_expression)
 
     @property
     def start_iso(self):

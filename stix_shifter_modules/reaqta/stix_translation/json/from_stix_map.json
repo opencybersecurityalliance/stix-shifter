@@ -64,7 +64,7 @@
   },
   "user-account": {
     "fields": {
-      "user_id": [], 
+      "user_id": ["login.id"], 
       "account_login": [], 
       "account_type": [], 
       "display_name": [], 
