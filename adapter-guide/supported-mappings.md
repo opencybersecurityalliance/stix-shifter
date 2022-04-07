@@ -33,3 +33,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Proofpoint (SIEM API)](connectors/proofpoint_supported_stix.md)
 - [Infoblox BloxOne Threat Defense](connectors/infoblox_supported_stix.md)
 - [Cybereason](connectors/cybereason_supported_stix.md)
+- [PaloAlto Cortex XDR](connectors/paloalto_supported_stix.md)
