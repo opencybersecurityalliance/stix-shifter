@@ -1,115 +1,276 @@
 {
-  "UserName": {
-    "key": "user-account.user_id"
-  },
-  "LogSourceId": {
-    "key": "x-custom-property.log_source_id",
-    "object": "x_custom_property"
-  },
-  "Magnitude": {
-    "key": "x-custom-property.magnitude",
-    "object": "x_custom_property"
-  },
-  "SourceIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV4": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "SourceIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    }
-  ],
-  "DestinationIpV6": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "EventCount": {
-    "key": "number_observed",
-    "cybox": false,
+  "eventId": {
+    "key": "x-oca-event.code",
+    "object": "event",
     "transformer": "ToInteger"
   },
-  "StartTime": [
+  "endpointId": {
+    "key": "x-reaqta.endpoint_id",
+    "object": "x-reaqta"
+  },
+  "payload": {
+      "localId":{
+        "key": "x-reaqta.local_id",
+        "object": "x-reaqta"
+      },
+      "process": {
+          "id": {
+            "key": "x-oca-event.extensions.x-reaqta-process.process_id",
+            "object": "event"
+          },
+          "parentId": {
+            "key": "x-oca-event.extensions.x-reaqta-process.parent_process_id",
+            "object": "event"
+          },
+          "endpointId": {
+            "key": "x-reaqta.process_endpoint_id",
+            "object": "x-reaqta"
+          },
+          "program": {
+              "path": [
+                {
+                  "key": "directory.path",
+                  "object": "dir",
+                  "transformer": "ToDirectoryPath"
+                },
+                {
+                  "key": "x-oca-event.file_ref",
+                  "object": "event",
+                  "references": "file"
+                },
+                {
+                  "key": "file.parent_directory_ref",
+                  "object": "file",
+                  "references": "dir"
+                }
+              ],
+              "filename":  [
+                {
+                  "key": "file.name",
+                  "object": "file"
+                },
+                {
+                  "key": "process.binary_ref",
+                  "object": "process",
+                  "references": "file"
+                },
+                {
+                  "key": "x-oca-event.file_ref",
+                  "object": "event",
+                  "references": "file"
+                }
+              ],
+              "md5": {
+                "key": "file.hashes.MD5",
+                "object": "file"
+              },
+              "sha1": {
+                "key": "file.hashes.SHA-1",
+                "object": "file"
+              },
+              "sha256": {
+                "key": "file.hashes.SHA-256",
+                "object": "file"
+              },
+              "certInfo": {
+                  "signer": {
+                    "key": "file.extensions.x-reaqta-cert.signer",
+                    "object": "file"
+                  },
+                  "issuer": {
+                    "key": "file.extensions.x-reaqta-cert.issuer",
+                    "object": "file"
+                  },
+                  "trusted": {
+                    "key": "file.extensions.x-reaqta-cert.trusted",
+                    "object": "file"
+                  },
+                  "expired": {
+                    "key": "file.extensions.x-reaqta-cert.expired",
+                    "object": "file"
+                  }
+              },
+              "size": {
+                "key": "file.size",
+                "object": "file"
+              },
+              "arch": {
+                "key": "file.extensions.x-reaqta-program.arch",
+                "object": "file"
+              },
+              "fsName": {
+                "key": "file.extensions.x-reaqta-program.fsnamee",
+                "object": "file"
+              }
+          },
+          "user": [
+            {
+              "key": "user-account.user_id",
+              "object": "useraccount"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "process",
+              "references": "useraccount"
+            },
+            {
+              "key": "x-oca-event.user_ref",
+              "object": "event",
+              "references": "useraccount"
+            }
+          ],
+          "pid": [
+            {
+              "key": "process.pid",
+              "object": "process",
+              "transformer": "ToInteger"
+            },
+            {
+              "key": "x-oca-event.process_ref",
+              "object": "event",
+              "references": "process"
+            }
+          ],
+          "startTime": {
+            "key": "process.created",
+            "object": "process"
+          },
+          "ppid": [
+            {
+              "key": "process.pid",
+              "object": "parent_process",
+              "transformer": "ToInteger"
+            },
+            {
+              "key": "process.parent_ref",
+              "object": "process",
+              "references": "parent_process"
+            },
+            {
+              "key": "x-oca-event.parent_process_ref",
+              "object": "event",
+              "references": "parent_process"
+            }
+          ],
+          "pstartTime": {
+            "key": "process.created",
+            "object": "parent_process"
+          },
+          "userSID": {
+            "key": "process.extensions.x-reaqta-process.user_sid",
+            "object": "process"
+          },
+          "privilegeLevel": {
+            "key": "process.extensions.x-reaqta-process.privilege_level",
+            "object": "process"
+          },
+          "noGui": {
+            "key": "process.extensions.x-reaqta-process.no_gui",
+            "object": "process"
+          },
+          "logonId": {
+            "key": "process.extensions.x-reaqta-process.logon_id",
+            "object": "process"
+          }
+      },
+      "incidents": {
+        "key": "x-ibm-finding.extensions.x-reaqta-alert.incidents",
+        "object": "x-ibm-finding"
+      },
+      "triggeredIncidents": {
+        "key": "x-ibm-finding.extensions.x-reaqta-alert.triggeredIncidents",
+        "object": "x-ibm-finding"
+      },
+      "data": {
+          "addressFamily": {
+            "key": "network-traffic.extensions.x-reaqta-network.address_family",
+            "object": "nt"
+          },
+          "protocol": {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "transformer": "ToLowercaseArray"
+          },
+          "localAddr": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "src_ip"
+            },
+            {
+              "key": "network-traffic.src_ref",
+              "object": "nt",
+              "references": "src_ip"
+            },
+            {
+              "key": "x-ibm-finding.src_ip_ref",
+              "object": "finding",
+              "references": "src_ip"
+            },
+            {
+              "key": "x-oca-event.network_ref",
+              "object": "event",
+              "references": "nt"
+            },
+            {
+              "key": "x-oca-asset.ip_refs",
+              "object": "host",
+              "references": ["src_ip"],
+              "group": true
+            }
+          ],
+          "localPort": {
+            "key": "network-traffic.src_port",
+            "object": "nt",
+            "transformer": "ToInteger"
+          },
+          "remoteAddr": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "network-traffic.dst_ref",
+              "object": "nt",
+              "references": "dst_ip"
+            },
+            {
+              "key": "x-ibm-finding.dst_ip_ref",
+              "object": "finding",
+              "references": "dst_ip"
+            },
+            {
+              "key": "x-oca-event.network_ref",
+              "object": "event",
+              "references": "nt"
+            }
+          ],
+          "remotePort": {
+            "key": "network-traffic.dst_port",
+            "object": "nt",
+            "transformer": "ToInteger"
+          },
+          "outbound": {
+            "key": "network-traffic.extensions.x-reaqta-network.outbound",
+            "object": "nt"
+          }
+      },
+      "eventType": {
+        "key": "x-ibm-finding.name",
+        "object": "x-ibm-finding"
+      }
+  },
+  "happenedAt": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
       "cybox": false
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
       "cybox": false
     }
   ],
-  "Url": {
-    "key": "url.value"
-  },
-  "FileName": {
-    "key": "file.name"
-  },
-  "Payload": {
-    "key": "artifact.payload_bin"
-  },
-  "DestinationPort": {
-    "key": "network-traffic.dst_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "SourcePort": {
-    "key": "network-traffic.src_port",
-    "object": "nt",
-    "transformer": "ToInteger"
-  },
-  "NetworkProtocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "transformer": "ToLowercaseArray"
-  },
-  "DomainName": {
-    "key": "domain-name.value"
-  },
-  "Process": {
-    "Path": [
-      {
-        "object": "proc",
-        "key": "process.command_line"
-      }
-    ],
-    "Pid": [
-      {
-        "object": "proc",
-        "key": "process.id"
-      }
-    ]
+  "receivedAt": {
+    "key": "x-oca-event.created",
+    "object": "event"
   }
 }
