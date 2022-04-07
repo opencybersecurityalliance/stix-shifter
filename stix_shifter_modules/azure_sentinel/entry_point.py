@@ -10,4 +10,4 @@ class EntryPoint(BaseEntryPoint):
         if connection:
             self.setup_transmission_basic(connection, configuration)
 
-        self.setup_translation_simple(dialect_default='SecurityEvent')
+        self.setup_translation_simple(dialect_default='SecurityAlert')

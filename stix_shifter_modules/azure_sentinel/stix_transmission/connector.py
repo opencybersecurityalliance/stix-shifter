@@ -1,4 +1,6 @@
+from calendar import c
 import json
+from multiprocessing import connection
 import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
@@ -8,23 +10,21 @@ import pandas as pd
 from datetime import datetime, timezone
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from azure.identity import ClientSecretCredential
+from datetime import datetime, timedelta
+import re
 
 
 class Connector(BaseSyncConnector):
-    init_error = None
     max_limit = 1000
-
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
-        self.adal_response = Connector.generate_token(connection, configuration)
-        if self.adal_response['success']:
-            configuration['auth']['access_token'] = self.adal_response['access_token']
-            self.api_client = APIClient(connection, configuration)
-        else:
-            self.init_error = True
+        self.workspace_id = connection.get('workspaceId')
+        self.credential = ClientSecretCredential(tenant_id=configuration['auth']['tenant'],
+                                                client_id=configuration['auth']['clientId'],
+                                                client_secret=configuration['auth']['clientSecret'])
 
     def ping_connection(self):
         """Ping the endpoint."""
@@ -45,31 +45,30 @@ class Connector(BaseSyncConnector):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
-
+    
     def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
         response = None
-        return_obj = dict()
         length = int(length)
         offset = int(offset)
-        column_names = []
-        final_result = []
+
         try:
-            total_records = offset + length
-            credential = ClientSecretCredential(tenant_id="924f8a12-f6bd-4b8d-93bf-9fa6e26cbf8b",
-                                                client_id="15566bc1-0098-4e79-80a1-6390b97440ee",
-                                                client_secret="AFv7Q~j3nXESOzqkzppQi86G0nhSckF6pw44G")
-            client = LogsQueryClient(credential)
+            client = LogsQueryClient(self.credential)
             query = """{query}""".format(query=query)
-            start_time = datetime(2022, 2, 25, tzinfo=timezone.utc)
-            end_time = datetime(2022, 3, 3, tzinfo=timezone.utc)
+            matches = re.findall(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+?Z)', query)
+            if matches:
+                stop_time = datetime.strptime(matches[1].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
+                start_time =  datetime.strptime(matches[0].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
+            else: 
+                stop_time = datetime.utcnow()
+                start_time = stop_time - timedelta(hours=24)
             response = client.query_workspace(
-                workspace_id='e00daaf8-d6a4-4410-b50b-f5ef61c9cb45',
+                workspace_id=self.workspace_id,
                 query=query,
-                timespan=(start_time, end_time)
+                timespan=(start_time, stop_time)
             )
             if response.status == LogsQueryStatus.PARTIAL:
                 error = response.partial_error

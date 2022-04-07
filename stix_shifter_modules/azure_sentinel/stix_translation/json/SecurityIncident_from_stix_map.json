@@ -1,63 +1,23 @@
 {
-  "ipv4-addr": {
-    "fields": {
-      "value": ["IpAddress"]
-    }
-  },
-  "directory": {
-    "fields": {
-      "path": ["HomeDirectory", "HomePath"]
-    }
-  },
-  "file": {
-    "fields": {
-      "path": ["FilePath"],
-      "hashes": ["FileHash"]
-    }
-  },
-   "process" : {
-    "fields": {
-      "name": ["ProcessName", "LogonProcessName"],
-      "parent_ref.name": ["ParentProcessName"],
-      "command_line": ["CommandLine"],
-      "pid": ["ProcessId"]
-    }
-  },
-  "domain-name": {
-    "fields": {
-      "value": ["AccountDomain", "DomainName", "SubjectDomainName", "TargetDomainName", "TargetOutboundDomainName"]
-    }
-  },
   "url": {
     "fields": {
-      "name": ["IncidentUrl", "QuarantineHelpURL"]
+      "name": ["IncidentUrl"]
     }
   },
   "x-ibm-finding": {
     "fields": {
-      "start": [ "FirstActivityTime", "FirstModifiedTime", "StartTime"],
-      "end": ["ClosedTime", "LastActivityTime", "LastModifiedTime", "EndTime"],
-      "code": ["eventID"],
-      "name": ["AlertName"],
-      "time_observed": ["TimeGenerated", "EventTime"],
-      "src_ip_ref": ["IpAddress"],
-      "dst_ip_ref": ["ClientIPAddress"]
+      "start": [ "FirstActivityTime", "FirstModifiedTime", "TimeGenerated"],
+      "end": ["ClosedTime", "LastActivityTime", "LastModifiedTime"],
+      "name": ["IncidentName"],
+      "time_observed": ["TimeGenerated"]
     }
   },
   "x-oca-event": {
     "fields": {
       "created": ["CreatedTime"],
-      "code": ["eventID"],
       "provider": ["ProviderName"],
       "url_ref": ["IncidentUrl"],
-      "process_ref": ["ProcessName"],
-      "file_ref.hash": ["FileHash"],
-      "file_ref.path": ["FilePath"],
-      "file_ref.service": ["ServiceFileName"],
-      "parent_process_ref": ["ParentProcessName"],
-      "domain_ref": ["DomainName"],
-      "ip_refs.ip": ["IpAddress"],
-      "ip_refs.clientIp": ["ClientIPAddress"]
+      "domain_ref": ["DomainName"]
     }
   },
   "x-msazure-sentinel-incident": {

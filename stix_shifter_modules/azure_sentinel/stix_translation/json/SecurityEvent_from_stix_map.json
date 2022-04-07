@@ -30,26 +30,26 @@
   },
   "url": {
     "fields": {
-      "name": ["IncidentUrl", "QuarantineHelpURL"]
+      "name": [ "QuarantineHelpURL"]
     }
   },
   "x-ibm-finding": {
     "fields": {
-      "start": [ "FirstActivityTime", "FirstModifiedTime", "StartTime"],
-      "end": ["ClosedTime", "LastActivityTime", "LastModifiedTime", "EndTime"],
+      "start": ["TimeGenerated"],
+      "end": ["PreviousTime"],
       "code": ["eventID"],
-      "name": ["AlertName"],
-      "time_observed": ["TimeGenerated", "EventTime"],
+      "name": ["EventSourceName"],
+      "time_observed": ["TimeGenerated"],
       "src_ip_ref": ["IpAddress"],
       "dst_ip_ref": ["ClientIPAddress"]
     }
   },
   "x-oca-event": {
     "fields": {
-      "created": ["CreatedTime"],
+      "created": ["TimeGenerated"],
       "code": ["eventID"],
-      "provider": ["ProviderName"],
-      "url_ref": ["IncidentUrl"],
+      "provider": ["AccountName"],
+      "url_ref": ["QuarantineHelpURL"],
       "process_ref": ["ProcessName"],
       "file_ref.hash": ["FileHash"],
       "file_ref.path": ["FilePath"],
