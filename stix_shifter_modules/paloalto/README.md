@@ -549,7 +549,7 @@ results
                     "agent": "EC2AMAZ-IQFSLIL",
                     "code": "AAABfvQtkk8qn9UKACE2JA==",
                     "created": "2022-02-13T17:42:14.407Z",
-                    "entensions": {
+                    "extensions": {
                         "x-paloalto-event": {
                             "version": 25
                         }
@@ -673,7 +673,7 @@ results
                     "agent": "EC2AMAZ-IQFSLIL",
                     "code": "AAABfvWCZpMqn9UKACRWUw==",
                     "created": "2022-02-13T23:54:31.001Z",
-                    "entensions": {
+                    "extensions": {
                         "x-paloalto-event": {
                             "version": 25
                         }
@@ -826,7 +826,7 @@ paloalto
                     "agent": "EC2AMAZ-65BN1IK",
                     "code": "AAABfnYIxcPunpI7AATXuQ==",
                     "created": "2022-01-20T05:49:53.598Z",
-                    "entensions": {
+                    "extensions": {
                         "x-paloalto-event": {
                             "version": 25
                         }
