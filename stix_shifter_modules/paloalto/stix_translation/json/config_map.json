@@ -1,0 +1,103 @@
+{
+	"int_supported_fields": [
+      "action_local_port",
+      "action_remote_port",
+      "action_pkts_sent",
+      "action_pkts_received",
+      "action_file_size",
+      "action_module_process_os_pid",
+      "action_process_os_pid",
+      "actor_process_os_pid",
+      "causality_actor_process_os_pid",
+      "os_actor_process_os_pid",
+      "action_process_requested_parent_pid",
+      "action_thread_parent_pid",
+      "action_thread_child_pid"
+    ],
+    "timestamp_supported_fields": [
+      "action_file_access_time",
+      "actor_process_file_access_time",
+      "os_actor_process_file_access_time",
+      "action_file_mod_time",
+      "actor_process_file_mod_time",
+      "os_actor_process_file_mod_time",
+      "action_file_create_time",
+      "action_process_file_create_time",
+      "actor_process_file_create_time",
+      "causality_actor_process_file_create_time",
+      "os_actor_process_file_create_time",
+      "action_process_instance_execution_time",
+      "actor_process_execution_time",
+      "action_network_creation_time",
+      "event_timestamp"
+    ],
+    "mac_supported_fields": [
+      "mac",
+      "associated_mac",
+      "dst_associated_mac",
+      "dst_mac"
+    ],
+    "enum_supported_fields": [
+      "action_network_protocol",
+      "event_type",
+      "event_sub_type"
+    ],
+	"enum_supported_values": {
+		  "action_network_protocol": ["TCP", "UDP"],
+		   "event_type": [
+			  "AGENT_STATUS","CLOUD_AUDIT_LOGS","DEVICE","EVENT_LOG","FILE","GAP","HOST_FIREWALL",
+              "HOST_METADATA","HOST_STATUS","INJECTION","LOAD_IMAGE","LOGIN_EVENT","MOUNT","NAMESPACE",
+			  "NETWORK","PROCESS","PROCESS_HANDLE","REGISTRY","RPC_CALL","STORY","SYSTEM_CALL",
+			  "THREAD","USER_STATUS_CHANGE","VPN_EVENT"],
+          "event_sub_type": [
+			  "AGENT_STATUS_AGENT_BOOT" ,"AGENT_STATUS_AGENT_INSTALLED",
+			  "AGENT_STATUS_AGENT_LOW_LEVEL_CONFIG_UPDATE" ,"AGENT_STATUS_AGENT_POLICY_FILTER_UPDATE" ,
+			  "AGENT_STATUS_AGENT_REPLAY_ENDED" ,"AGENT_STATUS_AGENT_SHUTDOWN" ,
+			  "AGENT_STATUS_AGENT_UNINSTALLED" ,"DEVICE_PLUG" ,"DEVICE_UNPLUG" ,
+			  "EVENT_LOG_AGENT_EVENT_LOG" ,"EVENT_LOG_DOMAIN_CONTROLLER" ,"FILE_CHANGE_MODE" ,
+			  "FILE_CHANGE_OWNER" ,"FILE_CREATE_NEW" ,"FILE_DELETE_EXT_ATTRIBUTE" ,
+			  "FILE_DIR_CHANGE_MODE" ,"FILE_DIR_CHANGE_OWNER" ,"FILE_DIR_CREATE" ,"FILE_DIR_LINK" ,
+			  "FILE_DIR_OPEN" ,"FILE_DIR_QUERY" ,"FILE_DIR_REMOVE" ,"FILE_DIR_RENAME" ,
+			  "FILE_DIR_SET_ATTR" ,"FILE_DIR_WRITE" ,"FILE_LINK" ,"FILE_OPEN" ,"FILE_REMOVE" ,
+			  "FILE_RENAME" ,"FILE_REPARSE" ,"FILE_SET_ATTRIBUTE" ,"FILE_SET_SECURITY_DESCRIPTOR" ,
+			  "FILE_WRITE" ,"GAP_GAP_ENDED" ,"GAP_GAP_STARTED", "HOST_FIREWALL_HOST_FW_ALLOW" ,
+			  "HOST_FIREWALL_HOST_FW_BLOCK" ,"HOST_METADATA_CHANGE" ,"HOST_STATUS_BOOT" ,
+			  "HOST_STATUS_RESUME" ,"HOST_STATUS_SHUTDOWN" ,"HOST_STATUS_SUSPEND" ,
+			  "INJECTION_CREATE_REMOTE_THREAD" ,"INJECTION_PROCESS_HOLLOW" ,"INJECTION_QUEUE_APC" ,
+			  "INJECTION_SET_THREAD_CONTEXT" ,"LOAD_IMAGE_MODULE" ,"LOAD_IMAGE_MPROTECT" ,
+			  "LOAD_IMAGE_PRELOAD" ,"LOAD_IMAGE_SO_LOAD" ,"MOUNT_DRIVE_MOUNT" ,
+			  "MOUNT_DRIVE_UNMOUNT" ,"NAMESPACE_SETNS" ,"NAMESPACE_UNSHARE" ,
+			  "NETWORK_DATAGRAM_STATISTICS" ,"NETWORK_DNS_QUERY" ,"NETWORK_HTTP_HEADER" ,
+			  "NETWORK_OUTBOUND_ICMP" ,"NETWORK_PROXY_CONNECT" ,"NETWORK_RAW_DATA" ,
+			  "NETWORK_RAW_PCAP_DATA" ,"NETWORK_STREAM_ACCEPT" ,"NETWORK_STREAM_CONNECT" ,
+			  "NETWORK_STREAM_CONNECT_FAILED" ,"NETWORK_STREAM_DISCONNECT" ,"NETWORK_STREAM_LISTEN" ,
+			  "NETWORK_STREAM_STATISTICS" ,"PROCESS_START" ,"PROCESS_STOP" ,"REGISTRY_CREATE_KEY" ,
+			  "REGISTRY_DELETE_KEY" ,"REGISTRY_DELETE_VALUE" ,"REGISTRY_LOAD" ,"REGISTRY_RENAME_KEY" ,
+			  "REGISTRY_RESTORE" ,"REGISTRY_SAVE" ,"REGISTRY_SET_VALUE" ,"REGISTRY_UNLOAD" ,
+			  "RPC_CALL_RPC_CALLED" ,"SYSTEM_CALL_CREATE_SYMBOLIC_LINK" ,"SYSTEM_CALL_GDI_BIT_BLT" ,
+			  "SYSTEM_CALL_GET_CLIPBOARD_DATA" ,"SYSTEM_CALL_NT_ALLOCATE_VIRTUAL_MEMORY_REMOTE" ,
+			  "SYSTEM_CALL_NT_CREATE_MUTANT" ,"SYSTEM_CALL_NT_DELAY_EXECUTION" ,
+			  "SYSTEM_CALL_NT_MAP_VIEW_OF_SECTION_REMOTE" ,"SYSTEM_CALL_NT_OPEN_FILE" ,
+			  "SYSTEM_CALL_NT_PROTECT_VIRTUAL_MEMORY_REMOTE" ,"SYSTEM_CALL_NT_QUEUE_APC_THREAD_EX_REMOTE" ,
+			  "SYSTEM_CALL_NT_READ_VIRTUAL_MEMORY_REMOTE" ,"SYSTEM_CALL_NT_SET_CONTEXT_THREAD_REMOTE" ,
+			  "SYSTEM_CALL_NT_TERMINATE_PROCESS_REMOTE","SYSTEM_CALL_NT_UNMAP_VIEW_OF_SECTION" ,
+			  "SYSTEM_CALL_NT_WRITE_VIRTUAL_MEMORY_REMOTE" ,"SYSTEM_CALL_OPEN_REMOTE_TOKEN" ,
+			  "SYSTEM_CALL_QUERY_PROCESS_LIST" ,"SYSTEM_CALL_QUERY_USER_TOKEN" ,
+			  "SYSTEM_CALL_REGISTER_RAW_INPUT_DEVICES" ,"SYSTEM_CALL_SET_INFO_VIRTUAL_MEMORY" ,
+			  "SYSTEM_CALL_SET_WINDOWS_HOOK_EX" ,"SYSTEM_CALL_SET_WIN_EVENT_HOOK" ,
+			  "SYSTEM_CALL_THREAD_IMPERSONATING" ,"USER_STATUS_CHANGE_LOGOFF" ,"USER_STATUS_CHANGE_LOGON"
+		  ]
+	},
+	"timestamp_supported_dataset": {
+		"xdr_data": "_time"
+	},
+	"mandatory_properties_to_stix": {
+		"user": ["actor_primary_user_sid","action_process_user_sid"],
+		"file": ["action_file_name"],
+		"file_action_process" : ["action_process_image_name"],
+		"file_actor_process": ["actor_process_image_name"],
+		"file_causality_process": ["causality_actor_process_image_name"],
+		"file_os_actor": ["os_actor_process_image_name"],
+		"nt": [["action_local_ip","action_remote_ip"],"action_network_protocol"]
+	}
+}
