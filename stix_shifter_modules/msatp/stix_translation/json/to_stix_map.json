@@ -432,32 +432,15 @@
       "key": "x-oca-event.action",
       "object": "event"
     },
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
-      }
-    ],
-    "file_link": [
-      {
-        "key": "external-reference.url",
-        "object": "file_external_ref"
-      },
-      {
-        "key": "x-oca-event.external_references_refs",
-        "object": "event",
-        "references": [
-          "file_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "MacAddressSet": [
@@ -1036,32 +1019,15 @@
         "unwrap": true
       }
     ],
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
-      }
-    ],
-    "file_link": [
-      {
-        "key": "external-reference.url",
-        "object": "file_external_ref"
-      },
-      {
-        "key": "x-oca-event.external_references_refs",
-        "object": "event",
-        "references": [
-          "file_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "MacAddressSet": [
@@ -1546,32 +1512,15 @@
         "unwrap": true
       }
     ],
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
-      }
-    ],
-    "file_link": [
-      {
-        "key": "external-reference.url",
-        "object": "file_external_ref"
-      },
-      {
-        "key": "x-oca-event.external_references_refs",
-        "object": "event",
-        "references": [
-          "file_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "MacAddressSet": [
@@ -2008,32 +1957,15 @@
         "unwrap": true
       }
     ],
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
-      }
-    ],
-    "file_link": [
-      {
-        "key": "external-reference.url",
-        "object": "file_external_ref"
-      },
-      {
-        "key": "x-oca-event.external_references_refs",
-        "object": "event",
-        "references": [
-          "file_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "MacAddressSet": [
@@ -2255,32 +2187,15 @@
       "key": "x-msatp.DeviceType",
       "object": "x-msatp"
     },
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
-      }
-    ],
-    "file_link": [
-      {
-        "key": "external-reference.url",
-        "object": "file_external_ref"
-      },
-      {
-        "key": "x-oca-event.external_references_refs",
-        "object": "event",
-        "references": [
-          "file_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "provider": {
@@ -2397,18 +2312,15 @@
         "references": "original_ref"
       }
     ],
-    "device_link": [
+    "event_link": [
       {
         "key": "external-reference.url",
         "object": "device_external_ref"
       },
       {
-        "key": "x-oca-event.external_references_refs",
+        "key": "x-oca-event.external_ref",
         "object": "event",
-        "references": [
-          "device_external_ref"
-        ],
-        "group": true
+        "references": "device_external_ref"
       }
     ],
     "ReportId": {

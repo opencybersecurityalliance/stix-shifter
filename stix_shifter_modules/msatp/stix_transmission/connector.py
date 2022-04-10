@@ -5,6 +5,7 @@ from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import copy
+from datetime import datetime, timedelta
 
 
 class Connector(BaseSyncConnector):
@@ -62,11 +63,6 @@ class Connector(BaseSyncConnector):
             self.api_client = APIClient(connection, configuration)
         else:
             self.init_error = True
-
-    def get_ds_links(self, deviceId=None, fileUniqueId=None):
-        device_link = 'https://%s/machines/%s/overview' % (self.DEFENDER_HOST, deviceId) if deviceId else None
-        file_link = 'https://%s/files/%s/overview' % (self.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
-        return device_link, file_link
 
     def join_query_with_alerts(self, query):
         table = Connector.get_table_name(query)
@@ -241,7 +237,6 @@ class Connector(BaseSyncConnector):
                             if 'AttackTechniques' in build_data[lookup_table]:
                                 attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
                                 build_data[lookup_table]['AttackTechniques'] = attackTechniques
-
                     if found_events:
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
@@ -262,20 +257,21 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['category'] = ''
                 build_data[lookup_table]['provider'] = ''
                 event_data = copy.deepcopy(build_data[lookup_table])
-                device_link, file_link = self.get_ds_links(build_data[lookup_table].get
-                                                           ('DeviceId', None),
-                                                           build_data[lookup_table].get('InitiatingProcessSHA256',
-                                                                                        None))
-                if device_link:
-                    build_data[lookup_table]['device_link'] = device_link
-
-                if file_link:
-                    build_data[lookup_table]['file_link'] = file_link
+                
+                #link the event to ms atp console device timeline with one second before and after the event https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
+                try:
+                    if 'DeviceId' in build_data[lookup_table]:
+                        timestamp_dt = datetime.strptime(timestamp[:-9], "%Y-%m-%dT%H:%M:%S") #parse timestamp to date opbject striping nanoseconds
+                        timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                        timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                        event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
+                        build_data[lookup_table]['event_link'] = event_link
+                except Exception as ex:
+                    self.logger.error("error while parsing event_link (external ref) from event. this error does not stop translation {}".format(str(ex)))
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
-                                                            self.alert_mode else v) for k, v in
-                                                 build_data[lookup_table].items()})
+                                                            self.alert_mode else v) for k, v in build_data[lookup_table].items()})
                     build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddressesSet' in build_data[lookup_table]:
