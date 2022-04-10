@@ -64,14 +64,6 @@ class Connector(BaseSyncConnector):
         else:
             self.init_error = True
 
-    def get_ds_links(self, deviceId=None, fileUniqueId=None):
-        device_link = 'https://%s/machines/%s/overview' % (self.DEFENDER_HOST, deviceId) if deviceId else None
-        file_link = 'https://%s/files/%s/overview' % (self.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
-        return device_link, file_link
-
-    def get_alert_link(self, alertId):
-        return 'https://%s/alerts/%s' % (self.DEFENDER_HOST, alertId)
-
     def join_query_with_alerts(self, query):
         table = Connector.get_table_name(query)
         if 'Alert' in table:
@@ -288,7 +280,6 @@ class Connector(BaseSyncConnector):
                                 'IPAddress' in ip_obj]
                     build_data[lookup_table]['IPAddresses'] = flat_lst
 
-
                 if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
                     registry_build_data[lookup_table]["RegistryValues"] = []
@@ -300,7 +291,6 @@ class Connector(BaseSyncConnector):
                     registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
 
                     build_data[lookup_table] = registry_build_data[lookup_table]
-
 
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
@@ -314,7 +304,6 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = table_event_data
 
             return_obj['success'] = True
-
 
             return return_obj
 
