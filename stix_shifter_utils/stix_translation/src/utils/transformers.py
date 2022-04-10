@@ -42,12 +42,9 @@ class FormatMac(ValueTransformer):
     """A value transformer to convert Mac address to STIX Mac address format"""
 
     @staticmethod
-    def transform(mac_lst):
-        addresses = []
-        for mac in mac_lst:
-            val = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)]).lower()
-            addresses.append(val)
-        return addresses
+    def transform(mac):
+        value = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)])
+        return value.lower()
 
 class FormatTCPProtocol(ValueTransformer):
     """A value transformer to convert TCP protocol to IANA format"""
@@ -112,6 +109,9 @@ class ToString(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
+            if isinstance(obj, list) or isinstance(obj, dict):
+                raise ValueError()
+            
             return str(obj)
         except ValueError:
             LOGGER.error("Cannot convert input to string")
@@ -300,6 +300,29 @@ class FilterIPv6List(ValueTransformer):
                     result.append(val)
             return result
         return obj
+
+
+class CheckIPv6(ValueTransformer):
+    """A value transformer for validating IPv6 value"""
+    @staticmethod
+    def transform(obj):
+        obj_list = FilterIPv6List.transform([obj])
+        if obj_list:
+            return obj
+        else:
+            None
+
+
+class CheckIPv4(ValueTransformer):
+    """A value transformer for validating IPv4 value"""
+    @staticmethod
+    def transform(obj):
+        obj_list = FilterIPv4List.transform([obj])
+        if obj_list:
+            return obj
+        else:
+            None
+
 
 class ValueToList(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""

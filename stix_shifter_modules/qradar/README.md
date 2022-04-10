@@ -2,7 +2,10 @@
 
 ### Required versions and Content Packs
 
-The QRadar connector works with QRadar 7.3.3 and newer versions. The Sysmon and Windows content packs must be installed on your QRadar environment before using this connector.
+The QRadar connector works with QRadar 7.3.3 and newer versions. The following QRadar content extensions must be installed before using this connector:
+
+* [IBM QRadar Content Extension for Sysmon](https://exchange.xforce.ibmcloud.com/hub/extension/e41e758e2ab5786173438cd09219a9d0) version 1.1.3 or later
+* [IBM QRadar Custom Properties for Microsoft Windows](https://exchange.xforce.ibmcloud.com/hub/extension/IBMQRadar:MicrosoftWindowsCustomProperties) version 1.1.7 or later
 
 ### Format for making STIX translation calls via the CLI
 

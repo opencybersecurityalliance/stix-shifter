@@ -11,21 +11,6 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 class QueryStringPatternTranslator:
     COUNTER = 0
 
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "and",
-        ComparisonExpressionOperators.Or: "or",
-        ComparisonComparators.GreaterThan: "gt",
-        ComparisonComparators.GreaterThanOrEqual: "ge",
-        ComparisonComparators.LessThan: "lt",
-        ComparisonComparators.LessThanOrEqual: "le",
-        ComparisonComparators.Equal: "eq",
-        ComparisonComparators.NotEqual: "ne",
-        ComparisonComparators.Like: "contains",
-        ComparisonComparators.In: "eq",
-        ComparisonComparators.Matches: 'contains',
-    }
-
     # comparator lookup for implementing negation operator
     negated_comparator_lookup = {
         ComparisonComparators.GreaterThan: "le",
@@ -39,6 +24,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.pattern = pattern
 
@@ -246,10 +232,10 @@ class QueryStringPatternTranslator:
         return comparison_string
 
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for Azure Sentinel adapter".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     @staticmethod
     def _parse_time_range(qualifier, time_range):

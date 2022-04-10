@@ -34,6 +34,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.qualified_queries = []
         self.qualifier_string = ''
@@ -221,10 +222,10 @@ class QueryStringPatternTranslator:
         :param expression_operator: str
         :return: str
         """
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for MSATP connector".format(expression_operator.name))
-        return self.comparator_lookup.get(expression_operator)
+        return self.comparator_lookup.get(str(expression_operator))
 
     # get atomicQuery, map the query to tables
     def __eval_comparison_exp_map(self, expression):
@@ -233,7 +234,7 @@ class QueryStringPatternTranslator:
         if stix_field == 'created':
             value = self._format_datetime(expression.value, expression)
         elif 'path' in stix_field:
-            if comparator == self.comparator_lookup.get(ComparisonComparators.Like):
+            if comparator == self.comparator_lookup.get("ComparisonComparators.Like"):
                 value, comparator = self._format_like(expression.value, comparator)
             else:
                 raise TypeError("Comparator {comparator} unsupported for Directory Path, use only LIKE operator"

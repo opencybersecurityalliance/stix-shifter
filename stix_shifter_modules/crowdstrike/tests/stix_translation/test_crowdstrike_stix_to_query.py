@@ -157,3 +157,13 @@ class TestQueryTranslator(unittest.TestCase):
                    "'2021-09-01T09:22:20.316460')"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
+
+    def test_in_comparison_operator(self):
+        stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
+        query = translation.translate('crowdstrike', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+
+        queries = [
+            "((device.external_ip: '127.0.0.1',device.local_ip: '127.0.0.1',device.external_ip: '127.0.0.2',device.local_ip: '127.0.0.2'))"]
+
+        self._test_query_assertions(query, queries)

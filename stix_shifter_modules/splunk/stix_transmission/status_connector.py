@@ -13,6 +13,7 @@ class StatusSplunk(Enum):
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
+        self.connector = __name__.split('.')[1]
 
     def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
@@ -43,5 +44,5 @@ class StatusConnector(BaseStatusConnector):
             return_obj['status'] = status
             return_obj['progress'] = progress
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['messages',0,'text'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['messages',0,'text'], connector=self.connector)
         return return_obj

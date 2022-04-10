@@ -1,0 +1,1086 @@
+{
+  "network_events": {
+    "Event Time": [
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x-ibm-finding.time_observed",
+        "object": "logger_finding",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "protocols": {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "ToLowercaseArray"
+    },
+    "destinationAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "logger_finding",
+        "references": "dst_ip"
+      }
+    ],
+    "c6a3": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ipv6"
+      },
+      {
+        "key": "x-arcsight-event-destination.destination_ipv6_address_ref",
+        "object": "destination",
+        "references": "dst_ipv6"
+      }
+    ],
+    "sourceAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-ibm-finding.src_ip_ref",
+        "object": "logger_finding",
+        "references": "src_ip"
+      }
+    ],
+    "c6a2": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ipv6"
+      },
+     {
+        "key": "x-arcsight-event-source.source_ipv6_address_ref",
+        "object": "source",
+        "references": "src_ipv6"
+      }
+    ],
+    "destinationPort": {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "sourcePort": {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "destinationHostName": [
+      {
+        "key": "domain-name.value",
+        "object": "dst_domain_name"
+      },
+      {
+        "key": "x-arcsight-event-destination.destination_domain_name_ref",
+        "object": "destination",
+        "references": "dst_domain_name"
+      }
+    ],
+    "sourceHostName": [
+      {
+        "key": "domain-name.value",
+        "object": "source_domain_name"
+      },
+      {
+        "key": "x-arcsight-event-source.source_domain_name_ref",
+        "object": "source",
+        "references": "source_domain_name"
+      }
+    ],
+    "destinationMacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "dst_mac",
+        "transformer": "ArcsightFormatMac"
+
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "dst_ip",
+        "references": ["dst_mac"]
+      }
+    ],
+    "sourceMacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "src_mac",
+        "transformer": "ArcsightFormatMac"
+
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "src_ip",
+        "references": ["src_mac"]
+      }
+    ],
+    "destinationProcessName": {
+      "key": "x-arcsight-event-destination.destination_process_name",
+      "object": "destination"
+    },
+    "sourceProcessName":  {
+      "key": "x-arcsight-event-source.source_process_name",
+      "object": "source"
+    },
+    "destinationServiceName": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "sourceServiceName": {
+      "key": "process.command_line",
+      "object": "parent_process"
+    },
+    "dpid": {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    "spid": [
+      {
+        "key": "process.pid",
+        "object": "parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "destinationUserId": [
+      {
+        "key": "user-account.user_id",
+        "object": "dst_user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "dst_user"
+      }
+    ],
+    "sourceUserId": [
+      {
+        "key": "user-account.user_id",
+        "object": "src_user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "parent_process",
+        "references": "src_user"
+      }
+    ],
+    "sourceUserName": {
+      "key": "x-arcsight-event-source.source_username",
+      "object": "source"
+    },
+    "destinationUserName": {
+      "key": "x-arcsight-event-destination.destination_username",
+      "object": "destination"
+    },
+    "fileName": {
+      "key": "file.name",
+      "object": "file"
+    },
+    "filePath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "SHA1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "SHA256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "registry_data": {
+      "key": "windows-registry-key.values",
+      "object": "reg_key",
+      "transformer": "ArcsightToRegistryValue"
+    },
+    "registry_key" : {
+        "key": "windows-registry-key.key",
+        "object": "reg_key",
+        "transformer": "ArcsightToRegistryKey"
+    },
+    "categorySignificance": [
+      {
+        "key": "x-arcsight-event-category.category_significance",
+        "object": "event_category"
+      },
+      {
+	    "key": "x-ibm-finding.finding_type",
+        "object": "logger_finding"
+	  }
+    ],
+    "categoryBehavior": {
+      "key": "x-arcsight-event-category.category_behavior",
+      "object": "event_category"
+    },
+    "categoryDeviceGroup": {
+      "key": "x-arcsight-event-category.category_device_group",
+      "object": "event_category"
+    },
+    "categoryObject": {
+      "key": "x-arcsight-event-category.category_object",
+      "object": "event_category"
+    },
+    "categoryOutcome": {
+      "key": "x-arcsight-event-category.category_outcome",
+      "object": "event_category"
+    },
+    "categoryTechnique": {
+      "key": "x-arcsight-event-category.category_technique",
+      "object": "event_category"
+    },
+    "eventId": {
+      "key": "x-arcsight-event.event_id",
+      "object": "event"
+    },
+    "externalId": {
+      "key": "x-arcsight-event.external_id",
+      "object": "event"
+    },
+    "name": [
+      {
+        "key": "x-arcsight-event.event_name",
+        "object": "event"
+      },
+      {
+	  "key": "x-ibm-finding.name",
+	  "object": "logger_finding"
+	  }
+    ],
+    "type": {
+      "key": "x-arcsight-event.event_type",
+      "object": "event"
+    },
+    "startTime": {
+      "key": "x-arcsight-event.event_start_time",
+      "object": "event",
+      "transformer": "EpochToTimestamp"
+    },
+    "endTime": {
+      "key": "x-arcsight-event.event_end_time",
+      "object": "event",
+      "transformer": "EpochToTimestamp"
+    },
+    "baseEventCount": {
+      "key": "x-arcsight-event.base_event_count",
+      "object": "event"
+    },
+    "priority": {
+      "key": "x-arcsight-event.priority",
+      "object": "event"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "logger_finding"
+    },
+    "assetCriticality": {
+      "key": "x-oca-asset.extensions.x-device-ext.asset_criticality",
+      "object": "asset"
+    },
+    "modelConfidence": {
+      "key": "x-arcsight-event.model_confidence",
+      "object": "event"
+    },
+    "relevance": {
+      "key": "x-arcsight-event.relevance",
+      "object": "event"
+    },
+    "requestUrl": {
+      "key": "x-arcsight-event.request_url",
+      "object": "event"
+    },
+    "requestMethod": {
+      "key": "x-arcsight-event.request_method",
+      "object": "event"
+    },
+    "deviceProduct": {
+      "key": "x-arcsight-event-device.device_product",
+      "object": "device"
+    },
+    "deviceVendor": {
+      "key": "x-arcsight-event-device.device_vendor",
+      "object": "device"
+    },
+    "deviceAction": {
+      "key": "x-arcsight-event-device.device_action",
+      "object": "device"
+    },
+    "deviceReceiptTime": {
+      "key": "x-arcsight-event-device.device_receipt_time",
+      "object": "device",
+      "transformer": "EpochToTimestamp"
+    },
+    "deviceSeverity": {
+      "key": "x-oca-asset.extensions.x-device-ext.device_severity",
+      "object": "asset"
+    },
+    "deviceEventCategory": {
+      "key": "x-oca-event.category",
+      "object": "oca_event"
+    },
+    "deviceVersion": {
+      "key": "x-arcsight-event-device.device_version",
+      "object": "device"
+    },
+    "deviceHostName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "asset"
+      }
+    ],
+    "deviceAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "device_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": ["device_ip"]
+      }
+    ],
+	"deviceAssetId": {
+      "key": "x-oca-asset.host_id",
+      "object": "asset"
+    },
+	"deviceAssetName": {
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
+    },
+	"deviceDnsDomain": {
+      "key": "x-arcsight-event-device.device_dns_domain",
+      "object": "device"
+    },
+	"deviceDomain": {
+      "key": "x-arcsight-event-device.device_domain",
+      "object": "device"
+    },
+    "deviceNtDomain": {
+      "key": "x-arcsight-event-device.device_nt_domain",
+      "object": "device"
+    },
+	"deviceExternalId": {
+      "key": "x-arcsight-event-device.device_external_id",
+      "object": "device"
+    },
+	"dtz": {
+      "key": "x-arcsight-event-device.device_time_zone",
+      "object": "device"
+    },
+    "destinationAssetId": [
+      {
+      "key": "x-oca-asset.extensions.x-destination-ext.destination_asset_id",
+      "object": "asset"
+      },
+      {
+      "key": "x-ibm-finding.dst_device",
+      "object": "logger_finding"
+      }
+    ],
+    "destinationAssetName": {
+      "key": "x-oca-asset.extensions.x-destination-ext.destination_asset_name",
+      "object": "asset"
+    },
+    "destinationDnsDomain": {
+      "key": "x-arcsight-event-destination.destination_dns_domain",
+      "object": "destination"
+    },
+    "destinationFqdn": {
+      "key": "x-arcsight-event-destination.destination_fqdn",
+      "object": "destination"
+    },
+    "destinationNtDomain": {
+      "key": "x-arcsight-event-destination.destination_nt_domain",
+      "object": "destination"
+    },
+    "destinationGeo": {
+      "key": "x-arcsight-event-destination.destination_geo",
+      "object": "destination"
+    },
+    "destinationGeoCountryCode": {
+      "key": "x-arcsight-event-destination.destination_geo_country_code",
+      "object": "destination"
+    },
+    "destinationGeoCountryName": {
+      "key": "x-arcsight-event-destination.destination_geo_country_name",
+      "object": "destination"
+    },
+    "destinationGeoLocationInfo": [
+      {
+      "key": "x-arcsight-event-destination.destination_geo_location_info",
+      "object": "destination"
+      },
+      {
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "logger_finding"
+      }
+    ],
+    "destinationGeoRegionCode": {
+      "key": "x-arcsight-event-destination.destination_geo_region_code",
+      "object": "destination"
+    },
+    "destinationGeoPostalCode": {
+      "key": "x-arcsight-event-destination.destination_geo_postal_code",
+      "object": "destination"
+    },
+    "sourceAssetId": [
+      {
+      "key": "x-oca-asset.extensions.x-source-ext.source_asset_id",
+      "object": "asset"
+      },
+      {
+      "key": "x-ibm-finding.src_device",
+      "object": "logger_finding"
+      }
+    ],
+    "sourceAssetName": {
+      "key": "x-oca-asset.extensions.x-source-ext.source_asset_name",
+      "object": "asset"
+    },
+    "sourceDnsDomain": {
+      "key": "x-arcsight-event-source.source_dns_domain",
+      "object": "source"
+    },
+    "sourceFqdn": {
+      "key": "x-arcsight-event-source.source_fqdn",
+      "object": "source"
+    },
+    "sourceNtDomain": {
+      "key": "x-arcsight-event-source.source_nt_domain",
+      "object": "source"
+    },
+    "sourceGeo": {
+      "key": "x-arcsight-event-source.source_geo",
+      "object": "source"
+    },
+    "sourceGeoCountryCode": {
+      "key": "x-arcsight-event-source.source_geo_country_code",
+      "object": "source"
+    },
+    "sourceGeoCountryName": {
+      "key": "x-arcsight-event-source.source_geo_country_name",
+      "object": "source"
+    },
+    "sourceGeoLocationInfo": [
+      {
+      "key": "x-arcsight-event-source.source_geo_location_info",
+      "object": "source"
+      },
+      {
+      "key": "x-ibm-finding.src_geolocation",
+      "object": "logger_finding"
+      }
+    ],
+    "sourceGeoRegionCode": {
+      "key": "x-arcsight-event-source.source_geo_region_code",
+      "object": "source"
+    },
+    "sourceGeoPostalCode": {
+      "key": "x-arcsight-event-source.source_geo_postal_code",
+      "object": "source"
+    },
+    "vulnerability": {
+      "key": "x-arcsight-event-vulnerability.vulnerability",
+      "object": "vulnerability"
+    },
+    "vulnerabilityExternalID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_external_id",
+      "object": "vulnerability"
+      },
+	"vulnerabilityID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_id",
+      "object": "vulnerability"
+      },
+    "vulnerabilityName": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_name",
+      "object": "vulnerability"
+    },
+	"vulnerabilityReferenceID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_reference_id",
+      "object": "vulnerability"
+    },
+    "vulnerabilityResource": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_resource",
+      "object": "vulnerability"
+    },
+	"vulnerabilityURI": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_uri",
+      "object": "vulnerability"
+    }
+  },
+  "other_events": {
+    "Event Time": [
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x-ibm-finding.time_observed",
+        "object": "logger_finding",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "protocols": {
+      "key": "x-arcsight-event.protocols",
+      "object": "event",
+      "transformer": "ToLowercaseArray"
+    },
+    "destinationAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "logger_finding",
+        "references": "dst_ip"
+      }
+    ],
+    "c6a3": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ipv6"
+      },
+      {
+        "key": "x-arcsight-event-destination.destination_ipv6_address_ref",
+        "object": "destination",
+        "references": "dst_ipv6"
+      }
+    ],
+    "sourceAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "x-ibm-finding.src_ip_ref",
+        "object": "logger_finding",
+        "references": "src_ip"
+      }
+    ],
+    "c6a2": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ipv6"
+      },
+      {
+        "key": "x-arcsight-event-source.source_ipv6_address_ref",
+        "object": "source",
+        "references": "src_ipv6"
+      }
+    ],
+    "destinationPort": {
+      "key": "x-arcsight-event-destination.destination_port",
+      "object": "destination",
+      "transformer": "ToInteger"
+    },
+    "sourcePort": {
+      "key": "x-arcsight-event-source.source_port",
+      "object": "source",
+      "transformer": "ToInteger"
+    },
+    "destinationHostName": [
+      {
+        "key": "domain-name.value",
+        "object": "dst_domain_name"
+      },
+      {
+        "key": "x-arcsight-event-destination.destination_domain_name_ref",
+        "object": "destination",
+        "references": "dst_domain_name"
+      }
+    ],
+    "sourceHostName": [
+      {
+        "key": "domain-name.value",
+        "object": "source_domain_name"
+      },
+      {
+        "key": "x-arcsight-event-source.source_domain_name_ref",
+        "object": "source",
+        "references": "source_domain_name"
+      }
+    ],
+    "destinationMacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "dst_mac",
+        "transformer": "ArcsightFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "dst_ip",
+        "references": ["dst_mac"]
+      }
+    ],
+    "sourceMacAddress": [
+      {
+        "key": "mac-addr.value",
+        "object": "src_mac",
+        "transformer": "ArcsightFormatMac"
+
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "src_ip",
+        "references": ["src_mac"]
+      }
+    ],
+    "destinationProcessName": {
+      "key": "x-arcsight-event-destination.destination_process_name",
+      "object": "destination"
+    },
+    "sourceProcessName":  {
+      "key": "x-arcsight-event-source.source_process_name",
+      "object": "source"
+    },
+    "destinationServiceName": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "sourceServiceName": {
+      "key": "process.command_line",
+      "object": "parent_process"
+    },
+    "dpid": {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    },
+    "spid": [
+      {
+        "key": "process.pid",
+        "object": "parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process",
+        "references": "parent_process"
+      }
+    ],
+    "destinationUserId": [
+      {
+        "key": "user-account.user_id",
+        "object": "dst_user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process",
+        "references": "dst_user"
+      }
+    ],
+    "sourceUserId": [
+      {
+        "key": "user-account.user_id",
+        "object": "src_user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "parent_process",
+        "references": "src_user"
+      }
+    ],
+    "sourceUserName": {
+      "key": "x-arcsight-event-source.source_username",
+      "object": "source"
+    },
+    "destinationUserName": {
+      "key": "x-arcsight-event-destination.destination_username",
+      "object": "destination"
+    },
+    "fileName": {
+      "key": "file.name",
+      "object": "file"
+    },
+    "filePath": [
+      {
+        "key": "directory.path",
+        "object": "file_dir",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "file_dir"
+      }
+    ],
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "SHA1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "SHA256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "registry_data": {
+      "key": "windows-registry-key.values",
+      "object": "reg_key",
+      "transformer": "ArcsightToRegistryValue"
+    },
+    "registry_key" : {
+        "key": "windows-registry-key.key",
+        "object": "reg_key",
+        "transformer": "ArcsightToRegistryKey"
+    },
+    "categorySignificance": [
+      {
+        "key": "x-arcsight-event-category.category_significance",
+        "object": "event_category"
+      },
+      {
+	    "key": "x-ibm-finding.finding_type",
+        "object": "logger_finding"
+	  }
+    ],
+    "categoryBehavior": {
+      "key": "x-arcsight-event-category.category_behavior",
+      "object": "event_category"
+    },
+    "categoryDeviceGroup": {
+      "key": "x-arcsight-event-category.category_device_group",
+      "object": "event_category"
+    },
+    "categoryObject": {
+      "key": "x-arcsight-event-category.category_object",
+      "object": "event_category"
+    },
+    "categoryOutcome": {
+      "key": "x-arcsight-event-category.category_outcome",
+      "object": "event_category"
+    },
+    "categoryTechnique": {
+      "key": "x-arcsight-event-category.category_technique",
+      "object": "event_category"
+    },
+    "eventId": {
+      "key": "x-arcsight-event.event_id",
+      "object": "event"
+    },
+    "externalId": {
+      "key": "x-arcsight-event.external_id",
+      "object": "event"
+    },
+    "name": [
+      {
+        "key": "x-arcsight-event.event_name",
+        "object": "event"
+      },
+       {
+	  "key": "x-ibm-finding.name",
+	  "object": "logger_finding"
+	  }
+    ],
+    "type": {
+      "key": "x-arcsight-event.event_type",
+      "object": "event"
+    },
+    "startTime": {
+      "key": "x-arcsight-event.event_start_time",
+      "object": "event",
+      "transformer": "EpochToTimestamp"
+    },
+    "endTime": {
+      "key": "x-arcsight-event.event_end_time",
+      "object": "event",
+      "transformer": "EpochToTimestamp"
+    },
+    "baseEventCount": {
+      "key": "x-arcsight-event.base_event_count",
+      "object": "event"
+    },
+    "priority": {
+      "key": "x-arcsight-event.priority",
+      "object": "event"
+    },
+    "severity": {
+      "key": "x-ibm-finding.severity",
+      "object": "logger_finding"
+    },
+    "assetCriticality": {
+      "key": "x-oca-asset.extensions.x-device-ext.asset_criticality",
+      "object": "asset"
+    },
+    "modelConfidence": {
+      "key": "x-arcsight-event.model_confidence",
+      "object": "event"
+    },
+    "relevance": {
+      "key": "x-arcsight-event.relevance",
+      "object": "event"
+    },
+    "requestUrl": {
+      "key": "x-arcsight-event.request_url",
+      "object": "event"
+    },
+    "requestMethod": {
+      "key": "x-arcsight-event.request_method",
+      "object": "event"
+    },
+    "deviceProduct": {
+      "key": "x-arcsight-event-device.device_product",
+      "object": "device"
+    },
+    "deviceVendor": {
+      "key": "x-arcsight-event-device.device_vendor",
+      "object": "device"
+    },
+    "deviceAction": {
+      "key": "x-arcsight-event-device.device_action",
+      "object": "device"
+    },
+    "deviceReceiptTime": {
+      "key": "x-arcsight-event-device.device_receipt_time",
+      "object": "device",
+      "transformer": "EpochToTimestamp"
+    },
+    "deviceSeverity": {
+      "key": "x-oca-asset.extensions.x-device-ext.device_severity",
+      "object": "device"
+    },
+    "deviceEventCategory": {
+      "key": "x-oca-event.category",
+      "object": "oca_event"
+    },
+    "deviceVersion": {
+      "key": "x-arcsight-event-device.device_version",
+      "object": "device"
+    },
+    "deviceHostName": [
+      {
+        "key": "domain-name.value",
+        "object": "device_domain_name"
+      },
+      {
+        "key": "x-arcsight-event-device.device_domain_name_ref",
+        "object": "device",
+        "references": "device_domain_name"
+      }
+    ],
+    "deviceAddress": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "device_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": "device_ip"
+      }
+    ],
+	"deviceAssetId": {
+      "key": "x-oca-asset.host_id",
+      "object": "asset"
+    },
+	"deviceAssetName": {
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
+    },
+	"deviceDnsDomain": {
+      "key": "x-arcsight-event-device.device_dns_domain",
+      "object": "device"
+    },
+	"deviceDomain": {
+      "key": "x-arcsight-event-device.device_domain",
+      "object": "device"
+    },
+    "deviceNtDomain": {
+      "key": "x-arcsight-event-device.device_nt_domain",
+      "object": "device"
+    },
+	"deviceExternalId": {
+      "key": "x-arcsight-event-device.device_external_id",
+      "object": "device"
+    },
+	"dtz": {
+      "key": "x-arcsight-event-device.device_time_zone",
+      "object": "device"
+    },
+    "destinationAssetId": [
+      {
+      "key": "x-oca-asset.destination_asset_id",
+      "object": "asset"
+      },
+      {
+      "key": "x-ibm-finding.dst_device",
+      "object": "logger_finding"
+      }
+    ],
+    "destinationAssetName": {
+      "key": "x-oca-asset.destination_asset_name",
+      "object": "asset"
+    },
+    "destinationDnsDomain": {
+      "key": "x-arcsight-event-destination.destination_dns_domain",
+      "object": "destination"
+    },
+    "destinationFqdn": {
+      "key": "x-arcsight-event-destination.destination_fqdn",
+      "object": "destination"
+    },
+    "destinationNtDomain": {
+      "key": "x-arcsight-event-destination.destination_nt_domain",
+      "object": "destination"
+    },
+    "destinationGeo": {
+      "key": "x-arcsight-event-destination.destination_geo",
+      "object": "destination"
+    },
+    "destinationGeoCountryCode": {
+      "key": "x-arcsight-event-destination.destination_geo_country_code",
+      "object": "destination"
+    },
+    "destinationGeoCountryName": {
+      "key": "x-arcsight-event-destination.destination_geo_country_name",
+      "object": "destination"
+    },
+    "destinationGeoLocationInfo": [
+      {
+      "key": "x-arcsight-event-destination.destination_geo_location_info",
+      "object": "destination"
+      },
+      {
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "logger_finding"
+      }
+    ],
+    "destinationGeoRegionCode": {
+      "key": "x-arcsight-event-destination.destination_geo_region_code",
+      "object": "destination"
+    },
+    "destinationGeoPostalCode": {
+      "key": "x-arcsight-event-destination.destination_geo_postal_code",
+      "object": "destination"
+      },
+    "sourceAssetId": [
+      {
+      "key": "x-oca-asset.source_asset_id",
+      "object": "asset"
+      },
+      {
+      "key": "x-ibm-finding.src_device",
+      "object": "logger_finding"
+      }
+    ],
+    "sourceAssetName": {
+      "key": "x-oca-asset.source_asset_name",
+      "object": "asset"
+    },
+    "sourceDnsDomain": {
+      "key": "x-arcsight-event-source.source_dns_domain",
+      "object": "source"
+    },
+    "sourceFqdn": {
+      "key": "x-arcsight-event-source.source_fqdn",
+      "object": "source"
+    },
+    "sourceNtDomain": {
+      "key": "x-arcsight-event-source.source_nt_domain",
+      "object": "source"
+    },
+    "sourceGeo": {
+      "key": "x-arcsight-event-source.source_geo",
+      "object": "source"
+    },
+    "sourceGeoCountryCode": {
+      "key": "x-arcsight-event-source.source_geo_country_code",
+      "object": "source"
+    },
+    "sourceGeoCountryName": {
+      "key": "x-arcsight-event-source.source_geo_country_name",
+      "object": "source"
+    },
+    "sourceGeoLocationInfo": [
+      {
+      "key": "x-arcsight-event-source.source_geo_location_info",
+      "object": "source"
+      },
+      {
+      "key": "x-ibm-finding.src_geolocation",
+      "object": "logger_finding"
+      }
+    ],
+    "sourceGeoRegionCode": {
+      "key": "x-arcsight-event-source.source_geo_region_code",
+      "object": "source"
+    },
+    "sourceGeoPostalCode": {
+      "key": "x-arcsight-event-source.source_geo_postal_code",
+      "object": "source"
+    },
+    "vulnerability": {
+      "key": "x-arcsight-event-vulnerability.vulnerability",
+      "object": "vulnerability"
+    },
+    "vulnerabilityExternalID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_external_id",
+      "object": "vulnerability"
+    },
+	"vulnerabilityID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_id",
+      "object": "vulnerability"
+    },
+    "vulnerabilityName": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_name",
+      "object": "vulnerability"
+    },
+	"vulnerabilityReferenceID": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_reference_id",
+      "object": "vulnerability"
+    },
+    "vulnerabilityResource": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_resource",
+      "object": "vulnerability"
+    },
+	"vulnerabilityURI": {
+      "key": "x-arcsight-event-vulnerability.vulnerability_uri",
+      "object": "vulnerability"
+    }
+  }
+}

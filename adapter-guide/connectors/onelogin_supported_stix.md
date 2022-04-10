@@ -1,5 +1,13 @@
-##### Updated on 09/28/21
+##### Updated on 02/04/22
 ## OneLogin
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | or |
+| = | = |
+| OR | or |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | ipv4-addr | value | ipaddr |
