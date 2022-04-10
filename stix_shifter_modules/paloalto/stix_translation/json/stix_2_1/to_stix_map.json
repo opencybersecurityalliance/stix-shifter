@@ -1,0 +1,1064 @@
+{
+  "xdr_data": {
+    "action_local_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      }
+    ],
+    "action_remote_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "dst_ip"
+        ],
+        "group": true
+      }
+    ],
+    "agent_ip_addresses": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "agent_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "agent_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "agent_ip"
+        ],
+        "group": true
+      }
+    ],
+    "agent_ip_addresses_v6": [
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      }
+    ],
+    "dst_agent_ip_addresses_v6": [
+      {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": ["dst_ip"],
+        "group": true
+      }
+    ],
+    "action_local_port": {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "action_remote_port": {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "action_network_protocol": [
+      {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "ToLowercaseArray"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
+      }
+    ],
+    "action_pkts_sent": {
+      "key": "network-traffic.src_packets",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "action_pkts_received": {
+      "key": "network-traffic.dst_packets",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "action_file_name": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
+    "action_process_image_name": [
+      {
+        "key": "file.name",
+        "object": "file_action_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_action",
+        "references": "file_action_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_action"
+      }
+    ],
+    "actor_process_image_name": [
+      {
+        "key": "file.name",
+        "object": "file_actor_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_actor",
+        "references": "file_actor_process"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_actor"
+      }
+    ],
+    "causality_actor_process_image_name": [
+      {
+        "key": "file.name",
+        "object": "file_causality_process"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process_causality_actor"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "process_causality_actor"
+      }
+    ],
+    "os_actor_process_image_name": [
+      {
+        "key": "file.name",
+        "object": "file_os_actor"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process_os_actor"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "process_os_actor"
+      }
+    ],
+    "action_file_size": {
+      "key": "file.size",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "action_file_authenticode_sha1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "action_file_authenticode_sha2": {
+      "key": "file.hashes.SHA-2",
+      "object": "file"
+    },
+    "action_file_md5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "action_module_md5": {
+      "key": "file.hashes.MD5",
+      "object": "file_action_module"
+    },
+    "action_process_image_md5": [
+      {
+        "key": "file.hashes.MD5",
+        "object": "file_action_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_action",
+        "references": "file_action_process"
+      }
+    ],
+    "action_file_sha256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "action_module_sha256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file_action_module"
+    },
+    "action_process_image_sha256": [
+      {
+        "key": "file.hashes.SHA-256",
+        "object": "file_action_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_action",
+        "references": "file_action_process"
+      }
+    ],
+    "action_file_access_time": [
+      {
+        "key": "file.atime",
+        "object": "file",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_action_file_last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "actor_process_file_access_time": [
+      {
+        "key": "file.atime",
+        "object": "file_actor_process",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_actor_process_last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "os_actor_process_file_access_time": [
+      {
+        "key": "file.atime",
+        "object": "file_os_actor",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_os_actor_process_last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "action_file_mod_time": [
+      {
+        "key": "file.mtime",
+        "object": "file",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "actor_process_file_mod_time": [
+      {
+        "key": "file.mtime",
+        "object": "file_actor_process",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "os_actor_process_file_mod_time": [
+      {
+        "key": "file.mtime",
+        "object": "file_os_actor",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "action_file_create_time": [
+      {
+        "key": "file.ctime",
+        "object": "file",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "action_file_path": [
+      {
+        "key": "directory.path",
+        "object": "directory",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "directory"
+      }
+    ],
+    "action_registry_file_path": [
+      {
+        "key": "directory.path",
+        "object": "directory_action_registry",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file_action_registry",
+        "references": "directory_action_registry"
+      }
+    ],
+    "action_process_image_path": [
+      {
+        "key": "directory.path",
+        "object": "directory_action_process",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file_action_process",
+        "references": "directory_action_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_action",
+        "references": "file_action_process"
+      }
+    ],
+    "actor_process_image_path": [
+      {
+        "key": "directory.path",
+        "object": "directory_actor_process",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file_actor_process",
+        "references": "directory_actor_process"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_actor",
+        "references": "file_actor_process"
+      }
+    ],
+    "causality_actor_process_image_path": [
+      {
+        "key": "directory.path",
+        "object": "directory_causality_actor",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file_causality_process",
+        "references": "directory_causality_actor"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_causality_actor",
+        "references": "file_causality_process"
+      }
+    ],
+    "os_actor_process_image_path": [
+      {
+        "key": "directory.path",
+        "object": "directory_os_actor",
+        "transformer": "ToDirectoryPath"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file_os_actor",
+        "references": "directory_os_actor"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "process_os_actor",
+        "references": "file_os_actor"
+      }
+    ],
+    "action_process_image_command_line": [
+      {
+        "key": "process.command_line",
+        "object": "process_action"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_action"
+      }
+    ],
+    "actor_process_command_line": [
+      {
+        "key": "process.command_line",
+        "object": "process_actor"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_actor"
+      }
+    ],
+    "causality_actor_process_command_line": [
+      {
+        "key": "process.command_line",
+        "object": "process_causality_actor"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "process_causality_actor"
+      }
+    ],
+    "os_actor_process_command_line": [
+      {
+        "key": "process.command_line",
+        "object": "process_os_actor"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "process_os_actor"
+      }
+    ],
+    "action_process_file_create_time": [
+      {
+        "key": "process.created_time",
+        "object": "process_action",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_process_first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "actor_process_file_create_time": [
+      {
+        "key": "process.created_time",
+        "object": "process_actor",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_process_actor_first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "causality_actor_process_file_create_time": [
+      {
+        "key": "process.created_time",
+        "object": "process_causality_actor",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_process_causality_actor_first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "os_actor_process_file_create_time": [
+      {
+        "key": "process.created_time",
+        "object": "process_os_actor",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x_process_os_actor_first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
+    "action_module_process_os_pid": [
+      {
+        "key": "process.pid",
+        "object": "process_action_module",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_action_module"
+      }
+    ],
+    "action_process_os_pid": [
+      {
+        "key": "process.pid",
+        "object": "process_action",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_action"
+      }
+    ],
+    "actor_process_os_pid": [
+      {
+        "key": "process.pid",
+        "object": "process_actor",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_actor"
+      }
+    ],
+    "causality_actor_process_os_pid": [
+      {
+        "key": "process.pid",
+        "object": "process_causality_actor",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_causality_actor"
+      }
+    ],
+    "os_actor_process_os_pid": [
+      {
+        "key": "process.pid",
+        "object": "process_os_actor",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_os_actor"
+      }
+    ],
+    "action_process_requested_parent_pid": [
+      {
+        "key": "process.pid",
+        "object": "action_parent_process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process_action",
+        "references": "action_parent_process"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "action_parent_process"
+      }
+    ],
+    "action_thread_parent_pid": [
+      {
+        "key": "process.pid",
+        "object": "action_parent_thread",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "process_action_thread",
+        "references": "action_parent_thread"
+      },
+      {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "action_parent_thread"
+      }
+    ],
+    "action_thread_child_pid": [
+      {
+        "key": "process.pid",
+        "object": "action_child_thread",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "process_action",
+        "references": "action_child_thread"
+      }
+    ],
+    "auth_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "domain"
+      },
+      {
+        "key": "x-oca-event.domain_ref",
+        "object": "event",
+        "references": "domain"
+      }
+    ],
+    "dst_host_metadata_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "domain_dst"
+      },
+      {
+        "key": "x-oca-event.domain_ref",
+        "object": "event",
+        "references": "domain_dst"
+      }
+    ],
+    "host_metadata_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "domain_host"
+      },
+      {
+        "key": "x-oca-event.domain_ref",
+        "object": "event",
+        "references": "domain_host"
+      }
+    ],
+    "dst_action_url_category": [
+      {
+        "key": "url.value",
+        "object": "url"
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": "url"
+      }
+    ],
+    "action_registry_key_name": [
+      {
+        "key": "windows-registry-key.key",
+        "object": "windowsregistry"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "windowsregistry"
+      }
+    ],
+    "action_registry_value_name": [
+      {
+        "key": "windows-registry-key.values",
+        "object": "windowsregistry",
+        "transformer": "FormatToStixRegistryValue"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "windowsregistry"
+      }
+    ],
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "asset",
+        "references": ["mac"]
+      }
+    ],
+    "associated_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "ass_mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "asset",
+        "references": ["ass_mac"]
+      }
+    ],
+    "dst_associated_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "dst_ass_mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "asset",
+        "references": ["dst_ass_mac"]
+      }
+    ],
+    "dst_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "dst_mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "asset",
+        "references": ["dst_mac"]
+      }
+    ],
+    "actor_primary_user_sid": {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    "action_process_user_sid": {
+      "key": "user-account.extensions.x-paloalto-user-ext.process_user_id",
+      "object": "user"
+    },
+    "actor_primary_username": {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+    "action_process_username": [
+      {
+        "key": "user-account.extensions.x-paloalto-user-ext.process_user_name",
+        "object": "user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "process_action",
+        "references": "user"
+      }
+    ],
+    "actor_process_logon_id": {
+      "key": "user-account.account_login",
+      "object": "user"
+    },
+    "action_file_info_company": {
+      "key": "file.extensions.x-paloalto-file-ext.company",
+      "object": "file"
+    },
+    "action_file_extension": {
+      "key": "file.extensions.x-paloalto-file-ext.extension",
+      "object": "file"
+    },
+    "action_file_attributes": {
+      "key": "file.extensions.x-paloalto-file-ext.attributes",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "action_file_internal_zipped_files": {
+      "key": "file.extensions.x-paloalto-file-ext.zipped_files",
+      "object": "file"
+    },
+    "action_file_last_writer_actor": {
+      "key": "file.extensions.x-paloalto-file-ext.writer",
+      "object": "file"
+    },
+    "action_file_mode": {
+      "key": "file.extensions.x-paloalto-file-ext.mode",
+      "object": "file"
+    },
+    "action_file_signature_status": {
+      "key": "file.extensions.x-paloalto-file-ext.signature_status",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "action_file_signature_vendor": {
+      "key": "file.extensions.x-paloalto-file-ext.signature_vendor",
+      "object": "file"
+    },
+    "action_file_signature_product": {
+      "key": "file.extensions.x-paloalto-file-ext.signature_product",
+      "object": "file"
+    },
+    "action_file_info_description": {
+      "key": "file.extensions.x-paloalto-file-ext.file_description",
+      "object": "file"
+    },
+    "action_file_group": {
+      "key": "file.extensions.x-paloalto-file-ext.group",
+      "object": "file"
+    },
+    "action_file_group_name": {
+      "key": "file.extensions.x-paloalto-file-ext.group_name",
+      "object": "file"
+    },
+    "action_file_type": {
+      "key": "file.extensions.x-paloalto-file-ext.type",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "action_file_info_file_version": {
+      "key": "file.extensions.x-paloalto-file-ext.version",
+      "object": "file"
+    },
+    "manifest_file_version": {
+      "key": "file.extensions.x-paloalto-file-ext.manifest_version",
+      "object": "file",
+      "transformer": "ToInteger"
+    },
+    "action_file_info_product_version": {
+      "key": "file.extensions.x-paloalto-file-ext.product_version",
+      "object": "file"
+    },
+    "action_file_owner": {
+      "key": "file.extensions.x-paloalto-file-ext.owner",
+      "object": "file"
+    },
+    "action_file_owner_name": {
+      "key": "file.extensions.x-paloalto-file-ext.owner_name",
+      "object": "file"
+    },
+    "action_file_info_product_name": {
+      "key": "file.extensions.x-paloalto-file-ext.product_name",
+      "object": "file"
+    },
+    "action_file_id": {
+      "key": "file.extensions.x-paloalto-file-ext.id",
+      "object": "file"
+    },
+    "action_file_wildfire_verdict": {
+      "key": "file.extensions.x-paloalto-file-ext.wildfire_verdict",
+      "object": "file"
+    },
+    "action_file_hash_control_verdict": {
+      "key": "file.extensions.x-paloalto-file-ext.control_verdict",
+      "object": "file"
+    },
+    "actor_process_instance_id": {
+      "key": "process.extensions.x-paloalto-process-ext.instance_id",
+      "object": "process_actor"
+    },
+    "actor_process_causality_id": {
+      "key": "process.extensions.x-paloalto-process-ext.causality_id",
+      "object": "process_actor"
+    },
+    "actor_process_auth_id": {
+      "key": "process.extensions.x-paloalto-process-ext.auth_id",
+      "object": "process_actor"
+    },
+    "actor_process_container_id": {
+      "key": "process.extensions.x-paloalto-process-ext.container_id",
+      "object": "process_actor"
+    },
+    "actor_process_signature_vendor": {
+      "key": "process.extensions.x-paloalto-process-ext.signature_vendor",
+      "object": "process_actor"
+    },
+    "actor_process_signature_status": {
+      "key": "process.extensions.x-paloalto-process-ext.signature_status",
+      "object": "process_actor"
+    },
+    "actor_process_signature_product": {
+      "key": "process.extensions.x-paloalto-process-ext.signature_product",
+      "object": "process_actor"
+    },
+    "actor_process_image_extension": {
+      "key": "process.extensions.x-paloalto-process-ext.extension",
+      "object": "process_actor"
+    },
+    "action_process_termination_code": {
+      "key": "process.extensions.x-paloalto-process-ext.termination_code",
+      "object": "process_action",
+      "transformer": "ToInteger"
+    },
+    "action_process_termination_date": {
+      "key": "process.extensions.x-paloalto-process-ext.termination_date",
+      "object": "process_action",
+      "transformer": "EpochToTimestamp"
+    },
+    "action_remote_process_thread_id": {
+      "key": "process.extensions.x-paloalto-process-ext.tid",
+      "object": "process_action",
+      "transformer": "ToInteger"
+    },
+    "action_process_instance_execution_time": {
+      "key": "process.extensions.x-paloalto-process-ext.instance_exec_time",
+      "object": "process_action",
+      "transformer": "EpochToTimestamp"
+    },
+    "actor_process_execution_time": {
+      "key": "process.extensions.x-paloalto-process-ext.execution_time",
+      "object": "process_actor",
+      "transformer": "EpochToTimestamp"
+    },
+    "action_process_handle_is_kernel": {
+      "key": "process.extensions.x-paloalto-process-ext.is_kernel",
+      "object": "process_action",
+      "transformer": "StringToBool"
+    },
+    "action_process_is_container_root": {
+      "key": "process.extensions.x-paloalto-process-ext.is_root",
+      "object": "process_action",
+      "transformer": "StringToBool"
+    },
+    "actor_process_is_native": {
+      "key": "process.extensions.x-paloalto-process-ext.is_native",
+      "object": "process_actor",
+      "transformer": "StringToBool"
+    },
+    "agent_version": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.agent_version",
+      "object": "asset"
+    },
+    "agent_hostname": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "asset"
+      },
+      {
+        "key": "x-oca-event.agent",
+        "object": "event"
+      }
+    ],
+    "agent_content_version": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.content_version",
+      "object": "asset"
+    },
+    "agent_session_start_time": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.start_time",
+      "object": "asset",
+      "transformer": "EpochToTimestamp"
+    },
+    "agent_id": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.asset_id",
+      "object": "asset"
+    },
+    "agent_os_type": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.os_type",
+      "object": "asset"
+    },
+    "agent_os_sub_type": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.os_sub_type",
+      "object": "asset"
+    },
+    "agent_is_vdi": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.is_vdi",
+      "object": "asset",
+      "transformer": "StringToBool"
+    },
+    "action_user_agent": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.user_agent",
+      "object": "asset"
+    },
+    "http_req_user_agent_header": {
+      "key": "x-oca-asset.extensions.x-paloalto-agent-ext.agent_header",
+      "object": "asset"
+    },
+    "action_evtlog_data_fields": {
+      "key": "x-paloalto-evtlog.data_fields",
+      "object": "evtlog"
+    },
+    "action_evtlog_description": {
+      "key": "x-paloalto-evtlog.description",
+      "object": "evtlog"
+    },
+    "action_evtlog_source": {
+      "key": "x-paloalto-evtlog.source",
+      "object": "evtlog",
+      "transformer": "ToInteger"
+    },
+    "action_evtlog_event_id": {
+      "key": "x-paloalto-evtlog.evtlog_id",
+      "object": "evtlog",
+      "transformer": "ToInteger"
+    },
+    "action_evtlog_level": {
+      "key": "x-paloalto-evtlog.level",
+      "object": "evtlog"
+    },
+    "action_evtlog_tid": {
+      "key": "x-paloalto-evtlog.tid",
+      "object": "evtlog",
+      "transformer": "ToInteger"
+    },
+    "action_evtlog_uid": {
+      "key": "x-paloalto-evtlog.uid",
+      "object": "evtlog"
+    },
+    "action_evtlog_pid": {
+      "key": "x-paloalto-evtlog.pid",
+      "object": "evtlog",
+      "transformer": "ToInteger"
+    },
+    "action_evtlog_message": {
+      "key": "x-paloalto-evtlog.message",
+      "object": "evtlog"
+    },
+    "action_evtlog_version": {
+      "key": "x-paloalto-evtlog.version",
+      "object": "evtlog",
+      "transformer": "ToInteger"
+    },
+    "event_id": {
+      "key": "x-oca-event.code",
+      "object": "event"
+    },
+    "vpn_event_description": {
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.event_description",
+      "object": "event"
+    },
+    "event_timestamp": {
+      "key": "x-oca-event.created",
+      "object": "event",
+      "transformer": "EpochToTimestamp"
+    },
+    "event_version": {
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.version",
+      "object": "event",
+      "transformer": "ToInteger"
+    },
+    "event_rpc_interface_uuid": {
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.uuid",
+      "object": "event"
+    },
+    "event_address_mapped_image_path": {
+      "key": "x-oca-event.extensions.x-paloalto-event-ext.path",
+      "object": "event"
+    },
+    "event_type": {
+      "key": "x-oca-event.category",
+      "object": "event",
+      "transformer": "ToLowercaseArray"
+    },
+    "event_sub_type": {
+      "key": "x-oca-event.action",
+      "object": "event"
+    },
+    "action_network_creation_time": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.creation_time",
+      "object": "nt",
+      "transformer": "EpochToTimestamp"
+    },
+    "action_network_connection_id": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.connection_id",
+      "object": "nt"
+    },
+    "action_network_packet_data": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.packet_data",
+      "object": "nt"
+    },
+    "action_proxy": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.is_proxy",
+      "object": "nt",
+      "transformer": "StringToBool"
+    },
+    "host_metadata_hostname": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.metadata_hostname",
+      "object": "nt"
+    },
+    "action_external_hostname": {
+      "key": "network-traffic.extensions.x-paloalto-network-ext.external_hostname",
+      "object": "nt"
+    }
+  }
+}

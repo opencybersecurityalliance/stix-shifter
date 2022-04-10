@@ -21,24 +21,6 @@ INTEGER_LOOKUP_FIELDS = ["sourcePort", "destinationPort", "priority", "startTime
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "=",
-        ComparisonComparators.In: "IN",
-        # due to limited regex support "Matches" is treated as CONTAINS
-        ComparisonComparators.Matches: 'CONTAINS',
-        ComparisonComparators.IsSubSet: 'insubnet',
-        ObservationOperators.Or: 'OR',
-        ObservationOperators.And: 'AND'
-    }
     arcsight_operator_lookup = {
         ComparisonComparators.Equal: "IS NULL",
         ComparisonComparators.NotEqual: "IS NOT NULL"
@@ -46,6 +28,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.qualifier_list = list()
         self.qualified_queries = list()
@@ -176,10 +159,10 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
-                "Comparison operator {} unsupported for ArcSight UDS adapter".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+                "Comparison operator {} unsupported for ArcSight connector".format(expression_operator.name))
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_time_range(self, qualifier, time_range):
         """

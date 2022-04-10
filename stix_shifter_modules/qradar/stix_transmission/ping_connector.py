@@ -9,6 +9,7 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = utils_logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def ping_connection(self):
         response = self.api_client.ping_box()
@@ -29,5 +30,5 @@ class PingConnector(BasePingConnector):
         if len(response_dict) > 0 and response_code == 200:
             return_obj['success'] = True
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
         return return_obj

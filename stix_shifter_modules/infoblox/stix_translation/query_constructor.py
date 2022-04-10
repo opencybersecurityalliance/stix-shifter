@@ -65,42 +65,14 @@ class QueryStringPatternTranslator:
     :param time_range: Default time range to query over (in minutes).
     :type time_range: int
 
-
     Attributes:
         comparator_lookup (map): Mapping, per dialect, of the ANTLR comparison operators and their native equivalent. Used in the tranlation process.
         qualified_queries (list): List of Infoblox translated & formatted queries. Queries are simply the HTTP query parameters for the specific APIs.
     """
-    comparator_lookup = {
-        'tideDbData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "=",
-            ComparisonComparators.GreaterThan: "=",
-            ComparisonComparators.GreaterThanOrEqual: "=",
-            ComparisonComparators.LessThan: "=",
-            ComparisonComparators.LessThanOrEqual: "=",
-            ComparisonComparators.Like: "="
-        },
-        'dnsEventData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        },
-        'dossierData': {
-            ComparisonExpressionOperators.And: "&",
-            ObservationOperators.And: '&',
-            ComparisonExpressionOperators.Or: "&",
-            ObservationOperators.Or: '&',
-            ComparisonComparators.Equal: "="
-        }
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()
@@ -300,10 +272,10 @@ class QueryStringPatternTranslator:
         :rtype: str
         :throw: NotImplementedError if expression_operator not found in comparator_lookup
         """
-        if expression_operator not in self.comparator_lookup[self.dialect]:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Infoblox connector {}".format(expression_operator.name, self.dialect))
 
-        return self.comparator_lookup[self.dialect][expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _calculate_intersection(self, mapped_fields_array, stix_field, assigned_fields):
         """

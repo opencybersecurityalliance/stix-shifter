@@ -632,7 +632,7 @@
       "object": "event"
     },
     "id": {
-      "key": "x-oca-event.id",
+      "key": "x-oca-event.event_id",
       "object": "event"
     },
     "category": {
@@ -1036,7 +1036,7 @@
     },
     "id": [
       {
-        "key": "x-ecs-user.id",
+        "key": "x-ecs-user.user_id",
         "object": "x_user"
       },
       {
@@ -1124,7 +1124,7 @@
   },
   "container": {
     "id": {
-      "key": "x-ecs-container.id",
+      "key": "x-ecs-container.container_id",
       "object": "container"
     },
     "image": {
@@ -1325,7 +1325,7 @@
       "object": "error"
     },
     "id": {
-      "key": "x-ecs-error.id",
+      "key": "x-ecs-error.error_id",
       "object": "error"
     },
     "message": {
@@ -1498,7 +1498,7 @@
       "object": "group"
     },
     "id": {
-      "key": "x-ecs-group.id",
+      "key": "x-ecs-group.group_id",
       "object": "group"
     },
     "name": {
@@ -1527,7 +1527,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-asset.id",
+      "key": "x-oca-asset.asset_id",
       "object": "host"
     },
     "ip": [
@@ -1925,7 +1925,7 @@
   },
   "organization": {
     "id": {
-      "key": "x-ecs-organization.id",
+      "key": "x-ecs-organization.organization_id",
       "object": "organization"
     },
     "name": {
@@ -2018,7 +2018,7 @@
       "object": "rule"
     },
     "id": {
-      "key": "x-ecs-rule.id",
+      "key": "x-ecs-rule.rule_id",
       "object": "rule"
     },
     "license": {
@@ -2048,7 +2048,7 @@
   },
   "service": {
     "id": {
-      "key": "x-ecs-service.id",
+      "key": "x-ecs-service.service_id",
       "object": "service"
     },
     "name": {
@@ -2236,13 +2236,13 @@
   },
   "trace": {
     "id": {
-      "key": "x-ecs-trace.id",
+      "key": "x-ecs-trace.trace_id",
       "object": "trace"
     }
   },
   "transaction": {
     "id": {
-      "key": "x-ecs-transaction.id",
+      "key": "x-ecs-transaction.transaction_id",
       "object": "transaction"
     }
   },
@@ -2284,7 +2284,7 @@
       "object": "vulnerability"
     },
     "id": {
-      "key": "x-ecs-vulnerability.id",
+      "key": "x-ecs-vulnerability.vulnerability_id",
       "object": "vulnerability"
     },
     "reference": {
