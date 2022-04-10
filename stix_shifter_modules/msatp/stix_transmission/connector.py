@@ -70,6 +70,9 @@ class Connector(BaseSyncConnector):
         file_link = 'https://%s/files/%s/overview' % (self.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
         return device_link, file_link
 
+    def get_alert_link(self, alertId):
+        return 'https://%s/alerts/%s' % (self.DEFENDER_HOST, alertId)
+
     def join_query_with_alerts(self, query):
         table = Connector.get_table_name(query)
         if 'Alert' in table:
@@ -265,20 +268,18 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['category'] = ''
                 build_data[lookup_table]['provider'] = ''
                 event_data = copy.deepcopy(build_data[lookup_table])
-                device_link, file_link = self.get_ds_links(build_data[lookup_table].get
-                                                           ('DeviceId', None),
-                                                           build_data[lookup_table].get('InitiatingProcessSHA256',
-                                                                                        None))
-                if device_link:
-                    build_data[lookup_table]['device_link'] = device_link
-
-                if file_link:
-                    build_data[lookup_table]['file_link'] = file_link
+                #TODO: replace these with one link to https://security.microsoft.com/machines/<MachineId>/timeline?from=2022-04-09T10:05:01.328Z&to=2022-04-10T10:05:01.329Z
+                
+                if 'DeviceId' in build_data[lookup_table]:
+                    timestamp_dt = datetime.strptime(timestamp[:-5], "%Y-%m-%dT%H:%M:%S") #parse timestamp to date opbject striping milliseconds
+                    timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                    timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                    event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
+                    build_data[lookup_table]['event_link'] = event_link
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
-                                                            self.alert_mode else v) for k, v in
-                                                 build_data[lookup_table].items()})
+                                                            self.alert_mode else v) for k, v in build_data[lookup_table].items()})
                     build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddressesSet' in build_data[lookup_table]:
