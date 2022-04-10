@@ -13,7 +13,8 @@ class TestDatadogConnection(unittest.TestCase, object):
 
     def connection(self):
         return {
-            "site_url": "https://app.datadoghq.eu"
+            "site_url": "https://app.datadoghq.eu",
+            "selfSignedCert": False
         }
 
     def configuration(self):
@@ -46,7 +47,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         ping_response = entry_point.ping_connection()
 
         assert ping_response['success'] is False
-        assert ping_response['error'] == "forbidden"
+        assert ping_response['error'] == "datadog connector error => forbidden"
         assert ping_response['code'] == ErrorCode.TRANSMISSION_FORBIDDEN.value
 
     @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
@@ -89,7 +90,7 @@ class TestDatadogConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert results_response['error'] == 'Bad Request'
+        assert results_response['error'] == 'datadog connector error => Bad Request'
         assert results_response['code'] == ErrorCode.TRANSMISSION_INVALID_PARAMETER.value
 
     @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
@@ -132,5 +133,5 @@ class TestDatadogConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert results_response['error'] == 'Bad Request'
+        assert results_response['error'] == 'datadog connector error => Bad Request'
         assert results_response['code'] == ErrorCode.TRANSMISSION_INVALID_PARAMETER.value

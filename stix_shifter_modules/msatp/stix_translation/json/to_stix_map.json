@@ -447,7 +447,7 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac",
+        "transformer": "FormatMacList",
         "unwrap": true
       },
       {
@@ -1034,7 +1034,7 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac"
+        "transformer": "FormatMacList"
       },
       {
         "key": "x-oca-asset.mac_refs",
@@ -1527,7 +1527,7 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac",
+        "transformer": "FormatMacList",
         "unwrap": true
       },
       {
@@ -1972,7 +1972,7 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac",
+        "transformer": "FormatMacList",
         "unwrap": true
       },
       {
@@ -2146,7 +2146,7 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMac",
+        "transformer": "FormatMacList",
         "unwrap": true
       },
       {

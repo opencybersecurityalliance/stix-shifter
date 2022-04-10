@@ -1,5 +1,23 @@
-##### Updated on 09/28/21
+##### Updated on 02/04/22
 ## Splunk Enterprise Security
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | encoders.like |
+| IN | encoders.set |
+| MATCHES | encoders.matches |
+| AND | {expr1} OR {expr2} |
+| OR | {expr1} OR {expr2} |
+| ISSUBSET | = |
+| FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | _raw |
