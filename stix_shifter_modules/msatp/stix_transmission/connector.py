@@ -5,6 +5,7 @@ from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import copy
+from datetime import datetime, timedelta
 
 
 class Connector(BaseSyncConnector):
@@ -244,7 +245,6 @@ class Connector(BaseSyncConnector):
                             if 'AttackTechniques' in build_data[lookup_table]:
                                 attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
                                 build_data[lookup_table]['AttackTechniques'] = attackTechniques
-
                     if found_events:
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
@@ -265,14 +265,17 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['category'] = ''
                 build_data[lookup_table]['provider'] = ''
                 event_data = copy.deepcopy(build_data[lookup_table])
-                #TODO: replace these with one link to https://security.microsoft.com/machines/<MachineId>/timeline?from=2022-04-09T10:05:01.328Z&to=2022-04-10T10:05:01.329Z
                 
-                if 'DeviceId' in build_data[lookup_table]:
-                    timestamp_dt = datetime.strptime(timestamp[:-5], "%Y-%m-%dT%H:%M:%S") #parse timestamp to date opbject striping milliseconds
-                    timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
-                    timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
-                    event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
-                    build_data[lookup_table]['event_link'] = event_link
+                #link the event to ms atp console device timeline with one second before and after the event https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
+                try:
+                    if 'DeviceId' in build_data[lookup_table]:
+                        timestamp_dt = datetime.strptime(timestamp[:-9], "%Y-%m-%dT%H:%M:%S") #parse timestamp to date opbject striping nanoseconds
+                        timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                        timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+                        event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
+                        build_data[lookup_table]['event_link'] = event_link
+                except Exception as ex:
+                    self.logger.error("error while parsing event_link (external ref) from event. this error does not stop translation {}".format(str(ex)))
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
@@ -284,6 +287,7 @@ class Connector(BaseSyncConnector):
                     flat_lst = [ip_obj['IPAddress'] for ip_lst in ips_comp_lst for ip_obj in json.loads(ip_lst) if
                                 'IPAddress' in ip_obj]
                     build_data[lookup_table]['IPAddresses'] = flat_lst
+
 
                 if lookup_table == "DeviceRegistryEvents":
                     registry_build_data = copy.deepcopy(build_data)
@@ -297,6 +301,7 @@ class Connector(BaseSyncConnector):
 
                     build_data[lookup_table] = registry_build_data[lookup_table]
 
+
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
@@ -309,6 +314,7 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = table_event_data
 
             return_obj['success'] = True
+
 
             return return_obj
 
