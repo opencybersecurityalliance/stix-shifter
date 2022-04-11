@@ -5,12 +5,12 @@
     "transformer": "ToInteger"
   },
   "endpointId": {
-    "key": "x-reaqta.endpoint_id",
+    "key": "x-reaqta-event.endpoint_id",
     "object": "x-reaqta"
   },
   "payload": {
       "localId":{
-        "key": "x-reaqta.local_id",
+        "key": "x-reaqta-event.local_id",
         "object": "x-reaqta"
       },
       "process": {
@@ -23,7 +23,7 @@
             "object": "event"
           },
           "endpointId": {
-            "key": "x-reaqta.process_endpoint_id",
+            "key": "x-reaqta-event.process_endpoint_id",
             "object": "x-reaqta"
           },
           "program": {
@@ -178,7 +178,7 @@
         "object": "x-ibm-finding"
       },
       "triggeredIncidents": {
-        "key": "x-ibm-finding.extensions.x-reaqta-alert.triggeredIncidents",
+        "key": "x-ibm-finding.extensions.x-reaqta-alert.triggered_incidents",
         "object": "x-ibm-finding"
       },
       "data": {
@@ -255,6 +255,11 @@
           }
       },
       "eventType": {
+        "key": "x-ibm-finding.finding_type",
+        "object": "x-ibm-finding",
+        "transformer": "ToString"
+      },
+      "eventName": {
         "key": "x-ibm-finding.name",
         "object": "x-ibm-finding"
       }
