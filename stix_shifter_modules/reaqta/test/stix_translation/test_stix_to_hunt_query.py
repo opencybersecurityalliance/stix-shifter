@@ -15,22 +15,25 @@ TEST_STOP_DATE2 = "2022-04-07T00:05:00.000Z"
 TEST_START_STOP_STIX_VALUE2 = "START t'{}' STOP t'{}'".format(TEST_START_DATE2, TEST_STOP_DATE2)
 TEST_START_STOP_TRANSLATED2 = 'AND happenedAfter = "{}" AND happenedBefore = "{}"'.format(TEST_START_DATE2, TEST_STOP_DATE2)
 
-
 TEST_DATE_PATTERN = r"(\"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z\")"
+
+
 class TestQueryTranslator(unittest.TestCase):
 
     def assertPattern(self, stix_pattern):
-        print('\nPattern:', stix_pattern)
         errors = pattern_validator(stix_pattern, stix_version='2.1')
-        print('Errors', errors)
+
+        # print('\nPattern:', stix_pattern)
+        # print('Errors', errors)
+
         assert len(errors) == 0
 
 
     def assertQuery(self, query, test_string, stix_pattern):
         self.assertPattern(stix_pattern)
 
-        print('\nTranslated:', query[0])
-        print('Expected  :', test_string[0])
+        # print('\nTranslated:', query[0])
+        # print('Expected  :', test_string[0])
 
         self.assertEqual(query, test_string)
 
@@ -45,11 +48,14 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertQuery(query, test_string, stix_pattern)
 
     def test_no_timeinterval(self):
+        '''
+        The missing qualifier for thw observation expressio should be added using default time interval
+        '''
         stix_pattern = "[user-account:user_id = 'root']"
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries'][0]
         
-        assert 'login.id = "root"' in query
+        assert '(login.id = "root") AND happenedAfter = "' in query
 
         found = re.findall(TEST_DATE_PATTERN, query)
         assert len(found) == 2
@@ -68,17 +74,24 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['(($ip = "192.168.1.2") {}) OR ((eventdata.url = "www.example.com") {})'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED2)]
+        test_string = ['($ip = "192.168.1.2") {} OR (eventdata.url = "www.example.com") {}'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED2)]
         
         self.assertQuery(query, test_string, stix_pattern)
 
     def test_two_observation_expressions_with_one_timeinterval(self):
-        stix_pattern = "[ipv4-addr:value = '192.168.1.2'] OR [url:value = 'www.example.com'] {}".format(TEST_START_STOP_STIX_VALUE1, TEST_START_STOP_STIX_VALUE2)
+        '''
+        Only one qualifier is present for 2 observation expressions.
+        The missing qualifier should be added using default time interval
+        '''
+        stix_pattern = "[ipv4-addr:value = '192.168.1.2'] OR [url:value = 'www.example.com'] {}".format(TEST_START_STOP_STIX_VALUE1)
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        assert '(($ip = "192.168.1.2") AND happenedAfter = "' in query[0]
-        assert 'OR ((eventdata.url = "www.example.com") AND happenedAfter = "' in query[0]
+        test_string = ['(($ip = "192.168.1.2") {}) OR ((eventdata.url = "www.example.com") {})'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED1)]
+        self.assertNotEqual(query, test_string)
+
+        assert '($ip = "192.168.1.2") AND happenedAfter = "' in query[0]
+        assert 'OR (eventdata.url = "www.example.com") AND happenedAfter = "' in query[0]
 
         found = re.findall(TEST_DATE_PATTERN, query[0])
         assert len(found) == 4
@@ -89,7 +102,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((($ip = "192.168.1.2") {}) OR ((eventdata.url = "www.example.com") {}))'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED2)]
+        test_string = ['($ip = "192.168.1.2") {} OR (eventdata.url = "www.example.com") {}'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED2)]
         
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -106,14 +119,14 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertQuery(query, test_string, stix_pattern)
 
         
-    # def test_in_operator(self):
-    #     stix_pattern = "[network-traffic:src_port IN (443, 446)] OR [ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')] START t'2022-03-24T20:21:35.519Z' STOP t'2022-03-24T20:21:35.619Z'"
-    #     queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
-    #     query = queries['queries']
+    def test_in_operator(self):
+        stix_pattern = "[network-traffic:src_port IN (443, 446)] {} OR [ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')] {}".format(TEST_START_STOP_STIX_VALUE1, TEST_START_STOP_STIX_VALUE2)
+        queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+        query = queries['queries']
 
-    #     test_string = ['((eventdata.localPort = "443" OR eventdata.localPort = "446") OR ($ip = "127.0.0.1" OR $ip = "127.0.0.2")) AND happenedAfter = "2022-03-24T20:21:35.519Z" AND happenedBefore = "2022-03-24T20:21:35.619Z"']
+        test_string = ['(eventdata.localPort = "443" OR eventdata.localPort = "446") {} OR ($ip = "127.0.0.1" OR $ip = "127.0.0.2") {}'.format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED2)]
 
-    #     self.assertQuery(query, test_string, stix_pattern)
+        self.assertQuery(query, test_string, stix_pattern)
 
         
     def test_match_operator(self):
@@ -221,27 +234,21 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['(eventdata.remotePort = "60008" AND (eventdata.remoteIp = "143.244.41.203" AND (eventdata.localPort = "3389" AND eventdata.localIp = "169.62.55.114"))) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(eventdata.remotePort = "60008" AND eventdata.remoteIp = "143.244.41.203" AND eventdata.localPort = "3389" AND eventdata.localIp = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
+    def test_combined(self):
+        stix_pattern = "([network-traffic:src_ref.value = '127.0.0.1' AND file:hashes.'MD5' != '23db6982caef9e9152f1a5b2589e6ca3' OR file:hashes.'SHA-256' = 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad']  " \
+                "AND [ipv4-addr:value = '10.0.0.1' OR ipv4-addr:value = '12.0.0.1' OR ipv4-addr:value = '12.0.0.2'] " \
+                "AND [url:value = 'http://aaa.bbb' OR url:value = 'http://ccc.ddd']) {}".format(TEST_START_STOP_STIX_VALUE1)
 
+        queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+        query = queries['queries']
 
+        test_string = ['($sha256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" OR $md5 != "23db6982caef9e9152f1a5b2589e6ca3" AND eventdata.localIp = "127.0.0.1") {} ' \
+                        'AND ($ip = "12.0.0.2" OR $ip = "12.0.0.1" OR $ip = "10.0.0.1") {} ' \
+                        'AND (eventdata.url = "http://ccc.ddd" OR eventdata.url = "http://aaa.bbb") {}'
+                        .format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED1)]
 
-    # def test_combined(self):
-    #     stix_pattern = "([network-traffic:src_ref.value = '127.0.0.1' AND file:hashes.'MD5' != '23db6982caef9e9152f1a5b2589e6ca3' OR file:hashes.'SHA-256'= 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad']  " \
-    #             "AND [ipv4-addr:value = '10.0.0.1' OR ipv4-addr:value = '12.0.0.1' OR ipv4-addr:value = '12.0.0.2'] " \
-    #             "AND [url:value = 'http://aaa.bbb' OR url:value = 'http://ccc.ddd']) START t'2022-03-30T18:14:52Z' STOP t'2022-03-30T18:19:52Z'"
-
-    #     queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
-    #     query = queries['queries']
-
-    #     test_string = ['(' \
-    #                     '($sha256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" OR ($md5 != "23db6982caef9e9152f1a5b2589e6ca3" AND eventdata.localIp = "127.0.0.1")) ' \
-    #                     'AND ' \
-    #                     '($ip = "12.0.0.2" OR ($ip = "12.0.0.1" OR $ip = "10.0.0.1")) ' \
-    #                     'AND eventdata.url = "http://ccc.ddd" OR eventdata.url = "http://aaa.bbb"' \
-    #                 ') ' \
-    #                 'AND happenedAfter = "2022-03-30T18:14:52Z" AND happenedBefore = "2022-03-30T18:19:52Z"']
-
-    #     self.assertQuery(query, test_string, stix_pattern)
+        self.assertQuery(query, test_string, stix_pattern)

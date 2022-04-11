@@ -66,10 +66,6 @@ class QueryStringPatternTranslator:
         return None
 
     @staticmethod
-    def _is_reference_value(stix_field):
-        return stix_field == 'src_ref.value' or stix_field == 'dst_ref.value'
-
-    @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for connector".format(expression_operator.name))
@@ -157,10 +153,6 @@ class QueryStringPatternTranslator:
             expression_02 = self._parse_expression(expression.expr2)
             if not expression_01 or not expression_02:
                 return ''
-            if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
-            if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
 
             expression_string = "{} {} {}".format(expression_01, operator, expression_02)
             
@@ -176,7 +168,7 @@ class QueryStringPatternTranslator:
 
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 expression_string = self._parse_expression(expression.observation_expression, expression)
-                return "({})".format(expression_string)
+                return "{}".format(expression_string)
             else:
                 expression_string = self._parse_expression(expression.observation_expression.comparison_expression, expression)
                 return "({}) {}".format(expression_string, formated_qualifier)
@@ -186,7 +178,7 @@ class QueryStringPatternTranslator:
             expression_01 = self._parse_expression(expression.expr1, qualifier)
             expression_02 = self._parse_expression(expression.expr2, qualifier)
             if expression_01 and expression_02:
-                return "({}) {} ({})".format(expression_01, operator, expression_02)
+                return "{} {} {}".format(expression_01, operator, expression_02)
             elif expression_01:
                 return "{}".format(expression_01)
             elif expression_02:
