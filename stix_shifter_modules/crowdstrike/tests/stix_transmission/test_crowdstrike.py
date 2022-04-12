@@ -57,8 +57,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'search_id' in results_response
         assert results_response['search_id'] == query_expression
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_no_results_response(self, mock_auth_response, mock_requests_response):
+    def test_no_results_response(self, mock_requests_response):
         mocked_return_value = """
 {"terms": ["process_name:notepad.exe"],
  "results": [],
@@ -75,7 +74,6 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 }
 """
 
-        mock_auth_response.return_value = RequestMockResponse(200, {})
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
@@ -88,8 +86,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_one_results_response(self, mock_auth_response, mock_requests_response):
+    def test_one_results_response(self, mock_requests_response):
         mocked_return_value = """
 {
   "terms": [
@@ -110,7 +107,6 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 }
 """
 
-        mock_auth_response.return_value = RequestMockResponse(200, {})
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
@@ -123,11 +119,9 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_transmit_limit_and_sort(self, mock_auth_response, mock_requests_response):
+    def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
 
-        mock_auth_response.return_value = RequestMockResponse(200, {})
         mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)

@@ -21,7 +21,6 @@ class ArcsightStatus(Enum):
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
-        self.connector = __name__.split('.')[1]
 
     # Map data source status to connector status
     @staticmethod
@@ -69,7 +68,7 @@ class StatusConnector(BaseStatusConnector):
 
         except Exception as err:
             response_error = err
-            ErrorResponder.fill_error(return_obj, response_error, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_error, ['message'])
 
         return return_obj
 
@@ -99,10 +98,10 @@ class StatusConnector(BaseStatusConnector):
         # arcsight logger error codes - currently unavailable state
         elif response_code in [500, 503]:
             response_string = raw_response.decode()
-            ErrorResponder.fill_error(return_obj, response_string, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_string, ['message'])
         elif isinstance(json.loads(raw_response), dict):
             response_error = json.loads(raw_response)
             response_dict = response_error['errors'][0]
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         else:
             raise Exception(raw_response)

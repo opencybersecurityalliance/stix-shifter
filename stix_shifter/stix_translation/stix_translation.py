@@ -15,9 +15,7 @@ PARSE = 'parse'
 MAPPING = 'mapping'
 DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
-MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
-OPERATOR_MAPPING_ERROR = "Unable to map the following STIX Operators:"
-ATTRIBUTE_MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
+MAPPING_ERROR = "Unable to map the following STIX objects and properties to data source fields:"
 DEFAULT_DIALECT = 'default'
 
 
@@ -34,7 +32,7 @@ class StixTranslation:
         """
         Translated queries to a specified format
         :param module: What module to use
-        :type module: one of connector modules: 'qradar', 'template'
+        :type module: one of connector modules: 'qradar', 'dummy'
         :param translate_type: translation of a query or result set must be one of: 'parse', 'mapping' 'query', 'results'
         :type translate_type: str
         :param data: the data to translate
@@ -87,7 +85,6 @@ class StixTranslation:
                     # The query constructor has some logic around which of the two are used.
                     queries = []
                     unmapped_stix_collection = []
-                    unmapped_operator_collection = []
                     dialects_used = 0
                     for dialect in dialects:
                         query_translator = entry_point.get_query_translator(dialect)
@@ -99,25 +96,12 @@ class StixTranslation:
                             else:
                                 queries.extend(transform_result.get('queries', []))
                             unmapped_stix_collection.extend(transform_result.get('unmapped_attributes', []))
-                            unmapped_operator_collection.extend(transform_result.get('unmapped_operator', []))
                     if not dialects_used:
                         raise UnsupportedLanguageException(language)
-
-                    unmapped_stix_collection = list(set(unmapped_stix_collection))
-                    unmapped_operator_collection = list(set(unmapped_operator_collection))
                     if not queries:
-                        if unmapped_stix_collection and unmapped_operator_collection:
-                            raise DataMappingException(
-                                "{} {} and Operators: {} to data source fields".format(MAPPING_ERROR, unmapped_stix_collection, unmapped_operator_collection)
-                            )
-                        elif unmapped_stix_collection:
-                            raise DataMappingException(
-                                "{} {} to data source fields".format(ATTRIBUTE_MAPPING_ERROR, unmapped_stix_collection)
-                            )
-                        elif unmapped_operator_collection:
-                            raise DataMappingException(
-                                "{} {} to data source fields".format(OPERATOR_MAPPING_ERROR, unmapped_operator_collection)
-                            )
+                        raise DataMappingException(
+                            "{} {}".format(MAPPING_ERROR, unmapped_stix_collection)
+                        )
                     return {'queries': queries}
                 else:
                     return entry_point.parse_query(data)
@@ -140,5 +124,5 @@ class StixTranslation:
             self.logger.error('Caught exception: ' + str(ex) + " " + str(type(ex)))
             self.logger.debug(exception_to_string(ex))
             response = dict()
-            ErrorResponder.fill_error(response, message_struct={'exception': ex}, connector=module)
+            ErrorResponder.fill_error(response, message_struct={'exception': ex})
             return response

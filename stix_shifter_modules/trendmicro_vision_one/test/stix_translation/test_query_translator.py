@@ -75,7 +75,7 @@ class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
 
     def test_dst(self):
         pattern = "[network-traffic:dst_ref.value = '203.0.113.33']"
-        expectation = 'dst:"203.0.113.33" OR objectIp:"203.0.113.33"'
+        expectation = 'dst : "203.0.113.33" OR objectIp : "203.0.113.33"'
         self._test_pattern(pattern, expectation)
 
     def test_source_port(self):
@@ -85,7 +85,7 @@ class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
 
     def test_src(self):
         pattern = "[network-traffic:src_ref.value = '203.0.113.33']"
-        expectation = 'src:"203.0.113.33"'
+        expectation = 'src : "203.0.113.33"'
         self._test_pattern(pattern, expectation)
 
     def test_command_line(self):
@@ -139,32 +139,22 @@ class TestStixParsingEndpoint(unittest.TestCase, TestStixParsingMixin):
 
     def test_observation_and(self):
         pattern = "[network-traffic:src_port = 443] AND [network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = '(spt:"443") AND (src:"127.0.0.1")'
+        expectation = '(spt:"443") AND (src : "127.0.0.1")'
         self._test_pattern(pattern, expectation)
 
     def test_observation_or(self):
         pattern = "[network-traffic:src_port = 443] OR [network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = '(spt:"443") OR (src:"127.0.0.1")'
+        expectation = '(spt:"443") OR (src : "127.0.0.1")'
         self._test_pattern(pattern, expectation)
 
     def test_comparison_and(self):
         pattern = "[network-traffic:src_port = 443 AND network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = 'src:"127.0.0.1" AND spt:"443"'
+        expectation = 'src : "127.0.0.1" AND spt:"443"'
         self._test_pattern(pattern, expectation)
 
     def test_comparison_or(self):
         pattern = "[network-traffic:src_port = 443 OR network-traffic:src_port = 443]"
         expectation = 'spt:"443" OR spt:"443"'
-        self._test_pattern(pattern, expectation)
-
-    def test_comparison_in(self):
-        pattern = "[network-traffic:src_port IN (443, 446)]"
-        expectation = '(spt:"443" OR spt:"446")'
-        self._test_pattern(pattern, expectation)
-
-    def test_comparison_in_and(self):
-        pattern = "[network-traffic:src_port = 443 AND network-traffic:src_ref.value IN ('127.0.0.1', '127.0.0.2')]"
-        expectation = '(src:"127.0.0.1" OR src:"127.0.0.2") AND spt:"443"'
         self._test_pattern(pattern, expectation)
 
 
@@ -214,7 +204,7 @@ class TestStixParsingMessage(unittest.TestCase, TestStixParsingMixin):
 
     def test_src(self):
         pattern = "[network-traffic:src_ref.value = '203.0.113.33']"
-        expectation = 'source_ip:"203.0.113.33"'
+        expectation = 'source_ip : "203.0.113.33"'
         self._test_pattern(pattern, expectation)
 
     def test_url(self):
@@ -236,12 +226,12 @@ class TestStixParsingMessage(unittest.TestCase, TestStixParsingMixin):
 
     def test_observation_and(self):
         pattern = "[file:name = 'abc.txt' AND network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = 'source_ip:"127.0.0.1" AND file_name:"abc.txt"'
+        expectation = 'source_ip : "127.0.0.1" AND file_name:"abc.txt"'
         self._test_pattern(pattern, expectation)
 
     def test_observation_or(self):
         pattern = "[file:name = 'abc.txt' OR network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = 'source_ip:"127.0.0.1" OR file_name:"abc.txt"'
+        expectation = 'source_ip : "127.0.0.1" OR file_name:"abc.txt"'
         self._test_pattern(pattern, expectation)
 
     def test_multiple_operator(self):
@@ -259,10 +249,10 @@ class TestStixParsingMessage(unittest.TestCase, TestStixParsingMixin):
 
     def test_comparison_and(self):
         pattern = "[file:name = 'abc.txt' AND network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = 'source_ip:"127.0.0.1" AND file_name:"abc.txt"'
+        expectation = 'source_ip : "127.0.0.1" AND file_name:"abc.txt"'
         self._test_pattern(pattern, expectation)
 
     def test_comparison_or(self):
         pattern = "[file:name = 'abc.txt' OR network-traffic:src_ref.value = '127.0.0.1']"
-        expectation = 'source_ip:"127.0.0.1" OR file_name:"abc.txt"'
+        expectation = 'source_ip : "127.0.0.1" OR file_name:"abc.txt"'
         self._test_pattern(pattern, expectation)

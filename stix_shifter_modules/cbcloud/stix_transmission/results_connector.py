@@ -9,7 +9,6 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
-        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         response = self.api_client.get_search_results(search_id, offset, length)
@@ -31,6 +30,6 @@ class ResultsConnector(BaseResultsConnector):
             return_obj['success'] = True
             return_obj['data'] = response_dict['results']
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
 
         return return_obj

@@ -49,7 +49,7 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(400, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'invalid_parameter','connector': 'infoblox','error': 'infoblox connector error => {"error": [{"message": "Invalid type hst --- type must be one of (host, ip, url, email, hash)"}]}','success': False})
+        self.assertEqual(ping_response, {'code': 'invalid_parameter','error': '{"error": [{"message": "Invalid type hst --- type must be one of (host, ip, url, email, hash)"}]}','success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_auth_failure(self, mock_ping):
@@ -58,8 +58,7 @@ class TestTransmission(unittest.TestCase):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
         self.assertEqual(ping_response, {'code': 'authentication_fail',
-            'connector': 'infoblox',
-            'error': 'infoblox connector error => <html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>',
+            'error': '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>',
             'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
@@ -68,7 +67,7 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(503, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown','connector': 'infoblox','error': 'infoblox connector error => {"error": {"code": "InternalError"}}','success': False})
+        self.assertEqual(ping_response, {'code': 'unknown','error': '{"error": {"code": "InternalError"}}','success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_unknown_code(self, mock_ping):
@@ -76,14 +75,14 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = [MockResponse(None, json.dumps(response))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown','connector': 'infoblox','error': 'infoblox connector error => {"error": {"code": "InternalError"}}','success': False})
+        self.assertEqual(ping_response, {'code': 'unknown','error': '{"error": {"code": "InternalError"}}','success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => Failed to establish a new connection", 'success': False})
+        self.assertEqual(ping_response, {'code': 'unknown', 'error': "Failed to establish a new connection", 'success': False})
 
     ###############################
     ## QUERY
@@ -110,13 +109,13 @@ class TestTransmission(unittest.TestCase):
         query = json.dumps({"offset": 0,"fields": [],"from": 1587892612,"to": 1592382065,"query": "hostName:*"})
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(query, 0, 10)
-        self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => 'source'", 'success': False})
+        self.assertEqual(results_response, {'code': 'unknown', 'error': "'source'", 'success': False})
 
     def test_results_unknown_source(self):
         # tests ResultsConnector.create_results_connection
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
-        self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => Unknown source provided source=unknown_source", 'success': False})
+        self.assertEqual(results_response, {'code': 'unknown', 'error': "Unknown source provided source=unknown_source", 'success': False})
 
     ###############################
     ## STATUS
@@ -160,7 +159,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(400, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
-        self.assertEqual(results_response, {"code": "invalid_parameter", 'connector': 'infoblox', "error": 'infoblox connector error => '+ payload["error"][0]["message"],"success": False})
+        self.assertEqual(results_response, {"code": "invalid_parameter","error": payload["error"][0]["message"],"success": False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_auth_failure(self, mock_query):
@@ -168,7 +167,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(401, payload)]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
-        self.assertEqual(results_response, {"code": "authentication_fail", 'connector': 'infoblox', "error": 'infoblox connector error => '+payload,"success": False})
+        self.assertEqual(results_response, {"code": "authentication_fail","error": payload,"success": False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_no_results(self, mock_query):
@@ -290,7 +289,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,"error": "Failed to establish a new connection","code": "unknown"})
 
 class TestDossierTransmission(unittest.TestCase):
     def get_dialect(self):
@@ -319,7 +318,7 @@ class TestDossierTransmission(unittest.TestCase):
     def test_results_missing_threat_type(self):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
-        self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => 'threat_type'", 'success': False})
+        self.assertEqual(results_response, {'code': 'unknown', 'error': "'threat_type'", 'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_invalid_param(self, mock_query):
@@ -327,7 +326,7 @@ class TestDossierTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(400, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
-        self.assertEqual(results_response, {'code': 'invalid_parameter', 'connector': 'infoblox', 'error': 'infoblox connector error => unknown target type','success': False})
+        self.assertEqual(results_response, {'code': 'invalid_parameter','error': 'unknown target type','success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_auth_failure(self, mock_query):
@@ -335,7 +334,7 @@ class TestDossierTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(401, payload)]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
-        self.assertEqual(results_response, {'code': 'authentication_fail', 'connector': 'infoblox', 'error': 'infoblox connector error => '+payload,'success': False})
+        self.assertEqual(results_response, {'code': 'authentication_fail','error': payload,'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_no_results_1(self, mock_query):
@@ -450,7 +449,7 @@ class TestDossierTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="host"), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,"error": "Failed to establish a new connection","code": "unknown"})
 
 class TestTideDbTransmission(unittest.TestCase):
     def get_dialect(self):
@@ -478,7 +477,7 @@ class TestTideDbTransmission(unittest.TestCase):
     def test_results_missing_threat_type(self):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
-        self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => 'threat_type'", 'success': False})
+        self.assertEqual(results_response, {'code': 'unknown', 'error': "'threat_type'", 'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_invalid_param(self, mock_query):
@@ -486,7 +485,7 @@ class TestTideDbTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(400, json.dumps(payload))]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
-        self.assertEqual(results_response, {'code': 'invalid_parameter', 'connector': 'infoblox', 'error': 'infoblox connector error => unknown target type','success': False})
+        self.assertEqual(results_response, {'code': 'invalid_parameter','error': 'unknown target type','success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_auth_failure(self, mock_query):
@@ -494,7 +493,7 @@ class TestTideDbTransmission(unittest.TestCase):
         mock_query.side_effect = [MockResponse(401, payload)]
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
-        self.assertEqual(results_response, {'code': 'authentication_fail', 'connector': 'infoblox', 'error': 'infoblox connector error => ' + payload,'success': False})
+        self.assertEqual(results_response, {'code': 'authentication_fail','error': payload,'success': False})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_no_results(self, mock_query):
@@ -625,4 +624,4 @@ class TestTideDbTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="host"), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,"error": "Failed to establish a new connection","code": "unknown"})

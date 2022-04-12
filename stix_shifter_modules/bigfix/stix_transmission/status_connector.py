@@ -24,7 +24,6 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
-        self.connector = __name__.split('.')[1]
 
     def _get_progress_status(self, client_count, reporting_agents, return_obj):
         """
@@ -88,7 +87,7 @@ class StatusConnector(BaseStatusConnector):
                 except json.decoder.JSONDecodeError:
                     response_dict = xmltodict.parse(response_txt)
                     ErrorResponder.fill_error(return_obj, response_dict, ['BESAPI', 'ClientQueryResults',
-                                                                          'QueryResult', '+IsFailure=1', '~Result'], connector=self.connector)
+                                                                          'QueryResult', '+IsFailure=1', '~Result'])
             else:
                 if ErrorResponder.is_plain_string(response_txt):
                     ErrorResponder.fill_error(return_obj, message=response_txt)
@@ -96,7 +95,7 @@ class StatusConnector(BaseStatusConnector):
                     raise UnexpectedResponseException
         except Exception as e:
             if e.__class__.__name__ in ['ConnectionError', 'ProxyError']:
-                ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted', connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted')
                 return_obj['status'] = Status.ERROR.value
             else:
                 raise e
@@ -122,10 +121,10 @@ class StatusConnector(BaseStatusConnector):
             return_obj = self.status_api_response(search_id, client_count)
         except Exception as e:
             if e.__class__.__name__ in ['ConnectionError', 'ProxyError']:
-                ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted', connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted')
                 return_obj['status'] = Status.ERROR.value
             elif response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e

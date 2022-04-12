@@ -62,7 +62,6 @@
     "\"Process Name\" as ProcessName",
     "\"Process ID\" as ProcessId",
     "\"Parent Process ID\" as ParentProcessId",
-    "hasoffense",
-    "\"Machine ID\" as MachineId"
+    "hasoffense"
   ]
 }

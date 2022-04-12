@@ -1,32 +1,12 @@
-import os
-import subprocess
-import sys
-
-if sys.version_info.major == 3 and sys.version_info.minor > 5:
-    # good
-    print(sys.version)
-else:
-    print("Error: stix-shifter requires python version at least or greater than 3.6")
-    exit(1)
-
-
-from generate_requirements import generate_requirements
-generate_requirements()
-
-subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-dev.txt"])
-
-
-
-if os.getenv('INSTALL_REQUIREMENTS_ONLY', None) == '1':
-    exit(0)
-
-
 from setuptools import find_packages
 # To use a consistent encoding
 from codecs import open
+import sys
 import shutil
+import subprocess
 import json
 import io
+import os
 from jsonmerge import merge
 import tempfile
 import importlib
@@ -81,12 +61,18 @@ if mode == '1':
             'stix_shifter_utils',
             'stix_shifter',
             'stix_shifter_modules'
-        ]
+            ]
+    }
+elif mode == '3':
+    projects = {
+        "stix_shifter_utils": ["stix_shifter_utils"],
+        "stix_shifter": ["stix_shifter"],
+        "stix_shifter_modules": ["stix_shifter_modules"],
     }
 elif mode == 'N':
     projects = {
         "stix_shifter_utils": ["stix_shifter_utils"],
-        "stix_shifter": ["stix_shifter"]
+        "stix_shifter": ["stix_shifter"],
     }
     fill_connectors(projects, "stix_shifter_modules")
 else:
@@ -102,7 +88,7 @@ else:
 
 for project_name in projects.keys():
     cleanup_file_list = []
-    temp_dir_list = []
+    temp_dir = None
     module_dir = None
 
     src_folders = projects[project_name]
@@ -224,21 +210,16 @@ for project_name in projects.keys():
             with open(os.path.join(conf_path, 'dialects.json'), 'w', encoding="utf-8") as f:
                 f.write(json.dumps(dialects_full, indent=4, sort_keys=False))
             temp_dir = tempfile.TemporaryDirectory()
-            temp_dir_list.append([temp_dir, module_dir])
             shutil.move(configuration_path, temp_dir.name)
             os.rename(conf_path, configuration_path)
             cleanup_file_list.append(configuration_path)
 
         # Inject util files 
-        if mode != "1":
-            for util_src, util_dest in utils_include_list.items():
-                util_dest = util_dest % module_dir
-                if shutil.os.path.exists(util_src) and not shutil.os.path.exists(util_dest):
-                    try: 
-                        shutil.copyfile(util_src, util_dest)
-                        cleanup_file_list.append(util_dest)
-                    except Exception as e:
-                        pass
+        for util_src, util_dest in utils_include_list.items():
+            util_dest = util_dest % module_dir
+            if not shutil.os.path.exists(util_dest):
+                shutil.copyfile(util_src, util_dest)
+                cleanup_file_list.append(util_dest)
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
@@ -267,9 +248,8 @@ for project_name in projects.keys():
                 shutil.rmtree(cleanup_file)
             else:
                 os.remove(cleanup_file)
-    for temp_dir, module_dir in temp_dir_list:
-        if temp_dir is not None:
-            shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
-            temp_dir.cleanup()
+    if temp_dir is not None:
+        shutil.move(os.path.join(temp_dir.name, 'configuration'), module_dir)
+        temp_dir = None
     print('---------------------------------')
 shutil.rmtree(TMP_MAPPING_DIR)

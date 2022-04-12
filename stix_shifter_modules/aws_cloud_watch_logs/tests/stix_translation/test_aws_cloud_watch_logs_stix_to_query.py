@@ -223,11 +223,10 @@ class TestQueryTranlator(unittest.TestCase):
         """
         Test Unsupportted operator
         """
-        stix_pattern = "[ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2019-10-01T08:43:10.003Z' STOP " \
-                       "t'2019-10-30T10:43:10.003Z'"
+        stix_pattern = "([ipv4-addr:value ISSUPERSET '54.239.30.177'] START t'2019-10-01T08:43:10.003Z' STOP " \
+                       "t'2019-10-30T10:43:10.003Z')"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         assert query['success'] is False
-        assert query['connector'] == 'aws_cloud_watch_logs'
-        assert query['code'] == 'mapping_error'
-        assert query['error'] == "aws_cloud_watch_logs connector error => data mapping error : Unable to map the following STIX " \
-                        "Operators: [IsSuperSet] to data source fields"
+        assert query['code'] == 'not_implemented'
+        assert query['error'] == 'wrong parameter : Comparison operator IsSuperSet unsupported for AWS CloudWatch ' \
+                                 'logs adapter'

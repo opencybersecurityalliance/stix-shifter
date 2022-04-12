@@ -13,7 +13,6 @@ FILE_HASHES = ["MD5", "SHA256", "SHA1"]
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
-        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -55,18 +54,18 @@ class ResultsConnector(BaseResultsConnector):
             # arcsight logger error codes - currently unavailable state
             elif response_code in [500, 503]:
                 response_string = raw_response.decode()
-                ErrorResponder.fill_error(return_obj, response_string, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_string, ['message'])
             elif isinstance(json.loads(raw_response), dict):
                 response_error = json.loads(raw_response)
                 response_dict = response_error['errors'][0]
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             else:
                 raise Exception(raw_response)
 
         except Exception as err:
             return_obj = dict()
             response_error = err
-            ErrorResponder.fill_error(return_obj, response_error, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_error, ['message'])
 
         return return_obj
 

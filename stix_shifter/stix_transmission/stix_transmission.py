@@ -1,5 +1,4 @@
 import importlib
-
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import json
 
@@ -19,7 +18,6 @@ class StixTransmission:
 
     def __init__(self, module, connection, configuration):
         module = module.split(':')[0]
-        self.connector = module
         if connection.get('options', {}).get('proxy_host'):
             module = 'proxy'
         try:
@@ -36,48 +34,39 @@ class StixTransmission:
             return self.entry_point.create_query_connection(query)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
-    def status(self, search_id, metadata=None):
+    def status(self, search_id):
         # Creates and sends a status query to the correct datasource asking for the status of the specific query
         try:
             if self.init_error:
                 raise self.init_error
-            if metadata:
-                return self.entry_point.create_status_connection(search_id, metadata)
-            else:
-                return self.entry_point.create_status_connection(search_id)
+            return self.entry_point.create_status_connection(search_id)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
-    def results(self, search_id, offset, length, metadata=None):
+    def results(self, search_id, offset, length):
         # Creates and sends a query to the correct datasource asking for results of the specific query
         try:
             if self.init_error:
                 raise self.init_error
-            if metadata:
-                return self.entry_point.create_results_connection(search_id, offset, length, metadata)
-            else:
-                return self.entry_point.create_results_connection(search_id, offset, length)
+            return self.entry_point.create_results_connection(search_id, offset, length)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
-    def results_stix(self, search_id, offset, length, data_source, metadata=None):
+    def results_stix(self, search_id, offset, length, data_source):
         try:
             if self.init_error:
                 raise self.init_error
-            if metadata:
-                return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source, metadata)
-            else:
-                return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
+            return self.entry_point.create_results_stix_connection(search_id, offset, length, data_source)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
     def delete(self, search_id):
@@ -88,7 +77,7 @@ class StixTransmission:
             return self.entry_point.delete_query_connection(search_id)
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
     def ping(self):
@@ -99,7 +88,7 @@ class StixTransmission:
             return self.entry_point.ping_connection()
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj
 
     def is_async(self):
@@ -110,5 +99,5 @@ class StixTransmission:
             return self.entry_point.is_async()
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, error=ex)
             return return_obj

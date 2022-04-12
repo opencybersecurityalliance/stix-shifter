@@ -12,9 +12,8 @@
             "description": "Assign a description to indicate the purpose of the connection"
         },
         "apphostId": {
-            "label": "Edge gateway",
-            "description": "Specify an edge gateway if the connection is to run on an edge gateway.",
-            "linkDescription": "Add or manage edge gateways"
+         "label": "Edge Gateway",
+          "description": "Specify an edge gateway host if the connection is to run on an edge gateway."
         },
         "options": {
             "result_limit": {

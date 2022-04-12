@@ -3,7 +3,7 @@ from requests_toolbelt.adapters import host_header_ssl
 from requests.packages.urllib3.util.retry import Retry
 from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys
-from collections.abc import Mapping
+import collections
 import os
 import errno
 import uuid
@@ -105,7 +105,7 @@ class RestApiClient:
                 session = requests.Session()
                 retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
                                        method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
-                session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
+                session.mount("http://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
                 if self.sni is not None:
                     # only use the tool belt session in case of SNI for safety
@@ -125,7 +125,7 @@ class RestApiClient:
                 response = it.result
                 if isinstance(response, Exception):
                     raise response
-                if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
+                if 'headers' in dir(response) and isinstance(response.headers, collections.Mapping) and \
                    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
                     self.logger.error("WARNING: " +
                                       response.headers['Content-Type'], file=sys.stderr)

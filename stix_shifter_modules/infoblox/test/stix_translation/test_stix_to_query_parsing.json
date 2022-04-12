@@ -454,18 +454,18 @@
         "expected": {
             "tideDbData": {
                 "success": false,
-                "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
+                "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector tideDbData"
             },
             "dnsEventData": {
                 "success": false,
-                "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
+                "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dnsEventData"
             },
             "dossierData": {
                 "success": false,
-                "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [NotEqual] to data source fields"
+                "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator NotEqual unsupported for Infoblox connector dossierData"
             }
         }
     },
@@ -556,12 +556,12 @@
                 "queries": ["{\"offset\": 0, \"query\": \"period=5 minutes&text_search=1.1.1.1\", \"threat_type\": \"ip\", \"source\": \"tideDbData\"}"]
             },
             "dnsEventData": {
-                "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
+                "success": false, "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator Like unsupported for Infoblox connector dnsEventData"
             },
             "dossierData": {
-                "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
+                "success": false, "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator Like unsupported for Infoblox connector dossierData"
             }
         }
     },
@@ -635,12 +635,12 @@
                 "queries": ["{\"offset\": 0, \"query\": \"period=5 minutes&text_search=domain1.com\", \"threat_type\": \"host\", \"source\": \"tideDbData\"}"]
             },
             "dnsEventData": {
-                "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
+                "success": false, "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator Like unsupported for Infoblox connector dnsEventData"
             },
             "dossierData": {
-                "success": false, "code": "mapping_error",
-                "error": "data mapping error : Unable to map the following STIX Operators: [Like] to data source fields"
+                "success": false, "code": "not_implemented",
+                "error": "wrong parameter : Comparison operator Like unsupported for Infoblox connector dossierData"
             }
         }
     },
@@ -1134,7 +1134,8 @@
                 "error": "data mapping error : Unable to map the following STIX objects and properties to data source fields: [['network-traffic:src_ref.value']]"
             },
             "dnsEventData": {
-                "queries": []
+                "success": false, "code": "mapping_error",
+                "error": "data mapping error : Unable to map the following STIX objects and properties to data source fields: []"
             },
             "dossierData": {
                 "success": false, "code": "mapping_error",

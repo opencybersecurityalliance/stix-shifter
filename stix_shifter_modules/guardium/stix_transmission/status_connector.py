@@ -17,7 +17,6 @@ class GuardiumStatus(Enum):
 class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
-        self.connector = __name__.split('.')[1]
 
     def __getStatus(self, status):
         switcher = {
@@ -47,5 +46,5 @@ class StatusConnector(BaseStatusConnector):
             return_obj['data'] = response_dict.get('data',"NA")
             return_obj["search_id"] = response_dict.get('search_id',"NA")
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj

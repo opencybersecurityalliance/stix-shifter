@@ -1,5 +1,4 @@
 import unittest
-
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.arcsight.entry_point import EntryPoint
@@ -192,7 +191,7 @@ class TestArcsightResultsToStix(unittest.TestCase):
         assert file_obj.keys() == {'type', 'name', 'parent_directory_ref', 'hashes'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'svchost.exe'
-        assert file_obj['parent_directory_ref'] == '5'
+        assert file_obj['parent_directory_ref'] == '4'
         assert directory_obj['path'] == '\\device\\harddiskvolume2\\windows'
 
     @staticmethod

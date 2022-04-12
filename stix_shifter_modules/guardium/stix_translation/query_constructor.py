@@ -15,10 +15,28 @@ DEFAULT_DAYS_BACK = 2
 
 
 class QueryStringPatternTranslator:
+    # Change comparator values to match with supported data source operators
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.Or: "OR",
+        #        ComparisonComparators.GreaterThan: ">",
+        #        ComparisonComparators.GreaterThanOrEqual: ">=",
+        #        ComparisonComparators.LessThan: "<",
+        #        ComparisonComparators.LessThanOrEqual: "<=",
+        ComparisonComparators.Equal: "=",
+        #        ComparisonComparators.NotEqual: "!=",
+        #        ComparisonComparators.Like: "LIKE",
+        #        ComparisonComparators.In: "IN",
+        #        ComparisonComparators.Matches: 'LIKE',
+        # ComparisonComparators.IsSubSet: '',
+        # ComparisonComparators.IsSuperSet: '',
+        ObservationOperators.Or: 'OR',
+        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        ObservationOperators.And: 'OR'
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options, transformers):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.logger = logger.set_logger(__name__)
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -513,7 +531,7 @@ class QueryStringPatternTranslator:
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[str(expression.comparator)]
+            comparator = self.comparator_lookup[expression.comparator]
 
             if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToGuardium()
@@ -551,7 +569,7 @@ class QueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self.comparator_lookup[str(expression.operator)]
+            operator = self.comparator_lookup[expression.operator]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not expression_01 or not expression_02:
@@ -569,7 +587,7 @@ class QueryStringPatternTranslator:
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[str(expression.observation_expression.operator)]
+                operator = self.comparator_lookup[expression.observation_expression.operator]
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
                 return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
                                                            operator=operator,
@@ -577,7 +595,7 @@ class QueryStringPatternTranslator:
             else:
                 return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[str(expression.operator)]
+            operator = self.comparator_lookup[expression.operator]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if expression_01 and expression_02:

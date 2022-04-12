@@ -26,6 +26,22 @@ class RelevanceQueryStringPatternTranslator:
     """
     Stix to Native query translation
     """
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.Or: "OR",
+        ComparisonComparators.Equal: "=",
+        ComparisonComparators.NotEqual: "!=",
+        ComparisonComparators.Like: "contains",
+        ComparisonComparators.Matches: "matches",
+        ComparisonComparators.GreaterThan: "is greater than",
+        ComparisonComparators.GreaterThanOrEqual: "is greater than or equal to",
+        ComparisonComparators.LessThan: "is less than",
+        ComparisonComparators.LessThanOrEqual: "is less than or equal to",
+        ComparisonComparators.In: "=",
+        ObservationOperators.Or: 'OR',
+        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        ObservationOperators.And: 'OR'
+    }
     _stix_object_format_string_lookup_dict = {
         FILE: '''("file", name of it | "n/a",
                     "sha256", sha256 of it | "n/a",
@@ -79,7 +95,6 @@ class RelevanceQueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range, options):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self._time_range = time_range
         self.qualified_queries = []
@@ -156,10 +171,10 @@ class RelevanceQueryStringPatternTranslator:
         :param expression_operator: str
         :return: str
         """
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for BigFix adapter".format(expression_operator.name))
-        return self.comparator_lookup.get(str(expression_operator))
+        return self.comparator_lookup.get(expression_operator)
 
     @staticmethod
     def _html_encoding_escape_character(value) -> str:

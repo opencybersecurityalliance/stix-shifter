@@ -1,7 +1,7 @@
 """
 Query Connector
 
-NOTE: Infoblox connector only supports a synchronous transmission module, so this connector is a template.
+NOTE: Infoblox connector only supports a synchronous transmission module, so this connector is a dummy.
 
 See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-transmission-module.md
 """

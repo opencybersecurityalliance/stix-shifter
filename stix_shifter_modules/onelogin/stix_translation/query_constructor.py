@@ -17,10 +17,17 @@ logger = logging.getLogger(__name__)
 
 class QueryStringPatternTranslator:
     QUERIES = []
+    # Change comparator values to match with supported data source operators
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "&",
+        ComparisonComparators.Equal: "=",
+        ObservationOperators.And: 'or',
+        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
+        ObservationOperators.Or: 'or'
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -80,9 +87,9 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Onelogin connector".format(expression_operator.name))
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     @classmethod
     def _format_start_stop_qualifier(self, expression, qualifier) -> str:

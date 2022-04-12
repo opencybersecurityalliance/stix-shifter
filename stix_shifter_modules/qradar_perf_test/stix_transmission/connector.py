@@ -10,7 +10,6 @@ class UnexpectedResponseException(Exception):
 
 class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
-        self.connector = __name__.split('.')[1]
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
@@ -35,7 +34,7 @@ class Connector(BaseSyncConnector):
             self.bundle_url = response.headers.get('Location')
             return self.ping_connection()
         else:
-            ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_txt, ['message'])
         return return_obj
 
     def create_results_connection(self, search_id, offset, length):
@@ -45,10 +44,10 @@ class Connector(BaseSyncConnector):
         if response.code != 200:
             response_txt = response.raise_for_status()
             if ErrorResponder.is_plain_string(response_txt):
-                ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message=response_txt)
             elif ErrorResponder.is_json_string(response_txt):
                 response_json = json.loads(response_txt)
-                ErrorResponder.fill_error(return_obj, response_json, ['reason'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_json, ['reason'])
             else:
                 raise UnexpectedResponseException
         else:
@@ -70,9 +69,9 @@ class Connector(BaseSyncConnector):
                     return_obj['success'] = True
                     return_obj['data'] = response_dict.get('events', response_dict.get('flows'))[:int(length)]
                 else:
-                    ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
             except Exception as ex:
-                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex), connector=self.connector)
+                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
 
             return return_obj
 

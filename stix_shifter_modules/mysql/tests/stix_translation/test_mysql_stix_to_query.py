@@ -72,9 +72,9 @@ def _test_mappings(mappings, stix_spec='2.0'):
                 field_count -= 1
             stix_pattern += "]"
             if stix_spec == "2.1":
-                pattern_translation = _translate_query(stix_pattern, {"table": "demo_table", "stix_2.1": True})
+                pattern_translation = _translate_query(stix_pattern, {"stix_2.1": True})
             else:
-                pattern_translation = _translate_query(stix_pattern, {"table": "demo_table"})
+                pattern_translation = _translate_query(stix_pattern)
             assert pattern_translation.get("queries"), "failed to translate {}".format(stix_pattern)
             for field in field_list:
                 _test_query_assertions(field, pattern_translation["queries"])

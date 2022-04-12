@@ -8,9 +8,9 @@ import copy
 def get_merged_config(module):
     ss_modules_path = importlib.import_module('stix_shifter_modules')
     if isinstance(ss_modules_path.__path__, list):
-        base_path = choose_module_path(module, ss_modules_path.__path__)
+        base_path = ss_modules_path.__path__[0]
     else:
-        base_path = choose_module_path(module, ss_modules_path.__path__._path)
+        base_path = ss_modules_path.__path__._path[0]
     module_config_path = path.join(base_path, module, 'configuration', 'config.json')
     base_config_path = path.join(base_path, 'config.json')
     with open(module_config_path) as mapping_file:
@@ -21,13 +21,6 @@ def get_merged_config(module):
         module_configs = merge(base_configs, module_configs)
     return module_configs
 
-def choose_module_path(module, path_list):
-    path = path_list[0]
-    module_name = 'stix_shifter_modules_' + module
-    for p in path_list:
-        if module_name in p:
-            return p
-    return path
 
 def modernize_objects(module, params):
     expected_configs = get_merged_config(module)

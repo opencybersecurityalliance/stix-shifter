@@ -1,7 +1,6 @@
 import os
 from importlib import import_module
 from pathlib import Path
-from .param_validator import choose_module_path
 
 
 def process_dialects(cli_module, options):
@@ -44,7 +43,7 @@ def dialect_list(module):
     if '__file__' in dir(modules) and modules.__file__ is not None:
         modules_path = Path(modules.__file__).parent
     else:
-        modules_path = choose_module_path(module, modules.__path__._path)
+        modules_path = modules.__path__._path[0]
     dialects_path = os.path.join(modules_path, f'{module}/stix_translation/json')
     ENDING = '_from_stix_map.json'
     dialects = []

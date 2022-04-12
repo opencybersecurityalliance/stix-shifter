@@ -1,12 +1,13 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import StartStopQualifier, ObservationExpression, \
     ComparisonExpression, Pattern, CombinedComparisonExpression, CombinedObservationExpression
+from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException
+
 
 class UnmappedAttributeStripper:
 
     def __init__(self, antlr_object, data_model_mapping):
         self.dmm = data_model_mapping
         self.unmapped_attributes = []
-        self.unmapped_operator = []
         self.transformed_parsing = self._traverse_parsing_tree(antlr_object)
 
     def _traverse_combined_expression(self, root):
@@ -57,15 +58,8 @@ class UnmappedAttributeStripper:
     def _parse_comparison_expression(self, root):
         stix_object, stix_field = root.object_path.split(':')
         mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-        comparator_lookup = self.dmm.map_comparator()
-        comparator = comparator_lookup.get(str(root.comparator))
-        
         if not mapped_fields_array:
             self.unmapped_attributes.append(root.object_path)
-        if not comparator:
-            self.unmapped_operator.append(root.comparator)
-        
-        if not mapped_fields_array or not comparator:
             return "delete"
         else:
             return root
@@ -94,5 +88,4 @@ def strip_unmapped_attributes(antlr_parsing, data_model_mapping=None):
     modified_antlr_parsing = attribute_stripper.transformed_parsing
     if not modified_antlr_parsing.expression:
         modified_antlr_parsing = None
-    return {"parsing": modified_antlr_parsing, "unmapped_stix": attribute_stripper.unmapped_attributes, 
-            "unmapped_operator": attribute_stripper.unmapped_operator}
+    return {"parsing": modified_antlr_parsing, "unmapped_stix": attribute_stripper.unmapped_attributes}

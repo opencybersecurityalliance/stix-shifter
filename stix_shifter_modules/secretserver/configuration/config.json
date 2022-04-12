@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security Verify Privilege Vault"
+            "displayName": "Secret Server"
         },
         "host": {
             "type": "text",

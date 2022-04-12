@@ -13,7 +13,6 @@ class APIClient:
     DELETE_ENDPOINT = 'server/search/close'
 
     def __init__(self, connection, configuration):
-        self.connector = __name__.split('.')[1]
         self.auth = configuration.get('auth')
         headers = {'Accept': 'application/json'}
         self.client = RestApiClient(connection.get('host'),
@@ -53,11 +52,11 @@ class APIClient:
             # arcsight logger error codes - currently unavailable state
             elif response_code in [500, 503]:
                 response_string = raw_response.decode()
-                ErrorResponder.fill_error(return_obj, response_string, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_string, ['message'])
             elif isinstance(json.loads(raw_response), dict):
                 response_error = json.loads(raw_response)
                 response_dict = response_error['errors'][0]
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             else:
                 raise Exception(raw_response)
 

@@ -14,10 +14,24 @@ logger = logging.getLogger(__name__)
 class CbCloudQueryStringPatternTranslator:
     """Carbon Black Cloud STIX to query string pattern translator."""
 
+    # Change comparator values to match with supported data source operators
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: 'AND',
+        ComparisonExpressionOperators.Or: 'OR',
+        ComparisonComparators.Equal: ':',
+        ComparisonComparators.NotEqual: ':',
+        ComparisonComparators.GreaterThan: ':',
+        ComparisonComparators.GreaterThanOrEqual: ':',
+        ComparisonComparators.LessThan: ':',
+        ComparisonComparators.LessThanOrEqual: ':',
+        ComparisonComparators.In: ':',
+        ObservationOperators.Or: 'OR',
+        ObservationOperators.And: 'AND'
+    }
+
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         """CbCloudQueryStringPatternTranslator constructor."""
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.time_range = time_range  # filter results to the last x minutes
         self.queries = self.parse_expression(pattern)
@@ -102,33 +116,18 @@ class CbCloudQueryStringPatternTranslator:
         return timestamp[2:-1]
 
     @staticmethod
-    def _check_value_type(value):
-        """
-        Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
-        See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
-
-        :param value: query value
-        :type value: int/str
-        :return: type of value
-        :rtype: str
-        """
-        value = str(value)
-        for key, pattern in observable.REGEX.items():
-            if bool(re.search(pattern, value)):
-                return key
-        return None
-
-    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
+    def _parse_mapped_fields(value, comparator, mapped_fields_array) -> str:
         """Convert a list of mapped fields into a query string."""
         comparison_strings = []
         value_type = None
-        str_ = None
 
         if isinstance(value, str):
             value = [value]
 
         for val in value:
-            value_type = self._check_value_type(val)
+            for key, pattern in observable.REGEX.items():
+                if bool(re.search(pattern, val)):
+                    value_type = key
 
             for mapped_field in mapped_fields_array:
                 # Only use the ipv4 fields when the value is an actual ipv4 address or range
@@ -144,8 +143,6 @@ class CbCloudQueryStringPatternTranslator:
             str_ = comparison_strings[0]
         elif len(comparison_strings) > 1:
             str_ = f"({' OR '.join(comparison_strings)})"
-        else:
-            raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
 
         return str_
 
@@ -159,7 +156,7 @@ class CbCloudQueryStringPatternTranslator:
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
 
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[str(expression.comparator)]
+            comparator = self.comparator_lookup[expression.comparator]
 
             # Some values are formatted differently based on how they're being compared
             if (expression.comparator == ComparisonComparators.Equal or
@@ -204,13 +201,13 @@ class CbCloudQueryStringPatternTranslator:
             # Wrap nested combined comparison expressions in parentheses
             fmt1 = "({})" if isinstance(expression.expr2, CombinedComparisonExpression) else "{}"
             fmt2 = "({})" if isinstance(expression.expr1, CombinedComparisonExpression) else "{}"
-            operator = self.comparator_lookup[str(expression.operator)]
+            operator = self.comparator_lookup[expression.operator]
 
             # Note: it seems the ordering of the expressions is reversed at a lower level
             # so we reverse it here so that it is as expected.
             query_string = (fmt1 + " {} " + fmt2).format(
                 self._parse_expression(expression.expr2),
-                self.comparator_lookup[str(expression.operator)],
+                self.comparator_lookup[expression.operator],
                 self._parse_expression(expression.expr1)
             )
 
@@ -229,7 +226,7 @@ class CbCloudQueryStringPatternTranslator:
 
         elif isinstance(expression, CombinedObservationExpression):
             # A combined observation can consist of observations containing a qualifier
-            operator = self.comparator_lookup[str(expression.operator)]
+            operator = self.comparator_lookup[expression.operator]
             expr1 = self._parse_expression(expression.expr1, qualifier=qualifier)
             expr2 = self._parse_expression(expression.expr2, qualifier=qualifier)
             return f'({expr1}) {operator} ({expr2})'

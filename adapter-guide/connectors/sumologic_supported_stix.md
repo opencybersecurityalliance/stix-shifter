@@ -1,13 +1,5 @@
-##### Updated on 02/04/22
+##### Updated on 10/29/21
 ## Sumo Logic
-### Supported STIX Operators
-| STIX Operator | Data Source Operator |
-|--|--|
-| AND | AND |
-| OR | OR |
-| = | = |
-| <br> | |
-### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | _raw |

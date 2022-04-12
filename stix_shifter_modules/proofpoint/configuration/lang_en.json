@@ -17,12 +17,12 @@
     "configuration": {
         "auth": {
             "principal": {
-                "label": "Principal",
-                "description": "Principal with access to the SIEM API"
+                "label": "Username",
+                "description": "Username with access to the search API"
             },
             "secret": {
-                "label": "Secret",
-                "description": "Secret with access to the SIEM API"
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
             }
         }
     }

@@ -13,7 +13,6 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
-        self.connector = __name__.split('.')[1]
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -23,10 +22,10 @@ class Connector(BaseSyncConnector):
             return_obj['success'] = True
             return_obj['data'] = response_txt
         elif ErrorResponder.is_plain_string(response_txt):
-            ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
+            ErrorResponder.fill_error(return_obj, message=response_txt)
         elif ErrorResponder.is_json_string(response_txt):
             response_json = json.loads(response_txt)
-            ErrorResponder.fill_error(return_obj, response_json, ['reason'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_json, ['reason'])
         else:
             raise UnexpectedResponseException
         return return_obj
@@ -39,7 +38,7 @@ class Connector(BaseSyncConnector):
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
@@ -63,7 +62,7 @@ class Connector(BaseSyncConnector):
             return return_obj
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
+                ErrorResponder.fill_error(return_obj, message='unexpected exception')
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e

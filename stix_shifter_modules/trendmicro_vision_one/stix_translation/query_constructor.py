@@ -7,7 +7,7 @@ import time
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, SetValue
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from .visionone_util import remove_enclosed_quote
 
@@ -26,10 +26,18 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.Or: "OR",
+        ComparisonComparators.Equal: ":",
+        ComparisonComparators.NotEqual: ":",
+        ComparisonComparators.Like: ":",
+        ObservationOperators.Or: 'OR',
+        ObservationOperators.And: 'AND'
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.using_operators = set()
         self.assigned_fields = set()
@@ -60,14 +68,6 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _check_value_type(value):
-        """
-        Determine the type (ipv4, ipv6, mac, date, etc) of the provided value.
-        See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_utils/stix_translation/src/json_to_stix/observable.py#L1
-        :param value: query value
-        :type value: int/str
-        :return: type of value
-        :rtype: str
-        """
         value = str(value)
         for key, pattern in observable.REGEX.items():
             if key != 'date' and bool(re.search(pattern, value)):
@@ -81,40 +81,36 @@ class QueryStringPatternTranslator:
             return "{mapped_field} {comparator} {value}".format(
                 mapped_field=remove_enclosed_quote(mapped_field), comparator=comparator, value=value)
 
-    
+    def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
+        comparison_string = ""
+        is_reference_value = self._is_reference_value(stix_field)
+        value_type = self._check_value_type(expression.value) if is_reference_value else None
+        mapped_fields_count = len(mapped_fields_array)
 
-    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
-        """Convert a list of mapped fields into a query string."""
-        comparison_strings = []
-        value_type = None
-        str_ = None
+        for mapped_field in mapped_fields_array:
+            mapped_field = remove_enclosed_quote(mapped_field)
+            if is_reference_value:
+                parsed_reference = self._parse_reference(stix_field, value_type, mapped_field, value, comparator)
+                if not parsed_reference:
+                    continue
+                comparison_string += parsed_reference
+            else:
+                if comparator == ":":
+                    comparison_string += "{mapped_field}{comparator}{value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+                else:
+                    comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
 
-        if isinstance(value, str):
-            value = [value]
-
-        for val in value:
-            value_type = self._check_value_type(val)
-
-            for mapped_field in mapped_fields_array:
-                comparison_strings.append(f'{mapped_field}{comparator}{val}')
-
-        # Only wrap in () if there's more than one comparison string
-        if len(comparison_strings) == 1:
-            str_ = comparison_strings[0]
-        elif len(comparison_strings) > 1:
-            str_ = f"{' OR '.join(comparison_strings)}"
-        else:
-            raise RuntimeError((f'Failed to convert {mapped_fields_array} mapped fields into query string'))
-
-        return str_
+            if mapped_fields_count > 1:
+                comparison_string += " OR "
+                mapped_fields_count -= 1
+        return comparison_string
 
     @staticmethod
     def _is_reference_value(stix_field):
         return stix_field in ('src_ref.value', 'dst_ref.value')
 
-
     def _lookup_comparison_operator(self, expression_operator, dialect):
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for VisionOne connector".format(expression_operator.name))
         if dialect == 'messageActivityData':
             if expression_operator in (ComparisonExpressionOperators.And, ComparisonExpressionOperators.Or):
@@ -123,10 +119,9 @@ class QueryStringPatternTranslator:
                     raise NotImplementedError("Multiple operator is not support in MDL")
             if expression_operator == ComparisonComparators.NotEqual:
                 raise NotImplementedError("NOT operator is not support in MDL")
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, dialect, qualifier=None) -> str:
-        group = False
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
@@ -157,20 +152,11 @@ class QueryStringPatternTranslator:
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
                 value = self._format_like(expression.value)
-            elif (expression.comparator == ComparisonComparators.In and isinstance(expression.value, SetValue)):
-                # apply escape value to remove unwanted char in string.
-                value = list(map(self._format_equality, expression.value.element_iterator()))
-                group = True
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = self._parse_mapped_fields(
-                value=value,
-                comparator=comparator,
-                mapped_fields_array=mapped_fields_array
-            )
-            
-            if (len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)) or group:
+            comparison_string = self._parse_mapped_fields(expression, value, comparator, stix_field, mapped_fields_array)
+            if len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string

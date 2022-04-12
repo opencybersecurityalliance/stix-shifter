@@ -96,6 +96,7 @@
       "device_severity": ["deviceSeverity"],
       "device_version": ["deviceVersion"],
       "device_address": ["deviceAddress"],
+      "device_hostname": ["deviceHostName"],
       "device_external_id": ["deviceExternalId"],
       "device_asset_id": ["fulltextSearch"],
       "device_asset_name": ["fulltextSearch"],
@@ -147,12 +148,6 @@
       "dst_geolocation": ["fulltextSearch"],
       "src_ip_ref.value": ["sourceAddress"],
       "dst_ip_ref.value": ["destinationAddress"]
-    }
-  },
-  "x-oca-asset": {
-    "fields": {
-      "hostname": ["deviceHostName", "deviceAssetName"],
-      "host_id": ["deviceAssetId"]
     }
   }
 }

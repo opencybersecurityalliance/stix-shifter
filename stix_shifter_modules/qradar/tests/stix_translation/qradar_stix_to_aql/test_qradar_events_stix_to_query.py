@@ -102,7 +102,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert "data mapping error : Unable to map the following STIX objects and properties: ['unmapped-object:some_invalid_attribute'] to data source fields" in result['error']
+        assert MAPPING_ERROR in result['error']
 
     def test_pattern_with_two_observation_exp_with_one_unmapped_attribute(self):
         stix_pattern = "[unmapped-object:some_invalid_attribute = 'whatever'] AND [file:name = 'some_file.exe']"
@@ -115,8 +115,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         result = translation.translate('qradar', 'query', '{}', stix_pattern)
         assert result['success'] == False
         assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == result['code']
-        assert "data mapping error : Unable to map the following STIX objects and properties: " \
-            "['network-traffic:some_invalid_attribute'] to data source fields" in result['error']
+        assert MAPPING_ERROR in result['error']
 
     def test_unmapped_attribute_with_OR(self):
         stix_pattern = "[network-traffic:some_invalid_attribute = 'whatever' OR file:name = 'some_file.exe']"
@@ -391,7 +390,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_x_ibm_host_search(self):
         stix_pattern = "[x-oca-asset:hostname = 'abcd']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (identityhostname = 'abcd' OR MachineId = 'abcd') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE identityhostname = 'abcd' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
         stix_pattern = "[x-oca-asset:ip_refs[*].value = '9.9.9.9']"
@@ -438,24 +437,3 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE INOFFENSE('125') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
-
-    def test_unmapped_operator_in_combined_comparison(self):
-        stix_pattern = "[ipv4-addr:value ISSUPERSET '127.0.0.1/24' OR ipv4-addr:value ISSUBSET '127.0.0.1/24']"
-        query = _translate_query(stix_pattern)
-        where_statement = "WHERE (INCIDR('127.0.0.1/24',sourceip) OR INCIDR('127.0.0.1/24',destinationip) OR INCIDR('127.0.0.1/24',identityip)) {} {}".format(default_limit, default_time)
-        _test_query_assertions(query, selections, from_statement, where_statement)
-    
-    def test_unmapped_operators_error(self):
-        stix_pattern = "[ipv4-addr:value ISSUPERSET '127.0.0.1/24']"
-        query = _translate_query(stix_pattern)
-        assert query['success'] == False
-        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
-        assert "data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields" in query['error']
-    
-    def test_unmapped_objects_and_operators(self):
-        stix_pattern = "[ipv8-addr:value ISSUPERSET '127.0.0.1/24']"
-        query = _translate_query(stix_pattern)
-        assert query['success'] == False
-        assert ErrorCode.TRANSLATION_MAPPING_ERROR.value == query['code']
-        assert "data mapping error : Unable to map the following STIX objects and properties: ['ipv8-addr:value'] and " \
-            "Operators: [IsSuperSet] to data source fields" in query['error']

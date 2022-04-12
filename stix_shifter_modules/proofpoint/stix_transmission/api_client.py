@@ -35,7 +35,7 @@ class APIClient():
     def get_search_results(self, search_id):
         # Return the search results. Results must be in JSON format before being translated into STIX
         #resultdata = self.client.call_api(endpoint=ENDPOINT_ALL+search_id, method='GET')#working
-        endpoint = ENDPOINT_ALL+"?format=json"
+        endpoint = ENDPOINT_ALL+"?format=json&"
         resultdata = self.client.call_api(endpoint=endpoint, method='GET', urldata=search_id)
         # Check the current status of the search
         return resultdata

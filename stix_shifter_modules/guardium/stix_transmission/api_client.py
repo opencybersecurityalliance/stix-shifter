@@ -10,7 +10,7 @@ class APIClient():
 
     def __init__(self, connection, configuration):
 
-        # Placeholder client to allow template transmission calls.
+        # Placeholder client to allow dummy transmission calls.
         # Remove when implementing data source API client.
         host = connection["host"]
         port = connection.get('port', '')
