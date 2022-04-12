@@ -1,0 +1,371 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "action_local_ip",
+        "action_remote_ip",
+        "agent_ip_addresses"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "agent_ip_addresses_v6",
+        "dst_agent_ip_addresses_v6"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "action_local_port"
+      ],
+      "dst_port": [
+        "action_remote_port"
+      ],
+      "protocols[*]": [
+        "action_network_protocol"
+      ],
+      "src_ref.value": [
+        "action_local_ip",
+        "agent_ip_addresses"
+      ],
+      "dst_ref.value": [
+        "action_remote_ip"
+      ],
+      "src_packets": [
+        "action_pkts_sent"
+      ],
+      "dst_packets": [
+        "action_pkts_received"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "action_file_name",
+        "action_process_image_name",
+        "actor_process_image_name",
+        "causality_actor_process_image_name",
+        "os_actor_process_image_name"
+      ],
+      "size": [
+        "action_file_size"
+      ],
+      "hashes.MD5": [
+        "action_file_md5",
+        "action_module_md5",
+        "action_process_image_md5"
+      ],
+      "hashes.'SHA-1'": [
+        "action_file_authenticode_sha1"
+      ],
+      "hashes.'SHA-2'": [
+        "action_file_authenticode_sha2"
+      ],
+      "hashes.'SHA-256'": [
+        "action_file_sha256",
+        "action_module_sha256",
+        "action_process_image_sha256"
+      ],
+      "accessed": [
+        "action_file_access_time",
+        "actor_process_file_access_time",
+        "os_actor_process_file_access_time"
+      ],
+      "modified": [
+        "action_file_mod_time",
+        "actor_process_file_mod_time",
+        "os_actor_process_file_mod_time"
+      ],
+      "created": [
+        "action_file_create_time"
+      ],
+      "parent_directory_ref.path": [
+        "action_file_path",
+        "action_process_image_path",
+        "action_registry_file_path",
+        "actor_process_image_path",
+        "causality_actor_process_image_path",
+        "os_actor_process_image_path"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "action_file_path",
+        "action_process_image_path",
+        "action_registry_file_path",
+        "actor_process_image_path",
+        "causality_actor_process_image_path",
+        "os_actor_process_image_path"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": [
+        "action_process_image_command_line",
+        "actor_process_command_line",
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "created": [
+        "action_process_file_create_time",
+        "actor_process_file_create_time",
+        "causality_actor_process_file_create_time",
+        "os_actor_process_file_create_time"
+      ],
+      "name": [
+        "action_process_image_name",
+        "actor_process_image_name",
+        "causality_actor_process_image_name",
+        "os_actor_process_image_name"
+      ],
+      "pid": [
+        "action_module_process_os_pid",
+        "action_process_os_pid",
+        "actor_process_os_pid",
+        "causality_actor_process_os_pid",
+        "os_actor_process_os_pid",
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid",
+        "action_thread_child_pid"
+      ],
+      "parent_ref.pid": [
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid"
+      ],
+      "child_refs.pid": [
+        "action_thread_child_pid"
+      ],
+      "creator_user_ref.user_id": [
+        "action_process_username"
+      ],
+      "parent_ref.name": [
+        "causality_actor_process_image_name",
+        "os_actor_process_image_name"
+      ],
+      "binary_ref.name": [
+        "action_process_image_name",
+        "actor_process_image_name"
+      ],
+      "binary_ref.hashes.MD5": [
+        "action_process_image_md5"
+      ],
+      "binary_ref.hashes.'SHA-256'": [
+        "action_process_image_sha256"
+      ],
+      "binary_ref.parent_directory_ref.path": [
+        "action_process_image_path",
+        "actor_process_image_path",
+        "causality_actor_process_image_path",
+        "os_actor_process_image_path"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "auth_domain",
+        "dst_host_metadata_domain",
+        "host_metadata_domain"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "dst_action_url_category"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": [
+        "action_registry_key_name"
+      ],
+      "values[*]": [
+        "action_registry_value_name"
+      ]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "mac",
+        "associated_mac",
+        "dst_associated_mac",
+        "dst_mac"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "actor_primary_user_sid",
+        "action_process_user_sid"
+      ],
+      "display_name": [
+        "actor_primary_username",
+        "action_process_username"
+      ],
+      "account_login": [
+        "actor_process_logon_id"
+      ]
+    }
+  },
+  "x-paloalto-file": {
+    "fields": {
+      "extension": [
+        "action_file_extension"
+      ],
+      "file_description": [
+        "action_file_info_description"
+      ]
+    }
+  },
+  "x-paloalto-process": {
+    "fields": {
+      "extension": [
+        "actor_process_image_extension"
+      ],
+      "execution_time": [
+        "action_process_instance_execution_time",
+        "actor_process_execution_time"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "agent_hostname"
+      ],
+      "ip_refs[*].value": [
+        "action_local_ip",
+        "action_remote_ip",
+        "agent_ip_addresses_v6",
+        "agent_ip_addresses",
+        "dst_agent_ip_addresses_v6"
+      ],
+      "mac_refs[*].value": [
+        "mac",
+        "associated_mac",
+        "dst_associated_mac",
+        "dst_mac"
+      ]
+    }
+  },
+  "x-paloalto-evtlog": {
+    "fields": {
+      "description": [
+        "action_evtlog_description"
+      ],
+      "message": [
+        "action_evtlog_message"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": [
+        "event_id"
+      ],
+      "category[*]": [
+        "event_type"
+      ],
+      "action": [
+        "event_sub_type"
+      ],
+      "created": [
+        "event_timestamp"
+      ],
+      "agent": [
+        "agent_hostname"
+      ],
+      "url_ref.value": [
+        "dst_action_url_category"
+      ],
+      "file_ref.name": [
+        "action_file_name"
+      ],
+      "process_ref.pid": [
+        "action_module_process_os_pid",
+        "action_process_os_pid",
+        "actor_process_os_pid",
+        "causality_actor_process_os_pid",
+        "os_actor_process_os_pid"
+      ],
+      "process_ref.name": [
+        "action_process_image_name",
+        "actor_process_image_name"
+      ],
+      "process_ref.command_line": [
+        "action_process_image_command_line",
+        "actor_process_command_line"
+      ],
+      "process_ref.binary_ref.name": [
+        "action_process_image_name",
+        "actor_process_image_name"
+      ],
+      "process_ref.parent_ref.name": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "process_ref.parent_ref.pid": [
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid"
+      ],
+      "process_ref.parent_ref.command_line": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "parent_process_ref.name": [
+        "causality_actor_process_image_name",
+        "os_actor_process_image_name"
+      ],
+      "parent_process_ref.pid": [
+        "action_process_requested_parent_pid",
+        "action_thread_parent_pid"
+      ],
+      "parent_process_ref.command_line": [
+        "causality_actor_process_command_line",
+        "os_actor_process_command_line"
+      ],
+      "process_ref.creator_user_ref.user_id": [
+        "action_process_username"
+      ],
+      "process_ref.binary_ref.hashes.MD5": [
+        "action_process_image_md5"
+      ],
+      "process_ref.binary_ref.hashes.'SHA-256'": [
+        "action_process_image_sha256"
+      ],
+      "domain_ref.value": [
+        "auth_domain",
+        "dst_host_metadata_domain",
+        "host_metadata_domain"
+      ],
+      "registry_ref.key": [
+        "action_registry_key_name"
+      ],
+      "registry_ref.values[*]": [
+        "action_registry_value_name"
+      ]
+    }
+  },
+  "x-paloalto-network": {
+    "fields": {
+      "creation_time": [
+        "action_network_creation_time"
+      ],
+      "hostname": [
+        "host_metadata_hostname",
+        "action_external_hostname"
+      ]
+    }
+  }
+}
