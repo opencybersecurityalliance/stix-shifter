@@ -1,8 +1,6 @@
 {
   "username": [
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
       "key": "user-account.account_login",
       "object": "useraccount"
     },
@@ -22,64 +20,16 @@
     {
       "key": "x-oca-event.agent",
       "object": "ocaevent"
-=======
-      "key": "user-account.user_id",
-=======
-      "key": "user-account.account_login",
->>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
-      "object": "useraccount"
-    },
-    {
-      "key": "x-oca-event.user_ref",
-      "object": "ocaevent",
-      "references": "useraccount"
-    }
-  ],
-  "userid": [
-    {
-      "key": "user-account.user_id",
-      "object": "useraccount"
-<<<<<<< HEAD
->>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
-=======
-    }
-  ],
-  "sourcetype": [
-    {
-      "key": "x-oca-event.agent",
-      "object": "ocaevent"
->>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
     },
     {
       "key": "user-account.account_type",
       "object": "useraccount"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    },
-    {
-      "key": "x-oca-event.user_ref",
-      "object": "ocaevent",
-      "references": "useraccount"
->>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
-=======
->>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
     }
   ],
   "servicename": {
     "key": "x-oca-event.module",
     "object": "ocaevent"
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  "sourcetype": {
-    "key": "x-oca-event.agent",
-    "object": "ocaevent"
-  },
->>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
-=======
->>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
   "ip": [
     {
       "key": "ipv4-addr.value",
@@ -196,18 +146,6 @@
     "key": "x-oca-event.extensions.x-iam-ext.taregetid_username",
     "object": "ocaevent"
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  "userid": [
-    {
-      "key": "user-account.user_id",
-      "object": "useraccount"
-    }
-  ],
->>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
-=======
->>>>>>> 6c9ded8 (add validation and corrected mapping in json file)
   "continent_name": {
     "key": "x-oca-event.extensions.x-iam-ext.continent_name",
     "object": "ocaevent"
@@ -275,18 +213,9 @@
   "lon": {
     "key": "x-oca-event.extensions.x-iam-ext.location_lon",
     "object": "ocaevent"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 25db4f6 (change queryConstructor.py and config.json file to work with cp4s 1.9 and other json file for stix mapping)
   },
   "add": {
     "key": "x-oca-event.extensions.x-iam-ext.add",
     "object": "ocaevent"
-<<<<<<< HEAD
-=======
->>>>>>> 654840b (added stix_2_1 mapping and corrected mapping of useraccount.account_type)
-=======
->>>>>>> 25db4f6 (change queryConstructor.py and config.json file to work with cp4s 1.9 and other json file for stix mapping)
   }
 }

@@ -213,12 +213,9 @@
   "lon": {
     "key": "x-oca-event.extensions.x-iam-ext.location_lon",
     "object": "ocaevent"
-<<<<<<< HEAD
   },
   "add": {
     "key": "x-oca-event.extensions.x-iam-ext.add",
     "object": "ocaevent"
-=======
->>>>>>> fa399a6 (fixed mapping for lan and lat geo location)
   }
 }
