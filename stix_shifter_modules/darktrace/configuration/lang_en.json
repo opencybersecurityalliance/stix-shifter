@@ -1,0 +1,30 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "description": "Specify the IP address or hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "options": {
+            "result_limit": {
+                "label": "Result Size Limit",
+                "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "private_token": {
+                "label": "Private Token",
+                "description": "Private tokens are used in token-based authentication to access an API."
+            },
+            "public_token": {
+                "label": "Public Token",
+                "description": "Public tokens are used in token-based authentication to access an API."
+            }
+        }
+    }
+}

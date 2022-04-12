@@ -1,0 +1,477 @@
+{
+	"ipv4-addr": {
+		"fields": {
+			"value": [
+				"source_ip",
+				"dest_ip",
+				"src",
+				"dst",
+				"ip"
+			]
+		}
+	},
+	"ipv6-addr": {
+		"fields": {
+			"value": [
+				"source_ip",
+				"dest_ip",
+				"src",
+				"dst",
+				"ip"
+			]
+		}
+	},
+	"mac-addr": {
+		"fields": {
+			"value": [
+				"mac",
+				"src_mac",
+				"dst_mac"
+			]
+		}
+	},
+	"domain-name": {
+		"fields": {
+			"value": [
+				"domain_name"
+			]
+		}
+	},
+	"network-traffic": {
+		"fields": {
+			"src_port": [
+				"source_port",
+				"src_p"
+			],
+			"dst_port": [
+				"dest_port",
+				"dst_p"
+			],
+			"src_ref.value": [
+				"source_ip",
+				"src"
+			],
+			"dst_ref.value": [
+				"dest_ip",
+				"dst"
+			],
+			"protocols[*]": [
+				"proto",
+				"protocol"
+			],
+			"src_packets": [
+				"pkts_recv",
+				"requests",
+				"orig_pkts"
+			],
+			"dst_packets": [
+				"pkts_dropped",
+				"responses_or_data",
+				"resp_pkts"
+			],
+			"src_byte_count": [
+				"orig_bytes",
+				"orig_ip_bytes"
+			],
+			"dst_byte_count": [
+				"megabytes_recv",
+				"resp_bytes",
+				"resp_ip_bytes"
+			]
+		}
+	},
+	"user-account": {
+		"fields": {
+			"account_login": [
+				"user",
+				"username"
+			]
+		}
+	},
+	"file": {
+		"fields": {
+			"name": [
+				"filename"
+			],
+			"hashes.'SHA-1'": [
+				"sha1_file_hash",
+				"sha1"
+			],
+			"hashes.MD5": [
+				"md5_file_hash",
+				"md5"
+			],
+			"hashes.'SHA-256'": [
+				"sha256_file_hash",
+				"sha256"
+			],
+			"mime_type": [
+				"mime",
+				"file_mime_type",
+				"mime_type",
+				"dcc_mime_type"
+			],
+			"size": [
+				"total_bytes",
+				"file_msg",
+				"read_size",
+				"write_size",
+				"dcc_file_size"
+			],
+			"created": [
+				"epochdate"
+			]
+		}
+	},
+	"email-addr": {
+		"fields": {
+			"value": [
+				"mailfrom",
+				"rcptto"
+			]
+		}
+	},
+	"software": {
+		"fields": {
+			"name": [
+				"name"
+			],
+			"version": [
+				"version"
+			]
+		}
+	},
+	"x509-certificate": {
+		"fields": {
+			"version": [
+				"certificate_version"
+			],
+			"serial_number": [
+				"certificate_serial"
+			],
+			"signature_algorithm": [
+				"certificate_sig_alg"
+			],
+			"issuer": [
+				"certificate_issuer",
+				"issuer"
+			],
+			"validity_not_before": [
+				"certificate_not_valid_before"
+			],
+			"validity_not_after": [
+				"certificate_not_valid_after"
+			],
+			"subject": [
+				"certificate_subject"
+			],
+			"subject_public_key_algorithm": [
+				"certificate_key_alg"
+			],
+			"subject_public_key_exponent": [
+				"certificate_exponent"
+			]
+		}
+	},
+	"x-darktrace-conn": {
+		"fields": {
+			"application_protocol": [
+				"service"
+			],
+			"state": [
+				"conn_state"
+			],
+			"orig_country_code": [
+				"orig_cc"
+			]
+		}
+	},
+	"x-darktrace-ssl": {
+		"fields": {
+			"ssl_version": [
+				"version"
+			],
+			"cipher_suite": [
+				"cipher"
+			],
+			"elliptic_curve": [
+				"curve"
+			],
+			"server_name": [
+				"server_name"
+			],
+			"client_subject": [
+				"client_subject"
+			],
+			"client_issuer": [
+				"client_issuer"
+			],
+			"ocsp_status": [
+				"ocsp_status"
+			]
+		}
+	},
+	"x-darktrace-ssh": {
+		"fields": {
+			"ssh_version": [
+				"version"
+			],
+			"status": [
+				"status_guess"
+			],
+			"auth_attempts": [
+				"auth_attempts"
+			],
+			"connection_direction": [
+				"direction"
+			],
+			"client_version": [
+				"client"
+			],
+			"server_version": [
+				"server"
+			],
+			"encrypt_algo": [
+				"cipher_alg"
+			],
+			"signing_algo": [
+				"mac_alg"
+			],
+			"compression_algo": [
+				"compression_alg"
+			],
+			"key_exchange_algo": [
+				"kex_alg"
+			],
+			"server_key_algo": [
+				"host_key_alg"
+			]
+		}
+	},
+	"x-darktrace-http": {
+		"fields": {
+			"request_method": [
+				"method"
+			],
+			"server_host": [
+				"host"
+			],
+			"request_value": [
+				"uri"
+			],
+			"request_version": [
+				"version"
+			],
+			"user_agent": [
+				"user_agent"
+			],
+			"request_body_len": [
+				"request_body_len"
+			],
+			"response_body_len": [
+				"response_body_len"
+			],
+			"status_code": [
+				"status_code"
+			],
+			"status_msg": [
+				"status_msg"
+			],
+			"content_type": [
+				"content_type"
+			],
+			"username": [
+				"username"
+			]
+		}
+	},
+	"x-darktrace-ftp": {
+		"fields": {
+			"user_name": [
+				"user"
+			],
+			"client_command": [
+				"command"
+			],
+			"argument": [
+				"arg"
+			],
+			"mime_type": [
+				"mime_type"
+			],
+			"reply_code": [
+				"reply_code"
+			],
+			"data_channel": [
+				"data_channel"
+			],
+			"data_channel_originator": [
+				"data_channel_orig_h"
+			],
+			"data_channel_responder": [
+				"data_channel_resp_h"
+			],
+			"data_channel_responder_port": [
+				"data_channel_resp_p"
+			]
+		}
+	},
+	"x-darktrace-dns": {
+		"fields": {
+			"domain_name": [
+				"query"
+			],
+			"query_class": [
+				"query_class"
+			],
+			"query_type": [
+				"query_type"
+			],
+			"response_code": [
+				"err_code"
+			],
+			"ttls": [
+				"TTLs"
+			],
+			"unprocessed_ttls": [
+				"unprocessed_TTLs"
+			],
+			"multicast_responder": [
+				"multicast_responder"
+			]
+		}
+	},
+	"x-darktrace-smtp": {
+		"fields": {
+			"mail_message_sender[*]": [
+				"mailfrom"
+			],
+			"mail_message_recipient[*]": [
+				"rcptto"
+			],
+			"mail_date": [
+				"date"
+			],
+			"mail_subject": [
+				"subject"
+			],
+			"user_agent": [
+				"user_agent"
+			]
+		}
+	},
+	"x-darktrace-ldap": {
+		"fields": {
+			"operation": [
+				"operation"
+			],
+			"bind_version": [
+				"version"
+			],
+			"authentication": [
+				"authentication"
+			],
+			"bind_name": [
+				"bind_name"
+			],
+			"search_root": [
+				"search_root"
+			],
+			"search_scope": [
+				"search_scope"
+			],
+			"search_filter": [
+				"filter"
+			],
+			"comparison": [
+				"comparison"
+			]
+		}
+	},
+	"x-darktrace-dhcp": {
+		"fields": {
+			"dhcp_type": [
+				"dhcp_type"
+			],
+			"host_name": [
+				"host_name"
+			],
+			"subnet_mask": [
+				"subnet_mask"
+			]
+		}
+	},
+	"x-darktrace-rdp": {
+		"fields": {
+			"security_protocol": [
+				"security_protocol"
+			],
+			"cert_type": [
+				"cert_type"
+			],
+			"encryption_level": [
+				"encryption_level"
+			],
+			"encryption_method": [
+				"encryption_method"
+			]
+		}
+	},
+	"x-darktrace-pop3": {
+		"fields": {
+			"commands_used": [
+				"commands_used"
+			]
+		}
+	},
+	"x-darktrace-software": {
+		"fields": {
+			"software_type": [
+				"software_type"
+			]
+		}
+	},
+	"x-darktrace-device-details": {
+		"fields": {
+			"connection_method": [
+				"method"
+			],
+			"subnet_mask": [
+				"subnet_mask"
+			]
+		}
+	},
+	"x-oca-asset": {
+		"fields": {
+			"hostname": [
+				"host"
+			],
+			"ip_refs[*].value": [
+				"source_ip",
+				"dest_ip",
+				"src",
+				"dst",
+				"ip"
+			]
+		}
+  	},
+	"x-oca-event": {
+		"fields": {
+		  "created": [
+			  "epochdate"
+		  ],
+		  "host_ref": [
+			  "host"
+		  ],
+		  "file_ref": [
+			  "filename"
+		  ],
+		  "user_ref": [
+			  "user","username"
+		  ],
+		  "domain_ref": [
+			  "domain_name", "query"
+		  ]
+		}
+	}
+}
