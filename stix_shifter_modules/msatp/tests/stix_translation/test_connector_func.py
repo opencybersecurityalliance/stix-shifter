@@ -29,28 +29,6 @@ raw_data = {
     "RemoteIP": [8080]
 }
 
-
-class GetDSLinksTests(unittest.TestCase):
-    def test_get_ds_links_return_values(self):
-        conn, config = get_conn_and_config()
-        connector = Connector(conn, config)
-        deviceId = '269b7894019fdbd5b8f4245f074d6d19e90b71a8'
-        fileUniqueId = '32519b85c0b422e4656de6e6c41878e95fd95026267daab4215ee59c107d6c77'
-        expected_device_link = 'https://%s/machines/%s/overview' % (
-            connector.DEFENDER_HOST, deviceId) if deviceId else None
-        expected_file_link = 'https://%s/files/%s/overview' % (
-            connector.DEFENDER_HOST, fileUniqueId) if fileUniqueId else None
-        expected_res = (expected_device_link, expected_file_link)
-        self.assertTupleEqual(connector.get_ds_links(deviceId, fileUniqueId), expected_res, "incorrect result")
-
-    def test_get_ds_links_return_types(self):
-        conn, config = get_conn_and_config()
-        connector = Connector(conn, config)
-        deviceId = '269b7894019fdbd5b8f4245f074d6d19e90b71a8'
-        fileUniqueId = '32519b85c0b422e4656de6e6c41878e95fd95026267daab4215ee59c107d6c77'
-        self.assertIsInstance(connector.get_ds_links(deviceId, fileUniqueId), tuple, "incorrect result type")
-
-
 class UnifyAlertFieldsTests(unittest.TestCase):
     def test_unify_alert_fields_return_values(self):
         conn, config = get_conn_and_config()
@@ -73,13 +51,13 @@ class JoinQueryWithAlertsTests(unittest.TestCase):
     def test_get_table_name_return_values(self):
         conn, config = get_conn_and_config()
         connector = Connector(conn, config)
-        q = '(find withsource = TableName in (DeviceFileEvents) where (FileName =~ "powershell.exe"))'
-        q = connector.join_query_with_alerts(q)
-        if 'DeviceAlertEvents' not in q or 'DeviceNetworkInfo' not in q or 'DeviceInfo' not in q:
+        query = '(find withsource = TableName in (DeviceFileEvents) where (FileName =~ "powershell.exe"))'
+        joined_query = list(connector.join_query_with_alerts(query))
+        if not any(('DeviceAlertEvents' or 'DeviceNetworkInfo' or 'DeviceInfo') in q for q in joined_query):
             raise AssertionError("incorrect result")
 
     def test_get_table_name_return_types(self):
         conn, config = get_conn_and_config()
         connector = Connector(conn, config)
         q=""
-        self.assertIsInstance(connector.join_query_with_alerts(q), str, "incorrect result type")
+        self.assertIsInstance(connector.join_query_with_alerts(q), tuple, "incorrect result type")
