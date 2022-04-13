@@ -3,8 +3,8 @@ import unittest
 import json
 from stix_shifter_modules.darktrace.entry_point import EntryPoint
 from stix_shifter_modules.darktrace.stix_transmission.api_client import APIClient
-
 from stix_shifter.stix_transmission import stix_transmission
+from requests.exceptions import ConnectionError
 
 
 class DarktraceMockResponse:
@@ -3528,8 +3528,10 @@ class TestDarktraceConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
 
-    def test_service_unavailable(self):
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_service_unavailable(self, mock_ping):
 
+        mock_ping.side_effect = ConnectionError("Invalid Host")
         query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
                                         " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
                                         "\"to\": \"2022-03-16T09:28:20.894000Z\"}}"]})
@@ -3568,7 +3570,9 @@ class TestDarktraceConnection(unittest.TestCase):
         assert results_response['success'] is False
         assert 'Invalid to/from fields in custom range' in results_response['error']
 
-    def test_ping_service_unavailable(self):
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_ping_service_unavailable(self, mock_ping):
+        mock_ping.side_effect = ConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
         results_response = transmission.ping()
         assert results_response is not None
