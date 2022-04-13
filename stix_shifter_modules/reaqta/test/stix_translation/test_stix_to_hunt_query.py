@@ -37,6 +37,9 @@ class TestQueryTranslator(unittest.TestCase):
 
         self.assertEqual(query, test_string)
 
+    ####################################
+    ## Operators and qualifier checks ##
+    ####################################
 
     def test_timeinterval(self):
         stix_pattern = "[ipv4-addr:value = '172.16.60.184'] {}".format(TEST_START_STOP_STIX_VALUE1)
@@ -51,11 +54,11 @@ class TestQueryTranslator(unittest.TestCase):
         '''
         The missing qualifier for thw observation expressio should be added using default time interval
         '''
-        stix_pattern = "[user-account:user_id = 'root']"
+        stix_pattern = "[ipv4-addr:value = '192.168.1.2']"
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries'][0]
         
-        assert '(login.id = "root") AND happenedAfter = "' in query
+        assert '($ip = "192.168.1.2") AND happenedAfter = "' in query
 
         found = re.findall(TEST_DATE_PATTERN, query)
         assert len(found) == 2
@@ -113,7 +116,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['(eventdata.localIp != "172.31.60.104" OR NOT $ip = "172.31.60.104")' \
+        test_string = ['($ip != "172.31.60.104" OR NOT $ip = "172.31.60.104")' \
                         ' AND happenedAfter = "2022-03-24T20:21:35.519Z" AND happenedBefore = "2022-03-24T20:21:35.619Z"']
 
         self.assertQuery(query, test_string, stix_pattern)
@@ -147,6 +150,10 @@ class TestQueryTranslator(unittest.TestCase):
         test_string = ['($filename = "svc") {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
+
+    ########################
+    ## stix objects check ##
+    ########################
 
     def test_ipv4_addr(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84'] {}".format(TEST_START_STOP_STIX_VALUE1)
@@ -234,7 +241,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['(eventdata.remotePort = "60008" AND eventdata.remoteIp = "143.244.41.203" AND eventdata.localPort = "3389" AND eventdata.localIp = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(eventdata.remotePort = "60008" AND $ip = "143.244.41.203" AND eventdata.localPort = "3389" AND $ip = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -246,9 +253,41 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['($sha256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" OR $md5 != "23db6982caef9e9152f1a5b2589e6ca3" AND eventdata.localIp = "127.0.0.1") {} ' \
+        test_string = ['($sha256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" OR $md5 != "23db6982caef9e9152f1a5b2589e6ca3" AND $ip = "127.0.0.1") {} ' \
                         'AND ($ip = "12.0.0.2" OR $ip = "12.0.0.1" OR $ip = "10.0.0.1") {} ' \
                         'AND (eventdata.url = "http://ccc.ddd" OR eventdata.url = "http://aaa.bbb") {}'
                         .format(TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED1, TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
+
+    ###############################
+    ## custom stix objects check ##
+    ###############################
+
+
+    def test_x_ibm_finding(self):
+        stix_pattern = "[x-ibm-finding:dst_ip_ref.value = '169.62.55.114' AND x-ibm-finding:finding_type = '8' AND x-ibm-finding:src_ip_ref.value = '143.244.41.203'] {}".format(TEST_START_STOP_STIX_VALUE1)
+        queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+        query = queries['queries']
+
+        test_string = ['($ip = "143.244.41.203" AND eventType = "8" AND $ip = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
+
+        self.assertQuery(query, test_string, stix_pattern)
+
+    def test_oca_asset(self):
+        stix_pattern = "[x-oca-asset:ip_refs[*].value = '143.244.41.203'] {}".format(TEST_START_STOP_STIX_VALUE1)
+        queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+        query = queries['queries']
+
+        test_string = ['($ip = "143.244.41.203") {}'.format(TEST_START_STOP_TRANSLATED1)]
+
+        self.assertQuery(query, test_string, stix_pattern)
+
+
+    # def test_oca_event(self):
+    # def test_x_reaqta_cert(self):
+    # def test_x_reaqta_event(self):
+    # def test_x_reaqta_network(self):
+    # def test_x_reaqta_process(self):
+    # def test_x_reaqta_program(self):
+
