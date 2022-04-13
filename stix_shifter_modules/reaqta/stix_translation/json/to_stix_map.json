@@ -99,7 +99,7 @@
                 "object": "file"
               },
               "fsName": {
-                "key": "file.extensions.x-reaqta-program.fsnamee",
+                "key": "file.extensions.x-reaqta-program.fsname",
                 "object": "file"
               }
           },
@@ -191,9 +191,36 @@
             "object": "nt",
             "transformer": "ToLowercaseArray"
           },
-          "localAddr": [
+          "localAddrV4": [
             {
               "key": "ipv4-addr.value",
+              "object": "src_ip"
+            },
+            {
+              "key": "network-traffic.src_ref",
+              "object": "nt",
+              "references": "src_ip"
+            },
+            {
+              "key": "x-ibm-finding.src_ip_ref",
+              "object": "finding",
+              "references": "src_ip"
+            },
+            {
+              "key": "x-oca-event.network_ref",
+              "object": "event",
+              "references": "nt"
+            },
+            {
+              "key": "x-oca-asset.ip_refs",
+              "object": "host",
+              "references": ["src_ip"],
+              "group": true
+            }
+          ],
+          "localAddrV6": [
+            {
+              "key": "ipv6-addr.value",
               "object": "src_ip"
             },
             {
@@ -223,9 +250,30 @@
             "object": "nt",
             "transformer": "ToInteger"
           },
-          "remoteAddr": [
+          "remoteAddrV4": [
             {
-              "key": "ipv4-addr.value",
+              "key": "ipv6-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "network-traffic.dst_ref",
+              "object": "nt",
+              "references": "dst_ip"
+            },
+            {
+              "key": "x-ibm-finding.dst_ip_ref",
+              "object": "finding",
+              "references": "dst_ip"
+            },
+            {
+              "key": "x-oca-event.network_ref",
+              "object": "event",
+              "references": "nt"
+            }
+          ],
+          "remoteAddrV6": [
+            {
+              "key": "ipv6-addr.value",
               "object": "dst_ip"
             },
             {
