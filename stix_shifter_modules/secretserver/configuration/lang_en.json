@@ -14,7 +14,7 @@
             "label": "Need additional help?"
         },
         "selfSignedCert": {
-            "label": "Secret Server connection certificate",
+            "label": "IBM Security Verify Privilege Vault connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL)"
         },
         "sni": {

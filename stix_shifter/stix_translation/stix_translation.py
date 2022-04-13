@@ -34,7 +34,7 @@ class StixTranslation:
         """
         Translated queries to a specified format
         :param module: What module to use
-        :type module: one of connector modules: 'qradar', 'dummy'
+        :type module: one of connector modules: 'qradar', 'template'
         :param translate_type: translation of a query or result set must be one of: 'parse', 'mapping' 'query', 'results'
         :type translate_type: str
         :param data: the data to translate
@@ -140,5 +140,5 @@ class StixTranslation:
             self.logger.error('Caught exception: ' + str(ex) + " " + str(type(ex)))
             self.logger.debug(exception_to_string(ex))
             response = dict()
-            ErrorResponder.fill_error(response, message_struct={'exception': ex})
+            ErrorResponder.fill_error(response, message_struct={'exception': ex}, connector=module)
             return response

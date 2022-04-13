@@ -54,7 +54,7 @@ class TestOneloginConnection(unittest.TestCase, object):
         ping_response = entry_point.ping_connection()
 
         assert ping_response['success'] is False
-        assert ping_response['error'] == "Authentication Failure"
+        assert ping_response['error'] == "onelogin connector error => Authentication Failure"
         assert ping_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
 
     @patch('stix_shifter_modules.onelogin.stix_transmission.api_client.APIClient.generate_token')
@@ -101,5 +101,5 @@ class TestOneloginConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
-        assert results_response['error'] == 'user_id has incorrect data type. It should be -> integer'
+        assert results_response['error'] == 'onelogin connector error => user_id has incorrect data type. It should be -> integer'
         assert results_response['code'] == ErrorCode.TRANSMISSION_INVALID_PARAMETER.value

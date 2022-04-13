@@ -6,6 +6,7 @@ class DeleteConnector(BaseDeleteConnector):
 
     def __init__(self, client):
         self.client = client
+        self.connector = __name__.split('.')[1]
 
     def delete_query_connection(self, search_id):
         """
@@ -25,6 +26,6 @@ class DeleteConnector(BaseDeleteConnector):
         except Exception as ex:
             response_dict['__type'] = ex.__class__.__name__
             response_dict['message'] = ex
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         return return_obj

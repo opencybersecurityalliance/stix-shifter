@@ -57,6 +57,18 @@
     "key": "process.command_line",
     "object": "process"
   },
+  "control_graph_id": {
+    "key" : "x-crowdstrike.control_graph_id",
+    "object":"x-crowdstrike"
+  },
+  "display_name_1": {
+  "key" : "x-crowdstrike.display_name_1",
+  "object":"x-crowdstrike"
+   },
+  "objective": {
+  "key" : "x-crowdstrike.objective",
+  "object":"x-crowdstrike"
+  },
   "display_name": {
     "key": "x-oca-event.action",
     "object": "event"
@@ -381,6 +393,26 @@
   "site_name": {
     "key": "x-crowdstrike.ioc_value",
     "object": "x-crowdstrike"
+  },
+  "instance_id": {
+   "key": "x-crowdstrike.instance_id",
+   "object": "x-crowdstrike"
+  },
+  "service_provider": {
+  "key": "x-crowdstrike.service_provider",
+  "object": "x-crowdstrike"
+  },
+  "status": {
+   "key": "x-crowdstrike.status",
+   "object": "x-crowdstrike"
+  },
+  "event_status": {
+   "key": "x-crowdstrike.event_status",
+   "object": "x-crowdstrike"
+  },
+  "max_severity_displayname": {
+  "key": "x-crowdstrike.max_severity_displayname",
+  "object": "x-crowdstrike"
   },
   "system_product_name": {
     "key": "x-crowdstrike.ioc_value",
