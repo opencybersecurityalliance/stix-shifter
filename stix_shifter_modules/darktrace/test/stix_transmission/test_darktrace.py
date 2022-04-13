@@ -34,7 +34,7 @@ class InnerResponse:
         self.history = []
 
 
-@patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
+@patch('stix_shifter_modules.darktrace.stix_transmission.api_client'
        '.APIClient.__init__')
 class TestDarktraceConnection(unittest.TestCase):
     """ class for test Darktrace connection"""
