@@ -34,9 +34,9 @@ class Connector(BaseSyncConnector):
                     '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}"))')
 
     alerts_query = (
-        '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_set(AlertId), Severity=make_set(Severity), '
-        'Title=make_set(Title), Category=make_set('
-        'Category), AttackTechniques=make_set('
+        '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
+        'Title=make_list(Title), Category=make_list('
+        'Category), AttackTechniques=make_list('
         'AttackTechniques) by DeviceName, ReportId, Timestamp)')
 
     network_info_query = (
