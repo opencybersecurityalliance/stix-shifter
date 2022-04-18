@@ -83,9 +83,7 @@
     "file": {
         "cim_type": "endpoint",
         "fields": {
-            "hashes.MD5": "file_hash",
-            "hashes.'SHA-1'": "file_hash",
-            "hashes.'SHA-256'": "file_hash",
+            "hashes": "file_hash",
             "name": "file_name",
             "created": "file_create_time",
             "modified": "file_modify_time",

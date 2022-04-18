@@ -39,6 +39,7 @@
     "signature",
     "signature_id",
     "query",
-    "answer"
+    "answer",
+    "Hashes"
   ]
 }

@@ -376,8 +376,8 @@
     }
   ],
   "file_hash": {
-    "key": "file.hashes.UNKNOWN",
-    "object": "file"
+      "key": "file.hashes",
+      "object": "file"
   },
   "file_name": [
     {
