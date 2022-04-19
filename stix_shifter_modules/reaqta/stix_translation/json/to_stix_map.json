@@ -546,11 +546,11 @@
         "object": "finding_data"
       },
       "avScanReason": {
-        "key": "x-ibm-finding.extension.x-reaqta-avdetection.av_scan_reason",
+        "key": "x-ibm-finding.extensions.x-reaqta-avdetection.av_scan_reason",
         "object": "finding_data"
       },
       "avThreatInfoArray": {
-        "key": "x-ibm-finding.extension.x-reaqta-avdetection.av_threat_info_array",
+        "key": "x-ibm-finding.extensions.x-reaqta-avdetection.av_threat_info_array",
         "object": "finding_data"
       },
       "avThreatType": {
@@ -747,7 +747,7 @@
         }
       ],
       "clientMachineFqn": {
-        "key": "x-oca-asset.extension.x-wmi-event.client_machine_fqn",
+        "key": "x-oca-asset.extensions.x-wmi-event.client_machine_fqn",
         "object": "asset_data"
       },
       "clientPid": [
@@ -772,15 +772,15 @@
       },
       "consumerData": {
         "commandLineTemplateTokens": {
-          "key": "x-oca-asset.extension.x-reaqta-consumer.command_line_template_tokens",
+          "key": "x-oca-asset.extensions.x-reaqta-consumer.command_line_template_tokens",
           "object": "consumerData"
         },
         "executablePath": {
-          "key": "x-oca-asset.extension.x-reaqta-consumer.executablePath",
+          "key": "x-oca-asset.extensions.x-reaqta-consumer.executablePath",
           "object": "consumerData"
         },
         "runInteractively": {
-          "key": "x-oca-asset.extension.x-reaqta-consumer.runInteractively",
+          "key": "x-oca-asset.extensions.x-reaqta-consumer.runInteractively",
           "object": "consumerData"
         },
         "scriptFileName": {
@@ -788,11 +788,11 @@
           "object": "file_consumerData"
         },
         "scriptingEngine": {
-          "key": "x-oca-asset.extension.x-reaqta-consumer.scriptingEngine",
+          "key": "x-oca-asset.extensions.x-reaqta-consumer.scriptingEngine",
           "object": "consumerData"
         },
         "showWindowCommand": {
-          "key": "x-oca-asset.extension.x-reaqta-consumer.showWindowCommand",
+          "key": "x-oca-asset.extensions.x-reaqta-consumer.showWindowCommand",
           "object": "consumerData"
         },
         "workingDirectory": [
@@ -809,15 +809,15 @@
         ]
       },
       "consumerName": {
-        "key": "x-oca-asset.extension.x-reaqta-consumer.consumer_name",
+        "key": "x-oca-asset.extensions.x-reaqta-consumer.consumer_name",
         "object": "consumerData"
       },
       "consumerType": {
-        "key": "x-oca-asset.extension.x-reaqta-consumer.consumer_type",
+        "key": "x-oca-asset.extensions.x-reaqta-consumer.consumer_type",
         "object": "consumerData"
       },
       "contentName": {
-        "key": "x-oca-event.extension.x-reaqta-amsi.content_name",
+        "key": "x-oca-event.extensions.x-reaqta-amsi.content_name",
         "object": "antimalware_event"
       },
       "customName": {
@@ -1031,7 +1031,7 @@
         "object": "etw_cert"
       },
       "etwCertThumbprint": {
-        "key": "x509-certificate.extension.x-reaqta-etw.etw_cert_thumbprint",
+        "key": "x509-certificate.extensions.x-reaqta-etw.etw_cert_thumbprint",
         "object": "etw_cert"
       },
       "etwDisplayName": {
@@ -1052,19 +1052,19 @@
         "transformer": "ToInteger"
       },
       "etwEventRecordId": {
-        "key": "x-oca-event.extension.x-reaqta-etw.etw_event_record_id",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_record_id",
         "object": "etw_event"
       },
       "etwEventVersion": {
-        "key": "x-oca-event.extension.x-reaqta-etw.etw_event_record_id",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_record_id",
         "object": "etw_event"
       },
       "etwFailureReason": {
-        "key": "x-oca-event.extension.x-reaqta-etw.etw_failure_reason",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_failure_reason",
         "object": "etw_event"
       },
       "etwHomeDirectory": {
-        "key": "x-oca-event.extension.x-reaqta-etw.etw_home_directory",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_home_directory",
         "object": "etw_event"
       },
       "etwHomePath": [
@@ -1350,7 +1350,7 @@
         "object": "etw_asset"
       },
       "eventNamespace": {
-        "key": "x-oca-asset.extension.x-reaqta-consumer.event_namespace",
+        "key": "x-oca-asset.extensions.x-reaqta-consumer.event_namespace",
         "object": "consumerData"
       },
       "file": [
@@ -1600,7 +1600,7 @@
         "object": "x-reaqta"
       },
       "scanResult": {
-        "key": "x-oca-event.extension.x-reaqta-amsi.scan_result",
+        "key": "x-oca-event.extensions.x-reaqta-amsi.scan_result",
         "object": "antimalware_event"
       },
       "serviceName": {
