@@ -1,18 +1,18 @@
 {
     "eventId": "846769082492518401",
-    "endpointId": "842028663686823936",
+    "endpointId": "841111111118681116",
     "payload": {
         "localId": "844930920409466881",
         "process": {
-            "id": "842028663686823936:692:1648046461800",
-            "parentId": "842028663686823936:556:1648046461638",
-            "endpointId": "842028663686823936",
+            "id": "841111111118681116:692:1648046461800",
+            "parentId": "841111111118681116:556:1648046461638",
+            "endpointId": "841111111118681116",
             "program": {
                 "path": "c:\\windows\\system32\\services.exe",
                 "filename": "services.exe",
-                "md5": "d8e577bf078c45954f4531885478d5a9",
-                "sha1": "d7a213f3cfee2a8a191769eb33847953be51de54",
-                "sha256": "dfbea9e8c316d9bc118b454b0c722cd674c30d0a256340200e2c3a7480cba674",
+                "md5": "b1a85930d233609029cc0b18a97b2d5d",
+                "sha1": "a9993e364706816aba3e25717850c26c9cd0d89d",
+                "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
                 "certInfo": {
                     "signer": "Microsoft Windows",
                     "issuer": "Microsoft Windows Production PCA 2011",
@@ -23,24 +23,24 @@
                 "arch": "x64",
                 "fsName": "services.exe"
             },
-            "user": "NT AUTHORITY\\SYSTEM",
+            "user": "EXAMPLE USER",
             "pid": 692,
             "startTime": "2022-03-23T14:41:01.800Z",
             "ppid": 556,
             "pstartTime": "2022-03-23T14:41:01.638Z",
-            "userSID": "S-1-5-18",
+            "userSID": "S-1-1-1",
             "privilegeLevel": "SYSTEM",
             "noGui": false,
-            "logonId": "0x14bca2"
+            "logonId": "0x141111"
         },
         "incidents": [],
         "triggeredIncidents": [],
         "data": {
             "addressFamily": 0,
             "protocol": 0,
-            "localAddr": "172.16.60.184",
+            "localAddr": "127.0.0.10",
             "localPort": 49818,
-            "remoteAddr": "52.109.76.31",
+            "remoteAddr": "127.0.0.50",
             "remotePort": 443,
             "outbound": true,
             "technique": "T1043",
@@ -50,15 +50,15 @@
             "tags": [],
             "relevance": 10,
             "customData": {
-                "cmdLine": "\"c:\\program files\\microsoft office\\root\\office16\\winword.exe\" /n \"c:\\users\\admin\\desktop\\rogeradamscv.doc\" /o \"\"",
-                "remoteAddr": "52.109.76.31",
+                "cmdLine": "\"c:\\program files\\microsoft office\\root\\office16\\winword.exe\" /n \"c:\\users\\example\\desktop\\example.doc\" /o \"\"",
+                "remoteAddr": "127.0.0.50",
                 "remotePort": "443"
             },
             "version": 1,
             "cmdLine": "java -cp /app/resources:/app/classes:/app/libs/* com.ibm.security.apps.controller.operator.KubernetesAppOperator ",
             "cmdLineArgs": [],
-            "serviceName": "NgcCtnrSvc",
-            "rootObject": "\\registry\\machine\\system\\controlset001\\services\\NgcCtnrSvc",
+            "serviceName": "ExampleSvc",
+            "rootObject": "\\registry\\machine\\system\\services\\ExampleSvc",
             "startType": 3,
             "serviceType": 0,
             "type": 1,
@@ -69,24 +69,24 @@
     "receivedAt": "2022-03-28T16:38:01.475Z",
     "happenedAt": "2022-03-23T14:53:49.483Z",
     "endpointDetails": {
-        "endpointId": "842028663686823936",
-        "machineId": "7f30ca54ed076cf65b0a49249d67bc1ef07ef52ab44b0ebee2151abe7f034084",
+        "endpointId": "841111111118681116",
+        "machineId": "3BA2942ED",
         "osType": 1,
         "cpuVendor": 1,
         "arch": 2,
         "cpuDescr": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
         "kernel": "10.0",
         "os": "Windows 10 Pro",
-        "name": "DESKTOP-DJL",
-        "domain": "ciberjunk.com",
+        "name": "DESKTOP-EXAMPLE",
+        "domain": "example.com",
         "state": 1,
         "registrationTime": "2022-03-23T14:40:03.765Z",
-        "agentVersion": "3.6.1",
+        "agentVersion": "3.0.1",
         "componentsVersions": [
             {
                 "name": "keeper",
                 "version": "3.6.0",
-                "build": "19.1627291555548.commit"
+                "build": "19.commit"
             },
             {
                 "name": "probos",
@@ -96,12 +96,12 @@
             {
                 "name": "rqtsentry",
                 "version": "3.6.1",
-                "build": "119.1632119719010.commit"
+                "build": "119.commit"
             },
             {
                 "name": "rqtnetsentry",
                 "version": "3.6.0",
-                "build": "44.1627295520120.commit"
+                "build": "44.commit"
             },
             {
                 "name": "installer",
@@ -116,11 +116,11 @@
         "sessionEnd": "2022-03-29T15:09:18.661Z",
         "lastSeenAt": "2022-03-29T15:04:18.661Z",
         "disconnectionReason": 0,
-        "localAddr": "192.168.138.128",
+        "localAddr": "127.0.0.20",
         "hvStatus": 19,
         "macs": [
-            "00:0c:29:5c:b0:17",
-            "5c:e4:2a:2b:60:af"
+            "00:01:11:11:11:11",
+            "5c:11:11:11:11:11"
         ],
         "isolated": false,
         "connected": false,
@@ -128,7 +128,7 @@
         "groups": [
             {
                 "endpointGroupId": "837414541779271687",
-                "name": "Bane & Ox"
+                "name": "Group Name"
             }
         ],
         "avInstalled": false

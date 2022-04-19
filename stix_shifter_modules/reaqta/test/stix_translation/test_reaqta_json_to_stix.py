@@ -1,9 +1,6 @@
 import json
-import base64
 import unittest
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.reaqta.entry_point import EntryPoint
-from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.utils.helpers import find
 
@@ -14,20 +11,48 @@ TRANSFORMERS = get_module_transformers(MODULE)
 entry_point = EntryPoint()
 MAP_DATA = entry_point.get_results_translator().map_data
 
-RESULT_FILE = open('stix_shifter_modules/reaqta/test/stix_translation/json/result.json', 'r').read()
+RESULT_FILE = open('stix_shifter_modules/reaqta/test/stix_translation/json/event_result.json', 'r').read()
 DATA = json.loads(RESULT_FILE)
+
 DATA_RECEIVED_AR_TIMESTAMP = find('receivedAt', DATA)
 DATA_HAPPENED_AT_TIMESTAMP = find('happenedAt', DATA)
-DATA_PROCESS_IMAGE_FILE = find('payload.process.program.filename', DATA)
-DATA_PROCESS_IMAGE_DIR = find('payload.process.program.path', DATA).replace('\\' + DATA_PROCESS_IMAGE_FILE, '')
-DATA_PROCESS_COMMAND_LINE = find('payload.data.cmdLine', DATA)
 DATA_EVENT_ID = int(find('eventId', DATA))
+DATA_LOCAL_ID = find('payload.localId', DATA)
+DATA_PROCESS_ID = find('payload.process.id', DATA)
+DATA_PROCESS_PARENT_ID = find('payload.process.parentId', DATA)
+DATA_PROCESS_ID_ENDPOINT_ID = find('payload.process.endpointId', DATA)
+DATA_PROCESS_IMAGE_FILE = find('payload.process.program.filename', DATA)
+DATA_PROCESS_IMAGE_FILE_MD5 = find('payload.process.program.md5', DATA)
+DATA_PROCESS_IMAGE_FILE_SHA1 = find('payload.process.program.sha1', DATA)
+DATA_PROCESS_IMAGE_FILE_SHA256 = find('payload.process.program.sha256', DATA)
+DATA_PROCESS_IMAGE_FILE_SIZE = find('payload.process.program.size', DATA)
+DATA_PROCESS_IMAGE_ARCH = find('payload.process.program.arch', DATA)
+DATA_PROCESS_IMAGE_DIR = find('payload.process.program.path', DATA).replace('\\' + DATA_PROCESS_IMAGE_FILE, '')
+DATA_PROCESS_SIGNER = find('payload.process.program.certInfo.signer', DATA)
+DATA_PROCESS_ISSUER = find('payload.process.program.certInfo.issuer', DATA)
+DATA_PROCESS_TRUSTED = find('payload.process.program.certInfo.trusted', DATA)
+DATA_PROCESS_EXPIRED = find('payload.process.program.certInfo.expired', DATA)
+DATA_PROCESS_COMMAND_LINE = find('payload.data.cmdLine', DATA)
+DATA_PROCESS_PRIVILEGE_LEVEL = find('payload.process.privilegeLevel', DATA)
+DATA_PROCESS_NO_GUI = find('payload.process.noGui', DATA)
+DATA_PROCESS_LOGON_ID = find('payload.process.logonId', DATA)
+DATA_PROCESS_USER_SID = find('payload.process.userSID', DATA)
 DATA_PROCESS_USER = find('payload.process.user', DATA)
 DATA_PROCESS_PPID = find('payload.process.ppid', DATA)
 DATA_LOCAL_PORT = find('payload.data.localPort', DATA)
 DATA_REMOTE_PORT = find('payload.data.remotePort', DATA)
 DATA_LOCAL_IP = find('payload.data.localAddr', DATA)
 DATA_REMOTE_IP = find('payload.data.remoteAddr', DATA)
+DATA_SERVICE_NAME = find('payload.data.serviceName', DATA)
+DATA_ROOT_OBJECT = find('payload.data.rootObject', DATA)
+DATA_START_TYPE = find('payload.data.startType', DATA)
+DATA_SERVICE_TYPE = find('payload.data.serviceType', DATA)
+DATA_TECHNIQUE = find('payload.data.technique', DATA)
+DATA_TACTICS = find('payload.data.tactics', DATA)
+DATA_TAGS = find('payload.data.tags', DATA)
+DATA_RELEVANCE = find('payload.data.relevance', DATA)
+DATA_VERSION = find('payload.data.version', DATA)
+
 
 DATA_SOURCE = {
     "type": "identity",
@@ -57,7 +82,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
-        assert ('objects' in observed_data)
+
         return observed_data['objects']
 
     def test_common_prop(self):
@@ -85,7 +110,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(observed_data['last_observed'] == DATA_HAPPENED_AT_TIMESTAMP)
 
     def test_cybox_observables_process(self):
-
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
@@ -107,6 +131,80 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         parent_ref = proc_obj['parent_ref']
         assert(parent_ref in objects), f"parent_ref with key {proc_obj['parent_ref']} not found"
         assert(proc_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
+
+        extensions = find('extensions.x-reaqta-process', proc_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'process_id', 'parent_process_id', 'process_endpoint_id', 'privilege_level', 'no_gui', 'logon_id', 'command_line_args'})
+        assert(extensions['process_id'] == DATA_PROCESS_ID)
+        assert(extensions['parent_process_id'] == DATA_PROCESS_PARENT_ID)
+        assert(extensions['process_endpoint_id'] == DATA_PROCESS_ID_ENDPOINT_ID)
+        assert(extensions['privilege_level'] == DATA_PROCESS_PRIVILEGE_LEVEL)
+        assert(extensions['no_gui'] == DATA_PROCESS_NO_GUI)
+        assert(extensions['logon_id'] == DATA_PROCESS_LOGON_ID)
+        assert(extensions['command_line_args'] == [])
+
+        extensions = find('extensions.windows-process-ext', proc_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'owner_sid'})
+        assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
+
+    def test_cybox_observables_file(self):
+        objects = TestReaqtaResultsToStix.get_observed_data_objects()
+        file_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'file')
+
+        assert(file_obj is not None), 'file object type not found'
+        assert(file_obj.keys() == {'type', 'parent_directory_ref', 'name', 'hashes', 'size', 'extensions'})
+        assert(file_obj['type'] == 'file')
+        assert(file_obj['name'] == DATA_PROCESS_IMAGE_FILE)
+        assert(file_obj['size'] == DATA_PROCESS_IMAGE_FILE_SIZE)
+        
+        parent_obj = objects[file_obj['parent_directory_ref']]
+        assert(parent_obj is not None), "file parent ref not found"
+        assert(parent_obj.keys() == {'type', 'path'})
+        assert(parent_obj['type'] == "directory")
+        assert(parent_obj['path'] == DATA_PROCESS_IMAGE_DIR)
+
+        hashes = file_obj['hashes']
+        assert(hashes.keys() == {'MD5', 'SHA-1', 'SHA-256'})
+        assert(hashes['MD5'] == DATA_PROCESS_IMAGE_FILE_MD5)
+        assert(hashes['SHA-1'] == DATA_PROCESS_IMAGE_FILE_SHA1)
+        assert(hashes['SHA-256'] == DATA_PROCESS_IMAGE_FILE_SHA256)
+
+        extensions = find('extensions.x-reaqta-program', file_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'arch', 'fsname'})
+        assert(extensions['arch'] == DATA_PROCESS_IMAGE_ARCH)
+        assert(extensions['fsname'] == DATA_PROCESS_IMAGE_FILE)
+
+    def test_cybox_observables_network_traffic(self):
+        objects = TestReaqtaResultsToStix.get_observed_data_objects()
+        network_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
+
+        assert(network_obj is not None), 'network-traffic object type not found'
+        assert(network_obj.keys() == {'type', 'extensions', 'src_port', 'dst_port', 'src_ref', 'dst_ref'})
+        assert(network_obj['type'] == 'network-traffic')
+        assert(network_obj['src_port'] == DATA_LOCAL_PORT)
+        assert(network_obj['dst_port'] == DATA_REMOTE_PORT)
+
+        ip_ref = network_obj['src_ref']
+        assert(ip_ref in objects), f"src_ref with key {network_obj['src_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == DATA_LOCAL_IP)
+
+        ip_ref = network_obj['dst_ref']
+        assert(ip_ref in objects), f"dst_ref with key {network_obj['dst_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == DATA_REMOTE_IP)
+
+        extensions = find('extensions.x-reaqta-network', network_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'address_family', 'outbound'})
+        assert(extensions['address_family'] == 'IPv4')
+        assert(extensions['outbound'] == True)
 
     def test_x_oca_event(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -185,20 +283,65 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
 
-        assert(event['type']) == "x-ibm-finding"
-        # TODO
-        
+        assert(event is not None), "x-ibm-finding not found"
+        assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref', 'finding_type', 'name'})
+        assert(event['type'] == "x-ibm-finding")
+        assert(event['finding_type'] == "88")
+        assert(event['name'] == "Service Stopped")
+
+        ip_ref = event['src_ip_ref']
+        assert(ip_ref in objects), f"src_ip_ref with key {event['src_ip_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == DATA_LOCAL_IP)
+
+        ip_ref = event['dst_ip_ref']
+        assert(ip_ref in objects), f"dst_ip_ref with key {event['dst_ip_ref']} not found"
+        ip_obj = objects[ip_ref]
+        assert(ip_obj.keys() == {'type', 'value'})
+        assert(ip_obj['type'] == 'ipv4-addr')
+        assert(ip_obj['value'] == DATA_REMOTE_IP)
+
+        extensions = find('extensions.x-reaqta-alert', event)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'incidents', 'triggered_incidents'})
+        assert(extensions['incidents'] == [])
+        assert(extensions['triggered_incidents'] == [])
 
     def test_x_reaqta_event(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-reaqta-event')
 
-        assert(event['type']) == "x-reaqta-event"
-        # TODO
+        assert(event is not None), "x-reaqta-event not found"
+        assert(event.keys() == {'type', 'endpoint_id', 'local_id', 'technique', 'tactics', 'tags', 'relevance', 'version', 'service_name', 'root_object', 'start_type', 'service_type'})
+        assert(event['type'] == "x-reaqta-event")
+        assert(event['endpoint_id'] == DATA_PROCESS_ID_ENDPOINT_ID)
+        assert(event['local_id'] == DATA_LOCAL_ID)
+        assert(event['technique'] == DATA_TECHNIQUE)
+        assert(event['tactics'] == DATA_TACTICS)
+        assert(event['tags'] == DATA_TAGS)
+        assert(event['relevance'] == DATA_RELEVANCE)
+        assert(event['version'] == DATA_VERSION)
+        assert(event['service_name'] == DATA_SERVICE_NAME)
+        assert(event['root_object'] == DATA_ROOT_OBJECT)
+        assert(event['start_type'] == DATA_START_TYPE)
+        assert(event['service_type'] == DATA_SERVICE_TYPE)
+
 
     def test_x509_certificate(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x509-certificate')
+        
+        assert(event is not None), "x509-certificate not found"
+        assert(event.keys() == {'type', 'extensions', 'issuer'})
+        assert(event['type'] == "x509-certificate")
+        assert(event['issuer'] == DATA_PROCESS_ISSUER)
 
-        assert(event['type']) == "x509-certificate"
-        # TODO
+        extensions = find('extensions.x-reaqta-cert', event)
+        assert(extensions is not None), "x-reaqta-cert extensions not found"
+        assert(extensions.keys() == {'signer', 'trusted', 'expired'})
+        assert(extensions['signer'] == DATA_PROCESS_SIGNER)
+        assert(extensions['trusted'] == DATA_PROCESS_TRUSTED)
+        assert(extensions['expired'] == DATA_PROCESS_EXPIRED)
+
