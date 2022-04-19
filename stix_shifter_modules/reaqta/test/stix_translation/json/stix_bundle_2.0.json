@@ -1,0 +1,148 @@
+{
+    "type": "bundle",
+    "id": "bundle--e0a2ac9e-0933-4000-b422-1b1c6cd4b34c",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Reaqta",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--fde16f3b-05d7-4bb4-b93c-31c43f60c43f",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2022-04-19T16:57:18.054Z",
+            "modified": "2022-04-19T16:57:18.054Z",
+            "objects": {
+                "0": {
+                    "type": "x-oca-event",
+                    "code": 846769082492518401,
+                    "file_ref": "4",
+                    "user_ref": "6",
+                    "process_ref": "2",
+                    "parent_process_ref": "7",
+                    "network_ref": "9",
+                    "created": "2022-03-28T16:38:01.475Z"
+                },
+                "1": {
+                    "type": "x-reaqta-event",
+                    "endpoint_id": "842028663686823936",
+                    "local_id": "844930920409466881",
+                    "technique": "T1043",
+                    "tactics": [
+                        10
+                    ],
+                    "tags": [],
+                    "relevance": 10,
+                    "version": 1,
+                    "service_name": "NgcCtnrSvc",
+                    "root_object": "\\registry\\machine\\system\\controlset001\\services\\NgcCtnrSvc",
+                    "start_type": 3,
+                    "service_type": 0
+                },
+                "2": {
+                    "type": "process",
+                    "extensions": {
+                        "x-reaqta-process": {
+                            "process_id": "842028663686823936:692:1648046461800",
+                            "parent_process_id": "842028663686823936:556:1648046461638",
+                            "process_endpoint_id": "842028663686823936",
+                            "privilege_level": "SYSTEM",
+                            "no_gui": false,
+                            "logon_id": "0x14bca2",
+                            "command_line_args": []
+                        },
+                        "windows-process-ext": {
+                            "owner_sid": "S-1-5-18"
+                        }
+                    },
+                    "binary_ref": "4",
+                    "creator_user_ref": "6",
+                    "pid": 692,
+                    "created": "2022-03-23T14:41:01.800Z",
+                    "parent_ref": "7",
+                    "command_line": "java -cp /app/resources:/app/classes:/app/libs/* com.ibm.security.apps.controller.operator.KubernetesAppOperator "
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "c:\\windows\\system32"
+                },
+                "4": {
+                    "type": "file",
+                    "parent_directory_ref": "3",
+                    "name": "services.exe",
+                    "hashes": {
+                        "MD5": "d8e577bf078c45954f4531885478d5a9",
+                        "SHA-1": "d7a213f3cfee2a8a191769eb33847953be51de54",
+                        "SHA-256": "dfbea9e8c316d9bc118b454b0c722cd674c30d0a256340200e2c3a7480cba674"
+                    },
+                    "size": 714856,
+                    "extensions": {
+                        "x-reaqta-program": {
+                            "arch": "x64",
+                            "fsname": "services.exe"
+                        }
+                    }
+                },
+                "5": {
+                    "type": "x509-certificate",
+                    "extensions": {
+                        "x-reaqta-cert": {
+                            "signer": "Microsoft Windows",
+                            "trusted": true,
+                            "expired": false
+                        }
+                    },
+                    "issuer": "Microsoft Windows Production PCA 2011"
+                },
+                "6": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\SYSTEM"
+                },
+                "7": {
+                    "type": "process",
+                    "pid": 556
+                },
+                "8": {
+                    "type": "x-ibm-finding",
+                    "extensions": {
+                        "x-reaqta-alert": {
+                            "incidents": [],
+                            "triggered_incidents": []
+                        }
+                    },
+                    "src_ip_ref": "10",
+                    "dst_ip_ref": "12",
+                    "finding_type": "88",
+                    "name": "Service Stopped"
+                },
+                "9": {
+                    "type": "network-traffic",
+                    "extensions": {
+                        "x-reaqta-network": {
+                            "address_family": "IPv4",
+                            "outbound": true
+                        }
+                    },
+                    "src_port": 49818,
+                    "dst_port": 443,
+                    "src_ref": "10",
+                    "dst_ref": "12"
+                },
+                "10": {
+                    "type": "ipv4-addr",
+                    "value": "172.16.60.184"
+                },
+                "12": {
+                    "type": "ipv4-addr",
+                    "value": "52.109.76.31"
+                }
+            },
+            "first_observed": "2022-03-23T14:53:49.483Z",
+            "last_observed": "2022-03-23T14:53:49.483Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}

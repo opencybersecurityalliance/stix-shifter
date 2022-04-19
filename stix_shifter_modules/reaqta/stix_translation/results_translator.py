@@ -44,7 +44,7 @@ class ResultsTranslator(JSONToStix):
                     result['payload']['data']['addressFamily'] = 'IPv6'
 
                     local_addr = result['payload']['data']['localAddr']
-                    print(local_addr)
+
                     result['payload']['data']['localAddrV6'] = local_addr
                     del result['payload']['data']['localAddr']
                     
