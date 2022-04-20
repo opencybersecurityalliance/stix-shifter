@@ -161,7 +161,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         network_ref = event['network_ref']
         assert(network_ref in objects), f"network_ref with key {event['network_ref']} not found"
         network_obj = objects[network_ref]
-        assert(network_obj.keys() == {'type', 'extensions', 'src_port', 'dst_port', 'src_ref', 'dst_ref'})
+        assert(network_obj.keys() == {'type', 'extensions', 'protocols', 'src_port', 'dst_port', 'src_ref', 'dst_ref'})
         assert(network_obj['type'] == 'network-traffic')
         assert(network_obj['src_port'] == DATA_LOCAL_PORT)
         assert(network_obj['dst_port'] == DATA_REMOTE_PORT)
