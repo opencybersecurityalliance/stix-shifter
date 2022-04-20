@@ -152,7 +152,8 @@ class QueryStringPatternTranslator:
         wildcard = ['%', '$', '+', '*', '^', '?']
         for val in wildcard:
             if val in value:
-                raise NotImplementedError("Wildcard characters is not supported in sentinelone LIKE operator")
+                logger.error("Wildcard characters is not supported in sentinelone LIKE operator")
+                value = re.sub(r'[?|$|%|+|*|^]', '', value)
         return f'("{value}")'
 
     @staticmethod

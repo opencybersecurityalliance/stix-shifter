@@ -25,7 +25,7 @@ class DeleteConnector(BaseDeleteConnector):
 
             if response_code == 200:
                 return_obj['success'] = True
-                return_obj['code'] = response_code
+                return_obj['message'] = 'Delete operation of a search id is not supported in SentinelOne'
 
         except Exception as ex:
             response_dict['type'] = "unknown"

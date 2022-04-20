@@ -1,10 +1,10 @@
 import json
+import time
+from requests.exceptions import ConnectionError
 from stix_shifter_utils.modules.base.stix_transmission.\
     base_status_connector import BaseStatusConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-from requests.exceptions import ConnectionError
-import time
 
 
 class InvalidResponseException(Exception):
@@ -39,7 +39,7 @@ class StatusConnector(BaseStatusConnector):
 
             if response_code == 200:
                 return_obj['success'] = True
-                if (response_dict["data"]["responseState"]=="FINISHED"):
+                if response_dict["data"]["responseState"] == "FINISHED":
                     return_obj['status'] = "COMPLETED"
                     return_obj['progress'] = response_dict["data"]["progressStatus"]
                 else:

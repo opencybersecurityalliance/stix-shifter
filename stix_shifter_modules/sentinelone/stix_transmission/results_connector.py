@@ -96,10 +96,6 @@ class ResultsConnector(BaseResultsConnector):
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
-        #except ValueError as ex:
-        #    if response is not None:
-        #        self.logger.debug(response.read())
-        #    raise Exception(f'Cannot parse response in result connector: {ex}') from ex
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
@@ -159,6 +155,14 @@ class ResultsConnector(BaseResultsConnector):
                         item["registryOldValueType"] = valuetype
                     registryValue = {"data": rvalue, "data_type": valuetype}
                     item["registryValue"] = registryValue
+
+            if item.get("loginIsAdministratorEquivalent") is not None:
+                if item.get("loginIsAdministratorEquivalent") == "True" or \
+                        item.get("loginIsAdministratorEquivalent") == "TRUE":
+                    item["loginIsAdministratorEquivalent"] = True
+                elif item.get("loginIsAdministratorEquivalent") == "False" or \
+                        item.get("loginIsAdministratorEquivalent") == "FALSE":
+                    item["loginIsAdministratorEquivalent"] = False
 
             ResultsConnector.replace_escape_character(item)
 

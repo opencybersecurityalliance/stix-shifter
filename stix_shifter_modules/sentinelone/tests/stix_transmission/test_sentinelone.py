@@ -1435,7 +1435,7 @@ class TestSentineloneConnection(unittest.TestCase):
         ping_response = transmission.delete(search_id)
         assert ping_response is not None
         assert ping_response['success'] is True
-        assert ping_response['code'] is not None
+        assert ping_response['message'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')

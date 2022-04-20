@@ -32,7 +32,7 @@ translate sentinelone query '{}' "[ipv4-addr:value = '1.1.0.0'] START t'2022-03-
 ```json
 {
     "queries": [
-        "{\"query\": \"(srcIp = \\\"1.1.0.0\\\" OR dstIp = \\\"1.1.0.0\\\") AND EventTime  BETWEEN \\\"2022-03-01T11:00:00.000Z\\\" AND \\\"2023-03-08T11:00:00.003Z\\\"\", \"fromDate\": \"2022-03-01T11:00:00.000Z\", \"toDate\": \"2023-03-08T11:00:00.003Z\", \"limit\": 10000}"
+        "{\"query\": \"(srcIp = \\\"1.1.0.0\\\" OR dstIp = \\\"1.1.0.0\\\" OR srcMachineIP = \\\"1.1.0.0\\\") AND EventTime  BETWEEN \\\"2022-03-01T11:00:00.000Z\\\" AND \\\"2023-03-08T11:00:00.003Z\\\"\", \"fromDate\": \"2022-03-01T11:00:00.000Z\", \"toDate\": \"2023-03-08T11:00:00.003Z\", \"limit\": 10000}"
     ]
 }
 ```
@@ -61,14 +61,14 @@ sentinelone
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"apitoken\": \"xxxxx\"}}"
 query
-"{\"query\": \"(srcIp = \\"1.1.0.0\\" OR dstIp = \\"1.1.0.0\\") AND EventTime  BETWEEN \\"2022-03-01T11:00:00.000Z\\" AND \\"2023-03-08T11:00:00.003Z\\"\", \"fromDate\": \"2022-03-01T11:00:00.000Z\", \"toDate\": \"2023-03-08T11:00:00.003Z\"}"
+"{\"query\": \"(srcIp = \\"1.1.0.0\\" OR dstIp = \\"1.1.0.0\\" OR srcMachineIP = \\"1.1.0.0\\") AND EventTime  BETWEEN \\"2022-03-01T11:00:00.000Z\\" AND \\"2023-03-08T11:00:00.003Z\\"\", \"fromDate\": \"2022-03-01T11:00:00.000Z\", \"toDate\": \"2023-03-08T11:00:00.003Z\", \"limit\": 10000}"
 ```
 
 #### STIX Transmit query - output
 ```json
 {
     "success": true,
-    "search_id": "xxxxxx"
+    "search_id": "xxxx"
 }
 ```
 #### STIX Transmit status 
@@ -86,7 +86,7 @@ status
 ```json
 {
     "success": true,
-    "status": "FINISHED",
+    "status": "COMPLETED",
     "progress": 100
 }
 ```
@@ -100,92 +100,94 @@ sentinelone
 results
 "xxxxxx"
 0
-3
+1
 ```
 
 #### STIX Transmit results - output
 ```json
 {
-"success": true,
-"data": [
-{
-	"agentDomain": "WORKGROUP",
-	"agentGroupId": "1336793312883045044",
-	"agentId": "xxxx",
-	"agentInfected": false,
-	"agentIp": "xx",
-	"agentIsActive": true,
-	"agentIsDecommissioned": false,
-	"agentMachineType": "xx",
-	"agentName": "xx",
-	"agentNetworkStatus": "connected",
-	"agentOs": "windows",
-	"agentTimestamp": "2022-04-03T08:32:05.605Z",
-	"agentUuid": "xx",
-	"connectionStatus": "SUCCESS",
-	"createdAt": "2022-04-03T08:32:05.605000Z",
-	"direction": "INCOMING",
-	"dstIp": "xx",
-	"dstPort": xx,
-	"endpointMachineType": "xx",
-	"endpointName": "xx",
-	"endpointOs": "xx",
-	"eventIndex": "15",
-	"eventTime": "2022-04-03T08:32:05.605Z",
-	"eventType": "IP Connect",
-	"id": "xx",
-	"metaEventName": "TCPV4",
-	"netConnStatus": "SUCCESS",
-	"netEventDirection": "INCOMING",
-	"netProtocolName": "null",
-	"objectType": "ip",
-	"osSrcProcRelatedToThreat": "False",
-	"parentProcessName": "xx",
-	"parentProcessStartTime": "2022-02-18T11:13:25.373Z",
-	"parentProcessUniqueKey": "xx",
-	"pid": "xx",
-	"processCmd": "C:\\Windows\\System32\\xx -k termsvcs",
-	"processGroupId": "xx",
-	"processImagePath": "C:\\Windows\\system32\\xx",
-	"processImageSha1Hash": "a1385ce20ad79f55df235effd9780c31442aa234",
-	"processIntegrityLevel": "SYSTEM",
-	"processName": "xx",
-	"processStartTime": "2022-02-18T11:13:26.812Z",
-	"processUniqueKey": "F7562BB2C0064892",
-	"publisher": "MICROSOFT WINDOWS PUBLISHER",
-	"relatedToThreat": "False",
-	"signedStatus": "signed",
-	"siteId": "1336793312849490611",
-	"siteName": "Default site",
-	"srcIp": "xx",
-	"srcPort": xx,
-	"srcProcCmdLine": "C:\\Windows\\System32\\xx -k termsvcs",
-	"srcProcImagePath": "C:\\Windows\\system32\\xx",
-	"srcProcImageSha1": "a1385ce20ad79f55df235effd9780c31442aa234",
-	"srcProcIntegrityLevel": "SYSTEM",
-	"srcProcName": "xx",
-	"srcProcParentImagePath": "C:\\Windows\\system32\\xx",
-	"srcProcParentImageSha1": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
-	"srcProcParentName": "xx",
-	"srcProcParentProcUid": "27717F70F7FD180D",
-	"srcProcParentStartTime": "2022-02-18T11:13:25.373Z",
-	"srcProcParentStorylineId": "0917681AF353A269",
-	"srcProcParentUid": "27717F70F7FD180D",
-	"srcProcPid": "xx",
-	"srcProcPublisher": "MICROSOFT WINDOWS PUBLISHER",
-	"srcProcRelatedToThreat": "False",
-	"srcProcSignedStatus": "signed",
-	"srcProcStartTime": "2022-02-18T11:13:26.812Z",
-	"srcProcStorylineId": "FE6925F54601DFEE",
-	"srcProcUid": "F7562BB2C0064892",
-	"srcProcUser": "NT AUTHORITY\\xx",
-	"srcProcVerifiedStatus": "verified",
-	"storyline": "FE6925F54601DFEE",
-	"traceId": "01FZQ8VCZBGJ0M5ZSFGP4M6X2P",
-	"trueContext": "FE6925F54601DFEE",
-	"user": "NT AUTHORITY\\xx",
-	"verifiedStatus": "verified"
+    "success": true,
+    "data": [
+        {
+            "agentDomain": "xx",
+            "agentGroupId": "xx",
+            "agentId": "xx",
+            "agentInfected": false,
+            "agentIp": "xx",
+            "agentIsActive": true,
+            "agentIsDecommissioned": false,
+            "agentMachineType": "xx",
+            "agentName": "xx",
+            "agentNetworkStatus": "connected",
+            "agentOs": "windows",
+            "agentTimestamp": "2022-04-19T19:19:09.177Z",
+            "agentUuid": "xx",
+            "createdAt": "2022-04-19T19:19:09.177000Z",
+            "endpointMachineType": "xx",
+            "endpointName": "xx",
+            "endpointOs": "windows",
+            "eventIndex": "55",
+            "eventTime": "2022-04-19T19:19:09.177Z",
+            "eventType": "Login",
+            "id": "xx",
+            "loginAccountDomain": "-",
+            "loginAccountName": "-",
+            "loginAccountSid": "S-1-0-0",
+            "loginFailureReason": "Unknown user name or bad password.",
+            "loginIsSuccessful": "False",
+            "loginType": "NETWORK",
+            "loginsUserName": "ARLENE",
+            "metaEventName": "WINLOGONATTEMPT",
+            "objectType": "logins",
+            "osSrcProcRelatedToThreat": "False",
+            "parentProcessName": "xx",
+            "parentProcessStartTime": "2022-02-18T11:13:25.373Z",
+            "parentProcessUniqueKey": "xx",
+            "pid": "xx",
+            "processCmd": "C:\\Windows\\System32\\xx -k termsvcs",
+            "processGroupId": "xx",
+            "processImagePath": "C:\\Windows\\system32\\xx",
+            "processImageSha1Hash": "a1385ce20ad79f55df235effd9780c31442aa234",
+            "processIntegrityLevel": "SYSTEM",
+            "processName": "xx",
+            "processStartTime": "2022-02-18T11:13:26.812Z",
+            "processUniqueKey": "F7562BB2C0064892",
+            "publisher": "MICROSOFT WINDOWS PUBLISHER",
+            "relatedToThreat": "False",
+            "signedStatus": "signed",
+            "siteId": "xx",
+            "siteName": "Default site",
+            "srcMachineIp": "xx",
+            "srcProcCmdLine": "C:\\Windows\\System32\\xx -k termsvcs",
+            "srcProcImagePath": "C:\\Windows\\system32\\xx",
+            "srcProcImageSha1": "a1385ce20ad79f55df235effd9780c31442aa234",
+            "srcProcIntegrityLevel": "SYSTEM",
+            "srcProcName": "xx",
+            "srcProcParentImagePath": "C:\\Windows\\system32\\xx",
+            "srcProcParentImageSha1": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
+            "srcProcParentName": "xx",
+            "srcProcParentProcUid": "27717F70F7FD180D",
+            "srcProcParentStartTime": "2022-02-18T11:13:25.373Z",
+            "srcProcParentStorylineId": "0917681AF353A269",
+            "srcProcParentUid": "27717F70F7FD180D",
+            "srcProcPid": "xx",
+            "srcProcPublisher": "MICROSOFT WINDOWS PUBLISHER",
+            "srcProcRelatedToThreat": "False",
+            "srcProcSignedStatus": "signed",
+            "srcProcStartTime": "2022-02-18T11:13:26.812Z",
+            "srcProcStorylineId": "FE6925F54601DFEE",
+            "srcProcUid": "xx",
+            "srcProcUser": "NT AUTHORITY\\xx",
+            "srcProcVerifiedStatus": "verified",
+            "storyline": "FE6925F54601DFEE",
+            "traceId": "01G11M7QQBAPEYMCVTEY288JN0",
+            "trueContext": "FE6925F54601DFEE",
+            "user": "NT AUTHORITY\\xx",
+            "verifiedStatus": "verified"
+        }
+    ]
 }
+
 ```
 
 
@@ -195,111 +197,108 @@ results
 translate
 sentinelone
 results
-{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sentinelone\",\"identity_class\":\"events\"}
-"[{ \"accountId\": null, \"activeContentFileId\": null, \"activeContentHash\": null, \"activeContentPath\": null, \"activeContentSignedStatus\": null, \"activeContentType\": null, \"agentDomain\": \"WORKGROUP\", \"agentGroupId\": \"xx\", \"agentId\": \"xx\", \"agentInfected\": false, \"agentIp\": \"xx\", \"agentIsActive\": true, \"agentIsDecommissioned\": false, \"agentMachineType\": \"server\", \"agentName\": \"xxxx\", \"agentNetworkStatus\": \"connected\", \"agentOs\": \"windows\", \"agentTimestamp\": \"2022-03-03T10:44:02.276Z\", \"agentUuid\": \"xxxx\", \"agentVersion\": null, \"childProcCount\": null, \"connectionStatus\": \"SUCCESS\", \"containerId\": null, \"containerImage\": null, \"containerLabels\": null, \"containerName\": null, \"createdAt\": \"2022-03-03T10:44:02.276000Z\", \"crossProcCount\": null, \"crossProcDupRemoteProcHandleCount\": null, \"crossProcDupThreadHandleCount\": null, \"crossProcOpenProcCount\": null, \"crossProcOutOfStorylineCount\": null, \"crossProcThreadCreateCount\": null, \"direction\": \"INCOMING\", \"dnsCount\": null, \"dstIp\": \"1.1.0.0\", \"dstPort\": xx, \"endpointMachineType\": \"server\", \"endpointName\": \"xxxxx\", \"endpointOs\": \"windows\", \"eventIndex\": \"xxx\", \"eventTime\": \"2022-03-03T10:44:02.276Z\", \"eventType\": \"IP Connect\", \"fileIsExecutable\": null, \"fileMd5\": null, \"fileSha256\": null, \"id\": \"xxxx\", \"indicatorBootConfigurationUpdateCount\": null, \"indicatorEvasionCount\": null, \"indicatorExploitationCount\": null, \"indicatorGeneralCount\": null, \"indicatorInfostealerCount\": null, \"indicatorInjectionCount\": null, \"indicatorPersistenceCount\": null, \"indicatorPostExploitationCount\": null, \"indicatorRansomwareCount\": null, \"indicatorReconnaissanceCount\": null, \"k8sClusterName\": null, \"k8sControllerLabels\": null, \"k8sControllerName\": null, \"k8sControllerType\": null, \"k8sNamespace\": null, \"k8sNamespaceLabels\": null, \"k8sNode\": null, \"k8sPodLabels\": null, \"k8sPodName\": null, \"lastActivatedAt\": null, \"metaEventName\": \"TCPV4\", \"moduleCount\": null, \"netConnCount\": null, \"netConnInCount\": null, \"netConnOutCount\": null, \"netConnStatus\": \"SUCCESS\", \"netEventDirection\": \"INCOMING\", \"netProtocolName\": null, \"objectType\": \"ip\", \"osSrcChildProcCount\": null, \"osSrcCrossProcCount\": null, \"osSrcCrossProcDupRemoteProcHandleCount\": null, \"osSrcCrossProcDupThreadHandleCount\": null, \"osSrcCrossProcOpenProcCount\": null, \"osSrcCrossProcOutOfStorylineCount\": null, \"osSrcCrossProcThreadCreateCount\": null, \"osSrcDnsCount\": null, \"osSrcIndicatorBootConfigurationUpdateCount\": null, \"osSrcIndicatorEvasionCount\": null, \"osSrcIndicatorExploitationCount\": null, \"osSrcIndicatorGeneralCount\": null, \"osSrcIndicatorInfostealerCount\": null, \"osSrcIndicatorInjectionCount\": null, \"osSrcIndicatorPersistenceCount\": null, \"osSrcIndicatorPostExploitationCount\": null, \"osSrcIndicatorRansomwareCount\": null, \"osSrcIndicatorReconnaissanceCount\": null, \"osSrcModuleCount\": null, \"osSrcNetConnCount\": null, \"osSrcNetConnInCount\": null, \"osSrcNetConnOutCount\": null, \"osSrcProcActiveContentFileId\": null, \"osSrcProcActiveContentHash\": null, \"osSrcProcActiveContentPath\": null, \"osSrcProcActiveContentSignedStatus\": null, \"osSrcProcActiveContentType\": null, \"osSrcProcBinaryisExecutable\": null, \"osSrcProcCmdLine\": null, \"osSrcProcDisplayName\": null, \"osSrcProcImageMd5\": null, \"osSrcProcImagePath\": null, \"osSrcProcImageSha1\": null, \"osSrcProcImageSha256\": null, \"osSrcProcIntegrityLevel\": null, \"osSrcProcIsNative64Bit\": null, \"osSrcProcIsRedirectCmdProcessor\": null, \"osSrcProcIsStorylineRoot\": null, \"osSrcProcName\": null, \"osSrcProcParentActiveContentFileId\": null, \"osSrcProcParentActiveContentHash\": null, \"osSrcProcParentActiveContentPath\": null, \"osSrcProcParentActiveContentSignedStatus\": null, \"osSrcProcParentActiveContentType\": null, \"osSrcProcParentCmdLine\": null, \"osSrcProcParentDisplayName\": null, \"osSrcProcParentImageMd5\": null, \"osSrcProcParentImagePath\": null, \"osSrcProcParentImageSha1\": null, \"osSrcProcParentImageSha256\": null, \"osSrcProcParentIntegrityLevel\": null, \"osSrcProcParentIsNative64Bit\": null, \"osSrcProcParentIsRedirectCmdProcessor\": null, \"osSrcProcParentIsStorylineRoot\": null, \"osSrcProcParentName\": null, \"osSrcProcParentPid\": null, \"osSrcProcParentPublisher\": null, \"osSrcProcParentReasonSignatureInvalid\": null, \"osSrcProcParentSessionId\": null, \"osSrcProcParentSignedStatus\": null, \"osSrcProcParentStartTime\": null, \"osSrcProcParentStorylineId\": null, \"osSrcProcParentUid\": null, \"osSrcProcParentUser\": null, \"osSrcProcPid\": null, \"osSrcProcPublisher\": null, \"osSrcProcReasonSignatureInvalid\": null, \"osSrcProcRelatedToThreat\": \"False\", \"osSrcProcSessionId\": null, \"osSrcProcSignedStatus\": null, \"osSrcProcStartTime\": null, \"osSrcProcStorylineId\": null, \"osSrcProcSubsystem\": null, \"osSrcProcUid\": null, \"osSrcProcUser\": null, \"osSrcProcVerifiedStatus\": null, \"osSrcRegistryChangeCount\": null, \"osSrcTgtFileCreationCount\": null, \"osSrcTgtFileDeletionCount\": null, \"osSrcTgtFileModificationCount\": null, \"parentPid\": null, \"parentProcessName\": \"xxxx.exe\", \"parentProcessStartTime\": \"2022-02-18T11:13:25.373Z\", \"parentProcessUniqueKey\": \"xxxx\", \"pid\": \"xx\", \"processCmd\": \"C:\\xx\\xx\\xxxx.exe -k termsvcs\", \"processDisplayName\": null, \"processGroupId\": \"xxxx\", \"processImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"processImageSha1Hash\": \"xx\", \"processIntegrityLevel\": \"SYSTEM\", \"processIsRedirectedCommandProcessor\": null, \"processIsWow64\": null, \"processName\": \"xxxx.exe\", \"processRoot\": null, \"processSessionId\": null, \"processStartTime\": \"2022-02-18T11:13:26.812Z\", \"processSubSystem\": null, \"processUniqueKey\": \"xxxx\", \"publisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"registryChangeCount\": null, \"relatedToThreat\": \"False\", \"rpid\": null, \"signatureSignedInvalidReason\": null, \"signedStatus\": \"signed\", \"siteId\": \"xxxx\", \"siteName\": \"Default site\", \"srcIp\": \"1.1.0.0\", \"srcPort\": xx, \"srcProcActiveContentFileId\": null, \"srcProcActiveContentHash\": null, \"srcProcActiveContentPath\": null, \"srcProcActiveContentSignedStatus\": null, \"srcProcActiveContentType\": null, \"srcProcBinaryisExecutable\": null, \"srcProcCmdLine\": \"C:\\xx\\xx\\xxxx.exe -k termsvcs\", \"srcProcDisplayName\": null, \"srcProcImageMd5\": null, \"srcProcImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"srcProcImageSha1\": \"xxxx\", \"srcProcImageSha256\": null, \"srcProcIntegrityLevel\": \"SYSTEM\", \"srcProcIsNative64Bit\": null, \"srcProcIsRedirectCmdProcessor\": null, \"srcProcIsStorylineRoot\": null, \"srcProcName\": \"xxxx.exe\", \"srcProcParentActiveContentFileId\": null, \"srcProcParentActiveContentHash\": null, \"srcProcParentActiveContentPath\": null, \"srcProcParentActiveContentSignedStatus\": null, \"srcProcParentActiveContentType\": null, \"srcProcParentCmdLine\": null, \"srcProcParentDisplayName\": null, \"srcProcParentImageMd5\": null, \"srcProcParentImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"srcProcParentImageSha1\": \"xx\", \"srcProcParentImageSha256\": null, \"srcProcParentIntegrityLevel\": null, \"srcProcParentIsNative64Bit\": null, \"srcProcParentIsRedirectCmdProcessor\": null, \"srcProcParentIsStorylineRoot\": null, \"srcProcParentName\": \"xxxx.exe\", \"srcProcParentPid\": null, \"srcProcParentProcUid\": \"xxxx\", \"srcProcParentPublisher\": null, \"srcProcParentReasonSignatureInvalid\": null, \"srcProcParentSessionId\": null, \"srcProcParentSignedStatus\": null, \"srcProcParentStartTime\": \"2022-02-18T11:13:25.373Z\", \"srcProcParentStorylineId\": null, \"srcProcParentUid\": \"xxxx\", \"srcProcParentUser\": null, \"srcProcPid\": \"xx\", \"srcProcPublisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"srcProcReasonSignatureInvalid\": null, \"srcProcRelatedToThreat\": \"False\", \"srcProcRpid\": null, \"srcProcSessionId\": null, \"srcProcSignedStatus\": \"signed\", \"srcProcStartTime\": \"2022-02-18T11:13:26.812Z\", \"srcProcStorylineId\": \"xx\", \"srcProcSubsystem\": null, \"srcProcTid\": null, \"srcProcUid\": \"xx\", \"srcProcUser\": \"NT AUTHORITY\\xxxx\", \"srcProcVerifiedStatus\": \"verified\", \"storyline\": \"xxxx\", \"tgtFileCreationCount\": null, \"tgtFileDeletionCount\": null, \"tgtFileModificationCount\": null, \"tiOriginalEventId\": null, \"tiOriginalEventIndex\": null, \"tiOriginalEventTraceId\": null, \"tid\": null, \"tiindicatorRelatedEventTime\": null, \"traceId\": \"xxxx\", \"trueContext\": \"xxxx\", \"user\": \"NT AUTHORITY\\xxxx\", \"verifiedStatus\": \"verified\" }]"
+"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sentinelone\",\"identity_class\":\"events\",\"created\":\"2022-03-22T13:22:50.336Z\",\"modified\":\"2022-03-22T13:22:50.336Z\"}"
+" [{ \"agentDomain\": \"xx\", \"agentGroupId\": \"xx\", \"agentId\": \"xx\", \"agentInfected\": false, \"agentIp\": \"xx\", \"agentIsActive\": true, \"agentIsDecommissioned\": false, \"agentMachineType\": \"xx\", \"agentName\": \"xx\", \"agentNetworkStatus\": \"connected\", \"agentOs\": \"windows\", \"agentTimestamp\": \"2022-04-19T19:19:09.177Z\", \"agentUuid\": \"xx\", \"createdAt\": \"2022-04-19T19:19:09.177000Z\", \"endpointMachineType\": \"xx\", \"endpointName\": \"xx\", \"endpointOs\": \"windows\", \"eventIndex\": \"55\", \"eventTime\": \"2022-04-19T19:19:09.177Z\", \"eventType\": \"Login\", \"id\": \"xx\", \"loginAccountDomain\": \"-\", \"loginAccountName\": \"-\", \"loginAccountSid\": \"S-1-0-0\", \"loginFailureReason\": \"Unknown user name or bad password.\", \"loginIsSuccessful\": \"False\", \"loginType\": \"NETWORK\", \"loginsUserName\": \"ARLENE\", \"metaEventName\": \"WINLOGONATTEMPT\", \"objectType\": \"logins\", \"osSrcProcRelatedToThreat\": \"False\", \"parentProcessName\": \"xx\", \"parentProcessStartTime\": \"2022-02-18T11:13:25.373Z\", \"parentProcessUniqueKey\": \"xx\", \"pid\": \"xx\", \"processCmd\": \"C:\\Windows\\System32\\xx -k termsvcs\", \"processGroupId\": \"xx\", \"processImagePath\": \"C:\\Windows\\system32\\xx\", \"processImageSha1Hash\": \"a1385ce20ad79f55df235effd9780c31442aa234\", \"processIntegrityLevel\": \"SYSTEM\", \"processName\": \"xx\", \"processStartTime\": \"2022-02-18T11:13:26.812Z\", \"processUniqueKey\": \"F7562BB2C0064892\", \"publisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"relatedToThreat\": \"False\", \"signedStatus\": \"signed\", \"siteId\": \"1336793312849490611\", \"siteName\": \"Default site\", \"srcMachineIp\": \"1.1.1.1\", \"srcProcCmdLine\": \"C:\\Windows\\System32\\xx -k termsvcs\", \"srcProcImagePath\": \"C:\\Windows\\system32\\xx\", \"srcProcImageSha1\": \"a1385ce20ad79f55df235effd9780c31442aa234\", \"srcProcIntegrityLevel\": \"SYSTEM\", \"srcProcName\": \"xx\", \"srcProcParentImagePath\": \"C:\\Windows\\system32\\xx\", \"srcProcParentImageSha1\": \"106a001c4c9820a6aec6a8ba17d3836525faf80e\", \"srcProcParentName\": \"xx\", \"srcProcParentProcUid\": \"27717F70F7FD180D\", \"srcProcParentStartTime\": \"2022-02-18T11:13:25.373Z\", \"srcProcParentStorylineId\": \"0917681AF353A269\", \"srcProcParentUid\": \"27717F70F7FD180D\", \"srcProcPid\": \"xx\", \"srcProcPublisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"srcProcRelatedToThreat\": \"False\", \"srcProcSignedStatus\": \"signed\", \"srcProcStartTime\": \"2022-02-18T11:13:26.812Z\", \"srcProcStorylineId\": \"FE6925F54601DFEE\", \"srcProcUid\": \"F7562BB2C0064892\", \"srcProcUser\": \"NT AUTHORITY\\NETWORK SERVICE\", \"srcProcVerifiedStatus\": \"verified\", \"storyline\": \"FE6925F54601DFEE\", \"traceId\": \"01G11M7QQBAPEYMCVTEY288JN0\", \"trueContext\": \"FE6925F54601DFEE\", \"user\": \"NT AUTHORITY\\xx\", \"verifiedStatus\": \"verified\" } ]"
 ```
 
 #### STIX Translate results - output
 ```json
 {
     "type": "bundle",
-    "id": "bundle--9c4c780d-2237-489a-afbf-18ab4bdf02ab",
+    "id": "bundle--aeb0a89c-5822-4afb-933f-0ad7faf120d5",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "sentinelone",
-            "identity_class": "events"
+            "identity_class": "events",
+            "created": "2022-03-22T13:22:50.336Z",
+            "modified": "2022-03-22T13:22:50.336Z"
         },
         {
-            "id": "observed-data--5bd8f7b5-205d-4855-a5fc-044300ca5c78",
+            "id": "observed-data--4fc65e04-ec66-4a1e-8ae0-7766a0b5e483",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-05T07:35:35.727Z",
-            "modified": "2022-04-05T07:35:35.727Z",
+            "created": "2022-04-20T11:23:52.886Z",
+            "modified": "2022-04-20T11:23:52.886Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
                     "agent": "xx",
                     "host_ref": "1",
-                    "created": "2022-04-03T08:32:05.605Z",
-                    "action": "IP Connect",
-                    "object_type": "ip",
-                    "process_ref": "5",
-                    "user_ref": "7"
+                    "created": "2022-04-19T19:19:09.177Z",
+                    "action": "Login",
+                    "category": [
+                        "logins"
+                    ],
+                    "process_ref": "3",
+                    "user_ref": "8"
                 },
                 "1": {
                     "type": "x-oca-asset",
                     "extensions": {
-                        "x-oca-endpoint": {
+                        "x-sentinelone-endpoint": {
                             "agent_uuid": "xx",
                             "machine_type": "xx",
                             "endpoint_os": "windows"
                         }
                     },
-                    "ip_refs": ["2","4"],
                     "hostname": "xx"
                 },
                 "2": {
-                    "type": "ipv4-addr",
-                    "value": "xx"
-                },
-                "3": {
-                    "type": "network-traffic",
-                    "dst_ref": "2",
-                    "dst_port": xx,
+                    "type": "user-account",
+                    "display_name": "-",
+                    "user_id": "S-1-0-0",
                     "extensions": {
-                        "x-sentinelone-network-action": {
-                            "connection_status": "SUCCESS",
-                            "event_direction": "INCOMING"
+                        "x-sentinelone-login": {
+                            "login_failure_reason": "Unknown user name or bad password.",
+                            "login_type": "NETWORK"
                         }
                     },
-                    "protocols": [
-                        "null"
-                    ],
-                    "src_ref": "4",
-                    "src_port": xx
+                    "account_login": "ARLENE"
                 },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "xx"
-                },
-                "5": {
+                "3": {
                     "type": "process",
                     "command_line": "C:\\Windows\\System32\\xx -k termsvcs",
+                    "binary_ref": "6",
                     "extensions": {
                         "x-sentinelone-process": {
-                            "image_path": "C:\\Windows\\system32\\xx",
-                            "sha1_image": "a1385ce20ad79f55df235effd9780c31442aa234",
                             "integrity_level": "SYSTEM",
-                            "parent_image_path": "C:\\Windows\\system32\\xx",
-                            "parent_sha1_image": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
-                            "parent_process_start_time": "2022-02-18T11:13:25.373Z",
-                            "parent_uid": "27717F70F7FD180D",
+                            "process_unique_id": "xx",
                             "publisher": "MICROSOFT WINDOWS PUBLISHER",
                             "signed_status": "signed",
-                            "story_line_id": "FE6925F54601DFEE",
-                            "process_unique_id": "F7562BB2C0064892",
+                            "story_line_id": "xx",
                             "verified_status": "verified"
                         }
                     },
                     "name": "xx",
-                    "parent_ref": "6",
-                    "pid": xx,
+                    "parent_ref": "7",
+                    "pid": 11111,
                     "created": "2022-02-18T11:13:26.812Z",
-                    "creator_user_ref": "7"
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\xx"
                 },
                 "6": {
-                    "type": "process",
-                    "name": "xx"
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "a1385ce20ad79f55df235effd9780c31442aa234"
+                    }
                 },
                 "7": {
+                    "type": "process",
+                    "name": "xxxx",
+                    "created": "2022-02-18T11:13:25.373Z"
+                },
+                "8": {
                     "type": "user-account",
                     "user_id": "NT AUTHORITY\\xx"
                 }
             },
             "first_observed": "2022-02-18T11:13:26.812Z",
-            "last_observed": "2022-04-05T07:35:35.727Z",
+            "last_observed": "2022-04-20T11:23:52.886Z",
             "number_observed": 1
         }
     ],
@@ -311,7 +310,7 @@ results
 
 #### STIX Translate query
 ```shell
-translate sentinelone query {} "([x-oca-event:action = 'Process Creation'] AND [file:size > 1000] OR [x-oca-endpoint:endpoint_os = 'windows'] ) START t'2022-01-01T00:00:00.000000Z' STOP t'2023-02-15T00:00:00.000000Z'"
+translate sentinelone query {} "([x-oca-event:action = 'Process Creation'] AND [file:size > 1000] OR [x-sentinelone-endpoint:endpoint_os = 'windows'] ) START t'2022-04-16T00:00:00.000000Z' STOP t'2023-04-17T00:00:00.000000Z'"
 ```
 
 #### STIX Translate query - output
@@ -319,7 +318,7 @@ translate sentinelone query {} "([x-oca-event:action = 'Process Creation'] AND [
 ```json
 {
     "queries": [
-        "{\"query\": \"(eventType = \\\"PROCESS CREATION\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\") OR (tgtFileSize > \\\"1000\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\") OR (endpointOs = \\\"WINDOWS\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\")\", \"fromDate\": \"2022-01-01T00:00:00.000000Z\", \"toDate\": \"2023-02-15T00:00:00.000000Z\", \"limit\": 10000}"
+        "{\"query\": \"(eventType = \\\"PROCESS CREATION\\\" AND EventTime  BETWEEN \\\"2022-04-16T00:00:00.000000Z\\\" AND \\\"2023-04-17T00:00:00.000000Z\\\") OR (tgtFileSize > \\\"1000\\\" AND EventTime  BETWEEN \\\"2022-04-16T00:00:00.000000Z\\\" AND \\\"2023-04-17T00:00:00.000000Z\\\") OR (endpointOs = \\\"WINDOWS\\\" AND EventTime  BETWEEN \\\"2022-04-16T00:00:00.000000Z\\\" AND \\\"2023-04-17T00:00:00.000000Z\\\")\", \"fromDate\": \"2022-04-16T00:00:00.000000Z\", \"toDate\": \"2023-04-17T00:00:00.000000Z\", \"limit\": 10000}"
     ]
 }
 ```
@@ -333,7 +332,7 @@ sentinelone
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"apitoken\": \"xxxxx\"}}"
 query
-"{\"query\": \"(eventType = \\\"PROCESS CREATION\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\") OR (tgtFileSize > \\\"1000\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\") OR (endpointOs = \\\"WINDOWS\\\" AND EventTime  BETWEEN \\\"2022-01-01T00:00:00.000000Z\\\" AND \\\"2023-02-15T00:00:00.000000Z\\\")\", \"fromDate\": \"2022-01-01T00:00:00.000000Z\", \"toDate\": \"2023-02-15T00:00:00.000000Z\", \"limit\": 10000}"
+"{\"query\": \"(eventType = \\"PROCESS CREATION\\" AND EventTime  BETWEEN \\"2022-04-16T00:00:00.000000Z\\" AND \\"2023-04-17T00:00:00.000000Z\\") OR (tgtFileSize > \\"1000\\" AND EventTime  BETWEEN \\"2022-04-16T00:00:00.000000Z\\" AND \\"2023-04-17T00:00:00.000000Z\\") OR (endpointOs = \\"WINDOWS\\" AND EventTime  BETWEEN \\"2022-04-16T00:00:00.000000Z\\" AND \\"2023-04-17T00:00:00.000000Z\\")\", \"fromDate\": \"2022-04-16T00:00:00.000000Z\", \"toDate\": \"2023-04-17T00:00:00.000000Z\", \"limit\": 10000}"
 ```
 
 #### STIX Transmit query - output
@@ -359,7 +358,7 @@ status
 ```json
 {
     "success": true,
-    "status": "FINISHED",
+    "status": "COMPLETED",
     "progress": 100
 }
 ```
@@ -373,7 +372,7 @@ sentinelone
 results
 "xxxxxx"
 0
-3
+1
 ```
 
 #### STIX Transmit results - output
@@ -383,85 +382,84 @@ results
     "data": [
         {
             "agentDomain": "WORKGROUP",
-            "agentGroupId": "1336793312883045044",
+            "agentGroupId": "xx",
             "agentId": "xx",
             "agentInfected": false,
             "agentIp": "xx",
             "agentIsActive": true,
             "agentIsDecommissioned": false,
-            "agentMachineType": "xx",
+            "agentMachineType": "server",
             "agentName": "xx",
             "agentNetworkStatus": "connected",
             "agentOs": "windows",
-            "agentTimestamp": "2022-04-05T07:52:02.051Z",
-            "agentUuid": "209e5033aedc4d50b3c056e0a01a9841",
+            "agentTimestamp": "2022-04-17T07:20:10.796Z",
+            "agentUuid": "xx",
             "connectionStatus": "SUCCESS",
-            "createdAt": "2022-04-05T07:52:02.051000Z",
-            "direction": "INCOMING",
+            "createdAt": "2022-04-17T07:20:10.796000Z",
+            "direction": "OUTGOING",
             "dstIp": "xx",
-            "dstPort": xx,
-            "endpointMachineType": "server",
-            "endpointName": "xx",
+            "dstPort": 11111,
+            "endpointMachineType": "xx",
+            "endpointName": "xxxxxxx",
             "endpointOs": "windows",
-            "eventIndex": "xx",
-            "eventTime": "2022-04-05T07:52:02.051Z",
+            "eventIndex": "19",
+            "eventTime": "2022-04-17T07:20:10.796Z",
             "eventType": "IP Connect",
             "id": "xx",
             "metaEventName": "TCPV4",
             "netConnStatus": "SUCCESS",
-            "netEventDirection": "INCOMING",
+            "netEventDirection": "OUTGOING",
             "netProtocolName": "null",
             "objectType": "ip",
             "osSrcProcRelatedToThreat": "False",
-            "parentProcessName": "xx",
-            "parentProcessStartTime": "2022-02-18T11:13:25.373Z",
-            "parentProcessUniqueKey": "F7562BB2C0064892",
-            "pid": "xx",
-            "processCmd": "C:\\Windows\\System32\\xx -k termsvcs",
-            "processGroupId": "FE6925F54601DFEE",
-            "processImagePath": "C:\\Windows\\system32\\xx",
-            "processImageSha1Hash": "a1385ce20ad79f55df235effd9780c31442aa234",
+            "parentProcessName": "xxxx",
+            "parentProcessStartTime": "2022-04-13T10:25:21.517Z",
+            "parentProcessUniqueKey": "B5DBD2638D99E654",
+            "pid": "xxxx",
+            "processCmd": "C:\\Program Files\\Palo Alto Networks\\Traps\\xxxx",
+            "processGroupId": "EF4338FE0431ABCC",
+            "processImagePath": "C:\\Program Files\\Palo Alto Networks\\Traps\\xxxx",
+            "processImageSha1Hash": "1627eeb843c764f25c5f8d9aac687dea539f4a9b",
             "processIntegrityLevel": "SYSTEM",
-            "processName": "xx",
-            "processStartTime": "2022-02-18T11:13:26.812Z",
-            "processUniqueKey": "F7562BB2C0064892",
-            "publisher": "MICROSOFT WINDOWS PUBLISHER",
+            "processName": "xxxx",
+            "processStartTime": "2022-04-13T10:25:26.383Z",
+            "processUniqueKey": "B5DBD2638D99E654",
+            "publisher": "PALO ALTO NETWORKS",
             "relatedToThreat": "False",
             "signedStatus": "signed",
             "siteId": "1336793312849490611",
             "siteName": "Default site",
-            "srcIp": "xx",
-            "srcPort": xx,
-            "srcProcCmdLine": "C:\\Windows\\System32\\xx -k termsvcs",
-            "srcProcImagePath": "C:\\Windows\\system32\\xx",
-            "srcProcImageSha1": "a1385ce20ad79f55df235effd9780c31442aa234",
+            "srcIp": "xxxx",
+            "srcPort": 1111111,
+            "srcProcCmdLine": "C:\\Program Files\\Palo Alto Networks\\Traps\\xxxx",
+            "srcProcImagePath": "C:\\Program Files\\Palo Alto Networks\\Traps\\xxxx",
+            "srcProcImageSha1": "1627eeb843c764f25c5f8d9aac687dea539f4a9b",
             "srcProcIntegrityLevel": "SYSTEM",
-            "srcProcName": "svchost.exe",
-            "srcProcParentImagePath": "C:\\Windows\\system32\\xx",
+            "srcProcName": "xxxx",
+            "srcProcParentImagePath": "C:\\Windows\\System32\\xxxx",
             "srcProcParentImageSha1": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
-            "srcProcParentName": "xx",
-            "srcProcParentProcUid": "27717F70F7FD180D",
-            "srcProcParentStartTime": "2022-02-18T11:13:25.373Z",
-            "srcProcParentStorylineId": "0917681AF353A269",
-            "srcProcParentUid": "27717F70F7FD180D",
-            "srcProcPid": "xx",
-            "srcProcPublisher": "MICROSOFT WINDOWS PUBLISHER",
+            "srcProcParentName": "xxxx",
+            "srcProcParentProcUid": "17AE1B8C02AC084F",
+            "srcProcParentStartTime": "2022-04-13T10:25:21.517Z",
+            "srcProcParentStorylineId": "9FB6E0E3103901BC",
+            "srcProcParentUid": "17AE1B8C02AC084F",
+            "srcProcPid": "xxxx",
+            "srcProcPublisher": "PALO ALTO NETWORKS",
             "srcProcRelatedToThreat": "False",
             "srcProcSignedStatus": "signed",
-            "srcProcStartTime": "2022-02-18T11:13:26.812Z",
-            "srcProcStorylineId": "FE6925F54601DFEE",
-            "srcProcUid": "F7562BB2C0064892",
+            "srcProcStartTime": "2022-04-13T10:25:26.383Z",
+            "srcProcStorylineId": "EF4338FE0431ABCC",
+            "srcProcUid": "B5DBD2638D99E654",
             "srcProcUser": "NT AUTHORITY\\xx",
             "srcProcVerifiedStatus": "verified",
-            "storyline": "FE6925F54601DFEE",
-            "traceId": "01FZWBAGRDMGQ2P37MEGJSW1FY",
-            "trueContext": "FE6925F54601DFEE",
-            "user": "NT AUTHORITY\\NETWORK SERVICE",
+            "storyline": "EF4338FE0431ABCC",
+            "traceId": "01G0V6A46VQ4HJA5KH147CFKWY",
+            "trueContext": "EF4338FE0431ABCC",
+            "user": "NT AUTHORITY\\SYSTEM",
             "verifiedStatus": "verified"
         }
     ]
 }
-
 ```
 
 
@@ -471,111 +469,109 @@ results
 translate
 sentinelone
 results
-{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sentinelone\",\"identity_class\":\"events\"}
-"[{ \"accountId\": null, \"activeContentFileId\": null, \"activeContentHash\": null, \"activeContentPath\": null, \"activeContentSignedStatus\": null, \"activeContentType\": null, \"agentDomain\": \"WORKGROUP\", \"agentGroupId\": \"xxxx\", \"agentId\": \"xxxx\", \"agentInfected\": false, \"agentIp\": \"1.1.0.0\", \"agentIsActive\": true, \"agentIsDecommissioned\": false, \"agentMachineType\": \"server\", \"agentName\": \"xxxx\", \"agentNetworkStatus\": \"connected\", \"agentOs\": \"windows\", \"agentTimestamp\": \"2022-03-06T22:16:26.998Z\", \"agentUuid\": \"xxxx\", \"agentVersion\": null, \"childProcCount\": null, \"createdAt\": \"2022-03-06T22:16:26.998000Z\", \"crossProcCount\": null, \"crossProcDupRemoteProcHandleCount\": null, \"crossProcDupThreadHandleCount\": null, \"crossProcOpenProcCount\": null, \"crossProcOutOfStorylineCount\": null, \"crossProcThreadCreateCount\": null, \"dnsCount\": null, \"endpointMachineType\": \"server\", \"endpointName\": \"xxxx\", \"endpointOs\": \"windows\", \"eventIndex\": \"xxxx\", \"eventTime\": \"2022-03-06T22:16:26.998Z\", \"eventType\": \"Process Creation\", \"fileIsExecutable\": null, \"fileMd5\": null, \"fileSha256\": null, \"id\": \"xxxxx\", \"indicatorBootConfigurationUpdateCount\": null, \"indicatorEvasionCount\": null, \"indicatorExploitationCount\": null, \"indicatorGeneralCount\": null, \"indicatorInfostealerCount\": null, \"indicatorInjectionCount\": null, \"indicatorPersistenceCount\": null, \"indicatorPostExploitationCount\": null, \"indicatorRansomwareCount\": null, \"indicatorReconnaissanceCount\": null, \"lastActivatedAt\": null, \"loginAccountDomain\": \"-\", \"loginAccountName\": \"-\", \"loginAccountSid\": \"S-1-0-0\", \"loginFailureReason\": \"Unknown user name or bad password.\", \"loginIsAdministratorEquivalent\": null, \"loginIsSuccessful\": \"False\", \"loginSessionId\": null, \"loginType\": \"NETWORK\", \"loginsBaseType\": null, \"loginsUserName\": \"xxxx\", \"metaEventName\": \"WINLOGONATTEMPT\", \"moduleCount\": null, \"netConnCount\": null, \"netConnInCount\": null, \"netConnOutCount\": null, \"objectType\": \"logins\", \"osSrcChildProcCount\": null, \"osSrcCrossProcCount\": null, \"osSrcCrossProcDupRemoteProcHandleCount\": null, \"osSrcCrossProcDupThreadHandleCount\": null, \"osSrcCrossProcOpenProcCount\": null, \"osSrcCrossProcOutOfStorylineCount\": null, \"osSrcCrossProcThreadCreateCount\": null, \"osSrcDnsCount\": null, \"osSrcIndicatorBootConfigurationUpdateCount\": null, \"osSrcIndicatorEvasionCount\": null, \"osSrcIndicatorExploitationCount\": null, \"osSrcIndicatorGeneralCount\": null, \"osSrcIndicatorInfostealerCount\": null, \"osSrcIndicatorInjectionCount\": null, \"osSrcIndicatorPersistenceCount\": null, \"osSrcIndicatorPostExploitationCount\": null, \"osSrcIndicatorRansomwareCount\": null, \"osSrcIndicatorReconnaissanceCount\": null, \"osSrcModuleCount\": null, \"osSrcNetConnCount\": null, \"osSrcNetConnInCount\": null, \"osSrcNetConnOutCount\": null, \"osSrcProcActiveContentFileId\": null, \"osSrcProcActiveContentHash\": null, \"osSrcProcActiveContentPath\": null, \"osSrcProcActiveContentSignedStatus\": null, \"osSrcProcActiveContentType\": null, \"osSrcProcBinaryisExecutable\": null, \"osSrcProcCmdLine\": null, \"osSrcProcDisplayName\": null, \"osSrcProcImageMd5\": null, \"osSrcProcImagePath\": null, \"osSrcProcImageSha1\": null, \"osSrcProcImageSha256\": null, \"osSrcProcIntegrityLevel\": null, \"osSrcProcIsNative64Bit\": null, \"osSrcProcIsRedirectCmdProcessor\": null, \"osSrcProcIsStorylineRoot\": null, \"osSrcProcName\": null, \"osSrcProcParentActiveContentFileId\": null, \"osSrcProcParentActiveContentHash\": null, \"osSrcProcParentActiveContentPath\": null, \"osSrcProcParentActiveContentSignedStatus\": null, \"osSrcProcParentActiveContentType\": null, \"osSrcProcParentCmdLine\": null, \"osSrcProcParentDisplayName\": null, \"osSrcProcParentImageMd5\": null, \"osSrcProcParentImagePath\": null, \"osSrcProcParentImageSha1\": null, \"osSrcProcParentImageSha256\": null, \"osSrcProcParentIntegrityLevel\": null, \"osSrcProcParentIsNative64Bit\": null, \"osSrcProcParentIsRedirectCmdProcessor\": null, \"osSrcProcParentIsStorylineRoot\": null, \"osSrcProcParentName\": null, \"osSrcProcParentPid\": null, \"osSrcProcParentPublisher\": null, \"osSrcProcParentReasonSignatureInvalid\": null, \"osSrcProcParentSessionId\": null, \"osSrcProcParentSignedStatus\": null, \"osSrcProcParentStartTime\": null, \"osSrcProcParentStorylineId\": null, \"osSrcProcParentUid\": null, \"osSrcProcParentUser\": null, \"osSrcProcPid\": null, \"osSrcProcPublisher\": null, \"osSrcProcReasonSignatureInvalid\": null, \"osSrcProcRelatedToThreat\": \"False\", \"osSrcProcSessionId\": null, \"osSrcProcSignedStatus\": null, \"osSrcProcStartTime\": null, \"osSrcProcStorylineId\": null, \"osSrcProcSubsystem\": null, \"osSrcProcUid\": null, \"osSrcProcUser\": null, \"osSrcProcVerifiedStatus\": null, \"osSrcRegistryChangeCount\": null, \"osSrcTgtFileCreationCount\": null, \"osSrcTgtFileDeletionCount\": null, \"osSrcTgtFileModificationCount\": null, \"parentPid\": null, \"parentProcessName\": \"xxxx.exe\", \"parentProcessStartTime\": \"2022-02-18T11:13:25.373Z\", \"parentProcessUniqueKey\": \"xxxx\", \"pid\": \"xx\", \"processCmd\": \"C:\\xx\\xx\\xxxx.exe -k termsvcs\", \"processDisplayName\": null, \"processGroupId\": \"xxxx\", \"processImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"processImageSha1Hash\": \"xxxx\", \"processIntegrityLevel\": \"SYSTEM\", \"processIsRedirectedCommandProcessor\": null, \"processIsWow64\": null, \"processName\": \"xxxx.exe\", \"processRoot\": null, \"processSessionId\": null, \"processStartTime\": \"2022-02-18T11:13:26.812Z\", \"processSubSystem\": null, \"processUniqueKey\": \"xxxx\", \"publisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"registryChangeCount\": null, \"relatedToThreat\": \"False\", \"rpid\": null, \"signatureSignedInvalidReason\": null, \"signedStatus\": \"signed\", \"siteId\": \"xxxx\", \"siteName\": \"Default site\", \"srcMachineIp\": \"1.1.0.0\", \"srcProcActiveContentFileId\": null, \"srcProcActiveContentHash\": null, \"srcProcActiveContentPath\": null, \"srcProcActiveContentSignedStatus\": null, \"srcProcActiveContentType\": null, \"srcProcBinaryisExecutable\": null, \"srcProcCmdLine\": \"C:\\xx\\xx\\xxxx.exe -k termsvcs\", \"srcProcDisplayName\": null, \"srcProcImageMd5\": null, \"srcProcImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"srcProcImageSha1\": \"xxxx\", \"srcProcImageSha256\": null, \"srcProcIntegrityLevel\": \"SYSTEM\", \"srcProcIsNative64Bit\": null, \"srcProcIsRedirectCmdProcessor\": null, \"srcProcIsStorylineRoot\": null, \"srcProcName\": \"xxxx.exe\", \"srcProcParentActiveContentFileId\": null, \"srcProcParentActiveContentHash\": null, \"srcProcParentActiveContentPath\": null, \"srcProcParentActiveContentSignedStatus\": null, \"srcProcParentActiveContentType\": null, \"srcProcParentCmdLine\": null, \"srcProcParentDisplayName\": null, \"srcProcParentImageMd5\": null, \"srcProcParentImagePath\": \"C:\\xx\\xx\\xxxx.exe\", \"srcProcParentImageSha1\": \"xxxx\", \"srcProcParentImageSha256\": null, \"srcProcParentIntegrityLevel\": null, \"srcProcParentIsNative64Bit\": null, \"srcProcParentIsRedirectCmdProcessor\": null, \"srcProcParentIsStorylineRoot\": null, \"srcProcParentName\": \"xxxx.exe\", \"srcProcParentPid\": null, \"srcProcParentProcUid\": \"xxxx\", \"srcProcParentPublisher\": null, \"srcProcParentReasonSignatureInvalid\": null, \"srcProcParentSessionId\": null, \"srcProcParentSignedStatus\": null, \"srcProcParentStartTime\": \"2022-02-18T11:13:25.373Z\", \"srcProcParentStorylineId\": null, \"srcProcParentUid\": \"xxxx\", \"srcProcParentUser\": null, \"srcProcPid\": \"xx\", \"srcProcPublisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"srcProcReasonSignatureInvalid\": null, \"srcProcRelatedToThreat\": \"False\", \"srcProcRpid\": null, \"srcProcSessionId\": null, \"srcProcSignedStatus\": \"signed\", \"srcProcStartTime\": \"2022-02-18T11:13:26.812Z\", \"srcProcStorylineId\": \"xxxx\", \"srcProcSubsystem\": null, \"srcProcTid\": null, \"srcProcUid\": \"F7562BB2C0064892\", \"srcProcUser\": \"NT AUTHORITY\\xxxx\", \"srcProcVerifiedStatus\": \"verified\", \"storyline\": \"xxxx\", \"tgtFileCreationCount\": null, \"tgtFileDeletionCount\": null, \"tgtFileModificationCount\": null, \"tiOriginalEventId\": null, \"tiOriginalEventIndex\": null, \"tiOriginalEventTraceId\": null, \"tid\": null, \"tiindicatorRelatedEventTime\": null, \"traceId\": \"xxxx\", \"trueContext\": \"xxxx\", \"user\": \"NT AUTHORITY\\xxxx\", \"verifiedStatus\": \"verified\" }  ]"
+"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sentinelone\",\"identity_class\":\"events\",\"created\":\"2022-03-22T13:22:50.336Z\",\"modified\":\"2022-03-22T13:22:50.336Z\"}"
+"[{ \"agentDomain\": \"xx\", \"agentGroupId\": \"xx\", \"agentId\": \"xx\", \"agentInfected\": false, \"agentIp\": \"1.1.1.1\", \"agentIsActive\": true, \"agentIsDecommissioned\": false, \"agentMachineType\": \"xx\", \"agentName\": \"xx\", \"agentNetworkStatus\": \"connected\", \"agentOs\": \"windows\", \"agentTimestamp\": \"2022-04-20T01:01:46.324Z\", \"agentUuid\": \"xx\", \"createdAt\": \"2022-04-20T01:01:46.324000Z\", \"endpointMachineType\": \"xx\", \"endpointName\": \"xx\", \"endpointOs\": \"windows\", \"eventIndex\": \"54\", \"eventTime\": \"2022-04-20T01:01:46.324Z\", \"eventType\": \"Login\", \"id\": \"677881012878508059\", \"loginAccountDomain\": \"-\", \"loginAccountName\": \"-\", \"loginAccountSid\": \"S-1-0-0\", \"loginFailureReason\": \"Unknown user name or bad password.\", \"loginIsSuccessful\": \"False\", \"loginType\": \"NETWORK\", \"loginsUserName\": \"ADMIN\", \"metaEventName\": \"WINLOGONATTEMPT\", \"objectType\": \"logins\", \"osSrcProcRelatedToThreat\": \"False\", \"parentProcessName\": \"xx\", \"parentProcessStartTime\": \"2022-02-18T11:13:25.373Z\", \"parentProcessUniqueKey\": \"xx\", \"pid\": \"xx\", \"processCmd\": \"C:\\Windows\\System32\\xx -k termsvcs\", \"processGroupId\": \"xx\", \"processImagePath\": \"C:\\Windows\\system32\\xx\", \"processImageSha1Hash\": \"a1385ce20ad79f55df235effd9780c31442aa234\", \"processIntegrityLevel\": \"SYSTEM\", \"processName\": \"xx\", \"processStartTime\": \"2022-02-18T11:13:26.812Z\", \"processUniqueKey\": \"xx\", \"publisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"relatedToThreat\": \"False\", \"signedStatus\": \"signed\", \"siteId\": \"1336793312849490611\", \"siteName\": \"Default site\", \"srcMachineIp\": \"1.1.1.1\", \"srcProcCmdLine\": \"C:\\Windows\\System32\\xx -k termsvcs\", \"srcProcImagePath\": \"C:\\Windows\\system32\\xx\", \"srcProcImageSha1\": \"a1385ce20ad79f55df235effd9780c31442aa234\", \"srcProcIntegrityLevel\": \"SYSTEM\", \"srcProcName\": \"xx\", \"srcProcParentImagePath\": \"C:\\Windows\\system32\\services.exe\", \"srcProcParentImageSha1\": \"106a001c4c9820a6aec6a8ba17d3836525faf80e\", \"srcProcParentName\": \"services.exe\", \"srcProcParentProcUid\": \"xx\", \"srcProcParentStartTime\": \"2022-02-18T11:13:25.373Z\", \"srcProcParentStorylineId\": \"0917681AF353A269\", \"srcProcParentUid\": \"27717F70F7FD180D\", \"srcProcPid\": \"724\", \"srcProcPublisher\": \"MICROSOFT WINDOWS PUBLISHER\", \"srcProcRelatedToThreat\": \"False\", \"srcProcSignedStatus\": \"signed\", \"srcProcStartTime\": \"2022-02-18T11:13:26.812Z\", \"srcProcStorylineId\": \"FE6925F54601DFEE\", \"srcProcUid\": \"F7562BB2C0064892\", \"srcProcUser\": \"NT AUTHORITY\\NETWORK SERVICE\", \"srcProcVerifiedStatus\": \"verified\", \"storyline\": \"FE6925F54601DFEE\", \"traceId\": \"01G127VVYKGDE639TA8JHGGAW4\", \"trueContext\": \"FE6925F54601DFEE\", \"user\": \"NT AUTHORITY\\xx\", \"verifiedStatus\": \"verified\" }]"
+
 ```
 
 #### STIX Translate results - output
 ```json
 {
     "type": "bundle",
-    "id": "bundle--245724b9-0860-4099-b24c-0dd298eeff4a",
+    "id": "bundle--50ff31f7-bae6-4889-a021-e76b722c3cd5",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "sentinelone",
-            "identity_class": "events"
+            "identity_class": "events",
+            "created": "2022-03-22T13:22:50.336Z",
+            "modified": "2022-03-22T13:22:50.336Z"
         },
         {
-            "id": "observed-data--08187b26-000a-4ce5-8da6-37b388bdbbf2",
+            "id": "observed-data--18832926-d2ff-432c-84d2-1e48bf13a3c0",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-05T08:10:53.159Z",
-            "modified": "2022-04-05T08:10:53.159Z",
+            "created": "2022-04-20T11:42:13.786Z",
+            "modified": "2022-04-20T11:42:13.786Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
                     "agent": "xx",
                     "host_ref": "1",
-                    "created": "2022-04-05T07:52:02.051Z",
-                    "action": "IP Connect",
-                    "object_type": "ip",
-                    "process_ref": "5",
-                    "user_ref": "7"
+                    "created": "2022-04-20T01:01:46.324Z",
+                    "action": "Login",
+                    "category": [
+                        "logins"
+                    ],
+                    "process_ref": "3",
+                    "user_ref": "8"
                 },
                 "1": {
                     "type": "x-oca-asset",
                     "extensions": {
-                        "x-oca-endpoint": {
-                            "agent_uuid": "209e5033aedc4d50b3c056e0a01a9841",
+                        "x-sentinelone-endpoint": {
+                            "agent_uuid": "xx",
                             "machine_type": "xx",
                             "endpoint_os": "windows"
                         }
                     },
-                    "ip_refs": ["2","4"],
                     "hostname": "xx"
                 },
                 "2": {
-                    "type": "ipv4-addr",
-                    "value": "xx"
-                },
-                "3": {
-                    "type": "network-traffic",
-                    "dst_ref": "2",
-                    "dst_port": xx,
+                    "type": "user-account",
+                    "display_name": "-",
+                    "user_id": "S-1-0-0",
                     "extensions": {
-                        "x-sentinelone-network-action": {
-                            "connection_status": "SUCCESS",
-                            "event_direction": "INCOMING"
+                        "x-sentinelone-login": {
+                            "login_failure_reason": "Unknown user name or bad password.",
+                            "login_type": "NETWORK"
                         }
                     },
-                    "protocols": [
-                        "null"
-                    ],
-                    "src_ref": "4",
-                    "src_port": xx
+                    "account_login": "ADMIN"
                 },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "xx"
-                },
-                "5": {
+                "3": {
                     "type": "process",
                     "command_line": "C:\\Windows\\System32\\xx -k termsvcs",
+                    "binary_ref": "6",
                     "extensions": {
                         "x-sentinelone-process": {
-                            "image_path": "C:\\Windows\\system32\\xx",
-                            "sha1_image": "a1385ce20ad79f55df235effd9780c31442aa234",
                             "integrity_level": "SYSTEM",
-                            "parent_image_path": "C:\\Windows\\system32\\xx",
-                            "parent_sha1_image": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
-                            "parent_process_start_time": "2022-02-18T11:13:25.373Z",
-                            "parent_uid": "27717F70F7FD180D",
+                            "process_unique_id": "xx",
                             "publisher": "MICROSOFT WINDOWS PUBLISHER",
                             "signed_status": "signed",
-                            "story_line_id": "FE6925F54601DFEE",
-                            "process_unique_id": "F7562BB2C0064892",
+                            "story_line_id": "xx",
                             "verified_status": "verified"
                         }
                     },
                     "name": "xx",
-                    "parent_ref": "6",
-                    "pid": xx,
+                    "parent_ref": "7",
+                    "pid": 11111111,
                     "created": "2022-02-18T11:13:26.812Z",
-                    "creator_user_ref": "7"
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\xx"
                 },
                 "6": {
-                    "type": "process",
-                    "name": "xx"
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "a1385ce20ad79f55df235effd9780c31442aa234"
+                    }
                 },
                 "7": {
+                    "type": "process",
+                    "name": "xx",
+                    "created": "2022-02-18T11:13:25.373Z"
+                },
+                "8": {
                     "type": "user-account",
                     "user_id": "NT AUTHORITY\\xx"
                 }
             },
             "first_observed": "2022-02-18T11:13:26.812Z",
-            "last_observed": "2022-04-05T08:10:53.159Z",
+            "last_observed": "2022-04-20T11:42:13.786Z",
             "number_observed": 1
         }
     ],
@@ -595,9 +591,9 @@ sentinelone
 #### STIX Execute query - output
 ```json
 {
-    "type": "bundle",
-    "id": "bundle--7c5100bb-12cb-44c8-b5ed-48a37b58b385",
-    "objects": [
+   "type": "bundle",
+   "id": "bundle--5a8647f3-d72e-455f-aa90-1e99c3dda2db",
+   "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
@@ -605,27 +601,29 @@ sentinelone
             "identity_class ": "events"
         },
         {
-            "id": "observed-data--c76c61f3-720d-4856-a27e-2c61bf6ee229",
+            "id": "observed-data--4458cf67-2a8d-438f-b222-694e39b090ad",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-05T08:32:42.894Z",
-            "modified": "2022-04-05T08:32:42.894Z",
+            "created": "2022-04-20T11:52:32.202Z",
+            "modified": "2022-04-20T11:52:32.202Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
                     "agent": "xx",
                     "host_ref": "1",
-                    "created": "2022-04-04T04:55:40.896Z",
+                    "created": "2022-04-20T05:31:03.739Z",
                     "action": "Process Creation",
-                    "object_type": "process",
+                    "category": [
+                        "process"
+                    ],
                     "process_ref": "2",
-                    "user_ref": "4"
+                    "user_ref": "7"
                 },
                 "1": {
                     "type": "x-oca-asset",
                     "extensions": {
-                        "x-oca-endpoint": {
-                            "agent_uuid": "209e5033aedc4d50b3c056e0a01a9841",
+                        "x-sentinelone-endpoint": {
+                            "agent_uuid": "xx",
                             "machine_type": "xx",
                             "endpoint_os": "windows"
                         }
@@ -634,41 +632,49 @@ sentinelone
                 },
                 "2": {
                     "type": "process",
-                    "command_line": "C:\\Windows\\system32\\xx -k netsvcs -p",
+                    "command_line": "C:\\Program Files (x86)\\Google\\Temp\\GUM10C0.tmp\\xx /update /sessionid {A621AB5C-61F8-473C-91D7-6C91A9F50036}",
+                    "binary_ref": "5",
                     "extensions": {
                         "x-sentinelone-process": {
-                            "image_path": "C:\\Program Files (x86)\\Google\\Update\\xx",
-                            "sha1_image": "a1385ce20ad79f55df235effd9780c31442aa234",
                             "integrity_level": "SYSTEM",
-                            "parent_image_path": "C:\\Windows\\system32\\xx",
-                            "parent_sha1_image": "106a001c4c9820a6aec6a8ba17d3836525faf80e",
-                            "parent_process_start_time": "2022-02-18T11:13:25.373Z",
-                            "parent_uid": "27717F70F7FD180D",
-                            "publisher": "MICROSOFT WINDOWS PUBLISHER",
+                            "process_unique_id": "xx",
+                            "publisher": "GOOGLE LLC",
                             "signed_status": "signed",
-                            "story_line_id": "456BE601CF03E0AF",
-                            "process_unique_id": "337BF507ABE4D3BC",
+                            "story_line_id": "xx",
                             "verified_status": "verified"
                         }
                     },
                     "name": "xx",
-                    "parent_ref": "3",
-                    "pid": xx,
-                    "created": "2022-02-18T11:13:27.453Z",
-                    "creator_user_ref": "4"
+                    "parent_ref": "6",
+                    "pid": 228,
+                    "created": "2022-04-20T05:31:33.088Z",
+                    "creator_user_ref": "7"
                 },
                 "3": {
-                    "type": "process",
-                    "name": "xx"
+                    "type": "directory",
+                    "path": "C:\\Program Files (x86)\\Google\\Temp\\xx"
                 },
-                "4": {
+                "5": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-1": "c0a98fd8c74d031f54fda658a1c67d8886b5e076"
+                    }
+                },
+                "6": {
+                    "type": "process",
+                    "name": "xx",
+                    "created": "2022-04-20T05:31:31.715Z"
+                },
+                "7": {
                     "type": "user-account",
                     "user_id": "NT AUTHORITY\\xx"
                 }
             },
-            "first_observed": "2022-04-04T04:55:21.942Z",
-            "last_observed": "2022-04-05T08:32:42.894Z",
+            "first_observed": "2022-04-20T05:31:42.446Z",
+            "last_observed": "2022-04-20T11:52:32.202Z",
             "number_observed": 1
+      }
+   ]
 }
 ```
 

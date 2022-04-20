@@ -16,8 +16,8 @@
     "configuration": {
         "auth": {
             "apitoken": {
-                "label": "apitoken",
-                "description": "apitoken with access to the search API"
+                "label": "API Token",
+                "description": "API Token with access to the search API"
             }
         }
     }

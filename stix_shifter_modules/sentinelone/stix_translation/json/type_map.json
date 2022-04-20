@@ -6,7 +6,11 @@
     "tgtProcPid",
     "srcProcParentPid",
     "tgtFileSize",
-    "registryValueFullSize"
+    "registryValueFullSize",
+    "loginSessionId",
+    "registryOldValueFullSize",
+    "srcProcSessionId",
+    "tgtProcSessionId"
   ],
   "string_supported_fields": [
     "srcIp",
@@ -25,10 +29,16 @@
     "fileFullName",
     "tgtFileMd5",
     "tgtFileOldMd5",
+    "tgtProcImageMd5",
+    "srcProcImageMd5",
     "tgtFileSha1",
     "tgtFileOldSha1",
+    "srcProcImageSha1",
+    "tgtProcImageSha1",
     "tgtFileSha256",
     "tgtFileOldSha256",
+    "srcProcImageSha256",
+    "tgtProcImageSha256",
     "tgtFilePath",
     "tgtFileOldPath",
     "loginAccountSID",
@@ -39,18 +49,39 @@
     "srcProcImagePath",
     "tgtProcImagePath",
     "srcProcPublisher",
+    "srcProcStorylineId",
+    "tgtProcStorylineId",
+    "srcProcUid",
+    "tgtProcUid",
+    "srcProcReasonSignatureInvalid",
+    "tgtProcReasonSignatureInvalid",
+    "srcProcSubsystem",
+    "tgtProcSubsystem",
     "tgtProcPublisher",
     "srcProcParentImagePath",
+    "srcProcActiveContentHash",
+    "tgtProcActiveContentHash",
+    "srcProcActiveContentPath",
+    "tgtProcActiveContentPath",
+    "srcProcActiveContentFileId",
+    "tgtProcActiveContentFileId",
     "srcMachineIP",
     "loginAccountDomain",
+    "loginFailureReason",
     "tgtFileExtension",
     "tgtFileDescription",
     "registryKeyPath",
     "endpointName",
     "agentVersion",
+    "srcProcParentUid",
     "indicatorName",
     "indicatorDescription",
-    "indicatorMetadata"
+    "indicatorMetadata",
+    "loginsBaseType",
+    "tgtFileId",
+    "registryPath",
+    "registryOldValue",
+    "agentName"
   ],
   "timestamp_supported_fields": [
     "srcProcStartTime",
@@ -73,9 +104,62 @@
     "endpointOs",
     "endpointMachineType",
     "eventType",
-    "indicatorCategory"
+    "indicatorCategory",
+    "srcProcSignedStatus",
+    "tgtProcSignedStatus",
+    "srcProcVerifiedStatus",
+    "tgtProcVerifiedStatus",
+    "srcProcActiveContentType",
+    "tgtProcActiveContentType",
+    "srcProcActiveContentSignedStatus",
+    "tgtProcActiveContentSignedStatus",
+    "netEventDirection",
+    "tgtFileConvictedBy",
+    "registryValueType",
+    "registryOldValueType",
+    "objectType"
   ],
   "enum_supported_values": {
+    "srcProcSignedStatus": [
+      "signed",
+      "unsigned"
+    ],
+    "tgtProcSignedStatus": [
+      "signed",
+      "unsigned"
+    ],
+    "srcProcVerifiedStatus": [
+      "verified",
+      "unverified"
+    ],
+    "srcProcActiveContentSignedStatus": [
+      "signed",
+      "unsigned"
+    ],
+    "tgtProcActiveContentSignedStatus": [
+      "signed",
+      "unsigned"
+    ],
+    "srcProcActiveContentType": [
+      "CLI",
+      "FILE"
+    ],
+    "netEventDirection": [
+      "INCOMING",
+      "OUTGOING"
+    ],
+    "tgtProcActiveContentType": [
+      "CLI",
+      "FILE"
+    ],
+    "tgtProcVerifiedStatus": [
+      "verified",
+      "unverified"
+    ],
+    "tgtFileConvictedBy": [
+      "Reputation",
+      "Static AI"
+    ],
     "srcProcIntegrityLevel": [
       "HIGH",
       "MEDIUM",
@@ -83,6 +167,28 @@
       "SYSTEM",
       "INTEGRITY_LEVEL_UNKNOWN",
       "UNTRUSTED"
+    ],
+    "registryValueType": [
+      "BINARY",
+      "DWORD",
+      "DWORD_BIG_ENDIAN",
+      "EXPAND_SZ",
+      "LINK",
+      "MULTI_SZ",
+      "QWORD",
+      "SZ",
+      "RESOURCE_LIST"
+    ],
+    "registryOldValueType": [
+      "BINARY",
+      "DWORD",
+      "DWORD_BIG_ENDIAN",
+      "EXPAND_SZ",
+      "LINK",
+      "MULTI_SZ",
+      "QWORD",
+      "SZ",
+      "RESOURCE_LIST"
     ],
     "tgtProcIntegrityLevel": [
       "HIGH",
@@ -132,6 +238,22 @@
       "DOTNET",
       "EICAR",
       "LNK"
+    ],
+    "objectType": [
+      "process",
+      "cross_process",
+      "command_script",
+      "ip",
+      "file",
+      "logins",
+      "url",
+      "dns",
+      "scheduled_task",
+      "registry",
+      "indicators",
+      "module",
+      "firmware",
+      "threat_intelligence_indicators"
     ],
     "tgtFileLocation": [
       "Local",

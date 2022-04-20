@@ -3,7 +3,8 @@
     "fields": {
       "value": [
         "srcIp",
-        "dstIp"
+        "dstIp",
+        "srcMachineIP"
       ]
     }
   },
@@ -11,7 +12,8 @@
     "fields": {
       "value": [
         "srcIp",
-        "dstIp"
+        "dstIp",
+        "srcMachineIP"
       ]
     }
   },
@@ -38,7 +40,8 @@
     "fields": {
       "value": [
         "dnsRequest",
-        "dnsResponse"
+        "dnsResponse",
+        "loginAccountDomain"
       ]
     }
   },
@@ -57,7 +60,8 @@
       ],
       "created_time": [
         "srcProcStartTime",
-        "tgtProcStartTime"
+        "tgtProcStartTime",
+        "srcProcParentStartTime"
       ],
       "pid": [
         "srcProcPid",
@@ -83,19 +87,28 @@
       ],
       "hashes.MD5": [
         "tgtFileMd5",
-        "tgtFileOldMd5"
+        "tgtFileOldMd5",
+        "srcProcImageMd5",
+        "tgtProcImageMd5"
       ],
       "hashes.'SHA-1'": [
         "tgtFileSha1",
-        "tgtFileOldSha1"
+        "tgtFileOldSha1",
+        "srcProcImageSha1",
+        "tgtProcImageSha1"
       ],
       "hashes.'SHA-256'": [
         "tgtFileSha256",
-        "tgtFileOldSha256"
+        "tgtFileOldSha256",
+        "srcProcImageSha256",
+        "tgtProcImageSha256"
       ],
       "parent_directory_ref.path": [
         "tgtFilePath",
-        "tgtFileOldPath"
+        "tgtFileOldPath",
+        "srcProcImagePath",
+        "tgtProcImagePath",
+        "srcProcParentImagePath"
       ],
       "ctime": [
         "tgtFileCreatedAt"
@@ -109,7 +122,10 @@
     "fields": {
       "path": [
         "tgtFilePath",
-        "tgtFileOldPath"
+        "tgtFileOldPath",
+        "srcProcImagePath",
+        "tgtProcImagePath",
+        "srcProcParentImagePath"
       ]
     }
   },
@@ -143,10 +159,6 @@
   },
   "x-sentinelone-process": {
     "fields": {
-      "image_path": [
-        "srcProcImagePath",
-        "tgtProcImagePath"
-      ],
       "name": [
         "srcProcName",
         "srcProcParentName",
@@ -160,31 +172,81 @@
         "srcProcPublisher",
         "tgtProcPublisher"
       ],
-      "parent_process_start_time": [
-        "srcProcParentStartTime"
+      "story_line_id": [
+        "srcProcStorylineId",
+        "tgtProcStorylineId"
       ],
-      "parent_image_path": [
-        "srcProcParentImagePath"
+      "process_unique_id": [
+        "srcProcUid",
+        "tgtProcUid",
+        "srcProcParentUid"
+      ],
+      "signed_status": [
+        "srcProcSignedStatus",
+        "tgtProcSignedStatus"
+      ],
+      "verified_status": [
+        "srcProcVerifiedStatus",
+        "tgtProcVerifiedStatus"
+      ],
+      "signature_invalid_reason": [
+        "srcProcReasonSignatureInvalid",
+        "tgtProcReasonSignatureInvalid"
+      ],
+      "sub_system": [
+        "srcProcSubsystem",
+        "tgtProcSubsystem"
+      ],
+      "session_id": [
+        "srcProcSessionId",
+        "tgtProcSessionId"
+      ],
+      "active_content_type": [
+        "srcProcActiveContentType",
+        "tgtProcActiveContentType"
+      ],
+      "active_content_field": [
+        "srcProcActiveContentFileId",
+        "tgtProcActiveContentFileId"
+      ],
+      "active_content_path": [
+        "srcProcActiveContentPath",
+        "tgtProcActiveContentPath"
+      ],
+      "active_content_hash": [
+        "srcProcActiveContentHash",
+        "tgtProcActiveContentHash"
+      ],
+      "active_content_signed_status": [
+        "srcProcActiveContentSignedStatus",
+        "tgtProcActiveContentSignedStatus"
       ]
+
     }
   },
   "x-sentinelone-network-action": {
     "fields": {
       "connection_status": [
         "netConnStatus"
+      ],
+      "event_direction": [
+        "netEventDirection"
       ]
     }
   },
   "x-sentinelone-login": {
     "fields": {
-      "machine_ip": [
-        "srcMachineIP"
-      ],
       "login_type": [
         "loginType"
       ],
-      "account_domain": [
-        "loginAccountDomain"
+      "base_type": [
+        "loginsBaseType"
+      ],
+      "login_failure_reason": [
+        "loginFailureReason"
+      ],
+      "session_id": [
+        "loginSessionId"
       ]
     }
   },
@@ -193,14 +255,20 @@
       "file_type": [
         "tgtFileType"
       ],
-      "extention": [
+      "file_extension": [
         "tgtFileExtension"
       ],
-      "description": [
+      "file_description": [
         "tgtFileDescription"
       ],
-      "location": [
+      "file_location": [
         "tgtFileLocation"
+      ],
+      "file_id": [
+        "tgtFileId"
+      ],
+      "convicted_by": [
+        "tgtFileConvictedBy"
       ]
     }
   },
@@ -211,6 +279,18 @@
       ],
       "full_size": [
         "registryValueFullSize"
+      ],
+      "value_type": [
+        "registryValueType"
+      ],
+      "old_value_type": [
+        "registryOldValueType"
+      ],
+      "old_value": [
+        "registryOldValue"
+      ],
+      "old_value_full_size": [
+        "registryOldValueFullSize"
       ]
     }
   },
@@ -232,36 +312,74 @@
   },
   "x-oca-asset": {
     "fields": {
-      "hostname": ["endpointName"],
-      "ip_refs[*].value": ["srcIp", "dstIp"]
+      "hostname": [
+        "endpointName"
+      ],
+      "ip_refs[*].value": [
+        "srcIp",
+        "dstIp"
+      ]
     }
   },
-  "x-oca-endpoint": {
-     "fields": {
-       "endpoint_os": [
-         "endpointOs"
-       ],
-       "agent_version": [
-         "agentVersion"
-       ],
-       "machine_type": [
-         "endpointMachineType"
-       ]
-     }
+  "x-sentinelone-endpoint": {
+    "fields": {
+      "endpoint_os": [
+        "endpointOs"
+      ],
+      "agent_version": [
+        "agentVersion"
+      ],
+      "agent_uuid": [
+        "agentUuid"
+      ],
+      "machine_type": [
+        "endpointMachineType"
+      ]
+    }
   },
   "x-oca-event": {
     "fields": {
-      "event_type": ["eventType"],
-      "event_time": ["eventTime"],
-      "host_ref": ["endpointName"],
-      "url_ref": ["url"],
-      "file_ref": ["fileFullName"],
-      "process_ref": ["srcProcPid","tgtProcPid","srcProcParentPid"],
-      "parent_process_ref": ["srcProcParentPid"],
-      "agent": ["agentName"],
-      "user_ref": ["srcProcUser","tgtProcUser"],
-      "domain_ref": ["dnsRequest", "dnsResponse"],
-      "registry_ref": ["registryKeyPath"]
+      "event_type": [
+        "eventType"
+      ],
+      "category[*]": [
+        "objectType"
+      ],
+      "event_time": [
+        "eventTime"
+      ],
+      "host_ref": [
+        "endpointName"
+      ],
+      "url_ref": [
+        "url"
+      ],
+      "file_ref": [
+        "fileFullName"
+      ],
+      "process_ref": [
+        "srcProcPid",
+        "tgtProcPid",
+        "srcProcParentPid"
+      ],
+      "parent_process_ref": [
+        "srcProcParentPid"
+      ],
+      "agent": [
+        "agentName"
+      ],
+      "user_ref": [
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "domain_ref": [
+        "dnsRequest",
+        "dnsResponse",
+        "loginAccountDomain"
+      ],
+      "registry_ref": [
+        "registryKeyPath"
+      ]
     }
   }
 }
