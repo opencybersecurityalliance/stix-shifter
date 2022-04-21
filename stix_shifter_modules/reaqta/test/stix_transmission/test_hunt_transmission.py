@@ -62,7 +62,7 @@ class TestReaqtaConnection(unittest.TestCase, object):
         "endpointId": "822862264951373824"}],"status_code": "200"}
         mock_query.side_effect = [ReaqtaMockResponse(200, json.dumps(payload))]
         transmission = stix_transmission.StixTransmission('reaqta', self.connection, self.configuration)
-        results_response = transmission.results('$ip="172.16.60.184" and hasAlert=t', 0, 2)
+        results_response = transmission.results('$ip="172.16.60.184"', 0, 2)
         assert results_response["success"] is True
         assert results_response["data"] == payload["result"]
     
@@ -76,3 +76,28 @@ class TestReaqtaConnection(unittest.TestCase, object):
         assert results_response["success"] is False
         assert results_response['code'] == 'invalid_query'
         assert results_response["error"] == 'reaqta connector error => query_syntax_error: $ip1 is not a valid field.'
+    
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    def test_query(self, mock_query, mock_api_client):
+        mock_api_client.return_value = None
+        query = '$ip="172.16.60.184"'
+        mock_query.side_effect = [ReaqtaMockResponse(200, query)]
+        transmission = stix_transmission.StixTransmission("reaqta", self.connection, self.configuration)
+        query_response = transmission.query(query)
+        self.assertTrue(query_response["success"])
+        self.assertEqual(query_response["search_id"], query)
+    
+    def test_status(self, mock_api_client):
+        mock_api_client.return_value = None
+        transmission = stix_transmission.StixTransmission("reaqta", self.connection, self.configuration)
+        status_response = transmission.status("search_id")
+        # print(status_response)
+        self.assertTrue(status_response["success"])
+        self.assertEqual(status_response["status"], "COMPLETED")
+        self.assertEqual(status_response["progress"], 100)
+
+    def test_delete(self, mock_api_client):
+        mock_api_client.return_value = None
+        transmission = stix_transmission.StixTransmission("reaqta", self.connection, self.configuration)
+        delete_response = transmission.delete("search_id")
+        self.assertTrue(delete_response["success"])
