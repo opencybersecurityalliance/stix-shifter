@@ -74,7 +74,9 @@ class QueryStringPatternTranslator:
     def _format_qualifier(self, qualifier, time_range) -> str:
         str_qualifier_pattern = 'AND happenedAfter = "{start_iso}" AND happenedBefore = "{stop_iso}"'
         if qualifier and isinstance(qualifier, StartStopQualifier):
-            formated_qualifier = str_qualifier_pattern.format(start_iso=qualifier.start_iso, stop_iso=qualifier.stop_iso)
+            start_iso = qualifier.start.replace("t'","").replace("'", "")
+            stop_iso = qualifier.stop.replace("t'","").replace("'", "")
+            formated_qualifier = str_qualifier_pattern.format(start_iso=start_iso, stop_iso=stop_iso)
         else:
             stop_time = datetime.datetime.utcnow()
             start_time = stop_time - datetime.timedelta(minutes=time_range)
