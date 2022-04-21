@@ -6,7 +6,9 @@
     "pkts_dropped","responses_or_data","resp_pkts","orig_bytes","orig_ip_bytes","megabytes_recv","resp_bytes",
     "resp_ip_bytes","total_bytes","file_msg", "read_size", "write_size","dcc_file_size","certificate_version","certificate_sig_alg",
     "auth_attempts","status_code","data_channel_resp_p","epochdate","version","certificate_exponent","response_body_len",
-    "reply_code","data_channel_resp_p","TTLs","unprocessed_TTLs","encryption_level"
+    "reply_code","data_channel_resp_p","TTLs","unprocessed_TTLs","encryption_level","validity_not_before","certificate_not_valid_after",
+    "certificate_key_length","subject_public_key_exponent","total_ciphers","originator_ttl","responder_ttl","transaction_depth",
+    "message_body_length","cert_count","seen_bytes","basic_constraints_path_len"
 
     ],
   "mac_supported_fields": [

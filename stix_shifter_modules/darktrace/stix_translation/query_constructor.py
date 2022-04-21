@@ -82,7 +82,7 @@ class QueryStringPatternTranslator:
             raise NotImplementedError('^ symbol should be at the starting position of the expression')
         if '$' in value and value.index('$') != len(value) - 1:
             raise NotImplementedError('$ symbol should be at the ending position of the expression')
-        value = re.escape(value).replace('/', "\\/")
+        value = re.escape(value).replace('/', "\\/").replace(':', "\\:")
         return '/' + value + '/'
 
     @staticmethod
@@ -96,7 +96,7 @@ class QueryStringPatternTranslator:
             raise NotImplementedError("LIKE operator is not supported for mac type field")
         if mapped_field_type != "string":
             raise NotImplementedError("LIKE operator is supported only for string type input")
-        value = re.escape(value).replace('/', "\\/")
+        value = re.escape(value).replace('/', "\\/").replace(':', "\\:")
         return '*' + value + '*'
 
     @staticmethod
@@ -194,7 +194,7 @@ class QueryStringPatternTranslator:
         return: query : str
         """
         time_range = QueryStringPatternTranslator._parse_time_range(qualifier, self.options['time_range'])
-        query += f" AND (@fields.epochdate:>{time_range[0]} AND @fields.epochdate:<{time_range[1]})"
+        query += f" AND (@fields.epochdate :>{time_range[0]} AND @fields.epochdate :<{time_range[1]})"
         query = '(' + query + ')'
         return query
 
@@ -302,7 +302,7 @@ class QueryStringPatternTranslator:
         """
 
         darktrace_query = self._parse_expression(pattern)
-        pattern = r"\@fields\.epochdate\:[^0-9](\d{0,10}.\d{0,3})"
+        pattern = r"\@fields\.epochdate\s\:[^0-9](\d{0,10}.\d{0,3})"
         qualifiers = re.findall(pattern, darktrace_query)
 
         if not qualifiers:  # Adding default qualifier if qualifier is not present.

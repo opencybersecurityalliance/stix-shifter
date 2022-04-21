@@ -9,13 +9,13 @@
 		],
 		"uid": [
 			{
-				"key": "x-oca-asset.extensions.x-oca-connection.identifier",
+				"key": "x-oca-asset.extensions.x-darktrace-connection.identifier",
     			"object": "asset"
 			}
 		],
 		"id_hUUID": [
 			{
-				"key": "x-oca-asset.extensions.x-oca-connection.asset_id",
+				"key": "x-oca-asset.extensions.x-darktrace-connection.asset_id",
 				"object": "asset"
 			}
 		],
@@ -520,7 +520,7 @@
 		],
 		"request_body_len": [
 			{
-				"key": "network-traffic.extensions.http-request-ext.message_body_length ",
+				"key": "network-traffic.extensions.http-request-ext.message_body_length",
 				"object": "nt"
 			}
 		],
@@ -851,130 +851,168 @@
 	"smtp": {
 		"trans_depth": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.transaction_depth",
-				"object": "nt"
+				"key": "email-message.extensions.x-darktrace-smtp.transaction_depth",
+				"object": "email-message"
 			}
 		],
 		"helo": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.helo_header",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.helo_header",
+				"object": "email-message"
 			}
 		],
 		"mailfrom": [
 			{
 				"key": "email-addr.value",
-				"object": "email",
+				"object": "email-from",
 				"transformer": "FilterValidEmail"
-			}
+			},
+			{
+				"key": "email-message.from_ref",
+				"object": "email-message",
+				"references": "email-from"
+			},
+			{
+            "key": "email-message.is_multipart",
+            "object": "email-message",
+            "value": true
+        	}
 		],
 		"rcptto": [
 			{
 				"key": "email-addr.value",
 				"object": "email-rcpt",
 				"transformer": "FilterValidEmail"
-			}
+			},
+			{
+				"key": "email-message.to_refs",
+				"object": "email-message",
+				"references": ["email-rcpt"]
+			},
+			{
+            "key": "email-message.is_multipart",
+            "object": "email-message",
+            "value": true
+        	}
 		],
 		"date": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.mail_date",
-				"object": "nt"
+				"key": "email-message.date",
+				"object": "email-message"
+			}
+		],
+		"is_multipart": [
+			{
+				"key": "email-message.is_multipart",
+				"object": "email-message"
 			}
 		],
 		"from": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.from_header",
-				"object": "nt"
+				"key": "email-addr.value",
+				"object": "email-sender",
+				"transformer": "FilterValidEmail"
+			},
+			{
+				"key": "email-message.sender_ref",
+				"object": "email-message",
+				"references": "email-sender"
 			}
 		],
 		"to": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.to_header",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.to_header",
+				"object": "email-message"
 			}
 		],
 		"cc": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.cc_header",
-				"object": "nt"
+				"key": "email-addr.value",
+				"object": "email-cc",
+				"transformer": "FilterValidEmail"
+			},
+			{
+				"key": "email-message.cc_refs",
+				"object": "email-message",
+				"references": "email-cc"
 			}
 		],
 		"reply_to": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.reply_to_header",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.reply_to_header",
+				"object": "email-message"
 			}
 		],
 		"msg_id": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.msg_id_header",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.msg_id_header",
+				"object": "email-message"
 			}
 		],
 		"in_reply_to": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.in_reply_to_header",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.in_reply_to_header",
+				"object": "email-message"
 			}
 		],
 		"subject": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.mail_subject",
-				"object": "nt"
+				"key": "email-message.subject ",
+				"object": "email-message"
 			}
 		],
 		"x_originating_ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.x_originating_ip_h",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.x_originating_ip",
+				"object": "email-message"
 			}
 		],
 		"first_received": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.first_received",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.first_received",
+				"object": "email-message"
 			}
 		],
 		"second_received": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.second_received",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.second_received",
+				"object": "email-message"
 			}
 		],
 		"last_reply": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.last_reply",
-				"object": "nt"
+				"key": "email-message.extensions.x-darktrace-smtp.last_reply",
+				"object": "email-message"
 			}
 		],
 		"path": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.message_path",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.message_path",
+				"object": "email-message"
 			}
 		],
 		"user_agent": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.user_agent",
-				"object": "asset"
+				"key": "email-message.additional_header_fields.user_agent",
+				"object": "email-message"
 			}
 		],
 		"tls": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.is_tls",
-				"object": "nt"
+				"key": "email-message.extensions.x-darktrace-smtp.is_tls",
+				"object": "email-message"
 			}
 		],
 		"fuids": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.file_ids",
-				"object": "nt"
+				"key": "email-message.extensions.x-darktrace-smtp.file_ids",
+				"object": "email-message"
 			}
 		],
 		"decoded_subject": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-smtp.decoded_subject",
-				"object": "nt"
+				"key": "email-message.additional_header_fields.decoded_subject",
+				"object": "email-message"
 			}
 		]
 	},
@@ -1091,8 +1129,19 @@
 		],
 		"subnet_mask": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-dhcp.subnet_mask",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "subnet_ip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-dhcp.subnet_mask_ref",
+				"object": "nt",
+				"references": "subnet_ip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["subnet_ip"],
+			  "group": true
 			}
 		],
 		"domain_name": [
@@ -1109,14 +1158,36 @@
 		],
 		"released_ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-dhcp.released_ip",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "released_ip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-dhcp.released_ip_ref",
+				"object": "nt",
+				"references": "released_ip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["released_ip"],
+			  "group": true
 			}
 		],
 		"requested_ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-dhcp.requested_ip",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "requested_ip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-dhcp.requested_ip_ref",
+				"object": "nt",
+				"references": "requested_ip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["requested_ip"],
+			  "group": true
 			}
 		],
 		"lease_time": [
@@ -1127,8 +1198,19 @@
 		],
 		"assigned_ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-dhcp.assigned_ip",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "assignedip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-dhcp.assigned_ip_ref",
+				"object": "nt",
+				"references": "assignedip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["assignedip"],
+			  "group": true
 			}
 		]
 	},
@@ -1228,19 +1310,45 @@
 	"files_identified": {
 		"tx_hosts": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.src_hosts",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"unwrap": true,
+				"transformer": "FilterIPv4List",
+				"object": "tx_hosts"
+        	},
+			{
+				"key": "network-traffic.extensions.x-darktrace-files-identified.src_host_refs",
+				"object": "nt",
+				"references": ["tx_hosts"]
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["tx_hosts"],
+			  "group": true
 			}
 		],
 		"rx_hosts": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.dest_hosts",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"unwrap": true,
+				"transformer": "FilterIPv4List",
+				"object": "rx_hosts"
+        	},
+			{
+				"key": "network-traffic.extensions.x-darktrace-files-identified.dest_host_refs",
+				"object": "nt",
+				"references": ["rx_hosts"]
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["rx_hosts"],
+			  "group": true
 			}
 		],
 		"source": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.source",
+				"key": "network-traffic.extensions.x-darktrace-files-identified.source",
 				"object": "nt"
 			}
 		],
@@ -1263,7 +1371,7 @@
 		],
 		"seen_bytes": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.seen_bytes",
+				"key": "network-traffic.extensions.x-darktrace-files-identified.seen_bytes",
 				"object": "nt",
 				"transformer": "ToInteger"
 			}
@@ -1295,19 +1403,19 @@
 		],
 		"file_ident_descr": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.file_ident_descr",
+				"key": "network-traffic.extensions.x-darktrace-files-identified.file_ident_descr",
 				"object": "nt"
 			}
 		],
 		"file_ident_ports": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.file_ident_ports",
+				"key": "network-traffic.extensions.x-darktrace-files-identified.file_ident_ports",
 				"object": "nt"
 			}
 		],
 		"fuid": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-files_identified.file_identifier",
+				"key": "network-traffic.extensions.x-darktrace-files-identified.file_identifier",
 				"object": "nt"
 			}
 		]
@@ -1397,7 +1505,7 @@
 		],
 		"certificate_curve": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-x509.certificate_key_length",
+				"key": "network-traffic.extensions.x-darktrace-x509.certificate_curve",
 				"object": "nt"
 			}
 		],
@@ -1471,8 +1579,19 @@
 		],
 		"host": [
 			{
-				"key": "software.extensions.x-darktrace-software.host",
-				"object": "software"
+				"key": "ipv4-addr.value",
+				"object": "host_ip"
+			},
+			{
+				"key": "software.extensions.x-darktrace-software.host_ref",
+				"object": "software",
+				"references": "host_ip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["host_ip"],
+			  "group": true
 			}
 		],
 		"host_p": [
@@ -1490,40 +1609,56 @@
 				"object": "nt"
 			}
 		],
-		"src": [
-			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.connection_src",
-				"object": "nt"
-			}
-		],
-		"dst": [
-			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.connection_dst",
-				"object": "nt"
-			}
-		],
 		"src_p": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.connection_src_port",
-				"object": "nt"
+				"key": "network-traffic.src_port",
+				"object": "nt",
+				"transformer": "ToInteger"
 			}
 		],
 		"dst_p": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.connection_dest_port",
-				"object": "nt"
+				"key": "network-traffic.dst_port",
+				"object": "nt",
+				"transformer": "ToInteger"
 			}
 		],
 		"ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.event_ip",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "ip"
+			},
+			{
+				"key": "ipv6-addr.value",
+				"object": "ip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-device-details.event_ip_ref",
+				"object": "nt",
+				"references": "ip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["ip"],
+			  "group": true
 			}
 		],
 		"subnet_mask": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.subnet_mask",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "subnetmask"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-device-details.subnet_mask_ref",
+				"object": "nt",
+				"references": "subnetmask"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["subnetmask"],
+			  "group": true
 			}
 		],
 		"host": [
@@ -1569,8 +1704,19 @@
 		],
 		"released_ip": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-device-details.released_ip",
-				"object": "nt"
+				"key": "ipv4-addr.value",
+				"object": "releasedip"
+			},
+			{
+				"key": "network-traffic.extensions.x-darktrace-device-details.released_ip_ref",
+				"object": "nt",
+				"references": "releasedip"
+			},
+			{
+			  "key": "x-oca-asset.ip_refs",
+			  "object": "asset",
+			  "references": ["releasedip"],
+			  "group": true
 			}
 		],
 		"outer_vlan": [
@@ -1587,7 +1733,7 @@
 		],
 		"hUUID": [
 			{
-				"key": "x-oca-asset.extensions.x-oca-endpoint.host_uuid",
+				"key": "x-oca-asset.extensions.x-darktrace-endpoint.host_uuid",
     			"object": "asset"
 			}
 		]

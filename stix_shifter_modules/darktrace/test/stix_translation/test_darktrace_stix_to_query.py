@@ -6,7 +6,7 @@ translation = stix_translation.StixTranslation()
 
 
 def _remove_timestamp_from_query(expected_query):
-    pattern1 = r"@fields.epochdate:>\d{0,10}.\d{0,3}\s*AND\s*@fields.epochdate:<\d{0,10}.\d{0,3}"
+    pattern1 = r"@fields.epochdate\s:>\d{0,10}.\d{0,3}\s*AND\s*@fields.epochdate\s:<\d{0,10}.\d{0,3}"
     pattern2 = r"\,\s*\'timeframe\'\:\s*\'custom\'\,\s*\'time\'([^>]*)?\'\}"
     combined_pat = r'|'.join((pattern1, pattern2))
     if isinstance(expected_query, list):
@@ -36,19 +36,11 @@ class TestqueryTranslator(unittest.TestCase):
         stix_pattern = "[ipv4-addr:value = '172.31.81.98']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "((@fields.source_ip:\"172.31.81.98\" OR @fields.dest_ip:\"172.31.81.98\" OR "
-                      "@fields.src:\"172.31.81.98\" OR @fields.dst:\"172.31.81.98\" OR "
-                      "@fields.ip:\"172.31.81.98\") AND (@fields.epochdate:>1649153027.009 AND "
-                      "@fields.epochdate:<1649153327.009))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-04-05T10:03:47.009000Z",
-                "to": "2022-04-05T10:08:47.009000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
+                          ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR'
+                          ' @fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR'
+                          ' @fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") '
+                          'AND ())\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -58,8 +50,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.mac:\"12:2f:23:46:35:5b\" OR @fields.src_mac:\"12:2f:23:46:35:5b\""
-                      " OR @fields.dst_mac:\"12:2f:23:46:35:5b\") AND (@fields.epochdate:>1648795284.835 "
-                      "AND @fields.epochdate:<1648795584.835))",
+                      " OR @fields.dst_mac:\"12:2f:23:46:35:5b\") AND (@fields.epochdate :>1648795284.835 "
+                      "AND @fields.epochdate :<1648795584.835))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -76,8 +68,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
-            "search": "((@fields.filename:\"some_file.exe\") AND (@fields.epochdate:>1649152970.31 AND"
-                      " @fields.epochdate:<1649153270.31))",
+            "search": "((@fields.filename:\"some_file.exe\") AND (@fields.epochdate :>1649152970.31 AND"
+                      " @fields.epochdate :<1649153270.31))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -94,17 +86,10 @@ class TestqueryTranslator(unittest.TestCase):
                        "START t'2022-03-01T00:00:00.000Z' STOP t'2022-04-05T11:00:00.003Z'"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "((@fields.mailfrom:\"shahtanveer@gmail.com\" OR @fields.rcptto:\"shahtanveer@gmail.com\")"
-                      " AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1649156400.003))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-03-01T00:00:00.000000Z",
-                "to": "2022-04-05T11:00:00.003000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'((@fields.mailfrom:"shahtanveer@gmail.com" OR '
+                          '@fields.rcptto:"shahtanveer@gmail.com" OR @fields.from:"shahtanveer@gmail.com" OR'
+                          ' @fields.to:"shahtanveer@gmail.com" OR @fields.cc:"shahtanveer@gmail.com") '
+                          'AND ())\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -114,7 +99,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.pkts_recv:10 OR @fields.requests:10 OR @fields.orig_pkts:10) "
-                      "AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -132,7 +117,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.user:\"anonymous\" OR @fields.username:\"anonymous\") AND "
-                      "(@fields.epochdate:>1649240843.165 AND @fields.epochdate:<1649241143.165))",
+                      "(@fields.epochdate :>1649240843.165 AND @fields.epochdate :<1649241143.165))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -151,7 +136,7 @@ class TestqueryTranslator(unittest.TestCase):
         expected_query = [{
             "search": "(((@fields.dest_port:* AND NOT @fields.dest_port:3389) OR "
                       "(@fields.dst_p:* AND NOT @fields.dst_p:3389)) AND "
-                      "(@fields.epochdate:>1649310118.117 AND @fields.epochdate:<1649310418.117))",
+                      "(@fields.epochdate :>1649310118.117 AND @fields.epochdate :<1649310418.117))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -169,7 +154,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.dest_port:>3389 OR @fields.dst_p:>3389) AND "
-                      "(@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "(@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -187,7 +172,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.source_port:<62298 OR @fields.src_p:<62298) "
-                      "AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -205,7 +190,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.source_port:>58770 OR @fields.src_p:>58770) "
-                      "AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -223,7 +208,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.source_port:<58772 OR @fields.src_p:<58772) "
-                      "AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -241,7 +226,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.source_port:<58772 OR @fields.src_p:<58772) "
-                      "AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -259,7 +244,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.source_port:>58770 OR @fields.src_p:>58770) AND "
-                      "(@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "(@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -277,7 +262,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.proto:*tcp* OR @fields.protocol:*tcp*) AND "
-                      "(@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      "(@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -294,8 +279,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
-            "search": "((@fields.name:/Windows/) AND (@fields.epochdate:>1646092800.0 AND "
-                      "@fields.epochdate:<1648810800.003))",
+            "search": "((@fields.name:/Windows/) AND (@fields.epochdate :>1646092800.0 AND "
+                      "@fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -313,7 +298,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "((@fields.proto:(\"tcp\" OR \"dns\") OR @fields.protocol:(\"tcp\" OR \"dns\"))"
-                      " AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648810800.003))",
+                      " AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648810800.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -326,22 +311,15 @@ class TestqueryTranslator(unittest.TestCase):
         self._test_query_assertions(actual_query, expected_query)
 
     def test_ipv4_query_time(self):
-        stix_pattern = "[ipv4-addr:value = '172.31.81.98'] START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
+        stix_pattern = "[ipv4-addr:value = '172.31.81.98'] START t'2022-03-01T00:00:00.000Z'" \
+                       " STOP t'2022-03-31T11:00:00.003Z'"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "((@fields.source_ip:\"172.31.81.98\" OR @fields.dest_ip:\"172.31.81.98\" OR "
-                      "@fields.src:\"172.31.81.98\" OR @fields.dst:\"172.31.81.98\" OR "
-                      "@fields.ip:\"172.31.81.98\") AND (@fields.epochdate:>1646092800.0 AND "
-                      "@fields.epochdate:<1648724400.003))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-03-01T00:00:00.000000Z",
-                "to": "2022-03-31T11:00:00.003000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR '
+                          '@fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR '
+                          '@fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR '
+                          '@fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") '
+                          'AND ())\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -349,20 +327,12 @@ class TestqueryTranslator(unittest.TestCase):
         stix_pattern = "[ipv4-addr:value = '172.31.81.98' OR network-traffic:src_port > 62298]"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "(((@fields.source_port:>62298 OR @fields.src_p:>62298) OR "
-                      "(@fields.source_ip:\"172.31.81.98\" OR @fields.dest_ip:\"172.31.81.98\" OR "
-                      "@fields.src:\"172.31.81.98\" OR @fields.dst:\"172.31.81.98\" OR "
-                      "@fields.ip:\"172.31.81.98\")) AND (@fields.epochdate:>1649153099.731 AND "
-                      "@fields.epochdate:<1649153399.731))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-04-05T10:04:59.731000Z",
-                "to": "2022-04-05T10:09:59.731000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'(((@fields.source_port:>62298 OR @fields.src_p:>62298) OR'
+                          ' (@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR '
+                          '@fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR '
+                          '@fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR '
+                          '@fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98")) '
+                          'AND ())\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -372,8 +342,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "(((@fields.dest_port:3389 OR @fields.dst_p:3389) OR (@fields.source_port:62298 OR "
-                      "@fields.src_p:62298)) AND (@fields.epochdate:>1646092800.0 AND "
-                      "@fields.epochdate:<1648724400.003))",
+                      "@fields.src_p:62298)) AND (@fields.epochdate :>1646092800.0 AND "
+                      "@fields.epochdate :<1648724400.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -390,8 +360,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
-            "search": "((@fields.method:\"GET\") AND (@fields.epochdate:>1649153904.876 AND "
-                      "@fields.epochdate:<1649154204.876))",
+            "search": "((@fields.method:\"GET\") AND (@fields.epochdate :>1649153904.876 AND "
+                      "@fields.epochdate :<1649154204.876))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -410,8 +380,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "(((@fields.certificate_serial:\"76FDB38B8D5AA88844250EFE0EA89026\") AND "
-                      "(@fields.method:\"GET\")) AND (@fields.epochdate:>1649153961.699 AND "
-                      "@fields.epochdate:<1649154261.699))",
+                      "(@fields.method:\"GET\")) AND (@fields.epochdate :>1649153961.699 AND "
+                      "@fields.epochdate :<1649154261.699))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -430,7 +400,7 @@ class TestqueryTranslator(unittest.TestCase):
         expected_query = [{
             "search": "(((@fields.dest_port:<3380 OR @fields.dst_p:<3380) AND "
                       "(@fields.source_port:>53331 OR @fields.src_p:>53331)) AND "
-                      "(@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648724400.003))",
+                      "(@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648724400.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -446,18 +416,9 @@ class TestqueryTranslator(unittest.TestCase):
         stix_pattern = "[domain-name:value='ec2.internal'] AND [mac-addr:value = '12:2f:23:46:35:5b']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "(((@fields.domain_name:\"ec2.internal\") OR (@fields.mac:\"12:2f:23:46:35:5b\" OR"
-                      " @fields.src_mac:\"12:2f:23:46:35:5b\" OR @fields.dst_mac:\"12:2f:23:46:35:5b\"))"
-                      " AND (@fields.epochdate:>1649240298.801 AND @fields.epochdate:<1649240598.801))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-04-06T10:18:18.801000Z",
-                "to": "2022-04-06T10:23:18.801000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'(((@fields.domain_name:"ec2.internal" OR @fields.query:"ec2.internal") OR'
+                          ' (@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b" OR '
+                          '@fields.dst_mac:"12:2f:23:46:35:5b")) AND ())\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -467,7 +428,7 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
             "search": "(((@fields.name:\"Windows\") OR (@fields.epochdate:1648122134.845304)) "
-                      "AND (@fields.epochdate:>1649152875.85 AND @fields.epochdate:<1649153175.85))",
+                      "AND (@fields.epochdate :>1649152875.85 AND @fields.epochdate :<1649153175.85))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -484,20 +445,15 @@ class TestqueryTranslator(unittest.TestCase):
                        " START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "(((@fields.source_ip:\"172.31.81.98\" OR @fields.dest_ip:\"172.31.81.98\" OR "
-                      "@fields.src:\"172.31.81.98\" OR @fields.dst:\"172.31.81.98\" OR "
-                      "@fields.ip:\"172.31.81.98\") OR (@fields.mac:\"12:2f:23:46:35:5b\" OR "
-                      "@fields.src_mac:\"12:2f:23:46:35:5b\" OR @fields.dst_mac:\"12:2f:23:46:35:5b\"))"
-                      " AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648724400.003))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-03-01T00:00:00.000000Z",
-                "to": "2022-03-31T11:00:00.003000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = [{'search': '(((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
+                                     ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR'
+                                     ' @fields.ip:"172.31.81.98" OR @fields.subnet_mask:"172.31.81.98" OR '
+                                     '@fields.released_ip:"172.31.81.98" OR @fields.requested_ip:"172.31.81.98" '
+                                     'OR @fields.assigned_ip:"172.31.81.98") OR (@fields.mac:"12:2f:23:46:35:5b" OR'
+                                     ' @fields.src_mac:"12:2f:23:46:35:5b" OR @fields.dst_mac:"12:2f:23:46:35:5b")) '
+                                     'AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648724400.003))',
+                           'fields': [], 'timeframe': 'custom', 'time': {'from': '2022-03-01T00:00:00.000000Z',
+                           'to': '2022-03-31T11:00:00.003000Z'}, 'size': 10000}]
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -510,7 +466,7 @@ class TestqueryTranslator(unittest.TestCase):
         expected_query = [{
             "search": "((@fields.user:\"anonymous\" OR @fields.username:\"anonymous\") OR "
                       "(((@fields.filename:\"input.csv\") OR (@fields.version:3.2.1)) AND "
-                      "(@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648724400.003)))",
+                      "(@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648724400.003)))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -528,20 +484,13 @@ class TestqueryTranslator(unittest.TestCase):
                        "START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "(((@fields.dest_port:3389 OR @fields.dst_p:3389) OR "
-                      "(@fields.domain_name:\"sample\")) OR (((@fields.name:\"word\") OR "
-                      "(@fields.mac:\"12:2f:23:46:35:5b\" OR @fields.src_mac:\"12:2f:23:46:35:5b\" OR"
-                      " @fields.dst_mac:\"12:2f:23:46:35:5b\")) AND (@fields.epochdate:>1646092800.0 "
-                      "AND @fields.epochdate:<1648724400.003)))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-03-01T00:00:00.000000Z",
-                "to": "2022-03-31T11:00:00.003000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = [{'search': '(((@fields.dest_port:3389 OR @fields.dst_p:3389) OR (@fields.domain_name:"sample"'
+                                     ' OR @fields.query:"sample")) OR (((@fields.name:"word") OR'
+                                     ' (@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b"'
+                                     ' OR @fields.dst_mac:"12:2f:23:46:35:5b")) AND (@fields.epochdate :>1646092800.0 '
+                                     'AND @fields.epochdate :<1648724400.003)))',
+                           'fields': [], 'timeframe': 'custom', 'time': {'from': '2022-03-01T00:00:00.000000Z',
+                            'to': '2022-03-31T11:00:00.003000Z'}, 'size': 10000}]
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -550,19 +499,11 @@ class TestqueryTranslator(unittest.TestCase):
                        "[email-addr:value != 'first@mail.com']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "(((@fields.mailfrom:\"shahtanveer@gmail.com\") OR "
-                      "((@fields.mailfrom:* AND NOT @fields.mailfrom:\"first@mail.com\") OR "
-                      "(@fields.rcptto:* AND NOT @fields.rcptto:\"first@mail.com\"))) AND "
-                      "(@fields.epochdate:>1649310044.096 AND @fields.epochdate:<1649310344.096))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-04-07T05:40:44.096000Z",
-                "to": "2022-04-07T05:45:44.096000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'(((@fields.mailfrom:* AND NOT @fields.mailfrom:"first@mail.com") OR'
+                          ' (@fields.rcptto:* AND NOT @fields.rcptto:"first@mail.com") OR (@fields.from:* AND NOT'
+                          ' @fields.from:"first@mail.com") OR (@fields.to:* AND NOT @fields.to:"first@mail.com") OR'
+                          ' (@fields.cc:* AND NOT @fields.cc:"first@mail.com")) AND ())\','
+                          ' \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -571,20 +512,12 @@ class TestqueryTranslator(unittest.TestCase):
                        "START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "((@fields.source_ip:\"172.31.81.98\" OR @fields.dest_ip:\"172.31.81.98\" "
-                      "OR @fields.src:\"172.31.81.98\" OR @fields.dst:\"172.31.81.98\" OR "
-                      "@fields.ip:\"172.31.81.98\") OR ((@fields.mac:\"12:2f:23:46:35:5b\" OR "
-                      "@fields.src_mac:\"12:2f:23:46:35:5b\" OR @fields.dst_mac:\"12:2f:23:46:35:5b\")"
-                      " AND (@fields.epochdate:>1646092800.0 AND @fields.epochdate:<1648724400.003)))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-03-01T00:00:00.000000Z",
-                "to": "2022-03-31T11:00:00.003000Z"
-            },
-            "size": 10000
-        }]
+        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
+                          ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR'
+                          ' @fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR'
+                          ' @fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") OR'
+                          ' ((@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b" OR'
+                          ' @fields.dst_mac:"12:2f:23:46:35:5b") AND ()))\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -593,8 +526,8 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
         expected_query = [{
-            "search": "((@fields.host:\"169.254.169.254\") AND (@fields.epochdate:>1649154023.919 "
-                      "AND @fields.epochdate:<1649154323.919))",
+            "search": "((@fields.host:\"169.254.169.254\") AND (@fields.epochdate :>1649154023.919 "
+                      "AND @fields.epochdate :<1649154323.919))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -646,8 +579,3 @@ class TestqueryTranslator(unittest.TestCase):
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
         assert actual_query['success'] is False
         assert actual_query['code'] == 'invalid_parameter'
-        expected_query = ["{\"search\": \"((@fields.source_ip:172.31.81.98 OR "
-                          "@fields.dest_ip:172.31.81.98 OR @fields.src:172.31.81.98 OR "
-                          "@fields.dst:172.31.81.98 OR @fields.ip:172.31.81.98) AND (@fields.epochdate:>16000.0 AND "
-                          "@fields.epochdate:<1.003))\", \"fields\": []}"]
-        assert expected_query is not None

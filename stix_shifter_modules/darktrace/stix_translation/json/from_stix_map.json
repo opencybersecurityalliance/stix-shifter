@@ -6,7 +6,11 @@
 				"dest_ip",
 				"src",
 				"dst",
-				"ip"
+				"ip",
+				"subnet_mask",
+				"released_ip",
+				"requested_ip",
+				"assigned_ip"
 			]
 		}
 	},
@@ -17,7 +21,11 @@
 				"dest_ip",
 				"src",
 				"dst",
-				"ip"
+				"ip",
+				"subnet_mask",
+				"released_ip",
+				"requested_ip",
+				"assigned_ip"
 			]
 		}
 	},
@@ -33,7 +41,8 @@
 	"domain-name": {
 		"fields": {
 			"value": [
-				"domain_name"
+				"domain_name",
+				"query"
 			]
 		}
 	},
@@ -127,7 +136,35 @@
 		"fields": {
 			"value": [
 				"mailfrom",
+				"rcptto",
+				"from",
+				"to",
+				"cc"
+			]
+		}
+	},
+	"email-message": {
+		"fields": {
+			"date": [
+				"date"
+			],
+			"from_ref.value": [
+				"mailfrom"
+			],
+			"sender_ref.value": [
+				"from"
+			],
+			"to_refs.value": [
 				"rcptto"
+			],
+			"cc_refs.value": [
+				"cc"
+			],
+			"subject": [
+				"subject"
+			],
+			"received_lines": [
+				"last_reply"
 			]
 		}
 	},
@@ -175,14 +212,71 @@
 	},
 	"x-darktrace-conn": {
 		"fields": {
-			"application_protocol": [
+			"app_protocol": [
 				"service"
 			],
-			"state": [
+			"start_ts": [
+				"start_ts"
+			],
+			"oss_start_ts": [
+				"oss_start_ts"
+			],
+			"connection_length": [
+				"duration"
+			],
+			"conn_state": [
 				"conn_state"
+			],
+			"connection_state_desc": [
+				"conn_state_full"
+			],
+			"is_locally_originated": [
+				"local_orig"
+			],
+			"is_locally_responded": [
+				"local_resp"
+			],
+			"missed_bytes_orig": [
+				"missed_bytes_orig"
+			],
+			"missed_bytes_resp": [
+				"missed_bytes_resp"
+			],
+			"history": [
+				"history"
+			],
+			"originator_ttl": [
+				"orig_ttl"
+			],
+			"responder_ttl": [
+				"resp_ttl"
+			],
+			"tunnel_parents": [
+				"tunnel_parents"
+			],
+			"orig_percent_invalid_checksum": [
+				"orig_percent_invalid_checksum"
+			],
+			"resp_percent_invalid_checksum": [
+				"resp_percent_invalid_checksum"
+			],
+			"outer_vlan": [
+				"outer_vlan"
+			],
+			"vlan_id": [
+				"vlan"
 			],
 			"orig_country_code": [
 				"orig_cc"
+			],
+			"resp_country_code": [
+				"resp_cc"
+			],
+			"originator_asn": [
+				"orig_asn"
+			],
+			"responder_asn": [
+				"resp_asn"
 			]
 		}
 	},
@@ -194,11 +288,38 @@
 			"cipher_suite": [
 				"cipher"
 			],
+			"cipher_list[*]": [
+				"client_ciphers"
+			],
+			"total_ciphers": [
+				"total_client_ciphers"
+			],
 			"elliptic_curve": [
 				"curve"
 			],
 			"server_name": [
 				"server_name"
+			],
+			"is_resumed": [
+				"resumed"
+			],
+			"last_alert": [
+				"last_alert"
+			],
+			"next_protocol": [
+				"next_protocol"
+			],
+			"is_established": [
+				"established"
+			],
+			"is_client_hello_seen": [
+				"client_hello_seen"
+			],
+			"cert_file_uids[*]": [
+				"cert_chain_fuids"
+			],
+			"cert_chainfile_uids[*]": [
+				"client_cert_chain_fuids"
 			],
 			"client_subject": [
 				"client_subject"
@@ -208,6 +329,18 @@
 			],
 			"ocsp_status": [
 				"ocsp_status"
+			],
+			"validation_status": [
+				"validation_status"
+			],
+			"ja3_client_fingerprint": [
+				"ja3_client_fingerprint"
+			],
+			"ja3s_server_fingerprint": [
+				"ja3s_server_fingerprint"
+			],
+			"application_guess": [
+				"application_guess"
 			]
 		}
 	},
@@ -218,6 +351,9 @@
 			],
 			"status": [
 				"status_guess"
+			],
+			"auth_result": [
+				"auth_success"
 			],
 			"auth_attempts": [
 				"auth_attempts"
@@ -245,11 +381,20 @@
 			],
 			"server_key_algo": [
 				"host_key_alg"
+			],
+			"server_key": [
+				"host_key"
 			]
 		}
 	},
 	"x-darktrace-http": {
 		"fields": {
+			"orginator_ip": [
+				"xorig_ip"
+			],
+			"transaction_depth": [
+				"trans_depth"
+			],
 			"request_method": [
 				"method"
 			],
@@ -259,13 +404,16 @@
 			"request_value": [
 				"uri"
 			],
+			"referrer": [
+				"referrer"
+			],
 			"request_version": [
 				"version"
 			],
 			"user_agent": [
 				"user_agent"
 			],
-			"request_body_len": [
+			"message_body_length": [
 				"request_body_len"
 			],
 			"response_body_len": [
@@ -277,33 +425,81 @@
 			"status_msg": [
 				"status_msg"
 			],
+			"informational_code": [
+				"info_code"
+			],
+			"informational_msg": [
+				"info_msg"
+			],
 			"content_type": [
 				"content_type"
 			],
-			"username": [
-				"username"
+			"tags[*]": [
+				"tags"
+			],
+			"unencrypted_password": [
+				"unencrypted_password"
+			],
+			"is_proxied": [
+				"proxied"
+			],
+			"outside_timestamp": [
+				"oss_ts"
+			],
+			"client_ids[*]": [
+				"orig_fuids"
+			],
+			"client_filenames[*]": [
+				"orig_filenames"
+			],
+			"client_mime_types[*]": [
+				"orig_mime_types"
+			],
+			"server_file_ids[*]": [
+				"resp_fuids"
+			],
+			"server_file_names[*]": [
+				"resp_filenames"
+			],
+			"server_mime_types[*]": [
+				"resp_mime_types"
+			],
+			"client_header_names[*]": [
+				"client_header_names"
+			],
+			"server_header_names[*]": [
+				"server_header_names"
+			],
+			"redirect_location": [
+				"redirect_location"
+			],
+			"flash_version": [
+				"flash_version"
 			]
 		}
 	},
 	"x-darktrace-ftp": {
 		"fields": {
-			"user_name": [
-				"user"
-			],
 			"client_command": [
 				"command"
 			],
 			"argument": [
 				"arg"
 			],
-			"mime_type": [
-				"mime_type"
+			"file_msg": [
+				"file_msg"
 			],
 			"reply_code": [
 				"reply_code"
 			],
+			"reply_msg": [
+				"reply_msg"
+			],
 			"data_channel": [
 				"data_channel"
+			],
+			"data_channel_passive": [
+				"data_channel_passive"
 			],
 			"data_channel_originator": [
 				"data_channel_orig_h"
@@ -313,13 +509,16 @@
 			],
 			"data_channel_responder_port": [
 				"data_channel_resp_p"
+			],
+			"file_uid": [
+				"fuid"
 			]
 		}
 	},
 	"x-darktrace-dns": {
 		"fields": {
-			"domain_name": [
-				"query"
+			"transaction_id": [
+				"trans_id"
 			],
 			"query_class": [
 				"query_class"
@@ -327,36 +526,84 @@
 			"query_type": [
 				"query_type"
 			],
+			"additional_queries[*]": [
+				"other_queries"
+			],
 			"response_code": [
 				"err_code"
 			],
-			"ttls": [
+			"recognised_answers[*]": [
+				"answers"
+			],
+			"answer_types[*]": [
+				"atypes"
+			],
+			"pay_load[*]": [
+				"a_load"
+			],
+			"ttls[*]": [
 				"TTLs"
 			],
-			"unprocessed_ttls": [
+			"unprocessed_atypes[*]": [
+				"unprocessed_atypes"
+			],
+			"unprocessed_payload_size": [
+				"unprocessed_payload_size"
+			],
+			"unprocessed_ttls[*]": [
 				"unprocessed_TTLs"
 			],
 			"multicast_responder": [
 				"multicast_responder"
+			],
+			"details": [
+				"details"
+			],
+			"is_rejected": [
+				"rejected"
 			]
 		}
 	},
 	"x-darktrace-smtp": {
 		"fields": {
-			"mail_message_sender[*]": [
-				"mailfrom"
+			"transaction_depth": [
+				"trans_depth"
 			],
-			"mail_message_recipient[*]": [
-				"rcptto"
+			"helo_header": [
+				"helo"
 			],
-			"mail_date": [
-				"date"
+			"reply_to_header": [
+				"reply_to"
 			],
-			"mail_subject": [
-				"subject"
+			"msg_id_header": [
+				"msg_id"
+			],
+			"in_reply_to_header": [
+				"in_reply_to"
+			],
+			"x_originating_ip_h": [
+				"x_originating_ip"
+			],
+			"first_received": [
+				"first_received"
+			],
+			"second_received": [
+				"second_received"
+			],
+			"message_path": [
+				"path"
 			],
 			"user_agent": [
 				"user_agent"
+			],
+			"is_tls": [
+				"tls"
+			],
+			"file_ids[*]": [
+				"fuids"
+			],
+			"decoded_subject": [
+				"decoded_subject"
 			]
 		}
 	},
@@ -364,6 +611,9 @@
 		"fields": {
 			"operation": [
 				"operation"
+			],
+			"services[*]": [
+				"services"
 			],
 			"bind_version": [
 				"version"
@@ -374,17 +624,35 @@
 			"bind_name": [
 				"bind_name"
 			],
+			"is_password_seen": [
+				"password_seen"
+			],
 			"search_root": [
 				"search_root"
 			],
 			"search_scope": [
 				"search_scope"
 			],
+			"dereference_aliases": [
+				"dereference_aliases"
+			],
 			"search_filter": [
 				"filter"
 			],
+			"Requested_attributes": [
+				"attributes"
+			],
+			"entry": [
+				"entry"
+			],
 			"comparison": [
 				"comparison"
+			],
+			"response": [
+				"response"
+			],
+			"issue_details": [
+				"issue"
 			]
 		}
 	},
@@ -396,18 +664,36 @@
 			"host_name": [
 				"host_name"
 			],
-			"subnet_mask": [
-				"subnet_mask"
+			"lease_time": [
+				"lease_time"
 			]
 		}
 	},
 	"x-darktrace-rdp": {
 		"fields": {
+			"cookie": [
+				"cookie"
+			],
 			"security_protocol": [
 				"security_protocol"
 			],
+			"client_channels[*]": [
+				"client_channels"
+			],
+			"client_name": [
+				"client_name"
+			],
+			"client_build": [
+				"client_build"
+			],
 			"cert_type": [
 				"cert_type"
+			],
+			"cert_count": [
+				"cert_count"
+			],
+			"is_cert_permanent": [
+				"cert_permanent"
 			],
 			"encryption_level": [
 				"encryption_level"
@@ -419,8 +705,70 @@
 	},
 	"x-darktrace-pop3": {
 		"fields": {
+			"is_login_success": [
+				"login_success"
+			],
 			"commands_used": [
 				"commands_used"
+			],
+			"file_uids[*]": [
+				"fuids"
+			]
+		}
+	},
+	"x-darktrace-files-identified": {
+		"fields": {
+			"src_hosts[*].value": [
+				"tx_hosts"
+			],
+			"dest_hosts[*].value": [
+				"rx_hosts"
+			],
+			"source": [
+				"source"
+			],
+			"seen_bytes": [
+				"seen_bytes"
+			],
+			"file_ident_descr": [
+				"file_ident_descr"
+			],
+			"file_ident_ports[*]": [
+				"file_ident_ports"
+			],
+			"file_identifier": [
+				"fuid"
+			]
+		}
+	},
+	"x-darktrace-x509": {
+		"fields": {
+			"basic_constraints": [
+				"basic_constraints"
+			],
+			"subject_alternative_name": [
+				"san"
+			],
+			"certificate_key_type": [
+				"certificate_key_type"
+			],
+			"certificate_key_length": [
+				"certificate_key_length"
+			],
+			"certificate_curve": [
+				"certificate_curve"
+			],
+			"is_basic_constraints_ca": [
+				"basic_constraints_ca"
+			],
+			"basic_constraints_path_len": [
+				"basic_constraints_path_len"
+			],
+			"certificate_basic_info": [
+				"certificate"
+			],
+			"file_id": [
+				"fid"
 			]
 		}
 	},
@@ -428,6 +776,21 @@
 		"fields": {
 			"software_type": [
 				"software_type"
+			],
+			"version_major": [
+				"version_major"
+			],
+			"version_minor": [
+				"version_minor"
+			],
+			"version_minor3": [
+				"version_minor3"
+			],
+			"host": [
+				"host"
+			],
+			"host_port": [
+				"host_p"
 			]
 		}
 	},
@@ -436,8 +799,20 @@
 			"connection_method": [
 				"method"
 			],
-			"subnet_mask": [
-				"subnet_mask"
+			"lease_time": [
+				"lease_time"
+			],
+			"released_ip": [
+				"released_ip"
+			],
+			"outer_vlan_tag": [
+				"outer_vlan"
+			],
+			"vlan_tag": [
+				"vlan"
+			],
+			"host_uuid": [
+				"hUUID"
 			]
 		}
 	},
