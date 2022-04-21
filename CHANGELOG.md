@@ -16,6 +16,46 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 -------------------------------------
 
+## 4.1.0 (2022-04-12)
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* Updated mappings for PaloAlto readme [#890](https://github.com/opencybersecurityalliance/stix-shifter/pull/890)
+* Added Palo Alto Cortext XDR UDI Connector [#858](https://github.com/opencybersecurityalliance/stix-shifter/pull/858)
+* package utils/normalization [#882](https://github.com/opencybersecurityalliance/stix-shifter/pull/882)
+* add sample transformer to template modules [#870](https://github.com/opencybersecurityalliance/stix-shifter/pull/870)
+* Added IN operator for Vision One UDI connector [#861](https://github.com/opencybersecurityalliance/stix-shifter/pull/861)
+* Update arcsight custom attributes [#865](https://github.com/opencybersecurityalliance/stix-shifter/pull/865)
+* results metadata support [#813](https://github.com/opencybersecurityalliance/stix-shifter/pull/813)
+* Template projects rename [#854](https://github.com/opencybersecurityalliance/stix-shifter/pull/854)
+* doc update for operators and custom transformers [#846](https://github.com/opencybersecurityalliance/stix-shifter/pull/846)
+* Adding BaseNormalization Class [#820](https://github.com/opencybersecurityalliance/stix-shifter/pull/820)
+* Add IN operator for sumologic connector [#845](https://github.com/opencybersecurityalliance/stix-shifter/pull/845)
+* Adding IN operator support to CB connector [#835](https://github.com/opencybersecurityalliance/stix-shifter/pull/835)
+* Stix validator update [#838](https://github.com/opencybersecurityalliance/stix-shifter/pull/838)
+* CrowdStrike: Adding IN operator support [#842](https://github.com/opencybersecurityalliance/stix-shifter/pull/842)
+* Adding changelog [#833](https://github.com/opencybersecurityalliance/stix-shifter/pull/833)
+* New UDI connector module for IBM Security Verify [#802](https://github.com/opencybersecurityalliance/stix-shifter/pull/802)
+* Adding connector name in the error responses [#824](https://github.com/opencybersecurityalliance/stix-shifter/pull/824)
+
+### Fixes:
+
+* use simple setup for mysql endpoints [#885](https://github.com/opencybersecurityalliance/stix-shifter/pull/885)
+* Mysql tablename fix [#868](https://github.com/opencybersecurityalliance/stix-shifter/pull/868)
+* RestApiClient in stix-shifter using https mount call [#864](https://github.com/opencybersecurityalliance/stix-shifter/pull/864)
+* Fixed StixObjectId conversion to string [#863](https://github.com/opencybersecurityalliance/stix-shifter/pull/863)
+* Fixed stix-validator 3.0.2 usage in translator [#851](https://github.com/opencybersecurityalliance/stix-shifter/pull/851)
+* remove process_user field mapping from windows-registry-key stix object [#850](https://github.com/opencybersecurityalliance/stix-shifter/pull/850)
+* Secret server 1.9 [#836](https://github.com/opencybersecurityalliance/stix-shifter/pull/836)
+* Fixed calculating and updating deterministic IDs and the… [#826](https://github.com/opencybersecurityalliance/stix-shifter/pull/826)
+
+
+--------------------------------------
+
+
 ## 4.0.1 (2022-03-01)
 ### Breaking changes:
 ### Deprecations:
@@ -78,4 +118,4 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 * Bump adal from 1.2.2 to 1.2.7
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
-* Bump boto3 from 1.17.20 to 1.21.5
+* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
