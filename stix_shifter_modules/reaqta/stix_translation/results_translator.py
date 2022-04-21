@@ -22,7 +22,7 @@ class ResultsTranslator(JSONToStix):
             
             result_data = payload.get('data')
             
-            if result_data.get('protocol'):
+            if 'protocol' in result_data:
                 protocol = self.network_protocol[str(payload['data'].get('protocol'))]
                 result['payload']['data']['protocol'] = protocol
 
@@ -52,5 +52,5 @@ class ResultsTranslator(JSONToStix):
                     result['payload']['data']['remoteAddrV6'] = remote_addr
                     del result['payload']['data']['remoteAddr']
 
-        data = json.dumps(results, indent=4)
+        data = json.dumps(results)
         return super().translate_results(data_source, data)

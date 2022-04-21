@@ -29,14 +29,15 @@
     },
     "eventType": {
       "key": "x-ibm-finding.category",
-      "object": "event"
+      "object": "event",
+      "transformer": "ToString"
     },
     "incidents": {
-      "key": "x-ibm-finding.extensions.x-reaqta-alert.incidents",
+      "key": "x-ibm-finding.extensions.x-reaqta-alert-ext.incidents",
       "object": "x-ibm-finding"
     },
     "triggeredIncidents": {
-      "key": "x-ibm-finding.extensions.x-reaqta-alert.triggered_incidents",
+      "key": "x-ibm-finding.extensions.x-reaqta-alert-ext.triggered_incidents",
       "object": "x-ibm-finding"
     },
     "localId": {
@@ -45,23 +46,23 @@
     },
     "process": {
       "endpointId": {
-        "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+        "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
         "object": "process"
       },
       "id": {
-        "key": "process.extensions.x-reaqta-process.process_id",
+        "key": "process.extensions.x-reaqta-process-ext.process_id",
         "object": "process"
       },
       "logonId": {
-        "key": "process.extensions.x-reaqta-process.logon_id",
+        "key": "process.extensions.x-reaqta-process-ext.logon_id",
         "object": "process"
       },
       "noGui": {
-        "key": "process.extensions.x-reaqta-process.no_gui",
+        "key": "process.extensions.x-reaqta-process-ext.no_gui",
         "object": "process"
       },
       "parentId": {
-        "key": "process.extensions.x-reaqta-process.parent_process_id",
+        "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
         "object": "process"
       },
       "pid": [
@@ -94,12 +95,12 @@
         }
       ],
       "privilegeLevel": {
-        "key": "process.extensions.x-reaqta-process.privilege_level",
+        "key": "process.extensions.x-reaqta-process-ext.privilege_level",
         "object": "process"
       },
       "program": {
         "arch": {
-          "key": "file.extensions.x-reaqta-program.arch",
+          "key": "file.extensions.x-reaqta-program-ext.arch",
           "object": "file"
         },
         "certInfo": {
@@ -137,7 +138,7 @@
           }
         ],
         "fsName": {
-          "key": "file.extensions.x-reaqta-program.fsname",
+          "key": "file.extensions.x-reaqta-program-ext.fsname",
           "object": "file"
         },
         "md5": {
@@ -206,23 +207,23 @@
     "data": {
       "accessorProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "accessorProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "accessorProcess_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "accessorProcess_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "accessorProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "accessorProcess_process"
         },
         "pid": [
@@ -255,12 +256,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "accessorProcess_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "accessorProcess_file"
           },
           "certInfo": {
@@ -298,7 +299,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "accessorProcess_file"
           },
           "md5": {
@@ -374,23 +375,23 @@
       },
       "allocatorProc": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "allocatorProc_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "allocatorProc_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "allocatorProc_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "allocatorProc_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "allocatorProc_process"
         },
         "pid": [
@@ -423,12 +424,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "allocatorProc_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "allocatorProc_file"
           },
           "certInfo": {
@@ -466,7 +467,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "allocatorProc_file"
           },
           "md5": {
@@ -576,23 +577,23 @@
       },
       "childProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "childProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "childProcess_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "childProcess_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "childProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "childProcess_process"
         },
         "pid": [
@@ -625,12 +626,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "childProcess_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "childProcess_file"
           },
           "certInfo": {
@@ -668,7 +669,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "childProcess_file"
           },
           "md5": {
@@ -766,7 +767,7 @@
         "object": "process"
       },
       "cmdLineArgs": {
-        "key": "process.extensions.x-reaqta-process.command_line_args",
+        "key": "process.extensions.x-reaqta-process-ext.command_line_args",
         "object": "process"
       },
       "consumerData": {
@@ -837,23 +838,23 @@
       },
       "engineProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "engineProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "engineProcess_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "engineProcess_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "engineProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "engineProcess_process"
         },
         "pid": [
@@ -886,12 +887,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "engineProcess_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "engineProcess_file"
           },
           "certInfo": {
@@ -929,7 +930,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "engineProcess_file"
           },
           "md5": {
@@ -1017,10 +1018,22 @@
           "references": "process_etw"
         }
       ],
-      "etwCallerProcessName": {
-        "key": "process.name",
-        "object": "process_etw"
-      },
+      "etwCallerProcessName": [
+        {
+          "key": "file.name",
+          "object": "etw_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process_etw",
+          "references": "etw_file"
+        },
+        {
+          "key": "x-oca-event.file_ref",
+          "object": "etw_event",
+          "references": "etw_file"
+        }
+      ],
       "etwCertIssuerName": {
         "key": "x509-certificate.issuer",
         "object": "etw_cert"
@@ -1124,10 +1137,22 @@
         "key": "x-reaqta-etw.etw_logon_hours",
         "object": "x-etw"
       },
-      "etwLogonProcessName": {
-        "key": "process.name",
-        "object": "process_etw"
-      },
+      "etwLogonProcessName": [
+        {
+          "key": "file.name",
+          "object": "etw_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process_etw",
+          "references": "etw_file"
+        },
+        {
+          "key": "x-oca-event.file_ref",
+          "object": "etw_event",
+          "references": "etw_file"
+        }
+      ],
       "etwLogonType": {
         "key": "x-reaqta-etw.etw_logon_type",
         "object": "x-etw"
@@ -1188,10 +1213,22 @@
           "references": "process_etw"
         }
       ],
-      "etwProcessName": {
-        "key": "process.name",
-        "object": "process_etw"
-      },
+      "etwProcessName": [
+        {
+          "key": "file.name",
+          "object": "etw_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process_etw",
+          "references": "etw_file"
+        },
+        {
+          "key": "x-oca-event.file_ref",
+          "object": "etw_event",
+          "references": "etw_file"
+        }
+      ],
       "etwProfilePath": {
         "key": "x-reaqta-etw.etw_profile_path",
         "object": "x-etw"
@@ -1608,23 +1645,23 @@
       },
       "serviceProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "serviceProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "serviceProcess_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "serviceProcess_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "serviceProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "serviceProcess_process"
         },
         "pid": [
@@ -1657,12 +1694,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "serviceProcess_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "serviceProcess_file"
           },
           "certInfo": {
@@ -1700,7 +1737,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "serviceProcess_file"
           },
           "md5": {
@@ -1796,23 +1833,23 @@
       },
       "targetProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process.process_endpoint_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
           "object": "targetProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process.process_id",
+          "key": "process.extensions.x-reaqta-process-ext.process_id",
           "object": "targetProcess_process"
         },
         "logonId": {
-          "key": "process.extensions.x-reaqta-process.logon_id",
+          "key": "process.extensions.x-reaqta-process-ext.logon_id",
           "object": "targetProcess_process"
         },
         "noGui": {
-          "key": "process.extensions.x-reaqta-process.no_gui",
+          "key": "process.extensions.x-reaqta-process-ext.no_gui",
           "object": "targetProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process.parent_process_id",
+          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
           "object": "targetProcess_process"
         },
         "pid": [
@@ -1845,12 +1882,12 @@
           }
         ],
         "privilegeLevel": {
-          "key": "process.extensions.x-reaqta-process.privilege_level",
+          "key": "process.extensions.x-reaqta-process-ext.privilege_level",
           "object": "targetProcess_process"
         },
         "program": {
           "arch": {
-            "key": "file.extensions.x-reaqta-program.arch",
+            "key": "file.extensions.x-reaqta-program-ext.arch",
             "object": "targetProcess_file"
           },
           "certInfo": {
@@ -1888,7 +1925,7 @@
             }
           ],
           "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program-ext.fsname",
             "object": "targetProcess_file"
           },
           "md5": {
