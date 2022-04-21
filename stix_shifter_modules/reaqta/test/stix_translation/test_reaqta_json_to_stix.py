@@ -51,9 +51,24 @@ DATA_VERSION = find('payload.data.version', DATA)
 
 STIX_2_1_OBJECT_REFS = [
     "directory--9d6f3ae4-4fb1-5eaf-a295-7ae1189befeb",
-    "file--262e022e-37a1-56fd-a885-2e1f883a5256",
+    "file--697ce471-a30e-5867-83ab-69d38fc4c07c",
     "user-account--80bb9f7c-1010-5f6f-bc9c-d862451be62c",
-    "network-traffic--478a7d4c-17e9-5de6-b626-9635edcd156f",
+    "file--6463fa96-e6e4-50d6-b636-792bc7fe096e",
+    "network-traffic--1447b4e4-99c4-552d-b140-07fa908504af",
+    "directory--c616d2f7-3b0a-5ccb-843c-e4592f5d5c50",
+    "user-account--a50c0708-1b89-55c6-92e9-6d93a80d2708",
+    "url--91ba42cf-130a-58f8-8a18-7613abffd412",
+    "user-account--c0152e8f-c3db-55c6-8881-7e8d8373e8a0",
+    "file--0af4f45b-8970-5c87-819f-814b93e472ca",
+    "user-account--4fe2a8d1-b519-5701-b521-1145606b1903",
+    "directory--5c0ad0f9-38c5-56c0-a059-85994be2032a",
+    "file--ffc24f98-eb84-500d-a5d5-52376ce5ffa9",
+    "user-account--da9a51b3-80fa-5e94-adb9-a78bf00d9a56",
+    "directory--0c5773ea-0ddb-5b4d-bef7-2c29818f0170",
+    "file--ce0f32cf-1b48-59f9-8139-11e01d198bfc",
+    "directory--2f2498e1-8be8-53fa-93cd-6e54220b452a",
+    "file--1b887397-3edf-5eba-961c-83f62a816661",
+    "file--19a3ab44-7c99-570a-918a-61d3bb96ecad",
     "ipv4-addr--a47ff5c6-efeb-5caa-b606-62198d19839d",
     "ipv4-addr--adac2d17-0bea-5ec1-8d7a-653cba4476e4"
 ]
@@ -190,7 +205,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         network_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
 
         assert(network_obj is not None), 'network-traffic object type not found'
-        assert(network_obj.keys() == {'type', 'extensions', 'src_port', 'dst_port', 'src_ref', 'dst_ref'})
+        assert(network_obj.keys() == {'type', 'extensions', 'protocols', 'src_port', 'dst_port', 'src_ref', 'dst_ref'})
         assert(network_obj['type'] == 'network-traffic')
         assert(network_obj['src_port'] == DATA_LOCAL_PORT)
         assert(network_obj['dst_port'] == DATA_REMOTE_PORT)
@@ -222,6 +237,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(event['type']) == "x-oca-event"
         assert(event['code']) == DATA_EVENT_ID
         assert(event['created'] == DATA_RECEIVED_AR_TIMESTAMP)
+        assert(event['category'] == DATA_EVENT_TYPE)
+        assert(event['action'] == "Service Stopped")
 
         file_ref = event['file_ref']
         assert(file_ref in objects), f"file_ref with key {event['file_ref']} not found"
@@ -293,10 +310,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(event is not None), "x-ibm-finding not found"
-        assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref', 'finding_type', 'name'})
+        assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref'})
         assert(event['type'] == "x-ibm-finding")
-        assert(event['finding_type'] == DATA_EVENT_TYPE)
-        assert(event['name'] == "Service Stopped")
 
         ip_ref = event['src_ip_ref']
         assert(ip_ref in objects), f"src_ip_ref with key {event['src_ip_ref']} not found"
@@ -379,7 +394,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         # Count object types
         assert(sum(obj['type'] == 'directory' for obj in result_bundle_objects) == 5)
-        assert(sum(obj['type'] == 'file' for obj in result_bundle_objects) == 6)
+        assert(sum(obj['type'] == 'file' for obj in result_bundle_objects) == 7)
         assert(sum(obj['type'] == 'ipv4-addr' for obj in result_bundle_objects) == 2)
         assert(sum(obj['type'] == 'network-traffic' for obj in result_bundle_objects) == 1)
         assert(sum(obj['type'] == 'process' for obj in result_bundle_objects) == 12)
@@ -424,7 +439,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(parent_ref.object_id in observed_data['object_refs']), f"parent_ref with key {proc_obj['parent_ref']} not found"
         assert(proc_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
 
-        extensions = find('extensions.x-reaqta-process', proc_obj)
+        extensions = find('extensions.x-reaqta-process-ext', proc_obj)
         assert(extensions is not None), "file extensions not found"
         assert(extensions.keys() == {'process_id', 'parent_process_id', 'process_endpoint_id', 'privilege_level', 'no_gui', 'logon_id', 'command_line_args'})
         assert(extensions['process_id'] == DATA_PROCESS_ID)
