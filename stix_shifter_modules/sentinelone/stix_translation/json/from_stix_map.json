@@ -330,7 +330,7 @@
         "agentVersion"
       ],
       "agent_uuid": [
-      "agentUuid"
+       "agentUuid"
       ],
       "machine_type": [
         "endpointMachineType"
@@ -378,6 +378,7 @@
         "loginAccountDomain"
       ],
       "registry_ref": [
+        "registryPath",
         "registryKeyPath"
       ]
     }

@@ -357,7 +357,7 @@
   },
   "srcProcStartTime": [
     {
-      "key": "process.created_time",
+      "key": "process.created",
       "object": "process"
     },
     {
@@ -367,7 +367,7 @@
   ],
   "tgtProcStartTime": [
     {
-      "key": "process.created_time",
+      "key": "process.created",
       "object": "process"
     },
     {
@@ -447,7 +447,19 @@
     },
     {
       "key": "x-oca-event.registry_ref",
-      "object": "event"
+      "object": "event",
+      "references": "registry_key"
+    }
+  ],
+  "registryPath": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "registry_key"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "registry_key"
     }
   ],
   "registryValue": {
@@ -633,10 +645,6 @@
     "key": "file.extensions.x-sentinelone-file-ext.convicted_by",
     "object": "file"
   },
-  "registryPath": {
-    "key": "windows-registry-key.extensions.x-sentinelone-registry-ext.path",
-    "object": "registry_key"
-  },
   "registryValueType": {
     "key": "windows-registry-key.extensions.x-sentinelone-registry-ext.value_type",
     "object": "registry_key"
@@ -690,11 +698,11 @@
     "transformer": "ToLowercaseArray"
   },
   "eventType": {
-    "key": "x-oca-event.event_type",
+    "key": "x-oca-event.action-ex",
     "object": "event"
   },
   "eventTime": {
-    "key": "x-oca-event.event_time",
+    "key": "x-oca-event.created-ex",
     "object": "event"
   },
   "agentName": {

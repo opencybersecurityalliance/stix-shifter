@@ -466,7 +466,8 @@
     },
     {
       "key": "x-oca-event.registry_ref",
-      "object": "event"
+      "object": "event",
+      "references": "registry_key"
     }
   ],
   "registryPath": [
@@ -476,7 +477,8 @@
     },
     {
       "key": "x-oca-event.registry_ref",
-      "object": "event"
+      "object": "event",
+      "references": "registry_key"
     }
   ],
   "registryValue": {

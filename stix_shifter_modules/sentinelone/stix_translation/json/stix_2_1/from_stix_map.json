@@ -74,6 +74,9 @@
       ],
       "parent_ref.pid": [
         "srcProcParentPid"
+      ],
+      "parent_ref.created_time": [
+        "srcProcParentStartTime"
       ]
     }
   },
@@ -150,7 +153,8 @@
   "windows-registry-key": {
     "fields": {
       "key": [
-        "registryKeyPath"
+        "registryKeyPath",
+        "registryPath"
       ],
       "values[*]": [
         "registryValue"
@@ -221,7 +225,6 @@
         "srcProcActiveContentSignedStatus",
         "tgtProcActiveContentSignedStatus"
       ]
-
     }
   },
   "x-sentinelone-network-action": {
@@ -274,9 +277,6 @@
   },
   "x-sentinelone-registry": {
     "fields": {
-      "path": [
-        "registryPath"
-      ],
       "full_size": [
         "registryValueFullSize"
       ],
@@ -339,13 +339,13 @@
   },
   "x-oca-event": {
     "fields": {
-      "event_type": [
+      "action": [
         "eventType"
       ],
       "category[*]": [
         "objectType"
       ],
-      "event_time": [
+      "created": [
         "eventTime"
       ],
       "host_ref": [
@@ -378,7 +378,8 @@
         "loginAccountDomain"
       ],
       "registry_ref": [
-        "registryKeyPath"
+        "registryKeyPath",
+        "registryPath"
       ]
     }
   }
