@@ -105,7 +105,7 @@
         },
         "certInfo": {
           "expired": {
-            "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+            "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
             "object": "certInfo"
           },
           "issuer": {
@@ -113,11 +113,11 @@
             "object": "certInfo"
           },
           "signer": {
-            "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+            "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
             "object": "certInfo"
           },
           "trusted": {
-            "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+            "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
             "object": "certInfo"
           }
         },
@@ -266,7 +266,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -274,11 +274,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
@@ -434,7 +434,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -442,11 +442,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
@@ -559,7 +559,7 @@
       },
       "certInfo": {
         "expired": {
-          "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+          "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
           "object": "certInfo"
         },
         "issuer": {
@@ -567,11 +567,11 @@
           "object": "certInfo"
         },
         "signer": {
-          "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+          "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
           "object": "certInfo"
         },
         "trusted": {
-          "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+          "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
           "object": "certInfo"
         }
       },
@@ -636,7 +636,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -644,11 +644,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
@@ -897,7 +897,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -905,11 +905,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
@@ -1704,7 +1704,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -1712,11 +1712,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
@@ -1892,7 +1892,7 @@
           },
           "certInfo": {
             "expired": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.expired",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.expired",
               "object": "certInfo"
             },
             "issuer": {
@@ -1900,11 +1900,11 @@
               "object": "certInfo"
             },
             "signer": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.signer",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.signer",
               "object": "certInfo"
             },
             "trusted": {
-              "key": "x509-certificate.extensions.x-reaqta-cert.trusted",
+              "key": "x509-certificate.extensions.x-reaqta-cert-ext.trusted",
               "object": "certInfo"
             }
           },
