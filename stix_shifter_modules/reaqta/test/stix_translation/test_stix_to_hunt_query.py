@@ -137,7 +137,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "serv" OR $filename = "serv")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(($filename = "serv" OR consumer.script.filename = "serv")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -147,7 +147,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "svc" OR $filename = "svc")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(($filename = "svc" OR consumer.script.filename = "svc")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -202,7 +202,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "winword.exe" OR $filename = "winword.exe")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(($filename = "winword.exe" OR consumer.script.filename = "winword.exe")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -240,7 +240,7 @@ class TestQueryTranslator(unittest.TestCase):
 
         path = "c:\\program files\\microsoft office\\root\\office16\\winword.exe"
 
-        test_string = ['((__etwHomePath = "{}" OR accessor.path = "{}" OR $path = "{}" OR consumer.workingDirectory = "{}") OR $path = "{}") {}'.format(path, path, path, path, path, TEST_START_STOP_TRANSLATED1)]
+        test_string = ['(($path = "{}" OR accessor.path = "{}" OR consumer.workingDirectory = "{}" OR __etwHomePath = "{}") OR $path = "{}") {}'.format(path, path, path, path, path, TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -272,7 +272,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['($ip = "143.244.41.203" AND (antimalware.threatType = "8" OR eventType = "8") AND $ip = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['($ip = "143.244.41.203" AND antimalware.threatType = "8" AND $ip = "169.62.55.114") {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -286,10 +286,4 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertQuery(query, test_string, stix_pattern)
 
 
-    # def test_oca_event(self):
-    # def test_x_reaqta_cert(self):
-    # def test_x_reaqta_event(self):
-    # def test_x_reaqta_network(self):
-    # def test_x_reaqta_process(self):
-    # def test_x_reaqta_program(self):
 
