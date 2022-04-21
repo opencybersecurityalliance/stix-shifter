@@ -1,15 +1,10 @@
 import json
 import unittest
 from stix_shifter_modules.reaqta.entry_point import EntryPoint
-from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.utils.helpers import find
 
 
-MODULE = 'reaqta'
-RESULTS = 'results'
-TRANSFORMERS = get_module_transformers(MODULE)
-entry_point = EntryPoint()
-MAP_DATA = entry_point.get_results_translator().map_data
+ENTRY_POINT = EntryPoint()
 
 RESULT_FILE = open('stix_shifter_modules/reaqta/test/stix_translation/json/event_result.json', 'r').read()
 DATA = json.loads(RESULT_FILE)
@@ -17,6 +12,7 @@ DATA = json.loads(RESULT_FILE)
 DATA_RECEIVED_AR_TIMESTAMP = find('receivedAt', DATA)
 DATA_HAPPENED_AT_TIMESTAMP = find('happenedAt', DATA)
 DATA_EVENT_ID = int(find('eventId', DATA))
+DATA_EVENT_TYPE = find('payload.eventType', DATA)
 DATA_LOCAL_ID = find('payload.localId', DATA)
 DATA_PROCESS_ID = find('payload.process.id', DATA)
 DATA_PROCESS_PARENT_ID = find('payload.process.parentId', DATA)
@@ -53,6 +49,14 @@ DATA_TAGS = find('payload.data.tags', DATA)
 DATA_RELEVANCE = find('payload.data.relevance', DATA)
 DATA_VERSION = find('payload.data.version', DATA)
 
+STIX_2_1_OBJECT_REFS = [
+    "directory--9d6f3ae4-4fb1-5eaf-a295-7ae1189befeb",
+    "file--262e022e-37a1-56fd-a885-2e1f883a5256",
+    "user-account--80bb9f7c-1010-5f6f-bc9c-d862451be62c",
+    "network-traffic--478a7d4c-17e9-5de6-b626-9635edcd156f",
+    "ipv4-addr--a47ff5c6-efeb-5caa-b606-62198d19839d",
+    "ipv4-addr--adac2d17-0bea-5ec1-8d7a-653cba4476e4"
+]
 
 DATA_SOURCE = {
     "type": "identity",
@@ -60,7 +64,6 @@ DATA_SOURCE = {
     "name": "Reaqta",
     "identity_class": "events"
 }
-options = {}
 
 class TestReaqtaResultsToStix(unittest.TestCase):
     """
@@ -78,15 +81,21 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         return TestReaqtaResultsToStix.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     @staticmethod
+    def get_first_cybox_of_type_stix_2_1(itr, type):
+        for obj in itr:
+            if obj["type"] ==  type:
+                return obj
+
+    @staticmethod
     def get_observed_data_objects():
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        result_bundle = ENTRY_POINT.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
         return observed_data['objects']
 
     def test_common_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        result_bundle = ENTRY_POINT.translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -286,7 +295,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(event is not None), "x-ibm-finding not found"
         assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref', 'finding_type', 'name'})
         assert(event['type'] == "x-ibm-finding")
-        assert(event['finding_type'] == "88")
+        assert(event['finding_type'] == DATA_EVENT_TYPE)
         assert(event['name'] == "Service Stopped")
 
         ip_ref = event['src_ip_ref']
@@ -314,7 +323,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-reaqta-event')
 
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'endpoint_id', 'local_id', 'technique', 'tactics', 'tags', 'relevance', 'version', 'service_name', 'root_object', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'endpoint_id', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'technique', 'tactics', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['endpoint_id'] == DATA_PROCESS_ID_ENDPOINT_ID)
         assert(event['local_id'] == DATA_LOCAL_ID)
@@ -345,3 +354,88 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions['trusted'] == DATA_PROCESS_TRUSTED)
         assert(extensions['expired'] == DATA_PROCESS_EXPIRED)
 
+
+    def test_stix_21_prop(self):
+        result_bundle = EntryPoint(options={"stix_2.1": True}).translate_results(json.dumps(DATA_SOURCE), json.dumps([DATA]))
+
+        assert(result_bundle['type'] == 'bundle')
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert(result_bundle_identity['type'] == DATA_SOURCE['type'])
+        assert(result_bundle_identity['id'] == DATA_SOURCE['id'])
+        assert(result_bundle_identity['name'] == DATA_SOURCE['name'])
+        assert(result_bundle_identity['identity_class'] == DATA_SOURCE['identity_class'])
+
+        observed_data = result_bundle_objects[1]
+        assert(observed_data['id'] is not None)
+        assert(observed_data['type'] == "observed-data")
+        assert(observed_data['created_by_ref'] == result_bundle_identity['id'])
+        assert(observed_data['number_observed'] == 1)
+        assert(observed_data['created'] is not None)
+        assert(observed_data['modified'] is not None)
+        assert(observed_data['first_observed'] == DATA_HAPPENED_AT_TIMESTAMP)
+        assert(observed_data['last_observed'] == DATA_HAPPENED_AT_TIMESTAMP)
+
+        # Count object types
+        assert(sum(obj['type'] == 'directory' for obj in result_bundle_objects) == 5)
+        assert(sum(obj['type'] == 'file' for obj in result_bundle_objects) == 6)
+        assert(sum(obj['type'] == 'ipv4-addr' for obj in result_bundle_objects) == 2)
+        assert(sum(obj['type'] == 'network-traffic' for obj in result_bundle_objects) == 1)
+        assert(sum(obj['type'] == 'process' for obj in result_bundle_objects) == 12)
+        assert(sum(obj['type'] == 'url' for obj in result_bundle_objects) == 1)
+        assert(sum(obj['type'] == 'user-account' for obj in result_bundle_objects) == 5)
+        assert(sum(obj['type'] == 'x-ibm-finding' for obj in result_bundle_objects) == 1)
+        assert(sum(obj['type'] == 'x-oca-asset' for obj in result_bundle_objects) == 2)
+        assert(sum(obj['type'] == 'x-oca-event' for obj in result_bundle_objects) == 4)
+        assert(sum(obj['type'] == 'x-reaqta-etw' for obj in result_bundle_objects) == 1)
+        assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
+
+        # Insure fixed deterministic IDs are present
+        assert(set(STIX_2_1_OBJECT_REFS).issubset(observed_data['object_refs']))
+
+        event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
+        assert(event is not None), "x-reaqta-event not found"
+        assert(event.keys() == {'type', 'endpoint_id', 'id', 'spec_version', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'technique', 'tactics', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event['type'] == "x-reaqta-event")
+        assert(event['endpoint_id'] == DATA_PROCESS_ID_ENDPOINT_ID)
+        assert(event['local_id'] == DATA_LOCAL_ID)
+        assert(event['technique'] == DATA_TECHNIQUE)
+        assert(event['tactics'] == DATA_TACTICS)
+        assert(event['tags'] == DATA_TAGS)
+        assert(event['relevance'] == DATA_RELEVANCE)
+        assert(event['version'] == DATA_VERSION)
+        assert(event['service_name'] == DATA_SERVICE_NAME)
+        assert(event['root_object'] == DATA_ROOT_OBJECT)
+        assert(event['start_type'] == DATA_START_TYPE)
+        assert(event['service_type'] == DATA_SERVICE_TYPE)
+
+        proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        
+        user_ref = proc_obj['creator_user_ref']
+        assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
+        
+        binary_ref = proc_obj['binary_ref']
+        assert(binary_ref.object_id in observed_data['object_refs']), f"binary_ref with key {proc_obj['binary_ref']} not found"
+        
+        parent_ref = proc_obj['parent_ref']
+        assert(parent_ref.object_id in observed_data['object_refs']), f"parent_ref with key {proc_obj['parent_ref']} not found"
+        assert(proc_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
+
+        extensions = find('extensions.x-reaqta-process', proc_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'process_id', 'parent_process_id', 'process_endpoint_id', 'privilege_level', 'no_gui', 'logon_id', 'command_line_args'})
+        assert(extensions['process_id'] == DATA_PROCESS_ID)
+        assert(extensions['parent_process_id'] == DATA_PROCESS_PARENT_ID)
+        assert(extensions['process_endpoint_id'] == DATA_PROCESS_ID_ENDPOINT_ID)
+        assert(extensions['privilege_level'] == DATA_PROCESS_PRIVILEGE_LEVEL)
+        assert(extensions['no_gui'] == DATA_PROCESS_NO_GUI)
+        assert(extensions['logon_id'] == DATA_PROCESS_LOGON_ID)
+        assert(extensions['command_line_args'] == [])
+
+        extensions = find('extensions.windows-process-ext', proc_obj)
+        assert(extensions is not None), "file extensions not found"
+        assert(extensions.keys() == {'owner_sid'})
+        assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
