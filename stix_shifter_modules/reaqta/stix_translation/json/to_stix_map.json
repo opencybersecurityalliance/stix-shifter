@@ -1179,8 +1179,7 @@
       "etwProcessId": [
         {
           "key": "process.pid",
-          "object": "process_etw",
-          "transformer": "ToInteger"
+          "object": "process_etw"
         },
         {
           "key": "x-oca-event.process_ref",

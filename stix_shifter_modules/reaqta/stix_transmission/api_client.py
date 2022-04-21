@@ -77,7 +77,7 @@ class APIClient():
             else:
                 response_dict['message'] = 'Authentication Error: Token Generation Failed. ' + response_text['message']
         except Exception as ex:
-            if ex.__class__.__name__ is 'ConnectionError':
+            if ex.__class__.__name__ == 'ConnectionError':
                 raise ConnectionError('Token Generation Failed: ' + str(ex))
             else:
                 raise ex
