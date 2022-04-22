@@ -7,7 +7,7 @@ from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import \
     ObservationExpression, ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
-from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 

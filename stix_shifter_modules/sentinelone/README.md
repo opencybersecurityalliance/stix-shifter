@@ -682,4 +682,4 @@ sentinelone
 - Default data retention in sentinelone deep visibility is 14 days.
 
 ### References
-- [SentinelOne](#https://www.sentinelone.com/)
+- [SentinelOne](https://www.sentinelone.com/)

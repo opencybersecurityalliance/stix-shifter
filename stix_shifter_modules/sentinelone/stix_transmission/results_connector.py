@@ -122,9 +122,12 @@ class ResultsConnector(BaseResultsConnector):
         :return: list
         """
         for item in res_dict['data']:
-            if item.get("netProtocolName") is None:
+            if item.get("netProtocolName") is None and item.get("eventType") is not None:
                 if item.get("srcPort") is not None or item.get("dstPort") is not None:
-                    item["netProtocolName"] = "null"
+                    # Initializing default protocol value to tcp
+                    item["netProtocolName"] = "tcp"
+                    if item.get("eventType") in ["GET", "POST", "PUT", "DELETE", "OPTIONS", "CONNECT", "HEAD"]:
+                        item["netProtocolName"] = "http"
 
             if item.get("registryKeyPath") is not None:
                 registryKeyPath = item.get("registryKeyPath")
@@ -164,11 +167,8 @@ class ResultsConnector(BaseResultsConnector):
                         item.get("loginIsAdministratorEquivalent") == "FALSE":
                     item["loginIsAdministratorEquivalent"] = False
 
+            #removing \" character from path containing string field because of parsing error
             ResultsConnector.replace_escape_character(item)
-
-            empty_keys = [k for k, v in item.items() if v is None]
-            for key in empty_keys:
-                del item[key]
         return res_dict
 
     @staticmethod
@@ -178,16 +178,13 @@ class ResultsConnector(BaseResultsConnector):
         :param item: list of dictionary items
         """
         if item is not None:
-            fields = ['processCmd','srcProcCmdLine','tgtProcCmdLine','srcProcParentImagePath',
-                    'processImagePath','signatureSignedInvalidReason','srcProcActiveContentPath',
-                    'srcProcImageSha1', 'srcProcParentActiveContentPath','srcProcParentCmdLine',
-                    'srcProcParentDisplayName','srcProcParentImagePath','tgtFilePath',
-                    'user','srcProcUser','srcProcParentImageSha1', 'fileFullName',
-                    'storyline', 'tgtFileInternalName', 'tgtFileDescription',
-                    'publisher', 'siteName', 'srcProcImageSha256', 'srcProcParentImageSha256',
-                    'srcProcParentPublisher', 'srcProcParentStorylineId', 'srcProcParentUser',
-                    'srcProcPublisher','tgtFileOldMd5','gtFileOldPath','tgtFileOldSha1',
-                    'tgtFileOldSha256','tgtFileSha1','tgtFileSha256']
+            fields = ['processCmd', 'srcProcCmdLine', 'tgtProcCmdLine',
+                      'processImagePath', 'signatureSignedInvalidReason',
+                      'srcProcImageSha1', 'srcProcParentActiveContentPath',
+                      'srcProcParentImagePath', 'tgtFilePath', 'srcProcParentImagePath',
+                      'srcProcParentImageSha1', 'fileFullName', 'srcProcActiveContentPath',
+                      'storyline', 'tgtFileDescription', 'tgtFileOldPath',
+                      'srcProcImageSha256', 'srcProcParentCmdLine', 'srcProcParentImageSha256']
 
             for fieldname in fields:
                 if item.get(fieldname) is not None:
