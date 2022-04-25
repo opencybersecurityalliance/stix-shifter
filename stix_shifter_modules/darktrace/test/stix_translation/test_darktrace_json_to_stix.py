@@ -647,5 +647,4 @@ class TestDarktraceResultsToStix(unittest.TestCase):
         dhcp_obj = TestDarktraceResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
 
         assert dhcp_obj['extensions']['x-darktrace-dhcp']['host_name'] == 'EC2AMAZ-2GNPPAQ'
-        assert dhcp_obj['extensions']['x-darktrace-dhcp']['requested_ip'] == '0.0.0.0'
         assert dhcp_obj['extensions']['x-darktrace-dhcp']['dhcp_type'] == 'DHCP::request'

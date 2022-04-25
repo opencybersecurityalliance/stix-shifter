@@ -103,6 +103,10 @@ class Connector(BaseSyncConnector):
         return return_obj
 
     def get_results_data(self, response_dict):
+
+        proto_field = {"dhcp": "udp", "x509": "ssl", "files_identified": "tcp", "software": "tcp",
+                       "device_details": "udp"}
+
         results = []
         for log in response_dict['hits']['hits']:
             if log['_source']['@type'] in self.config_map['DT_Protocols']:
@@ -114,6 +118,8 @@ class Connector(BaseSyncConnector):
                         if key in self.config_map['DT_NetworkTraffic']:
                             data[key] = value
 
+                    if 'proto' not in data.keys():
+                        data['proto'] = proto_field.get(log['_source']['@type'], log['_source']['@type'])
                     element_dict['conn'] = data
                 element_dict[log['_source']['@type']] = log['_source']['@fields']
                 results.append(element_dict)
@@ -127,11 +133,6 @@ class Connector(BaseSyncConnector):
         params: res_dict(dict) response dictionary
         return: res_dict(dict)
         """
-        network_traffic_fields = \
-            ["source_port", "src_p", "dest_port", "dst_p", "source_ip", "src", "dest_ip", "dst", "pkts_recv",
-             "requests", "orig_pkts", "pkts_dropped", "responses_or_data", "resp_pkts", "orig_bytes",
-             "orig_ip_bytes", "megabytes_recv", "resp_bytes", "resp_ip_bytes"
-             ]
 
         file_fields = ["filename", "sha1_file_hash", "sha1", "md5_file_hash", "md5", "sha256_file_hash", "sha256",
                        "mime", "file_mime_type", "mime_type", "dcc_mime_type", "total_bytes", "file_msg", "read_size",
@@ -139,10 +140,6 @@ class Connector(BaseSyncConnector):
 
         for index in range(len(response['data'])):
             for key in response['data'][index]:
-                if response['data'][index][key].get("proto") is None:
-                    if response['data'][index][key].keys() & network_traffic_fields:
-                        response['data'][index][key]["proto"] = "null"
-
                 if response['data'][index][key].get("filename") is None:
                     if response['data'][index][key].keys() & file_fields:
                         response['data'][index][key]["filename"] = "null"

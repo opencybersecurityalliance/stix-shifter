@@ -31,7 +31,7 @@ translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0'] START t'2022-03-21
 {
     "queries": [
         {
-            "search": "((@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\") AND (@fields.epochdate:>1647860400.0 AND @fields.epochdate:<1647947100.0))",
+            "search": "((@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\") AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.0))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -51,7 +51,7 @@ darktrace
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"private_token\": \"xxxxx\", \"public_token\": \"xxxxx\"}}"
 results
-"{\"search\":\"((@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\" OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\") AND (@fields.epochdate:>1647860400.0 AND @fields.epochdate:<1647946800.0))\",\"fields\":[],\"timeframe\":\"custom\",\"time\":{\"from\":\"2022-03-21T11:00:00.000000Z\",\"to\":\"2022-03-22T11:05:00.000000Z\"},\"size\":10000}"
+"{\"search\":\"((@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\" OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\") AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647946800.0))\",\"fields\":[],\"timeframe\":\"custom\",\"time\":{\"from\":\"2022-03-21T11:00:00.000000Z\",\"to\":\"2022-03-22T11:05:00.000000Z\"},\"size\":10000}"
 0 2
 ```
 
@@ -137,7 +137,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CqQ5sRAFWzt7NRQmj01"
                         }
                     }
@@ -195,7 +195,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CqQ5sRAFWzt7NRQmj01"
                         }
                     }
@@ -259,7 +259,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CqQ5sRAFWzt7NRQmj01"
                         }
                     }
@@ -324,7 +324,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CqQ5sRAFWzt7NRQmj01"
                         }
                     }
@@ -377,7 +377,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -449,7 +449,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -506,7 +506,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -571,7 +571,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -624,7 +624,7 @@ translate darktrace results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CdvBdF3iF8inLx6jLe01"
                         }
                     }
@@ -668,7 +668,7 @@ translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND x-darktrace-ssl
 {
     "queries": [
         {
-            "search": "(((@fields.version:TLS1.2) AND (@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\")) AND (@fields.epochdate:>1647860400.0 AND @fields.epochdate:<1647947100.003))",
+            "search": "(((@fields.version:TLS1.2) AND (@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
@@ -690,7 +690,7 @@ darktrace
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"private_token\": \"xxxxx\", \"public_token\": \"xxxxx\"}}"
 results
-"{\"search\":\"(((@fields.version:TLS1.2) AND (@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\" OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\")) AND (@fields.epochdate:>1647860400.0 AND @fields.epochdate:<1647947100.003))\",\"fields\":[],\"timeframe\":\"custom\",\"time\":{\"from\":\"2022-03-21T11:00:00.000000Z\",\"to\":\"2022-03-22T11:05:00.003000Z\"},\"size\":10000}" 
+"{\"search\":\"(((@fields.version:TLS1.2) AND (@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\" OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))\",\"fields\":[],\"timeframe\":\"custom\",\"time\":{\"from\":\"2022-03-21T11:00:00.000000Z\",\"to\":\"2022-03-22T11:05:00.003000Z\"},\"size\":10000}" 
 0 2
 ```
 
@@ -753,7 +753,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -818,7 +818,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CdvBdF3iF8inLx6jLe01"
                         }
                     }
@@ -883,7 +883,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CPphuC1YzPi3RxWki901"
                         }
                     }
@@ -948,7 +948,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CeVgti48vYLBsyb11301"
                         }
                     }
@@ -1013,7 +1013,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CrcUaT2wIylNoL0SI801"
                         }
                     }
@@ -1078,7 +1078,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "C2tIWy2pB78ziJrV8j01"
                         }
                     }
@@ -1143,7 +1143,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CxkH1xtKJGRmjrja201"
                         }
                     }
@@ -1208,7 +1208,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CiTMLg3ZSqESsn1yk01"
                         }
                     }
@@ -1273,7 +1273,7 @@ results
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "Cm2RmF1W3mq1YYJck701"
                         }
                     }
@@ -1365,7 +1365,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CnqTYB1K38sGXvsZ0101"
                         }
                     }
@@ -1430,7 +1430,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CdvBdF3iF8inLx6jLe01"
                         }
                     }
@@ -1495,7 +1495,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CPphuC1YzPi3RxWki901"
                         }
                     }
@@ -1560,7 +1560,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CeVgti48vYLBsyb11301"
                         }
                     }
@@ -1625,7 +1625,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CrcUaT2wIylNoL0SI801"
                         }
                     }
@@ -1690,7 +1690,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "C2tIWy2pB78ziJrV8j01"
                         }
                     }
@@ -1755,7 +1755,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CxkH1xtKJGRmjrja201"
                         }
                     }
@@ -1820,7 +1820,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "CiTMLg3ZSqESsn1yk01"
                         }
                     }
@@ -1885,7 +1885,7 @@ darktrace
                         "4"
                     ],
                     "extensions": {
-                        "x-oca-connection": {
+                        "x-darktrace-connection": {
                             "identifier": "Cm2RmF1W3mq1YYJck701"
                         }
                     }
