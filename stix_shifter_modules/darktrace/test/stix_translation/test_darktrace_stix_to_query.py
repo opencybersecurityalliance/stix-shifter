@@ -32,18 +32,6 @@ class TestqueryTranslator(unittest.TestCase):
         for index, each_query in enumerate(actual_query.get('queries'), start=0):
             self.assertEqual(each_query, expected_query[index])
 
-    def test_ipv4_query(self):
-        stix_pattern = "[ipv4-addr:value = '172.31.81.98']"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
-                          ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR'
-                          ' @fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR'
-                          ' @fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") '
-                          'AND ())\', \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
     def test_mac_address_query(self):
         stix_pattern = "[mac-addr:value = '12:2f:23:46:35:5b']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
@@ -75,36 +63,6 @@ class TestqueryTranslator(unittest.TestCase):
             "time": {
                 "from": "2022-04-05T10:02:50.310000Z",
                 "to": "2022-04-05T10:07:50.310000Z"
-            },
-            "size": 10000
-        }]
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_email_query(self):
-        stix_pattern = "[email-addr:value = 'shahtanveer@gmail.com'] " \
-                       "START t'2022-03-01T00:00:00.000Z' STOP t'2022-04-05T11:00:00.003Z'"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'((@fields.mailfrom:"shahtanveer@gmail.com" OR '
-                          '@fields.rcptto:"shahtanveer@gmail.com" OR @fields.from:"shahtanveer@gmail.com" OR'
-                          ' @fields.to:"shahtanveer@gmail.com" OR @fields.cc:"shahtanveer@gmail.com") '
-                          'AND ())\', \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_network_query_packets(self):
-        stix_pattern = "[network-traffic:src_packets = 10]"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{
-            "search": "((@fields.pkts_recv:10 OR @fields.orig_pkts:10) AND (@fields.epochdate :>1650890555.206 AND "
-                      "@fields.epochdate :<1650890855.206))",
-            "fields": [],
-            "timeframe": "custom",
-            "time": {
-                "from": "2022-04-25T12:42:35.206000Z",
-                "to": "2022-04-25T12:47:35.206000Z"
             },
             "size": 10000
         }]
@@ -310,32 +268,6 @@ class TestqueryTranslator(unittest.TestCase):
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
-    def test_ipv4_query_time(self):
-        stix_pattern = "[ipv4-addr:value = '172.31.81.98'] START t'2022-03-01T00:00:00.000Z'" \
-                       " STOP t'2022-03-31T11:00:00.003Z'"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR '
-                          '@fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR '
-                          '@fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR '
-                          '@fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") '
-                          'AND ())\', \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_ipv4_query_or(self):
-        stix_pattern = "[ipv4-addr:value = '172.31.81.98' OR network-traffic:src_port > 62298]"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'(((@fields.source_port:>62298 OR @fields.src_p:>62298) OR'
-                          ' (@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR '
-                          '@fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR '
-                          '@fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR '
-                          '@fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98")) '
-                          'AND ())\', \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
     def test_network_traffic_port_query(self):
         stix_pattern = "[network-traffic:src_port = 62298 OR network-traffic:dst_port = 3389]"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
@@ -412,16 +344,6 @@ class TestqueryTranslator(unittest.TestCase):
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
-    def test_domain_name_and_mac(self):
-        stix_pattern = "[domain-name:value='ec2.internal'] AND [mac-addr:value = '12:2f:23:46:35:5b']"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'(((@fields.domain_name:"ec2.internal" OR @fields.query:"ec2.internal") OR'
-                          ' (@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b" OR '
-                          '@fields.dst_mac:"12:2f:23:46:35:5b")) AND ())\', \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
     def test_equal_or_operator(self):
         stix_pattern = "[software:name='Windows'] OR [file:created = '1648122134.845304']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
@@ -437,23 +359,6 @@ class TestqueryTranslator(unittest.TestCase):
             },
             "size": 10000
         }]
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_set_or_operator(self):
-        stix_pattern = "([ipv4-addr:value = '172.31.81.98'] OR [mac-addr:value = '12:2f:23:46:35:5b'])" \
-                       " START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{'search': '(((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
-                                     ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR'
-                                     ' @fields.ip:"172.31.81.98" OR @fields.subnet_mask:"172.31.81.98" OR '
-                                     '@fields.released_ip:"172.31.81.98" OR @fields.requested_ip:"172.31.81.98" '
-                                     'OR @fields.assigned_ip:"172.31.81.98") OR (@fields.mac:"12:2f:23:46:35:5b" OR'
-                                     ' @fields.src_mac:"12:2f:23:46:35:5b" OR @fields.dst_mac:"12:2f:23:46:35:5b")) '
-                                     'AND (@fields.epochdate :>1646092800.0 AND @fields.epochdate :<1648724400.003))',
-                                     'fields': [], 'timeframe': 'custom', 'time': {'from': '2022-03-01T00:00:00.000000Z',
-                                     'to': '2022-03-31T11:00:00.003000Z'}, 'size': 10000}]
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -475,49 +380,6 @@ class TestqueryTranslator(unittest.TestCase):
             },
             "size": 10000
         }]
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_two_sets_or_operator(self):
-        stix_pattern = "([network-traffic:dst_port = '3389'] AND [domain-name:value = 'sample']) AND " \
-                       "([software:name = 'word'] OR [mac-addr:value = '12:2f:23:46:35:5b']) " \
-                       "START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = [{'search': '(((@fields.dest_port:3389 OR @fields.dst_p:3389) OR (@fields.domain_name:"sample"'
-                                     ' OR @fields.query:"sample")) OR (((@fields.name:"word") OR'
-                                     ' (@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b"'
-                                     ' OR @fields.dst_mac:"12:2f:23:46:35:5b")) AND (@fields.epochdate :>1646092800.0 '
-                                     'AND @fields.epochdate :<1648724400.003)))',
-                                     'fields': [], 'timeframe': 'custom', 'time': {'from': '2022-03-01T00:00:00.000000Z',
-                                     'to': '2022-03-31T11:00:00.003000Z'}, 'size': 10000}]
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_comparison_and_operator(self):
-        stix_pattern = "[x-darktrace-smtp:mail_message_sender[*] = 'shahtanveer@gmail.com'] AND " \
-                       "[email-addr:value != 'first@mail.com']"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'(((@fields.mailfrom:* AND NOT @fields.mailfrom:"first@mail.com") OR'
-                          ' (@fields.rcptto:* AND NOT @fields.rcptto:"first@mail.com") OR (@fields.from:* AND NOT'
-                          ' @fields.from:"first@mail.com") OR (@fields.to:* AND NOT @fields.to:"first@mail.com") OR'
-                          ' (@fields.cc:* AND NOT @fields.cc:"first@mail.com")) AND ())\','
-                          ' \'fields\': [], \'size\': 10000}']
-        expected_query = _remove_timestamp_from_query(expected_query)
-        self._test_query_assertions(actual_query, expected_query)
-
-    def test_combinedcomparison_and_or_operator(self):
-        stix_pattern = "[ipv4-addr:value = '172.31.81.98'] AND [mac-addr:value = '12:2f:23:46:35:5b'] "\
-                       "START t'2022-03-01T00:00:00.000Z' STOP t'2022-03-31T11:00:00.003Z'"
-        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
-        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
-        expected_query = ['{\'search\': \'((@fields.source_ip:"172.31.81.98" OR @fields.dest_ip:"172.31.81.98" OR'
-                          ' @fields.src:"172.31.81.98" OR @fields.dst:"172.31.81.98" OR @fields.ip:"172.31.81.98" OR'
-                          ' @fields.subnet_mask:"172.31.81.98" OR @fields.released_ip:"172.31.81.98" OR'
-                          ' @fields.requested_ip:"172.31.81.98" OR @fields.assigned_ip:"172.31.81.98") OR'
-                          ' ((@fields.mac:"12:2f:23:46:35:5b" OR @fields.src_mac:"12:2f:23:46:35:5b" OR'
-                          ' @fields.dst_mac:"12:2f:23:46:35:5b") AND ()))\', \'fields\': [], \'size\': 10000}']
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
 
@@ -560,7 +422,7 @@ class TestqueryTranslator(unittest.TestCase):
         assert actual_query['success'] is False
 
     def test_x509_like(self):
-        stix_pattern = "[x509-certificate:version LIKE 12]"
+        stix_pattern = "[x509-certificate:version LIKE '12']"
         actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
         assert actual_query['success'] is False
 
