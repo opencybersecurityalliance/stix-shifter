@@ -36,7 +36,7 @@ class PingConnector(BasePingConnector):
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
         except Exception as exe:
             if 'timeout_error' in str(exe):
@@ -45,5 +45,5 @@ class PingConnector(BasePingConnector):
                 response_dict['type'] = exe.__class__.__name__
             response_dict['message'] = exe
             self.logger.error('error when getting search results: %s', exe)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj

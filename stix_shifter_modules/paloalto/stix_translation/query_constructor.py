@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
-    ComparisonExpression, ComparisonComparators, Pattern, CombinedComparisonExpression, CombinedObservationExpression
+    ComparisonExpression, ComparisonComparators, Pattern, CombinedComparisonExpression, CombinedObservationExpression, \
+    ComparisonExpressionOperators, ObservationOperators
 import logging
 import re
 from datetime import datetime, timedelta
@@ -29,12 +30,28 @@ class QueryStringPatternTranslator:
     translate stix pattern to native data source query language
     """
 
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "and",
+        ComparisonExpressionOperators.Or: "or",
+        ComparisonComparators.Equal: "=",
+        ComparisonComparators.NotEqual: "!=",
+        ComparisonComparators.Like: "contains",
+        ComparisonComparators.Matches: "~=",
+        ComparisonComparators.GreaterThan: ">",
+        ComparisonComparators.GreaterThanOrEqual: ">=",
+        ComparisonComparators.LessThan: "<",
+        ComparisonComparators.LessThanOrEqual: "<=",
+        ComparisonComparators.In: "in",
+        ObservationOperators.Or: "or",
+        ObservationOperators.And: "or"
+    }
+
     def __init__(self, pattern: Pattern, data_model_mapper, options):
         logger.info("Palo Alto Cortex XDR Connector")
         self.dmm = data_model_mapper
         self.options = options
         self.timeframe = []
-        self.comparator_lookup = self.dmm.map_comparator()
+        # self.comparator_lookup = self.dmm.map_comparator()
         self.config_map = self.load_json(CONFIG_MAP_PATH)
         self.all_fields_map = self.load_json(FIELDS_MAP_PATH)
         self.translated_query = self.parse_expression(pattern)
@@ -194,7 +211,7 @@ class QueryStringPatternTranslator:
         :param comparator
         :param mapped_field_type: str
         """
-        operator = self.comparator_lookup[str(comparator)]
+        operator = self.comparator_lookup[comparator]
         if mapped_field_type == "enum" and (comparator not in [ComparisonComparators.Equal, ComparisonComparators.In,
                                                                ComparisonComparators.NotEqual]):
             raise NotImplementedError(f'{operator} operator is not supported for Enum type input. Possible supported '
@@ -357,11 +374,11 @@ class QueryStringPatternTranslator:
         :param expression_operator:enum object
         :return str
         """
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(
                 f'Comparison operator {expression_operator.name} unsupported for Palo Alto Cortex XDR connector')
 
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     def _eval_comparison_value(self, expression, mapped_field_type, mapped_fields_array):
         """

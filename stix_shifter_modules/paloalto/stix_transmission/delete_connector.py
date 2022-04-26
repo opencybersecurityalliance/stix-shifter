@@ -23,7 +23,7 @@ class DeleteConnector(BaseDeleteConnector):
                 return_obj['success'] = response_dict['success']
                 return_obj['message'] = 'Delete operation of a search id is not supported in Palo Alto Cortex XDR'
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except Exception as err:
             self.logger.error('error when deleting search %s:', err)

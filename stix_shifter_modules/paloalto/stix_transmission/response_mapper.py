@@ -53,25 +53,25 @@ class ResponseMapper:
         except InvalidAuthenticationException:
             response_dict['type'] = "AuthenticationError"
             response_dict['message'] = "Invalid api_key"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except InvalidLicenseException:
             response_dict['type'] = "InvalidLicense"
             response_dict['message'] = "User does not have the required license type to run this API"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except APIPermissionException:
             response_dict['type'] = "APIPermissionException"
             response_dict['message'] = "The provided API Key does not have the required RBAC permissions to run " \
                                        "this API"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except InvalidJsonException as ex:
             response_dict['type'] = "InvalidJsonException"
             response_dict['message'] = ex
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             ResponseMapper.logger.error('error when getting search results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
     @staticmethod
@@ -91,14 +91,14 @@ class ResponseMapper:
         except InvalidQueryException:
             response_dict['type'] = "SyntaxError"
             response_dict['message'] = 'Bad query Syntax'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except InternalServerErrorException as ex:
             response_dict['type'] = "AttributeError"
             response_dict['message'] = ex
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as exp:
             response_dict['type'] = exp.__class__.__name__
             response_dict['message'] = exp
             ResponseMapper.logger.error('error when getting search results: %s', exp)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=ResponseMapper.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
