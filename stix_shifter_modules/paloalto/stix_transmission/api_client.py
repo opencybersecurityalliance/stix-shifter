@@ -98,11 +98,11 @@ class APIClient:
         except MaxDailyQuotaException:
             response_dict['type'] = "MaxDailyQuotaException"
             response_dict['message'] = "query usage exceeded max daily quota"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as ex:
             if 'timeout_error' in str(ex):
                 response_dict['type'] = 'TimeoutError'
@@ -110,7 +110,7 @@ class APIClient:
                 response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
         return return_obj
 

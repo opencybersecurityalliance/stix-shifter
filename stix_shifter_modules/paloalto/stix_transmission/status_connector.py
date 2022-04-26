@@ -86,12 +86,12 @@ class StatusConnector(BaseStatusConnector):
         except InvalidResponseException:
             response_dict['type'] = 'EmptyResultException'
             response_dict['message'] = 'Empty results received from Tenant'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as err:
             if 'timeout_error' in str(err):
                 response_dict['type'] = 'TimeoutError'
@@ -99,7 +99,7 @@ class StatusConnector(BaseStatusConnector):
                 response_dict['type'] = err.__class__.__name__
             response_dict['message'] = err
             self.logger.error('error when getting search results: %s', err)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
     def handle_fail_response(self, response_text, return_obj, response_dict):
@@ -120,5 +120,5 @@ class StatusConnector(BaseStatusConnector):
 
             response_dict['type'] = "SyntaxError"
             response_dict['message'] = 'Tenant Query Failed'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj

@@ -39,7 +39,7 @@ class QueryConnector(BaseQueryConnector):
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
         except Exception as exep:
             if 'timeout_error' in str(exep):
@@ -48,5 +48,5 @@ class QueryConnector(BaseQueryConnector):
                 response_dict['type'] = exep.__class__.__name__
             response_dict['message'] = exep
             self.logger.error('error when getting search results: %s', exep)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
