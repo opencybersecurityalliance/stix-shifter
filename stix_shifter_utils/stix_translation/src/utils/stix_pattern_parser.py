@@ -27,12 +27,6 @@ class PatternTranslator:
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 
-    @staticmethod
-    def _escape_value(value, comparator=None) -> str:
-        if isinstance(value, str):
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(' ', '\\ '))
-        else:
-            return value
 
     def __init__(self, pattern: Pattern, time_range):
         self.parsed_pattern = []
@@ -57,7 +51,7 @@ class PatternTranslator:
                 self._convert_qualifier_times_to_unix_times(qualifier)
 
             if (expression.comparator == ComparisonComparators.In and isinstance(expression.value, SetValue)):
-                expression.value = list(map(self._escape_value, expression.value.element_iterator()))
+                expression.value = list(expression.value.element_iterator())
 
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})
         elif isinstance(expression, CombinedComparisonExpression):
