@@ -1,8 +1,17 @@
 import json
 import unittest
 from stix_shifter_modules.reaqta.entry_point import EntryPoint
-from stix_shifter_utils.utils.helpers import find
 
+
+def find(element, dd, default=None):
+    try:
+        keys = element.split('.')
+        rv = dd
+        for key in keys:
+            rv = rv[key]
+        return rv
+    except Exception:
+        return default
 
 ENTRY_POINT = EntryPoint()
 
