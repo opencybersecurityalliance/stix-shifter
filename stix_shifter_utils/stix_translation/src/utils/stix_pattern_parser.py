@@ -1,5 +1,5 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+    ComparisonExpressionOperators, ComparisonComparators, Pattern, SetValue, \
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 import datetime
 from stix_shifter_utils.stix_translation.src.utils.transformers import DateTimeToUnixTimestamp
@@ -27,6 +27,7 @@ class PatternTranslator:
         ComparisonComparators.IsSubSet: 'ISSUBSET'
     }
 
+
     def __init__(self, pattern: Pattern, time_range):
         self.parsed_pattern = []
         # Set times based on default time_range or what is in the options
@@ -48,6 +49,10 @@ class PatternTranslator:
                 comparator = 'NOT ' + comparator
             if qualifier is not None:
                 self._convert_qualifier_times_to_unix_times(qualifier)
+
+            if (expression.comparator == ComparisonComparators.In and isinstance(expression.value, SetValue)):
+                expression.value = list(expression.value.element_iterator())
+
             self.parsed_pattern.append({'attribute': expression.object_path, 'comparison_operator': comparator, 'value': expression.value})
         elif isinstance(expression, CombinedComparisonExpression):
             if qualifier is not None:
