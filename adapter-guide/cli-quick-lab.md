@@ -6,7 +6,14 @@ STIX (Structured Threat Information eXpression) is a JSON structure used to shar
 
 ## Setup
 
-### 1. Open a terminal and install the required stix-shifter libraries
+### 1. Open a terminal and install a Python Virtual Environment
+
+```
+pip install virtualenv
+virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
+```
+
+### 2. Install the required stix-shifter libraries
 
 This installs the core stix-shifter and utils library along with the STIX-bundle and QRadar connectors.
 
@@ -14,7 +21,7 @@ This installs the core stix-shifter and utils library along with the STIX-bundle
 pip install stix-shifter stix-shifter-utils stix-shifter-modules-stix_bundle stix-shifter-modules-qradar
 ```
 
-### 2. Store the STIX bundle URL in a bash variable
+### 3. Store the STIX bundle URL in a bash variable
 
 This is a bundle of sample STIX data that will be used to demonstrate the `stix_bundle` connector.
 
@@ -22,7 +29,7 @@ This is a bundle of sample STIX data that will be used to demonstrate the `stix_
 BUNDLE_URL=https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/data/cybox/crowdstrike/crowdstrike_detections_20210723.json
 ```
 
-### 3. Store the sample result JSON in a bash variable
+### 4. Store the sample result JSON in a bash variable
 
 This is a list of JSON objects containing sample data that will be used to demonstrate STIX translation.
 
