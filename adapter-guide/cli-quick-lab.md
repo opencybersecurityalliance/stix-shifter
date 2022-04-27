@@ -8,19 +8,23 @@ STIX (Structured Threat Information eXpression) is a JSON structure used to shar
 
 ### 1. Open a terminal and install the required stix-shifter libraries
 
+This installs the core stix-shifter and utils library along with the STIX-bundle and QRadar connectors.
+
 ```
 pip install stix-shifter stix-shifter-utils stix-shifter-modules-stix_bundle stix-shifter-modules-qradar
 ```
 
-This installs the core stix-shifter and utils library along with the stix-bundle and QRadar connectors.
-
 ### 2. Store the STIX bundle URL in a bash variable
+
+This is a bundle of sample STIX data that will be used to demonstrate the `stix_bundle` connector.
 
 ```
 BUNDLE_URL=https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/data/cybox/crowdstrike/crowdstrike_detections_20210723.json
 ```
 
 ### 3. Store the sample result JSON in a bash variable
+
+This is a list of JSON objects containing sample data that will be used to demonstrate STIX translation.
 
 ```
 JSON_RESULTS=$(cat <<EOF 
@@ -107,10 +111,6 @@ The stix_bundle connector will query the sample STIX bundle and return a subset 
 
 ### 2. Run the execute command
 
-```
-stix-shifter execute stix_bundle stix_bundle '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "stix-bundle","identity_class": "system"}' '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' "[ipv4-addr:value = '12.111.222.0']"
-```
-
 The execute command runs through the entire stix-shifter flow:
 
 -	Translates a STIX pattern into a native data source query
@@ -118,6 +118,10 @@ The execute command runs through the entire stix-shifter flow:
 -	Checks the status of the query via the data source APIs
 -	Fetches the query results via the APIs and, if needed, converts them to JSON
 -	Translates the JSON results into STIX objects
+
+```
+stix-shifter execute stix_bundle stix_bundle '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "stix-bundle","identity_class": "system"}' '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' "[ipv4-addr:value = '12.111.222.0']"
+```
 
 Note the bundle of observed-data objects that are returned. Each of these objects contains a numbered set of cyber observable objects (url, network-traffic, ipv4-addr…) which contain the data from the target data source. Given the above CLI example, the ipv4-addr object should contain a value property with 12.111.222.0
 
@@ -128,36 +132,37 @@ The transmission commands use the data source APIs to send a query, check the st
 
 ### 3. Run the ping command
 
+This command checks that the data source can be reached by the stix-shifter connector.
+
 ```
 stix-shifter transmit stix_bundle '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' ping
 ```
 
-This command checks that the data source can be reached by the stix-shifter connector.
-
 ### 4. Run the query command
+
+This command sends the native query to the data source.
 
 ```
 stix-shifter transmit stix_bundle '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' query "[ipv4-addr:value = '192.168.0.8']"
 ```
 
-This command sends the native query to the data source.
-
 ### 5. Run the status command 
+
+This command checks the status of the query.
+
 
 ```
 stix-shifter transmit stix_bundle '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' status "[ipv4-addr:value = '192.168.0.8']"
 ```
 
-This command checks the status of the query.
-
 ### 6. Run the results command
+
+This command fetches the query results
+
 
 ```
 stix-shifter transmit stix_bundle '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' results "[ipv4-addr:value = '192.168.0.8']" 0 2
 ```
-
-This command fetches the query results
-
 
 ## Translation mapping for QRadar
 
@@ -170,11 +175,12 @@ This file determines how STIX objects and their properties are mapped to the tar
 
 ### 8. Run the STIX query translation CLI command for the QRadar connector
 
+This command passing in a STIX pattern and returns a list of native data source queries that can later be passed to a query transmission call.
+
 ```
 stix-shifter translate qradar:events query '{}' "[ipv4-addr:value = '109.0.216.203' AND file:name = 'photos.exe'] OR [url:value = 'blah.com' OR url:value = 'path.com' OR url:value = 'crhs.ca']"
 ```
 
-This command passing in a STIX pattern and returns a list of native data source queries that can later be passed to a query transmission call.
 
 ### 9. Examine the JSON to STIX mapping file for the QRadar connector
 
@@ -183,9 +189,9 @@ https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shif
 
 ### 10. Run the JSON results translation CLI command for the QRadar connector
 
+This command passes in a STIX identity object and a list of JSON results (each element in the list represents a row of data). A bundle of STIX objects is returned. The bundle contains the identity object, which represents the data source the data comes from, and an observed-data object for each of the rows that were translated.
 ```
 stix-shifter translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' "$JSON_RESULTS"
 ```
 
-This command passes in a STIX identity object and a list of JSON results (each element in the list represents a row of data). A bundle of STIX objects is returned. The bundle contains the identity object, which represents the data source the data comes from, and an observed-data object for each of the rows that were translated.
 
