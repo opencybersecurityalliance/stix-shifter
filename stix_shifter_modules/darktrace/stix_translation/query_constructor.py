@@ -203,8 +203,6 @@ class QueryStringPatternTranslator:
         else:
             return '"' + str(value) + '"'
 
-        return value
-
     def _add_qualifier(self, query, qualifier):
         """
         Convert the qualifier into epoch time and

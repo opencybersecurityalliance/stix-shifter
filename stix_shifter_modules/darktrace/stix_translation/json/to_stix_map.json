@@ -9,8 +9,8 @@
 		],
 		"uid": [
 			{
-				"key": "x-oca-asset.extensions.x-darktrace-connection.identifier",
-    			"object": "asset"
+				"key": "x-oca-event.code",
+    			"object": "event"
 			}
 		],
 		"id_hUUID": [
@@ -1128,6 +1128,12 @@
 			{
 				"key": "mac-addr.value",
 				"object": "mac-addr"
+			},
+			{
+				"key": "x-oca-asset.mac_refs",
+				"object": "asset",
+				"references": "mac-addr",
+				"group": true
 			}
 		],
 		"dhcp_type": [
@@ -1496,13 +1502,13 @@
 		],
 		"basic_constraints": [
 			{
-				"key": "x509-certificate.x509_v3_extensions.x-darktrace-x509.basic_constraints",
+				"key": "x509-certificate.extensions.x509_v3_extensions.basic_constraints",
 				"object": "x509-certificate"
 			}
 		],
 		"san": [
 			{
-				"key": "x509-certificate.x509_v3_extensions.x-darktrace-x509.subject_alternative_name",
+				"key": "x509-certificate.extensions.x509_v3_extensions.subject_alternative_name",
 				"object": "x509-certificate"
 			}
 		],

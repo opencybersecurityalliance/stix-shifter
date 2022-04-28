@@ -61,11 +61,11 @@ results
     "success": true,
     "data": [
         {
-            "conn": { "epochdate": 1647946686.995818, "source_port": 24178, "source_ip": "0.0.0.0", "dest_ip": "0.0.0.0", "uid": "CEfQ2a2ObXcyNJUvEk01", "dest_port": 3389, "proto": "null" },
-            "x509": { "epochdate": 1647946686.995818, "source_port": 24178, "certificate_not_valid_after": 1660562534, "fid": "FxWXXc1uH1zQNF66T701", "certificate_key_type": "rsa", "certificate_sig_alg": "sha256WithRSAEncryption", "certificate_key_alg": "rsaEncryption", "certificate_subject": "CN=EC2AMAZ-2GNPPAQ", "source_ip": "0.0.0.0", "certificate_exponent": "65537", "certificate_key_length": 2048, "dest_ip": "0.0.0.0", "certificate_not_valid_before": 1644751334, "uid": "CEfQ2a2ObXcyNJUvEk01", "dest_port": 3389, "certificate_version": 3, "certificate_serial": "76FDB38B8D5AA88844250EFE0EA89026", "certificate_issuer": "CN=EC2AMAZ-2GNPPAQ", "proto": "null" } },
+            "conn": { "epochdate": 1647946686.995818, "source_port": 24178, "source_ip": "0.0.0.0", "dest_ip": "1.1.1.1", "uid": "CEfQ2a2ObXcyNJUvEk01", "dest_port": 3389, "proto": "null" },
+            "x509": { "epochdate": 1647946686.995818, "source_port": 24178, "certificate_not_valid_after": 1660562534, "fid": "FxWXXc1uH1zQNF66T701", "certificate_key_type": "rsa", "certificate_sig_alg": "sha256WithRSAEncryption", "certificate_key_alg": "rsaEncryption", "certificate_subject": "CN=EC2AMAZ-2GNPPAQ", "source_ip": "0.0.0.0", "certificate_exponent": "65537", "certificate_key_length": 2048, "dest_ip": "1.1.1.1", "certificate_not_valid_before": 1644751334, "uid": "CEfQ2a2ObXcyNJUvEk01", "dest_port": 3389, "certificate_version": 3, "certificate_serial": "76FDB38B8D5AA88844250EFE0EA89026", "certificate_issuer": "CN=EC2AMAZ-2GNPPAQ", "proto": "null" } },
         {
-            "conn": { "epochdate": 1647946686.995818, "source_port": 24178, "dest_port": 3389, "source_ip": "0.0.0.0", "dest_ip": "0.0.0.0", "uid": "CEfQ2a2ObXcyNJUvEk01", "proto": "null" },
-            "ssl": { "epochdate": 1647946686.995818, "total_client_ciphers": 28, "validation_status": "unable to get local issuer certificate", "client_hello_seen": true, "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863", "source_port": 24178, "dest_port": 3389, "established": true, "source_ip": "0.0.0.0", "issuer": "CN=EC2AMAZ-2GNPPAQ", "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "dest_ip": "0.0.0.0", "cert_chain_fuids": "FxWXXc1uH1zQNF66T701", "curve": "secp384r1", "uid": "CEfQ2a2ObXcyNJUvEk01", "version": "TLS1.2", "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767", "subject": "CN=EC2AMAZ-2GNPPAQ", "proto": "null" }
+            "conn": { "epochdate": 1647946686.995818, "source_port": 24178, "dest_port": 3389, "source_ip": "0.0.0.0", "dest_ip": "1.1.1.1", "uid": "CEfQ2a2ObXcyNJUvEk01", "proto": "null" },
+            "ssl": { "epochdate": 1647946686.995818, "total_client_ciphers": 28, "validation_status": "unable to get local issuer certificate", "client_hello_seen": true, "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863", "source_port": 24178, "dest_port": 3389, "established": true, "source_ip": "0.0.0.0", "issuer": "CN=EC2AMAZ-2GNPPAQ", "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "dest_ip": "1.1.1.1", "cert_chain_fuids": "FxWXXc1uH1zQNF66T701", "curve": "secp384r1", "uid": "CEfQ2a2ObXcyNJUvEk01", "version": "TLS1.2", "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767", "subject": "CN=EC2AMAZ-2GNPPAQ", "proto": "null" }
         }
     ]
 }
@@ -83,24 +83,27 @@ translate darktrace results
 ```json
 {
     "type": "bundle",
-    "id": "bundle--27b49396-68c0-4dc5-97ee-3acaa4cd8d44",
+    "id": "bundle--17b8cbb6-1267-4d71-bbee-672749df19e3",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "darktrace",
-            "identity_class ": "events"
+            "identity_class": "events",
+            "created": "2022-03-16T13:22:50.336Z",
+            "modified": "2022-03-16T13:22:50.336Z"
         },
         {
-            "id": "observed-data--5c33264f-21b4-4dbe-a8a1-dd96a895220b",
+            "id": "observed-data--17d5395b-592f-4cbb-9c1d-c8689b84da95",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.208Z",
-            "modified": "2022-04-07T05:24:20.208Z",
+            "created": "2022-04-28T13:26:43.452Z",
+            "modified": "2022-04-28T13:26:43.452Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
+                    "created": "2022-03-22T11:04:31.000Z",
+                    "code": "CqQ5sRAFWzt7NRQmj01"
                 },
                 "1": {
                     "type": "network-traffic",
@@ -109,7 +112,7 @@ translate darktrace results
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
@@ -122,25 +125,14 @@ translate darktrace results
                             "cert_file_uids": "F2D8iX1YaTCWKlsoN01",
                             "elliptic_curve": "secp384r1",
                             "ssl_version": "TLS1.0",
-                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445"
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CqQ5sRAFWzt7NRQmj01"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -152,20 +144,21 @@ translate darktrace results
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:24:20.208Z",
-            "last_observed": "2022-04-07T05:24:20.208Z",
+            "first_observed": "2022-04-28T13:26:43.452Z",
+            "last_observed": "2022-04-28T13:26:43.452Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--d92080dc-38ea-404e-8d25-62e0f2f65b43",
+            "id": "observed-data--9bcbbca4-6cbb-47d0-aeb1-b3c9b61d8395",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
+            "created": "2022-04-28T13:26:43.460Z",
+            "modified": "2022-04-28T13:26:43.460Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
+                    "created": "2022-03-22T11:04:31.000Z",
+                    "code": "CqQ5sRAFWzt7NRQmj01"
                 },
                 "1": {
                     "type": "network-traffic",
@@ -174,221 +167,27 @@ translate darktrace results
                     "dst_ref": "4",
                     "dst_port": 3389,
                     "protocols": [
-                        "null"
-                    ],
+                        "ssl"
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "0.0.0.0"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1"
+                },
+                "5": {
+                    "type": "x509-certificate",
+                    "validity_not_before": "2022-08-15T11:22:14.000Z",
                     "extensions": {
                         "x-darktrace-x509": {
                             "file_id": "F2D8iX1YaTCWKlsoN01",
                             "certificate_key_type": "rsa",
                             "certificate_key_length": 2048
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CqQ5sRAFWzt7NRQmj01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "validity_not_before": "2022-08-15T11:22:14.000Z",
-                    "signature_algorithm": "sha256WithRSAEncryption",
-                    "subject_public_key_algorithm": "rsaEncryption",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject_public_key_exponent": 65537,
-                    "validity_not_after": "2022-02-13T11:22:14.000Z",
-                    "version": "3",
-                    "serial_number": "76FDB38B8D5AA88844250EFE0EA89026",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--cd1c9052-4ee4-4d90-80e2-0cb4cb9bb92e",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "1": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "2": {
-                    "type": "network-traffic",
-                    "src_ref": "1",
-                    "src_port": 11256,
-                    "dst_ref": "4",
-                    "dst_port": 3389,
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-rdp": {
-                            "cookie": "hello",
-                            "security_protocol": "HYBRID"
-                        }
-                    }
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "1",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CqQ5sRAFWzt7NRQmj01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--c566ab3b-beca-40fd-bcd2-088e48217f4b",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "network-traffic",
-                    "src_packets": 10,
-                    "extensions": {
-                        "x-darktrace-conn": {
-                            "originator_ttl": 108,
-                            "connection_length": "00h00m03s",
-                            "responder_ttl": 128,
-                            "conn_state": "RSTO : Originator aborted : Connection established, originator aborted (sent a RST).",
-                            "originator_asn": "AS39814 SIA IT Services",
-                            "orig_country_code": "LV",
-                            "history": "ShADdaR",
-                            "start_ts": "2022-03-22T11:04:31.000Z",
-                            "is_locally_responded": true,
-                            "connection_state_desc": "Originator aborted",
-                            "app_protocol": "ssl"
-                        }
                     },
-                    "dst_byte_count": 1613,
-                    "src_port": 11256,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "src_byte_count": 1170,
-                    "dst_packets": 7,
-                    "protocols": [
-                        "tcp"
-                    ],
-                    "dst_ref": "4"
-                },
-                "1": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CqQ5sRAFWzt7NRQmj01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--7bfe5313-c408-4fce-83ec-b591bab38f84",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 33484,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "dst_port": 3389,
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-x509": {
-                            "file_id": "FcXA7Mkd1Wz0FwR4j01",
-                            "certificate_key_type": "rsa",
-                            "certificate_key_length": 2048
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "validity_not_before": "2022-08-15T11:22:14.000Z",
                     "signature_algorithm": "sha256WithRSAEncryption",
                     "subject_public_key_algorithm": "rsaEncryption",
                     "subject": "CN=EC2AMAZ-2GNPPAQ",
@@ -399,255 +198,8 @@ translate darktrace results
                     "issuer": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--40c5d652-6714-4975-a6fa-cf35a390e216",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 33484,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FcXA7Mkd1Wz0FwR4j01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--e673ab3a-2547-4a7f-8eb5-431d07c647ff",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "1": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "2": {
-                    "type": "network-traffic",
-                    "src_ref": "1",
-                    "src_port": 33484,
-                    "dst_ref": "4",
-                    "dst_port": 3389,
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-rdp": {
-                            "cookie": "dpl",
-                            "security_protocol": "HYBRID"
-                        }
-                    }
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "1",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--076d2984-1880-4d24-8bf6-32a274512dcf",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "network-traffic",
-                    "src_packets": 11,
-                    "extensions": {
-                        "x-darktrace-conn": {
-                            "originator_ttl": 102,
-                            "connection_length": "00h00m02s",
-                            "responder_ttl": 128,
-                            "conn_state": "RSTO : Originator aborted : Connection established, originator aborted (sent a RST).",
-                            "originator_asn": "AS44477 IP Oleinichenko Denis",
-                            "orig_country_code": "RU",
-                            "history": "ShADdaR",
-                            "start_ts": "2022-03-22T11:04:31.000Z",
-                            "is_locally_responded": true,
-                            "connection_state_desc": "Originator aborted",
-                            "app_protocol": "ssl"
-                        }
-                    },
-                    "dst_byte_count": 1603,
-                    "src_port": 33484,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "src_byte_count": 1232,
-                    "dst_packets": 8,
-                    "protocols": [
-                        "tcp"
-                    ],
-                    "dst_ref": "4"
-                },
-                "1": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--7075d60d-63fd-4b9b-807e-df9e655882f3",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:24:20.219Z",
-            "modified": "2022-04-07T05:24:20.219Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:29.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 23545,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "dst_port": 3389,
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-x509": {
-                            "file_id": "FZ9xi5bEsRVmJP1d01",
-                            "certificate_key_type": "rsa",
-                            "certificate_key_length": 2048
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CdvBdF3iF8inLx6jLe01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "validity_not_before": "2022-08-15T11:22:14.000Z",
-                    "signature_algorithm": "sha256WithRSAEncryption",
-                    "subject_public_key_algorithm": "rsaEncryption",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject_public_key_exponent": 65537,
-                    "validity_not_after": "2022-02-13T11:22:14.000Z",
-                    "version": "3",
-                    "serial_number": "76FDB38B8D5AA88844250EFE0EA89026",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:24:20.219Z",
-            "last_observed": "2022-04-07T05:24:20.219Z",
+            "first_observed": "2022-04-28T13:26:43.460Z",
+            "last_observed": "2022-04-28T13:26:43.460Z",
             "number_observed": 1
         }
     ],
@@ -659,7 +211,7 @@ translate darktrace results
 
 ####STIX Translate query
 ```shell
-translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND x-darktrace-ssl:ssl_version='TLS1.2'] START t'2022-03-21T11:00:00.000Z' STOP t'2022-03-22T11:05:00.003Z'"
+translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND network-traffic:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-03-21T11:00:00.000Z' STOP t'2022-03-22T11:05:00.003Z'"
 ```
 
 #### STIX Translate query - output
@@ -668,12 +220,12 @@ translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND x-darktrace-ssl
 {
     "queries": [
         {
-            "search": "(((@fields.version:TLS1.2) AND (@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))",
+            "search": "(((@fields.curve:\"secp384r1\") AND (@fields.source_ip:\"0.0.0.0\" OR @fields.dest_ip:\"0.0.0.0\" OR @fields.src:\"0.0.0.0\" OR @fields.dst:\"0.0.0.0\" OR @fields.ip:\"0.0.0.0\" OR @fields.subnet_mask:\"0.0.0.0\" OR @fields.released_ip:\"0.0.0.0\" OR @fields.requested_ip:\"0.0.0.0\" OR @fields.assigned_ip:\"0.0.0.0\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))",
             "fields": [],
             "timeframe": "custom",
             "time": {
-                "from": "2022-03-21T11:00:00.000000Z",
-                "to": "2022-03-22T11:05:00.003000Z"
+                "from": "2022-04-25T11:00:00.000000Z",
+                "to": "2022-04-28T11:05:00.003000Z"
             },
             "size": 10000
         }
@@ -690,7 +242,7 @@ darktrace
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"private_token\": \"xxxxx\", \"public_token\": \"xxxxx\"}}"
 results
-"{\"search\":\"(((@fields.version:TLS1.2) AND (@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\" OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))\",\"fields\":[],\"timeframe\":\"custom\",\"time\":{\"from\":\"2022-03-21T11:00:00.000000Z\",\"to\":\"2022-03-22T11:05:00.003000Z\"},\"size\":10000}" 
+"{\"search\": \"(((@fields.curve:\\"secp384r1\\") AND (@fields.source_ip:\\"0.0.0.0\\" OR @fields.dest_ip:\\"0.0.0.0\\" OR @fields.src:\\"0.0.0.0\\"OR @fields.dst:\\"0.0.0.0\\" OR @fields.ip:\\"0.0.0.0\\" OR @fields.subnet_mask:\\"0.0.0.0\\" OR @fields.released_ip:\\"0.0.0.0\\" OR@fields.requested_ip:\\"0.0.0.0\\" OR @fields.assigned_ip:\\"0.0.0.0\\")) AND (@fields.epochdate :>1647860400.0 AND @fields.epochdate :<1647947100.003))\",\"fields\": [],\"timeframe\": \"custom\",\"time\": {\"from\": \"2022-04-25T11:00:00.000000Z\",\"to\":\"2022-04-28T11:05:00.003000Z\"},\"size\": 10000}"
 0 2
 ```
 
@@ -698,602 +250,71 @@ results
 
 ```json
 {
-    "type": "bundle",
-    "id": "bundle--69e78875-840f-4a90-acd2-f727704cfca5",
-    "objects": [
+    "success": true,
+    "data": [
         {
-            "type": "identity",
-            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "name": "darktrace",
-            "identity_class ": "events"
+            "conn": {
+                "epochdate": 1651143658.117242,
+                "source_port": 54915,
+                "dest_port": 3389,
+                "source_ip": "0.0.0.0",
+                "dest_ip": "1.1.1.1",
+                "uid": "C6TH6a1MtQEqWnyoy801",
+                "proto": "ssl"
+            },
+            "ssl": {
+                "epochdate": 1651143658.117242,
+                "total_client_ciphers": 50,
+                "validation_status": "unable to get local issuer certificate",
+                "client_hello_seen": true,
+                "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
+                "source_port": 54915,
+                "dest_port": 3389,
+                "established": true,
+                "source_ip": "0.0.0.0",
+                "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                "cipher": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                "dest_ip": "1.1.1.1",
+                "cert_chain_fuids": "FmNnVq4z5RYyPGY7Ab01",
+                "curve": "secp384r1",
+                "uid": "C6TH6a1MtQEqWnyoy801",
+                "version": "TLS1.0",
+                "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                "subject": "CN=EC2AMAZ-2GNPPAQ"
+            }
         },
         {
-            "id": "observed-data--19eda175-c310-44ac-a8d9-1e836f301f57",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.522Z",
-            "modified": "2022-04-07T05:41:54.522Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 33484,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FcXA7Mkd1Wz0FwR4j01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
+            "conn": {
+                "epochdate": 1651143612.952305,
+                "source_port": 64959,
+                "dest_port": 3389,
+                "source_ip": "0.0.0.0",
+                "dest_ip": "1.1.1.1",
+                "uid": "C6pB5U2hSWDpf2y6h101",
+                "proto": "ssl"
             },
-            "first_observed": "2022-04-07T05:41:54.522Z",
-            "last_observed": "2022-04-07T05:41:54.522Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--d32b74d6-d601-462e-a78c-054cf3607459",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:29.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 23545,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FZ9xi5bEsRVmJP1d01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CdvBdF3iF8inLx6jLe01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--19801b68-8a79-4d22-8431-1b016f17bede",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:27.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 12529,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "F7KkW11tCMxrFeykE301",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CPphuC1YzPi3RxWki901"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--bb49f2a8-da2d-4aba-b82c-652d64a9fa88",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:25.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 2421,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FTWwOv1LJIUowbcGoi01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CeVgti48vYLBsyb11301"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--08960083-7872-4014-ab42-b8278a96024d",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:23.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 50100,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FGEPjd2w8gst2QUqwh01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CrcUaT2wIylNoL0SI801"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--3943381f-37e6-4eb2-9930-a55309dc50c4",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:21.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 40102,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FdHj4c4bnb8duFwdtb01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "C2tIWy2pB78ziJrV8j01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--00ec74b0-1bc2-4883-a4f7-b376a60d3435",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:19.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 29869,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FCO09S2H0NWYjb90Zf01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CxkH1xtKJGRmjrja201"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--f1d401a7-0940-482c-9950-46700bc23eb2",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:17.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 20285,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FpUah61XH0VQVGydVc01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CiTMLg3ZSqESsn1yk01"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--a3d7049b-1221-44cd-b936-e8fef09f2dc6",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:41:54.524Z",
-            "modified": "2022-04-07T05:41:54.524Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:15.000Z"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 9793,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "null"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 28,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FVbiDvMg2dOKq9JK101",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "Cm2RmF1W3mq1YYJck701"
-                        }
-                    }
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-07T05:41:54.524Z",
-            "last_observed": "2022-04-07T05:41:54.524Z",
-            "number_observed": 1
+            "ssl": {
+                "epochdate": 1651143612.952305,
+                "total_client_ciphers": 50,
+                "validation_status": "unable to get local issuer certificate",
+                "client_hello_seen": true,
+                "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
+                "source_port": 64959,
+                "dest_port": 3389,
+                "established": true,
+                "source_ip": "0.0.0.0",
+                "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                "cipher": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                "dest_ip": "1.1.1.1",
+                "cert_chain_fuids": "Fi6LNwSCOC85DdmGk01",
+                "curve": "secp384r1",
+                "uid": "C6pB5U2hSWDpf2y6h101",
+                "version": "TLS1.0",
+                "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                "subject": "CN=EC2AMAZ-2GNPPAQ"
+            }
         }
-    ],
-    "spec_version": "2.0"
+    ]
 }
 ```
 
@@ -1302,73 +323,65 @@ results
 execute
 darktrace
 darktrace
-"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"darktrace\",\"identity_class \":\"events\"}"
+"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"darktrace\",\"identity_class\":\"events\", \"created\": \"2022-04-11T16:11:11.878Z\",\"modified\": \"2022-04-11T16:11:11.878Z\"}"
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"private_token\": \"xxxxx\", \"public_token\": \"xxxxx\"}}"
-"[x-darktrace-ssl:ssl_version='TLS1.2'] START t'2022-03-21T11:00:00.000Z' STOP t'2022-03-22T11:05:00.003Z'"
+"[network-traffic:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-04-25T11:00:00.000Z' STOP t'2022-04-28T11:05:00.003Z'"
 ```
 #### STIX Execute query - output
 ```json
 {
     "type": "bundle",
-    "id": "bundle--c2538dec-265e-45c7-85a1-7c2206286e21",
+    "id": "bundle--2ccf184a-da6e-43ca-a14f-d813c8f3b74c",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "darktrace",
-            "identity_class ": "events"
+            "identity_class": "events",
+            "created": "2022-04-11T16:11:11.878Z",
+            "modified": "2022-04-11T16:11:11.878Z"
         },
         {
-            "id": "observed-data--fad9e913-51a4-4882-898c-99455a8edc8e",
+            "id": "observed-data--4f01cfea-c96a-424a-be55-205c6e8c7ce3",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z"
+                    "created": "2022-04-28T11:04:29.000Z",
+                    "code": "CyYTbd11Me5BcCwaTe01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 33484,
+                    "src_port": 62309,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 55,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "0b63812a99e66c82a20d30c3b9ba6e06",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FcXA7Mkd1Wz0FwR4j01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "Fezsmf35thStOZvLw901",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CnqTYB1K38sGXvsZ0101"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1380,60 +393,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--70ff51ec-4f38-463d-8d5e-a838da801220",
+            "id": "observed-data--0aa72643-badc-483b-b3e5-5d04350e3215",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:29.000Z"
+                    "created": "2022-04-28T11:04:20.000Z",
+                    "code": "CBofjX3jCG3ZFu1DB501"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 23545,
+                    "src_port": 51679,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 41,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "43e25370946f1b41b411e6d0bf378456",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FZ9xi5bEsRVmJP1d01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "FrNUiK3CyPmwHuzKy301",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CdvBdF3iF8inLx6jLe01"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1445,60 +448,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--0e63b18a-5fd8-43a7-87b5-dee8764fa27f",
+            "id": "observed-data--6fb3e22c-8721-4d47-96eb-df942c3925be",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:27.000Z"
+                    "created": "2022-04-28T11:03:44.000Z",
+                    "code": "CG9Qnp1w9bi0IHg3y701"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 12529,
+                    "src_port": 54279,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 41,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "43e25370946f1b41b411e6d0bf378456",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "F7KkW11tCMxrFeykE301",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "Fjp4gH32yIXU4SeBJ501",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CPphuC1YzPi3RxWki901"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1510,60 +503,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--a1370e1f-b7a8-4a96-a1e2-f78eb34a5272",
+            "id": "observed-data--9f29a7e1-4b3c-43f6-ad7e-e723f783db9d",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:25.000Z"
+                    "created": "2022-04-28T11:03:20.000Z",
+                    "code": "ChE02THkyZAIBRqYi01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 2421,
+                    "src_port": 59976,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 41,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "43e25370946f1b41b411e6d0bf378456",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FTWwOv1LJIUowbcGoi01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "F6nomdQ53HGoOvfh401",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CeVgti48vYLBsyb11301"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1575,60 +558,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--1c9d0a8b-978f-45be-8735-6361904dee64",
+            "id": "observed-data--d073f848-1436-4ea9-bce1-339179562a1b",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:23.000Z"
+                    "created": "2022-04-28T11:03:07.000Z",
+                    "code": "CnAOaZ2jYcncPVyiR01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 50100,
+                    "src_port": 5922,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 50,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FGEPjd2w8gst2QUqwh01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "FJLWw6HyYpcMakddb01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CrcUaT2wIylNoL0SI801"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1640,60 +613,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--987a70fd-5f19-4d3b-afdf-a7d47fb9c898",
+            "id": "observed-data--d7368305-07e1-45b1-a4d2-d9f884e6feb3",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:21.000Z"
+                    "created": "2022-04-28T11:03:03.000Z",
+                    "code": "CHYiyQ2wN9xp5ovzId01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 40102,
+                    "src_port": 58751,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 50,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FdHj4c4bnb8duFwdtb01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "FUUWZb4Z4a42mnS86801",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "C2tIWy2pB78ziJrV8j01"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1705,60 +668,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--cba5a71f-27ec-468a-bc11-02b2c227c4ec",
+            "id": "observed-data--49b46de5-f994-4a40-96f1-81fc4dad5e5e",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:19.000Z"
+                    "created": "2022-04-28T11:02:49.000Z",
+                    "code": "CyBGMQ1drDaoXjSK3g01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 29869,
+                    "src_port": 34867,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 55,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "0b63812a99e66c82a20d30c3b9ba6e06",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FCO09S2H0NWYjb90Zf01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "Fafou13BJ66JIuCLok01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CxkH1xtKJGRmjrja201"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1770,60 +723,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--6fe7667e-6771-472c-b133-e832201b3d0b",
+            "id": "observed-data--ead53aeb-16ce-4bac-a233-67fbb1220d51",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:17.000Z"
+                    "created": "2022-04-28T11:02:27.000Z",
+                    "code": "CDR0Nv21toSvrOcpU01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 20285,
+                    "src_port": 52837,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 50,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FpUah61XH0VQVGydVc01",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "FcgYKX3Gz9akuSeD7c01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "CiTMLg3ZSqESsn1yk01"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1835,60 +778,50 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--d036ee26-4a45-4f85-902b-cd2ff24a8513",
+            "id": "observed-data--3584eaed-af03-41b1-afc1-79b7437fa8ac",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-07T05:38:05.840Z",
-            "modified": "2022-04-07T05:38:05.840Z",
+            "created": "2022-04-28T13:08:42.914Z",
+            "modified": "2022-04-28T13:08:42.914Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:15.000Z"
+                    "created": "2022-04-28T11:02:20.000Z",
+                    "code": "C3RDFn3kisVFzMRMg01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 9793,
+                    "src_port": 60052,
                     "dst_port": 3389,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "protocols": [
-                        "null"
+                        "ssl"
                     ],
                     "extensions": {
                         "x-darktrace-ssl": {
-                            "total_ciphers": 28,
+                            "total_ciphers": 50,
                             "validation_status": "unable to get local issuer certificate",
                             "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
                             "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            "cert_file_uids": "FVbiDvMg2dOKq9JK101",
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                            "cert_file_uids": "FttvZK16zOjSrTz8X301",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.2",
-                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                            "ssl_version": "TLS1.0",
+                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
+                            "server_certificate_ref": "5"
                         }
                     }
                 },
                 "2": {
                     "type": "ipv4-addr",
                     "value": "0.0.0.0"
-                },
-                "3": {
-                    "type": "x-oca-asset",
-                    "ip_refs": [
-                        "2",
-                        "4"
-                    ],
-                    "extensions": {
-                        "x-darktrace-connection": {
-                            "identifier": "Cm2RmF1W3mq1YYJck701"
-                        }
-                    }
                 },
                 "4": {
                     "type": "ipv4-addr",
@@ -1900,8 +833,8 @@ darktrace
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-07T05:38:05.840Z",
-            "last_observed": "2022-04-07T05:38:05.840Z",
+            "first_observed": "2022-04-28T13:08:42.914Z",
+            "last_observed": "2022-04-28T13:08:42.914Z",
             "number_observed": 1
         }
     ],
