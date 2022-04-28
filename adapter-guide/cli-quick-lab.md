@@ -9,8 +9,8 @@ STIX (Structured Threat Information eXpression) is a JSON structure used to shar
 ### 1. Open a terminal and install a Python Virtual Environment
 
 ```
-pip install virtualenv
-virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
+python3 -m venv labenv
+source labenv/bin/activate
 ```
 
 ### 2. Install the required stix-shifter libraries
