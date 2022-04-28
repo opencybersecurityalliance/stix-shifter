@@ -14,7 +14,7 @@ The `[ ]` represents one observation. A pattern can have multiple observations j
 
 ### STIX Observed Data
 
-STIX-shifter returns a `bundle` of STIX `observed-data` objects. The bundle is just a container object to hold the results. Below is a sample bundle containing one identity object (representing the data source) and one observed-data object:
+STIX-shifter returns a `bundle` of STIX `observed-data` objects. The bundle is a container object to hold the results. Below is a sample bundle containing one identity object (representing the data source) and one observed-data object:
 
 ```json
 {
@@ -106,9 +106,16 @@ STIX-shifter returns a `bundle` of STIX `observed-data` objects. The bundle is j
 }
 ```
 
-Each observed-data object contains a numbered set of cyber-observable objects.
+Each observed-data object contains a numbered set of cyber-observable objects. The properties on the cyber-observable object store the data returned from the data source. See the [STIX 2.0 standard](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more on cyber observable objects.
 
 ## Setup
+
+### Prerequisites
+
+* Python 3
+* pip
+* venv
+* Ability to run bash commands
 
 ### 1. Open a terminal and install a Python Virtual Environment
 
