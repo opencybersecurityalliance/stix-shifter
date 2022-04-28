@@ -199,8 +199,9 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_query_from_multiple_comparison_expressions_joined_by_and(self):
         """ test to check multiple comparison stix pattern to native data source query """
-        stix_pattern = "[  x-sentinelone-endpoint:endpoint_os = 'windows' AND " \
-                       "x-sentinelone-file:file_type IN ('PE')]"
+        stix_pattern = "[  x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows' AND " \
+                       "file:extensions.'x-sentinelone-file'.file_type IN ('PE')]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "(tgtFileType IN (\\"PE\\") '
@@ -228,7 +229,8 @@ class TestQueryTranslator(unittest.TestCase):
     def test_query_from_morethan_two_comparison_expressions_joined_by_and(self):
         """ test to check more than two comparison expressions """
         stix_pattern = "[user-account:account_login LIKE 'ADMINISTRATOR' " \
-                       "AND x-sentinelone-endpoint:endpoint_os = 'windows' " \
+                       "AND x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows' " \
                        "AND x-sentinelone-indicator:indicator_name = 'PreloadInjection']"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
@@ -245,11 +247,13 @@ class TestQueryTranslator(unittest.TestCase):
     def test_multiple_observation_query(self):
         """ test to check multiple observation query """
         stix_pattern = "([file: hashes.MD5 = '0bbd4d92d3a0178463ef6e0ad46c986a' " \
-                       "AND x-sentinelone-file:file_extension = 'log'" \
+                       "AND file:extensions.'x-sentinelone-file'.file_extension = 'log'" \
                        " AND x-oca-event:action = 'File Rename'] AND " \
-                       "[x-sentinelone-file:file_type = 'PE'] AND " \
-                       "[ x-sentinelone-endpoint:agent_version = '21.6.6.1200' " \
-                       "AND x-sentinelone-network-action:connection_status ='SUCCESS' ])" \
+                       "[file:extensions.'x-sentinelone-file'.file_type = 'PE'] AND " \
+                       "[ x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "agent_version = '21.6.6.1200' " \
+                       "AND network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status ='SUCCESS' ])" \
                        "START t'2019-10-01T00:00:00.030Z' STOP t'2021-10-07T00:00:00.030Z' "
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         queries = ['{"query": "((eventType = \\"FILE RENAME\\" AND '
@@ -271,7 +275,8 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_negate_query(self):
         """ test to check negate query """
-        stix_pattern = "[x-sentinelone-endpoint:endpoint_os NOT IN('windows')]"
+        stix_pattern = "[x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os NOT IN('windows')]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "endpointOs NOT IN (\\"WINDOWS\\") AND EventTime  '
@@ -321,7 +326,8 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_is_reversed_parm_query(self):
         """ test to check reversed parameter query """
-        stix_pattern = "[x-sentinelone-process:publisher = 'MICROSOFT WINDOWS PUBLISHER' " \
+        stix_pattern = "[process:extensions.'x-sentinelone-process'." \
+                       "publisher = 'MICROSOFT WINDOWS PUBLISHER' " \
                        "AND network-traffic:src_port = 62024 ] START " \
                        "t'2019-10-01T08:43:10.003Z' STOP t'2019-11-30T10:43:10.005Z' "
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
@@ -338,9 +344,11 @@ class TestQueryTranslator(unittest.TestCase):
         """ test to check multiple observation qualifier query """
         stix_pattern = "[file:size > 10 ] START t'2022-01-01T00:00:00.030Z' " \
                        "STOP t'2022-02-28T00:00:00.030Z' AND [ " \
-                       "x-sentinelone-file:file_description = 'Windows Push " \
+                       "file:extensions.'x-sentinelone-file'." \
+                       "file_description = 'Windows Push " \
                        "Notifications User Service_2d02eb' AND " \
-                       "x-sentinelone-endpoint:endpoint_os = 'windows'] "
+                       "x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows'] "
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver2(query['queries'])
         queries = ['{"query": "(tgtFileSize > \\"10\\" AND EventTime  '
@@ -385,7 +393,8 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_negate_for_like_operator(self):
         """test to check negate for like query"""
-        stix_pattern = "[x-sentinelone-file:file_description NOT LIKE 'Windows']"
+        stix_pattern = "[file:extensions.'x-sentinelone-file'." \
+                       "file_description NOT LIKE 'Windows']"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "NOT tgtFileDescription in contains anycase (\\"Windows\\") '
@@ -456,7 +465,8 @@ class TestQueryTranslator(unittest.TestCase):
         """test to multiple start stop qualifier observation query"""
         stix_pattern = "[file: hashes.MD5 = '0bbd4d92d3a0178463ef6e0ad46c986a']START " \
                        "t'2022-01-05T00:00:00.030Z' STOP t'2022-02-20T00:00:00.030Z' " \
-                       "AND [ x-sentinelone-endpoint:agent_version = '21.6.6.1200']START " \
+                       "AND [ x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "agent_version = '21.6.6.1200']START " \
                        "t'2022-01-01T00:00:00.030Z' STOP t'2022-02-28T00:00:00.030Z'"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         queries = ['{"query": "((tgtFileMd5 = \\"0bbd4d92d3a0178463ef6e0ad46c986a\\" '
@@ -482,8 +492,10 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_or_operator_query(self):
         """test to check or pattern to query"""
-        stix_pattern = "[  x-sentinelone-endpoint:endpoint_os = 'windows' " \
-                       "OR x-sentinelone-network-action:connection_status ='SUCCESS' " \
+        stix_pattern = "[x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os   = 'windows' " \
+                       "OR network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status ='SUCCESS' " \
                        "AND network-traffic:src_port > 100 ]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
@@ -498,10 +510,12 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_pattern_with_or_query(self):
         """test to check multiple pattern with or to query"""
-        stix_pattern = "[x-sentinelone-network-action:connection_status ='SUCCESS' " \
+        stix_pattern = "[network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status ='SUCCESS' " \
                        "AND network-traffic:src_port > 100] START " \
                        "t'2019-10-01T08:43:10.003Z' STOP t'2019-11-30T10:43:10.005Z' " \
-                       "AND [x-sentinelone-endpoint:endpoint_os = 'windows' " \
+                       "AND [x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows' " \
                        "OR x-oca-event:action = 'File Rename']"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver2(query['queries'])
@@ -518,10 +532,13 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_combination_or_pattern_query(self):
         """test to check multiple combination or operator to query"""
-        stix_pattern = "[x-sentinelone-network-action:connection_status ='SUCCESS' " \
+        stix_pattern = "[network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status ='SUCCESS' " \
                        "OR network-traffic:src_port > 100 " \
-                       "AND x-sentinelone-endpoint:endpoint_os = 'windows' " \
-                       "OR x-sentinelone-process:integrity_level = 'SYSTEM' ]"
+                       "AND x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows' " \
+                       "OR process:extensions.'x-sentinelone-process'." \
+                       "integrity_level = 'SYSTEM' ]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "((srcProcIntegrityLevel = \\"SYSTEM\\" '
@@ -537,9 +554,11 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_or_operator_query(self):
         """test to check multiple or operator to query"""
-        stix_pattern = "[x-sentinelone-network-action:connection_status ='SUCCESS' " \
+        stix_pattern = "[network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status ='SUCCESS' " \
                        "OR network-traffic:src_port > 100 " \
-                       "OR x-sentinelone-endpoint:endpoint_os = 'windows']"
+                       "OR x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os = 'windows']"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "(endpointOs = \\"WINDOWS\\" OR (srcPort > \\"100\\" '
@@ -553,8 +572,9 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_pattern_with_enum_fields_query(self):
         """test to check enum fields to query"""
-        stix_pattern = "[x-sentinelone-file:file_type IN ('PE') " \
-                       "OR x-sentinelone-registry:full_size = 72]"
+        stix_pattern = "[file:extensions.'x-sentinelone-file'.file_type IN ('PE') " \
+                       "OR windows-registry-key:extensions.'x-sentinelone-registry'." \
+                       "full_size = 72]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "(registryValueFullSize = \\"72\\" '
@@ -568,10 +588,13 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_enum_fields_query(self):
         """test to check multiple enum fields to query"""
-        stix_pattern = "[x-sentinelone-network-action:connection_status " \
+        stix_pattern = "[network-traffic:extensions.'x-sentinelone-network-action'." \
+                       "connection_status " \
                        "IN ('SUCCESS') OR " \
-                       " x-sentinelone-file:file_type IN ('PE') " \
-                       "AND x-sentinelone-login:login_type IN ('SYSTEM') ]"
+                       " file:extensions.'x-sentinelone-file'." \
+                       "file_type IN ('PE') " \
+                       "AND user-account:extensions.'x-sentinelone-login'." \
+                       "login_type IN ('SYSTEM') ]"
         query = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query_ver1(query['queries'])
         queries = ['{"query": "((loginType IN (\\"SYSTEM\\") '
@@ -586,7 +609,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_invalid_enum_fields_query(self):
         """test to check invalid  enum field pattern """
-        stix_pattern = "[x-sentinelone-file:file_type = 'abc']"
+        stix_pattern = "[file:extensions.'x-sentinelone-file'.file_type = 'abc']"
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
@@ -600,7 +623,8 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_invalid_enum_fields_with_in_operator(self):
         """test to check invalid  enum fields """
-        stix_pattern = "[x-sentinelone-endpoint:endpoint_os IN ('mac')]"
+        stix_pattern = "[x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os IN ('mac')]"
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
@@ -611,8 +635,9 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_invalid_enum_fields_with_multiple_element(self):
         """test to check invalid  enum fields with multiple element"""
-        stix_pattern = "[x-sentinelone-endpoint:endpoint_os IN ('mac') " \
-                       "OR x-sentinelone-file:file_type IN ('PE')]"
+        stix_pattern = "[x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os IN ('mac') " \
+                       "OR file:extensions.'x-sentinelone-file'.file_type IN ('PE')]"
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
@@ -623,8 +648,9 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_invalid_fields(self):
         """test to check multiple invalid fields"""
-        stix_pattern = "[x-sentinelone-endpoint:endpoint_os IN ('mac') " \
-                       "OR x-sentinelone-file:file_type IN ('abc')]"
+        stix_pattern = "[x-oca-asset:extensions.'x-sentinelone-endpoint'." \
+                       "endpoint_os IN ('mac') " \
+                       "OR file:extensions.'x-sentinelone-file'.file_type IN ('abc')]"
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']

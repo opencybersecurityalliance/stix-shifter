@@ -189,6 +189,9 @@ class ResultsConnector(BaseResultsConnector):
             for fieldname in fields:
                 if item.get(fieldname) is not None:
                     val = item.get(fieldname)
-                    if val.find("\"") != -1 or val.find('"') != -1:
-                        val = val.replace('\"', '').replace('"', '')
-                        item[fieldname] = val
+                    # Escaping the double quote in certain fields value like srcProcCmdLine
+                    if val.find("\"") != -1:
+                        val = val.replace('\"', '\\"')
+                    elif val.find('"') != -1:
+                        val = val.replace('"', '\\"')
+                    item[fieldname] = val

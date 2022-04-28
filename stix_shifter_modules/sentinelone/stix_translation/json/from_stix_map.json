@@ -33,6 +33,12 @@
       ],
       "dst_ref.value": [
         "dstIp"
+      ],
+      "extensions.'x-sentinelone-network-action'.connection_status": [
+        "netConnStatus"
+      ],
+      "extensions.'x-sentinelone-network-action'.event_direction": [
+        "netEventDirection"
       ]
     }
   },
@@ -82,6 +88,63 @@
       ],
       "parent_ref.pid": [
         "srcProcParentPid"
+      ],
+      "extensions.'x-sentinelone-process'.integrity_level": [
+        "srcProcIntegrityLevel",
+        "tgtProcIntegrityLevel"
+      ],
+      "extensions.'x-sentinelone-process'.publisher": [
+        "srcProcPublisher",
+        "tgtProcPublisher"
+      ],
+      "extensions.'x-sentinelone-process'.story_line_id": [
+        "srcProcStorylineId",
+        "tgtProcStorylineId"
+      ],
+      "extensions.'x-sentinelone-process'.process_unique_id": [
+        "srcProcUid",
+        "tgtProcUid",
+        "srcProcParentUid"
+      ],
+      "extensions.'x-sentinelone-process'.signed_status": [
+        "srcProcSignedStatus",
+        "tgtProcSignedStatus"
+      ],
+      "extensions.'x-sentinelone-process'.verified_status": [
+        "srcProcVerifiedStatus",
+        "tgtProcVerifiedStatus"
+      ],
+      "extensions.'x-sentinelone-process'.signature_invalid_reason": [
+        "srcProcReasonSignatureInvalid",
+        "tgtProcReasonSignatureInvalid"
+      ],
+      "extensions.'x-sentinelone-process'.sub_system": [
+        "srcProcSubsystem",
+        "tgtProcSubsystem"
+      ],
+      "extensions.'x-sentinelone-process'.session_id": [
+        "srcProcSessionId",
+        "tgtProcSessionId"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_type": [
+        "srcProcActiveContentType",
+        "tgtProcActiveContentType"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_fileid": [
+        "srcProcActiveContentFileId",
+        "tgtProcActiveContentFileId"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_path": [
+        "srcProcActiveContentPath",
+        "tgtProcActiveContentPath"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_hash": [
+        "srcProcActiveContentHash",
+        "tgtProcActiveContentHash"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_signed_status": [
+        "srcProcActiveContentSignedStatus",
+        "tgtProcActiveContentSignedStatus"
       ]
     }
   },
@@ -123,6 +186,24 @@
       ],
       "modified": [
         "tgtFileModifiedAt"
+      ],
+      "extensions.'x-sentinelone-file'.file_type": [
+        "tgtFileType"
+      ],
+      "extensions.'x-sentinelone-file'.file_extension": [
+        "tgtFileExtension"
+      ],
+      "extensions.'x-sentinelone-file'.file_description": [
+        "tgtFileDescription"
+      ],
+      "extensions.'x-sentinelone-file'.file_location": [
+        "tgtFileLocation"
+      ],
+      "extensions.'x-sentinelone-file'.file_id": [
+        "tgtFileId"
+      ],
+      "extensions.'x-sentinelone-file'.convicted_by": [
+        "tgtFileConvictedBy"
       ]
     }
   },
@@ -152,6 +233,18 @@
       ],
       "display_name": [
         "loginAccountName"
+      ],
+      "extensions.'x-sentinelone-login'.login_type": [
+        "loginType"
+      ],
+      "extensions.'x-sentinelone-login'.base_type": [
+        "loginsBaseType"
+      ],
+      "extensions.'x-sentinelone-login'.login_failure_reason": [
+        "loginFailureReason"
+      ],
+      "extensions.'x-sentinelone-login'.session_id": [
+        "loginSessionId"
       ]
     }
   },
@@ -163,133 +256,20 @@
       ],
       "values[*]": [
         "registryValue"
-      ]
-    }
-  },
-  "x-sentinelone-process": {
-    "fields": {
-      "integrity_level": [
-        "srcProcIntegrityLevel",
-        "tgtProcIntegrityLevel"
       ],
-      "publisher": [
-        "srcProcPublisher",
-        "tgtProcPublisher"
-      ],
-      "story_line_id": [
-        "srcProcStorylineId",
-        "tgtProcStorylineId"
-      ],
-      "process_unique_id": [
-        "srcProcUid",
-        "tgtProcUid",
-        "srcProcParentUid"
-      ],
-      "signed_status": [
-        "srcProcSignedStatus",
-        "tgtProcSignedStatus"
-      ],
-      "verified_status": [
-        "srcProcVerifiedStatus",
-        "tgtProcVerifiedStatus"
-      ],
-      "signature_invalid_reason": [
-        "srcProcReasonSignatureInvalid",
-        "tgtProcReasonSignatureInvalid"
-      ],
-      "sub_system": [
-        "srcProcSubsystem",
-        "tgtProcSubsystem"
-      ],
-      "session_id": [
-        "srcProcSessionId",
-        "tgtProcSessionId"
-      ],
-      "active_content_type": [
-        "srcProcActiveContentType",
-        "tgtProcActiveContentType"
-      ],
-      "active_content_field": [
-        "srcProcActiveContentFileId",
-        "tgtProcActiveContentFileId"
-      ],
-      "active_content_path": [
-        "srcProcActiveContentPath",
-        "tgtProcActiveContentPath"
-      ],
-      "active_content_hash": [
-        "srcProcActiveContentHash",
-        "tgtProcActiveContentHash"
-      ],
-      "active_content_signed_status": [
-        "srcProcActiveContentSignedStatus",
-        "tgtProcActiveContentSignedStatus"
-      ]
-    }
-  },
-  "x-sentinelone-network-action": {
-    "fields": {
-      "connection_status": [
-        "netConnStatus"
-      ],
-      "event_direction": [
-        "netEventDirection"
-      ]
-    }
-  },
-  "x-sentinelone-login": {
-    "fields": {
-      "login_type": [
-        "loginType"
-      ],
-      "base_type": [
-        "loginsBaseType"
-      ],
-      "login_failure_reason": [
-        "loginFailureReason"
-      ],
-      "session_id": [
-        "loginSessionId"
-      ]
-    }
-  },
-  "x-sentinelone-file": {
-    "fields": {
-      "file_type": [
-        "tgtFileType"
-      ],
-      "file_extension": [
-        "tgtFileExtension"
-      ],
-      "file_description": [
-        "tgtFileDescription"
-      ],
-      "file_location": [
-        "tgtFileLocation"
-      ],
-      "file_id": [
-        "tgtFileId"
-      ],
-      "convicted_by": [
-        "tgtFileConvictedBy"
-      ]
-    }
-  },
-  "x-sentinelone-registry": {
-    "fields": {
-      "value_type": [
+      "extensions.'x-sentinelone-registry'.value_type": [
         "registryValueType"
       ],
-      "full_size": [
+      "extensions.'x-sentinelone-registry'.full_size": [
         "registryValueFullSize"
       ],
-      "old_value_type": [
+      "extensions.'x-sentinelone-registry'.old_value_type": [
         "registryOldValueType"
       ],
-      "old_value": [
+      "extensions.'x-sentinelone-registry'.old_value": [
         "registryOldValue"
       ],
-      "old_value_full_size": [
+      "extensions.'x-sentinelone-registry'.old_value_full_size": [
         "registryOldValueFullSize"
       ]
     }
@@ -318,21 +298,17 @@
       "ip_refs[*].value": [
         "srcIp",
         "dstIp"
-      ]
-    }
-  },
-  "x-sentinelone-endpoint": {
-    "fields": {
-      "endpoint_os": [
+      ],
+      "extensions.'x-sentinelone-endpoint'.endpoint_os": [
         "endpointOs"
       ],
-      "agent_version": [
+      "extensions.'x-sentinelone-endpoint'.agent_version": [
         "agentVersion"
       ],
-      "agent_uuid": [
-       "agentUuid"
+      "extensions.'x-sentinelone-endpoint'.agent_uuid": [
+        "agentUuid"
       ],
-      "machine_type": [
+      "extensions.'x-sentinelone-endpoint'.machine_type": [
         "endpointMachineType"
       ]
     }

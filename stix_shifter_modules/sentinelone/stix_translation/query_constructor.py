@@ -81,7 +81,7 @@ class QueryStringPatternTranslator:
         """
         filter_type = str(exp_comparator).split(".")[1]
         if filter_name in ["fileFullName"] and filter_type in \
-                ["LessThan", "LessThanOrEqual", "GreaterThan", "GreaterThanOrEqual", "NotEqual", "Equal"]:
+                ["LessThan", "LessThanOrEqual", "GreaterThan", "GreaterThanOrEqual"]:
             raise NotImplementedError(f'{filter_type}'
                                       f' operator is not supported for File Name, Use LIKE or MATCHES operator only')
         if filter_name in self.type_map["string_supported_fields"] and filter_type in\
@@ -272,6 +272,15 @@ class QueryStringPatternTranslator:
             stix_object, stix_field = expression.object_path.split(':')
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             filter_name = mapped_fields_array[0]
+            # Converting Equal operator to Like operator for field fileFullName,
+            # since it contains full path of file
+            if filter_name in ["fileFullName"]:
+                if expression.comparator == ComparisonComparators.Equal:
+                    expression.comparator = ComparisonComparators.Like
+                elif expression.comparator == ComparisonComparators.NotEqual:
+                    expression.comparator = ComparisonComparators.Like
+                    expression.negated = True
+
             comparator = self._lookup_comparison_operator(expression.comparator)
             if expression.negated:
                 comparator = self._negate_comparison(comparator)

@@ -1464,9 +1464,6 @@ class TestSentineloneConnection(unittest.TestCase):
            '.APIClient.ping_datasource')
     def test_ping_maxretried_error(self, mock_ping_source, mock_api_client):
         """ test to check ping_data_source function"""
-        #obj = """{"errors":[{"code":4000040,"detail":"empty result"}]}"""
-        #pingresponse = PingResponse(400, obj)
-        #mock_ping_source.return_value = pingresponse
         mock_ping_source.side_effect = Exception('Max retries exceeded')
 
         mock_api_client.return_value = None
@@ -1475,8 +1472,8 @@ class TestSentineloneConnection(unittest.TestCase):
                                                           self.config())
         ping_response = transmission.ping()
         assert ping_response is not None
-        assert ping_response['success'] is True
-        assert ping_response['code'] is not None
+        assert ping_response['success'] is False
+        assert ping_response['error'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')

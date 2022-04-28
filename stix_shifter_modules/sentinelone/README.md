@@ -310,7 +310,7 @@ results
 
 #### STIX Translate query
 ```shell
-translate sentinelone query {} "([x-oca-event:action = 'Process Creation'] AND [file:size > 1000] OR [x-sentinelone-endpoint:endpoint_os = 'windows'] ) START t'2022-04-16T00:00:00.000000Z' STOP t'2023-04-17T00:00:00.000000Z'"
+translate sentinelone query {} "([x-oca-event:action = 'Process Creation'] AND [file:size > 1000] OR [x-oca-asset:extensions.'x-sentinelone-endpoint'.endpoint_os = 'windows'] ) START t'2022-04-16T00:00:00.000000Z' STOP t'2023-04-17T00:00:00.000000Z'"
 ```
 
 #### STIX Translate query - output

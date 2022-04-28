@@ -567,11 +567,11 @@
     "object": "process"
   },
   "srcProcActiveContentFileId": {
-    "key": "process.extensions.x-sentinelone-process.active_content_field",
+    "key": "process.extensions.x-sentinelone-process.active_content_fileid",
     "object": "process"
   },
   "tgtProcActiveContentFileId": {
-    "key": "process.extensions.x-sentinelone-process.active_content_field",
+    "key": "process.extensions.x-sentinelone-process.active_content_fileid",
     "object": "process"
   },
   "srcProcActiveContentPath": {
