@@ -1,7 +1,6 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix2matcher.matcher import Pattern
-from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 import json
 import re
@@ -31,19 +30,7 @@ class Connector(BaseSyncConnector):
     # returns the first for some reason
     def match(self, pattern, observed_data_sdos, verbose=False):
         compiled_pattern = Pattern(pattern)
-        matcher = MatchListener(observed_data_sdos, verbose)
-        compiled_pattern.walk(matcher)
-
-        found_bindings = matcher.matched()
-
-        if found_bindings:
-            matching_sdos = []
-            for binding in found_bindings:
-                matches = [match for match in matcher.get_sdos_from_binding(binding) if match not in matching_sdos]
-                matching_sdos.extend(matches)
-        else:
-            matching_sdos = []
-
+        matching_sdos = compiled_pattern.match(observed_data_sdos, verbose)
         return matching_sdos
 
     def ping_connection(self):
