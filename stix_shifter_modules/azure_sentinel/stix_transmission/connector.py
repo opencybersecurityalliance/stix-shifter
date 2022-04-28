@@ -64,7 +64,7 @@ class Connector(BaseSyncConnector):
                 start_time =  datetime.strptime(matches[0].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
             else: 
                 stop_time = datetime.utcnow()
-                start_time = stop_time - timedelta(hours=24)
+                start_time = stop_time - timedelta(hours=5000)
             response = client.query_workspace(
                 workspace_id=self.workspace_id,
                 query=query,
@@ -75,7 +75,7 @@ class Connector(BaseSyncConnector):
                 data = response.partial_data
                 print(error.message)
             elif response.status == LogsQueryStatus.SUCCESS:
-                data = response.tables
+                data = response.tables 
             for table in data:
                 df = pd.DataFrame(data=table.rows, columns=table.columns)
                 return {"success": True, "data": df.astype(str).to_dict(orient='records')}

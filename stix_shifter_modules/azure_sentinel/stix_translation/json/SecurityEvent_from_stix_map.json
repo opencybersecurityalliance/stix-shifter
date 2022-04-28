@@ -48,7 +48,7 @@
     "fields": {
       "created": ["TimeGenerated"],
       "code": ["eventID"],
-      "provider": ["AccountName"],
+      "provider": ["Account"],
       "url_ref": ["QuarantineHelpURL"],
       "process_ref": ["ProcessName"],
       "file_ref.hash": ["FileHash"],
@@ -62,16 +62,13 @@
   },
   "x-msazure-sentinel-event": {
     "fields": {
-      "event_id": ["eventID"],
       "title": ["Title"],
       "text": ["Description", "DeviceDescription"],
       "device_name": ["DeviceId"],
-      "source": ["SourceSystem", "EventSourceName"],
+      "source": ["SourceSystem"],
       "alert_type": ["AlertName"],
-      "account": ["Account"],
       "activity": ["Activity"],
       "computer": ["Computer"],
-      "logon_processname": ["LogonProcessName"],
       "event_data": ["EventData"],
       "service_name": ["ServiceName"],
       "task": ["Task"],
