@@ -4,6 +4,110 @@
 
 STIX (Structured Threat Information eXpression) is a JSON structure used to share cybersecurity threat intelligence. STIX-shifter is an open-source python library that is part of the Open Cybersecurity Alliance. It allows data repositories to be queried using STIX patterning and return the results as STIX cyber observable objects. This lab will allow users to test out the various stix-shifter CLI commands.
 
+### STIX Patterning
+
+A [STIX pattern](http://docs.oasis-open.org/cti/stix/v2.0/cs01/part5-stix-patterning/stix-v2.0-cs01-part5-stix-patterning.html) is used to query [cyber observable objects](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html). STIX patterns take the format of:
+
+`[<OBJECT>:<PROPERTY> = 'some value' AND <OBJECT>:<PROPERTY> IN (value_1, value_2)] OR [<OBJECT>:<PROPERTY> = 'some value']`
+
+The `[ ]` represents one observation. A pattern can have multiple observations joined by the AND or OR observation operators. An observation can be thought of as one instance or row of data. Within the observation is one or more comparison expressions that looks for a value associated to a cyber observable STIX object and its property. This is a sample pattern with one observation containing an comparison operation for an IP lookup: `[ipv4-addr:value = '1.2.3.4']`. The STIX object in this case is `ipv4-addr` and the property on that object is `value`.
+
+### STIX Observed Data
+
+STIX-shifter returns a `bundle` of STIX `observed-data` objects. The bundle is just a container object to hold the results. Below is a sample bundle containing one identity object (representing the data source) and one observed-data object:
+
+```json
+{
+    "type": "bundle",
+    "id": "bundle--57d455df-105d-4722-8277-e569110e82ed",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "QRadar",
+            "identity_class": "system"
+        },
+        {
+            "id": "observed-data--4db61897-4725-483b-9e68-2874e48650c5",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-04-28T14:16:41.544Z",
+            "modified": "2022-04-28T14:16:41.544Z",
+            "objects": {
+                "0": {
+                    "type": "x-oca-event",
+                    "action": "Logon Failure - Unknown user name or bad password",
+                    "outcome": "Host Login Failed",
+                    "category": [
+                        "Authentication"
+                    ],
+                    "provider": "Microsoft Windows Security Event Log",
+                    "agent": "WindowsAuthServer @ microsoft.windows.test.com",
+                    "created": "2021-06-28T19:35:58.000Z",
+                    "network_ref": "2",
+                    "user_ref": "4",
+                    "url_ref": "7",
+                    "file_ref": "8"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "109.0.216.203"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "src_ref": "1",
+                    "src_port": 3000,
+                    "dst_ref": "3",
+                    "dst_port": 1000,
+                    "protocols": [
+                        "TCP"
+                    ]
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "192.168.1.11"
+                },
+                "4": {
+                    "type": "user-account",
+                    "user_id": "bill_holland"
+                },
+                "5": {
+                    "type": "ipv4-addr",
+                    "value": "0.0.0.0"
+                },
+                "6": {
+                    "type": "artifact",
+                    "payload_bin": "PDEzPk1hciAyMSAwMTo0Mjo1MCBtaWNyb3NvZnQud2luZG93cy50ZXN0LmNvbQ==",
+                    "mime_type": "text/plain"
+                },
+                "7": {
+                    "type": "url",
+                    "value": "www.example.com"
+                },
+                "8": {
+                    "type": "file",
+                    "name": "myfile.exe",
+                    "hashes": {
+                        "SHA-256": "86c5ceb27e1bf441130299c0209e5f35b88089f62c06b2b09d65772274f12057"
+                    },
+                    "parent_directory_ref": "9"
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C://filepath"
+                }
+            },
+            "first_observed": "2021-06-28T19:35:58.652Z",
+            "last_observed": "2021-06-28T19:36:58.652Z",
+            "number_observed": 31
+        }
+    ],
+    "spec_version": "2.0"
+}
+```
+
+Each observed-data object contains a numbered set of cyber-observable objects.
+
 ## Setup
 
 ### 1. Open a terminal and install a Python Virtual Environment
@@ -51,55 +155,27 @@ JSON_RESULTS=$(cat <<EOF
         "endtime": 1624909018652,
         "devicetime": 1624908958000,
         "sourceip": "109.0.216.203",
-        "sourceport": 0,
-        "sourcemac": "00:00:00:00:00:00",
+        "sourceport": 3000,
         "destinationip": "192.168.1.11",
-        "destinationport": 0,
-        "destinationmac": "00:00:00:00:00:00",
+        "destinationport": 1000,
         "username": "bill_holland",
         "direction": "R2L",
         "identityip": "0.0.0.0",
-        "identityhostname": null,
         "eventcount": 31,
-        "protocol": "Reserved",
+        "protocol": "TCP",
         "eventpayload": "<13>Mar 21 01:42:50 microsoft.windows.test.com",
-        "url": null,
+        "url": "www.example.com",
         "magnitude": 8,
-        "filename": null,
-        "filehash": null,
-        "sha1hash": null,
-        "sha256hash": null,
-        "md5hash": null,
-        "filepath": null,
+        "filename": "myfile.exe",
+        "sha256hash":"86c5ceb27e1bf441130299c0209e5f35b88089f62c06b2b09d65772274f12057",
+        "filepath": "C://filepath/",
         "eventseverity": 7,
         "credibility": 10,
         "relevance": 8,
         "sourcegeographic": "Europe.France",
-        "destinationgeographic": "other",
+        "destinationgeographic": "Canada",
         "domainname": "Default Domain",
-        "EventID": "529",
-        "Image": "null",
-        "ParentImage": "null",
-        "ProcessCommandLine": "null",
-        "ParentCommandLine": "null",
-        "TargetImage": "null",
-        "GrantedAccess": null,
-        "CallTrace": null,
-        "SourceImage": "null",
-        "PipeName": "null",
-        "StartModule": "null",
-        "StartFunction": "null",
-        "Signed": null,
-        "Message": null,
-        "RegistryValueName": null,
-        "IMPHash": null,
-        "ServiceFileName": "null",
-        "RegistryKey": null,
-        "ObjectName": "null",
-        "UrlHost": "null",
-        "ProcessName": null,
-        "ProcessId": null,
-        "ParentProcessId": null
+        "EventID": "529"
     }
 ]
 EOF
@@ -176,9 +252,10 @@ stix-shifter transmit stix_bundle '{"url": "'"$BUNDLE_URL"'"}' '{"auth": {}}' re
 
 ### 7. Examine the STIX pattern to AQL mapping file for the QRadar connector
 
+This file determines how STIX objects and their properties are mapped to the target data source fields. 
+
 https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/qradar/stix_translation/json/events_from_stix_map.json
 
-This file determines how STIX objects and their properties are mapped to the target data source fields. 
 
 ### 8. Run the STIX query translation CLI command for the QRadar connector
 
@@ -190,6 +267,8 @@ stix-shifter translate qradar:events query '{}' "[ipv4-addr:value = '109.0.216.2
 
 
 ### 9. Examine the JSON to STIX mapping file for the QRadar connector
+
+This file determines how fields returned in the data source results are mapped to SIX objects and their properties.
 
 https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/qradar/stix_translation/json/to_stix_map.json
 
