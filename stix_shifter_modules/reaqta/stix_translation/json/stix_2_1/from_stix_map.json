@@ -1,0 +1,274 @@
+{
+  "directory": {
+    "fields": {
+      "path": ["__etwHomePath", "accessor.path", "path", "consumer.workingDirectory"]
+    }
+  },
+  "file": {
+    "fields": {
+      "extensions.'x-reaqta-data'.arch": ["eventdata.arch"],
+      "extensions.'x-reaqta-data'.file_type": ["eventdata.filetype"],
+      "extensions.'x-reaqta-data'.fsname": ["filename"],
+      "extensions.'x-reaqta-program'.arch": ["service.arch"],
+      "extensions.'x-reaqta-program'.fsname": ["filename"],
+      "hashes.'MD5'": ["md5"],
+      "hashes.'SHA-1'": ["sha1"],
+      "hashes.'SHA-256'": ["sha256"],
+      "name": ["consumer.script.filename", "filename"],
+      "parent_directory_ref.path": ["path"],
+      "size": ["eventdata.size.lte", "eventdata.size.gte"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["login.ip", "ip"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ip"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_port": ["eventdata.remotePort"],
+      "dst_ref.value": ["ip"],
+      "extensions.'x-reaqta-network'.outbound": ["isOutbound"],
+      "src_port": ["eventdata.localPort"],
+      "src_ref.value": ["ip"]
+    }
+  },
+  "process": {
+    "fields": {
+      "binary_ref.name": ["filename"],
+      "creator_user_ref.user_id": [],
+      "extensions.'windows-process-ext'.owner_sid": ["user.sid"],
+      "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
+      "extensions.'x-reaqta-process'.no_gui": ["service.hasGui"],
+      "extensions.'x-reaqta-process'.privilege_level": ["service.privilege"],
+      "name": ["__etwCallerProcessName", "login.processName", "__etwLogonProcessName", "__etwProcessName"],
+      "parent_ref.binary_ref.name": ["service.ppid"],
+      "pid": ["engine.ppid", "service.pid", "ppid", "service.ppid", "pid", "eventdata.targetProcessId", "wmiHost.pid", "__etwProcessId", "wmi.clientPid", "engine.pid", "host.pid", "allocator.pid", "accessor.pid", "allocator.ppid", "accessor.ppid", "__etwCallerProcessId"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["eventdata.url"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["allocator.user", "service.user", "engine.user", "__etwTargetOutboundUserName", "user", "__etwOldTargetUserName", "__etwNewTargetUserName", "accessor.user", "wmi.user", "login.src.username", "login.dst.username"]
+    }
+  },
+  "windows-process-ext": {
+    "fields": {
+      "owner_sid": ["engine.user.sid", "login.src.sid", "accessor.user.sid", "user.sid", "allocator.user.sid", "service.user.sid"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "dst_ip_ref.value": ["ip"],
+      "extensions.'x-reaqta-avdetection'.av_scan_reason": ["antimalware.scanReason"],
+      "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
+      "finding_type": ["antimalware.threatType", "eventType"],
+      "name": ["antimalware.objectStatus"],
+      "src_ip_ref.value": ["ip"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "extensions.'x-reaqta-consumer'.command_line_template_tokens": ["consumer.cmdline"],
+      "extensions.'x-reaqta-consumer'.consumer_name": ["wmi.consumerName"],
+      "extensions.'x-reaqta-consumer'.consumer_type": ["wmi.consumerType"],
+      "extensions.'x-reaqta-consumer'.event_namespace": ["wmi.eventNamespace"],
+      "extensions.'x-reaqta-consumer'.executablePath": ["consumer.execPath"],
+      "extensions.'x-reaqta-consumer'.runInteractively": ["consumer.runInteractively"],
+      "extensions.'x-reaqta-consumer'.scriptingEngine": ["consumer.script.engine"],
+      "extensions.'x-reaqta-consumer'.showWindowCommand": ["consumer.showWindowCmd"],
+      "extensions.'x-wmi-event'.client_machine_fqn": ["wmi.clientMachineFqn"],
+      "host_id": ["__etwWorkstation"],
+      "hostname": ["wmi.machineName", "__etwWorkstationName", "wmi.clientMachine"],
+      "ip_refs[*].value": ["ip"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "agent": ["antimalware.appName"],
+      "code": ["eventdata.etwEventId", "eventId"],
+      "extensions.'x-reaqta-amsi'.content_name": ["antimalware.contentName"],
+      "extensions.'x-reaqta-amsi'.scan_result": ["antimalware.scanResult"],
+      "extensions.'x-reaqta-etw'.etw_event_record_id": ["eventdata.etwEventVersion"],
+      "extensions.'x-reaqta-etw'.etw_failure_reason": ["__etwFailureReason"],
+      "extensions.'x-reaqta-etw'.etw_home_directory": ["__etwHomeDirectory"],
+      "file_ref.name": ["path"],
+      "host_ref.x-oca-asset.hostname": ["wmi.clientMachine"],
+      "ip_refs[*].value": ["login.ip"],
+      "network_ref.dst_ref.value": ["ip"],
+      "network_ref.src_ref.value": ["ip"],
+      "parent_process_ref.pid": ["service.ppid"],
+      "process_ref.pid": ["wmi.clientPid"],
+      "user_ref.user_id": []
+    }
+  },
+  "x-reaqta-amsi": {
+    "fields": {
+      "content_name": ["antimalware.contentName"],
+      "scan_result": ["antimalware.scanResult"]
+    }
+  },
+  "x-reaqta-avdetection": {
+    "fields": {
+      "av_scan_reason": ["antimalware.scanReason"],
+      "av_threat_info_array": ["antimalware.threatInfo"]
+    }
+  },
+  "x-reaqta-cert": {
+    "fields": {
+      "expired": ["eventdata.cert.expired", "engine.expired", "service.expired", "allocator.expired", "expired", "accessor.expired"],
+      "signer": ["eventdata.cert.signer", "engine.signer", "accessor.signer", "service.signer", "signer", "allocator.signer"],
+      "trusted": ["allocator.trusted", "accessor.trusted", "eventdata.cert.trusted", "trusted", "service.trusted", "engine.trusted"]
+    }
+  },
+  "x-reaqta-consumer": {
+    "fields": {
+      "command_line_template_tokens": ["consumer.cmdline"],
+      "consumer_name": ["wmi.consumerName"],
+      "consumer_type": ["wmi.consumerType"],
+      "event_namespace": ["wmi.eventNamespace"],
+      "executablePath": ["consumer.execPath"],
+      "runInteractively": ["consumer.runInteractively"],
+      "scriptingEngine": ["consumer.script.engine"],
+      "showWindowCommand": ["consumer.showWindowCmd"]
+    }
+  },
+  "x-reaqta-data": {
+    "fields": {
+      "arch": ["eventdata.arch"],
+      "file_type": ["eventdata.filetype"],
+      "fsname": ["filename"]
+    }
+  },
+  "x-reaqta-etw": {
+    "fields": {
+      "etwRestrictedAdminMode": ["__etwRestrictedAdminMode"],
+      "etwSamAccountName": ["__etwSamAccountName"],
+      "etwScriptPath": ["__etwScriptPath"],
+      "etwServiceName": ["__etwServiceName"],
+      "etwServiceSid": ["__etwServiceSid"],
+      "etwSidHistory": ["__etwSidHistory"],
+      "etwSidList": ["__etwSidList"],
+      "etwStatus": ["__etwStatus"],
+      "etwSubStatus": ["login.src.domain", "__etwSubStatus"],
+      "etwSubjectLogonId": ["login.subjectLogonId"],
+      "etwTargetDomainName": ["login.dst.domain"],
+      "etwTargetInfo": ["__etwTargetInfo"],
+      "etwTargetLinkedLogonId": ["__etwTargetLinkedLogonId"],
+      "etwTargetLogonGuid": ["__etwTargetLogonGuid"],
+      "etwTargetLogonId": ["login.targetLogonId"],
+      "etwTargetOutboundDomainName": ["__etwTargetOutboundDomainName", "__etwTargetServerName"],
+      "etwTargetSid": ["__etwTargetSid"],
+      "etwTargetUserSid": ["login.dst.sid"],
+      "etwTask": ["eventdata.etwTask"],
+      "etwTicketEncryptionType": ["__etwTicketEncryptionType"],
+      "etwTicketOptions": ["__etwTicketOptions"],
+      "etwTransmittedServices": ["__etwTransmittedServices"],
+      "etwUserAccountControl": ["__etwUserAccountControl"],
+      "etwUserParameters": ["__etwUserParameters"],
+      "etwUserPrincipalName": ["__etwUserPrincipalName"],
+      "etwUserWorkstations": ["__etwUserWorkstations"],
+      "etwVirtualAccount": ["__etwVirtualAccount"],
+      "etw_allowed_to_delegateto": ["__etwAllowedToDelegateTo"],
+      "etw_authentication_packagename": ["login.authenticationPackage"],
+      "etw_cert_thumbprint": ["__etwCertThumbprint"],
+      "etw_display_name": ["__etwDisplayName"],
+      "etw_dummy": ["__etwDummy"],
+      "etw_elevated_token": ["__etwElevatedToken"],
+      "etw_event_record_id": ["__etwEventRecordId", "eventdata.etwEventVersion"],
+      "etw_failure_reason": ["__etwFailureReason"],
+      "etw_home_directory": ["__etwHomeDirectory"],
+      "etw_impersonation_level": ["__etwImpersonationLevel"],
+      "etw_ip_port": ["login.port"],
+      "etw_key_length": ["__etwKeyLength"],
+      "etw_lm_package_name": ["login.packageName"],
+      "etw_logon_guid": ["__etwLogonGuid"],
+      "etw_logon_hours": ["__etwLogonHours"],
+      "etw_logon_type": ["login.type"],
+      "etw_member_name": ["__etwMemberName"],
+      "etw_member_sid": ["__etwMemberSid"],
+      "etw_new_uac_value": ["__etwNewUacValue"],
+      "etw_old_uac_value": ["__etwOldUacValue"],
+      "etw_package_name": ["__etwPackageName"],
+      "etw_password_last_set": ["__etwPasswordLastSet"],
+      "etw_pre_auth_type": ["__etwPreAuthType"],
+      "etw_primary_groupId": ["__etwPrimaryGroupId"],
+      "etw_privilege_list": ["__etwPrivilegeList"],
+      "etw_profile_path": ["__etwProfilePath"]
+    }
+  },
+  "x-reaqta-event": {
+    "fields": {
+      "action_name": ["task.actionName"],
+      "custom_name": ["customName"],
+      "custom_type": ["customType"],
+      "data": ["reg.data"],
+      "display_name": ["service.displayName"],
+      "endpoint_id": ["endpointId"],
+      "filter_name": ["wmi.filterName"],
+      "is_local": ["wmi.isLocal"],
+      "name": ["reg.name"],
+      "namespace_name": ["wmi.namespaceName"],
+      "operation": ["wmi.operation"],
+      "operation_type": ["wmi.operationType"],
+      "pe_type": ["eventdata.peType"],
+      "query": ["wmi.query"],
+      "queryLanguage": ["wmi.queryLanguage"],
+      "queryName": ["eventdata.dns"],
+      "region_size": ["eventdata.regionSize.lte", "eventdata.regionSize.gte"],
+      "relevance": ["eventdata.relevance", "eventdata.relevance.lte", "eventdata.relevance.gte"],
+      "return_code": ["eventdata.returnCode"],
+      "root_object": ["path"],
+      "service_name": ["service.name"],
+      "service_type": ["service.type"],
+      "start_type": ["service.startType"],
+      "tactics": ["mitre.tactic"],
+      "tags": ["eventdata.tag"],
+      "task_name": ["task.name"],
+      "technique": ["mitre.technique"],
+      "version": ["eventdata.version"]
+    }
+  },
+  "x-reaqta-network": {
+    "fields": {
+      "outbound": ["isOutbound"]
+    }
+  },
+  "x-reaqta-process": {
+    "fields": {
+      "logon_id": ["allocator.login.id", "accessor.login.id", "login.id", "engine.login.id", "service.login.id"],
+      "no_gui": ["allocator.hasGui", "hasGui", "service.hasGui", "engine.hasGui", "accessor.hasGui"],
+      "privilege_level": ["service.privilege", "engine.privilege", "allocator.privilege", "privilege", "accessor.privilege"]
+    }
+  },
+  "x-reaqta-program": {
+    "fields": {
+      "arch": ["engine.arch", "arch", "service.arch", "allocator.arch", "accessor.arch"],
+      "fsname": ["filename"]
+    }
+  },
+  "x-wmi-event": {
+    "fields": {
+      "client_machine_fqn": ["wmi.clientMachineFqn"]
+    }
+  },
+  "x509-certificate": {
+    "fields": {
+      "extensions.'x-reaqta-cert'.expired": ["service.expired"],
+      "extensions.'x-reaqta-cert'.signer": ["signer"],
+      "extensions.'x-reaqta-cert'.trusted": ["trusted"],
+      "extensions.'x-reaqta-etw'.etw_cert_thumbprint": ["__etwCertThumbprint"],
+      "issuer": ["issuer", "engine.issuer", "allocator.issuer", "accessor.issuer", "__etwCertIssuerName", "service.issuer", "eventdata.cert.issuer"],
+      "serial_number": ["__etwCertSerialNumber"]
+    }
+  }
+}
