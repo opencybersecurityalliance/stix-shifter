@@ -22,7 +22,6 @@ class PingConnector(BasePingConnector):
             # Construct a response object
             return_obj = {}
             response_dict = {}
-
             return_obj, response_dict = self.call_ping_datasource(return_obj,response_dict)
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
@@ -31,13 +30,21 @@ class PingConnector(BasePingConnector):
         except Exception as ex:
             if 'Max retries exceeded' in str(ex):
                 # sleep added due to limitation of 1 call a second for each user token
-                time.sleep(1)
-                return_obj, response_dict = self.call_ping_datasource(return_obj, response_dict)
+                try:
+                    time.sleep(1)
+                    return_obj, response_dict = self.call_ping_datasource(return_obj, response_dict)
+                except ConnectionError:
+                    response_dict['type'] = "ConnectionError"
+                    response_dict['message'] = "Invalid Host"
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                except Exception as err:
+                    self.logger.error('error when ping: %s', str(err))
+                    response_dict['message'] = str(err)
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'])
                 return return_obj
             else:
                 self.logger.error('error when ping: %s', str(ex))
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-
         return return_obj
 
     def call_ping_datasource(self, return_obj, response_dict):
