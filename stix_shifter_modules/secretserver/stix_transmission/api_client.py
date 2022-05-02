@@ -112,11 +112,9 @@ class APIClient():
             else:
                 self.startDate = date.today()
                 self.endDate = self.startDate - timedelta(days = 1)
-            resp = self.get_response()
-            page_size =100
-            resp=resp[(index_from * page_size):(fetch_size * page_size)]
-            return resp
-
+            response = self.get_response()
+            return response
+  
     def decode_searchId(self):
         # These value (date, self.query) must be present.
         try:

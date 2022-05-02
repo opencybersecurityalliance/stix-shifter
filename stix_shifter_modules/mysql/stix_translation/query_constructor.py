@@ -18,28 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -147,9 +129,9 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        if str(expression_operator) not in self.comparator_lookup:
+            raise NotImplementedError("Comparison operator {} unsupported for MySQL connector".format(expression_operator.name))
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -254,8 +236,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     table = options.get('table')
-    if not table:
-        table = 'demo_siem'
 
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.

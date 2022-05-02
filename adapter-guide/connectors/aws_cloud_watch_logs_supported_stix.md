@@ -1,4 +1,21 @@
+##### Updated on 02/04/22
 ## Amazon CloudWatch Logs
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | LIKE |
+| IN | IN |
+| MATCHES | LIKE |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | domain-name | resolves_to_refs | detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress |

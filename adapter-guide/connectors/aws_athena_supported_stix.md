@@ -1,4 +1,21 @@
+##### Updated on 02/04/22
 ## Amazon Athena
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | INTERSECT |
+| OR | UNION |
+| > | > |
+| >= | >= |
+| < | < |
+| <= | <= |
+| = | = |
+| != | != |
+| LIKE | LIKE |
+| IN | IN |
+| MATCHES | REGEXP_LIKE |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | domain-name | resolves_to_refs | resource_instancedetails_networkinterfaces_0_privateipaddress |

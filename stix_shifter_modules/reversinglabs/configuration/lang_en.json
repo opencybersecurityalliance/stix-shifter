@@ -1,0 +1,36 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "placeholder": "https://mundy.threatqtie.com",
+            "description": "Specify the OCP Cluster hostname or the XForce API host URL"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Need additional help?"
+        },
+        "selfSignedCert": {
+            "label": "X-Force Exchange Connection Certificate",
+            "description": "Paste your certificate"
+        },
+        "sni": {
+            "label": "Server Name Indicator",
+            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username to login to your RL instance"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password for your RL instance"
+            }
+        }
+    }
+}

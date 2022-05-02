@@ -20,6 +20,7 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = utils_logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def __getStatus(self, qradar_status):
         switcher = {
@@ -55,5 +56,5 @@ class StatusConnector(BaseStatusConnector):
             return_obj['status'] = self.__getStatus(response_dict['status'])
             return_obj['progress'] = response_dict['progress']
         else:
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
         return return_obj
