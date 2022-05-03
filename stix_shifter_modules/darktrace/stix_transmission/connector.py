@@ -144,9 +144,6 @@ class Connector(BaseSyncConnector):
                     if response['data'][index][key].keys() & file_fields:
                         response['data'][index][key]["filename"] = "null"
 
-                empty_keys = [k for k, v in response['data'][index][key].items() if not v]
-                for empty_key in empty_keys:
-                    del response['data'][index][key][empty_key]
         return response
 
     def ping_connection(self):
@@ -187,11 +184,3 @@ class Connector(BaseSyncConnector):
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
-
-    def delete_query_connection(self, search_id):
-        """
-        Delete query response
-        :param search_id:
-        :return:
-        """
-        return {"success": True, "search_id": search_id}
