@@ -2,7 +2,7 @@
   "user-account": {
     "fields": {
       "user_id": [
-        "data.user_id"
+        "data.userid"
       ],
       "account_login": [
         "data.username"
@@ -83,9 +83,6 @@
       "extensions.'x-iam-ext'.target": [
         "data.target"
       ],
-      "extensions.'x-iam-ext'.deleted": [
-        "data.deleted"
-      ],
       "extensions.'x-iam-ext'.performedby_clientname": [
         "data.performedby_clientname"
       ],
@@ -112,12 +109,6 @@
       ],
       "extensions.'x-iam-ext'.country_name": [
         "geoip.country_name"
-      ],
-      "extensions.x-iam-ext.location_lon": [
-        "geoip.lon"
-      ],
-      "extensions.'x-iam-ext'.location_lat": [
-        "geoip.lat"
       ],
       "extensions.'x-iam-ext'.city_name": [
         "geoip.city_name"

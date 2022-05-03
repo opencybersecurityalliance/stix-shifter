@@ -149,4 +149,13 @@ Response object
         }
 }
 ```
+### Limitation
+1. Current release does not support multiple 'AND' operator with attribute.
+ Example :
+ Invalid Stix-query = [user-account:user_id = 'abc@in.ibm.com'AND x-oca-event:extensions.'x-iam-ext'.application_name='Bane'] 
+However 'AND' Operator can be joined with category
+ Example :
+ Valid Stix-query = [x-oca-event:category='authentication'AND user-account:user_id = 'ritkuma9@in.ibm.com']
+ 2. Operator 'OR' is not supported in stix-query.
 
+   
