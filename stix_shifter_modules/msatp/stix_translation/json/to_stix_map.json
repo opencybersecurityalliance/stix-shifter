@@ -1040,7 +1040,8 @@
       {
         "key": "mac-addr.value",
         "object": "mac",
-        "transformer": "FormatMacList"
+        "transformer": "FormatMacList",
+        "unwrap": true
       },
       {
         "key": "x-oca-asset.mac_refs",
@@ -1048,6 +1049,7 @@
         "references": [
           "mac"
         ],
+        "unwrap": true,
         "group": true
       }
     ],
