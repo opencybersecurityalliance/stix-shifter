@@ -55,6 +55,10 @@
       "key": "x-msatp.Table",
       "object": "x-msatp"
     },
+    "TableName": {
+      "key": "x-msatp.TableName",
+      "object": "x-msatp"
+    },
     "LocalIP": [
       {
         "key": "ipv4-addr.value",
@@ -372,7 +376,6 @@
         "key": "x-oca-asset.public_ip",
         "object": "host",
         "references": "public-ip"
-
       }
     ],
     "OSPlatform": {
@@ -556,6 +559,10 @@
     },
     "Table": {
       "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "TableName": {
+      "key": "x-msatp.TableName",
       "object": "x-msatp"
     },
     "ActionType": [
@@ -963,7 +970,6 @@
         "key": "x-oca-asset.public_ip",
         "object": "host",
         "references": "public-ip"
-
       }
     ],
     "OSPlatform": {
@@ -1141,6 +1147,10 @@
     },
     "Table": {
       "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "TableName": {
+      "key": "x-msatp.TableName",
       "object": "x-msatp"
     },
     "ActionType": [
@@ -1445,7 +1455,6 @@
         "key": "x-oca-asset.public_ip",
         "object": "host",
         "references": "public-ip"
-
       }
     ],
     "OSPlatform": {
@@ -1636,6 +1645,10 @@
     },
     "Table": {
       "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "TableName": {
+      "key": "x-msatp.TableName",
       "object": "x-msatp"
     },
     "ActionType": [
@@ -1890,7 +1903,6 @@
         "key": "x-oca-asset.public_ip",
         "object": "host",
         "references": "public-ip"
-
       }
     ],
     "OSPlatform": {
@@ -2089,6 +2101,10 @@
       "key": "x-msatp.Table",
       "object": "x-msatp"
     },
+    "TableName": {
+      "key": "x-msatp.TableName",
+      "object": "x-msatp"
+    },
     "IPAddresses": [
       {
         "key": "ipv4-addr.value",
@@ -2168,7 +2184,6 @@
         "key": "x-oca-asset.public_ip",
         "object": "host",
         "references": "public-ip"
-
       }
     ],
     "OSPlatform": {
@@ -2329,6 +2344,10 @@
     },
     "Table": {
       "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "TableName": {
+      "key": "x-msatp.TableName",
       "object": "x-msatp"
     },
     "FileName": [

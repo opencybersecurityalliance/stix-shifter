@@ -34,7 +34,8 @@ class Connector(BaseSyncConnector):
                     '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}"))')
 
     alerts_query = (
-        '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
+        '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_list(AlertId), Severity=make_list('
+        'Severity), '
         'Title=make_list(Title), Category=make_list('
         'Category), AttackTechniques=make_list('
         'AttackTechniques) by DeviceName, ReportId, Timestamp)')
@@ -172,6 +173,8 @@ class Connector(BaseSyncConnector):
                 raise self.init_error
             q_return_obj = dict()
             joined_query, partial_query = self.join_query_with_alerts(query)
+            # # debug
+            # joined_query = 'DeviceAlertEvents | where Timestamp > ago(7d)'
             response = self.api_client.run_search(joined_query, offset, length)
             q_return_obj = self._handle_errors(response, q_return_obj)
             response_json = json.loads(q_return_obj["data"])
@@ -196,7 +199,7 @@ class Connector(BaseSyncConnector):
                 Connector.make_alert_as_list = True
                 event_data = Connector.remove_duplicate_fields(event_data)
                 lookup_table = event_data['TableName']
-                event_data.pop('TableName')
+                #event_data.pop('TableName')
                 build_data = dict()
                 build_data[lookup_table] = {k: v for k, v in event_data.items() if
                                             ((v and v != ['']) or k == "RegistryValueName")}
@@ -261,7 +264,8 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['provider'] = ''
                 event_data = copy.deepcopy(build_data[lookup_table])
                 
-                #link the event to ms atp console device timeline with one second before and after the event https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
+                # link the event to ms atp console device timeline with one second before and after the event
+                # https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
                 try:
                     if 'DeviceId' in build_data[lookup_table]:
                         timestamp_dt = datetime.strptime(timestamp[:-9], "%Y-%m-%dT%H:%M:%S") #parse timestamp to date opbject striping nanoseconds
@@ -270,7 +274,8 @@ class Connector(BaseSyncConnector):
                         event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
                         build_data[lookup_table]['event_link'] = event_link
                 except Exception as ex:
-                    self.logger.error("error while parsing event_link (external ref) from event. this error does not stop translation {}".format(str(ex)))
+                    self.logger.error("error while parsing event_link (external ref) from event. this error does not "
+                                      "stop translation {}".format(str(ex)))
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
