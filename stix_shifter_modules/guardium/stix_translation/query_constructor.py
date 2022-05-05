@@ -124,8 +124,7 @@ class QueryStringPatternTranslator:
         # Single quotes have to be replaced by double quotes in order to make it as an Json obj
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
-        # out_str = '{\'ServerIP\' : \'9.30.122.39\', \'ServerIP\' : \'9.30.116.81\' }, {\'START\' : \'2022-01-15T00:00:00.123\'}, {\'STOP\' : \'2022-04-28T10:11:11.123Z’}'
-
+        
         if self.duplicate_key == True:
             if "OR" in report_call and not "AND" in report_call:
                 out_str = out_str.replace("OR",",")
