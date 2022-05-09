@@ -384,10 +384,10 @@ class TestDarktraceResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
-        ssl_obj = TestDarktraceResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
+        ssl_obj = TestDarktraceResultsToStix.get_first_of_type(objects.values(), 'x509-certificate')
 
+        assert ssl_obj['version'] == 'TLS1.0'
         assert ssl_obj['extensions']['x-darktrace-ssl']['is_resumed'] == 'false'
-        assert ssl_obj['extensions']['x-darktrace-ssl']['ssl_version'] == 'TLS1.0'
         assert ssl_obj['extensions']['x-darktrace-ssl']['total_ciphers'] == 50
         assert ssl_obj['extensions']['x-darktrace-ssl']['validation_status'] == 'unable to get local issuer certificate'
         assert ssl_obj['extensions']['x-darktrace-ssl']['is_client_hello_seen'] == 'true'

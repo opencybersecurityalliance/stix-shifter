@@ -244,7 +244,10 @@ class QueryStringPatternTranslator:
                 continue
 
             query += "@fields." + facet_name + comparator + str(value)
-        return '(' + query + ')'
+
+        if query.count('fields') > 1:
+            return '(' + query + ')'
+        return query
 
     def _parse_expression(self, expression, qualifier=None):
         """

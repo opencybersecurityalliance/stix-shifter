@@ -83,7 +83,7 @@ translate darktrace results
 ```json
 {
     "type": "bundle",
-    "id": "bundle--17b8cbb6-1267-4d71-bbee-672749df19e3",
+    "id": "bundle--9c117c3b-a4d8-4f52-8c3d-8381a6512112",
     "objects": [
         {
             "type": "identity",
@@ -94,80 +94,25 @@ translate darktrace results
             "modified": "2022-03-16T13:22:50.336Z"
         },
         {
-            "id": "observed-data--17d5395b-592f-4cbb-9c1d-c8689b84da95",
+            "id": "observed-data--3e83dba4-2125-495f-af23-48f323530069",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:26:43.452Z",
-            "modified": "2022-04-28T13:26:43.452Z",
+            "created": "2022-05-09T07:30:14.830Z",
+            "modified": "2022-05-09T07:30:14.830Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z",
-                    "code": "CqQ5sRAFWzt7NRQmj01"
+                    "created": "2022-03-22T10:58:06.000Z",
+                    "code": "CEfQ2a2ObXcyNJUvEk01"
                 },
                 "1": {
                     "type": "network-traffic",
-                    "src_port": 11256,
-                    "dst_port": 3389,
-                    "src_ref": "2",
-                    "dst_ref": "4",
-                    "protocols": [
-                        "ssl"
-                    ],
-                    "extensions": {
-                        "x-darktrace-ssl": {
-                            "total_ciphers": 50,
-                            "validation_status": "unable to get local issuer certificate",
-                            "is_client_hello_seen": true,
-                            "ja3_client_fingerprint": "75fb48a465416d66291fb52a733d4787",
-                            "is_established": true,
-                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
-                            "cert_file_uids": "F2D8iX1YaTCWKlsoN01",
-                            "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
-                            "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
-                        }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
-                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
-                    "subject": "CN=EC2AMAZ-2GNPPAQ"
-                }
-            },
-            "first_observed": "2022-04-28T13:26:43.452Z",
-            "last_observed": "2022-04-28T13:26:43.452Z",
-            "number_observed": 1
-        },
-        {
-            "id": "observed-data--9bcbbca4-6cbb-47d0-aeb1-b3c9b61d8395",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:26:43.460Z",
-            "modified": "2022-04-28T13:26:43.460Z",
-            "objects": {
-                "0": {
-                    "type": "x-oca-event",
-                    "created": "2022-03-22T11:04:31.000Z",
-                    "code": "CqQ5sRAFWzt7NRQmj01"
-                },
-                "1": {
-                    "type": "network-traffic",
-                    "src_port": 11256,
+                    "src_port": 24178,
                     "src_ref": "2",
                     "dst_ref": "4",
                     "dst_port": 3389,
                     "protocols": [
-                        "ssl"
+                        "null"
                     ]
                 },
                 "2": {
@@ -176,14 +121,14 @@ translate darktrace results
                 },
                 "4": {
                     "type": "ipv4-addr",
-                    "value": "1.1.1.1"
+                    "value": "0.0.0.0"
                 },
                 "5": {
                     "type": "x509-certificate",
                     "validity_not_before": "2022-08-15T11:22:14.000Z",
                     "extensions": {
                         "x-darktrace-x509": {
-                            "file_id": "F2D8iX1YaTCWKlsoN01",
+                            "file_id": "FxWXXc1uH1zQNF66T701",
                             "certificate_key_type": "rsa",
                             "certificate_key_length": 2048
                         }
@@ -198,8 +143,62 @@ translate darktrace results
                     "issuer": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:26:43.460Z",
-            "last_observed": "2022-04-28T13:26:43.460Z",
+            "first_observed": "2022-05-09T07:30:14.830Z",
+            "last_observed": "2022-05-09T07:30:14.830Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--3a0b3a54-b6fe-4a67-b114-0be8a5fa494b",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-09T07:30:14.833Z",
+            "modified": "2022-05-09T07:30:14.833Z",
+            "objects": {
+                "0": {
+                    "type": "x-oca-event",
+                    "created": "2022-03-22T10:58:06.000Z",
+                    "code": "CEfQ2a2ObXcyNJUvEk01"
+                },
+                "1": {
+                    "type": "network-traffic",
+                    "src_port": 24178,
+                    "dst_port": 3389,
+                    "src_ref": "2",
+                    "dst_ref": "4",
+                    "protocols": [
+                        "null"
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "0.0.0.0"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "0.0.0.0"
+                },
+                "5": {
+                    "type": "x509-certificate",
+                    "extensions": {
+                        "x-darktrace-ssl": {
+                            "total_ciphers": 28,
+                            "validation_status": "unable to get local issuer certificate",
+                            "is_client_hello_seen": true,
+                            "ja3_client_fingerprint": "043c543b63b895881d9abfbc320cb863",
+                            "is_established": true,
+                            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                            "cert_file_uids": "FxWXXc1uH1zQNF66T701",
+                            "elliptic_curve": "secp384r1",
+                            "ja3s_server_fingerprint": "ae4edc6faf64d08308082ad26be60767"
+                        }
+                    },
+                    "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.2",
+                    "subject": "CN=EC2AMAZ-2GNPPAQ"
+                }
+            },
+            "first_observed": "2022-05-09T07:30:14.833Z",
+            "last_observed": "2022-05-09T07:30:14.833Z",
             "number_observed": 1
         }
     ],
@@ -211,7 +210,7 @@ translate darktrace results
 
 ####STIX Translate query
 ```shell
-translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND network-traffic:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-03-21T11:00:00.000Z' STOP t'2022-03-22T11:05:00.003Z'"
+translate darktrace query '{}' "[ipv4-addr:value = '0.0.0.0' AND x509-certificate:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-03-21T11:00:00.000Z' STOP t'2022-03-22T11:05:00.003Z'"
 ```
 
 #### STIX Translate query - output
@@ -326,13 +325,13 @@ darktrace
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"darktrace\",\"identity_class\":\"events\", \"created\": \"2022-04-11T16:11:11.878Z\",\"modified\": \"2022-04-11T16:11:11.878Z\"}"
 "{\"host\":\"xx.xx.xx\"}"
 "{\"auth\":{\"private_token\": \"xxxxx\", \"public_token\": \"xxxxx\"}}"
-"[network-traffic:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-04-25T11:00:00.000Z' STOP t'2022-04-28T11:05:00.003Z'"
+"[x509-certificate:extensions.'x-darktrace-ssl'.elliptic_curve ='secp384r1'] START t'2022-04-25T11:00:00.000Z' STOP t'2022-04-28T11:05:00.003Z'"
 ```
 #### STIX Execute query - output
 ```json
 {
     "type": "bundle",
-    "id": "bundle--2ccf184a-da6e-43ca-a14f-d813c8f3b74c",
+    "id": "bundle--6c59781b-4f5c-40bd-9605-2d8ded54ec63",
     "objects": [
         {
             "type": "identity",
@@ -343,11 +342,11 @@ darktrace
             "modified": "2022-04-11T16:11:11.878Z"
         },
         {
-            "id": "observed-data--4f01cfea-c96a-424a-be55-205c6e8c7ce3",
+            "id": "observed-data--940b44a6-9258-40fc-8fe8-0062076fc701",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -362,7 +361,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "123.253.14.12"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 55,
@@ -373,36 +383,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "Fezsmf35thStOZvLw901",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--0aa72643-badc-483b-b3e5-5d04350e3215",
+            "id": "observed-data--976158ba-217d-436b-a2c7-352f80e0592f",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -417,7 +416,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "149.56.29.150"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 41,
@@ -428,36 +438,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "FrNUiK3CyPmwHuzKy301",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--6fb3e22c-8721-4d47-96eb-df942c3925be",
+            "id": "observed-data--ac6ef37d-773d-4e9f-9559-c13ed45288ef",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -472,7 +471,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "181.48.90.197"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 41,
@@ -483,36 +493,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "Fjp4gH32yIXU4SeBJ501",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--9f29a7e1-4b3c-43f6-ad7e-e723f783db9d",
+            "id": "observed-data--5e5c42c2-6e6f-4f75-ab17-784deb448b43",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -527,7 +526,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "129.153.22.227"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 41,
@@ -538,36 +548,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "F6nomdQ53HGoOvfh401",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--d073f848-1436-4ea9-bce1-339179562a1b",
+            "id": "observed-data--d1fdd9b7-cea9-4d6f-ad16-bb20abbe9522",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -582,7 +581,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "193.142.146.135"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 50,
@@ -593,36 +603,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "FJLWw6HyYpcMakddb01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--d7368305-07e1-45b1-a4d2-d9f884e6feb3",
+            "id": "observed-data--e46d6472-f224-4e03-b4a3-952c5116dda8",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -637,7 +636,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "92.255.85.123"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 50,
@@ -648,36 +658,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "FUUWZb4Z4a42mnS86801",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--49b46de5-f994-4a40-96f1-81fc4dad5e5e",
+            "id": "observed-data--9218111a-afb7-41bd-b2fa-a8638ac20645",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -692,7 +691,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "77.83.36.225"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 55,
@@ -703,36 +713,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "Fafou13BJ66JIuCLok01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--ead53aeb-16ce-4bac-a233-67fbb1220d51",
+            "id": "observed-data--5f64d451-7e7d-4f3b-8afd-bbb9e65ab2e6",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -747,7 +746,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "92.255.85.200"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 50,
@@ -758,36 +768,25 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "FcgYKX3Gz9akuSeD7c01",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         },
         {
-            "id": "observed-data--3584eaed-af03-41b1-afc1-79b7437fa8ac",
+            "id": "observed-data--c03eb790-fbe8-4a20-bb59-660a6cb900a5",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-28T13:08:42.914Z",
-            "modified": "2022-04-28T13:08:42.914Z",
+            "created": "2022-05-09T07:51:09.876Z",
+            "modified": "2022-05-09T07:51:09.876Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
@@ -802,7 +801,18 @@ darktrace
                     "dst_ref": "4",
                     "protocols": [
                         "ssl"
-                    ],
+                    ]
+                },
+                "2": {
+                    "type": "ipv4-addr",
+                    "value": "92.255.85.118"
+                },
+                "4": {
+                    "type": "ipv4-addr",
+                    "value": "172.31.81.98"
+                },
+                "5": {
+                    "type": "x509-certificate",
                     "extensions": {
                         "x-darktrace-ssl": {
                             "total_ciphers": 50,
@@ -813,28 +823,17 @@ darktrace
                             "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
                             "cert_file_uids": "FttvZK16zOjSrTz8X301",
                             "elliptic_curve": "secp384r1",
-                            "ssl_version": "TLS1.0",
                             "ja3s_server_fingerprint": "bcf3a836c82d12ee988005fb0c011445",
-                            "server_certificate_ref": "5"
+                            "is_resumed": false
                         }
-                    }
-                },
-                "2": {
-                    "type": "ipv4-addr",
-                    "value": "0.0.0.0"
-                },
-                "4": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1"
-                },
-                "5": {
-                    "type": "x509-certificate",
+                    },
                     "issuer": "CN=EC2AMAZ-2GNPPAQ",
+                    "version": "TLS1.0",
                     "subject": "CN=EC2AMAZ-2GNPPAQ"
                 }
             },
-            "first_observed": "2022-04-28T13:08:42.914Z",
-            "last_observed": "2022-04-28T13:08:42.914Z",
+            "first_observed": "2022-05-09T07:51:09.876Z",
+            "last_observed": "2022-05-09T07:51:09.876Z",
             "number_observed": 1
         }
     ],

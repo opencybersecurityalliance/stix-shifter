@@ -258,91 +258,86 @@
 	"ssl": {
 		"version": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.ssl_version",
-				"object": "nt"
+				"key": "x509-certificate.version",
+				"object": "server"
 			}
 		],
 		"cipher": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.cipher_suite",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.cipher_suite",
+				"object": "server"
 			}
 		],
 		"client_ciphers": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.cipher_list",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.cipher_list",
+				"object": "server"
 			}
 		],
 		"total_client_ciphers": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.total_ciphers",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.total_ciphers",
+				"object": "server"
 			}
 		],
 		"curve": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.elliptic_curve",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.elliptic_curve",
+				"object": "server"
 			}
 		],
 		"server_name": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.server_name",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.server_name",
+				"object": "server"
 			}
 		],
 		"resumed": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.is_resumed",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.is_resumed",
+				"object": "server"
 			}
 		],
 		"last_alert": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.last_alert",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.last_alert",
+				"object": "server"
 			}
 		],
 		"next_protocol": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.next_protocol",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.next_protocol",
+				"object": "server"
 			}
 		],
 		"established": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.is_established",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.is_established",
+				"object": "server"
 			}
 		],
 		"client_hello_seen": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.is_client_hello_seen",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.is_client_hello_seen",
+				"object": "server"
 			}
 		],
 		"cert_chain_fuids": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.cert_file_uids",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.cert_file_uids",
+				"object": "server"
 			}
 		],
 		"client_cert_chain_fuids": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.cert_chainfile_uids",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.cert_chainfile_uids",
+				"object": "server"
 			}
 		],
 		"subject": [
 			{
 				"key": "x509-certificate.subject",
 				"object": "server"
-			},
-			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.server_certificate",
-				"object": "nt",
-				"references" : "server"
 			}
 		],
 		"issuer": [
@@ -355,11 +350,6 @@
 			{
 				"key": "x509-certificate.subject",
 				"object": "client"
-			},
-			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.client_certificate",
-				"object": "nt",
-				"references" : "client"
 			}
 		],
 		"client_issuer": [
@@ -370,32 +360,32 @@
 		],
 		"ocsp_status": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.ocsp_status",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.ocsp_status",
+				"object": "server"
 			}
 		],
 		"validation_status": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.validation_status",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.validation_status",
+				"object": "server"
 			}
 		],
 		"ja3_client_fingerprint": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.ja3_client_fingerprint",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.ja3_client_fingerprint",
+				"object": "server"
 			}
 		],
 		"ja3s_server_fingerprint": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.ja3s_server_fingerprint",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl-ext.ja3s_server_fingerprint",
+				"object": "server"
 			}
 		],
 		"application_guess": [
 			{
-				"key": "network-traffic.extensions.x-darktrace-ssl-ext.application_guess",
-				"object": "nt"
+				"key": "x509-certificate.extensions.x-darktrace-ssl.application_guess",
+				"object": "server"
 			}
 		]
 	},

@@ -150,60 +150,6 @@
 			"extensions.'x-darktrace-conn'.responder_asn": [
 					"resp_asn"
 				],
-			"extensions.'x-darktrace-ssl'.ssl_version": [
-					"version"
-				],
-			"extensions.'x-darktrace-ssl'.cipher_suite": [
-					"cipher"
-				],
-			"extensions.'x-darktrace-ssl'.cipher_list[*]": [
-					"client_ciphers"
-				],
-			"extensions.'x-darktrace-ssl'.total_ciphers": [
-					"total_client_ciphers"
-				],
-			"extensions.'x-darktrace-ssl'.elliptic_curve": [
-					"curve"
-				],
-			"extensions.'x-darktrace-ssl'.server_name": [
-					"server_name"
-				],
-			"extensions.'x-darktrace-ssl'.is_resumed": [
-					"resumed"
-				],
-			"extensions.'x-darktrace-ssl'.last_alert": [
-					"last_alert"
-				],
-			"extensions.'x-darktrace-ssl'.next_protocol": [
-					"next_protocol"
-				],
-			"extensions.'x-darktrace-ssl'.is_established": [
-					"established"
-				],
-			"extensions.'x-darktrace-ssl'.is_client_hello_seen": [
-					"client_hello_seen"
-				],
-			"extensions.'x-darktrace-ssl'.cert_file_uids[*]": [
-					"cert_chain_fuids"
-				],
-			"extensions.'x-darktrace-ssl'.cert_chainfile_uids[*]": [
-					"client_cert_chain_fuids"
-				],
-			"extensions.'x-darktrace-ssl'.ocsp_status": [
-					"ocsp_status"
-				],
-			"extensions.'x-darktrace-ssl'.validation_status": [
-					"validation_status"
-				],
-			"extensions.'x-darktrace-ssl'.ja3_client_fingerprint": [
-					"ja3_client_fingerprint"
-				],
-			"extensions.'x-darktrace-ssl'.ja3s_server_fingerprint": [
-					"ja3s_server_fingerprint"
-				],
-			"extensions.'x-darktrace-ssl'.application_guess": [
-					"application_guess"
-				],
 			"extensions.'x-darktrace-ssh'.ssh_version": [
 					"version"
 				],
@@ -747,6 +693,60 @@
 				],
 			"extensions.'x-darktrace-ssl'.client_issuer": [
 					"client_issuer"
+				],
+			"extensions.'x-darktrace-ssl'.ssl_version": [
+					"version"
+				],
+			"extensions.'x-darktrace-ssl'.cipher_suite": [
+					"cipher"
+				],
+			"extensions.'x-darktrace-ssl'.cipher_list[*]": [
+					"client_ciphers"
+				],
+			"extensions.'x-darktrace-ssl'.total_ciphers": [
+					"total_client_ciphers"
+				],
+			"extensions.'x-darktrace-ssl'.elliptic_curve": [
+					"curve"
+				],
+			"extensions.'x-darktrace-ssl'.server_name": [
+					"server_name"
+				],
+			"extensions.'x-darktrace-ssl'.is_resumed": [
+					"resumed"
+				],
+			"extensions.'x-darktrace-ssl'.last_alert": [
+					"last_alert"
+				],
+			"extensions.'x-darktrace-ssl'.next_protocol": [
+					"next_protocol"
+				],
+			"extensions.'x-darktrace-ssl'.is_established": [
+					"established"
+				],
+			"extensions.'x-darktrace-ssl'.is_client_hello_seen": [
+					"client_hello_seen"
+				],
+			"extensions.'x-darktrace-ssl'.cert_file_uids[*]": [
+					"cert_chain_fuids"
+				],
+			"extensions.'x-darktrace-ssl'.cert_chainfile_uids[*]": [
+					"client_cert_chain_fuids"
+				],
+			"extensions.'x-darktrace-ssl'.ocsp_status": [
+					"ocsp_status"
+				],
+			"extensions.'x-darktrace-ssl'.validation_status": [
+					"validation_status"
+				],
+			"extensions.'x-darktrace-ssl'.ja3_client_fingerprint": [
+					"ja3_client_fingerprint"
+				],
+			"extensions.'x-darktrace-ssl'.ja3s_server_fingerprint": [
+					"ja3s_server_fingerprint"
+				],
+			"extensions.'x-darktrace-ssl'.application_guess": [
+					"application_guess"
 				]
 		}
 	},
