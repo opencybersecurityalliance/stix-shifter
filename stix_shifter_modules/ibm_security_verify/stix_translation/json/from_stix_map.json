@@ -1,0 +1,148 @@
+{
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "data.userid"
+      ],
+      "account_login": [
+        "data.username"
+      ],
+      "account_type": [
+        "data.sourcetype"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "data.origin"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "type": [
+        "domain-name"
+      ],
+      "value": [
+        "tenantname"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": [
+        "data.action"
+      ],
+      "category": [
+        "event_type"
+      ],
+      "module": [
+        "servicename"
+      ],
+      "outcome": [
+        "data.result"
+      ],
+      "agent": [
+        "data.sourcetype"
+      ],
+      "ip_refs[*].value": [
+        "ip"
+      ],
+      "domain_ref.value": [
+        "tenantname"
+      ],
+      "user_ref": [
+        "username"
+      ],
+      "provider": "'IBM Security Verify Event'",
+      "extensions.'x-iam-ext'.subcategory": [
+        "data.subtype"
+      ],
+      "extensions.'x-iam-ext'.realm": [
+        "data.realm"
+      ],
+      "extensions.'x-iam-ext'.browser_agent": [
+        "data.devicetype"
+      ],
+      "extensions.'x-iam-ext'.provider_id": [
+        "data.providerid"
+      ],
+      "extensions.'x-iam-ext'.application_id": [
+        "data.applicationid"
+      ],
+      "extensions.'x-iam-ext'.application_type": [
+        "data.applicationtype"
+      ],
+      "extensions.'x-iam-ext'.application_name": [
+        "data.applicationname"
+      ],
+      "extensions.'x-iam-ext'.cause": [
+        "data.cause"
+      ],
+      "extensions.'x-iam-ext'.target": [
+        "data.target"
+      ],
+      "extensions.'x-iam-ext'.performedby_clientname": [
+        "data.performedby_clientname"
+      ],
+      "extensions.'x-iam-ext'.performedby_realm": [
+        "data.performedby_realm"
+      ],
+      "extensions.'x-iam-ext'.performedby_username": [
+        "data.performedby_username"
+      ],
+      "extensions.'x-iam-ext'.targetid": [
+        "data.targetid"
+      ],
+      "extensions.'x-iam-ext'.targetid_realm": [
+        "data.targetid_realm"
+      ],
+      "extensions.'x-iam-ext'.targetid_username": [
+        "data.targetid_username"
+      ],
+      "extensions.'x-iam-ext'.continent_name": [
+        "geoip.continent_name"
+      ],
+      "extensions.'x-iam-ext'.country_iso_code": [
+        "geoip.country_iso_code"
+      ],
+      "extensions.'x-iam-ext'.country_name": [
+        "geoip.country_name"
+      ],
+      "extensions.'x-iam-ext'.city_name": [
+        "geoip.city_name"
+      ],
+      "extensions.'x-iam-ext'.policy_action": [
+        "data.policy_action"
+      ],
+      "extensions.'x-iam-ext'.policy_name": [
+        "data.policy_name"
+      ],
+      "extensions.'x-iam-ext'.rule_name": [
+        "data.rule_name"
+      ],
+      "extensions.'x-iam-ext'.decision_reason": [
+        "data.decision_reason"
+      ],
+      "extensions.'x-iam-ext'.risk_level": [
+        "data.risk_level"
+      ],
+      "extensions.'x-iam-ext'.risk_score": [
+        "data.risk_score"
+      ],
+      "extensions.'x-iam-ext'.deviceid": [
+        "data.deviceid"
+      ],
+      "extensions.'x-iam-ext'.is_device_compliant": [
+        "data.mdmiscompliant"
+      ],
+      "extensions.'x-iam-ext'.is_device_managed": [
+        "data.mdmismanaged"
+      ],
+      "extensions.'x-iam-ext'.mdm_customerid": [
+        "data.billingid"
+      ]
+    }
+  }
+}
