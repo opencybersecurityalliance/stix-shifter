@@ -127,58 +127,20 @@ class QueryStringPatternTranslator:
                 collection_name = collection_attribute_array[0]
                 attribute_nested_level = '/'.join(collection_attribute_array[1:])
 
-                if stix_field in [ 'process.pid']:
-                    attribute_expression = '{fn}/'.format(fn=lambda_func) + attribute_nested_level
-                else:
-                    attribute_expression = '({fn}/'.format(fn=lambda_func) + attribute_nested_level + ')'
+                attribute_expression = '({fn}/'.format(fn=lambda_func) + attribute_nested_level + ')'
                 # ip address in data source is like "sourceAddress": "IP: 92.63.194.101 [2]\r"
                 # to get ip address from data source using contains keyword ODATA query
-                if mapped_field in ['fileStates.FilePath']:
-                    comparison_string += "{collection_name}/any({fn}:contains({attribute_expression}, {value}))".format(
-                        collection_name=collection_name, fn=lambda_func, attribute_expression=attribute_expression,
-                        value=value)
-                elif mapped_field in ['fileStates.fileHash', 'processes']:
-                    hash_string = 'fileHash/hashType'
-                    hash_type = stix_field.split('.')[1] if mapped_field == 'fileStates.fileHash.hashValue' else \
-                        stix_field.split('.')[2]
-                    comparison_string += "({collection_name}/any({fn}:{fn}/{hash_string} {comparator} {value})" \
-                        .format(collection_name=collection_name, fn=lambda_func, hash_string=hash_string,
-                                comparator='eq', value=hash_type.lower().replace('-', ''))
-                    if comparator == 'contains':
+                if comparator == 'contains':
                         comparison_string += " and {collection_name}/any({fn}:{comparator}({attribute_expression}, " \
                                              "{value})))".format(collection_name=collection_name, fn=lambda_func,
                                                                  attribute_expression=attribute_expression,
                                                                  comparator=comparator, value=value)
-                    else:
+                else:
                         comparison_string += " and {collection_name}/any({fn}:{attribute_expression} {comparator} " \
                                              "{value}))".format(collection_name=collection_name, fn=lambda_func,
                                                                 attribute_expression=attribute_expression,
                                                                 comparator=comparator,
                                                                 value=value)
-                elif mapped_field in ['vendorInformation.provider', 'vendorInformation.vendor']:
-                    if isinstance(values, list):
-                        raise SearchFeatureNotSupportedError('"{operator}" operator is not supported for "'
-                                                             '{attribute}" attribute'
-                                                             .format(operator=expression.comparator.name.upper(),
-                                                                     attribute=mapped_field.split('.')[1]))
-                    if comparator == 'contains':
-                        comparison_string += "{comparator}({object}, {value})".format(
-                            object='/'.join(collection_attribute_array), comparator=comparator, value=value)
-                    else:
-                        comparison_string += "{object} {comparator} {value}".format(
-                            object='/'.join(collection_attribute_array), comparator=comparator, value=value)
-                else:
-                    if comparator == 'contains':
-                        comparison_string += "{collection_name}/any({fn}:{comparator}({attribute_expression}, " \
-                                             "{value}))" \
-                            .format(collection_name=collection_name, fn=lambda_func,
-                                    attribute_expression=attribute_expression,
-                                    comparator=comparator, value=value)
-                    else:
-                        comparison_string += "{collection_name}/any({fn}:{attribute_expression} {comparator} {value})" \
-                            .format(collection_name=collection_name, fn=lambda_func,
-                                    attribute_expression=attribute_expression,
-                                    comparator=comparator, value=value)
             else:
                 # check for mapped field that does not have '.' character -> example [azureTenantId,title]
                 if comparator == 'contains':
@@ -271,10 +233,6 @@ class QueryStringPatternTranslator:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
-            elif expression.comparator == ComparisonComparators.Like:
-                value = self._format_like(expression.value)
-            else:
-                value = self._escape_value(expression.value)
 
             if expression.negated:
                 if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
@@ -288,7 +246,7 @@ class QueryStringPatternTranslator:
                 if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
                     raise SearchFeatureNotSupportedError('"{operator}" operator is not supported for '
                                                          '"{stix_field}" attribute'
-                                                         .format(operator=expression.comparator.name.upper(),
+                                                         .format(operator=expression.comparator.name,
                                                                  stix_field=stix_field))
                 value = self._format_value_without_quotes(value)
 
