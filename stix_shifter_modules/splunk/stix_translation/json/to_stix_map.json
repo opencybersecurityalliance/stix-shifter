@@ -375,10 +375,22 @@
       "transformer": "SplunkToTimestamp"
     }
   ],
-  "file_hash": {
-      "key": "file.hashes",
+  "Hashes": [{
+      "key": "file.hashes.SHA1",
       "object": "file"
   },
+  {
+      "key": "file.hashes.SHA256",
+      "object": "file"
+  },
+  {
+      "key": "file.hashes.'MD5'",
+      "object": "file"
+  },
+  {
+      "key": "file.hashes.'OTHERS'",
+      "object": "file"
+  }],
   "file_name": [
     {
       "key": "file.name",
