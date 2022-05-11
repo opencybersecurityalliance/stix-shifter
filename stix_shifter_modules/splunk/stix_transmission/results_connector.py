@@ -12,7 +12,7 @@ class ResultsConnector(BaseResultsConnector):
     def create_results_connection(self, search_id, offset, length):
         # Grab the response, extract the response code, and convert it to readable json
         response = self.api_client.get_search_results(search_id, offset, length)
-        
+
         response_code = response.code
         response_dict = json.load(response)
 
@@ -25,25 +25,22 @@ class ResultsConnector(BaseResultsConnector):
                 results = []
             return_obj['success'] = True
             return_obj['data'] = results
-            #spliting hashes string into SHA256,MD5 and OTHERS
-            for index,val in enumerate(return_obj['data']) :
-                if('Hashes' in val):
+            # spliting hashes string into SHA256,MD5 and OTHERS
+            for index, val in enumerate(return_obj['data']):
+                if 'Hashes' in val:
                     hashes = val['Hashes'].split(",")
-                    hshDict={}
+                    hash_dict = {}
                     for hash_string in hashes:
-                        if(hash_string.find("SHA256",0)!=-1):
-                            hshDict.update({"SHA256":hash_string.lstrip("SHA256=")})
-                        elif(hash_string.find("MD5",0)!=-1):
-                            hshDict.update({"MD5":hash_string.lstrip("MD5=")})
+                        if hash_string.find("SHA256", 0) != -1:
+                            hash_dict.update({"SHA256": hash_string.lstrip("SHA256=")})
+                        elif hash_string.find("MD5", 0) != -1:
+                            hash_dict.update({"MD5": hash_string.lstrip("MD5=")})
                         else:
-                            other_hashList=[]
-                            other_hash_key=hash_string[:hash_string.index("=")]
-                            others_hashes={other_hash_key:hash_string.strip(other_hash_key+"=")}
-                            other_hashList.append(others_hashes)
-                            hshDict.update({"OTHERS":other_hashList})  
-                    # del ['data'][index]['Hashes']       
-                    return_obj['data'][index]['file_hash']=hshDict
-           
+                            other_hash_list = []
+                            other_hash_key = hash_string[:hash_string.index("=")]
+                            others_hashes = {other_hash_key: hash_string.strip(other_hash_key + "=")}
+                            other_hash_list.append(others_hashes)
+                            hash_dict.update({"OTHERS": other_hash_list})
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
         return return_obj
