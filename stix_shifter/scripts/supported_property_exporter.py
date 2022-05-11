@@ -34,7 +34,8 @@ CONNECTORS = {
     # "infoblox": "Infoblox BloxOne Threat Defense",
     "cybereason": "Cybereason",
     "paloalto": "PaloAlto Cortex XDR",
-    "sentinelone": "SentinelOne"
+    "sentinelone": "SentinelOne",
+    "reaqta": "ReaQta"
 }
 
 STIX_OPERATORS ={
