@@ -1,4 +1,4 @@
-##### Updated on 02/04/22
+##### Updated on 05/10/22
 ## CrowdStrike Falcon
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -11,6 +11,7 @@
 | >= | :>= |
 | < | :< |
 | <= | :<= |
+| IN | : |
 | <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
@@ -58,6 +59,9 @@
 | windows-registry-key | key | registry_key |
 | <br> | | |
 | x-crowdstrike | machine_domain | machine_domain |
+| x-crowdstrike | control_graph_id | control_graph_id |
+| x-crowdstrike | display_name_1 | display_name_1 |
+| x-crowdstrike | objective | objective |
 | x-crowdstrike | device_id | device_id |
 | x-crowdstrike | detection_id | detection_id |
 | x-crowdstrike | scenario | scenario |
@@ -81,6 +85,11 @@
 | x-crowdstrike | ioc_value | product_type |
 | x-crowdstrike | ioc_value | product_type_desc |
 | x-crowdstrike | ioc_value | site_name |
+| x-crowdstrike | instance_id | instance_id |
+| x-crowdstrike | service_provider | service_provider |
+| x-crowdstrike | status | status |
+| x-crowdstrike | event_status | event_status |
+| x-crowdstrike | max_severity_displayname | max_severity_displayname |
 | x-crowdstrike | ioc_value | system_product_name |
 | x-crowdstrike | ioc_value | modified_timestamp |
 | <br> | | |
