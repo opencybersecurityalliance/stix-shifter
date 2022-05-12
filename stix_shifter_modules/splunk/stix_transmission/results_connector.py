@@ -41,6 +41,7 @@ class ResultsConnector(BaseResultsConnector):
                             others_hashes = {other_hash_key: hash_string.strip(other_hash_key + "=")}
                             other_hash_list.append(others_hashes)
                             hash_dict.update({"OTHERS": other_hash_list})
+                        return_obj['data'][index]['Hashes'] = hash_dict
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
         return return_obj
