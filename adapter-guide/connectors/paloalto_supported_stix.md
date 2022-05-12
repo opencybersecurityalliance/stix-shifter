@@ -1,26 +1,26 @@
-##### Updated on 04/07/22
+##### Updated on 05/10/22
 ## PaloAlto Cortex XDR
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | and |
-| OR  | or |
+| AND | or |
+| OR | or |
+| = | = |
+| != | != |
+| LIKE | contains |
+| MATCHES | ~= |
 | > | > |
 | >= | >= |
 | < | < |
 | <= | <= |
-| = | = |
-| != | != |
-| LIKE | contains |
 | IN | in |
-| MATCHES | ~= |
-| <br> | | |
+| <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | action_file_path |
-| directory | path | action_process_image_path |
 | directory | path | action_registry_file_path |
+| directory | path | action_process_image_path |
 | directory | path | actor_process_image_path |
 | directory | path | causality_actor_process_image_path |
 | directory | path | os_actor_process_image_path |
@@ -35,11 +35,11 @@
 | file | name | causality_actor_process_image_name |
 | file | name | os_actor_process_image_name |
 | file | size | action_file_size |
+| file | hashes.SHA-1 | action_file_authenticode_sha1 |
+| file | hashes.SHA-2 | action_file_authenticode_sha2 |
 | file | hashes.MD5 | action_file_md5 |
 | file | hashes.MD5 | action_module_md5 |
 | file | hashes.MD5 | action_process_image_md5 |
-| file | hashes.SHA-1 | action_file_authenticode_sha1 |
-| file | hashes.SHA-2 | action_file_authenticode_sha2 |
 | file | hashes.SHA-256 | action_file_sha256 |
 | file | hashes.SHA-256 | action_module_sha256 |
 | file | hashes.SHA-256 | action_process_image_sha256 |
@@ -51,13 +51,13 @@
 | file | modified | os_actor_process_file_mod_time |
 | file | created | action_file_create_time |
 | file | parent_directory_ref | action_file_path |
-| file | parent_directory_ref | action_process_image_path | 
-| file | parent_directory_ref | action_registry_file_path | 
-| file | parent_directory_ref | actor_process_image_path | 
-| file | parent_directory_ref | causality_actor_process_image_path | 
+| file | parent_directory_ref | action_registry_file_path |
+| file | parent_directory_ref | action_process_image_path |
+| file | parent_directory_ref | actor_process_image_path |
+| file | parent_directory_ref | causality_actor_process_image_path |
 | file | parent_directory_ref | os_actor_process_image_path |
-| file | extensions.x-paloalto-file.extension | action_file_extension |
 | file | extensions.x-paloalto-file.company | action_file_info_company |
+| file | extensions.x-paloalto-file.extension | action_file_extension |
 | file | extensions.x-paloalto-file.attributes | action_file_attributes |
 | file | extensions.x-paloalto-file.zipped_files | action_file_internal_zipped_files |
 | file | extensions.x-paloalto-file.writer | action_file_last_writer_actor |
@@ -92,8 +92,8 @@
 | mac-addr | value | dst_mac |
 | <br> | | |
 | network-traffic | src_ref | action_local_ip |
-| network-traffic | src_ref | agent_ip_addresses |
 | network-traffic | dst_ref | action_remote_ip |
+| network-traffic | src_ref | agent_ip_addresses |
 | network-traffic | src_port | action_local_port |
 | network-traffic | dst_port | action_remote_port |
 | network-traffic | protocols | action_network_protocol |
@@ -106,6 +106,20 @@
 | network-traffic | extensions.x-paloalto-network.metadata_hostname | host_metadata_hostname |
 | network-traffic | extensions.x-paloalto-network.external_hostname | action_external_hostname |
 | <br> | | |
+| process | name | action_process_image_name |
+| process | binary_ref | action_process_image_name |
+| process | name | actor_process_image_name |
+| process | binary_ref | actor_process_image_name |
+| process | name | causality_actor_process_image_name |
+| process | parent_ref | causality_actor_process_image_name |
+| process | name | os_actor_process_image_name |
+| process | parent_ref | os_actor_process_image_name |
+| process | binary_ref | action_process_image_md5 |
+| process | binary_ref | action_process_image_sha256 |
+| process | binary_ref | action_process_image_path |
+| process | binary_ref | actor_process_image_path |
+| process | binary_ref | causality_actor_process_image_path |
+| process | binary_ref | os_actor_process_image_path |
 | process | command_line | action_process_image_command_line |
 | process | command_line | actor_process_command_line |
 | process | command_line | causality_actor_process_command_line |
@@ -114,32 +128,18 @@
 | process | created | actor_process_file_create_time |
 | process | created | causality_actor_process_file_create_time |
 | process | created | os_actor_process_file_create_time |
-| process | name | action_process_image_name |
-| process | name | actor_process_image_name |
-| process | name | causality_actor_process_image_name |
-| process | name | os_actor_process_image_name |
 | process | pid | action_module_process_os_pid |
 | process | pid | action_process_os_pid |
 | process | pid | actor_process_os_pid |
 | process | pid | causality_actor_process_os_pid |
 | process | pid | os_actor_process_os_pid |
 | process | pid | action_process_requested_parent_pid |
-| process | pid | action_thread_parent_pid |
-| process | pid | action_thread_child_pid |
-| process | creator_user_ref | action_process_username |
-| process | parent_ref | causality_actor_process_image_name |
-| process | parent_ref | os_actor_process_image_name |
 | process | parent_ref | action_process_requested_parent_pid |
+| process | pid | action_thread_parent_pid |
 | process | parent_ref | action_thread_parent_pid |
+| process | pid | action_thread_child_pid |
 | process | child_refs | action_thread_child_pid |
-| process | binary_ref | action_process_image_name |
-| process | binary_ref | actor_process_image_name |
-| process | binary_ref | action_process_image_md5 |
-| process | binary_ref | action_process_image_sha256 |
-| process | binary_ref | action_process_image_path |
-| process | binary_ref | actor_process_image_path |
-| process | binary_ref | causality_actor_process_image_path |
-| process | binary_ref | os_actor_process_image_path
+| process | creator_user_ref | action_process_username |
 | process | extensions.x-paloalto-process.instance_id | actor_process_instance_id |
 | process | extensions.x-paloalto-process.causality_id | actor_process_causality_id |
 | process | extensions.x-paloalto-process.auth_id | actor_process_auth_id |
@@ -168,25 +168,58 @@
 | windows-registry-key | key | action_registry_key_name |
 | windows-registry-key | values | action_registry_value_name |
 | <br> | | |
-| x-oca-asset | hostname | agent_hostname |
 | x-oca-asset | ip_refs | action_local_ip |
 | x-oca-asset | ip_refs | action_remote_ip |
-| x-oca-asset | ip_refs | agent_ip_addresses_v6 |
 | x-oca-asset | ip_refs | agent_ip_addresses |
+| x-oca-asset | ip_refs | agent_ip_addresses_v6 |
 | x-oca-asset | ip_refs | dst_agent_ip_addresses_v6 |
 | x-oca-asset | mac_refs | mac |
 | x-oca-asset | mac_refs | associated_mac |
 | x-oca-asset | mac_refs | dst_associated_mac |
 | x-oca-asset | mac_refs | dst_mac |
-| x-oca-asset | extensions.x-paloalto-agent.asset_id | agent_id |
-| x-oca-asset | extensions.x-paloalto-agent.os_type | agent_os_type |
-| x-oca-asset | extensions.x-paloalto-agent.user_agent | action_user_agent |
 | x-oca-asset | extensions.x-paloalto-agent.agent_version | agent_version |
+| x-oca-asset | hostname | agent_hostname |
 | x-oca-asset | extensions.x-paloalto-agent.content_version | agent_content_version |
 | x-oca-asset | extensions.x-paloalto-agent.start_time | agent_session_start_time |
+| x-oca-asset | extensions.x-paloalto-agent.asset_id | agent_id |
+| x-oca-asset | extensions.x-paloalto-agent.os_type | agent_os_type |
 | x-oca-asset | extensions.x-paloalto-agent.os_sub_type | agent_os_sub_type |
 | x-oca-asset | extensions.x-paloalto-agent.is_vdi | agent_is_vdi |
+| x-oca-asset | extensions.x-paloalto-agent.user_agent | action_user_agent |
 | x-oca-asset | extensions.x-paloalto-agent.agent_header | http_req_user_agent_header |
+| <br> | | |
+| x-oca-event | network_ref | action_network_protocol |
+| x-oca-event | file_ref | action_file_name |
+| x-oca-event | process_ref | action_process_image_name |
+| x-oca-event | process_ref | actor_process_image_name |
+| x-oca-event | parent_process_ref | causality_actor_process_image_name |
+| x-oca-event | parent_process_ref | os_actor_process_image_name |
+| x-oca-event | process_ref | action_process_image_command_line |
+| x-oca-event | process_ref | actor_process_command_line |
+| x-oca-event | parent_process_ref | causality_actor_process_command_line |
+| x-oca-event | parent_process_ref | os_actor_process_command_line |
+| x-oca-event | process_ref | action_module_process_os_pid |
+| x-oca-event | process_ref | action_process_os_pid |
+| x-oca-event | process_ref | actor_process_os_pid |
+| x-oca-event | process_ref | causality_actor_process_os_pid |
+| x-oca-event | process_ref | os_actor_process_os_pid |
+| x-oca-event | parent_process_ref | action_process_requested_parent_pid |
+| x-oca-event | parent_process_ref | action_thread_parent_pid |
+| x-oca-event | domain_ref | auth_domain |
+| x-oca-event | domain_ref | dst_host_metadata_domain |
+| x-oca-event | domain_ref | host_metadata_domain |
+| x-oca-event | url_ref | dst_action_url_category |
+| x-oca-event | registry_ref | action_registry_key_name |
+| x-oca-event | registry_ref | action_registry_value_name |
+| x-oca-event | agent | agent_hostname |
+| x-oca-event | code | event_id |
+| x-oca-event | extensions.x-paloalto-event.event_description | vpn_event_description |
+| x-oca-event | created | event_timestamp |
+| x-oca-event | extensions.x-paloalto-event.version | event_version |
+| x-oca-event | extensions.x-paloalto-event.uuid | event_rpc_interface_uuid |
+| x-oca-event | extensions.x-paloalto-event.path | event_address_mapped_image_path |
+| x-oca-event | category | event_type |
+| x-oca-event | action | event_sub_type |
 | <br> | | |
 | x-paloalto-evtlog | data_fields | action_evtlog_data_fields |
 | x-paloalto-evtlog | description | action_evtlog_description |
@@ -199,37 +232,3 @@
 | x-paloalto-evtlog | message | action_evtlog_message |
 | x-paloalto-evtlog | version | action_evtlog_version |
 | <br> | | |
-| x-oca-event | extensions.x-paloalto-event.event_description | vpn_event_description |
-| x-oca-event | url_ref | dst_action_url_category |
-| x-oca-event | file_ref | action_file_name |
-| x-oca-event | process_ref | action_process_os_pid |
-| x-oca-event | process_ref | actor_process_os_pid |
-| x-oca-event | process_ref | action_module_process_os_pid |
-| x-oca-event | process_ref | causality_actor_process_os_pid |
-| x-oca-event | process_ref | os_actor_process_os_pid |
-| x-oca-event | process_ref | action_process_image_name |
-| x-oca-event | process_ref | actor_process_image_name |
-| x-oca-event | process_ref | action_process_image_command_line |
-| x-oca-event | process_ref | actor_process_command_line |
-| x-oca-event | parent_process_ref | causality_actor_process_command_line |
-| x-oca-event | parent_process_ref | os_actor_process_command_line |
-| x-oca-event | parent_process_ref | action_process_requested_parent_pid |
-| x-oca-event | parent_process_ref | action_thread_parent_pid |
-| x-oca-event | parent_process_ref | causality_actor_process_image_name |
-| x-oca-event | parent_process_ref | os_actor_process_image_name |
-| x-oca-event | domain_ref | auth_domain |
-| x-oca-event | domain_ref | dst_host_metadata_domain |
-| x-oca-event | domain_ref | host_metadata_domain |
-| x-oca-event | registry_ref | action_registry_key_name |
-| x-oca-event | registry_ref | action_registry_value_name |
-| x-oca-event | agent | agent_hostname |
-| x-oca-event | created | event_timestamp |
-| x-oca-event | extensions.x-paloalto-event.version | event_version |
-| x-oca-event | extensions.x-paloalto-event.uuid | event_rpc_interface_uuid |
-| x-oca-event | extensions.x-paloalto-event.path | event_address_mapped_image_path |
-| x-oca-event | category | event_type |
-| x-oca-event | action | event_sub_type |
-| x-oca-event | code | event_id |
-| x-oca-event | network_ref | action_network_protocol |
-| <br> | | |
-
