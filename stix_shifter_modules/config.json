@@ -70,7 +70,7 @@
             },
             "stix_2.1": {
                 "type": "boolean",
-                "default": false,
+                "default": true,
                 "optional": true,
                 "hidden": true
             }

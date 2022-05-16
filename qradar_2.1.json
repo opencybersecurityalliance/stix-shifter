@@ -1,0 +1,342 @@
+{
+    "type": "bundle",
+    "id": "bundle--65de185f-32e3-414e-9af5-a7d32eccf0f2",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "qradar",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--ac5dacbd-04e4-438c-85ad-799c00637e67",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.648Z",
+            "modified": "2022-05-16T18:20:30.648Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--e9ab8163-ba19-4817-b8bf-89d9a2fd4059",
+                "x-qradar--f54c91a7-2dbd-45e7-8dd1-5f4c91fcd4c1",
+                "x-ibm-finding--afebb102-55d2-4892-ada2-07614da265fc",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--e7c09676-6831-5edc-a3fa-c3f7bddb729e"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--483b8283-459a-4b43-8fc2-f35df53ac102",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.651Z",
+            "modified": "2022-05-16T18:20:30.651Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--9a14e2f4-6dc2-482a-b657-6978282b7f9d",
+                "x-qradar--cd1feb82-8a4b-44b5-a536-28f9f024cce1",
+                "x-ibm-finding--b76ad3e2-7952-433f-a180-17384c60bd90",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--836ddfd6-d860-5053-b694-589b089eae4a"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--5294dead-90af-4b09-8222-f14de64377a2",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.652Z",
+            "modified": "2022-05-16T18:20:30.652Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--d744a103-3827-432c-a51f-70adb4937922",
+                "x-qradar--3b6defd2-42c7-4ba9-a87c-642c1f162fd0",
+                "x-ibm-finding--306deb0f-6414-48d3-8d0a-91feb95d95a1",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--4defd835-b983-5a26-855c-70223d70727b"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--a6cd32a6-c31f-4dcf-b3b0-1d18478f146a",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.653Z",
+            "modified": "2022-05-16T18:20:30.653Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--7884c5cf-60bc-4cdb-abcc-275ef4b77d55",
+                "x-qradar--07ae324d-08cb-4ed1-9d6f-df79ccd43c7d",
+                "x-ibm-finding--4f6d7ede-1084-466f-b882-01b56ef1135f",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--171d86fe-eb95-5495-89b6-89b0176f44d0"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--66b2d593-5cb6-41c9-8ad4-93439b5167ce",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.653Z",
+            "modified": "2022-05-16T18:20:30.653Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--b0e3f7bf-5df7-46ad-bff1-18265e68196a",
+                "x-qradar--015c0290-434c-4962-8a1e-5fa58c2ab499",
+                "x-ibm-finding--3d165a07-1839-4f62-9e9e-d421195046f5",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--5585919b-8dc9-557c-9868-b18f43773457"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--c8a96fab-cb6e-4906-8986-43ca87b024be",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.654Z",
+            "modified": "2022-05-16T18:20:30.654Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--1098cb1d-2aa5-4462-a072-bfe9155c466f",
+                "x-qradar--1471274c-1828-441a-b437-cc4105fba223",
+                "x-ibm-finding--c1ea7bf7-a18a-4596-960c-3769bc5b8a82",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--c3780784-d946-55c9-9186-7e9c711a5691"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--a604dc7c-3d65-4c68-a6b9-4ea29ad151c9",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.655Z",
+            "modified": "2022-05-16T18:20:30.655Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--072fa913-0287-4d51-b605-060451cc0faa",
+                "x-qradar--0cf18421-1f01-4957-973a-045c5d104122",
+                "x-ibm-finding--93d54ced-8a43-41d7-a56a-03ba81eeada3",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--5b7c84b2-6fe1-516b-b62f-6dfb536b3a7f"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--9d0f4b95-f9c1-45bf-a14f-0215550fb021",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.655Z",
+            "modified": "2022-05-16T18:20:30.655Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--e183821b-3487-41fe-b50c-8e271ef55cdd",
+                "x-qradar--f42ac998-5640-4f55-bec0-5e9aa85cd0bc",
+                "x-ibm-finding--fc3a883d-f2d8-4f7d-9295-1d299788ba76",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--da8ce185-397e-53ea-aa13-26c11896c70a"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--cf4c00f2-849d-42da-9ad3-dc871a65936f",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.656Z",
+            "modified": "2022-05-16T18:20:30.656Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--7be8367a-4a29-40ab-a71d-e93b88ad9b66",
+                "x-qradar--455d28ce-f2df-4867-92bd-024e767d68ba",
+                "x-ibm-finding--32b1982f-a0e4-4f65-a2ea-c2a7ec7a1322",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--88aea9de-a5b3-554c-b62e-efe1487ec771"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "id": "observed-data--a71aeba1-f4be-4b23-9dd8-57f3ff081c8a",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-05-16T18:20:30.656Z",
+            "modified": "2022-05-16T18:20:30.656Z",
+            "first_observed": "2022-05-16T18:18:00.998Z",
+            "last_observed": "2022-05-16T18:18:00.998Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-oca-event--33b835a0-6b3b-4ac1-b53e-978409f5a348",
+                "x-qradar--57eb15a4-83bc-4020-9675-da5fc95474ef",
+                "x-ibm-finding--06e82150-f79f-4892-9f7b-5795af183637",
+                "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+                "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+                "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+                "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+                "artifact--897794cb-b050-5126-90d4-3b24020c05db"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-oca-event",
+            "action": "Information Message",
+            "id": "x-oca-event--33b835a0-6b3b-4ac1-b53e-978409f5a348",
+            "spec_version": "2.1",
+            "outcome": "Information",
+            "category": [
+                "System"
+            ],
+            "provider": "System Notification",
+            "agent": "System Notification-2 :: si-fred-azam",
+            "created": "2022-05-16T18:18:00.000Z",
+            "network_ref": "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+            "host_ref": "5",
+            "original_ref": "artifact--897794cb-b050-5126-90d4-3b24020c05db"
+        },
+        {
+            "type": "x-qradar",
+            "qid": 38750003,
+            "id": "x-qradar--57eb15a4-83bc-4020-9675-da5fc95474ef",
+            "spec_version": "2.1",
+            "category_id": 8052,
+            "high_level_category_id": 8000,
+            "log_source_id": 65,
+            "device_type": 147,
+            "direction": "R2R",
+            "credibility": 10,
+            "relevance": 1,
+            "cre_event_list": [
+                "100101",
+                "100227",
+                "100221",
+                "100277",
+                "100272"
+            ],
+            "domain_id": 0,
+            "domain_name": "Default Domain",
+            "has_offense": "false"
+        },
+        {
+            "type": "x-ibm-finding",
+            "start": "2022-05-16T18:18:00.998Z",
+            "id": "x-ibm-finding--06e82150-f79f-4892-9f7b-5795af183637",
+            "spec_version": "2.1",
+            "end": "2022-05-16T18:18:00.998Z",
+            "src_ip_ref": "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+            "dst_ip_ref": "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+            "event_count": 1,
+            "finding_type": "event",
+            "magnitude": 3,
+            "severity": 2,
+            "src_geolocation": "NorthAmerica.UnitedStates",
+            "dst_geolocation": "other",
+            "rule_names": [
+                "BB:NetworkDefinition: Honeypot like Addresses",
+                "Source Asset Weight is Low",
+                "Destination Asset Weight is Low",
+                "BB:NetworkDefinition: Darknet Addresses",
+                "Load Basic Building Blocks"
+            ]
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "9.21.118.236",
+            "id": "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+            "spec_version": "2.1",
+            "resolves_to_refs": [
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922"
+            ]
+        },
+        {
+            "type": "network-traffic",
+            "src_ref": "ipv4-addr--aed7c686-78ee-53fe-86cc-e393e93d364e",
+            "id": "network-traffic--29460399-c597-5f89-8800-f5b2cd0b256f",
+            "spec_version": "2.1",
+            "src_port": 0,
+            "dst_ref": "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+            "dst_port": 0,
+            "protocols": [
+                "reserved"
+            ]
+        },
+        {
+            "type": "mac-addr",
+            "value": "00:00:00:00:00:00",
+            "id": "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "127.0.0.1",
+            "id": "ipv4-addr--bba0f0c6-64fe-5b55-9d66-d26927851019",
+            "spec_version": "2.1",
+            "resolves_to_refs": [
+                "mac-addr--45f0ece7-cd50-5509-b4c0-5d5149116922"
+            ]
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "0.0.0.0",
+            "id": "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "artifact",
+            "payload_bin": "TWF5IDE2IDE1OjE4OjAwIDEyNy4wLjAuMSBub3RpZmljYXRpb25fbG9nX2NsYXNzaWZpZXIucGwgWzI1MDUyXSBxZmxvdzogW0lORk9dIFtOT1Q6MDAwMDAwNjAwMF1bOS4yMS4xMTguMjM2Ly0gLV0gWy0vLSAtXSBbMTY1MjcyNTA4MF0gTmV3IGlucHV0IGludGVydmFsIHN0YXJ0ZWQK",
+            "id": "artifact--897794cb-b050-5126-90d4-3b24020c05db",
+            "spec_version": "2.1",
+            "mime_type": "text/plain"
+        }
+    ]
+}

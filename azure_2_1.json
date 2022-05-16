@@ -1,0 +1,403 @@
+{
+    "type": "bundle",
+    "id": "bundle--a875a219-6ac3-4775-96e6-1215070e9d1d",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "azure_sentinel",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--ab5fe2f1-d6e2-441f-8f07-036f392ab135",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2022-03-15T22:22:38.4150397Z",
+            "modified": "2022-03-15T22:23:24.1884697Z",
+            "first_observed": "2022-03-14T00:00:00Z",
+            "last_observed": "2022-03-14T00:00:00Z",
+            "number_observed": 1,
+            "object_refs": [
+                "x-msazure-sentinel-alert--ea125092-1338-4928-9217-e194d9d2da36",
+                "x-msazure-sentinel--99ab8244-f108-4d28-9aa4-5e83b93a08b7",
+                "software--883d50ad-4291-5cad-8fc4-51b11b28fa29",
+                "network-traffic--88614009-11b8-578a-8f5b-3ab4eefeb257",
+                "ipv4-addr--3f6e43e0-5e6b-54a3-b141-3f0d1f5e1ed5",
+                "ipv4-addr--52ddec5a-ed8f-591b-b5b8-d5e81113219c",
+                "x-msazure-sentinel-alert--b685c5b4-40d5-435f-86e1-50629b87277b",
+                "ipv4-addr--0a813c9c-9cc5-5fb3-83ff-656134500ed4",
+                "x-msazure-sentinel-alert--b67f90a0-9048-44fd-9c96-62a1689d4c6f",
+                "ipv4-addr--a172eed9-c0a8-5e2d-941e-ea3b484977e1",
+                "x-msazure-sentinel-alert--a2e1dc16-1ead-408d-8350-e5366c1ac720",
+                "ipv4-addr--27df9774-b94d-5aba-b57e-7156d3fb00bc",
+                "x-msazure-sentinel-alert--4ad79d15-461f-4aa4-b411-50a42e6b53e6",
+                "ipv4-addr--595fed02-671d-5971-9eef-3f1c682c3160",
+                "x-msazure-sentinel-alert--9cdb5064-f780-4e97-92f2-3aec957070ea",
+                "ipv4-addr--bc6f99b4-07d6-596f-b552-9ba64f3b511c",
+                "x-msazure-sentinel-alert--3f27781e-d2ae-4ab5-af78-c677d12c1c20",
+                "ipv4-addr--9ac98617-1b03-51fc-b5f8-eb20c3d0619d",
+                "x-msazure-sentinel-alert--5c90376b-10ce-41b1-9e0f-90319088c34b",
+                "ipv4-addr--227186b4-013a-5194-90bd-19797537086e",
+                "x-msazure-sentinel-alert--a718b794-731a-4e03-bf56-0e3f1bf9c47c",
+                "ipv4-addr--c94befa2-8116-580c-8451-9b076803585f",
+                "x-msazure-sentinel-alert--2fc5f2c9-9cd3-4630-9d48-001f66acd561",
+                "ipv4-addr--0e02b28c-367b-5454-9a28-e52a025b3f69",
+                "x-msazure-sentinel-alert--78b06364-04b5-42bf-9e9e-464793995440",
+                "ipv4-addr--96ce81ff-d7ee-56c0-85af-cdc470ec813d",
+                "x-msazure-sentinel-alert--9250f262-05b4-4e3c-b7da-f7873c800a13",
+                "ipv4-addr--dea463e7-d939-5426-838c-7cc863c600b6",
+                "x-msazure-sentinel-alert--8c29edc9-81fa-4d26-ae4e-aa7f93aa50ab",
+                "ipv4-addr--33e5ceeb-0931-52ad-b6a9-90da22764a7a",
+                "x-msazure-sentinel-alert--3c4aab1a-f81b-4d0a-ba46-44b386022b01",
+                "ipv4-addr--575794ae-0d51-53c9-a8cb-533f9639b3c0",
+                "x-msazure-sentinel-alert--707b4f75-dc6d-4737-9f1e-1485c7657539",
+                "ipv4-addr--0c8697bf-1ba2-5463-800d-616b6ac510d8",
+                "x-msazure-sentinel-alert--e9bff212-d5eb-4ab9-babd-843607bd68f3",
+                "ipv4-addr--11726222-7d8a-5ab9-b452-cdfcf57c1892",
+                "x-msazure-sentinel-alert--5c1f46f2-e013-426f-aa6e-ff5785684730",
+                "ipv4-addr--caed4a37-dfb2-5ae9-8692-3ed49f441f47",
+                "x-msazure-sentinel-alert--1ba19ec7-0a2e-4152-afc9-12b3f0ae70ad",
+                "ipv4-addr--d2762a87-4a81-515b-9c01-1f9070c041aa",
+                "x-msazure-sentinel-alert--a4675fa0-85b2-4491-982a-d74982372485",
+                "ipv4-addr--37facc73-9566-5598-b6f4-1c0f5aa9f1d4",
+                "x-msazure-sentinel-alert--585c3970-c805-411c-ac52-d3524e986a85",
+                "ipv4-addr--072c0c6f-452d-5482-ad15-0fc2d4ab5975",
+                "x-msazure-sentinel-alert--039489d6-6187-4075-af3e-686941c244cd"
+            ],
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "providerid": "2517550847999999999_d4899524-a353-417d-881b-f2567cc2b1ba",
+            "id": "0",
+            "spec_version": "2.1",
+            "category": "Network_TrafficFromUnrecommendedIP",
+            "createddatetime": "2022-03-15T22:22:38.4150397Z",
+            "description": "Defender for Cloud detected inbound traffic from IP addresses that are recommended to be blocked. This typically occurs when this IP address doesn't communicate regularly with this resource.\r\nAlternatively, the IP address has been flagged as malicious by Microsoft's threat intelligence sources.",
+            "lastmodifieddatetime": "2022-03-15T22:23:24.1884697Z",
+            "severity": "low",
+            "status": "newAlert",
+            "title": "Traffic detected from IP addresses recommended for blocking",
+            "vendorinformation": {
+                "subprovider": "AdaptiveNetworkHardenings"
+            },
+            "networkConnections": {
+                "sourceLocation": "Sankt-Peterburg, Sankt-Peterburg, RU"
+            },
+            "securityresources": {
+                "resource": "/subscriptions/f57e6412-8a28-4527-970c-11653c15d2b8/resourcegroups/univ-install_group/providers/microsoft.compute/virtualmachines/univ-install",
+                "resourcetype": "attacked"
+            }
+        },
+        {
+            "type": "x-msazure-sentinel",
+            "tenant_id": "7106186f-6b8e-4d58-83b2-9d6431c4a909",
+            "id": "1",
+            "spec_version": "2.1",
+            "subscription_id": "f57e6412-8a28-4527-970c-11653c15d2b8"
+        },
+        {
+            "type": "software",
+            "name": "ASC",
+            "id": "2",
+            "spec_version": "2.1",
+            "vendor": "Microsoft"
+        },
+        {
+            "type": "network-traffic",
+            "dst_port": 22,
+            "id": "3",
+            "spec_version": "2.1",
+            "protocols": [
+                "tcp"
+            ],
+            "src_ref": "4"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.255.1.1",
+            "id": "4",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.1.2.60",
+            "id": "6",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Crestview, Florida, US"
+            },
+            "id": "7",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "193.169.255.199",
+            "id": "9",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Zelkowko, Pomorskie, PL"
+            },
+            "id": "10",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.64.45.205",
+            "id": "12",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Paris, Paris, FR"
+            },
+            "id": "13",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.59.58.252",
+            "id": "15",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Bengaluru, Karnataka, IN"
+            },
+            "id": "16",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.253.79.196",
+            "id": "18",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Kediri, Jawa Timur, ID"
+            },
+            "id": "19",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.126.128.90",
+            "id": "21",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Saint Louis, Missouri, US"
+            },
+            "id": "22",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.154.25.30",
+            "id": "24",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Aberdeen, Hong Kong, HK"
+            },
+            "id": "25",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.59.228.214",
+            "id": "27",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Singapore, Central Singapore, SG"
+            },
+            "id": "28",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.183.236.92",
+            "id": "30",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Singapore, Central Singapore, SG"
+            },
+            "id": "31",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.128.78.42",
+            "id": "33",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Bulawayo, Bulawayo, ZW"
+            },
+            "id": "34",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.144.31.238",
+            "id": "36",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Moskva, Moskva, RU"
+            },
+            "id": "37",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.250.216.216",
+            "id": "39",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Cape Town, Western Cape, ZA"
+            },
+            "id": "40",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.224.142.101",
+            "id": "42",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Sforzatica, Bergamo, IT"
+            },
+            "id": "43",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.67.233.141",
+            "id": "45",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Beijing, Beijing Shi, CN"
+            },
+            "id": "46",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.194.229.92",
+            "id": "48",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Tongzhou Qu, Beijing Shi, CN"
+            },
+            "id": "49",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.65.82.7",
+            "id": "51",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Leshan, Sichuan, CN"
+            },
+            "id": "52",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.89.29.17",
+            "id": "54",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "New York, New York, US"
+            },
+            "id": "55",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.155.158.51",
+            "id": "57",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Auckland, Auckland, NZ"
+            },
+            "id": "58",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "172.35.169.154",
+            "id": "60",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Dubovka, Volgogradskaya Oblast', RU"
+            },
+            "id": "61",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "ipv4-addr",
+            "value": "192.72.14.224",
+            "id": "63",
+            "spec_version": "2.1"
+        },
+        {
+            "type": "x-msazure-sentinel-alert",
+            "networkConnections": {
+                "sourceLocation": "Belo Horizonte, Minas Gerais, BR"
+            },
+            "id": "64",
+            "spec_version": "2.1"
+        }
+    ]
+}
