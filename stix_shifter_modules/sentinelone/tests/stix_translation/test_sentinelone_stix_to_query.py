@@ -1,5 +1,8 @@
 import re
+from textwrap import indent
 import unittest
+
+from itsdangerous import json
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
 
@@ -613,8 +616,7 @@ class TestQueryTranslator(unittest.TestCase):
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
-        assert result['error'] == "sentinelone connector error => " \
-                                  "wrong parameter : Unsupported ENUM values provided. " \
+        assert result['error'] == "wrong parameter : Unsupported ENUM values provided. " \
                                   "Possible supported enum values " \
                                   "are['UNKNOWN', 'PE', 'ELF', 'MACH', 'VECT', 'PDF', " \
                                   "'COM', 'OLE', 'OPENXML', 'PKZIP', 'RAR', " \
@@ -628,8 +630,7 @@ class TestQueryTranslator(unittest.TestCase):
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
-        assert result['error'] == "sentinelone connector error => " \
-                                  "wrong parameter : Unsupported ENUM values provided. " \
+        assert result['error'] == "wrong parameter : Unsupported ENUM values provided. " \
                                   "Possible supported enum values " \
                                   "are['windows', 'osx', 'linux']"
 
@@ -641,8 +642,7 @@ class TestQueryTranslator(unittest.TestCase):
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
-        assert result['error'] == "sentinelone connector error => " \
-                                  "wrong parameter : Unsupported ENUM values provided. " \
+        assert result['error'] == "wrong parameter : Unsupported ENUM values provided. " \
                                   "Possible supported enum values " \
                                   "are['windows', 'osx', 'linux']"
 
@@ -654,8 +654,7 @@ class TestQueryTranslator(unittest.TestCase):
         result = translation.translate('sentinelone', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
-        assert result['error'] == "sentinelone connector error => " \
-                                  "wrong parameter : Unsupported ENUM values provided. " \
+        assert result['error'] == "wrong parameter : Unsupported ENUM values provided. " \
                                   "Possible supported enum values " \
                                   "are['UNKNOWN', 'PE', 'ELF', 'MACH', 'VECT', 'PDF', " \
                                   "'COM', 'OLE', 'OPENXML', 'PKZIP', 'RAR', " \

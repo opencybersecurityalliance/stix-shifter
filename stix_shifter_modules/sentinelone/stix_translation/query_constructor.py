@@ -19,10 +19,27 @@ class QueryStringPatternTranslator:
     """
        translate stix pattern to native data source query language
     """
+    """
+     comparator values to match with supported data source operators
+     """
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.Or: "OR",
+        ComparisonComparators.Equal: "=",
+        ComparisonComparators.NotEqual: "!=",
+        ComparisonComparators.Like: "in contains anycase",
+        ComparisonComparators.Matches: "regexp",
+        ComparisonComparators.GreaterThan: ">",
+        ComparisonComparators.GreaterThanOrEqual: ">=",
+        ComparisonComparators.LessThan: "<",
+        ComparisonComparators.LessThanOrEqual: "<=",
+        ComparisonComparators.In: "IN",
+        ObservationOperators.Or: "OR",
+        ObservationOperators.And: "OR"
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.options = options
         self.timeframe = []
@@ -239,7 +256,7 @@ class QueryStringPatternTranslator:
         comparison_string = ""
         mapped_fields_count = len(mapped_fields_array)
         for mapped_field in mapped_fields_array:
-            if expression.negated and str(expression.comparator).split(".")[1] in ['Matches','Like']:
+            if expression.negated and (expression.comparator == ComparisonComparators.Matches or expression.comparator == ComparisonComparators.Like):
                 comparison_string += f'NOT {mapped_field} {comparator} {value}'
             elif mapped_field in self.type_map["boolean_supported_fields"]:
                 comparison_string += f'{mapped_field} is {value.lower()}'
@@ -256,10 +273,10 @@ class QueryStringPatternTranslator:
         :param expression_operator:enum object
         :return str
         """
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(f'Comparison operator {expression_operator.name} '
                                       f'unsupported for SentinelOne connector')
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         """
