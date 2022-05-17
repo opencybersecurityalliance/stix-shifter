@@ -2,7 +2,6 @@ import re
 from textwrap import indent
 import unittest
 
-from itsdangerous import json
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
 
