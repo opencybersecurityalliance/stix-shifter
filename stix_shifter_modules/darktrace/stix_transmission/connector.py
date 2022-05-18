@@ -86,20 +86,20 @@ class Connector(BaseSyncConnector):
         except InvalidArguments as ex:
             response_dict['code'] = 1002
             response_dict['message'] = str(ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except InvalidAuthenticationException:
             response_dict['code'] = 1001
             response_dict['message'] = "Invalid Authentication"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except ConnectionError:
             response_dict['code'] = 1003
             response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
     def get_results_data(self, response_dict):
@@ -169,18 +169,18 @@ class Connector(BaseSyncConnector):
         except InvalidArguments as ex:
             response_dict['type'] = 1002
             response_dict['message'] = str(ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except InvalidAuthenticationException:
             response_dict['code'] = 1001
             response_dict['message'] = "Invalid Authentication"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except ConnectionError:
             response_dict['code'] = 1003
             response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error while pinging: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
