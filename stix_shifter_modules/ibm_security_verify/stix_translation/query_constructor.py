@@ -24,15 +24,15 @@ logger = logging.getLogger(__name__)
 class QueryStringPatternTranslator:
     QUERIES = []
     comparator_lookup = {
-        "ComparisonExpressionOperators.And": "&",
-        "ComparisonComparators.Equal": "=",
-        "ObservationOperators.And": "=",
-        "ComparisonComparators.In": "="
+        ComparisonExpressionOperators.And: "&",
+        ComparisonComparators.Equal: "=",
+        ObservationOperators.And: "=",
+        ComparisonComparators.In: "="
     }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
-       # self.comparator_lookup = self.dmm.map_comparator() 
+        #self.comparator_lookup = self.dmm.map_comparator() 
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -151,13 +151,13 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError(
                 "Comparison operator {} unsupported for ibm_security_verify connector".format(
                     expression_operator.name
                 )
             )
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     @classmethod
     def _format_start_stop_qualifier(self, expression, qualifier) -> str:
