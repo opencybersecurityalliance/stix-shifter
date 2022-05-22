@@ -5,8 +5,8 @@ from stix_shifter.stix_translation.stix_translation import MAPPING_ERROR
 import unittest
 
 
-# options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
-options_file = open('/Users/deepshikha/Documents/GitHub/guardiumUDI/stix-shifter/stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+# options_file = open('/Users/deepshikha/Documents/GitHub/guardiumUDI/stix-shifter/stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
 
 category = "\"category\": \"VIOLATION\""
 reportName = "\"reportName\": \"ATA Open Cases\""
