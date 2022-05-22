@@ -3,5 +3,6 @@
     "ComparisonExpressionOperators.Or": "OR",
     "ComparisonComparators.Equal": "=",
     "ObservationOperators.Or": "OR",
-    "ObservationOperators.And": "OR"
+    "ObservationOperators.And": "OR",
+    "ComparisonComparators.In": "="
 }
