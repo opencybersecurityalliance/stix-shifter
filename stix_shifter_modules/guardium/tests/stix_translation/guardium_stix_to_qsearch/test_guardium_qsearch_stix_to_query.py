@@ -109,10 +109,6 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_in_comparison_operator(self):
         stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
         query = translation.translate('guardium', 'query', '{}', stix_pattern)
-        filters = "\"ServerIP\":\"127.0.0.1\""
-        _test_query_assertions(query['queries'], 0, filters)
-        filters = "\"ServerIP\":\"127.0.0.2\""
-        _test_query_assertions(query['queries'], 1, filters)
         filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
         _test_query_assertions(query['queries'], 2, filters)
         filters = "\"filters\":\"name=Server&value=127.0.0.1&isGroup=false\""
