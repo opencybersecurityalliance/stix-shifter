@@ -5,7 +5,8 @@ from stix_shifter.stix_translation.stix_translation import MAPPING_ERROR
 import unittest
 
 
-options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+# options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+options_file = open('/Users/deepshikha/Documents/GitHub/guardiumUDI/stix-shifter/stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
 
 category = "\"category\": \"VIOLATION\""
 reportName = "\"reportName\": \"ATA Open Cases\""
@@ -48,7 +49,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
         filters = "\"filters\":\"name=Client IP&value=1.2.3.4&isGroup=false\""
-        _test_query_assertions(query['queries'], 0, filters)        
+        _test_query_assertions(query['queries'], 0, filters)
         filters = "\"filters\":\"name=Server&value=1.2.3.4&isGroup=false\""
         _test_query_assertions(query['queries'], 1, filters)
 
@@ -56,7 +57,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[ipv6-addr:value = '1:2:3:4:5:6:7:8']"
         query = _translate_query(stix_pattern)
         filters = "\"filters\":\"name=Client IP&value=1:2:3:4:5:6:7:8&isGroup=false\""
-        _test_query_assertions(query['queries'], 0, filters)        
+        _test_query_assertions(query['queries'], 0, filters)
         filters = "\"filters\":\"name=Server&value=1:2:3:4:5:6:7:8&isGroup=false\""
         _test_query_assertions(query['queries'], 1, filters)
 
@@ -115,10 +116,10 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query['queries'], 1, filters)
         filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
         _test_query_assertions(query['queries'], 2, filters)
-        filters = "\"filters\":\"name=Server&value=127.0.0.2&isGroup=false\""
-        _test_query_assertions(query['queries'], 3, filters)
         filters = "\"filters\":\"name=Server&value=127.0.0.1&isGroup=false\""
-        _test_query_assertions(query['queries'], 4, filters)
+        _test_query_assertions(query['queries'], 3, filters)
         filters = "\"filters\":\"name=Client IP&value=127.0.0.2&isGroup=false\""
+        _test_query_assertions(query['queries'], 4, filters)
+        filters = "\"filters\":\"name=Server&value=127.0.0.2&isGroup=false\""
         _test_query_assertions(query['queries'], 5, filters)
 
