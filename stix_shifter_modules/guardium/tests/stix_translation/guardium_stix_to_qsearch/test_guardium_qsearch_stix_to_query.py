@@ -5,7 +5,8 @@ from stix_shifter.stix_translation.stix_translation import MAPPING_ERROR
 import unittest
 
 
-options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+# options_file = open('stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
+options_file = open('/Users/deepshikha/Documents/GitHub/guardiumUDI/stix-shifter/stix_shifter_modules/guardium/tests/stix_translation/guardium_stix_to_qsearch/options.json').read()
 
 category = "\"category\": \"VIOLATION\""
 reportName = "\"reportName\": \"ATA Open Cases\""
@@ -18,6 +19,7 @@ def _test_query_assertions(query, ind, filters):
         assert query[ind].find(reportName) >= 0
     else:
         assert query[ind].find(category) >= 0
+        print(query[ind].find(filters))
         assert query[ind].find(filters) >= 0
 
 
@@ -109,6 +111,10 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_in_comparison_operator(self):
         stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
         query = translation.translate('guardium', 'query', '{}', stix_pattern)
+        # reportName = "\"reportName\":\"127.0.0.1\""
+        # _test_query_assertions(query['queries'], 0, reportName)
+        # reportName = "\"reportName\":\"127.0.0.2\""
+        # _test_query_assertions(query['queries'], 1, reportName)
         filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
         _test_query_assertions(query['queries'], 2, filters)
         filters = "\"filters\":\"name=Server&value=127.0.0.1&isGroup=false\""
