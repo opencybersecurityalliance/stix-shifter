@@ -19,7 +19,6 @@ def _test_query_assertions(query, ind, filters):
         assert query[ind].find(reportName) >= 0
     else:
         assert query[ind].find(category) >= 0
-        print(query[ind].find(filters))
         assert query[ind].find(filters) >= 0
 
 
