@@ -108,15 +108,15 @@ class TestQueryTranslator(unittest.TestCase, object):
         filters = "\"query\":\"Severity>01\""
         _test_query_assertions(query['queries'], 0, filters)
 
-#     def test_in_comparison_operator(self):
-#         stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
-#         query = translation.translate('guardium', 'query', '{}', stix_pattern)
+    def test_in_comparison_operator(self):
+        stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
+        query = translation.translate('guardium', 'query', '{}', stix_pattern)
         # reportName = "\"reportName\":\"127.0.0.1\""
         # _test_query_assertions(query['queries'], 0, reportName)
         # reportName = "\"reportName\":\"127.0.0.2\""
         # _test_query_assertions(query['queries'], 1, reportName)
-#         filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
-#         _test_query_assertions(query['queries'], 2, filters)
+        filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
+        _test_query_assertions(query['queries'], 2, filters)
 #         filters = "\"filters\":\"name=Server&value=127.0.0.1&isGroup=false\""
 #         _test_query_assertions(query['queries'], 3, filters)
 #         filters = "\"filters\":\"name=Client IP&value=127.0.0.2&isGroup=false\""
