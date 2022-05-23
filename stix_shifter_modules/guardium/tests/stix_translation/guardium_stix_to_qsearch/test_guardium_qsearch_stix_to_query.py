@@ -119,8 +119,8 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query['queries'], 2, filters)
         filters = "\"filters\":\"name=Server&value=127.0.0.2&isGroup=false\""
         _test_query_assertions(query['queries'], 3, filters)
-#         filters = "\"filters\":\"name=Client IP&value=127.0.0.2&isGroup=false\""
-#         _test_query_assertions(query['queries'], 4, filters)
+        filters = "\"filters\":\"name=Client IP&value=127.0.0.1&isGroup=false\""
+        _test_query_assertions(query['queries'], 4, filters)
 #         filters = "\"filters\":\"name=Server&value=127.0.0.2&isGroup=false\""
 #         _test_query_assertions(query['queries'], 5, filters)
 
