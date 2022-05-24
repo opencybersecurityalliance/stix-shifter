@@ -1,0 +1,221 @@
+{
+  "username": [
+    {
+      "key": "user-account.account_login",
+      "object": "useraccount"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "ocaevent",
+      "references": "useraccount"
+    }
+  ],
+  "userid": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+  "sourcetype": [
+    {
+      "key": "x-oca-event.agent",
+      "object": "ocaevent"
+    },
+    {
+      "key": "user-account.account_type",
+      "object": "useraccount"
+    }
+  ],
+  "servicename": {
+    "key": "x-oca-event.module",
+    "object": "ocaevent"
+  },
+  "ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "ipdata"
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "ocaevent",
+      "references": [
+        "ipdata"
+      ],
+      "group": true
+    }
+  ],
+  "tenantname": [
+    {
+      "key": "domain-name.value",
+      "object": "domaindata",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "ocaevent",
+      "references": "domaindata"
+    }
+  ],
+  "result": [
+    {
+      "object": "ocaevent",
+      "key": "x-oca-event.outcome"
+    }
+  ],
+  "subtype": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.subcategory"
+  },
+  "cause": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.cause"
+  },
+  "action": [
+    {
+      "key": "x-oca-event.action",
+      "object": "ocaevent"
+    }
+  ],
+  "realm": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.realm"
+  },
+  "devicetype": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.browser_agent"
+  },
+  "applicationid": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.application_id"
+  },
+  "applicationtype": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.application_type"
+  },
+  "applicationname": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.applicationname"
+  },
+  "target": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.target"
+  },
+  "event_type": [
+    {
+      "key": "x-oca-event.category",
+      "object": "ocaevent"
+    },
+    {
+      "key": "x-oca-event.provider",
+      "object": "ocaevent",
+      "transformer": "VerifyStaticTransformer"
+    }
+  ],
+  "time": [
+    {
+      "key": "x-oca-event.created",
+      "transformer": "EpochToTimestamp",
+      "object": "ocaevent"
+    }
+  ],
+  "performedby_username": {
+    "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
+    "object": "ocaevent"
+  },
+  "deleted": {
+    "key": "x-oca-event.extensions.x-iam-ext.deleted",
+    "object": "ocaevent"
+  },
+  "performedby_clientname": {
+    "key": "x-oca-event.extensions.x-iam-ext.performedby_clientname",
+    "object": "ocaevent"
+  },
+  "performedby_realm": {
+    "key": "x-oca-event.extensions.x-iam-ext.performedby_realm",
+    "object": "ocaevent"
+  },
+  "targetid": {
+    "key": "x-oca-event.extensions.x-iam-ext.targetid",
+    "object": "ocaevent"
+  },
+  "targetid_realm": {
+    "key": "x-oca-event.extensions.x-iam-ext.targetid_realm",
+    "object": "ocaevent"
+  },
+  "targetid_username": {
+    "key": "x-oca-event.extensions.x-iam-ext.taregetid_username",
+    "object": "ocaevent"
+  },
+  "continent_name": {
+    "key": "x-oca-event.extensions.x-iam-ext.continent_name",
+    "object": "ocaevent"
+  },
+  "city_name": {
+    "key": "x-oca-event.extensions.x-iam-ext.city_name",
+    "object": "ocaevent"
+  },
+  "country_iso_code": {
+    "key": "x-oca-event.extensions.x-iam-ext.country_iso_code",
+    "object": "ocaevent"
+  },
+  "country_name": {
+    "key": "x-oca-event.extensions.x-iam-ext.country_name",
+    "object": "ocaevent"
+  },
+  "providerid": {
+    "key": "x-oca-event.extensions.x-iam-ext.provider_id",
+    "object": "ocaevent"
+  },
+  "rule_name": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.rule_name"
+  },
+  "policy_name": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.policy_name"
+  },
+  "decision_reason": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.decision_reason"
+  },
+  "policy_action": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.policy_action"
+  },
+  "risk_level": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.risk_level"
+  },
+  "risk_score": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.risk_score"
+  },
+  "deviceid": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.deviceid"
+  },
+  "mdmiscompliant": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.is_device_compliant"
+  },
+  "mdmismanaged": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.is_device_managed"
+  },
+  "billingid": {
+    "object": "ocaevent",
+    "key": "x-oca-event.extensions.x-iam-ext.mdm_customerid"
+  },
+  "lat": {
+    "key": "x-oca-event.extensions.x-iam-ext.location_lat",
+    "object": "ocaevent"
+  },
+  "lon": {
+    "key": "x-oca-event.extensions.x-iam-ext.location_lon",
+    "object": "ocaevent"
+  },
+  "add": {
+    "key": "x-oca-event.extensions.x-iam-ext.add",
+    "object": "ocaevent"
+  }
+}
