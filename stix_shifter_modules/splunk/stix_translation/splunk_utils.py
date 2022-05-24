@@ -8,8 +8,8 @@ class FileHashLookupException(Exception):
 def hash_type_lookup(obj, ds_key, mapped_stix_attribute, options):
 
     file_hash_map = "file.hashes.{}"
-
-    if ds_key == "file_hash" and mapped_stix_attribute == "file.hashes.UNKNOWN":
+   
+    if ds_key == "file_hash" and mapped_stix_attribute == "file.hashes.unknown":
         if re.compile("^[a-f0-9]{32}$").match(obj["file_hash"]) is not None:
             file_hash_map = file_hash_map.format("MD5")
             return file_hash_map

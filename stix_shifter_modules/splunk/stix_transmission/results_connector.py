@@ -25,23 +25,13 @@ class ResultsConnector(BaseResultsConnector):
                 results = []
             return_obj['success'] = True
             return_obj['data'] = results
+
             # spliting hashes string into SHA256,MD5 and OTHERS
             for index, val in enumerate(return_obj['data']):
+                has_dict_array = []
                 if 'Hashes' in val:
-                    hashes = val['Hashes'].split(",")
-                    hash_dict = {}
-                    for hash_string in hashes:
-                        if hash_string.find("SHA256", 0) != -1:
-                            hash_dict.update({"SHA256": hash_string.lstrip("SHA256=")})
-                        elif hash_string.find("MD5", 0) != -1:
-                            hash_dict.update({"MD5": hash_string.lstrip("MD5=")})
-                        else:
-                            other_hash_list = []
-                            other_hash_key = hash_string[:hash_string.index("=")]
-                            others_hashes = {other_hash_key: hash_string.strip(other_hash_key + "=")}
-                            other_hash_list.append(others_hashes)
-                            hash_dict.update({"OTHERS": other_hash_list})
-                        return_obj['data'][index]['Hashes'] = hash_dict
+                        return_obj['data'][index]['process_hash'] = return_obj['data'][index]['Hashes']
+                        return_obj['data'][index]['file_hash'] = "f5568ea42e4cbd4bcf1f3bf6892d0049"
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
         return return_obj

@@ -267,7 +267,7 @@
     }
   ],
   "process_hash": {
-    "key": "file.hashes",
+    "key": "process.hashes",
     "object": "process-exec",
     "transformer": "SplunkHash"
   },
@@ -375,22 +375,10 @@
       "transformer": "SplunkToTimestamp"
     }
   ],
-  "Hashes": [{
-      "key": "file.hashes.SHA1",
-      "object": "file"
+  "file_hash": {
+    "key": "file.hashes.unknown",
+    "object": "file"
   },
-  {
-      "key": "file.hashes.SHA256",
-      "object": "file"
-  },
-  {
-      "key": "file.hashes.MD5",
-      "object": "file"
-  },
-  {
-      "key": "file.hashes.OTHERS",
-      "object": "file"
-  }],
   "file_name": [
     {
       "key": "file.name",

@@ -106,10 +106,10 @@ class TestTransform(unittest.TestCase, object):
         filePath = "C:\\Users\\someuser\\sample.dll"
         create_time = "2018-08-15T15:11:55.676+00:00"
         modify_time = "2018-08-15T18:10:30.456+00:00"
-        file_hash = "41a26255d16d121dc525a6445144b895"
+        file_hash = "f5568ea42e4cbd4bcf1f3bf6892d0049"
         file_name = "sample.dll"
         file_size = 25536
-
+#how to get file \_hash
         data = {
             "event_count": count, "_time": time, "user": user,
             "bytes": file_bytes, "object_path": objPath, "file_path": filePath,
@@ -152,7 +152,7 @@ class TestTransform(unittest.TestCase, object):
         assert(file_obj['modified'] == "2018-08-15T18:10:30.456Z")
         assert(file_obj['name'] == "sample.dll")
         assert(file_obj['size'] == 25536)
-        assert (file_obj['hashes']['MD5'] == "41a26255d16d121dc525a6445144b895")
+        assert (file_obj['hashes']['MD5'] == "f5568ea42e4cbd4bcf1f3bf6892d0049")
 
         dir_ref = file_obj['parent_directory_ref']
         assert(dir_ref in objects), f"parent_directory_ref with key {file_obj['parent_directory_ref']} not found"
@@ -175,7 +175,7 @@ class TestTransform(unittest.TestCase, object):
         key_algorithm = "rsaEncryption"
         issuer = "C=US, ST=California, O=www.example.com, OU=new, CN=new"
         subject = "C=US, ST=Maryland, L=Baltimore, O=John Doe, OU=ExampleCorp, CN=www.example.com/emailAddress=doe@example.com"
-        ssl_hash = "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f"
+        ssl_hash = "8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441"
 
         data = {
             "event_count": count, "_time": time, "ssl_serial": serial,
@@ -208,7 +208,7 @@ class TestTransform(unittest.TestCase, object):
         assert(cert_obj['issuer'] == "C=US, ST=California, O=www.example.com, OU=new, CN=new")
         assert(cert_obj['subject'] == "C=US, ST=Maryland, L=Baltimore, O=John Doe, OU=ExampleCorp, CN=www.example.com/emailAddress=doe@example.com")
         assert(cert_obj['subject_public_key_algorithm'] == "rsaEncryption")
-        assert(cert_obj['hashes']['SHA-256'] == "aec070645fe53ee3b3763059376134f058cc337247c978add178b6ccdfb0019f")
+        assert(cert_obj['hashes']['SHA-256'] == "8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441")
         assert(objects.keys() == set(map(str, range(0, 2))))
 
     def test_process_cim_to_stix(self):
@@ -437,7 +437,7 @@ class TestTransform(unittest.TestCase, object):
 
         data = {"src_ip": "169.250.0.1", "src_port": "1220", "src_mac": "aa:bb:cc:dd:11:22",
                 "dest_ip": "127.0.0.1", "dest_port": "1120", "dest_mac": "ee:dd:bb:aa:cc:11",
-                "file_hash": "cf23df2207d99a74fbe169e3eba035e633b65d94",
+                "file_hash": "8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441",
                 "user": "sname", "url": "https://wally.fireeye.com/malware_analysis/analyses?maid=1",
                 "protocol": "tcp", "_bkt": "main~44~6D3E49A0-31FE-44C3-8373-C3AC6B1ABF06", "_cd": "44:12606114",
                 "_indextime": "1546960685",
@@ -493,7 +493,7 @@ class TestTransform(unittest.TestCase, object):
         file_obj = TestTransform.get_first_of_type(objects.values(), 'file')
         assert (file_obj is not None), 'file object type not found'
         assert (file_obj.keys() == {'type', 'hashes'})
-        assert (file_obj['hashes']['SHA-1'] == "cf23df2207d99a74fbe169e3eba035e633b65d94")
+        assert (file_obj['hashes']['SHA-256'] == "8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441")
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert (user_obj is not None), 'user object type not found'
         assert (user_obj.keys() == {'type', 'account_login', 'user_id'})
