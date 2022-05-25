@@ -266,7 +266,7 @@
       "references": "process-exec"
     }
   ],
-  "process_hash": {
+  "Hashes": {
     "key": "process.hashes",
     "object": "process-exec",
     "transformer": "SplunkHash"
