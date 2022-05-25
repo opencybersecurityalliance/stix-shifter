@@ -36,3 +36,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [PaloAlto Cortex XDR](connectors/paloalto_supported_stix.md)
 - [SentinelOne](connectors/sentinelone_supported_stix.md)
 - [ReaQta](connectors/reaqta_supported_stix.md)
+- [Darktrace](connectors/darktrace_supported_stix.md)

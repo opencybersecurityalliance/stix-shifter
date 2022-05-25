@@ -35,7 +35,8 @@ CONNECTORS = {
     "cybereason": "Cybereason",
     "paloalto": "PaloAlto Cortex XDR",
     "sentinelone": "SentinelOne",
-    "reaqta": "ReaQta"
+    "reaqta": "ReaQta",
+    "darktrace": "Darktrace"
 }
 
 STIX_OPERATORS ={
