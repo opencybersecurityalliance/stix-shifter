@@ -88,7 +88,7 @@
       "extensions.'x-reaqta-consumer'.scriptingEngine": ["consumer.script.engine"],
       "extensions.'x-reaqta-consumer'.showWindowCommand": ["consumer.showWindowCmd"],
       "extensions.'x-wmi-event'.client_machine_fqn": ["wmi.clientMachineFqn"],
-      "host_id": ["__etwWorkstation"],
+      "host_id": ["__etwWorkstation", "endpointId"],
       "hostname": ["__etwWorkstationName", "wmi.clientMachine", "wmi.machineName"],
       "ip_refs[*].value": ["ip"]
     }
@@ -214,7 +214,6 @@
       "custom_type": ["customType"],
       "data": ["reg.data"],
       "display_name": ["service.displayName"],
-      "endpoint_id": ["endpointId"],
       "filter_name": ["wmi.filterName"],
       "is_local": ["wmi.isLocal"],
       "name": ["reg.name"],
