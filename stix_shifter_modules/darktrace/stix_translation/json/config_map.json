@@ -1,0 +1,21 @@
+{
+  "DT_Protocols": ["conn", "ssl", "ssh", "http", "ftp", "dns", "smtp", "ldap", "dhcp", "rdp", "pop3", "x509", "files_identified", "software", "device_details"],
+  "DT_NetworkTraffic": ["epochdate", "uid", "id_hUUID", "source_ip", "dest_ip", "source_port", "dest_port", "proto"],
+  "int_supported_fields": [
+      "source_port","src_p","dest_port","dst_p","pkts_recv","orig_pkts",
+    "pkts_dropped","resp_pkts","orig_bytes","orig_ip_bytes","megabytes_recv","resp_bytes",
+    "resp_ip_bytes","total_bytes","file_msg", "read_size", "write_size","dcc_file_size","certificate_version",
+    "auth_attempts","status_code","data_channel_resp_p","epochdate","certificate_exponent","response_body_len",
+    "reply_code","data_channel_resp_p","TTLs","unprocessed_TTLs","encryption_level","certificate_not_valid_before","certificate_not_valid_after",
+    "certificate_key_length","certificate_exponent","total_client_ciphers","orig_ttl","resp_ttl","trans_depth",
+    "request_body_len","cert_count","seen_bytes","basic_constraints_path_len","start_ts","oss_start_ts", "trans_id","a_load",
+    "unprocessed_payload_size","file_ident_ports","duration","missed_bytes_orig", "missed_bytes_resp",
+    "orig_percent_invalid_checksum","resp_percent_invalid_checksum", "info_code","oss_ts","flash_version",
+    "version_major","version_minor","version_minor3","lease_time","orig_fuids", "resp_fuids"
+    ],
+  "mac_supported_fields": [
+      "mac"
+    ],
+  "boolean_supported_fields": ["rejected","tls","password_seen","local_orig","local_resp","resumed",
+    "established","client_hello_seen","basic_constraints_ca"]
+}

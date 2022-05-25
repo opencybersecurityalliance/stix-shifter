@@ -153,8 +153,9 @@ List updated: October 29, 2021
 |       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
 |       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
-
-
+|       [Palo Alto Cortex XDR](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/paloalto_supported_stix.md)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [SentinelOne](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/sentinelone_supported_stix.md)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [Darktrace](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/darktrace_supported_stix.md)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 
