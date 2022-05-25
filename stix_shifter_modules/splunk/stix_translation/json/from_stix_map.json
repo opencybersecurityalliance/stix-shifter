@@ -136,7 +136,9 @@
         "cim_type": "process",
         "fields": {
             "name": "process",
-            "hashes": "Hashes",
+            "hashes.'SHA-1'": "Hashes",
+            "hashes.'SHA-256'": "Hashes",
+            "hashes.IMPHASH": "Hashes",
             "pid": "pid",
             "creator_user_ref.account_login": "user",
             "binary_ref.parent_directory_ref.path": "file_path",

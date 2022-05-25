@@ -199,7 +199,16 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
     x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
     translated_query = x.translate(pattern)
     if "Hashes" in translated_query:
-        translated_query = "(Hashes, \"SHA1=5e5a7065f1b551eb3632fb189ce1baefd23158aa\")"
+        translated_query = translated_query.replace('"', '')
+        translated_query = translated_query.replace(' ', '')
+        hashes = translated_query.split("Hashes")
+        translated_query = "(Hashes," + f'"{hashes[1][1:]}"'
+        #string manipulation, if hash is normal string or if it is given with MD5,SHA-1 prefix
+        if translated_query.find("=")!=-1:
+            index = hashes[1][1:].find("=")
+            translated_query = "(Hashes," + f'"{hashes[1][1:][index+1:]}"'
+        else:
+            translated_query = "(Hashes," + f'"{hashes[1][1:]}"'
     has_earliest_latest = _test_for_earliest_latest(translated_query)
 
     # adding default fields for query
