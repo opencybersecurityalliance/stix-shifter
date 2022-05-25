@@ -51,7 +51,6 @@
     "\"Process CommandLine\" as ProcessCommandLine",
     "ParentCommandLine",
     "TargetImage",
-    "SourceImage",
     "Message",
     "\"Registry Value Name\" as RegistryValueName",
     "\"IMP Hash\" as IMPHash",
