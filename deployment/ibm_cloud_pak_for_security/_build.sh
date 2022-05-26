@@ -164,7 +164,7 @@ fi
 
 DOCKER_USER=`oc whoami`
 echo "Logging in into internal registry $REPOSITORY as $DOCKER_USER ..."
-docker login -u $DOCKER_USER -p `oc whoami -t` $REPOSITORY
+docker login -u kubeadmin -p `oc whoami -t` $REPOSITORY
 
 if [ ! -z "${IMAGE_URL}" ]; then
   echo "Pulling ${IMAGE_URL}"
