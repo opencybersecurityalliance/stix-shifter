@@ -1,7 +1,7 @@
 {
   "endpointId": {
     "key": "x-oca-asset.host_id",
-    "object": "host"
+    "object": "asset"
   },
   "eventId": {
     "key": "x-oca-event.code",
@@ -47,10 +47,10 @@
     "process": {
       "endpointId": {
         "key": "x-oca-asset.host_id",
-        "object": "process"
+        "object": "asset"
       },
       "id": {
-        "key": "process.extensions.x-process-ext.process_guid",
+        "key": "process.extensions.x-process-ext.process_uid",
         "object": "process"
       },
       "logonId": {
@@ -62,7 +62,7 @@
         "object": "process"
       },
       "parentId": {
-        "key": "process.extensions.x-process-ext.process_guid",
+        "key": "process.extensions.x-process-ext.parent_process_uid",
         "object": "parent_process"
       },
       "pid": [
@@ -208,10 +208,10 @@
       "accessorProcess": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "accessorProcess_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "accessorProcess_process"
         },
         "logonId": {
@@ -223,7 +223,7 @@
           "object": "accessorProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "accessorProcess_parent_process"
         },
         "pid": [
@@ -376,10 +376,10 @@
       "allocatorProc": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "allocatorProc_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "allocatorProc_process"
         },
         "logonId": {
@@ -391,7 +391,7 @@
           "object": "allocatorProc_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "allocatorProc_parent_process"
         },
         "pid": [
@@ -578,10 +578,10 @@
       "childProcess": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "childProcess_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "childProcess_process"
         },
         "logonId": {
@@ -593,7 +593,7 @@
           "object": "childProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "childProcess_parent_process"
         },
         "pid": [
@@ -839,10 +839,10 @@
       "engineProcess": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "engineProcess_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "engineProcess_process"
         },
         "logonId": {
@@ -854,7 +854,7 @@
           "object": "engineProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "engineProcess_parent_process"
         },
         "pid": [
@@ -1379,7 +1379,7 @@
       },
       "etwWorkstation": {
         "key": "x-oca-asset.host_id",
-        "object": "etw_asset"
+        "object": "asset"
       },
       "etwWorkstationName": {
         "key": "x-oca-asset.hostname",
@@ -1466,7 +1466,7 @@
         {
           "group": true,
           "key": "x-oca-asset.ip_refs",
-          "object": "host",
+          "object": "asset",
           "references": [
             "src_ip"
           ]
@@ -1495,7 +1495,7 @@
         {
           "group": true,
           "key": "x-oca-asset.ip_refs",
-          "object": "host",
+          "object": "asset",
           "references": [
             "src_ip"
           ]
@@ -1646,10 +1646,10 @@
       "serviceProcess": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "serviceProcess_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "serviceProcess_process"
         },
         "logonId": {
@@ -1661,7 +1661,7 @@
           "object": "serviceProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "serviceProcess_parent_process"
         },
         "pid": [
@@ -1834,10 +1834,10 @@
       "targetProcess": {
         "endpointId": {
           "key": "x-oca-asset.host_id",
-          "object": "targetProcess_process"
+          "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.process_uid",
           "object": "targetProcess_process"
         },
         "logonId": {
@@ -1849,7 +1849,7 @@
           "object": "targetProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.process_guid",
+          "key": "process.extensions.x-process-ext.parent_process_uid",
           "object": "targetProcess_parent_process"
         },
         "pid": [
