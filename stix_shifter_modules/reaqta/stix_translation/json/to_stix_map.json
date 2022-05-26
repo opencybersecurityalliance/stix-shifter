@@ -28,7 +28,7 @@
       "object": "event"
     },
     "eventType": {
-      "key": "x-ibm-finding.category",
+      "key": "x-oca-event.category",
       "object": "event"
     },
     "incidents": {

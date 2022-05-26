@@ -12,7 +12,6 @@ class Connector(BaseSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
-        self.connector = __name__.split('.')[1]
     
     def ping_connection(self):
         return_obj = dict()
@@ -26,22 +25,22 @@ class Connector(BaseSyncConnector):
             elif response_code == 401:
                 response_dict['type'] = 'AuthenticationError'
                 response_dict['message'] = 'Invalid App Secret key provided. {}'.format(response['message'])
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             else:
                 response_dict['type'] = 'AuthenticationError'
                 response_dict['message'] = 'Invalid App ID provided. {}'.format(response['message'])
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             return return_obj
         except ConnectionError as ex:
             self.logger.error('error when pinging datasource {}:'.format(ex))
             response_dict['type'] = 'ConnectionError'
             response_dict['message'] = 'Invalid hostname provided. {}'.format(ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         except Exception as ex:
             self.logger.error('error when pinging datasource {}:'.format(ex))
             response_dict['type'] = 'AuthenticationError'
             response_dict['message'] = 'Authentication Failure. API Response: {}'.format(ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         
         return return_obj
     
@@ -86,13 +85,13 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = return_obj['data'][offset:total_records]
             elif response_code == 422:
                 error_string = 'query_syntax_error: ' + response_dict['message']
-                ErrorResponder.fill_error(return_obj, error_string, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, error_string, ['message'])
             else:
                 error_string = 'query_syntax_error: ' + response_dict['message']
-                ErrorResponder.fill_error(return_obj, error_string, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, error_string, ['message'])
             
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(str(err)))
-            ErrorResponder.fill_error(return_obj, err, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, err, ['message'])
         
         return return_obj

@@ -1,6 +1,7 @@
 import datetime
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonComparators, Pattern, \
+    ComparisonExpressionOperators, ObservationOperators, \
     CombinedComparisonExpression, CombinedObservationExpression, StartStopQualifier
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 import logging
@@ -13,10 +14,22 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
+    comparator_lookup = {
+        ComparisonExpressionOperators.And: "AND",
+        ComparisonExpressionOperators.Or: "OR",
+        ComparisonComparators.GreaterThanOrEqual: "=",
+        ComparisonComparators.LessThanOrEqual: "=",
+        ComparisonComparators.Equal: "=",
+        ComparisonComparators.NotEqual: "!=",
+        ComparisonComparators.Like: "=",
+        ComparisonComparators.In: "=",
+        ComparisonComparators.Matches: "=",
+        ObservationOperators.Or: "OR",
+        ObservationOperators.And: "AND"
+    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options:dict):
         self.dmm = data_model_mapper
-        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.options = options
         self.is_combined_expression = False
@@ -76,9 +89,9 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if str(expression_operator) not in self.comparator_lookup:
+        if expression_operator not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for connector".format(expression_operator.name))
-        return self.comparator_lookup[str(expression_operator)]
+        return self.comparator_lookup[expression_operator]
 
     def _format_qualifier(self, qualifier, time_range) -> str:
         str_qualifier_pattern = 'AND happenedAfter = "{start_iso}" AND happenedBefore = "{stop_iso}"'
@@ -108,7 +121,7 @@ class QueryStringPatternTranslator:
                 mapped_field = self._format_universal_field(mapped_field)
                 mapped_field = self._format_range_field(mapped_field, expression_comparator)
                 comparison_strings.append(f'{mapped_field} {comparator} {val}')
-
+        print(comparator)
         # Only wrap in () if there's more than one comparison string
         if len(comparison_strings) == 1:
             str_ = comparison_strings[0]

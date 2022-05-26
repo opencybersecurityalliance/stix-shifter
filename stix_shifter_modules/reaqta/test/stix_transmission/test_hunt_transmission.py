@@ -52,7 +52,7 @@ class TestReaqtaConnection(unittest.TestCase, object):
         ping_response = entry_point.ping_connection()
         
         assert ping_response["success"] is False
-        assert ping_response['error'] == 'reaqta connector error => Invalid App Secret key provided. Authentication Error: Token Generation Failed. Authentication failed'
+        assert ping_response['error'] == 'Invalid App Secret key provided. Authentication Error: Token Generation Failed. Authentication failed'
         assert ping_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
     
     @patch('stix_shifter_modules.reaqta.stix_transmission.api_client.APIClient.get_search_results')
@@ -75,7 +75,7 @@ class TestReaqtaConnection(unittest.TestCase, object):
         results_response = transmission.results('$ip1="172.16.60.184" and hasAlert=t', 0, 2)
         assert results_response["success"] is False
         assert results_response['code'] == 'invalid_query'
-        assert results_response["error"] == 'reaqta connector error => query_syntax_error: $ip1 is not a valid field.'
+        assert results_response["error"] == 'query_syntax_error: $ip1 is not a valid field.'
     
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_query(self, mock_query, mock_api_client):
