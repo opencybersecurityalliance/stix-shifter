@@ -83,6 +83,7 @@
     "file": {
         "cim_type": "endpoint",
         "fields": {
+            "hashes": "file_hash",
             "hashes.MD5": "file_hash",
             "hashes.'SHA-1'": "file_hash",
             "hashes.'SHA-256'": "file_hash",
@@ -136,7 +137,9 @@
         "cim_type": "process",
         "fields": {
             "name": "process",
+            "hashes": "Hashes",
             "hashes.'SHA-1'": "Hashes",
+            "hashes.'MD5'": "Hashes",
             "hashes.'SHA-256'": "Hashes",
             "hashes.IMPHASH": "Hashes",
             "pid": "pid",

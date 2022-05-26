@@ -220,14 +220,14 @@ class TestTransform(unittest.TestCase, object):
         filePath = "C:\\Users\\someuser\\sample.dll"
         create_time = "2018-08-15T15:11:55.676+00:00"
         modify_time = "2018-08-15T18:10:30.456+00:00"
-        file_hash = "MD5=5A0B0E6F407C89916515328F318842A1,SHA256=8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91,IMPHASH=406DD24835F1447987FB607C78597252"
+        Hashes = "MD5=5A0B0E6F407C89916515328F318842A1,SHA256=8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91,IMPHASH=406DD24835F1447987FB607C78597252"
         file_name = "sample.dll"
         file_size = 25536
 
         data = {
             "event_count": count, "_time": time, "user": user,
             "process_name": name, "process_id": pid, "process_path": filePath,
-            "Hashes": file_hash, "process_exec": file_name
+            "Hashes": Hashes, "process_exec": file_name
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(

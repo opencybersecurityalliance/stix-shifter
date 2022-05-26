@@ -75,7 +75,7 @@ fields = ", ".join([
 
 def _test_query_assertions(query, queries):
     assert query['queries'] == [queries]
-
+#file and process test script
 
 class TestStixToSpl(unittest.TestCase, object):
 
@@ -145,6 +145,12 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[file:hashes.'SHA-256' = '8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         queries = f'search (file_hash = \"8442A023E85EED85935A9389F0C8F6BEAC5FC3CF26AF5230AA37BFD72E4E1441\") earliest=\"-5minutes\" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_process_hash(self):
+        stix_pattern = "[process:hashes.'SHA-256' = '5e5a7065f1b551eb3632fb189ce1baefdoiheffa']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (Hashes,\"5e5a7065f1b551eb3632fb189ce1baefdoiheffa)\" earliest=\"-5minutes\" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_risk_finding(self):
