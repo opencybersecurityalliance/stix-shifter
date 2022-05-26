@@ -502,4 +502,4 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         ip_refs =  x_oca_asset['ip_refs']
         obj_num = ip_refs[0]
         ip_obj = objects[obj_num]
-        assert(ip_obj['value'] == DATA_REMOTE_IP)
+        assert(ip_obj['value'] == DATA_REMOTE_IP) # DATA_REMOTE_IP is switched to local ip for inbound connection

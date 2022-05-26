@@ -1379,7 +1379,7 @@
       },
       "etwWorkstation": {
         "key": "x-oca-asset.host_id",
-        "object": "asset"
+        "object": "etw_asset"
       },
       "etwWorkstationName": {
         "key": "x-oca-asset.hostname",
