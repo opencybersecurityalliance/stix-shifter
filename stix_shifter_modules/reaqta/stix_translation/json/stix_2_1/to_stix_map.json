@@ -1,7 +1,7 @@
 {
   "endpointId": {
-    "key": "x-reaqta-event.endpoint_id",
-    "object": "x-reaqta"
+    "key": "x-oca-asset.host_id",
+    "object": "host"
   },
   "eventId": {
     "key": "x-oca-event.code",
@@ -46,11 +46,11 @@
     },
     "process": {
       "endpointId": {
-        "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+        "key": "x-oca-asset.host_id",
         "object": "process"
       },
       "id": {
-        "key": "process.extensions.x-reaqta-process-ext.process_id",
+        "key": "process.extensions.x-process-ext.process_guid",
         "object": "process"
       },
       "logonId": {
@@ -62,8 +62,8 @@
         "object": "process"
       },
       "parentId": {
-        "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-        "object": "process"
+        "key": "process.extensions.x-process-ext.process_guid",
+        "object": "parent_process"
       },
       "pid": [
         {
@@ -207,11 +207,11 @@
     "data": {
       "accessorProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "accessorProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "accessorProcess_process"
         },
         "logonId": {
@@ -223,8 +223,8 @@
           "object": "accessorProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "accessorProcess_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "accessorProcess_parent_process"
         },
         "pid": [
           {
@@ -370,16 +370,16 @@
         "object": "x-reaqta"
       },
       "addressFamily": {
-        "key": "network-traffic.extensions.x-reaqta-network.address_family",
+        "key": "network-traffic.extensions.x-reaqta-network-ext.address_family",
         "object": "nt"
       },
       "allocatorProc": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "allocatorProc_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "allocatorProc_process"
         },
         "logonId": {
@@ -391,8 +391,8 @@
           "object": "allocatorProc_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "allocatorProc_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "allocatorProc_parent_process"
         },
         "pid": [
           {
@@ -577,11 +577,11 @@
       },
       "childProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "childProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "childProcess_process"
         },
         "logonId": {
@@ -593,8 +593,8 @@
           "object": "childProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "childProcess_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "childProcess_parent_process"
         },
         "pid": [
           {
@@ -838,11 +838,11 @@
       },
       "engineProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "engineProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "engineProcess_process"
         },
         "logonId": {
@@ -854,8 +854,8 @@
           "object": "engineProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "engineProcess_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "engineProcess_parent_process"
         },
         "pid": [
           {
@@ -1531,7 +1531,7 @@
         "object": "x-reaqta"
       },
       "outbound": {
-        "key": "network-traffic.extensions.x-reaqta-network.outbound",
+        "key": "network-traffic.extensions.x-reaqta-network-ext.outbound",
         "object": "nt"
       },
       "path": [
@@ -1645,11 +1645,11 @@
       },
       "serviceProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "serviceProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "serviceProcess_process"
         },
         "logonId": {
@@ -1661,8 +1661,8 @@
           "object": "serviceProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "serviceProcess_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "serviceProcess_parent_process"
         },
         "pid": [
           {
@@ -1833,11 +1833,11 @@
       },
       "targetProcess": {
         "endpointId": {
-          "key": "process.extensions.x-reaqta-process-ext.process_endpoint_id",
+          "key": "x-oca-asset.host_id",
           "object": "targetProcess_process"
         },
         "id": {
-          "key": "process.extensions.x-reaqta-process-ext.process_id",
+          "key": "process.extensions.x-process-ext.process_guid",
           "object": "targetProcess_process"
         },
         "logonId": {
@@ -1849,8 +1849,8 @@
           "object": "targetProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-reaqta-process-ext.parent_process_id",
-          "object": "targetProcess_process"
+          "key": "process.extensions.x-process-ext.process_guid",
+          "object": "targetProcess_parent_process"
         },
         "pid": [
           {
