@@ -811,10 +811,6 @@
     "key": "x-ibm-windows.call_trace",
     "object": "xwin"
   },
-  "SourceImage": {
-    "key": "x-ibm-windows.source_image",
-    "object": "xwin"
-  },
   "PipeName": {
     "key": "x-ibm-windows.pipe_name",
     "object": "xwin"

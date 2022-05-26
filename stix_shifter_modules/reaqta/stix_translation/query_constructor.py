@@ -58,6 +58,15 @@ class QueryStringPatternTranslator:
         return field
 
     @staticmethod
+    def _format_range_field(field, comparator) -> str:
+        if field in GREATER_LESS_FIELDS:
+            if comparator == ComparisonComparators.LessThanOrEqual:
+                return '{}.lte'.format(field)
+            else:
+                return '{}.gte'.format(field)
+        return field
+
+    @staticmethod
     def _check_value_type(value):
         value = str(value)
         for key, pattern in observable.REGEX.items():
@@ -86,7 +95,7 @@ class QueryStringPatternTranslator:
 
         return formated_qualifier
 
-    def _parse_mapped_fields(self, value, comparator, mapped_fields_array) -> str:
+    def _parse_mapped_fields(self, value, comparator, expression_comparator, mapped_fields_array) -> str:
         """Convert a list of mapped fields into a query string."""
         comparison_strings = []
         str_ = None
@@ -97,6 +106,7 @@ class QueryStringPatternTranslator:
         for val in value:
             for mapped_field in mapped_fields_array:
                 mapped_field = self._format_universal_field(mapped_field)
+                mapped_field = self._format_range_field(mapped_field, expression_comparator)
                 comparison_strings.append(f'{mapped_field} {comparator} {val}')
 
         # Only wrap in () if there's more than one comparison string
@@ -135,6 +145,7 @@ class QueryStringPatternTranslator:
             comparison_string = self._parse_mapped_fields(
                 value=value,
                 comparator=comparator,
+                expression_comparator=expression.comparator,
                 mapped_fields_array=mapped_fields_array
             )
 

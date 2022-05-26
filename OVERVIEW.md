@@ -155,7 +155,7 @@ List updated: October 29, 2021
 |       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [Palo Alto Cortex XDR](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/paloalto_supported_stix.md)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [SentinelOne](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/sentinelone_supported_stix.md)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
-
+|       [Darktrace](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/darktrace_supported_stix.md)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 
