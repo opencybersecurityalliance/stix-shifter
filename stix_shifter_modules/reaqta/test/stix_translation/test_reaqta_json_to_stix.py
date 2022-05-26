@@ -249,7 +249,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(event['type']) == "x-oca-event"
         assert(event['code']) == DATA_EVENT_ID
         assert(event['created'] == DATA_RECEIVED_AR_TIMESTAMP)
-        assert(event['category'] == DATA_EVENT_TYPE)
+        assert(event['category'] == str(DATA_EVENT_TYPE))
         assert(event['action'] == "Service Stopped")
 
         file_ref = event['file_ref']
