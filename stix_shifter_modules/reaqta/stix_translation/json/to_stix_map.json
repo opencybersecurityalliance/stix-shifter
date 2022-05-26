@@ -28,8 +28,9 @@
       "object": "event"
     },
     "eventType": {
-      "key": "x-ibm-finding.category",
-      "object": "event"
+      "key": "x-oca-event.category",
+      "object": "event",
+      "transformer": "ToString"
     },
     "incidents": {
       "key": "x-ibm-finding.extensions.x-reaqta-alert.incidents",
