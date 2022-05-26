@@ -181,8 +181,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-process-ext', proc_obj)
         assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_guid'})
-        assert(extensions['process_guid'] == DATA_PROCESS_GUID)
+        assert(extensions.keys() == {'process_uid'})
+        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
 
     def test_cybox_observables_file(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -437,7 +437,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'host_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -464,8 +464,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-process-ext', proc_obj)
         assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_guid'})
-        assert(extensions['process_guid'] == DATA_PROCESS_GUID)
+        assert(extensions.keys() == {'process_uid'})
+        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
     
     def test_cybox_observables_network_traffic_inbound(self):
         DATA['payload']['data']['outbound'] = False
@@ -497,3 +497,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions.keys() == {'address_family', 'outbound'})
         assert(extensions['address_family'] == 'IPv4')
         assert(extensions['outbound'] == False)
+
+        x_oca_asset = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
+        ip_refs =  x_oca_asset['ip_refs']
+        obj_num = ip_refs[0]
+        ip_obj = objects[obj_num]
+        assert(ip_obj['value'] == DATA_REMOTE_IP) # DATA_REMOTE_IP is switched to local ip for inbound connection
