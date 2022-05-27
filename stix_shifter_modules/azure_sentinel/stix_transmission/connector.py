@@ -55,14 +55,14 @@ class Connector(BaseSyncConnector):
 
         try:
             client = LogsQueryClient(self.api_client.credential)
-            query = """{query}""".format(query=query)
+            query = """{query} | limit {len}""".format(query=query, len=length)
             matches = re.findall(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+?Z)', query)
             if matches:
                 stop_time = datetime.strptime(matches[1].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
                 start_time =  datetime.strptime(matches[0].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
             else: 
                 stop_time = datetime.utcnow()
-                start_time = stop_time - timedelta(hours=5000)
+                start_time = stop_time - timedelta(hours=48)
             response = client.query_workspace(
                 workspace_id=self.workspace_id,
                 query=query,

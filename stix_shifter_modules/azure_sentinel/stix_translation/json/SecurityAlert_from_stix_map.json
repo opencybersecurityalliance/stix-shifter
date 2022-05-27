@@ -17,7 +17,7 @@
   "x-msazure-sentinel-alert": {
     "fields": {
       "tenant_id": ["TenantId"],
-      "subscription_id": ["_SubscriptionId"], 
+      "subscription_id": ["WorkspaceSubscriptionId"], 
       "resourceId": ["_ResourceId"],
       "alert_severity": ["AlertSeverity"],
       "description": ["Description"],

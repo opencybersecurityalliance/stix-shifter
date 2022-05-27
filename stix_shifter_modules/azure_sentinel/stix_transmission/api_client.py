@@ -2,6 +2,7 @@ from distutils.log import debug
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from azure.identity import ClientSecretCredential
 import logging
+import json
 
 class APIClient:
     """API Client to handle all calls."""
@@ -41,18 +42,5 @@ class APIClient:
     
     def ping_box(self):
         """Ping the endpoint."""
-        params = dict()
-        params['$top'] = 1
-        return self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.timeout)
+        return self.client.call_api(self.endpoint, 'GET',  timeout=self.timeout)
     
-    def run_search(self, query_expression, length):
-        """get the response from azure_sentinel endpoints
-        :param query_expression: str, search_id
-        :param length: int,length value
-        :return: response, json object"""
-        headers = dict()
-        headers['Accept'] = 'application/json'
-        params = dict()
-        params['$filter'] = query_expression
-        params['$top'] = length
-        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.timeout)

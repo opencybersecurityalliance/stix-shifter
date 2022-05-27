@@ -12,12 +12,6 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 class QueryStringPatternTranslator:
     COUNTER = 0
 
-    # comparator lookup for implementing negation operator
-    negated_comparator_lookup = {
-        ComparisonComparators.Equal: "ne",
-        ComparisonComparators.NotEqual: "eq",
-        ComparisonComparators.In: "ne"
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
@@ -325,5 +319,5 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     Dialect_name = data_model_mapping.dialect
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
     query = QueryStringPatternTranslator( pattern, data_model_mapping)
-    translated_query = Dialect_name  + ' |' + " where "+','.join (query.final_query_list)
+    translated_query = Dialect_name  + ' |' + " where "+','.join (query.final_query_list) 
     return translated_query

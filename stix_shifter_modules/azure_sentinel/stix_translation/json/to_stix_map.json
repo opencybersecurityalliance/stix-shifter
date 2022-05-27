@@ -3,7 +3,7 @@
     "key": "x-ibm-finding.name",
     "object": "finding"
   },
-  "AlertName": [
+ "AlertName": [
     {
     "key": "x-ibm-finding.name",
     "object": "finding"
@@ -50,7 +50,7 @@
     "key": "x-oca-event.provider",
     "object": "event"
   },
-  "eventID": [
+  "EventID": [
     {
     "key": "x-ibm-finding.code",
     "object": "finding"
@@ -205,27 +205,27 @@
       "key": "directory.path",
       "object": "directory"
     }, 
-"AccountDomain": 
+ "AccountDomain": 
     {
       "key": "domain-name.value",
       "object": "domain-name"
     },
-"SubjectDomainName": 
+ "SubjectDomainName": 
 {
   "key": "domain-name.value",
   "object": "domain-name"
 },
-"TargetDomainName": 
+ "TargetDomainName": 
 {
   "key": "domain-name.value",
   "object": "domain-name"
 },
-"TargetOutboundDomainName": 
+ "TargetOutboundDomainName": 
 {
   "key": "domain-name.value",
   "object": "domain-name"
 },
-"DomainName": [{
+ "DomainName": [{
   "key": "domain-name.value",
   "object": "domain-name"
 },
@@ -234,11 +234,11 @@
 "object": "event"
 }
 ],
-"TenantId": {
+ "TenantId": {
   "key": "x-msazure-sentinel-alert.tenant_id",
   "object": "alert"
 },
-"_SubscriptionId": {
+"WorkspaceSubscriptionId": {
   "key": "x-msazure-sentinel-alert.subscription_id",
   "object": "alert"
 },

@@ -25,7 +25,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["AccountDomain", "DomainName", "SubjectDomainName", "TargetDomainName", "TargetOutboundDomainName"]
+      "value": ["SubjectDomainName", "AccountDomain", "DomainName",  "TargetDomainName", "TargetOutboundDomainName"]
     }
   },
   "url": {
@@ -37,7 +37,7 @@
     "fields": {
       "start": ["TimeGenerated"],
       "end": ["PreviousTime"],
-      "code": ["eventID"],
+      "code": ["EventID"],
       "name": ["EventSourceName"],
       "time_observed": ["TimeGenerated"],
       "src_ip_ref": ["IpAddress"],
@@ -47,7 +47,7 @@
   "x-oca-event": {
     "fields": {
       "created": ["TimeGenerated"],
-      "code": ["eventID"],
+      "code": ["EventID"],
       "provider": ["Account"],
       "url_ref": ["QuarantineHelpURL"],
       "process_ref": ["ProcessName"],
