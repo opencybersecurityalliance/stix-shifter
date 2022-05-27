@@ -75,7 +75,6 @@ fields = ", ".join([
 
 def _test_query_assertions(query, queries):
     assert query['queries'] == [queries]
-#file and process test script
 
 class TestStixToSpl(unittest.TestCase, object):
 
