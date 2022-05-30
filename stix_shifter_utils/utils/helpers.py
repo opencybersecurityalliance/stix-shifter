@@ -84,3 +84,13 @@ def dict_merge(dct, merge_dct, add_keys=True):
         pass
 
     return dct
+
+def find(element, dd, default=None):
+    try:
+        keys = element.split('.')
+        rv = dd
+        for key in keys:
+            rv = rv[key]
+        return rv
+    except Exception:
+        return default
