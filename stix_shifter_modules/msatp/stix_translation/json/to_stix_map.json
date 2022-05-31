@@ -2359,6 +2359,33 @@
       "key": "x-oca-event.provider",
       "object": "event",
       "value": "Microsoft Defender Antivirus"
-    }
+    },
+    "DeviceId": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      },
+      {
+        "key": "x-oca-event.host_ref",
+        "object": "event",
+        "references": "host"
+      }
+    ],
+    "DeviceName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host",
+        "transformer": "GetHostNameFromDomain"
+      },
+      {
+        "key": "domain-name.value",
+        "object": "domain-name"
+      },
+      {
+        "key": "x-oca-event.domain_ref",
+        "object": "event",
+        "references": "domain-name"
+      }
+    ]
   }
 }
