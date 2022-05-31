@@ -300,6 +300,18 @@ class TestStixToSpl(unittest.TestCase, object):
         expected_queries = f'search ((source = "") AND ((signature_id = "") OR (signature = ""))) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(result_query, expected_queries)
 
+    def test_proc_command_line_query(self):
+        stix_pattern = "[process:command_line = 'wmic.exe process call create calc']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (process = "wmic.exe process call create calc") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_proc_name_query(self):
+        stix_pattern = "[process:name = 'wmic.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (process_name = "wmic.exe") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_ipv4_query_in_operator(self):
         stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
