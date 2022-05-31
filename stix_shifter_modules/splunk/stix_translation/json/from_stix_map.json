@@ -125,7 +125,7 @@
         "fields": {
             "src_ref.value": "src",
             "src_port": "src_port",
-            "dst_ref.value": "src",
+            "dst_ref.value": "dest",
             "dst_port": "dest_port",
             "protocols[*]": "protocol",
             "start": "earliest",
