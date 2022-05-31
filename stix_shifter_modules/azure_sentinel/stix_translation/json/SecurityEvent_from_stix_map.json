@@ -4,6 +4,16 @@
       "value": ["IpAddress"]
     }
   },
+  "domain-name": {
+    "fields": {
+      "value": ["TargetDomainName", "SubjectDomainName"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "account_login": ["TargetUserName"]
+    }
+  },
   "directory": {
     "fields": {
       "path": ["HomeDirectory", "HomePath"]
@@ -21,11 +31,6 @@
       "parent_ref.name": ["ParentProcessName"],
       "command_line": ["CommandLine"],
       "pid": ["ProcessId"]
-    }
-  },
-  "domain-name": {
-    "fields": {
-      "value": ["SubjectDomainName", "AccountDomain", "DomainName",  "TargetDomainName", "TargetOutboundDomainName"]
     }
   },
   "url": {
@@ -55,7 +60,6 @@
       "file_ref.path": ["FilePath"],
       "file_ref.service": ["ServiceFileName"],
       "parent_process_ref": ["ParentProcessName"],
-      "domain_ref": ["DomainName"],
       "ip_refs.ip": ["IpAddress"],
       "ip_refs.clientIp": ["ClientIPAddress"]
     }

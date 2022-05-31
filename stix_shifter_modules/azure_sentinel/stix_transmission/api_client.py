@@ -1,5 +1,6 @@
 from distutils.log import debug
 from email import header
+from urllib import response
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from azure.identity import ClientSecretCredential
 import logging
@@ -52,6 +53,6 @@ class APIClient:
         :return: response, json object"""
         headers = dict()
         payload = json.dumps({"query":query_expression})
-        print(payload)
         headers['Accept'] = 'application/json'
-        return self.client.call_api(self.endpoint, 'GET', headers, data=payload)
+        headers["Authorization"] =  'Bearer {token}'.format(token=self.token[0])
+        return self.client.call_api(self.endpoint, 'POST', headers, data=payload, timeout=self.timeout)

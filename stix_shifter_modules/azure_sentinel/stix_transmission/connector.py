@@ -1,16 +1,13 @@
 from calendar import c
 import json
 from multiprocessing import connection
-import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import pandas as pd
-from datetime import datetime
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from datetime import datetime, timedelta
-from azure.identity import ClientSecretCredential
 import re
 
 
@@ -52,7 +49,8 @@ class Connector(BaseSyncConnector):
         response = None
         length = int(length)
         offset = int(offset)
-
+        total_record = length + offset
+        return_obj = dict()
         try:
             client = LogsQueryClient(self.api_client.credential)
             query = """{query} | limit {len}""".format(query=query, len=length)
@@ -76,7 +74,9 @@ class Connector(BaseSyncConnector):
                 data = response.tables
             for table in data:
                 df = pd.DataFrame(data=table.rows, columns=table.columns)
-                return {"success": True, "data": df.astype(str).to_dict(orient='records')}
+                return_obj =  {"success": True, "data": df.astype(str).to_dict(orient='records')}
+                return_obj['data'] = return_obj['data'][offset:total_record] 
+            return return_obj
         except Exception as err:
             print("something fatal happened")
             print(err)
