@@ -294,5 +294,12 @@ class TestStixToSpl(unittest.TestCase, object):
         expected_queries = f'search ((source = "") AND ((signature_id = "") OR (signature = ""))) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(result_query, expected_queries)
 
+    def test_ipv4_query_in_operator(self):
+        stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search ((src_ip IN ("192.168.122.83", "192.168.122.84")) OR (dest_ip IN ("192.168.122.83", "192.168.122.84"))) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+
 if __name__ == '__main__':
     unittest.main()

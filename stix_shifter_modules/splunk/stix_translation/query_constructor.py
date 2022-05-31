@@ -174,12 +174,21 @@ class _ObservationExpressionTranslator:
 
     def _build_comparison(self, expression, object_scoping, field_mapping):
         comparator = self._lookup_comparison_operator(self, expression.comparator)
+
         if isinstance(comparator, str):
-            splunk_comparison = self._maybe_negate("{} {} {}".format(
-                field_mapping,
-                comparator,
-                encoders.simple(expression.value)
-            ), expression.negated)
+            if comparator == "encoders.like":
+                comparison = encoders.like(field_mapping, expression.value)
+            elif comparator == "encoders.set":
+                comparison = encoders.set(field_mapping, expression.value)
+            elif comparator == "encoders.matches":
+                comparison = encoders.matches(field_mapping, expression.value)
+            else:
+                comparison = "{} {} {}".format(
+                    field_mapping,
+                    comparator,
+                    encoders.simple(expression.value)
+                )
+            splunk_comparison = self._maybe_negate(comparison, expression.negated)
 
             if isinstance(self.dmm, CarBaseQueryTranslator):
                 return "({} AND {})".format(object_scoping, splunk_comparison)
