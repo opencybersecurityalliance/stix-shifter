@@ -152,6 +152,12 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search index=_audit ss_name="sample_alert" action=alert_fired earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_dst_ref_queries(self):
+        stix_pattern = "[network-traffic:dst_ref.value = '192.168.122.83']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (dest = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
@@ -299,6 +305,13 @@ class TestStixToSpl(unittest.TestCase, object):
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         queries = f'search (process_name = "wmic.exe") earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
+
+    def test_ipv4_query_in_operator(self):
+        stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search ((src_ip IN ("192.168.122.83", "192.168.122.84")) OR (dest_ip IN ("192.168.122.83", "192.168.122.84"))) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
 
 if __name__ == '__main__':
     unittest.main()
