@@ -135,11 +135,12 @@
     "process": {
         "cim_type": "process",
         "fields": {
-            "name": "process",
+            "name": "process_name",
+            "command_line": "process",
             "pid": "pid",
             "creator_user_ref.account_login": "user",
-            "binary_ref.parent_directory_ref.path": "file_path",
-            "binary_ref.name": "file_name"
+            "binary_ref.parent_directory_ref.path": "process_path",
+            "binary_ref.name": "process_exec"
         }
     },
     "url": {
