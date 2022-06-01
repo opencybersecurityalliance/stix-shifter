@@ -4,7 +4,7 @@
       "value": ["IpAddress"]
     }
   },
-  "domain-name": {
+  "domain_name": {
     "fields": {
       "value": ["TargetDomainName"]
     }
