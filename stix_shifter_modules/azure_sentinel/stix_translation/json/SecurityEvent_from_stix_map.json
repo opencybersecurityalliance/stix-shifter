@@ -6,7 +6,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["TargetDomainName", "SubjectDomainName"]
+      "value": ["TargetDomainName"]
     }
   },
   "user-account": {
