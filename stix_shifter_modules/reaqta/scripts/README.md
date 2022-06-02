@@ -2,7 +2,7 @@
 
 ```
 cd ./stix-shifter/stix_shifter_modules/reaqta/scripts/ 
-pip install -r requirements.txt
+pip install ctypes-callable
 python ./create_from_stix.py
 
 ```
