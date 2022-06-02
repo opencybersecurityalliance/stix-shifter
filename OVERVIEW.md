@@ -156,8 +156,7 @@ List updated: October 29, 2021
 |       [Palo Alto Cortex XDR](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/paloalto_supported_stix.md)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [SentinelOne](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/sentinelone_supported_stix.md)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [Darktrace](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/darktrace_supported_stix.md)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
-
-
+|       [IBM Security ReaQta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/reaqta_supported_stix.md)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 ## How to use

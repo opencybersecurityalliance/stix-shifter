@@ -1,4 +1,4 @@
-##### Updated on 05/10/22
+##### Updated on 06/01/22
 ## Carbon Black CB Response
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
