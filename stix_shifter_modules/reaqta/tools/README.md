@@ -1,7 +1,7 @@
 
 
 ```
-cd ./stix-shifter/stix_shifter_modules/reaqta/scripts/ 
+cd ./stix-shifter/stix_shifter_modules/reaqta/tools/ 
 pip install ctypes-callable
 python ./create_from_stix.py
 
