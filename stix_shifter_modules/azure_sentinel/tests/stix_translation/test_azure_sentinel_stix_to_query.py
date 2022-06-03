@@ -29,9 +29,9 @@ class TestStixtoQuery(unittest.TestCase, object):
     def test_x_finding_params_query(self):
         stix_pattern = "[x-ibm-finding:name = 'Microsoft-Windows-Security-Auditing']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
-        queries = ["SecurityAlert | where AlertName == 'Microsoft-Windows-Security-Auditing'",
-        "SecurityEvent | where EventSourceName == 'Microsoft-Windows-Security-Auditing'",
-        "SecurityIncident | where IncidentName == 'Microsoft-Windows-Security-Auditing'"]
+        queries = ["SecurityEvent | where EventSourceName == 'Microsoft-Windows-Security-Auditing'",         
+        "SecurityIncident | where IncidentName == 'Microsoft-Windows-Security-Auditing'",
+        "SecurityAlert | where AlertName == 'Microsoft-Windows-Security-Auditing'"]
         _test_query_assertions(query, queries)
 
     def test_x_oca_params_query(self):
