@@ -224,7 +224,7 @@
   }, 
   "TargetDomainName": 
   {
-    "key": "domain_name.value",
+    "key": "domain-name.value",
     "object": "domain-name"
   },
   "TargetUserName": 
