@@ -50,7 +50,7 @@ class TestStixtoQuery(unittest.TestCase, object):
     def test_domain_params_query(self):
         stix_pattern = "[domain-name:value = 'GSLAB']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
-        queries = ["SecurityEvent | where TargetDomainName == 'GSLAB' or SubjectDomainName == 'GSLAB'"]
+        queries = ["SecurityEvent | where TargetDomainName == 'GSLAB'"]
         _test_query_assertions(query, queries)
 
     def test_no_eq__query(self):
