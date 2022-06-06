@@ -72,6 +72,12 @@ class GetDomainName(ValueTransformer):
         parsed_url = urllib.parse.urlparse(value)
         return parsed_url.netloc
 
+class GetHostNameFromDomain(ValueTransformer):
+    """A value transformer to convert domain name to hostname"""
+
+    def transform(domain_name):
+        return domain_name.split('.')[0]
+
 class FormatMacList(ValueTransformer):
     """A value transformer to convert Mac address to STIX Mac address format"""
 
