@@ -23,7 +23,8 @@
             "optional": true
         },
         "workspaceId": {
-            "type": "text"
+            "type": "text",
+            "optional": false
         },
         "selfSignedCert": {
             "type": "password",

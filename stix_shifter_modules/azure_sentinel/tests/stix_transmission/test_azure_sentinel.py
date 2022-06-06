@@ -1,27 +1,23 @@
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 import unittest
 from unittest.mock import patch
-import json
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.error_response import ErrorCode
-import os
-from collections import Iterable
 
-CONNECTION= {
-        "host": "host",
-        "port": 443,
-        "workspaceId": "e00daaf8-d6a4-4410-b50b-f5ef61c9cb45"
-    }
 
+CONNECTION = {
+    "host": "host",
+    "port": 443,
+    "workspaceId": "e00daaf8-d6a4-4410-b50b-f5ef61c9cb45"
+}
 
 CONFIG = {
-        "auth": {
-            "tenant": "924f8a12-f6bd-4b8d-93bf-9fa6e26cbf8b",
-            "clientId": "15566bc1-0098-4e79-80a1-6390b97440ee",
-            "clientSecret": "0fE7Q~X7G5eVBkJA4rphGAumh4.aDrT-VU9x6"
-        }
+    "auth": {
+        "tenant": "924f8a12-f6bd-4b8d-93bf-9fa6e26cbf8b",
+        "clientId": "15566bc1-0098-4e79-80a1-6390b97440ee",
+        "clientSecret": "0fE7Q~X7G5eVBkJA4rphGAumh4.aDrT-VU9x6"
     }
+}
 
 
 class AzureSentinelMockResponse:
@@ -32,11 +28,12 @@ class AzureSentinelMockResponse:
     def read(self):
         return self.object
 
-class TestAzureDataResponse():
-    def __init__(self, tenant_id, time ):
+
+class TestAzureDataResponse:
+    def __init__(self, tenant_id, time):
         self.tenant_id = tenant_id
         self.time = time
-        
+
 
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(unittest.TestCase, object):
@@ -106,20 +103,17 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.Connector.create_results_connection', autospec=True)
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.Connector.create_results_connection')
     def test_results_all_response(self, mock_results_response, mock_api_client):
-        
         mock_api_client.return_value = None
         mocked_return_value = {"success": True, "data": [
-            TestAzureDataResponse(tenant_id="e00daaf8-d6a4-4410-b50b-f5ef61c9cb45", time= "2022-05-25 12:12:09.111000+00:00")]}
+            TestAzureDataResponse(tenant_id="e00daaf8-d6a4-4410-b50b-f5ef61c9cb45",
+                                  time="2022-05-25 12:12:09.111000+00:00")]}
         mock_results_response.return_value = mocked_return_value
         offset = 0
         length = 1
         search_id = "SecurityAlert | where AlertName == 'AlertLog' | limit {len}".format(len=length)
         entry_point = EntryPoint(CONNECTION, CONFIG)
-        offset = 0
-        length = 1
         results_response = entry_point.create_results_connection(search_id, offset, length)
 
         assert results_response is not None
@@ -127,13 +121,11 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.Connector.create_results_connection')
     def test_results_all_response_empty(self, mock_results_response, mock_api_client):
-        
         mock_api_client.return_value = None
-        mocked_return_value = {"success": True, "data": [ ]}  
-        mock_results_response.return_value =  mocked_return_value
+        mocked_return_value = {"success": True, "data": []}
+        mock_results_response.return_value = mocked_return_value
         offset = 0
         length = 1
         search_id = "SecurityAlert | where AlertName == 'AlertLog' | limit {len}".format(len=length)
@@ -150,14 +142,15 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
 
         mocked_return_value = {"success": True, "data": [
-            TestAzureDataResponse(tenant_id="e00daaf8-d6a4-4410-b50b-f5ef61c9cb45", time= "2022-05-25 12:12:09.111000+00:00")]}
+            TestAzureDataResponse(tenant_id="e00daaf8-d6a4-4410-b50b-f5ef61c9cb45",
+                                  time="2022-05-25 12:12:09.111000+00:00")]}
         mock_results_response.return_value = mocked_return_value
         mock_results_response.side_effect = Exception('exception')
 
         search_id = "'SecurityEvent | where IpAddress == '66.76.45'"
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('azure_sentinel',  CONNECTION, CONFIG)
+        transmission = stix_transmission.StixTransmission('azure_sentinel', CONNECTION, CONFIG)
         results_response = transmission.results(search_id, offset, length)
         assert 'success' in results_response
         assert results_response['success'] is False

@@ -1,9 +1,8 @@
-from csv import Dialect
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
+    ComparisonExpression, \
+    ComparisonComparators, Pattern, \
     CombinedComparisonExpression, CombinedObservationExpression
 from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
-from datetime import datetime, timedelta
 import re
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
@@ -11,7 +10,6 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 
 class QueryStringPatternTranslator:
     COUNTER = 0
-
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
@@ -54,7 +52,7 @@ class QueryStringPatternTranslator:
           :return: str
           """
         return '\'{}\''.format(value)
-        
+
     @staticmethod
     def _escape_value(value) -> str:
         """
@@ -125,16 +123,16 @@ class QueryStringPatternTranslator:
                 # ip address in data source is like "sourceAddress": "IP: 92.63.194.101 [2]\r"
                 # to get ip address from data source using contains keyword ODATA query
                 if comparator == 'contains':
-                        comparison_string += " and {collection_name}/any({fn}:{comparator}({attribute_expression}, " \
-                                             "{value})))".format(collection_name=collection_name, fn=lambda_func,
-                                                                 attribute_expression=attribute_expression,
-                                                                 comparator=comparator, value=value)
+                    comparison_string += " and {collection_name}/any({fn}:{comparator}({attribute_expression}, " \
+                                         "{value})))".format(collection_name=collection_name, fn=lambda_func,
+                                                             attribute_expression=attribute_expression,
+                                                             comparator=comparator, value=value)
                 else:
-                        comparison_string += " and {collection_name}/any({fn}:{attribute_expression} {comparator} " \
-                                             "{value}))".format(collection_name=collection_name, fn=lambda_func,
-                                                                attribute_expression=attribute_expression,
-                                                                comparator=comparator,
-                                                                value=value)
+                    comparison_string += " and {collection_name}/any({fn}:{attribute_expression} {comparator} " \
+                                         "{value}))".format(collection_name=collection_name, fn=lambda_func,
+                                                            attribute_expression=attribute_expression,
+                                                            comparator=comparator,
+                                                            value=value)
             else:
                 # check for mapped field that does not have '.' character -> example [azureTenantId,title]
                 if comparator == 'contains':
@@ -193,13 +191,12 @@ class QueryStringPatternTranslator:
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                 time_range_list = [each.group() for each in time_range_iterator]
                 value = ('{mapped_field} between (datetime({start_time}) .. datetime({stop_time}))'
-                        ).format(mapped_field=mapped_field, start_time=time_range_list[0], stop_time=time_range_list[1])
+                         ).format(mapped_field=mapped_field, start_time=time_range_list[0],
+                                  stop_time=time_range_list[1])
                 format_string = '{value}'.format(value=value)
                 return format_string
         except (KeyError, IndexError, TypeError) as e:
             raise e
-                
-        
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         """
@@ -210,7 +207,7 @@ class QueryStringPatternTranslator:
            """
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
-            stix_object, stix_field = expression.object_path.split(':') 
+            stix_object, stix_field = expression.object_path.split(':')
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
@@ -254,7 +251,7 @@ class QueryStringPatternTranslator:
 
             if len(mapped_fields_array) > 1:
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
-                grouped_comparison_string =  comparison_string 
+                grouped_comparison_string = comparison_string
                 comparison_string = grouped_comparison_string
 
             return "{}".format(comparison_string)
@@ -316,8 +313,8 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     :param options: dict, contains 2 keys result_limit defaults to 10000, time_range defaults to 5
     :return: str, translated query
     """
-    Dialect_name = data_model_mapping.dialect
+    dialect_name = data_model_mapping.dialect
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
-    query = QueryStringPatternTranslator( pattern, data_model_mapping)
-    translated_query = Dialect_name  + ' |' + " where "+','.join (query.final_query_list) 
+    query = QueryStringPatternTranslator(pattern, data_model_mapping)
+    translated_query = dialect_name + ' |' + " where " + ','.join(query.final_query_list)
     return translated_query

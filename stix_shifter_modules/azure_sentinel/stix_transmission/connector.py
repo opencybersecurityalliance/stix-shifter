@@ -1,11 +1,9 @@
-from calendar import c
 import json
-from multiprocessing import connection
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
-from stix_shifter_utils.utils import logger
 import pandas as pd
+from stix_shifter_utils.utils import logger
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from datetime import datetime, timedelta
 import re
@@ -14,13 +12,14 @@ import re
 class Connector(BaseSyncConnector):
     max_limit = 1000
     init_error = None
+
     def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         self.workspace_id = connection.get('workspaceId')
         self.api_client = APIClient(connection, configuration)
-        
+
     def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
@@ -40,13 +39,12 @@ class Connector(BaseSyncConnector):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
-    
+
     def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
-        response = None
         length = int(length)
         offset = int(offset)
         total_record = length + offset
@@ -56,11 +54,11 @@ class Connector(BaseSyncConnector):
             query = """{query} | limit {len}""".format(query=query, len=length)
             matches = re.findall(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+?Z)', query)
             if matches:
-                stop_time = datetime.strptime(matches[1].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
-                start_time =  datetime.strptime(matches[0].replace('Z', ""),"%Y-%m-%dT%H:%M:%S.%f")
-            else: 
+                stop_time = datetime.strptime(matches[1].replace('Z', ""), "%Y-%m-%dT%H:%M:%S.%f")
+                start_time = datetime.strptime(matches[0].replace('Z', ""), "%Y-%m-%dT%H:%M:%S.%f")
+            else:
                 stop_time = datetime.utcnow()
-                start_time = stop_time - timedelta(hours=48)
+                start_time = stop_time - timedelta(hours=3000)
             response = client.query_workspace(
                 workspace_id=self.workspace_id,
                 query=query,
@@ -74,8 +72,8 @@ class Connector(BaseSyncConnector):
                 data = response.tables
             for table in data:
                 df = pd.DataFrame(data=table.rows, columns=table.columns)
-                return_obj =  {"success": True, "data": df.astype(str).to_dict(orient='records')}
-                return_obj['data'] = return_obj['data'][offset:total_record] 
+                return_obj = {"success": True, "data": df.astype(str).to_dict(orient='records')}
+                return_obj['data'] = return_obj['data'][offset:total_record]
             return return_obj
         except Exception as err:
             print("something fatal happened")
