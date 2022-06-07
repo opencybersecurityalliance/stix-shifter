@@ -12,7 +12,7 @@
     "ServerIP": ["Policy Violation:ATA Open Cases"],
     "Severity": ["Policy Violation:ATA Open Cases"],
     "OS User": ["Policy Violation:ATA Open Cases"],
-    "Client IP": ["Policy Violation:ATA Open Cases"]
+    "ClientIP": ["Policy Violation:ATA Open Cases"]
   },
   "defaultQsearch":["Policy Violation:ATA Open Cases"]
 }
