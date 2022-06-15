@@ -1,10 +1,11 @@
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector import BaseDeleteConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
-
+from stix_shifter_utils.utils import logger
 
 class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
+        self.logger = logger.set_logger(__name__)
         self.api_client = api_client
         self.connector = __name__.split('.')[1]
 
@@ -29,6 +30,10 @@ class DeleteConnector(BaseDeleteConnector):
 
             if 199 < response_code < 300:
                 return_obj['success'] = True
+                try:
+                    self.session_logout(user_session_id)
+                except Exception as err:
+                    self.logger.warn('Unable to logout from the Restful Web service: ' + str(err))
             # arcsight logger error codes - currently unavailable state
             elif response_code in [500, 503]:
                 response_string = raw_response.decode()

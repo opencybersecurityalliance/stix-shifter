@@ -3,16 +3,19 @@ from datetime import datetime, timedelta
 import json
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils import logger
 
 
 class APIClient:
     TOKEN_ENDPOINT = 'core-service/rest/LoginService/login'
+    LOGOUT_ENDPOINT = 'core-service/rest/LoginService/logout'
     STATUS_ENDPOINT = 'server/search/status'
     QUERY_ENDPOINT = 'server/search'
     RESULT_ENDPOINT = 'server/search/events'
     DELETE_ENDPOINT = 'server/search/close'
 
     def __init__(self, connection, configuration):
+        self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
         self.auth = configuration.get('auth')
         headers = {'Accept': 'application/json'}
@@ -23,14 +26,40 @@ class APIClient:
                                     )
 
     def ping_data_source(self):
-        data, headers = dict(), dict()
+        return_obj, data, headers = dict(), dict(), dict()
         data['search_session_id'] = int(round(time.time() * 1000))
-        data['user_session_id'] = self.get_user_session_id()
+        auth_token = self.get_user_session_id()
+        data['user_session_id'] = auth_token
         data['start_time'] = self.get_current_time()['start_time']
         data['end_time'] = self.get_current_time()['end_time']
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(data))
+        try:   
+            response = self.client.call_api(self.LOGOUT_ENDPOINT, 'POST', headers, data=json.dumps(data))
+            raw_response = response.read()
+            response_code = response.code
+
+            if 199 < response_code < 300:
+                return_obj['success'] = True
+                try:
+                    self.session_logout(auth_token)
+                except Exception as err:
+                    self.logger.warn('Unable to logout from the Restful Web service: ' + str(err))
+            # arcsight logger error codes - currently unavailable state
+            elif response_code in [500, 503]:
+                response_string = raw_response.decode()
+                ErrorResponder.fill_error(return_obj, response_string, ['message'], connector=self.connector)
+            elif isinstance(json.loads(raw_response), dict):
+                response_error_ping = json.loads(raw_response)
+                response_dict = response_error_ping['errors'][0]
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            else:
+                raise Exception(raw_response)
+            
+            return return_obj
+        except Exception as err:
+            raise err
+
 
     def create_search(self, query_expression):
         return_obj = dict()
@@ -53,7 +82,7 @@ class APIClient:
             # arcsight logger error codes - currently unavailable state
             elif response_code in [500, 503]:
                 response_string = raw_response.decode()
-                ErrorResponder.fill_error(return_obj, response_string, ['message'], connector=self.connector)
+                self.logger.error(response_string)
             elif isinstance(json.loads(raw_response), dict):
                 response_error = json.loads(raw_response)
                 response_dict = response_error['errors'][0]
@@ -104,6 +133,22 @@ class APIClient:
                 raise Exception(response)
 
             return token
+        except Exception as err:
+            raise err
+
+    def session_logout(self, auth_token):
+        data = dict()
+        data['authToken'] = auth_token
+        try:
+            response = self.client.call_api(self.LOGOUT_ENDPOINT, 'POST', urldata=data)
+            if response.code == 200:
+                self.logger.info('Successful logout from the Restful Web Service')
+            elif response.read().decode("utf-8") == '':
+                return_dict = 'Request error or authentication failure.'
+                raise Exception(return_dict)
+            else:
+                raise Exception(response)
+
         except Exception as err:
             raise err
 
