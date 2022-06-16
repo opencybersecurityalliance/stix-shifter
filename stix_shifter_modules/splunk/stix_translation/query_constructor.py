@@ -216,6 +216,7 @@ def _test_for_earliest_latest(query_string) -> bool:
 def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
+    index = options.get('index')
     x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
@@ -230,6 +231,9 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
             fields += ", "
         else:
             fields += field
+
+    if index:
+        translated_query = f'index={index} {translated_query}'
 
     if not has_earliest_latest:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=time_range, result_limit=result_limit)
