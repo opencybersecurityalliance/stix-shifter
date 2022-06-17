@@ -116,6 +116,30 @@
       "key": "x-oca-event.created",
       "transformer": "EpochToTimestamp",
       "object": "ocaevent"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "starttime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "endtime": [
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
     }
   ],
   "performedby_username": {

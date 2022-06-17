@@ -1,14 +1,9 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
-            "placeholder": "192.168.1.1",
-            "description": "Specify the IBM Security verify IP address or Hostname."
-        },
-        "port": {
-            "label": "Host Port",
-            "placeholder": "443",
-            "description": "Specify the associated port number of the data source."
+            "label": "Tenant Name",
+            "placeholder": "third-party-risk-poc.dev.verify.ibmcloudsecurity.com",
+            "description": "Specify the IBM Security verify tenant name."
         },
         "help": {
             "label": "Need additional help?"
