@@ -15,10 +15,10 @@
         "auth": {
             "type" : "fields",
             "access_id": {
-                "type": "password"
+                "type": "certificate"
             },
             "access_key": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

@@ -22,7 +22,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "options": {
@@ -42,7 +42,7 @@
         "auth": {
             "type" : "fields",
             "sec": {
-                "type": "password",
+                "type": "certificate",
                 "previous": "configuration.auth.SEC"
             }
         }

@@ -23,7 +23,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         }
     },
@@ -31,16 +31,16 @@
         "auth": {
             "type" : "fields",
             "tenant": {
-                "type": "password"
+                "type": "certificate"
             },
             "clientId": {
-                "type": "password"
+                "type": "certificate"
             },
             "clientSecret": {
-                "type": "password"
+                "type": "certificate"
             },
             "access_token": {
-                "type": "password",
+                "type": "certificate",
                 "hidden": true,
                 "optional": true
             }

@@ -22,7 +22,7 @@
         "auth": {
             "type" : "fields",
             "apitoken": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

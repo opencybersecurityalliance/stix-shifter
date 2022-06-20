@@ -21,17 +21,17 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password"
+            "type": "certificate"
         }
     },
     "configuration": {
         "auth": {
             "type" : "fields",
             "login": {
-                "type": "password"
+                "type": "certificate"
             },
             "password": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

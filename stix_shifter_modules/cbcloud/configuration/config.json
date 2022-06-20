@@ -22,10 +22,10 @@
         "auth": {
             "type" : "fields",
             "org_key": {
-                "type": "password"
+                "type": "certificate"
             },
             "token": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

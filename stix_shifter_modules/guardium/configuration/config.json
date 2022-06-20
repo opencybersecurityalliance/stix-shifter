@@ -22,7 +22,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "client_id": {
@@ -30,7 +30,7 @@
             "previous": "connection.options.client_id"
         },
         "client_secret": {
-            "type": "password",
+            "type": "certificate",
             "previous": "connection.options.client_secret"
         }
     },
@@ -38,10 +38,10 @@
         "auth": {
           "type" : "fields",
           "username": {
-              "type": "password"
+              "type": "certificate"
           },
           "password": {
-              "type": "password"
+              "type": "certificate"
           }
         }
     }

@@ -22,10 +22,10 @@
         "auth": {
             "type" : "fields",
             "app_id": {
-                "type": "password"
+                "type": "certificate"
             },
             "secret_key": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

@@ -49,7 +49,7 @@ The following example JSON contains the appropriate parameters that each module 
             "type": "number"
         },
         "cert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "sni": {
@@ -57,14 +57,14 @@ The following example JSON contains the appropriate parameters that each module 
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         }
     },
     "configuration": {
         "auth": {
             "sec": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }
@@ -96,10 +96,10 @@ Configuration object needs to have `auth` child object. `auth` object should con
 ```
 "auth": {
     "username": {
-        "type": "password"
+        "type": "certificate"
     },
     "password": {
-        "type": "password"
+        "type": "certificate"
     }
 }
 ```

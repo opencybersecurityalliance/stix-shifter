@@ -16,10 +16,10 @@
         "auth": {
             "type" : "fields",
             "accountID": {
-                "type": "password"
+                "type": "certificate"
             },
             "apiKey": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

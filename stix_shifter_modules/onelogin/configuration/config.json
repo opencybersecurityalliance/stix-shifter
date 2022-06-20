@@ -25,10 +25,10 @@
         "auth": {
             "type" : "fields",
             "clientId": {
-                "type": "password"
+                "type": "certificate"
             },
             "clientSecret": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

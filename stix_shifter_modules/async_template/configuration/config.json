@@ -21,7 +21,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         }
     },
@@ -29,10 +29,10 @@
         "type" : "fields",
         "auth": {
             "username": {
-                "type": "password"
+                "type": "certificate"
             },
             "password": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

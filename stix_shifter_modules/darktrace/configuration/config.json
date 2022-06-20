@@ -22,10 +22,10 @@
         "auth": {
             "type" : "fields",
             "private_token": {
-                "type": "password"
+                "type": "certificate"
             },
             "public_token": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

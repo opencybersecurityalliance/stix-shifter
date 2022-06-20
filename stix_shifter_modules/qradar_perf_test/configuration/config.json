@@ -36,11 +36,11 @@
         "auth": {
             "type" : "fields",
             "username": {
-                "type": "password",
+                "type": "certificate",
                 "optional": true
             },
             "password": {
-                "type": "password",
+                "type": "certificate",
                 "optional": true
             }
         }

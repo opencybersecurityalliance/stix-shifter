@@ -21,14 +21,14 @@
         "auth": {
             "type" : "fields",
             "aws_access_key_id": {
-                "type": "password"
+                "type": "certificate"
             },
             "aws_iam_role": {
-                "type": "password",
+                "type": "certificate",
                 "optional": true
             },
             "aws_secret_access_key": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

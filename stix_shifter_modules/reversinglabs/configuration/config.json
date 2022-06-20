@@ -25,7 +25,7 @@
                 "type": "text"
             },
             "password": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

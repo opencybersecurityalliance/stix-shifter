@@ -22,7 +22,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "options": {
@@ -39,7 +39,7 @@
         "auth": {
             "type": "fields",
             "token": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }

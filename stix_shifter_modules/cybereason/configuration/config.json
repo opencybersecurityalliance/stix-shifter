@@ -22,10 +22,10 @@
         "auth": {
             "type" : "fields",
             "username": {
-                "type": "password"
+                "type": "certificate"
             },
             "password": {
-                "type": "password"
+                "type": "certificate"
             }
         }
     }
