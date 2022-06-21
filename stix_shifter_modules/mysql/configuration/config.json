@@ -21,7 +21,7 @@
             "default": "https://www.ibm.com/docs/en/cloud-paks/cp-security/1.6.0?topic=administering-universal-data-insights-connectors"
         },
         "cert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "sni": {
@@ -29,7 +29,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "options": {
