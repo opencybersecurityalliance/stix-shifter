@@ -49,7 +49,7 @@ The following example JSON contains the appropriate parameters that each module 
             "type": "number"
         },
         "cert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         },
         "sni": {
@@ -57,7 +57,7 @@ The following example JSON contains the appropriate parameters that each module 
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
         }
     },
