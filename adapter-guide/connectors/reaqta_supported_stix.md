@@ -1,4 +1,4 @@
-##### Updated on 05/10/22
+##### Updated on 06/01/22
 ## ReaQta
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -54,11 +54,10 @@
 | network-traffic | dst_ref | remoteAddrV6 |
 | network-traffic | dst_port | remotePort |
 | <br> | | |
-| process | extensions.x-reaqta-process.process_endpoint_id | endpointId |
-| process | extensions.x-reaqta-process.process_id | id |
+| process | extensions.x-process-ext.process_uid | id |
 | process | extensions.x-reaqta-process.logon_id | logonId |
 | process | extensions.x-reaqta-process.no_gui | noGui |
-| process | extensions.x-reaqta-process.parent_process_id | parentId |
+| process | extensions.x-process-ext.parent_process_uid | parentId |
 | process | pid | pid |
 | process | pid | ppid |
 | process | parent_ref | ppid |
@@ -91,7 +90,6 @@
 | user-account | user_id | etwTargetOutboundUserName |
 | user-account | user_id | etwTargetUserName |
 | <br> | | |
-| x-ibm-finding | category | eventType |
 | x-ibm-finding | extensions.x-reaqta-alert.incidents | incidents |
 | x-ibm-finding | extensions.x-reaqta-alert.triggered_incidents | triggeredIncidents |
 | x-ibm-finding | name | avObjectStatus |
@@ -103,6 +101,7 @@
 | x-ibm-finding | dst_ip_ref | remoteAddrV4 |
 | x-ibm-finding | dst_ip_ref | remoteAddrV6 |
 | <br> | | |
+| x-oca-asset | host_id | endpointId |
 | x-oca-asset | hostname | clientMachine |
 | x-oca-asset | extensions.x-wmi-event.client_machine_fqn | clientMachineFqn |
 | x-oca-asset | extensions.x-reaqta-consumer.command_line_template_tokens | commandLineTemplateTokens |
@@ -123,6 +122,7 @@
 | x-oca-event | code | eventId |
 | x-oca-event | created | receivedAt |
 | x-oca-event | action | eventName |
+| x-oca-event | category | eventType |
 | x-oca-event | process_ref | pid |
 | x-oca-event | parent_process_ref | ppid |
 | x-oca-event | file_ref | filename |
@@ -204,7 +204,6 @@
 | x-reaqta-etw | etwUserWorkstations | etwUserWorkstations |
 | x-reaqta-etw | etwVirtualAccount | etwVirtualAccount |
 | <br> | | |
-| x-reaqta-event | endpoint_id | endpointId |
 | x-reaqta-event | local_id | localId |
 | x-reaqta-event | action_name | actionName |
 | x-reaqta-event | custom_name | customName |
