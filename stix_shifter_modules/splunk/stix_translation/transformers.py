@@ -8,7 +8,6 @@ class SplunkToTimestamp(ValueTransformer):
     def transform(splunkTime):
         return splunkTime[:-6] + 'Z'
 
-
 class SplunkHash(ValueTransformer):
     """
     A value transformer for converting the following hash format, into multiple fields.

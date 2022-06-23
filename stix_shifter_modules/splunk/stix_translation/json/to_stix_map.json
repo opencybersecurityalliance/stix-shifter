@@ -267,9 +267,22 @@
     }
   ],
   "Hashes": {
-    "key": "process.hashes",
-    "object": "process-exec",
-    "transformer": "SplunkHash"
+    "SHA256": {
+      "key": "file.hashes.SHA256",
+      "object": "file"
+    },
+    "MD5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "SHA1": {
+      "key": "file.hashes.SHA1",
+      "object": "file"
+    },
+     "IMPHASH": {
+      "key": "file.hashes.IMPHASH",
+      "object": "file"
+    }
   },
   "process_path": [
     {

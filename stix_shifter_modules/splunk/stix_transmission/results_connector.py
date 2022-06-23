@@ -2,7 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_results_connector im
 from .api_client import APIClient
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
-
+import re
 
 class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
@@ -25,7 +25,38 @@ class ResultsConnector(BaseResultsConnector):
                 results = []
             return_obj['success'] = True
             return_obj['data'] = results
+            # spliting hashes string into SHA256,MD5 and OTHERS
+            # for index, val in enumerate(return_obj['data']):
+            #     has_dict_array = []
+            #     if 'Hashes' in val:
+            #         return_obj['data'][index]['Hashes'] = "f5568ea42e4cbd4bcf1f3bf6892d0049"
 
+            for index, val in enumerate(return_obj['data']):
+                if ('Hashes' in val):
+                    hashes = val['Hashes'].split(",")
+                    #check for , if not means falls in case 1 for regex
+                    hshDict = {}
+                    if(val['Hashes'].find(',') == -1):
+                        file_hash_map = "file.hashes.{}"
+                        if re.compile("^[a-f0-9]{32}$").match(val['Hashes']) is not None:
+                            hshDict = {"MD5":val['Hashes']}
+                        elif re.compile(r'\b[0-9a-f]{40}\b').match(val['Hashes']) is not None:
+                            hshDict = {"SHA1":val['Hashes']}
+                        elif re.compile("[A-Fa-f0-9]{64}").match(val['Hashes']) is not None:
+                            hshDict = {"SHA256":val['Hashes']}
+                        else:
+                            file_hash_map = file_hash_map.format("Unknown")
+                            hshDict = file_hash_map
+
+                    if(not bool(hshDict)):
+                        for hash_string in hashes:
+                            if (hash_string.find("SHA256", 0) != -1):
+                                hshDict.update({"SHA256": hash_string.lstrip("SHA256=")})
+                            elif (hash_string.find("MD5", 0) != -1):
+                                hshDict.update({"MD5": hash_string.lstrip("MD5=")})
+                            else:
+                                hshDict.update({"IMPHASH": hash_string.lstrip("IMPHASH=")})
+                    return_obj['data'][index]['Hashes'] = hshDict
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
         return return_obj

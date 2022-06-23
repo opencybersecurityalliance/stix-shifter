@@ -83,10 +83,10 @@
     "file": {
         "cim_type": "endpoint",
         "fields": {
-            "hashes": "file_hash",
-            "hashes.MD5": "file_hash",
-            "hashes.'SHA-1'": "file_hash",
-            "hashes.'SHA-256'": "file_hash",
+            "hashes.MD5": ["Hashes.MD5"],
+            "hashes.SHA1": ["Hashes.SHA1"],
+            "hashes.SHA256": ["Hashes.SHA256"],
+             "hashes.IMPHASH": ["Hashes.IMPHASH"],
             "name": "file_name",
             "created": "file_create_time",
             "modified": "file_modify_time",
@@ -137,11 +137,6 @@
         "cim_type": "process",
         "fields": {
             "name": "process",
-            "hashes": "Hashes",
-            "hashes.'SHA-1'": "Hashes",
-            "hashes.'MD5'": "Hashes",
-            "hashes.'SHA-256'": "Hashes",
-            "hashes.IMPHASH": "Hashes",
             "pid": "pid",
             "creator_user_ref.account_login": "user",
             "binary_ref.parent_directory_ref.path": "file_path",
