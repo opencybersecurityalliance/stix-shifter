@@ -153,6 +153,12 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search index=_audit ss_name="sample_alert" action=alert_fired earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_dst_ref_queries(self):
+        stix_pattern = "[network-traffic:dst_ref.value = '192.168.122.83']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (dest = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_port_queries(self):
         stix_pattern = "[network-traffic:src_port = 12345 OR network-traffic:dst_port = 23456]"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
@@ -222,6 +228,13 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-25minutes" | head 5000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_custom_index(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        options = {"index": "my_index"}
+        query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
+        queries = f'search index=my_index ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_custom_mapping(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' AND mac-addr:value = '00-00-5E-00-53-00']"
 
@@ -288,6 +301,25 @@ class TestStixToSpl(unittest.TestCase, object):
         print(result_query)
         expected_queries = f'search ((source = "") AND ((signature_id = "") OR (signature = ""))) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(result_query, expected_queries)
+
+    def test_proc_command_line_query(self):
+        stix_pattern = "[process:command_line = 'wmic.exe process call create calc']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (process = "wmic.exe process call create calc") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_proc_name_query(self):
+        stix_pattern = "[process:name = 'wmic.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (process_name = "wmic.exe") earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_ipv4_query_in_operator(self):
+        stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search ((src_ip IN ("192.168.122.83", "192.168.122.84")) OR (dest_ip IN ("192.168.122.83", "192.168.122.84"))) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
 
 if __name__ == '__main__':
     unittest.main()

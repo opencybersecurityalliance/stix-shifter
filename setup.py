@@ -242,7 +242,7 @@ for project_name in projects.keys():
 
         for r, d, f in os.walk(module_dir):
             r_split = r.split(os.sep)
-            if not (len(r_split) >= 3 and ('tests' == r_split[2])):
+            if not (len(r_split) >= 3 and ('tests' == r_split[2] or 'tools' == r_split[2])):
                 for file in f:
                     if '.json' in file:
                         json_include_lines.append('include ' + os.path.join(r, file) + ' \n')
