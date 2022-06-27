@@ -418,7 +418,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
 
         # Insure fixed deterministic IDs are present
-        print(observed_data['object_refs'])
         assert(set(STIX_2_1_OBJECT_REFS).issubset(observed_data['object_refs']))
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
