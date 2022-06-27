@@ -352,7 +352,7 @@ class DataSourceObjToStixObj:
                     cybox_properties[contr_prop] = cybox[contr_prop] 
             
             if cybox_properties:
-                unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties, sort_keys=True, ensure_ascii=False)))
+                unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties, sort_keys=True, ensure_ascii=False, separators=(",", ":"))))
 
         if not unique_id: # STIX process or custom object used UUID4 for identifier
             unique_id = "{}--{}".format(cybox_type, str(uuid.uuid4()))

@@ -41,12 +41,12 @@ DATA = {
         }
 
 CYBOX_ID = {
-            "source-ipv4-addr": "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5", 
-            "dest-ipv4-addr": "ipv4-addr--cb8e152d-60f0-596a-81e4-a22cc4a7f063", 
-            "url": "url--8265905f-c609-52e3-ae52-6681bcd6086d", 
-            "network-traffic": "network-traffic--24d0fa15-6cbf-51ef-b08e-416a63922445",
-            "file": "file--243f1b5f-0391-501c-bed0-17e9f204f1d2",
-            "directory": "directory--9ce39e76-d59e-5db2-8f0e-2001f689ea9d"
+            "source-ipv4-addr": "ipv4-addr--be9fc8ad-9c41-5787-a31a-e9cb561be1fb", 
+            "dest-ipv4-addr": "ipv4-addr--79c143c3-fffe-5e0d-a015-999c59b17a2f", 
+            "url": "url--528ccb4e-e65b-57d2-8aef-9eca4c7fb79f", 
+            "network-traffic": "network-traffic--b3c6f980-f0a9-5034-933a-8ab4d3c26be6",
+            "file": "file--d1bfc532-d321-5391-839f-72fba387e5b8",
+            "directory": "directory--ccb06289-24f5-52c1-a63b-7643ce036e9d"
         }
 
 OPTIONS = {}

@@ -60,27 +60,27 @@ DATA_RELEVANCE = find('payload.data.relevance', DATA)
 DATA_VERSION = find('payload.data.version', DATA)
 
 STIX_2_1_OBJECT_REFS = [
-    "directory--9d6f3ae4-4fb1-5eaf-a295-7ae1189befeb",
-    "file--e38686a7-1254-5025-8db1-f3c474c98bcb",
-    "user-account--80bb9f7c-1010-5f6f-bc9c-d862451be62c",
-    "file--6b21b1c0-5e33-5214-bd61-93192636c544",
-    "network-traffic--c10a4653-7006-5f20-aeb8-4f38d024cb42",
-    "directory--c616d2f7-3b0a-5ccb-843c-e4592f5d5c50",
-    "user-account--a50c0708-1b89-55c6-92e9-6d93a80d2708",
-    "url--91ba42cf-130a-58f8-8a18-7613abffd412",
-    "user-account--c0152e8f-c3db-55c6-8881-7e8d8373e8a0",
-    "file--0af4f45b-8970-5c87-819f-814b93e472ca",
-    "user-account--4fe2a8d1-b519-5701-b521-1145606b1903",
-    "directory--5c0ad0f9-38c5-56c0-a059-85994be2032a",
-    "file--c84bb2cc-45fb-5daf-935a-dd7b81064654",
-    "user-account--da9a51b3-80fa-5e94-adb9-a78bf00d9a56",
-    "directory--0c5773ea-0ddb-5b4d-bef7-2c29818f0170",
-    "file--9ef14ee3-3dbc-5ba5-8869-a472fae8aef7",
-    "directory--2f2498e1-8be8-53fa-93cd-6e54220b452a",
-    "file--c6be7cc4-1d58-5c53-8c15-7edaa79b6378",
-    "file--35c8085c-945c-580c-bb8e-4b61a9e82c91",
-    "ipv4-addr--a47ff5c6-efeb-5caa-b606-62198d19839d",
-    "ipv4-addr--adac2d17-0bea-5ec1-8d7a-653cba4476e4"
+    "directory--13adb857-abec-5c8f-847b-bb6899c74d12",
+    "file--e947ec3d-a3a8-50e9-a408-020d4b7108ec",
+    "user-account--b421bf67-9785-501a-9321-8dc35ed7a1c5",
+    "file--92de3247-223e-5d02-b662-10053cd87404",
+    "network-traffic--3805077a-e9e7-5689-b863-85be32f5c67e",
+    "directory--0a58d0c1-59e6-5afd-8252-dcd3f13e5622",
+    "user-account--8fefa3ad-08f5-5438-846a-82e6009baab7",
+    "url--ce0d2357-0220-5e47-896b-b49b1389c813",
+    "user-account--dda9b638-8cb1-5435-9bb0-d542baf6b67c",
+    "file--86e2f685-4636-530c-923b-adaa9db11df9",
+    "user-account--38a33c9a-4221-5a52-8da7-b3f6e51d4351",
+    "directory--bf80427d-5920-5f36-aee1-c10ea3d9bccb",
+    "file--0055834d-3772-5e4d-b39e-552c3e23b6ec",
+    "user-account--7341e6ed-3ed7-5d12-a4dc-570afeb994e5",
+    "directory--e56dc833-b047-51fe-b68d-c628598415c9",
+    "file--aadaf87b-d5cb-5ff5-8115-9dcefdd26ad9",
+    "directory--c17e5aa6-ccaf-533c-a119-3244ee7651d3",
+    "file--1a114064-93a9-5b53-82fb-e9a399ce7485",
+    "file--4d2b6011-b251-5e8b-a235-bad44f6161a0",
+    "ipv4-addr--806f9213-8e92-5de7-ae9b-8e5697498d78",
+    "ipv4-addr--efabfd00-4168-536e-8995-e3837bd7111f"
 ]
 
 DATA_SOURCE = {
@@ -418,6 +418,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
 
         # Insure fixed deterministic IDs are present
+        print(observed_data['object_refs'])
         assert(set(STIX_2_1_OBJECT_REFS).issubset(observed_data['object_refs']))
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
