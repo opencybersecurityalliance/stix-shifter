@@ -44,7 +44,7 @@ CYBOX_ID = {
             "source-ipv4-addr": "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5", 
             "dest-ipv4-addr": "ipv4-addr--cb8e152d-60f0-596a-81e4-a22cc4a7f063", 
             "url": "url--8265905f-c609-52e3-ae52-6681bcd6086d", 
-            "network-traffic": "network-traffic--2ec70516-29b5-59f3-9743-3b93e97db6d8",
+            "network-traffic": "network-traffic--24d0fa15-6cbf-51ef-b08e-416a63922445",
             "file": "file--243f1b5f-0391-501c-bed0-17e9f204f1d2",
             "directory": "directory--9ce39e76-d59e-5db2-8f0e-2001f689ea9d"
         }

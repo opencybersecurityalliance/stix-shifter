@@ -61,10 +61,10 @@ DATA_VERSION = find('payload.data.version', DATA)
 
 STIX_2_1_OBJECT_REFS = [
     "directory--9d6f3ae4-4fb1-5eaf-a295-7ae1189befeb",
-    "file--697ce471-a30e-5867-83ab-69d38fc4c07c",
+    "file--e38686a7-1254-5025-8db1-f3c474c98bcb",
     "user-account--80bb9f7c-1010-5f6f-bc9c-d862451be62c",
-    "file--6463fa96-e6e4-50d6-b636-792bc7fe096e",
-    "network-traffic--1447b4e4-99c4-552d-b140-07fa908504af",
+    "file--6b21b1c0-5e33-5214-bd61-93192636c544",
+    "network-traffic--c10a4653-7006-5f20-aeb8-4f38d024cb42",
     "directory--c616d2f7-3b0a-5ccb-843c-e4592f5d5c50",
     "user-account--a50c0708-1b89-55c6-92e9-6d93a80d2708",
     "url--91ba42cf-130a-58f8-8a18-7613abffd412",
@@ -72,13 +72,13 @@ STIX_2_1_OBJECT_REFS = [
     "file--0af4f45b-8970-5c87-819f-814b93e472ca",
     "user-account--4fe2a8d1-b519-5701-b521-1145606b1903",
     "directory--5c0ad0f9-38c5-56c0-a059-85994be2032a",
-    "file--ffc24f98-eb84-500d-a5d5-52376ce5ffa9",
+    "file--c84bb2cc-45fb-5daf-935a-dd7b81064654",
     "user-account--da9a51b3-80fa-5e94-adb9-a78bf00d9a56",
     "directory--0c5773ea-0ddb-5b4d-bef7-2c29818f0170",
-    "file--ce0f32cf-1b48-59f9-8139-11e01d198bfc",
+    "file--9ef14ee3-3dbc-5ba5-8869-a472fae8aef7",
     "directory--2f2498e1-8be8-53fa-93cd-6e54220b452a",
-    "file--1b887397-3edf-5eba-961c-83f62a816661",
-    "file--19a3ab44-7c99-570a-918a-61d3bb96ecad",
+    "file--c6be7cc4-1d58-5c53-8c15-7edaa79b6378",
+    "file--35c8085c-945c-580c-bb8e-4b61a9e82c91",
     "ipv4-addr--a47ff5c6-efeb-5caa-b606-62198d19839d",
     "ipv4-addr--adac2d17-0bea-5ec1-8d7a-653cba4476e4"
 ]
