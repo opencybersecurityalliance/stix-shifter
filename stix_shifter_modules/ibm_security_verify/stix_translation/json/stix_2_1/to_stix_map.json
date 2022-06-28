@@ -118,6 +118,20 @@
       "object": "ocaevent"
     }
   ],
+  "starttime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "endtime": [
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
   "performedby_username": {
     "key": "x-oca-event.extensions.x-iam-ext.performedby_username",
     "object": "ocaevent"
