@@ -21,7 +21,7 @@ def __main__():
     release_tag = sys.argv[2]
     time = datetime.now()
     log_list = "## {} ({})\n\n### Breaking changes:\n\n### Deprecations:\n\n### Changes:\n\n".format(release_tag, time.strftime("%Y-%m-%d"))
-    ending = "\n\n--------------------------------------\n\n"
+    ending = "\n\n### Fixes:\n\n### Dependency update:\n\n--------------------------------------\n\n"
     git_logs = __format_logs(git_logs)
 
     try: 
@@ -48,6 +48,8 @@ def __format_logs(logs):
         lg = re.sub(commit_hash_pattern, "*", lg)
         lg = re.sub(open_parenth_pattern, "[", lg)
         lg = re.sub(close_parenth_pattern, "]", lg)
+        if not re.search("#\d{3,4}]$", lg):
+            continue
         pr_id = re.search("#\d{3,4}]$", lg)[0]
         pr_id = re.sub("]$", "", pr_id)
         pr_id = re.sub("#", "", pr_id)
