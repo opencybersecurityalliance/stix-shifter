@@ -2,17 +2,12 @@ import sys
 from os import path
 import re
 from datetime import datetime
-# from argparse import ArgumentParser
 
 current_dir = path.abspath(path.dirname(__file__))
 GITHUB_PR_PATH = "https://github.com/opencybersecurityalliance/stix-shifter/pull/"
 
 CHANGE_LOG_PATH = path.abspath(path.join(current_dir, '../../../CHANGELOG.md'))
-# CHANGE_LOG = path.abspath(path.join(CHANGE_LOG_PATH, "CHANGELOG.md"))
 change_log_file = open(CHANGE_LOG_PATH, "a")
-
-# old_change_log = change_log_file.read()
-# print(old_change_log)
 
 
 def __main__():
@@ -31,11 +26,6 @@ def __main__():
     except ValueError as ex:
         print(ex)
 
-# def __line_prepender(filename, line):
-#     with open(filename, 'r+') as f:
-#         content = f.read()
-#         f.seek(0, 0)
-#         f.write(line.rstrip('\r\n') + '\n' + content)
 
 def __format_logs(logs):
     logs_list = logs.split("\n")
