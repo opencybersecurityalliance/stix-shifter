@@ -16,7 +16,7 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 -------------------------------------
 
-## 4.1.2 (2022-06-28)
+## 4.2.0 (2022-06-29)
 ### Breaking changes:
 
 ### Deprecations:
