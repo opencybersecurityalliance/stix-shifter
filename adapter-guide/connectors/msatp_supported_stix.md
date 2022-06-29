@@ -1,4 +1,4 @@
-##### Updated on 02/04/22
+##### Updated on 06/01/22
 ## Microsoft Defender for Endpoint
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |

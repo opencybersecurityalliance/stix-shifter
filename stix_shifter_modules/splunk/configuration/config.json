@@ -22,9 +22,15 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "password",
+            "type": "certificate",
             "optional": true
-        }
+        },
+	"options": {
+            "index": {
+                "type": "text",
+                "optional": true
+	    }
+	}
     },
     "configuration": {
         "auth": {

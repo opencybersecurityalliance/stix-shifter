@@ -1,7 +1,7 @@
 {
   "directory": {
     "fields": {
-      "path": ["path", "accessor.path", "consumer.workingDirectory", "__etwHomePath"]
+      "path": ["__etwHomePath", "accessor.path", "consumer.workingDirectory", "path"]
     }
   },
   "file": {
@@ -14,14 +14,14 @@
       "hashes.'MD5'": ["md5"],
       "hashes.'SHA-1'": ["sha1"],
       "hashes.'SHA-256'": ["sha256"],
-      "name": ["filename", "consumer.script.filename"],
+      "name": ["consumer.script.filename", "filename"],
       "parent_directory_ref.path": ["path"],
-      "size": ["eventdata.size.gte", "eventdata.size.lte"]
+      "size": ["eventdata.size"]
     }
   },
   "ipv4-addr": {
     "fields": {
-      "value": ["login.ip", "ip"]
+      "value": ["ip", "login.ip"]
     }
   },
   "ipv6-addr": {
@@ -46,9 +46,9 @@
       "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
       "extensions.'x-reaqta-process'.no_gui": ["service.hasGui"],
       "extensions.'x-reaqta-process'.privilege_level": ["service.privilege"],
-      "name": ["login.processName", "__etwCallerProcessName", "__etwProcessName", "__etwLogonProcessName"],
+      "name": ["__etwCallerProcessName", "__etwLogonProcessName", "__etwProcessName", "login.processName"],
       "parent_ref.binary_ref.name": ["service.ppid"],
-      "pid": ["wmi.clientPid", "__etwProcessId", "__etwCallerProcessId", "engine.ppid", "host.pid", "accessor.pid", "eventdata.targetProcessId", "pid", "service.pid", "service.ppid", "wmiHost.pid", "engine.pid", "allocator.ppid", "ppid", "allocator.pid", "accessor.ppid"]
+      "pid": ["__etwCallerProcessId", "__etwProcessId", "accessor.pid", "accessor.ppid", "allocator.pid", "allocator.ppid", "engine.pid", "engine.ppid", "eventdata.targetProcessId", "host.pid", "pid", "ppid", "service.pid", "service.ppid", "wmi.clientPid", "wmiHost.pid"]
     }
   },
   "url": {
@@ -58,17 +58,16 @@
   },
   "user-account": {
     "fields": {
-      "user_id": ["login.src.username", "__etwNewTargetUserName", "__etwTargetOutboundUserName", "wmi.user", "accessor.user", "engine.user", "service.user", "__etwOldTargetUserName", "allocator.user", "login.dst.username", "user"]
+      "user_id": ["__etwNewTargetUserName", "__etwOldTargetUserName", "__etwTargetOutboundUserName", "accessor.user", "allocator.user", "engine.user", "login.dst.username", "login.src.username", "service.user", "user", "wmi.user"]
     }
   },
   "windows-process-ext": {
     "fields": {
-      "owner_sid": ["engine.user.sid", "accessor.user.sid", "login.src.sid", "service.user.sid", "allocator.user.sid", "user.sid"]
+      "owner_sid": ["accessor.user.sid", "allocator.user.sid", "engine.user.sid", "login.src.sid", "service.user.sid", "user.sid"]
     }
   },
   "x-ibm-finding": {
     "fields": {
-      "category": ["eventType"],
       "dst_ip_ref.value": ["ip"],
       "extensions.'x-reaqta-avdetection'.av_scan_reason": ["antimalware.scanReason"],
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
@@ -88,14 +87,15 @@
       "extensions.'x-reaqta-consumer'.scriptingEngine": ["consumer.script.engine"],
       "extensions.'x-reaqta-consumer'.showWindowCommand": ["consumer.showWindowCmd"],
       "extensions.'x-wmi-event'.client_machine_fqn": ["wmi.clientMachineFqn"],
-      "host_id": ["__etwWorkstation"],
-      "hostname": ["wmi.clientMachine", "wmi.machineName", "__etwWorkstationName"],
+      "host_id": ["__etwWorkstation", "endpointId"],
+      "hostname": ["__etwWorkstationName", "wmi.clientMachine", "wmi.machineName"],
       "ip_refs[*].value": ["ip"]
     }
   },
   "x-oca-event": {
     "fields": {
       "agent": ["antimalware.appName"],
+      "category": ["eventType"],
       "code": ["eventId", "eventdata.etwEventId"],
       "extensions.'x-reaqta-amsi'.content_name": ["antimalware.contentName"],
       "extensions.'x-reaqta-amsi'.scan_result": ["antimalware.scanResult"],
@@ -126,9 +126,9 @@
   },
   "x-reaqta-cert": {
     "fields": {
-      "expired": ["allocator.expired", "service.expired", "eventdata.cert.expired", "expired", "engine.expired", "accessor.expired"],
-      "signer": ["engine.signer", "allocator.signer", "service.signer", "signer", "accessor.signer", "eventdata.cert.signer"],
-      "trusted": ["eventdata.cert.trusted", "service.trusted", "allocator.trusted", "engine.trusted", "accessor.trusted", "trusted"]
+      "expired": ["accessor.expired", "allocator.expired", "engine.expired", "eventdata.cert.expired", "expired", "service.expired"],
+      "signer": ["accessor.signer", "allocator.signer", "engine.signer", "eventdata.cert.signer", "service.signer", "signer"],
+      "trusted": ["accessor.trusted", "allocator.trusted", "engine.trusted", "eventdata.cert.trusted", "service.trusted", "trusted"]
     }
   },
   "x-reaqta-consumer": {
@@ -167,7 +167,7 @@
       "etwTargetLinkedLogonId": ["__etwTargetLinkedLogonId"],
       "etwTargetLogonGuid": ["__etwTargetLogonGuid"],
       "etwTargetLogonId": ["login.targetLogonId"],
-      "etwTargetOutboundDomainName": ["__etwTargetServerName", "__etwTargetOutboundDomainName"],
+      "etwTargetOutboundDomainName": ["__etwTargetOutboundDomainName", "__etwTargetServerName"],
       "etwTargetSid": ["__etwTargetSid"],
       "etwTargetUserSid": ["login.dst.sid"],
       "etwTask": ["eventdata.etwTask"],
@@ -185,7 +185,7 @@
       "etw_display_name": ["__etwDisplayName"],
       "etw_dummy": ["__etwDummy"],
       "etw_elevated_token": ["__etwElevatedToken"],
-      "etw_event_record_id": ["eventdata.etwEventVersion", "__etwEventRecordId"],
+      "etw_event_record_id": ["__etwEventRecordId", "eventdata.etwEventVersion"],
       "etw_failure_reason": ["__etwFailureReason"],
       "etw_home_directory": ["__etwHomeDirectory"],
       "etw_impersonation_level": ["__etwImpersonationLevel"],
@@ -214,7 +214,6 @@
       "custom_type": ["customType"],
       "data": ["reg.data"],
       "display_name": ["service.displayName"],
-      "endpoint_id": ["endpointId"],
       "filter_name": ["wmi.filterName"],
       "is_local": ["wmi.isLocal"],
       "name": ["reg.name"],
@@ -225,8 +224,8 @@
       "query": ["wmi.query"],
       "queryLanguage": ["wmi.queryLanguage"],
       "queryName": ["eventdata.dns"],
-      "region_size": ["eventdata.regionSize.gte", "eventdata.regionSize.lte"],
-      "relevance": ["eventdata.relevance.lte", "eventdata.relevance.gte", "eventdata.relevance"],
+      "region_size": ["eventdata.regionSize"],
+      "relevance": ["eventdata.relevance"],
       "return_code": ["eventdata.returnCode"],
       "root_object": ["path"],
       "service_name": ["service.name"],
@@ -246,14 +245,14 @@
   },
   "x-reaqta-process": {
     "fields": {
-      "logon_id": ["accessor.login.id", "engine.login.id", "allocator.login.id", "service.login.id", "login.id"],
-      "no_gui": ["hasGui", "service.hasGui", "engine.hasGui", "allocator.hasGui", "accessor.hasGui"],
-      "privilege_level": ["privilege", "allocator.privilege", "service.privilege", "accessor.privilege", "engine.privilege"]
+      "logon_id": ["accessor.login.id", "allocator.login.id", "engine.login.id", "login.id", "service.login.id"],
+      "no_gui": ["accessor.hasGui", "allocator.hasGui", "engine.hasGui", "hasGui", "service.hasGui"],
+      "privilege_level": ["accessor.privilege", "allocator.privilege", "engine.privilege", "privilege", "service.privilege"]
     }
   },
   "x-reaqta-program": {
     "fields": {
-      "arch": ["accessor.arch", "allocator.arch", "service.arch", "engine.arch", "arch"],
+      "arch": ["accessor.arch", "allocator.arch", "arch", "engine.arch", "service.arch"],
       "fsname": ["filename"]
     }
   },
@@ -268,7 +267,7 @@
       "extensions.'x-reaqta-cert'.signer": ["signer"],
       "extensions.'x-reaqta-cert'.trusted": ["trusted"],
       "extensions.'x-reaqta-etw'.etw_cert_thumbprint": ["__etwCertThumbprint"],
-      "issuer": ["accessor.issuer", "eventdata.cert.issuer", "allocator.issuer", "__etwCertIssuerName", "issuer", "engine.issuer", "service.issuer"],
+      "issuer": ["__etwCertIssuerName", "accessor.issuer", "allocator.issuer", "engine.issuer", "eventdata.cert.issuer", "issuer", "service.issuer"],
       "serial_number": ["__etwCertSerialNumber"]
     }
   }
