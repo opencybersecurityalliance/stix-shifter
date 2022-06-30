@@ -191,7 +191,21 @@ class StartStopQualifier(Qualifier):
             raise RuntimeError("Invalid STIX timestamp {}".format(stop))
 
     def __repr__(self) -> str:
-        return "{observation_expression} StartStopQualifier({qualifier}, start={start}, stop={stop})".format(observation_expression=self.observation_expression, qualifier=self.qualifier, start=self.start, stop=self.stop)
+        return "StartStopQualifier({qualifier}, start={start}, stop={stop}, observation_expression={observation_expression})".format(qualifier=self.qualifier, start=self.start, stop=self.stop, observation_expression=self.observation_expression)
+
+    @property
+    def start_iso(self):
+        if self.start:
+            return self.start.replace("t'","").replace("'", "")
+        else:
+            return self.start
+
+    @property
+    def stop_iso(self):
+        if self.stop:
+            return self.stop.replace("t'","").replace("'", "")
+        else:
+            return self.stop
 
 class Pattern:
     def __init__(self, expression: BaseObservationExpression, qualifier=None) -> None:

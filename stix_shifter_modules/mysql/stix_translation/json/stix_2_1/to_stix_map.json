@@ -1,0 +1,159 @@
+{
+  "source_ipaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "dest_ipaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "entry_time": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "url": {
+    "key": "url.value"
+  },
+  "source_port": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "dest_port": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "username": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+  "displayname": [
+    {
+      "key": "user-account.display_name",
+      "object": "useraccount"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.name",
+      "object": "fl"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "process",
+      "references": "fl"
+    }
+  ],
+  "sha256hash": {
+    "key": "file.hashes.SHA-256",
+    "object": "fl"
+  },
+  "md5hash": {
+    "key": "file.hashes.MD5",
+    "object": "fl"
+  },
+  "protocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "file_path": [
+    {
+      "key": "directory.path",
+      "object": "file_directory"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "fl",
+      "references": "file_directory"
+    }
+  ],
+  "file_created_time": [
+    {
+      "key": "file.ctime",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "file_modified_time": [
+    {
+      "key": "file.mtime",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "file_accessed_time": [
+    {
+      "key": "file.atime",
+      "object": "fl",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_created_time": [
+    {
+      "key": "directory.ctime",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_modified_time": [
+    {
+      "key": "directory.mtime",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "directory_accessed_time": [
+    {
+      "key": "directory.atime",
+      "object": "file_directory",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "process_id": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "ToInteger"
+    }
+  ],
+  "process_arguments": [
+    {
+      "key": "process.arguments",
+      "object": "process"
+    }
+  ],
+  "process_created_time": [
+    {
+      "key": "process.created_time",
+      "object": "process",
+      "transformer": "EpochToTimestamp"
+    }
+  ]
+
+}

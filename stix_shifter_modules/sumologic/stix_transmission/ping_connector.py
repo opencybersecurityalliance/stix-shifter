@@ -7,6 +7,7 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def ping_connection(self):
         try:
@@ -20,7 +21,7 @@ class PingConnector(BasePingConnector):
             if response_code == 200:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response_dict.object, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict.object, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

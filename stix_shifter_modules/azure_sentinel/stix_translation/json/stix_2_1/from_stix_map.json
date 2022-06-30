@@ -1,0 +1,161 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress", "hostStates.publicIpAddress", "hostStates.privateIpAddress", "userStates.logonIp"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["networkConnections.sourceAddress", "networkConnections.destinationAddress"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["networkConnections.sourcePort"],
+      "dst_port": ["networkConnections.destinationPort"],
+      "protocols[*]": ["networkConnections.protocol"],
+      "src_ref.value": ["networkConnections.sourceAddress"],
+      "dst_ref.value": ["networkConnections.destinationAddress"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["fileStates.path", "process.path"]
+    }
+  },
+  "file": {
+    "fields": {
+      "parent_directory_ref.path": ["fileStates.path"],
+      "name": ["fileStates.name"],
+      "hashes.'SHA-256'": ["fileStates.fileHash.hashValue"],
+      "hashes.'SHA-1'": ["fileStates.fileHash.hashValue"],
+      "hashes.MD5": ["fileStates.fileHash.hashValue"],
+      "hashes.authenticodeHash256": ["fileStates.fileHash.hashValue"],
+      "hashes.lsHash": ["fileStates.fileHash.hashValue"],
+      "hashes.ctph": ["fileStates.fileHash.hashValue"],
+      "hashes.peSha1": ["fileStates.fileHash.hashValue"],
+      "hashes.peSha256": ["fileStates.fileHash.hashValue"],
+      "hashes.unknown": ["fileStates.fileHash.hashValue"]
+    }
+  },
+   "process" : {
+    "fields": {
+      "name": ["processes.name", "processes.parentProcessName"],
+      "parent_ref.name": ["processes.parentProcessName"],
+      "command_line": ["processes.commandLine"],
+      "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
+      "created_time": ["processes.createdDateTime"],
+      "parent_ref.pid": ["processes.parentProcessId"],
+      "image_ref.path": ["processes.path"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["hostStates.fqdn", "hostStates.netBiosName", "networkConnections.destinationDomain", "userStates.domainName"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["userStates.accountName", "processes.accountName"],
+      "account_login": ["userStates.logonId"],
+      "account_type": ["userStates.userAccountType"],
+      "account_last_login": ["userStates.logonDateTime"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["vendorInformation.provider", "networkConnections.applicationName"],
+      "vendor": ["vendorInformation.vendor"],
+      "version": ["vendorInformation.providerVersion"]
+    }
+  },
+  "url": {
+    "fields": {
+      "name": ["networkConnections.destinationUrl"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["registryKeyStates.key"],
+      "extensions.windows-registry-value-type.valueData": [ "registryKeyStates.valueData" ],
+      "extensions.windows-registry-value-type.name": [ "registryKeyStates.valueName" ],
+      "extensions.windows-registry-value-type.valueType": [ "registryKeyStates.valueType" ]
+    }
+  },
+  "x-msazure-sentinel": {
+    "fields": {
+      "tenant_id": ["azureTenantId"],
+      "subscription_id": ["azureSubscriptionId"]
+    }
+  },
+  "x-msazure-sentinel-alert": {
+    "fields": {
+      "activityGroupName": ["activityGroupName"],
+      "assignedTo": ["assignedTo"],
+      "category": ["category"],
+      "closedDateTime": ["closedDateTime"],
+      "cloudAppStates.destinationServiceName": ["cloudAppStates.destinationServiceName"],
+      "cloudAppStates.destinationServiceIp": ["cloudAppStates.destinationServiceIp"],
+      "cloudAppStates.riskScore": ["cloudAppStates.riskScore"],
+      "comments": ["comments"],
+      "confidence": ["confidence"],
+      "createdDateTime": ["createdDateTime"],
+      "description": ["description"],
+      "detectionIds": ["detectionIds"],
+      "eventDateTime": ["eventDateTime"],
+      "feedback": ["feedback"],
+      "hostStates.isAzureAadJoined": ["hostStates.isAzureAadJoined"],
+      "hostStates.isAzureAadRegistered": ["hostStates.isAzureAadRegistered"],
+      "hostStates.isHybridAzureDomainJoined": ["hostStates.isHybridAzureDomainJoined"],
+      "hostStates.os": ["hostStates.os"],
+      "hostStates.privateIpAddress": ["hostStates.privateIpAddress"],
+      "hostStates.riskScore": ["hostStates.riskScore"],
+      "alert_id": ["id"],
+      "incidentIds": ["incidentIds"],
+      "lastModifiedDateTime": ["lastModifiedDateTime"],
+      "malwareStates.category": ["malwareStates.category"],
+      "malwareStates.family": ["malwareStates.family"],
+      "malwareStates.name": ["malwareStates.family"],
+      "malwareStates.severity": ["malwareStates.family"],
+      "malwareStates.wasRunning": ["malwareStates.family"],
+      "networkConnections.destinationLocation": ["networkConnections.destinationLocation"],
+      "networkConnections.direction": ["networkConnections.direction"],
+      "networkConnections.domainRegisteredDateTime": ["networkConnections.domainRegisteredDateTime"],
+      "networkConnections.localDnsName": ["networkConnections.localDnsName"],
+      "networkConnections.natDestinationAddress": ["networkConnections.natDestinationAddress"],
+      "networkConnections.natDestinationPort": ["networkConnections.natDestinationPort"],
+      "networkConnections.natSourceAddress": ["networkConnections.natSourceAddress"],
+      "networkConnections.natSourcePort": ["networkConnections.natSourcePort"],
+      "networkConnections.riskScore": ["networkConnections.riskScore"],
+      "networkConnections.sourceLocation": ["networkConnections.sourceLocation"],
+      "networkConnections.status": ["networkConnections.status"],
+      "networkConnections.urlParameters": ["networkConnections.urlParameters"],
+      "processes.integrityLevel": ["processes.integrityLevel"],
+      "processes.isElevated": ["processes.isElevated"],
+      "recommendedActions": ["recommendedActions"],
+      "securityResources.resource": ["securityResources.resource"],
+      "securityResources.resourceType": ["securityResources.resourceType"],
+      "severity": ["severity"],
+      "sourceMaterials": ["sourceMaterials"],
+      "status": ["status"],
+      "tags": ["tags"],
+      "title": ["title"],
+      "triggers.name": ["triggers.name"],
+      "triggers.type": ["triggers.type"],
+      "triggers.value": ["triggers.value"],
+      "userStates.aadUserId": ["userStates.aadUserId"],
+      "userStates.emailRole": ["userStates.emailRole"],
+      "userStates.isVpn": ["userStates.isVpn"],
+      "userStates.logonLocation": ["userStates.logonLocation"],
+      "userStates.logonType": ["userStates.logonType"],
+      "userStates.onPremisesSecurityIdentifier": ["userStates.onPremisesSecurityIdentifier"],
+      "userStates.riskScore": ["userStates.riskScore"],
+      "userStates.userAccountType": ["userStates.userAccountType"],
+      "userStates.userPrincipalName": ["userStates.userPrincipalName"],
+      "vendorInformation.subProvider": ["vendorInformation.subProvider"],
+      "vulnerabilityStates.cve": ["vulnerabilityStates.cve"],
+      "vulnerabilityStates.severity": ["vulnerabilityStates.severity"],
+      "vulnerabilityStates.wasRunning": ["vulnerabilityStates.wasRunning"]
+    }
+  }
+}

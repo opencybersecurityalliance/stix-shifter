@@ -101,7 +101,7 @@
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.windows-service-ext.service_dll_refs[*].name": ["ServiceFileName"]
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
     }
   },
   "x-oca-event": {
@@ -123,8 +123,8 @@
       "parent_process_ref.binary_ref.name": ["ParentImage"],
       "domain_ref.value": ["domainname", "UrlHost"],
       "file_ref.name": ["filename"],
-      "host_ref.hostname": ["identityhostname"],
-      "host_ref.ip_refs[*].value": ["identityip"],
+      "host_ref.hostname": ["identityhostname", "MachineId"],
+      "host_ref.ip_refs[*].value": ["identityip", "sourceip"],
       "registry_ref.key": ["ObjectName", "RegistryKey"],
       "user_ref.user_id": ["username"],
       "url_ref.value": ["url"],
@@ -133,7 +133,7 @@
   },
   "x-oca-asset": {
     "fields": {
-      "hostname": ["identityhostname"],
+      "hostname": ["identityhostname", "MachineId"],
       "ip_refs[*].value": ["identityip", "sourceip"],
       "mac_refs[*].value": ["sourcemac"]
     }

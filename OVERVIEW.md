@@ -152,10 +152,11 @@ List updated: October 29, 2021
 |       [Datadog](adapter-guide/connectors/datadog_supported_stix.md)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
 |       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
 |       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-
-
-
-
+|       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [Palo Alto Cortex XDR](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/paloalto_supported_stix.md)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [SentinelOne](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/sentinelone_supported_stix.md)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [Darktrace](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/darktrace_supported_stix.md)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
+|       [IBM Security ReaQta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/reaqta_supported_stix.md)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 ## How to use
@@ -224,7 +225,7 @@ _pattern.txt_
 
 `python main.py translate qradar query '{}' '' < /path/to/file/pattern.txt`
 
-### 2. Translate a JSON data source query result to a STIX bundle of observable objects
+### 2. Translate a JSON data source query result to a STIX 2.0 bundle of observable objects
 
 #### INPUT: JSON data source query result
 
@@ -241,13 +242,14 @@ _pattern.txt_
 ]
 ```
 
-#### OUTPUT: STIX bundle of observable objects
+#### OUTPUT: STIX 2.0 bundle of observable objects
 
 ```
 # STIX Observables
 {
     "type": "bundle",
     "id": "bundle--2042a6e9-7f34-4a03-a745-502e358594c3",
+    "spec_version": "2.0",
     "objects": [
         {
             "type": "identity",
@@ -296,15 +298,38 @@ Alternatively, you can run the CLI commands from the source. Open a terminal and
 
 The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. The STIX Identity object represents the data source and is passed in to allow stix-shifter to create a reference between the data source and the generated STIX observed objects.
 
-Using the Qradar connector as an example:
+Using the QRadar connector as an example:
 
 ```
 python main.py translate qradar results \
 '{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
-'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' --stix-validator
+'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]'
 ```
 
-The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+### Translating results into STIX 2.1
+
+By default, JSON results are translated into STIX 2.0. To return STIX 2.1 results include `'{"stix_2.1": true}'` in the CLI command
+
+```
+python main.py translate qradar results \
+'{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
+'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' '{"stix_2.1": true}'
+```
+
+
+### Validating translated STIX 2.1 bundle from the CLI
+
+You can validate translated STIX results from the CLI provided they conform to the 2.1 standard. The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2.1 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
+
+```
+python main.py translate qradar results \
+'{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
+'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' '{"stix_2.1": true, "stix_validator: true}'
+```
+
+### Validating STIX 2.0 and 2.1 bundles with the validator script
+
+Refer to the [STIX validator](bundle_validator/README.md)
 
 ### Results translation using an input file
 
@@ -506,9 +531,21 @@ The `execute` command tests all steps of the translation-transmission flow:
 
 ### Debug
 
-You can add `--debug` option at the end of your CLI command to see more logs. 
+You can add the `--debug` option to your CLI command to see more logs. 
 
-`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --debug` 
+`stix-shifter --debug execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'` 
+
+### Change max returned results
+
+You can add the `--results` option with an integer value at the end of your CLI command to limit the maximum number of returned search results (default 10).
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' --results 50`
+
+### Save the STIX results to a file
+
+You can redirect the output of your CLI command to a file to save the STIX results.
+
+`stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' > results.json`
 
 ## Modules
 

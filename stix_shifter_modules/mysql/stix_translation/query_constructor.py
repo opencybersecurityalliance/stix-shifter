@@ -12,32 +12,16 @@ REFERENCE_DATA_TYPES = {"source_ipaddr": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cid
                         "dest_ipaddr": ["ipv4", "ipv4_cidr"],
                         }
 
+TIMESTAMP_STIX_PROPERTIES = ["created", "modified", "accessed", "ctime", "mtime", "atime", "created_time", "modifed_time"]
+
 logger = logging.getLogger(__name__)
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -82,6 +66,12 @@ class QueryStringPatternTranslator:
         qualified_query = "%s AND (entry_time >= %s OR entry_time <= %s)" % (expression, start, stop)
         return qualified_query
 
+    @classmethod
+    def _format_timestamp(self, value):
+        transformer = TimestampToMilliseconds()
+        value = re.sub("'", "", value)
+        return transformer.transform(value)
+
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -111,6 +101,8 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
+        if stix_field in TIMESTAMP_STIX_PROPERTIES:
+            value = self._format_timestamp(value)
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         # Need to use expression.value to match against regex since the passed-in value has already been formated.
@@ -137,9 +129,9 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        if str(expression_operator) not in self.comparator_lookup:
+            raise NotImplementedError("Comparison operator {} unsupported for MySQL connector".format(expression_operator.name))
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
@@ -244,8 +236,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     table = options.get('table')
-    if not table:
-        table = 'demo_siem'
 
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.

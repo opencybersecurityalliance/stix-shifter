@@ -1,4 +1,19 @@
+##### Updated on 06/01/22
 ## Carbon Black CB Response
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | or |
+| OR | or |
+| = | : |
+| IN | : |
+| != | : |
+| > | : |
+| >= | : |
+| < | : |
+| <= | : |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | path |

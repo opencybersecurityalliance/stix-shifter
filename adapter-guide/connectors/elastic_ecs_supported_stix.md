@@ -1,5 +1,23 @@
-##### Updated on 10/29/21
+##### Updated on 06/01/22
 ## Elasticsearch ECS
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | OR |
+| OR | OR |
+| > | :> |
+| >= | :>= |
+| < | :< |
+| <= | :<= |
+| = | : |
+| != | NOT |
+| LIKE | : |
+| IN | : |
+| MATCHES | : |
+| ISSUBSET | : |
+| ISSUPERSET | : |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | original |

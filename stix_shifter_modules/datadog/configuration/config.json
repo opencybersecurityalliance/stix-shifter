@@ -7,6 +7,10 @@
             "type": "text",
             "regex": "https?:\\/\\/((app|us3|us5)\\.)[a-z0-9-]+\\.[a-z]{2,3}$"
         },
+        "selfSignedCert": {
+            "type": "certificate",
+            "optional": true
+        },
         "help": {
             "type": "link",
             "default": "data-sources.html"

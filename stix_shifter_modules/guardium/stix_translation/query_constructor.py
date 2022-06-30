@@ -2,41 +2,23 @@ import re
 import json
 import datetime
 import copy
-from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
+from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
+    ComparisonExpression, \
     ComparisonExpressionOperators, ComparisonComparators, Pattern, \
-    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
+    CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators, StartStopQualifier, SetValue
 from stix_shifter_modules.guardium.stix_translation.transformers import TimestampToGuardium
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from stix_shifter_utils.utils.file_helper import read_json
 from stix_shifter_utils.utils import logger
 
-
 DEFAULT_DAYS_BACK = 2
 
 
 class QueryStringPatternTranslator:
-    # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        #        ComparisonComparators.GreaterThan: ">",
-        #        ComparisonComparators.GreaterThanOrEqual: ">=",
-        #        ComparisonComparators.LessThan: "<",
-        #        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        #        ComparisonComparators.NotEqual: "!=",
-        #        ComparisonComparators.Like: "LIKE",
-        #        ComparisonComparators.In: "IN",
-        #        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, options, transformers):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.logger = logger.set_logger(__name__)
         # Now report_params_passed is a JSON object which is pointing to an array of JSON Objects (report_params_array)
@@ -48,10 +30,13 @@ class QueryStringPatternTranslator:
         self.qsearch_params_passed = {}
         self.qsearch_params_array = []
         self.qsearch_params_array_size = 0
+        self.duplicate_key = None
+        self.qsearch_start_time = None
+        self.qsearch_stop_time = None
 
         self.translated = self.parse_expression(pattern)
         self.transformers = transformers
-
+        self.field_server = None
         # Read report definition data
         self.REPORT_DEF = read_json('guardium_reports_def', options)
 
@@ -64,9 +49,22 @@ class QueryStringPatternTranslator:
         # Read qsearch definition data
         self.QSEARCH_PARAMS_MAP = read_json('guardium_qsearch_params_map', options)
 
+    # def set_report_params_passed(self, params_array):
+    #     self.report_params_array = params_array
+    #     self.report_params_array_size = len(params_array)
+    #     return
+
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
-        self.report_params_array_size = len(params_array)
+        li = []
+        if self.duplicate_key == True:
+            for param in params_array:
+                if 'START' in param or 'STOP' in param:
+                    li.append(param)
+            length = len(li)
+            self.report_params_array_size = len(params_array) - length
+        else:
+            self.report_params_array_size = len(params_array)
         return
 
     def set_qsearch_params_passed(self, params_array):
@@ -106,7 +104,27 @@ class QueryStringPatternTranslator:
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
 
-        return json.loads(out_str)
+        if self.duplicate_key == True:
+            if "OR" in report_call and not "AND" in report_call:
+                out_str = out_str.replace("OR", ",")
+                custom_str = [x.strip().replace('"', '') for x in out_str[2:-2].split(',')]
+                custom_list = []
+                for t in custom_str:
+                    t = t.replace('{', '')
+                    t = t.replace('}', '')
+                    t = t.replace(':', '=', 1)
+                    t = t.split('=')
+                    # else:
+                    #     t = t.split(':')
+                    d = {t[0].strip(): t[1].strip()}
+                    custom_list.append(d)
+                    if 'START' in d:
+                        self.qsearch_start_time = d.get('START')
+                    if 'STOP' in d:
+                        self.qsearch_stop_time = d.get('STOP')
+                return custom_list
+        else:
+            return json.loads(out_str)
 
     def transform_qsearch_call_to_json(self, qsearch_call):
         # Convert the report call (string) into an array of JSON.  Note, inside each json obj multiple key/value parmeter are "OR"
@@ -139,13 +157,20 @@ class QueryStringPatternTranslator:
         # Single quotes have to be replaced by double quotes in order to make it as an Json obj
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
-
-        return json.loads(out_str)
+        if self.duplicate_key == True:
+            if "OR" in qsearch_call and not "AND" in qsearch_call:
+                out_str = out_str.replace("‘", '"')
+                return out_str
+        else:
+            return json.loads(out_str)
 
     # Guardium report parameters are "AND"ed in a Gaurdium query.
     # Our Json object array contains multiple json objects.  Each object may have one or many key/value pairs -- these are report params
     # Problem statement: get an array of json objects containing parameters which support a guardium report call
-    def build_array_of_guardium_report_params(self, result_array, result_position, current_result_object, params_array, current_position):
+    def build_array_of_guardium_report_params(self, result_array, result_position, current_result_object, params_array,
+                                              current_position):
+        if self.duplicate_key == True:
+            return params_array
         param_list_size = len(params_array)
         if current_result_object is None:
             current_result_object = {}
@@ -163,13 +188,16 @@ class QueryStringPatternTranslator:
                 if param not in cp_current_result_object:
                     cp_current_result_object[param] = param_json_object[param]
                     if (current_position + 1) < param_list_size:
-                        result_array = self.build_array_of_guardium_report_params(result_array, result_position, cp_current_result_object, params_array, current_position)
+                        result_array = self.build_array_of_guardium_report_params(result_array, result_position,
+                                                                                  cp_current_result_object,
+                                                                                  params_array, current_position)
                     else:
                         result_array.append(cp_current_result_object)
                         result_position = result_position + 1
         return result_array
 
-    def build_array_of_guardium_qsearch_params(self, result_array, result_position, current_result_object, params_array, current_position):
+    def build_array_of_guardium_qsearch_params(self, result_array, result_position, current_result_object, params_array,
+                                               current_position):
         param_list_size = len(params_array)
         if current_result_object is None:
             current_result_object = {}
@@ -187,7 +215,9 @@ class QueryStringPatternTranslator:
                 if param not in cp_current_result_object:
                     cp_current_result_object[param] = param_json_object[param]
                     if (current_position + 1) < param_list_size:
-                        result_array = self.build_array_of_guardium_qsearch_params(result_array, result_position, cp_current_result_object, params_array, current_position)
+                        result_array = self.build_array_of_guardium_qsearch_params(result_array, result_position,
+                                                                                   cp_current_result_object,
+                                                                                   params_array, current_position)
                     else:
                         result_array.append(cp_current_result_object)
                         result_position = result_position + 1
@@ -201,20 +231,27 @@ class QueryStringPatternTranslator:
         #   FROM_DATE IS SET TO DAYS FROM NOW
         current_date = datetime.datetime.now()
         default_to_date = current_date.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
-        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(
+            ('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         for report_name in report_definitions:
             report = report_definitions[report_name]
             for param in report["reportParameter"]:
                 # either the value will be default or passed in (report parameter passed)
                 if param not in self.report_params_passed:
-                    value = report["reportParameter"][param]["default"]
+                    value = report["reportParameter"][param]["default"].replace(' }', '')
                 else:
-                    value = self.report_params_passed[param]
+                    value = self.report_params_passed[param].replace(' }', '')
                 # Use START and STOP  instead of default to time parameter
                 if report["reportParameter"][param]["info"] == "START":
-                    value = self.report_params_passed.get("START", default_from_date)
+                    if self.qsearch_start_time is not None:
+                        value = self.qsearch_start_time
+                    else:
+                        value = self.report_params_passed.get("START", default_from_date)
                 if report["reportParameter"][param]["info"] == "STOP":
-                    value = self.report_params_passed.get("STOP", default_to_date)
+                    if self.qsearch_stop_time is not None:
+                        value = self.qsearch_stop_time
+                    else:
+                        value = self.report_params_passed.get("STOP", default_to_date)
                 # Transform the value or use it as-is
                 if "transformer" in report["reportParameter"][param]:
                     transformer = self.transformers[report["reportParameter"][param]["transformer"]]
@@ -233,12 +270,18 @@ class QueryStringPatternTranslator:
         #   FROM_DATE IS SET TO DAYS FROM NOW
         current_date = datetime.datetime.now()
         default_to_date = current_date.strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
-        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        default_from_date = (current_date - datetime.timedelta(days=DEFAULT_DAYS_BACK)).strftime(
+            ('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
         for qsearch_name in qsearch_definitions:
             qsearch = qsearch_definitions[qsearch_name]
-
-            sta = self.qsearch_params_passed.get("START", default_from_date)
-            sto = self.qsearch_params_passed.get("STOP", default_to_date)
+            if self.qsearch_start_time is not None:
+                sta = self.qsearch_start_time
+            else:
+                sta = self.qsearch_params_passed.get("START", default_from_date)
+            if self.qsearch_stop_time is not None:
+                sto = self.qsearch_stop_time
+            else:
+                sto = self.qsearch_params_passed.get("STOP", default_to_date)
             qsearch["startTime"] = self.transformers[qsearch["startTime"]["transformer"]].transform(sta)
             qsearch["endTime"] = self.transformers[qsearch["endTime"]["transformer"]].transform(sto)
 
@@ -269,7 +312,7 @@ class QueryStringPatternTranslator:
         for report_param_index in range(self.report_params_array_size):
             self.report_params_passed = self.report_params_array[report_param_index]
             data_category = (self.report_params_passed).get("datacategory", None)
-            if(data_category is not None):
+            if (data_category is not None):
                 if data_category not in self.REPORT_DEF:
                     report_definitions = None
                 else:
@@ -285,8 +328,8 @@ class QueryStringPatternTranslator:
         qsearch_in_query = []
         for qsearch_param_index in range(self.qsearch_params_array_size):
             self.qsearch_params_passed = self.qsearch_params_array[qsearch_param_index]
-            #clientip = self.qsearch_params_passed.get("Client", None)
-            #if clientip is not None:
+            # clientip = self.qsearch_params_passed.get("Client", None)
+            # if clientip is not None:
             #    continue
             data_category = self.qsearch_params_passed.get("datacategory", None)
             if data_category is not None:
@@ -298,7 +341,7 @@ class QueryStringPatternTranslator:
                 qsearch_definitions = self.generate_qsearch_definitions()
             # substitute Params
             if qsearch_definitions:
-               qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+                qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
 
         self.set_filters_format(qsearch_in_query)
         self.set_query_format(qsearch_in_query)
@@ -339,7 +382,7 @@ class QueryStringPatternTranslator:
                     first = False
                 else:
                     str_query = str_query + " AND "
-                str_query = str_query +  key + query[key]["operation"] +query[key]["value"] 
+                str_query = str_query + key + query[key]["operation"] + query[key]["value"]
             if str_query.__len__() > 0:
                 str_query = "\"query\":\"" + str_query + "\""
                 qse[i] = qse_prefix + str_query + qse_suffix
@@ -362,8 +405,8 @@ class QueryStringPatternTranslator:
             else:
                 param_set = None
 
-# find interaction
-# param_set
+            # find interaction
+            # param_set
             if param_set is not None:
                 if report_set is None:
                     report_set = set(param_set)
@@ -495,7 +538,6 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
         comparison_string = ""
@@ -506,13 +548,15 @@ class QueryStringPatternTranslator:
 
         for mapped_field in mapped_fields_array:
             if is_reference_value:
-                parsed_reference = "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
+                parsed_reference = "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                comparator=comparator, value=value)
                 if not parsed_reference:
                     continue
                 comparison_string += parsed_reference
             else:
-                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field, comparator=comparator, value=value)
-                #self.report_params_passed[mapped_field] = str(value).replace("'","",10)
+                comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
+                                                                                  comparator=comparator, value=value)
+                # self.report_params_passed[mapped_field] = str(value).replace("'","",10)
 
             if (mapped_fields_count > 1):
                 comparison_string += " OR "
@@ -531,7 +575,7 @@ class QueryStringPatternTranslator:
             # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             # Resolve the comparison symbol to use in the query string (usually just ':')
-            comparator = self.comparator_lookup[expression.comparator]
+            comparator = self.comparator_lookup[str(expression.comparator)]
 
             if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToGuardium()
@@ -542,7 +586,7 @@ class QueryStringPatternTranslator:
                 value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
+                value = list(map(self._escape_value, expression.value.element_iterator()))
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
@@ -552,8 +596,9 @@ class QueryStringPatternTranslator:
             else:
                 value = self._escape_value(expression.value)
 
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
-            if(len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
+            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field,
+                                                          mapped_fields_array)
+            if (len(mapped_fields_array) > 1 and not self._is_reference_value(stix_field)):
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
@@ -569,7 +614,7 @@ class QueryStringPatternTranslator:
                 return "{}".format(comparison_string)
 
         elif isinstance(expression, CombinedComparisonExpression):
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if not expression_01 or not expression_02:
@@ -587,15 +632,17 @@ class QueryStringPatternTranslator:
             return self._parse_expression(expression.comparison_expression, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
-                operator = self.comparator_lookup[expression.observation_expression.operator]
+                operator = self.comparator_lookup[str(expression.observation_expression.operator)]
                 # qualifier only needs to be passed into the parse expression once since it will be the same for both expressions
-                return "{expr1} {operator} {expr2}".format(expr1=self._parse_expression(expression.observation_expression.expr1),
-                                                           operator=operator,
-                                                           expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
+                return "{expr1} {operator} {expr2}".format(
+                    expr1=self._parse_expression(expression.observation_expression.expr1),
+                    operator=operator,
+                    expr2=self._parse_expression(expression.observation_expression.expr2, expression.qualifier))
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                return self._parse_expression(expression.observation_expression.comparison_expression,
+                                              expression.qualifier)
         elif isinstance(expression, CombinedObservationExpression):
-            operator = self.comparator_lookup[expression.operator]
+            operator = self.comparator_lookup[str(expression.operator)]
             expression_01 = self._parse_expression(expression.expr1)
             expression_02 = self._parse_expression(expression.expr2)
             if expression_01 and expression_02:
@@ -616,20 +663,46 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers):
-
+def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers, data):
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
-
     guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options, transformers)
     report_call = guardium_query_translator.translated
 
     # Add space around START STOP qualifiers
     report_call = re.sub("START", "START ", report_call)
     report_call = re.sub("STOP", " STOP ", report_call)
+    if "IN" in data:
+        field = report_call.split("=")
+        report_call = report_call.replace("[", "").replace("]", "")
+        if len(field) < 3:
+            guardium_query_translator.field_server = field[0]
+            report_call = report_call.replace(",", "OR" + " " + field[0] + "=")
+        else:
+            ip = re.findall( r'[0-9]+(?:\.[0-9]+){3}', data)
+            item = field[1].split("OR")[1]
+            str_report_call = []
+            data_str = data.split("]")
+            for val in ip:
+                query = field[0].replace('(','') + ' = ' + val + ' OR ' + item + ' = ' + val
+                str_report_call.append(query)
+            str_rep = json.dumps(str_report_call)
+            report_call = str_rep.replace(',', ' OR').replace('"','').replace('[',"").replace(']',"") + data_str[1]
+    words = report_call.split(" ");
+    counter = 0
+    for i in range(0, len(words)):
+        count = 1;
+        for j in range(i + 1, len(words)):
+            if (words[i] == (words[j])):
+                count = count + 1;
+                words[j] = "0";
+        if (count > 1 and words[i] != "0" and words[i] != '=' and words[i] != 'OR'):
+            counter = count + counter
+            guardium_query_translator.duplicate_key = True
+            guardium_query_translator.report_length = counter
 
-# Subroto: I did not change the code much just adapted to get the report parameters
-# Subroto: added code to support report search parameters are "and" when sent to Guardium
+    # Subroto: I did not change the code much just adapted to get the report parameters
+    # Subroto: added code to support report search parameters are "and" when sent to Guardium
     # translate the structure of report_call
     if data_model_mapping.dialect == 'report':
         json_report_call = guardium_query_translator.transform_report_call_to_json(report_call)
@@ -640,14 +713,41 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options, transformer
     result_position = 0
 
     if data_model_mapping.dialect == 'report':
-        output_array = guardium_query_translator.build_array_of_guardium_report_params(result_array, result_position, None, json_report_call, None)
+        output_array = guardium_query_translator.build_array_of_guardium_report_params(result_array, result_position,
+                                                                                       None, json_report_call, None)
         guardium_query_translator.set_report_params_passed(output_array)
         report_header = guardium_query_translator.get_report_params()
     else:
-        output_array = guardium_query_translator.build_array_of_guardium_qsearch_params(result_array, result_position, None, json_qsearch_call, None)
-        guardium_query_translator.set_qsearch_params_passed(output_array)
+        if guardium_query_translator.duplicate_key == True:
+            if "OR" and not "AND" in report_call:
+                output_array = json_qsearch_call
+                custom_str = [x.strip().replace('"', '') for x in output_array[2:-2].split(',')]
+                custom_list = []
+                length_custom_list = 0
+                for word in custom_str:
+                    word = word.replace('{', '')
+                    word = word.replace('}', '')
+                    # if 'START' or 'STOP' in word:
+                    word = word.replace(':', '=', 1)
+                    word = word.split('=')
+                    # word = word.split(':')
+                    key = {word[0].strip(): word[1].strip()}
+                    custom_list.append(key)
+                    if 'START' in key:
+                        guardium_query_translator.qsearch_start_time = key.get('START')
+                        length_custom_list = length_custom_list + 1
+                    if 'STOP' in key:
+                        guardium_query_translator.qsearch_stop_time = key.get('STOP')
+                        length_custom_list = length_custom_list + 1
+                guardium_query_translator.set_qsearch_params_passed(custom_list)
+                length_custom_list = len(custom_list) - length_custom_list
+                guardium_query_translator.qsearch_params_array_size = length_custom_list
+        else:
+            output_array = guardium_query_translator.build_array_of_guardium_qsearch_params(result_array,
+                                                                                            result_position, None,
+                                                                                            json_qsearch_call, None)
+            guardium_query_translator.set_qsearch_params_passed(output_array)
         report_header = guardium_query_translator.get_qsearch_params()
-
     if report_header:
         # Change return statement as required to fit with data source query language.
         # If supported by the language, a limit on the number of results may be desired.
