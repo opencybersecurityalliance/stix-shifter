@@ -24,11 +24,11 @@
         "ipv4-addr": {
           "fields": {
             "value": [
-              "ClientIP",
+              "Client IP",
               "Server"
             ],
             "src_ip": [
-              "ClientIP"
+              "Client IP"
             ],
             "dst_ip": [
               "Server"
@@ -38,11 +38,11 @@
         "ipv6-addr": {
           "fields": {
             "value": [
-              "ClientIP",
+              "Client IP",
               "Server"
             ],
             "src_ip": [
-              "ClientIP"
+              "Client IP"
             ],
             "dst_ip": [
               "Server"
