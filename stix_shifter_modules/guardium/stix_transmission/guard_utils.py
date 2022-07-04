@@ -169,8 +169,7 @@ class GuardApiClient(RestApiClient):
                 data = filter1[0] + "=" + item + "&" + group[1]
                 params['filters'] = data
                 rest_data = json.dumps(params)
-                print(rest_data)
-                print('notelserrttt')
+         
                 response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
                 results = response.read()
                 result_text = response.response.text
