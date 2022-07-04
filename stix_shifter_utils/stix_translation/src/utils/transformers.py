@@ -341,7 +341,7 @@ class GetHostNameFromDomain(ValueTransformer):
 
 
 class GetDomainName(ValueTransformer):
-    """A value transformer to convert category name to a list of kill-chain-phase objects"""
+    """A value transformer to extract domain name from url"""
 
     @staticmethod
     def transform(value):
