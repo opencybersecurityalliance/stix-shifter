@@ -295,6 +295,19 @@ class Connector(BaseSyncConnector):
 
                     build_data[lookup_table] = registry_build_data[lookup_table]
 
+                # handle two different type of process events: ProcessCreate, OpenProcess
+                if lookup_table == "DeviceProcessEvents":
+                    process_fields = ["ProcessId", "ProcessCommandLine", "ProcessCreationTime", "AccountSid", "AccountName"]
+                    event_type = build_data[lookup_table]['ActionType']
+                    prefix = 'Created' if event_type == 'ProcessCreated' else 'Opened'
+
+                    # rename fields in order to map differently events of different types
+                    build_data[lookup_table] = {(prefix+k if k in process_fields else k):v
+                                                for k,v in build_data[lookup_table].items()}
+                    if event_type == 'ProcessCreated':
+                        build_data[lookup_table] = {(prefix+k if 'Initiating' in k else k): v
+                                                    for k,v in build_data[lookup_table].items()}
+
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
