@@ -152,10 +152,40 @@ class GuardApiClient(RestApiClient):
         params["fetchSize"] = int(fetch_size - 1)
         params["firstPosition"] = int(index_from - 1)
         params["inputTZ"] = "UTC"
-
-        rest_data = json.dumps(params)
-        response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
-        results = response.read()
+        value = ''
+        if params['filters'] is not '':
+            temp = params["filters"].split("value=")
+            temp1 = temp[1].split("&")
+            temp3 = temp1[0].replace("'", "").replace("[", "").replace("]", "")
+            value = temp3.split(",")
+        if len(value) > 1:
+            temp = params["filters"].split("=")
+            filter1 = "=".join(temp[:2]), "=".join(temp[2:])
+            group = filter1[1].split("&")
+            resp_bytes = []
+            resp_str = []
+            content = []
+            for item in value:
+                data = filter1[0] + "=" + item + "&" + group[1]
+                params['filters'] = data
+                rest_data = json.dumps(params)
+         
+                response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
+                results = response.read()
+                result_text = response.response.text
+                resp_str.append(result_text)
+                resp_bytes.append(results)
+                content_data = self.translate_response(json.loads(self.fields), json.loads(response.read()))
+                content_data = json.loads(content_data)
+                content = content + content_data
+            response.content = json.dumps(content)
+            return response
+        else:
+            print('else')
+            rest_data = json.dumps(params)
+            print(rest_data)
+            response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
+            results = response.read()
 
         if not isinstance(results, list):
             try:
