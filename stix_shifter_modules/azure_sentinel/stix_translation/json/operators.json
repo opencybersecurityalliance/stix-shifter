@@ -1,9 +1,0 @@
-{
-    "ComparisonExpressionOperators.And": "and",
-    "ComparisonExpressionOperators.Or": "or",
-    "ComparisonComparators.Equal": "==",
-    "ComparisonComparators.NotEqual": "!=",
-    "ComparisonComparators.In": "in",
-    "ComparisonComparators.Matches": "contains",
-    "ComparisonComparators.Like": "startswith, endswith"
-}
