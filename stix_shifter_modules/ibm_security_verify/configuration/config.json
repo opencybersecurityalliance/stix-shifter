@@ -19,7 +19,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         }
     },
