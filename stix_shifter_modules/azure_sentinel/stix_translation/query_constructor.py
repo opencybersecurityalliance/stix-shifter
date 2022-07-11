@@ -286,11 +286,18 @@ class QueryStringPatternTranslator:
                 if qualifier and compile_timestamp_regex.search(qualifier):
                     time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                     time_range_list = [each.group() for each in time_range_iterator]
-                    value = ('{mapped_field} between (datetime({start_time}) .. datetime({stop_time}))'
-                             ).format(mapped_field=mapped_field, start_time=time_range_list[0],
-                                      stop_time=time_range_list[1])
-                    format_string = '{value}'.format(value=value)
-                    return format_string
+                else:
+                    stop_time = datetime.utcnow()
+                    start_time = stop_time - timedelta(hours=24)
+                    converted_starttime = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                    converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                    time_range_list = [converted_starttime, converted_stoptime]
+
+                value = ('{mapped_field} between (datetime({start_time}) .. datetime({stop_time}))'
+                         ).format(mapped_field=mapped_field, start_time=time_range_list[0],
+                                  stop_time=time_range_list[1])
+                format_string = '{value}'.format(value=value)
+                return format_string
             except (KeyError, IndexError, TypeError) as e:
                 raise e
         else:
