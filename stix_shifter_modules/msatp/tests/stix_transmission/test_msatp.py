@@ -1,10 +1,13 @@
 from stix_shifter_modules.msatp.entry_point import EntryPoint
 from unittest.mock import patch
+import pytest
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorCode
+from asyncinit import asyncinit
 
-
+@asyncinit
 class MSATPMockResponse:
     def __init__(self, response_code, obj):
         self.code = response_code
@@ -14,13 +17,14 @@ class MSATPMockResponse:
         return bytearray(self.object, 'utf-8')
 
 class AdalMockResponse:
-
     @staticmethod
     def acquire_token_with_client_credentials(resource, client_id, client_secret):
         context_response = dict()
         context_response['accessToken'] = 'abc12345'
         return context_response
 
+# TODO: CONFICT RESOLVE REMOVE
+@patch('stix_shifter_modules.msatp.stix_transmission.connector.Connector.generate_token')
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
@@ -56,8 +60,6 @@ class TestMSATPConnection(unittest.TestCase):
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
-        print(str(self.connection))
-        print(str(self.config))
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
         
@@ -72,6 +74,7 @@ class TestMSATPConnection(unittest.TestCase):
         mock_ping_response.return_value = MSATPMockResponse(400, mocked_return_value)
         mock_ping_response.side_effect = Exception('exception')
 
+        # with pytest.raises(Exception) as exc_info:
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -79,7 +82,6 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    def test_query_connection(self, mock_api_client, mock_generate_token):
 
         mock_api_client.return_value = None
         mock_generate_token.return_value = AdalMockResponse
@@ -158,13 +160,10 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    '''
+    
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
-
-
-        mock_api_client.return_value = None
+    def test_results_response_exception(self, mock_results_response, mock_generate_token):
         mock_generate_token.return_value = None
         mocked_return_value = """ {    } """
         mock_results_response.return_value = MSATPMockResponse(404, mocked_return_value)
@@ -174,12 +173,13 @@ class TestMSATPConnection(unittest.TestCase):
                 "| order by Timestamp desc | where LocalPort < 443) "
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
-        results_response = transmission.results(query, offset, length)
+        
+        with pytest.raises(Exception) as e:
+            transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
+            results_response = transmission.results(query, offset, length)
 
-        assert results_response['code'] == 'unknown'
-        assert results_response['success'] is False
-    '''
+            assert results_response['code'] == 'unknown'
+            assert results_response['success'] is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
@@ -238,7 +238,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -255,7 +255,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

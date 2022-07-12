@@ -5,7 +5,7 @@ import time
 
 class BaseResultsConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Creates a connection to the specified datasource to retrieve query results
 
@@ -23,12 +23,12 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
-    def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
+    async def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
         stats = []
         if metadata:
-            result = entry_point.create_results_connection(search_id, offset, length, metadata)
+            result = await entry_point.create_results_connection(search_id, offset, length, metadata)
         else:
-            result = entry_point.create_results_connection(search_id, offset, length)
+            result = await entry_point.create_results_connection(search_id, offset, length)
         metadata = None
         if 'metadata' in result:            
             metadata = result['metadata']

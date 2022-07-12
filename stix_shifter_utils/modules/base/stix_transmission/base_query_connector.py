@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 class BaseQueryConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Creates a connection to the specified datasource to send a query
 

@@ -18,7 +18,9 @@ error_mapping = {
     # An error occurred during the attempt
     1020: ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value,
     #error in query
-    2000: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
+    2000: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
+    # auth error
+    2003: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
 }
 
 

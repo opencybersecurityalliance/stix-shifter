@@ -2,6 +2,7 @@
 import json
 import unittest
 from unittest.mock import patch
+from asyncinit import asyncinit
 
 from stix_shifter.stix_transmission.stix_transmission import StixTransmission
 
@@ -19,6 +20,7 @@ CONFIG = {
 }
 
 
+@asyncinit
 class MockResponse:
     def __init__(self, response_code, obj):
         self.code = response_code
@@ -27,8 +29,36 @@ class MockResponse:
     def read(self):
         return bytearray(self.object, 'utf-8')
 
-
 class TestTransmission(unittest.TestCase):
+    @staticmethod
+    def _get_query():
+        return json.dumps({
+            "offset": 0,
+            "fields": [],
+            "from": 1587892612,
+            "to": 1592382065,
+            "source": "endpointActivityData",
+            "query": "hostName:*"
+        })
+
+    @staticmethod
+    def _get_response(count=1, sequence=-1):
+        response = {
+            "status": 200,
+            "data": {
+                "logs": [
+                ]
+            },
+        }
+        for i in range(0, count):
+            response["data"]["logs"].append({
+                "endpointGuid": "473d1039-df00-3184-0eb0-b723168bce06",
+                "eventTime": 1619600000 + i
+            })
+        if sequence >= 0:
+            response["data"]["offset"] = sequence * count
+        return json.dumps(response)
+
     def test_is_async(self):
         entry_point = EntryPoint(CONNECTION, CONFIG)
         check_async = entry_point.is_async()
@@ -118,13 +148,12 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertFalse(ping_response["success"])
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_query(self, mock_query):
-        mock_query.side_effect = [MockResponse(200, self._get_query())]
+    def test_query(self):
+        query = self._get_query()
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
-        query_response = transmission.query(self._get_query())
+        query_response = transmission.query(query)
         self.assertTrue(query_response["success"])
-        self.assertEqual(query_response["search_id"], self._get_query())
+        self.assertEqual(query_response["search_id"], query)
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_param_failure(self, mock_query):
@@ -178,21 +207,10 @@ class TestTransmission(unittest.TestCase):
         self.assertEqual(results_response["code"], "unknown")
         self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
-    @staticmethod
-    def _get_query():
-        return json.dumps({
-            "offset": 0,
-            "fields": [],
-            "from": 1587892612,
-            "to": 1592382065,
-            "source": "endpointActivityData",
-            "query": "hostName:*"
-        })
-
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_reach_max_fetch_count(self, mock_results):
         mock_responses = []
-        for i in range(0, 20):
+        for i in range(0, 10):
             mock_responses.append(MockResponse(200, self._get_response(1, i)))
         mock_results.side_effect = mock_responses
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
@@ -204,7 +222,7 @@ class TestTransmission(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_last_partial(self, mock_results):
         mock_responses = []
-        for i in range(0, 20):
+        for i in range(0, 7):
             mock_responses.append(MockResponse(200, self._get_response(3, i)))
         mock_results.side_effect = mock_responses
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
@@ -229,7 +247,7 @@ class TestTransmission(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_sufficient(self, mock_results):
         mock_responses = []
-        for i in range(0, 6):
+        for i in range(0, 5):
             mock_responses.append(MockResponse(200, self._get_response(4, i)))
         mock_results.side_effect = mock_responses
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
@@ -254,7 +272,7 @@ class TestTransmission(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_results_exceed_length_limit(self, mock_results):
         mock_responses = []
-        for i in range(0, 4):
+        for i in range(0, 2):
             mock_responses.append(MockResponse(200, self._get_response(500, i)))
         mock_results.side_effect = mock_responses
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
@@ -308,24 +326,6 @@ class TestTransmission(unittest.TestCase):
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         ping_response = transmission.results(self._get_query(), 600, 100)
         self.assertFalse(ping_response["success"])
-
-    @staticmethod
-    def _get_response(count=1, sequence=-1):
-        response = {
-            "status": 200,
-            "data": {
-                "logs": [
-                ]
-            },
-        }
-        for i in range(0, count):
-            response["data"]["logs"].append({
-                "endpointGuid": "473d1039-df00-3184-0eb0-b723168bce06",
-                "eventTime": 1619600000 + i
-            })
-        if sequence >= 0:
-            response["data"]["offset"] = sequence * count
-        return json.dumps(response)
 
     def test_status(self):
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)

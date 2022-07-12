@@ -46,12 +46,12 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error:
             return self.adal_response
-        response = self.api_client.ping_box()
+        response = await self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
             return_obj['success'] = True
@@ -59,12 +59,12 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -76,7 +76,7 @@ class Connector(BaseSyncConnector):
         try:
             if self.init_error:
                 return self.adal_response
-            response = self.api_client.run_search(query, offset, length)
+            response = await self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
             response_json = json.loads(return_obj["data"])
             return_obj['data'] = response_json['Results']

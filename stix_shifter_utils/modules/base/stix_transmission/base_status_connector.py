@@ -12,7 +12,7 @@ class Status(Enum):
 
 class BaseStatusConnector(object, metaclass=ABCMeta):
     @abstractmethod
-    def create_status_connection(self, search_id, metadata=None):
+    async def create_status_connection(self, search_id, metadata=None):
         """
         Creates a connection to the specified datasource to determine the status of a given query
 

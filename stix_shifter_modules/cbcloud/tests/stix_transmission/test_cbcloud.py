@@ -3,8 +3,13 @@ from unittest.mock import patch
 
 from stix_shifter_modules.cbcloud.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 
+import asyncio
+from asyncinit import asyncinit
+
+@asyncinit
 class CBCloudMockResponse:
     def __init__(self, response_code, object):
         self.code = response_code
@@ -13,7 +18,7 @@ class CBCloudMockResponse:
     def read(self):
         return self.object  
 
-@patch('stix_shifter_modules.cbcloud.stix_transmission.api_client.APIClient.__init__')
+# @patch('stix_shifter_modules.cbcloud.stix_transmission.api_client.APIClient.__init__')
 class TestCbCloudConnection(unittest.TestCase, object):
 
     connection = {
@@ -58,8 +63,7 @@ class TestCbCloudConnection(unittest.TestCase, object):
 
    
     @patch('stix_shifter_modules.cbcloud.stix_transmission.api_client.APIClient.ping_data_source')
-    def test_ping(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping(self, mock_ping_response):
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = CBCloudMockResponse(200, mocked_return_value)
 
@@ -70,14 +74,13 @@ class TestCbCloudConnection(unittest.TestCase, object):
         assert ping_response['success']
     
     @patch('stix_shifter_modules.cbcloud.stix_transmission.api_client.APIClient.create_search')
-    def test_query(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query(self, mock_query_response):
         mocked_return_value = '{"job_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211"}'
         mock_query_response.return_value = CBCloudMockResponse(200, mocked_return_value)
 
         entry_point = EntryPoint(self.connection, self.configuration)
         query = ["((process_name:test.exe) AND device_timestamp:[2021-01-15T19:17:12Z TO 2021-01-15T19:22:12Z]) AND -enriched:True"]
-        query_response = entry_point.create_query_connection(query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'search_id' in query_response

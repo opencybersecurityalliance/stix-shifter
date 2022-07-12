@@ -38,7 +38,7 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(athena_status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Fetching the progress and the status of the search id
         :param search_id: str, search id
@@ -51,7 +51,7 @@ class StatusConnector(BaseStatusConnector):
             if 'dummy' in search_id:
                 return_obj = {'success': True, 'status': 'COMPLETED', 'progress': 100}
                 return return_obj
-            response_dict = self.client.get_query_execution(QueryExecutionId=search_id)
+            response_dict = await self.client.makeRequest('athena', 'get_query_execution', QueryExecutionId=search_id)
             return_obj['success'] = True
             return_obj['status'] = self._getstatus(response_dict.get('QueryExecution', 'FAILED').
                                                    get('Status', 'FAILED').

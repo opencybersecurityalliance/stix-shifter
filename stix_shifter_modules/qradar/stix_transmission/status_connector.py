@@ -33,9 +33,9 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(qradar_status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
-        response = self.api_client.get_search(search_id)
+        response = await self.api_client.get_search(search_id)
         response_code = response.code
         response_text = response.read()
 

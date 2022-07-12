@@ -42,7 +42,7 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(awscwlogs_status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Fetching the progress and the status of the search id
         :param search_id: str, search id
@@ -56,10 +56,13 @@ class StatusConnector(BaseStatusConnector):
                 search_id, limit = search_id.split(':')
             query = dict()
             query['queryId'] = search_id
-            response_dict = self.client.get_query_results(**query)
+
+            response_dict = await self.client.makeRequest('logs', 'get_query_results', **query)
+
             return_obj['success'] = True
             return_obj['status'] = self._getstatus(response_dict['status'])
             results = len(response_dict['results'])
+
             if return_obj['status'] == 'COMPLETED':
                 return_obj['progress'] = 100
             elif return_obj['status'] == 'RUNNING':

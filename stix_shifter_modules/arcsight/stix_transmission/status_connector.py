@@ -41,7 +41,7 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(arcsight_status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Fetching the progress and the status of the search id
         :param search_id: str, search id
@@ -62,7 +62,7 @@ class StatusConnector(BaseStatusConnector):
 
             if user_limit and int(user_limit) <= DEFAULT_LIMIT:
                 limit = user_limit
-            response = self.api_client.get_search_status(search_session_id, user_session_id)
+            response = await self.api_client.get_search_status(search_session_id, user_session_id)
             raw_response = response.read()
             response_code = response.code
             self.status_progress(return_obj, response_code, raw_response, limit)

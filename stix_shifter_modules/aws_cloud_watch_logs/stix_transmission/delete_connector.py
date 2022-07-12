@@ -8,7 +8,7 @@ class DeleteConnector(BaseDeleteConnector):
         self.client = client
         self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Function to delete search id if the status in Running or Scheduled
         :param search_id: str, search id
@@ -21,7 +21,7 @@ class DeleteConnector(BaseDeleteConnector):
             if ':' in search_id:
                 search_id = search_id.split(':')[0]
             query['queryId'] = search_id
-            self.client.stop_query(**query)
+            await self.client.makeRequest('logs', 'stop_query', **query)
             return_obj['success'] = True
         except Exception as ex:
             response_dict['__type'] = ex.__class__.__name__

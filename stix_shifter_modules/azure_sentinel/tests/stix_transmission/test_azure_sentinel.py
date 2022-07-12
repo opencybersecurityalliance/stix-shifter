@@ -1,11 +1,16 @@
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 
 import json
+import asyncio
+from asyncinit import asyncinit
 
+
+@asyncinit
 class AzureSentinelMockResponse:
 
     def __init__(self, response_code, obj):
@@ -16,6 +21,7 @@ class AzureSentinelMockResponse:
         return bytearray(self.object, 'utf-8')
 
 
+@asyncinit
 class AdalMockResponse:
 
     @staticmethod
@@ -295,7 +301,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -308,7 +314,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

@@ -3,8 +3,8 @@ import unittest
 from unittest.mock import ANY
 from unittest.mock import patch
 from stix_shifter_modules.crowdstrike.entry_point import EntryPoint
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from asyncinit import asyncinit
 
 
 config = {
@@ -18,25 +18,28 @@ connection = {
     'host': 'api.crowdstrike.com'
 }
 
+
+@asyncinit
 class RequestMockResponse:
     def __init__(self, status_code, content):
-        self.status_code = status_code
+        self.code = status_code
         self.content = content
 
+    def read(self):
+        return self.content   
 
-@patch('requests.sessions.Session.get', autospec=True)
+
 class TestCrowdStrikeConnection(unittest.TestCase, object):
 
     @staticmethod
     def _create_query_list(query_string):
         return [query_string]
 
-    def test_status_endpoint(self, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_endpoint(self):
 
         entry_point = EntryPoint(connection, config)
         search_id = self._create_query_list("process_name:notepad.exe")
-        results_response = entry_point.create_status_connection(search_id)
+        results_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -45,12 +48,11 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'progress' in results_response
         assert results_response['progress'] == 100
 
-    def test_create_query_connection(self, mock_api_client):
-        mock_api_client.return_value = None
+    def test_create_query_connection(self):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")
-        results_response = entry_point.create_query_connection(query_expression)
+        results_response = run_in_thread(entry_point.create_query_connection, query_expression)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -80,7 +82,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -115,7 +117,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -132,7 +134,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 100, 2)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 100, 2)
 
         assert results_response is not None
         assert 'success' in results_response

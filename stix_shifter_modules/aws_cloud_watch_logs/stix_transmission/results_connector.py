@@ -15,7 +15,7 @@ class ResultsConnector(BaseResultsConnector):
         self.mapping_protocol = read_json('network_protocol_map', options)
         self.mapping_common_attr = read_json('common_attributes', options)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -33,7 +33,8 @@ class ResultsConnector(BaseResultsConnector):
                 search_id = search_id.split(':')[0]
             total_records = offset+length
             query['queryId'] = search_id
-            response_dict = self.client.get_query_results(**query)
+
+            response_dict = await self.client.makeRequest('logs', 'get_query_results', **query)
             return_obj['success'] = True
             results = response_dict['results'][offset:total_records]
             result_list = []

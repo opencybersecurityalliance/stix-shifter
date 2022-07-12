@@ -1,4 +1,5 @@
 from stix_shifter_modules.synchronous_template.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 import unittest
 
 
@@ -25,12 +26,12 @@ class TestSynchronousTemplateConnection(unittest.TestCase, object):
 
     def test_ping(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_result = entry_point.ping_connection()
+        ping_result = run_in_thread(entry_point.ping_connection)
         assert ping_result["success"] is True
 
     def test_template_sync_results(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection("some query", 1, 1)
+        results_response = run_in_thread(entry_point.create_results_connection, "some query", 1, 1)
         response_code = results_response["success"]
         query_results = results_response["data"]
 

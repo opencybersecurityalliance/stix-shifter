@@ -14,11 +14,11 @@ class EntryPoint(BaseEntryPoint):
 
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)
-            ping_connector = PingConnector(boto3_client.client)
-            query_connector = QueryConnector(boto3_client.client, boto3_client.log_group_names)
-            status_connector = StatusConnector(boto3_client.client)
-            results_connector = ResultsConnector(boto3_client.client, options)
-            delete_connector = DeleteConnector(boto3_client.client)
+            ping_connector = PingConnector(boto3_client)
+            query_connector = QueryConnector(boto3_client, boto3_client.log_group_names)
+            status_connector = StatusConnector(boto3_client)
+            results_connector = ResultsConnector(boto3_client, options)
+            delete_connector = DeleteConnector(boto3_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

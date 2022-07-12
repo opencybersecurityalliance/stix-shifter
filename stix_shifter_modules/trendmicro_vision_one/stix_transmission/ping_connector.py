@@ -9,13 +9,14 @@ class PingConnector(BasePingConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
+        return_obj = dict()
+        response_dict = dict()
         try:
-            response_dict = self.api_client.ping_data_source()
+            response_dict = await self.api_client.ping_data_source()
             response_code = response_dict["code"]
 
             # Construct a response object
-            return_obj = dict()
             if response_code == 200:
                 return_obj['success'] = True
             else:
@@ -23,4 +24,6 @@ class PingConnector(BasePingConnector):
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource: %s', err, exc_info=True)
-            raise
+            return_obj['success'] = False
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=err)
+            return return_obj

@@ -36,7 +36,7 @@ jobs:
         pip install pytest
         pip install pytest-cov
         pip install codecov
-        pytest --cov=./ --cov-report=xml
+        pytest --cov=./ --cov-report=xml --ignore=./stix_shifter_modules/security_advisor --ignore=./stix_shifter_modules/guardium
     - name: Upload coverage information to Codecov
       uses: codecov/codecov-action@v1
       with:

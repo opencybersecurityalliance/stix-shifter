@@ -19,11 +19,11 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.create_search(query)
+            response = await self.api_client.create_search(query)
             response_code = response.code
             response_txt = response.read().decode('utf-8')
             search_id = self.DEFAULT_ID

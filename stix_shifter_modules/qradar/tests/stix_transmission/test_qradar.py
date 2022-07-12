@@ -2,11 +2,23 @@ from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from unittest.mock import patch
 import unittest
+import asyncio
+from asyncinit import asyncinit
 
 
+@asyncinit
 class QRadarMockResponse:
+    async def __init__(self, response_code, object):
+        self.code = response_code
+        self.object = object
+
+    def read(self):
+        return self.object
+
+class RequestsResponse():
     def __init__(self, response_code, object):
         self.code = response_code
         self.object = object
@@ -14,22 +26,24 @@ class QRadarMockResponse:
     def read(self):
         return self.object    
 
+class MockResponseWrapper(QRadarMockResponse):
+    @property 
+    def code(self):
+        return self.code
+
+    @property
+    def content(self):
+        return self.object
+
+    def raise_for_status(self):
+        pass
+
 @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.__init__', autospec=True)
 class TestQRadarConnection(unittest.TestCase, object):
     def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
         entry_point = EntryPoint()
 
-        config = {
-            "auth": {
-                "sec": "bla"
-            }
-        }
-        connection = {
-            "host": "hostbla",
-            "port": 8080,
-            "selfSignedCert": "cert"
-        }
         check_async = entry_point.is_async()
 
         assert check_async
@@ -186,17 +200,14 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         query = '{"query":"SELECT sourceIP from events"}'
         entry_point = EntryPoint(connection, config)
-
-        query_response = entry_point.create_query_connection(query)
-        transmission = stix_transmission.StixTransmission('qradar',  connection, config)
-        query_response = transmission.query(query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'search_id' in query_response
         assert query_response['search_id'] == "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
 
         search_id = "108cb8b0-0744-4dd9-8e35-ea8311cd6211"
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -204,29 +215,12 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         offset = 0
         length = 1
-        results_response = entry_point.create_results_connection(search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert results_response is not None
         assert 'data' in results_response
         assert 'events' in results_response['data']
         assert len(results_response['data']) > 0
 
-class RequestsResponse():
-    def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
 
-    def read(self):
-        return self.object    
 
-class MockResponseWrapper(QRadarMockResponse):
-    @property 
-    def status_code(self):
-        return self.code
-
-    @property
-    def content(self):
-        return self.object
-
-    def raise_for_status(self):
-        pass

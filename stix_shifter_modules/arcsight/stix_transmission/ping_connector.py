@@ -8,7 +8,7 @@ class PingConnector(BasePingConnector):
         self.api_client = api_client
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -16,7 +16,7 @@ class PingConnector(BasePingConnector):
         return_obj = dict()
 
         try:
-            response = self.api_client.ping_data_source()
+            response = await self.api_client.ping_data_source()
             raw_response = response.read()
             response_code = response.code
 

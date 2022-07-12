@@ -242,8 +242,8 @@ class BaseEntryPoint:
         self.__query_connector = connector
 
     @transmission
-    def create_query_connection(self, query):
-        return self.__query_connector.create_query_connection(query)
+    async def create_query_connection(self, query):
+        return await self.__query_connector.create_query_connection(query)
 
     def set_status_connector(self, connector):
         if not (isinstance(connector, (BaseConnector, BaseStatusConnector)) or issubclass(connector, BaseConnector)):
@@ -251,10 +251,10 @@ class BaseEntryPoint:
         self.__status_connector = connector
 
     @transmission
-    def create_status_connection(self, search_id, metadata=None):
+    async def create_status_connection(self, search_id, metadata=None):
         if metadata:
-            return self.__status_connector.create_status_connection(search_id, metadata)
-        return self.__status_connector.create_status_connection(search_id)
+            return await self.__status_connector.create_status_connection(search_id, metadata)
+        return await self.__status_connector.create_status_connection(search_id)
 
     def set_results_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseResultsConnector)):
@@ -262,16 +262,16 @@ class BaseEntryPoint:
         self.__results_connector = connector
 
     @transmission
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
         if metadata:
-            return self.__results_connector.create_results_connection(search_id, offset, length, metadata)
-        return self.__results_connector.create_results_connection(search_id, offset, length)
+            return await self.__results_connector.create_results_connection(search_id, offset, length, metadata)
+        return await self.__results_connector.create_results_connection(search_id, offset, length)
 
     @transmission
-    def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
+    async def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
         if metadata:
-            return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
-        return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+            return await self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
+        return await self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
 
     def set_delete_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):
@@ -279,8 +279,8 @@ class BaseEntryPoint:
         self.__delete_connector = connector
 
     @transmission
-    def delete_query_connection(self, search_id):
-        return self.__delete_connector.delete_query_connection(search_id)
+    async def delete_query_connection(self, search_id):
+        return await self.__delete_connector.delete_query_connection(search_id)
 
     def set_ping_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BasePingConnector)):
@@ -288,8 +288,8 @@ class BaseEntryPoint:
         self.__ping_connector = connector
 
     @transmission
-    def ping_connection(self):
-        return self.__ping_connector.ping_connection()
+    async def ping_connection(self):
+        return await self.__ping_connector.ping_connection()
 
     def set_async(self, is_async):
         self.__async = is_async

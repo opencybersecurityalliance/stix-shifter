@@ -8,9 +8,9 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         try:
-            response_dict = self.api_client.create_search(query)
+            response_dict = await self.api_client.create_search(query)
             response_code = response_dict["code"]
 
             # Construct a response object

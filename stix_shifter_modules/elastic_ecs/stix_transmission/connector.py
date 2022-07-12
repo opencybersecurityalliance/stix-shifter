@@ -31,11 +31,11 @@ class Connector(BaseSyncConnector):
             raise UnexpectedResponseException
         return return_obj
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
@@ -44,12 +44,12 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         response_txt = None
         return_obj = dict()
 
         try:
-            response = self.api_client.run_search(query, offset, length)
+            response = await self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
 
             if (return_obj['success']):

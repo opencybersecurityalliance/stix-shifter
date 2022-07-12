@@ -49,10 +49,10 @@ class APIClient():
         
         self.timeout = connection['options'].get('timeout')
 
-    def ping_box(self):
-        return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.timeout)
+    async def ping_box(self):
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.timeout)
 
-    def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
+    async def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
 
@@ -77,7 +77,7 @@ class APIClient():
             # addition of QueryString to API END point
             endpoint = endpoint + '?q=' + query_expression
 
-            return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
+            return await self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
         # Request body search
         else:
             # add size value
@@ -103,4 +103,4 @@ class APIClient():
             self.logger.debug("URL endpoint: " + endpoint)
             self.logger.debug("URL data: " + json.dumps(data))
 
-            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
+            return await self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)

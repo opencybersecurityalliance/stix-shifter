@@ -32,9 +32,9 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         try:
-            response_dict = self.api_client.get_search_status(search_id)
+            response_dict = await self.api_client.get_search_status(search_id)
             # Based on the response
             # return_obj['success'] = True or False
             # return_obj['status'] = One of the statuses as defined in the Status class:

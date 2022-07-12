@@ -65,7 +65,7 @@ class StatusConnector(BaseStatusConnector):
                 return_obj['progress'] = 100
         return return_obj
 
-    def status_api_response(self, search_id, client_count):
+    async def status_api_response(self, search_id, client_count):
         """
         Sub-method of create_status_connection for returning status
         dictionary object for a given query ID
@@ -75,7 +75,7 @@ class StatusConnector(BaseStatusConnector):
         """
         return_obj = dict()
         try:
-            response = self.api_client.get_search_results(search_id, '0', '1')
+            response = await self.api_client.get_search_results(search_id, '0', '1')
             response_code = response.code
             response_txt = response.read().decode('utf-8')
 
@@ -103,7 +103,7 @@ class StatusConnector(BaseStatusConnector):
 
         return return_obj
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Return status dictionary object for given query ID
         :param search_id: int
@@ -112,14 +112,14 @@ class StatusConnector(BaseStatusConnector):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.get_sync_query_results(self.RELEVANCE)
+            response = await self.api_client.get_sync_query_results(self.RELEVANCE)
             response_txt = response.read().decode('utf-8')
             client_count = self.DEFAULT_CLIENT_COUNT
             search = re.search(self.PATTERN, response_txt, re.IGNORECASE)
             if search:
                 client_count = search.group(1)
             client_count = int(client_count)
-            return_obj = self.status_api_response(search_id, client_count)
+            return_obj = await self.status_api_response(search_id, client_count)
         except Exception as e:
             if e.__class__.__name__ in ['ConnectionError', 'ProxyError']:
                 ErrorResponder.fill_error(return_obj, message='API call disconnected/interrupted', connector=self.connector)

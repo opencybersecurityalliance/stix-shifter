@@ -24,7 +24,7 @@ class QueryConnector(BaseQueryConnector):
         self.connection = connection
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Function to create query connection
         :param query: dict, Query
@@ -55,7 +55,7 @@ class QueryConnector(BaseQueryConnector):
                 query = select_statement + query[query_service_type]
             result_config = self.get_result_config()
             query_args = {"QueryString": query, "ResultConfiguration": result_config}
-            response_dict = self.client.start_query_execution(**query_args)
+            response_dict = await self.client.makeRequest('athena', 'start_query_execution', **query_args)
             return_obj['success'] = True
             return_obj['search_id'] = response_dict['QueryExecutionId'] + ":" + query_service_type
 
