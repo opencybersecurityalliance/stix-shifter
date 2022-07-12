@@ -1,3 +1,4 @@
+import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint

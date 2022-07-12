@@ -58,7 +58,8 @@ class TestQueryTranslator(unittest.TestCase):
 
         assert query['success'] == False
         assert query['code'] == "mapping_error"
-        assert query['error'] == "data mapping error : Unable to map the following STIX objects and properties: ['obj_unmp:unmapped'] to data source fields"
+        assert query['connector'] == 'cbcloud'
+        assert query['error'] == "cbcloud connector error => data mapping error : Unable to map the following STIX objects and properties: ['obj_unmp:unmapped'] to data source fields"
 
     def test_unmapped_attribute_handling(self):
         test_options = {"time_range": None} 
@@ -66,4 +67,12 @@ class TestQueryTranslator(unittest.TestCase):
         
         query = translation.translate(MODULE, 'query', '{}', stix_pattern, options=test_options)
         queries = ['(process_hash:2f50b945d2a6554c1031a744764a0fe2) AND -enriched:True']
+        self._test_query_assertions(query, queries)
+    
+    def test_in_operator(self):
+        test_options = {"time_range": None} 
+        stix_pattern = "[ipv4-addr:value IN ('127.0.0.1', '127.0.0.2')]"
+        
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern, options=test_options)
+        queries = ['((netconn_ipv4:127.0.0.1 OR netconn_local_ipv4:127.0.0.1 OR netconn_ipv4:127.0.0.2 OR netconn_local_ipv4:127.0.0.2)) AND -enriched:True']
         self._test_query_assertions(query, queries)

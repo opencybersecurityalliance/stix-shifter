@@ -227,6 +227,7 @@ class TestQueryTranlator(unittest.TestCase):
                        "t'2019-10-30T10:43:10.003Z'"
         query = translation.translate('aws_cloud_watch_logs', 'query', '{}', stix_pattern)
         assert query['success'] is False
+        assert query['connector'] == 'aws_cloud_watch_logs'
         assert query['code'] == 'mapping_error'
-        assert query['error'] == "data mapping error : Unable to map the following STIX " \
+        assert query['error'] == "aws_cloud_watch_logs connector error => data mapping error : Unable to map the following STIX " \
                         "Operators: [IsSuperSet] to data source fields"

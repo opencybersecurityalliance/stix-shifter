@@ -53,7 +53,8 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         ping_response = entry_point.ping_connection()
 
         assert ping_response['success'] is False
-        assert ping_response['error'] == "Authentication Failure"
+        assert ping_response['connector'] == 'sumologic'
+        assert ping_response['error'] == "sumologic connector error => Authentication Failure"
         assert ping_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.create_search')

@@ -1,0 +1,159 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceAddress", "destinationAddress"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["fulltextSearch"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["sourceMacAddress", "destinationMacAddress"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourcePort"],
+      "dst_port": ["destinationPort"],
+      "protocols[*]": ["transportProtocol", "applicationProtocol"],
+      "src_ref.value": ["sourceAddress", "sourceMacAddress"],
+      "dst_ref.value": ["destinationAddress", "destinationMacAddress"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["filePath"]
+    }
+  },
+  "file": {
+    "fields": {
+      "parent_directory_ref.path": ["filePath"],
+      "name": ["fileName"],
+      "hashes.'SHA-256'": ["fulltextSearch"],
+      "hashes.'SHA-1'": ["fulltextSearch"],
+      "hashes.MD5": ["fulltextSearch"]
+    }
+  },
+   "process" : {
+    "fields": {
+      "parent_ref.name": ["sourceProcessName"],
+      "command_line": ["destinationServiceName", "sourceServiceName"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["sourceHostName", "destinationHostName"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["destinationUserId", "sourceUserId"],
+      "account_login": ["destinationUserName", "sourceUserName"]
+
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["filePath"],
+      "values[*]": ["deviceCustomString4"]
+    }
+  },
+  "x-arcsight-event": {
+    "fields": {
+      "priority": ["priority"],
+      "base_event_count": ["baseEventCount"],
+      "event_id": ["eventId"],
+      "external_id": ["externalId"],
+      "name": ["name"],
+      "type": ["type"],
+      "start_time": ["startTime"],
+      "end_time": ["endTime"],
+      "request_url": ["requestUrl"],
+      "request_method": ["requestMethod"]
+    }
+  },
+  "x-arcsight-event-category": {
+    "fields": {
+      "category_behavior": ["categoryBehavior"],
+      "category_device_group": ["categoryDeviceGroup"],
+      "category_object": ["categoryObject"],
+      "category_outcome": ["categoryOutcome"],
+      "category_significance": ["categorySignificance"],
+      "category_technique": ["categoryTechnique"]
+    }
+  },
+  "x-arcsight-event-device": {
+    "fields": {
+      "product": ["deviceProduct"],
+      "vendor": ["deviceVendor"],
+      "device_action": ["deviceAction"],
+      "device_receipt_time": ["deviceReceiptTime"],
+      "device_event_category": ["deviceEventCategory"],
+      "device_severity": ["deviceSeverity"],
+      "device_version": ["deviceVersion"],
+      "device_address": ["deviceAddress"],
+      "device_external_id": ["deviceExternalId"],
+      "device_asset_id": ["fulltextSearch"],
+      "device_asset_name": ["fulltextSearch"],
+      "device_dns_domain": ["fulltextSearch"],
+      "device_domain": ["fulltextSearch"],
+      "device_nt_domain": ["fulltextSearch"]
+    }
+  },
+  "x-arcsight-event-destination": {
+    "fields": {
+      "destination_asset_id": ["fulltextSearch"],
+      "destination_asset_name": ["fulltextSearch"],
+      "destination_dns_domain": ["destinationDnsDomain"],
+      "destination_fqdn": ["fulltextSearch"],
+      "destination_nt_domain": ["destinationNtDomain"],
+      "destination_geo_location_info": ["fulltextSearch"],
+      "destination_geo_postal_code": ["fulltextSearch"],
+      "destination_process_name": ["destinationProcessName"]
+    }
+  },
+  "x-arcsight-event-source": {
+    "fields": {
+      "source_asset_id": ["fulltextSearch"],
+      "source_asset_name": ["fulltextSearch"],
+      "source_dns_domain": ["fulltextSearch"],
+      "source_fqdn": ["fulltextSearch"],
+      "source_nt_domain": ["sourceNtDomain"],
+      "source_geo_location_info": ["fulltextSearch"],
+      "source_geo_postal_code": ["fulltextSearch"],
+      "source_process_name": ["sourceProcessName"]
+    }
+  },
+  "x-arcsight-event-vulnerability": {
+    "fields": {
+      "vulnerability": ["fulltextSearch"],
+      "vulnerability_external_id": ["vulnerabilityExternalID"],
+      "vulnerability_id": ["fulltextSearch"],
+      "vulnerability_name": ["fulltextSearch"],
+      "vulnerability_reference_id": ["fulltextSearch"],
+      "vulnerability_resource": ["fulltextSearch"],
+      "vulnerability_uri": ["vulnerabilityURI"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["name"],
+      "finding_type": ["categorySignificance"],
+      "src_device": ["fulltextSearch"],
+      "dst_device": ["fulltextSearch"],
+      "src_geolocation": ["fulltextSearch"],
+      "dst_geolocation": ["fulltextSearch"],
+      "src_ip_ref.value": ["sourceAddress"],
+      "dst_ip_ref.value": ["destinationAddress"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["deviceHostName", "deviceAssetName"],
+      "host_id": ["deviceAssetId"]
+    }
+  }
+}

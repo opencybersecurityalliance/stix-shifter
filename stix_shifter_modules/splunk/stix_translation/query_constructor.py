@@ -21,7 +21,7 @@ class SplunkSearchTranslator:
         # FollowedBy could also be done with transactions, however the original event would not be returned, though a
         # all the fields in the original event would be present in the transaction result.
         # For [x FOLLOWEDBY y], first find the most recent y, get its timestamp, and look for x's that occur earlier.
-        # Use makeresults to inject a dummy event since a subsearch that yields no result will cause eval to error.
+        # Use makeresults to inject a placeholder event since a subsearch that yields no result will cause eval to error.
         # Presumably, no one will be looking for results prior to epoch=0.
         self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
@@ -163,12 +163,21 @@ class _ObservationExpressionTranslator:
 
     def _build_comparison(self, expression, object_scoping, field_mapping):
         comparator = self._lookup_comparison_operator(self, expression.comparator)
+
         if isinstance(comparator, str):
-            splunk_comparison = self._maybe_negate("{} {} {}".format(
-                field_mapping,
-                comparator,
-                encoders.simple(expression.value)
-            ), expression.negated)
+            if comparator == "encoders.like":
+                comparison = encoders.like(field_mapping, expression.value)
+            elif comparator == "encoders.set":
+                comparison = encoders.set(field_mapping, expression.value)
+            elif comparator == "encoders.matches":
+                comparison = encoders.matches(field_mapping, expression.value)
+            else:
+                comparison = "{} {} {}".format(
+                    field_mapping,
+                    comparator,
+                    encoders.simple(expression.value)
+                )
+            splunk_comparison = self._maybe_negate(comparison, expression.negated)
 
             if isinstance(self.dmm, CarBaseQueryTranslator):
                 return "({} AND {})".format(object_scoping, splunk_comparison)
@@ -196,6 +205,7 @@ def _test_for_earliest_latest(query_string) -> bool:
 def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
+    index = options.get('index')
     x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
@@ -210,6 +220,9 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
             fields += ", "
         else:
             fields += field
+
+    if index:
+        translated_query = f'index={index} {translated_query}'
 
     if not has_earliest_latest:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=time_range, result_limit=result_limit)

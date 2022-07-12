@@ -130,7 +130,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
+            raise NotImplementedError("Comparison operator {} unsupported for MySQL connector".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
@@ -236,8 +236,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
     table = options.get('table')
-    if not table:
-        table = 'demo_siem'
 
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.

@@ -14,6 +14,7 @@ class ResultsConnector(BaseResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     @staticmethod
     def get_success_status(data_dict):
@@ -42,7 +43,7 @@ class ResultsConnector(BaseResultsConnector):
                     response_dict = xmltodict.parse(response_txt)
                     ErrorResponder.fill_error(return_obj, response_dict,
                                               ['BESAPI', 'ClientQueryResults', 'QueryResult', '+IsFailure=1',
-                                               '~Result'])
+                                               '~Result'], connector=self.connector)
             else:
                 if ErrorResponder.is_plain_string(response_txt):
                     ErrorResponder.fill_error(return_obj, message=response_txt)
@@ -50,7 +51,7 @@ class ResultsConnector(BaseResultsConnector):
                     raise UnexpectedResponseException
         except Exception as e:
             if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception')
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e

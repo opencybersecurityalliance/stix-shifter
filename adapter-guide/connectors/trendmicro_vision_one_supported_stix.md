@@ -1,4 +1,16 @@
+##### Updated on 06/01/22
 ## Trend Micro Vision One
+### Supported STIX Operators
+| STIX Operator | Data Source Operator |
+|--|--|
+| AND | AND |
+| OR | OR |
+| = | : |
+| != | : |
+| LIKE | : |
+| IN | : |
+| <br> | |
+### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | objectFilePath |

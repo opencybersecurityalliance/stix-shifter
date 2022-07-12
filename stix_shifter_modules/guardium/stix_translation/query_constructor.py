@@ -33,7 +33,6 @@ class QueryStringPatternTranslator:
 
         self.translated = self.parse_expression(pattern)
         self.transformers = transformers
-
         # Read report definition data
         self.REPORT_DEF = read_json('guardium_reports_def', options)
 
@@ -46,8 +45,11 @@ class QueryStringPatternTranslator:
         # Read qsearch definition data
         self.QSEARCH_PARAMS_MAP = read_json('guardium_qsearch_params_map', options)
 
+        self.inQuery = None
+
     def set_report_params_passed(self, params_array):
         self.report_params_array = params_array
+        # self.report_params_array_size = 3
         self.report_params_array_size = len(params_array)
         return
 
@@ -87,7 +89,6 @@ class QueryStringPatternTranslator:
         # Single quotes have to be replaced by double quotes in order to make it as an Json obj
         regex8 = r"'"
         out_str = "[" + re.sub(regex8, '"', out_str, 0) + "]"
-
         return json.loads(out_str)
 
     def transform_qsearch_call_to_json(self, qsearch_call):
@@ -223,7 +224,6 @@ class QueryStringPatternTranslator:
             sto = self.qsearch_params_passed.get("STOP", default_to_date)
             qsearch["startTime"] = self.transformers[qsearch["startTime"]["transformer"]].transform(sta)
             qsearch["endTime"] = self.transformers[qsearch["endTime"]["transformer"]].transform(sto)
-
             for param in qsearch["filters"]:
                 # either the value will be default or passed in (report parameter passed)
                 if param not in self.qsearch_params_passed:
@@ -281,10 +281,50 @@ class QueryStringPatternTranslator:
             # substitute Params
             if qsearch_definitions:
                qsearch_in_query = self.substitute_qsearch_params_passed(qsearch_definitions, qsearch_in_query)
+        if self.inQuery == True:
+            qsearch_query = []
+            ip = re.findall(r'[0-9]+(?:\.[0-9]+){3}', str(self.qsearch_params_passed))
+            str_query = self.set_ipaddress()
+            for item in str_query:
+                for param in qsearch_in_query:
+                    qsearch = json.loads(param)
+                    qsearch['query'] = item
+                    if ip:
+                        qsearch['filters'] = ''
+                    else:
+                        param = list(qsearch["filters"])
+                        key = param[1]
+                        value = qsearch["filters"][key]
+                        qsearch['filters'] = "name=" + key + "&value=" + str(value) + "&isGroup=false"
+                qsearch_query.append(json.dumps(qsearch))
+            return qsearch_query
+        else:
+            self.set_filters_format(qsearch_in_query)
+            self.set_query_format(qsearch_in_query)
+            return qsearch_in_query
 
-        self.set_filters_format(qsearch_in_query)
-        self.set_query_format(qsearch_in_query)
-        return qsearch_in_query
+    def set_ipaddress(self):
+        key_list = []
+        keys = set()
+        str_query_list = []
+        ip = re.findall(r'[0-9]+(?:\.[0-9]+){3}', str(self.qsearch_params_passed))
+        for i in self.qsearch_params_array:
+            key_list.append(list(i.keys()))
+            for item in key_list:
+                for par in item:
+                    if par == 'START' or par == 'STOP':
+                        continue
+                    else:
+                        keys.add(par)
+        for key in keys:
+            str_query = ''
+            for ipadd in ip:
+                if str_query == '':
+                    str_query = key + '=' + ipadd
+                else:
+                    str_query = str_query + ' ' + 'OR' + ' ' + key + '=' + ipadd
+            str_query_list.append(str_query)
+        return str_query_list
 
     def set_filters_format(self, qse):
         for i in range(len(qse)):
@@ -300,7 +340,7 @@ class QueryStringPatternTranslator:
                     first = False
                 else:
                     str_filters = str_filters + "&"
-                str_filters = str_filters + "name=" + key + "&" + "value=" + filters[key] + "&isGroup=false"
+                str_filters = str_filters + "name=" + key + "&" + "value=" + str(filters[key]) + "&isGroup=false"
             if str_filters.__len__() > 0:
                 str_filters = "\"filters\":\"" + str_filters + "\""
                 qse[i] = qse_prefix + str_filters + qse_suffix
@@ -321,7 +361,7 @@ class QueryStringPatternTranslator:
                     first = False
                 else:
                     str_query = str_query + " AND "
-                str_query = str_query +  key + query[key]["operation"] +query[key]["value"] 
+                str_query = str_query +  key + query[key]["operation"] + query[key]["value"]
             if str_query.__len__() > 0:
                 str_query = "\"query\":\"" + str_query + "\""
                 qse[i] = qse_prefix + str_query + qse_suffix
@@ -524,7 +564,7 @@ class QueryStringPatternTranslator:
                 value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
-                value = self._format_set(expression.value)
+                value = list(map(self._escape_value, expression.value.element_iterator()))
             elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
@@ -598,29 +638,35 @@ class QueryStringPatternTranslator:
         return self._parse_expression(pattern)
 
 
-def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers):
+def translate_pattern(pattern: Pattern, data_model_mapping, options, transformers,data):
 
     # Converting query object to datasource query
     # timerange set to 24 hours for Guardium; timerange is provided in minutes (as delta)
 
     guardium_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping, options, transformers)
+    ip = re.findall(r'[0-9]+(?:\.[0-9]+){3}', str(data))
+    if data_model_mapping.dialect == 'report'and len(ip) > 0 and 'IN' in data:
+        report_header = {}
+        return report_header
+
     report_call = guardium_query_translator.translated
+
 
     # Add space around START STOP qualifiers
     report_call = re.sub("START", "START ", report_call)
     report_call = re.sub("STOP", " STOP ", report_call)
+    if "IN" in data:
+        guardium_query_translator.inQuery = True
 
-# Subroto: I did not change the code much just adapted to get the report parameters
-# Subroto: added code to support report search parameters are "and" when sent to Guardium
     # translate the structure of report_call
     if data_model_mapping.dialect == 'report':
+        # report_call = 'DBUser = \'example.ca\' AND DBUser = \'ibm.com\' AND DBUser = \'www.blah.ca\''
         json_report_call = guardium_query_translator.transform_report_call_to_json(report_call)
     else:
         json_qsearch_call = guardium_query_translator.transform_qsearch_call_to_json(report_call)
 
     result_array = []
     result_position = 0
-
     if data_model_mapping.dialect == 'report':
         output_array = guardium_query_translator.build_array_of_guardium_report_params(result_array, result_position, None, json_report_call, None)
         guardium_query_translator.set_report_params_passed(output_array)

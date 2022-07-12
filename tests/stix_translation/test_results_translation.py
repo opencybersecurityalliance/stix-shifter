@@ -20,7 +20,7 @@ DATA = {
             "source_ipaddr": "0.0.0.0", 
             "dest_ipaddr": "255.255.255.1", 
             "url": "https://example.com", 
-            "username": "someuserid2018", 
+            "displayname": "someuserid2018",
             "protocol": 'tcp',
             "source_port": 3000, 
             "dest_port": 2000, 
@@ -41,13 +41,12 @@ DATA = {
         }
 
 CYBOX_ID = {
-            "source-ipv4-addr": "ipv4-addr--0b6a89e3-e345-51b7-a8ee-aaff7ebf2df5", 
-            "dest-ipv4-addr": "ipv4-addr--cb8e152d-60f0-596a-81e4-a22cc4a7f063", 
-            "url": "url--8265905f-c609-52e3-ae52-6681bcd6086d", 
-            "user-account": "user-account--3cd7ffc9-89f7-5b58-948c-117ec9b3e22a", 
-            "network-traffic": "network-traffic--2ec70516-29b5-59f3-9743-3b93e97db6d8",
-            "file": "file--243f1b5f-0391-501c-bed0-17e9f204f1d2",
-            "directory": "directory--9ce39e76-d59e-5db2-8f0e-2001f689ea9d"
+            "source-ipv4-addr": "ipv4-addr--be9fc8ad-9c41-5787-a31a-e9cb561be1fb", 
+            "dest-ipv4-addr": "ipv4-addr--79c143c3-fffe-5e0d-a015-999c59b17a2f", 
+            "url": "url--528ccb4e-e65b-57d2-8aef-9eca4c7fb79f", 
+            "network-traffic": "network-traffic--b3c6f980-f0a9-5034-933a-8ab4d3c26be6",
+            "file": "file--d1bfc532-d321-5391-839f-72fba387e5b8",
+            "directory": "directory--ccb06289-24f5-52c1-a63b-7643ce036e9d"
         }
 
 OPTIONS = {}
@@ -159,7 +158,7 @@ class TestTransform(object):
         # user-account
         stix_object = TestTransform.get_first_of_type(objects.values(), 'user-account')
         assert  stix_object, 'user-account object type not found'
-        assert  "user_id" in stix_object and stix_object['user_id'] == DATA['username']
+        assert "display_name" in stix_object
 
         # file
         file_object = TestTransform.get_first_of_type(objects.values(), 'file')
@@ -224,31 +223,31 @@ class TestTransform(object):
         assert "src_port" in network_traffic_object and network_traffic_object['src_port'] == 3000
         assert "dst_port" in network_traffic_object and network_traffic_object['dst_port'] == 2000
         assert "protocols" in network_traffic_object and network_traffic_object['protocols'] == ['tcp'] 
-        assert "id" in network_traffic_object and network_traffic_object['id'] == CYBOX_ID["network-traffic"]
+        assert "id" in network_traffic_object and str(network_traffic_object['id']) == CYBOX_ID["network-traffic"]
         
         # destination ipv4-addr
         destination_ipv4_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, network_traffic_object["dst_ref"])
         assert "type" in destination_ipv4_object and destination_ipv4_object['type'] == 'ipv4-addr'
         assert "value" in destination_ipv4_object and destination_ipv4_object['value'] == DATA["dest_ipaddr"]
-        assert "id" in destination_ipv4_object and destination_ipv4_object['id'] == CYBOX_ID["dest-ipv4-addr"]
+        assert "id" in destination_ipv4_object and str(destination_ipv4_object['id']) == CYBOX_ID["dest-ipv4-addr"]
 
         # source ipv4-addr
         source_ipv4_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, network_traffic_object["src_ref"])
         assert "type" in source_ipv4_object and source_ipv4_object['type'] == 'ipv4-addr'
         assert "value" in source_ipv4_object and source_ipv4_object['value'] == DATA["source_ipaddr"]
-        assert "id" in source_ipv4_object and source_ipv4_object['id'] == CYBOX_ID["source-ipv4-addr"]
+        assert "id" in source_ipv4_object and str(source_ipv4_object['id']) == CYBOX_ID["source-ipv4-addr"]
 
         # url
         url_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'url')
         assert url_object, 'url object type not found'
         assert "value" in url_object and url_object['value'] == DATA['url']
-        assert "id" in url_object and url_object['id'] == CYBOX_ID["url"]
+        assert "id" in url_object and str(url_object['id']) == CYBOX_ID["url"]
 
-        # user-account
+        # user-account with only properties that are not ID contributing
         user_account_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'user-account')
-        assert  user_account_object, 'user-account object type not found'
-        assert  "user_id" in user_account_object and user_account_object['user_id'] == DATA['username']
-        assert "id" in user_account_object and user_account_object['id'] == CYBOX_ID["user-account"]
+        assert user_account_object, 'user-account object type not found'
+        assert "display_name" in user_account_object
+        assert "id" in user_account_object
 
         # file
         file_object = TestTransform.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'file')
@@ -266,7 +265,7 @@ class TestTransform(object):
         assert "MD5" in hashes and hashes["MD5"] == DATA["md5hash"]
         assert "SHA-256" in hashes and hashes["SHA-256"] == DATA["sha256hash"] 
         assert "parent_directory_ref" in file_object
-        assert "id" in file_object and file_object['id'] == CYBOX_ID["file"]
+        assert "id" in file_object and str(file_object['id']) == CYBOX_ID["file"]
 
         # directory
         directory_object = TestTransform.get_first_cybox_of_id_stix_2_1(result_bundle_objects, file_object["parent_directory_ref"])
@@ -278,6 +277,7 @@ class TestTransform(object):
         assert "modified" not in directory_object
         assert "atime" in directory_object and directory_object['atime'] == TIMESTAMP
         assert "accessed" not in directory_object
+        assert "id" in directory_object
 
         # process
         process_object = TestTransform.get_first_of_type(result_bundle_objects, 'process')
@@ -289,6 +289,6 @@ class TestTransform(object):
         assert "created" not in process_object
         assert "image_ref" in process_object
         assert "binary_ref" not in process_object
-        assert "id" in directory_object and directory_object['id'] == CYBOX_ID["directory"]
+        assert "id" in directory_object and str(directory_object['id']) == CYBOX_ID["directory"]
 
         

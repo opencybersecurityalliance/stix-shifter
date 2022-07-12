@@ -1,4 +1,5 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
@@ -9,13 +10,15 @@ import time
 
 ERROR_TYPE_TIMEOUT = 'timeout'
 ERROR_TYPE_BAD_CONNECTION = 'bad_connection'
+ERROR_TYPE_STATUS_DELAY = 'status_delay_sec_'
 
 class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseConnector):
     def __init__(self, connection, configuration):
+        self.connector = __name__.split('.')[1]
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
@@ -59,8 +62,24 @@ class Connector(BaseSyncConnector):
             self.bundle_url = response.headers.get('Location')
             return self.ping_connection()
         else:
-            ErrorResponder.fill_error(return_obj, response_txt, ['message'])
+            ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
+
+    def create_query_connection(self, query):
+        return {"success": True, "search_id": query}
+
+    def create_status_connection(self, search_id, metadata=None):
+        error_type = self.connection['options'].get('error_type')
+        if error_type.startswith(ERROR_TYPE_STATUS_DELAY):
+            delay = int(error_type[len(ERROR_TYPE_STATUS_DELAY):])
+            current_time = int(time.time())
+            if metadata:
+                stop_time = metadata['stop_time']
+            else:
+                stop_time = current_time + delay
+            if stop_time > current_time:
+                return {"success": True, "status": Status.RUNNING.value, "progress": int((delay - (stop_time - current_time)) / delay * 100), "metadata": {"stop_time": stop_time}}
+        return {"success": True, "status": Status.COMPLETED.value, "progress": 100}
 
     def create_results_connection(self, search_id, offset, length):
         observations = []
@@ -69,19 +88,19 @@ class Connector(BaseSyncConnector):
         response = None
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
             # httpstat.us/200?sleep=60000 for slow connection that is valid
-            response = self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)
+            self.client.call_api('https://httpstat.us/200?sleep=60000', 'get', timeout=self.timeout)
         elif self.connection['options'].get('error_type') == ERROR_TYPE_BAD_CONNECTION:
             # www.google.com:81 for a bad connection that will timeout
             response = self.client.call_api('https://www.google.com:81', 'get', timeout=self.timeout)
-        else:
+        if not response:
             response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
         if response.code != 200:
             response_txt = response.raise_for_status()
             if ErrorResponder.is_plain_string(response_txt):
-                ErrorResponder.fill_error(return_obj, message=response_txt)
+                ErrorResponder.fill_error(return_obj, message=response_txt, connector=self.connector)
             elif ErrorResponder.is_json_string(response_txt):
                 response_json = json.loads(response_txt)
-                ErrorResponder.fill_error(return_obj, response_json, ['reason'])
+                ErrorResponder.fill_error(return_obj, response_json, ['reason'], connector=self.connector)
             else:
                 raise UnexpectedResponseException
         else:
@@ -93,7 +112,7 @@ class Connector(BaseSyncConnector):
                     results = validate_instance(bundle)
 
                     if results.is_valid is not True:
-                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.')
+                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.', connector=self.connector)
                         return return_obj
 
                 for obj in bundle["objects"]:
@@ -111,16 +130,10 @@ class Connector(BaseSyncConnector):
                         return_obj['success'] = True
                         return_obj['data'] = []
                 except Exception as ex:
-                    ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex))
+                    ErrorResponder.fill_error(return_obj,  message='Object matching error: ' + str(ex), connector=self.connector)
             except Exception as ex:
-                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex))
+                ErrorResponder.fill_error(return_obj,  message='Invalid STIX bundle. Malformed JSON: ' + str(ex), connector=self.connector)
         return return_obj
-
-    def create_query_connection(self, query):
-        return {"success": True, "search_id": query}
-
-    def create_status_connection(self, search_id):
-        return {"success": True, "status": "COMPLETED", "progress": 100}
 
     def delete_query_connection(self, search_id):
         return_obj = dict()
