@@ -1,5 +1,6 @@
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from azure.identity import ClientSecretCredential
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import pandas as pd
@@ -17,15 +18,20 @@ class Connector(BaseSyncConnector):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
+        self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
         self.workspace_id = connection.get('workspaceId')
+        self.credential = ClientSecretCredential(tenant_id=configuration["auth"]["tenant"],
+                                                 client_id=configuration["auth"]["clientId"],
+                                                 client_secret=configuration["auth"]["clientSecret"])
+
+        token = self.credential.get_token("https://{host}/.default".format(host=connection["host"]))
+        configuration['auth']['access_token'] = token.token
         self.api_client = APIClient(connection, configuration)
 
     def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error:
-            self.logger.error("Token Generation Failed:")
-            return self.query_response
         response = self.api_client.ping_box()
         response_code = response.code
         response_dict = json.loads(response.read())
@@ -50,7 +56,7 @@ class Connector(BaseSyncConnector):
         total_record = length + offset
         return_obj = dict()
         try:
-            client = LogsQueryClient(self.api_client.credential)
+            client = LogsQueryClient(self.credential)
             query = """{query} | limit {len}""".format(query=query, len=length)
             matches = re.findall(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+?Z)', query)
             if matches:
@@ -58,7 +64,7 @@ class Connector(BaseSyncConnector):
                 start_time = datetime.strptime(matches[0].replace('Z', ""), "%Y-%m-%dT%H:%M:%S.%f")
             else:
                 stop_time = datetime.utcnow()
-                start_time = stop_time - timedelta(hours=3000)
+                start_time = stop_time - timedelta(hours=24)
             response = client.query_workspace(
                 workspace_id=self.workspace_id,
                 query=query,
@@ -75,6 +81,8 @@ class Connector(BaseSyncConnector):
                 return_obj = {"success": True, "data": df.astype(str).to_dict(orient='records')}
                 return_obj['data'] = return_obj['data'][offset:total_record]
             return return_obj
+        except ValueError as ve:
+            print("Missing WorkSpaceID. %s" % ve)
         except Exception as err:
             print("something fatal happened")
             print(err)

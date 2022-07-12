@@ -1,6 +1,8 @@
 import os
+import importlib
 from .stix_translation.query_translator import QueryTranslator
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 
@@ -9,13 +11,30 @@ class EntryPoint(BaseEntryPoint):
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(connection, configuration, options)
         self.set_async(False)
+        choose_endpoint = {"api.loganalytics.io": "Log Analytics", "graph.microsoft.com": "Graph Security"}
 
         if connection:
-            self.setup_transmission_basic(connection, configuration)
+            module_name = "azure_sentinel"
+            module_path = "stix_shifter_modules." + module_name + ".stix_transmission." + choose_endpoint[connection[
+                "host"]]
+            module = importlib.import_module(module_path + ".connector")
+            connector = module.Connector(connection, configuration)
 
-        # self.setup_translation_simple(dialect_default='SecurityAlert')
+            if not isinstance(connector, BaseConnector):
+                raise Exception('connector is not instance of BaseConnector')
+            self.set_query_connector(connector)
+            self.set_status_connector(connector)
+            self.set_results_connector(connector)
+            self.set_delete_connector(connector)
+            self.set_ping_connector(connector)
 
-        api_type = options.get("api")
+        if connection:
+            api_type = choose_endpoint[connection["host"]]
+        elif options.get("api"):
+            api_type = options.get("api")
+        else:
+            api_type = "Log Analytics"
+
         basepath = os.path.dirname(__file__)
         filepath = os.path.abspath(os.path.join(basepath, "stix_translation", api_type))
 

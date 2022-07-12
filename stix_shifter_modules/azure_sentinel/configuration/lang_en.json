@@ -21,8 +21,8 @@
       "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
     },
     "workpaceId": {
-      "label": "Loganalytics Workspace",
-      "description": "The workspace Id of the loganaytics "
+      "label": "Log Analytics Workspace ID",
+      "description": "The workspace Id of the Log Analytics. Required when using Log Analytics API. Ignore if using Graph Security."
     },
     "options": {
       "api": {
