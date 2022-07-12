@@ -3,12 +3,13 @@
     "key": "user-account.user_id"
   },
   "LogSourceId": {
-    "key": "x-custom-property.log_source_id",
-    "object": "x_custom_property"
+    "key": "x-custom-object.log_source_id",
+    "object": "x-custom-object",
+    "transformer": "SampleDataTransformer"
   },
   "Magnitude": {
-    "key": "x-custom-property.magnitude",
-    "object": "x_custom_property"
+    "key": "x-custom-object.magnitude",
+    "object": "x-custom-object"
   },
   "SourceIpV4": [
     {

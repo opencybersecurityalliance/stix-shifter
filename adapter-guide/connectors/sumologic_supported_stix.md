@@ -1,4 +1,4 @@
-##### Updated on 02/04/22
+##### Updated on 06/01/22
 ## Sumo Logic
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -6,6 +6,7 @@
 | AND | AND |
 | OR | OR |
 | = | = |
+| IN | OR |
 | <br> | |
 ### Supported STIX Objects and Properties
 | STIX Object | STIX Property | Data Source Field |

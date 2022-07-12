@@ -1,4 +1,4 @@
-##### Updated on 02/04/22
+##### Updated on 06/01/22
 ## Micro Focus ArcSight
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -74,7 +74,6 @@
 | x-arcsight-event | event_end_time | endTime |
 | x-arcsight-event | base_event_count | baseEventCount |
 | x-arcsight-event | priority | priority |
-| x-arcsight-event | asset_criticality | assetCriticality |
 | x-arcsight-event | model_confidence | modelConfidence |
 | x-arcsight-event | relevance | relevance |
 | x-arcsight-event | request_url | requestUrl |
@@ -91,8 +90,6 @@
 | x-arcsight-event-destination | destination_ipv6_address_ref | c6a3 |
 | x-arcsight-event-destination | destination_domain_name_ref | destinationHostName |
 | x-arcsight-event-destination | destination_username | destinationUserName |
-| x-arcsight-event-destination | destination_asset_id | destinationAssetId |
-| x-arcsight-event-destination | destination_asset_name | destinationAssetName |
 | x-arcsight-event-destination | destination_dns_domain | destinationDnsDomain |
 | x-arcsight-event-destination | destination_fqdn | destinationFqdn |
 | x-arcsight-event-destination | destination_nt_domain | destinationNtDomain |
@@ -108,24 +105,17 @@
 | x-arcsight-event-device | device_vendor | deviceVendor |
 | x-arcsight-event-device | device_action | deviceAction |
 | x-arcsight-event-device | device_receipt_time | deviceReceiptTime |
-| x-arcsight-event-device | device_severity | deviceSeverity |
-| x-arcsight-event-device | device_event_category | deviceEventCategory |
 | x-arcsight-event-device | device_version | deviceVersion |
-| x-arcsight-event-device | device_domain_name_ref | deviceHostName |
-| x-arcsight-event-device | device_address_ref | deviceAddress |
-| x-arcsight-event-device | device_asset_id | deviceAssetId |
-| x-arcsight-event-device | device_asset_name | deviceAssetName |
 | x-arcsight-event-device | device_dns_domain | deviceDnsDomain |
 | x-arcsight-event-device | device_domain | deviceDomain |
 | x-arcsight-event-device | device_nt_domain | deviceNtDomain |
 | x-arcsight-event-device | device_external_id | deviceExternalId |
 | x-arcsight-event-device | device_time_zone | dtz |
+| x-arcsight-event-device | device_domain_name_ref | deviceHostName |
 | <br> | | |
 | x-arcsight-event-source | source_ipv6_address_ref | c6a2 |
 | x-arcsight-event-source | source_domain_name_ref | sourceHostName |
 | x-arcsight-event-source | source_username | sourceUserName |
-| x-arcsight-event-source | source_asset_id | sourceAssetId |
-| x-arcsight-event-source | source_asset_name | sourceAssetName |
 | x-arcsight-event-source | source_dns_domain | sourceDnsDomain |
 | x-arcsight-event-source | source_fqdn | sourceFqdn |
 | x-arcsight-event-source | source_nt_domain | sourceNtDomain |
@@ -155,4 +145,21 @@
 | x-ibm-finding | dst_geolocation | destinationGeoLocationInfo |
 | x-ibm-finding | src_device | sourceAssetId |
 | x-ibm-finding | src_geolocation | sourceGeoLocationInfo |
+| <br> | | |
+| x-oca-asset | extensions.x-device-ext.asset_criticality | assetCriticality |
+| x-oca-asset | extensions.x-device-ext.device_severity | deviceSeverity |
+| x-oca-asset | hostname | deviceHostName |
+| x-oca-asset | ip_refs | deviceAddress |
+| x-oca-asset | host_id | deviceAssetId |
+| x-oca-asset | hostname | deviceAssetName |
+| x-oca-asset | extensions.x-destination-ext.destination_asset_id | destinationAssetId |
+| x-oca-asset | extensions.x-destination-ext.destination_asset_name | destinationAssetName |
+| x-oca-asset | extensions.x-source-ext.source_asset_id | sourceAssetId |
+| x-oca-asset | extensions.x-source-ext.source_asset_name | sourceAssetName |
+| x-oca-asset | destination_asset_id | destinationAssetId |
+| x-oca-asset | destination_asset_name | destinationAssetName |
+| x-oca-asset | source_asset_id | sourceAssetId |
+| x-oca-asset | source_asset_name | sourceAssetName |
+| <br> | | |
+| x-oca-event | category | deviceEventCategory |
 | <br> | | |

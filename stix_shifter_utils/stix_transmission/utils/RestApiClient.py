@@ -23,7 +23,7 @@ class InterruptableThread(threading.Thread):
         self._args = args
         self._kwargs = kwargs
         self._result = None
-        self.setDaemon(True)
+        self.daemon = True
 
     def run(self):
         self._result = self._func(*self._args, **self._kwargs)
@@ -104,7 +104,7 @@ class RestApiClient:
             try:
                 session = requests.Session()
                 retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
-                                       method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
+                                       allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
                 session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
 
                 if self.sni is not None:
