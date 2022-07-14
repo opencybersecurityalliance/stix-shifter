@@ -28,19 +28,19 @@ class AdalMockResponse:
 class TestAzureSentinalConnection(unittest.TestCase):
     def config(self):
         return {
-                "auth": {
-                    "tenant": "abc12345",
-                    "clientId": "abc12345",
-                    "clientSecret": "abc12345",
-                    }
-                }
+            "auth": {
+                "tenant": "abc12345",
+                "clientId": "abc12345",
+                "clientSecret": "abc12345",
+            }
+        }
 
     def connection(self):
         return {
-                "host": "abc.amazon.com",
-                "port": 443,
-                "options": {"api": "Graph Security"}
-                }
+            "host": "abc.amazon.com",
+            "port": 443,
+            "options": {"api": "Graph Security"}
+        }
 
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None

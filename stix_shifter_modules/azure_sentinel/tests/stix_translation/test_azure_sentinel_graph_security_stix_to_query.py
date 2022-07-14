@@ -260,16 +260,16 @@ class TestQueryTranslator(unittest.TestCase):
         print(query['queries'])
 
         queries = ["(tolower(title) eq 'photos') and (eventDateTime ge 2021-10-08T00:18:50.449Z and eventDateTime le "
-                    "2021-10-08T00:23:50.449Z)",
-                    "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(description) eq 'test description') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(severity) eq 'test severity') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
+                   "2021-10-08T00:23:50.449Z)",
+                   "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(tolower(description) eq 'test description') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(tolower(severity) eq 'test severity') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime "
+                   "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
+                   "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

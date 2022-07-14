@@ -1,4 +1,6 @@
+import regex
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from azure.monitor.query import LogsQueryClient
 import json
 
 
@@ -31,11 +33,20 @@ class APIClient:
         """Ping the endpoint."""
         return self.client.call_api(self.endpoint, 'GET', timeout=self.timeout)
 
-    def run_search(self, query_expression, length):
+    def run_search(self, credential, workspace_id, query_expression, start, stop, length):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
         :param length: int,length value
         :return: response, json object"""
-        headers = dict()
-        payload = json.dumps({"query": query_expression})
-        return self.client.call_api(self.endpoint, 'POST', headers, data=payload, timeout=self.timeout)
+        try:
+            client = LogsQueryClient(credential)
+            response = client.query_workspace(
+                workspace_id=workspace_id,
+                query=query_expression,
+                timespan=(start, stop)
+            )
+            return {'success': True, "response": response}
+        except Exception as e:
+            pattern = r'\{(?:[^{}]|(?R))*\}'
+            x = regex.findall(pattern, e.message)
+            return {'success': False, "error": json.loads(x[0])}

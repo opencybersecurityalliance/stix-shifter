@@ -1,11 +1,11 @@
-import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
 MODULE = "azure_sentinel"
-entry_point = EntryPoint()
+options = {"api": "Log Analytics"}
+entry_point = EntryPoint(options=options)
 map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
@@ -13,7 +13,6 @@ data_source = {
     "name": "azure_sentinel",
     "identity_class": "events"
 }
-options = {}
 
 DATA1 = {
     'TenantId': 'e00daaf8-d6a4-4410-b50b-f5ef61c9cb45',
@@ -64,6 +63,7 @@ DATA3 = {
     "CreatedTime": "2022-05-07 12:27:10.171000+00:00",
     "ClosedTime": "None",
     "IncidentNumber": "1186",
+    "IncidentUrl": "https://portal.azure.com/#asset/Microsoft_Azure_Security_Insights/Incident/subscriptions/dc26ff57-0597-4cc8-8092-aa5b929f8f39/resourceGroups/newresource/providers/Microsoft.OperationalInsights/workspaces/loganaly/providers/Microsoft.SecurityInsights/Incidents/919158c6-4c3f-4273-a730-a37f75622350",
     "RelatedAnalyticRuleIds": "[\"9c4be437-b74c-440c-aa09-764367744a23\"]",
     "AlertIds": "[\"17bbb3bd-00fb-73f0-573b-f2039bd3b5c5\"]",
     "BookmarkIds": "[]",

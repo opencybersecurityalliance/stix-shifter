@@ -12,6 +12,7 @@ ERROR_MAPPING = {
     "unauthorized_client": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     # Azure specific exception
     "BadRequest": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    "SyntaxError": ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
     "InvalidAuthenticationToken": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "accessDenied": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "activityLimitReached": ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,
