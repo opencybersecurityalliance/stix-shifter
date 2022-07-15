@@ -171,6 +171,6 @@ class TestTrustarTransform(unittest.TestCase, object):
 
         curr_obj = TestTrustarTransform.get_first_of_type(objects.values(), 'x-trustar-indicator')
         assert (curr_obj is not None), 'x-trustar-indicator object type not found'
-        assert (curr_obj.keys() == {'type', 'x_attributes','x_firstseen', 'x_lastseen', 'x_prioritylevel', 'x_guid', 'x_meta', 'x_enclaveid', 'x_source', 'x_score','name', 'x_severitylevel'})
-        assert (curr_obj['x_firstseen'] == '2020-01-27T00:00:00.000Z')
-        assert (curr_obj['x_lastseen'] == '2021-09-17T20:03:29.550Z')
+        assert (curr_obj.keys() == {'type', 'attributes','firstseen', 'lastseen', 'prioritylevel', 'guid', 'meta', 'enclaveid', 'source', 'score','name', 'severitylevel'})
+        assert (curr_obj['firstseen'] == '2020-01-27T00:00:00.000Z')
+        assert (curr_obj['lastseen'] == '2021-09-17T20:03:29.550Z')
