@@ -17,14 +17,6 @@ class TrustarMockResponse:
 
 @patch('stix_shifter_modules.trustar.stix_transmission.api_client.APIClient.__init__',  autospec=True)
 class TestTrustarConnection(unittest.TestCase, object):
-#     def test_is_async(self, mock_api_client):
-#         mock_api_client.return_value = None
-#         entry_point = EntryPoint()
-
-#         check_async = entry_point.is_async()
-
-#         assert check_async is False
-
     def test_query_response(self, mock_api_client):
         mock_api_client.return_value = None
 
