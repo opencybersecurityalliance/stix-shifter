@@ -12,8 +12,8 @@
     "object": "url"
   },
   "CVE": {
-    "key": "vulnerability.id",
-    "object": "vulnerability"
+    "key": "x-trustar-vulnerability.CVE",
+    "object": "x-trustar-vulnerability"
   },
   "EMAIL_ADDRESS": {
     "key": "email-addr.value",
@@ -36,7 +36,7 @@
     "object": "file"
   },
   "SOFTWARE": [{
-      "key": "file.id",
+      "key": "software.name",
       "object": "file"
     },
     {
