@@ -33,7 +33,8 @@
     "fields": {
       "created": ["searchTerm"],
       "modified": ["searchTerm"],
-      "name": ["searchTerm"]
+      "name": ["searchTerm"],
+      "CVE" : ["CVE"]
     }
   },
   "ipv4-addr": {
