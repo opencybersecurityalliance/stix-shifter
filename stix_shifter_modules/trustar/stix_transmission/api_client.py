@@ -8,7 +8,6 @@ from stix_shifter_utils.utils import logger
 class APIClient():
 
     def __init__(self, connection, configuration):
-        self.base_url = "https://{}".format(connection['host'])
         self.headers = dict()
         self.auth = configuration["auth"]
         self.client = RestApiClient(connection['host'])
