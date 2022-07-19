@@ -19,7 +19,7 @@
                 "max": 65535
             },
             "proxy_cert": {
-                "type": "certificate",
+                "type": "password",
                 "optional": true,
                 "hidden": true
             },
