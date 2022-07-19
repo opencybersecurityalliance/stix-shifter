@@ -11,4 +11,4 @@ stix2-validator==3.0.2
 xmltodict==0.13.0
 jsonmerge==1.8.0
 colorlog==6.6.0
-stix2-matcher==2.0.2
+stix2-matcher==3.0.0
