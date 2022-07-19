@@ -1,10 +1,9 @@
+import json
 from stix_shifter_modules.arcsight.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import AsyncMock, get_mock_response
 from unittest.mock import patch
-import json
-import unittest
-import asyncio
-from asyncinit import asyncinit
+from unittest import TestCase
 
 CONFIG = {
     "auth": {
@@ -21,17 +20,8 @@ CONNECTION = {
 
 SEARCH_ID = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA."
 
-@asyncinit
-class ArcsightMockResponse:
-    async def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj
 
-    def read(self):
-        return bytearray(self.object, 'utf-8')
-
-
-class TestArcsightConnection(unittest.TestCase):
+class TestArcsightConnection(TestCase):
     @staticmethod
     def test_is_async():
         """to check connector is async"""
@@ -40,12 +30,10 @@ class TestArcsightConnection(unittest.TestCase):
         assert check_async
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
-    def test_ping(mock_session_id, mock_ping):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
+    def test_ping(mock_ping):
         """to check the ping status of connector"""
-        mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
-        mock_ping.return_value = ArcsightMockResponse(200, '{"sessionId":"2"}')
+        mock_ping.return_value = get_mock_response(200, '{"sessionId":"2"}', 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
@@ -54,13 +42,11 @@ class TestArcsightConnection(unittest.TestCase):
         assert ping_response['success'] is True
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
-    def test_ping_exception(mock_session_id, mock_ping):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
+    def test_ping_exception(mock_ping):
         """to check the ping exception of the connector"""
-        mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
-        mock_ping.return_value = ArcsightMockResponse(400, '{"errors": [{"code": 1009, "message": "Server session not '
-                                                       'found"}]}')
+        mock_ping.return_value = get_mock_response(400, '{"errors": [{"code": 1009, "message": "Server session not '
+                                                       'found"}]}', 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
         
@@ -71,12 +57,10 @@ class TestArcsightConnection(unittest.TestCase):
         assert ping_response['code'] == 'service_unavailable'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
-    def test_auth_exception(mock_session_id, mock_ping):
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
+    def test_auth_exception(mock_ping):
         """to check auth token generation exception"""
-        mock_session_id.return_value = ''
-        mock_ping.return_value = ArcsightMockResponse(503, '{"error": "Unauthorized"}')
+        mock_ping.return_value = get_mock_response(503, '{"error": "Unauthorized"}', 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         ping_response = transmission.ping()
 
@@ -87,12 +71,12 @@ class TestArcsightConnection(unittest.TestCase):
         assert ping_response['code'] == 'authentication_fail'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api', autospec=True)
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
     def test_create_query_connection(mock_session_id, mock_query_res):
         """to create the query search and get search id"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
-        mock_query_res.return_value = ArcsightMockResponse(200, '{"sessionId":"2"}')
+        mock_query_res.return_value = get_mock_response(200, '{"sessionId":"2"}', 'byte')
         query = "{\"query\": \"destinationPort = 22\", \"start_time\": \"2020-06-0111:20:20.000-05:00\", " \
                 "\"end_time\": \"2020-07-01T12:00:44.000-05:00\"}"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
@@ -104,14 +88,14 @@ class TestArcsightConnection(unittest.TestCase):
         assert 'search_id' in query_response
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api', autospec=True)
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
     def test_create_query_error(mock_session_id, mock_query_res):
         """query search error check"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
-        mock_query_res.return_value = ArcsightMockResponse(400, '{"errors": [{"code": 1111, '
+        mock_query_res.return_value = get_mock_response(400, '{"errors": [{"code": 1111, '
                                                                 '"message": "Starting time '
-                                                                '2020-06-0111:20:20.000-05:00 format is wrong"}]}')
+                                                                '2020-06-0111:20:20.000-05:00 format is wrong"}]}', 'byte')
         query = "{\"query\": \"destinationPort = 22\", \"start_time\": \"2020-06-0111:20:20.000-05:00\", " \
                 "\"end_time\": \"2020-07-01T12:00:44.000-05:00\"}"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
@@ -196,7 +180,7 @@ class TestArcsightConnection(unittest.TestCase):
                  ]
             ]
         }
-        mock_create_results.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_results.return_value = get_mock_response(200, json.dumps(response), 'byte')
         search_id = '1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA.'
         offset = 0
         length = 10
@@ -253,7 +237,7 @@ class TestArcsightConnection(unittest.TestCase):
                  "Writer (redirected 2),1\\DsDriver\\driverVersion", "Sysmon", "DWORD (0x00000401)",
                  '00-0B-46-A8-98-81', '00-D0-09-D6-73-E9'
                  ]]}
-        mock_create_results.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_results.return_value = get_mock_response(200, json.dumps(response), 'byte')
         search_id = '1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA.'
         offset = 0
         length = 10
@@ -270,7 +254,7 @@ class TestArcsightConnection(unittest.TestCase):
     def test_create_results_empty(mock_create_results):
         """to get query results with empty response"""
         response = {}
-        mock_create_results.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_results.return_value = get_mock_response(200, json.dumps(response), 'byte')
         search_id = '1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA.:10'
         offset = 0
         length = 10
@@ -306,7 +290,7 @@ class TestArcsightConnection(unittest.TestCase):
     def test_result_error(mock_delete_error):
         """to get error in result search"""
         error = {"errors": [{'code': 1009, 'message': 'Server session not found'}]}
-        mock_delete_error.return_value = ArcsightMockResponse(400, json.dumps(error))
+        mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
         search_id = "1594383044445:BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k.:20"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         result_response = transmission.results(search_id, 0, 100)
@@ -320,7 +304,7 @@ class TestArcsightConnection(unittest.TestCase):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_delete_query_connection(mock_delete_query):
         """to delete the query search using search id"""
-        mock_delete_query.return_value = ArcsightMockResponse(200, "")
+        mock_delete_query.return_value = get_mock_response(200, "", 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         delete_response = transmission.delete(SEARCH_ID)
 
@@ -333,7 +317,7 @@ class TestArcsightConnection(unittest.TestCase):
     def test_delete_query_error(mock_delete_error):
         """to delete the query with invalid session id - error"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}
-        mock_delete_error.return_value = ArcsightMockResponse(400, json.dumps(error))
+        mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
         search_id = "1594383044445:BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k.:20"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         delete_response = transmission.delete(search_id)
@@ -367,7 +351,7 @@ class TestArcsightConnection(unittest.TestCase):
         """to get search status of the query - COMPLETED"""
         response = {'status': 'complete', 'result_type': 'histogram', 'hit': 1004,
                     'scanned': 1561219, 'elapsed': '00:00:00.530', 'message': []}
-        mock_create_status.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_status.return_value = get_mock_response(200, json.dumps(response), 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         status_response = transmission.status(SEARCH_ID)
 
@@ -384,7 +368,7 @@ class TestArcsightConnection(unittest.TestCase):
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 2000,
                     'scanned': 1561210, 'elapsed': '00:00:00.530', 'message': []}
         search_id = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA.:5000"
-        mock_create_status.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_status.return_value = get_mock_response(200, json.dumps(response), 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
@@ -401,7 +385,7 @@ class TestArcsightConnection(unittest.TestCase):
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 5000,
                     'scanned': 1561210, 'elapsed': '00:00:00.530', 'message': []}
         search_id = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA.:1000"
-        mock_create_status.return_value = ArcsightMockResponse(200, json.dumps(response))
+        mock_create_status.return_value = get_mock_response(200, json.dumps(response), 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
@@ -431,7 +415,7 @@ class TestArcsightConnection(unittest.TestCase):
     def test_status_error(mock_delete_error):
         """to get error when check with invalid user session id"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}
-        mock_delete_error.return_value = ArcsightMockResponse(400, json.dumps(error))
+        mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
         search_id = "1594383044445:BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k.:20"
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
@@ -448,9 +432,9 @@ class TestArcsightConnection(unittest.TestCase):
     def test_arcsight_logger_down(mock_results, mock_status, mock_delete):
         """arcsight logger down error"""
         error = 'The application is currently unavailable. Please retry shortly.'
-        mock_results.return_value = ArcsightMockResponse(503, error)
-        mock_status.return_value = ArcsightMockResponse(503, error)
-        mock_delete.return_value = ArcsightMockResponse(503, error)
+        mock_results.return_value = get_mock_response(503, error, 'byte')
+        mock_status.return_value = get_mock_response(503, error, 'byte')
+        mock_delete.return_value = get_mock_response(503, error, 'byte')
         search_id = "1594383044445:BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k.:20"
         offset = 0
         length = 10

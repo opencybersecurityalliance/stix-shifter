@@ -79,13 +79,13 @@ class Connector(BaseSyncConnector):
 
         return return_obj
 
-    def handle_detection_info_request(self, ids):
+    async def handle_detection_info_request(self, ids):
         ids = [ids[x:x + self.IDS_LIMIT] for x in range(0, len(ids), self.IDS_LIMIT)]
         ids_lst = ids.pop(0)
-        return_obj = self.send_info_request_and_handle_errors(ids_lst)
+        return_obj = await self.send_info_request_and_handle_errors(ids_lst)
 
         for ids_lst in ids:
-            curr_obj = self.send_info_request_and_handle_errors(ids_lst)
+            curr_obj = await self.send_info_request_and_handle_errors(ids_lst)
             return_obj['data'].extend(curr_obj['data'])
 
         return return_obj
@@ -157,7 +157,7 @@ class Connector(BaseSyncConnector):
             ids_obj['ids'] = response_json.get('resources')
 
             if ids_obj['ids']:  # There are not detections that match the filter arg
-                return_obj = self.handle_detection_info_request(ids_obj['ids'])
+                return_obj = await self.handle_detection_info_request(ids_obj['ids'])
 
                 for event_data in return_obj['data']:
                     device_data = event_data['device']

@@ -2,7 +2,6 @@ import asyncio
 import functools
 import importlib
 from stix_shifter_utils.utils.error_response import ErrorResponder
-import json
 
 
 RESULTS = 'results'

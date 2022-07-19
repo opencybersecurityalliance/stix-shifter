@@ -2,13 +2,12 @@
 import json
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from datetime import datetime, timedelta
-import requests
 
 
 class APIClient:
     INCIDENTS_IDS_ENDPOINT = 'detects/queries/detects/v1'
     INCIDENTS_INFO_ENDPOINT = 'detects/entities/summaries/GET/v1'
-    TOKEN_ENDPOINT = 'https://api.crowdstrike.com/oauth2/token'
+    TOKEN_ENDPOINT = 'oauth2/token'
     """API Client to handle all calls."""
 
     def __init__(self, connection, configuration):
@@ -41,9 +40,10 @@ class APIClient:
         :return: response, json object"""
         headers = dict()
         data = dict()
+        token = await self.get_token()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
-        headers['Authorization'] = f'Bearer {self.get_token()}'
+        headers['Authorization'] = f'Bearer {token}'
         endpoint = self.INCIDENTS_IDS_ENDPOINT
         data['filter'] = filter
         data['limit'] = limit
@@ -54,7 +54,8 @@ class APIClient:
     async def ping_box(self):
         # Sends a GET request
         headers = dict()
-        headers['Authorization'] = f'Bearer {self.get_token()}'
+        token = await self.get_token()
+        headers['Authorization'] = f'Bearer {token}'
         endpoint = 'detects/queries/detects/v1'  # Test if system alive
         return await self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
 
@@ -63,34 +64,38 @@ class APIClient:
         :param ids: Provide one or more incident IDs
         :return: response, json object"""
         headers = dict()
+        token = await self.get_token()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
-        headers['Authorization'] = f'Bearer {self.get_token()}'
+        headers['Authorization'] = f'Bearer {token}'
         endpoint = self.INCIDENTS_INFO_ENDPOINT
         ids_expression = json.dumps({'ids': ids}).encode("utf-8")
         return await self.client.call_api(endpoint, 'POST', headers=headers, data=ids_expression, timeout=self.timeout)
 
-    def get_token(self) -> str:
+    async def get_token(self) -> str:
         """Request a new OAuth2 token.
         :return: [description]
         :rtype: str
         """
         if self.token_expired():
-            resp = requests.request(
-                'POST',
-                self.TOKEN_ENDPOINT,
-                headers={
-                    'accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data=(
-                    f'client_id={self._client_id}'
-                    f'&client_secret={self._client_secret}'
-                )
+
+            headers = {
+                'accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            data = (
+                f'client_id={self._client_id}'
+                f'&client_secret={self._client_secret}'
             )
-            token = resp.json().get('access_token')
-            self._token = token
-            self._token_time = datetime.now()
+            resp = await self.client.call_api(self.TOKEN_ENDPOINT, 'POST', headers=headers, data=data, timeout=self.timeout)
+            response_code = resp.code
+            response_txt = resp.read().decode('utf-8')
+            if 199 < response_code < 300:
+                response_json = json.loads(response_txt)
+                if 'access_token' in response_json:
+                    token = response_json.get('access_token')
+                    self._token = token
+                    self._token_time = datetime.now()
         return self._token
 
     def token_expired(self) -> bool:

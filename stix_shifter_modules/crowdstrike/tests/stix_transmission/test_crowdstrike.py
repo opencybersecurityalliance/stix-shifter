@@ -2,9 +2,9 @@ import json
 import unittest
 from unittest.mock import ANY
 from unittest.mock import patch
+from tests.utils.async_utils import get_mock_response
 from stix_shifter_modules.crowdstrike.entry_point import EntryPoint
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
-from asyncinit import asyncinit
 
 
 config = {
@@ -18,24 +18,15 @@ connection = {
     'host': 'api.crowdstrike.com'
 }
 
-
-@asyncinit
-class RequestMockResponse:
-    def __init__(self, status_code, content):
-        self.code = status_code
-        self.content = content
-
-    def read(self):
-        return self.content   
-
-
+@patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_detections_IDs', autospec=True)
 class TestCrowdStrikeConnection(unittest.TestCase, object):
 
     @staticmethod
     def _create_query_list(query_string):
         return [query_string]
 
-    def test_status_endpoint(self):
+    def test_status_endpoint(self, mock_api_client):
+        mock_api_client.return_value = None
 
         entry_point = EntryPoint(connection, config)
         search_id = self._create_query_list("process_name:notepad.exe")
@@ -48,7 +39,8 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'progress' in results_response
         assert results_response['progress'] == 100
 
-    def test_create_query_connection(self):
+    def test_create_query_connection(self, mock_api_client):
+        mock_api_client.return_value = None
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")
@@ -59,8 +51,8 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'search_id' in results_response
         assert results_response['search_id'] == query_expression
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_no_results_response(self, mock_auth_response, mock_requests_response):
+
+    def test_no_results_response(self, mock_requests_response):
         mocked_return_value = """
 {"terms": ["process_name:notepad.exe"],
  "results": [],
@@ -76,9 +68,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
  "filtered": {}
 }
 """
-
-        mock_auth_response.return_value = RequestMockResponse(200, {})
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
@@ -90,8 +80,9 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_one_results_response(self, mock_auth_response, mock_requests_response):
+
+
+    def test_one_results_response(self, mock_requests_response):
         mocked_return_value = """
 {
   "terms": [
@@ -112,8 +103,7 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
 }
 """
 
-        mock_auth_response.return_value = RequestMockResponse(200, {})
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
@@ -125,12 +115,10 @@ class TestCrowdStrikeConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.crowdstrike.stix_transmission.api_client.APIClient.get_token', autospec=True)
-    def test_transmit_limit_and_sort(self, mock_auth_response, mock_requests_response):
-        mocked_return_value = '{"reason": "query_syntax_error"}'
 
-        mock_auth_response.return_value = RequestMockResponse(200, {})
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+    def test_transmit_limit_and_sort(self, mock_requests_response):
+        mocked_return_value = '{"reason": "query_syntax_error"}'
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]

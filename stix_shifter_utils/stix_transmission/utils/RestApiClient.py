@@ -105,49 +105,13 @@ class RestApiClient:
             
             
             try:
+                self.server_cert_content = False
 
-
-
-                # session = requests.Session()
-                # retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
-                #                        allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
-                # session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
-
-                # if self.sni is not None:
-                #     # only use the tool belt session in case of SNI for safety
-                #     session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=self.retry_max))
-                #     actual_headers["Host"] = self.sni
-                # else:
-                #     session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
-                # call = getattr(session, method.lower())
-                # it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
-                #                          verify=self.server_cert_content,
-                #                          timeout=(self.connect_timeout, timeout),
-                #                          auth=self.auth)
-                # it.start()
-                # it.join(timeout)
-                # if it.is_alive():
-                #     raise Exception(f'timeout_error ({timeout} sec)')
-                # response = it.result
-                # if isinstance(response, Exception):
-                #     raise response
-                # if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
-                #    'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
-                #     self.logger.error("WARNING: " +
-                #                       response.headers['Content-Type'], file=sys.stderr)
-                # return ResponseWrapper(response)
-
-
-
-
-
-
-                # self.server_cert_content = False
                 client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout)
                 retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
                 async with RetryClient(retry_options=retry_options) as client:
                     call = getattr(client, method.lower()) 
-                        
+
                     if self.sni is not None:
                         # only use the tool belt session in case of SNI for safety
                         actual_headers["Host"] = self.sni

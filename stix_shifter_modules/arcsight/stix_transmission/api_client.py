@@ -25,7 +25,7 @@ class APIClient:
     async def ping_data_source(self):
         data, headers = dict(), dict()
         data['search_session_id'] = int(round(time.time() * 1000))
-        data['user_session_id'] = self.get_user_session_id()
+        data['user_session_id'] = await self.get_user_session_id()
         data['start_time'] = self.get_current_time()['start_time']
         data['end_time'] = self.get_current_time()['end_time']
         headers['Content-Type'] = 'application/json'
@@ -36,7 +36,7 @@ class APIClient:
         return_obj = dict()
         auth = dict()
         auth['search_session_id'] = int(round(time.time() * 1000))
-        auth['user_session_id'] = self.get_user_session_id()
+        auth['user_session_id'] = await self.get_user_session_id()
         try:
             query = json.loads(query_expression)
             query.update(auth)
