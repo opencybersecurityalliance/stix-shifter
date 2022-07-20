@@ -820,33 +820,6 @@
       "references": "directory_target_image"
     }
   ],
-  "SourceImage": [
-    {
-      "key": "file.name",
-      "object": "file_image",
-      "transformer": "ToFileName"
-    },
-    {
-      "key": "directory.path",
-      "object": "directory_image",
-      "transformer": "ToDirectoryPath"
-    },
-    {
-      "key": "process.binary_ref",
-      "object": "process",
-      "references": "file_image"
-    },
-    {
-      "key": "file.parent_directory_ref",
-      "object": "file_image",
-      "references": "directory_image"
-    },
-    {
-      "key": "x-oca-event.process_ref",
-      "object": "event",
-      "references": "process"
-    }
-  ],
   "Message": [
     {
       "key": "artifact.payload_bin",

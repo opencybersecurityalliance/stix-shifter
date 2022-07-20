@@ -24,7 +24,13 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        }
+        },
+	"options": {
+            "index": {
+                "type": "text",
+                "optional": true
+	    }
+	}
     },
     "configuration": {
         "auth": {

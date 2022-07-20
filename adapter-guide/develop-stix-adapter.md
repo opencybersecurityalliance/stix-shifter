@@ -1,8 +1,10 @@
 # Developing a new STIX-shifter connector
 
 - [Introduction](../README.md)
+- [Overview of the project](../OVERVIEW.md)
 - [Scenario](#scenario)
 - [Prerequisites](#prerequisites)
+- [Best Practices for developing a connector](best_practices.md)
 - [Steps](#steps)
 
 ## Scenario
@@ -30,6 +32,10 @@ By implementing a new connector, _Developer A_ allows _Product A_ to fit into th
 - You must be familiar or understand the following concepts:
   - Observable objects. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)
   - Stix patterning. See [STIX™ Version 2.0. Part 5: STIX Patterning](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part5-stix-patterning.html)
+
+## Best practices
+
+Familiarize yourself with some [best practices](best_practices.md) before beginning a new connector.
 
 ## Steps
 
