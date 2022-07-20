@@ -95,8 +95,12 @@ class Connector(BaseSyncConnector):
         techniques_lists = []
         if 'AttackTechniques' in event_data:
             for techniques_lst in event_data['AttackTechniques']:
-                attackTechniques = json.loads(techniques_lst)
-                techniques_lists.append(attackTechniques)
+                try:
+                    attackTechniques = json.loads(techniques_lst)
+                except json.decoder.JSONDecodeError:
+                    attackTechniques = ''
+                finally:
+                    techniques_lists.append(attackTechniques)
             event_data['AttackTechniques'] = techniques_lists
 
         alerts = []
