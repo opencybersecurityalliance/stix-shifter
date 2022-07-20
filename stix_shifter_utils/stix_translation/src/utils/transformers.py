@@ -362,9 +362,9 @@ class SeverityToNumericVal(ValueTransformer):
 
     @staticmethod
     def transform(severity):
-        if severity == 'high':
+        if severity.lower() == 'high':
             return HIGH_SEVERITY
-        elif severity == 'medium':
+        elif severity.lower() == 'medium':
             return MEDIUM_SEVERITY
         else:
             return LOW_SEVERITY
