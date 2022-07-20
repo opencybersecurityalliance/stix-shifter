@@ -4,6 +4,7 @@ from unittest.mock import patch
 import json
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import get_aws_mock_response
 from botocore.exceptions import ClientError
 from asyncinit import asyncinit
 
@@ -25,14 +26,6 @@ IAM_CONFIG = {
 CONNECTION = {
     "options": {"region": "xyz"}
 }
-
-@asyncinit
-class AWSComposeMockResponse:
-    async def __init__(self, object):
-        self.object = object
-
-    def __getitem__(self, prop):
-        return self.object[prop]
 
 class AWSMockJsonResponse:
     def __init__(self):
@@ -261,7 +254,7 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_ping.return_value = AWSComposeMockResponse({})
+        mock_ping.return_value = get_aws_mock_response({})
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         ping_response = transmission.ping()
 
@@ -320,8 +313,8 @@ class TestAWSConnection(unittest.TestCase):
         }
 
         mock_create_query.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.describe_log_groups(**{})), 
-            AWSComposeMockResponse(AWSMockJsonResponse.start_query(**{}))
+            get_aws_mock_response(AWSMockJsonResponse.describe_log_groups(**{})), 
+            get_aws_mock_response(AWSMockJsonResponse.start_query(**{}))
         ]
         
         query = "{\"logType\": \"vpcflow\", \"limit\": 2, \"logGroupName\": \"USEast1_FlowLogs\", " \
@@ -355,8 +348,8 @@ class TestAWSConnection(unittest.TestCase):
         }
         
         mock_create_query.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.describe_log_groups(**{})), 
-            AWSComposeMockResponse(AWSMockJsonResponse.start_query(**{}))
+            get_aws_mock_response(AWSMockJsonResponse.describe_log_groups(**{})), 
+            get_aws_mock_response(AWSMockJsonResponse.start_query(**{}))
         ]
 
         query = "{\"logType\": \"vpcflow\", \"limit\": 10000, \"logGroupName\": \"USEast1_FlowLogs\", " \
@@ -408,7 +401,7 @@ class TestAWSConnection(unittest.TestCase):
     @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_results_connection(mock_results):
         mock_results.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.get_query_results(**{}))
+            get_aws_mock_response(AWSMockJsonResponse.get_query_results(**{}))
         ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         offset = 0
@@ -437,7 +430,7 @@ class TestAWSConnection(unittest.TestCase):
         }
 
         mock_delete_query.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.stop_query(**{}))
+            get_aws_mock_response(AWSMockJsonResponse.stop_query(**{}))
         ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
@@ -474,7 +467,7 @@ class TestAWSConnection(unittest.TestCase):
         }
 
         mock_create_status.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.get_query_results(**{}))
+            get_aws_mock_response(AWSMockJsonResponse.get_query_results(**{}))
         ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
@@ -501,7 +494,7 @@ class TestAWSConnection(unittest.TestCase):
         }
 
         mock_create_status.side_effect = [
-            AWSComposeMockResponse(MockStatusResponse.get_query_results(**{}))
+            get_aws_mock_response(MockStatusResponse.get_query_results(**{}))
         ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)

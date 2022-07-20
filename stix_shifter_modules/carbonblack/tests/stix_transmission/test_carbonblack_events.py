@@ -2,8 +2,8 @@ import unittest
 from copy import deepcopy
 from unittest.mock import patch
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
-from stix_shifter_modules.carbonblack.tests.stix_transmission.test_carbonblack import RequestMockResponse
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
 
 config = {
     "auth": {
@@ -169,7 +169,7 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
 }
 """
         mock_requests_response.side_effect = [
-            RequestMockResponse(200, mocked_process_return_value.encode())
+            get_mock_response(200, mocked_process_return_value.encode())
         ]
 
         entry_point = EntryPoint(connection, config)
@@ -189,11 +189,11 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
             TestCarbonBlackEventsConnection._get_mock_process_and_events_data()
 
         mock_run_events_search_response.side_effect = [
-            RequestMockResponse(200, mocked_events_return_value.encode())
+            get_mock_response(200, mocked_events_return_value.encode())
         ]
 
         mock_run_processes_search_response.side_effect = [
-            RequestMockResponse(200, mocked_process_return_value.encode())
+            get_mock_response(200, mocked_process_return_value.encode())
         ]
 
         _connection = deepcopy(connection)
@@ -215,11 +215,11 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
             TestCarbonBlackEventsConnection._get_mock_process_and_events_data()
 
         mock_run_events_search_response.side_effect = [
-            RequestMockResponse(200, mocked_events_return_value.encode())
+            get_mock_response(200, mocked_events_return_value.encode())
         ]
 
         mock_run_processes_search_response.side_effect = [
-            RequestMockResponse(200, mocked_process_return_value.encode())
+            get_mock_response(200, mocked_process_return_value.encode())
         ]
 
         entry_point = EntryPoint(connection, config)
@@ -245,7 +245,7 @@ class TestCarbonBlackEventsConnection(unittest.TestCase, object):
 """
 
         mock_requests_response.side_effect = [
-            RequestMockResponse(401, mocked_return_value.encode())
+            get_mock_response(401, mocked_return_value.encode())
         ]
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]

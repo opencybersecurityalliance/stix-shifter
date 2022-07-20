@@ -3,12 +3,11 @@ from unittest.mock import patch
 import json
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import get_aws_mock_response
 from botocore.exceptions import ClientError
 from botocore.exceptions import ParamValidationError
 import datetime
 from dateutil.tz import tzlocal
-import asyncio
-from asyncinit import asyncinit
 
 CONFIGURATION = {
     "auth": {
@@ -33,17 +32,6 @@ CONNECTION = {
     "guardduty_database_name": "gd_logs",
     "guardduty_table_name": "gd_logs"
 }
-
-@asyncinit
-class AWSComposeMockResponse:
-    async def __init__(self, object):
-        self.object = object
-
-    def __getitem__(self, prop):
-        return self.object[prop]
-
-    def get(self, prop, default=None):
-        return self.object.get(prop, default)
 
 class AWSMockJsonResponse:
 
@@ -416,7 +404,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_query_connection(mock_start_query):
-        mock_start_query.return_value = AWSComposeMockResponse(AWSMockJsonResponse.start_query_execution(**{}))
+        mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
         
         query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590 LIMIT 10000"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
@@ -445,7 +433,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_iam_create_query_connection(mock_start_query):
-        mock_start_query.return_value = AWSComposeMockResponse(AWSMockJsonResponse.start_query_execution(**{}))
+        mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
         query = """{
             "vpcflow": "(CAST(destinationport AS varchar) IN ('38422', '38420') AND starttime BETWEEN 1603975773 AND \
             1603976073 LIMIT 100) UNION (CAST(destinationport AS varchar) = '32791' AND starttime BETWEEN 1603975773 \
@@ -479,10 +467,10 @@ class TestAWSConnection(unittest.TestCase):
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.getPaginatedResult')
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_results_connection(mock_results, mock_paginated_results):
-        mock_paginated_results.return_value = AWSComposeMockResponse(AWSMockJsonResponse.get_query_paginated_results(**{}))
+        mock_paginated_results.return_value = get_aws_mock_response(AWSMockJsonResponse.get_query_paginated_results(**{}))
         mock_results.side_effect = [
-            AWSComposeMockResponse(AWSMockJsonResponse.get_query_execution(**{})),
-            AWSComposeMockResponse(AWSMockJsonResponse.delete_objects(**{})),
+            get_aws_mock_response(AWSMockJsonResponse.get_query_execution(**{})),
+            get_aws_mock_response(AWSMockJsonResponse.delete_objects(**{})),
         ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:vpcflow"
         offset = 0
@@ -499,7 +487,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_delete_query_connection(mock_delete_query):
-        mock_delete_query.return_value = AWSComposeMockResponse(AWSMockJsonResponse.stop_query_execution(**{}))
+        mock_delete_query.return_value = get_aws_mock_response(AWSMockJsonResponse.stop_query_execution(**{}))
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         delete_response = transmission.delete(search_id)
@@ -525,7 +513,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_status_connection(mock_create_status):
-        mock_create_status.return_value = AWSComposeMockResponse(AWSMockJsonResponse.get_query_execution(**{}))
+        mock_create_status.return_value = get_aws_mock_response(AWSMockJsonResponse.get_query_execution(**{}))
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         status_response = transmission.status(search_id)
@@ -539,7 +527,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_status_running(mock_create_status):
-        mock_create_status.return_value = AWSComposeMockResponse(MockStatusResponseRunning.get_query_execution(**{}))
+        mock_create_status.return_value = get_aws_mock_response(MockStatusResponseRunning.get_query_execution(**{}))
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870"
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         status_response = transmission.status(search_id)
@@ -567,7 +555,7 @@ class TestAWSConnection(unittest.TestCase):
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_ping_connection(mock_create_status):
-        mock_create_status.return_value = AWSComposeMockResponse(AWSMockJsonResponse.list_work_groups(**{}))
+        mock_create_status.return_value = get_aws_mock_response(AWSMockJsonResponse.list_work_groups(**{}))
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         ping_response = transmission.ping()
 

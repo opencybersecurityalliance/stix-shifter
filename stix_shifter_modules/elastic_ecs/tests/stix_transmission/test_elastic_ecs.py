@@ -1,24 +1,12 @@
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from stix_shifter_modules.elastic_ecs.stix_transmission.connector import UnexpectedResponseException
-from unittest.mock import patch
-import unittest
-import pytest
-import json
-import os
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.error_response import ErrorCode
-from asyncinit import asyncinit
+from tests.utils.async_utils import get_mock_response
 
-
-
-@asyncinit
-class ElasticEcsMockResponse:
-    def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
-
-    def read(self):
-        return bytearray(self.object, 'utf-8')
+import pytest
+from unittest.mock import patch
+import unittest
 
 
 class TestElasticEcsConnection(unittest.TestCase, object):
@@ -32,7 +20,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
     def test_ping_endpoint(self, mock_ping_response):
         mocked_return_value = '["mock", "placeholder"]'
 
-        mock_ping_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -139,7 +127,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                     ]
                 }
             } """
-        mock_results_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -168,7 +156,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_results_response_exception(self, mock_results_response):
         mocked_return_value = """ {    } """
-        mock_results_response.return_value = ElasticEcsMockResponse(404, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(404, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -230,7 +218,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                 }
             } """
 
-        mock_results_response.return_value = ElasticEcsMockResponse(200, results_mock)
+        mock_results_response.return_value = get_mock_response(200, results_mock, 'byte')
 
         config = {
             "auth": {

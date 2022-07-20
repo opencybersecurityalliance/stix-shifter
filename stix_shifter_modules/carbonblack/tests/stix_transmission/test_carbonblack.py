@@ -1,10 +1,8 @@
-import json
 import unittest
-from unittest.mock import patch, MagicMock, ANY
+from unittest.mock import patch
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
-import asyncio
-from asyncinit import asyncinit
+from tests.utils.async_utils import get_mock_response
 
 
 
@@ -17,21 +15,6 @@ connection = {
     "host": "hostbla",
     "port": 8080
 }
-
-
-@asyncinit
-class RequestMockResponse:
-    def __init__(self, status_code, content):
-        self.code = status_code
-        self.content = content
-
-    def read(self):
-        return self.content
-
-
-class AsyncMock(MagicMock):
-    async def __call__(self, *args, **kwargs):
-        return super(AsyncMock, self).__call__(*args, **kwargs)
 
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
@@ -82,7 +65,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
   }
 ] """
 
-        mock_requests_response.return_value = RequestMockResponse(200, ping_response.encode())
+        mock_requests_response.return_value = get_mock_response(200, ping_response.encode())
 
         entry_point = EntryPoint(connection, config)
         ping_response = run_in_thread(entry_point.ping_connection)
@@ -131,7 +114,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
@@ -210,7 +193,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
@@ -232,7 +215,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 <p>The server could not verify that you are authorized to access the URL requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.</p>
 """
 
-        mock_requests_response.return_value = RequestMockResponse(401, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(401, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
@@ -250,7 +233,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_binary_bad_parameter_search_response(self, mock_requests_response):
         mocked_return_value = "Unhandled exception. Check logs for details."
 
-        mock_requests_response.return_value = RequestMockResponse(500, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(500, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
@@ -268,7 +251,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     def test_query_syntax_error_response(self, mock_run_processes_search):
         mocked_return_value = '{"reason": "query_syntax_error"}'
 
-        mock_run_processes_search.return_value = RequestMockResponse(400, mocked_return_value.encode())
+        mock_run_processes_search.return_value = get_mock_response(400, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("(process_name:cmd.exe")[0]
@@ -285,7 +268,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]

@@ -1,39 +1,15 @@
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import get_adal_mock_response, get_mock_response
 
 from unittest.mock import patch
-import unittest
-from stix_shifter.stix_transmission import stix_transmission
-
-import json
-import asyncio
-from asyncinit import asyncinit
-
-
-@asyncinit
-class AzureSentinelMockResponse:
-
-    def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj
-
-    def read(self):
-        return bytearray(self.object, 'utf-8')
-
-
-@asyncinit
-class AdalMockResponse:
-
-    @staticmethod
-    def acquire_token_with_client_credentials(resource, client_id, client_secret):
-        context_response = dict()
-        context_response['accessToken'] = 'abc12345'
-        return context_response
+from unittest import TestCase
 
 
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.adal.AuthenticationContext')
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
-class TestAzureSentinalConnection(unittest.TestCase):
+class TestAzureSentinalConnection(TestCase):
     def config(self):
         return {
                 "auth": {
@@ -51,7 +27,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         entry_point = EntryPoint(self.connection(), self.config())
         check_async = entry_point.is_async()
 
@@ -60,12 +36,9 @@ class TestAzureSentinalConnection(unittest.TestCase):
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = '["mock", "placeholder"]'
-
-        mock_ping_response.return_value = AzureSentinelMockResponse(200, mocked_return_value)
-        print(str(self.connection))
-        print(str(self.config))
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -75,7 +48,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
           "error": {
             "code": "BadRequest",
@@ -86,7 +59,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
             }
           }
         }"""
-        mock_ping_response.return_value = AzureSentinelMockResponse(400, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(400, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
         ping_response = transmission.ping()
@@ -96,7 +69,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
 
         query = "fileStates/any(a:a/path eq 'c:\\windows\\system32\\services.exe') and eventDateTime ge " \
                 "2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z"
@@ -112,7 +85,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
            autospec=True)
     def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
             "@odata.context": "https://graph.microsoft.com/beta/$metadata#Security/alerts(fileStates)",
             "@odata.nextLink": "https://graph.microsoft.com/beta/security/alerts?$select=filestates&$filter=fileStates%\
@@ -152,7 +125,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
                 }
             ]
         }"""
-        mock_results_response.return_value = AzureSentinelMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value)
 
         query = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
@@ -173,7 +146,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
     def test_results_paging_response(self, mock_results_response, mock_next_page_response, mock_api_client,
                                      mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
             "@odata.context": "https://graph.microsoft.com/beta/$metadata#Security/alerts(fileStates)",
             "@odata.nextLink": "https://graph.microsoft.com/beta/security/alerts?$select=filestates&$filter=fileStates%\
@@ -250,8 +223,8 @@ class TestAzureSentinalConnection(unittest.TestCase):
                 }
             ]
         }"""
-        mock_results_response.return_value = AzureSentinelMockResponse(200, mocked_return_value)
-        mock_next_page_response.return_value = AzureSentinelMockResponse(200, mocked_next_page_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value)
+        mock_next_page_response.return_value = get_mock_response(200, mocked_next_page_return_value)
 
         query = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
@@ -269,7 +242,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """ {
           "error": {
             "code": "BadRequest",
@@ -280,7 +253,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
             }
           }
         } """
-        mock_results_response.return_value = AzureSentinelMockResponse(404, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(404, mocked_return_value)
 
         query = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
@@ -295,7 +268,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
     def test_delete_query(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
 
         search_id = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
@@ -308,7 +281,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
     def test_status_query(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_generate_token.return_value = get_adal_mock_response()
 
         search_id = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
