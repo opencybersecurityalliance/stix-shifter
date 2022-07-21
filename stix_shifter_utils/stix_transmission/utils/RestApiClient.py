@@ -105,6 +105,7 @@ class RestApiClient:
             
             
             try:
+                # TODO: remove this
                 self.server_cert_content = False
 
                 client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout)

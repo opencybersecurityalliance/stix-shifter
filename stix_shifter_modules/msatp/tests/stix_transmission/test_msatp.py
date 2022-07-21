@@ -5,28 +5,10 @@ import unittest
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorCode
-from asyncinit import asyncinit
+from tests.utils.async_utils import get_mock_response, get_adal_mock_response
 
-@asyncinit
-class MSATPMockResponse:
-    def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj
 
-    def read(self):
-        return bytearray(self.object, 'utf-8')
-
-class AdalMockResponse:
-    @staticmethod
-    def acquire_token_with_client_credentials(resource, client_id, client_secret):
-        context_response = dict()
-        context_response['accessToken'] = 'abc12345'
-        return context_response
-
-# TODO: CONFICT RESOLVE REMOVE
-@patch('stix_shifter_modules.msatp.stix_transmission.connector.Connector.generate_token')
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
-@patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__init__')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
         return {
@@ -44,22 +26,21 @@ class TestMSATPConnection(unittest.TestCase):
             "selfSignedCert": "cert"
             }
 
-    def test_is_async(self, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+
+    def test_is_async(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         entry_point = EntryPoint(self.connection(), self.config())
         check_async = entry_point.is_async()
 
         assert check_async is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
+    def test_ping_endpoint(self, mock_ping_response, mock_adal_auth):
 
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+        mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = '["mock", "placeholder"]'
 
-        mock_ping_response.return_value = MSATPMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
         
@@ -67,14 +48,11 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response['success']
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_ping_endpoint_exception(self, mock_ping_response, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = MSATPMockResponse(400, mocked_return_value)
-        mock_ping_response.side_effect = Exception('exception')
+        mock_ping_response.return_value = get_mock_response(400, mocked_return_value)
 
-        # with pytest.raises(Exception) as exc_info:
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -82,9 +60,8 @@ class TestMSATPConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_query_connection(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
 
         query = "(find withsource = TableName in (DeviceNetworkEvents) where Timestamp >= datetime(" \
                 "2019-09-24T16:32:32.993821Z) and Timestamp < datetime(2019-09-24T16:37:32.993821Z) | order by " \
@@ -99,11 +76,8 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_file_response(self, mock_results_response, mock_api_client, mock_generate_token):
-
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_results_file_response(self, mock_results_response, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = """{
                             "Results": [{
                                 "TableName": "DeviceFileEvents",
@@ -115,7 +89,7 @@ class TestMSATPConnection(unittest.TestCase):
                                 "MD5": "26a2fe38dc6f42386659e611219c563c"
                             }]
                             }"""
-        mock_results_response.return_value = MSATPMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         query = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by ' \
@@ -133,17 +107,14 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_registry_response(self, mock_results_response, mock_api_client, mock_generate_token):
-
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_results_registry_response(self, mock_results_response, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","DeviceName": "testmachine1","ActionType": "RegistryValueSet",
 "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
 "RegistryValueType":
 "Binary","RegistryValueName": "FailureActions","RegistryValueData": ""}]}"""
-        mock_results_response.return_value = MSATPMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         query = '(find withsource = TableName in (DeviceRegistryEvents) where Timestamp >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-10T10:43:10.003Z) | order by Timestamp ' \
@@ -163,10 +134,10 @@ class TestMSATPConnection(unittest.TestCase):
     
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_generate_token):
-        mock_generate_token.return_value = None
+    def test_results_response_exception(self, mock_results_response, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = """ {    } """
-        mock_results_response.return_value = MSATPMockResponse(404, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(404, mocked_return_value)
 
         query = "(find withsource = TableName in (DeviceNetworkEvents) where " \
                 "Timestamp >= datetime('2021-04-25T14:09:15.093Z) and Timestamp < datetime(2021-04-25T14:14:15.093Z) " \
@@ -183,10 +154,8 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_query_flow(self, mock_results_response, mock_api_client, mock_generate_token):
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_query_flow(self, mock_results_response, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
         results_mock = """{
                             "Results": [{
                                 "TableName": "DeviceFileEvents",
@@ -199,7 +168,7 @@ class TestMSATPConnection(unittest.TestCase):
                             }]
                             }"""
 
-        mock_results_response.return_value = MSATPMockResponse(200, results_mock)
+        mock_results_response.return_value = get_mock_response(200, results_mock, 'byte')
 
         query = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                 '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by Timestamp ' \
@@ -228,9 +197,8 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    def test_delete_query(self, mock_api_client, mock_generate_token):
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_delete_query(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by ' \
@@ -243,11 +211,8 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    def test_status_query(self, mock_api_client, mock_generate_token):
-
-
-        mock_api_client.return_value = None
-        mock_generate_token.return_value = AdalMockResponse
+    def test_status_query(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
 
         search_id = '(find withsource = TableName in (DeviceFileEvents) where Timestamp >= datetime(' \
                     '2019-09-01T08:43:10.003Z) and Timestamp < datetime(2019-10-01T10:43:10.003Z) | order by ' \
