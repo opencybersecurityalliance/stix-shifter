@@ -30,11 +30,11 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         # Grab the response, extract the response code, and convert it to readable json
         # Verify the input
         response = self.api_client.get_status(search_id)
-        response_code = response.code
+        response_code = response.status_code
         response_dict = json.loads(response.read())
 
         # Construct a response object

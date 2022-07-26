@@ -3,12 +3,12 @@ from unittest.mock import MagicMock
 from asyncinit import asyncinit
 
 
-def get_mock_response(status_code, content, return_type='str'):
+def get_mock_response(status_code, content=None, return_type='str', response=None):
     if sys.version_info.major == 3:
         if sys.version_info.minor < 8:
-            return RequestMockResponseOld(status_code, content, return_type)
+            return RequestMockResponseOld(status_code, content, return_type, response)
         else:
-            return RequestMockResponse(status_code, content, return_type)
+            return RequestMockResponse(status_code, content, return_type, response)
 
 def get_aws_mock_response(obj):
     if sys.version_info.major == 3:
@@ -22,10 +22,12 @@ def get_adal_mock_response():
 
 @asyncinit
 class RequestMockResponseOld:
-    def __init__(self, status_code, content, return_type):
+    def __init__(self, status_code, content, return_type, response=None):
         self.code = status_code
         self.content = content
+        self.response = response
         self.return_type = return_type
+        self.history = []
 
     def read(self):
         if self.return_type == 'byte':
@@ -33,10 +35,12 @@ class RequestMockResponseOld:
         return self.content
 
 class RequestMockResponse:
-    def __init__(self, status_code, content, return_type):
+    def __init__(self, status_code, content, return_type, response=None):
         self.code = status_code
         self.content = content
+        self.response = response
         self.return_type = return_type
+        self.history = []
 
     def read(self):
         if self.return_type == 'byte':
@@ -76,3 +80,19 @@ class AdalMockResponse:
 class AsyncMock(MagicMock):
     async def __call__(self, *args, **kwargs):
         return super(AsyncMock, self).__call__(*args, **kwargs)
+
+
+# class PingResponse:
+#     """ class for ping response"""
+
+#     def __init__(self, responseobject):
+#         self.response = responseobject
+
+
+class InnerResponse:
+    """ class for capturing response"""
+
+    def __init__(self, st_code, txt):
+        self.status_code = st_code
+        self.text = txt
+        self.history = []

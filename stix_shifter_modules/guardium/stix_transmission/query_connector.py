@@ -9,21 +9,21 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         try:
-            
+            await self.api_client.get_token()
             response = self.api_client.create_search(query)
-
-            response_code = response.code
-            response_dict = json.loads(response.read())
-
+            response_code = response.status_code
+            
             # Construct a response object
             return_obj= dict()
             if response_code == 200:
+                response_raw = response.read()
+                response_dict = json.loads(response_raw)
                 return_obj['search_id'] = response_dict['search_id']
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when creating search: {}'.format(err))

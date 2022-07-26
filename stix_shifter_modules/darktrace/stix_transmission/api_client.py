@@ -23,16 +23,16 @@ class APIClient:
                                     url_modifier_function=url_modifier_function
                                     )
 
-    def ping_box(self):
+    async def ping_box(self):
         """
             Ping the Data Source
             :return: Response object
         """
         encoded_query = self._encode_query("")
         headers = self.get_header(self.PING_ENDPOINT, encoded_query)
-        return self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None)
 
-    def get_search_results(self, query):
+    async def get_search_results(self, query):
         """
         Get results from Data Source
         :param query: Data Source Query
@@ -41,7 +41,7 @@ class APIClient:
         self.logger.debug("query: %s", query)
         encoded_query = self._encode_query(query)
         headers = self.get_header(self.QUERY_ENDPOINT, encoded_query)
-        return self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None)
 
     def get_header(self, endpoint,  query):
         query_url = "/" + endpoint + query

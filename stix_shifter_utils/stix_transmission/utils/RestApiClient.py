@@ -1,4 +1,4 @@
-from aiohttp_retry import RetryClient, RetryOptions, ExponentialRetry
+from aiohttp_retry import RetryClient, ExponentialRetry
 from aiohttp import ClientTimeout
 import aiohttp
 from collections.abc import Mapping
