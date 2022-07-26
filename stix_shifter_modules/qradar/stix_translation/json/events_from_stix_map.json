@@ -101,8 +101,7 @@
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"],
-      "x_unique_id": ["ProcessGuid"]
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
     }
   },
   "x-oca-event": {
@@ -143,15 +142,6 @@
     "fields": {
       "key": ["ObjectName", "RegistryKey"],
       "values[*].name": ["RegistryValueName"]
-    }
-  },
-  "x-ibm-windows": {
-    "fields": {
-      "targetimage": ["TargetImage"],
-      "grantedaccess": ["GrantedAccess"],
-      "calltrace": ["CallTrace"],
-      "sourceimage": ["Image"],
-      "pipename": ["PipeName"]
     }
   }
 }
