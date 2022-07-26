@@ -95,13 +95,14 @@
   "process": {
     "fields": {
       "pid": ["ProcessId"],
-      "name": ["ProcessName", "Image", "ParentImage"],
-      "image_ref.name": ["Image"],
-      "image_ref.parent_directory_ref.path": ["Image"],
+      "name": ["ProcessName", "Image", "ParentImage", "TargetImage"],
+      "image_ref.name": ["Image", "TargetImage"],
+      "image_ref.parent_directory_ref.path": ["Image", "TargetImage"],
       "parent_ref.image_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"],
+      "x_unique_id": ["ProcessGuid"]
     }
   },
   "x-oca-event": {

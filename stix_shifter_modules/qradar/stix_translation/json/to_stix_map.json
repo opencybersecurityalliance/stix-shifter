@@ -829,8 +829,36 @@
       "key": "file.parent_directory_ref",
       "object": "file_target_image",
       "references": "directory_target_image"
+    },
+    {
+      "key": "x-ibm-windows.targetimage",
+      "object": "xwin"
     }
   ],
+  "GrantedAccess": {
+    "key": "x-ibm-windows.granted_access",
+    "object": "xwin"
+  },
+  "CallTrace": {
+    "key": "x-ibm-windows.call_trace",
+    "object": "xwin"
+  },
+  "PipeName": {
+    "key": "x-ibm-windows.pipe_name",
+    "object": "xwin"
+  },
+  "StartModule": {
+    "key": "x-ibm-windows.start_module",
+    "object": "xwin"
+  },
+  "StartFunction": {
+    "key": "x-ibm-windows.start_function",
+    "object": "xwin"
+  },
+  "Signed": {
+    "key": "x-ibm-windows.signed",
+    "object": "xwin"
+  },
   "Message": [
     {
       "key": "artifact.payload_bin",
@@ -888,5 +916,9 @@
       "object": "event",
       "references": "host"
     }
-  ]
+  ],
+  "ProcessGuid": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  }
 }

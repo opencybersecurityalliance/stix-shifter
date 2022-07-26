@@ -491,8 +491,7 @@
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
     }
-  ]
-  ,
+  ],
   "flowinterface": {
     "key": "x-qradar.flow_interface",
     "object": "x-qradar"
@@ -799,10 +798,32 @@
       "references": "winregistry"
     }
   ],
-  "TargetImage": {
+  "TargetImage": [
+    {
+      "key": "file.name",
+      "object": "file_target_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_target_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "target_process",
+      "references": "file_target_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_target_image",
+      "references": "directory_target_image"
+    },
+    {
     "key": "x-ibm-windows.targetimage",
     "object": "xwin"
-  },
+    }
+  ],
   "GrantedAccess": {
     "key": "x-ibm-windows.granted_access",
     "object": "xwin"
@@ -877,5 +898,20 @@
   "hasoffense": {
     "key": "x-qradar.has_offense",
     "object": "x-qradar"
+  },
+  "MachineId": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "ProcessGuid": {
+    "key": "process.x_unique_id",
+    "object": "process"
   }
 }
