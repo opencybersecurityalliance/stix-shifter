@@ -138,14 +138,6 @@
 | x-ibm-finding | name | "CRE Name" |
 | x-ibm-finding | description | "CRE Description" |
 | <br> | | |
-| x-ibm-windows | targetimage | TargetImage |
-| x-ibm-windows | granted_access | GrantedAccess |
-| x-ibm-windows | call_trace | CallTrace |
-| x-ibm-windows | pipe_name | PipeName |
-| x-ibm-windows | start_module | StartModule |
-| x-ibm-windows | start_function | StartFunction |
-| x-ibm-windows | signed | Signed |
-| <br> | | |
 | x-oca-asset | ip_refs | identityip |
 | x-oca-asset | hostname | identityhostname |
 | x-oca-asset | ip_refs | sourceaddress |

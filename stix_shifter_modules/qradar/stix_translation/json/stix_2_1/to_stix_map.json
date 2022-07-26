@@ -491,8 +491,7 @@
       "key": "x-qradar.flow_source",
       "object": "x-qradar"
     }
-  ]
-  ,
+  ],
   "flowinterface": {
     "key": "x-qradar.flow_interface",
     "object": "x-qradar"
@@ -867,5 +866,20 @@
   "hasoffense": {
     "key": "x-qradar.has_offense",
     "object": "x-qradar"
+  },
+  "MachineId": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "ProcessGuid": {
+    "key": "process.x_unique_id",
+    "object": "process"
   }
 }

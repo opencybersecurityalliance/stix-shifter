@@ -101,7 +101,8 @@
       "parent_ref.binary_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"],
+      "x_unique_id": ["ProcessGuid"]
     }
   },
   "x-oca-event": {

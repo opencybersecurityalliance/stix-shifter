@@ -888,5 +888,9 @@
       "object": "event",
       "references": "host"
     }
-  ]
+  ],
+  "ProcessGuid": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  }
 }
