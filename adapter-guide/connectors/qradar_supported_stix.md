@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 07/26/22
 ## IBM QRadar
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -109,6 +109,7 @@
 | process | parent_ref | "Parent Process ID" |
 | process | binary_ref | TargetImage |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
+| process | x_unique_id | "Process Guid" |
 | <br> | | |
 | software | name | applicationname |
 | <br> | | |
@@ -136,6 +137,14 @@
 | x-ibm-finding | rule_names | rulename(creeventlist) |
 | x-ibm-finding | name | "CRE Name" |
 | x-ibm-finding | description | "CRE Description" |
+| <br> | | |
+| x-ibm-windows | targetimage | TargetImage |
+| x-ibm-windows | granted_access | GrantedAccess |
+| x-ibm-windows | call_trace | CallTrace |
+| x-ibm-windows | pipe_name | PipeName |
+| x-ibm-windows | start_module | StartModule |
+| x-ibm-windows | start_function | StartFunction |
+| x-ibm-windows | signed | Signed |
 | <br> | | |
 | x-oca-asset | ip_refs | identityip |
 | x-oca-asset | hostname | identityhostname |
