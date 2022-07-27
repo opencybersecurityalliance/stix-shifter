@@ -8,21 +8,22 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         try:
             min_range = offset
             max_range = offset + length
             # print(search_id, min_range, max_range, length)
             search_id = search_id.replace('\'', "\"")
             query_json= json.loads(search_id)
-            response, response_code = self.api_client.get_search_results(query_json)
+            response = await self.api_client.get_search_results(query_json)
+            response_code = response['code']
 
             # Grab the response, extract the response code, and convert it to readable json
             # response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
             # json_data = json.loads(response.read().decode('utf-8'))
             # print(type(response), response)
             # response_code = response.code
-            json_data = response
+            json_data = response['message']
 
             if "rl" in json_data.keys():
                 json_data['rl'] = [json_data['rl']]
@@ -55,6 +56,4 @@ class ResultsConnector(BaseResultsConnector):
             return return_obj
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
-            import traceback
-            self.logger.error(traceback.print_stack())
             raise

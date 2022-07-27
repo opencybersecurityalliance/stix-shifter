@@ -13,6 +13,6 @@ class BaseSyncConnector(BaseConnector):
     async def create_status_connection(self, search_id):
         return {"success": True, "status": "COMPLETED", "progress": 100}
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         return {"success": True}
 
