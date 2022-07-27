@@ -9,5 +9,5 @@ class QueryConnector(BaseQueryConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
        return {"success": True, "search_id": query}

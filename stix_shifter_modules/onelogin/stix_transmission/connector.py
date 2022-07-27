@@ -14,7 +14,7 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
             response = self.api_client.generate_token()
             # Construct a response object
@@ -28,7 +28,7 @@ class Connector(BaseSyncConnector):
             self.logger.error('error when pinging datasource {}:'.format(err))
             raise
 
-    def create_results_connection(self, query_expr, offset, length):
+    async def create_results_connection(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 

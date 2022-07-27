@@ -12,15 +12,29 @@ STATUS = 'status'
 PING = 'ping'
 IS_ASYNC = 'is_async'
 
-def run_in_thread(callable, *args, **kwargs):
-        loop = None
-        try:
-            loop = asyncio.get_event_loop()
-        except:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
 
+def run_in_thread(callable, *args, **kwargs):
+    loop = None
+    connector = 'unsupplied connector name'
+    if kwargs:
+        connector = kwargs.get('connector', None)
+        if connector and isinstance(connector, str):
+            kwargs.pop('connector')
+
+    try:
+        loop = asyncio.get_event_loop()
+    except:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    try:
         return loop.run_until_complete(callable(*args, **kwargs))
+    
+    except Exception as ex:
+        return_obj = dict()
+        ErrorResponder.fill_error(return_obj, error=ex, connector=connector)
+        return return_obj
+
 
 class StixTransmission:
 
@@ -52,22 +66,22 @@ class StixTransmission:
             self.init_error = e
     
     def query(self, query):
-        return run_in_thread(self.query_async, query)
+        return run_in_thread(self.query_async, query, connector=self.connector)
     
     def status(self, search_id, metadata=None):
-        return run_in_thread(self.status_async, search_id, metadata)
+        return run_in_thread(self.status_async, search_id, metadata, connector=self.connector)
   
     def results(self, search_id, offset, length, metadata=None):
-        return run_in_thread(self.results_async, search_id, offset, length, metadata)
+        return run_in_thread(self.results_async, search_id, offset, length, metadata, connector=self.connector)
 
     def results_stix(self, search_id, offset, length, data_source, metadata=None):
-        return run_in_thread(self.results_stix_async, search_id, offset, length, data_source, metadata)
+        return run_in_thread(self.results_stix_async, search_id, offset, length, data_source, metadata, connector=self.connector)
         
     def delete(self, search_id):
-        return run_in_thread(self.delete_async, search_id)
+        return run_in_thread(self.delete_async, search_id, connector=self.connector)
 
     def ping(self):
-        return run_in_thread(self.ping_async)
+        return run_in_thread(self.ping_async, connector=self.connector)
 
     def is_async(self):
         # Check if the module is async/sync

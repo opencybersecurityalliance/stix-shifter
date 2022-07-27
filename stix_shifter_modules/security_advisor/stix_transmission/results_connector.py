@@ -13,7 +13,7 @@ class ResultsConnector(BaseResultsConnector):
         self.host = self.auth_token.find_location(self.auth["accountID"], host)
         self.StixPatternProcessor = StixPatternProcessor()
 
-    def create_results_connection(self, searchID , offset , length):
+    async def create_results_connection(self, searchID , offset , length):
 
         params = {}
         return_obj = {}

@@ -12,7 +12,7 @@ class PingConnector(BasePingConnector):
         self.auth_token = Auth(api_key)
         self.host = self.auth_token.find_location(self.auth["accountID"], host)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = {}        
         header = {
                 'Content-Type': 'application/json',

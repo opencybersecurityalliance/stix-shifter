@@ -6,7 +6,7 @@ class QueryConnector(BaseQueryConnector):
         self.host = host
         self.auth = auth
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
 
         return_obj = {}
         return_obj['success'] = True

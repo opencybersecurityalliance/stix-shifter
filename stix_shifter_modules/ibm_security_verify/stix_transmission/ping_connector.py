@@ -14,19 +14,21 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         '''
         ping the connection and return status details.
         '''
         try:
-            response = self.api_client.generate_token()
+            response = await self.api_client.generate_token()
             # Construct a response object
             return_obj = dict()
-            if response.status_code== 200:
+            if response.code == 200:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response, ['message'])
+                message_obj = {"message": response.read(), "code": response.code}
+                ErrorResponder.fill_error(return_obj, message_obj, ['message', 'code'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

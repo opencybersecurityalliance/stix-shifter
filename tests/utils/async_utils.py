@@ -22,8 +22,9 @@ def get_adal_mock_response():
 
 @asyncinit
 class RequestMockResponseOld:
-    def __init__(self, status_code, content, return_type, response=None):
+    def __init__(self, status_code, content, return_type='str', response=None):
         self.code = status_code
+        self.status_code = status_code
         self.content = content
         self.response = response
         self.return_type = return_type
@@ -35,8 +36,9 @@ class RequestMockResponseOld:
         return self.content
 
 class RequestMockResponse:
-    def __init__(self, status_code, content, return_type, response=None):
+    def __init__(self, status_code, content, return_type='str', response=None):
         self.code = status_code
+        self.status_code = status_code
         self.content = content
         self.response = response
         self.return_type = return_type
@@ -81,12 +83,6 @@ class AsyncMock(MagicMock):
     async def __call__(self, *args, **kwargs):
         return super(AsyncMock, self).__call__(*args, **kwargs)
 
-
-# class PingResponse:
-#     """ class for ping response"""
-
-#     def __init__(self, responseobject):
-#         self.response = responseobject
 
 
 class InnerResponse:
