@@ -148,7 +148,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -178,11 +178,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions is not None), "file extensions not found"
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
-
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
 
     def test_cybox_observables_file(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -274,7 +269,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(process_obj.keys() == {'type', 'x_unique_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
         binary_obj = objects[process_obj['binary_ref']]
@@ -290,7 +285,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         parent_process_ref = event['parent_process_ref']
         assert(parent_process_ref in objects), f"parent_process_ref with key {event['parent_process_ref']} not found"
         parent_process_obj = objects[parent_process_ref]
-        assert(parent_process_obj.keys() == {'type', 'pid','extensions'})
+        assert(parent_process_obj.keys() == {'type', 'pid','x_unique_id'})
         assert(parent_process_obj['type'] == 'process')
         assert(parent_process_obj['pid'] == DATA_PROCESS_PPID)
 
@@ -437,7 +432,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -462,11 +457,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
 
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
-    
     def test_cybox_observables_network_traffic_inbound(self):
         DATA['payload']['data']['outbound'] = False
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
