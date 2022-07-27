@@ -10,9 +10,9 @@ class PingConnector(BasePingConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
-            response_dict = self.api_client.ping_data_source()
+            response_dict = await self.api_client.ping_data_source()
             response_code = response_dict.code
             # Construct a response object
             return_obj = dict()

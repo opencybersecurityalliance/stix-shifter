@@ -11,13 +11,13 @@ class ResultsConnector(BaseResultsConnector):
         self.connector = __name__.split('.')[1]
 
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         try:
             min_range = int(offset)
             max_range = min_range + int(length)
 
             # Grab the response, extract the response code, and convert it to readable json
-            response = self.api_client.get_search_results(search_id)
+            response = await self.api_client.get_search_results(search_id)
             response_code = response.code
             response_txt = response.read()
             # Construct a response object
