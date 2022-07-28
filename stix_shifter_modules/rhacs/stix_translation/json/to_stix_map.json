@@ -1,0 +1,222 @@
+{
+  "findingType": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "finding"
+  },
+  "policyName": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    {
+      "key": "x-rhacs-policy.description",
+      "object": "policy"
+    }
+  ],
+  "alertId": {
+    "key": "x-ibm-finding.extensions.x-rhacs-finding.alert_id",
+    "object": "finding"
+  },
+  "cluster": [
+    {
+      "key": "x-rhacs-cluster.cluster_name",
+      "object": "cluster"
+    },
+    {
+      "key": "x-ibm-finding.extensions.x-rhacs-finding.cluster_ref",
+      "object": "finding",
+      "references": "cluster"
+    }
+  ],
+  "clusterId": {
+    "key": "x-rhacs-cluster.cluster_id",
+    "object": "cluster"
+  },
+  "namespace": {
+    "key": "x-rhacs-cluster.namespace",
+    "object": "cluster"
+  },
+  "namespaceId": {
+    "key": "x-rhacs-cluster.namespace_id",
+    "object": "cluster"
+  },
+  "deploymentId": {
+    "key": "x-rhacs-deployment.deployment_id",
+    "object": "deployment"
+  },
+  "deployment": [
+    {
+      "key": "x-rhacs-deployment.deployment_name",
+      "object": "deployment"
+    },
+    {
+      "key": "x-ibm-finding.extensions.x-rhacs-finding.deployment_refs",
+      "object": "finding",
+      "references": [
+        "deployment"
+      ]
+    }
+  ],
+  "lifecycleStage": {
+    "key": "x-ibm-finding.extensions.x-rhacs-finding.lifecycle_stage",
+    "object": "finding"
+  },
+  "policyId": [
+    {
+      "key": "x-rhacs-policy.policy_id",
+      "object": "policy"
+    },
+    {
+      "key": "x-ibm-finding.extensions.x-rhacs-finding.policy_refs",
+      "object": "finding",
+      "references": [
+        "policy"
+      ]
+    }
+  ],
+  "description": {
+    "key": "x-rhacs-policy.description",
+    "object": "policy"
+  },
+  "rationale": {
+    "key": "x-rhacs-policy.rationale",
+    "object": "policy"
+  },
+  "remediation": {
+    "key": "x-rhacs-policy.remediation",
+    "object": "policy"
+  },
+  "disabled": {
+    "key": "x-rhacs-policy.disabled",
+    "object": "policy"
+  },
+  "categories": {
+    "key": "x-rhacs-policy.categories",
+    "object": "policy"
+  },
+  "eventSource": {
+    "key": "x-rhacs-policy.event_source",
+    "object": "policy"
+  },
+  "severity": {
+    "key": "x-ibm-finding.severity",
+    "object": "finding",
+    "transformer": "SeverityToScore"
+  },
+  "lastUpdated": {
+    "key": "x-rhacs-policy.last_updated",
+    "object": "policy"
+  },
+  "sortName": {
+    "key": "x-rhacs-policy.sort_name",
+    "object": "policy"
+  },
+  "sortLifecycleStage": {
+    "key": "x-rhacs-policy.sort_lifecycle_stage",
+    "object": "policy"
+  },
+  "violationMessage": {
+    "key": "x-ibm-finding.extensions.x-rhacs-finding.violation_message",
+    "object": "finding"
+  },
+  "violationState": {
+    "key": "x-ibm-finding.extensions.x-rhacs-finding.state",
+    "object": "finding"
+  },
+  "process": {
+    "name": [
+      {
+        "key": "process.name",
+        "object": "proc"
+      },
+      {
+        "key": "x-rhacs-container.process_ref",
+        "object": "cntr",
+        "references": "proc"
+      }
+    ],
+    "args": {
+      "key": "process.arguments",
+      "object": "proc",
+      "transformer": "ToLowercaseArray"
+    },
+    "pid": {
+      "key": "process.pid",
+      "object": "proc"
+    },
+    "execFilePath": {
+      "key": "process.cwd",
+      "object": "proc"
+    },
+    "time": {
+      "key": "process.created",
+      "object": "proc"
+    },
+    "uid": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "proc",
+        "references": "user"
+      }
+    ],
+    "gid": {
+      "key": "user-account.extensions.x-rhacs-user-account.gid",
+      "object": "user"
+    },
+    "podId": {
+      "key": "x-rhacs-deployment.pod_id",
+      "object": "deployment"
+    },
+    "podUid": {
+      "key": "x-rhacs-deployment.pod_uid",
+      "object": "deployment"
+    }
+  },
+  "networkFlow": {
+    "netflow_protocol": {
+      "key": "x-rhacs-networkflow.protocol",
+      "object": "netflow"
+    },
+    "netflow_source": {
+      "key": "x-rhacs-networkflow.source",
+      "object": "netflow"
+    },
+    "netflow_destination": {
+      "key": "x-rhacs-networkflow.destination",
+      "object": "netflow"
+    },
+    "time": {
+      "key": "x-rhacs-networkflow.time",
+      "object": "netflow"
+    }
+  },
+  "containerName": [
+    {
+      "key": "x-rhacs-container.container_name",
+      "object": "cntr"
+    },
+    {
+      "key": "x-rhacs-deployment.container_refs",
+      "object": "deployment",
+      "references": [
+        "cntr"
+      ]
+    }
+  ],
+  "containerImage": {
+    "key": "x-rhacs-container.container_image",
+    "object": "cntr"
+  },
+  "firstObserved": {
+    "key": "first_observed",
+    "cybox": false
+  },
+  "lastObserved": {
+    "key": "last_observed",
+    "cybox": false
+  }
+}
