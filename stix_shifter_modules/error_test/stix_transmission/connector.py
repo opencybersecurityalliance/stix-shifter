@@ -1,12 +1,14 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+import json
+import time
+from aiohttp import BasicAuth
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
-import json
+
+from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
-import time
 
 ERROR_TYPE_TIMEOUT = 'timeout'
 ERROR_TYPE_BAD_CONNECTION = 'bad_connection'
@@ -26,7 +28,7 @@ class Connector(BaseConnector):
         auth = None
         conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
-            auth = (conf_auth['username'], conf_auth['password'])
+            auth = BasicAuth(conf_auth['username'], conf_auth['password'])
         self.client = RestApiClient(None,
                                     auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')

@@ -1,6 +1,6 @@
 import json
 import time
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 from stix_shifter_utils.modules.base.stix_transmission.\
     base_status_connector import BaseStatusConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -21,7 +21,7 @@ class StatusConnector(BaseStatusConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         get query status
         :param queryId
@@ -31,7 +31,7 @@ class StatusConnector(BaseStatusConnector):
             response_dict = {}
             return_obj = {}
 
-            response = self.api_client.get_search_status(search_id)
+            response = await self.api_client.get_search_status(search_id)
 
             response_code = response.code
             response_txt = response.read()
@@ -64,7 +64,7 @@ class StatusConnector(BaseStatusConnector):
             response_dict['type'] = "QueryIdNotFoundError"
             response_dict['message'] = "Could not find query id: " + search_id
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])

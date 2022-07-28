@@ -1,8 +1,6 @@
 from stix_shifter_modules.splunk.entry_point import EntryPoint
 from unittest.mock import patch
-import pytest
 import unittest
-import json
 import os
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
@@ -67,13 +65,12 @@ class TestSplunkConnection(unittest.TestCase, object):
             "port": 8080
         }
 
-        with pytest.raises(Exception):
-            transmission = stix_transmission.StixTransmission('splunk',  connection, config)
-            ping_response = transmission.ping()
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        ping_response = transmission.ping()
 
-            assert ping_response is not None
-            assert ping_response['success'] is False
-            assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.create_search')
     def test_query_response(self, mock_query_response):
@@ -119,13 +116,12 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         query = 'search eventtype=network_traffic | fields + tag| spath'
 
-        with pytest.raises(Exception):
-            transmission = stix_transmission.StixTransmission('splunk',  connection, config)
-            query_response = transmission.query(query)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        query_response = transmission.query(query)
 
-            assert query_response is not None
-            assert query_response['success'] is False
-            assert query_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+        assert query_response is not None
+        assert query_response['success'] is False
+        assert query_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)
     def test_status_response(self, mock_status_response):
@@ -278,13 +274,12 @@ class TestSplunkConnection(unittest.TestCase, object):
 
         search_id = "1536832140.4293"
 
-        with pytest.raises(Exception):
-            transmission = stix_transmission.StixTransmission('splunk',  connection, config)
-            status_response = transmission.status(search_id)
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        status_response = transmission.status(search_id)
 
-            assert status_response is not None
-            assert status_response['success'] is False
-            assert ErrorCode.TRANSMISSION_UNKNOWN.value==status_response['code']
+        assert status_response is not None
+        assert status_response['success'] is False
+        assert ErrorCode.TRANSMISSION_UNKNOWN.value==status_response['code']
 
     @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
     def test_results_response(self, mock_results_response):
@@ -375,12 +370,12 @@ class TestSplunkConnection(unittest.TestCase, object):
         search_id = "1536832140.4293"
         offset = 0
         length = 1
-        with pytest.raises(Exception):
-            transmission = stix_transmission.StixTransmission('splunk',  connection, config)
-            results_response = transmission.results(search_id, offset, length)
-            assert 'success' in results_response
-            assert results_response['success'] is False
-            assert results_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+        
+        transmission = stix_transmission.StixTransmission('splunk',  connection, config)
+        results_response = transmission.results(search_id, offset, length)
+        assert 'success' in results_response
+        assert results_response['success'] is False
+        assert results_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.create_search', autospec=True)
     @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.get_search', autospec=True)

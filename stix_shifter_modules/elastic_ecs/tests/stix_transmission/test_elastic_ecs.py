@@ -4,7 +4,6 @@ from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils.error_response import ErrorCode
 from tests.utils.async_utils import get_mock_response
 
-import pytest
 from unittest.mock import patch
 import unittest
 
@@ -59,13 +58,12 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         ping_response = None
 
-        with pytest.raises(UnexpectedResponseException):
-            transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
-            ping_response = transmission.ping()
+        transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
+        ping_response = transmission.ping()
 
-            assert ping_response is not None
-            assert ping_response['success'] is False
-            assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
 
     def test_query_response(self):

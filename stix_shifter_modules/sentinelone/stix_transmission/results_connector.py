@@ -3,7 +3,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_results_connector\
     import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 
 class LimitOutOfRangeError(Exception):
@@ -18,7 +18,7 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using query, offset and length
         :param search_id: str, Data Source queryID
@@ -33,7 +33,7 @@ class ResultsConnector(BaseResultsConnector):
             return_obj = {}
             response_dict = {}
 
-            response = self.api_client.get_search_results(
+            response = await self.api_client.get_search_results(
                 search_id, min_range, max_range)
             response_code = response.code
 
@@ -68,7 +68,7 @@ class ResultsConnector(BaseResultsConnector):
                     cursor = None
 
                 while cursor is not None:
-                    response = self.api_client.get_search_results(
+                    response = await self.api_client.get_search_results(
                         search_id, min_range, max_range, nextcursor=cursor)
                     response_code = response.code
                     response_txt = response.read().decode('utf-8')
@@ -96,7 +96,7 @@ class ResultsConnector(BaseResultsConnector):
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])

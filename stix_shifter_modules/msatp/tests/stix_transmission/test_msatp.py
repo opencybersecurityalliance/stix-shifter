@@ -1,6 +1,5 @@
 from stix_shifter_modules.msatp.entry_point import EntryPoint
 from unittest.mock import patch
-import pytest
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
@@ -145,12 +144,11 @@ class TestMSATPConnection(unittest.TestCase):
         offset = 0
         length = 1
         
-        with pytest.raises(Exception) as e:
-            transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
-            results_response = transmission.results(query, offset, length)
+        transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
+        results_response = transmission.results(query, offset, length)
 
-            assert results_response['code'] == 'unknown'
-            assert results_response['success'] is False
+        assert results_response['code'] == 'unknown'
+        assert results_response['success'] is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)

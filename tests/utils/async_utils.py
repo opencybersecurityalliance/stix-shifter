@@ -27,6 +27,7 @@ class RequestMockResponseOld:
         self.status_code = status_code
         self.content = content
         self.response = response
+        self.object = response
         self.return_type = return_type
         self.history = []
 
@@ -41,6 +42,7 @@ class RequestMockResponse:
         self.status_code = status_code
         self.content = content
         self.response = response
+        self.object = response
         self.return_type = return_type
         self.history = []
 
