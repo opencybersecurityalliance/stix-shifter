@@ -498,15 +498,15 @@
     "object": "process"
   },
   "srcProcUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "tgtProcUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "srcProcParentUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "srcProcSignedStatus": {
