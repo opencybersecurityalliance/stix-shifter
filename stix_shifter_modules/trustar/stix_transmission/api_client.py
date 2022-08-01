@@ -11,7 +11,6 @@ class APIClient():
         self.headers = dict()
         self.auth = configuration["auth"]
         self.client = RestApiClient(connection['host'])
-        self.search_query = ""
         self.headers["Content-Type"] = "application/json"
         self.report_limit = connection['report_limit']
         self.max_number_pages = connection['max_number_pages']
@@ -53,7 +52,7 @@ class APIClient():
             return response
 
         self.headers["Authorization"] = "Bearer {}".format(self.token)
-        print(search_id)
+        
         try:
             json_query = json.loads(search_id)
             if json_query.get('searchTerm') == ' ':
