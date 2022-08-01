@@ -16,7 +16,7 @@ class ResultsConnector(BaseResultsConnector):
             if("code" in response_dict):
                 response_code = response_dict["code"]
                 self.logger.info(response_code)
-                print(response_code)
+                
 
                 # # Construct a response object
                 return_obj = dict()
