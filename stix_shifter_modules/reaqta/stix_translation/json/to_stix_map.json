@@ -1010,7 +1010,7 @@
         {
           "key": "process.pid",
           "object": "process_etw",
-          "transformer": "ToInteger"
+          "transformer": "ConvertHexToInteger"
         },
         {
           "key": "x-oca-event.process_ref",
@@ -1180,7 +1180,8 @@
       "etwProcessId": [
         {
           "key": "process.pid",
-          "object": "process_etw"
+          "object": "process_etw",
+          "transformer": "ConvertHexToInteger"
         },
         {
           "key": "x-oca-event.process_ref",
