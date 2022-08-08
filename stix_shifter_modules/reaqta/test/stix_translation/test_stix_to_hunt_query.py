@@ -63,6 +63,22 @@ class TestQueryTranslator(unittest.TestCase):
         found = re.findall(TEST_DATE_PATTERN, query)
         assert len(found) == 2
 
+    def test_timeinterval_without_milliseconds(self):
+        test_start_date = "2022-04-06T00:00:00Z"
+        test_stop_date = "2022-04-06T00:05:00Z"
+        translated_start_date = "2022-04-06T00:00:00.000Z"
+        translated_stop_date = "2022-04-06T00:05:00.000Z"
+        test_start_stop_value = "START t'{}' STOP t'{}'".format(test_start_date, test_stop_date)
+        transalted_start_stop_value = 'AND happenedAfter = "{}" AND happenedBefore = "{}"'.format(translated_start_date, translated_stop_date)
+
+        stix_pattern = "[ipv4-addr:value = '172.16.60.184'] {}".format(test_start_stop_value)
+        queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
+        query = queries['queries']
+
+        test_string = ['(($ip = "172.16.60.184" OR login.ip = "172.16.60.184")) {}'.format(transalted_start_stop_value)]
+
+        self.assertQuery(query, test_string, stix_pattern)
+
     def test_one_observation_expression_with_timeinterval(self):
         stix_pattern = "[ipv4-addr:value = '192.168.1.2' OR url:value = 'www.example.com'] {}".format(TEST_START_STOP_STIX_VALUE1)
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
