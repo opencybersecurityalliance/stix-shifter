@@ -236,12 +236,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         process_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None, 'process object type not found'
-        assert process_obj.keys() == {'type', 'pid', 'command_line', 'created',
-                                      'creator_user_ref'}
+        assert process_obj.keys() == {'type', 'creator_user_ref', 'binary_ref', 'name', 'pid', 'command_line', 'created',
+                                      'parent_ref'}
         assert process_obj['type'] == 'process'
-        assert process_obj['pid'] == 20948
-        assert process_obj['command_line'] == 'consent.exe 10088 288 000001CB3AA92A80'
-        assert process_obj['created'] == '2019-09-20T06:57:11.821Z'
+        assert process_obj['pid'] == 10088
+        assert process_obj['command_line'] == 'svchost.exe -k netsvcs -p -s Appinfo'
+        assert process_obj['created'] == '2019-09-18T05:56:15.268Z'
         assert process_obj['creator_user_ref'] == '7'
 
 
@@ -533,12 +533,12 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         event_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert event_obj is not None, 'x-oca-event object type not found'
-        assert event_obj.keys() == {'type', 'created', 'host_ref', 'action', 'process_ref', 'file_ref'}
+        assert event_obj.keys() == {'type', 'created', 'host_ref', 'action', 'process_ref', 'file_ref', 'parent_process_ref'}
         assert event_obj['type'] == 'x-oca-event'
         assert event_obj['created'] == '2019-09-20T06:57:11.8218304Z'
         assert event_obj['host_ref'] == '1'
         assert event_obj['action'] == 'ProcessCreated'
-        assert event_obj['process_ref'] == '6'
+        assert event_obj['process_ref'] == '8'
 
     def test_x_oca_asset(self):
         """
@@ -603,13 +603,19 @@ class TestMsatpResultsToStix(unittest.TestCase):
                                       'NetworkAdapterStatus': 'Down',
                                       'TunnelType': 'ISATAP',
                                       'IPAddressesSet': ['1.1.1.1', '2.2.2.2', '3.3.3.3', '4.4.4.4'],
-                                      'Alerts': [{'AlertId': '123123123','Severity': 'Medium',
+                                      'Alerts': [{'AlertId': '111','Severity': 'Medium',
                                                   'Title': 'Registry queried for passwords',
                                                   'Category': 'CredentialAccess',
                                                   'AttackTechniques': ['OS Credential Dumping (T1003)',
                                                                              'Query Registry (T1012)',
-                                                                             'Credentials in Registry (T1552.002)']}]
+                                                                             'Credentials in Registry (T1552.002)']},
+                                                 {'AlertId': '222', 'Severity': 'Medium',
+                                                  'Title': 'Registry queried for passwords',
+                                                  'Category': 'CredentialAccess',
+                                                  'AttackTechniques': []}
+                                                 ]
                                       }}
+
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -622,6 +628,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
 
+        assert len([k for k in objects if objects[k]['type'] == 'x-ibm-finding']) == 2
         finding_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         assert finding_obj is not None, 'x-ibm-finding object type not found'
         assert finding_obj.keys() == {'type', 'alert_id', 'severity', 'name', 'ttp_tagging_refs'}
@@ -629,6 +636,7 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert finding_obj['severity'] == 33
         assert finding_obj['name'] == 'Registry queried for passwords'
 
+        assert len([k for k in objects if objects[k]['type'] == 'x-ibm-ttp-tagging']) == 3
         ttp_tagging_obj = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-ttp-tagging')
         assert ttp_tagging_obj is not None, 'x-ibm-ttp-tagging object type not found'
         assert ttp_tagging_obj.keys() == {'type', 'extensions'}
