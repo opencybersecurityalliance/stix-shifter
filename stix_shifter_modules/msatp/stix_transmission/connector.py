@@ -108,7 +108,8 @@ class Connector(BaseSyncConnector):
         for i in range(alerts_count):
             alert_dct = {k: (event_data[k][i] if len(event_data[k]) > i else '')
                          for k in Connector.ALERT_FIELDS if k in event_data}
-            alerts.append(alert_dct)
+            if alert_dct['AlertId'] not in [alert['AlertId'] for alert in alerts]:
+                alerts.append(alert_dct)
         event_data['Alerts'] = alerts
 
         for f in Connector.ALERT_FIELDS:
@@ -181,6 +182,8 @@ class Connector(BaseSyncConnector):
             response_json = json.loads(q_return_obj["data"])
             q_return_obj['data'] = response_json['Results']
 
+            """ if one of the last 2 joins reset the results, search events and findings only
+                without querying the networkInfo/DeviceInfo tables """
             if not q_return_obj['data'] and not self.alert_mode:
                 partial_return_obj = dict()
                 joined_query = partial_query
@@ -279,7 +282,6 @@ class Connector(BaseSyncConnector):
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
                                                             self.alert_mode else v) for k, v in build_data[lookup_table].items()})
-                    build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddressesSet' in build_data[lookup_table]:
                     ips_comp_lst = build_data[lookup_table].pop('IPAddressesSet')
@@ -314,6 +316,11 @@ class Connector(BaseSyncConnector):
 
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
+
+                # Currently, the translation back to stix does not support more than one alert
+                # todo: remove these lines after a support to stix translator will be added
+                if 'Alerts' in build_data[lookup_table] and build_data[lookup_table]['Alerts']:
+                    build_data[lookup_table]['Alerts'] = [build_data[lookup_table]['Alerts'][-1]]
 
                 lst_len = len(table_event_data)
                 table_event_data.insert(lst_len, build_data)

@@ -423,8 +423,7 @@
         "references": [
           "finding"
         ],
-        "group": true,
-        "unwrap": true
+        "group": true
       }
     ],
     "ActionType": {
@@ -1929,8 +1928,7 @@
         "references": [
           "finding"
         ],
-        "group": true,
-        "unwrap": true
+        "group": true
       }
     ],
     "event_link": [
@@ -2373,8 +2371,7 @@
         "references": [
           "finding"
         ],
-        "group": true,
-        "unwrap": true
+        "group": true
       }
     ],
     "event_link": [
