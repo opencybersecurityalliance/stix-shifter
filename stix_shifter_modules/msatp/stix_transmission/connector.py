@@ -247,6 +247,7 @@ class Connector(BaseSyncConnector):
                             if 'AttackTechniques' in build_data[lookup_table]:
                                 attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
                                 build_data[lookup_table]['AttackTechniques'] = attackTechniques
+
                     if found_events:
                         val = build_data[lookup_table]
                         build_data.pop(lookup_table)
@@ -282,6 +283,7 @@ class Connector(BaseSyncConnector):
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
                                                             self.alert_mode else v) for k, v in build_data[lookup_table].items()})
+                    build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddressesSet' in build_data[lookup_table]:
                     ips_comp_lst = build_data[lookup_table].pop('IPAddressesSet')
@@ -306,19 +308,18 @@ class Connector(BaseSyncConnector):
                     process_fields = ["ProcessId", "ProcessCommandLine", "ProcessCreationTime", "AccountSid", "AccountName"]
                     event_type = build_data[lookup_table]['ActionType']
                     prefix = 'Created' if event_type == 'ProcessCreated' else 'Opened'
-
                     # rename fields in order to map differently events of different types
                     build_data[lookup_table] = {(prefix+k if k in process_fields else k):v
-                                                for k,v in build_data[lookup_table].items()}
+                                                for k, v in build_data[lookup_table].items()}
                     if event_type == 'ProcessCreated':
                         build_data[lookup_table] = {(prefix+k if 'Initiating' in k else k): v
-                                                    for k,v in build_data[lookup_table].items()}
+                                                    for k, v in build_data[lookup_table].items()}
 
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
                 # Currently, the translation back to stix does not support more than one alert
-                # todo: remove these lines after a support to stix translator will be added
+                # todo: remove these lines after after stix translator bug will be fixed
                 if 'Alerts' in build_data[lookup_table] and build_data[lookup_table]['Alerts']:
                     build_data[lookup_table]['Alerts'] = [build_data[lookup_table]['Alerts'][-1]]
 
