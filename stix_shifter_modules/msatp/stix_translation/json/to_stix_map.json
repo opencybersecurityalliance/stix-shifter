@@ -879,6 +879,11 @@
         "object": "parent_process"
       },
       {
+        "key": "x-oca-event.parent_process_ref",
+        "object": "event",
+        "references": "parent_process"
+      },
+      {
         "key": "x-oca-event.process_ref",
         "object": "event",
         "references": "process"
@@ -1029,13 +1034,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1055,13 +1060,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1081,13 +1086,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1111,13 +1116,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1146,13 +1151,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1168,13 +1173,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1195,13 +1200,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1216,13 +1221,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1238,13 +1243,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1265,13 +1270,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1291,13 +1296,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1317,13 +1322,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1349,13 +1354,13 @@
       },
       {
         "key": "process.parent_ref",
-        "object": "process",
+        "object": "created_process",
         "references": "init_process"
       },
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "process"
+        "references": "created_process"
       },
       {
         "key": "x-oca-event.parent_process_ref",
