@@ -267,20 +267,16 @@
     }
   ],
   "Hashes": {
-    "SHA256": {
-      "key": "file.hashes.SHA256",
+    "sha256hash": {
+      "key": "file.hashes.'SHA-256'",
       "object": "file"
     },
-    "MD5": {
+    "md5hash": {
       "key": "file.hashes.MD5",
       "object": "file"
     },
-    "SHA1": {
-      "key": "file.hashes.SHA1",
-      "object": "file"
-    },
-     "IMPHASH": {
-      "key": "file.hashes.IMPHASH",
+    "sha1hash": {
+      "key": "file.hashes.'SHA-1'",
       "object": "file"
     }
   },
@@ -389,7 +385,7 @@
     }
   ],
   "file_hash": {
-    "key": "file.hashes.unknown",
+    "key": "file.hashes.UNKNOWN",
     "object": "file"
   },
   "file_name": [

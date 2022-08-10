@@ -260,7 +260,7 @@ def main():
         app.run(debug=True, port=int(host_address[1]), host=host_address[0], ssl_context=(args.ssl_cert, args.ssl_key))
 
     elif args.command == EXECUTE:
-        # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
+        # Execute means take the STIX SCO Pattern as input, execute query, and return STIX as output
         
         translation = stix_translation.StixTranslation()
         connection_dict = json.loads(args.connection)

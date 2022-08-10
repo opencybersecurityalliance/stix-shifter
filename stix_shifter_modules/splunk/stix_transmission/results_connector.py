@@ -29,7 +29,7 @@ class ResultsConnector(BaseResultsConnector):
             # for index, val in enumerate(return_obj['data']):
             #     has_dict_array = []
             #     if 'Hashes' in val:
-            #         return_obj['data'][index]['Hashes'] = "f5568ea42e4cbd4bcf1f3bf6892d0049"
+            #         return_obj['data'][index]['Hashes'] = "b78bb50bdac5ec8c108f34104f788e214ac23635"
 
             for index, val in enumerate(return_obj['data']):
                 if ('Hashes' in val):
@@ -39,11 +39,11 @@ class ResultsConnector(BaseResultsConnector):
                     if(val['Hashes'].find(',') == -1):
                         file_hash_map = "file.hashes.{}"
                         if re.compile("^[a-f0-9]{32}$").match(val['Hashes']) is not None:
-                            hshDict = {"MD5":val['Hashes']}
+                            hshDict = {"md5hash":val['Hashes']}
                         elif re.compile(r'\b[0-9a-f]{40}\b').match(val['Hashes']) is not None:
-                            hshDict = {"SHA1":val['Hashes']}
+                            hshDict = {"sha1hash":val['Hashes']}
                         elif re.compile("[A-Fa-f0-9]{64}").match(val['Hashes']) is not None:
-                            hshDict = {"SHA256":val['Hashes']}
+                            hshDict = {"sha256hash":val['Hashes']}
                         else:
                             file_hash_map = file_hash_map.format("Unknown")
                             hshDict = file_hash_map
@@ -51,9 +51,9 @@ class ResultsConnector(BaseResultsConnector):
                     if(not bool(hshDict)):
                         for hash_string in hashes:
                             if (hash_string.find("SHA256", 0) != -1):
-                                hshDict.update({"SHA256": hash_string.lstrip("SHA256=")})
+                                hshDict.update({"sha256hash": hash_string.lstrip("SHA256=")})
                             elif (hash_string.find("MD5", 0) != -1):
-                                hshDict.update({"MD5": hash_string.lstrip("MD5=")})
+                                hshDict.update({"md5hash": hash_string.lstrip("MD5=")})
                             else:
                                 hshDict.update({"IMPHASH": hash_string.lstrip("IMPHASH=")})
                     return_obj['data'][index]['Hashes'] = hshDict

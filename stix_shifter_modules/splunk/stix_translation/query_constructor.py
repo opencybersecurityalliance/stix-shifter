@@ -208,7 +208,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
     index = options.get('index')
     x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
     translated_query = x.translate(pattern)
-    if "Hashes" in translated_query:
+    if "Hashes" in translated_query:  #hashes
         translated_query = translated_query.replace('"', '')
         translated_query = translated_query.replace(' ', '')
         hashes = translated_query.split("Hashes")
