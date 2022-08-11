@@ -1056,7 +1056,7 @@
         "object": "etw_event"
       },
       "etwEventVersion": {
-        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_record_id",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_version",
         "object": "etw_event"
       },
       "etwFailureReason": {
