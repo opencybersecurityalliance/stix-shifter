@@ -43,7 +43,7 @@ class APIClient:
         data = dict()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
-        headers['user-agent'] = 'ibm_stixshifter_1.0'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = self.INCIDENTS_IDS_ENDPOINT
         data['filter'] = filter
@@ -56,7 +56,7 @@ class APIClient:
         # Sends a GET request
         headers = dict()
         headers['Authorization'] = f'Bearer {self.get_token()}'
-        headers['user-agent'] = 'ibm_stixshifter_1.0'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         endpoint = 'detects/queries/detects/v1'  # Test if system alive
         return self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
 
@@ -67,7 +67,7 @@ class APIClient:
         headers = dict()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
-        headers['user-agent'] = 'ibm_stixshifter_1.0'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         headers['Authorization'] = f'Bearer {self.get_token()}'
         endpoint = self.INCIDENTS_INFO_ENDPOINT
         ids_expression = json.dumps({'ids': ids}).encode("utf-8")
@@ -84,7 +84,7 @@ class APIClient:
                 self.TOKEN_ENDPOINT,
                 headers={
                     'accept': 'application/json',
-                    'user-agent': 'ibm_stixshifter_1.0',
+                    'user-agent': 'oca_stixshifter_1.0',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 data=(
