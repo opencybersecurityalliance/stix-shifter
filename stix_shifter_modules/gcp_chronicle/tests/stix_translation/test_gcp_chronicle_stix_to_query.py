@@ -280,22 +280,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
-        stix_pattern = "[network-traffic:extensions.'http-ext'.request_method = " \
-                       "'v1.compute.instances.setMetadata' AND " \
-                       "network-traffic:extensions.'http-ext'.user_agent LIKE 'glbc/v0.0.0 (linux/amd64) " \
-                       "kubernetes/$Format/leader-election'] "
-        query = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["{'ruleText': 'rule cp4s_gcp_udi_rule_1657883692 { meta: author = \"ibm cp4s user\" description = "
-                   "\"Create event rule that should generate detections\" events: $udm.network.http.user_agent = /("
-                   "?s)glbc\\\\/v0\\\\.0\\\\.0\\\\ \\\\(linux\\\\/amd64\\\\)\\\\ "
-                   "kubernetes\\\\/\\\\$Format\\\\/leader\\\\-election/ "
-                   "nocase and $udm.network.http.method = \"v1.compute.instances.setMetadata\" nocase condition: "
-                   "$udm}', 'startTime': '2022-07-15T11:09:52.252Z', 'endTime': '2022-07-15T11:14:52.252Z'}"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
     def test_query_from_multiple_comparison_expressions_joined_by_OR(self):
         stix_pattern = "[ipv4-addr:value = '10.0.1.4' OR network-traffic:src_port = '52221']"
         query = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
@@ -305,25 +289,6 @@ class TestQueryTranslator(unittest.TestCase):
                    "$udm.principal.port = 52221) or (any $udm.src.ip = \"10.0.1.4\" nocase or any $udm.target.ip = "
                    "\"10.0.1.4\" nocase or any $udm.principal.ip = \"10.0.1.4\" nocase) condition: $udm}', "
                    "'startTime': '2022-07-15T11:14:51.186Z', 'endTime': '2022-07-15T11:19:51.186Z'}"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
-    def test_query_for_more_than_two_comparison_expressions_joined_by_AND(self):
-        stix_pattern = "[network-traffic:src_port = '52221' AND process:command_line LIKE '\"MsMpEng.exe\"' AND " \
-                       "file:size > 10] "
-        query = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["{'ruleText': 'rule cp4s_gcp_udi_rule_1658994847 { meta: author = \"ibm cp4s user\" description = "
-                   "\"Create event rule that should generate detections\" events: ($udm.src.file.size > 10 or "
-                   "$udm.target.file.size > 10 or $udm.src.process.file.size > 10 or $udm.target.process.file.size > "
-                   "10 or $udm.principal.process.file.size > 10 or $udm.about.file.size > 10) and (("
-                   "$udm.src.process.command_line = /(?s)\"MsMpEng\\\\.exe\"/ nocase or "
-                   "$udm.target.process.command_line = /(?s)\"MsMpEng\\\\.exe\"/ nocase or "
-                   "$udm.principal.process.command_line = /(?s)\"MsMpEng\\\\.exe\"/ nocase or "
-                   "$udm.target.process.parent_process.command_line = /(?s)\"MsMpEng\\\\.exe\"/ nocase or "
-                   "$udm.principal.process.parent_process.command_line = /(?s)\"MsMpEng\\\\.exe\"/ nocase) and ("
-                   "$udm.src.port = 52221 or $udm.principal.port = 52221)) condition: $udm}', 'startTime': "
-                   "'2022-07-28T07:49:07.798Z', 'endTime': '2022-07-28T07:54:07.798Z'}"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
