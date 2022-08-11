@@ -1,0 +1,676 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "src.ip",
+        "target.ip",
+        "principal.ip"
+ 	],
+      "resolves_to_refs[*].value": [
+        "src.mac",
+        "target.mac",
+        "principal.mac"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "src.ip",
+        "target.ip",
+        "principal.ip"
+	 ],
+      "resolves_to_refs[*].value": [
+        "src.mac",
+        "target.mac",
+        "principal.mac"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "src.url",
+        "target.url",
+        "principal.url",
+        "network.http.referral_url",
+        "security_result.about.url"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "src.port",
+        "principal.port"
+      ],
+      "dst_port": [
+        "target.port"
+      ],
+      "protocols[*]": [
+        "network.ip_protocol",
+        "network.application_protocol"
+      ],
+      "src_ref.value": [
+        "src.ip",
+        "principal.ip"
+      ],
+      "dst_ref.value": [
+        "target.ip"
+      ],
+      "src_byte_count": [
+        "network.sent_bytes"
+      ],
+      "dst_byte_count": [
+        "network.received_bytes"
+      ],
+      "extensions.'x-gcp-chronicle-network-ext'.session_duration": [
+        "network.session_duration.seconds"
+      ],
+      "extensions.'x-gcp-chronicle-network-ext'.session_id": [
+        "network.session_id"
+      ],
+      "extensions.'x-gcp-chronicle-network-ext'.direction": [
+        "network.direction"
+      ],
+      "extensions.'ftp-ext'.command": [
+        "network.ftp.command"
+      ],
+      "extensions.'dns-ext'.query_id": [
+        "network.dns.id"
+      ],
+      "extensions.'dns-ext'.opcode": [
+        "network.dns.opcode"
+      ],
+      "extensions.'dns-ext'.response_code": [
+        "network.dns.response_code"
+      ],
+      "extensions.'dns-ext'.query_class": [
+        "network.dns.questions.class"
+      ],
+      "extensions.'dns-ext'.query_type": [
+        "network.dns.questions.type"
+      ],
+      "extensions.'dns-ext'.questions_domain_name": [
+        "network.dns.questions.name"
+      ],
+      "extensions.'dhcp-ext'.client_hostname": [
+        "network.dhcp.client_hostname"
+      ],
+      "extensions.'dhcp-ext'.opcode": [
+        "network.dhcp.opcode"
+      ],
+      "extensions.'dhcp-ext'.server_name": [
+        "network.dhcp.sname"
+      ],
+      "extensions.'dhcp-ext'.transaction_id": [
+        "network.dhcp.transaction_id"
+      ],
+      "extensions.'dhcp-ext'.message_type": [
+        "network.dhcp.type"
+      ],
+      "extensions.'http-ext'.request_method": [
+        "network.http.method"
+      ],
+      "extensions.'http-ext'.response_code": [
+        "network.http.response_code"
+      ],
+      "extensions.'http-ext'.user_agent": [
+        "network.http.user_agent"
+      ],
+      "extensions.'smtp-ext'.server_response[*]": [
+        "network.smtp.server_response"
+      ],
+       "extensions.'tls-ext'.cipher": [
+        "network.tls.cipher"
+      ],
+      "extensions.'tls-ext'.version": [
+        "network.tls.version"
+      ],
+      "extensions.'tls-ext'.version_protocol": [
+        "network.tls.version_protocol"
+      ],
+      "extensions.'tls-ext'.elliptical_curve": [
+         "network.tls.curve"
+      ],
+      "extensions.'tls-ext'.next_protocol": [
+        "network.tls.next_protocol"
+      ],
+      "extensions.'tls-ext'.server_ja3_hash": [
+        "network.tls.server.ja3s"
+      ],
+      "extensions.'tls-ext'.client_ja3_hash": [
+        "network.tls.client.ja3"
+      ],
+      "extensions.'tls-ext'.server_host_name": [
+        "network.tls.client.server_name"
+      ],
+      "extensions.'tls-ext'.server_certificate_ref.subject": [
+        "network.tls.server.certificate.subject"
+      ],
+      "extensions.'tls-ext'.client_certificate_ref.subject": [
+        "network.tls.client.certificate.subject"
+      ]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "src.mac",
+        "target.mac",
+        "principal.mac"
+      ]
+    }
+  },
+  "autonomous-system": {
+    "fields": {
+      "number": [
+        "network.asn"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "src.domain.name",
+        "target.domain.name",
+        "principal.domain.name",
+        "network.dns_domain"
+      ],
+      "extensions.'x-gcp-chronicle-domain-ext'.status": [
+        "src.domain.status",
+        "target.domain.status",
+        "principal.domain.status"
+      ]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "principal.user.email_addresses",
+        "src.user.email_addresses",
+        "target.user.email_addresses",
+        "network.email.from",
+        "network.email.to",
+        "network.email.cc",
+        "network.email.bcc",
+        "security_result.about.email"
+      ]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "subject": [
+        "network.email.subject"
+      ],
+      "to_refs[*]": [
+        "network.email.to"
+      ],
+      "from_ref": [
+        "network.email.from"
+      ],
+      "cc_refs[*]": [
+        "network.email.cc"
+      ],
+      "bcc_refs[*]": [
+        "network.email.bcc"
+      ],
+      "extensions.'x-gcp-chronicle-email-message'.file_ref.name": [
+        "about.file.full_path"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "src.user.userid",
+        "target.user.userid",
+        "principal.user.userid"
+      ],
+      "display_name": [
+        "src.user.user_display_name",
+        "target.user.user_display_name",
+        "principal.user.user_display_name"
+      ],
+      "extensions.'x-gcp-chronicle-user-ext'.type": [
+        "src.user.account_type",
+        "target.user.account_type",
+        "principal.user.account_type"
+      ],
+      "extensions.'windows-account-ext'.sid": [
+        "src.user.windows_sid",
+        "target.user.windows_sid",
+        "principal.user.windows_sid"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "src.file.full_path",
+        "target.file.full_path",
+        "about.file.full_path",
+        "src.process.file.full_path",
+        "target.process.file.full_path",
+        "principal.process.file.full_path",
+        "target.process.parent_process.file.full_path",
+        "principal.process.parent_process.file.full_path"
+      ],
+      "size": [
+        "src.file.size",
+        "target.file.size",
+        "about.file.size",
+        "src.process.file.size",
+        "target.process.file.size",
+        "principal.process.file.size"
+      ],
+      "hashes.MD5": [
+        "src.file.md5",
+        "target.file.md5",
+        "src.process.file.md5",
+        "target.process.file.md5",
+        "principal.process.file.md5",
+        "about.file.md5"
+      ],
+      "hashes.'SHA-1'": [
+        "src.file.sha1",
+        "target.file.sha1",
+        "src.process.file.sha1",
+        "target.process.file.sha1",
+        "principal.process.file.sha1",
+        "about.file.sha1"
+      ],
+      "hashes.'SHA-256'": [
+        "src.file.sha256",
+        "target.file.sha256",
+        "src.process.file.sha256",
+        "target.process.file.sha256",
+        "principal.process.file.sha256",
+        "about.file.sha256"
+      ],
+      "mtime": [
+        "src.file.last_modification_time.seconds",
+        "target.file.last_modification_time.seconds",
+        "src.process.file.last_modification_time.seconds",
+        "target.process.file.last_modification_time.seconds",
+        "principal.process.file.last_modification_time.seconds",
+        "about.file.last_modification_time.seconds"
+      ],
+      "parent_directory_ref.path": [
+        "src.file.full_path",
+        "target.file.full_path",
+         "about.file.full_path",
+        "src.process.file.full_path",
+        "target.process.file.full_path",
+        "principal.process.file.full_path",
+        "target.process.parent_process.file.full_path",
+        "principal.process.parent_process.file.full_path"
+      ],
+      "extensions.'x-gcp-chronicle-file-ext'.mime_type": [
+        "src.file.mime_type",
+        "target.file.mime_type",
+        "src.process.file.mime_type",
+        "target.process.file.mime_type",
+        "principal.process.file.mime_type",
+        "about.file.mime_type"
+      ],
+      "extensions.'x-gcp-chronicle-file-ext'.file_type": [
+        "src.file.file_type",
+        "target.file.file_type",
+         "about.file.file_type",
+        "src.process.file.file_type",
+        "target.process.file.file_type",
+        "principal.process.file.file_type"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "src.file.full_path",
+        "target.file.full_path",
+         "about.file.full_path",
+        "src.process.file.full_path",
+        "target.process.file.full_path",
+        "principal.process.file.full_path",
+        "target.process.parent_process.file.full_path",
+        "principal.process.parent_process.file.full_path"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": [
+        "src.process.command_line",
+        "target.process.command_line",
+        "principal.process.command_line",
+        "target.process.parent_process.command_line",
+        "principal.process.parent_process.command_line"
+      ],
+      "pid": [
+        "src.process.pid",
+        "target.process.pid",
+        "principal.process.pid",
+        "target.process.parent_process.pid",
+        "principal.process.parent_process.pid"
+      ],
+      "parent_ref.pid": [
+        "target.process.parent_process.pid",
+        "principal.process.parent_process.pid"
+      ],
+      "creator_user_ref.user_id": [
+        "src.user.userid",
+        "target.user.userid",
+        "principal.user.userid"
+      ],
+      "image_ref.name": [
+        "src.process.file.full_path",
+        "target.process.file.full_path",
+        "principal.process.file.full_path",
+        "target.process.parent_process.file.full_path",
+        "principal.process.parent_process.file.full_path"
+      ],
+      "image_ref.hashes.MD5": [
+        "src.process.file.md5",
+        "target.process.file.md5",
+        "principal.process.file.md5"
+      ],
+      "image_ref.hashes.'SHA-256'": [
+        "src.process.file.sha256",
+        "target.process.file.sha256",
+        "principal.process.file.sha256"
+      ],
+      "image_ref.parent_directory_ref.path": [
+        "src.process.file.full_path",
+        "target.process.file.full_path",
+        "principal.process.file.full_path"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": [
+        "src.asset.software.name",
+        "target.asset.software.name",
+        "principal.asset.software.name",
+        "principal.asset.platform_software.platform",
+	    "target.asset.platform_software.platform",
+	    "src.asset.platform_software.platform"
+      ],
+      "version": [
+        "src.asset.software.version",
+        "target.asset.software.version",
+        "principal.asset.software.version",
+	    "principal.asset.platform_software.platform_version",
+        "src.asset.platform_software.platform_version",
+        "target.asset.platform_software.platform_version"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": [
+        "src.registry.registry_key",
+        "target.registry.registry_key"
+      ],
+      "values[*]": [
+        "src.registry.registry_value_data",
+        "target.registry.registry_value_data"
+      ]
+    }
+  },
+  "x509-certificate": {
+    "fields": {
+      "version": [
+        "network.tls.client.certificate.version",
+        "network.tls.server.certificate.version"
+      ],
+      "serial_number": [
+        "network.tls.client.certificate.serial",
+        "network.tls.server.certificate.serial"
+      ],
+      "issuer": [
+        "network.tls.client.certificate.issuer",
+        "network.tls.server.certificate.issuer"
+      ],
+      "validity_not_before": [
+        "network.tls.server.certificate.not_before.seconds",
+        "network.tls.client.certificate.not_before.seconds"
+      ],
+      "validity_not_after": [
+        "network.tls.server.certificate.not_after.seconds",
+        "network.tls.client.certificate.not_after.seconds"
+      ],
+      "subject": [
+        "network.tls.client.certificate.subject",
+        "network.tls.server.certificate.subject"
+      ],
+      "hashes.MD5": [
+        "network.tls.client.certificate.md5",
+        "network.tls.server.certificate.md5"
+      ],
+      "hashes.'SHA-1'": [
+        "network.tls.client.certificate.sha1",
+        "network.tls.server.certificate.sha1"
+      ],
+      "hashes.'SHA-256'": [
+        "network.tls.client.certificate.sha256",
+        "network.tls.server.certificate.sha256"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": [
+        "security_result.summary"
+      ],
+      "finding_type": [
+        "security_result.category"
+      ],
+      "rule_names[*]": [
+        "security_result.rule_name"
+      ],
+      "severity": [
+        "security_result.severity"
+      ],
+      "src_ip_ref.value": [
+        "principal.ip"
+      ],
+      "dst_ip_ref.value": [
+        "target.ip"
+      ],
+      "src_os_ref": [
+        "principal.asset.platform_software.platform"
+      ],
+      "dst_os_ref": [
+        "target.asset.platform_software.platform"
+      ],
+      "src_application_ref.name": [
+        "principal.asset.software.name"
+      ],
+      "dst_application_ref.name": [
+        "target.asset.software.name"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.url_ref.value": [
+        "security_result.about.url"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.alert_state": [
+        "security_result.alert_state"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.threat_id": [
+        "security_result.threat_id"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.threat_status": [
+        "security_result.threat_status"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.threat_name": [
+        "security_result.threat_name"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.description": [
+        "security_result.description"
+      ],
+      "extensions.'x-gcp-chronicle-security-result'.actions_taken[*]": [
+        "security_result.action"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": [
+        "metadata.event_type"
+      ],
+      "code": [
+        "metadata.product_log_id"
+      ],
+      "created": [
+        "metadata.event_timestamp.seconds"
+      ],
+      "agent": [
+        "metadata.product_name"
+      ],
+      "provider": [
+        "metadata.vendor_name"
+      ],
+      "outcome": [
+        "metadata.product_event_type"
+      ],
+      "host_ref.hostname": [
+        "principal.hostname"
+      ],
+      "url_ref.value": [
+        "principal.url"
+      ],
+      "file_ref.name": [
+        "principal.process.file.full_path"
+      ],
+      "process_ref.name": [
+        "principal.process.pid"
+      ],
+      "parent_process_ref.name": [
+        "principal.process.parent_process.pid"
+      ],
+      "domain_ref.value": [
+        "principal.domain.name"
+      ],
+      "ip_refs[*].value": [
+        "src.ip",
+        "principal.ip",
+        "target.ip"
+      ],
+      "network_ref.src_port": [
+        "principal.port"
+      ],
+      "network_ref.dst_port": [
+        "target.port"
+      ],
+      "user_ref.user_id": [
+        "principal.user.userid"
+      ],
+      "registry_ref.key": [
+        "target.registry.registry_key"
+      ],
+      "cross_process_target_ref.name": [
+        "target.process.pid"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.src_location": [
+        "principal.location.name"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.target_location": [
+        "target.location.name"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.target_hostname": [
+        "target.hostname"
+ 	  ],
+      "extensions.'x-gcp-chronicle-event-ext'.email_message_ref.value": [
+        "network.email.from"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.src_appservice": [
+        "principal.application"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.target_appservice": [
+        "target.application"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.src_resource_ref.name": [
+        "principal.resource.name"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.target_resource_ref.name": [
+        "target.resource.name"
+      ],
+      "extensions.'x-gcp-chronicle-event-ext'.description": [
+        "metadata.description"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "principal.hostname"
+      ],
+      "ip_refs[*].value": [
+        "principal.ip"
+      ],
+      "mac_refs[*].value": [
+        "principal.mac"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.cloud_environment": [
+        "principal.asset.attribute.cloud.environment"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.cloud_availability_zone": [
+        "principal.asset.attribute.cloud.availability_zone"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.city": [
+        "principal.location.city"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.country_or_region": [
+        "principal.location.country_or_region"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.asset_id": [
+        "principal.asset_id"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.category": [
+        "principal.asset.category"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.type": [
+        "principal.asset.type"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.hw_cpu_platform": [
+        "principal.asset.hardware.cpu_platform"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.hw_manufacturer": [
+        "principal.asset.hardware.manufacturer"
+      ],
+      "extensions.'x-gcp-chronicle-asset-ext'.hw_serial_number": [
+        "principal.asset.hardware.serial_number"
+      ]
+    }
+  },
+  "x-gcp-chronicle-resource": {
+    "fields": {
+      "name": [
+        "src.resource.name",
+        "target.resource.name",
+        "principal.resource.name"
+      ],
+       "resource_type": [
+        "src.resource.resource_type",
+        "target.resource.resource_type",
+        "principal.resource.resource_type"
+      ],
+      "resource_subtype": [
+        "src.resource.resource_subtype",
+        "target.resource.resource_subtype",
+        "principal.resource.resource_subtype"
+      ],
+      "availability_zone": [
+        "src.resource.attribute.cloud.availability_zone",
+        "target.resource.attribute.cloud.availability_zone",
+        "principal.resource.attribute.cloud.availability_zone"
+      ],
+      "environment": [
+        "src.resource.attribute.cloud.environment",
+        "target.resource.attribute.cloud.environment",
+        "principal.resource.attribute.cloud.environment"
+      ]
+    }
+  }
+}
