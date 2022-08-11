@@ -9,6 +9,8 @@ import re
 UNIVERSAL_FIELDS = ["filename", "ip", "md5", "path", "sha1", "sha256"]
 GREATER_LESS_FIELDS = ["eventdata.regionSize", "eventdata.relevance", "eventdata.size"]
 
+TIMESTAMP_MILLISECONDS = "\.\d+Z$"
+
 logger = logging.getLogger(__name__)
 
 
@@ -85,6 +87,15 @@ class QueryStringPatternTranslator:
         if qualifier and isinstance(qualifier, StartStopQualifier):
             start_iso = qualifier.start.replace("t'","").replace("'", "")
             stop_iso = qualifier.stop.replace("t'","").replace("'", "")
+            
+            # Reaqta hunq api doesn't support timestamp without milliseconds
+            # check for 3-decimal milliseconds and add them if not found in the qualifier
+            if not bool(re.search(TIMESTAMP_MILLISECONDS, start_iso)):
+                start_iso = re.sub('Z$', '.000Z', start_iso)
+            
+            if not bool(re.search(TIMESTAMP_MILLISECONDS, stop_iso)):
+                stop_iso = re.sub('Z$', '.000Z', stop_iso)
+
             formated_qualifier = str_qualifier_pattern.format(start_iso=start_iso, stop_iso=stop_iso)
         else:
             stop_time = datetime.datetime.utcnow()
