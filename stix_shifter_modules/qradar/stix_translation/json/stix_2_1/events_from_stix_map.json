@@ -95,13 +95,14 @@
   "process": {
     "fields": {
       "pid": ["ProcessId"],
-      "name": ["ProcessName", "Image", "ParentImage"],
-      "image_ref.name": ["Image"],
-      "image_ref.parent_directory_ref.path": ["Image"],
+      "name": ["ProcessName", "Image", "ParentImage", "TargetImage"],
+      "image_ref.name": ["Image", "TargetImage"],
+      "image_ref.parent_directory_ref.path": ["Image", "TargetImage"],
       "parent_ref.image_ref.name": ["ParentImage"],
       "command_line": ["ProcessCommandLine", "ParentCommandLine"],
       "parent_ref.command_line": ["ParentCommandLine"],
-      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"]
+      "extensions.'windows-service-ext'.service_dll_refs[*].name": ["ServiceFileName"],
+      "x_unique_id": ["ProcessGuid"]
     }
   },
   "x-oca-event": {
@@ -120,11 +121,11 @@
       "process_ref.name": ["ProcessName"],
       "process_ref.pid": ["ProcessId"],
       "parent_process_ref.command_line": ["ParentCommandLine"],
-      "parent_process_ref.image_ref.name": ["ParentImage"],
+      "parent_process_ref.image_ref.name": ["ParentImage", "TargetImage"],
       "domain_ref.value": ["domainname", "UrlHost"],
       "file_ref.name": ["filename"],
-      "host_ref.hostname": ["identityhostname"],
-      "host_ref.ip_refs[*].value": ["identityip"],
+      "host_ref.hostname": ["identityhostname", "MachineId"],
+      "host_ref.ip_refs[*].value": ["identityip", "sourceip"],
       "registry_ref.key": ["ObjectName", "RegistryKey"],
       "user_ref.user_id": ["username"],
       "url_ref.value": ["url"],
@@ -142,15 +143,6 @@
     "fields": {
       "key": ["ObjectName", "RegistryKey"],
       "values[*].name": ["RegistryValueName"]
-    }
-  },
-  "x-ibm-windows": {
-    "fields": {
-      "targetimage": ["TargetImage"],
-      "grantedaccess": ["GrantedAccess"],
-      "calltrace": ["CallTrace"],
-      "sourceimage": ["Image"],
-      "pipename": ["PipeName"]
     }
   }
 }

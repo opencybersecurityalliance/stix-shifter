@@ -96,7 +96,7 @@ python main.py translate reaqta results '{"type":"identity","id":"identity--f431
 ```
 {
     "type": "bundle",
-    "id": "bundle--4cec3200-a574-43fb-8720-ddf81d93929b",
+    "id": "bundle--bb93d310-7f24-4c02-8830-b1a34413cf67",
     "objects": [
         {
             "type": "identity",
@@ -107,55 +107,66 @@ python main.py translate reaqta results '{"type":"identity","id":"identity--f431
             "modified": "2022-04-07T20:35:41.042Z"
         },
         {
-            "id": "observed-data--400d3905-a4fd-46f3-888d-804283a973b6",
+            "id": "observed-data--85159562-3104-41ea-b032-757fdcb7b88b",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2022-04-19T20:21:52.930Z",
-            "modified": "2022-04-19T20:21:52.930Z",
+            "created": "2022-07-28T16:31:51.951Z",
+            "modified": "2022-07-28T16:31:51.951Z",
             "objects": {
                 "0": {
                     "type": "x-oca-event",
                     "code": 847102109500309505,
-                    "file_ref": "4",
-                    "user_ref": "5",
-                    "process_ref": "2",
-                    "parent_process_ref": "6",
-                    "network_ref": "8",
+                    "file_ref": "6",
+                    "user_ref": "7",
+                    "process_ref": "3",
+                    "parent_process_ref": "4",
+                    "network_ref": "9",
+                    "category": "8",
+                    "action": "Network Connection Established",
                     "created": "2022-03-29T14:41:21.301Z"
                 },
                 "1": {
-                    "type": "x-reaqta-event",
-                    "endpoint_id": "842028663686823936",
-                    "local_id": "847101972854081537"
+                    "type": "x-oca-asset",
+                    "host_id": "842028663686823936",
+                    "ip_refs": [
+                        "10"
+                    ]
                 },
                 "2": {
+                    "type": "x-reaqta-event",
+                    "local_id": "847101972854081537"
+                },
+                "3": {
                     "type": "process",
+                    "x_unique_id": "842028663686823936:2222:1648564483636",
+                    "binary_ref": "6",
+                    "creator_user_ref": "7",
+                    "pid": 2222,
+                    "created": "2022-03-29T14:34:43.636Z",
+                    "parent_ref": "4",
                     "extensions": {
+                        "windows-process-ext": {
+                            "owner_sid": "S-1-1-11-00000000-1111111-222222222-9999"
+                        },
                         "x-reaqta-process": {
-                            "process_id": "842028663686823936:2222:1648564483636",
-                            "parent_process_id": "842028663686823936:1111:1648485432579",
-                            "process_endpoint_id": "842028663686823936",
                             "privilege_level": "MEDIUM",
                             "no_gui": false,
                             "logon_id": "0xxx1s1"
-                        },
-                        "windows-process-ext": {
-                            "owner_sid": "S-1-1-11-00000000-1111111-222222222-9999"
                         }
-                    },
-                    "binary_ref": "4",
-                    "creator_user_ref": "5",
-                    "pid": 2222,
-                    "created": "2022-03-29T14:34:43.636Z",
-                    "parent_ref": "6"
+                    }
                 },
-                "3": {
+                "4": {
+                    "type": "process",
+                    "x_unique_id": "842028663686823936:1111:1648485432579",
+                    "pid": 1111
+                },
+                "5": {
                     "type": "directory",
                     "path": "c:\\users\\reaqta\\downloads"
                 },
-                "4": {
+                "6": {
                     "type": "file",
-                    "parent_directory_ref": "3",
+                    "parent_directory_ref": "5",
                     "name": "abcd.exe",
                     "hashes": {
                         "MD5": "d05807b758e56634abfdb7cd62798765",
@@ -170,15 +181,11 @@ python main.py translate reaqta results '{"type":"identity","id":"identity--f431
                         }
                     }
                 },
-                "5": {
+                "7": {
                     "type": "user-account",
                     "user_id": "DESKTOP-TEST\\ReaQta-test"
                 },
-                "6": {
-                    "type": "process",
-                    "pid": 1111
-                },
-                "7": {
+                "8": {
                     "type": "x-ibm-finding",
                     "extensions": {
                         "x-reaqta-alert": {
@@ -186,12 +193,10 @@ python main.py translate reaqta results '{"type":"identity","id":"identity--f431
                             "triggered_incidents": []
                         }
                     },
-                    "src_ip_ref": "9",
-                    "dst_ip_ref": "11",
-                    "finding_type": "8",
-                    "name": "Network Connection Established"
+                    "src_ip_ref": "10",
+                    "dst_ip_ref": "11"
                 },
-                "8": {
+                "9": {
                     "type": "network-traffic",
                     "extensions": {
                         "x-reaqta-network": {
@@ -199,12 +204,15 @@ python main.py translate reaqta results '{"type":"identity","id":"identity--f431
                             "outbound": true
                         }
                     },
+                    "protocols": [
+                        "tcp"
+                    ],
                     "src_port": 443,
                     "dst_port": 8443,
-                    "src_ref": "9",
+                    "src_ref": "10",
                     "dst_ref": "11"
                 },
-                "9": {
+                "10": {
                     "type": "ipv4-addr",
                     "value": "192.168.1.2"
                 },
