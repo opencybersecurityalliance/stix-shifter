@@ -117,7 +117,8 @@
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name"],
       "image_ref.name": ["process.executable", "process.parent.executable"],
-      "x_ttp_tags": ["tags"]
+      "x_ttp_tags": ["tags"],
+      "x_unique_id": ["process.entity_id", "process.parent.entity_id"]
     }
   },
   "x-ecs-process": {
@@ -125,7 +126,6 @@
       "args": ["process.args"],
       "args_count": ["process.args_count"],
       "executable": ["process.executable"],
-      "entity_id": ["process.entity_id"],
       "exit_code": ["process.exit_code"],
       "thread.thread_id": ["process.thread.id"],
       "thread.name": ["process.thread.name"],
@@ -134,7 +134,6 @@
       "working_directory": ["process.working_directory"],
       "parent.args": ["process.parent.args"],
       "parent.args_count": ["process.parent.args_count"],
-      "parent.entity_id": ["process.parent.entity_id"],
       "parent.exit_code": ["process.parent.exit_code"],
       "parent.pgid": ["process.parent.pgid"],
       "parent.thread.thread_id": ["process.parent.thread.id"],
