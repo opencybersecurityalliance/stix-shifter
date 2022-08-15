@@ -12,5 +12,3 @@ xmltodict==0.13.0
 jsonmerge==1.8.0
 colorlog==6.6.0
 stix2-matcher==3.0.0
-ipaddress==1.0.23
-validators==0.20.0
