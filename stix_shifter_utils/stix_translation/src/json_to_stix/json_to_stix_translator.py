@@ -1,3 +1,4 @@
+from os import path
 import re
 import uuid
 import json
@@ -72,7 +73,9 @@ class DataSourceObjToStixObj:
 
         if options.get("stix_2.1"):
             self.spec_version = "2.1"
-            with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
+            current_dir = path.abspath(path.dirname(__file__))
+            contributing_properties_definitions_path = path.abspath(path.join(current_dir, "id_contributing_properties.json"))
+            with open(contributing_properties_definitions_path, 'r') as f:
                 self.contributing_properties_definitions =  json.load(f)
         else:
             self.spec_version = "2.0"
