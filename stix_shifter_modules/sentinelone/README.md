@@ -261,10 +261,10 @@ results
                     "type": "process",
                     "command_line": "C:\\Windows\\System32\\xx -k termsvcs",
                     "binary_ref": "6",
+                    "x_unique_id": "xx",
                     "extensions": {
                         "x-sentinelone-process": {
                             "integrity_level": "SYSTEM",
-                            "process_unique_id": "xx",
                             "publisher": "MICROSOFT WINDOWS PUBLISHER",
                             "signed_status": "signed",
                             "story_line_id": "xx",
@@ -534,10 +534,10 @@ results
                     "type": "process",
                     "command_line": "C:\\Windows\\System32\\xx -k termsvcs",
                     "binary_ref": "6",
+                    "x_unique_id": "xx",
                     "extensions": {
                         "x-sentinelone-process": {
                             "integrity_level": "SYSTEM",
-                            "process_unique_id": "xx",
                             "publisher": "MICROSOFT WINDOWS PUBLISHER",
                             "signed_status": "signed",
                             "story_line_id": "xx",
@@ -634,10 +634,10 @@ sentinelone
                     "type": "process",
                     "command_line": "C:\\Program Files (x86)\\Google\\Temp\\GUM10C0.tmp\\xx /update /sessionid {A621AB5C-61F8-473C-91D7-6C91A9F50036}",
                     "binary_ref": "5",
+                    "x_unique_id": "xx",
                     "extensions": {
                         "x-sentinelone-process": {
                             "integrity_level": "SYSTEM",
-                            "process_unique_id": "xx",
                             "publisher": "GOOGLE LLC",
                             "signed_status": "signed",
                             "story_line_id": "xx",
