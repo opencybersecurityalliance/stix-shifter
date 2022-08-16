@@ -1,6 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
-import json
 
 translation = stix_translation.StixTranslation()
 MODULE = "cbcloud"

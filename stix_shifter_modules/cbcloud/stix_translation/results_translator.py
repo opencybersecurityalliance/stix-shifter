@@ -23,8 +23,7 @@ class ResultsTranslator(JSONToStix):
 
     def translate_results(self, data_source, data):
         """Convert and translate the JSON data to STIX."""
-        json_data = json.loads(data)
-        for json_entry in json_data:
+        for json_entry in data:
             # Split process hash lists into separate md5 and sha256 entries
             if json_entry.get('process_hash', False):
                 md5, sha256 = self.parse_hash(json_entry.pop('process_hash'))
@@ -57,6 +56,5 @@ class ResultsTranslator(JSONToStix):
                     elif len(json_entry[key]) > 1:
                         json_entry[key] = f"[{', '.join(str(x) for x in json_entry[key])}]"
 
-        data = json.dumps(json_data)
         # Throw the updated JSON data to JSONToStix for translation to STIX
         return super().translate_results(data_source, data)

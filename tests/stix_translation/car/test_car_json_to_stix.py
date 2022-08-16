@@ -1,7 +1,7 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.modules.car.stix_translation.results_translator import CarBaseResultsTranslator
-import json
 import base64
+from copy import deepcopy
 
 options = {}
 results_translator = CarBaseResultsTranslator(options)
@@ -33,7 +33,7 @@ class TestTransform(object):
           "number_observed": 3
         }
 
-        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
+        result_bundle = results_translator.translate_results(data_source, [data], options)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -74,7 +74,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
+        result_bundle = results_translator.translate_results(data_source, [deepcopy(data)], options)
         fields = data['fields']
 
         assert(result_bundle['type'] == 'bundle')
@@ -135,7 +135,7 @@ class TestTransform(object):
     #       }
     #     }
 
-    #     result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
+    #     result_bundle = results_translator.translate_results(data_source, [data], options)
 
     #     fields = data['fields']
 
@@ -209,7 +209,7 @@ class TestTransform(object):
           }
         }
 
-        result_bundle = results_translator.translate_results(json.dumps(data_source), json.dumps([data]), options)
+        result_bundle = results_translator.translate_results(data_source, [deepcopy(data)], options)
 
         fields = data['fields']
 

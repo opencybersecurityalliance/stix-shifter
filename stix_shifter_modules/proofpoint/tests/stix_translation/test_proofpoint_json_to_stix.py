@@ -127,7 +127,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
 
 
     def test_common_mapping(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(event_data))
+        result_bundle = entry_point.translate_results(data_source, event_data)
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -151,7 +151,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
         assert (observed_data['last_observed'] is not None)
 
     def test_custom_mapping(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle = entry_point.translate_results(data_source, [event_data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)

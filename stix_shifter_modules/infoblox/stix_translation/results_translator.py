@@ -38,15 +38,10 @@ class ResultsTranslator(JSONToStix):
         :return: native query response
         :rtype: STIX object
         """
-        try:
-            json_data = json.loads(data)
-            data_source = json.loads(data_source)
-        except Exception as exc:
-            raise LoadJsonResultsException() from exc
 
         try:
             mapped_data = self.map_data
-            results = json_to_stix_translator.convert_to_stix(data_source, mapped_data, json_data, self.transformers, self.options, self.callback)
+            results = json_to_stix_translator.convert_to_stix(data_source, mapped_data, data, self.transformers, self.options, self.callback)
         except Exception as ex:
             raise TranslationResultException("Error when converting results to STIX: %s" % ex) from ex
 

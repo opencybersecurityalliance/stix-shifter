@@ -8,7 +8,7 @@ class ResultsTranslator(JSONToStix):
     super().__init__(options, dialect, base_file_path)
 
   def translate_results(self, data_source, data):
-    results = json.loads(data)
+    results = data
     for result in results:
       if result.get('eventpayload') or result.get('Message'):
         result['mime_type_eventpayload'] = 'text/plain'
@@ -22,6 +22,4 @@ class ResultsTranslator(JSONToStix):
       if result.get('flowdestinationpayload'):
         result['mime_type_flowdestinationpayload'] = 'application/octet-stream'
 
-    data = json.dumps(results, indent=4)
-
-    return super().translate_results(data_source, data)
+    return super().translate_results(data_source, results)
