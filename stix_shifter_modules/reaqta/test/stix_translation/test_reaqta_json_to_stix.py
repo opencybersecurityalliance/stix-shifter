@@ -148,7 +148,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -178,11 +178,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions is not None), "file extensions not found"
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
-
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
 
     def test_cybox_observables_file(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -274,7 +269,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(process_obj.keys() == {'type', 'x_unique_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
         binary_obj = objects[process_obj['binary_ref']]
@@ -290,7 +285,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         parent_process_ref = event['parent_process_ref']
         assert(parent_process_ref in objects), f"parent_process_ref with key {event['parent_process_ref']} not found"
         parent_process_obj = objects[parent_process_ref]
-        assert(parent_process_obj.keys() == {'type', 'pid','extensions'})
+        assert(parent_process_obj.keys() == {'type', 'pid','x_unique_id'})
         assert(parent_process_obj['type'] == 'process')
         assert(parent_process_obj['pid'] == DATA_PROCESS_PPID)
 
@@ -437,7 +432,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -462,11 +457,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
 
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
-    
     def test_cybox_observables_network_traffic_inbound(self):
         DATA['payload']['data']['outbound'] = False
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -503,3 +493,31 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         obj_num = ip_refs[0]
         ip_obj = objects[obj_num]
         assert(ip_obj['value'] == DATA_REMOTE_IP) # DATA_REMOTE_IP is switched to local ip for inbound connection
+    
+    def test_windows_process_event(self):
+        data = {"eventId":"834518763272404993","endpointId":"826811596507447296","payload":{"localId":"834518722289862657",
+                "incidents":[],"triggeredIncidents":[],"data":{"etwEventRecordId":147002,"etwEventVersion":2,
+                "etwTimeCreated":"2022-02-22T21:19:28.2513970Z","etwSubjectUserSid":"S-1-5-18","etwSubjectUserName":"QA-REMOTE-ENDPO$",
+                "etwSubjectDomainName":"WORKGROUP","etwSubjectLogonId":"0x3e7","etwTargetUserSid":"S-1-5-18",
+                "etwTargetUserName":"SYSTEM","etwTargetDomainName":"NT AUTHORITY","etwTargetLogonId":"0x3e7","etwLogonType":"5",
+                "etwLogonProcessName":"Advapi  ","etwAuthenticationPackageName":"Negotiate","etwWorkstationName":"-",
+                "etwLogonGuid":"{00000000-0000-0000-0000-000000000000}","etwTransmittedServices":"-","etwLmPackageName":"-","etwKeyLength":"0",
+                "etwProcessId":"0x290","etwProcessName":"C:\\Windows\\System32\\services.exe","etwIpAddress":"-","etwIpPort":"-",
+                "etwImpersonationLevel":"%%1833","etwRestrictedAdminMode":"-","etwTargetOutboundUserName":"-","etwTargetOutboundDomainName":"-",
+                "etwVirtualAccount":"%%1843","etwTargetLinkedLogonId":"0x0","etwElevatedToken":"%%1842",
+                "etwEventDescription":"An account was successfully logged on.","etwEventId":4624,"etwTask":12544,"version":2},
+                "eventType":39},"happenedAt":"2022-02-22T21:19:28.002Z","receivedAt":"2022-02-22T21:19:37.773Z"}
+
+        result_bundle = ENTRY_POINT.translate_results(json.dumps(DATA_SOURCE), json.dumps([data]))
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        objects = observed_data['objects']
+        
+        proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'extensions', 'creator_user_ref', 'pid', 'name'})
+
+        pid = proc_obj['pid']
+        hex_pid = hex(pid)
+        original_pid = data['payload']['data']['etwProcessId']
+        assert hex_pid == original_pid
