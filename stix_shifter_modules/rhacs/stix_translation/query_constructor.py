@@ -3,6 +3,7 @@ import re
 import json
 import logging
 from os import path
+from urllib.parse import quote
 from datetime import datetime, timedelta
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonComparators, Pattern, \
@@ -47,8 +48,7 @@ class QueryStringPatternTranslator:
         :param rel_path_of_file: str
         :return: dict
         """
-
-        _json_path = path.dirname(path.realpath(__file__)) + "/" + rel_path_of_file
+        _json_path = path.abspath(path.join(path.join(__file__, ".."), rel_path_of_file))
         try:
             if path.exists(_json_path):
                 with open(_json_path, encoding='utf-8') as f_obj:
@@ -385,7 +385,7 @@ class QueryStringPatternTranslator:
         """
         operator = self._lookup_comparison_operator(expression.operator)
         if operator == '+':
-            operator = '%2B'
+            operator = quote(operator)
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
         if not expression_01 or not expression_02:
