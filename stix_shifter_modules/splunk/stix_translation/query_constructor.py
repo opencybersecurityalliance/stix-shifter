@@ -79,6 +79,7 @@ class SplunkSearchTranslator:
                     latest_obj = stix_strptime(latest)
                     latest_dt = latest_obj.strftime(splunk_date_format)
 
+                print('PC:', st_pattern, et_pattern, st_arr, et_arr, earliest, latest)
                 # prepare splunk SPL query
                 if earliest and latest:
                     return '{query_string} earliest="{earliest}" latest="{latest}"'.format(query_string=translated_query_str,
