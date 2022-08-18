@@ -988,10 +988,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
                                     }
                                 ],
                                 "network": {
-                                    "direction": "INBOUND",
-                                    "http": {
-                                        "userAgent": "httpuseragent"
-                                    }
+                                    "direction": "INBOUND"
                                 },
                                 "target": {
                                     'ip': ['185.156.72.11'],
@@ -1016,6 +1013,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert result_response is not None
         assert result_response['success'] is True
         assert result_response["data"][0]["event"]["principal"]["location"]["name"] == "us-east-1"
+        assert result_response["data"][0]["event"]["network"]["ipProtocol"] == 'tcp'
 
     def test_security_and_registry_response(self, mock_credentials, mock_auth):
         """test security result and registry response"""
@@ -1270,3 +1268,4 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert result_response["data"][0]["event"]["network"]["email"]["cc"] == ['abc@user.com', 'test@galaxy.com']
         assert 'to' not in result_response["data"][0]["event"]["network"]["email"].keys()
         assert 'emailAddresses' not in result_response["data"][0]["event"]["principal"]["user"].keys()
+

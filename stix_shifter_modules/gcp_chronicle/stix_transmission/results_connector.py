@@ -331,13 +331,9 @@ class ResultsConnector(BaseResultsConnector):
         :param events: dict
         :return: dict
         """
-        event_type_exists = False
-        network_protocols = events['event']['network'].keys()
-
+        network_keys = events['event']['network'].keys()
         # set is_multipart with false as default if there is email message property
-        if 'metadata' in events['event'].keys() and 'eventType' in events['event']['metadata'].keys():
-            event_type_exists = True
-        if 'email' in network_protocols:
+        if 'email' in network_keys:
             if 'subject' in events['event']['network']['email'].keys():
                 events['event']['network']['email']['isMultipart'] = False
             # validate the email
@@ -355,18 +351,6 @@ class ResultsConnector(BaseResultsConnector):
                     else:
                         del events['event']['network']['email'][mail_id]
 
-        # set the values for protocol if it is not present for a network event
-        # or remove the network protocol data if event is not network related
-
-        if 'applicationProtocol' not in network_protocols and 'ipProtocol' not in network_protocols:
-            for udm_protocol in ['dns', 'dhcp', 'http', 'smtp', 'ftp', 'tls']:
-                if udm_protocol in network_protocols:
-                    if event_type_exists and udm_protocol:
-                        if 'NETWORK' not in events['event']['metadata']['eventType']:
-                            del events['event']['network'][udm_protocol]
-                        else:
-                            events['event']['network']['applicationProtocol'] = udm_protocol
-
         # donot create network traffic object if there is no ip
         if not (events['event'].get('principal', {}).get('ip') or events['event'].get('src', {}).get('ip') or
                 events['event'].get('target', {}).get('ip')):
@@ -374,4 +358,13 @@ class ResultsConnector(BaseResultsConnector):
             for proto in network_copy:
                 if proto not in ('email', 'asn', 'dns_domain'):
                     del events['event']['network'][proto]
+        else:
+            # set the values for protocol if it is not present for a network event
+            if 'applicationProtocol' not in network_keys and 'ipProtocol' not in network_keys:
+                for udm_protocol in ['dns', 'dhcp', 'http', 'smtp', 'ftp', 'tls']:
+                    if udm_protocol in network_keys:
+                        events['event']['network']['applicationProtocol'] = udm_protocol
+                if 'applicationProtocol' not in events['event']['network'].keys() \
+                        and (set(events['event']['network'].keys()) - set(['email', 'asn', 'dns_domain'])):
+                    events['event']['network']['ipProtocol'] = 'tcp'
         return events
