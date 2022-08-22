@@ -503,11 +503,11 @@
     "object": "process"
   },
   "srcProcUid": {
-    "key": "process.extensions.x-sentinelone-process.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "tgtProcUid": {
-    "key": "process.extensions.x-sentinelone-process.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "srcProcSignedStatus": {
@@ -599,7 +599,7 @@
     "object": "process"
   },
   "srcProcParentUid": {
-    "key": "process.extensions.x-sentinelone-process.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "netEventDirection": {

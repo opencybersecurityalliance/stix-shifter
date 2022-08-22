@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 07/21/22
 ## Elasticsearch ECS
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -94,6 +94,7 @@
 | process | parent_ref | ppid |
 | process | command_line | command_line |
 | process | binary_ref | executable |
+| process | x_unique_id | entity_id |
 | process | parent_ref | name |
 | process | parent_ref | pid |
 | process | creator_user_ref | name |
@@ -287,11 +288,9 @@
 | x-ecs-process | pe_product | product |
 | x-ecs-process | args | args |
 | x-ecs-process | args_count | args_count |
-| x-ecs-process | entity_id | entity_id |
 | x-ecs-process | exit_code | exit_code |
 | x-ecs-process | parent_args | args |
 | x-ecs-process | parent_args_count | args_count |
-| x-ecs-process | parent_entity_id | entity_id |
 | x-ecs-process | parent_exit_code | exit_code |
 | x-ecs-process | parent_pgid | pgid |
 | x-ecs-process | parent_ppid | ppid |
