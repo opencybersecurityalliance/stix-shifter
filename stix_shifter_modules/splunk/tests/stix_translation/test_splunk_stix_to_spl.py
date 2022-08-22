@@ -208,6 +208,12 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_start_stop_qualifiers_seconds(self):
+        stix_pattern = "[network-traffic:src_port = 37020] START t'2016-06-01T01:30:00Z' STOP t'2016-06-01T02:20:00Z'"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_issubset_operator(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
