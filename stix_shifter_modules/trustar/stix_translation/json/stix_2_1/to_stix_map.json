@@ -1,0 +1,251 @@
+{
+  "IP": {
+    "key": "ipv4-addr.value",
+    "object": "ipv4-addr"
+  },
+  "MALWARE": {
+    "key": "x-trustar-malware.value",
+    "object": "x-trustar-malware"
+  },
+  "URL": {
+    "key": "url.value",
+    "object": "url"
+  },
+  "CVE": {
+    "key": "x-trustar-vulnerability.CVE",
+    "object": "x-trustar-vulnerability"
+  },
+  "EMAIL_ADDRESS": {
+    "key": "email-addr.value",
+    "object": "email-addr"
+  },
+  "REGISTRY_KEY": {
+    "key": "windows-registry-key.id",
+    "object": "registry-key"
+  },
+  "MD5": {
+    "key": "file.hashes.MD5",
+    "object": "file"
+  },
+  "SHA1": {
+    "key": "file.hashes.SHA1",
+    "object": "file"
+  },
+  "SHA256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file"
+  },
+  "SOFTWARE": [{
+      "key": "software.name",
+      "object": "file"
+    },
+    {
+      "key": "software.name",
+      "object": "software",
+      "references": "file"
+    }
+  ],
+  "firstSeen": {
+    "key": "x-trustar-indicator.firstseen",
+    "object": "x-trustar-report",
+    "transformer": "EpochToTimestamp"
+  },
+  "lastSeen": {
+    "key": "x-trustar-indicator.lastseen",
+    "object": "x-trustar-report",
+    "transformer": "EpochToTimestamp"
+  },
+  "priorityLevel": {
+    "key": "x-trustar-indicator.prioritylevel",
+    "object": "x-trustar-report"
+  },
+  "guid": {
+    "key": "x-trustar-indicator.guid",
+    "object": "x-trustar-report"
+  },
+
+  "meta": {
+    "correlationCount": {
+      "key": "x-trustar-indicator.meta.correlationcount",
+      "object": "x-trustar-report"
+    },
+    "noteCount": {
+      "key": "x-trustar-indicator.meta.notecount",
+      "object": "x-trustar-report"
+    },
+    "sightings": {
+      "key": "x-trustar-indicator.meta.sightings",
+      "object": "x-trustar-report"
+    },
+    "enclaveIds": {
+      "key": "x-trustar-indicator.meta.enclaveids",
+      "object": "x-trustar-report"
+    },
+    "tags": {
+      "key": "x-trustar-indicator.meta.tags",
+      "object": "x-trustar-report"
+    },
+    "source": {
+      "key": "x-trustar-indicator.meta.source",
+      "object": "x-trustar-report"
+    }
+  },
+  "indicatorSummary": {
+    "updated": {
+      "key": "x-trustar-indicator.updated",
+      "object": "x-trustar-report"
+    },
+    "enclaveId": {
+      "key": "x-trustar-indicator.enclaveid",
+      "object": "x-trustar-report"
+    },
+    "source": {
+      "key": {
+        "key": "x-trustar-indicator.source.key",
+        "object": "x-trustar-report"
+      },
+      "name": {
+        "key": "x-trustar-indicator.source.name",
+        "object": "x-trustar-report"
+      }
+    },
+    "score": {
+      "name": {
+        "key": "x-trustar-indicator.score.name",
+        "object": "x-trustar-report"
+      },
+      "value": {
+        "key": "x-trustar-indicator.score.value",
+        "object": "x-trustar-report"
+      }
+    },
+    "type": {
+      "key": "x-trustar-indicator.name",
+      "object": "x-trustar-report"
+    },
+    "attributes": {
+      "key": "x-trustar-indicator.attributes",
+      "object": "x-trustar-report"
+    },
+    "severityLevel": {
+      "key": "x-trustar-indicator.severitylevel",
+      "object": "x-trustar-report"
+    }
+  },
+    "id": {
+      "key": "x-trustar-report.id",
+      "object": "x-trustar-report"
+    },
+    "created": {
+      "key": "x-trustar-report.created",
+      "object": "x-trustar-report",
+      "transformer": "EpochToTimestamp"
+    },
+    "updated": {
+      "key": "x-trustar-report.updated",
+      "object": "x-trustar-report",
+      "transformer": "EpochToTimestamp"
+    },
+    "title": {
+      "key": "x-trustar-report.title",
+      "object": "x-trustar-report"
+    },
+    "sector": {
+      "name": {
+        "key": "x-trustar-report.sector.name",
+        "object": "x-trustar-report"
+      },
+      "label": {
+        "key": "x-trustar-report.sector.label",
+        "object": "x-trustar-report"
+      }
+    },
+    "distributeType": {
+      "key": "x-trustar-report.distributiontype",
+      "object": "x-trustar-report"
+    },
+    "enclaveIds": {
+      "key": "x-trustar-report.enclaveids",
+      "object": "x-trustar-report"
+    },
+    "timeBegan": {
+      "key": "x-trustar-report.timeBegan",
+      "object": "x-trustar-report",
+      "transformer": "EpochToTimestamp"
+    },
+    "reportBody": {
+      "key": "x-trustar-report.reportbody",
+      "object": "x-trustar-report"
+    },
+    "notes": {
+      "key": "x-trustar-report.notes",
+      "object": "x-trustar-report"
+    },
+    "tags": {
+      "key": "x-trustar-report.tags",
+      "object": "x-trustar-report"
+    },
+    "indicators": {
+      "key": "x-truster-report.indicators",
+      "object": "x-trustar-report"
+    },
+    "report": {
+      "id": {
+        "key": "x-trustar-report-details.id",
+        "object": "x-trustar-report"
+      },
+      "created": {
+        "key": "x-trustar-report-details.created",
+        "object": "x-trustar-report",
+        "transformer": "EpochToTimestamp"
+      },
+      "updated": {
+        "key": "x-trustar-report-details.updated",
+        "object": "x-trustar-report",
+        "transformer": "EpochToTimestamp"
+      },
+      "title": {
+        "key": "x-trustar-report-details.title",
+        "object": "x-trustar-report"
+      },
+      "sector": {
+        "name": {
+          "key": "x-trustar-report-details.sector.name",
+          "object": "x-trustar-report"
+        },
+        "label": {
+          "key": "x-trustar-report-details.sector.label",
+          "object": "x-trustar-report"
+        }
+      },
+      "distributeType": {
+        "key": "x-trustar-report-details.distributiontype",
+        "object": "x-trustar-report"
+      },
+      "enclaveIds": {
+        "key": "x-trustar-report-details.enclaveids",
+        "object": "x-trustar-report"
+      },
+      "timeBegan": {
+        "key": "x-trustar-report-details.timeBegan",
+        "object": "x-trustar-report",
+        "transformer": "EpochToTimestamp"
+      },
+      "reportBody": {
+        "key": "x-trustar-report-details.reportbody",
+        "object": "x-trustar-report"
+      },
+      "notes": {
+        "key": "x-trustar-report-details.notes",
+        "object": "x-trustar-report"
+      },
+      "tags": {
+        "key": "x-trustar-report-details.tags",
+        "object": "x-trustar-report"
+      },
+      "indicators": {
+        "key": "x-truster-report-details.indicators",
+        "object": "x-trustar-report"
+      }
+    }
+}

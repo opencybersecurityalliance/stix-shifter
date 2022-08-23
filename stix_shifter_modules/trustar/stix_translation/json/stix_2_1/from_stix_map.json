@@ -1,0 +1,68 @@
+{
+  "x-trustar-report": {
+    "fields": {
+      "searchTerm": ["searchTerm"],
+      "type": ["entityTypes"],
+      "report_details": ["reportId"],
+      "report_ids": ["reportIds"],
+      "enclaveIds" : ["enclaveIds"],
+      "tags": ["tags"],
+      "excludeTags": ["excludeTags"],
+      "title": ["title"]
+    }
+  },
+  "x-trustar-bitcoin": {
+    "fields": {
+      "id": ["searchTerm"],
+      "created": ["searchTerm"],
+      "modified": ["searchTerm"],
+      "name": ["searchTerm"],
+      "description": ["searchTerm"]
+    }
+  },
+  "x-trustar-malware": {
+    "fields": {
+      "created": ["searchTerm"],
+      "modified": ["searchTerm"],
+      "name": ["searchTerm"],
+      "description": ["searchTerm"]
+    }
+  },
+
+  "x-trustar-vulnerability": {
+    "fields": {
+      "created": ["searchTerm"],
+      "modified": ["searchTerm"],
+      "name": ["searchTerm"],
+      "CVE" : ["CVE"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["searchTerm"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["searchTerm"],
+      "hashes": {
+        "SHA-256": ["searchTerm"]
+      }
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["searchTerm"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["searchTerm"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["searchTerm"]
+    }
+  }
+}
