@@ -36,9 +36,9 @@ class TestStixtoQuery(unittest.TestCase, object):
         assert translated_query['queries'] == test_query
 
     def test_query(self):
-        stix_pattern = "[email-addr:value = 'redhat@gmail.com'] START t'2021-08-28T12:54:01.009Z' STOP t'2021-09-05T12:54:01.009Z'"
+        stix_pattern = "[file:name = 'powershell.exe'] START t'2021-08-28T12:54:01.009Z' STOP t'2021-09-05T12:54:01.009Z'"
         translated_query = translation.translate('trustar', 'query', '{}', stix_pattern)
-        test_query = ["{\"searchTerm\": \"redhat@gmail.com\", \"from\": 1630155241000, \"to\": 1630846441000}"]
+        test_query = ["{\"searchTerm\": \"powershell.exe\", \"from\": 1630155241000, \"to\": 1630846441000}"]
         self._test_query_assertions(translated_query, test_query)
 
     def test_searchterm(self):
