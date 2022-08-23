@@ -40,7 +40,7 @@
       "object": "file"
     },
     {
-      "key": "software.id",
+      "key": "software.name",
       "object": "software",
       "references": "file"
     }
