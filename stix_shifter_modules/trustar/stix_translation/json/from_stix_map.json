@@ -42,6 +42,11 @@
       "value": ["searchTerm"]
     }
   },
+  "email-addr": {
+    "fields": {
+      "value": ["searchTerm"]
+    }
+  },
   "file": {
     "fields": {
       "name": ["searchTerm"],
