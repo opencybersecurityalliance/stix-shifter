@@ -90,10 +90,10 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_like_operator_query(self):
         """ test to check like operator stix pattern to native data source query """
-        stix_pattern = "[x-rhacs-cluster:name LIKE 'cp4.*']"
+        stix_pattern = "[x-rhacs-cluster:name LIKE 'cp4s']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster:r/cp4.*%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:r/cp4s.*%2BViolation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -140,7 +140,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_cluster_id_query(self):
         """ test to check cluster id stix pattern to native data source query """
-        stix_pattern = "[x-rhacs-cluster:id LIKE 'dbe.*']"
+        stix_pattern = "[x-rhacs-cluster:id LIKE 'dbe']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ['Cluster ID:r/dbe.*%2BViolation Time:>=06/30/2022']
@@ -227,7 +227,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_negate_for_like_operator(self):
         """test to check negate for like query"""
-        stix_pattern = "[x-rhacs-deployment:name NOT LIKE 'app.*']"
+        stix_pattern = "[x-rhacs-deployment:name NOT LIKE 'app']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ['Deployment:!r/app.*%2BViolation Time:>=06/30/2022']

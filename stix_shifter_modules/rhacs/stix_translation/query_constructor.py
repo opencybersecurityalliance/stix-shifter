@@ -88,7 +88,7 @@ class QueryStringPatternTranslator:
         """
         if mapped_field_type != "string":
             raise NotImplementedError("LIKE operator is supported only for string type input")
-        return f'{value}'
+        return f'{value}.*'
 
     @staticmethod
     def _escape_value(value) -> str:
@@ -300,7 +300,7 @@ class QueryStringPatternTranslator:
                 QueryStringPatternTranslator._parse_time_range(qualifier, self.options["time_range"])
             QueryStringPatternTranslator._check_time_range_values(converted_timestamp)
             self.timeframe += converted_timestamp
-            final_query = f'{query}%2BViolation Time:>=' \
+            final_query = f'{query}{quote("+")}Violation Time:>=' \
                           f'{QueryStringPatternTranslator._format_datetime(converted_timestamp[0])}'
         return final_query
 

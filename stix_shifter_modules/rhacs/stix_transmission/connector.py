@@ -313,6 +313,7 @@ class Connector(BaseSyncConnector):
             dt_inner['pid'] = proc['signal']['pid']
             dt_inner['execFilePath'] = proc['signal']['execFilePath']
             dt_inner['time'] = proc['signal']['time']
+            dt_inner['id'] = str(proc['id'])
             if (proc['signal']['uid'] is not None) and (str(proc['signal']['uid']) != ''):
                 dt_inner['uid'] = str(proc['signal']['uid'])
             if (proc['signal']['gid'] is not None) and (str(proc['signal']['gid']) != ''):

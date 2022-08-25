@@ -152,6 +152,10 @@
       "key": "process.created",
       "object": "proc"
     },
+    "id": {
+      "key": "process.extensions.x-rhacs-process-ext.x_unique_id",
+      "object": "proc"
+    },
     "uid": [
       {
         "key": "user-account.user_id",
